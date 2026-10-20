@@ -28,6 +28,21 @@ const ROUTE_ALIASES = {
   '/vs-totalvpn': 'vs-totalvpn.html'
 };
 
+async function readJsonBody(req) {
+  const chunks = [];
+  for await (const chunk of req) chunks.push(chunk);
+  try {
+    return JSON.parse(Buffer.concat(chunks).toString('utf8') || '{}');
+  } catch {
+    return {};
+  }
+}
+
+function sendJson(res, status, payload) {
+  res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8' });
+  res.end(JSON.stringify(payload));
+}
+
 const server = http.createServer(async (req, res) => {
   const urlObj = new URL(req.url, `http://${req.headers.host}`);
   let pathname = urlObj.pathname;
@@ -38,39 +53,113 @@ const server = http.createServer(async (req, res) => {
     crm.reportBotHit({ userAgent: ua, path: pathname, status: 200 });
   }
 
-  // Proxy pricing & licensing calls to central SWEEPR Multi-Project CRM (project: vpn)
+  // Proxy pricing to central SWEEPR Multi-Project CRM (project: vpn)
   if (pathname === '/api/pricing' && req.method === 'GET') {
     try {
       const data = await crm.fetchPricing({
         currency: urlObj.searchParams.get('currency') || undefined,
         country: urlObj.searchParams.get('country') || undefined,
       });
-      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-      res.end(JSON.stringify(data));
+      return sendJson(res, 200, data);
     } catch (e) {
-      res.writeHead(502, { 'Content-Type': 'application/json; charset=utf-8' });
-      res.end(JSON.stringify({ ok: false, error: e?.message || 'crm_unreachable' }));
+      return sendJson(res, 502, { ok: false, error: e?.message || 'crm_unreachable' });
     }
-    return;
   }
 
-  if ((pathname === '/v1/billing/checkout' || pathname === '/v1/license/activate' || pathname === '/v1/license/refresh') && req.method === 'POST') {
-    const chunks = [];
-    for await (const chunk of req) chunks.push(chunk);
-    let body = {};
-    try { body = JSON.parse(Buffer.concat(chunks).toString('utf8') || '{}'); } catch {}
+  // VPN Checkout & PaymentIntent (uses isolated VPN_STRIPE_SECRET_KEY in sweepr-crm)
+  if ((pathname === '/api/vpn/checkout' || pathname === '/v1/billing/checkout') && req.method === 'POST') {
+    const body = await readJsonBody(req);
     try {
-      let data;
-      if (pathname === '/v1/billing/checkout') data = await crm.createCheckout(body);
-      else if (pathname === '/v1/license/activate') data = await crm.activateDevice({ accountId: body.account_id, refreshToken: body.refresh_token, deviceId: body.device_id });
-      else data = await crm.refreshLicense({ accountId: body.account_id, refreshToken: body.refresh_token, deviceId: body.device_id });
-      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-      res.end(JSON.stringify(data));
+      crm.reportTelemetryEvent({
+        event_name: 'checkout_started',
+        category: 'funnel',
+        os: body.device || 'web',
+        properties: { plan: body.plan || 'annual', wifi_radar: Boolean(body.wifi_radar) },
+      });
+      const data = body.mode === 'redirect'
+        ? await crm.createCheckout(body)
+        : await crm.createPaymentIntent(body);
+      if (data?.ok || data?.dev_simulated) {
+        crm.reportTelemetryEvent({
+          event_name: 'purchase_completed',
+          category: 'funnel',
+          account_id: data.account_id,
+          os: body.device || 'web',
+          properties: { plan: body.plan || 'annual', wifi_radar: Boolean(body.wifi_radar) },
+        });
+      }
+      return sendJson(res, 200, data);
     } catch (e) {
-      res.writeHead(502, { 'Content-Type': 'application/json; charset=utf-8' });
-      res.end(JSON.stringify({ ok: false, error: e?.message || 'crm_unreachable' }));
+      return sendJson(res, 502, { ok: false, error: e?.message || 'crm_unreachable' });
     }
-    return;
+  }
+
+  // VPN Device Licensing (Ed25519 signed tokens for WireGuard/AmneziaWG + Wi-Fi Radar)
+  if ((pathname === '/api/vpn/activate' || pathname === '/v1/license/activate' || pathname === '/v1/license/refresh') && req.method === 'POST') {
+    const body = await readJsonBody(req);
+    try {
+      const data = pathname === '/v1/license/refresh'
+        ? await crm.refreshLicense({
+            accountId: body.account_id,
+            refreshToken: body.refresh_token,
+            deviceId: body.device_id,
+            appVersion: body.app_version,
+          })
+        : await crm.activateDevice({
+            email: body.email,
+            otp: body.otp || body.activation_code || body.refresh_token,
+            accountId: body.account_id,
+            refreshToken: body.refresh_token,
+            deviceId: body.device_id || `vpn_${Date.now()}`,
+            deviceName: body.device_name || 'SWEEPR VPN Client',
+            os: body.os || 'windows',
+            appVersion: body.app_version || '0.1.0',
+          });
+      return sendJson(res, 200, data);
+    } catch (e) {
+      return sendJson(res, 502, { ok: false, error: e?.message || 'crm_unreachable' });
+    }
+  }
+
+  // VPN Key Verification
+  if (pathname === '/api/vpn/verify-key' && (req.method === 'GET' || req.method === 'POST')) {
+    const body = req.method === 'POST' ? await readJsonBody(req) : {};
+    const key = body.key || urlObj.searchParams.get('key') || '';
+    try {
+      const data = await crm.verifyKey(key);
+      return sendJson(res, 200, data);
+    } catch (e) {
+      return sendJson(res, 502, { valid: false, error: e?.message || 'crm_unreachable' });
+    }
+  }
+
+  // VPN Lead Capture (Free Home Wi-Fi Diagnostic Scanner / Leak Test leads)
+  if (pathname === '/api/vpn/leads' && req.method === 'POST') {
+    const body = await readJsonBody(req);
+    try {
+      const data = await crm.captureLead(body);
+      return sendJson(res, 200, data);
+    } catch (e) {
+      return sendJson(res, 502, { ok: false, error: e?.message || 'crm_unreachable' });
+    }
+  }
+
+  // VPN Customer Support Ticket Submission
+  if (pathname === '/api/vpn/support' && req.method === 'POST') {
+    const body = await readJsonBody(req);
+    try {
+      const data = await crm.createSupportTicket(body);
+      return sendJson(res, 200, data);
+    } catch (e) {
+      return sendJson(res, 502, { ok: false, error: e?.message || 'crm_unreachable' });
+    }
+  }
+
+  // VPN Funnel & Telemetry Events
+  if (pathname === '/api/vpn/telemetry' && req.method === 'POST') {
+    const body = await readJsonBody(req);
+    const data = await crm.reportTelemetryEvent(body);
+    return sendJson(res, 200, data);
   }
 
   if (ROUTE_ALIASES[pathname]) {

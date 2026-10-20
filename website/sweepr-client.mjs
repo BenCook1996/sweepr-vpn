@@ -18,7 +18,10 @@ export class SweeprCrmClient {
       'x-sweepr-project': this.projectId,
       ...extra,
     };
-    if (this.apiKey) h['x-sweepr-api-key'] = this.apiKey;
+    if (this.apiKey) {
+      h['x-crm-api-key'] = this.apiKey;
+      h['x-sweepr-api-key'] = this.apiKey;
+    }
     return h;
   }
 
@@ -67,21 +70,26 @@ export class SweeprCrmClient {
     }
   }
 
-  async activateDevice({ accountId, refreshToken, deviceId }) {
+  async activateDevice({ email, otp, accountId, refreshToken, deviceId, deviceName, os, appVersion }) {
     const res = await fetch(`${this.crmUrl}/v1/license/activate`, {
       method: 'POST',
       headers: this.headers(),
       body: JSON.stringify({
         project_id: this.projectId,
+        email,
+        otp: otp || refreshToken,
         account_id: accountId,
         refresh_token: refreshToken,
         device_id: deviceId,
+        device_name: deviceName,
+        os,
+        app_version: appVersion,
       }),
     });
     return res.json();
   }
 
-  async refreshLicense({ accountId, refreshToken, deviceId }) {
+  async refreshLicense({ accountId, refreshToken, deviceId, appVersion }) {
     const res = await fetch(`${this.crmUrl}/v1/license/refresh`, {
       method: 'POST',
       headers: this.headers(),
@@ -90,7 +98,16 @@ export class SweeprCrmClient {
         account_id: accountId,
         refresh_token: refreshToken,
         device_id: deviceId,
+        app_version: appVersion,
       }),
+    });
+    return res.json();
+  }
+
+  async verifyKey(key) {
+    const qs = new URLSearchParams({ project: this.projectId, key: String(key || '').trim() });
+    const res = await fetch(`${this.crmUrl}/v1/license/verify-key?${qs.toString()}`, {
+      headers: this.headers(),
     });
     return res.json();
   }
@@ -106,17 +123,76 @@ export class SweeprCrmClient {
   }
 
   async createCheckout(params = {}) {
-    const res = await fetch(`${this.crmUrl}/v1/billing/checkout`, {
+    const res = await fetch(`${this.crmUrl}/api/checkout`, {
       method: 'POST',
       headers: this.headers(),
       body: JSON.stringify({
         project_id: this.projectId,
         plan: params.plan || 'annual',
         currency: params.currency,
+        country: params.country,
         email: params.email,
-        account_id: params.accountId,
-        intro: params.intro,
-        addons: params.addons || [],
+        device: params.device,
+        wifi_radar: Boolean(params.wifi_radar),
+        addons: params.addons || (params.wifi_radar ? ['wifi_radar'] : []),
+      }),
+    });
+    return res.json();
+  }
+
+  async createPaymentIntent(params = {}) {
+    const res = await fetch(`${this.crmUrl}/api/payment-intent`, {
+      method: 'POST',
+      headers: this.headers(),
+      body: JSON.stringify({
+        project_id: this.projectId,
+        plan: params.plan || 'annual',
+        currency: params.currency,
+        country: params.country,
+        email: params.email,
+        device: params.device,
+        wifi_radar: Boolean(params.wifi_radar),
+        addons: params.addons || (params.wifi_radar ? ['wifi_radar'] : []),
+      }),
+    });
+    return res.json();
+  }
+
+  async captureLead(params = {}) {
+    const res = await fetch(`${this.crmUrl}/v1/leads/capture`, {
+      method: 'POST',
+      headers: this.headers(),
+      body: JSON.stringify({
+        project_id: this.projectId,
+        email: params.email,
+        name: params.name,
+        source: params.source || 'vpn_web',
+        domain: params.domain,
+        country: params.country,
+        device: params.device,
+        tags: params.tags,
+        metadata: params.metadata,
+      }),
+    });
+    return res.json();
+  }
+
+  async createSupportTicket(params = {}) {
+    const res = await fetch(`${this.crmUrl}/api/support/contact`, {
+      method: 'POST',
+      headers: this.headers(),
+      body: JSON.stringify({
+        project_id: this.projectId,
+        email: params.email,
+        name: params.name,
+        subject: params.subject,
+        message: params.message,
+        category: params.category || 'general',
+        priority: params.priority || 'normal',
+        os: params.os || 'web',
+        app_version: params.appVersion,
+        device_id: params.deviceId,
+        diagnostics: params.diagnostics,
       }),
     });
     return res.json();
@@ -139,19 +215,23 @@ export class SweeprCrmClient {
 
   async reportTelemetryEvent(params = {}) {
     try {
-      await fetch(`${this.crmUrl}/v1/telemetry/event`, {
+      const res = await fetch(`${this.crmUrl}/v1/telemetry/event`, {
         method: 'POST',
         headers: this.headers(),
         body: JSON.stringify({
           project_id: this.projectId,
-          event: params.event,
-          account_id: params.accountId,
-          device_id: params.deviceId,
-          platform: params.platform,
-          app_version: params.appVersion,
+          event_name: params.event_name || params.event,
+          category: params.category || 'funnel',
+          account_id: params.account_id || params.accountId,
+          device_id: params.device_id || params.deviceId,
+          os: params.os || params.platform,
+          app_version: params.app_version || params.appVersion,
           properties: params.properties,
         }),
       });
-    } catch {}
+      return res.json().catch(() => ({ ok: res.ok }));
+    } catch {
+      return { ok: false };
+    }
   }
 }
