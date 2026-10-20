@@ -190,6 +190,6 @@ const server = http.createServer(async (req, res) => {
   });
 });
 
-server.listen(PORT, '127.0.0.1', () => {
-  console.log(`SWEEPR VPN local server running at http://localhost:${PORT}`);
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`SWEEPR VPN server running at http://0.0.0.0:${PORT}`);
 });
