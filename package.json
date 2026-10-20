@@ -1,0 +1,12 @@
+{
+  "name": "sweepr-vpn",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node website/server.mjs"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
