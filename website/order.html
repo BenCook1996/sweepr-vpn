@@ -194,13 +194,11 @@
       border-radius: 0 0 4px 4px;
     }
   </style>
-  <!-- Google tag (gtag.js) - Sweepr VPN -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-7D28EEMNXX');
+    try {
+      localStorage.setItem('sweepr_visited_order', '1');
+      document.cookie = 'sweepr_visited_order=1; path=/; max-age=2592000; SameSite=Lax';
+    } catch (e) {}
   </script>
 </head>
 <body class="bg-[#f8fafc] text-gray-800 min-h-screen flex flex-col font-sans antialiased">
@@ -231,28 +229,12 @@
     </div>
   </header>
 
-  <!-- MAIN 2-COLUMN CHECKOUT LAYOUT -->
+  <!-- MAIN 2-COLUMN CHECKOUT LAYOUT (Exact match to sweeprcleaner.com/order — plan is determined from /pricing) -->
   <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12 w-full flex-1">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
       
       <!-- LEFT COLUMN: Product Overview, Included Bundles & Pricing Breakdown -->
       <div class="lg:col-span-6 space-y-6">
-
-        <!-- 3-Way Plan Duration Selector (Annual Save 50% / 6-Month Save 35% / Monthly) -->
-        <div class="grid grid-cols-3 gap-2.5 bg-white p-2 rounded-2xl border border-gray-200/80 shadow-sm text-xs">
-          <button type="button" id="pillAnnual" onclick="selectOrderPlan('annual')" class="py-2.5 px-3 rounded-xl font-bold border-2 border-emerald-500 bg-emerald-50/60 text-emerald-900 cursor-pointer transition-all">
-            Annual (<span data-price="annualStr">£59.99</span>)<br>
-            <span class="text-[10px] text-emerald-700"><span data-price="annualPerMonthStr">£5.00</span>/mo • Save 50%</span>
-          </button>
-          <button type="button" id="pillSixMonth" onclick="selectOrderPlan('six_month')" class="py-2.5 px-3 rounded-xl font-bold border border-gray-200 bg-white hover:border-emerald-300 text-gray-700 cursor-pointer transition-all">
-            6-Month (<span data-price="sixMonthStr">£38.99</span>)<br>
-            <span class="text-[10px] text-gray-500"><span data-price="sixMonthPerMonthStr">£6.50</span>/mo • Save 35%</span>
-          </button>
-          <button type="button" id="pillMonthly" onclick="selectOrderPlan('monthly')" class="py-2.5 px-3 rounded-xl font-bold border border-gray-200 bg-white hover:border-emerald-300 text-gray-700 cursor-pointer transition-all">
-            Monthly (<span data-price="monthlyStr">£9.99</span>)<br>
-            <span id="monthlyPillSub" class="text-[10px] text-gray-500">Flexible Monthly</span>
-          </button>
-        </div>
         
         <!-- Main Product Item Card -->
         <div class="bg-white rounded-2xl p-5 sm:p-6 border border-gray-200/80 shadow-sm flex items-start justify-between gap-4">
@@ -332,36 +314,15 @@
               <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
             </div>
             <div>
-              <h3 class="font-bold text-gray-900 text-sm">Automatic Drop Protection &amp; App Control</h3>
+              <h3 class="font-bold text-gray-900 text-sm">Home Wi-Fi Scanner, Smart-TV Spy Blocker &amp; Auto-Protect</h3>
               <p class="text-xs text-gray-500 mt-0.5 leading-relaxed">
-                Automatically blocks unsafe connections if your Wi-Fi drops, lets you choose which apps use the VPN, and protects up to 10 devices
+                See every device on your Wi-Fi, stop Smart TVs from taking screenshots, automatically block unsafe drops, and protect up to 10 devices
               </p>
             </div>
           </div>
           <div class="shrink-0">
             <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 uppercase tracking-wide">
               <span>🎁</span> INCLUDED FREE
-            </span>
-          </div>
-        </div>
-
-        <!-- Paid Add-On Order Bump: SWEEPR Wi-Fi Radar & Smart-TV Shield -->
-        <div class="bg-white rounded-xl p-4 border-2 border-emerald-500/80 shadow-sm flex items-center justify-between gap-4">
-          <label class="flex items-start gap-3.5 cursor-pointer select-none flex-1">
-            <input type="checkbox" id="radarAddonToggle" onchange="selectOrderPlan(selectedPlan)" class="mt-1 w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 cursor-pointer shrink-0">
-            <div>
-              <div class="flex items-center gap-2 flex-wrap">
-                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold text-emerald-800 bg-emerald-100 border border-emerald-200 uppercase">OPTIONAL ADD-ON</span>
-                <h3 class="font-bold text-gray-900 text-sm">SWEEPR Wi-Fi Radar &amp; Smart-TV Shield</h3>
-              </div>
-              <p class="text-xs text-gray-500 mt-0.5 leading-relaxed">
-                Instant alerts when unknown devices join your home Wi-Fi (15–30+ devices), router security checks &amp; automatic blocking of Smart-TV screenshot spying
-              </p>
-            </div>
-          </label>
-          <div class="shrink-0 text-right">
-            <span id="addonPriceBadge" class="inline-flex items-center px-2.5 py-1 rounded-md text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 whitespace-nowrap">
-              + £14.99/yr
             </span>
           </div>
         </div>
@@ -399,12 +360,6 @@
             </div>
           </div>
 
-          <!-- Optional Add-On Summary Row -->
-          <div id="addonSummaryRow" class="hidden flex items-center justify-between text-gray-700 border-t border-dashed border-gray-200 pt-2 text-xs">
-            <span>SWEEPR Wi-Fi Radar &amp; Smart-TV Shield Add-On</span>
-            <span id="addonSummaryAmount" class="font-semibold text-gray-900">+ £14.99</span>
-          </div>
-
           <div class="pt-3 border-t border-gray-200 flex items-center justify-between">
             <span id="totalTodayLabel" class="font-bold text-gray-900 text-base">Total Today (GBP)</span>
             <span id="totalTodayText" class="font-black text-2xl text-gray-900">£59.99</span>
@@ -437,18 +392,18 @@
       <!-- RIGHT COLUMN: Payment Form (Matched to sweeprcleaner.com/order) -->
       <div id="checkoutBox" class="lg:col-span-6 bg-white p-6 sm:p-8 rounded-2xl border border-gray-200/90 shadow-md">
         
-        <!-- Green Guarantee Box -->
+        <!-- Green Guarantee Box (With direct link to Refund Policy) -->
         <div class="bg-[#f0fdf4] border border-[#bbf7d0] rounded-xl p-4 mb-6 text-xs text-gray-700 leading-relaxed flex items-start gap-2.5">
           <svg class="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           <div>
-            You are eligible for a full refund within 30 days of any charges under our <a href="/pricing#faqs" class="text-emerald-700 font-bold underline hover:text-emerald-800">Refund Policy</a>. You can cancel anytime in 1 click via your online account.
+            You are eligible for a full refund within 30 days of any charges under our <a href="/refund" target="_blank" class="text-emerald-700 font-bold underline hover:text-emerald-800">Refund Policy</a>. You can cancel anytime in 1 click via your online portal. Here are simple cancel <a href="/refund#cancel" target="_blank" class="text-emerald-700 font-semibold underline hover:text-emerald-800">instructions</a>.
           </div>
         </div>
 
         <!-- Order Form -->
         <form id="orderForm" class="space-y-4" novalidate>
 
-          <!-- Consent Checkboxes -->
+          <!-- Consent Checkboxes (Matching sweeprcleaner.com/order) -->
           <div class="space-y-2.5 text-xs text-gray-700 pb-1">
             <label class="flex items-start gap-2.5 cursor-pointer select-none">
               <input type="checkbox" id="termsConsent" required checked class="mt-0.5 w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 cursor-pointer">
@@ -460,14 +415,14 @@
             <label class="flex items-start gap-2.5 cursor-pointer select-none">
               <input type="checkbox" id="legalConsent" required checked class="mt-0.5 w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 cursor-pointer">
               <span class="leading-snug">
-                I agree to the <a href="/pricing#faqs" class="text-blue-600 underline font-medium">Terms of Service</a>, <a href="/pricing#faqs" class="text-blue-600 underline font-medium">Privacy Policy</a>, and <a href="/pricing#faqs" class="text-blue-600 underline font-medium">Refund Policy</a>.
+                I agree to the <a href="/terms" target="_blank" class="text-blue-600 underline font-medium">Terms of Service</a>, <a href="/privacy" target="_blank" class="text-blue-600 underline font-medium">Privacy Policy</a>, and <a href="/refund" target="_blank" class="text-blue-600 underline font-medium">Refund Policy</a>.
               </span>
             </label>
           </div>
 
           <!-- Express Payment Buttons (Google Pay / Apple Pay) -->
           <div class="space-y-2.5 pt-2">
-            <button type="button" id="expressGPayBtn" onclick="alert('Launching Google Pay / Apple Pay Express Sheet...')" class="w-full h-11 bg-[#202124] hover:bg-black text-white font-medium rounded-xl flex items-center justify-center gap-2 transition-all shadow-xs cursor-pointer text-sm">
+            <button type="button" id="expressGPayBtn" onclick="document.getElementById('orderForm').requestSubmit()" class="w-full h-11 bg-[#202124] hover:bg-black text-white font-medium rounded-xl flex items-center justify-center gap-2 transition-all shadow-xs cursor-pointer text-sm">
               <span class="font-semibold text-base inline-flex items-center tracking-tight">
                 <span class="text-[#4285F4] font-bold">G</span><span class="text-[#EA4335] font-bold">o</span><span class="text-[#FBBC05] font-bold">o</span><span class="text-[#4285F4] font-bold">g</span><span class="text-[#34A853] font-bold">l</span><span class="text-[#EA4335] font-bold">e</span>&nbsp;<span class="text-white font-semibold">Pay</span>
               </span>
@@ -582,12 +537,6 @@
             <span>Cancel in 1-Click</span>
           </div>
 
-          <div class="text-center pt-1">
-            <button type="button" onclick="showDiscountModal()" class="text-xs text-emerald-700 font-semibold underline hover:text-emerald-800 cursor-pointer">
-              Want to try 1st month first? Claim the <span data-price="introStr">£1.99</span> Introductory Offer &rarr;
-            </button>
-          </div>
-
         </form>
 
       </div>
@@ -595,14 +544,14 @@
     </div>
   </main>
 
-  <!-- CLEAN FOOTER WITH LEGAL LINKS -->
+  <!-- CLEAN FOOTER WITH LEGAL LINKS (Matched to sweeprcleaner.com/order) -->
   <footer class="py-8 bg-white border-t border-gray-200 text-center text-xs text-gray-500 mt-auto">
     <div class="max-w-6xl mx-auto px-6">
       <div class="flex flex-wrap justify-center gap-4 sm:gap-6 mb-3 font-medium">
-        <a href="/pricing" class="text-gray-600 hover:text-emerald-700 transition-colors">Pricing</a>
-        <a href="/vs-totalvpn.html" class="text-gray-600 hover:text-emerald-700 transition-colors">vs Total VPN</a>
-        <a href="/pricing#faqs" class="text-gray-600 hover:text-emerald-700 transition-colors">Privacy &amp; Refunds</a>
-        <a href="/pricing#faqs" class="text-gray-600 hover:text-emerald-700 transition-colors">Support &amp; Help</a>
+        <a href="/refund" class="text-gray-600 hover:text-emerald-700 transition-colors">Refund Policy</a>
+        <a href="/terms" class="text-gray-600 hover:text-emerald-700 transition-colors">Terms of Service</a>
+        <a href="/privacy" class="text-gray-600 hover:text-emerald-700 transition-colors">Privacy Policy</a>
+        <a href="/support" class="text-gray-600 hover:text-emerald-700 transition-colors">Support &amp; Help</a>
       </div>
       <p class="text-gray-400">&copy; 2026 SWEEPR VPN Inc. All rights reserved. SWEEPR VPN is an independent online privacy &amp; home Wi-Fi protection software.</p>
     </div>
@@ -712,7 +661,7 @@
                     <img src="/logo-mint-glass.svg" class="w-3.5 h-3.5 rounded" alt="SWEEPR VPN">
                     <span class="text-[9px] font-bold tracking-tight">SWEEPR VPN PRO</span>
                   </div>
-                  <span class="text-[8px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-semibold">PROTECTED</span>
+                  <span class="text-[8px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-semibold">ACTIVATED</span>
                 </div>
                 <!-- Status Circle -->
                 <div class="text-center py-2">
@@ -744,9 +693,9 @@
     </div>
   </div>
 
-  <!-- CHECKOUT CLIENT SCRIPT -->
+  <!-- CHECKOUT CLIENT SCRIPT (Matched to sweeprcleaner.com/order) -->
   <script>
-    let selectedPlan = 'annual'; // 'annual' | 'six_month' | 'monthly'
+    let selectedPlan = 'annual'; // 'annual' | 'six_month' | 'monthly' (determined on /pricing)
     let isDiscountApplied = false;
     let discountModalShown = false;
     let inactivityTimer = null;
@@ -757,22 +706,6 @@
 
       const p = window.SWEEPR_ACTIVE_PRICING || (window.getSweeprPricing ? window.getSweeprPricing('GBP') : null);
       if (!p) return;
-
-      const pillAnnual = document.getElementById('pillAnnual');
-      const pillSixMonth = document.getElementById('pillSixMonth');
-      const pillMonthly = document.getElementById('pillMonthly');
-
-      const activePillClass = 'py-2.5 px-3 rounded-xl font-bold border-2 border-emerald-500 bg-emerald-50/60 text-emerald-900 cursor-pointer transition-all';
-      const normalPillClass = 'py-2.5 px-3 rounded-xl font-bold border border-gray-200 bg-white hover:border-emerald-300 text-gray-700 cursor-pointer transition-all';
-
-      if (pillAnnual) pillAnnual.className = plan === 'annual' ? activePillClass : normalPillClass;
-      if (pillSixMonth) pillSixMonth.className = plan === 'six_month' ? activePillClass : normalPillClass;
-      if (pillMonthly) pillMonthly.className = plan === 'monthly' ? activePillClass : normalPillClass;
-
-      const addonChecked = document.getElementById('radarAddonToggle')?.checked || false;
-      const addonPriceBadge = document.getElementById('addonPriceBadge');
-      const addonSummaryRow = document.getElementById('addonSummaryRow');
-      const addonSummaryAmount = document.getElementById('addonSummaryAmount');
 
       const productPriceTop = document.getElementById('productPriceTop');
       const productPriceSub = document.getElementById('productPriceSub');
@@ -793,12 +726,9 @@
       const termsConsentLabel = document.getElementById('termsConsentLabel');
 
       let basePrice = p.annual;
-      let addonPrice = 0;
 
       if (plan === 'annual') {
         basePrice = p.annual;
-        addonPrice = addonChecked ? p.addonAnnual : 0;
-        if (addonPriceBadge) addonPriceBadge.textContent = `+ ${p.addonAnnualStr}/yr`;
         if (productPriceTop) productPriceTop.textContent = p.annualStr;
         if (productPriceSub) productPriceSub.textContent = `per year (${p.annualPerMonthStr}/mo)`;
         if (productTag) productTag.classList.remove('hidden');
@@ -815,8 +745,6 @@
         if (discountSummaryRow) discountSummaryRow.classList.add('hidden');
       } else if (plan === 'six_month') {
         basePrice = p.sixMonth;
-        addonPrice = addonChecked ? p.addonSixMonth : 0;
-        if (addonPriceBadge) addonPriceBadge.textContent = `+ ${p.addonSixMonthStr}/6mo`;
         if (productPriceTop) productPriceTop.textContent = p.sixMonthStr;
         if (productPriceSub) productPriceSub.textContent = `every 6 months (${p.sixMonthPerMonthStr}/mo)`;
         if (productTag) productTag.classList.remove('hidden');
@@ -832,8 +760,6 @@
         if (savingsSummaryNote) savingsSummaryNote.textContent = `Billed every 6 months at ${p.sixMonthStr} (${p.sixMonthPerMonthStr}/month equivalent) instead of standard ${p.sixMonthRegularStr}/6-months.`;
         if (discountSummaryRow) discountSummaryRow.classList.add('hidden');
       } else {
-        addonPrice = addonChecked ? p.addonMonthly : 0;
-        if (addonPriceBadge) addonPriceBadge.textContent = `+ ${p.addonMonthlyStr}/mo`;
         if (savingsSummaryRow) savingsSummaryRow.classList.add('hidden');
         if (summaryPlanTitle) summaryPlanTitle.textContent = 'SWEEPR VPN Pro (Monthly Plan)';
         if (summaryPlanPrice) summaryPlanPrice.textContent = `${p.monthlyStr}/month`;
@@ -860,24 +786,17 @@
         }
       }
 
-      if (addonSummaryRow) {
-        if (addonChecked) {
-          addonSummaryRow.classList.remove('hidden');
-          if (addonSummaryAmount) addonSummaryAmount.textContent = `+ ${p.fmt(addonPrice)}`;
-        } else {
-          addonSummaryRow.classList.add('hidden');
-        }
-      }
-
-      const totalToday = basePrice + addonPrice;
-      const totalStr = p.fmt(totalToday);
+      const totalStr = p.fmt(basePrice);
       if (totalTodayLabel) totalTodayLabel.textContent = `Total Today (${p.code})`;
       if (totalTodayText) totalTodayText.textContent = totalStr;
 
       if (termsConsentLabel) {
-        const cycleWord = plan === 'annual' ? 'annually' : plan === 'six_month' ? 'every 6 months' : 'monthly';
-        const renewAmtStr = plan === 'monthly' && isDiscountApplied ? p.fmt(p.monthly + addonPrice) : totalStr;
-        termsConsentLabel.textContent = `I agree to pay ${totalStr} today which will auto renew at ${renewAmtStr} ${cycleWord} unless I cancel before my next renewal. I can cancel anytime via my online account. Prices may change with notice.`;
+        if (plan === 'monthly' && isDiscountApplied) {
+          termsConsentLabel.textContent = `I agree to pay ${p.introStr} today for my 1st month. My subscription will automatically renew at the standard price of ${p.monthlyStr} monthly thereafter unless cancelled. The ${p.introSavingsStr} introductory discount applies to month 1 only and never reduces future ${p.monthlyStr} renewals. I can cancel anytime via my online portal.`;
+        } else {
+          const cycleWord = plan === 'annual' ? 'annually' : plan === 'six_month' ? 'every 6 months' : 'monthly';
+          termsConsentLabel.textContent = `I agree to pay ${totalStr} today which will auto renew at ${totalStr} ${cycleWord} unless I cancel before my next renewal. I can cancel anytime via my online portal. Prices may change with notice.`;
+        }
       }
     }
 
@@ -907,7 +826,28 @@
       });
     }
 
+    function startInactivityTimer() {
+      clearTimeout(inactivityTimer);
+      inactivityTimer = setTimeout(() => {
+        showDiscountModal();
+      }, 30000);
+    }
+
+    function resetInactivityTimer() {
+      if (!discountModalShown && !isDiscountApplied) {
+        clearTimeout(inactivityTimer);
+        inactivityTimer = setTimeout(() => {
+          showDiscountModal();
+        }, 30000);
+      }
+    }
+
+    ['mousemove', 'keydown', 'scroll', 'touchstart'].forEach((event) => {
+      window.addEventListener(event, resetInactivityTimer, { passive: true });
+    });
+
     function showDiscountModal() {
+      if (discountModalShown || isDiscountApplied) return;
       const modal = document.getElementById('discountModal');
       if (!modal) return;
       discountModalShown = true;
@@ -933,9 +873,6 @@
       if (bannerTitle) bannerTitle.innerHTML = `Special Introductory Offer - <span class="text-emerald-400 font-black">1st Month for ${p.introStr}</span>`;
       if (bannerSubtitle) bannerSubtitle.innerHTML = `⚡ Full Pro Access across up to 10 Devices. Renews at standard ${p.monthlyStr}/mo; cancel anytime in 1 click.`;
 
-      const monthlyPillSub = document.getElementById('monthlyPillSub');
-      if (monthlyPillSub) monthlyPillSub.textContent = `${p.introStr} 1st mo • Intro`;
-
       selectOrderPlan('monthly');
       document.getElementById('checkoutBox')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -944,30 +881,55 @@
       selectOrderPlan(selectedPlan);
     };
 
+    // Capture lead in CRM as soon as visitor enters a valid email on the order page
+    let lastCapturedLeadEmail = '';
+    function captureOrderLead() {
+      const emailEl = document.getElementById('email');
+      const nameEl = document.getElementById('cardName');
+      const email = (emailEl?.value || '').trim().toLowerCase();
+      if (!email || email === lastCapturedLeadEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return;
+      lastCapturedLeadEmail = email;
+      const name = (nameEl?.value || '').trim() || undefined;
+      fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, name })
+      }).catch(() => {});
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
       setupFallbackInputMasks();
+      startInactivityTimer();
+
+      const emailInputEl = document.getElementById('email');
+      if (emailInputEl) {
+        emailInputEl.addEventListener('blur', captureOrderLead);
+        emailInputEl.addEventListener('change', captureOrderLead);
+      }
 
       const urlParams = new URLSearchParams(window.location.search);
       const planParam = urlParams.get('plan');
       const offerParam = urlParams.get('offer');
-      if (urlParams.get('addon') === 'radar') {
-        const addonBox = document.getElementById('radarAddonToggle');
-        if (addonBox) addonBox.checked = true;
+      const discountParam = urlParams.get('discount');
+      const emailParam = urlParams.get('email');
+
+      if (emailParam && emailInputEl && !emailInputEl.value) {
+        emailInputEl.value = emailParam;
       }
 
-      if (offerParam === 'intro' || planParam === 'intro') {
+      let storedPlan = null;
+      try { storedPlan = sessionStorage.getItem('sweepr_selected_plan'); } catch (e) {}
+      const effectivePlan = planParam || storedPlan;
+
+      if (offerParam === 'intro' || discountParam === '1' || urlParams.get('intro') === '1' || planParam === 'intro') {
         activateDiscountOffer();
-      } else if (planParam === 'six_month' || planParam === '6month') {
+      } else if (effectivePlan === 'six_month' || effectivePlan === '6month' || effectivePlan === 'sixmonth') {
         selectOrderPlan('six_month');
-      } else if (planParam === 'monthly') {
+      } else if (effectivePlan === 'monthly') {
         selectOrderPlan('monthly');
       } else {
         selectOrderPlan('annual');
       }
-
-      inactivityTimer = setTimeout(() => {
-        if (!discountModalShown && !isDiscountApplied) showDiscountModal();
-      }, 30000);
 
       document.addEventListener('mouseleave', (e) => {
         if (e.clientY <= 0 && !discountModalShown && !isDiscountApplied) {
@@ -977,25 +939,38 @@
 
       document.getElementById('orderForm')?.addEventListener('submit', async (e) => {
         e.preventDefault();
+        captureOrderLead();
+
         const errBox = document.getElementById('checkoutError');
         const btn = document.getElementById('submitBtn');
         const btnText = document.getElementById('submitBtnText');
-        const email = document.getElementById('email')?.value?.trim();
-        const wifiRadar = Boolean(document.getElementById('radarAddonToggle')?.checked);
+        const termsConsent = document.getElementById('termsConsent');
+        const legalConsent = document.getElementById('legalConsent');
+        const emailInput = document.getElementById('email');
+        const email = emailInput?.value?.trim();
         const activeCurrency = (window.SWEEPR_ACTIVE_PRICING && window.SWEEPR_ACTIVE_PRICING.code)
           ? window.SWEEPR_ACTIVE_PRICING.code.toLowerCase()
           : 'gbp';
 
-        if (!email || !email.includes('@')) {
+        if (!termsConsent?.checked || !legalConsent?.checked) {
           if (errBox) {
-            errBox.textContent = 'Please enter a valid email address to receive your 6-digit SWEEPR VPN Activation Key.';
+            errBox.textContent = 'Please agree to the subscription terms, Terms of Service, and Privacy Policy to proceed.';
+            errBox.classList.remove('hidden');
+          }
+          return;
+        }
+
+        if (!email || !email.includes('@')) {
+          emailInput?.focus();
+          if (errBox) {
+            errBox.textContent = 'Please enter your email address so we can deliver your SWEEPR VPN Pro license.';
             errBox.classList.remove('hidden');
           }
           return;
         }
         if (errBox) errBox.classList.add('hidden');
         if (btn) btn.disabled = true;
-        if (btnText) btnText.textContent = 'VERIFYING & PROVISIONING...';
+        if (btnText) btnText.textContent = 'PROCESSING SECURE PAYMENT...';
 
         try {
           const res = await fetch('/api/vpn/checkout', {
@@ -1004,8 +979,7 @@
             body: JSON.stringify({
               email,
               plan: selectedPlan,
-              wifi_radar: wifiRadar,
-              addons: wifiRadar ? ['wifi_radar'] : [],
+              applyDiscount: isDiscountApplied && selectedPlan === 'monthly',
               currency: activeCurrency,
             }),
           });
@@ -1028,13 +1002,18 @@
                   <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
                 </div>
                 <h2 class="text-2xl font-black text-gray-900">SWEEPR VPN Pro Activated!</h2>
-                <p class="text-sm text-gray-600">Your subscription is live in the SWEEPR Account Portal for <strong>${email}</strong>.</p>
+                <p class="text-sm text-gray-600">Your subscription is live in the SWEEPR Customer Portal for <strong>${email}</strong>.</p>
                 <div class="bg-emerald-50 border-2 border-emerald-500 rounded-xl p-4 max-w-sm mx-auto">
                   <div class="text-xs font-bold uppercase tracking-wider text-emerald-800">6-Digit Activation Key</div>
                   <div class="font-mono text-3xl font-black tracking-widest text-emerald-700 mt-1">${code}</div>
-                  ${wifiRadar ? '<div class="text-xs font-bold text-emerald-700 mt-2">+ SWEEPR Wi-Fi Radar &amp; Smart-TV Shield Active</div>' : ''}
                 </div>
-                <p class="text-xs text-gray-500">Enter your email and this 6-digit key inside the SWEEPR VPN Desktop or Mobile app to unlock full Pro privacy and Wi-Fi protection.</p>
+                <p class="text-xs text-gray-500">Download SWEEPR VPN below and enter your email and this 6-digit key to unlock full Pro privacy and Wi-Fi protection.</p>
+                <div class="pt-2">
+                  <a href="/download" class="btn btn-go btn-big justify-center gap-2">
+                    <span>Download SWEEPR VPN</span>
+                    <svg class="arrow-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                  </a>
+                </div>
               </div>
             `;
           }

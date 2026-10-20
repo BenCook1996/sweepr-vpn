@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="color-scheme" content="light">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Portal Sign In | SWEEPR VPN</title>
+  <meta name="description" content="Sign in to your SWEEPR VPN Customer Portal with a one-time email code to manage your subscription, download the app, or update billing.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="canonical" href="https://sweeprvpn.com/login">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="shortcut icon" href="/favicon.svg">
+  <script src="https://cdn.tailwindcss.com/3.4.5"></script>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/pricing-config.js" defer></script>
+</head>
+<body class="text-gray-800 flex flex-col items-center justify-center min-h-screen">
+
+  <div class="glass-card p-10 w-full max-w-md mx-4 relative">
+    <a href="/" id="backBtn" class="absolute top-6 left-6 text-gray-400 hover:text-gray-800 transition-colors p-1" title="Back">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+    </a>
+
+    <!-- Currency Selector Dropdown -->
+    <div class="absolute top-5 right-5 z-20" id="currencySelectorMount"></div>
+    
+    <div class="text-center mb-8 mt-4">
+      <div class="logo-box mx-auto mb-4">S</div>
+      <h1 class="text-2xl font-black">Login</h1>
+      <p class="text-gray-500 mt-2 text-sm" id="headerSubtitle">Manage your subscription, update payment methods, and download the app.</p>
+    </div>
+
+    <form id="loginForm" class="flex flex-col gap-4">
+      <div id="emailSection">
+        <label class="block text-sm font-semibold mb-1">Email Address</label>
+        <input type="email" id="email" required placeholder="you@example.com" class="w-full p-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500 transition-shadow bg-white">
+        <div class="mt-2 flex items-center justify-end">
+          <button type="button" id="haveCodeBtn" class="text-xs font-semibold text-green-600 hover:text-green-700 transition-colors">
+            Already have a 6-digit code? Enter it here
+          </button>
+        </div>
+      </div>
+      
+      <div id="otpSection" class="hidden">
+        <div class="flex items-center justify-between mb-1">
+          <label class="block text-sm font-semibold">Login Code</label>
+          <button type="button" id="changeEmailBtn" class="text-xs text-green-600 hover:text-green-700 font-medium transition-colors">Change email</button>
+        </div>
+        <p class="text-xs text-gray-500 mb-2">
+          Enter the 6-digit login code for <strong id="targetEmail" class="text-gray-800 font-semibold"></strong>.
+        </p>
+        <input type="text" id="otp" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="123456" class="w-full p-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500 transition-shadow bg-white text-center tracking-widest font-mono text-xl font-bold">
+        
+        <div class="mt-2 flex items-center justify-center">
+          <button type="button" id="resendOtpBtn" class="text-xs font-semibold text-green-600 hover:text-green-700 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors py-1 px-2 rounded">
+            Didn't receive it? Resend code
+          </button>
+        </div>
+      </div>
+      
+      <button type="submit" class="btn w-full justify-center" id="loginBtn">
+        <span id="loginBtnText">Continue</span>
+      </button>
+    </form>
+    
+    <div id="message" class="hidden mt-4 text-center text-sm font-medium p-3 rounded-lg border"></div>
+
+    <div class="text-center mt-6 pt-5 border-t border-gray-100">
+      <p class="text-xs text-gray-500 mb-2 font-medium">Don't have SWEEPR VPN yet?</p>
+      <a href="/order" class="btn btn-go w-full justify-center gap-2 text-sm">
+        <span>Buy Now</span>
+        <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <div class="mt-8 text-xs text-gray-500 flex flex-wrap justify-center gap-4">
+    <a href="/refund" class="hover:text-gray-900 transition-colors">Refund Policy</a>
+    <a href="/terms" class="hover:text-gray-900 transition-colors">Terms of Service</a>
+    <a href="/privacy" class="hover:text-gray-900 transition-colors">Privacy Policy</a>
+    <a href="/support" class="hover:text-gray-900 transition-colors">Support &amp; Help</a>
+  </div>
+
+  <script>
+    let awaitingOtp = false;
+    let cooldownTimer = null;
+    let cooldownSeconds = 0;
+
+    const backBtn = document.getElementById('backBtn');
+    const loginForm = document.getElementById('loginForm');
+    const loginBtn = document.getElementById('loginBtn');
+    const loginBtnText = document.getElementById('loginBtnText');
+    const msg = document.getElementById('message');
+    const emailInput = document.getElementById('email');
+    const emailSection = document.getElementById('emailSection');
+    const otpSection = document.getElementById('otpSection');
+    const otpInput = document.getElementById('otp');
+    const targetEmail = document.getElementById('targetEmail');
+    const changeEmailBtn = document.getElementById('changeEmailBtn');
+    const resendOtpBtn = document.getElementById('resendOtpBtn');
+    const haveCodeBtn = document.getElementById('haveCodeBtn');
+
+    function showMessage(text, type) {
+      if (!text) {
+        msg.classList.add('hidden');
+        return;
+      }
+      msg.textContent = text;
+      msg.className = "mt-4 text-center text-sm font-medium p-3 rounded-lg border";
+      if (type === 'success') {
+        msg.classList.add('bg-green-50', 'text-green-700', 'border-green-200');
+      } else {
+        msg.classList.add('bg-red-50', 'text-red-700', 'border-red-200');
+      }
+      msg.classList.remove('hidden');
+    }
+
+    function startCooldown(seconds = 30) {
+      cooldownSeconds = seconds;
+      resendOtpBtn.disabled = true;
+      updateResendText();
+      if (cooldownTimer) clearInterval(cooldownTimer);
+      cooldownTimer = setInterval(() => {
+        cooldownSeconds--;
+        if (cooldownSeconds <= 0) {
+          clearInterval(cooldownTimer);
+          cooldownTimer = null;
+          resendOtpBtn.disabled = false;
+          resendOtpBtn.textContent = "Didn't receive it? Resend code";
+        } else {
+          updateResendText();
+        }
+      }, 1000);
+    }
+
+    function updateResendText() {
+      resendOtpBtn.textContent = `Resend code in ${cooldownSeconds}s`;
+    }
+
+    function showEmailStep() {
+      awaitingOtp = false;
+      emailSection.classList.remove('hidden');
+      otpSection.classList.add('hidden');
+      loginBtnText.textContent = "Continue";
+      loginBtn.disabled = false;
+      showMessage('', false);
+      emailInput.focus();
+    }
+
+    function showOtpStep(email, withCooldown = true) {
+      awaitingOtp = true;
+      emailSection.classList.add('hidden');
+      otpSection.classList.remove('hidden');
+      targetEmail.textContent = email;
+      loginBtnText.textContent = "Verify Code";
+      loginBtn.disabled = false;
+      otpInput.value = '';
+      otpInput.focus();
+      if (withCooldown) {
+        startCooldown(30);
+      } else {
+        if (cooldownTimer) clearInterval(cooldownTimer);
+        cooldownSeconds = 0;
+        resendOtpBtn.disabled = false;
+        resendOtpBtn.textContent = "Didn't receive it? Resend code";
+      }
+    }
+
+    haveCodeBtn.addEventListener('click', () => {
+      const email = emailInput.value.trim();
+      if (!email || !email.includes('@')) {
+        showMessage("Please enter your email address first, then click 'Already have a 6-digit code?'.", 'error');
+        emailInput.focus();
+        return;
+      }
+      showMessage('', false);
+      showOtpStep(email, false);
+    });
+
+    (function initFromQuery() {
+      const params = new URLSearchParams(window.location.search);
+      const qEmail = params.get('email');
+      if (qEmail) {
+        emailInput.value = qEmail;
+        if (params.get('step') === 'otp') {
+          showOtpStep(qEmail, false);
+        }
+      }
+    })();
+
+    backBtn.addEventListener('click', (e) => {
+      if (awaitingOtp) {
+        e.preventDefault();
+        showEmailStep();
+      }
+    });
+
+    changeEmailBtn.addEventListener('click', () => {
+      showEmailStep();
+    });
+
+    otpInput.addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 6);
+    });
+
+    resendOtpBtn.addEventListener('click', async () => {
+      const email = emailInput.value.trim();
+      if (!email || cooldownSeconds > 0) return;
+      
+      resendOtpBtn.disabled = true;
+      resendOtpBtn.textContent = "Sending new code...";
+      showMessage('', false);
+
+      try {
+        const res = await fetch('/api/portal-login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        const data = await res.json();
+        if (data.otpSent) {
+          startCooldown(30);
+          showMessage('A fresh 6-digit login code has been sent! Please check your inbox and spam folder.', 'success');
+          otpInput.value = '';
+          otpInput.focus();
+        } else {
+          resendOtpBtn.disabled = false;
+          resendOtpBtn.textContent = "Didn't receive it? Resend code";
+          showMessage(data.error || 'Failed to resend code. Please try again.', 'error');
+        }
+      } catch {
+        resendOtpBtn.disabled = false;
+        resendOtpBtn.textContent = "Didn't receive it? Resend code";
+        showMessage('Network error. Please try again.', 'error');
+      }
+    });
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = emailInput.value.trim();
+      
+      loginBtn.disabled = true;
+      loginBtnText.textContent = "Please wait...";
+      showMessage('', false);
+
+      try {
+        if (!awaitingOtp) {
+          const res = await fetch('/api/portal-login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+          });
+          
+          const data = await res.json();
+          if (data.otpSent) {
+            showOtpStep(email);
+          } else {
+            showMessage(data.error || "No active subscription found for this email.", 'error');
+            loginBtn.disabled = false;
+            loginBtnText.textContent = "Continue";
+          }
+        } else {
+          const code = otpInput.value.trim();
+          if (code.length !== 6) {
+            showMessage("Please enter the 6-digit login code.", 'error');
+            loginBtn.disabled = false;
+            loginBtnText.textContent = "Verify Code";
+            return;
+          }
+
+          const res = await fetch('/api/verify-otp', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, code })
+          });
+          const data = await res.json();
+          if (data.redirect) {
+            window.location.href = data.redirect;
+          } else {
+            showMessage(data.error || "Invalid or expired code.", 'error');
+            loginBtn.disabled = false;
+            loginBtnText.textContent = "Verify Code";
+          }
+        }
+      } catch (err) {
+        showMessage("Network error. Please try again.", 'error');
+        loginBtn.disabled = false;
+        loginBtnText.textContent = awaitingOtp ? "Verify Code" : "Continue";
+      }
+    });
+  </script>
+</body>
+</html>
