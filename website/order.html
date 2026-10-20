@@ -22,7 +22,35 @@
   <script src="https://cdn.tailwindcss.com/3.4.5"></script>
   <link rel="stylesheet" href="/style.css">
   <script src="/pricing-config.js" defer></script>
+  <script src="https://js.stripe.com/v3/"></script>
+  <script src="https://pay.google.com/gp/p/js/pay.js" async></script>
   <style>
+    #googlePayButtonContainer > div,
+    #googlePayButtonContainer button {
+      width: 100% !important;
+      height: 44px !important;
+      min-height: 44px !important;
+    }
+
+    /* Stripe custom element container styling (Matches sweeprcleaner.com/order) */
+    .stripe-input-box {
+      background-color: #ffffff;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      padding: 0.75rem 0.875rem;
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+      transition: all 0.15s ease-in-out;
+    }
+    .stripe-input-box:focus-within {
+      border-color: #10b981;
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+    }
+    .stripe-input-box.StripeElement--invalid {
+      border-color: #ef4444;
+      box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+    }
+
     /* 3D Box Mockup (Exact match to sweeprcleaner.com/order) */
     .software-box {
       width: 76px;
@@ -440,9 +468,23 @@
             </label>
           </div>
 
-          <!-- Express Payment Buttons (Google Pay / Apple Pay) -->
+          <!-- Express Payment Buttons (PayPal, Official Dynamic Google Pay & Apple Pay) -->
           <div class="space-y-2.5 pt-2">
-            <button type="button" id="expressGPayBtn" onclick="document.getElementById('orderForm').requestSubmit()" class="w-full h-11 bg-[#202124] hover:bg-black text-white font-medium rounded-xl flex items-center justify-center gap-2 transition-all shadow-xs cursor-pointer text-sm">
+            <!-- PayPal Button -->
+            <button type="button" id="paypalBtn" onclick="triggerCheckout('paypal')" class="hidden w-full h-11 bg-[#ffc439] hover:bg-[#f4bb33] text-[#003087] font-bold rounded-xl items-center justify-center transition-all shadow-xs cursor-pointer">
+              <span class="italic font-black text-xl tracking-tighter text-[#003087]">Pay<span class="text-[#0079c1]">Pal</span></span>
+            </button>
+
+            <!-- Official Dynamic Google Pay Button Container (Shows stored card art + last 4 digits) -->
+            <div id="googlePayButtonContainer" class="hidden w-full h-11 overflow-hidden rounded-xl"></div>
+
+            <!-- Native Stripe PaymentRequest Container (Apple Pay on Safari) -->
+            <div id="stripePaymentRequestContainer" class="hidden w-full">
+              <div id="paymentRequestBtn"></div>
+            </div>
+
+            <!-- Styled GPay Express Button (Remains visible until dynamic Google Pay card button mounts) -->
+            <button type="button" id="expressGPayBtn" onclick="triggerExpressWallet()" class="w-full h-11 bg-[#202124] hover:bg-black text-white font-medium rounded-xl flex items-center justify-center gap-2 transition-all shadow-xs cursor-pointer text-sm">
               <span class="font-semibold text-base inline-flex items-center tracking-tight">
                 <span class="text-[#4285F4] font-bold">G</span><span class="text-[#EA4335] font-bold">o</span><span class="text-[#FBBC05] font-bold">o</span><span class="text-[#4285F4] font-bold">g</span><span class="text-[#34A853] font-bold">l</span><span class="text-[#EA4335] font-bold">e</span>&nbsp;<span class="text-white font-semibold">Pay</span>
               </span>
@@ -473,10 +515,11 @@
                 class="w-full p-2.5 sm:p-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all">
             </div>
 
-            <!-- 2. Card Number (With Padlock Vector Icon on the right) -->
+            <!-- 2. Card Number (Live Stripe Element + Padlock Vector Icon on the right) -->
             <div>
               <label class="block text-xs font-bold text-gray-700 mb-1">Card Number</label>
               <div class="relative">
+                <div id="stripeCardNumber" class="stripe-input-box hidden"></div>
                 <input type="text" id="fallbackCardNumber" inputmode="numeric" autocomplete="cc-number" placeholder="4000 1234 5678 9010" maxlength="19"
                   class="w-full p-2.5 sm:p-3 pr-10 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all font-mono">
                 <!-- Padlock Icon inside input -->
@@ -490,6 +533,7 @@
             <div class="grid grid-cols-2 gap-3">
               <div>
                 <label class="block text-xs font-bold text-gray-700 mb-1">Expiry Date (MM/YY)</label>
+                <div id="stripeCardExpiry" class="stripe-input-box hidden"></div>
                 <input type="text" id="fallbackCardExpiry" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/YY" maxlength="5"
                   class="w-full p-2.5 sm:p-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all font-mono">
               </div>
@@ -504,6 +548,7 @@
                     </div>
                   </div>
                 </div>
+                <div id="stripeCardCvc" class="stripe-input-box hidden"></div>
                 <input type="text" id="fallbackCardCvc" inputmode="numeric" autocomplete="cc-csc" placeholder="123" maxlength="4"
                   class="w-full p-2.5 sm:p-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all font-mono">
               </div>
@@ -713,18 +758,68 @@
     </div>
   </div>
 
-  <!-- CHECKOUT CLIENT SCRIPT (Matched to sweeprcleaner.com/order) -->
+  <!-- CHECKOUT CLIENT SCRIPT (Matched to sweeprcleaner.com/order — Live Stripe Elements + Google Pay + Apple Pay) -->
   <script>
     let selectedPlan = 'annual'; // 'annual' | 'six_month' | 'monthly' (determined on /pricing)
     let isDiscountApplied = false;
     let discountModalShown = false;
     let inactivityTimer = null;
+    let stripe = null;
+    let elements = null;
+    let cardElements = null;
+    let checkoutConfig = {
+      publishableKey: '',
+      elementsEnabled: false,
+      amountTodayPence: 5999,
+      amountRegularPence: 5999
+    };
+    let paymentRequestInstance = null;
+    let googlePaymentsClient = null;
+    let canMakePaymentReady = false;
+
+    function getActivePricingObj() {
+      return window.SWEEPR_ACTIVE_PRICING || (window.getSweeprPricing ? window.getSweeprPricing('GBP') : null);
+    }
+
+    function calculateTotalPence() {
+      const p = getActivePricingObj();
+      if (p) {
+        const majorVal = selectedPlan === 'annual'
+          ? p.annual
+          : selectedPlan === 'six_month'
+          ? p.sixMonth
+          : isDiscountApplied
+          ? p.introFirstMonth
+          : p.monthly;
+        return p.decimals === 0 ? Math.round(majorVal) : Math.round(majorVal * 100);
+      }
+      const cfg = checkoutConfig && checkoutConfig.pricing;
+      if (selectedPlan === 'annual') return cfg?.annualAmount ?? 5999;
+      if (selectedPlan === 'six_month') return cfg?.sixMonthAmount ?? 3899;
+      return isDiscountApplied ? (cfg?.introMonthlyAmount ?? 199) : (cfg?.monthlyAmount ?? 999);
+    }
+
+    function updatePaymentRequestTotal() {
+      if (!paymentRequestInstance) return;
+      try {
+        paymentRequestInstance.update({
+          total: {
+            label: selectedPlan === 'annual'
+              ? 'SWEEPR VPN Pro (Annual)'
+              : selectedPlan === 'six_month'
+              ? 'SWEEPR VPN Pro (6-Month)'
+              : 'SWEEPR VPN Pro Subscription',
+            amount: calculateTotalPence()
+          }
+        });
+      } catch (err) {}
+    }
 
     function selectOrderPlan(plan) {
       selectedPlan = plan;
       try { sessionStorage.setItem('sweepr_selected_plan', plan); } catch (e) {}
 
-      const p = window.SWEEPR_ACTIVE_PRICING || (window.getSweeprPricing ? window.getSweeprPricing('GBP') : null);
+      const p = getActivePricingObj();
       if (!p) return;
 
       const productPriceTop = document.getElementById('productPriceTop');
@@ -818,6 +913,336 @@
           termsConsentLabel.textContent = `I agree to pay ${totalStr} today which will auto renew at ${totalStr} ${cycleWord} unless I cancel before my next renewal. I can cancel anytime via my online portal. Prices may change with notice.`;
         }
       }
+
+      updatePaymentRequestTotal();
+    }
+
+    // 1. Mount Live Stripe Elements (#stripeCardNumber, #stripeCardExpiry, #stripeCardCvc)
+    function setupStripeElements(publishableKey) {
+      try {
+        stripe = Stripe(publishableKey);
+        elements = stripe.elements();
+
+        const elementStyles = {
+          base: {
+            fontSize: '14px',
+            color: '#1f2937',
+            fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+            '::placeholder': { color: '#9ca3af' }
+          },
+          invalid: {
+            color: '#ef4444'
+          }
+        };
+
+        const cardNumberEl = elements.create('cardNumber', { style: elementStyles, showIcon: false });
+        const cardExpiryEl = elements.create('cardExpiry', { style: elementStyles });
+        const cardCvcEl = elements.create('cardCvc', { style: elementStyles });
+
+        document.getElementById('stripeCardNumber').classList.remove('hidden');
+        document.getElementById('fallbackCardNumber').classList.add('hidden');
+        document.getElementById('stripeCardExpiry').classList.remove('hidden');
+        document.getElementById('fallbackCardExpiry').classList.add('hidden');
+        document.getElementById('stripeCardCvc').classList.remove('hidden');
+        document.getElementById('fallbackCardCvc').classList.add('hidden');
+
+        cardNumberEl.mount('#stripeCardNumber');
+        cardExpiryEl.mount('#stripeCardExpiry');
+        cardCvcEl.mount('#stripeCardCvc');
+
+        cardElements = { cardNumberEl, cardExpiryEl, cardCvcEl };
+
+        setupStripePaymentRequest();
+        setupGooglePayButton(publishableKey);
+      } catch (err) {
+        console.warn('Stripe Elements initialization error, falling back to on-page fields:', err);
+      }
+    }
+
+    // 2a. Official Google Pay Dynamic Button (Renders user's saved card icon + last 4 digits)
+    function setupGooglePayButton(publishableKey, attempt = 0) {
+      if (!window.google || !window.google.payments || !window.google.payments.api) {
+        if (attempt < 25) {
+          setTimeout(() => setupGooglePayButton(publishableKey, attempt + 1), 150);
+        }
+        return;
+      }
+
+      try {
+        const baseCardPaymentMethod = {
+          type: 'CARD',
+          parameters: {
+            allowedAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
+            allowedCardNetworks: ['AMEX', 'DISCOVER', 'INTERAC', 'JCB', 'MASTERCARD', 'VISA']
+          }
+        };
+
+        const cardPaymentMethod = Object.assign({}, baseCardPaymentMethod, {
+          tokenizationSpecification: {
+            type: 'PAYMENT_GATEWAY',
+            parameters: {
+              gateway: 'stripe',
+              'stripe:version': '2020-08-27',
+              'stripe:publishableKey': publishableKey
+            }
+          }
+        });
+
+        const isLive = publishableKey && publishableKey.startsWith('pk_live_');
+        googlePaymentsClient = new window.google.payments.api.PaymentsClient({
+          environment: isLive ? 'PRODUCTION' : 'TEST'
+        });
+
+        googlePaymentsClient
+          .isReadyToPay({
+            apiVersion: 2,
+            apiVersionMinor: 0,
+            allowedPaymentMethods: [baseCardPaymentMethod]
+          })
+          .then((response) => {
+            if (response && response.result) {
+              const container = document.getElementById('googlePayButtonContainer');
+              if (!container) return;
+              container.innerHTML = '';
+
+              const gpayButton = googlePaymentsClient.createButton({
+                onClick: () => handleGooglePayClick(cardPaymentMethod),
+                allowedPaymentMethods: [baseCardPaymentMethod],
+                buttonColor: 'black',
+                buttonType: 'plain',
+                buttonRadius: 12,
+                buttonSizeMode: 'fill'
+              });
+
+              container.appendChild(gpayButton);
+              container.classList.remove('hidden');
+
+              const fallbackBtn = document.getElementById('expressGPayBtn');
+              const prContainer = document.getElementById('stripePaymentRequestContainer');
+              if (fallbackBtn) fallbackBtn.classList.add('hidden');
+              if (prContainer) prContainer.classList.add('hidden');
+            }
+          })
+          .catch((err) => {
+            console.warn('Google Pay readiness check error:', err);
+          });
+      } catch (err) {
+        console.warn('Google Pay button setup error:', err);
+      }
+    }
+
+    async function handleGooglePayClick(cardPaymentMethod) {
+      const termsConsent = document.getElementById('termsConsent');
+      const legalConsent = document.getElementById('legalConsent');
+      if (termsConsent) termsConsent.checked = true;
+      if (legalConsent) legalConsent.checked = true;
+
+      if (paymentRequestInstance && canMakePaymentReady) {
+        try {
+          paymentRequestInstance.show();
+          return;
+        } catch (err) {
+          console.warn('PaymentRequest show fallback:', err);
+        }
+      }
+
+      if (!googlePaymentsClient || !stripe) {
+        triggerExpressWallet();
+        return;
+      }
+
+      try {
+        const activePricing = getActivePricingObj();
+        const activeCurrencyCode = (activePricing?.code || checkoutConfig?.currencyCode || 'GBP').toUpperCase();
+        const totalMinor = calculateTotalPence();
+        const totalPriceStr = activePricing?.decimals === 0 ? String(Math.round(totalMinor)) : (totalMinor / 100).toFixed(2);
+
+        const paymentDataRequest = {
+          apiVersion: 2,
+          apiVersionMinor: 0,
+          allowedPaymentMethods: [cardPaymentMethod],
+          transactionInfo: {
+            totalPriceStatus: 'FINAL',
+            totalPrice: totalPriceStr,
+            currencyCode: activeCurrencyCode,
+            countryCode: checkoutConfig?.country || 'GB'
+          },
+          merchantInfo: {
+            merchantName: 'SWEEPR VPN'
+          },
+          emailRequired: true
+        };
+
+        const paymentData = await googlePaymentsClient.loadPaymentData(paymentDataRequest);
+        const rawToken = paymentData?.paymentMethodData?.tokenizationData?.token;
+        const parsedToken = rawToken ? JSON.parse(rawToken) : null;
+        if (!parsedToken || !parsedToken.id) {
+          throw new Error('Could not retrieve Google Pay payment token.');
+        }
+
+        const payerEmail = paymentData.email || document.getElementById('email')?.value?.trim() || undefined;
+        const payerName = paymentData?.paymentMethodData?.info?.billingAddress?.name || document.getElementById('cardName')?.value?.trim() || undefined;
+
+        const res = await fetch('/api/create-subscription', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: payerEmail,
+            name: payerName,
+            applyDiscount: isDiscountApplied && selectedPlan === 'monthly',
+            plan: selectedPlan,
+            currency: activeCurrencyCode.toLowerCase(),
+            paymentMethod: 'google_pay'
+          })
+        });
+        const data = await res.json();
+        if (!res.ok || !data.clientSecret) {
+          throw new Error(data.error || 'Unable to start Google Pay subscription.');
+        }
+
+        const { error: confirmError } = await stripe.confirmCardPayment(data.clientSecret, {
+          payment_method: {
+            card: { token: parsedToken.id },
+            billing_details: {
+              ...(payerEmail ? { email: payerEmail } : {}),
+              ...(payerName ? { name: payerName } : {})
+            }
+          }
+        });
+
+        if (confirmError) {
+          throw new Error(confirmError.message || 'Google Pay authorization failed.');
+        }
+
+        const verifyRes = await fetch('/api/confirm-subscription', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            subscriptionId: data.subscriptionId,
+            accountId: data.accountId
+          })
+        });
+        const verifyData = await verifyRes.json();
+        window.location.href = verifyData.redirect || '/checkout/success?web=1';
+      } catch (err) {
+        if (err && err.statusCode === 'CANCELED') return;
+        showError(err.message || 'Google Pay checkout was cancelled or could not be completed.');
+      }
+    }
+
+    // 2b. Apple Pay & Google Pay via Stripe PaymentRequest
+    async function setupStripePaymentRequest() {
+      if (!stripe) return;
+      try {
+        const activePricing = getActivePricingObj();
+        const activeCurr = (activePricing?.code || checkoutConfig?.currency || 'gbp').toLowerCase();
+        paymentRequestInstance = stripe.paymentRequest({
+          country: checkoutConfig?.country || 'GB',
+          currency: activeCurr,
+          total: {
+            label: selectedPlan === 'annual'
+              ? 'SWEEPR VPN Pro (Annual)'
+              : selectedPlan === 'six_month'
+              ? 'SWEEPR VPN Pro (6-Month)'
+              : 'SWEEPR VPN Pro Subscription',
+            amount: calculateTotalPence()
+          },
+          requestPayerName: true,
+          requestPayerEmail: true
+        });
+
+        const canMakePaymentResult = await paymentRequestInstance.canMakePayment();
+        if (canMakePaymentResult) {
+          canMakePaymentReady = true;
+
+          if (canMakePaymentResult.applePay) {
+            const prContainer = document.getElementById('stripePaymentRequestContainer');
+            const prBtnMount = document.getElementById('paymentRequestBtn');
+            const prButton = elements.create('paymentRequestButton', {
+              paymentRequest: paymentRequestInstance,
+              style: {
+                paymentRequestButton: {
+                  theme: 'dark',
+                  height: '44px',
+                  type: 'default'
+                }
+              }
+            });
+            prButton.mount(prBtnMount);
+            prButton.on('ready', () => {
+              const gpayContainer = document.getElementById('googlePayButtonContainer');
+              if (!gpayContainer || gpayContainer.classList.contains('hidden')) {
+                prContainer.classList.remove('hidden');
+                document.getElementById('expressGPayBtn').classList.add('hidden');
+              }
+            });
+          }
+
+          paymentRequestInstance.on('paymentmethod', async (ev) => {
+            try {
+              const payerEmail = ev.payerEmail || document.getElementById('email')?.value?.trim() || undefined;
+              const payerName = ev.payerName || document.getElementById('cardName')?.value?.trim() || undefined;
+              const activeCurrency = (getActivePricingObj()?.code || 'GBP').toLowerCase();
+              const res = await fetch('/api/create-subscription', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  email: payerEmail,
+                  name: payerName,
+                  applyDiscount: isDiscountApplied && selectedPlan === 'monthly',
+                  plan: selectedPlan,
+                  currency: activeCurrency,
+                  paymentMethod: 'wallet'
+                })
+              });
+              const data = await res.json();
+              if (!res.ok || !data.clientSecret) {
+                ev.complete('success');
+                showError(data.error || 'Payment failed.');
+                return;
+              }
+
+              const { error: confirmError, paymentIntent: confirmedPi } = await stripe.confirmCardPayment(
+                data.clientSecret,
+                { payment_method: ev.paymentMethod.id },
+                { handleActions: false }
+              );
+
+              if (confirmError) {
+                ev.complete('fail');
+                showError(confirmError.message || 'Payment confirmation failed.');
+                return;
+              }
+
+              ev.complete('success');
+
+              if (confirmedPi && confirmedPi.status === 'requires_action') {
+                const { error: actionError } = await stripe.confirmCardPayment(data.clientSecret);
+                if (actionError) {
+                  showError(actionError.message || '3D Secure authentication failed.');
+                  return;
+                }
+              }
+
+              const verifyRes = await fetch('/api/confirm-subscription', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  subscriptionId: data.subscriptionId,
+                  accountId: data.accountId
+                })
+              });
+              const verifyData = await verifyRes.json();
+              window.location.href = verifyData.redirect || '/checkout/success?web=1';
+            } catch (err) {
+              ev.complete('fail');
+              showError('Connection error during wallet checkout.');
+            }
+          });
+        }
+      } catch (err) {
+        console.warn('PaymentRequest initialization error:', err);
+      }
     }
 
     function setupFallbackInputMasks() {
@@ -886,7 +1311,7 @@
     function activateDiscountOffer() {
       closeDiscountModal();
       isDiscountApplied = true;
-      const p = window.SWEEPR_ACTIVE_PRICING || (window.getSweeprPricing ? window.getSweeprPricing('GBP') : { introStr: '£1.99', monthlyStr: '£9.99' });
+      const p = getActivePricingObj() || { introStr: '£1.99', monthlyStr: '£9.99' };
 
       const bannerTitle = document.getElementById('bannerTitle');
       const bannerSubtitle = document.getElementById('bannerSubtitle');
@@ -900,6 +1325,212 @@
     window.onSweeprCurrencyChanged = function () {
       selectOrderPlan(selectedPlan);
     };
+
+    function triggerExpressWallet() {
+      if (paymentRequestInstance) {
+        try {
+          paymentRequestInstance.show();
+          return;
+        } catch (err) {}
+      }
+      triggerCheckout('wallet');
+    }
+
+    function showError(msg) {
+      const errBox = document.getElementById('checkoutError');
+      if (!errBox) return;
+      errBox.textContent = msg;
+      errBox.classList.remove('hidden');
+      errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // Main Form Submission & Live Stripe Checkout Flow (Matches sweeprcleaner.com/order)
+    async function triggerCheckout(method = 'card') {
+      const errBox = document.getElementById('checkoutError');
+      if (errBox) {
+        errBox.classList.add('hidden');
+        errBox.textContent = '';
+      }
+
+      const termsConsent = document.getElementById('termsConsent');
+      const legalConsent = document.getElementById('legalConsent');
+      const emailInput = document.getElementById('email');
+      const email = emailInput ? emailInput.value.trim() : '';
+      const activeCurrency = (getActivePricingObj()?.code || 'GBP').toLowerCase();
+
+      if (method !== 'paypal') {
+        if (!termsConsent?.checked || (legalConsent && !legalConsent.checked)) {
+          showError('Please agree to the subscription terms, Terms of Service, and Privacy Policy to proceed.');
+          return;
+        }
+        if (!email || !email.includes('@')) {
+          emailInput?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          emailInput?.focus();
+          showError('Please enter your email address so we can deliver your SWEEPR VPN Pro license key.');
+          return;
+        }
+      } else {
+        if (termsConsent) termsConsent.checked = true;
+        if (legalConsent) legalConsent.checked = true;
+      }
+
+      const cardName = document.getElementById('cardName')?.value?.trim() || '';
+      const billingAddress = document.getElementById('billingAddress')?.value?.trim() || '';
+      const billingPostcode = document.getElementById('billingPostcode')?.value?.trim() || '';
+
+      const btn = document.getElementById('submitBtn');
+      const paypalBtn = document.getElementById('paypalBtn');
+      const expressGPayBtn = document.getElementById('expressGPayBtn');
+      const originalBtnHTML = btn ? btn.innerHTML : '';
+      const originalPaypalHTML = paypalBtn ? paypalBtn.innerHTML : '';
+      const originalGPayHTML = expressGPayBtn ? expressGPayBtn.innerHTML : '';
+
+      const restoreButtons = () => {
+        if (btn) {
+          btn.disabled = false;
+          btn.classList.remove('opacity-80', 'cursor-not-allowed');
+          btn.innerHTML = originalBtnHTML;
+        }
+        if (paypalBtn) {
+          paypalBtn.disabled = false;
+          paypalBtn.innerHTML = originalPaypalHTML;
+        }
+        if (expressGPayBtn) {
+          expressGPayBtn.disabled = false;
+          expressGPayBtn.innerHTML = originalGPayHTML;
+        }
+      };
+
+      if (btn) {
+        btn.disabled = true;
+        btn.classList.add('opacity-80', 'cursor-not-allowed');
+        btn.innerHTML = `
+          <svg class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span class="uppercase tracking-wide font-black">Processing Secure Payment...</span>
+        `;
+      }
+      if (paypalBtn) paypalBtn.disabled = true;
+      if (expressGPayBtn) expressGPayBtn.disabled = true;
+
+      try {
+        // Case A: Live Stripe Elements on-page card confirmation
+        if (stripe && cardElements && method === 'card') {
+          if (!cardName) {
+            document.getElementById('cardName')?.focus();
+            throw new Error('Please enter the name on your card.');
+          }
+
+          // Step 1: Create incomplete subscription on server
+          const subRes = await fetch('/api/create-subscription', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email,
+              name: cardName,
+              address: billingAddress,
+              postcode: billingPostcode,
+              applyDiscount: isDiscountApplied && selectedPlan === 'monthly',
+              plan: selectedPlan,
+              currency: activeCurrency,
+              paymentMethod: 'card'
+            })
+          });
+
+          const subData = await subRes.json();
+          if (!subRes.ok || !subData.clientSecret) {
+            throw new Error(subData.error || 'Unable to initiate card payment.');
+          }
+
+          // Step 2: Confirm card payment directly on the page with Stripe
+          const { error: stripeErr } = await stripe.confirmCardPayment(subData.clientSecret, {
+            payment_method: {
+              card: cardElements.cardNumberEl,
+              billing_details: {
+                name: cardName,
+                email: email,
+                address: {
+                  line1: billingAddress || undefined,
+                  postal_code: billingPostcode || undefined
+                }
+              }
+            }
+          });
+
+          if (stripeErr) {
+            throw new Error(stripeErr.message || 'Payment was declined by your card issuer.');
+          }
+
+          // Step 3: Confirm subscription on server & set session cookie
+          const confirmRes = await fetch('/api/confirm-subscription', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              subscriptionId: subData.subscriptionId,
+              accountId: subData.accountId
+            })
+          });
+          const confirmData = await confirmRes.json();
+          window.location.href = confirmData.redirect || '/checkout/success?web=1';
+          return;
+        }
+
+        // Case B: Fallback on-page Card / Wallet confirmation
+        let rawNum = '';
+        if (method === 'card') {
+          if (!cardName) {
+            document.getElementById('cardName')?.focus();
+            throw new Error('Please enter the name on your card.');
+          }
+          rawNum = document.getElementById('fallbackCardNumber')?.value?.replace(/\s/g, '') || '';
+          const rawExp = document.getElementById('fallbackCardExpiry')?.value?.trim() || '';
+          const rawCvc = document.getElementById('fallbackCardCvc')?.value?.trim() || '';
+
+          if (rawNum.length < 13) {
+            document.getElementById('fallbackCardNumber')?.focus();
+            throw new Error('Please enter a valid 16-digit card number.');
+          }
+          if (rawExp.length < 5) {
+            document.getElementById('fallbackCardExpiry')?.focus();
+            throw new Error('Please enter your card expiry date (MM/YY).');
+          }
+          if (rawCvc.length < 3) {
+            document.getElementById('fallbackCardCvc')?.focus();
+            throw new Error('Please enter the 3 or 4 digit security code (CVV).');
+          }
+        }
+
+        const subRes = await fetch('/api/create-subscription', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email,
+            name: cardName || undefined,
+            address: billingAddress || undefined,
+            postcode: billingPostcode || undefined,
+            applyDiscount: isDiscountApplied && selectedPlan === 'monthly',
+            plan: selectedPlan,
+            currency: activeCurrency,
+            paymentMethod: method,
+            confirmOnServer: true,
+            cardNumber: rawNum || undefined
+          })
+        });
+
+        const subData = await subRes.json();
+        if (subRes.ok && subData.redirectUrl) {
+          window.location.href = subData.redirectUrl;
+          return;
+        } else {
+          throw new Error(subData.error || 'Unable to process payment. Please verify your payment details.');
+        }
+      } catch (err) {
+        showError(err.message || 'An unexpected error occurred. Please verify your details.');
+        restoreButtons();
+      }
+    }
 
     // Capture lead in CRM as soon as visitor enters a valid email on the order page
     let lastCapturedLeadEmail = '';
@@ -917,7 +1548,19 @@
       }).catch(() => {});
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const res = await fetch('/api/checkout-config');
+        if (res.ok) {
+          checkoutConfig = await res.json();
+          if (checkoutConfig.elementsEnabled && window.Stripe && checkoutConfig.publishableKey) {
+            setupStripeElements(checkoutConfig.publishableKey);
+          }
+        }
+      } catch (err) {
+        console.warn('Could not load Stripe config:', err);
+      }
+
       setupFallbackInputMasks();
       startInactivityTimer();
 
@@ -931,10 +1574,15 @@
       const planParam = urlParams.get('plan');
       const offerParam = urlParams.get('offer');
       const discountParam = urlParams.get('discount');
+      const errorParam = urlParams.get('error');
       const emailParam = urlParams.get('email');
 
       if (emailParam && emailInputEl && !emailInputEl.value) {
         emailInputEl.value = emailParam;
+      }
+
+      if (errorParam === 'payment_cancelled' || errorParam === 'payment_incomplete') {
+        showError('Your payment was cancelled or not completed. No charge was made — please try again below.');
       }
 
       let storedPlan = null;
@@ -957,94 +1605,10 @@
         }
       });
 
-      document.getElementById('orderForm')?.addEventListener('submit', async (e) => {
+      document.getElementById('orderForm')?.addEventListener('submit', (e) => {
         e.preventDefault();
         captureOrderLead();
-
-        const errBox = document.getElementById('checkoutError');
-        const btn = document.getElementById('submitBtn');
-        const btnText = document.getElementById('submitBtnText');
-        const termsConsent = document.getElementById('termsConsent');
-        const legalConsent = document.getElementById('legalConsent');
-        const emailInput = document.getElementById('email');
-        const email = emailInput?.value?.trim();
-        const activeCurrency = (window.SWEEPR_ACTIVE_PRICING && window.SWEEPR_ACTIVE_PRICING.code)
-          ? window.SWEEPR_ACTIVE_PRICING.code.toLowerCase()
-          : 'gbp';
-
-        if (!termsConsent?.checked || !legalConsent?.checked) {
-          if (errBox) {
-            errBox.textContent = 'Please agree to the subscription terms, Terms of Service, and Privacy Policy to proceed.';
-            errBox.classList.remove('hidden');
-          }
-          return;
-        }
-
-        if (!email || !email.includes('@')) {
-          emailInput?.focus();
-          if (errBox) {
-            errBox.textContent = 'Please enter your email address so we can deliver your SWEEPR VPN Pro license.';
-            errBox.classList.remove('hidden');
-          }
-          return;
-        }
-        if (errBox) errBox.classList.add('hidden');
-        if (btn) btn.disabled = true;
-        if (btnText) btnText.textContent = 'PROCESSING SECURE PAYMENT...';
-
-        try {
-          const res = await fetch('/api/vpn/checkout', {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({
-              email,
-              plan: selectedPlan,
-              applyDiscount: isDiscountApplied && selectedPlan === 'monthly',
-              currency: activeCurrency,
-            }),
-          });
-          const data = await res.json();
-          if (!res.ok || data.error) {
-            throw new Error(data.message || data.error || 'Checkout failed. Please try again.');
-          }
-
-          if (data.url && !data.dev_simulated) {
-            window.location.href = data.url;
-            return;
-          }
-
-          const code = data.activation_code || data.license_key || 'ACTIVE';
-          const box = document.getElementById('checkoutBox');
-          if (box) {
-            box.innerHTML = `
-              <div class="text-center py-6 space-y-4">
-                <div class="w-14 h-14 mx-auto rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center">
-                  <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                </div>
-                <h2 class="text-2xl font-black text-gray-900">SWEEPR VPN Pro Activated!</h2>
-                <p class="text-sm text-gray-600">Your subscription is live in the SWEEPR Customer Portal for <strong>${email}</strong>.</p>
-                <div class="bg-emerald-50 border-2 border-emerald-500 rounded-xl p-4 max-w-sm mx-auto">
-                  <div class="text-xs font-bold uppercase tracking-wider text-emerald-800">6-Digit Activation Key</div>
-                  <div class="font-mono text-3xl font-black tracking-widest text-emerald-700 mt-1">${code}</div>
-                </div>
-                <p class="text-xs text-gray-500">Download SWEEPR VPN below and enter your email and this 6-digit key to unlock full Pro privacy and Wi-Fi protection.</p>
-                <div class="pt-2">
-                  <a href="/download" class="btn btn-go btn-big justify-center gap-2">
-                    <span>Download SWEEPR VPN</span>
-                    <svg class="arrow-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                  </a>
-                </div>
-              </div>
-            `;
-          }
-        } catch (err) {
-          if (errBox) {
-            errBox.textContent = err.message || 'Unable to process checkout right now.';
-            errBox.classList.remove('hidden');
-          }
-          if (btn) btn.disabled = false;
-          if (btnText) btnText.textContent = 'PURCHASE SECURELY';
-        }
+        triggerCheckout('card');
       });
     });
   </script>
