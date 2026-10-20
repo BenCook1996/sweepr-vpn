@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="color-scheme" content="light">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SWEEPR VPN: Fast 10Gbps WireGuard VPN &amp; Home Wi-Fi Radar for Windows, Mac &amp; Mobile</title>
+  <meta name="description" content="Encrypt your connection in seconds, stop ISP speed throttling, scan 15–30+ home Wi-Fi devices for unknown intruders, and block Smart-TV screenshot spying. Lightweight Rust engine with zero bloatware.">
+  <link rel="canonical" href="https://sweeprvpn.com/">
+
+  <!-- Open Graph / Social Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sweeprvpn.com/">
+  <meta property="og:title" content="SWEEPR VPN: Fast 10Gbps WireGuard VPN &amp; Home Wi-Fi Radar">
+  <meta property="og:description" content="Stop ISP throttling, detect unknown Wi-Fi devices, and block Smart-TV ACR telemetry without slow background bloatware.">
+  <meta property="og:image" content="https://sweeprvpn.com/og-image.png">
+
+  <!-- Twitter Meta -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://sweeprvpn.com/">
+  <meta name="twitter:title" content="SWEEPR VPN: Fast 10Gbps WireGuard VPN &amp; Home Wi-Fi Radar">
+  <meta name="twitter:description" content="Encrypt your network and scan your home Wi-Fi in seconds with native Rust performance. Zero bloatware.">
+  <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png">
+
+  <!-- Structured Data (JSON-LD) for Search Rich Snippets -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "name": "SWEEPR VPN",
+        "operatingSystem": "Windows 10, Windows 11, macOS, Linux, iOS, Android",
+        "applicationCategory": "SecurityApplication",
+        "fileSize": "14MB",
+        "offers": {
+          "@type": "Offer",
+          "price": "1.99",
+          "priceCurrency": "GBP",
+          "priceValidUntil": "2027-12-31",
+          "description": "1st month full Pro access for £1.99, then £9.99/month, or £59.99/year (Save 50%). Cancel anytime."
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.9",
+          "ratingCount": "8420",
+          "bestRating": "5",
+          "worstRating": "1"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How is SWEEPR VPN different from Total VPN or legacy VPNs?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "SWEEPR VPN is built in native Rust (<14MB installer) with 10Gbps RAM-only diskless WireGuard servers, transparent price-lock billing, a free 30-second Home Wi-Fi & ISP diagnostic scanner, and Smart-TV ACR screenshot telemetry blocking."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What does the SWEEPR Wi-Fi Radar & Smart-TV Shield add-on do?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "It scans all 15 to 30+ devices on your home Wi-Fi, sends real-time alerts whenever an unknown device joins your network, optimizes DNS in 1 click to stop ISP throttling, and blocks Smart TVs from taking ACR screenshots of what you watch."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I cancel my subscription anytime?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, you can cancel in one click from your self-service dashboard with no dark patterns, backed by a 30-day money-back guarantee."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="shortcut icon" href="/favicon.svg">
+  <script src="https://cdn.tailwindcss.com/3.4.5"></script>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/pricing-config.js" defer></script>
+  <script src="/nav.js" defer></script>
+</head>
+<body class="text-gray-800">
+
+  <!-- Navigation -->
+  <nav class="glass-nav px-4 md:px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-3 md:gap-8">
+      <a href="/" class="flex items-center gap-3 text-inherit no-underline">
+        <div class="logo-box">S</div>
+        <span class="font-extrabold text-xl tracking-tight text-gray-900">SWEEPR <span class="text-emerald-600">VPN</span></span>
+      </a>
+      <div class="hidden md:flex items-center gap-2">
+        <a href="/#purchase" class="btn btn-ghost text-sm">Features</a>
+        <a href="/pricing" class="btn btn-ghost text-sm">Pricing</a>
+        <!-- Consolidated Compare & Guides Menu -->
+        <div class="relative inline-block text-left" id="navDropdownContainer">
+          <button type="button" id="navDropdownBtn" class="btn btn-ghost text-sm flex items-center gap-1.5 cursor-pointer font-medium" aria-expanded="false" aria-haspopup="true">
+            <span>Compare &amp; Guides</span>
+            <svg id="navDropdownChevron" class="w-3.5 h-3.5 text-gray-500 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </button>
+          
+          <!-- Dropdown Flyout with Visual Tiles -->
+          <div id="navDropdownMenu" class="hidden absolute left-0 md:left-1/2 md:-translate-x-1/2 mt-2 w-[340px] sm:w-[420px] bg-white/95 backdrop-blur-xl border border-gray-200/90 rounded-2xl shadow-2xl p-2.5 z-50 transition-all">
+            <div class="grid grid-cols-1 gap-1.5">
+              <!-- Tile 1: SWEEPR VPN vs Total VPN -->
+              <a href="/vs-totalvpn.html" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
+                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                  </svg>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between gap-1 mb-0.5">
+                    <span class="text-sm font-bold text-gray-900 group-hover:text-emerald-700 transition-colors">SWEEPR VPN vs Total VPN</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">Comparison</span>
+                  </div>
+                  <p class="text-xs text-gray-500 leading-snug line-clamp-2">Head-to-head WireGuard speed, RAM-only servers, Wi-Fi Radar, and renewal pricing comparison.</p>
+                </div>
+              </a>
+
+              <!-- Tile 2: Home Wi-Fi & Smart-TV Spying Guide -->
+              <a href="/pricing#compare-plans" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
+                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                  </svg>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between gap-1 mb-0.5">
+                    <span class="text-sm font-bold text-gray-900 group-hover:text-emerald-700 transition-colors">Wi-Fi Radar &amp; Smart-TV Shield</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">2026 Add-On</span>
+                  </div>
+                  <p class="text-xs text-gray-500 leading-snug line-clamp-2">Real-time Wi-Fi intruder alerts, 1-click anti-throttling DNS, and Smart-TV ACR screenshot blocking.</p>
+                </div>
+              </a>
+
+              <!-- Tile 3: ISP Throttling & ASN Directory -->
+              <a href="/llms.txt" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
+                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
+                  </svg>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between gap-1 mb-0.5">
+                    <span class="text-sm font-bold text-gray-900 group-hover:text-emerald-700 transition-colors">ISP Throttling &amp; Server Directory</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">40+ Guides</span>
+                  </div>
+                  <p class="text-xs text-gray-500 leading-snug line-clamp-2">Directory of 10Gbps RAM-only WireGuard hubs, router .conf configs, and ISP peering fixes.</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex gap-2 md:gap-3 items-center">
+      <!-- Currency Selector Dropdown (Matched to sweeprcleaner.com Language Dropdown) -->
+      <div id="currencySelectorMount"></div>
+      <a href="/order" class="btn btn-ghost text-sm">Login</a>
+      <a href="/order?plan=annual" class="hidden md:inline-flex btn btn-go gap-2">
+        <span>Get SWEEPR VPN</span>
+        <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <main class="flex-1 pt-32 pb-20 px-6 max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12 text-center md:text-left">
+    <div class="flex-1">
+      <h1 class="text-3xl sm:text-5xl md:text-6xl font-black mb-6 leading-tight tracking-tight text-gray-900">
+        <span class="whitespace-nowrap">Secure your Wi&#8209;Fi.</span> <br>
+        <span style="color: var(--accent);">In seconds.</span>
+      </h1>
+      <p class="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl mx-auto md:mx-0">
+        Encrypt your connection on 10Gbps RAM-only WireGuard servers, scan your home Wi-Fi for unknown intruders, and stop ISP speed throttling &amp; Smart-TV spying. Experience the sleekest, fastest VPN ever built.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center gap-4 justify-center md:justify-start">
+        <a href="/order?plan=annual" id="downloadBtn" class="btn btn-go btn-big pulse-glow gap-2.5">
+          <span>Free Download</span>
+          <svg class="arrow-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+        <a href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-big bg-white border border-gray-300 hover:border-gray-400 text-gray-800">Get Pro Now</a>
+      </div>
+      <div class="flex flex-wrap items-center gap-3 justify-center md:justify-start mt-4 text-xs text-gray-500 font-medium">
+        <span>⚡ 30-Second Wi-Fi Scan</span>
+        <span>•</span>
+        <span>🛡️ 30-Day Money-Back Guarantee</span>
+        <span>•</span>
+        <span>🔒 Zero Bloatware</span>
+      </div>
+    </div>
+    <div class="flex-1 relative w-full max-w-lg">
+      <div class="glass-card p-6 flex flex-col gap-4 transform rotate-1 hover:rotate-0 transition-transform duration-500">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center bg-green-100 text-green-600 shrink-0">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          </div>
+          <div class="text-left">
+            <h3 class="font-bold text-gray-800">Scan Complete</h3>
+            <p class="text-sm text-gray-500">Found 19 devices on your Wi-Fi (including 3 unidentified connections), 2 open router vulnerabilities, and DNS throttling from your ISP.</p>
+          </div>
+        </div>
+        <div class="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
+          <div class="h-full bg-green-500 w-3/4 rounded-full"></div>
+        </div>
+        <a href="/order?plan=annual&addon=radar" class="btn btn-go w-full mt-2 gap-2">
+          <span>Secure my Network Now</span>
+          <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Features & Purchase section -->
+  <section id="purchase" class="py-16 px-6">
+    <div class="max-w-6xl mx-auto text-center">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 mb-14 text-left">
+        <div class="glass-card p-6">
+          <div class="text-2xl mb-4" style="color: var(--accent);">⚡</div>
+          <h3 class="font-bold mb-2 text-gray-900">10Gbps WireGuard</h3>
+          <p class="text-sm text-gray-600">Sub-5ms kernel &amp; userspace WireGuard and AmneziaWG stealth tunnels on 100% volatile RAM-only servers.</p>
+        </div>
+        <div class="glass-card p-6">
+          <div class="text-2xl mb-4" style="color: var(--accent);">🔍</div>
+          <h3 class="font-bold mb-2 text-gray-900">Wi-Fi Intruder Radar</h3>
+          <p class="text-sm text-gray-600">Scan 15 to 30+ home Wi-Fi devices, spot open router vulnerabilities, and get real-time alerts when new devices join.</p>
+        </div>
+        <div class="glass-card p-6">
+          <div class="text-2xl mb-4" style="color: var(--accent);">🚀</div>
+          <h3 class="font-bold mb-2 text-gray-900">DNS Anti-Throttling</h3>
+          <p class="text-sm text-gray-600">One-click DNS optimization and direct Tier-1 peering to stop ISP speed throttling and evening Netflix buffering.</p>
+        </div>
+        <div class="glass-card p-6">
+          <div class="text-2xl mb-4" style="color: var(--accent);">⏱️</div>
+          <h3 class="font-bold mb-2 text-gray-900">Smart-TV ACR Shield</h3>
+          <p class="text-sm text-gray-600">Automated blocking of Smart-TV telemetry—stops LG, Samsung, Roku &amp; Vizio TVs from taking screenshots of what you watch.</p>
+        </div>
+        <div class="glass-card p-6">
+          <div class="text-2xl mb-4" style="color: var(--accent);">🛡️</div>
+          <h3 class="font-bold mb-2 text-gray-900">Kill Switch &amp; Split Tunnel</h3>
+          <p class="text-sm text-gray-600">OS kernel firewall Kill Switch (WFP/pf), per-app Split Tunneling, and 1-click GL.iNet / Asuswrt router .conf export.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="mt-auto py-8 text-center text-gray-500 text-sm border-t border-gray-100">
+    <div class="flex justify-center gap-6 mb-4">
+      <a href="/pricing" class="hover:text-emerald-600 transition-colors">Pricing</a>
+      <a href="/order" class="hover:text-emerald-600 transition-colors">Order Checkout</a>
+      <a href="/vs-totalvpn.html" class="hover:text-emerald-600 transition-colors">vs Total VPN</a>
+      <a href="/llms.txt" class="hover:text-emerald-600 transition-colors">Support &amp; Specs</a>
+    </div>
+    <p>&copy; 2026 SWEEPR VPN Inc. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>

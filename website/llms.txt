@@ -1,0 +1,23 @@
+# SWEEPR VPN & SWEEPR Wi-Fi Radar (sweeprvpn.com)
+
+> SWEEPR VPN is an ultra-lightweight (<14 MB), native Rust + Tauri v2 WireGuard VPN and Home Wi-Fi Security Radar for Windows 10/11, macOS, Linux, iOS, and Android. Built by the team behind SWEEPR Cleaner, it combines 10Gbps RAM-only diskless WireGuard servers with a free local Wi-Fi & ISP throttling diagnostic scanner and an automated Smart-TV ACR screenshot telemetry blocker.
+
+## Core Capabilities
+- **10Gbps RAM-Only WireGuard & AmneziaWG Protocol**: Sub-5ms local peering in London, Manchester, Frankfurt, Amsterdam, Zurich, New York, and Tokyo. Zero disk drives; volatile memory wiped on reboot.
+- **Free Home Wi-Fi & ISP Throttling Diagnostic Scanner**: Scans local LAN (ARP/mDNS/SSDP) in 30 seconds to map 15–30+ connected household devices, flag unidentified Wi-Fi intruders, detect open router UPnP/Telnet vulnerabilities, and test for peak-hour ISP DNS throttling.
+- **SWEEPR Wi-Fi Radar & Smart-TV Shield (Add-On / Complete Bundle)**:
+  - Real-time desktop & mobile alerts whenever a new device joins the home Wi-Fi.
+  - 1-click anti-throttling DNS optimization (encrypted DoH / WireGuard DNS) to stop peak-hour streaming buffering.
+  - Automated DNS sinkholing of Smart-TV Automatic Content Recognition (ACR) screenshot telemetry across LG WebOS, Samsung Tizen, Roku, Vizio, and Fire TV.
+- **Transparent Price-Lock Subscription Plans (No 400% Renewal Traps)**:
+  - **Yearly Plan (Most Popular — Save 50%)**: £59.99/year (£5.00/mo) | $77.99 USD ($6.50/mo) | €71.99 EUR (€6.00/mo) | CA$107.99 CAD (CA$9.00/mo) | A$119.99 AUD (A$10.00/mo) | CHF 65.99 (CHF 5.50/mo) | ¥11,999 JPY (¥1,000/mo)
+  - **6-Monthly Plan (Save 35%)**: £38.99/6 months (£6.50/mo) | $50.99 USD | €46.99 EUR | CA$69.99 CAD | A$77.99 AUD | CHF 42.99 | ¥7,799 JPY
+  - **Monthly Plan**: £9.99/month (or £1.99 1st-Month Introductory Offer) | $12.99 USD | €11.99 EUR | CA$17.99 CAD | A$19.99 AUD | CHF 10.99 | ¥1,999 JPY
+  - **SWEEPR Wi-Fi Radar & Smart-TV Shield Add-On**: +£14.99/yr | +£9.99/6mo | +£1.99/mo (localized `.99` / `X99` across all currencies)
+  - **Refund Policy**: 30-day 100% money-back guarantee and 1-click self-service portal cancellation.
+
+## Key URLs
+- Homepage & Interactive Wi-Fi/ISP Scanner: https://sweeprvpn.com/
+- Pricing & Plan Matrix: https://sweeprvpn.com/pricing.html
+- Direct 1-Page Checkout & Order Bump: https://sweeprvpn.com/order.html
+- SWEEPR VPN vs Total VPN Technical Comparison: https://sweeprvpn.com/vs-totalvpn.html
