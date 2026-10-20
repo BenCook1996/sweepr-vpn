@@ -25,14 +25,21 @@
     })();
   </script>
   <meta name="description" content="Keep your browsing private in one click, see every device on your home Wi-Fi, stop internet slowdowns, and block Smart-TV spying. Lightweight app with zero bloatware.">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="https://sweeprvpn.com/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.tailwindcss.com">
 
   <!-- Open Graph / Social Meta -->
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="SWEEPR VPN">
+  <meta property="og:locale" content="en_GB">
   <meta property="og:url" content="https://sweeprvpn.com/">
   <meta property="og:title" content="SWEEPR VPN: Fast, Simple VPN &amp; Home Wi-Fi Scanner">
   <meta property="og:description" content="Stop internet slowdowns, spot unknown devices on your Wi-Fi, and block Smart-TV spying without slow background bloatware.">
   <meta property="og:image" content="https://sweeprvpn.com/og-image.png">
+  <meta property="og:image:alt" content="SWEEPR VPN 30-second Home Wi-Fi and Speed Scanner">
 
   <!-- Twitter Meta -->
   <meta name="twitter:card" content="summary_large_image">
@@ -46,6 +53,31 @@
   {
     "@context": "https://schema.org",
     "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://sweeprvpn.com/#organization",
+        "name": "SWEEPR VPN Inc.",
+        "url": "https://sweeprvpn.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://sweeprvpn.com/logo-emerald.svg"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer support",
+          "url": "https://sweeprvpn.com/support",
+          "availableLanguage": ["en"]
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://sweeprvpn.com/#website",
+        "url": "https://sweeprvpn.com/",
+        "name": "SWEEPR VPN",
+        "publisher": {
+          "@id": "https://sweeprvpn.com/#organization"
+        }
+      },
       {
         "@type": "SoftwareApplication",
         "name": "SWEEPR VPN",
@@ -243,6 +275,7 @@
   <!-- Features & Purchase section -->
   <section id="features" class="py-16 px-6">
     <div class="max-w-6xl mx-auto text-center" id="purchase">
+      <h2 class="sr-only">Key Privacy &amp; Home Wi-Fi Security Features</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 mb-14 text-left">
         <div class="glass-card p-6">
           <div class="text-2xl mb-4" style="color: var(--accent);">⚡</div>

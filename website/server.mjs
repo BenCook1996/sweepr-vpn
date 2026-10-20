@@ -22,6 +22,21 @@ const MIME_TYPES = {
   '.exe': 'application/vnd.microsoft.portable-executable'
 };
 
+const CANONICAL_REDIRECTS = {
+  '/index.html': '/',
+  '/pricing.html': '/pricing',
+  '/order.html': '/order',
+  '/login.html': '/login',
+  '/refund.html': '/refund',
+  '/terms.html': '/terms',
+  '/privacy.html': '/privacy',
+  '/support.html': '/support',
+  '/vs-totalvpn.html': '/vs/totalvpn',
+  '/vs-totalvpn': '/vs/totalvpn',
+  '/alternatives-totalvpn.html': '/alternatives/totalvpn',
+  '/alternatives-totalvpn': '/alternatives/totalvpn'
+};
+
 const ROUTE_ALIASES = {
   '/': 'index.html',
   '/pricing': 'pricing.html',
@@ -32,9 +47,7 @@ const ROUTE_ALIASES = {
   '/privacy': 'privacy.html',
   '/support': 'support.html',
   '/vs/totalvpn': 'vs-totalvpn.html',
-  '/vs-totalvpn': 'vs-totalvpn.html',
-  '/alternatives/totalvpn': 'alternatives-totalvpn.html',
-  '/alternatives-totalvpn': 'alternatives-totalvpn.html'
+  '/alternatives/totalvpn': 'alternatives-totalvpn.html'
 };
 
 async function readJsonBody(req) {
@@ -67,6 +80,7 @@ function renderPlatformDownloadPicker(osType) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Download SWEEPR VPN</title>
+  <meta name="robots" content="noindex, follow">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <script src="https://cdn.tailwindcss.com/3.4.5"></script>
   <link rel="stylesheet" href="/style.css">
@@ -101,6 +115,13 @@ const server = http.createServer(async (req, res) => {
   const urlObj = new URL(req.url, `http://${req.headers.host}`);
   let pathname = urlObj.pathname;
 
+  // 301 Permanent Redirect from legacy .html or non-canonical URLs to clean canonical URLs
+  if (req.method === 'GET' && CANONICAL_REDIRECTS[pathname]) {
+    const target = CANONICAL_REDIRECTS[pathname] + (urlObj.search || '');
+    res.writeHead(301, { Location: target });
+    return res.end();
+  }
+
   // Forward AI & Search crawler hits to central SWEEPR CRM SEO Intelligence (project: vpn)
   const ua = req.headers['user-agent'] || '';
   if (req.method === 'GET' && BOT_UA_RE.test(ua) && !pathname.startsWith('/api/')) {
@@ -128,7 +149,10 @@ const server = http.createServer(async (req, res) => {
     else if (uaLower.includes('linux')) osType = 'linux';
 
     if (osType === 'mobile' || (requestedPlatform && osType !== 'windows')) {
-      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+      res.writeHead(200, {
+        'Content-Type': 'text/html; charset=utf-8',
+        'X-Robots-Tag': 'noindex, follow'
+      });
       return res.end(renderPlatformDownloadPicker(osType));
     }
 
@@ -139,14 +163,15 @@ const server = http.createServer(async (req, res) => {
         'Content-Type': 'application/vnd.microsoft.portable-executable',
         'Content-Disposition': 'attachment; filename="SWEEPRVPN.exe"',
         'Content-Length': stat.size,
-        'Cache-Control': 'public, max-age=3600'
+        'Cache-Control': 'public, max-age=3600',
+        'X-Robots-Tag': 'noindex, nofollow'
       });
       return fs.createReadStream(exePath).pipe(res);
     }
   }
 
   // Returning-visitor redirect on `/` -> `/order` if sweepr_visited_order=1 cookie is present
-  if ((pathname === '/' || pathname === '/index.html') && req.method === 'GET') {
+  if (pathname === '/' && req.method === 'GET') {
     const cookies = req.headers.cookie || '';
     const hasVisitedOrder = cookies.includes('sweepr_visited_order=1');
     const bypassRedirect = urlObj.searchParams.get('noredirect') === '1' || urlObj.searchParams.get('home') === '1';
@@ -288,7 +313,8 @@ const server = http.createServer(async (req, res) => {
     return sendJson(res, 200, data);
   }
 
-  const isOrderRoute = pathname === '/order' || pathname === '/order.html';
+  const isOrderRoute = pathname === '/order';
+  const isLoginRoute = pathname === '/login';
 
   if (ROUTE_ALIASES[pathname]) {
     pathname = '/' + ROUTE_ALIASES[pathname];
@@ -316,6 +342,11 @@ const server = http.createServer(async (req, res) => {
     const headers = { 'Content-Type': MIME_TYPES[ext] || 'application/octet-stream' };
     if (isOrderRoute) {
       headers['Set-Cookie'] = 'sweepr_visited_order=1; Path=/; Max-Age=2592000; SameSite=Lax';
+      headers['X-Robots-Tag'] = 'noindex, follow';
+    } else if (isLoginRoute) {
+      headers['X-Robots-Tag'] = 'noindex, nofollow';
+    } else if (['.svg', '.png', '.ico', '.css', '.js'].includes(ext)) {
+      headers['Cache-Control'] = 'public, max-age=86400';
     }
     res.writeHead(200, headers);
     res.end(content);
