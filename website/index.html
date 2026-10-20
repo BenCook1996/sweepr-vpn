@@ -4,10 +4,11 @@
   <meta name="color-scheme" content="light">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SWEEPR VPN: Fast, Simple VPN &amp; Home Wi-Fi Scanner for PC, Mac &amp; Mobile</title>
+  <title>SWEEPR VPN — Fast, Simple VPN &amp; Home Wi-Fi Speed Scanner</title>
   <script>
     (function() {
       try {
+        if (/bot|crawl|spider|slurp|google|bing|gpt|claude|perplexity|applebot|duckduck|yandex/i.test(navigator.userAgent || '')) return;
         var params = new URLSearchParams(window.location.search);
         if (params.get('home') === '1' || params.get('noredirect') === '1') return;
         var ref = document.referrer || '';
@@ -24,7 +25,7 @@
       } catch (e) {}
     })();
   </script>
-  <meta name="description" content="Keep your browsing private in one click, see every device on your home Wi-Fi, stop internet slowdowns, and block Smart-TV spying. Lightweight app with zero bloatware.">
+  <meta name="description" content="Keep your browsing private in 1 click, see every device on your home Wi-Fi, and stop internet slowdowns. Tiny ~14MB app with zero popups. Try it free today.">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="https://sweeprvpn.com/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -65,6 +66,7 @@
         "contactPoint": {
           "@type": "ContactPoint",
           "contactType": "customer support",
+          "email": "support@sweeprvpn.com",
           "url": "https://sweeprvpn.com/support",
           "availableLanguage": ["en"]
         }
@@ -132,11 +134,21 @@
   }
   </script>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <link rel="shortcut icon" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/favicon.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" href="/favicon-dark.png" media="(prefers-color-scheme: dark)">
+  <link rel="shortcut icon" href="/favicon.ico">
   <script src="https://cdn.tailwindcss.com/3.4.5"></script>
   <link rel="stylesheet" href="/style.css">
   <script src="/pricing-config.js" defer></script>
   <script src="/nav.js" defer></script>
+  <!-- Google tag (gtag.js) - Sweepr VPN -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-7D28EEMNXX');
+  </script>
 </head>
 <body class="text-gray-800">
 
