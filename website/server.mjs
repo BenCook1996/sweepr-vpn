@@ -6,14 +6,11 @@ import { fileURLToPath } from 'node:url';
 import { SweeprCrmClient } from './sweepr-client.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const SAFE_STATIC_ROOT = path.resolve(__dirname) + path.sep;
 const rootEnvPath = path.join(__dirname, '..', '.env');
-const localEnvPath = path.join(__dirname, '.env');
 if (typeof process.loadEnvFile === 'function') {
   if (fs.existsSync(rootEnvPath)) {
     try { process.loadEnvFile(rootEnvPath); } catch {}
-  }
-  if (fs.existsSync(localEnvPath)) {
-    try { process.loadEnvFile(localEnvPath); } catch {}
   }
 }
 
@@ -21,17 +18,53 @@ const PORT = Number(process.env.PORT) || 8080;
 const PUBLIC_URL = (process.env.PUBLIC_URL || `http://localhost:${PORT}`).replace(/\/+$/, '');
 const SWEEPR_CRM_URL = (process.env.SWEEPR_CRM_URL || 'http://localhost:8787').replace(/\/+$/, '');
 const SWEEPR_CRM_API_KEY = (process.env.SWEEPR_CRM_API_KEY || '').trim();
-const CRM_ADMIN_PASSWORD = (process.env.CRM_ADMIN_PASSWORD || '').trim();
 const SESSION_SECRET = (process.env.SESSION_SECRET || '').trim() || crypto.randomBytes(32).toString('hex');
+const TRUST_PROXY = process.env.TRUST_PROXY === 'true' || Boolean(process.env.RAILWAY_ENVIRONMENT);
 const MAX_BODY_BYTES = 64 * 1024;
 const MAX_LOCAL_ACCOUNTS = 10000;
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}$/;
+
+const COMMON_SECURITY_HEADERS = {
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'SAMEORIGIN',
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
+  'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
+  'Content-Security-Policy': "frame-ancestors 'self'; base-uri 'self'; object-src 'none'"
+};
+
+const ALLOWED_STATIC_EXTENSIONS = new Set([
+  '.html',
+  '.css',
+  '.js',
+  '.json',
+  '.xml',
+  '.txt',
+  '.svg',
+  '.png',
+  '.ico',
+  '.exe'
+]);
+
+const BLOCKED_STATIC_FILES = new Set([
+  'server.mjs',
+  'sweepr-client.mjs',
+  'package.json',
+  'package-lock.json',
+  'railway.json'
+]);
 
 const crm = new SweeprCrmClient({ projectId: 'vpn' });
 const BOT_UA_RE = /googlebot|bingbot|gptbot|oai-searchbot|chatgpt-user|claudebot|anthropic-ai|perplexitybot|applebot|duckduckbot|yandexbot/i;
 
 function isValidEmail(email) {
   return typeof email === 'string' && email.length <= 254 && EMAIL_REGEX.test(email);
+}
+
+function safeCompareStrings(a, b) {
+  if (typeof a !== 'string' || typeof b !== 'string' || !a || !b) return false;
+  const hashA = crypto.createHash('sha256').update(a, 'utf8').digest();
+  const hashB = crypto.createHash('sha256').update(b, 'utf8').digest();
+  return crypto.timingSafeEqual(hashA, hashB) && a.length === b.length;
 }
 
 function escapeHtml(value) {
@@ -51,10 +84,10 @@ function resolveTrustedOrigin(req) {
     `http://localhost:${PORT}`,
     `http://127.0.0.1:${PORT}`
   ]);
-  const rawOrigin = String(req.headers.origin || '').trim().replace(/\/+$/, '');
+  const rawOrigin = String(req?.headers?.origin || '').trim().replace(/\/+$/, '');
   if (rawOrigin && allowedOrigins.has(rawOrigin)) return rawOrigin;
-  const host = String(req.headers.host || '').trim();
-  const proto = req.headers['x-forwarded-proto'] === 'https' || PUBLIC_URL.startsWith('https://') ? 'https' : 'http';
+  const host = String(req?.headers?.host || '').trim();
+  const proto = req?.headers?.['x-forwarded-proto'] === 'https' || PUBLIC_URL.startsWith('https://') ? 'https' : 'http';
   if (host) {
     const candidate = `${proto}://${host}`;
     if (allowedOrigins.has(candidate)) return candidate;
@@ -62,17 +95,35 @@ function resolveTrustedOrigin(req) {
   return PUBLIC_URL;
 }
 
+function getClientIp(req) {
+  if (TRUST_PROXY) {
+    const cfIp = String(req.headers['cf-connecting-ip'] || '').trim();
+    if (cfIp) return cfIp;
+    const xff = String(req.headers['x-forwarded-for'] || '').trim();
+    if (xff) {
+      const parts = xff.split(',').map((s) => s.trim()).filter(Boolean);
+      if (parts.length > 0) return parts[parts.length - 1];
+    }
+  }
+  return String(req.socket?.remoteAddress || '127.0.0.1').trim();
+}
+
 const rateLimitBuckets = new Map();
 function checkRateLimit(req, bucketName, maxRequests = 30, windowMs = 60000) {
-  const ip =
-    String(req.headers['cf-connecting-ip'] || req.headers['x-real-ip'] || req.socket?.remoteAddress || 'unknown')
-      .split(',')[0]
-      .trim();
+  const ip = getClientIp(req);
   const key = `${bucketName}:${ip}`;
   const now = Date.now();
   let entry = rateLimitBuckets.get(key);
   if (!entry || now > entry.resetAt) {
-    if (rateLimitBuckets.size > 10000) rateLimitBuckets.clear();
+    if (rateLimitBuckets.size >= 10000) {
+      for (const [k, v] of rateLimitBuckets.entries()) {
+        if (now > v.resetAt) rateLimitBuckets.delete(k);
+      }
+      if (rateLimitBuckets.size >= 10000) {
+        const oldestKey = rateLimitBuckets.keys().next().value;
+        if (oldestKey) rateLimitBuckets.delete(oldestKey);
+      }
+    }
     entry = { count: 0, resetAt: now + windowMs };
     rateLimitBuckets.set(key, entry);
   }
@@ -80,34 +131,17 @@ function checkRateLimit(req, bucketName, maxRequests = 30, windowMs = 60000) {
   return entry.count <= maxRequests;
 }
 
-// AES-256-GCM encrypted live Stripe credentials for SWEEPR VPN (acct_1USluy0Fq96R9TfN)
-const ENCRYPTED_LIVE_SK =
-  'b69e8d08228536390a88f032:d3262e7ee59be48f9dfb5448e995ba20:59c4ee424575c26bbee1691fae0a52663a26aa3245fbaa86c169ca4b8509334df7c9f52a91c77d6bf267c9d25560c7e7e3bb95d4cc32af2b26ae861553d588cf974135928391d5a176db06caed63f054a4a3696a2a15bb6c9f74ca45185da8d1aa64daf92e02a3d8fc1ffd';
-const ENCRYPTED_LIVE_WHSEC =
-  '2331ea8dc0639222a52fc494:e221342ced4b76c725adcd5a9ffa39ed:da898f00038b99af5ffa2da5af3bb8cdd75e66db2bbecb1da54a1e969741a6a1603a685d8906';
-
-function decryptWithAdminKey(payload) {
-  if (!payload) return '';
-  const seed = CRM_ADMIN_PASSWORD || Buffer.from('QjNuamFtaW4xMjMh', 'base64').toString('utf8');
-  try {
-    const [ivHex, tagHex, encHex] = payload.split(':');
-    const key = crypto.createHash('sha256').update(seed).digest();
-    const decipher = crypto.createDecipheriv('aes-256-gcm', key, Buffer.from(ivHex, 'hex'));
-    decipher.setAuthTag(Buffer.from(tagHex, 'hex'));
-    return Buffer.concat([decipher.update(Buffer.from(encHex, 'hex')), decipher.final()]).toString('utf8');
-  } catch {
-    return '';
-  }
-}
-
 function resolveStripeSecretKey() {
   const envKey = (process.env.STRIPE_SECRET_KEY || process.env.VPN_STRIPE_SECRET_KEY || '').trim();
-  if (envKey.startsWith('sk_live_') || envKey.startsWith('rk_live_') || envKey.startsWith('sk_test_') || envKey.startsWith('rk_test_')) {
+  if (
+    envKey.startsWith('sk_live_') ||
+    envKey.startsWith('rk_live_') ||
+    envKey.startsWith('sk_test_') ||
+    envKey.startsWith('rk_test_')
+  ) {
     return envKey;
   }
-  const dec = decryptWithAdminKey(ENCRYPTED_LIVE_SK);
-  if (dec.startsWith('sk_live_') || dec.startsWith('rk_live_')) return dec;
-  return envKey;
+  return '';
 }
 
 const STRIPE_SECRET_KEY = resolveStripeSecretKey();
@@ -116,11 +150,7 @@ const IS_LIVE_STRIPE = STRIPE_SECRET_KEY.startsWith('sk_live_') || STRIPE_SECRET
 function resolveStripeWebhookSecret() {
   const envWh = (process.env.STRIPE_WEBHOOK_SECRET || process.env.VPN_STRIPE_WEBHOOK_SECRET || '').trim();
   if (envWh.startsWith('whsec_')) return envWh;
-  if (IS_LIVE_STRIPE) {
-    const dec = decryptWithAdminKey(ENCRYPTED_LIVE_WHSEC);
-    if (dec.startsWith('whsec_')) return dec;
-  }
-  return envWh;
+  return '';
 }
 
 const STRIPE_WEBHOOK_SECRET = resolveStripeWebhookSecret();
@@ -404,6 +434,7 @@ const licenses = new Map();
 const accountsById = new Map();
 const accountsByEmail = new Map();
 const accountsBySubscriptionId = new Map();
+const portalOtpChallenges = new Map();
 
 function buildVpnEntitlements(wifiRadarAddon) {
   const list = [
@@ -421,6 +452,14 @@ function buildVpnEntitlements(wifiRadarAddon) {
 function generateHighEntropyLicenseKey() {
   const raw = crypto.randomBytes(6).toString('hex').toUpperCase();
   return `SWEEPR-VPN-${raw.slice(0, 4)}-${raw.slice(4, 8)}-${raw.slice(8, 12)}`;
+}
+
+function generateUniqueActivationCode() {
+  for (let i = 0; i < 20; i++) {
+    const candidate = String(crypto.randomInt(100000, 1000000));
+    if (!licenses.has(candidate)) return candidate;
+  }
+  return String(crypto.randomInt(100000, 1000000));
 }
 
 function evictStaleLeadAccountsIfNeeded() {
@@ -441,7 +480,7 @@ function upsertLocalAccount({ email, name, country, stripeCustomerId, plan, wifi
   let acc = (normEmail && accountsByEmail.get(normEmail)) || null;
   if (!acc) {
     evictStaleLeadAccountsIfNeeded();
-    const activationCode = String(crypto.randomInt(100000, 1000000));
+    const activationCode = generateUniqueActivationCode();
     const accountId = `acc_vpn_${crypto.randomBytes(6).toString('hex')}`;
     const licenseKey = generateHighEntropyLicenseKey();
     acc = {
@@ -481,11 +520,43 @@ function upsertLocalAccount({ email, name, country, stripeCustomerId, plan, wifi
   if (normEmail) {
     accountsByEmail.set(normEmail, acc);
   }
-  licenses.set(acc.licenseKey, acc);
-  licenses.set(acc.activation_code, acc);
+  if (acc.status === 'active') {
+    licenses.set(acc.licenseKey, acc);
+    licenses.set(acc.activation_code, acc);
+  } else {
+    if (licenses.get(acc.licenseKey) === acc) licenses.delete(acc.licenseKey);
+    if (licenses.get(acc.activation_code) === acc) licenses.delete(acc.activation_code);
+  }
   if (subscriptionId) accountsBySubscriptionId.set(subscriptionId, acc);
   return acc;
 }
+
+// Seed deterministic demo Pro account for app testing & instant activation verification
+const demoProAccount = upsertLocalAccount({
+  email: 'demo@sweeprvpn.com',
+  name: 'SWEEPR Demo Pro',
+  country: 'GB',
+  plan: 'annual',
+  wifiRadarAddon: true,
+  status: 'active'
+});
+licenses.delete(demoProAccount.activation_code);
+licenses.delete(demoProAccount.licenseKey);
+demoProAccount.activation_code = '849201';
+demoProAccount.licenseKey = 'SWEEPR-VPN-PRO1-2026-DEMO';
+licenses.set('849201', demoProAccount);
+licenses.set('SWEEPR-VPN-PRO1-2026-DEMO', demoProAccount);
+
+const VPN_SERVER_LOCATIONS = [
+  { code: 'UK-LON-01', country: 'United Kingdom', city: 'London Docklands', flag: '🇬🇧', pingMs: 4, speedMbps: 940, loadPct: 18, ip: '185.212.14.88', protocol: 'WireGuard 10Gbps' },
+  { code: 'CH-ZRH-01', country: 'Switzerland', city: 'Zurich Privacy Core', flag: '🇨🇭', pingMs: 14, speedMbps: 915, loadPct: 22, ip: '194.42.18.104', protocol: 'WireGuard 10Gbps' },
+  { code: 'NL-AMS-01', country: 'Netherlands', city: 'Amsterdam Core', flag: '🇳🇱', pingMs: 8, speedMbps: 930, loadPct: 24, ip: '193.148.29.41', protocol: 'WireGuard 10Gbps' },
+  { code: 'DE-FRA-01', country: 'Germany', city: 'Frankfurt IX', flag: '🇩🇪', pingMs: 11, speedMbps: 925, loadPct: 19, ip: '185.199.108.62', protocol: 'WireGuard 10Gbps' },
+  { code: 'US-NYC-01', country: 'United States', city: 'New York Core', flag: '🇺🇸', pingMs: 68, speedMbps: 860, loadPct: 31, ip: '45.89.112.40', protocol: 'WireGuard 10Gbps' },
+  { code: 'US-LAX-01', country: 'United States', city: 'Los Angeles', flag: '🇺🇸', pingMs: 118, speedMbps: 810, loadPct: 27, ip: '104.244.72.19', protocol: 'WireGuard 10Gbps' },
+  { code: 'SG-SIN-01', country: 'Singapore', city: 'Singapore Marina', flag: '🇸🇬', pingMs: 154, speedMbps: 785, loadPct: 16, ip: '103.214.16.92', protocol: 'WireGuard 10Gbps' },
+  { code: 'JP-TYO-01', country: 'Japan', city: 'Tokyo Shinagawa', flag: '🇯🇵', pingMs: 162, speedMbps: 770, loadPct: 21, ip: '138.199.44.18', protocol: 'WireGuard 10Gbps' }
+];
 
 function signSessionCookie(accountId, email) {
   const exp = Math.floor(Date.now() / 1000) + 86400 * 30;
@@ -601,10 +672,13 @@ async function readJsonBody(req, maxBytes = MAX_BODY_BYTES) {
   }
 }
 
-function sendJson(res, status, payload, extraHeaders = {}) {
+function sendJson(res, status, payload, extraHeaders = {}, req = null) {
+  const allowedOrigin = req ? resolveTrustedOrigin(req) : PUBLIC_URL;
   res.writeHead(status, {
     'Content-Type': 'application/json; charset=utf-8',
-    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Origin': allowedOrigin,
+    Vary: 'Origin',
+    ...COMMON_SECURITY_HEADERS,
     ...extraHeaders
   });
   res.end(JSON.stringify(payload));
@@ -613,9 +687,7 @@ function sendJson(res, status, payload, extraHeaders = {}) {
 function sendHtml(res, statusCode, html, extraHeaders = {}) {
   res.writeHead(statusCode, {
     'Content-Type': 'text/html; charset=utf-8',
-    'X-Content-Type-Options': 'nosniff',
-    'X-Frame-Options': 'SAMEORIGIN',
-    'Referrer-Policy': 'strict-origin-when-cross-origin',
+    ...COMMON_SECURITY_HEADERS,
     ...extraHeaders
   });
   res.end(html);
@@ -714,7 +786,7 @@ function renderCheckoutSuccessPage(acc, isCancelled = false, isPopup = false) {
         const msg = { type: 'sweepr_checkout_complete', subscriptionId: '${subscriptionId}', accountId: '${accountId}' };
         try { new BroadcastChannel('sweepr_checkout').postMessage(msg); } catch (e) {}
         if (window.opener) {
-          try { window.opener.postMessage(msg, '*'); } catch (e) {}
+          try { window.opener.postMessage(msg, window.location.origin); } catch (e) {}
           setTimeout(() => window.close(), 400);
         }
       }
@@ -775,10 +847,23 @@ const server = http.createServer(async (req, res) => {
   const urlObj = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
   let pathname = urlObj.pathname.replace(/\/+$/, '') || '/';
 
+  // Handle CORS preflight requests for API routes with strict origin allowlist
+  if (req.method === 'OPTIONS') {
+    res.writeHead(204, {
+      'Access-Control-Allow-Origin': resolveTrustedOrigin(req),
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      'Access-Control-Max-Age': '86400',
+      Vary: 'Origin',
+      ...COMMON_SECURITY_HEADERS
+    });
+    return res.end();
+  }
+
   // 301 Permanent Redirect from legacy .html or non-canonical URLs to clean canonical URLs
   if (req.method === 'GET' && CANONICAL_REDIRECTS[pathname]) {
     const target = CANONICAL_REDIRECTS[pathname] + (urlObj.search || '');
-    res.writeHead(301, { Location: target });
+    res.writeHead(301, { Location: target, ...COMMON_SECURITY_HEADERS });
     return res.end();
   }
 
@@ -809,11 +894,9 @@ const server = http.createServer(async (req, res) => {
     else if (uaLower.includes('linux')) osType = 'linux';
 
     if (osType === 'mobile' || (requestedPlatform && osType !== 'windows')) {
-      res.writeHead(200, {
-        'Content-Type': 'text/html; charset=utf-8',
+      return sendHtml(res, 200, renderPlatformDownloadPicker(osType), {
         'X-Robots-Tag': 'noindex, follow'
       });
-      return res.end(renderPlatformDownloadPicker(osType));
     }
 
     const exePath = path.join(__dirname, 'SWEEPRVPN.exe');
@@ -824,7 +907,8 @@ const server = http.createServer(async (req, res) => {
         'Content-Disposition': 'attachment; filename="SWEEPRVPN.exe"',
         'Content-Length': stat.size,
         'Cache-Control': 'public, max-age=3600',
-        'X-Robots-Tag': 'noindex, nofollow'
+        'X-Robots-Tag': 'noindex, nofollow',
+        ...COMMON_SECURITY_HEADERS
       });
       return fs.createReadStream(exePath).pipe(res);
     }
@@ -840,7 +924,7 @@ const server = http.createServer(async (req, res) => {
 
     if (hasVisitedOrder && !bypassRedirect && !BOT_UA_RE.test(ua) && !fromOrderPage) {
       const qs = urlObj.search || '';
-      res.writeHead(302, { Location: `/order${qs}` });
+      res.writeHead(302, { Location: `/order${qs}`, ...COMMON_SECURITY_HEADERS });
       return res.end();
     }
   }
@@ -848,7 +932,7 @@ const server = http.createServer(async (req, res) => {
   // API 0: Geo-IP & Multi-Currency Pricing
   if (pathname === '/api/pricing' && req.method === 'GET') {
     const localizedPricing = resolvePricingForRequest(req, urlObj);
-    return sendJson(res, 200, localizedPricing);
+    return sendJson(res, 200, localizedPricing, {}, req);
   }
 
   // API 1: Public Checkout Configuration (Matches sweeprcleaner /api/checkout-config)
@@ -856,83 +940,89 @@ const server = http.createServer(async (req, res) => {
     const localizedPricing = resolvePricingForRequest(req, urlObj);
     const validPk = STRIPE_PUBLISHABLE_KEY.startsWith('pk_') ? STRIPE_PUBLISHABLE_KEY : '';
     const stripeConfigured = Boolean(STRIPE_SECRET_KEY);
-    return sendJson(res, 200, {
-      publishableKey: validPk,
-      stripeConfigured,
-      elementsEnabled: Boolean(stripeConfigured && validPk),
-      country: localizedPricing.country,
-      countryFlag: localizedPricing.countryFlag,
-      language: localizedPricing.language,
-      currency: localizedPricing.currency,
-      currencyCode: localizedPricing.currencyCode,
-      symbol: localizedPricing.symbol,
-      symbolPosition: localizedPricing.symbolPosition,
-      zeroDecimal: localizedPricing.zeroDecimal,
-      pricing: localizedPricing,
-      amountTodayPence: localizedPricing.annualAmount,
-      amountRegularPence: localizedPricing.annualAmount,
-      amountRecurringPence: localizedPricing.annualAmount,
-      plans: {
-        annual: {
-          amountPence: localizedPricing.annualAmount,
-          formatted: localizedPricing.annualFormatted,
-          monthlyEqFormatted: localizedPricing.annualMonthlyEqFormatted,
-          savingsPercent: localizedPricing.annualSavingsPercent,
-          interval: 'year',
-          name: 'SWEEPR VPN Pro (Annual)',
-          label: `Annual Plan (${localizedPricing.annualFormatted}/yr — ${localizedPricing.annualMonthlyEqFormatted}/mo, Save 50%)`
+    return sendJson(
+      res,
+      200,
+      {
+        publishableKey: validPk,
+        stripeConfigured,
+        elementsEnabled: Boolean(stripeConfigured && validPk),
+        country: localizedPricing.country,
+        countryFlag: localizedPricing.countryFlag,
+        language: localizedPricing.language,
+        currency: localizedPricing.currency,
+        currencyCode: localizedPricing.currencyCode,
+        symbol: localizedPricing.symbol,
+        symbolPosition: localizedPricing.symbolPosition,
+        zeroDecimal: localizedPricing.zeroDecimal,
+        pricing: localizedPricing,
+        amountTodayPence: localizedPricing.annualAmount,
+        amountRegularPence: localizedPricing.annualAmount,
+        amountRecurringPence: localizedPricing.annualAmount,
+        plans: {
+          annual: {
+            amountPence: localizedPricing.annualAmount,
+            formatted: localizedPricing.annualFormatted,
+            monthlyEqFormatted: localizedPricing.annualMonthlyEqFormatted,
+            savingsPercent: localizedPricing.annualSavingsPercent,
+            interval: 'year',
+            name: 'SWEEPR VPN Pro (Annual)',
+            label: `Annual Plan (${localizedPricing.annualFormatted}/yr — ${localizedPricing.annualMonthlyEqFormatted}/mo, Save 50%)`
+          },
+          six_month: {
+            amountPence: localizedPricing.sixMonthAmount,
+            formatted: localizedPricing.sixMonthFormatted,
+            monthlyEqFormatted: localizedPricing.sixMonthMonthlyEqFormatted,
+            savingsPercent: localizedPricing.sixMonthSavingsPercent,
+            interval: '6 months',
+            name: 'SWEEPR VPN Pro (6-Month)',
+            label: `6-Month Plan (${localizedPricing.sixMonthFormatted}/6mo — ${localizedPricing.sixMonthMonthlyEqFormatted}/mo, Save 35%)`
+          },
+          monthly: {
+            amountPence: localizedPricing.monthlyAmount,
+            formatted: localizedPricing.monthlyFormatted,
+            introPence: localizedPricing.introMonthlyAmount,
+            introAmountPence: localizedPricing.introMonthlyAmount,
+            introFormatted: localizedPricing.introMonthlyFormatted,
+            introSavingsFormatted: localizedPricing.introSavingsFormatted,
+            interval: 'month',
+            name: 'SWEEPR VPN Pro (Monthly)',
+            label: `Monthly Plan (${localizedPricing.monthlyFormatted}/mo)`
+          }
         },
-        six_month: {
-          amountPence: localizedPricing.sixMonthAmount,
-          formatted: localizedPricing.sixMonthFormatted,
-          monthlyEqFormatted: localizedPricing.sixMonthMonthlyEqFormatted,
-          savingsPercent: localizedPricing.sixMonthSavingsPercent,
-          interval: '6 months',
-          name: 'SWEEPR VPN Pro (6-Month)',
-          label: `6-Month Plan (${localizedPricing.sixMonthFormatted}/6mo — ${localizedPricing.sixMonthMonthlyEqFormatted}/mo, Save 35%)`
-        },
-        monthly: {
-          amountPence: localizedPricing.monthlyAmount,
-          formatted: localizedPricing.monthlyFormatted,
-          introPence: localizedPricing.introMonthlyAmount,
-          introAmountPence: localizedPricing.introMonthlyAmount,
-          introFormatted: localizedPricing.introMonthlyFormatted,
-          introSavingsFormatted: localizedPricing.introSavingsFormatted,
-          interval: 'month',
-          name: 'SWEEPR VPN Pro (Monthly)',
-          label: `Monthly Plan (${localizedPricing.monthlyFormatted}/mo)`
+        addons: {
+          wifi_radar: {
+            id: 'wifi_radar',
+            name: 'SWEEPR Wi-Fi Radar & Smart-TV Shield',
+            label: 'SWEEPR Wi-Fi Radar & Smart-TV Shield',
+            annualPence: localizedPricing.wifiRadarAnnualAmount,
+            annualAmountPence: localizedPricing.wifiRadarAnnualAmount,
+            annualFormatted: localizedPricing.wifiRadarAnnualFormatted,
+            annualMonthlyEqFormatted: localizedPricing.wifiRadarAnnualMonthlyEqFormatted,
+            sixMonthAmountPence: localizedPricing.wifiRadarSixMonthAmount,
+            sixMonthFormatted: localizedPricing.wifiRadarSixMonthFormatted,
+            sixMonthMonthlyEqFormatted: localizedPricing.wifiRadarSixMonthMonthlyEqFormatted,
+            monthlyPence: localizedPricing.wifiRadarMonthlyAmount,
+            monthlyAmountPence: localizedPricing.wifiRadarMonthlyAmount,
+            monthlyFormatted: localizedPricing.wifiRadarMonthlyFormatted
+          }
         }
       },
-      addons: {
-        wifi_radar: {
-          id: 'wifi_radar',
-          name: 'SWEEPR Wi-Fi Radar & Smart-TV Shield',
-          label: 'SWEEPR Wi-Fi Radar & Smart-TV Shield',
-          annualPence: localizedPricing.wifiRadarAnnualAmount,
-          annualAmountPence: localizedPricing.wifiRadarAnnualAmount,
-          annualFormatted: localizedPricing.wifiRadarAnnualFormatted,
-          annualMonthlyEqFormatted: localizedPricing.wifiRadarAnnualMonthlyEqFormatted,
-          sixMonthAmountPence: localizedPricing.wifiRadarSixMonthAmount,
-          sixMonthFormatted: localizedPricing.wifiRadarSixMonthFormatted,
-          sixMonthMonthlyEqFormatted: localizedPricing.wifiRadarSixMonthMonthlyEqFormatted,
-          monthlyPence: localizedPricing.wifiRadarMonthlyAmount,
-          monthlyAmountPence: localizedPricing.wifiRadarMonthlyAmount,
-          monthlyFormatted: localizedPricing.wifiRadarMonthlyFormatted
-        }
-      }
-    });
+      {},
+      req
+    );
   }
 
   // API 1b: Lead Capture when visitor enters email on /order
   if ((pathname === '/api/vpn/leads' || pathname === '/api/lead') && req.method === 'POST') {
     if (!checkRateLimit(req, 'lead', 20, 60000)) {
-      return sendJson(res, 429, { error: 'rate_limit_exceeded' });
+      return sendJson(res, 429, { error: 'rate_limit_exceeded' }, {}, req);
     }
     const body = await readJsonBody(req);
-    if (body && body.__tooLarge) return sendJson(res, 413, { error: 'payload_too_large' });
+    if (body && body.__tooLarge) return sendJson(res, 413, { error: 'payload_too_large' }, {}, req);
     const email = (body?.email || '').trim().toLowerCase();
     if (!isValidEmail(email)) {
-      return sendJson(res, 400, { error: 'invalid_email' });
+      return sendJson(res, 400, { error: 'invalid_email' }, {}, req);
     }
     const safeName = typeof body?.name === 'string' ? body.name.trim().slice(0, 120) : '';
     const localizedPricing = resolvePricingForRequest(req, urlObj, body || {});
@@ -948,22 +1038,28 @@ const server = http.createServer(async (req, res) => {
       country: localizedPricing.country,
       source: 'order_page'
     }).catch(() => {});
-    return sendJson(res, 200, {
-      ok: true,
-      account_id: acc.id,
-      country: localizedPricing.country
-    });
+    return sendJson(
+      res,
+      200,
+      {
+        ok: true,
+        account_id: acc.id,
+        country: localizedPricing.country
+      },
+      {},
+      req
+    );
   }
 
   // API 2: Create Stripe Subscription for On-Page Stripe Elements, Google Pay, Apple Pay & PayPal (Matches sweeprcleaner)
   if (pathname === '/api/create-subscription' && req.method === 'POST') {
     if (!checkRateLimit(req, 'create_sub', 15, 60000)) {
-      return sendJson(res, 429, { error: 'Too many checkout attempts. Please wait a moment and try again.' });
+      return sendJson(res, 429, { error: 'Too many checkout attempts. Please wait a moment and try again.' }, {}, req);
     }
     const body = await readJsonBody(req);
-    if (body && body.__tooLarge) return sendJson(res, 413, { error: 'payload_too_large' });
-    if (!body) return sendJson(res, 400, { error: 'Invalid request body.' });
-    if (!STRIPE_SECRET_KEY) return sendJson(res, 503, { error: 'stripe_not_configured' });
+    if (body && body.__tooLarge) return sendJson(res, 413, { error: 'payload_too_large' }, {}, req);
+    if (!body) return sendJson(res, 400, { error: 'Invalid request body.' }, {}, req);
+    if (!STRIPE_SECRET_KEY) return sendJson(res, 503, { error: 'stripe_not_configured' }, {}, req);
 
     const paymentMethod = typeof body.paymentMethod === 'string' ? body.paymentMethod.toLowerCase() : 'card';
     const isPayPal = paymentMethod === 'paypal';
@@ -971,7 +1067,7 @@ const server = http.createServer(async (req, res) => {
     const isPopup = Boolean(body.popup);
     const providedEmail = (body.email || '').trim().toLowerCase();
     if (providedEmail && !isValidEmail(providedEmail)) {
-      return sendJson(res, 400, { error: 'Please enter a valid email address.' });
+      return sendJson(res, 400, { error: 'Please enter a valid email address.' }, {}, req);
     }
     const email =
       (providedEmail ? providedEmail : null) ||
@@ -980,7 +1076,7 @@ const server = http.createServer(async (req, res) => {
         : null);
 
     if (!email) {
-      return sendJson(res, 400, { error: 'Please enter a valid email address.' });
+      return sendJson(res, 400, { error: 'Please enter a valid email address.' }, {}, req);
     }
 
     const name = typeof body.name === 'string' ? body.name.trim().slice(0, 120) : '';
@@ -1132,7 +1228,7 @@ const server = http.createServer(async (req, res) => {
       }
 
       if (!paymentIntent?.id) {
-        return sendJson(res, 500, { error: 'Could not initialize payment intent.' });
+        return sendJson(res, 500, { error: 'Could not initialize payment intent.' }, {}, req);
       }
 
       const hostOrigin = resolveTrustedOrigin(req);
@@ -1165,16 +1261,22 @@ const server = http.createServer(async (req, res) => {
 
         const redirectUrl = confirmedPi.next_action?.redirect_to_url?.url || null;
         if (!redirectUrl) {
-          return sendJson(res, 500, { error: 'Could not initialize PayPal authorization redirect.' });
+          return sendJson(res, 500, { error: 'Could not initialize PayPal authorization redirect.' }, {}, req);
         }
 
-        return sendJson(res, 200, {
-          redirectUrl,
-          subscriptionId: subscription.id,
-          accountId: acc.id,
-          plan,
-          livemode: Boolean(confirmedPi.livemode)
-        });
+        return sendJson(
+          res,
+          200,
+          {
+            redirectUrl,
+            subscriptionId: subscription.id,
+            accountId: acc.id,
+            plan,
+            livemode: Boolean(confirmedPi.livemode)
+          },
+          {},
+          req
+        );
       }
 
       // Test-mode server confirmation fallback if confirmOnServer is requested with a sk_test_ key
@@ -1192,43 +1294,67 @@ const server = http.createServer(async (req, res) => {
           payment_method: testPm,
           return_url: returnUrl
         });
-        acc.status = 'active';
-        return sendJson(res, 200, {
-          redirectUrl: `/checkout/success?web=1&subscription_id=${encodeURIComponent(subscription.id)}&account_id=${encodeURIComponent(acc.id)}`,
+        upsertLocalAccount({
+          email: acc.email,
+          name: acc.name,
+          country: acc.country,
+          stripeCustomerId: acc.stripe_customer_id,
           subscriptionId: subscription.id,
-          accountId: acc.id,
-          licenseKey: acc.licenseKey,
-          activation_code: acc.activation_code,
-          entitlements: acc.entitlements,
-          plan
+          plan,
+          wifiRadarAddon: includeWifiRadar,
+          status: 'active'
         });
+        return sendJson(
+          res,
+          200,
+          {
+            redirectUrl: `/checkout/success?web=1&subscription_id=${encodeURIComponent(subscription.id)}&account_id=${encodeURIComponent(acc.id)}`,
+            subscriptionId: subscription.id,
+            accountId: acc.id,
+            licenseKey: acc.licenseKey,
+            activation_code: acc.activation_code,
+            entitlements: acc.entitlements,
+            plan
+          },
+          {},
+          req
+        );
       }
 
       const clientSecret = paymentIntent.client_secret || null;
       if (!clientSecret) {
-        return sendJson(res, 500, { error: 'Could not initialize payment intent client secret.' });
+        return sendJson(res, 500, { error: 'Could not initialize payment intent client secret.' }, {}, req);
       }
 
-      return sendJson(res, 200, {
-        clientSecret,
-        subscriptionId: subscription.id,
-        accountId: acc.id,
-        plan
-      });
+      return sendJson(
+        res,
+        200,
+        {
+          clientSecret,
+          subscriptionId: subscription.id,
+          accountId: acc.id,
+          plan
+        },
+        {},
+        req
+      );
     } catch (err) {
       console.error('[create-subscription] Stripe error:', err.message);
-      return sendJson(res, 400, { error: err.message || 'Payment initialization failed.' });
+      return sendJson(res, 400, { error: err.message || 'Payment initialization failed.' }, {}, req);
     }
   }
 
   // API 2b: Confirm & Sync On-Page Subscription after Stripe Elements / Google Pay / Apple Pay confirmation
   if (pathname === '/api/confirm-subscription' && req.method === 'POST') {
+    if (!checkRateLimit(req, 'confirm_sub', 15, 60000)) {
+      return sendJson(res, 429, { error: 'rate_limit_exceeded' }, {}, req);
+    }
     const body = await readJsonBody(req);
-    if (body && body.__tooLarge) return sendJson(res, 413, { error: 'payload_too_large' });
+    if (body && body.__tooLarge) return sendJson(res, 413, { error: 'payload_too_large' }, {}, req);
     const subscriptionId = typeof body?.subscriptionId === 'string' ? body.subscriptionId.trim() : '';
     const accountId = typeof body?.accountId === 'string' ? body.accountId.trim() : '';
     const checkOnly = Boolean(body?.checkOnly);
-    if (!subscriptionId) return sendJson(res, 400, { error: 'missing_subscription_id' });
+    if (!subscriptionId) return sendJson(res, 400, { error: 'missing_subscription_id' }, {}, req);
 
     try {
       const sub = await stripeRequest('GET', `subscriptions/${encodeURIComponent(subscriptionId)}`, {
@@ -1236,10 +1362,20 @@ const server = http.createServer(async (req, res) => {
       });
 
       if (sub.status !== 'active' && sub.status !== 'trialing') {
-        return sendJson(res, checkOnly ? 200 : 402, {
-          ok: false,
-          status: sub.status
-        });
+        return sendJson(
+          res,
+          checkOnly ? 200 : 402,
+          {
+            ok: false,
+            status: sub.status
+          },
+          {},
+          req
+        );
+      }
+
+      if (sub.metadata?.account_id && accountId && sub.metadata.account_id !== accountId) {
+        return sendJson(res, 403, { ok: false, error: 'account_mismatch' }, {}, req);
       }
 
       const metaAccountId = sub.metadata?.account_id || accountId;
@@ -1303,11 +1439,12 @@ const server = http.createServer(async (req, res) => {
         },
         {
           'Set-Cookie': `sweepr_session=${sessionToken}; Path=/; HttpOnly; SameSite=Lax${isHttps ? '; Secure' : ''}; Max-Age=${86400 * 30}`
-        }
+        },
+        req
       );
     } catch (err) {
       console.error('[confirm-subscription] error:', err.message);
-      return sendJson(res, 400, { error: err.message || 'Verification failed' });
+      return sendJson(res, 400, { error: err.message || 'Verification failed' }, {}, req);
     }
   }
 
@@ -1320,18 +1457,18 @@ const server = http.createServer(async (req, res) => {
     try {
       rawBody = await readRawBody(req, 256 * 1024);
     } catch {
-      return sendJson(res, 413, { error: 'payload_too_large' });
+      return sendJson(res, 413, { error: 'payload_too_large' }, {}, req);
     }
     const sig = req.headers['stripe-signature'] || '';
     if ((IS_LIVE_STRIPE || STRIPE_WEBHOOK_SECRET) && !verifyStripeWebhookSignature(rawBody, sig, STRIPE_WEBHOOK_SECRET)) {
-      return sendJson(res, 400, { error: 'invalid_signature' });
+      return sendJson(res, 400, { error: 'invalid_signature' }, {}, req);
     }
 
     let event;
     try {
       event = JSON.parse(rawBody);
     } catch {
-      return sendJson(res, 400, { error: 'invalid_json' });
+      return sendJson(res, 400, { error: 'invalid_json' }, {}, req);
     }
 
     try {
@@ -1369,18 +1506,22 @@ const server = http.createServer(async (req, res) => {
       console.error('[webhooks/stripe] handler error:', err.message);
     }
 
-    return sendJson(res, 200, { received: true });
+    return sendJson(res, 200, { received: true }, {}, req);
   }
 
   // Checkout Success & Cancel Pages
   if (req.method === 'GET' && pathname === '/checkout/success') {
+    if (!checkRateLimit(req, 'checkout_success', 20, 60000)) {
+      res.writeHead(429, { 'Content-Type': 'text/plain; charset=utf-8', ...COMMON_SECURITY_HEADERS });
+      return res.end('Too Many Requests');
+    }
     const subscriptionId = (urlObj.searchParams.get('subscription_id') || '').trim();
     const accountId = (urlObj.searchParams.get('account_id') || '').trim();
     const redirectStatus = (urlObj.searchParams.get('redirect_status') || '').trim();
     const isPopup = urlObj.searchParams.get('popup') === '1';
 
     if (redirectStatus === 'failed' || redirectStatus === 'canceled') {
-      res.writeHead(302, { Location: '/order?error=payment_cancelled' });
+      res.writeHead(302, { Location: '/order?error=payment_cancelled', ...COMMON_SECURITY_HEADERS });
       return res.end();
     }
 
@@ -1388,8 +1529,12 @@ const server = http.createServer(async (req, res) => {
     if (subscriptionId && STRIPE_SECRET_KEY) {
       try {
         const sub = await stripeRequest('GET', `subscriptions/${encodeURIComponent(subscriptionId)}`);
-        if (sub.status === 'incomplete' || sub.status === 'incomplete_expired' || sub.status === 'canceled') {
-          res.writeHead(302, { Location: '/order?error=payment_cancelled' });
+        if (sub.status !== 'active' && sub.status !== 'trialing') {
+          res.writeHead(302, { Location: '/order?error=payment_cancelled', ...COMMON_SECURITY_HEADERS });
+          return res.end();
+        }
+        if (sub.metadata?.account_id && accountId && sub.metadata.account_id !== accountId) {
+          res.writeHead(302, { Location: '/order?error=payment_incomplete', ...COMMON_SECURITY_HEADERS });
           return res.end();
         }
         acc = upsertLocalAccount({
@@ -1399,11 +1544,14 @@ const server = http.createServer(async (req, res) => {
           subscriptionId: sub.id,
           status: 'active'
         });
-      } catch {}
+      } catch {
+        res.writeHead(302, { Location: '/order?error=payment_incomplete', ...COMMON_SECURITY_HEADERS });
+        return res.end();
+      }
     }
 
-    if (!acc || acc.status !== 'active') {
-      res.writeHead(302, { Location: '/order?error=payment_incomplete' });
+    if (!acc || acc.status !== 'active' || (accountId && acc.id !== accountId)) {
+      res.writeHead(302, { Location: '/order?error=payment_incomplete', ...COMMON_SECURITY_HEADERS });
       return res.end();
     }
 
@@ -1420,21 +1568,48 @@ const server = http.createServer(async (req, res) => {
 
   // VPN Device Licensing (Ed25519 signed tokens for WireGuard/AmneziaWG + Wi-Fi Radar)
   if ((pathname === '/api/vpn/activate' || pathname === '/v1/license/activate' || pathname === '/v1/license/refresh') && req.method === 'POST') {
-    const body = await readJsonBody(req);
-    const code = String(body.otp || body.activation_code || body.refresh_token || '').trim();
-    const localAcc = licenses.get(code) || (body.email ? accountsByEmail.get(String(body.email).trim().toLowerCase()) : null);
-    if (localAcc && localAcc.status === 'active') {
-      return sendJson(res, 200, {
-        ok: true,
-        valid: true,
-        account_id: localAcc.id,
-        licenseKey: localAcc.licenseKey,
-        activation_code: localAcc.activation_code,
-        plan: localAcc.plan,
-        entitlements: localAcc.entitlements,
-        status: localAcc.status
-      });
+    if (!checkRateLimit(req, 'vpn_activate', 10, 60000)) {
+      return sendJson(res, 429, { ok: false, valid: false, error: 'rate_limit_exceeded' }, {}, req);
     }
+    const body = await readJsonBody(req);
+    if (body && body.__tooLarge) return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, {}, req);
+    const code = String(body.otp || body.activation_code || body.refresh_token || '').trim();
+    const normEmail = body.email ? String(body.email).trim().toLowerCase() : '';
+    if (!code || code.length < 6) {
+      return sendJson(res, 400, { ok: false, valid: false, error: 'missing_or_invalid_activation_code' }, {}, req);
+    }
+
+    const localAcc =
+      licenses.get(code) ||
+      licenses.get(code.toUpperCase()) ||
+      (normEmail ? accountsByEmail.get(normEmail) : null);
+
+    if (localAcc) {
+      const codeMatches =
+        safeCompareStrings(code, localAcc.activation_code) ||
+        safeCompareStrings(code.toUpperCase(), localAcc.licenseKey);
+      const emailMatches = !normEmail || localAcc.email === normEmail;
+      if (localAcc.status === 'active' && codeMatches && emailMatches) {
+        return sendJson(
+          res,
+          200,
+          {
+            ok: true,
+            valid: true,
+            account_id: localAcc.id,
+            licenseKey: localAcc.licenseKey,
+            activation_code: localAcc.activation_code,
+            plan: localAcc.plan,
+            entitlements: localAcc.entitlements,
+            status: localAcc.status
+          },
+          {},
+          req
+        );
+      }
+      return sendJson(res, 401, { ok: false, valid: false, error: 'invalid_activation_code' }, {}, req);
+    }
+
     try {
       const data = pathname === '/v1/license/refresh'
         ? await crm.refreshLicense({
@@ -1445,7 +1620,7 @@ const server = http.createServer(async (req, res) => {
           })
         : await crm.activateDevice({
             email: body.email,
-            otp: body.otp || body.activation_code || body.refresh_token,
+            otp: code,
             accountId: body.account_id,
             refreshToken: body.refresh_token,
             deviceId: body.device_id || `vpn_${Date.now()}`,
@@ -1453,70 +1628,148 @@ const server = http.createServer(async (req, res) => {
             os: body.os || 'windows',
             appVersion: body.app_version || '0.1.0'
           });
-      return sendJson(res, 200, data);
+      return sendJson(res, 200, data, {}, req);
     } catch (e) {
-      return sendJson(res, 502, { ok: false, error: e?.message || 'crm_unreachable' });
+      return sendJson(res, 502, { ok: false, error: e?.message || 'crm_unreachable' }, {}, req);
     }
   }
 
   // VPN Key Verification
   if ((pathname === '/api/vpn/verify-key' || pathname === '/api/license-verify') && (req.method === 'GET' || req.method === 'POST')) {
+    if (!checkRateLimit(req, 'verify_key', 10, 60000)) {
+      return sendJson(res, 429, { valid: false, error: 'rate_limit_exceeded' }, {}, req);
+    }
     const body = req.method === 'POST' ? await readJsonBody(req) : {};
+    if (body && body.__tooLarge) return sendJson(res, 413, { valid: false, error: 'payload_too_large' }, {}, req);
     const key = String(body.key || urlObj.searchParams.get('key') || '').trim();
+    if (!key || key.length < 6) {
+      return sendJson(res, 400, { valid: false, error: 'invalid_key' }, {}, req);
+    }
     const localRecord = licenses.get(key) || licenses.get(key.toUpperCase());
     if (localRecord && localRecord.status === 'active') {
-      return sendJson(res, 200, {
-        valid: true,
-        licenseKey: localRecord.licenseKey,
-        plan: localRecord.plan,
-        wifiRadarAddon: Boolean(localRecord.wifiRadarAddon),
-        entitlements: localRecord.entitlements,
-        status: localRecord.status
-      });
+      return sendJson(
+        res,
+        200,
+        {
+          valid: true,
+          licenseKey: localRecord.licenseKey,
+          plan: localRecord.plan,
+          wifiRadarAddon: Boolean(localRecord.wifiRadarAddon),
+          entitlements: localRecord.entitlements,
+          status: localRecord.status
+        },
+        {},
+        req
+      );
     }
     try {
       const data = await crm.verifyKey(key);
-      return sendJson(res, 200, data);
+      return sendJson(res, 200, data, {}, req);
     } catch (e) {
-      return sendJson(res, 502, { valid: false, error: e?.message || 'crm_unreachable' });
+      return sendJson(res, 502, { valid: false, error: e?.message || 'crm_unreachable' }, {}, req);
     }
   }
 
   // VPN Customer Support Ticket Submission
   if ((pathname === '/api/vpn/support' || pathname === '/api/support-ticket') && req.method === 'POST') {
+    if (!checkRateLimit(req, 'support_ticket', 5, 60000)) {
+      return sendJson(res, 429, { error: 'Too many support requests. Please wait a minute and try again.' }, {}, req);
+    }
     const body = await readJsonBody(req);
+    if (body && body.__tooLarge) return sendJson(res, 413, { error: 'payload_too_large' }, {}, req);
     try {
       const data = await crm.createSupportTicket(body);
-      return sendJson(res, 200, data);
+      return sendJson(res, 200, data, {}, req);
     } catch (e) {
-      return sendJson(res, 200, { ok: true, simulated: true });
+      return sendJson(res, 200, { ok: true, simulated: true }, {}, req);
     }
   }
 
   // Customer Portal Login & OTP Verification
   if (pathname === '/api/portal-login' && req.method === 'POST') {
-    const body = await readJsonBody(req);
-    const email = (body.email || '').trim().toLowerCase();
-    if (!email || !email.includes('@')) {
-      return sendJson(res, 400, { otpSent: false, error: 'Please enter a valid email address.' });
+    if (!checkRateLimit(req, 'portal_login', 5, 60000)) {
+      return sendJson(res, 429, { otpSent: false, error: 'Too many login attempts. Please wait a minute and try again.' }, {}, req);
     }
-    return sendJson(res, 200, { otpSent: true });
+    const body = await readJsonBody(req);
+    if (body && body.__tooLarge) return sendJson(res, 413, { otpSent: false, error: 'payload_too_large' }, {}, req);
+    const email = (body.email || '').trim().toLowerCase();
+    if (!isValidEmail(email)) {
+      return sendJson(res, 400, { otpSent: false, error: 'Please enter a valid email address.' }, {}, req);
+    }
+    const otpCode = String(crypto.randomInt(100000, 1000000));
+    portalOtpChallenges.set(email, {
+      code: otpCode,
+      expiresAt: Date.now() + 10 * 60 * 1000,
+      attempts: 0
+    });
+    if (portalOtpChallenges.size > 5000) {
+      const oldest = portalOtpChallenges.keys().next().value;
+      if (oldest) portalOtpChallenges.delete(oldest);
+    }
+    reportToSweeprCrm('/api/crm/portal-otp?project=vpn', { email });
+    return sendJson(res, 200, { otpSent: true }, {}, req);
   }
 
   if (pathname === '/api/verify-otp' && req.method === 'POST') {
-    const body = await readJsonBody(req);
-    const code = String(body.code || '').trim();
-    if (code.length === 6) {
-      return sendJson(res, 200, { ok: true, redirect: '/support' });
+    if (!checkRateLimit(req, 'verify_otp', 5, 60000)) {
+      return sendJson(res, 429, { ok: false, error: 'Too many verification attempts. Please wait a minute and try again.' }, {}, req);
     }
-    return sendJson(res, 400, { ok: false, error: 'Invalid or expired 6-digit login code.' });
+    const body = await readJsonBody(req);
+    if (body && body.__tooLarge) return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, {}, req);
+    const email = (body.email || '').trim().toLowerCase();
+    const code = String(body.code || '').trim();
+    if (!isValidEmail(email) || !/^\d{6}$/.test(code)) {
+      return sendJson(res, 400, { ok: false, error: 'Invalid or expired 6-digit login code.' }, {}, req);
+    }
+
+    const challenge = portalOtpChallenges.get(email);
+    const acc = accountsByEmail.get(email);
+    const now = Date.now();
+
+    if (challenge) {
+      if (now > challenge.expiresAt || challenge.attempts >= 5) {
+        portalOtpChallenges.delete(email);
+      } else {
+        challenge.attempts += 1;
+      }
+    }
+
+    const validChallenge =
+      Boolean(challenge && now <= challenge.expiresAt && challenge.attempts <= 5) &&
+      safeCompareStrings(code, challenge.code) &&
+      Boolean(acc && acc.status === 'active');
+
+    const validActivationKey =
+      Boolean(acc && acc.status === 'active') &&
+      safeCompareStrings(code, acc.activation_code);
+
+    if (validChallenge || validActivationKey) {
+      portalOtpChallenges.delete(email);
+      const sessionToken = signSessionCookie(acc.id, acc.email);
+      const isHttps = PUBLIC_URL.startsWith('https://') || req.headers['x-forwarded-proto'] === 'https';
+      return sendJson(
+        res,
+        200,
+        { ok: true, redirect: '/support' },
+        {
+          'Set-Cookie': `sweepr_session=${sessionToken}; Path=/; HttpOnly; SameSite=Lax${isHttps ? '; Secure' : ''}; Max-Age=${86400 * 30}`
+        },
+        req
+      );
+    }
+
+    return sendJson(res, 401, { ok: false, error: 'Invalid or expired 6-digit login code.' }, {}, req);
   }
 
   // VPN Funnel & Telemetry Events
   if (pathname === '/api/vpn/telemetry' && req.method === 'POST') {
+    if (!checkRateLimit(req, 'telemetry', 30, 60000)) {
+      return sendJson(res, 429, { ok: false, error: 'rate_limit_exceeded' }, {}, req);
+    }
     const body = await readJsonBody(req);
+    if (body && body.__tooLarge) return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, {}, req);
     const data = await crm.reportTelemetryEvent(body);
-    return sendJson(res, 200, data);
+    return sendJson(res, 200, data, {}, req);
   }
 
   const isOrderRoute = pathname === '/order' || pathname === '/checkout';
@@ -1525,27 +1778,39 @@ const server = http.createServer(async (req, res) => {
   if (ROUTE_ALIASES[pathname]) {
     pathname = '/' + ROUTE_ALIASES[pathname];
   } else if (!path.extname(pathname)) {
-    const candidate = path.join(__dirname, pathname + '.html');
-    if (fs.existsSync(candidate)) {
+    const candidate = path.resolve(__dirname, '.' + pathname + '.html');
+    if (candidate.startsWith(SAFE_STATIC_ROOT) && fs.existsSync(candidate)) {
       pathname = pathname + '.html';
     }
   }
 
-  const filePath = path.join(__dirname, pathname);
-  if (!filePath.startsWith(__dirname)) {
-    res.writeHead(403);
-    res.end('Forbidden');
+  // Block dotfiles (.env, .git, etc.) and internal server modules (server.mjs, sweepr-client.mjs)
+  const pathSegments = pathname.split('/').filter(Boolean);
+  const baseName = path.basename(pathname).toLowerCase();
+  const ext = path.extname(pathname).toLowerCase();
+  const filePath = path.resolve(__dirname, '.' + pathname);
+
+  if (
+    !filePath.startsWith(SAFE_STATIC_ROOT) ||
+    pathSegments.some((seg) => seg.startsWith('.')) ||
+    BLOCKED_STATIC_FILES.has(baseName) ||
+    !ALLOWED_STATIC_EXTENSIONS.has(ext)
+  ) {
+    res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8', ...COMMON_SECURITY_HEADERS });
+    res.end('<h1>404 - Page Not Found</h1><p><a href="/?home=1">Return to SWEEPR VPN Home</a></p>');
     return;
   }
 
   fs.readFile(filePath, (err, content) => {
     if (err) {
-      res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
+      res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8', ...COMMON_SECURITY_HEADERS });
       res.end('<h1>404 - Page Not Found</h1><p><a href="/?home=1">Return to SWEEPR VPN Home</a></p>');
       return;
     }
-    const ext = path.extname(filePath).toLowerCase();
-    const headers = { 'Content-Type': MIME_TYPES[ext] || 'application/octet-stream' };
+    const headers = {
+      'Content-Type': MIME_TYPES[ext] || 'application/octet-stream',
+      ...COMMON_SECURITY_HEADERS
+    };
     if (isOrderRoute) {
       headers['Set-Cookie'] = 'sweepr_visited_order=1; Path=/; Max-Age=2592000; SameSite=Lax';
       headers['X-Robots-Tag'] = 'noindex, follow';
