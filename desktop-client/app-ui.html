@@ -288,10 +288,10 @@
 
       <h3 class="sec">Household shields <span style="cursor:pointer" onclick="allShields()">Turn all on</span></h3>
       <div class="card" style="padding:6px 14px">
-        <div class="devrow" style="border:0;padding:10px 0;background:transparent"><div class="grow"><div class="t">Smart-TV anti-spy shield</div><div class="s">Stops Samsung &amp; LG TVs from taking hidden snapshots of what you watch</div></div><button class="toggle on shield" onclick="this.classList.toggle('on')"><i></i></button></div>
-        <div class="devrow" style="border:0;border-top:1px solid var(--line);border-radius:0;padding:10px 0;background:transparent;margin:0"><div class="grow"><div class="t">Streaming-box ad blocker</div><div class="s">Stops Roku, Fire TV &amp; Apple TV sending your viewing habits to advertisers</div></div><button class="toggle on shield" onclick="this.classList.toggle('on')"><i></i></button></div>
-        <div class="devrow" style="border:0;border-top:1px solid var(--line);border-radius:0;padding:10px 0;background:transparent;margin:0"><div class="grow"><div class="t">Router safety check</div><div class="s">Makes sure your home Wi-Fi box has no unsafe open doors</div></div><button class="toggle on shield" onclick="this.classList.toggle('on')"><i></i></button></div>
-        <div class="devrow" style="border:0;border-top:1px solid var(--line);border-radius:0;padding:10px 0;background:transparent;margin:0"><div class="grow"><div class="t">Emergency cut-off</div><div class="s">Pauses the internet if protection drops, so your location never slips out</div></div><button class="toggle on shield" onclick="this.classList.toggle('on')"><i></i></button></div>
+        <div class="devrow" style="border:0;padding:10px 0;background:transparent"><div class="grow"><div class="t">Smart-TV anti-spy shield</div><div class="s">Stops Samsung &amp; LG TVs from taking hidden snapshots of what you watch</div></div><button class="toggle shield" onclick="toggleShield(this)"><i></i></button></div>
+        <div class="devrow" style="border:0;border-top:1px solid var(--line);border-radius:0;padding:10px 0;background:transparent;margin:0"><div class="grow"><div class="t">Streaming-box ad blocker</div><div class="s">Stops Roku, Fire TV &amp; Apple TV sending your viewing habits to advertisers</div></div><button class="toggle shield" onclick="toggleShield(this)"><i></i></button></div>
+        <div class="devrow" style="border:0;border-top:1px solid var(--line);border-radius:0;padding:10px 0;background:transparent;margin:0"><div class="grow"><div class="t">Router safety check</div><div class="s">Makes sure your home Wi-Fi box has no unsafe open doors</div></div><button class="toggle shield" onclick="toggleShield(this)"><i></i></button></div>
+        <div class="devrow" style="border:0;border-top:1px solid var(--line);border-radius:0;padding:10px 0;background:transparent;margin:0"><div class="grow"><div class="t">Emergency cut-off</div><div class="s">Pauses the internet if protection drops, so your location never slips out</div></div><button class="toggle shield" onclick="toggleShield(this)"><i></i></button></div>
       </div>
       <div style="height:6px"></div>
     </section>
@@ -482,22 +482,31 @@
   }
   function changeCountry() { setCompact(false); go('home'); setTimeout(() => $('search').focus(), 50); }
 
-  /* ---------- Connect (real WireGuard tunnel via sweepr-tunnel) ---------- */
+  /* ---------- Subscription Gate & Connect (real WireGuard tunnel via sweepr-tunnel) ---------- */
+  function requirePro(reason) {
+    if (state.pro && state.email && state.activationCode) return true;
+    openActivate(reason || 'An active paid SWEEPR Pro subscription is required to use this feature.');
+    return false;
+  }
+
   async function toggleConnect(reconnectOnly) {
     if (state.connecting) return;
+    const wantConnect = reconnectOnly ? true : !state.connected;
+    if (wantConnect && !requirePro('Enter your activation code or subscribe to enable VPN protection.')) {
+      return;
+    }
     if (!tauri) {
       toast('Download the SWEEPR desktop app to open a real WireGuard VPN tunnel.');
       return;
     }
-    const wantConnect = reconnectOnly ? true : !state.connected;
     state.connecting = true;
     $('connectText').textContent = wantConnect ? 'Connecting…' : 'Disconnecting…';
     try {
       if (wantConnect) {
         const st = await tauri.core.invoke('connect_vpn', {
           serverCode: state.code,
-          email: state.email || 'demo@sweeprvpn.com',
-          activationCode: state.activationCode || '849201',
+          email: state.email,
+          activationCode: state.activationCode,
           apiUrl: null
         });
         state.connected = !!st.connected;
@@ -516,7 +525,12 @@
     } catch (e) {
       state.connected = false;
       clearInterval(timerHandle);
-      toast(String(e && e.message || e));
+      const errMsg = String(e && e.message || e);
+      toast(errMsg);
+      if (/licence|subscription|activation/i.test(errMsg)) {
+        state.pro = false;
+        openActivate(errMsg);
+      }
     } finally {
       state.connecting = false;
       renderAll();
@@ -527,6 +541,12 @@
     try {
       const st = await tauri.core.invoke('vpn_status');
       if (st && st.connected) {
+        if (!state.pro) {
+          await tauri.core.invoke('disconnect_vpn');
+          state.connected = false;
+          renderAll();
+          return;
+        }
         state.connected = true;
         if (st.server_code) state.code = st.server_code;
         clearInterval(timerHandle);
@@ -542,6 +562,7 @@
   }
 
   function blockTv() {
+    if (!requirePro('Unlock SWEEPR Pro to block Smart-TV tracking across your home.')) return;
     go('home');
     if (!state.connected) {
       toggleConnect(true);
@@ -613,17 +634,34 @@
   }
   setInterval(updateLastChecked, 30000);
   function toggleAuto() {
+    if (!requirePro('Unlock SWEEPR Pro to enable automatic Wi-Fi intruder alerts.')) return;
     state.auto = !state.auto;
     $('autoToggle').classList.toggle('on', state.auto);
     $('radar').classList.toggle('off', !state.auto);
     toast(state.auto ? "We'll warn you if a stranger joins your Wi-Fi" : 'Wi-Fi watching turned off');
     postNative('toggleRadar', state.auto);
   }
-  function freq(btn) { btn.parentNode.querySelectorAll('button').forEach(b => b.classList.toggle('on', b === btn)); }
-  function allShields() { document.querySelectorAll('.toggle.shield').forEach(t => t.classList.add('on')); toast('All household shields are on'); }
+  function freq(btn) {
+    if (!requirePro('Unlock SWEEPR Pro to schedule automatic Wi-Fi checks.')) return;
+    btn.parentNode.querySelectorAll('button').forEach(b => b.classList.toggle('on', b === btn));
+  }
+  function toggleShield(btn) {
+    if (!requirePro('Unlock SWEEPR Pro to turn on Household & Smart-TV shields.')) return;
+    btn.classList.toggle('on');
+  }
+  function allShields() {
+    if (!requirePro('Unlock SWEEPR Pro to turn on all Household shields.')) return;
+    document.querySelectorAll('.toggle.shield').forEach(t => t.classList.add('on'));
+    toast('All household shields are on');
+  }
 
   /* ---------- Settings ---------- */
-  function toggleStartup() { state.startup = !state.startup; renderAll(); postNative('setStartup', state.startup); }
+  function toggleStartup() {
+    if (!requirePro('Unlock SWEEPR Pro to enable automatic start-up protection.')) return;
+    state.startup = !state.startup;
+    renderAll();
+    postNative('setStartup', state.startup);
+  }
   function toggleTheme() {
     const dark = document.documentElement.getAttribute('data-theme') !== 'dark';
     document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
@@ -647,18 +685,69 @@
     renderAll();
   }
 
-  /* ---------- Activation ---------- */
-  function openActivate() { $('mError').style.display = 'none'; $('modal').classList.add('open'); setTimeout(() => $('mEmail').focus(), 50); }
+  /* ---------- Activation (Live Paid Subscription Check) ---------- */
+  function openActivate(reason) {
+    if (reason && typeof reason === 'string') {
+      $('mError').textContent = reason;
+      $('mError').style.display = 'block';
+    } else {
+      $('mError').style.display = 'none';
+    }
+    $('modal').classList.add('open');
+    setTimeout(() => $('mEmail').focus(), 50);
+  }
   function closeActivate() { $('modal').classList.remove('open'); }
   function plan(btn) { btn.parentNode.querySelectorAll('.plan').forEach(p => p.classList.toggle('on', p === btn)); }
-  function confirmActivate() {
+  async function verifyServerSubscription(email, code) {
+    if (tauri) {
+      return await tauri.core.invoke('activate_subscription', { email, code, apiUrl: null });
+    }
+    const r = await fetch('/api/vpn/activate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, activation_code: code, otp: code })
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok || !d.ok || !d.valid) {
+      throw new Error(d.message || 'No active paid subscription found for that email and code.');
+    }
+    return d;
+  }
+  async function confirmActivate() {
     const email = $('mEmail').value.trim(), code = $('mCode').value.trim();
-    if (!email && !code) { postNative('openCheckout', true); toast('Opening secure checkout in your browser…'); return; }
-    if (!email.includes('@') || !/^\d{6}$/.test(code)) { $('mError').style.display = 'block'; return; }
-    state.pro = true; state.email = email; state.activationCode = code;
-    try { localStorage.setItem('sweepr_vpn_email', email); localStorage.setItem('sweepr_vpn_code', code); } catch (e) {}
-    closeActivate(); renderAll(); toast('SWEEPR Pro unlocked on this computer');
-    postNative('activateLicense', { email, code });
+    if (!email && !code) { postNative('openCheckout', true); window.open('https://sweeprvpn.com/order', '_blank'); toast('Opening secure checkout in your browser…'); return; }
+    if (!email.includes('@') || code.length < 6) {
+      $('mError').textContent = 'Please enter the email address and 6-digit activation code from your order.';
+      $('mError').style.display = 'block';
+      return;
+    }
+    try {
+      await verifyServerSubscription(email, code);
+      state.pro = true; state.email = email; state.activationCode = code;
+      document.querySelectorAll('.toggle.shield').forEach(t => t.classList.add('on'));
+      try { localStorage.setItem('sweepr_vpn_email', email); localStorage.setItem('sweepr_vpn_code', code); } catch (e) {}
+      closeActivate(); renderAll(); toast('SWEEPR Pro subscription verified & unlocked ✓');
+      postNative('activateLicense', { email, code });
+    } catch (e) {
+      state.pro = false;
+      $('mError').textContent = String(e && e.message || e);
+      $('mError').style.display = 'block';
+    }
+  }
+  async function verifySavedSubscription() {
+    if (!state.email || !state.activationCode) return;
+    try {
+      await verifyServerSubscription(state.email, state.activationCode);
+      state.pro = true;
+      document.querySelectorAll('.toggle.shield').forEach(t => t.classList.add('on'));
+      renderAll();
+      checkVpnStatus();
+    } catch (e) {
+      state.pro = false; state.email = ''; state.activationCode = '';
+      document.querySelectorAll('.toggle.shield').forEach(t => t.classList.remove('on'));
+      try { localStorage.removeItem('sweepr_vpn_email'); localStorage.removeItem('sweepr_vpn_code'); } catch (err) {}
+      renderAll();
+    }
   }
   function sendSupport() {
     if (!$('supEmail').value.includes('@') || !$('supMsg').value.trim()) { toast('Please add your email and a short message'); return; }
@@ -708,10 +797,10 @@
     if (localStorage.getItem('sweepr_vpn_theme') === 'dark') toggleTheme();
     const savedEmail = localStorage.getItem('sweepr_vpn_email');
     const savedCode = localStorage.getItem('sweepr_vpn_code');
-    if (savedEmail && savedCode) { state.email = savedEmail; state.activationCode = savedCode; state.pro = true; }
+    if (savedEmail && savedCode) { state.email = savedEmail; state.activationCode = savedCode; }
   } catch (e) {}
   renderAll();
-  checkVpnStatus();
+  verifySavedSubscription();
   scanWifi();
   // "Watch my Wi-Fi" re-checks on the chosen schedule
   setInterval(() => { if (state.auto) scanWifi(); }, 15 * 60 * 1000);

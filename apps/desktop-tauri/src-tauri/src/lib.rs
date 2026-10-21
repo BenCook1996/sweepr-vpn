@@ -8,6 +8,20 @@ async fn scan_network() -> Result<sweepr_wifi_radar::ScanReport, String> {
         .map_err(|e| e.to_string())?
 }
 
+/// Verifies that the user has an active paid SWEEPR VPN subscription.
+#[tauri::command]
+async fn activate_subscription(
+    email: String,
+    code: String,
+    api_url: Option<String>,
+) -> Result<sweepr_tunnel::SubscriptionStatus, String> {
+    tauri::async_runtime::spawn_blocking(move || {
+        sweepr_tunnel::verify_subscription(email, code, api_url)
+    })
+    .await
+    .map_err(|e| e.to_string())?
+}
+
 /// Returns current WireGuard tunnel status and this device's public key.
 #[tauri::command]
 async fn vpn_status() -> Result<sweepr_tunnel::TunnelStatus, String> {
@@ -86,6 +100,7 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
             scan_network,
+            activate_subscription,
             vpn_status,
             connect_vpn,
             disconnect_vpn,

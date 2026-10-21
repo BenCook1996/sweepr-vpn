@@ -43,6 +43,30 @@ pub struct TunnelStatus {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SubscriptionStatus {
+    pub active: bool,
+    pub plan: Option<String>,
+    pub wifi_radar: bool,
+    pub license_key: Option<String>,
+    pub activation_code: Option<String>,
+    pub message: String,
+}
+
+#[derive(Debug, Deserialize)]
+struct ApiActivateResponse {
+    ok: Option<bool>,
+    valid: Option<bool>,
+    status: Option<String>,
+    plan: Option<String>,
+    #[serde(rename = "licenseKey")]
+    license_key: Option<String>,
+    activation_code: Option<String>,
+    entitlements: Option<serde_json::Value>,
+    error: Option<String>,
+    message: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 struct PersistedState {
     private_key: String,
     public_key: String,
@@ -387,6 +411,121 @@ fn call_connect_api(
         .map_err(|_| "Unexpected response from SWEEPR server.".into())
 }
 
+fn call_activate_api(
+    api_base: &str,
+    email: &str,
+    code: &str,
+) -> Result<ApiActivateResponse, String> {
+    let url = format!("{}/api/vpn/activate", api_base.trim_end_matches('/'));
+    let body = serde_json::json!({
+        "email": email.trim(),
+        "activation_code": code.trim(),
+        "otp": code.trim(),
+        "os": std::env::consts::OS,
+        "app_version": "2.5.0"
+    })
+    .to_string();
+
+    let mut cmd = Command::new(curl_bin());
+    cmd.args([
+        "-sS",
+        "--max-time",
+        "10",
+        "-X",
+        "POST",
+        "-H",
+        "Content-Type: application/json",
+        "-d",
+        &body,
+        &url,
+    ]);
+    #[cfg(target_os = "windows")]
+    {
+        use std::os::windows::process::CommandExt;
+        cmd.creation_flags(0x08000000);
+    }
+
+    let out = cmd
+        .output()
+        .map_err(|e| format!("Could not reach SWEEPR servers: {e}"))?;
+    let stdout = String::from_utf8_lossy(&out.stdout).trim().to_string();
+    if stdout.is_empty() {
+        return Err("Could not reach SWEEPR servers. Check your internet connection.".into());
+    }
+    serde_json::from_str::<ApiActivateResponse>(&stdout)
+        .map_err(|_| "Unexpected response from SWEEPR server.".into())
+}
+
+pub fn verify_subscription(
+    email: String,
+    code: String,
+    api_url: Option<String>,
+) -> Result<SubscriptionStatus, String> {
+    let clean_email = email.trim();
+    let clean_code = code.trim();
+    if clean_email.is_empty() || !clean_email.contains('@') || clean_code.len() < 6 {
+        return Err("Please enter the email address and 6-digit code from your order.".into());
+    }
+
+    let env_url = std::env::var("SWEEPR_API_URL").ok();
+    let candidates: Vec<String> = if let Some(u) = api_url.or(env_url) {
+        vec![u]
+    } else {
+        vec![
+            "http://127.0.0.1:8080".to_string(),
+            "http://127.0.0.1:3000".to_string(),
+            "https://sweeprvpn.com".to_string(),
+        ]
+    };
+
+    let mut last_err = String::from("Could not reach SWEEPR subscription server.");
+    let mut resp_opt: Option<ApiActivateResponse> = None;
+
+    for base in &candidates {
+        match call_activate_api(base, clean_email, clean_code) {
+            Ok(r) => {
+                resp_opt = Some(r);
+                break;
+            }
+            Err(e) => {
+                last_err = e;
+            }
+        }
+    }
+
+    let resp = resp_opt.ok_or(last_err)?;
+    let is_active = resp.ok == Some(true)
+        && resp.valid == Some(true)
+        && matches!(resp.status.as_deref(), Some("active") | Some("trialing") | None);
+
+    if !is_active {
+        let msg = resp.message.unwrap_or_else(|| {
+            "No active paid subscription found for that email and activation code.".into()
+        });
+        return Err(msg);
+    }
+
+    let wifi_radar = resp
+        .entitlements
+        .as_ref()
+        .and_then(|e| e.get("addons"))
+        .and_then(|a| a.as_array())
+        .map(|arr| {
+            arr.iter()
+                .any(|v| v.as_str().map(|s| s.contains("wifi_radar")).unwrap_or(false))
+        })
+        .unwrap_or(true);
+
+    Ok(SubscriptionStatus {
+        active: true,
+        plan: resp.plan,
+        wifi_radar,
+        license_key: resp.license_key,
+        activation_code: resp.activation_code.or_else(|| Some(clean_code.to_string())),
+        message: "Active SWEEPR Pro subscription verified".into(),
+    })
+}
+
 // ---------------------------------------------------------------------------
 // OS Tunnel Management (Windows / macOS / Linux)
 // ---------------------------------------------------------------------------
@@ -611,6 +750,15 @@ pub fn status() -> Result<TunnelStatus, String> {
 }
 
 pub fn connect(req: ConnectRequest) -> Result<TunnelStatus, String> {
+    let email = req.email.as_deref().unwrap_or("").trim();
+    let code = req.activation_code.as_deref().unwrap_or("").trim();
+    if email.is_empty() || code.len() < 6 {
+        return Err(
+            "An active paid SWEEPR Pro subscription is required. Please enter your activation code or upgrade."
+                .into(),
+        );
+    }
+
     let mut st = load_or_create_state()?;
 
     let env_url = std::env::var("SWEEPR_API_URL").ok();
