@@ -18,6 +18,17 @@ import { fileURLToPath } from 'node:url';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const REGISTRY = join(root, 'infra', 'nodes.local.json');
 
+// Automatically load .env from project root if present
+const envFile = join(root, '.env');
+if (existsSync(envFile)) {
+  for (const line of readFileSync(envFile, 'utf8').split(/\r?\n/)) {
+    const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*)\s*$/);
+    if (m && !process.env[m[1]]) {
+      process.env[m[1]] = m[2].replace(/^['"]|['"]$/g, '');
+    }
+  }
+}
+
 const LOCATIONS = {
   'UK-LON-01': { upcloud: 'uk-lon1', vultr: 'lhr', hetzner: 'fsn1', country: 'United Kingdom', city: 'London', flag: 'GB' },
   'CH-ZRH-01': { upcloud: 'de-fra1', vultr: 'cdg', hetzner: 'fsn1', country: 'Switzerland', city: 'Zurich', flag: 'CH' },
@@ -63,6 +74,37 @@ if (args.includes('--list')) {
     console.log(`${n.code}  ${n.city.padEnd(14)} ${n.ip.padEnd(16)} ${n.provider || 'vps'}:${n.instance_id || 'manual'}`);
   }
   printEnv();
+  process.exit(0);
+}
+
+if (args.includes('--check-plans')) {
+  const { account } = await vultr('GET', '/account');
+  console.log('Vultr Account:', JSON.stringify(account));
+  const { regions } = await vultr('GET', '/regions?per_page=100');
+  const { plans } = await vultr('GET', '/plans?type=vc2&per_page=100');
+  const p35 = plans.find((p) => p.id === 'vc2-1c-0.5gb');
+  const p50 = plans.find((p) => p.id === 'vc2-1c-1gb');
+  console.log('\n--- 8 SWEEPR VPN Target Locations on Vultr ---');
+  let totalUsd = 0;
+  for (const [code, loc] of Object.entries(LOCATIONS)) {
+    const reg = regions.find((r) => r.id === loc.vultr);
+    const has35 = p35?.locations?.includes(loc.vultr);
+    const has50 = p50?.locations?.includes(loc.vultr);
+    const chosen = has35 ? p35 : p50;
+    totalUsd += chosen ? chosen.monthly_cost : 5;
+    console.log(
+      `${code} | App: ${(loc.country + ' - ' + loc.city).padEnd(30)} | Vultr DC: ${loc.vultr} (${reg ? reg.city + ', ' + reg.country : 'N/A'}) | Plan: ${chosen?.id} ($${chosen?.monthly_cost.toFixed(2)}/mo, ${chosen?.ram}MB RAM, ${chosen?.bandwidth}GB BW)`
+    );
+  }
+  console.log(`Total Monthly USD: $${totalUsd.toFixed(2)}/mo`);
+  console.log('\n--- All Vultr Regions & Lowest Available Plan ---');
+  for (const r of regions) {
+    const has35 = p35?.locations?.includes(r.id);
+    const has50 = p50?.locations?.includes(r.id);
+    if (has35 || has50) {
+      console.log(`${r.id.padEnd(5)} ${r.country.padEnd(3)} ${r.city.padEnd(16)} -> ${has35 ? '$3.50/mo (vc2-1c-0.5gb) + $5.00/mo' : '$5.00/mo (vc2-1c-1gb)'}`);
+    }
+  }
   process.exit(0);
 }
 
