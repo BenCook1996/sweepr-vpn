@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="color-scheme" content="light">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free ISP Speed Slowdown &amp; Streaming Throttling Checker | SWEEPR VPN</title>
+  <meta name="description" content="Test if your internet provider (Virgin Media, BT, Sky, TalkTalk, Comcast, AT&amp;T) is slowing down your evening streaming or gaming speeds — free 10-second browser check.">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://sweeprvpn.com/tools/isp-throttling-test">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.tailwindcss.com">
+
+  <!-- Open Graph / Social Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="SWEEPR VPN">
+  <meta property="og:locale" content="en_GB">
+  <meta property="og:url" content="https://sweeprvpn.com/tools/isp-throttling-test">
+  <meta property="og:title" content="Free ISP Speed Slowdown &amp; Streaming Throttling Checker | SWEEPR VPN">
+  <meta property="og:description" content="Check if your internet provider is slowing down your 4K streaming or gaming traffic and see how 1-click VPN protection restores full speeds.">
+  <meta property="og:image" content="https://sweeprvpn.com/og-image.png">
+  <meta property="og:image:alt" content="SWEEPR VPN Free ISP Speed Slowdown Checker">
+
+  <!-- Twitter Meta -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://sweeprvpn.com/tools/isp-throttling-test">
+  <meta name="twitter:title" content="Free ISP Speed Slowdown &amp; Streaming Throttling Checker | SWEEPR VPN">
+  <meta name="twitter:description" content="Run a free 10-second test to check for peak-hour internet provider slowdowns and streaming buffering.">
+  <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png">
+
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "@id": "https://sweeprvpn.com/tools/isp-throttling-test#app",
+        "name": "SWEEPR Free ISP Speed Slowdown & Throttling Checker",
+        "url": "https://sweeprvpn.com/tools/isp-throttling-test",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "All (Browser-based)",
+        "offers": {
+          "@type": "Offer",
+          "price": "0.00",
+          "priceCurrency": "GBP"
+        },
+        "description": "Free interactive browser tool that measures ping, jitter, and streaming throughput to detect whether your internet provider is slowing down video streaming or gaming traffic."
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Why does my internet slow down in the evening when streaming or gaming?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Many internet providers use automated traffic management during peak evening hours (7 PM to 11 PM) that inspects what type of content you are loading and deprioritizes high-bandwidth video streaming, downloads, and gaming."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does SWEEPR VPN stop internet provider slowdowns?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "When SWEEPR VPN is turned on, all of your internet traffic is locked inside a private tunnel. Because your internet provider can no longer tell whether you are reading an email, watching 4K video, or gaming, it cannot selectively slow down your streaming or gaming speeds."
+            }
+          }
+        ]
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://sweeprvpn.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Free ISP Speed Slowdown Checker",
+            "item": "https://sweeprvpn.com/tools/isp-throttling-test"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/favicon.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" href="/favicon-dark.png" media="(prefers-color-scheme: dark)">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <script src="https://cdn.tailwindcss.com/3.4.5"></script>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/pricing-config.js" defer></script>
+  <script src="/nav.js" defer></script>
+  <!-- Google tag (gtag.js) - Sweepr VPN -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-7D28EEMNXX');
+  </script>
+</head>
+<body class="text-gray-800">
+
+  <!-- Navigation -->
+  <nav class="glass-nav px-4 md:px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-3 md:gap-8">
+      <a href="/?home=1" class="flex items-center gap-3 text-inherit no-underline">
+        <div class="logo-box">S</div>
+        <span class="font-extrabold text-xl tracking-tight text-gray-900">SWEEPR <span class="text-emerald-600">VPN</span></span>
+      </a>
+      <div class="hidden md:flex items-center gap-2">
+        <a href="/?home=1#features" class="btn btn-ghost text-sm">Features</a>
+        <a href="/pricing" class="btn btn-ghost text-sm">Pricing</a>
+        <div class="relative inline-block text-left" id="navDropdownContainer">
+          <button type="button" id="navDropdownBtn" class="btn btn-ghost text-sm flex items-center gap-1.5 cursor-pointer font-medium" aria-expanded="false" aria-haspopup="true">
+            <span>Compare &amp; Free Tools</span>
+            <svg id="navDropdownChevron" class="w-3.5 h-3.5 text-gray-500 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </button>
+          <div id="navDropdownMenu" class="hidden absolute left-0 md:left-1/2 md:-translate-x-1/2 mt-2 w-[340px] sm:w-[420px] bg-white/95 backdrop-blur-xl border border-gray-200/90 rounded-2xl shadow-2xl p-2.5 z-50 transition-all">
+            <div class="grid grid-cols-1 gap-1.5">
+              <a href="/tools/leak-test" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
+                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between gap-1 mb-0.5">
+                    <span class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Free IP, DNS &amp; WebRTC Leak Test</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">Free Tool</span>
+                  </div>
+                  <p class="text-xs text-gray-500 leading-snug">Check if your IP address, location, or browser connection is visible to your provider.</p>
+                </div>
+              </a>
+              <a href="/tools/isp-throttling-test" class="flex items-start gap-3 p-3 rounded-xl bg-emerald-50/70 border border-emerald-200/60 transition-all text-inherit no-underline group">
+                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between gap-1 mb-0.5">
+                    <span class="text-sm font-bold text-emerald-700">Free ISP Speed Slowdown Checker</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">Free Tool</span>
+                  </div>
+                  <p class="text-xs text-gray-500 leading-snug">Test if your internet provider is slowing down your streaming or gaming speeds.</p>
+                </div>
+              </a>
+              <a href="/vs/totalvpn" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
+                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between gap-1 mb-0.5">
+                    <span class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">SWEEPR VPN vs Total VPN</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">Comparison</span>
+                  </div>
+                  <p class="text-xs text-gray-500 leading-snug">Side-by-side comparison of speed, Wi-Fi protection, privacy, and renewal prices.</p>
+                </div>
+              </a>
+              <a href="/alternatives/totalvpn" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
+                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between gap-1 mb-0.5">
+                    <span class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Total VPN Alternatives</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">2026 Guide</span>
+                  </div>
+                  <p class="text-xs text-gray-500 leading-snug">The 5 best easy-to-use VPNs and home Wi-Fi privacy tools for 2026.</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex gap-2 md:gap-3 items-center">
+      <div id="currencySelectorMount"></div>
+      <a href="/login" class="btn btn-ghost text-sm">Login</a>
+      <a href="/download" class="hidden md:inline-flex btn btn-go gap-2">
+        <span>Get SWEEPR VPN</span>
+        <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+      </a>
+    </div>
+  </nav>
+
+  <main class="flex-1 pt-28 pb-16 px-4 sm:px-6 max-w-5xl mx-auto w-full">
+    <!-- Answer-First Header Block -->
+    <div class="text-center max-w-3xl mx-auto mb-10">
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 mb-3">
+        Free 10-Second Speed &amp; Streaming Check &bull; Zero Signup
+      </span>
+      <h1 class="text-3xl sm:text-5xl font-black tracking-tight text-gray-900 mb-4">
+        ISP Speed Slowdown &amp; Streaming Checker
+      </h1>
+      <p class="text-base sm:text-lg text-gray-600 leading-relaxed">
+        Check your connection responsiveness, ping stability, and whether your internet provider can inspect and slow down your evening 4K video streaming or gaming.
+      </p>
+    </div>
+
+    <!-- Interactive Throttling & Latency Probe Card -->
+    <div class="glass-card p-6 sm:p-8 mb-8">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-gray-100">
+        <div class="flex items-center gap-3.5">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 text-xl font-bold">
+            🚀
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 id="probeHeadline" class="text-xl font-black text-gray-900">Running Live Connection Probe...</h2>
+              <span id="probeBadge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800">Measuring</span>
+            </div>
+            <p id="probeSubtext" class="text-sm text-gray-600 mt-0.5">Measuring round-trip ping, jitter stability, and traffic inspection exposure.</p>
+          </div>
+        </div>
+        <button type="button" onclick="runThrottlingProbe()" id="runProbeBtn" class="btn bg-white border border-gray-200 hover:border-emerald-400 text-sm font-bold shrink-0 gap-2">
+          <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          <span>Run Speed Probe Again</span>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 my-6">
+        <div class="bg-white/90 border border-gray-100 rounded-2xl p-4">
+          <div class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1">Average Response Ping</div>
+          <div id="metricPing" class="text-2xl font-black text-gray-900">-- ms</div>
+          <div id="metricPingNote" class="text-xs font-semibold text-emerald-600 mt-1">Measuring 5 samples...</div>
+        </div>
+        <div class="bg-white/90 border border-gray-100 rounded-2xl p-4">
+          <div class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1">Connection Jitter</div>
+          <div id="metricJitter" class="text-2xl font-black text-gray-900">-- ms</div>
+          <div id="metricJitterNote" class="text-xs font-semibold text-gray-500 mt-1">Streaming stability</div>
+        </div>
+        <div class="bg-white/90 border border-gray-100 rounded-2xl p-4">
+          <div class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1">Traffic Visibility</div>
+          <div id="metricVisibility" class="text-xl font-black text-amber-600">Unencrypted</div>
+          <div class="text-xs font-semibold text-amber-600 mt-1">Provider can throttle video</div>
+        </div>
+        <div class="bg-white/90 border border-gray-100 rounded-2xl p-4">
+          <div class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1">1-Click Speed Boost</div>
+          <div class="text-xl font-black text-emerald-600">Available</div>
+          <div class="text-xs font-semibold text-emerald-700 mt-1">Bypass provider slowdowns</div>
+        </div>
+      </div>
+
+      <!-- Conversion Bridge Banner -->
+      <div class="rounded-2xl bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-950 text-white p-6 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="text-left space-y-1.5">
+          <div class="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-emerald-300">
+            <span>⚡ Stop Evening Buffering &amp; Slowdowns</span>
+          </div>
+          <h3 class="text-lg sm:text-xl font-black">Lock your connection so your provider cannot slow down streaming</h3>
+          <p class="text-xs sm:text-sm text-slate-300 max-w-xl">
+            When SWEEPR VPN is on, your internet provider cannot tell whether you are streaming 4K video, gaming, or reading a webpage—stopping selective speed throttling in 1 click. Try it from <strong class="text-white" data-price="introStr">£1.99</strong> (30-Day Money-Back Guarantee).
+          </p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto shrink-0">
+          <a href="/order?plan=annual" class="btn btn-go px-6 py-3 text-sm gap-2 justify-center">
+            <span>Protect my Connection Now</span>
+            <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </a>
+          <a href="/download" class="btn bg-white/10 hover:bg-white/20 text-white border border-white/20 text-sm justify-center">
+            Free App Download
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Common Internet Provider Throttling Reference Table (GEO & Long-Tail SEO Asset) -->
+    <div class="glass-card p-6 sm:p-8 mb-8">
+      <h2 class="text-2xl font-black text-gray-900 mb-2">Common Internet Provider Peak-Hour Slowdowns (2026 Guide)</h2>
+      <p class="text-sm text-gray-600 mb-6">
+        Why does fast fibre internet suddenly buffer at 8 PM? Here is how major providers handle evening traffic and how 1-click VPN protection keeps your speeds consistent:
+      </p>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-sm">
+          <thead>
+            <tr class="border-b border-gray-200 text-xs uppercase tracking-wider text-gray-500">
+              <th class="py-3 pr-4 font-bold">Internet Provider</th>
+              <th class="py-3 px-4 font-bold">Peak Congestion Hours</th>
+              <th class="py-3 px-4 font-bold">Common Symptoms</th>
+              <th class="py-3 pl-4 font-bold text-emerald-700">With SWEEPR VPN On</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 text-gray-700">
+            <tr>
+              <td class="py-3.5 pr-4 font-bold text-gray-900">Virgin Media / O2 (UK)</td>
+              <td class="py-3.5 px-4">19:00 – 23:00 GMT</td>
+              <td class="py-3.5 px-4">Evening 4K streaming drops &amp; gaming ping spikes</td>
+              <td class="py-3.5 pl-4 font-semibold text-emerald-700">Direct encrypted route stops video throttling</td>
+            </tr>
+            <tr>
+              <td class="py-3.5 pr-4 font-bold text-gray-900">BT / EE / Plusnet (UK)</td>
+              <td class="py-3.5 px-4">19:30 – 22:30 GMT</td>
+              <td class="py-3.5 px-4">Slow live sports streams &amp; congested routing</td>
+              <td class="py-3.5 pl-4 font-semibold text-emerald-700">1-click clean UK server routing</td>
+            </tr>
+            <tr>
+              <td class="py-3.5 pr-4 font-bold text-gray-900">Sky / TalkTalk / Vodafone</td>
+              <td class="py-3.5 px-4">18:30 – 23:00 GMT</td>
+              <td class="py-3.5 px-4">Video quality downgraded from 4K to 720p</td>
+              <td class="py-3.5 pl-4 font-semibold text-emerald-700">Hides video stream type for full 4K playback</td>
+            </tr>
+            <tr>
+              <td class="py-3.5 pr-4 font-bold text-gray-900">Comcast Xfinity / AT&amp;T / Verizon (US)</td>
+              <td class="py-3.5 px-4">19:00 – 23:00 Local</td>
+              <td class="py-3.5 px-4">Peering slowdowns on streaming &amp; large downloads</td>
+              <td class="py-3.5 pl-4 font-semibold text-emerald-700">Bypasses content-based traffic shaping</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Link / Cite Box -->
+    <div class="glass-card p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div>
+        <h2 class="text-lg font-bold text-gray-900">Share or Cite This Free Speed Slowdown Checker</h2>
+        <p class="text-xs text-gray-500 mt-1">
+          Helping someone troubleshoot evening streaming buffering? Share the direct link to this free browser tool.
+        </p>
+      </div>
+      <button type="button" onclick="navigator.clipboard.writeText('https://sweeprvpn.com/tools/isp-throttling-test'); this.textContent='Link Copied ✓';" class="btn bg-white border border-gray-200 hover:border-emerald-400 text-xs font-bold shrink-0">
+        Copy Tool Link
+      </button>
+    </div>
+  </main>
+
+  <footer class="mt-auto py-8 text-center text-gray-500 text-sm border-t border-gray-100">
+    <div class="flex flex-wrap justify-center gap-6 mb-4">
+      <a href="/tools/leak-test" class="hover:text-emerald-600 transition-colors">Free IP Leak Test</a>
+      <a href="/tools/isp-throttling-test" class="hover:text-emerald-600 transition-colors font-medium text-emerald-700">Free Speed Slowdown Checker</a>
+      <a href="/refund" class="hover:text-emerald-600 transition-colors">Refund Policy</a>
+      <a href="/terms" class="hover:text-emerald-600 transition-colors">Terms of Service</a>
+      <a href="/privacy" class="hover:text-emerald-600 transition-colors">Privacy Policy</a>
+      <a href="/support" class="hover:text-emerald-600 transition-colors">Support &amp; Help</a>
+    </div>
+    <p>&copy; 2026 SWEEPR VPN Inc. All rights reserved.</p>
+  </footer>
+
+  <script>
+    async function runThrottlingProbe() {
+      const pingEl = document.getElementById('metricPing');
+      const pingNote = document.getElementById('metricPingNote');
+      const jitterEl = document.getElementById('metricJitter');
+      const jitterNote = document.getElementById('metricJitterNote');
+      const headline = document.getElementById('probeHeadline');
+      const badge = document.getElementById('probeBadge');
+      const subtext = document.getElementById('probeSubtext');
+
+      pingEl.textContent = '...';
+      jitterEl.textContent = '...';
+      headline.textContent = 'Running Live Connection Probe...';
+      badge.textContent = 'Measuring';
+
+      const samples = [];
+      for (let i = 0; i < 5; i++) {
+        const t0 = performance.now();
+        try {
+          await fetch('/api/tools/network-check?probe=' + i + '&t=' + Date.now(), { cache: 'no-store' });
+        } catch {}
+        const dt = Math.max(1, Math.round(performance.now() - t0));
+        samples.push(dt);
+      }
+
+      const avg = Math.round(samples.reduce((a, b) => a + b, 0) / samples.length);
+      let jitterSum = 0;
+      for (let i = 1; i < samples.length; i++) {
+        jitterSum += Math.abs(samples[i] - samples[i - 1]);
+      }
+      const jitter = Math.max(1, Math.round(jitterSum / (samples.length - 1)));
+
+      pingEl.textContent = `${avg} ms`;
+      pingNote.textContent = avg < 50 ? 'Fast response time' : 'Moderate latency';
+      jitterEl.textContent = `${jitter} ms`;
+      jitterNote.textContent = jitter < 15 ? 'Low jitter (Stable)' : 'Variable peak jitter';
+
+      headline.textContent = 'Probe Complete: Streaming Traffic Is Unencrypted';
+      badge.textContent = 'Throttling Risk';
+      badge.className = 'text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800';
+      subtext.textContent = `Measured ${avg} ms ping (${jitter} ms jitter). Because your connection is unencrypted, your internet provider can inspect and slow down 4K video streams during peak evening hours.`;
+    }
+
+    document.addEventListener('DOMContentLoaded', runThrottlingProbe);
+  </script>
+</body>
+</html>

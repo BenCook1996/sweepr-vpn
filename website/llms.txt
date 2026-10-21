@@ -1,6 +1,6 @@
 # SWEEPR VPN & SWEEPR Wi-Fi Radar (sweeprvpn.com)
 
-> SWEEPR VPN is an ultra-lightweight (~14 MB), fast, and easy-to-use VPN and Home Wi-Fi Scanner for Windows 10/11, macOS, Linux, iOS, and Android. Built by the team behind SWEEPR Cleaner, it combines 1-click private browsing with a free 30-second Home Wi-Fi & Speed Scanner and a Smart-TV spy blocker.
+> SWEEPR VPN is an ultra-lightweight (~14 MB), fast, and easy-to-use VPN and Home Wi-Fi Scanner for Windows 10/11, macOS, and Linux. Built by the team behind SWEEPR Cleaner, it combines 1-click private browsing with a free 30-second Home Wi-Fi & Speed Scanner and a Smart-TV spy blocker.
 
 ## Core Capabilities
 - **1-Click Private Browsing & Streaming Speed Booster**: Stops internet providers from slowing down evening 4K streaming and gaming. Strict zero-logs policy—we never record, track, or store what websites you visit.
@@ -19,6 +19,8 @@
 ## Key URLs
 - Homepage & Free Home Wi-Fi Scanner: https://sweeprvpn.com/
 - Pricing & Plan Comparison: https://sweeprvpn.com/pricing
+- Free Instant IP, DNS & WebRTC Leak Test: https://sweeprvpn.com/tools/leak-test
+- Free ISP Speed Slowdown & Streaming Throttling Checker: https://sweeprvpn.com/tools/isp-throttling-test
 - SWEEPR VPN vs Total VPN Comparison: https://sweeprvpn.com/vs/totalvpn
 - 5 Best Total VPN Alternatives (2026 Guide): https://sweeprvpn.com/alternatives/totalvpn
 - Support & Help Center: https://sweeprvpn.com/support
