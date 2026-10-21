@@ -31,13 +31,13 @@ if (existsSync(envFile)) {
 
 const LOCATIONS = {
   'UK-LON-01': { upcloud: 'uk-lon1', vultr: 'lhr', hetzner: 'fsn1', country: 'United Kingdom', city: 'London', flag: 'GB' },
-  'CH-ZRH-01': { upcloud: 'de-fra1', vultr: 'cdg', hetzner: 'fsn1', country: 'Switzerland', city: 'Zurich', flag: 'CH' },
-  'NL-AMS-01': { upcloud: 'nl-ams1', vultr: 'ams', hetzner: 'fsn1', country: 'Netherlands', city: 'Amsterdam', flag: 'NL' },
-  'DE-FRA-01': { upcloud: 'de-fra1', vultr: 'fra', hetzner: 'nbg1', country: 'Germany', city: 'Frankfurt', flag: 'DE' },
-  'US-NYC-01': { upcloud: 'us-nyc1', vultr: 'ewr', hetzner: 'ash',  country: 'United States', city: 'New York', flag: 'US' },
-  'US-LAX-01': { upcloud: 'us-sjo1', vultr: 'lax', hetzner: 'hil',  country: 'United States', city: 'Los Angeles', flag: 'US' },
-  'SG-SIN-01': { upcloud: 'sg-sin1', vultr: 'sgp', hetzner: 'sin',  country: 'Singapore', city: 'Singapore', flag: 'SG' },
-  'JP-TYO-01': { upcloud: 'sg-sin1', vultr: 'nrt', hetzner: 'sin',  country: 'Japan', city: 'Tokyo', flag: 'JP' }
+  'SE-STO-01': { upcloud: 'fi-hel1', vultr: 'sto', hetzner: 'hel1', country: 'Sweden',         city: 'Stockholm', flag: 'SE' },
+  'NL-AMS-01': { upcloud: 'nl-ams1', vultr: 'ams', hetzner: 'fsn1', country: 'Netherlands',    city: 'Amsterdam', flag: 'NL' },
+  'DE-FRA-01': { upcloud: 'de-fra1', vultr: 'fra', hetzner: 'nbg1', country: 'Germany',        city: 'Frankfurt', flag: 'DE' },
+  'US-NYC-01': { upcloud: 'us-nyc1', vultr: 'ewr', hetzner: 'ash',  country: 'United States',  city: 'New York', flag: 'US' },
+  'US-LAX-01': { upcloud: 'us-sjo1', vultr: 'lax', hetzner: 'hil',  country: 'United States',  city: 'Los Angeles', flag: 'US' },
+  'SG-SIN-01': { upcloud: 'sg-sin1', vultr: 'sgp', hetzner: 'sin',  country: 'Singapore',      city: 'Singapore', flag: 'SG' },
+  'JP-TYO-01': { upcloud: 'sg-sin1', vultr: 'nrt', hetzner: 'sin',  country: 'Japan',          city: 'Tokyo', flag: 'JP' }
 };
 
 const args = process.argv.slice(2);
@@ -74,6 +74,42 @@ if (args.includes('--list')) {
     console.log(`${n.code}  ${n.city.padEnd(14)} ${n.ip.padEnd(16)} ${n.provider || 'vps'}:${n.instance_id || 'manual'}`);
   }
   printEnv();
+  process.exit(0);
+}
+
+if (args.includes('--test')) {
+  const { createHmac, randomBytes: rb } = await import('node:crypto');
+  for (const n of registry) {
+    const ud = await vultr('GET', `/instances/${n.instance_id}/user-data`);
+    const decoded = Buffer.from(ud.user_data?.data || '', 'base64').toString('utf8');
+    const m = decoded.match(/AGENT_SECRET="([^"]+)"/);
+    const udSecret = m ? m[1] : '';
+    if (udSecret && udSecret !== n.agent_secret) {
+      console.log(`[${n.code}] Syncing agent_secret from Vultr user-data`);
+      n.agent_secret = udSecret;
+    }
+    const payload = JSON.stringify({
+      public_key: 'PeQDujOboCFTlTPOFEFJOsQczDCNSNnBE8R+ikx+uGc=',
+      licence: '0123456789abcdef0123456789abcdef'
+    });
+    const ts = String(Math.floor(Date.now() / 1000));
+    const nonce = rb(16).toString('hex');
+    const sig = createHmac('sha256', n.agent_secret)
+      .update(`POST\n/peers\n${ts}\n${nonce}\n${payload}`)
+      .digest('hex');
+    const r = await fetch(`http://${n.ip}:${n.agent_port || 8787}/peers`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Sweepr-Timestamp': ts,
+        'X-Sweepr-Nonce': nonce,
+        'X-Sweepr-Signature': sig
+      },
+      body: payload
+    });
+    console.log(`[${n.code}] ${n.ip} POST /peers -> ${r.status}:`, await r.text());
+  }
+  saveRegistry();
   process.exit(0);
 }
 
@@ -122,8 +158,8 @@ if (targetCodes.length === 0 || targetCodes.some((c) => !LOCATIONS[c])) {
   process.exit(1);
 }
 
-const agentPy = readFileSync(join(root, 'infra', 'node', 'sweepr_agent.py'), 'utf8');
-const setupTemplate = readFileSync(join(root, 'infra', 'node', 'setup-node.sh'), 'utf8');
+const agentPy = readFileSync(join(root, 'infra', 'node', 'sweepr_agent.py'), 'utf8').replace(/\r\n/g, '\n');
+const setupTemplate = readFileSync(join(root, 'infra', 'node', 'setup-node.sh'), 'utf8').replace(/\r\n/g, '\n');
 
 async function vultr(method, path, body) {
   const KEY = process.env.VULTR_API_KEY;
@@ -176,24 +212,39 @@ async function provisionOne(code) {
   let instanceId = '';
 
   if (provider === 'vultr') {
-    const osId = await getVultrUbuntuId();
-    const plan = await pickVultrPlan(loc.vultr);
-    console.log(`[${code}] Creating ${loc.city} (${loc.vultr}, plan ${plan}) on Vultr…`);
-    const { instance } = await vultr('POST', '/instances', {
-      region: loc.vultr,
-      plan,
-      os_id: osId,
-      label: `sweepr-${code.toLowerCase()}`,
-      hostname: `sweepr-${code.toLowerCase()}`,
-      user_data: Buffer.from(userData).toString('base64'),
-      backups: 'disabled',
-      enable_ipv6: false,
-      tags: ['sweepr-vpn']
-    });
-    instanceId = String(instance.id);
-    for (let i = 0; i < 60 && (!ip || ip === '0.0.0.0'); i++) {
-      await new Promise((r) => setTimeout(r, 5000));
-      ip = (await vultr('GET', `/instances/${instance.id}`)).instance.main_ip;
+    const label = `sweepr-${code.toLowerCase()}`;
+    const { instances } = await vultr('GET', '/instances?per_page=100');
+    const existing = (instances || []).find((i) => i.label === label);
+    if (existing) {
+      instanceId = String(existing.id);
+      ip = existing.main_ip;
+      console.log(`[${code}] Updating user_data (LF) & reinstalling existing Vultr server ${ip} (${instanceId})…`);
+      await vultr('PATCH', `/instances/${instanceId}`, {
+        user_data: Buffer.from(userData, 'utf8').toString('base64')
+      });
+      await vultr('POST', `/instances/${instanceId}/reinstall`, {
+        hostname: label
+      });
+    } else {
+      const osId = await getVultrUbuntuId();
+      const plan = await pickVultrPlan(loc.vultr);
+      console.log(`[${code}] Creating ${loc.city} (${loc.vultr}, plan ${plan}) on Vultr…`);
+      const { instance } = await vultr('POST', '/instances', {
+        region: loc.vultr,
+        plan,
+        os_id: osId,
+        label,
+        hostname: label,
+        user_data: Buffer.from(userData, 'utf8').toString('base64'),
+        backups: 'disabled',
+        enable_ipv6: false,
+        tags: ['sweepr-vpn']
+      });
+      instanceId = String(instance.id);
+      for (let i = 0; i < 60 && (!ip || ip === '0.0.0.0'); i++) {
+        await new Promise((r) => setTimeout(r, 5000));
+        ip = (await vultr('GET', `/instances/${instance.id}`)).instance.main_ip;
+      }
     }
   } else if (provider === 'upcloud') {
     const TOKEN = process.env.UPCLOUD_TOKEN;

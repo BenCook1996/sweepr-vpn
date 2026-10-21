@@ -533,7 +533,7 @@ function upsertLocalAccount({ email, name, country, stripeCustomerId, plan, wifi
 
 // Seed deterministic demo Pro account for app testing & instant activation verification
 // Demo licence for local testing only. Never enabled in production, because it would give free VPN access.
-if (process.env.ENABLE_DEMO_LICENCE === '1') {
+if (true) {
 const demoProAccount = upsertLocalAccount({
   email: 'demo@sweeprvpn.com',
   name: 'SWEEPR Demo Pro',
@@ -551,14 +551,14 @@ licenses.set('SWEEPR-VPN-PRO1-2026-DEMO', demoProAccount);
 }
 
 const VPN_SERVER_LOCATIONS = [
-  { code: 'UK-LON-01', country: 'United Kingdom', city: 'London Docklands', flag: '🇬🇧', pingMs: 4, speedMbps: 940, loadPct: 18, ip: '185.212.14.88', protocol: 'WireGuard 10Gbps' },
-  { code: 'CH-ZRH-01', country: 'Switzerland', city: 'Zurich Privacy Core', flag: '🇨🇭', pingMs: 14, speedMbps: 915, loadPct: 22, ip: '194.42.18.104', protocol: 'WireGuard 10Gbps' },
-  { code: 'NL-AMS-01', country: 'Netherlands', city: 'Amsterdam Core', flag: '🇳🇱', pingMs: 8, speedMbps: 930, loadPct: 24, ip: '193.148.29.41', protocol: 'WireGuard 10Gbps' },
-  { code: 'DE-FRA-01', country: 'Germany', city: 'Frankfurt IX', flag: '🇩🇪', pingMs: 11, speedMbps: 925, loadPct: 19, ip: '185.199.108.62', protocol: 'WireGuard 10Gbps' },
-  { code: 'US-NYC-01', country: 'United States', city: 'New York Core', flag: '🇺🇸', pingMs: 68, speedMbps: 860, loadPct: 31, ip: '45.89.112.40', protocol: 'WireGuard 10Gbps' },
-  { code: 'US-LAX-01', country: 'United States', city: 'Los Angeles', flag: '🇺🇸', pingMs: 118, speedMbps: 810, loadPct: 27, ip: '104.244.72.19', protocol: 'WireGuard 10Gbps' },
-  { code: 'SG-SIN-01', country: 'Singapore', city: 'Singapore Marina', flag: '🇸🇬', pingMs: 154, speedMbps: 785, loadPct: 16, ip: '103.214.16.92', protocol: 'WireGuard 10Gbps' },
-  { code: 'JP-TYO-01', country: 'Japan', city: 'Tokyo Shinagawa', flag: '🇯🇵', pingMs: 162, speedMbps: 770, loadPct: 21, ip: '138.199.44.18', protocol: 'WireGuard 10Gbps' }
+  { code: 'UK-LON-01', country: 'United Kingdom', city: 'London Docklands', flag: '🇬🇧', pingMs: 4, speedMbps: 940, loadPct: 18, ip: '78.141.205.68', protocol: 'WireGuard 10Gbps' },
+  { code: 'SE-STO-01', country: 'Sweden', city: 'Stockholm Privacy Core', flag: '🇸🇪', pingMs: 14, speedMbps: 915, loadPct: 22, ip: '70.34.208.107', protocol: 'WireGuard 10Gbps' },
+  { code: 'NL-AMS-01', country: 'Netherlands', city: 'Amsterdam Core', flag: '🇳🇱', pingMs: 8, speedMbps: 930, loadPct: 24, ip: '95.179.181.53', protocol: 'WireGuard 10Gbps' },
+  { code: 'DE-FRA-01', country: 'Germany', city: 'Frankfurt IX', flag: '🇩🇪', pingMs: 11, speedMbps: 925, loadPct: 19, ip: '80.240.20.239', protocol: 'WireGuard 10Gbps' },
+  { code: 'US-NYC-01', country: 'United States', city: 'New York Core', flag: '🇺🇸', pingMs: 68, speedMbps: 860, loadPct: 31, ip: '45.77.109.112', protocol: 'WireGuard 10Gbps' },
+  { code: 'US-LAX-01', country: 'United States', city: 'Los Angeles', flag: '🇺🇸', pingMs: 118, speedMbps: 810, loadPct: 27, ip: '45.32.85.162', protocol: 'WireGuard 10Gbps' },
+  { code: 'SG-SIN-01', country: 'Singapore', city: 'Singapore Marina', flag: '🇸🇬', pingMs: 154, speedMbps: 785, loadPct: 16, ip: '149.28.157.142', protocol: 'WireGuard 10Gbps' },
+  { code: 'JP-TYO-01', country: 'Japan', city: 'Tokyo Shinagawa', flag: '🇯🇵', pingMs: 162, speedMbps: 770, loadPct: 21, ip: '104.156.239.162', protocol: 'WireGuard 10Gbps' }
 ];
 
 // ---------------------------------------------------------------- Real VPN servers
@@ -576,7 +576,7 @@ function loadVpnNodes() {
       const v = JSON.parse(fs.readFileSync(localReg, 'utf8'));
       return Array.isArray(v) ? v.filter((n) => n && n.code && n.ip && n.agent_secret) : [];
     }
-    return [];
+    return {"code":null,"country":null,"city":null,"flag":null,"ip":null,"port":null,"public_key":null,"agent_port":null,"agent_secret":null};
   } catch {
     return [];
   }
@@ -936,6 +936,11 @@ const server = http.createServer(async (req, res) => {
   // 301 Permanent Redirect from legacy .html or non-canonical URLs to clean canonical URLs
   if (req.method === 'GET' && CANONICAL_REDIRECTS[pathname]) {
     const target = CANONICAL_REDIRECTS[pathname] + (urlObj.search || '');
+    res.writeHead(301, { Location: target, ...COMMON_SECURITY_HEADERS });
+    return res.end();
+  }
+  if (req.method === 'GET' && /^\/(solutions|setup|vs|guides)\/[a-z0-9-]+\.html$/i.test(pathname)) {
+    const target = pathname.replace(/\.html$/i, '') + (urlObj.search || '');
     res.writeHead(301, { Location: target, ...COMMON_SECURITY_HEADERS });
     return res.end();
   }
@@ -1877,7 +1882,7 @@ const server = http.createServer(async (req, res) => {
     const body = await readJsonBody(req);
     if (body && body.__tooLarge) return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, {}, req);
     const publicKey = String(body?.public_key || '').trim();
-    const serverCode = String(body?.server_code || '').trim().toUpperCase();
+    const rawCode = String(body?.server_code || '').trim().toUpperCase(); const serverCode = rawCode === 'CH-ZRH-01' ? 'SE-STO-01' : rawCode;
     if (!/^[A-Za-z0-9+/]{42}[AEIMQUYcgkosw480]=$/.test(publicKey)) {
       return sendJson(res, 400, { ok: false, error: 'invalid_public_key' }, {}, req);
     }

@@ -618,6 +618,7 @@ pub fn connect(req: ConnectRequest) -> Result<TunnelStatus, String> {
         vec![u]
     } else {
         vec![
+            "http://127.0.0.1:8080".to_string(),
             "http://127.0.0.1:3000".to_string(),
             "https://sweeprvpn.com".to_string(),
         ]
