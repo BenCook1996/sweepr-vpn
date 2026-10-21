@@ -7,3 +7,8 @@ dist/
 *.log
 .DS_Store
 Thumbs.db
+
+# VPN node registry (contains agent secrets)
+infra/nodes.local.json
+infra/.secret-*
+infra/userdata-*.sh

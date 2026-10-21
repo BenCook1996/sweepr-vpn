@@ -1,0 +1,46 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "SWEEPR VPN",
+  "version": "2.5.0",
+  "identifier": "com.sweepr.vpn",
+  "build": {
+    "frontendDist": "../ui"
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [
+      {
+        "label": "main",
+        "title": "SWEEPR VPN",
+        "width": 1160,
+        "height": 770,
+        "minWidth": 1020,
+        "minHeight": 680,
+        "resizable": true,
+        "center": true
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src ipc: http://ipc.localhost"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["nsis", "msi", "dmg", "app", "deb", "rpm", "appimage"],
+    "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"],
+    "publisher": "SWEEPR VPN",
+    "copyright": "Copyright © 2026 SWEEPR VPN. All rights reserved.",
+    "category": "Utility",
+    "shortDescription": "Easy privacy and home Wi-Fi protection",
+    "longDescription": "SWEEPR VPN hides your location in one click, names every device on your home Wi-Fi and stops Smart TVs tracking what you watch.",
+    "windows": {
+      "webviewInstallMode": { "type": "embedBootstrapper" },
+      "nsis": { "installMode": "perMachine", "installerIcon": "icons/icon.ico" }
+    },
+    "macOS": { "minimumSystemVersion": "11.0" },
+    "linux": {
+      "deb": { "depends": ["wireguard-tools"] },
+      "rpm": { "depends": ["wireguard-tools"] }
+    }
+  }
+}

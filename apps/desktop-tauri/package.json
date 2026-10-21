@@ -1,0 +1,13 @@
+﻿{
+  "name": "sweepr-vpn-desktop",
+  "private": true,
+  "version": "2.5.0",
+  "scripts": {
+    "tauri": "tauri",
+    "build": "tauri build",
+    "dev": "tauri dev"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2"
+  }
+}

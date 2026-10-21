@@ -532,6 +532,8 @@ function upsertLocalAccount({ email, name, country, stripeCustomerId, plan, wifi
 }
 
 // Seed deterministic demo Pro account for app testing & instant activation verification
+// Demo licence for local testing only. Never enabled in production, because it would give free VPN access.
+if (process.env.ENABLE_DEMO_LICENCE === '1') {
 const demoProAccount = upsertLocalAccount({
   email: 'demo@sweeprvpn.com',
   name: 'SWEEPR Demo Pro',
@@ -546,6 +548,7 @@ demoProAccount.activation_code = '849201';
 demoProAccount.licenseKey = 'SWEEPR-VPN-PRO1-2026-DEMO';
 licenses.set('849201', demoProAccount);
 licenses.set('SWEEPR-VPN-PRO1-2026-DEMO', demoProAccount);
+}
 
 const VPN_SERVER_LOCATIONS = [
   { code: 'UK-LON-01', country: 'United Kingdom', city: 'London Docklands', flag: '🇬🇧', pingMs: 4, speedMbps: 940, loadPct: 18, ip: '185.212.14.88', protocol: 'WireGuard 10Gbps' },
@@ -557,6 +560,75 @@ const VPN_SERVER_LOCATIONS = [
   { code: 'SG-SIN-01', country: 'Singapore', city: 'Singapore Marina', flag: '🇸🇬', pingMs: 154, speedMbps: 785, loadPct: 16, ip: '103.214.16.92', protocol: 'WireGuard 10Gbps' },
   { code: 'JP-TYO-01', country: 'Japan', city: 'Tokyo Shinagawa', flag: '🇯🇵', pingMs: 162, speedMbps: 770, loadPct: 21, ip: '138.199.44.18', protocol: 'WireGuard 10Gbps' }
 ];
+
+// ---------------------------------------------------------------- Real VPN servers
+// VPN_NODES (Railway variable) is created by scripts/provision-node.mjs:
+// [{ code, country, city, flag, ip, port, public_key, agent_port, agent_secret }]
+function loadVpnNodes() {
+  try {
+    const raw = (process.env.VPN_NODES || '').trim();
+    if (raw) {
+      const v = JSON.parse(raw);
+      return Array.isArray(v) ? v.filter((n) => n && n.code && n.ip && n.agent_secret) : [];
+    }
+    const localReg = path.resolve(__dirname, '..', 'infra', 'nodes.local.json');
+    if (fs.existsSync(localReg)) {
+      const v = JSON.parse(fs.readFileSync(localReg, 'utf8'));
+      return Array.isArray(v) ? v.filter((n) => n && n.code && n.ip && n.agent_secret) : [];
+    }
+    return [];
+  } catch {
+    return [];
+  }
+}
+
+const nodeHealthCache = new Map();
+async function nodeHealth(n) {
+  const cached = nodeHealthCache.get(n.code);
+  if (cached && Date.now() - cached.at < 30000) return cached.value;
+  let value = null;
+  try {
+    const r = await fetch(`http://${n.ip}:${n.agent_port || 8787}/health`, { signal: AbortSignal.timeout(2500) });
+    if (r.ok) value = await r.json();
+  } catch {}
+  nodeHealthCache.set(n.code, { at: Date.now(), value });
+  return value;
+}
+
+// Requests to a node are signed with HMAC-SHA256 (timestamp + one-time nonce), see infra/node/sweepr_agent.py
+async function callNodeAgent(n, method, agentPath, payload) {
+  const body = JSON.stringify(payload || {});
+  const ts = String(Math.floor(Date.now() / 1000));
+  const nonce = crypto.randomBytes(16).toString('hex');
+  const sig = crypto.createHmac('sha256', n.agent_secret).update(`${method}\n${agentPath}\n${ts}\n${nonce}\n${body}`).digest('hex');
+  const r = await fetch(`http://${n.ip}:${n.agent_port || 8787}${agentPath}`, {
+    method,
+    headers: { 'Content-Type': 'application/json', 'X-Sweepr-Timestamp': ts, 'X-Sweepr-Nonce': nonce, 'X-Sweepr-Signature': sig },
+    body,
+    signal: AbortSignal.timeout(6000)
+  });
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok || !data.ok) throw new Error(data.error || `agent_${r.status}`);
+  return data;
+}
+
+// Returns { id } for an active licence, where id is a one-way hash (servers never see the real key).
+async function resolveVpnLicence(code, email) {
+  if (!code || code.length < 6) return null;
+  const normEmail = email ? String(email).trim().toLowerCase() : '';
+  let key = null;
+  const local = licenses.get(code) || licenses.get(code.toUpperCase());
+  if (local && local.status === 'active' && (!normEmail || local.email === normEmail)) {
+    key = local.licenseKey || local.id;
+  } else {
+    try {
+      const data = await crm.verifyKey(code);
+      if (data && data.valid) key = data.licenseKey || data.account_id || code;
+    } catch {}
+  }
+  if (!key) return null;
+  return { id: crypto.createHash('sha256').update('sweepr-licence:' + key).digest('hex').slice(0, 32) };
+}
 
 function signSessionCookie(accountId, email) {
   const exp = Math.floor(Date.now() / 1000) + 86400 * 30;
@@ -1785,66 +1857,57 @@ const server = http.createServer(async (req, res) => {
     return sendJson(res, 401, { ok: false, error: 'Invalid or expired 6-digit login code.' }, {}, req);
   }
 
-  // VPN Server Locations API (Used by Desktop Dashboard Dropdown)
+  // VPN server list: only real servers from VPN_NODES (no secrets are ever sent)
   if (pathname === '/api/vpn/servers' && req.method === 'GET') {
-    return sendJson(
-      res,
-      200,
-      {
-        ok: true,
-        servers: VPN_SERVER_LOCATIONS
-      },
-      {},
-      req
-    );
+    const nodes = loadVpnNodes();
+    const servers = await Promise.all(nodes.map(async (n) => {
+      const h = await nodeHealth(n);
+      return { code: n.code, country: n.country, city: n.city, flag: n.flag, online: Boolean(h), devices: h ? h.devices : null };
+    }));
+    return sendJson(res, 200, { ok: true, servers }, {}, req);
   }
 
-  // VPN Tunnel Connect / Handover API
+  // VPN connect: checks the licence, registers this device's WireGuard public key on the
+  // chosen server and returns the details the app needs to open the tunnel.
+  // Nothing about browsing is logged anywhere; the server only stores the key and its tunnel address.
   if (pathname === '/api/vpn/connect' && req.method === 'POST') {
+    if (!checkRateLimit(req, 'vpn_connect', 20, 60000)) {
+      return sendJson(res, 429, { ok: false, error: 'rate_limit_exceeded', message: 'Too many attempts. Please wait a minute.' }, {}, req);
+    }
     const body = await readJsonBody(req);
     if (body && body.__tooLarge) return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, {}, req);
-    const requestedCode = String(body?.serverCode || body?.code || 'UK-LON-01').trim().toUpperCase();
-    const action = String(body?.action || 'connect').toLowerCase();
-    const serverNode = VPN_SERVER_LOCATIONS.find((s) => s.code === requestedCode) || VPN_SERVER_LOCATIONS[0];
-    return sendJson(
-      res,
-      200,
-      {
+    const publicKey = String(body?.public_key || '').trim();
+    const serverCode = String(body?.server_code || '').trim().toUpperCase();
+    if (!/^[A-Za-z0-9+/]{42}[AEIMQUYcgkosw480]=$/.test(publicKey)) {
+      return sendJson(res, 400, { ok: false, error: 'invalid_public_key' }, {}, req);
+    }
+    const licence = await resolveVpnLicence(String(body?.activation_code || body?.license_key || '').trim(), body?.email);
+    if (!licence) {
+      return sendJson(res, 401, { ok: false, error: 'licence_required', message: 'Enter your activation code to connect. It is in your order email.' }, {}, req);
+    }
+    const node = loadVpnNodes().find((n) => n.code === serverCode);
+    if (!node) {
+      return sendJson(res, 404, { ok: false, error: 'server_unavailable', message: 'That location is not available right now. Please pick another.' }, {}, req);
+    }
+    try {
+      const r = await callNodeAgent(node, 'POST', '/peers', { public_key: publicKey, licence: licence.id });
+      return sendJson(res, 200, {
         ok: true,
-        connected: action !== 'disconnect',
-        server: serverNode,
-        dnsResolver: '10.64.0.1',
-        killSwitchActive: true,
-        acrShieldActive: true,
-        timestamp: new Date().toISOString()
-      },
-      {},
-      req
-    );
+        endpoint: `${node.ip}:${node.port || 51820}`,
+        server_public_key: r.public_key || node.public_key,
+        address: r.address,
+        dns: r.dns || '10.64.0.1',
+        allowed_ips: '0.0.0.0/0',
+        server: { code: node.code, country: node.country, city: node.city, flag: node.flag }
+      }, {}, req);
+    } catch (e) {
+      return sendJson(res, 502, { ok: false, error: 'server_unreachable', message: 'That location is not responding. Please try another.' }, {}, req);
+    }
   }
 
-  // VPN Home Wi-Fi Radar & LAN Diagnostic Scan API
-  if (pathname === '/api/vpn/scan' && (req.method === 'GET' || req.method === 'POST')) {
-    return sendJson(
-      res,
-      200,
-      {
-        ok: true,
-        subnet: '192.168.1.0/24',
-        gatewayIp: '192.168.1.1',
-        upnpSafe: true,
-        acrTrackersFound: 142,
-        devices: [
-          { name: 'Gateway Router (UPnP Safe)', ip: '192.168.1.1', mac: 'A4:91:B1:02:1C:01', type: 'gateway', risk: 'safe' },
-          { name: 'Samsung QLED TV (ACR Telemetry)', ip: '192.168.1.160', mac: 'D0:03:DF:88:41:19', type: 'smart_tv', risk: 'warning' },
-          { name: 'LG WebOS Living Room TV (ACR)', ip: '192.168.1.184', mac: 'B8:38:61:4F:10:92', type: 'smart_tv', risk: 'warning' },
-          { name: 'Workstation PC (This Device)', ip: '192.168.1.42', mac: '3C:7C:3F:21:9A:04', type: 'pc', risk: 'safe' },
-          { name: 'MacBook Pro Workstation (Wi-Fi)', ip: '192.168.1.115', mac: 'F2:1A:8C:77:03:E1', type: 'pc', risk: 'safe' }
-        ]
-      },
-      {},
-      req
-    );
+  // Wi-Fi device scanning now runs inside the desktop app (it can only see the customer's own network).
+  if (pathname === '/api/vpn/scan') {
+    return sendJson(res, 410, { ok: false, error: 'moved_to_app' }, {}, req);
   }
 
   // VPN Funnel & Telemetry Events

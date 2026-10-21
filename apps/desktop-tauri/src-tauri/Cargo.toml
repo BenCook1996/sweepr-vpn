@@ -1,0 +1,28 @@
+[package]
+name = "sweepr-vpn"
+version = "2.5.0"
+description = "SWEEPR VPN: easy privacy and home Wi-Fi protection"
+edition = "2021"
+rust-version = "1.77"
+
+[lib]
+name = "sweepr_vpn_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-opener = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sweepr-wifi-radar = { path = "../../../crates/sweepr-wifi-radar" }
+sweepr-tunnel = { path = "../../../crates/sweepr-tunnel" }
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "s"
+panic = "abort"
+strip = true
