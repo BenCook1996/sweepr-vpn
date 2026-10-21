@@ -2,9 +2,9 @@
  * SWEEPR VPN — Centralized Multi-Currency Pricing Engine
  *
  * Base GBP Pricing Model:
- *   - Monthly Plan:   £9.99 / month (plus £1.99 1st-Month Introductory Offer)
- *   - 6-Monthly Plan: £38.99 / 6 months (£6.50/mo equivalent — Save 35%)
- *   - Yearly Plan:    £59.99 / year (£5.00/mo equivalent — Save 50%)
+ *   - Monthly Plan:   £12.49 / month (plus £1.99 1st-Month Introductory Offer)
+ *   - 6-Monthly Plan: £48.99 / 6 months (£8.17/mo equivalent — Save 35%)
+ *   - Yearly Plan:    £74.99 / year (£6.25/mo equivalent — Save 50%)
  *   - Paid Add-On (SWEEPR Wi-Fi Radar & Smart-TV Shield):
  *     +£14.99/yr | +£9.99/6mo | +£1.99/mo
  *
@@ -21,9 +21,9 @@
       label: 'GBP (£)',
       name: 'United Kingdom (GBP)',
       decimals: 2,
-      monthly: 9.99,
-      sixMonth: 38.99,
-      annual: 59.99,
+      monthly: 12.49,
+      sixMonth: 48.99,
+      annual: 74.99,
       introFirstMonth: 1.99,
       addonMonthly: 1.99,
       addonSixMonth: 9.99,
@@ -36,9 +36,9 @@
       label: 'USD ($)',
       name: 'United States (USD)',
       decimals: 2,
-      monthly: 12.99,
-      sixMonth: 50.99,
-      annual: 77.99,
+      monthly: 15.99,
+      sixMonth: 61.99,
+      annual: 95.99,
       introFirstMonth: 2.99,
       addonMonthly: 2.99,
       addonSixMonth: 12.99,
@@ -51,9 +51,9 @@
       label: 'EUR (€)',
       name: 'Europe (EUR)',
       decimals: 2,
-      monthly: 11.99,
-      sixMonth: 46.99,
-      annual: 71.99,
+      monthly: 14.99,
+      sixMonth: 58.99,
+      annual: 89.99,
       introFirstMonth: 2.99,
       addonMonthly: 2.49,
       addonSixMonth: 11.99,
@@ -66,9 +66,9 @@
       label: 'CAD (CA$)',
       name: 'Canada (CAD)',
       decimals: 2,
-      monthly: 17.99,
-      sixMonth: 69.99,
-      annual: 107.99,
+      monthly: 21.99,
+      sixMonth: 85.99,
+      annual: 131.99,
       introFirstMonth: 3.99,
       addonMonthly: 3.49,
       addonSixMonth: 17.99,
@@ -81,9 +81,9 @@
       label: 'AUD (A$)',
       name: 'Australia (AUD)',
       decimals: 2,
-      monthly: 19.99,
-      sixMonth: 77.99,
-      annual: 119.99,
+      monthly: 24.99,
+      sixMonth: 97.99,
+      annual: 149.99,
       introFirstMonth: 3.99,
       addonMonthly: 3.99,
       addonSixMonth: 19.99,
@@ -96,9 +96,9 @@
       label: 'CHF (Fr.)',
       name: 'Switzerland (CHF)',
       decimals: 2,
-      monthly: 10.99,
-      sixMonth: 42.99,
-      annual: 65.99,
+      monthly: 13.99,
+      sixMonth: 54.99,
+      annual: 83.99,
       introFirstMonth: 2.99,
       addonMonthly: 2.49,
       addonSixMonth: 10.99,
@@ -111,9 +111,9 @@
       label: 'JPY (¥)',
       name: 'Japan (JPY)',
       decimals: 0,
-      monthly: 1999,
-      sixMonth: 7799,
-      annual: 11999,
+      monthly: 2499,
+      sixMonth: 9799,
+      annual: 14999,
       introFirstMonth: 399,
       addonMonthly: 399,
       addonSixMonth: 1999,

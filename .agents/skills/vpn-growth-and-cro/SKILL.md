@@ -17,10 +17,10 @@ A £10/day (£300/month) marketing budget only turns into a £3,000–£10,000+/
 
 If a customer pays £7.99 for a 1-month plan and costs £18 in ad spend to acquire, your £10/day budget will bleed out of cash before Month 2 renewals arrive. You must structure your pricing page so **70%+ of buyers choose an upfront Annual or 2-Year plan** (detailed in [cro-and-pricing-playbook.md](./references/cro-and-pricing-playbook.md)):
 
-- **Monthly Plan (The Decoy):** **£9.99 / month** ($12.99 USD | €11.99 EUR | CA$17.99 CAD | A$19.99 AUD | CHF 10.99 | ¥1,999 JPY)
-- **6-Monthly Plan (Semi-Annual Anchor — Save 35%):** **£38.99 / 6 months** (£6.50/mo equivalent | $50.99 USD | €46.99 EUR | CA$69.99 CAD | A$77.99 AUD | CHF 42.99 | ¥7,799 JPY)
-- **Yearly Plan (The Cash-Cow Default — Save 50%):** **£59.99 / year** (£5.00/mo equivalent | $77.99 USD | €71.99 EUR | CA$107.99 CAD | A$119.99 AUD | CHF 65.99 | ¥11,999 JPY)
-- **1st-Month Introductory Offer (Exit-Intent / Downsell):** **£1.99 for Month 1** (renews at £9.99/mo unless cancelled in 1 click | $2.99 USD | €2.99 EUR | CA$3.99 CAD | A$3.99 AUD | CHF 2.99 | ¥399 JPY)
+- **Monthly Plan (The Decoy):** **£12.49 / month** ($15.99 USD | €14.99 EUR | CA$21.99 CAD | A$24.99 AUD | CHF 13.99 | ¥2,499 JPY)
+- **6-Monthly Plan (Semi-Annual Anchor — Save 35%):** **£48.99 / 6 months** (£8.17/mo equivalent | $61.99 USD | €58.99 EUR | CA$85.99 CAD | A$97.99 AUD | CHF 54.99 | ¥9,799 JPY)
+- **Yearly Plan (The Cash-Cow Default — Save 50%):** **£74.99 / year** (£6.25/mo equivalent | $95.99 USD | €89.99 EUR | CA$131.99 CAD | A$149.99 AUD | CHF 83.99 | ¥14,999 JPY)
+- **1st-Month Introductory Offer (Exit-Intent / Downsell):** **£1.99 for Month 1** (renews at £12.49/mo unless cancelled in 1 click | $2.99 USD | €2.99 EUR | CA$3.99 CAD | A$3.99 AUD | CHF 2.99 | ¥399 JPY)
 - **SWEEPR Wi-Fi Radar & Smart-TV Shield Add-On:** **+£14.99/yr** | **+£9.99/6mo** | **+£1.99/mo**
 
 > **Resulting Blended Upfront Cash Collected (AOV):** **~£33.50 per new paid customer** (assuming 25% Monthly, 45% 1-Year, 30% 2-Year mix). At a £15–£22 niche CAC, every single customer generates **+£11.50 to +£18.50 in immediate net cash** above ad cost on Day 1!

@@ -197,22 +197,22 @@ const STRIPE_PUBLISHABLE_KEY =
 
 const STRIPE_PRODUCT_MAIN = (process.env.STRIPE_PRODUCT_MAIN || 'prod_VTjdG0sise8wG8').trim();
 const STRIPE_PRODUCT_WIFI_RADAR = (process.env.STRIPE_PRODUCT_WIFI_RADAR || 'prod_VTjdnQaDaWKags').trim();
-const STRIPE_PRICE_ANNUAL = (process.env.STRIPE_PRICE_ANNUAL || 'price_1USmA90Fq96R9TfN64MFGM8m').trim();
-const STRIPE_PRICE_SIX_MONTH = (process.env.STRIPE_PRICE_SIX_MONTH || 'price_1USmA90Fq96R9TfNoJAsCWv2').trim();
-const STRIPE_PRICE_MONTHLY = (process.env.STRIPE_PRICE_MONTHLY || 'price_1USmA90Fq96R9TfNUETcvpen').trim();
-const STRIPE_COUPON = (process.env.STRIPE_COUPON || 'sweepr_intro_gbp_800').trim();
+const STRIPE_PRICE_ANNUAL = (process.env.STRIPE_PRICE_ANNUAL || 'price_1UT7Vl0Fq96R9TfN0smzMLKF').trim();
+const STRIPE_PRICE_SIX_MONTH = (process.env.STRIPE_PRICE_SIX_MONTH || 'price_1UT7Vl0Fq96R9TfNNPyzSXY1').trim();
+const STRIPE_PRICE_MONTHLY = (process.env.STRIPE_PRICE_MONTHLY || 'price_1UT7Vl0Fq96R9TfNFaC0Frsm').trim();
+const STRIPE_COUPON = (process.env.STRIPE_COUPON || 'sweepr_intro_gbp_1050').trim();
 
 // ============================================================================
 // Multi-Currency Geo-Pricing Engine (Exact match to pricing-config.js)
 // ============================================================================
 const PRICING_BY_CURRENCY = {
-  gbp: { currency: 'gbp', symbol: '£', symbolPosition: 'prefix', zeroDecimal: false, annualAmount: 5999, sixMonthAmount: 3899, monthlyAmount: 999, introMonthlyAmount: 199, wifiRadarAnnualAmount: 1499, wifiRadarSixMonthAmount: 999, wifiRadarMonthlyAmount: 199 },
-  usd: { currency: 'usd', symbol: '$', symbolPosition: 'prefix', zeroDecimal: false, annualAmount: 7799, sixMonthAmount: 5099, monthlyAmount: 1299, introMonthlyAmount: 299, wifiRadarAnnualAmount: 1999, wifiRadarSixMonthAmount: 1299, wifiRadarMonthlyAmount: 299 },
-  eur: { currency: 'eur', symbol: '€', symbolPosition: 'prefix', zeroDecimal: false, annualAmount: 7199, sixMonthAmount: 4699, monthlyAmount: 1199, introMonthlyAmount: 299, wifiRadarAnnualAmount: 1799, wifiRadarSixMonthAmount: 1199, wifiRadarMonthlyAmount: 249 },
-  cad: { currency: 'cad', symbol: 'CA$', symbolPosition: 'prefix', zeroDecimal: false, annualAmount: 10799, sixMonthAmount: 6999, monthlyAmount: 1799, introMonthlyAmount: 399, wifiRadarAnnualAmount: 2699, wifiRadarSixMonthAmount: 1799, wifiRadarMonthlyAmount: 349 },
-  aud: { currency: 'aud', symbol: 'A$', symbolPosition: 'prefix', zeroDecimal: false, annualAmount: 11999, sixMonthAmount: 7799, monthlyAmount: 1999, introMonthlyAmount: 399, wifiRadarAnnualAmount: 2999, wifiRadarSixMonthAmount: 1999, wifiRadarMonthlyAmount: 399 },
-  chf: { currency: 'chf', symbol: 'CHF ', symbolPosition: 'prefix', zeroDecimal: false, annualAmount: 6599, sixMonthAmount: 4299, monthlyAmount: 1099, introMonthlyAmount: 299, wifiRadarAnnualAmount: 1699, wifiRadarSixMonthAmount: 1099, wifiRadarMonthlyAmount: 249 },
-  jpy: { currency: 'jpy', symbol: '¥', symbolPosition: 'prefix', zeroDecimal: true, annualAmount: 11999, sixMonthAmount: 7799, monthlyAmount: 1999, introMonthlyAmount: 399, wifiRadarAnnualAmount: 2999, wifiRadarSixMonthAmount: 1999, wifiRadarMonthlyAmount: 399 }
+  gbp: { currency: 'gbp', symbol: '£', symbolPosition: 'prefix', zeroDecimal: false, annualAmount: 7499, sixMonthAmount: 4899, monthlyAmount: 1249, introMonthlyAmount: 199, wifiRadarAnnualAmount: 1499, wifiRadarSixMonthAmount: 999, wifiRadarMonthlyAmount: 199 },
+  usd: { currency: 'usd', symbol: '$', symbolPosition: 'prefix', zeroDecimal: false, annualAmount: 9599, sixMonthAmount: 6199, monthlyAmount: 1599, introMonthlyAmount: 299, wifiRadarAnnualAmount: 1999, wifiRadarSixMonthAmount: 1299, wifiRadarMonthlyAmount: 299 },
+  eur: { currency: 'eur', symbol: '€', symbolPosition: 'prefix', zeroDecimal: false, annualAmount: 8999, sixMonthAmount: 5899, monthlyAmount: 1499, introMonthlyAmount: 299, wifiRadarAnnualAmount: 1799, wifiRadarSixMonthAmount: 1199, wifiRadarMonthlyAmount: 249 },
+  cad: { currency: 'cad', symbol: 'CA$', symbolPosition: 'prefix', zeroDecimal: false, annualAmount: 13199, sixMonthAmount: 8599, monthlyAmount: 2199, introMonthlyAmount: 399, wifiRadarAnnualAmount: 2699, wifiRadarSixMonthAmount: 1799, wifiRadarMonthlyAmount: 349 },
+  aud: { currency: 'aud', symbol: 'A$', symbolPosition: 'prefix', zeroDecimal: false, annualAmount: 14999, sixMonthAmount: 9799, monthlyAmount: 2499, introMonthlyAmount: 399, wifiRadarAnnualAmount: 2999, wifiRadarSixMonthAmount: 1999, wifiRadarMonthlyAmount: 399 },
+  chf: { currency: 'chf', symbol: 'CHF ', symbolPosition: 'prefix', zeroDecimal: false, annualAmount: 8399, sixMonthAmount: 5499, monthlyAmount: 1399, introMonthlyAmount: 299, wifiRadarAnnualAmount: 1699, wifiRadarSixMonthAmount: 1099, wifiRadarMonthlyAmount: 249 },
+  jpy: { currency: 'jpy', symbol: '¥', symbolPosition: 'prefix', zeroDecimal: true, annualAmount: 14999, sixMonthAmount: 9799, monthlyAmount: 2499, introMonthlyAmount: 399, wifiRadarAnnualAmount: 2999, wifiRadarSixMonthAmount: 1999, wifiRadarMonthlyAmount: 399 }
 };
 
 const COUNTRY_TO_CURRENCY = {
@@ -1655,7 +1655,7 @@ const server = http.createServer(async (req, res) => {
           country: acc.country || 'GB',
           plan: acc.plan,
           status: 'active',
-          amount_cents: totalAmount || 5999,
+          amount_cents: totalAmount || 7499,
           currency: sub.currency || 'gbp',
           stripe_customer_id: acc.stripe_customer_id,
           stripe_subscription_id: sub.id,

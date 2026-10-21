@@ -61,303 +61,903 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/solutions/virgin-media-gaming-packet-loss</loc>
-    <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://sweeprvpn.com/solutions/virgin-media-remote-dev-ssh</loc>
-    <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://sweeprvpn.com/solutions/virgin-media-uhd-streaming-buffering</loc>
-    <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://sweeprvpn.com/solutions/virgin-media-p2p-port-forwarding</loc>
-    <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://sweeprvpn.com/solutions/bt-broadband-gaming-packet-loss</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://sweeprvpn.com/solutions/bt-broadband-remote-dev-ssh</loc>
-    <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://sweeprvpn.com/solutions/bt-broadband-uhd-streaming-buffering</loc>
-    <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://sweeprvpn.com/solutions/bt-broadband-p2p-port-forwarding</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/solutions/sky-broadband-gaming-packet-loss</loc>
+    <loc>https://sweeprvpn.com/solutions/bt-broadband-remote-dev-ssh</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/solutions/sky-broadband-remote-dev-ssh</loc>
+    <loc>https://sweeprvpn.com/solutions/bt-broadband-uhd-streaming-buffering</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/solutions/sky-broadband-uhd-streaming-buffering</loc>
+    <loc>https://sweeprvpn.com/solutions/cityfibre-uk-gaming-packet-loss</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/solutions/sky-broadband-p2p-port-forwarding</loc>
+    <loc>https://sweeprvpn.com/solutions/cityfibre-uk-isp-throttling</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/solutions/talktalk-gaming-packet-loss</loc>
+    <loc>https://sweeprvpn.com/solutions/cityfibre-uk-p2p-port-forwarding</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/solutions/talktalk-remote-dev-ssh</loc>
+    <loc>https://sweeprvpn.com/solutions/cityfibre-uk-remote-dev-ssh</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/solutions/talktalk-uhd-streaming-buffering</loc>
+    <loc>https://sweeprvpn.com/solutions/cityfibre-uk-smart-tv-acr-blocking</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/solutions/talktalk-p2p-port-forwarding</loc>
+    <loc>https://sweeprvpn.com/solutions/cityfibre-uk-uhd-streaming-buffering</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/solutions/vodafone-uk-gaming-packet-loss</loc>
+    <loc>https://sweeprvpn.com/solutions/cityfibre-uk-voip-teams-zoom-jitter</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/solutions/vodafone-uk-remote-dev-ssh</loc>
+    <loc>https://sweeprvpn.com/solutions/cityfibre-uk-wifi-arp-spoofing-protection</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/solutions/vodafone-uk-uhd-streaming-buffering</loc>
+    <loc>https://sweeprvpn.com/solutions/community-fibre-london-gaming-packet-loss</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/solutions/vodafone-uk-p2p-port-forwarding</loc>
+    <loc>https://sweeprvpn.com/solutions/community-fibre-london-isp-throttling</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/community-fibre-london-p2p-port-forwarding</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/community-fibre-london-remote-dev-ssh</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/community-fibre-london-smart-tv-acr-blocking</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/community-fibre-london-uhd-streaming-buffering</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/community-fibre-london-voip-teams-zoom-jitter</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/community-fibre-london-wifi-arp-spoofing-protection</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://sweeprvpn.com/solutions/eduroam-campus-wifi-gaming-packet-loss</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://sweeprvpn.com/solutions/eduroam-campus-wifi-remote-dev-ssh</loc>
-    <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://sweeprvpn.com/solutions/eduroam-campus-wifi-uhd-streaming-buffering</loc>
-    <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://sweeprvpn.com/solutions/eduroam-campus-wifi-p2p-port-forwarding</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/setup/gl-inet-travel-router</loc>
+    <loc>https://sweeprvpn.com/solutions/eduroam-campus-wifi-remote-dev-ssh</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/setup/linux-cli-wireguard</loc>
+    <loc>https://sweeprvpn.com/solutions/eduroam-campus-wifi-uhd-streaming-buffering</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/setup/pfsense-opnsense-router</loc>
+    <loc>https://sweeprvpn.com/solutions/ee-5g-mobile-hotspot-gaming-packet-loss</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/setup/steam-deck-vpn</loc>
+    <loc>https://sweeprvpn.com/solutions/ee-5g-mobile-hotspot-isp-throttling</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/setup/windows-11-wireguard-vpn</loc>
+    <loc>https://sweeprvpn.com/solutions/ee-5g-mobile-hotspot-p2p-port-forwarding</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/setup/macos-apple-silicon-vpn</loc>
+    <loc>https://sweeprvpn.com/solutions/ee-5g-mobile-hotspot-remote-dev-ssh</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/ee-5g-mobile-hotspot-smart-tv-acr-blocking</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/ee-5g-mobile-hotspot-uhd-streaming-buffering</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/ee-5g-mobile-hotspot-wifi-arp-spoofing-protection</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/hyperoptic-broadband-gaming-packet-loss</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/hyperoptic-broadband-isp-throttling</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/hyperoptic-broadband-p2p-port-forwarding</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/hyperoptic-broadband-remote-dev-ssh</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/hyperoptic-broadband-smart-tv-acr-blocking</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/hyperoptic-broadband-uhd-streaming-buffering</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/hyperoptic-broadband-voip-teams-zoom-jitter</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/hyperoptic-broadband-wifi-arp-spoofing-protection</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/nhs-guest-wifi-gaming-packet-loss</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/nhs-guest-wifi-isp-throttling</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/nhs-guest-wifi-p2p-port-forwarding</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/nhs-guest-wifi-remote-dev-ssh</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/nhs-guest-wifi-smart-tv-acr-blocking</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/nhs-guest-wifi-uhd-streaming-buffering</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/o2-uk-mobile-tethering-gaming-packet-loss</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/o2-uk-mobile-tethering-isp-throttling</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/o2-uk-mobile-tethering-p2p-port-forwarding</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/o2-uk-mobile-tethering-remote-dev-ssh</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/o2-uk-mobile-tethering-smart-tv-acr-blocking</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/o2-uk-mobile-tethering-uhd-streaming-buffering</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/o2-uk-mobile-tethering-voip-teams-zoom-jitter</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/o2-uk-mobile-tethering-wifi-arp-spoofing-protection</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/sky-broadband-gaming-packet-loss</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/sky-broadband-p2p-port-forwarding</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/sky-broadband-remote-dev-ssh</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/sky-broadband-uhd-streaming-buffering</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/starlink-satellite-uk-gaming-packet-loss</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/starlink-satellite-uk-isp-throttling</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/starlink-satellite-uk-p2p-port-forwarding</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/starlink-satellite-uk-remote-dev-ssh</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/starlink-satellite-uk-smart-tv-acr-blocking</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/starlink-satellite-uk-uhd-streaming-buffering</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/starlink-satellite-uk-voip-teams-zoom-jitter</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/starlink-satellite-uk-wifi-arp-spoofing-protection</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/talktalk-gaming-packet-loss</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/talktalk-p2p-port-forwarding</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/talktalk-remote-dev-ssh</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/talktalk-uhd-streaming-buffering</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/three-5g-home-broadband-gaming-packet-loss</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/three-5g-home-broadband-isp-throttling</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/three-5g-home-broadband-p2p-port-forwarding</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/three-5g-home-broadband-remote-dev-ssh</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/three-5g-home-broadband-smart-tv-acr-blocking</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/three-5g-home-broadband-uhd-streaming-buffering</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/three-5g-home-broadband-voip-teams-zoom-jitter</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/three-5g-home-broadband-wifi-arp-spoofing-protection</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/virgin-media-gaming-packet-loss</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/virgin-media-p2p-port-forwarding</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/virgin-media-remote-dev-ssh</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/virgin-media-uhd-streaming-buffering</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/vodafone-uk-gaming-packet-loss</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/vodafone-uk-p2p-port-forwarding</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/vodafone-uk-remote-dev-ssh</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/vodafone-uk-uhd-streaming-buffering</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/zen-internet-uk-gaming-packet-loss</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/zen-internet-uk-isp-throttling</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/zen-internet-uk-p2p-port-forwarding</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/zen-internet-uk-remote-dev-ssh</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/zen-internet-uk-smart-tv-acr-blocking</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/zen-internet-uk-uhd-streaming-buffering</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/zen-internet-uk-voip-teams-zoom-jitter</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/zen-internet-uk-wifi-arp-spoofing-protection</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/setup/apple-tv-tvos-17-wireguard</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://sweeprvpn.com/setup/asuswrt-merlin-vpn-router</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/setup/docker-gluetun-wireguard-compose</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/setup/gl-inet-flint-2-wireguard</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/setup/gl-inet-travel-router</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/setup/linux-cli-wireguard</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/setup/macos-apple-silicon-vpn</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/setup/mikrotik-routeros-v7-wireguard</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/setup/nvidia-shield-tv-pro-wireguard</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://sweeprvpn.com/setup/openwrt-wireguard-router</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/setup/synology-nas-docker-vpn</loc>
+    <loc>https://sweeprvpn.com/setup/pfsense-opnsense-router</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/setup/playstation-5-wireguard-router</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/setup/proxmox-lxc-wireguard-gateway</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/setup/qnap-qts-wireguard-client</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/setup/raspberry-pi-5-wireguard-gateway</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://sweeprvpn.com/setup/raspberry-pi-home-gateway</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/vs/nordvpn</loc>
+    <loc>https://sweeprvpn.com/setup/steam-deck-vpn</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/vs/expressvpn</loc>
+    <loc>https://sweeprvpn.com/setup/synology-dsm-7-wireguard</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/vs/surfshark</loc>
+    <loc>https://sweeprvpn.com/setup/synology-nas-docker-vpn</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/vs/cyberghost</loc>
+    <loc>https://sweeprvpn.com/setup/ubiquiti-unifi-dream-machine-wireguard</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/vs/protonvpn</loc>
+    <loc>https://sweeprvpn.com/setup/windows-11-wireguard-vpn</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/vs/mullvad</loc>
+    <loc>https://sweeprvpn.com/setup/xbox-series-x-wireguard-gaming</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/vs/pia-private-internet-access</loc>
+    <loc>https://sweeprvpn.com/vs/airvpn</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/vs/ipvanish</loc>
+    <loc>https://sweeprvpn.com/vs/avast-secureline-vpn</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/vs/avg-secure-vpn</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://sweeprvpn.com/vs/bitdefender-vpn</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/vs/cloudflare-warp-plus</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/vs/cyberghost</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/vs/expressvpn</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/vs/hide-me-vpn</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/vs/ipvanish</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/vs/kaspersky-vpn</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://sweeprvpn.com/vs/mcafee-safe-connect</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/guides/stop-lg-smart-tv-acr-spying</loc>
+    <loc>https://sweeprvpn.com/vs/mozilla-vpn</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/guides/stop-samsung-smart-tv-acr-tracking</loc>
+    <loc>https://sweeprvpn.com/vs/mullvad</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/guides/stop-roku-vizio-firetv-spying</loc>
+    <loc>https://sweeprvpn.com/vs/nordvpn</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/vs/norton-secure-vpn</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/vs/pia-private-internet-access</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/vs/private-internet-access</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/vs/protonvpn</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/vs/surfshark</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/vs/tunnelbear</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/vs/vyprvpn</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/vs/windscribe</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/guides/block-hisense-vidaa-fire-tv-acr</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/guides/block-sony-bravia-samba-tv-acr</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/guides/bypass-cgnat-for-self-hosted-home-lab</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/guides/detect-hidden-wifi-cameras-airbnb</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://sweeprvpn.com/guides/detect-unknown-devices-on-home-wifi</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://sweeprvpn.com/guides/public-hotel-airport-wifi-security</loc>
-    <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://sweeprvpn.com/guides/fix-isp-dns-hijacking-and-throttling</loc>
     <lastmod>2026-10-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/guides/fix-wireguard-mtu-fragmentation-pppoe</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/guides/public-hotel-airport-wifi-security</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/guides/stop-isp-dns-hijacking-nxdomain</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/guides/stop-lg-smart-tv-acr-spying</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/guides/stop-roku-vizio-firetv-spying</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/guides/stop-samsung-smart-tv-acr-tracking</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 </urlset>

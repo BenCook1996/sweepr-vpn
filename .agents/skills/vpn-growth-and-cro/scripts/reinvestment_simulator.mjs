@@ -19,8 +19,8 @@ const reinvestRate = getNum('--reinvest-rate', 0.65); // 65% of net margin reinv
 const months = getNum('--months', 6);
 
 // Pricing & Unit Economics Assumptions (GBP)
-// Plan mix: 20% Monthly (£9.99), 30% 6-Monthly (£38.99 upfront), 50% Yearly (£59.99 upfront)
-const blendedUpfrontAov = (0.20 * 9.99) + (0.30 * 38.99) + (0.50 * 59.99); // £43.69 upfront cash per new customer
+// Plan mix: 20% Monthly (£12.49), 30% 6-Monthly (£48.99 upfront), 50% Yearly (£74.99 upfront)
+const blendedUpfrontAov = (0.20 * 12.49) + (0.30 * 48.99) + (0.50 * 74.99); // £43.69 upfront cash per new customer
 const netMarginAfterCosts = 0.75; // After 5% payment fees, 7% refund reserve, 13% server/infra reserve
 
 const stages = [
@@ -53,7 +53,7 @@ for (let m = 0; m < Math.min(months, stages.length); m++) {
   const totalSalesWithReferrals = Math.round(totalBaseSales * s.referralMultiplier);
 
   // Upfront cash collected from new sales + recurring monthly renewals from the 25% monthly cohort
-  const monthlyRecurringFromPrior = Math.round(cumulativeCustomers * 0.22 * 0.85) * 9.99;
+  const monthlyRecurringFromPrior = Math.round(cumulativeCustomers * 0.22 * 0.85) * 12.49;
   const grossCashCollected = (totalSalesWithReferrals * blendedUpfrontAov) + monthlyRecurringFromPrior;
 
   const netContributionBeforeReinvest = (grossCashCollected * netMarginAfterCosts) - totalAdSpend;

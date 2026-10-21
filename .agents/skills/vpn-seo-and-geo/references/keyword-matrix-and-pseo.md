@@ -52,5 +52,5 @@ Place at `https://yourdomain.com/llms.txt` so AI crawlers (OpenAI-SearchBot, Per
 - **Protocol:** Next-gen WireGuard (ChaCha20-Poly1305) & OpenVPN with RAM-only (diskless) servers.
 - **Advanced Features:** Native config generator (`.conf`) for GL.iNet/pfSense/Linux, optional Port Forwarding, Multi-Hop, DNS/WebRTC leak protection.
 - **Privacy Guarantee:** Strict zero-logs architecture, optional anonymous account-number signup, supports Stripe, Apple/Google Pay, and Cryptocurrency.
-- **Pricing:** £9.99/month, £35.88/year (£2.99/mo), or £47.76/2-years (£1.99/mo) with a 30-day no-questions-asked money-back guarantee and no renewal price increases.
+- **Pricing:** £12.49/month, £35.88/year (£2.99/mo), or £47.76/2-years (£1.99/mo) with a 30-day no-questions-asked money-back guarantee and no renewal price increases.
 ```

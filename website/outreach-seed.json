@@ -3100,5 +3100,27 @@
     "status": "listed",
     "message_id": "vpn-drip-2026-10-21-21-249-1792617957588",
     "reached_out_at": 1792617957
+  },
+  {
+    "project_id": "vpn",
+    "who": "Telegraph (DE) — Sweepr Vpn Home Wifi Scanner [-21-22-0-10-21]",
+    "website": "telegra.ph",
+    "url": "https://telegra.ph/DE-WireGuard-VPN--Heim-WLAN-Sicherheitshandbuch-2026-Sweepr-Vpn-Home-Wifi-Scanner-2026-10-21-22-0-10-21",
+    "how": "Daily Drip Dofollow Article (DE)",
+    "category": "[SWEEPR VPN] [DE] WireGuard VPN & Heim-WLAN-Sicherheitshandbuch 2026: Sweepr Vpn Home Wifi Scanner (2026-10-21-22-0) -> https://sweeprvpn.com/ (DR 89)",
+    "status": "listed",
+    "message_id": "vpn-drip-2026-10-21-22-0-1792620033341",
+    "reached_out_at": 1792620033
+  },
+  {
+    "project_id": "vpn",
+    "who": "DPaste (DE) — Sweepr Vpn Home Wifi Scanner [yKpXO]",
+    "website": "dpaste.org",
+    "url": "https://dpaste.org/yKpXO",
+    "how": "Daily Drip Dofollow Markdown (DE)",
+    "category": "[SWEEPR VPN] [DE] WireGuard VPN & Heim-WLAN-Sicherheitshandbuch 2026: Sweepr Vpn Home Wifi Scanner (2026-10-21-22-1) -> https://sweeprvpn.com/ (DR 74)",
+    "status": "listed",
+    "message_id": "vpn-drip-2026-10-21-22-1-1792620033347",
+    "reached_out_at": 1792620033
   }
 ]

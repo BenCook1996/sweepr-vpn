@@ -93,7 +93,7 @@ const VPN_DIRECTORY_TARGETS = [
     how: 'Web Portal Contribution (Free)',
     category: 'DR 78 · Structured Pros/Cons Comparison Engine (Cited by LLMs)',
     status: 'pending',
-    notes: 'Add SWEEPR VPN option with pros: ~14MB lightweight app, honest price-lock renewals (£59.99/yr Save 50%), built-in 30s Wi-Fi device scanner, Smart-TV spy blocker.'
+    notes: 'Add SWEEPR VPN option with pros: ~14MB lightweight app, honest price-lock renewals (£74.99/yr Save 50%), built-in 30s Wi-Fi device scanner, Smart-TV spy blocker.'
   },
 
   // Tier 2: Product Launch & Indie Tech Directories (DR 70–91)
@@ -250,7 +250,7 @@ const VPN_DIRECTORY_TARGETS = [
     how: 'Web Portal Submission (Free)',
     category: 'DR 74 · UK & Global Software Download Directory',
     status: 'pending',
-    notes: 'Submit SWEEPR VPN (UK-priced £59.99/yr Save 50% or £1.99 1st-month intro).'
+    notes: 'Submit SWEEPR VPN (UK-priced £74.99/yr Save 50% or £1.99 1st-month intro).'
   },
   {
     who: 'LO4D Windows Security & VPN Directory',
@@ -371,7 +371,7 @@ const VPN_DIRECTORY_TARGETS = [
     how: 'Web Portal Product Submission (Free)',
     category: 'DR 76 · SaaS & Security Software Rating Index',
     status: 'pending',
-    notes: 'Submit at https://www.saasworthy.com/offerings — Highlight 50% annual savings (£59.99/yr) and Smart-TV spy blocker.'
+    notes: 'Submit at https://www.saasworthy.com/offerings — Highlight 50% annual savings (£74.99/yr) and Smart-TV spy blocker.'
   },
   {
     who: 'Serchen Cloud & Security Marketplace',
