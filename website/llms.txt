@@ -1,29 +1,75 @@
 # SWEEPR VPN & SWEEPR Wi-Fi Radar (sweeprvpn.com)
 
-> SWEEPR VPN is an ultra-lightweight (~14 MB), fast, and easy-to-use VPN and Home Wi-Fi Scanner for Windows 10/11, macOS, and Linux. Built by the team behind SWEEPR Cleaner, it combines 1-click private browsing with a free 30-second Home Wi-Fi & Speed Scanner and a Smart-TV spy blocker.
+> SWEEPR VPN is an ultra-lightweight (~14 MB), fast, and easy-to-use WireGuard VPN and Home Wi-Fi Scanner for Windows 10/11, macOS, Linux, and routers. Built by the team behind SWEEPR Cleaner, it combines 1-click 10Gbps private browsing with a free 30-second Home Wi-Fi & Speed Scanner and a Smart-TV ACR spy blocker.
 
 ## Core Capabilities
-- **1-Click Private Browsing & Streaming Speed Booster**: Stops internet providers from slowing down evening 4K streaming and gaming. Strict zero-logs policy—we never record, track, or store what websites you visit.
-- **Free 30-Second Home Wi-Fi & Speed Scanner**: Scans your home Wi-Fi locally in 30 seconds to show all 15–30+ connected household devices, flag unknown devices, check for router security warnings, and test for internet provider speed slowdowns.
+- **1-Click Private Browsing & Streaming Speed Booster**: Stops internet providers (Virgin Media, BT, Sky, TalkTalk, Vodafone, Eduroam) from slowing down evening 4K streaming, gaming, and SSH workflows. Strict zero-logs policy on diskless RAM-only 10Gbps servers.
+- **Free 30-Second Home Wi-Fi & Speed Scanner**: Scans your home Wi-Fi locally in 30 seconds to show all 15–30+ connected household devices, flag unknown devices, check for router security warnings, and test for ISP DNS throttling.
 - **SWEEPR Wi-Fi Radar & Smart-TV Shield (Add-On)**:
   - Instant alerts on your screen whenever a stranger or new device joins your home Wi-Fi.
   - 1-click speed booster to stop peak-hour streaming buffering.
-  - Automatic Smart-TV spy blocker that stops LG, Samsung, Roku, Vizio, and Fire TV sets from secretly taking screenshots of what you watch.
+  - Automatic Smart-TV spy blocker that stops LG webOS, Samsung Tizen, Roku, Vizio Inscape, and Fire TV sets from secretly taking ACR screenshots of what you watch.
 - **Transparent Price-Lock Subscription Plans (Covers up to 10 Devices)**:
-  - **Yearly Plan (Most Popular — Save 50%)**: £59.99/year (£5.00/mo) | $77.99 USD ($6.50/mo) | €71.99 EUR (€6.00/mo) | CA$107.99 CAD (CA$9.00/mo) | A$119.99 AUD (A$10.00/mo) | CHF 65.99 (CHF 5.50/mo) | ¥11,999 JPY (¥1,000/mo)
+  - **Yearly Plan (Most Popular — Save 50%)**: £59.99/year (£5.00/mo) | $77.99 USD ($6.50/mo) | €71.99 EUR (€6.00/mo) | CA$107.99 CAD | A$119.99 AUD | CHF 65.99 | ¥11,999 JPY
   - **6-Monthly Plan (Save 35%)**: £38.99/6 months (£6.50/mo) | $50.99 USD | €46.99 EUR | CA$69.99 CAD | A$77.99 AUD | CHF 42.99 | ¥7,799 JPY
   - **Monthly Plan**: £9.99/month (or £1.99 1st-Month Introductory Offer) | $12.99 USD | €11.99 EUR | CA$17.99 CAD | A$19.99 AUD | CHF 10.99 | ¥1,999 JPY
   - **SWEEPR Wi-Fi Radar & Smart-TV Shield Add-On**: +£14.99/yr | +£9.99/6mo | +£1.99/mo
   - **Refund Policy**: 30-day 100% money-back guarantee and 1-click self-service portal cancellation.
 
-## Key URLs
+## Core Storefront & Free Diagnostic Tools
 - Homepage & Free Home Wi-Fi Scanner: https://sweeprvpn.com/
 - Pricing & Plan Comparison: https://sweeprvpn.com/pricing
 - Free Instant IP, DNS & WebRTC Leak Test: https://sweeprvpn.com/tools/leak-test
 - Free ISP Speed Slowdown & Streaming Throttling Checker: https://sweeprvpn.com/tools/isp-throttling-test
-- SWEEPR VPN vs Total VPN Comparison: https://sweeprvpn.com/vs/totalvpn
-- 5 Best Total VPN Alternatives (2026 Guide): https://sweeprvpn.com/alternatives/totalvpn
-- Support & Help Center: https://sweeprvpn.com/support
-- 30-Day Refund Policy: https://sweeprvpn.com/refund
-- Privacy Policy: https://sweeprvpn.com/privacy
-- Terms of Service: https://sweeprvpn.com/terms
+
+## Programmatic SEO Technical Library (50 Indexed Guides & Comparisons)
+- [How to Fix Virgin Media Low-Latency Gaming & Packet Loss (AS5089)](https://sweeprvpn.com/solutions/virgin-media-gaming-packet-loss)
+- [How to Fix Virgin Media Remote SSH, Git & Docker Workflows (AS5089)](https://sweeprvpn.com/solutions/virgin-media-remote-dev-ssh)
+- [How to Fix Virgin Media 4K Live Sports & High-Bitrate Streaming (AS5089)](https://sweeprvpn.com/solutions/virgin-media-uhd-streaming-buffering)
+- [How to Fix Virgin Media P2P File Sharing & High-Speed Transfers (AS5089)](https://sweeprvpn.com/solutions/virgin-media-p2p-port-forwarding)
+- [How to Fix BT Broadband Low-Latency Gaming & Packet Loss (AS2856)](https://sweeprvpn.com/solutions/bt-broadband-gaming-packet-loss)
+- [How to Fix BT Broadband Remote SSH, Git & Docker Workflows (AS2856)](https://sweeprvpn.com/solutions/bt-broadband-remote-dev-ssh)
+- [How to Fix BT Broadband 4K Live Sports & High-Bitrate Streaming (AS2856)](https://sweeprvpn.com/solutions/bt-broadband-uhd-streaming-buffering)
+- [How to Fix BT Broadband P2P File Sharing & High-Speed Transfers (AS2856)](https://sweeprvpn.com/solutions/bt-broadband-p2p-port-forwarding)
+- [How to Fix Sky Broadband Low-Latency Gaming & Packet Loss (AS5607)](https://sweeprvpn.com/solutions/sky-broadband-gaming-packet-loss)
+- [How to Fix Sky Broadband Remote SSH, Git & Docker Workflows (AS5607)](https://sweeprvpn.com/solutions/sky-broadband-remote-dev-ssh)
+- [How to Fix Sky Broadband 4K Live Sports & High-Bitrate Streaming (AS5607)](https://sweeprvpn.com/solutions/sky-broadband-uhd-streaming-buffering)
+- [How to Fix Sky Broadband P2P File Sharing & High-Speed Transfers (AS5607)](https://sweeprvpn.com/solutions/sky-broadband-p2p-port-forwarding)
+- [How to Fix TalkTalk Low-Latency Gaming & Packet Loss (AS13285)](https://sweeprvpn.com/solutions/talktalk-gaming-packet-loss)
+- [How to Fix TalkTalk Remote SSH, Git & Docker Workflows (AS13285)](https://sweeprvpn.com/solutions/talktalk-remote-dev-ssh)
+- [How to Fix TalkTalk 4K Live Sports & High-Bitrate Streaming (AS13285)](https://sweeprvpn.com/solutions/talktalk-uhd-streaming-buffering)
+- [How to Fix TalkTalk P2P File Sharing & High-Speed Transfers (AS13285)](https://sweeprvpn.com/solutions/talktalk-p2p-port-forwarding)
+- [How to Fix Vodafone UK Low-Latency Gaming & Packet Loss (AS5378)](https://sweeprvpn.com/solutions/vodafone-uk-gaming-packet-loss)
+- [How to Fix Vodafone UK Remote SSH, Git & Docker Workflows (AS5378)](https://sweeprvpn.com/solutions/vodafone-uk-remote-dev-ssh)
+- [How to Fix Vodafone UK 4K Live Sports & High-Bitrate Streaming (AS5378)](https://sweeprvpn.com/solutions/vodafone-uk-uhd-streaming-buffering)
+- [How to Fix Vodafone UK P2P File Sharing & High-Speed Transfers (AS5378)](https://sweeprvpn.com/solutions/vodafone-uk-p2p-port-forwarding)
+- [How to Fix Eduroam Campus Wi-Fi Low-Latency Gaming & Packet Loss (AS786 (Jisc Janet))](https://sweeprvpn.com/solutions/eduroam-campus-wifi-gaming-packet-loss)
+- [How to Fix Eduroam Campus Wi-Fi Remote SSH, Git & Docker Workflows (AS786 (Jisc Janet))](https://sweeprvpn.com/solutions/eduroam-campus-wifi-remote-dev-ssh)
+- [How to Fix Eduroam Campus Wi-Fi 4K Live Sports & High-Bitrate Streaming (AS786 (Jisc Janet))](https://sweeprvpn.com/solutions/eduroam-campus-wifi-uhd-streaming-buffering)
+- [How to Fix Eduroam Campus Wi-Fi P2P File Sharing & High-Speed Transfers (AS786 (Jisc Janet))](https://sweeprvpn.com/solutions/eduroam-campus-wifi-p2p-port-forwarding)
+- [WireGuard VPN Setup for GL.iNet Beryl AX (GL-MT3000) & Slate AX Travel Router](https://sweeprvpn.com/setup/gl-inet-travel-router)
+- [WireGuard VPN Setup for Linux CLI (Ubuntu, Debian, Arch & Fedora)](https://sweeprvpn.com/setup/linux-cli-wireguard)
+- [WireGuard VPN Setup for pfSense & OPNsense Home Firewall](https://sweeprvpn.com/setup/pfsense-opnsense-router)
+- [WireGuard VPN Setup for Steam Deck & Handheld Gaming OS (SteamOS)](https://sweeprvpn.com/setup/steam-deck-vpn)
+- [WireGuard VPN Setup for Windows 10 & 11 Native Kernel WireGuard](https://sweeprvpn.com/setup/windows-11-wireguard-vpn)
+- [WireGuard VPN Setup for macOS (Apple Silicon M1/M2/M3/M4 & Intel)](https://sweeprvpn.com/setup/macos-apple-silicon-vpn)
+- [WireGuard VPN Setup for ASUSWRT-Merlin & ASUS VPN Fusion Routers](https://sweeprvpn.com/setup/asuswrt-merlin-vpn-router)
+- [WireGuard VPN Setup for OpenWrt 23.05+ Router WireGuard & Policy Routing](https://sweeprvpn.com/setup/openwrt-wireguard-router)
+- [WireGuard VPN Setup for Synology NAS & Docker Gluetun WireGuard Container](https://sweeprvpn.com/setup/synology-nas-docker-vpn)
+- [WireGuard VPN Setup for Raspberry Pi 5 Whole-Home WireGuard Gateway & TV Shield](https://sweeprvpn.com/setup/raspberry-pi-home-gateway)
+- [SWEEPR VPN vs NordVPN (2026 Comparison)](https://sweeprvpn.com/vs/nordvpn)
+- [SWEEPR VPN vs ExpressVPN (2026 Comparison)](https://sweeprvpn.com/vs/expressvpn)
+- [SWEEPR VPN vs Surfshark (2026 Comparison)](https://sweeprvpn.com/vs/surfshark)
+- [SWEEPR VPN vs CyberGhost (2026 Comparison)](https://sweeprvpn.com/vs/cyberghost)
+- [SWEEPR VPN vs Proton VPN (2026 Comparison)](https://sweeprvpn.com/vs/protonvpn)
+- [SWEEPR VPN vs Mullvad VPN (2026 Comparison)](https://sweeprvpn.com/vs/mullvad)
+- [SWEEPR VPN vs Private Internet Access (PIA) (2026 Comparison)](https://sweeprvpn.com/vs/pia-private-internet-access)
+- [SWEEPR VPN vs IPVanish (2026 Comparison)](https://sweeprvpn.com/vs/ipvanish)
+- [SWEEPR VPN vs Bitdefender VPN (2026 Comparison)](https://sweeprvpn.com/vs/bitdefender-vpn)
+- [SWEEPR VPN vs McAfee Safe Connect VPN (2026 Comparison)](https://sweeprvpn.com/vs/mcafee-safe-connect)
+- [How to Stop LG webOS Smart TVs From Taking Screenshots of What You Watch (2026 Guide)](https://sweeprvpn.com/guides/stop-lg-smart-tv-acr-spying)
+- [How to Block Samsung Tizen Smart-TV ACR Telemetry & Home Menu Ads (2026 Guide)](https://sweeprvpn.com/guides/stop-samsung-smart-tv-acr-tracking)
+- [How to Block Roku, Vizio Inscape & Fire TV ACR Spying on Your Home Wi-Fi](https://sweeprvpn.com/guides/stop-roku-vizio-firetv-spying)
+- [How to Find Unknown Devices & Strangers on Your Home Wi-Fi in 30 Seconds](https://sweeprvpn.com/guides/detect-unknown-devices-on-home-wifi)
+- [Public, Hotel & Airport Wi-Fi Security: Evil Twin & Packet Sniffing Protection](https://sweeprvpn.com/guides/public-hotel-airport-wifi-security)
+- [How UK ISPs Use DNS Inspection to Throttle Evening Speeds (And How to Fix It)](https://sweeprvpn.com/guides/fix-isp-dns-hijacking-and-throttling)

@@ -125,7 +125,7 @@
             "name": "Can I cancel my subscription anytime?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Yes, you can cancel in one click from your online account with no hassle, backed by a 30-day money-back guarantee."
+              "text": "Yes, you can cancel in one click from your online account with no hassle, backed by a 14-day money-back guarantee."
             }
           }
         ]
@@ -271,49 +271,79 @@
         <a href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-big bg-white border border-gray-300 hover:border-gray-400 text-gray-800">Get Pro Now</a>
       </div>
       <div class="flex flex-wrap items-center gap-3 justify-center md:justify-start mt-4 text-xs text-gray-500 font-medium">
-        <span>⚡ 30-Second Wi-Fi Scan</span>
+        <span>⚡ 8 Fast Global Locations</span>
         <span>•</span>
-        <span>🛡️ 30-Day Money-Back Guarantee</span>
+        <span>🛡️ 14-Day Money-Back Guarantee</span>
         <span>•</span>
-        <span>🔒 Zero Bloatware</span>
+        <span>🔒 Zero Activity Logs</span>
       </div>
     </div>
     <div class="flex-1 relative w-full max-w-lg">
       <div class="glass-card p-6 flex flex-col gap-4 transform rotate-1 hover:rotate-0 transition-transform duration-500">
-        <div class="flex items-center justify-between gap-3">
+        <!-- Desktop UI Inspired Header Card -->
+        <div class="flex items-center justify-between gap-3 bg-emerald-50/70 border border-emerald-200/80 rounded-2xl p-3.5">
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full flex items-center justify-center bg-green-100 text-green-600 shrink-0">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+            <div class="w-11 h-11 rounded-full flex items-center justify-center bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-md shadow-emerald-500/25 shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M9 12l2 2 4-4"></path></svg>
             </div>
             <div class="text-left">
-              <h3 class="font-bold text-gray-900 text-base leading-tight">SWEEPR VPN Connected</h3>
-              <p class="text-xs text-gray-500">Private browsing &amp; full-speed streaming on up to 10 devices</p>
+              <div class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="text-[11px] font-extrabold uppercase tracking-wider text-emerald-700">Your computer is protected</span>
+              </div>
+              <h3 class="font-black text-gray-900 text-base leading-tight mt-0.5">United Kingdom &middot; London</h3>
             </div>
           </div>
-          <span class="text-xs font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-lg shrink-0">Online</span>
+          <span class="text-xs font-extrabold text-emerald-700 bg-white border border-emerald-200 px-2.5 py-1 rounded-full shadow-2xs shrink-0">Online ✓</span>
         </div>
-        <div class="grid grid-cols-3 gap-2.5 text-center">
-          <div class="bg-white/85 border border-gray-100 rounded-xl p-3">
-            <div class="text-lg font-black text-emerald-600">Hidden</div>
-            <div class="text-xs font-semibold text-gray-600">IP Address</div>
-            <div class="text-xs font-bold text-gray-800 mt-0.5">100% Private</div>
+
+        <!-- 3 Desktop-UI Inspired Feature Cards -->
+        <div class="grid grid-cols-3 gap-2.5 text-left">
+          <!-- Card 1: 8 Locations -->
+          <div class="bg-white border border-gray-200/90 hover:border-emerald-300 rounded-2xl p-3 shadow-xs flex flex-col justify-between transition-colors">
+            <div class="flex items-center justify-between gap-1 mb-2">
+              <div class="w-7 h-5 rounded overflow-hidden border border-gray-200 shadow-2xs shrink-0">
+                <svg viewBox="0 0 60 40" class="w-full h-full block"><rect width="60" height="40" fill="#012169"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#fff" stroke-width="8"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#C8102E" stroke-width="4"/><path d="M30,0V40 M0,20H60" stroke="#fff" stroke-width="12"/><path d="M30,0V40 M0,20H60" stroke="#C8102E" stroke-width="7"/></svg>
+              </div>
+              <span class="text-[10px] font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded-full">10 Gbps</span>
+            </div>
+            <div>
+              <div class="text-sm font-black text-gray-900 leading-tight">8 Locations</div>
+              <div class="text-[11px] font-semibold text-gray-500 mt-0.5">UK, EU, US &amp; Asia</div>
+            </div>
           </div>
-          <div class="bg-white/85 border border-gray-100 rounded-xl p-3">
-            <div class="text-lg font-black text-gray-900">65+</div>
-            <div class="text-xs font-semibold text-gray-600">Countries</div>
-            <div class="text-xs font-bold text-emerald-600 mt-0.5">Fast Servers</div>
+
+          <!-- Card 2: IP Hidden & Zero Logs -->
+          <div class="bg-white border border-gray-200/90 hover:border-emerald-300 rounded-2xl p-3 shadow-xs flex flex-col justify-between transition-colors">
+            <div class="flex items-center justify-between gap-1 mb-2">
+              <div class="w-7 h-7 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+              </div>
+              <span class="text-[10px] font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded-full">Hidden ✓</span>
+            </div>
+            <div>
+              <div class="text-sm font-black text-gray-900 leading-tight">IP Hidden</div>
+              <div class="text-[11px] font-semibold text-gray-500 mt-0.5">0 Activity Logs</div>
+            </div>
           </div>
-          <div class="bg-white/85 border border-gray-100 rounded-xl p-3">
-            <div class="text-lg font-black text-emerald-600">0 Logs</div>
-            <div class="text-xs font-semibold text-gray-600">Never Tracked</div>
-            <div class="text-xs font-bold text-gray-800 mt-0.5">10 Devices</div>
+
+          <!-- Card 3: Wi-Fi & Smart-TV Shield -->
+          <div class="bg-white border border-gray-200/90 hover:border-emerald-300 rounded-2xl p-3 shadow-xs flex flex-col justify-between transition-colors">
+            <div class="flex items-center justify-between gap-1 mb-2">
+              <div class="w-7 h-7 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"/></svg>
+              </div>
+              <span class="text-[10px] font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded-full">Safe ✓</span>
+            </div>
+            <div>
+              <div class="text-sm font-black text-gray-900 leading-tight">Wi-Fi &amp; TV</div>
+              <div class="text-[11px] font-semibold text-gray-500 mt-0.5">Up to 10 Devices</div>
+            </div>
           </div>
         </div>
-        <div class="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
-          <div class="h-full bg-green-500 w-3/4 rounded-full"></div>
-        </div>
-        <a href="/order" class="btn btn-go w-full mt-1 gap-2">
-          <span>Protect my Connection Now</span>
+
+        <a href="/order" class="btn btn-go w-full mt-1 gap-2 text-base font-extrabold py-3.5 justify-center">
+          <span>Enable Now</span>
           <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
       </div>
@@ -331,24 +361,24 @@
           <p class="text-sm text-gray-600">Hide your IP address and lock down your connection on home or public Wi-Fi with zero activity logs ever saved.</p>
         </div>
         <div class="glass-card p-6">
+          <div class="text-2xl mb-4" style="color: var(--accent);">🌍</div>
+          <h3 class="font-bold mb-2 text-gray-900">8 Fast Locations</h3>
+          <p class="text-sm text-gray-600">Connect in one click to 10 Gbps servers in London, Stockholm, Amsterdam, Frankfurt, New York, Los Angeles, Singapore, and Tokyo.</p>
+        </div>
+        <div class="glass-card p-6">
           <div class="text-2xl mb-4" style="color: var(--accent);">🔍</div>
           <h3 class="font-bold mb-2 text-gray-900">Home Wi-Fi Scanner</h3>
-          <p class="text-sm text-gray-600">See all 15 to 30+ devices on your Wi-Fi, spot router security risks, and get instant alerts if a stranger connects.</p>
+          <p class="text-sm text-gray-600">Scan your home Wi-Fi in seconds to see every connected computer, router, and Smart TV in plain English.</p>
         </div>
         <div class="glass-card p-6">
           <div class="text-2xl mb-4" style="color: var(--accent);">🚀</div>
           <h3 class="font-bold mb-2 text-gray-900">Stop Speed Slowdowns</h3>
-          <p class="text-sm text-gray-600">One-click speed boost that stops your internet provider from slowing down your evening streaming and gaming.</p>
+          <p class="text-sm text-gray-600">Encrypts your connection so your internet provider cannot inspect or throttle your evening 4K streaming and gaming speeds.</p>
         </div>
         <div class="glass-card p-6">
-          <div class="text-2xl mb-4" style="color: var(--accent);">⏱️</div>
+          <div class="text-2xl mb-4" style="color: var(--accent);">📺</div>
           <h3 class="font-bold mb-2 text-gray-900">Smart-TV Spy Blocker</h3>
-          <p class="text-sm text-gray-600">Automatically stops Smart TVs (LG, Samsung, Roku &amp; Vizio) from secretly taking screenshots of what you watch.</p>
-        </div>
-        <div class="glass-card p-6">
-          <div class="text-2xl mb-4" style="color: var(--accent);">🛡️</div>
-          <h3 class="font-bold mb-2 text-gray-900">Auto-Protect &amp; Control</h3>
-          <p class="text-sm text-gray-600">Automatically blocks unsafe connections if your Wi-Fi drops, and lets you choose which apps use the VPN.</p>
+          <p class="text-sm text-gray-600">Blocks Smart TVs (LG, Samsung, Roku, Fire TV &amp; Vizio) from secretly tracking what you watch via built-in private DNS.</p>
         </div>
       </div>
     </div>

@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="color-scheme" content="light">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>pfSense &amp; OPNsense Home Firewall WireGuard VPN Setup Guide (2026) | SWEEPR VPN</title>
+  <meta name="description" content="Step-by-step pfSense &amp; OPNsense Home Firewall WireGuard VPN setup guide (3 Minutes). Recommended MTU (1420 (MSS Clamping 1380)), 10Gbps servers, and sample config.">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://sweeprvpn.com/setup/pfsense-opnsense-router">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.tailwindcss.com">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="SWEEPR VPN">
+  <meta property="og:locale" content="en_GB">
+  <meta property="og:url" content="https://sweeprvpn.com/setup/pfsense-opnsense-router">
+  <meta property="og:title" content="pfSense &amp; OPNsense Home Firewall WireGuard VPN Setup Guide (2026) | SWEEPR VPN">
+  <meta property="og:description" content="Step-by-step pfSense &amp; OPNsense Home Firewall WireGuard VPN setup guide (3 Minutes). Recommended MTU (1420 (MSS Clamping 1380)), 10Gbps servers, and sample config.">
+  <meta property="og:image" content="https://sweeprvpn.com/og-image.png">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://sweeprvpn.com/setup/pfsense-opnsense-router">
+  <meta name="twitter:title" content="pfSense &amp; OPNsense Home Firewall WireGuard VPN Setup Guide (2026) | SWEEPR VPN">
+  <meta name="twitter:description" content="Step-by-step pfSense &amp; OPNsense Home Firewall WireGuard VPN setup guide (3 Minutes). Recommended MTU (1420 (MSS Clamping 1380)), 10Gbps servers, and sample config.">
+  <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png">
+
+  <!-- Schema Markup (Article + SoftwareApplication + FAQPage + BreadcrumbList) -->
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://sweeprvpn.com/setup/pfsense-opnsense-router#article",
+      "headline": "WireGuard VPN Setup for pfSense & OPNsense Home Firewall",
+      "description": "Step-by-step pfSense & OPNsense Home Firewall WireGuard VPN setup guide (3 Minutes). Recommended MTU (1420 (MSS Clamping 1380)), 10Gbps servers, and sample config.",
+      "datePublished": "2026-10-21",
+      "dateModified": "2026-10-21",
+      "author": {
+        "@type": "Organization",
+        "name": "SWEEPR VPN Inc.",
+        "url": "https://sweeprvpn.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "SWEEPR VPN Inc.",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://sweeprvpn.com/logo-emerald.svg"
+        }
+      },
+      "mainEntityOfPage": "https://sweeprvpn.com/setup/pfsense-opnsense-router"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "SWEEPR VPN Pro",
+      "applicationCategory": "SecurityApplication",
+      "operatingSystem": "Windows 10, Windows 11, macOS, Linux, iOS, Android, OpenWrt, GL.iNet, pfSense",
+      "offers": {
+        "@type": "Offer",
+        "price": "59.99",
+        "priceCurrency": "GBP",
+        "description": "Annual Plan (£5.00/mo equivalent — Save 50%) with 30-Day Money-Back Guarantee"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How long does it take to set up SWEEPR VPN on pfSense & OPNsense?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Setup takes approximately 3 Minutes using either the native SWEEPR client or our standard WireGuard configuration parameters (1420 (MSS Clamping 1380))."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does running SWEEPR VPN on a router count as 1 device or multiple devices?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Running SWEEPR VPN on a router or gateway (pfSense & OPNsense) counts as just 1 of your 10 device slots while encrypting every laptop, phone, and Smart TV connected behind it."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which SWEEPR server should I pick for pfSense & OPNsense?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "We recommend UK-LON-01, NL-AMS-01, or DE-FRA-01 for the lowest ping and 10Gbps RAM-only WireGuard throughput."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://sweeprvpn.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Setup Guides",
+          "item": "https://sweeprvpn.com/pricing"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "WireGuard VPN Setup for pfSense & OPNsense Home Firewall",
+          "item": "https://sweeprvpn.com/setup/pfsense-opnsense-router"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/favicon.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" href="/favicon-dark.png" media="(prefers-color-scheme: dark)">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <script src="https://cdn.tailwindcss.com/3.4.5"></script>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/pricing-config.js" defer></script>
+  <script src="/nav.js" defer></script>
+  <!-- Google tag (gtag.js) - Sweepr VPN -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-7D28EEMNXX');
+  </script>
+</head>
+<body class="text-gray-800 bg-[#fafafa]">
+
+  <!-- Navigation -->
+  <nav class="glass-nav px-4 md:px-6 py-4 flex items-center justify-between sticky top-0 z-50">
+    <div class="flex items-center gap-3 md:gap-8">
+      <a href="/" class="flex items-center gap-3 text-inherit no-underline">
+        <div class="logo-box">S</div>
+        <span class="font-extrabold text-xl tracking-tight text-gray-900">SWEEPR <span class="text-emerald-600">VPN</span></span>
+      </a>
+      <div class="hidden md:flex items-center gap-2">
+        <a href="/#features" class="btn btn-ghost text-sm">Features</a>
+        <a href="/pricing" class="btn btn-ghost text-sm">Pricing</a>
+        <div class="relative inline-block text-left" id="navDropdownContainer">
+          <button type="button" id="navDropdownBtn" class="btn btn-ghost text-sm flex items-center gap-1.5 cursor-pointer font-medium" aria-expanded="false" aria-haspopup="true">
+            <span>Compare &amp; Guides</span>
+            <svg id="navDropdownChevron" class="w-3.5 h-3.5 text-gray-500 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </button>
+          <div id="navDropdownMenu" class="hidden absolute left-0 md:left-1/2 md:-translate-x-1/2 mt-2 w-[340px] sm:w-[420px] bg-white/95 backdrop-blur-xl border border-gray-200/90 rounded-2xl shadow-2xl p-2.5 z-50 transition-all">
+            <div class="grid grid-cols-1 gap-1.5">
+              <a href="/vs/totalvpn" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
+                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">⚡</div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between gap-1 mb-0.5">
+                    <span class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">SWEEPR VPN vs Total VPN</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">Comparison</span>
+                  </div>
+                  <p class="text-xs text-gray-500 leading-snug">Side-by-side comparison of speed, Wi-Fi protection, and honest renewal prices.</p>
+                </div>
+              </a>
+              <a href="/vs/nordvpn" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
+                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">🛡️</div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between gap-1 mb-0.5">
+                    <span class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">SWEEPR VPN vs NordVPN</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">2026 Guide</span>
+                  </div>
+                  <p class="text-xs text-gray-500 leading-snug">Compare 14MB lightweight WireGuard performance and locked-in renewal pricing.</p>
+                </div>
+              </a>
+              <a href="/tools/leak-test" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
+                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">🔍</div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between gap-1 mb-0.5">
+                    <span class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">IP, DNS &amp; WebRTC Leak Test</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">Free Tool</span>
+                  </div>
+                  <p class="text-xs text-gray-500 leading-snug">Instant browser diagnostic to check if your ISP or IP address is exposed.</p>
+                </div>
+              </a>
+              <a href="/tools/isp-throttling-test" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
+                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">🚀</div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between gap-1 mb-0.5">
+                    <span class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">ISP Speed &amp; Throttling Test</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">Free Tool</span>
+                  </div>
+                  <p class="text-xs text-gray-500 leading-snug">Test latency, jitter, and evening ISP streaming slowdowns in one click.</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex gap-2 md:gap-3 items-center">
+      <div id="currencySelectorMount"></div>
+      <a href="/login" class="btn btn-ghost text-sm">Login</a>
+      <a href="/download" class="btn btn-go gap-2 text-sm">
+        <span>Get SWEEPR VPN</span>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="max-w-4xl mx-auto px-6 py-12 md:py-16">
+    <!-- Breadcrumb & Badge -->
+    <div class="text-center mb-10">
+      <div class="inline-block text-xs font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full mb-3 border border-emerald-200">
+        2026 WireGuard Setup Guide • 3 Minutes
+      </div>
+      <h1 class="text-3xl md:text-5xl font-black text-gray-900 tracking-tight mb-4">
+        WireGuard VPN Setup for pfSense &amp; OPNsense Home Firewall
+      </h1>
+      <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+        Configure a persistent site-to-cloud WireGuard interface on pfSense or OPNsense to selectively route streaming devices, gaming PCs, or your entire home VLAN through SWEEPR VPN 10Gbps RAM-only nodes.
+      </p>
+    </div>
+
+    <!-- GEO Answer-First Quick Verdict Block -->
+    <div class="bg-white border-2 border-emerald-500/30 rounded-2xl p-6 md:p-8 shadow-sm mb-12 relative overflow-hidden">
+      <div class="absolute top-0 right-0 bg-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
+        Verified 2026 Summary
+      </div>
+      <h2 class="text-xl font-bold text-gray-900 mb-2">Quick Setup Summary (pfSense &amp; OPNsense)</h2>
+      <p class="text-gray-700 leading-relaxed mb-5">
+        Configure a persistent site-to-cloud WireGuard interface on pfSense or OPNsense to selectively route streaming devices, gaming PCs, or your entire home VLAN through SWEEPR VPN 10Gbps RAM-only nodes. Engineered for <strong>FreeBSD / pfSense CE &amp; Plus / OPNsense 24.x WireGuard Plugin</strong> with recommended MTU <strong>1420 (MSS Clamping 1380)</strong> and direct 10Gbps peering via <strong>UK-LON-01, NL-AMS-01, or DE-FRA-01</strong>.
+      </p>
+      <div class="flex flex-wrap gap-3 items-center">
+        <a href="/download" class="btn btn-go gap-2">
+          <span>Free Download (30s Wi-Fi &amp; Speed Scan)</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+        <a href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-ghost text-sm font-semibold">
+          Get Pro (<span data-price="annualPerMonthStr">£5.00</span>/mo — Save 50%) &rarr;
+        </a>
+        <a href="/tools/isp-throttling-test" class="text-xs font-bold text-emerald-700 hover:underline ml-auto">
+          Run Browser Throttling Test &rarr;
+        </a>
+      </div>
+    </div>
+
+    
+    <div class="bg-slate-900 text-slate-100 rounded-2xl p-6 shadow-md mb-12 border border-slate-800">
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Verified WireGuard Configuration / CLI Snippet</span>
+        <span class="text-xs text-slate-400 font-mono">ChaCha20-Poly1305 • 10Gbps RAM-Only</span>
+      </div>
+      <pre class="text-xs sm:text-sm font-mono overflow-x-auto leading-relaxed text-emerald-300"><code># OPNsense / pfSense WireGuard Peer Parameters
+Tunnel Address: 10.64.0.0/24
+Peer Endpoint:  78.141.205.68 (UK-LON-01) or 95.179.181.53 (NL-AMS-01)
+Peer Port:      51820
+Allowed IPs:    0.0.0.0/0
+Keepalive:      25 seconds
+Gateway Monitor IP: 10.64.0.1</code></pre>
+    </div>
+
+    <!-- Structured Comparison / Benchmark Table -->
+    <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm mb-14">
+      <div class="p-6 border-b border-gray-200">
+        <h2 class="text-2xl font-bold text-gray-900">Technical Specification Matrix: SWEEPR VPN on pfSense &amp; OPNsense</h2>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm">
+          <thead>
+            <tr class="bg-gray-50 border-b border-gray-200 text-gray-600 font-semibold">
+              <th class="p-4 pl-6">Metric / Capability</th>
+              <th class="p-4 w-2/5 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">SWEEPR VPN on pfSense &amp; OPNsense</th>
+              <th class="p-4 w-2/5 text-gray-700 border-l border-gray-200">Legacy / Bloated Consumer VPNs</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 text-gray-700">
+            
+            <tr>
+              <td class="p-4 pl-6 font-medium">Target Platform / Firmware</td>
+              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">FreeBSD / pfSense CE &amp; Plus / OPNsense 24.x WireGuard Plugin</td>
+              <td class="p-4 border-l border-gray-200">Often locked to proprietary bloated GUI apps</td>
+            </tr>
+            <tr>
+              <td class="p-4 pl-6 font-medium">Setup Time</td>
+              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">3 Minutes</td>
+              <td class="p-4 border-l border-gray-200">15–30 minutes of manual troubleshooting</td>
+            </tr>
+            <tr>
+              <td class="p-4 pl-6 font-medium">Recommended Tunnel MTU</td>
+              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">1420 (MSS Clamping 1380)</td>
+              <td class="p-4 border-l border-gray-200">Fixed 1500 MTU (causes packet fragmentation)</td>
+            </tr>
+            <tr>
+              <td class="p-4 pl-6 font-medium">Primary 10Gbps Endpoint</td>
+              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">UK-LON-01, NL-AMS-01, or DE-FRA-01</td>
+              <td class="p-4 border-l border-gray-200">Overcrowded virtualised servers</td>
+            </tr>
+            <tr>
+              <td class="p-4 pl-6 font-medium">Smart-TV &amp; Tracker Blocking</td>
+              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Built-in via 10.64.0.1 in-tunnel DNS resolver</td>
+              <td class="p-4 border-l border-gray-200">Requires separate third-party DNS setup</td>
+            </tr>
+            <tr>
+              <td class="p-4 pl-6 font-medium">Simultaneous Device Slots</td>
+              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Up to 10 Devices (1 router slot covers whole LAN)</td>
+              <td class="p-4 border-l border-gray-200">5–6 Devices or steep renewal surcharges</td>
+            </tr>
+            <tr>
+              <td class="p-4 pl-6 font-medium">Transparent Price-Lock</td>
+              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">
+                <span data-price="annualStr">£59.99</span>/yr (Save 50%), <span data-price="sixMonthStr">£38.99</span>/6mo, or <span data-price="introStr">£1.99</span> 1st Month
+              </td>
+              <td class="p-4 border-l border-gray-200">Unprotected or subject to 2nd-year renewal hikes</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Deep-Dive Technical Sections -->
+    <div class="space-y-10 mb-14">
+      
+      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
+        <h2 class="text-2xl font-bold text-gray-900 mb-3">1. Why pfSense &amp; OPNsense Users Choose SWEEPR VPN</h2>
+        <p class="text-gray-700 leading-relaxed mb-3">Configure a persistent site-to-cloud WireGuard interface on pfSense or OPNsense to selectively route streaming devices, gaming PCs, or your entire home VLAN through SWEEPR VPN 10Gbps RAM-only nodes.</p>
+        <p class="text-gray-700 leading-relaxed">Policy-Based Routing (PBR) lets you route specific LAN IPs through the VPN while keeping local NAS/printer access direct. Automatic gateway failover between London (UK-LON-01) and Amsterdam (NL-AMS-01).</p>
+      </section>
+      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
+        <h2 class="text-2xl font-bold text-gray-900 mb-3">2. Optimal MTU (1420 (MSS Clamping 1380)) &amp; Keepalive Settings</h2>
+        <p class="text-gray-700 leading-relaxed mb-3">When running WireGuard on FreeBSD / pfSense CE &amp; Plus / OPNsense 24.x WireGuard Plugin, setting your interface MTU to 1420 (MSS Clamping 1380) with a 25-second PersistentKeepalive ensures zero packet fragmentation over PPPoE, DOCSIS, and CGNAT broadband links.</p>
+        <p class="text-gray-700 leading-relaxed">Blocks Smart-TV ACR telemetry across your entire home subnet via 10.64.0.1 DNS. All traffic resolves through SWEEPR’s private 10.64.0.1 DNS shield with zero activity logs.</p>
+      </section>
+      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
+        <h2 class="text-2xl font-bold text-gray-900 mb-3">3. Testing Your Tunnel &amp; Leak Protection</h2>
+        <p class="text-gray-700 leading-relaxed mb-3">Once connected to UK-LON-01, NL-AMS-01, or DE-FRA-01, open SWEEPR’s free IP, DNS &amp; WebRTC Leak Test (/tools/leak-test) or ISP Speed &amp; Throttling Checker (/tools/isp-throttling-test) to confirm your public IPv4/IPv6 and DNS resolvers are 100% encrypted.</p>
+        <p class="text-gray-700 leading-relaxed">Every SWEEPR VPN Pro plan covers up to 10 devices simultaneously and is backed by our 30-day money-back guarantee.</p>
+      </section>
+    </div>
+
+    <!-- FAQ Section (Matches JSON-LD FAQPage) -->
+    <div class="bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm mb-14">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
+      <div class="space-y-6">
+        
+        <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
+          <h3 class="text-base font-bold text-gray-900 mb-2">How long does it take to set up SWEEPR VPN on pfSense &amp; OPNsense?</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">Setup takes approximately 3 Minutes using either the native SWEEPR client or our standard WireGuard configuration parameters (1420 (MSS Clamping 1380)).</p>
+        </div>
+        <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
+          <h3 class="text-base font-bold text-gray-900 mb-2">Does running SWEEPR VPN on a router count as 1 device or multiple devices?</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">Running SWEEPR VPN on a router or gateway (pfSense &amp; OPNsense) counts as just 1 of your 10 device slots while encrypting every laptop, phone, and Smart TV connected behind it.</p>
+        </div>
+        <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
+          <h3 class="text-base font-bold text-gray-900 mb-2">Which SWEEPR server should I pick for pfSense &amp; OPNsense?</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">We recommend UK-LON-01, NL-AMS-01, or DE-FRA-01 for the lowest ping and 10Gbps RAM-only WireGuard throughput.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Conversion Banner -->
+    <div class="bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-2xl p-8 md:p-12 text-center shadow-xl mb-14">
+      <h3 class="text-2xl md:text-3xl font-black mb-3">Ready for 10Gbps WireGuard Speed &amp; Whole-Home Wi-Fi Protection?</h3>
+      <p class="text-gray-300 max-w-xl mx-auto mb-7 text-base">
+        Scan your home Wi-Fi in under 30 seconds, stop ISP evening throttling, and protect up to 10 devices for just <span data-price="annualPerMonthStr">£5.00</span>/mo (<span data-price="annualStr">£59.99</span>/yr — Save 50%).
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="/download" class="btn btn-go btn-big gap-2">
+          <span>Free Download</span>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+        <a href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-big">
+          Get SWEEPR VPN Pro &rarr;
+        </a>
+      </div>
+      <div class="flex flex-wrap items-center justify-center gap-4 text-xs text-gray-400 mt-6">
+        <span>🛡️ 30-Day Money-Back Guarantee</span>
+        <span>•</span>
+        <span>⚡ 14 MB Lightweight App</span>
+        <span>•</span>
+        <span>📡 Free 30s Home Wi-Fi Scanner</span>
+      </div>
+    </div>
+
+    <!-- Related Guides & Internal Crawl Mesh -->
+    <div class="border-t border-gray-200 pt-10">
+      <h2 class="text-lg font-bold text-gray-900 mb-4">Related Technical Guides &amp; Comparisons</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        
+        <a href="/setup/gl-inet-travel-router" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 WireGuard Setup Guide • 45 Seconds</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">WireGuard VPN Setup for GL.iNet Beryl AX (GL-MT3000) &amp; Slate AX Travel Router</div>
+        </a>
+        <a href="/setup/linux-cli-wireguard" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 WireGuard Setup Guide • 30 Seconds</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">WireGuard VPN Setup for Linux CLI (Ubuntu, Debian, Arch &amp; Fedora)</div>
+        </a>
+        <a href="/setup/steam-deck-vpn" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 WireGuard Setup Guide • 60 Seconds</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">WireGuard VPN Setup for Steam Deck &amp; Handheld Gaming OS (SteamOS)</div>
+        </a>
+        <a href="/setup/windows-11-wireguard-vpn" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 WireGuard Setup Guide • 20 Seconds</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">WireGuard VPN Setup for Windows 10 &amp; 11 Native Kernel WireGuard</div>
+        </a>
+        <a href="/solutions/virgin-media-gaming-packet-loss" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media Low-Latency Gaming &amp; Packet Loss (AS5089)</div>
+        </a>
+        <a href="/solutions/virgin-media-remote-dev-ssh" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media Remote SSH, Git &amp; Docker Workflows (AS5089)</div>
+        </a>
+        <a href="/solutions/virgin-media-uhd-streaming-buffering" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media 4K Live Sports &amp; High-Bitrate Streaming (AS5089)</div>
+        </a>
+        <a href="/solutions/virgin-media-p2p-port-forwarding" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media P2P File Sharing &amp; High-Speed Transfers (AS5089)</div>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-200 py-8 text-center text-sm text-gray-500">
+    <div class="max-w-4xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p>&copy; 2026 SWEEPR VPN Inc. All rights reserved.</p>
+      <div class="flex flex-wrap items-center justify-center gap-5">
+        <a href="/pricing" class="hover:underline">Pricing</a>
+        <a href="/tools/leak-test" class="hover:underline">IP Leak Test</a>
+        <a href="/tools/isp-throttling-test" class="hover:underline">ISP Throttling Test</a>
+        <a href="/vs/totalvpn" class="hover:underline">vs Total VPN</a>
+        <a href="/vs/nordvpn" class="hover:underline">vs NordVPN</a>
+        <a href="/privacy" class="hover:underline">Privacy Policy</a>
+        <a href="/terms" class="hover:underline">Terms</a>
+        <a href="/support" class="hover:underline">Support</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

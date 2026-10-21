@@ -897,7 +897,7 @@ function renderCheckoutSuccessPage(acc, isCancelled = false, isPopup = false) {
       </div>
       <div class="text-xs text-slate-400 space-y-1 pt-2 border-t border-slate-800/80">
         <div class="font-bold text-slate-200 mb-1">Unlocked on your account (Up to 10 Devices):</div>
-        <div>✓ 1-Click Private Browsing &amp; Public Wi-Fi Protection (65+ Countries)</div>
+        <div>✓ 1-Click Private Browsing &amp; Public Wi-Fi Protection (8 Global Locations)</div>
         <div>✓ Streaming Speed Booster &amp; Automatic Drop Protection</div>
         <div>✓ Home Wi-Fi Device Scanner &amp; Smart-TV Spy Blocker Included Free</div>
       </div>

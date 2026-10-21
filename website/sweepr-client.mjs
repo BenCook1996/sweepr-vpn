@@ -112,6 +112,49 @@ export class SweeprCrmClient {
     return res.json();
   }
 
+  async syncSubscription(params = {}) {
+    const res = await fetch(`${this.crmUrl}/api/crm/subscriptions?project=${encodeURIComponent(this.projectId)}`, {
+      method: 'POST',
+      headers: this.headers(),
+      body: JSON.stringify({
+        project_id: this.projectId,
+        email: params.email,
+        name: params.name,
+        country: params.country,
+        plan: params.plan,
+        status: params.status || 'active',
+        days: params.days,
+        amount_cents: params.amountCents ?? params.amount_cents,
+        currency: params.currency,
+        stripe_customer_id: params.stripeCustomerId ?? params.stripe_customer_id,
+        stripe_subscription_id: params.stripeSubscriptionId ?? params.stripe_subscription_id,
+        activation_code: params.activationCode ?? params.activation_code,
+        license_key: params.licenseKey ?? params.license_key,
+        addons: params.addons || [],
+        notes: params.notes,
+      }),
+    });
+    return res.json();
+  }
+
+  async portalLookup(lookup) {
+    const res = await fetch(`${this.crmUrl}/v1/license/portal-lookup`, {
+      method: 'POST',
+      headers: this.headers(),
+      body: JSON.stringify({ project_id: this.projectId, lookup }),
+    });
+    return res.json();
+  }
+
+  async portalCancel(lookup, immediate = false) {
+    const res = await fetch(`${this.crmUrl}/v1/license/portal-cancel`, {
+      method: 'POST',
+      headers: this.headers(),
+      body: JSON.stringify({ project_id: this.projectId, lookup, immediate }),
+    });
+    return res.json();
+  }
+
   async fetchPricing(opts = {}) {
     const qs = new URLSearchParams({ project: this.projectId });
     if (opts.currency) qs.set('currency', opts.currency);

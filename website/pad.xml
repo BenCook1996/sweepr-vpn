@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XML_DIZ_INFO>
+  <MASTER_PAD_VERSION_INFO>
+    <MASTER_PAD_VERSION>4.0</MASTER_PAD_VERSION>
+    <MASTER_PAD_EDITOR>SWEEPR PAD Generator</MASTER_PAD_EDITOR>
+    <MASTER_PAD_INFO>Portable Application Description, or PAD for short, is a data set that is used by shareware authors to disseminate information to anyone interested in their software products.</MASTER_PAD_INFO>
+  </MASTER_PAD_VERSION_INFO>
+  <Company_Info>
+    <Company_Name>SWEEPR VPN Inc.</Company_Name>
+    <Address_1>Docklands Digital Exchange</Address_1>
+    <City_Town>London</City_Town>
+    <Country>United Kingdom</Country>
+    <Company_WebSite_URL>https://sweeprvpn.com</Company_WebSite_URL>
+    <Contact_Info>
+      <Author_First_Name>SWEEPR</Author_First_Name>
+      <Author_Last_Name>VPN Engineering</Author_Last_Name>
+      <Author_Email>support@sweeprvpn.com</Author_Email>
+      <Contact_First_Name>SWEEPR</Contact_First_Name>
+      <Contact_Last_Name>VPN Team</Contact_Last_Name>
+      <Contact_Email>support@sweeprvpn.com</Contact_Email>
+    </Contact_Info>
+    <Support_Info>
+      <Sales_Email>support@sweeprvpn.com</Sales_Email>
+      <Support_Email>support@sweeprvpn.com</Support_Email>
+      <General_Email>support@sweeprvpn.com</General_Email>
+    </Support_Info>
+  </Company_Info>
+  <Program_Info>
+    <Program_Name>SWEEPR VPN</Program_Name>
+    <Program_Version>1.0.0</Program_Version>
+    <Program_Release_Month>10</Program_Release_Month>
+    <Program_Release_Day>21</Program_Release_Day>
+    <Program_Release_Year>2026</Program_Release_Year>
+    <Program_Cost_Dollars>12.99</Program_Cost_Dollars>
+    <Program_Type>Freemium</Program_Type>
+    <Program_Release_Status>Major Update</Program_Release_Status>
+    <Program_Install_Support>Install and Uninstall</Program_Install_Support>
+    <Program_OS_Support>Win10,Win10 x64,Win11,Mac OS X,Linux</Program_OS_Support>
+    <Program_Language>English,French,German,Spanish,Italian,Portuguese,Dutch,Japanese</Program_Language>
+    <File_Info>
+      <File_Size_Bytes>3872256</File_Size_Bytes>
+      <File_Size_K>3781</File_Size_K>
+      <File_Size_MB>3.69</File_Size_MB>
+    </File_Info>
+    <Expire_Info>
+      <Has_Expire_Info>N</Has_Expire_Info>
+    </Expire_Info>
+    <Program_Change_Info>2026 release featuring 10Gbps RAM-Only WireGuard encryption, Free 30-Second Home Wi-Fi Device &amp; Router Vulnerability Scanner, 1-Click ISP Anti-Throttling Speed Booster, Automatic Drop Kill-Switch, and Smart-TV ACR Spy Blocker.</Program_Change_Info>
+    <Program_Category_Class>Network &amp; Internet::Security &amp; Privacy</Program_Category_Class>
+    <Program_Specific_Category>VPN &amp; Wi-Fi Security</Program_Specific_Category>
+    <Program_System_Requirements>Windows 10 or Windows 11 (64-bit), macOS 12+, or Linux; 50 MB RAM, 20 MB disk space</Program_System_Requirements>
+  </Program_Info>
+  <Program_Descriptions>
+    <English>
+      <Keywords>vpn, wireguard vpn, home wifi scanner, isp throttling fix, smart tv acr blocker, no logs vpn, gaming vpn low ping, public wifi encryption, sweepr vpn</Keywords>
+      <Char_Desc_45>Fast 10Gbps WireGuard VPN &amp; Wi-Fi Scanner.</Char_Desc_45>
+      <Char_Desc_80>Lightweight 10Gbps WireGuard VPN, free 30s Home Wi-Fi scanner &amp; Smart-TV shield.</Char_Desc_80>
+      <Char_Desc_250>SWEEPR VPN is an ultra-lightweight (~3.7 MB installer) 10Gbps WireGuard VPN and Free 30-Second Home Wi-Fi Scanner for Windows 10/11, macOS, and Linux. Stops ISP evening throttling, detects unknown Wi-Fi devices, and blocks Smart-TV ACR spying.</Char_Desc_250>
+      <Char_Desc_450>SWEEPR VPN is a fast, lightweight WireGuard VPN and Home Wi-Fi Security Scanner built by the team behind SWEEPR Cleaner. It installs in seconds with zero bloatware, never logs what you browse, and includes a free 30-second Home Wi-Fi &amp; Speed Scanner that lists all 15-30+ devices on your network. Upgrade to Pro to unlock 10Gbps global servers, 1-click ISP throttling protection, stranger Wi-Fi alerts, and Smart-TV ACR screenshot blocking.</Char_Desc_450>
+      <Char_Desc_2000>SWEEPR VPN is an ultra-lightweight, memory-safe Rust + Tauri v2 Virtual Private Network (VPN) and Home Wi-Fi Security Scanner for Windows 10, Windows 11, macOS, Linux, and WireGuard routers.
+
+Built for everyday users, remote workers, and gamers who are tired of bloated 150 MB+ VPN apps and surprise 3x second-year renewal price hikes, SWEEPR VPN combines 10Gbps RAM-only WireGuard encryption with whole-home Wi-Fi visibility.
+
+Key Features:
+- Featherlight Native App (~3.7 MB Installer): Opens instantaneously and runs in kernel-space with virtually zero CPU or battery drain.
+- Free 30-Second Home Wi-Fi &amp; Speed Scanner: Scans your local home Wi-Fi in 30 seconds using ARP, mDNS, and SSDP discovery to identify all 15 to 30+ connected devices, flag unknown hardware, check router ports, and benchmark ISP DNS throttling.
+- 10Gbps RAM-Only WireGuard Servers: Ultra-low-latency endpoints in London Docklands (4ms), Amsterdam (8ms), Frankfurt IX (11ms), Stockholm (14ms), New York, Los Angeles, Singapore, and Tokyo.
+- 1-Click ISP Speed Booster: Prevents UK and global broadband providers (Virgin Media, BT, Sky, TalkTalk, Vodafone, Eduroam) from throttling evening 4K streaming, gaming packets, or SSH workflows.
+- SWEEPR Wi-Fi Radar &amp; Smart-TV Shield: Alerts you the instant a new or unknown device joins your home Wi-Fi and blocks LG webOS, Samsung Tizen, Roku, Vizio Inscape, and Fire TV sets from secretly capturing ACR screenshots of what you watch.
+- Honest Price-Lock Guarantee: Covers up to 10 devices per license at £59.99/year (Save 50%), £38.99/6-months (Save 35%), or £1.99 for your first month, backed by a 30-day money-back guarantee and 1-click cancellation.</Char_Desc_2000>
+    </English>
+  </Program_Descriptions>
+  <Web_Info>
+    <Application_URLs>
+      <Application_Info_URL>https://sweeprvpn.com</Application_Info_URL>
+      <Application_Order_URL>https://sweeprvpn.com/order</Application_Order_URL>
+      <Application_Screenshot_URL>https://sweeprvpn.com/og-image.png</Application_Screenshot_URL>
+      <Application_Icon_URL>https://sweeprvpn.com/icon-32x32.png</Application_Icon_URL>
+      <Application_XML_File_URL>https://sweeprvpn.com/pad.xml</Application_XML_File_URL>
+    </Application_URLs>
+    <Download_URLs>
+      <Primary_Download_URL>https://sweeprvpn.com/SWEEPRVPN.exe</Primary_Download_URL>
+      <Secondary_Download_URL>https://sweeprvpn.com/download</Secondary_Download_URL>
+    </Download_URLs>
+  </Web_Info>
+</XML_DIZ_INFO>
