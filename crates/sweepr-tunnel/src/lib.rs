@@ -472,6 +472,7 @@ pub fn verify_subscription(
         vec![u]
     } else {
         vec![
+            "http://127.0.0.1:8788".to_string(),
             "http://127.0.0.1:8080".to_string(),
             "http://127.0.0.1:3000".to_string(),
             "https://sweeprvpn.com".to_string(),

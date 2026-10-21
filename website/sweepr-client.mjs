@@ -7,8 +7,8 @@ import crypto from 'node:crypto';
 export class SweeprCrmClient {
   constructor(opts = {}) {
     this.projectId = String(opts.projectId || 'vpn').trim().toLowerCase();
-    this.crmUrl = String(opts.crmUrl || process.env.SWEEPR_CRM_URL || 'http://localhost:8787').replace(/\/+$/, '');
-    this.apiKey = opts.apiKey || process.env.SWEEPR_CRM_API_KEY || '';
+    this.crmUrl = String(opts.crmUrl || process.env.SWEEPR_CRM_URL || 'http://localhost:8788').replace(/\/+$/, '');
+    this.apiKey = opts.apiKey || process.env.SWEEPR_CRM_API_KEY || 'sweepr_crm_shared_secret_v1';
     this.publicKeySpki = opts.publicKeySpki || process.env.SWEEPR_LICENSE_PUBLIC_KEY || '';
   }
 
@@ -74,10 +74,12 @@ export class SweeprCrmClient {
     const res = await fetch(`${this.crmUrl}/v1/license/activate`, {
       method: 'POST',
       headers: this.headers(),
+      signal: AbortSignal.timeout(6000),
       body: JSON.stringify({
         project_id: this.projectId,
         email,
         otp: otp || refreshToken,
+        activation_code: otp || refreshToken,
         account_id: accountId,
         refresh_token: refreshToken,
         device_id: deviceId,
@@ -86,13 +88,15 @@ export class SweeprCrmClient {
         app_version: appVersion,
       }),
     });
-    return res.json();
+    const data = await res.json().catch(() => ({}));
+    return { _httpStatus: res.status, ...data };
   }
 
   async refreshLicense({ accountId, refreshToken, deviceId, appVersion }) {
     const res = await fetch(`${this.crmUrl}/v1/license/refresh`, {
       method: 'POST',
       headers: this.headers(),
+      signal: AbortSignal.timeout(6000),
       body: JSON.stringify({
         project_id: this.projectId,
         account_id: accountId,
@@ -101,21 +105,25 @@ export class SweeprCrmClient {
         app_version: appVersion,
       }),
     });
-    return res.json();
+    const data = await res.json().catch(() => ({}));
+    return { _httpStatus: res.status, ...data };
   }
 
   async verifyKey(key) {
     const qs = new URLSearchParams({ project: this.projectId, key: String(key || '').trim() });
     const res = await fetch(`${this.crmUrl}/v1/license/verify-key?${qs.toString()}`, {
       headers: this.headers(),
+      signal: AbortSignal.timeout(6000),
     });
-    return res.json();
+    const data = await res.json().catch(() => ({}));
+    return { _httpStatus: res.status, ...data };
   }
 
   async syncSubscription(params = {}) {
     const res = await fetch(`${this.crmUrl}/api/crm/subscriptions?project=${encodeURIComponent(this.projectId)}`, {
       method: 'POST',
       headers: this.headers(),
+      signal: AbortSignal.timeout(6000),
       body: JSON.stringify({
         project_id: this.projectId,
         email: params.email,
@@ -134,25 +142,36 @@ export class SweeprCrmClient {
         notes: params.notes,
       }),
     });
-    return res.json();
+    const data = await res.json().catch(() => ({}));
+    return { _httpStatus: res.status, ...data };
   }
 
   async portalLookup(lookup) {
+    const payload = typeof lookup === 'object' && lookup !== null
+      ? { project_id: this.projectId, ...lookup }
+      : { project_id: this.projectId, lookup };
     const res = await fetch(`${this.crmUrl}/v1/license/portal-lookup`, {
       method: 'POST',
       headers: this.headers(),
-      body: JSON.stringify({ project_id: this.projectId, lookup }),
+      signal: AbortSignal.timeout(6000),
+      body: JSON.stringify(payload),
     });
-    return res.json();
+    const data = await res.json().catch(() => ({}));
+    return { _httpStatus: res.status, ...data };
   }
 
   async portalCancel(lookup, immediate = false) {
+    const payload = typeof lookup === 'object' && lookup !== null
+      ? { project_id: this.projectId, ...lookup, immediate }
+      : { project_id: this.projectId, lookup, immediate };
     const res = await fetch(`${this.crmUrl}/v1/license/portal-cancel`, {
       method: 'POST',
       headers: this.headers(),
-      body: JSON.stringify({ project_id: this.projectId, lookup, immediate }),
+      signal: AbortSignal.timeout(6000),
+      body: JSON.stringify(payload),
     });
-    return res.json();
+    const data = await res.json().catch(() => ({}));
+    return { _httpStatus: res.status, ...data };
   }
 
   async fetchPricing(opts = {}) {
