@@ -2505,6 +2505,7 @@ const server = http.createServer(async (req, res) => {
     if (isOrderRoute) {
       headers['Set-Cookie'] = 'sweepr_visited_order=1; Path=/; Max-Age=2592000; SameSite=Lax';
       headers['X-Robots-Tag'] = 'noindex, follow';
+      headers['Cache-Control'] = 'no-store, no-cache, must-revalidate';
     } else if (isLoginRoute) {
       headers['X-Robots-Tag'] = 'noindex, nofollow';
     } else if (['.svg', '.png', '.ico', '.css', '.js'].includes(ext)) {

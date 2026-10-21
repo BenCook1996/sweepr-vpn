@@ -1,0 +1,15 @@
+.git
+.gitignore
+.env
+.env.*
+**/.env
+**/.env.*
+apps
+crates
+desktop-client
+infra
+scripts
+node_modules
+**/node_modules
+**/target
+*.log
