@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SWEEPR VPN — Simple &amp; Clear Desktop App (Non-Technical UX Redesign)</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI Variable", "Segoe UI", "Inter", Roboto, sans-serif;
+      background: #e2e8f0;
+      color: #0f172a;
+      user-select: none;
+    }
+
+    /* Exact SWEEPR Cleaner Topographic + Isometric Surface */
+    .sweepr-surface {
+      background-color: #f4f7f9;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='900' viewBox='0 0 1200 1200'%3E%3Cdefs%3E%3Cpattern id='iso' width='48' height='48' patternUnits='userSpaceOnUse'%3E%3Cpath d='M 0 24 L 24 0 L 48 24 L 24 48 Z' fill='none' stroke='%23cbd5e1' stroke-width='0.6' stroke-opacity='0.35'/%3E%3C/pattern%3E%3Cpattern id='dots' width='24' height='24' patternUnits='userSpaceOnUse'%3E%3Ccircle cx='12' cy='12' r='0.8' fill='%2394a3b8' fill-opacity='0.22'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23iso)'/%3E%3Crect width='100%25' height='100%25' fill='url(%23dots)'/%3E%3Cg fill='none' stroke='%2394a3b8' stroke-opacity='0.26' stroke-width='1.25'%3E%3Cpath d='M 650 -50 C 720 180, 880 220, 1020 160 C 1150 110, 1220 220, 1280 320'/%3E%3Cpath d='M 710 -50 C 780 200, 920 260, 1060 200 C 1190 150, 1260 260, 1320 360'/%3E%3Cpath d='M 770 -50 C 840 220, 960 300, 1100 240 C 1230 190, 1300 300, 1360 400'/%3E%3Cpath d='M -100 280 C 180 180, 320 480, 580 340 C 840 200, 980 460, 1300 380'/%3E%3Cpath d='M -100 360 C 160 260, 340 540, 600 410 C 860 270, 960 520, 1300 450'/%3E%3Cpath d='M -100 440 C 140 340, 360 600, 620 490 C 880 350, 940 580, 1300 520'/%3E%3Cpath d='M -80 820 C 60 720, 220 860, 380 780 C 520 710, 620 890, 780 860'/%3E%3Cpath d='M -80 900 C 40 800, 240 930, 400 850 C 540 780, 600 950, 760 930'/%3E%3Cellipse cx='980' cy='850' rx='140' ry='80' transform='rotate(-15 980 850)'/%3E%3Cellipse cx='980' cy='850' rx='95' ry='52' transform='rotate(-15 980 850)'/%3E%3Cellipse cx='180' cy='160' rx='110' ry='60' transform='rotate(20 180 160)'/%3E%3C/g%3E%3C/svg%3E");
+      background-size: 780px 780px;
+      background-repeat: repeat;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    .dark-theme .sweepr-surface {
+      background-color: #0f172a;
+      color: #f8fafc;
+    }
+
+    .bento-card {
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(226, 232, 240, 0.95);
+      border-radius: 22px;
+      box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+      backdrop-filter: blur(20px);
+      transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .bento-card:hover {
+      box-shadow: 0 8px 26px -4px rgba(15, 23, 42, 0.06), 0 4px 10px -2px rgba(15, 23, 42, 0.03);
+    }
+
+    .dark-theme .bento-card {
+      background: rgba(30, 41, 59, 0.92);
+      border-color: rgba(51, 65, 85, 0.85);
+      color: #f8fafc;
+    }
+
+    .dark-theme .text-slate-900,
+    .dark-theme .text-slate-800,
+    .dark-theme .text-slate-700 {
+      color: #f8fafc !important;
+    }
+
+    .dark-theme .text-slate-600,
+    .dark-theme .text-slate-500 {
+      color: #94a3b8 !important;
+    }
+
+    .dark-theme .bg-slate-50,
+    .dark-theme .bg-slate-50\/60,
+    .dark-theme .bg-white {
+      background-color: rgba(15, 23, 42, 0.72) !important;
+      border-color: rgba(51, 65, 85, 0.85) !important;
+      color: #f8fafc !important;
+    }
+
+    /* Primary Emerald Button matching SWEEPR Cleaner */
+    .btn-emerald {
+      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 9999px;
+      font-weight: 800;
+      box-shadow: 0 6px 18px rgba(16, 185, 129, 0.32);
+      transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+      cursor: pointer;
+    }
+    .btn-emerald:hover {
+      background: linear-gradient(135deg, #047857 0%, #059669 100%);
+      box-shadow: 0 8px 22px rgba(16, 185, 129, 0.44);
+      transform: translateY(-1px) scale(1.015);
+    }
+    .btn-emerald:active {
+      transform: translateY(0) scale(0.99);
+    }
+
+    /* Soft Mint Secondary Action Button */
+    .btn-mint-soft {
+      background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 9999px;
+      font-weight: 800;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.22);
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .btn-mint-soft:hover {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      transform: translateY(-1px);
+    }
+
+    /* PRO & FREE Badges matching Screenshot 2 & 3 */
+    .pill-pro {
+      background: #fef3c7;
+      color: #b45309;
+      border: 1px solid #fde68a;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 9px;
+      border-radius: 9999px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .pill-mint {
+      background: #dcfce7;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    /* Custom Toggle Switch matching Screenshot 3 */
+    .sweepr-toggle {
+      position: relative;
+      width: 48px;
+      height: 26px;
+      border-radius: 9999px;
+      background: #cbd5e1;
+      transition: background 0.2s ease;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .sweepr-toggle.on {
+      background: #10b981;
+    }
+    .sweepr-toggle-knob {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 2px 4px rgba(15, 23, 42, 0.18);
+      transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .sweepr-toggle.on .sweepr-toggle-knob {
+      transform: translateX(22px);
+    }
+
+    /* Custom Green Rounded Checkbox matching Screenshot 3 */
+    .sweepr-check {
+      width: 22px;
+      height: 22px;
+      border-radius: 7px;
+      border: 2px solid #10b981;
+      background: #ecfdf5;
+      color: #059669;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all 0.15s ease;
+    }
+    .sweepr-check.unchecked {
+      border-color: #cbd5e1;
+      background: #ffffff;
+      color: transparent;
+    }
+
+    /* Country Location Pill Dropdown on Dashboard */
+    .server-dropdown-select {
+      appearance: none;
+      -webkit-appearance: none;
+      background-color: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 9999px;
+      padding: 9px 36px 9px 16px;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #0f172a;
+      cursor: pointer;
+      width: 100%;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23059669' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+    }
+    .server-dropdown-select:hover,
+    .server-dropdown-select:focus {
+      outline: none;
+      border-color: #10b981;
+      background-color: #ffffff;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.14);
+    }
+
+    /* Gauge Arc Transition */
+    .gauge-arc {
+      transition: stroke-dashoffset 0.7s cubic-bezier(0.22, 1, 0.36, 1), stroke 0.35s ease;
+    }
+  </style>
+</head>
+<body class="p-3 sm:p-5">
+
+  <!-- Friendly Live Notification Banner -->
+  <div id="liveToast" class="hidden fixed bottom-5 right-5 z-50 max-w-sm bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-2xl border border-emerald-500/40 flex items-center gap-3 text-xs font-semibold">
+    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0"></span>
+    <span id="liveToastText">Done!</span>
+  </div>
+
+  <!-- Top Preview Bar: Interactive Controls -->
+  <div class="max-w-[1160px] mx-auto mb-4 bg-slate-900 text-white rounded-2xl px-4 py-3 flex flex-wrap items-center justify-between gap-3 shadow-lg">
+    <div class="flex items-center gap-3">
+      <span class="px-2.5 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-extrabold uppercase tracking-wider">Plain-English UX Redesign</span>
+      <span class="text-sm font-bold text-slate-200">SWEEPR VPN — Designed for Non-Technical Everyday Users</span>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-2">
+      <button onclick="switchDesktopTab('dashboard')" class="px-3 py-1.5 rounded-full text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 cursor-pointer transition">
+        1. Home &amp; Privacy Screen
+      </button>
+      <button onclick="switchDesktopTab('radar')" class="px-3 py-1.5 rounded-full text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 cursor-pointer transition">
+        2. Wi-Fi &amp; TV Protection Screen
+      </button>
+      <div class="h-4 w-[1px] bg-slate-700 mx-1"></div>
+      <button onclick="toggleProTier()" id="proSimBtn" class="px-3.5 py-1.5 rounded-full text-xs font-bold bg-amber-500/20 border border-amber-400/40 text-amber-300 hover:bg-amber-500/30 cursor-pointer transition">
+        Plan: FREE (Click to Test PRO)
+      </button>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- DESKTOP APPLICATION WINDOW (1:1 Match with SWEEPR Cleaner + Plain English)-->
+  <!-- ========================================================================= -->
+  <div id="desktopViewport" class="max-w-[1160px] mx-auto rounded-2xl overflow-hidden shadow-2xl border border-slate-300">
+
+    <!-- Native Windows 11 Title Bar -->
+    <div class="bg-white border-b border-slate-200 px-4 py-2 flex items-center justify-between text-xs text-slate-600 select-none">
+      <div class="flex items-center gap-2">
+        <div class="w-4 h-4 rounded bg-emerald-600 flex items-center justify-center text-white">
+          <svg class="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <span class="font-medium text-slate-700">SWEEPR VPN</span>
+      </div>
+      <div class="flex items-center gap-5 text-slate-400">
+        <button onclick="showToast('Minimized to taskbar — SWEEPR keeps protecting you in the background')" class="hover:text-slate-700 cursor-pointer" title="Minimize">&#8212;</button>
+        <button onclick="showToast('Window size adjusted')" class="hover:text-slate-700 cursor-pointer" title="Maximize">&#9633;</button>
+        <button onclick="showToast('SWEEPR stays running quietly in your system tray')" class="hover:text-red-500 cursor-pointer" title="Close to Tray">&#10005;</button>
+      </div>
+    </div>
+
+    <!-- Main Desktop App Canvas with Topographic Background -->
+    <div class="sweepr-surface p-6 sm:p-7 min-h-[700px] flex flex-col justify-between">
+
+      <!-- FLOATING WHITE PILL HEADER BAR (Simple, Self-Explanatory Labels) -->
+      <header class="bento-card !rounded-full px-5 py-2.5 flex items-center justify-between gap-4 mb-6">
+        <!-- Brand Logo + Name -->
+        <div class="flex items-center gap-2.5 shrink-0">
+          <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white shadow-md" style="background: linear-gradient(135deg, #10b981 0%, #047857 100%); box-shadow: 0 3px 10px rgba(16, 185, 129, 0.35);">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="M9 12l2 2 4-4"/>
+            </svg>
+          </div>
+          <div class="text-base font-extrabold tracking-tight text-slate-900">
+            SWEEPR <span class="text-emerald-600">VPN</span>
+          </div>
+        </div>
+
+        <!-- Center Pill Tabs: Home & Privacy | Wi-Fi & TV Protection -->
+        <nav class="flex items-center gap-1.5 overflow-x-auto" aria-label="Main Navigation">
+          <button onclick="switchDesktopTab('dashboard')" id="dtab-dashboard" class="px-4 py-2 rounded-full text-xs font-bold flex items-center gap-2 cursor-pointer transition bg-emerald-500/15 text-emerald-700">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span>Home &amp; Privacy</span>
+          </button>
+
+          <button onclick="switchDesktopTab('radar')" id="dtab-radar" class="px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 cursor-pointer transition text-slate-600 hover:bg-slate-100">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+            <span>Wi-Fi &amp; TV Protection</span>
+          </button>
+        </nav>
+
+        <!-- Right Controls: Language + Clear "Enter Activation Code" Button + Theme Switch -->
+        <div class="flex items-center gap-2.5 shrink-0">
+          <select id="langSelect" onchange="changeLanguage(this.value)" aria-label="Language" class="px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-xs font-bold text-slate-700 cursor-pointer focus:outline-none focus:border-emerald-500">
+            <option value="GB - English">🇬🇧 English (UK)</option>
+            <option value="US - English">🇺🇸 English (US)</option>
+            <option value="DE - Deutsch">🇩🇪 Deutsch</option>
+            <option value="FR - Français">🇫🇷 Français</option>
+            <option value="ES - Español">🇪🇸 Español</option>
+            <option value="JP - 日本語">🇯🇵 日本語</option>
+          </select>
+
+          <button onclick="openActivateModal()" id="desktopTierBadge" class="pill-pro cursor-pointer" title="Click to enter your 6-digit Activation Code">
+            FREE PLAN · ENTER CODE
+          </button>
+
+          <button onclick="toggleDarkMode()" id="themeToggleBtn" class="w-8 h-8 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-600 hover:text-emerald-600 hover:border-emerald-300 cursor-pointer transition" title="Switch Light or Dark Appearance" aria-label="Toggle Theme">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- =================================================================== -->
+      <!-- DESKTOP TAB 1: HOME & PRIVACY (Plain-English 3-Column Bento Grid)   -->
+      <!-- =================================================================== -->
+      <div id="desktopView-dashboard" class="space-y-5">
+
+        <!-- Welcome Header Row (Zero Jargon!) -->
+        <div class="flex flex-wrap items-end justify-between gap-4 px-1">
+          <div>
+            <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">Welcome back!</h1>
+            <p class="text-sm text-slate-600 mt-1" id="dashboardStatusSubtitle">
+              We checked your home Wi-Fi: <span class="font-bold text-emerald-700">4 devices are connected</span>, and <span class="font-semibold text-amber-600" id="privacyRiskCountLabel">websites can currently see your home location</span>.
+            </p>
+          </div>
+          <button onclick="openActivateModal()" id="accountHeaderBtn" class="px-3.5 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:border-emerald-400 hover:text-emerald-700 cursor-pointer transition shadow-sm">
+            🔑 Enter Activation Code &middot; <span id="deviceCountLabel" class="text-emerald-700">1 of 10 Computers Used</span>
+          </button>
+        </div>
+
+        <!-- 3-Column Bento Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+
+          <!-- LEFT CARD: WHAT SWEEPR PROTECTS (Crystal-Clear Everyday Language) -->
+          <div class="bento-card p-6 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class="text-xs font-extrabold uppercase tracking-wider text-slate-500">
+                  WHAT SWEEPR PROTECTS
+                </span>
+                <span class="text-[11px] font-semibold text-slate-400">Click any item</span>
+              </div>
+
+              <div class="space-y-3.5">
+                <!-- Protection 1: Stop Internet Slowdowns -->
+                <div onclick="toggleRecommendationItem(0)" id="recItem-0" class="p-2.5 -mx-2.5 rounded-2xl hover:bg-slate-50 flex items-start gap-3.5 cursor-pointer transition">
+                  <div class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between">
+                      <span class="text-sm font-bold text-slate-900">Stop Internet Slowdowns</span>
+                      <span class="text-slate-400 font-bold text-xs" id="recStatusDot-0">OFF</span>
+                    </div>
+                    <div class="flex items-center justify-between gap-2 mt-0.5">
+                      <span class="text-xs text-slate-500 leading-snug">Stops your provider from slowing down evening Netflix &amp; video calls</span>
+                      <span class="pill-pro shrink-0" id="recBadge-0" data-pro-pill>PRO</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Protection 2: Stop Smart-TV Spying -->
+                <div onclick="toggleRecommendationItem(1)" id="recItem-1" class="p-2.5 -mx-2.5 rounded-2xl hover:bg-slate-50 flex items-start gap-3.5 cursor-pointer transition">
+                  <div class="w-10 h-10 rounded-xl bg-amber-50 border border-amber-100 text-amber-600 flex items-center justify-center shrink-0">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between">
+                      <span class="text-sm font-bold text-slate-900">Stop Smart-TV Spying</span>
+                      <span class="text-slate-400 font-bold text-xs" id="recStatusDot-1">OFF</span>
+                    </div>
+                    <div class="flex items-center justify-between gap-2 mt-0.5">
+                      <span class="text-xs text-slate-500 leading-snug">Stops Samsung, LG &amp; Roku TVs from secretly tracking what you watch</span>
+                      <span class="pill-pro shrink-0" id="recBadge-1" data-pro-pill>PRO</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Protection 3: Hide Your Location & IP -->
+                <div onclick="toggleRecommendationItem(2)" id="recItem-2" class="p-2.5 -mx-2.5 rounded-2xl hover:bg-slate-50 flex items-start gap-3.5 cursor-pointer transition">
+                  <div class="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between">
+                      <span class="text-sm font-bold text-slate-900">Hide Your Location &amp; IP</span>
+                      <span class="text-slate-400 font-bold text-xs" id="recStatusDot-2">OFF</span>
+                    </div>
+                    <div class="flex items-center justify-between gap-2 mt-0.5">
+                      <span class="text-xs text-slate-500 leading-snug">Hides your home address from websites &amp; pauses if Wi-Fi drops</span>
+                      <span class="pill-pro shrink-0" id="recBadge-2" data-pro-pill>PRO</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button onclick="fixAllPrivacyRisks()" id="leftCardBtn" class="btn-mint-soft w-full py-3 mt-5 text-xs tracking-wider uppercase">
+              TURN ON ALL 3 PROTECTIONS
+            </button>
+          </div>
+
+          <!-- CENTER CARD: YOUR PRIVACY STATUS + SIMPLE COUNTRY DROPDOWN -->
+          <div class="bento-card p-6 flex flex-col items-center justify-between text-center">
+            <div class="flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-slate-500">
+              <span>YOUR PRIVACY STATUS &middot;</span>
+              <span class="text-emerald-600" id="activeNodeBadge">United Kingdom</span>
+            </div>
+
+            <!-- Semi-Circular SVG Arc Gauge with Self-Explanatory Status -->
+            <div class="relative w-56 h-32 flex flex-col items-center justify-end mt-1">
+              <svg class="w-56 h-32 overflow-visible" viewBox="0 0 200 110">
+                <path
+                  d="M 20 98 A 80 80 0 0 1 180 98"
+                  fill="none"
+                  stroke="#e2e8f0"
+                  stroke-width="15"
+                  stroke-linecap="round"
+                />
+                <path
+                  id="vpnGaugeArc"
+                  class="gauge-arc"
+                  d="M 20 98 A 80 80 0 0 1 180 98"
+                  fill="none"
+                  stroke="#f59e0b"
+                  stroke-width="15"
+                  stroke-linecap="round"
+                  stroke-dasharray="251.3"
+                  stroke-dashoffset="155"
+                />
+              </svg>
+
+              <div class="-mt-14 text-center">
+                <div id="gaugeBigValue" class="text-3xl font-extrabold text-amber-600 tracking-tight">OFF</div>
+                <div id="gaugeStatusTitle" class="text-xs font-bold text-slate-800 mt-1">Not Protected Yet</div>
+                <div id="gaugeStatusSub" class="text-xs text-slate-500">Websites can see your real location</div>
+              </div>
+            </div>
+
+            <!-- COUNTRY LOCATION DROPDOWN PICKER (Friendly Everyday Labels!) -->
+            <div class="w-full max-w-[280px] mt-3 text-left">
+              <label for="desktopServerSelect" class="block text-[10px] font-extrabold uppercase tracking-wider text-slate-500 mb-1 text-center">
+                CHOOSE YOUR COUNTRY LOCATION
+              </label>
+              <select id="desktopServerSelect" onchange="selectServerFromDropdown(this.value)" class="server-dropdown-select">
+                <option value="UK-LON-01">🇬🇧 United Kingdom — London (Fastest Nearby)</option>
+                <option value="CH-ZRH-01">🇨🇭 Switzerland — Zurich (Maximum Privacy)</option>
+                <option value="NL-AMS-01">🇳🇱 Netherlands — Amsterdam (Super Fast)</option>
+                <option value="DE-FRA-01">🇩🇪 Germany — Frankfurt (Super Fast)</option>
+                <option value="US-NYC-01">🇺🇸 United States — New York (East Coast)</option>
+                <option value="US-LAX-01">🇺🇸 United States — Los Angeles (West Coast)</option>
+                <option value="SG-SIN-01">🇸🇬 Singapore — Asia Pacific</option>
+                <option value="JP-TYO-01">🇯🇵 Japan — Tokyo</option>
+              </select>
+            </div>
+
+            <!-- Primary Pill CTA Button -->
+            <div class="w-full flex flex-col items-center gap-2 mt-3">
+              <button onclick="toggleVpnConnection()" id="mainConnectBtn" class="btn-emerald px-6 py-3.5 text-xs sm:text-sm tracking-wide flex items-center justify-center gap-2 w-full max-w-[280px]">
+                <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <span id="mainConnectBtnLabel">PROTECT MY COMPUTER NOW</span>
+              </button>
+              <span class="text-xs text-slate-500">1 click &middot; Never slows down your internet &middot; Zero browsing logs</span>
+            </div>
+          </div>
+
+          <!-- RIGHT CARD: DEVICES ON YOUR HOME WI-FI (No confusing IPs or ms!) -->
+          <div class="bento-card p-6 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between text-xs mb-2">
+                <span class="font-extrabold uppercase tracking-wider text-slate-500">DEVICES ON YOUR HOME WI-FI</span>
+                <span class="text-emerald-700 font-bold" id="wifiSubnetLabel">Home Wi-Fi Safe</span>
+              </div>
+
+              <div class="flex items-baseline justify-between mt-1">
+                <div class="text-sm text-slate-700">
+                  Connected: <span id="wifiDeviceCount" class="text-xl font-extrabold text-emerald-600">4 Devices</span>
+                </div>
+                <span class="text-xs font-semibold text-emerald-700" id="wifiRiskLabel">No Strangers Found</span>
+              </div>
+
+              <!-- Segmented Bar + Plain-English Legend Dots -->
+              <div class="w-full h-2.5 rounded-full bg-slate-200 overflow-hidden flex mt-2.5">
+                <div id="wifiSegTrusted" class="bg-emerald-600 h-full transition-all duration-300" style="width: 55%"></div>
+                <div id="wifiSegTv" class="bg-amber-500 h-full transition-all duration-300" style="width: 25%"></div>
+                <div id="wifiSegGateway" class="bg-slate-300 h-full transition-all duration-300" style="width: 20%"></div>
+              </div>
+
+              <div class="flex items-center gap-3 text-xs text-slate-500 mt-2">
+                <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-600"></span><span id="wifiLegendTrusted">Your Devices (3)</span></span>
+                <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-amber-500"></span><span id="wifiLegendTv">Smart TVs (1)</span></span>
+                <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-slate-300"></span>Wi-Fi Box</span>
+              </div>
+
+              <!-- Friendly Device List (Icons + Plain-English Status instead of 192.168.1.x!) -->
+              <div id="wifiDeviceList" class="mt-3.5 space-y-1.5 max-h-[115px] overflow-y-auto pr-1">
+                <div class="flex items-center justify-between px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs">
+                  <div class="flex items-center gap-2 min-w-0">
+                    <span>🏠</span>
+                    <span class="font-semibold text-slate-800 truncate">Your Home Wi-Fi Router</span>
+                  </div>
+                  <span class="text-emerald-700 font-bold">Safe ✓</span>
+                </div>
+                <div class="flex items-center justify-between px-3 py-1.5 rounded-xl bg-amber-50/70 border border-amber-200/80 text-xs">
+                  <div class="flex items-center gap-2 min-w-0">
+                    <span>📺</span>
+                    <span class="font-semibold text-slate-800 truncate">Living Room Samsung Smart TV</span>
+                  </div>
+                  <span class="text-amber-700 font-bold">TV Trackers Found</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="border-t border-slate-100 my-4"></div>
+
+            <!-- Bottom Section: Plain-English Internet Speed Rating -->
+            <div>
+              <div class="text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2.5">
+                YOUR INTERNET SPEED &amp; QUALITY
+              </div>
+              <div class="flex items-center justify-between gap-2">
+                <div>
+                  <div class="text-xs text-slate-500">Video Calls:</div>
+                  <div class="text-sm font-extrabold text-emerald-700" id="pingStat">Instant (No Lag)</div>
+                </div>
+                <div>
+                  <div class="text-xs text-slate-500">Streaming Speed:</div>
+                  <div class="text-sm font-extrabold text-slate-900" id="speedStat">Ultra-Fast (4K)</div>
+                </div>
+                <button onclick="runWifiScan()" id="scanWifiBtn" class="px-3.5 py-1.5 rounded-full bg-slate-50 hover:bg-emerald-50 border border-slate-200 text-xs font-extrabold text-slate-700 hover:text-emerald-700 cursor-pointer transition shrink-0">
+                  SCAN WI-FI
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- BOTTOM ROW: 3 SELF-EXPLANATORY SUMMARY BENTO CARDS -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+
+          <!-- Bottom Card 1 -->
+          <div class="bento-card px-5 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3.5">
+              <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              </div>
+              <div>
+                <div class="text-xs font-extrabold uppercase tracking-wider text-slate-500">SMART-TV AD BLOCKER</div>
+                <div class="text-sm font-extrabold text-slate-900" id="acrStatusBottom">142 TV Trackers Stopped</div>
+              </div>
+            </div>
+            <button onclick="switchDesktopTab('radar')" id="reviewAcrBtn" class="text-xs font-extrabold uppercase text-emerald-700 hover:underline cursor-pointer">
+              SETTINGS
+            </button>
+          </div>
+
+          <!-- Bottom Card 2 -->
+          <div class="bento-card px-5 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3.5">
+              <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+              </div>
+              <div>
+                <div class="text-xs font-extrabold uppercase tracking-wider text-slate-500">STRANGER ALERTS</div>
+                <div class="text-xs text-slate-600"><strong class="text-slate-900 font-extrabold" id="bottomWifiCount">4</strong> Known devices &middot; 0 Strangers</div>
+              </div>
+            </div>
+            <button onclick="runWifiScan()" id="bottomWifiBadge" class="pill-mint cursor-pointer">ALL SAFE</button>
+          </div>
+
+          <!-- Bottom Card 3 -->
+          <div class="bento-card px-5 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3.5">
+              <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div>
+                <div class="text-xs font-extrabold uppercase tracking-wider text-slate-500">BROWSING HISTORY SAVED</div>
+                <div class="text-xs text-slate-600"><strong class="text-slate-900 font-extrabold" id="lifetimeEncryptedVal">Zero Logs</strong> Ever Recorded</div>
+              </div>
+            </div>
+            <span class="pill-mint">100% PRIVATE</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- =================================================================== -->
+      <!-- DESKTOP TAB 2: WI-FI & TV PROTECTION (Simple, Jargon-Free Controls) -->
+      <!-- =================================================================== -->
+      <div id="desktopView-radar" class="hidden space-y-5">
+
+        <!-- Title + Right Status Pill -->
+        <div class="flex flex-wrap items-start justify-between gap-4 px-1">
+          <div>
+            <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">Wi-Fi &amp; Smart-TV Protection</h1>
+            <p class="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl" id="radarFreqStatus">
+              Automatically watches your home Wi-Fi for unknown strangers and stops Smart TVs from tracking what you watch—even when this window is closed.
+            </p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="simulateIntruderAlert()" id="testIntruderAlertBtn" class="px-3.5 py-1.5 rounded-full bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-xs font-extrabold text-emerald-700 cursor-pointer transition">
+              Send Sample Alert
+            </button>
+            <span class="pill-pro" data-pro-pill>PRO</span>
+            <span id="radarHeaderBadge" class="px-3.5 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-extrabold text-slate-700 uppercase tracking-wider">
+              ALERTS OFF
+            </span>
+          </div>
+        </div>
+
+        <!-- Two-Column Split -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+
+          <!-- LEFT CARD: Simple Toggle, Frequency, Lifestyle Mode & Action Cards -->
+          <div class="bento-card p-6 lg:col-span-6 space-y-5">
+            <!-- Enable Row -->
+            <div class="flex items-center justify-between gap-4 pb-4 border-b border-slate-100">
+              <div>
+                <div class="text-sm font-extrabold text-slate-900">Alert Me If a Stranger Joins My Wi-Fi</div>
+                <div class="text-xs text-slate-500 mt-0.5">Shows a friendly notice on your screen whenever a new device connects to your Wi-Fi</div>
+              </div>
+              <div onclick="toggleRadarSwitch()" id="radarMainSwitch" class="sweepr-toggle" role="switch" aria-checked="false">
+                <div class="sweepr-toggle-knob"></div>
+              </div>
+            </div>
+
+            <!-- How Often Should We Check Segmented Control -->
+            <div>
+              <div class="text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">HOW OFTEN SHOULD WE CHECK YOUR WI-FI?</div>
+              <div id="desktopFreqGroup" class="grid grid-cols-3 bg-slate-100 p-1 rounded-xl border border-slate-200/80 text-xs font-bold">
+                <button onclick="selectFreq('Real-Time')" data-freq="Real-Time" class="py-2 rounded-lg bg-white text-emerald-700 shadow-sm cursor-pointer">Always On (Instant)</button>
+                <button onclick="selectFreq('Every 15m')" data-freq="Every 15m" class="py-2 rounded-lg text-slate-600 hover:text-slate-900 cursor-pointer">Every 15 Mins</button>
+                <button onclick="selectFreq('Hourly')" data-freq="Hourly" class="py-2 rounded-lg text-slate-600 hover:text-slate-900 cursor-pointer">Every Hour</button>
+              </div>
+            </div>
+
+            <!-- Plain-English Connection Mode Selector (Replaces "WireGuard DoH / AmneziaWG Anti-DPI") -->
+            <div>
+              <label for="protocolSelect" class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">HOW DO YOU USE THE INTERNET? (CONNECTION MODE)</label>
+              <select id="protocolSelect" onchange="changeTunnelProtocol(this.value)" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-800 cursor-pointer focus:outline-none focus:border-emerald-500">
+                <option value="Everyday Browsing & 4K Streaming (Recommended)">⚡ Everyday Browsing &amp; 4K Streaming (Recommended — Fastest)</option>
+                <option value="Public Wi-Fi, Hotels & Airports (Extra Security)">☕ Public Wi-Fi, Cafes, Hotels &amp; Airports (Extra Protection)</option>
+                <option value="Maximum Smart-TV & Ad Blocker">📺 Maximum Smart-TV &amp; Ad Blocker (Blocks All Home Trackers)</option>
+              </select>
+            </div>
+
+            <!-- What Should Happen When an Unknown Device Is Found -->
+            <div class="space-y-2.5">
+              <div class="text-xs font-extrabold uppercase tracking-wider text-slate-500">WHAT SHOULD SWEEPR DO automatiquement?</div>
+
+              <div onclick="selectActionCard(0)" id="actionCard-0" class="p-4 rounded-2xl border-2 border-emerald-500 bg-emerald-50/40 cursor-pointer transition">
+                <div class="flex items-center justify-between">
+                  <span class="text-sm font-extrabold text-slate-900">Notify Me &amp; Block Smart-TV Spying Automatically</span>
+                  <span class="pill-mint">RECOMMENDED</span>
+                </div>
+                <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">
+                  Lets you know if a new device joins your Wi-Fi and automatically stops Smart TVs from sending viewing data to advertisers.
+                </p>
+              </div>
+
+              <div onclick="selectActionCard(1)" id="actionCard-1" class="p-4 rounded-2xl border border-slate-200 bg-white hover:border-slate-300 cursor-pointer transition">
+                <div class="text-sm font-extrabold text-slate-900">Notify Me Only (Don't Change Anything)</div>
+                <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                  Simply shows you a list of devices connected to your home Wi-Fi without blocking any TV trackers.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT CARD: AUTOMATIC HOME PROTECTIONS (Plain English Checklist) -->
+          <div class="bento-card p-6 lg:col-span-6 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div>
+                  <div class="text-xs font-extrabold uppercase tracking-wider text-slate-500">
+                    AUTOMATIC HOME PROTECTIONS (<span id="activeShieldsCountLabel" class="text-emerald-600">4/4 Active</span>)
+                  </div>
+                  <div class="text-xs text-slate-500 mt-0.5">Tick the protections you want SWEEPR to keep turned on</div>
+                </div>
+                <div class="flex items-center gap-3 text-xs font-bold text-slate-600">
+                  <button onclick="setAllShields(true)" id="shieldsAllBtn" class="hover:text-emerald-600 cursor-pointer">Turn All On</button>
+                  <button onclick="setAllShields(false)" id="shieldsNoneBtn" class="hover:text-emerald-600 cursor-pointer">Turn All Off</button>
+                </div>
+              </div>
+
+              <div class="space-y-2.5 max-h-[380px] overflow-y-auto pr-1" id="desktopShieldsList">
+                <!-- Shield 1 -->
+                <div onclick="toggleCheckItem(this)" data-shield-id="acr_tv" class="p-3.5 rounded-2xl border border-slate-200/90 bg-slate-50/60 flex items-start gap-3 cursor-pointer hover:border-emerald-300 transition">
+                  <div class="sweepr-check mt-0.5">
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                  <div class="flex-1">
+                    <div class="flex items-center gap-2">
+                      <span class="text-xs font-extrabold text-slate-900">Stop Samsung &amp; LG Smart TVs From Tracking What You Watch</span>
+                      <span class="pill-pro" data-pro-pill>PRO</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-1">Stops your TV from quietly reporting which shows and movies you watch to advertisers, without affecting Netflix, BBC iPlayer, or YouTube.</p>
+                  </div>
+                </div>
+
+                <!-- Shield 2 -->
+                <div onclick="toggleCheckItem(this)" data-shield-id="roku_vizio" class="p-3.5 rounded-2xl border border-slate-200/90 bg-slate-50/60 flex items-start gap-3 cursor-pointer hover:border-emerald-300 transition">
+                  <div class="sweepr-check mt-0.5">
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                  <div class="flex-1">
+                    <div class="flex items-center gap-2">
+                      <span class="text-xs font-extrabold text-slate-900">Stop Roku, Fire TV &amp; Streaming Sticks From Sending Ad Data</span>
+                      <span class="pill-pro" data-pro-pill>PRO</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-1">Blocks hidden advertising trackers on streaming sticks and smart home gadgets across your Wi-Fi.</p>
+                  </div>
+                </div>
+
+                <!-- Shield 3 -->
+                <div onclick="toggleCheckItem(this)" data-shield-id="upnp_router" class="p-3.5 rounded-2xl border border-slate-200/90 bg-slate-50/60 flex items-start gap-3 cursor-pointer hover:border-emerald-300 transition">
+                  <div class="sweepr-check mt-0.5">
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                  <div class="flex-1">
+                    <div class="flex items-center gap-2">
+                      <span class="text-xs font-extrabold text-slate-900">Home Wi-Fi Router Safety Lock</span>
+                      <span class="pill-pro" data-pro-pill>PRO</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-1">Checks that your home Wi-Fi router box is locked properly so neighbours or strangers cannot snoop on your internet.</p>
+                  </div>
+                </div>
+
+                <!-- Shield 4 -->
+                <div onclick="toggleCheckItem(this)" data-shield-id="killswitch" class="p-3.5 rounded-2xl border border-slate-200/90 bg-slate-50/60 flex items-start gap-3 cursor-pointer hover:border-emerald-300 transition">
+                  <div class="sweepr-check mt-0.5">
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                  <div class="flex-1">
+                    <div class="flex items-center gap-2">
+                      <span class="text-xs font-extrabold text-slate-900">Automatic Wi-Fi Drop Protection</span>
+                      <span class="pill-pro" data-pro-pill>PRO</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-1">If your Wi-Fi connection ever flickers or drops for a second, SWEEPR pauses traffic so your real home location is never accidentally shown.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- GUIDED 3-STEP ACTIVATION MODAL (Super Simple for Non-Technical Users)     -->
+  <!-- ========================================================================= -->
+  <div id="activateModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bento-card max-w-md w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div>
+            <h3 class="text-base font-extrabold text-slate-900">Unlock SWEEPR VPN Pro</h3>
+            <p class="text-xs text-slate-500">Covers up to 10 computers &amp; devices</p>
+          </div>
+        </div>
+        <button onclick="closeActivateModal()" id="closeActivateModalBtn" class="text-slate-400 hover:text-slate-700 text-sm font-bold cursor-pointer">&#10005;</button>
+      </div>
+
+      <!-- 3 Simple Steps Box -->
+      <div class="bg-emerald-50/70 border border-emerald-200/80 rounded-2xl p-3.5 text-xs text-slate-700 space-y-1">
+        <div class="font-extrabold text-emerald-800 mb-1">How to unlock your computer in 10 seconds:</div>
+        <div><strong>1.</strong> Enter the email address you used when buying SWEEPR VPN.</div>
+        <div><strong>2.</strong> Type your <strong>6-digit Activation Code</strong> from your confirmation page or email.</div>
+        <div><strong>3.</strong> Click <strong>Unlock Full Protection</strong> below.</div>
+      </div>
+
+      <div class="space-y-2.5">
+        <div>
+          <label for="modalEmailInput" class="block text-[11px] font-bold text-slate-600 mb-1">Your Email Address</label>
+          <input id="modalEmailInput" type="email" value="demo@sweeprvpn.com" placeholder="you@example.com" class="w-full px-4 py-2.5 rounded-full border border-slate-200 text-xs focus:outline-none focus:border-emerald-500" />
+        </div>
+        <div>
+          <label for="modalCodeInput" class="block text-[11px] font-bold text-slate-600 mb-1">Your 6-Digit Activation Code</label>
+          <div class="flex gap-2">
+            <input id="modalCodeInput" type="text" maxlength="24" value="849201" placeholder="e.g. 849201" class="flex-1 px-4 py-2.5 rounded-full border border-slate-200 text-xs font-mono tracking-widest focus:outline-none focus:border-emerald-500" />
+            <button onclick="fillDemoActivation()" id="fillDemoKeyBtn" type="button" class="px-3 py-2 rounded-full bg-emerald-50 border border-emerald-200 text-[11px] font-bold text-emerald-700 cursor-pointer shrink-0">
+              Fill Sample Code
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="modalFeedbackMsg" class="hidden text-xs font-bold px-3 py-2 rounded-xl"></div>
+
+      <div class="flex items-center gap-2 pt-1">
+        <button onclick="activateFromModal()" id="confirmActivateBtn" class="btn-emerald flex-1 py-3 text-xs uppercase tracking-wider">
+          Unlock Full Protection
+        </button>
+        <button onclick="closeActivateModal()" class="px-4 py-3 rounded-full border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-100 cursor-pointer">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SERVER_CATALOG = {
+      'UK-LON-01': { code: 'UK-LON-01', country: 'United Kingdom', city: 'London, UK', ping: 'Instant (No Lag)', speed: 'Ultra-Fast (4K)', ip: '185.212.14.88' },
+      'CH-ZRH-01': { code: 'CH-ZRH-01', country: 'Switzerland', city: 'Zurich, Switzerland', ping: 'Instant (No Lag)', speed: 'Ultra-Fast (4K)', ip: '194.42.18.104' },
+      'NL-AMS-01': { code: 'NL-AMS-01', country: 'Netherlands', city: 'Amsterdam, Netherlands', ping: 'Instant (No Lag)', speed: 'Ultra-Fast (4K)', ip: '193.148.29.41' },
+      'DE-FRA-01': { code: 'DE-FRA-01', country: 'Germany', city: 'Frankfurt, Germany', ping: 'Instant (No Lag)', speed: 'Ultra-Fast (4K)', ip: '185.199.108.62' },
+      'US-NYC-01': { code: 'US-NYC-01', country: 'United States', city: 'New York, USA', ping: 'Smooth (HD & 4K)', speed: 'Super-Fast (4K)', ip: '45.89.112.40' },
+      'US-LAX-01': { code: 'US-LAX-01', country: 'United States', city: 'Los Angeles, USA', ping: 'Smooth (HD & 4K)', speed: 'Super-Fast (4K)', ip: '104.244.72.19' },
+      'SG-SIN-01': { code: 'SG-SIN-01', country: 'Singapore', city: 'Singapore', ping: 'Smooth (HD)', speed: 'Fast Streaming', ip: '103.214.16.92' },
+      'JP-TYO-01': { code: 'JP-TYO-01', country: 'Japan', city: 'Tokyo, Japan', ping: 'Smooth (HD)', speed: 'Fast Streaming', ip: '138.199.44.18' }
+    };
+
+    let currentServerCode = 'UK-LON-01';
+    let isConnected = false;
+    let isPro = false;
+    let isDark = false;
+    let isRadarOn = false;
+    let currentFrequency = 'Real-Time';
+    let currentProtocol = 'Everyday Browsing & 4K Streaming (Recommended)';
+    let recFixed = [false, false, false];
+    let toastTimer = null;
+
+    function showToast(message) {
+      const toast = document.getElementById('liveToast');
+      const text = document.getElementById('liveToastText');
+      if (!toast || !text) return;
+      text.textContent = message;
+      toast.classList.remove('hidden');
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 3200);
+    }
+
+    function switchDesktopTab(tabId) {
+      ['dashboard', 'radar'].forEach((id) => {
+        const view = document.getElementById('desktopView-' + id);
+        const tab = document.getElementById('dtab-' + id);
+        if (view) view.classList.toggle('hidden', id !== tabId);
+        if (tab) {
+          tab.className = id === tabId
+            ? 'px-4 py-2 rounded-full text-xs font-bold flex items-center gap-2 cursor-pointer transition bg-emerald-500/15 text-emerald-700'
+            : 'px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 cursor-pointer transition text-slate-600 hover:bg-slate-100';
+        }
+      });
+    }
+
+    function selectServerFromDropdown(code) {
+      const srv = SERVER_CATALOG[code] || SERVER_CATALOG['UK-LON-01'];
+      currentServerCode = srv.code;
+
+      const dSelect = document.getElementById('desktopServerSelect');
+      if (dSelect && dSelect.value !== srv.code) dSelect.value = srv.code;
+
+      document.getElementById('activeNodeBadge').textContent = srv.country;
+      document.getElementById('pingStat').textContent = srv.ping;
+      document.getElementById('speedStat').textContent = srv.speed;
+
+      updateConnectionUI();
+      showToast(`Country location set to ${srv.city}`);
+
+      if (window.location.protocol.startsWith('http')) {
+        fetch('/api/vpn/connect', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ serverCode: srv.code, action: isConnected ? 'connect' : 'select' })
+        }).catch(() => {});
+      }
+    }
+
+    function updateConnectionUI() {
+      const srv = SERVER_CATALOG[currentServerCode] || SERVER_CATALOG['UK-LON-01'];
+      const arc = document.getElementById('vpnGaugeArc');
+      const val = document.getElementById('gaugeBigValue');
+      const title = document.getElementById('gaugeStatusTitle');
+      const sub = document.getElementById('gaugeStatusSub');
+      const btnLabel = document.getElementById('mainConnectBtnLabel');
+      const leftBtn = document.getElementById('leftCardBtn');
+      const subtitle = document.getElementById('dashboardStatusSubtitle');
+
+      if (isConnected) {
+        arc.setAttribute('stroke', '#10b981');
+        arc.setAttribute('stroke-dashoffset', '0');
+        val.textContent = 'SAFE';
+        val.className = 'text-3xl font-extrabold text-emerald-600 tracking-tight';
+        title.textContent = 'Protected & Private';
+        sub.textContent = `Connected via ${srv.city} · Location Hidden`;
+        btnLabel.textContent = '✓ PROTECTED — CLICK TO TURN OFF';
+        leftBtn.textContent = '✓ ALL 3 PROTECTIONS ARE ON';
+        subtitle.innerHTML = `You're <span class="font-bold text-emerald-600">100% Protected</span>! Your browsing is private via <strong>${srv.city}</strong> and your home Wi-Fi is safe.`;
+      } else {
+        arc.setAttribute('stroke', '#f59e0b');
+        arc.setAttribute('stroke-dashoffset', '155');
+        val.textContent = 'OFF';
+        val.className = 'text-3xl font-extrabold text-amber-600 tracking-tight';
+        title.textContent = 'Not Protected Yet';
+        sub.textContent = 'Websites can see your real location';
+        btnLabel.textContent = 'PROTECT MY COMPUTER NOW';
+        const remainingRisks = recFixed.filter((x) => !x).length;
+        leftBtn.textContent = remainingRisks === 0 ? '✓ ALL 3 PROTECTIONS ARE ON' : 'TURN ON ALL 3 PROTECTIONS';
+        subtitle.innerHTML = `We checked your home Wi-Fi: <span class="font-bold text-emerald-700">4 devices are connected</span>, and <span class="font-semibold text-amber-600" id="privacyRiskCountLabel">websites can currently see your home location</span>.`;
+      }
+    }
+
+    function toggleVpnConnection() {
+      isConnected = !isConnected;
+      if (isConnected) {
+        recFixed = [true, true, true];
+        [0, 1, 2].forEach((idx) => {
+          const badge = document.getElementById('recBadge-' + idx);
+          const dot = document.getElementById('recStatusDot-' + idx);
+          if (badge) {
+            badge.textContent = 'ON ✓';
+            badge.className = 'pill-mint shrink-0';
+          }
+          if (dot) {
+            dot.textContent = 'ON';
+            dot.className = 'text-emerald-600 font-extrabold text-xs';
+          }
+        });
+      }
+      updateConnectionUI();
+      const srv = SERVER_CATALOG[currentServerCode] || SERVER_CATALOG['UK-LON-01'];
+      showToast(isConnected ? `You are now Protected & Private (${srv.city})` : 'Protection turned off');
+
+      if (window.location.protocol.startsWith('http')) {
+        fetch('/api/vpn/connect', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ serverCode: srv.code, action: isConnected ? 'connect' : 'disconnect' })
+        }).catch(() => {});
+      }
+    }
+
+    function toggleRecommendationItem(idx) {
+      recFixed[idx] = !recFixed[idx];
+      const badge = document.getElementById('recBadge-' + idx);
+      const dot = document.getElementById('recStatusDot-' + idx);
+      if (badge) {
+        badge.textContent = recFixed[idx] ? 'ON ✓' : (isPro ? 'ON ✓' : 'PRO');
+        badge.className = recFixed[idx] ? 'pill-mint shrink-0' : 'pill-pro shrink-0';
+      }
+      if (dot) {
+        dot.textContent = recFixed[idx] ? 'ON' : 'OFF';
+        dot.className = recFixed[idx] ? 'text-emerald-600 font-extrabold text-xs' : 'text-slate-400 font-bold text-xs';
+      }
+      updateConnectionUI();
+    }
+
+    function fixAllPrivacyRisks() {
+      recFixed = [true, true, true];
+      [0, 1, 2].forEach((idx) => {
+        const badge = document.getElementById('recBadge-' + idx);
+        const dot = document.getElementById('recStatusDot-' + idx);
+        if (badge) {
+          badge.textContent = 'ON ✓';
+          badge.className = 'pill-mint shrink-0';
+        }
+        if (dot) {
+          dot.textContent = 'ON';
+          dot.className = 'text-emerald-600 font-extrabold text-xs';
+        }
+      });
+      if (!isConnected) {
+        isConnected = true;
+      }
+      updateConnectionUI();
+      showToast('All 3 privacy & speed protections are now turned ON!');
+    }
+
+    function toggleProTier() {
+      isPro = !isPro;
+      const dBadge = document.getElementById('desktopTierBadge');
+      const simBtn = document.getElementById('proSimBtn');
+      const proPills = document.querySelectorAll('[data-pro-pill]');
+
+      if (isPro) {
+        dBadge.textContent = 'PRO ACTIVE ✓';
+        dBadge.className = 'pill-mint cursor-pointer';
+        simBtn.textContent = 'Plan: PRO ACTIVE (Click to Test FREE)';
+        proPills.forEach((el) => {
+          el.textContent = 'ON ✓';
+          el.className = 'pill-mint shrink-0';
+        });
+      } else {
+        dBadge.textContent = 'FREE PLAN · ENTER CODE';
+        dBadge.className = 'pill-pro cursor-pointer';
+        simBtn.textContent = 'Plan: FREE (Click to Test PRO)';
+        proPills.forEach((el) => {
+          el.textContent = 'PRO';
+          el.className = 'pill-pro shrink-0';
+        });
+      }
+      updateConnectionUI();
+    }
+
+    async function runWifiScan() {
+      const btn = document.getElementById('scanWifiBtn');
+      const count = document.getElementById('wifiDeviceCount');
+      const bottomCount = document.getElementById('bottomWifiCount');
+      const list = document.getElementById('wifiDeviceList');
+      const riskLabel = document.getElementById('wifiRiskLabel');
+
+      if (btn) btn.textContent = 'CHECKING...';
+
+      const friendlyDevices = [
+        { icon: '🏠', name: 'Your Home Wi-Fi Router', status: 'Safe ✓', warning: false },
+        { icon: '📺', name: 'Living Room Samsung Smart TV', status: 'TV Trackers Blocked', warning: true },
+        { icon: '📺', name: 'Bedroom LG Smart TV', status: 'TV Trackers Blocked', warning: true },
+        { icon: '💻', name: 'This Computer', status: 'Protected ✓', warning: false },
+        { icon: '💻', name: 'Home Laptop', status: 'Recognised ✓', warning: false }
+      ];
+
+      setTimeout(() => {
+        if (btn) btn.textContent = 'SCAN WI-FI';
+        if (count) count.textContent = `${friendlyDevices.length} Devices`;
+        if (bottomCount) bottomCount.textContent = String(friendlyDevices.length);
+        if (riskLabel) riskLabel.textContent = 'No Strangers Found';
+        const trustedLegend = document.getElementById('wifiLegendTrusted');
+        const tvLegend = document.getElementById('wifiLegendTv');
+        if (trustedLegend) trustedLegend.textContent = 'Your Devices (3)';
+        if (tvLegend) tvLegend.textContent = 'Smart TVs (2)';
+
+        if (list) {
+          list.innerHTML = friendlyDevices.map((d) => d.warning
+            ? `<div class="flex items-center justify-between px-3 py-1.5 rounded-xl bg-amber-50/70 border border-amber-200/80 text-xs">
+                 <div class="flex items-center gap-2 min-w-0">
+                   <span>${d.icon}</span>
+                   <span class="font-semibold text-slate-800 truncate">${d.name}</span>
+                 </div>
+                 <span class="text-amber-700 font-bold shrink-0">${d.status}</span>
+               </div>`
+            : `<div class="flex items-center justify-between px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs">
+                 <div class="flex items-center gap-2 min-w-0">
+                   <span>${d.icon}</span>
+                   <span class="font-semibold text-slate-800 truncate">${d.name}</span>
+                 </div>
+                 <span class="text-emerald-700 font-bold shrink-0">${d.status}</span>
+               </div>`
+          ).join('');
+        }
+
+        showToast('Wi-Fi Check complete: 5 household devices found, 0 strangers!');
+      }, 250);
+    }
+
+    function toggleRadarSwitch() {
+      isRadarOn = !isRadarOn;
+      const dSwitch = document.getElementById('radarMainSwitch');
+      const dBadge = document.getElementById('radarHeaderBadge');
+
+      if (dSwitch) {
+        dSwitch.classList.toggle('on', isRadarOn);
+        dSwitch.setAttribute('aria-checked', String(isRadarOn));
+      }
+      if (dBadge) {
+        dBadge.textContent = isRadarOn ? 'ALERTS ON ✓' : 'ALERTS OFF';
+        dBadge.className = isRadarOn
+          ? 'pill-mint'
+          : 'px-3.5 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-extrabold text-slate-700 uppercase tracking-wider';
+      }
+      showToast(isRadarOn ? 'Stranger & Smart-TV Alerts turned ON' : 'Stranger Alerts paused');
+    }
+
+    function selectFreq(freqLabel) {
+      currentFrequency = freqLabel;
+      const group = document.getElementById('desktopFreqGroup');
+      if (group) {
+        Array.from(group.children).forEach((btn) => {
+          const active = btn.getAttribute('data-freq') === freqLabel;
+          btn.className = active
+            ? 'py-2 rounded-lg bg-white text-emerald-700 shadow-sm cursor-pointer'
+            : 'py-2 rounded-lg text-slate-600 hover:text-slate-900 cursor-pointer';
+        });
+      }
+      const statusText = document.getElementById('radarFreqStatus');
+      if (statusText) {
+        const readable = freqLabel === 'Real-Time' ? 'Always On (Instant)' : freqLabel === 'Every 15m' ? 'Every 15 Minutes' : 'Every Hour';
+        statusText.textContent = `Checking your home Wi-Fi: ${readable} — automatically stopping Smart-TV spying and watching for unknown devices.`;
+      }
+      showToast(`Wi-Fi check schedule updated`);
+    }
+
+    function changeTunnelProtocol(proto) {
+      currentProtocol = proto;
+      showToast(`Connection mode set to: ${proto}`);
+    }
+
+    function selectActionCard(idx) {
+      const c0 = document.getElementById('actionCard-0');
+      const c1 = document.getElementById('actionCard-1');
+      if (idx === 0) {
+        c0.className = 'p-4 rounded-2xl border-2 border-emerald-500 bg-emerald-50/40 cursor-pointer transition';
+        c1.className = 'p-4 rounded-2xl border border-slate-200 bg-white hover:border-slate-300 cursor-pointer transition';
+        showToast('Set to: Notify Me & Block Smart-TV Spying Automatically');
+      } else {
+        c1.className = 'p-4 rounded-2xl border-2 border-emerald-500 bg-emerald-50/40 cursor-pointer transition';
+        c0.className = 'p-4 rounded-2xl border border-slate-200 bg-white hover:border-slate-300 cursor-pointer transition';
+        showToast('Set to: Notify Me Only');
+      }
+    }
+
+    function updateShieldCounts() {
+      const dBoxes = document.querySelectorAll('#desktopShieldsList .sweepr-check');
+      const activeCount = Array.from(dBoxes).filter((b) => !b.classList.contains('unchecked')).length;
+      const dLabel = document.getElementById('activeShieldsCountLabel');
+      const acrBottom = document.getElementById('acrStatusBottom');
+      if (dLabel) dLabel.textContent = `${activeCount}/4 Active`;
+      if (acrBottom) {
+        acrBottom.textContent = activeCount > 0 ? `142 TV Trackers Stopped (${activeCount}/4 On)` : 'Protections Paused';
+      }
+    }
+
+    function toggleCheckItem(card) {
+      const box = card.querySelector('.sweepr-check');
+      if (!box) return;
+      box.classList.toggle('unchecked');
+      updateShieldCounts();
+    }
+
+    function setAllShields(state) {
+      document.querySelectorAll('#desktopShieldsList .sweepr-check').forEach((box) => {
+        box.classList.toggle('unchecked', !state);
+      });
+      updateShieldCounts();
+      showToast(state ? 'All 4 Home Protections turned ON' : 'All Home Protections turned OFF');
+    }
+
+    function simulateIntruderAlert() {
+      if (!isRadarOn) toggleRadarSwitch();
+      const acrBottom = document.getElementById('acrStatusBottom');
+      if (acrBottom) acrBottom.textContent = '149 TV Trackers Stopped';
+      showToast('🔔 Sample Alert: SWEEPR blocked your Living Room Smart TV from sending viewing history to advertisers.');
+    }
+
+    function changeLanguage(langVal) {
+      showToast(`Language set to ${langVal}`);
+    }
+
+    function toggleDarkMode() {
+      isDark = !isDark;
+      document.body.classList.toggle('dark-theme', isDark);
+      showToast(isDark ? 'Switched to Dark Mode' : 'Switched to Light Mode');
+    }
+
+    function openActivateModal() {
+      const modal = document.getElementById('activateModal');
+      const msg = document.getElementById('modalFeedbackMsg');
+      if (msg) msg.classList.add('hidden');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeActivateModal() {
+      const modal = document.getElementById('activateModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function fillDemoActivation() {
+      const emailEl = document.getElementById('modalEmailInput');
+      const codeEl = document.getElementById('modalCodeInput');
+      if (emailEl) emailEl.value = 'demo@sweeprvpn.com';
+      if (codeEl) codeEl.value = '849201';
+    }
+
+    async function activateFromModal() {
+      const email = (document.getElementById('modalEmailInput')?.value || '').trim();
+      const code = (document.getElementById('modalCodeInput')?.value || '').trim();
+      const msg = document.getElementById('modalFeedbackMsg');
+
+      if (!email || !email.includes('@') || code.length < 6) {
+        if (msg) {
+          msg.textContent = 'Please enter your email address and your 6-digit code.';
+          msg.className = 'text-xs font-bold px-3 py-2 rounded-xl bg-amber-50 text-amber-800 border border-amber-200';
+          msg.classList.remove('hidden');
+        }
+        return;
+      }
+
+      if (window.location.protocol.startsWith('http')) {
+        try {
+          const res = await fetch('/api/vpn/activate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, activation_code: code, os: 'windows' })
+          });
+          const data = await res.json();
+          if (!res.ok && data && data.error === 'invalid_activation_code') {
+            if (msg) {
+              msg.textContent = 'That code was not recognised. Click "Fill Sample Code" (849201) to test.';
+              msg.className = 'text-xs font-bold px-3 py-2 rounded-xl bg-red-50 text-red-700 border border-red-200';
+              msg.classList.remove('hidden');
+            }
+            return;
+          }
+        } catch {}
+      }
+
+      if (!isPro) toggleProTier();
+      if (!isConnected) toggleVpnConnection();
+      const devLabel = document.getElementById('deviceCountLabel');
+      if (devLabel) devLabel.textContent = '2 of 10 Computers Used';
+      closeActivateModal();
+      showToast(`🎉 Full Protection Unlocked for ${email}!`);
+    }
+  </script>
+</body>
+</html>

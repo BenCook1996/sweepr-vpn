@@ -906,7 +906,8 @@ const server = http.createServer(async (req, res) => {
         'Content-Type': 'application/vnd.microsoft.portable-executable',
         'Content-Disposition': 'attachment; filename="SWEEPRVPN.exe"',
         'Content-Length': stat.size,
-        'Cache-Control': 'public, max-age=3600',
+        'Cache-Control': 'no-store, no-cache, must-revalidate',
+        'Pragma': 'no-cache',
         'X-Robots-Tag': 'noindex, nofollow',
         ...COMMON_SECURITY_HEADERS
       });
