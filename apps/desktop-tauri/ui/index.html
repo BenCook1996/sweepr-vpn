@@ -698,6 +698,34 @@
   }
   function closeActivate() { $('modal').classList.remove('open'); }
   function plan(btn) { btn.parentNode.querySelectorAll('.plan').forEach(p => p.classList.toggle('on', p === btn)); }
+  const SWEEPR_ED25519_PUB_B64URL = 't04hn-7TfW5RIemEhi4mKbZy6rHRYBO6HxeN5OOIR_8';
+  function b64UrlToBytes(b64u) {
+    const b64 = String(b64u || '').replace(/-/g, '+').replace(/_/g, '/');
+    const pad = b64 + '==='.slice((b64.length + 3) % 4);
+    const bin = atob(pad);
+    const out = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+    return out;
+  }
+  async function verifySignedLicenseToken(token) {
+    if (!token || typeof token !== 'string') return false;
+    const parts = token.trim().split('.');
+    if (parts.length !== 3) return false;
+    try {
+      const claims = JSON.parse(new TextDecoder().decode(b64UrlToBytes(parts[1])));
+      if (claims.status !== 'active' && claims.status !== 'trialing') return false;
+      if (claims.exp && Math.floor(Date.now() / 1000) > Number(claims.exp) + 300) return false;
+      if (window.crypto && window.crypto.subtle) {
+        const pubKey = await window.crypto.subtle.importKey('raw', b64UrlToBytes(SWEEPR_ED25519_PUB_B64URL), { name: 'Ed25519' }, false, ['verify']);
+        const data = new TextEncoder().encode(parts[0] + '.' + parts[1]);
+        const sig = b64UrlToBytes(parts[2]);
+        return await window.crypto.subtle.verify({ name: 'Ed25519' }, pubKey, sig, data);
+      }
+      return parts[2].length >= 80;
+    } catch (e) {
+      return false;
+    }
+  }
   async function verifyServerSubscription(email, code) {
     if (tauri) {
       return await tauri.core.invoke('activate_subscription', { email, code, apiUrl: null });
@@ -706,7 +734,7 @@
     if (location.protocol === 'http:' || location.protocol === 'https:') {
       endpoints.push('/api/vpn/activate');
     }
-    endpoints.push('http://127.0.0.1:8788/api/vpn/activate', 'http://127.0.0.1:8080/api/vpn/activate', 'https://sweeprvpn.com/api/vpn/activate');
+    endpoints.push('https://sweeprvpn.com/api/vpn/activate', 'http://127.0.0.1:8788/api/vpn/activate', 'http://127.0.0.1:8080/api/vpn/activate');
     let lastMsg = 'No active paid subscription found for that email and code.';
     for (const url of endpoints) {
       try {
@@ -716,7 +744,14 @@
           body: JSON.stringify({ email, activation_code: code, otp: code, project_id: 'vpn' })
         });
         const d = await r.json().catch(() => ({}));
-        if (r.ok && d.ok && d.valid) return d;
+        if (r.ok && d.ok && d.valid) {
+          const signedTok = d.token || d.license_token;
+          if (!(await verifySignedLicenseToken(signedTok))) {
+            lastMsg = 'License response failed cryptographic Ed25519 signature check.';
+            continue;
+          }
+          return d;
+        }
         if (r.status >= 400 && r.status < 500 && d.message) {
           lastMsg = d.message;
           break;

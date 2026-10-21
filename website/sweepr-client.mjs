@@ -8,7 +8,7 @@ export class SweeprCrmClient {
   constructor(opts = {}) {
     this.projectId = String(opts.projectId || 'vpn').trim().toLowerCase();
     this.crmUrl = String(opts.crmUrl || process.env.SWEEPR_CRM_URL || 'http://localhost:8788').replace(/\/+$/, '');
-    this.apiKey = opts.apiKey || process.env.SWEEPR_CRM_API_KEY || 'sweepr_crm_shared_secret_v1';
+    this.apiKey = String(opts.apiKey || process.env.SWEEPR_CRM_API_KEY || '').trim();
     this.publicKeySpki = opts.publicKeySpki || process.env.SWEEPR_LICENSE_PUBLIC_KEY || '';
   }
 
@@ -36,9 +36,16 @@ export class SweeprCrmClient {
       const rawKey = publicKeyOverride || this.publicKeySpki;
       if (!rawKey) return { valid: false, reason: 'missing_public_key' };
 
-      const keyObj = rawKey.includes('BEGIN PUBLIC KEY')
-        ? crypto.createPublicKey(rawKey)
-        : crypto.createPublicKey({ key: Buffer.from(rawKey, 'base64'), format: 'der', type: 'spki' });
+      let keyObj;
+      if (rawKey.includes('BEGIN PUBLIC KEY')) {
+        keyObj = crypto.createPublicKey(rawKey);
+      } else {
+        const rawBuf = Buffer.from(rawKey, rawKey.includes('-') || rawKey.includes('_') ? 'base64url' : 'base64');
+        const spkiBuf = rawBuf.length === 32
+          ? Buffer.concat([Buffer.from('302a300506032b6570032100', 'hex'), rawBuf])
+          : rawBuf;
+        keyObj = crypto.createPublicKey({ key: spkiBuf, format: 'der', type: 'spki' });
+      }
 
       const ok = crypto.verify(null, signingInput, keyObj, signature);
       if (!ok) return { valid: false, reason: 'invalid_signature' };
@@ -109,8 +116,9 @@ export class SweeprCrmClient {
     return { _httpStatus: res.status, ...data };
   }
 
-  async verifyKey(key) {
+  async verifyKey(key, email = '') {
     const qs = new URLSearchParams({ project: this.projectId, key: String(key || '').trim() });
+    if (email) qs.set('email', String(email).trim().toLowerCase());
     const res = await fetch(`${this.crmUrl}/v1/license/verify-key?${qs.toString()}`, {
       headers: this.headers(),
       signal: AbortSignal.timeout(6000),

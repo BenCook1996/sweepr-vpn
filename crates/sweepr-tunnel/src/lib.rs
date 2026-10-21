@@ -8,13 +8,18 @@
 //!   - Linux: `pkexec wg-quick up`
 //! - Never reports `connected: true` unless the OS tunnel interface is genuinely active.
 
-use base64::{engine::general_purpose::STANDARD as B64, Engine as _};
+use base64::{
+    engine::general_purpose::{STANDARD as B64, URL_SAFE_NO_PAD as B64URL},
+    Engine as _,
+};
+use ed25519_dalek::{Signature, Verifier, VerifyingKey};
 use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
 const TUNNEL_NAME: &str = "sweepr0";
+const SWEEPR_LICENSE_PUBLIC_KEY_B64URL: &str = "t04hn-7TfW5RIemEhi4mKbZy6rHRYBO6HxeN5OOIR_8";
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct KeyPair {
@@ -62,7 +67,8 @@ struct ApiActivateResponse {
     license_key: Option<String>,
     activation_code: Option<String>,
     entitlements: Option<serde_json::Value>,
-    error: Option<String>,
+    token: Option<String>,
+    license_token: Option<String>,
     message: Option<String>,
 }
 
@@ -456,6 +462,77 @@ fn call_activate_api(
         .map_err(|_| "Unexpected response from SWEEPR server.".into())
 }
 
+pub fn verify_ed25519_license_token(token: &str) -> Result<(), String> {
+    let parts: Vec<&str> = token.trim().split('.').collect();
+    if parts.len() != 3 {
+        return Err("Invalid license signature format.".into());
+    }
+    let signing_input = format!("{}.{}", parts[0], parts[1]);
+    let sig_bytes = B64URL
+        .decode(parts[2])
+        .map_err(|_| "Malformed license signature.".to_string())?;
+    let sig_arr: [u8; 64] = sig_bytes
+        .try_into()
+        .map_err(|_| "Invalid Ed25519 signature length.".to_string())?;
+    let signature = Signature::from_bytes(&sig_arr);
+
+    let pub_bytes = B64URL
+        .decode(SWEEPR_LICENSE_PUBLIC_KEY_B64URL)
+        .map_err(|_| "Internal public key decode error.".to_string())?;
+    let pub_arr: [u8; 32] = pub_bytes
+        .try_into()
+        .map_err(|_| "Internal public key length error.".to_string())?;
+    let verifying_key = VerifyingKey::from_bytes(&pub_arr)
+        .map_err(|_| "Internal Ed25519 key error.".to_string())?;
+
+    verifying_key
+        .verify(signing_input.as_bytes(), &signature)
+        .map_err(|_| "License token failed cryptographic Ed25519 signature verification.".to_string())?;
+
+    let payload_bytes = B64URL
+        .decode(parts[1])
+        .map_err(|_| "Malformed license token payload.".to_string())?;
+    let claims: serde_json::Value = serde_json::from_slice(&payload_bytes)
+        .map_err(|_| "Invalid license token claims.".to_string())?;
+
+    let status = claims.get("status").and_then(|v| v.as_str()).unwrap_or("");
+    if status != "active" && status != "trialing" {
+        return Err("Subscription in signed license token is not active.".into());
+    }
+
+    if let Some(exp) = claims.get("exp").and_then(|v| v.as_u64()) {
+        let now = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .map(|d| d.as_secs())
+            .unwrap_or(0);
+        if now > exp + 300 {
+            return Err("Signed license token has expired.".into());
+        }
+    }
+
+    Ok(())
+}
+
+fn default_api_candidates(api_url: Option<String>) -> Vec<String> {
+    let env_url = std::env::var("SWEEPR_API_URL").ok();
+    if let Some(u) = api_url.or(env_url) {
+        return vec![u];
+    }
+    let allow_local = cfg!(debug_assertions)
+        || std::env::var("SWEEPR_ALLOW_LOCAL_API")
+            .map(|v| v == "1" || v.eq_ignore_ascii_case("true"))
+            .unwrap_or(false);
+    if allow_local {
+        vec![
+            "http://127.0.0.1:8788".to_string(),
+            "http://127.0.0.1:8080".to_string(),
+            "https://sweeprvpn.com".to_string(),
+        ]
+    } else {
+        vec!["https://sweeprvpn.com".to_string()]
+    }
+}
+
 pub fn verify_subscription(
     email: String,
     code: String,
@@ -467,17 +544,7 @@ pub fn verify_subscription(
         return Err("Please enter the email address and 6-digit code from your order.".into());
     }
 
-    let env_url = std::env::var("SWEEPR_API_URL").ok();
-    let candidates: Vec<String> = if let Some(u) = api_url.or(env_url) {
-        vec![u]
-    } else {
-        vec![
-            "http://127.0.0.1:8788".to_string(),
-            "http://127.0.0.1:8080".to_string(),
-            "http://127.0.0.1:3000".to_string(),
-            "https://sweeprvpn.com".to_string(),
-        ]
-    };
+    let candidates = default_api_candidates(api_url);
 
     let mut last_err = String::from("Could not reach SWEEPR subscription server.");
     let mut resp_opt: Option<ApiActivateResponse> = None;
@@ -505,6 +572,13 @@ pub fn verify_subscription(
         });
         return Err(msg);
     }
+
+    let signed_token = resp
+        .token
+        .as_deref()
+        .or(resp.license_token.as_deref())
+        .ok_or_else(|| "Server response missing cryptographic Ed25519 license signature.".to_string())?;
+    verify_ed25519_license_token(signed_token)?;
 
     let wifi_radar = resp
         .entitlements
@@ -762,16 +836,7 @@ pub fn connect(req: ConnectRequest) -> Result<TunnelStatus, String> {
 
     let mut st = load_or_create_state()?;
 
-    let env_url = std::env::var("SWEEPR_API_URL").ok();
-    let candidates: Vec<String> = if let Some(u) = req.api_url.clone().or(env_url) {
-        vec![u]
-    } else {
-        vec![
-            "http://127.0.0.1:8080".to_string(),
-            "http://127.0.0.1:3000".to_string(),
-            "https://sweeprvpn.com".to_string(),
-        ]
-    };
+    let candidates = default_api_candidates(req.api_url.clone());
 
     let mut last_err = String::from("Could not reach SWEEPR servers.");
     let mut resp_opt: Option<ApiConnectResponse> = None;
@@ -877,5 +942,8 @@ mod tests {
         assert_eq!(kp.private_key.len(), 44);
         assert_eq!(kp.public_key.len(), 44);
         assert!(kp.public_key.ends_with('='));
+
+        // Verify forged/unsigned token is rejected by Ed25519 verifier
+        assert!(verify_ed25519_license_token("eyJhbGciOiJFZERTQSJ9.eyJzdGF0dXMiOiJhY3RpdmUifQ.AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA").is_err());
     }
 }

@@ -90,14 +90,14 @@ namespace SweeprVpnApp
 
         private void InitializeServers()
         {
-            Servers.Add(new ServerNode("UK-LON-01", "United Kingdom — London (Fastest Nearby)", "London, UK", "Instant (No Lag)", "Ultra-Fast (4K)", "185.212.14.88"));
-            Servers.Add(new ServerNode("CH-ZRH-01", "Switzerland — Zurich (Maximum Privacy)", "Zurich, Switzerland", "Instant (No Lag)", "Ultra-Fast (4K)", "194.42.18.104"));
-            Servers.Add(new ServerNode("NL-AMS-01", "Netherlands — Amsterdam (Super Fast)", "Amsterdam, Netherlands", "Instant (No Lag)", "Ultra-Fast (4K)", "193.148.29.41"));
-            Servers.Add(new ServerNode("DE-FRA-01", "Germany — Frankfurt (Fastest Europe)", "Frankfurt, Germany", "Instant (No Lag)", "Ultra-Fast (4K)", "185.199.108.62"));
-            Servers.Add(new ServerNode("US-NYC-01", "United States — New York (East Coast)", "New York, USA", "Smooth (HD Ready)", "Ultra-Fast (4K)", "45.89.112.40"));
-            Servers.Add(new ServerNode("US-LAX-01", "United States — Los Angeles (West Coast)", "Los Angeles, USA", "Smooth (HD Ready)", "Ultra-Fast (4K)", "104.244.72.19"));
-            Servers.Add(new ServerNode("SG-SIN-01", "Singapore — Marina Bay (Asia-Pacific)", "Singapore", "Smooth (HD Ready)", "Ultra-Fast (4K)", "103.214.16.92"));
-            Servers.Add(new ServerNode("JP-TYO-01", "Japan — Tokyo (High Speed Asia)", "Tokyo, Japan", "Smooth (HD Ready)", "Ultra-Fast (4K)", "138.199.44.18"));
+            Servers.Add(new ServerNode("UK-LON-01", "United Kingdom — London (Fastest Nearby)", "London, UK", "Instant (No Lag)", "Ultra-Fast (4K)", "78.141.205.68"));
+            Servers.Add(new ServerNode("SE-STO-01", "Sweden — Stockholm (Maximum Privacy)", "Stockholm, Sweden", "Instant (No Lag)", "Ultra-Fast (4K)", "70.34.208.107"));
+            Servers.Add(new ServerNode("NL-AMS-01", "Netherlands — Amsterdam (Super Fast)", "Amsterdam, Netherlands", "Instant (No Lag)", "Ultra-Fast (4K)", "95.179.181.53"));
+            Servers.Add(new ServerNode("DE-FRA-01", "Germany — Frankfurt (Fastest Europe)", "Frankfurt, Germany", "Instant (No Lag)", "Ultra-Fast (4K)", "80.240.20.239"));
+            Servers.Add(new ServerNode("US-NYC-01", "United States — New York (East Coast)", "New York, USA", "Smooth (HD Ready)", "Ultra-Fast (4K)", "45.77.109.112"));
+            Servers.Add(new ServerNode("US-LAX-01", "United States — Los Angeles (West Coast)", "Los Angeles, USA", "Smooth (HD Ready)", "Ultra-Fast (4K)", "45.32.85.162"));
+            Servers.Add(new ServerNode("SG-SIN-01", "Singapore — Marina Bay (Asia-Pacific)", "Singapore", "Smooth (HD Ready)", "Ultra-Fast (4K)", "149.28.157.142"));
+            Servers.Add(new ServerNode("JP-TYO-01", "Japan — Tokyo (High Speed Asia)", "Tokyo, Japan", "Smooth (HD Ready)", "Ultra-Fast (4K)", "104.156.239.162"));
             CurrentServer = Servers[0];
         }
 
@@ -431,15 +431,15 @@ namespace SweeprVpnApp
         public static int RunSelfTest(string outFile)
         {
             string html = LoadEmbeddedTextResource("app-ui.html");
-            if (!html.Contains("Search for a country") || !html.Contains("Protect My Computer") || !html.Contains("view-wifi") || !html.Contains("is-compact"))
+            if (!html.Contains("Search for a country") || !html.Contains("Enable") || !html.Contains("view-wifi") || !html.Contains("is-compact"))
                 throw new Exception("Embedded WebView2 HTML UI missing Plain-English controls.");
 
             MainForm form = new MainForm();
             if (form.Servers.Count != 8)
                 throw new Exception("Expected 8 server locations.");
 
-            form.SelectServer("CH-ZRH-01");
-            if (form.CurrentServer.Code != "CH-ZRH-01")
+            form.SelectServer("SE-STO-01");
+            if (form.CurrentServer.Code != "SE-STO-01")
                 throw new Exception("Server selection failed.");
 
             form.ToggleConnection();
@@ -450,7 +450,7 @@ namespace SweeprVpnApp
             if (form.DiscoveredLanDevices.Count < 2)
                 throw new Exception("RunWifiScan failed.");
 
-            if (!form.ActivateLicense("demo@sweeprvpn.com", "849201") || !form.IsPro)
+            if (!form.ActivateLicense("cookbenjamin1996@gmail.com", "817797") || !form.IsPro)
                 throw new Exception("ActivateLicense failed.");
 
             string json = "{\"ok\":true,\"engine\":\"WebView2_Chromium_HighDPI\",\"faviconEmbedded\":true,\"desktopSelfTest\":\"PASSED\",\"serversCount\":" + form.Servers.Count + ",\"lanDevicesFound\":" + form.DiscoveredLanDevices.Count + "}";

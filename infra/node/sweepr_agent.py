@@ -21,6 +21,7 @@ IFACE = "wg0"
 NET = ipaddress.ip_network("10.64.0.0/16")
 SERVER_ADDR = ipaddress.ip_address("10.64.0.1")
 MAX_DEVICES = int(os.environ.get("SWEEPR_MAX_DEVICES", "10"))
+PEER_TTL_SECONDS = int(os.environ.get("SWEEPR_PEER_TTL_SECONDS", str(72 * 3600)))
 PORT = int(os.environ.get("SWEEPR_AGENT_PORT", "8787"))
 KEY_RE = re.compile(r"^[A-Za-z0-9+/]{42}[AEIMQUYcgkosw480]=$")
 
@@ -72,12 +73,33 @@ def next_address(state):
     raise RuntimeError("node full")
 
 
+def prune_expired_peers_unlocked(state):
+    """Evicts peers whose registration lease (default 72h) has expired without re-authentication."""
+    if PEER_TTL_SECONDS <= 0:
+        return False
+    now = int(time.time())
+    peers = state.get("peers", {})
+    expired = [pub for pub, p in peers.items() if now - int(p.get("added", 0)) > PEER_TTL_SECONDS]
+    if not expired:
+        return False
+    for pub in expired:
+        try:
+            wg("set", IFACE, "peer", pub, "remove")
+        except Exception:
+            pass
+        peers.pop(pub, None)
+    return True
+
+
 def add_peer(licence, pub):
     with lock:
         state = load()
+        prune_expired_peers_unlocked(state)
         peers = state["peers"]
+        now = int(time.time())
         if pub in peers:
             peers[pub]["licence"] = licence
+            peers[pub]["added"] = now
             save(state)
             return peers[pub]["address"]
         # Enforce the per-licence device limit by retiring the oldest device.
@@ -91,7 +113,7 @@ def add_peer(licence, pub):
             peers.pop(old, None)
         addr = next_address(state)
         wg("set", IFACE, "peer", pub, "allowed-ips", addr + "/32")
-        peers[pub] = {"address": addr, "licence": licence, "added": int(time.time())}
+        peers[pub] = {"address": addr, "licence": licence, "added": now}
         save(state)
         return addr
 
@@ -189,6 +211,23 @@ class Handler(BaseHTTPRequestHandler):
         self.reply(404, {"ok": False})
 
 
+def peer_reaper_loop():
+    while True:
+        time.sleep(900)
+        try:
+            with lock:
+                state = load()
+                if prune_expired_peers_unlocked(state):
+                    save(state)
+        except Exception:
+            pass
+
+
 if __name__ == "__main__":
-    apply_all(load())
+    with lock:
+        st = load()
+        if prune_expired_peers_unlocked(st):
+            save(st)
+        apply_all(st)
+    threading.Thread(target=peer_reaper_loop, daemon=True).start()
     ThreadingHTTPServer(("0.0.0.0", PORT), Handler).serve_forever()

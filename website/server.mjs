@@ -17,18 +17,22 @@ if (typeof process.loadEnvFile === 'function') {
 const PORT = Number(process.env.PORT) || 8080;
 const PUBLIC_URL = (process.env.PUBLIC_URL || `http://localhost:${PORT}`).replace(/\/+$/, '');
 const SWEEPR_CRM_URL = (process.env.SWEEPR_CRM_URL || 'http://localhost:8788').replace(/\/+$/, '');
-const SWEEPR_CRM_API_KEY = (process.env.SWEEPR_CRM_API_KEY || 'sweepr_crm_shared_secret_v1').trim();
+const SWEEPR_CRM_API_KEY = (process.env.SWEEPR_CRM_API_KEY || '').trim();
+const ALLOW_DEMO_ACCOUNT = process.env.ALLOW_DEMO_ACCOUNT === 'true' && process.env.NODE_ENV !== 'production';
 const SESSION_SECRET = (process.env.SESSION_SECRET || '').trim() || crypto.randomBytes(32).toString('hex');
 const TRUST_PROXY = process.env.TRUST_PROXY === 'true' || Boolean(process.env.RAILWAY_ENVIRONMENT);
 const MAX_BODY_BYTES = 64 * 1024;
 const MAX_LOCAL_ACCOUNTS = 10000;
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}$/;
+const HIGH_ENTROPY_LICENSE_KEY_RE = /^SWEEPR-[A-Z0-9]{2,8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/i;
 
 const COMMON_SECURITY_HEADERS = {
   'X-Content-Type-Options': 'nosniff',
   'X-Frame-Options': 'SAMEORIGIN',
   'Referrer-Policy': 'strict-origin-when-cross-origin',
   'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
+  'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
+  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
   'Content-Security-Policy': "frame-ancestors 'self'; base-uri 'self'; object-src 'none'"
 };
 
@@ -50,7 +54,10 @@ const BLOCKED_STATIC_FILES = new Set([
   'sweepr-client.mjs',
   'package.json',
   'package-lock.json',
-  'railway.json'
+  'railway.json',
+  'outreach-seed.json',
+  'indexing-queue.json',
+  'daily-seo-pages-state.json'
 ]);
 
 const crm = new SweeprCrmClient({ projectId: 'vpn', crmUrl: SWEEPR_CRM_URL, apiKey: SWEEPR_CRM_API_KEY });
@@ -67,6 +74,36 @@ function safeCompareStrings(a, b) {
   return crypto.timingSafeEqual(hashA, hashB) && a.length === b.length;
 }
 
+function hasValidCrmServiceKey(req) {
+  const provided = String(
+    req?.headers?.['x-sweepr-api-key'] ||
+    req?.headers?.['x-crm-api-key'] ||
+    req?.headers?.['x-sweepr-service-key'] ||
+    ''
+  ).trim();
+  return Boolean(SWEEPR_CRM_API_KEY && provided && safeCompareStrings(provided, SWEEPR_CRM_API_KEY));
+}
+
+function maskEmailAddress(email) {
+  const clean = String(email || '').trim().toLowerCase();
+  const [local, domain] = clean.split('@');
+  if (!local || !domain) return '';
+  if (local.length <= 2) return `${local[0]}***@${domain}`;
+  return `${local[0]}***${local[local.length - 1]}@${domain}`;
+}
+
+function canonicalizeEmailForAntiAbuse(email) {
+  const clean = String(email || '').trim().toLowerCase();
+  const [rawLocal, rawDomain] = clean.split('@');
+  if (!rawLocal || !rawDomain) return clean;
+  let local = rawLocal.split('+')[0];
+  const domain = rawDomain === 'googlemail.com' ? 'gmail.com' : rawDomain;
+  if (domain === 'gmail.com') {
+    local = local.replace(/\./g, '');
+  }
+  return `${local}@${domain}`;
+}
+
 function escapeHtml(value) {
   return String(value ?? '')
     .replace(/&/g, '&amp;')
@@ -81,7 +118,6 @@ function resolveTrustedOrigin(req) {
     PUBLIC_URL,
     'https://sweeprvpn.com',
     'https://www.sweeprvpn.com',
-    'null',
     'tauri://localhost',
     'http://tauri.localhost',
     'https://tauri.localhost',
@@ -240,9 +276,10 @@ function formatAmount(amountMinor, cfg) {
 }
 
 function buildLocalizedPricing(countryCode = 'GB', overrideCurrency) {
-  const cc = (countryCode || 'GB').toUpperCase();
-  const currKey = (overrideCurrency || COUNTRY_TO_CURRENCY[cc] || 'gbp').toLowerCase();
-  const cfg = PRICING_BY_CURRENCY[currKey] || PRICING_BY_CURRENCY.gbp;
+  const cc = /^[A-Z]{2}$/i.test(String(countryCode || '')) ? String(countryCode).toUpperCase() : 'GB';
+  const rawCurr = String(overrideCurrency || COUNTRY_TO_CURRENCY[cc] || 'gbp').trim().toLowerCase();
+  const currKey = Object.prototype.hasOwnProperty.call(PRICING_BY_CURRENCY, rawCurr) ? rawCurr : 'gbp';
+  const cfg = PRICING_BY_CURRENCY[currKey];
 
   const divisor = cfg.zeroDecimal ? 1 : 100;
   const annualMonthlyEq = Math.round(cfg.annualAmount / 12);
@@ -303,13 +340,13 @@ function buildLocalizedPricing(countryCode = 'GB', overrideCurrency) {
 function resolvePricingForRequest(req, parsedUrl, body = {}) {
   const qCountry = parsedUrl?.searchParams?.get('country') || body?.country;
   const qCurrency = parsedUrl?.searchParams?.get('currency') || body?.currency;
-  const headerCountry =
-    req.headers['cf-ipcountry'] ||
-    req.headers['x-vercel-ip-country'] ||
-    req.headers['x-country-code'] ||
-    'GB';
-  const country = String(qCountry || headerCountry || 'GB').trim().toUpperCase();
-  return buildLocalizedPricing(country.length === 2 ? country : 'GB', qCurrency);
+  // Only trust CDN/proxy geo-IP headers when running behind a verified reverse proxy (TRUST_PROXY=true)
+  const headerCountry = TRUST_PROXY
+    ? (req.headers['cf-ipcountry'] || req.headers['x-vercel-ip-country'] || 'GB')
+    : 'GB';
+  const rawCountry = String(qCountry || headerCountry || 'GB').trim().toUpperCase();
+  const country = /^[A-Z]{2}$/.test(rawCountry) ? rawCountry : 'GB';
+  return buildLocalizedPricing(country, qCurrency);
 }
 
 // ============================================================================
@@ -472,6 +509,19 @@ const accountsById = new Map();
 const accountsByEmail = new Map();
 const accountsBySubscriptionId = new Map();
 const portalOtpChallenges = new Map();
+const claimedIntroEmails = new Set();
+const claimedIntroCustomerIds = new Set();
+const claimedIntroCardFingerprints = new Set();
+const processedStripeWebhookEvents = new Set();
+
+function recordBoundedSet(setObj, value, maxEntries = 10000) {
+  if (!value) return;
+  if (setObj.size >= maxEntries) {
+    const oldest = setObj.values().next().value;
+    if (oldest !== undefined) setObj.delete(oldest);
+  }
+  setObj.add(value);
+}
 
 function buildVpnEntitlements(wifiRadarAddon) {
   const list = [
@@ -568,8 +618,8 @@ function upsertLocalAccount({ email, name, country, stripeCustomerId, plan, wifi
   return acc;
 }
 
-// Seed deterministic demo Pro account for app testing & instant activation verification
-if (true) {
+// Seed deterministic demo Pro account ONLY when ALLOW_DEMO_ACCOUNT=true in non-production environments
+if (ALLOW_DEMO_ACCOUNT) {
   const demoProAccount = upsertLocalAccount({
     email: 'demo@sweeprvpn.com',
     name: 'SWEEPR Demo Pro',
@@ -586,7 +636,7 @@ if (true) {
   licenses.set('SWEEPR-VPN-PRO1-2026-DEMO', demoProAccount);
 
   // Ensure demo account exists in central sweepr_crm so it can also be managed/revoked from CRM
-  crm.verifyKey('849201').then((res) => {
+  crm.verifyKey('849201', 'demo@sweeprvpn.com').then((res) => {
     if (res && res.error === 'key_not_found') {
       return crm.syncSubscription({
         email: 'demo@sweeprvpn.com',
@@ -595,7 +645,7 @@ if (true) {
         plan: 'annual',
         status: 'active',
         days: 365,
-        amount_cents: 5999,
+        amount_cents: 7499,
         currency: 'gbp',
         activation_code: '849201',
         license_key: 'SWEEPR-VPN-PRO1-2026-DEMO',
@@ -665,6 +715,7 @@ function syncLocalCacheFromCrm(crmData, fallbackEmail = '', fallbackCode = '') {
       target.status = crmData.status || 'canceled';
       licenses.delete(target.activation_code);
       licenses.delete(target.licenseKey);
+      revokeLicenceOnAllNodes(target).catch(() => {});
     }
   }
   return null;
@@ -732,11 +783,66 @@ async function callNodeAgent(n, method, agentPath, payload) {
   return data;
 }
 
+function computeVpnLicenceHash(rawKey) {
+  const clean = String(rawKey || '').trim();
+  if (!clean) return '';
+  return crypto.createHash('sha256').update('sweepr-licence:' + clean).digest('hex').slice(0, 32);
+}
+
+async function revokeLicenceOnAllNodes(accOrKeys) {
+  const nodes = loadVpnNodes();
+  if (!Array.isArray(nodes) || nodes.length === 0) return { revokedHashes: 0, nodesContacted: 0 };
+
+  const rawCandidates = new Set();
+  if (typeof accOrKeys === 'string') {
+    rawCandidates.add(accOrKeys);
+  } else if (accOrKeys && typeof accOrKeys === 'object') {
+    for (const k of [
+      accOrKeys.licenseKey,
+      accOrKeys.license_key,
+      accOrKeys.id,
+      accOrKeys.account_id,
+      accOrKeys.activation_code,
+      ...(Array.isArray(accOrKeys.keys) ? accOrKeys.keys : [])
+    ]) {
+      if (k) {
+        rawCandidates.add(String(k).trim());
+        rawCandidates.add(String(k).trim().toUpperCase());
+      }
+    }
+  }
+
+  const hashes = new Set();
+  for (const raw of rawCandidates) {
+    if (/^[a-f0-9]{32}$/.test(raw)) {
+      hashes.add(raw);
+    }
+    const h = computeVpnLicenceHash(raw);
+    if (h) hashes.add(h);
+  }
+
+  const tasks = [];
+  for (const n of nodes) {
+    for (const licenceHash of hashes) {
+      tasks.push(callNodeAgent(n, 'POST', '/licences/revoke', { licence: licenceHash }).catch(() => null));
+    }
+  }
+  await Promise.allSettled(tasks);
+  return { revokedHashes: hashes.size, nodesContacted: nodes.length };
+}
+
 // Returns { id } for an active licence, where id is a one-way hash (servers never see the real key).
 // Authoritatively verifies against centralized sweepr_crm first, with local fallback if CRM is unreachable.
 async function resolveVpnLicence(code, email) {
-  if (!code || code.length < 6) return null;
+  const cleanCode = String(code || '').trim();
+  if (!cleanCode || cleanCode.length < 6) return null;
   const normEmail = email ? String(email).trim().toLowerCase() : '';
+  const isShortSixDigit = /^\d{6}$/.test(cleanCode);
+  // Prevent 6-digit activation code brute-forcing: short codes always require the matching account email
+  if (isShortSixDigit && !isValidEmail(normEmail)) {
+    return null;
+  }
+
   let key = null;
   let crmReachable = false;
 
@@ -744,32 +850,60 @@ async function resolveVpnLicence(code, email) {
     const data = normEmail
       ? await crm.activateDevice({
           email: normEmail,
-          otp: code,
-          deviceId: 'vpn_tunnel_' + crypto.createHash('sha256').update(normEmail + ':' + code).digest('hex').slice(0, 12),
+          otp: cleanCode,
+          deviceId: 'vpn_tunnel_' + crypto.createHash('sha256').update(normEmail + ':' + cleanCode).digest('hex').slice(0, 12),
           deviceName: 'SWEEPR VPN Tunnel',
           os: 'windows',
           appVersion: '2.5.0'
         })
-      : await crm.verifyKey(code);
+      : await crm.verifyKey(cleanCode);
 
     if (data && data._httpStatus && data._httpStatus < 500) {
       crmReachable = true;
-      syncLocalCacheFromCrm(data, normEmail, code);
-      if (data.valid && (!normEmail || !data.email || String(data.email).toLowerCase() === normEmail)) {
-        key = data.licenseKey || data.license_key || data.account_id || code;
+      syncLocalCacheFromCrm(data, normEmail, cleanCode);
+      if (data.valid && (!normEmail || !data.email || String(data.email).toLowerCase() === normEmail || String(data.email).includes('*'))) {
+        key = data.licenseKey || data.license_key || data.account_id || cleanCode;
       }
     }
   } catch {}
 
   if (!crmReachable) {
-    const local = licenses.get(code) || licenses.get(code.toUpperCase());
+    const local = licenses.get(cleanCode) || licenses.get(cleanCode.toUpperCase());
     if (local && local.status === 'active' && (!normEmail || local.email === normEmail)) {
       key = local.licenseKey || local.id;
     }
   }
 
   if (!key) return null;
-  return { id: crypto.createHash('sha256').update('sweepr-licence:' + key).digest('hex').slice(0, 32) };
+  return { id: computeVpnLicenceHash(key) };
+}
+
+function signFallbackEd25519LicenseToken(acc, deviceId = 'vpn_desktop') {
+  try {
+    const b64Pem = (process.env.LICENSE_PRIVATE_KEY_B64 || '').trim();
+    if (!b64Pem) return null;
+    const privKey = crypto.createPrivateKey(Buffer.from(b64Pem, 'base64').toString('utf8'));
+    const now = Math.floor(Date.now() / 1000);
+    const exp = now + 72 * 3600;
+    const header = Buffer.from(JSON.stringify({ alg: 'EdDSA', typ: 'JWT' })).toString('base64url');
+    const payload = Buffer.from(
+      JSON.stringify({
+        sub: acc.id,
+        device_id: deviceId,
+        project_id: 'vpn',
+        status: 'active',
+        plan: acc.plan || 'annual',
+        addons: acc.wifiRadarAddon ? ['wifi_radar'] : [],
+        iat: now,
+        exp
+      })
+    ).toString('base64url');
+    const signingInput = `${header}.${payload}`;
+    const sig = crypto.sign(null, Buffer.from(signingInput, 'utf8'), privKey).toString('base64url');
+    return { token: `${signingInput}.${sig}`, expires_at: exp };
+  } catch {
+    return null;
+  }
 }
 
 function signSessionCookie(accountId, email) {
@@ -1269,7 +1403,7 @@ const server = http.createServer(async (req, res) => {
     }
     const safeName = typeof body?.name === 'string' ? body.name.trim().slice(0, 120) : '';
     const localizedPricing = resolvePricingForRequest(req, urlObj, body || {});
-    const acc = upsertLocalAccount({
+    upsertLocalAccount({
       email,
       name: safeName,
       country: localizedPricing.country,
@@ -1286,7 +1420,6 @@ const server = http.createServer(async (req, res) => {
       200,
       {
         ok: true,
-        account_id: acc.id,
         country: localizedPricing.country
       },
       {},
@@ -1336,8 +1469,15 @@ const server = http.createServer(async (req, res) => {
     const includeWifiRadar = hasWifiRadarInBody(body);
 
     const localizedPricing = resolvePricingForRequest(req, urlObj, body);
+    const canonicalEmail = canonicalizeEmailForAntiAbuse(email);
     const existingAcc = accountsByEmail.get(email);
     const wasAlreadyActive = Boolean(existingAcc && existingAcc.status === 'active');
+    const alreadyClaimedIntro =
+      wasAlreadyActive ||
+      Boolean(canonicalEmail && claimedIntroEmails.has(canonicalEmail)) ||
+      Boolean(existingAcc?.stripe_customer_id && claimedIntroCustomerIds.has(existingAcc.stripe_customer_id));
+    const eligibleForIntroDiscount = applyDiscount && !alreadyClaimedIntro;
+
     const acc = upsertLocalAccount({
       email,
       name,
@@ -1442,10 +1582,14 @@ const server = http.createServer(async (req, res) => {
         });
       }
 
-      const introCouponId =
-        !isAnnual && !isSixMonth && applyDiscount
-          ? await getOrCreateIntroCoupon(localizedPricing.currency, localizedPricing.introSavingsAmount)
-          : '';
+      const canUseIntroCoupon =
+        !isAnnual &&
+        !isSixMonth &&
+        eligibleForIntroDiscount &&
+        !(customerId && claimedIntroCustomerIds.has(customerId));
+      const introCouponId = canUseIntroCoupon
+        ? await getOrCreateIntroCoupon(localizedPricing.currency, localizedPricing.introSavingsAmount)
+        : '';
 
       const subParams = {
         customer: customerId,
@@ -1456,7 +1600,10 @@ const server = http.createServer(async (req, res) => {
           payment_method_types: isPayPal ? ['paypal'] : ['card']
         },
         ...(introCouponId ? { discounts: [{ coupon: introCouponId }] } : {}),
-        metadata,
+        metadata: {
+          ...metadata,
+          intro_offer_applied: introCouponId ? 'true' : 'false'
+        },
         expand: ['latest_invoice.payment_intent']
       };
 
@@ -1625,6 +1772,39 @@ const server = http.createServer(async (req, res) => {
       const metaEmail = sub.metadata?.email || '';
       const metaPlan = sub.metadata?.plan || 'annual';
       const hasWifiRadar = sub.metadata?.wifi_radar === 'true' || (sub.metadata?.addons || '').includes('wifi_radar');
+      const usedIntroOffer =
+        sub.metadata?.intro_offer_applied === 'true' ||
+        Boolean(sub.discount) ||
+        (Array.isArray(sub.discounts) && sub.discounts.length > 0);
+      const cardFingerprint =
+        sub.default_payment_method?.card?.fingerprint ||
+        sub.latest_invoice?.payment_intent?.payment_method?.card?.fingerprint ||
+        '';
+      const subCustomerId = typeof sub.customer === 'string' ? sub.customer : sub.customer?.id;
+
+      // Enforce 1-per-card / 1-per-canonical-email limit on £1.99 intro offer
+      if (usedIntroOffer) {
+        if (cardFingerprint && claimedIntroCardFingerprints.has(`${cardFingerprint}:${subCustomerId || ''}`) === false && claimedIntroCardFingerprints.has(cardFingerprint)) {
+          await stripeRequest('DELETE', `subscriptions/${encodeURIComponent(sub.id)}`).catch(() => {});
+          return sendJson(
+            res,
+            403,
+            {
+              ok: false,
+              error: 'intro_offer_already_claimed',
+              message: 'The £1.99 introductory offer has already been claimed with this payment card.'
+            },
+            {},
+            req
+          );
+        }
+        if (cardFingerprint) {
+          recordBoundedSet(claimedIntroCardFingerprints, cardFingerprint);
+          recordBoundedSet(claimedIntroCardFingerprints, `${cardFingerprint}:${subCustomerId || ''}`);
+        }
+        if (subCustomerId) recordBoundedSet(claimedIntroCustomerIds, subCustomerId);
+        if (metaEmail) recordBoundedSet(claimedIntroEmails, canonicalizeEmailForAntiAbuse(metaEmail));
+      }
 
       let acc =
         accountsById.get(metaAccountId) ||
@@ -1714,6 +1894,9 @@ const server = http.createServer(async (req, res) => {
     req.method === 'POST' &&
     (pathname === '/webhooks/stripe' || pathname === '/api/webhook/stripe' || pathname === '/api/webhooks/stripe')
   ) {
+    if (!STRIPE_WEBHOOK_SECRET) {
+      return sendJson(res, 503, { error: 'webhook_secret_not_configured' }, {}, req);
+    }
     let rawBody;
     try {
       rawBody = await readRawBody(req, 256 * 1024);
@@ -1721,7 +1904,7 @@ const server = http.createServer(async (req, res) => {
       return sendJson(res, 413, { error: 'payload_too_large' }, {}, req);
     }
     const sig = req.headers['stripe-signature'] || '';
-    if ((IS_LIVE_STRIPE || STRIPE_WEBHOOK_SECRET) && !verifyStripeWebhookSignature(rawBody, sig, STRIPE_WEBHOOK_SECRET)) {
+    if (!verifyStripeWebhookSignature(rawBody, sig, STRIPE_WEBHOOK_SECRET)) {
       return sendJson(res, 400, { error: 'invalid_signature' }, {}, req);
     }
 
@@ -1730,6 +1913,13 @@ const server = http.createServer(async (req, res) => {
       event = JSON.parse(rawBody);
     } catch {
       return sendJson(res, 400, { error: 'invalid_json' }, {}, req);
+    }
+
+    if (event?.id) {
+      if (processedStripeWebhookEvents.has(event.id)) {
+        return sendJson(res, 200, { received: true, duplicate: true }, {}, req);
+      }
+      recordBoundedSet(processedStripeWebhookEvents, event.id);
     }
 
     try {
@@ -1752,6 +1942,9 @@ const server = http.createServer(async (req, res) => {
             wifiRadarAddon: hasWifiRadar,
             status: subStatus
           });
+          if (subStatus !== 'active') {
+            revokeLicenceOnAllNodes(acc).catch(() => {});
+          }
           crm.syncSubscription({
             email: acc.email,
             country: obj.metadata?.country || acc.country || 'GB',
@@ -1764,6 +1957,18 @@ const server = http.createServer(async (req, res) => {
             addons: acc.wifiRadarAddon ? ['wifi_radar'] : [],
             notes: `Stripe Webhook ${event.type} (${obj.id})`
           }).catch(() => {});
+        }
+      } else if (event.type === 'charge.refunded' || event.type === 'charge.dispute.created') {
+        const custId = typeof obj.customer === 'string' ? obj.customer : obj.customer?.id;
+        const chargeEmail = (obj.billing_details?.email || obj.receipt_email || '').trim().toLowerCase();
+        const targetAcc =
+          (chargeEmail ? accountsByEmail.get(chargeEmail) : null) ||
+          Array.from(accountsById.values()).find((a) => custId && a.stripe_customer_id === custId);
+        if (targetAcc) {
+          targetAcc.status = 'canceled';
+          licenses.delete(targetAcc.activation_code);
+          licenses.delete(targetAcc.licenseKey);
+          revokeLicenceOnAllNodes(targetAcc).catch(() => {});
         }
       }
       // Forward raw webhook to central sweepr-crm if reachable
@@ -1867,10 +2072,20 @@ const server = http.createServer(async (req, res) => {
     }
     const body = await readJsonBody(req);
     if (body && body.__tooLarge) return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, {}, req);
-    const code = String(body.otp || body.activation_code || body.key || body.refresh_token || '').trim();
+    const bearerSecret = String(req.headers.authorization || '').replace(/^Bearer\s+/i, '').trim();
+    const code = String(body.otp || body.activation_code || body.key || body.refresh_token || bearerSecret || '').trim();
     const normEmail = body.email ? String(body.email).trim().toLowerCase() : '';
-    if (pathname !== '/v1/license/refresh' && (!code || code.length < 6)) {
-      return sendJson(res, 400, { ok: false, valid: false, error: 'missing_or_invalid_activation_code', message: 'Please enter the 6-digit activation code from your order.' }, {}, req);
+    if (pathname === '/v1/license/refresh') {
+      if (!body.account_id || !body.device_id || (!code && !hasValidCrmServiceKey(req))) {
+        return sendJson(res, 401, { ok: false, valid: false, error: 'unauthorized', message: 'Valid refresh_token, account_id, and device_id are required.' }, {}, req);
+      }
+    } else {
+      if (!code || code.length < 6) {
+        return sendJson(res, 400, { ok: false, valid: false, error: 'missing_or_invalid_activation_code', message: 'Please enter the 6-digit activation code from your order.' }, {}, req);
+      }
+      if (/^\d{6}$/.test(code) && !isValidEmail(normEmail) && !hasValidCrmServiceKey(req)) {
+        return sendJson(res, 400, { ok: false, valid: false, error: 'email_required_for_short_code', message: 'Please enter your account email address along with your 6-digit activation code.' }, {}, req);
+      }
     }
 
     // 1. Query centralized sweepr_crm first (authoritative multi-project license hub)
@@ -1878,7 +2093,7 @@ const server = http.createServer(async (req, res) => {
       const data = pathname === '/v1/license/refresh'
         ? await crm.refreshLicense({
             accountId: body.account_id,
-            refreshToken: body.refresh_token,
+            refreshToken: code,
             deviceId: body.device_id,
             appVersion: body.app_version
           })
@@ -1950,6 +2165,7 @@ const server = http.createServer(async (req, res) => {
         safeCompareStrings(code.toUpperCase(), localAcc.licenseKey);
       const emailMatches = !normEmail || localAcc.email === normEmail;
       if (localAcc.status === 'active' && codeMatches && emailMatches) {
+        const signed = signFallbackEd25519LicenseToken(localAcc, body.device_id || 'vpn_desktop');
         return sendJson(
           res,
           200,
@@ -1962,7 +2178,8 @@ const server = http.createServer(async (req, res) => {
             activation_code: localAcc.activation_code,
             plan: localAcc.plan,
             entitlements: localAcc.entitlements,
-            status: localAcc.status
+            status: localAcc.status,
+            ...(signed ? { token: signed.token, license_token: signed.token, expires_at: signed.expires_at } : {})
           },
           {},
           req
@@ -1981,29 +2198,50 @@ const server = http.createServer(async (req, res) => {
     const body = req.method === 'POST' ? await readJsonBody(req) : {};
     if (body && body.__tooLarge) return sendJson(res, 413, { valid: false, error: 'payload_too_large' }, {}, req);
     const key = String(body.key || urlObj.searchParams.get('key') || '').trim();
+    const normEmail = String(body.email || urlObj.searchParams.get('email') || '').trim().toLowerCase();
+    const isServiceCall = hasValidCrmServiceKey(req);
     if (!key || key.length < 6) {
       return sendJson(res, 400, { valid: false, error: 'invalid_key' }, {}, req);
     }
+    if (!HIGH_ENTROPY_LICENSE_KEY_RE.test(key) && !isValidEmail(normEmail) && !isServiceCall) {
+      return sendJson(
+        res,
+        401,
+        {
+          valid: false,
+          error: 'email_required_for_short_code',
+          message: 'Please provide your account email address along with your 6-digit activation code, or enter your full SWEEPR-VPN-XXXX-XXXX-XXXX license key.'
+        },
+        {},
+        req
+      );
+    }
 
     try {
-      const data = await crm.verifyKey(key);
+      const data = await crm.verifyKey(key, normEmail);
       if (data && data._httpStatus && data._httpStatus < 500) {
-        syncLocalCacheFromCrm(data, data.email || '', key);
+        syncLocalCacheFromCrm(data, normEmail || data.email || '', key);
         const { _httpStatus, ...cleanData } = data;
+        if (!isServiceCall) {
+          delete cleanData.account_id;
+          delete cleanData.activation_code;
+          if (cleanData.email) cleanData.email = maskEmailAddress(cleanData.email);
+        }
         return sendJson(res, _httpStatus >= 400 ? _httpStatus : 200, cleanData, {}, req);
       }
     } catch {}
 
     const localRecord = licenses.get(key) || licenses.get(key.toUpperCase());
-    if (localRecord && localRecord.status === 'active') {
+    if (localRecord && localRecord.status === 'active' && (!normEmail || localRecord.email === normEmail)) {
       return sendJson(
         res,
         200,
         {
           valid: true,
           ok: true,
+          ...(isServiceCall ? { account_id: localRecord.id, activation_code: localRecord.activation_code } : {}),
+          email: maskEmailAddress(localRecord.email),
           licenseKey: localRecord.licenseKey,
-          activation_code: localRecord.activation_code,
           plan: localRecord.plan,
           wifiRadarAddon: Boolean(localRecord.wifiRadarAddon),
           entitlements: localRecord.entitlements,
@@ -2014,6 +2252,39 @@ const server = http.createServer(async (req, res) => {
       );
     }
     return sendJson(res, 404, { valid: false, error: 'key_not_found' }, {}, req);
+  }
+
+  // Service-authenticated VPN Peer Revocation Endpoint (called by sweepr_crm on refund/cancellation/device revocation)
+  if (pathname === '/api/vpn/revoke' && req.method === 'POST') {
+    if (!hasValidCrmServiceKey(req)) {
+      return sendJson(res, 401, { ok: false, error: 'unauthorized' }, {}, req);
+    }
+    const body = await readJsonBody(req);
+    if (body && body.__tooLarge) return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, {}, req);
+    const email = String(body?.email || '').trim().toLowerCase();
+    const accountId = String(body?.account_id || '').trim();
+    const activationCode = String(body?.activation_code || '').trim();
+    const licenseKey = String(body?.license_key || body?.licenseKey || '').trim();
+
+    const localAcc =
+      (accountId ? accountsById.get(accountId) : null) ||
+      (email ? accountsByEmail.get(email) : null) ||
+      (activationCode ? licenses.get(activationCode) : null) ||
+      (licenseKey ? licenses.get(licenseKey.toUpperCase()) : null);
+
+    if (localAcc) {
+      localAcc.status = 'canceled';
+      licenses.delete(localAcc.activation_code);
+      licenses.delete(localAcc.licenseKey);
+    }
+
+    const result = await revokeLicenceOnAllNodes({
+      id: accountId || localAcc?.id,
+      activation_code: activationCode || localAcc?.activation_code,
+      licenseKey: licenseKey || localAcc?.licenseKey,
+      keys: Array.isArray(body?.keys) ? body.keys : []
+    });
+    return sendJson(res, 200, { ok: true, ...result }, {}, req);
   }
 
   // VPN Customer Support Ticket Submission
