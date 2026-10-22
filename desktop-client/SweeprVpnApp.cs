@@ -352,7 +352,7 @@ namespace SweeprVpnApp
 
         public bool ActivateLicense(string email, string code)
         {
-            if (string.IsNullOrEmpty(email) || !email.Contains("@") || string.IsNullOrEmpty(code) || code.Length < 6)
+            if (string.IsNullOrEmpty(code) || code.Length < 6)
             {
                 return false;
             }

@@ -567,9 +567,8 @@ pub fn verify_subscription(
 ) -> Result<SubscriptionStatus, String> {
     let clean_email = email.trim();
     let clean_code = code.trim();
-    let is_full_key = clean_code.len() >= 12 && clean_code.to_ascii_uppercase().starts_with("SWEEPR-");
-    if (!is_full_key && (clean_email.is_empty() || !clean_email.contains('@'))) || clean_code.len() < 6 {
-        return Err("Please enter the license key and email address from your order.".into());
+    if clean_code.len() < 6 {
+        return Err("Please enter the license key from your order.".into());
     }
 
     let candidates = default_api_candidates(api_url);

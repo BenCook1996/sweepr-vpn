@@ -402,9 +402,8 @@
       <button onclick="closeActivate()" aria-label="Close" style="font-size:18px;color:var(--muted)">✕</button>
     </div>
     <div class="s" style="font-weight:800;letter-spacing:.4px;margin-top:4px">ALREADY PAID? ENTER YOUR LICENSE KEY</div>
-    <input class="input" id="mEmail" type="email" placeholder="Email you used at checkout" />
-    <input class="input" id="mCode" type="text" maxlength="64" placeholder="License key from your email (e.g. SWEEPR-VPN-XXXX-XXXX-XXXX)" style="font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;text-transform:uppercase" />
-    <div class="s" id="mError" style="color:#ef4444;font-weight:700;display:none">Please check your email and license key.</div>
+    <input class="input" id="mCode" type="text" maxlength="64" placeholder="Enter license key (e.g. SWEEPR-VPN-XXXX-XXXX-XXXX)" oninput="this.value=this.value.toUpperCase()" style="font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;letter-spacing:.4px" />
+    <div class="s" id="mError" style="color:#ef4444;font-weight:700;display:none">Please enter a valid license key.</div>
     <div class="s" style="font-weight:800;letter-spacing:.4px;margin-top:6px">OR CHOOSE A PLAN</div>
     <button class="plan on" onclick="plan(this)"><span class="tag">BEST VALUE · SAVE 50%</span><div><div class="t">Yearly</div><div class="s">£74.99 billed once a year</div></div><div style="text-align:right"><div style="font-weight:900;font-size:16px">£6.25</div><div class="s">/month</div></div></button>
     <button class="plan" onclick="plan(this)"><div><div class="t">6 months</div><div class="s">£48.99 · Save 35%</div></div><div style="text-align:right"><div style="font-weight:900;font-size:15px">£8.17</div><div class="s">/month</div></div></button>
@@ -712,7 +711,7 @@
       $('mError').style.display = 'none';
     }
     $('modal').classList.add('open');
-    setTimeout(() => $('mEmail').focus(), 50);
+    setTimeout(() => $('mCode').focus(), 50);
   }
   function closeActivate() { $('modal').classList.remove('open'); }
   function plan(btn) { btn.parentNode.querySelectorAll('.plan').forEach(p => p.classList.toggle('on', p === btn)); }
@@ -753,13 +752,13 @@
       endpoints.push('/api/vpn/activate');
     }
     endpoints.push('https://sweeprvpn.com/api/vpn/activate', 'http://127.0.0.1:8788/api/vpn/activate', 'http://127.0.0.1:8080/api/vpn/activate');
-    let lastMsg = 'No active paid subscription found for that email and license key.';
+    let lastMsg = 'No active paid subscription found for that license key.';
     for (const url of endpoints) {
       try {
         const r = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, key: code, activation_code: code, otp: code, project_id: 'vpn' })
+          body: JSON.stringify({ email: email || undefined, key: code, activation_code: code, otp: code, project_id: 'vpn' })
         });
         const d = await r.json().catch(() => ({}));
         if (r.ok && d.ok && d.valid) {
@@ -779,17 +778,16 @@
     throw new Error(lastMsg);
   }
   async function confirmActivate() {
-    const email = $('mEmail').value.trim(), code = $('mCode').value.trim().toUpperCase();
-    if (!email && !code) { postNative('openCheckout', true); window.open('https://sweeprvpn.com/order', '_blank'); toast('Opening secure checkout in your browser…'); return; }
-    const isFullKey = /^SWEEPR-[A-Z0-9-]{8,}$/i.test(code);
-    if ((!isFullKey && !email.includes('@')) || code.length < 6) {
-      $('mError').textContent = 'Please enter the license key (e.g. SWEEPR-VPN-XXXX-XXXX-XXXX) and email address from your order.';
+    const code = $('mCode').value.trim().toUpperCase();
+    if (!code) { postNative('openCheckout', true); window.open('https://sweeprvpn.com/order', '_blank'); toast('Opening secure checkout in your browser…'); return; }
+    if (code.length < 6) {
+      $('mError').textContent = 'Please enter the license key from your order (e.g. SWEEPR-VPN-XXXX-XXXX-XXXX).';
       $('mError').style.display = 'block';
       return;
     }
     try {
-      const res = await verifyServerSubscription(email, code);
-      const resolvedEmail = (res && res.email && !String(res.email).includes('*')) ? String(res.email) : email;
+      const res = await verifyServerSubscription('', code);
+      const resolvedEmail = (res && res.email && !String(res.email).includes('*')) ? String(res.email) : '';
       const resolvedKey = (res && (res.licenseKey || res.license_key)) ? String(res.licenseKey || res.license_key) : code;
       state.pro = true; state.email = resolvedEmail; state.activationCode = code;
       document.querySelectorAll('.toggle.shield').forEach(t => t.classList.add('on'));
@@ -850,7 +848,7 @@
     $('planPill').className = 'pill ' + (state.pro ? 'ok' : 'warn');
     $('planPillText').textContent = state.pro ? 'Pro · 1 of 10 devices' : 'Free plan · Enter license key';
     $('accTitle').textContent = state.pro ? 'SWEEPR Pro is active' : 'Free plan';
-    $('accSub').textContent = state.pro ? '1 of 10 devices used · All countries and TV shields unlocked' : 'Already paid? Enter your email and license key to unlock up to 10 devices.';
+    $('accSub').textContent = state.pro ? '1 of 10 devices used · All countries and TV shields unlocked' : 'Already paid? Enter your license key to unlock up to 10 devices.';
     $('accPill').className = 'pill ' + (state.pro ? 'ok' : 'warn');
     $('accPill').textContent = state.pro ? 'Pro' : 'Free';
     $('accBtn').textContent = state.pro ? 'Manage my plan' : 'Enter license key or upgrade';

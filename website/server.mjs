@@ -661,7 +661,7 @@ if (ALLOW_DEMO_ACCOUNT) {
 
 function syncLocalCacheFromCrm(crmData, fallbackEmail = '', fallbackCode = '') {
   if (!crmData || typeof crmData !== 'object') return null;
-  const email = String(crmData.email || fallbackEmail || '').trim().toLowerCase();
+  const email = String(crmData.email || fallbackEmail || (crmData.account_id ? `${crmData.account_id}@license.sweeprvpn.com` : '')).trim().toLowerCase();
   const isActive = Boolean(crmData.valid === true && (crmData.status === 'active' || crmData.status === 'trialing' || !crmData.status));
   if (isActive && email) {
     const addonsList = Array.isArray(crmData.addons)
@@ -850,16 +850,14 @@ async function resolveVpnLicence(code, email) {
   let crmReachable = false;
 
   try {
-    const data = normEmail
-      ? await crm.activateDevice({
-          email: normEmail,
-          otp: cleanCode,
-          deviceId: 'vpn_tunnel_' + crypto.createHash('sha256').update(normEmail + ':' + cleanCode).digest('hex').slice(0, 12),
-          deviceName: 'SWEEPR VPN Tunnel',
-          os: 'windows',
-          appVersion: '2.5.0'
-        })
-      : await crm.verifyKey(cleanCode);
+    const data = await crm.activateDevice({
+      email: normEmail || undefined,
+      otp: cleanCode,
+      deviceId: 'vpn_tunnel_' + crypto.createHash('sha256').update((normEmail || 'key') + ':' + cleanCode).digest('hex').slice(0, 12),
+      deviceName: 'SWEEPR VPN Tunnel',
+      os: 'windows',
+      appVersion: '2.5.0'
+    });
 
     if (data && data._httpStatus && data._httpStatus < 500) {
       crmReachable = true;
