@@ -863,9 +863,8 @@ function renderPseoHtmlPage(page, allPages) {
   <meta name="description" content="${escapeHtml(page.metaDesc)}">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="${canonicalUrl}">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://cdn.tailwindcss.com">
+  <link rel="preconnect" href="https://www.googletagmanager.com">
 
   <!-- Open Graph -->
   <meta property="og:type" content="article">
@@ -1184,6 +1183,7 @@ if (action === 'matrix') {
   const baseUrls = [
     { loc: 'https://sweeprvpn.com/', priority: '1.0', changefreq: 'weekly' },
     { loc: 'https://sweeprvpn.com/pricing', priority: '0.9', changefreq: 'weekly' },
+    { loc: 'https://sweeprvpn.com/app', priority: '0.8', changefreq: 'weekly' },
     { loc: 'https://sweeprvpn.com/tools/leak-test', priority: '0.8', changefreq: 'weekly' },
     { loc: 'https://sweeprvpn.com/tools/isp-throttling-test', priority: '0.8', changefreq: 'weekly' },
     { loc: 'https://sweeprvpn.com/vs/totalvpn', priority: '0.8', changefreq: 'monthly' },

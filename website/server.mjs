@@ -2,6 +2,7 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import zlib from 'node:zlib';
 import { fileURLToPath } from 'node:url';
 import { SweeprCrmClient } from './sweepr-client.mjs';
 
@@ -33,7 +34,7 @@ const COMMON_SECURITY_HEADERS = {
   'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
   'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
   'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
-  'Content-Security-Policy': "frame-ancestors 'self'; base-uri 'self'; object-src 'none'"
+  'Content-Security-Policy': "frame-ancestors 'self'; base-uri 'self'; object-src 'none'; form-action 'self'"
 };
 
 const ALLOWED_STATIC_EXTENSIONS = new Set([
@@ -45,7 +46,12 @@ const ALLOWED_STATIC_EXTENSIONS = new Set([
   '.txt',
   '.svg',
   '.png',
+  '.webp',
+  '.avif',
   '.ico',
+  '.woff2',
+  '.woff',
+  '.ttf',
   '.exe'
 ]);
 
@@ -139,8 +145,10 @@ function resolveTrustedOrigin(req) {
 
 function getClientIp(req) {
   if (TRUST_PROXY) {
-    const cfIp = String(req.headers['cf-connecting-ip'] || '').trim();
-    if (cfIp) return cfIp;
+    if (process.env.TRUST_CLOUDFLARE === 'true') {
+      const cfIp = String(req.headers['cf-connecting-ip'] || '').trim();
+      if (cfIp) return cfIp;
+    }
     const xff = String(req.headers['x-forwarded-for'] || '').trim();
     if (xff) {
       const parts = xff.split(',').map((s) => s.trim()).filter(Boolean);
@@ -173,31 +181,6 @@ function checkRateLimit(req, bucketName, maxRequests = 30, windowMs = 60000) {
   return entry.count <= maxRequests;
 }
 
-// AES-256-GCM encrypted live Stripe credentials for SWEEPR VPN (acct_1USluy0Fq96R9TfN)
-const ENCRYPTED_LIVE_SK =
-  'b69e8d08228536390a88f032:d3262e7ee59be48f9dfb5448e995ba20:59c4ee424575c26bbee1691fae0a52663a26aa3245fbaa86c169ca4b8509334df7c9f52a91c77d6bf267c9d25560c7e7e3bb95d4cc32af2b26ae861553d588cf974135928391d5a176db06caed63f054a4a3696a2a15bb6c9f74ca45185da8d1aa64daf92e02a3d8fc1ffd';
-const ENCRYPTED_LIVE_WHSEC =
-  '2331ea8dc0639222a52fc494:e221342ced4b76c725adcd5a9ffa39ed:da898f00038b99af5ffa2da5af3bb8cdd75e66db2bbecb1da54a1e969741a6a1603a685d8906';
-
-function decryptWithAdminKey(payload) {
-  if (!payload) return '';
-  const candidates = [
-    (process.env.CRM_ADMIN_PASSWORD || '').trim(),
-    Buffer.from('QjNuamFtaW4xMjMh', 'base64').toString('utf8')
-  ].filter(Boolean);
-  for (const seed of candidates) {
-    try {
-      const [ivHex, tagHex, encHex] = payload.split(':');
-      const key = crypto.createHash('sha256').update(seed).digest();
-      const decipher = crypto.createDecipheriv('aes-256-gcm', key, Buffer.from(ivHex, 'hex'));
-      decipher.setAuthTag(Buffer.from(tagHex, 'hex'));
-      const out = Buffer.concat([decipher.update(Buffer.from(encHex, 'hex')), decipher.final()]).toString('utf8');
-      if (out) return out;
-    } catch {}
-  }
-  return '';
-}
-
 function resolveStripeSecretKey() {
   const envKey = (process.env.STRIPE_SECRET_KEY || process.env.VPN_STRIPE_SECRET_KEY || '').trim();
   if (
@@ -208,8 +191,6 @@ function resolveStripeSecretKey() {
   ) {
     return envKey;
   }
-  const dec = decryptWithAdminKey(ENCRYPTED_LIVE_SK);
-  if (dec.startsWith('sk_live_') || dec.startsWith('rk_live_')) return dec;
   return '';
 }
 
@@ -219,10 +200,6 @@ const IS_LIVE_STRIPE = STRIPE_SECRET_KEY.startsWith('sk_live_') || STRIPE_SECRET
 function resolveStripeWebhookSecret() {
   const envWh = (process.env.STRIPE_WEBHOOK_SECRET || process.env.VPN_STRIPE_WEBHOOK_SECRET || '').trim();
   if (envWh.startsWith('whsec_')) return envWh;
-  if (IS_LIVE_STRIPE) {
-    const dec = decryptWithAdminKey(ENCRYPTED_LIVE_WHSEC);
-    if (dec.startsWith('whsec_')) return dec;
-  }
   return '';
 }
 
@@ -747,7 +724,7 @@ function loadVpnNodes() {
       const v = JSON.parse(fs.readFileSync(localReg, 'utf8'));
       return Array.isArray(v) ? v.filter((n) => n && n.code && n.ip && n.agent_secret) : [];
     }
-    return {"code":null,"country":null,"city":null,"flag":null,"ip":null,"port":null,"public_key":null,"agent_port":null,"agent_secret":null};
+    return [];
   } catch {
     return [];
   }
@@ -949,7 +926,12 @@ const MIME_TYPES = {
   '.txt': 'text/plain; charset=utf-8',
   '.svg': 'image/svg+xml',
   '.png': 'image/png',
+  '.webp': 'image/webp',
+  '.avif': 'image/avif',
   '.ico': 'image/x-icon',
+  '.woff2': 'font/woff2',
+  '.woff': 'font/woff',
+  '.ttf': 'font/ttf',
   '.exe': 'application/vnd.microsoft.portable-executable'
 };
 
@@ -1047,9 +1029,14 @@ function sendHtml(res, statusCode, html, extraHeaders = {}) {
   res.end(html);
 }
 
-function renderPlatformDownloadPicker() {
-  const title = 'Choose Your Operating System';
-  const subtitle = 'Select your desktop installer below to start your free 30-second Home Wi-Fi & Speed Scan on Windows 10/11, macOS, or Linux.';
+function renderPlatformDownloadPicker(osType = 'other') {
+  const isMobile = osType === 'ios' || osType === 'android';
+  const title = isMobile
+    ? 'Protect Your Phone &amp; Computer'
+    : 'Choose Your Operating System';
+  const subtitle = isMobile
+    ? 'You are visiting on a mobile device. One SWEEPR VPN Pro plan protects up to 10 devices across iPhone, Android, Windows, and Mac — or you can copy the desktop installer link for your computer below.'
+    : 'Select your setup option below to start your free 30-second Home Wi-Fi &amp; Speed Scan or activate 1-click WireGuard protection.';
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -1062,8 +1049,8 @@ function renderPlatformDownloadPicker() {
   <script src="https://cdn.tailwindcss.com/3.4.5"></script>
   <link rel="stylesheet" href="/style.css">
 </head>
-<body class="text-gray-800 flex flex-col items-center justify-center min-h-screen p-4">
-  <div class="glass-card p-8 md:p-10 w-full max-w-lg text-center">
+<body class="text-gray-800 flex flex-col items-center justify-center min-h-screen p-4 overflow-x-hidden">
+  <div class="glass-card p-6 sm:p-10 w-full max-w-lg text-center">
     <a href="/?home=1" class="inline-flex items-center gap-2 text-inherit no-underline mb-4">
       <div class="logo-box">S</div>
       <span class="font-extrabold text-xl tracking-tight text-gray-900">SWEEPR <span class="text-emerald-600">VPN</span></span>
@@ -1071,16 +1058,30 @@ function renderPlatformDownloadPicker() {
     <h1 class="text-2xl font-black text-gray-900 mb-2">${title}</h1>
     <p class="text-sm text-gray-600 mb-6 leading-relaxed">${subtitle}</p>
     <div class="space-y-3 text-left mb-6">
-      <a href="/download?platform=win" class="flex items-center justify-between p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50/40 hover:bg-emerald-50 transition-all no-underline text-gray-900">
+      <a href="/order?plan=annual" class="flex items-center justify-between gap-3 p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50/50 hover:bg-emerald-50 transition-all no-underline text-gray-900">
         <div>
-          <div class="font-bold text-sm">Windows 10 &amp; 11 Installer (.exe)</div>
-          <div class="text-xs text-gray-500">SWEEPRVPN.exe &bull; Standalone App</div>
+          <div class="font-extrabold text-sm text-emerald-950">Get SWEEPR VPN Pro (Up to 10 Devices)</div>
+          <div class="text-xs text-emerald-800/80">Instant WireGuard setup for iOS, Android, Windows &amp; Mac &bull; Save 50%</div>
         </div>
-        <span class="btn btn-go text-xs py-2 px-3">Download</span>
+        <span class="btn btn-go text-xs py-2 px-3 shrink-0">Get Pro &rarr;</span>
+      </a>
+      <button type="button" onclick="navigator.clipboard.writeText(window.location.origin + '/download'); this.querySelector('.copy-pill').textContent='Copied ✓';" class="w-full flex items-center justify-between gap-3 p-4 rounded-xl border border-gray-200 bg-white hover:border-emerald-300 transition-all text-left cursor-pointer">
+        <div>
+          <div class="font-bold text-sm text-gray-900">Send Desktop Installer Link to Your PC / Mac</div>
+          <div class="text-xs text-gray-500">Copy <span class="font-mono">sweeprvpn.com/download</span> to open on your computer</div>
+        </div>
+        <span class="copy-pill text-xs font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-full shrink-0">Copy Link</span>
+      </button>
+      <a href="/download?platform=win" class="flex items-center justify-between gap-3 p-3.5 rounded-xl border border-gray-200 bg-gray-50/80 hover:bg-white transition-all no-underline text-gray-700">
+        <div>
+          <div class="font-bold text-xs text-gray-800">Windows 10 &amp; 11 Desktop Installer (.exe)</div>
+          <div class="text-[11px] text-gray-500">Direct download &bull; SWEEPRVPN.exe</div>
+        </div>
+        <span class="text-xs font-bold text-gray-600 underline shrink-0">Download .exe</span>
       </a>
     </div>
     <div class="flex flex-col sm:flex-row gap-3 justify-center pt-4 border-t border-gray-100">
-      <a href="/order" class="btn btn-go w-full justify-center">Get SWEEPR VPN Pro &rarr;</a>
+      <a href="/app" class="btn btn-ghost w-full justify-center border border-gray-200">Try Interactive App Preview</a>
       <a href="/?home=1" class="btn btn-ghost w-full justify-center">Back to Home</a>
     </div>
   </div>
@@ -1232,22 +1233,27 @@ const server = http.createServer(async (req, res) => {
     const requestedPlatform = (urlObj.searchParams.get('platform') || '').toLowerCase();
     const uaLower = ua.toLowerCase();
 
-    crm.reportTelemetryEvent({
-      event_name: 'installer_downloaded',
-      category: 'funnel',
-      os: requestedPlatform || 'windows',
-      properties: { path: '/download' }
-    }).catch(() => {});
-
     let osType = 'windows';
     if (requestedPlatform === 'mac' || requestedPlatform === 'macos') osType = 'mac';
     else if (requestedPlatform === 'linux') osType = 'linux';
+    else if (requestedPlatform === 'ios') osType = 'ios';
+    else if (requestedPlatform === 'android') osType = 'android';
     else if (requestedPlatform === 'win' || requestedPlatform === 'windows') osType = 'windows';
+    else if (/iphone|ipad|ipod/.test(uaLower)) osType = 'ios';
+    else if (uaLower.includes('android')) osType = 'android';
     else if (uaLower.includes('mac os') || uaLower.includes('macintosh')) osType = 'mac';
     else if (uaLower.includes('linux')) osType = 'linux';
 
-    if (requestedPlatform && osType !== 'windows') {
-      return sendHtml(res, 200, renderPlatformDownloadPicker(), {
+    crm.reportTelemetryEvent({
+      event_name: 'installer_downloaded',
+      category: 'funnel',
+      os: requestedPlatform || osType,
+      properties: { path: '/download' }
+    }).catch(() => {});
+
+    const forceWinExe = requestedPlatform === 'win' || requestedPlatform === 'windows';
+    if (!forceWinExe && osType !== 'windows') {
+      return sendHtml(res, 200, renderPlatformDownloadPicker(osType), {
         'X-Robots-Tag': 'noindex, follow'
       });
     }
@@ -2313,17 +2319,7 @@ const server = http.createServer(async (req, res) => {
     if (!isValidEmail(email)) {
       return sendJson(res, 400, { otpSent: false, error: 'Please enter a valid email address.' }, {}, req);
     }
-    const otpCode = String(crypto.randomInt(100000, 1000000));
-    portalOtpChallenges.set(email, {
-      code: otpCode,
-      expiresAt: Date.now() + 10 * 60 * 1000,
-      attempts: 0
-    });
-    if (portalOtpChallenges.size > 5000) {
-      const oldest = portalOtpChallenges.keys().next().value;
-      if (oldest) portalOtpChallenges.delete(oldest);
-    }
-    reportToSweeprCrm('/api/crm/portal-otp?project=vpn', { email });
+    reportToSweeprCrm('/v1/account/send-otp?project=vpn', { email, project_id: 'vpn' });
     return sendJson(res, 200, { otpSent: true }, {}, req);
   }
 
@@ -2339,19 +2335,8 @@ const server = http.createServer(async (req, res) => {
       return sendJson(res, 400, { ok: false, error: 'Invalid or expired 6-digit login code.' }, {}, req);
     }
 
-    const challenge = portalOtpChallenges.get(email);
     let acc = accountsByEmail.get(email);
-    const now = Date.now();
-
-    if (challenge) {
-      if (now > challenge.expiresAt || challenge.attempts >= 5) {
-        portalOtpChallenges.delete(email);
-      } else {
-        challenge.attempts += 1;
-      }
-    }
-
-    // Verify against centralized sweepr_crm first (supports CRM activation codes, license keys, and OTPs)
+    let crmReachable = false;
     let crmVerified = false;
     try {
       const crmRes = await crm.activateDevice({
@@ -2363,6 +2348,7 @@ const server = http.createServer(async (req, res) => {
         appVersion: '2.5.0'
       });
       if (crmRes && crmRes._httpStatus && crmRes._httpStatus < 500) {
+        crmReachable = true;
         const synced = syncLocalCacheFromCrm(crmRes, email, code);
         if (crmRes.valid && synced) {
           acc = synced;
@@ -2371,18 +2357,13 @@ const server = http.createServer(async (req, res) => {
       }
     } catch {}
 
-    const validChallenge =
-      Boolean(challenge && now <= challenge.expiresAt && challenge.attempts <= 5) &&
-      safeCompareStrings(code, challenge.code) &&
-      Boolean(acc && acc.status === 'active');
-
     const validActivationKey =
       crmVerified ||
-      (Boolean(acc && acc.status === 'active') &&
+      (!crmReachable &&
+        Boolean(acc && acc.status === 'active') &&
         safeCompareStrings(code, acc.activation_code));
 
-    if (validChallenge || validActivationKey) {
-      portalOtpChallenges.delete(email);
+    if (validActivationKey && acc) {
       const sessionToken = signSessionCookie(acc.id, acc.email);
       const isHttps = PUBLIC_URL.startsWith('https://') || req.headers['x-forwarded-proto'] === 'https';
       return sendJson(
@@ -2433,12 +2414,29 @@ const server = http.createServer(async (req, res) => {
     }
     try {
       const r = await callNodeAgent(node, 'POST', '/peers', { public_key: publicKey, licence: licence.id });
+      const pinnedPubKey = String(node.public_key || '').trim();
+      const agentPubKey = String(r.public_key || '').trim();
+      if (pinnedPubKey && agentPubKey && pinnedPubKey !== agentPubKey) {
+        throw new Error('node_public_key_mismatch');
+      }
+      const serverPubKey = pinnedPubKey || agentPubKey;
+      if (!/^[A-Za-z0-9+/]{42}[AEIMQUYcgkosw480]=$/.test(serverPubKey)) {
+        throw new Error('invalid_server_public_key');
+      }
+      const assignedAddress = String(r.address || '').trim();
+      if (!/^\d{1,3}(?:\.\d{1,3}){3}\/\d{1,2}$/.test(assignedAddress)) {
+        throw new Error('invalid_assigned_address');
+      }
+      const assignedDns = String(r.dns || '10.64.0.1').trim();
+      if (!/^\d{1,3}(?:\.\d{1,3}){3}$/.test(assignedDns)) {
+        throw new Error('invalid_assigned_dns');
+      }
       return sendJson(res, 200, {
         ok: true,
         endpoint: `${node.ip}:${node.port || 51820}`,
-        server_public_key: r.public_key || node.public_key,
-        address: r.address,
-        dns: r.dns || '10.64.0.1',
+        server_public_key: serverPubKey,
+        address: assignedAddress,
+        dns: assignedDns,
         allowed_ips: '0.0.0.0/0',
         server: { code: node.code, country: node.country, city: node.city, flag: node.flag }
       }, {}, req);
@@ -2508,9 +2506,54 @@ const server = http.createServer(async (req, res) => {
       headers['Cache-Control'] = 'no-store, no-cache, must-revalidate';
     } else if (isLoginRoute) {
       headers['X-Robots-Tag'] = 'noindex, nofollow';
-    } else if (['.svg', '.png', '.ico', '.css', '.js'].includes(ext)) {
-      headers['Cache-Control'] = 'public, max-age=86400';
+      headers['Cache-Control'] = 'no-store, no-cache, must-revalidate';
+    } else if (['.svg', '.png', '.ico', '.css', '.js', '.webp', '.avif', '.woff2', '.woff', '.ttf'].includes(ext)) {
+      headers['Cache-Control'] = 'public, max-age=604800, stale-while-revalidate=86400';
+    } else if (ext === '.html') {
+      headers['Cache-Control'] = 'public, max-age=3600, stale-while-revalidate=86400';
     }
+
+    // Conditional HTTP ETag (304 Not Modified)
+    const etag = `W/"${content.length.toString(16)}-${crypto.createHash('md5').update(content).digest('hex').slice(0, 16)}"`;
+    headers['ETag'] = etag;
+
+    const ifNoneMatch = req.headers['if-none-match'];
+    if (ifNoneMatch && (ifNoneMatch === etag || ifNoneMatch === '*' || ifNoneMatch.includes(etag))) {
+      res.writeHead(304, headers);
+      res.end();
+      return;
+    }
+
+    // Transparent Brotli & Gzip compression for compressible static assets
+    const compressible = /^(text\/|application\/(javascript|json|xml)|image\/svg\+xml)/i.test(headers['Content-Type'] || '');
+    const acceptEncoding = String(req.headers['accept-encoding'] || '');
+
+    if (compressible && content.length > 512) {
+      headers['Vary'] = 'Accept-Encoding';
+      if (/\bbr\b/i.test(acceptEncoding)) {
+        try {
+          const compressed = zlib.brotliCompressSync(content, {
+            params: { [zlib.constants.BROTLI_PARAM_QUALITY]: 5 }
+          });
+          headers['Content-Encoding'] = 'br';
+          headers['Content-Length'] = compressed.length;
+          res.writeHead(200, headers);
+          res.end(compressed);
+          return;
+        } catch {}
+      } else if (/\bgzip\b/i.test(acceptEncoding)) {
+        try {
+          const compressed = zlib.gzipSync(content, { level: 6 });
+          headers['Content-Encoding'] = 'gzip';
+          headers['Content-Length'] = compressed.length;
+          res.writeHead(200, headers);
+          res.end(compressed);
+          return;
+        } catch {}
+      }
+    }
+
+    headers['Content-Length'] = content.length;
     res.writeHead(200, headers);
     res.end(content);
   });

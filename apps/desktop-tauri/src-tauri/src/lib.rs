@@ -13,10 +13,9 @@ async fn scan_network() -> Result<sweepr_wifi_radar::ScanReport, String> {
 async fn activate_subscription(
     email: String,
     code: String,
-    api_url: Option<String>,
 ) -> Result<sweepr_tunnel::SubscriptionStatus, String> {
     tauri::async_runtime::spawn_blocking(move || {
-        sweepr_tunnel::verify_subscription(email, code, api_url)
+        sweepr_tunnel::verify_subscription(email, code, None)
     })
     .await
     .map_err(|e| e.to_string())?
@@ -36,14 +35,13 @@ async fn connect_vpn(
     server_code: String,
     email: Option<String>,
     activation_code: Option<String>,
-    api_url: Option<String>,
 ) -> Result<sweepr_tunnel::TunnelStatus, String> {
     tauri::async_runtime::spawn_blocking(move || {
         sweepr_tunnel::connect(sweepr_tunnel::ConnectRequest {
             server_code,
             email,
             activation_code,
-            api_url,
+            api_url: None,
         })
     })
     .await

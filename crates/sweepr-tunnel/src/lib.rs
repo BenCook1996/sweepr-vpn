@@ -349,11 +349,21 @@ fn load_or_create_state() -> Result<PersistedState, String> {
     Ok(st)
 }
 
+fn write_private_file(path: &Path, contents: &str) -> Result<(), String> {
+    fs::write(path, contents).map_err(|e| e.to_string())?;
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::PermissionsExt;
+        let _ = fs::set_permissions(path, fs::Permissions::from_mode(0o600));
+    }
+    Ok(())
+}
+
 fn save_state(st: &PersistedState) -> Result<(), String> {
     let dir = app_data_dir();
     fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
     let json = serde_json::to_string_pretty(st).map_err(|e| e.to_string())?;
-    fs::write(state_path(), json).map_err(|e| e.to_string())
+    write_private_file(&state_path(), &json)
 }
 
 // ---------------------------------------------------------------------------
@@ -513,15 +523,30 @@ pub fn verify_ed25519_license_token(token: &str) -> Result<(), String> {
     Ok(())
 }
 
-fn default_api_candidates(api_url: Option<String>) -> Vec<String> {
-    let env_url = std::env::var("SWEEPR_API_URL").ok();
-    if let Some(u) = api_url.or(env_url) {
-        return vec![u];
+fn is_allowed_api_url(u: &str, allow_local: bool) -> bool {
+    let trimmed = u.trim();
+    if trimmed.is_empty() || trimmed.chars().any(|c| c.is_whitespace() || c.is_control()) {
+        return false;
     }
+    if trimmed.starts_with("https://") {
+        return true;
+    }
+    allow_local
+        && (trimmed.starts_with("http://127.0.0.1:")
+            || trimmed.starts_with("http://localhost:"))
+}
+
+fn default_api_candidates(api_url: Option<String>) -> Vec<String> {
     let allow_local = cfg!(debug_assertions)
         || std::env::var("SWEEPR_ALLOW_LOCAL_API")
             .map(|v| v == "1" || v.eq_ignore_ascii_case("true"))
             .unwrap_or(false);
+    let env_url = std::env::var("SWEEPR_API_URL").ok();
+    if let Some(u) = api_url.or(env_url) {
+        if is_allowed_api_url(&u, allow_local) {
+            return vec![u.trim().trim_end_matches('/').to_string()];
+        }
+    }
     if allow_local {
         vec![
             "http://127.0.0.1:8788".to_string(),
@@ -647,10 +672,10 @@ fn ensure_wireguard_windows() -> Result<PathBuf, String> {
         use std::os::windows::process::CommandExt;
         dl.creation_flags(0x08000000);
     }
-    let _ = dl.status();
-    if installer.exists() {
+    let dl_ok = dl.status().map(|s| s.success()).unwrap_or(false);
+    if dl_ok && installer.exists() {
         let ps = format!(
-            "Start-Process -FilePath '{}' -ArgumentList '/install','/quiet' -Verb RunAs -Wait",
+            "$p = '{}'; $sig = Get-AuthenticodeSignature -LiteralPath $p; if ($sig.Status -ne 'Valid') {{ Remove-Item -LiteralPath $p -Force -ErrorAction SilentlyContinue; exit 1 }}; Start-Process -FilePath $p -ArgumentList '/install','/quiet' -Verb RunAs -Wait",
             installer.display()
         );
         let mut run = Command::new("powershell");
@@ -876,13 +901,17 @@ pub fn connect(req: ConnectRequest) -> Result<TunnelStatus, String> {
         return Err(msg);
     }
 
-    let endpoint = resp.endpoint.ok_or("Server did not return an endpoint.")?;
+    let endpoint = resp.endpoint.ok_or("Server did not return an endpoint.")?.trim().to_string();
     let server_pub = resp
         .server_public_key
-        .ok_or("Server did not return a WireGuard public key.")?;
-    let address = resp.address.unwrap_or_else(|| "10.64.0.2/32".into());
-    let dns = resp.dns.unwrap_or_else(|| "10.64.0.1".into());
-    let allowed_ips = resp.allowed_ips.unwrap_or_else(|| "0.0.0.0/0".into());
+        .ok_or("Server did not return a WireGuard public key.")?
+        .trim()
+        .to_string();
+    let address = resp.address.unwrap_or_else(|| "10.64.0.2/32".into()).trim().to_string();
+    let dns = resp.dns.unwrap_or_else(|| "10.64.0.1".into()).trim().to_string();
+    let allowed_ips = resp.allowed_ips.unwrap_or_else(|| "0.0.0.0/0".into()).trim().to_string();
+
+    validate_wg_conf_fields(&server_pub, &endpoint, &address, &dns, &allowed_ips)?;
 
     let wg_conf = format!(
         "[Interface]\nPrivateKey = {}\nAddress = {}\nDNS = {}\n\n[Peer]\nPublicKey = {}\nEndpoint = {}\nAllowedIPs = {}\nPersistentKeepalive = 25\n",
@@ -890,7 +919,7 @@ pub fn connect(req: ConnectRequest) -> Result<TunnelStatus, String> {
     );
 
     let cpath = conf_path();
-    fs::write(&cpath, wg_conf).map_err(|e| format!("Could not write tunnel config: {e}"))?;
+    write_private_file(&cpath, &wg_conf).map_err(|e| format!("Could not write tunnel config: {e}"))?;
 
     bring_tunnel_up(&cpath)?;
 
@@ -912,8 +941,61 @@ pub fn connect(req: ConnectRequest) -> Result<TunnelStatus, String> {
     })
 }
 
+fn validate_wg_conf_fields(
+    server_pub: &str,
+    endpoint: &str,
+    address: &str,
+    dns: &str,
+    allowed_ips: &str,
+) -> Result<(), String> {
+    if server_pub.len() != 44
+        || !server_pub.ends_with('=')
+        || !server_pub[..43]
+            .chars()
+            .all(|c| c.is_ascii_alphanumeric() || c == '+' || c == '/')
+    {
+        return Err("Invalid server WireGuard public key.".into());
+    }
+    if endpoint.parse::<std::net::SocketAddr>().is_err() {
+        return Err("Invalid server WireGuard endpoint address.".into());
+    }
+    let (addr_ip, addr_prefix) = address
+        .split_once('/')
+        .ok_or_else(|| "Invalid tunnel IPv4 CIDR address.".to_string())?;
+    if addr_ip.parse::<std::net::Ipv4Addr>().is_err()
+        || addr_prefix
+            .parse::<u8>()
+            .map(|p| p > 32)
+            .unwrap_or(true)
+    {
+        return Err("Invalid tunnel IPv4 CIDR address.".into());
+    }
+    if dns.parse::<std::net::Ipv4Addr>().is_err() {
+        return Err("Invalid tunnel DNS IPv4 address.".into());
+    }
+    for token in allowed_ips.split(',') {
+        let tok = token.trim();
+        let (ip_str, pref_str) = tok
+            .split_once('/')
+            .ok_or_else(|| "Invalid AllowedIPs CIDR entry.".to_string())?;
+        let ip = ip_str
+            .parse::<std::net::IpAddr>()
+            .map_err(|_| "Invalid AllowedIPs IP address.".to_string())?;
+        let max_pref = if ip.is_ipv4() { 32 } else { 128 };
+        if pref_str
+            .parse::<u8>()
+            .map(|p| p > max_pref)
+            .unwrap_or(true)
+        {
+            return Err("Invalid AllowedIPs prefix length.".into());
+        }
+    }
+    Ok(())
+}
+
 pub fn disconnect() -> Result<TunnelStatus, String> {
     bring_tunnel_down()?;
+    let _ = fs::remove_file(conf_path());
     status()
 }
 
@@ -945,5 +1027,10 @@ mod tests {
 
         // Verify forged/unsigned token is rejected by Ed25519 verifier
         assert!(verify_ed25519_license_token("eyJhbGciOiJFZERTQSJ9.eyJzdGF0dXMiOiJhY3RpdmUifQ.AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA").is_err());
+
+        // Verify valid WireGuard config fields pass and newline/PostUp injection is rejected
+        assert!(validate_wg_conf_fields(&kp.public_key, "78.141.205.68:51820", "10.64.0.2/32", "10.64.0.1", "0.0.0.0/0").is_ok());
+        assert!(validate_wg_conf_fields(&kp.public_key, "78.141.205.68:51820", "10.64.0.2/32\nPostUp = calc.exe", "10.64.0.1", "0.0.0.0/0").is_err());
+        assert!(validate_wg_conf_fields(&kp.public_key, "78.141.205.68:51820", "10.64.0.2/32", "10.64.0.1\nPostUp = id", "0.0.0.0/0").is_err());
     }
 }

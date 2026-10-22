@@ -27,6 +27,8 @@ KEY_RE = re.compile(r"^[A-Za-z0-9+/]{42}[AEIMQUYcgkosw480]=$")
 
 lock = threading.Lock()
 nonces = {}
+CACHED_PUBLIC_KEY = ""
+CACHED_DEVICE_COUNT = 0
 
 
 def load():
@@ -38,11 +40,13 @@ def load():
 
 
 def save(state):
+    global CACHED_DEVICE_COUNT
     tmp = STATE + ".tmp"
     with open(tmp, "w") as f:
         json.dump(state, f)
     os.chmod(tmp, 0o600)
     os.replace(tmp, STATE)
+    CACHED_DEVICE_COUNT = len(state.get("peers", {}))
 
 
 def wg(*args):
@@ -50,7 +54,11 @@ def wg(*args):
 
 
 def server_public_key():
-    return subprocess.run(["wg", "show", IFACE, "public-key"], check=True, capture_output=True, text=True).stdout.strip()
+    global CACHED_PUBLIC_KEY
+    if CACHED_PUBLIC_KEY:
+        return CACHED_PUBLIC_KEY
+    CACHED_PUBLIC_KEY = subprocess.run(["wg", "show", IFACE, "public-key"], check=True, capture_output=True, text=True).stdout.strip()
+    return CACHED_PUBLIC_KEY
 
 
 def apply_all(state):
@@ -143,6 +151,7 @@ def revoke_licence(licence):
 
 class Handler(BaseHTTPRequestHandler):
     server_version = "sweepr-agent"
+    timeout = 5
 
     def log_message(self, *args):  # no request logs, by design
         pass
@@ -171,11 +180,18 @@ class Handler(BaseHTTPRequestHandler):
         if not hmac.compare_digest(expected, sig):
             return None
         now = time.time()
-        for k in [k for k, t in nonces.items() if now - t > 120]:
-            nonces.pop(k, None)
-        if nonce in nonces:
-            return None
-        nonces[nonce] = now
+        with lock:
+            if len(nonces) >= 10000:
+                for k in [k for k, t in list(nonces.items()) if now - t > 120]:
+                    nonces.pop(k, None)
+                if len(nonces) >= 10000:
+                    nonces.pop(next(iter(nonces)), None)
+            elif len(nonces) > 256:
+                for k in [k for k, t in list(nonces.items()) if now - t > 120]:
+                    nonces.pop(k, None)
+            if nonce in nonces and now - nonces[nonce] <= 120:
+                return None
+            nonces[nonce] = now
         try:
             return json.loads(body or b"{}")
         except Exception:
@@ -183,9 +199,8 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         if self.path == "/health":
-            # Public: lets the website show which servers are online and how busy they are.
-            state = load()
-            return self.reply(200, {"ok": True, "public_key": server_public_key(), "devices": len(state["peers"])})
+            # Public: lets the website show which servers are online and how busy they are (zero disk/subprocess I/O).
+            return self.reply(200, {"ok": True, "public_key": server_public_key(), "devices": CACHED_DEVICE_COUNT})
         self.reply(404, {"ok": False})
 
     def do_POST(self):
@@ -228,6 +243,12 @@ if __name__ == "__main__":
         st = load()
         if prune_expired_peers_unlocked(st):
             save(st)
+        else:
+            CACHED_DEVICE_COUNT = len(st.get("peers", {}))
         apply_all(st)
+        try:
+            server_public_key()
+        except Exception:
+            pass
     threading.Thread(target=peer_reaper_loop, daemon=True).start()
     ThreadingHTTPServer(("0.0.0.0", PORT), Handler).serve_forever()

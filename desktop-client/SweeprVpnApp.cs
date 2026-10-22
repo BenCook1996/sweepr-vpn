@@ -403,10 +403,10 @@ namespace SweeprVpnApp
         {
             try
             {
-                if (File.Exists(targetPath) && new FileInfo(targetPath).Length > 1024) return;
                 using (Stream s = Assembly.GetExecutingAssembly().GetManifestResourceStream(resName))
                 {
                     if (s == null) return;
+                    if (File.Exists(targetPath) && new FileInfo(targetPath).Length == s.Length) return;
                     using (FileStream fs = new FileStream(targetPath, FileMode.Create, FileAccess.Write))
                     {
                         s.CopyTo(fs);
@@ -450,7 +450,7 @@ namespace SweeprVpnApp
             if (form.DiscoveredLanDevices.Count < 2)
                 throw new Exception("RunWifiScan failed.");
 
-            if (!form.ActivateLicense("cookbenjamin1996@gmail.com", "817797") || !form.IsPro)
+            if (!form.ActivateLicense("selftest@sweeprvpn.com", "123456") || !form.IsPro)
                 throw new Exception("ActivateLicense failed.");
 
             string json = "{\"ok\":true,\"engine\":\"WebView2_Chromium_HighDPI\",\"faviconEmbedded\":true,\"desktopSelfTest\":\"PASSED\",\"serversCount\":" + form.Servers.Count + ",\"lanDevicesFound\":" + form.DiscoveredLanDevices.Count + "}";

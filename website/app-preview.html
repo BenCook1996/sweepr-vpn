@@ -3,7 +3,42 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>SWEEPR VPN</title>
+<title>SWEEPR VPN Interactive App Preview &amp; Wi-Fi Radar</title>
+<meta name="description" content="Experience SWEEPR VPN directly in your browser: 1-click 10Gbps WireGuard encryption, instant 30-second Home Wi-Fi LAN device audit, and Smart-TV ACR telemetry blocking." />
+<link rel="canonical" href="https://sweeprvpn.com/app" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/png" href="/favicon.png" media="(prefers-color-scheme: light)" />
+<link rel="icon" type="image/png" href="/favicon-dark.png" media="(prefers-color-scheme: dark)" />
+<link rel="shortcut icon" href="/favicon.ico" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="SWEEPR VPN" />
+<meta property="og:locale" content="en_GB" />
+<meta property="og:url" content="https://sweeprvpn.com/app" />
+<meta property="og:title" content="SWEEPR VPN Interactive App Preview &amp; Wi-Fi Radar" />
+<meta property="og:description" content="Test 1-click WireGuard connections, 30-second Home Wi-Fi Scanner, and Smart-TV ACR spy blocking in your browser." />
+<meta property="og:image" content="https://sweeprvpn.com/og-image.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content="https://sweeprvpn.com/app" />
+<meta name="twitter:title" content="SWEEPR VPN Interactive App Preview &amp; Wi-Fi Radar" />
+<meta name="twitter:description" content="Interactive demo of SWEEPR VPN: 10Gbps WireGuard client, 30s Wi-Fi device audit, and Smart-TV ACR shield." />
+<meta name="twitter:image" content="https://sweeprvpn.com/og-image.png" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "SWEEPR VPN Pro Desktop App",
+  "operatingSystem": "Windows 10, Windows 11, macOS, Linux",
+  "applicationCategory": "SecurityApplication",
+  "fileSize": "3.7MB",
+  "downloadUrl": "https://sweeprvpn.com/download",
+  "offers": {
+    "@type": "Offer",
+    "price": "1.99",
+    "priceCurrency": "GBP"
+  }
+}
+</script>
 <style>
   :root {
     --e400:#34d399; --e500:#10b981; --e600:#059669; --e700:#047857; --mint:#a7f3d0; --mint50:#ecfdf5;
@@ -163,6 +198,24 @@
   .c-list { border:1px solid var(--line); border-radius:16px; overflow-y:auto; flex:1; background:var(--card); }
   .c-list .loc { border-radius:0; border-bottom:1px solid var(--line); margin:0; }
   .c-list::-webkit-scrollbar { width:6px; } .c-list::-webkit-scrollbar-thumb { background:rgba(148,163,184,.35); border-radius:9px; }
+
+  @media (max-width: 820px) {
+    html, body { height:auto; min-height:100%; overflow-x:hidden; overflow-y:auto; }
+    .app { display:flex; flex-direction:column; height:auto; min-height:100vh; }
+    .rail { order:1; flex-direction:row; width:100%; border-right:0; border-bottom:1px solid var(--line); padding:10px 14px; justify-content:space-around; position:sticky; top:0; z-index:30; }
+    .rail .logo { margin-bottom:0; }
+    .rail .spacer { display:none; }
+    .rail-btn .tip { display:none; }
+    .panel { order:2; margin:12px 14px 4px; border-radius:22px; padding:18px; }
+    .h-big { font-size:24px; }
+    .info { margin-top:16px; gap:12px 10px; }
+    .timer { margin-top:14px; margin-bottom:14px; }
+    .timer .n { font-size:28px; }
+    .main { order:3; padding:16px 14px 28px; overflow-y:visible; }
+    .rec-grid { grid-template-columns:1fr; }
+    .compact { height:auto; min-height:100vh; }
+    .c-city { font-size:30px; }
+  }
 
   /* Modal */
   .backdrop { position:fixed; inset:0; background:rgba(15,23,42,.5); backdrop-filter:blur(6px); display:none; align-items:center; justify-content:center; z-index:100; padding:20px; }
@@ -458,14 +511,14 @@
     const on = s.code === state.code;
     const right = on && state.connected ? '<span class="pill ok">Connected ✓</span>'
       : (s.rating === 'Great' ? '<span class="pill ok">Great</span>' : '<span class="pill warn">Good</span>');
-    return '<button class="loc' + (on ? ' on' : '') + '" onclick="pick(\'' + s.code + '\')">' +
-      '<span class="flag" data-flag="' + s.flag + '"></span>' +
-      '<div class="grow"><div class="t">' + s.country + '</div><div class="s">' + s.city + ' · ' + s.desc + '</div></div>' + right + '</button>';
+    return '<button class="loc' + (on ? ' on' : '') + '" onclick="pick(\'' + esc(s.code) + '\')">' +
+      '<span class="flag" data-flag="' + esc(s.flag) + '"></span>' +
+      '<div class="grow"><div class="t">' + esc(s.country) + '</div><div class="s">' + esc(s.city) + ' · ' + esc(s.desc) + '</div></div>' + right + '</button>';
   }
   function renderList() {
     const q = ($('search').value || '').trim().toLowerCase();
     const items = SERVERS.filter(s => !q || (s.country + ' ' + s.city).toLowerCase().includes(q));
-    $('locList').innerHTML = items.length ? items.map(s => locRow(s)).join('') : '<div class="s" style="padding:14px;text-align:center">No country matches "' + q + '"</div>';
+    $('locList').innerHTML = items.length ? items.map(s => locRow(s)).join('') : '<div class="s" style="padding:14px;text-align:center">No country matches "' + esc(q) + '"</div>';
     $('countLabel').textContent = items.length + (items.length === 1 ? ' place' : ' places');
     $('recBlock').classList.toggle('hidden', !!q);
     $('cList').innerHTML = SERVERS.map(s => locRow(s, true)).join('');

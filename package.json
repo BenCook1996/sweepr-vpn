@@ -4,7 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node website/server.mjs"
+    "start": "node website/server.mjs",
+    "seo:drip": "node scripts/daily-50-seo-pages.mjs 50",
+    "seo:backlinks": "node scripts/vpn-seo-drip.mjs 300",
+    "seo:audit": "node scripts/daily-seo-pagespeed-audit.mjs",
+    "seo:validate": "node .agents/skills/vpn-seo-and-geo/scripts/pseo_and_seo_validator.mjs --action validate"
   },
   "engines": {
     "node": ">=20.0.0"

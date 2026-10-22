@@ -25,6 +25,7 @@ body {
   background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
   margin: 0;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   min-height: 100vh;

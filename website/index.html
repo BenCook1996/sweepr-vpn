@@ -28,9 +28,8 @@
   <meta name="description" content="Keep your browsing private in 1 click, see every device on your home Wi-Fi, and stop internet slowdowns. Tiny ~14MB app with zero popups. Try it free today.">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="https://sweeprvpn.com/">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://cdn.tailwindcss.com">
+  <link rel="preconnect" href="https://www.googletagmanager.com">
 
   <!-- Open Graph / Social Meta -->
   <meta property="og:type" content="website">
@@ -150,7 +149,7 @@
     gtag('config', 'G-7D28EEMNXX');
   </script>
 </head>
-<body class="text-gray-800">
+<body class="text-gray-800 overflow-x-hidden">
 
   <!-- Navigation -->
   <nav class="glass-nav px-4 md:px-6 py-4 flex items-center justify-between">
@@ -263,12 +262,12 @@
       <p class="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl mx-auto md:mx-0">
         Keep your browsing private in one click, see every device connected to your home Wi-Fi, and stop your internet provider from slowing down your speeds. Experience the simplest, fastest VPN ever built.
       </p>
-      <div class="flex flex-col sm:flex-row items-center gap-4 justify-center md:justify-start">
-        <a href="/download" id="downloadBtn" class="btn btn-go btn-big pulse-glow gap-2.5">
+      <div class="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 justify-center md:justify-start">
+        <a href="/download" id="downloadBtn" class="btn btn-go btn-big pulse-glow gap-2.5 w-full sm:w-auto justify-center">
           <span>Free Download</span>
           <svg class="arrow-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
-        <a href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-big bg-white border border-gray-300 hover:border-gray-400 text-gray-800">Get Pro Now</a>
+        <a href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-big bg-white border border-gray-300 hover:border-gray-400 text-gray-800 w-full sm:w-auto justify-center">Get Pro Now</a>
       </div>
       <div class="flex flex-wrap items-center gap-3 justify-center md:justify-start mt-4 text-xs text-gray-500 font-medium">
         <span>⚡ 8 Fast Global Locations</span>
@@ -279,7 +278,7 @@
       </div>
     </div>
     <div class="flex-1 relative w-full max-w-lg">
-      <div class="glass-card p-6 flex flex-col gap-4 transform rotate-1 hover:rotate-0 transition-transform duration-500">
+      <div class="glass-card p-5 sm:p-6 flex flex-col gap-4 transform sm:rotate-1 hover:rotate-0 transition-transform duration-500">
         <!-- Desktop UI Inspired Header Card -->
         <div class="flex items-center justify-between gap-3 bg-emerald-50/70 border border-emerald-200/80 rounded-2xl p-3.5">
           <div class="flex items-center gap-3">
@@ -289,7 +288,7 @@
             <div class="text-left">
               <div class="flex items-center gap-1.5">
                 <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span class="text-[11px] font-extrabold uppercase tracking-wider text-emerald-700">Your computer is protected</span>
+                <span class="text-[11px] font-extrabold uppercase tracking-wider text-emerald-700">Your device is protected</span>
               </div>
               <h3 class="font-black text-gray-900 text-base leading-tight mt-0.5">United Kingdom &middot; London</h3>
             </div>
@@ -298,47 +297,62 @@
         </div>
 
         <!-- 3 Desktop-UI Inspired Feature Cards -->
-        <div class="grid grid-cols-3 gap-2.5 text-left">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-left">
           <!-- Card 1: 8 Locations -->
-          <div class="bg-white border border-gray-200/90 hover:border-emerald-300 rounded-2xl p-3 shadow-xs flex flex-col justify-between transition-colors">
-            <div class="flex items-center justify-between gap-1 mb-2">
+          <div class="bg-white border border-gray-200/90 hover:border-emerald-300 rounded-2xl p-3 shadow-xs flex flex-row sm:flex-col items-center sm:items-stretch justify-between gap-2 transition-colors">
+            <div class="flex items-center sm:justify-between gap-2.5 sm:gap-1 sm:mb-2">
               <div class="w-7 h-5 rounded overflow-hidden border border-gray-200 shadow-2xs shrink-0">
                 <svg viewBox="0 0 60 40" class="w-full h-full block"><rect width="60" height="40" fill="#012169"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#fff" stroke-width="8"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#C8102E" stroke-width="4"/><path d="M30,0V40 M0,20H60" stroke="#fff" stroke-width="12"/><path d="M30,0V40 M0,20H60" stroke="#C8102E" stroke-width="7"/></svg>
               </div>
-              <span class="text-[10px] font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded-full">10 Gbps</span>
+              <div class="sm:hidden">
+                <div class="text-sm font-black text-gray-900 leading-tight">8 Locations</div>
+                <div class="text-[11px] font-semibold text-gray-500">UK, EU, US &amp; Asia</div>
+              </div>
+              <span class="hidden sm:inline-block text-[10px] font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded-full">10 Gbps</span>
             </div>
-            <div>
+            <div class="hidden sm:block">
               <div class="text-sm font-black text-gray-900 leading-tight">8 Locations</div>
               <div class="text-[11px] font-semibold text-gray-500 mt-0.5">UK, EU, US &amp; Asia</div>
             </div>
+            <span class="sm:hidden text-[11px] font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full shrink-0">10 Gbps</span>
           </div>
 
           <!-- Card 2: IP Hidden & Zero Logs -->
-          <div class="bg-white border border-gray-200/90 hover:border-emerald-300 rounded-2xl p-3 shadow-xs flex flex-col justify-between transition-colors">
-            <div class="flex items-center justify-between gap-1 mb-2">
+          <div class="bg-white border border-gray-200/90 hover:border-emerald-300 rounded-2xl p-3 shadow-xs flex flex-row sm:flex-col items-center sm:items-stretch justify-between gap-2 transition-colors">
+            <div class="flex items-center sm:justify-between gap-2.5 sm:gap-1 sm:mb-2">
               <div class="w-7 h-7 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center shrink-0">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
               </div>
-              <span class="text-[10px] font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded-full">Hidden ✓</span>
+              <div class="sm:hidden">
+                <div class="text-sm font-black text-gray-900 leading-tight">IP Hidden</div>
+                <div class="text-[11px] font-semibold text-gray-500">0 Activity Logs</div>
+              </div>
+              <span class="hidden sm:inline-block text-[10px] font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded-full">Hidden ✓</span>
             </div>
-            <div>
+            <div class="hidden sm:block">
               <div class="text-sm font-black text-gray-900 leading-tight">IP Hidden</div>
               <div class="text-[11px] font-semibold text-gray-500 mt-0.5">0 Activity Logs</div>
             </div>
+            <span class="sm:hidden text-[11px] font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full shrink-0">Hidden ✓</span>
           </div>
 
           <!-- Card 3: Wi-Fi & Smart-TV Shield -->
-          <div class="bg-white border border-gray-200/90 hover:border-emerald-300 rounded-2xl p-3 shadow-xs flex flex-col justify-between transition-colors">
-            <div class="flex items-center justify-between gap-1 mb-2">
+          <div class="bg-white border border-gray-200/90 hover:border-emerald-300 rounded-2xl p-3 shadow-xs flex flex-row sm:flex-col items-center sm:items-stretch justify-between gap-2 transition-colors">
+            <div class="flex items-center sm:justify-between gap-2.5 sm:gap-1 sm:mb-2">
               <div class="w-7 h-7 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center shrink-0">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"/></svg>
               </div>
-              <span class="text-[10px] font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded-full">Safe ✓</span>
+              <div class="sm:hidden">
+                <div class="text-sm font-black text-gray-900 leading-tight">Wi-Fi &amp; TV</div>
+                <div class="text-[11px] font-semibold text-gray-500">Up to 10 Devices</div>
+              </div>
+              <span class="hidden sm:inline-block text-[10px] font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded-full">Safe ✓</span>
             </div>
-            <div>
+            <div class="hidden sm:block">
               <div class="text-sm font-black text-gray-900 leading-tight">Wi-Fi &amp; TV</div>
               <div class="text-[11px] font-semibold text-gray-500 mt-0.5">Up to 10 Devices</div>
             </div>
+            <span class="sm:hidden text-[11px] font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full shrink-0">Safe ✓</span>
           </div>
         </div>
 

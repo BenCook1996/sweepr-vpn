@@ -9,7 +9,7 @@ on:
 jobs:
   build-desktop:
     permissions:
-      contents: write
+      contents: read
     strategy:
       fail-fast: false
       matrix:
@@ -52,7 +52,7 @@ jobs:
 
       - name: Install Tauri CLI dependencies
         working-directory: apps/desktop-tauri
-        run: npm install
+        run: npm ci --no-audit || npm install --no-audit
 
       - name: Build Tauri application & installers
         working-directory: apps/desktop-tauri
