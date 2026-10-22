@@ -1130,7 +1130,9 @@ function renderPlatformDownloadPicker(osType = 'other') {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Download SWEEPR VPN</title>
   <meta name="robots" content="noindex, follow">
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/logo-emerald.svg?v=5">
+  <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png?v=5">
+  <link rel="shortcut icon" href="/favicon.ico?v=5">
   <script src="https://cdn.tailwindcss.com/3.4.5"></script>
   <link rel="stylesheet" href="/style.css">
 </head>
@@ -1182,7 +1184,9 @@ function renderCheckoutSuccessPage(acc, isCancelled = false, isPopup = false) {
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
   <title>Checkout Cancelled — SWEEPR VPN</title>
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/logo-emerald.svg?v=5">
+  <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png?v=5">
+  <link rel="shortcut icon" href="/favicon.ico?v=5">
   <script src="https://cdn.tailwindcss.com/3.4.5"></script>
 </head>
 <body class="bg-slate-950 text-white min-h-screen flex items-center justify-center p-6 font-sans">
@@ -1211,7 +1215,9 @@ function renderCheckoutSuccessPage(acc, isCancelled = false, isPopup = false) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
   <title>You're Activated 🎉 — SWEEPR VPN Pro</title>
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/logo-emerald.svg?v=5">
+  <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png?v=5">
+  <link rel="shortcut icon" href="/favicon.ico?v=5">
   <script src="https://cdn.tailwindcss.com/3.4.5"></script>
   <script>
     try {
@@ -3121,10 +3127,12 @@ const server = http.createServer(async (req, res) => {
     } else if (isLoginRoute) {
       headers['X-Robots-Tag'] = 'noindex, nofollow';
       headers['Cache-Control'] = 'no-store, no-cache, must-revalidate';
-    } else if (['.svg', '.png', '.ico', '.css', '.js', '.webp', '.avif', '.woff2', '.woff', '.ttf'].includes(ext)) {
-      headers['Cache-Control'] = 'public, max-age=604800, stale-while-revalidate=86400';
+    } else if (/^(favicon|logo-|padlock-favicon|icon-)/i.test(baseName) || ext === '.ico') {
+      headers['Cache-Control'] = 'public, max-age=0, must-revalidate';
+    } else if (['.svg', '.png', '.css', '.js', '.webp', '.avif', '.woff2', '.woff', '.ttf'].includes(ext)) {
+      headers['Cache-Control'] = 'public, max-age=300, stale-while-revalidate=3600';
     } else if (ext === '.html') {
-      headers['Cache-Control'] = 'public, max-age=3600, stale-while-revalidate=86400';
+      headers['Cache-Control'] = 'public, max-age=0, must-revalidate';
     }
 
     // Conditional HTTP ETag (304 Not Modified)

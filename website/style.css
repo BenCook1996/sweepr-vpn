@@ -223,7 +223,7 @@ button.btn-ghost:hover:not(:disabled),
 .logo-box {
   width: 40px;
   height: 40px;
-  background-image: url("/logo-emerald.svg");
+  background-image: url("/logo-emerald.svg?v=5");
   background-size: 100% 100%;
   background-repeat: no-repeat;
   background-position: center;
@@ -246,13 +246,13 @@ button.btn-ghost:hover:not(:disabled),
 .logo-box.logo-mint,
 .dark .logo-box,
 [data-theme="dark"] .logo-box {
-  background-image: url("/logo-emerald.svg");
+  background-image: url("/logo-emerald.svg?v=5");
   box-shadow: 0 3px 12px rgba(16, 185, 129, 0.2);
 }
 
 @media (prefers-color-scheme: dark) {
   .logo-box {
-    background-image: url("/logo-emerald.svg");
+    background-image: url("/logo-emerald.svg?v=5");
   }
 }
 
