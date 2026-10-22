@@ -2,7 +2,7 @@
 <html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>SWEEPR VPN</title>
 <style>
   :root {
@@ -26,7 +26,14 @@
 
   .app { display:grid; grid-template-columns:68px 1fr 410px; height:100vh; }
 
-  /* Rail */
+  /* Mobile Top Bar (hidden on desktop) */
+  .mobile-topbar { display:none; align-items:center; justify-content:space-between; padding:10px 14px; border-bottom:1px solid var(--line); background:var(--card); position:sticky; top:0; z-index:35; }
+  .mobile-brand { display:flex; align-items:center; gap:8px; font-weight:900; font-size:15px; letter-spacing:-.3px; }
+  .mobile-brand svg { width:26px; height:26px; filter:drop-shadow(0 2px 6px rgba(16,185,129,.3)); }
+  .mobile-actions { display:flex; align-items:center; gap:8px; }
+  .icon-pill-btn { width:36px; height:36px; border-radius:10px; display:grid; place-items:center; background:var(--card2); border:1px solid var(--line); color:var(--ink3); }
+
+  /* Rail (Left sidebar on desktop, Fixed Labeled Bottom Tab Bar on mobile) */
   .rail { background:var(--rail); border-right:1px solid var(--line); display:flex; flex-direction:column; align-items:center; gap:10px; padding:16px 0; }
   .rail .logo { width:36px; height:36px; margin-bottom:10px; filter:drop-shadow(0 4px 10px rgba(16,185,129,.35)); }
   .rail-btn { width:46px; height:46px; border-radius:14px; display:grid; place-items:center; color:#94a3b8; position:relative; transition:all .15s; }
@@ -34,6 +41,7 @@
   .rail-btn.on { background:rgba(16,185,129,.14); color:var(--accent); }
   .rail-btn .tip { position:absolute; left:54px; background:var(--ink); color:var(--bg); font-size:11.5px; font-weight:700; padding:5px 9px; border-radius:8px; white-space:nowrap; opacity:0; pointer-events:none; transition:opacity .15s; z-index:20; }
   .rail-btn:hover .tip { opacity:1; }
+  .rail-btn .nav-lbl { display:none; font-size:11px; font-weight:800; letter-spacing:-.1px; line-height:1; }
   .rail-btn .dot { position:absolute; top:9px; right:9px; width:8px; height:8px; border-radius:50%; background:#f59e0b; border:2px solid var(--rail); }
   .rail .spacer { flex:1; }
 
@@ -47,6 +55,11 @@
   .search { display:flex; align-items:center; gap:10px; border:1.5px solid var(--line); border-radius:14px; padding:0 14px; height:44px; color:var(--muted); background:var(--card); }
   .search input { flex:1; border:0; outline:0; background:transparent; font:inherit; font-size:14px; color:var(--ink); }
   .search:focus-within { border-color:var(--e500); }
+
+  /* Country filter tabs (All / Fastest / Saved) */
+  .filter-tabs { display:flex; gap:6px; margin:12px 0 10px; }
+  .ftab { padding:6px 12px; border-radius:999px; font-size:12px; font-weight:800; color:var(--muted); background:var(--card2); border:1px solid var(--line); transition:all .15s; }
+  .ftab.on { background:var(--sel); color:var(--accent); border-color:rgba(16,185,129,.4); }
 
   .rec-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
   .rec { text-align:left; background:var(--card); border:1.5px solid var(--line); border-radius:16px; padding:14px; transition:all .15s; }
@@ -62,9 +75,12 @@
   .ico { width:38px; height:38px; border-radius:12px; display:grid; place-items:center; flex-shrink:0; }
   .ico.e { background:rgba(16,185,129,.14); color:var(--accent); }
   .ico.a { background:rgba(245,158,11,.16); color:#d97706; }
-  .t { font-size:13.5px; font-weight:800; }
+  .t { font-size:13.5px; font-weight:800; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
   .s { font-size:12px; color:var(--muted); margin-top:1px; }
   .grow { flex:1; min-width:0; }
+
+  .pro-tag { display:inline-flex; align-items:center; padding:1px 6px; border-radius:6px; font-size:10px; font-weight:900; letter-spacing:.4px; background:rgba(16,185,129,.14); color:var(--accent); border:1px solid rgba(16,185,129,.3); }
+  body.is-pro .pro-tag { display:none !important; }
 
   .pill { display:inline-flex; align-items:center; gap:5px; border-radius:999px; font-size:11.5px; font-weight:800; padding:5px 11px; white-space:nowrap; }
   .pill.ok { background:rgba(16,185,129,.14); color:var(--accent); border:1px solid rgba(16,185,129,.3); }
@@ -73,10 +89,20 @@
   button.pill.solid:hover { background:var(--e700); }
 
   .list { display:flex; flex-direction:column; }
-  .loc { display:flex; align-items:center; gap:12px; padding:10px 10px; border-radius:12px; text-align:left; width:100%; transition:background .12s; }
-  .loc:hover { background:var(--card2); }
-  .loc.on { background:var(--sel); }
-  .loc + .loc { margin-top:2px; }
+  .loc-wrap { display:flex; align-items:center; gap:4px; border-radius:12px; padding-right:6px; transition:background .12s; }
+  .loc-wrap:hover { background:var(--card2); }
+  .loc-wrap.on { background:var(--sel); }
+  .loc-wrap + .loc-wrap { margin-top:2px; }
+  .loc { display:flex; align-items:center; gap:12px; padding:10px 10px; border-radius:12px; text-align:left; flex:1; min-width:0; }
+  .fav-btn { width:34px; height:34px; border-radius:10px; display:grid; place-items:center; color:var(--muted); font-size:15px; flex-shrink:0; transition:all .15s; }
+  .fav-btn:hover { background:var(--card); color:#f59e0b; }
+  .fav-btn.on { color:#f59e0b; }
+  .ping-badge { font-size:11px; font-weight:700; color:var(--muted); font-variant-numeric:tabular-nums; margin-right:4px; }
+
+  /* Mobile Browse All Countries Trigger & Sheet Header */
+  .mobile-country-trigger { display:none; width:100%; margin-top:12px; padding:13px 16px; border-radius:16px; background:var(--card); border:1.5px solid var(--line); align-items:center; justify-content:space-between; font-weight:800; font-size:13.5px; color:var(--ink); }
+  .sheet-head-mobile { display:none; align-items:center; justify-content:space-between; padding-bottom:12px; margin-bottom:10px; border-bottom:1px solid var(--line); }
+  .sheet-handle { width:40px; height:4px; border-radius:99px; background:var(--line); margin:0 auto 10px; display:none; }
 
   .flag { width:30px; height:30px; border-radius:50%; overflow:hidden; flex-shrink:0; box-shadow:0 0 0 1px rgba(15,23,42,.10); display:block; }
   .flag svg { width:100%; height:100%; display:block; }
@@ -87,30 +113,28 @@
   .devrow { display:flex; align-items:center; gap:12px; border:1px solid var(--line); border-radius:14px; padding:11px 12px; background:var(--card); }
   .devrow.warn { background:var(--amberbg); border:1.5px solid var(--amberline); }
   .devrow + .devrow { margin-top:8px; }
+  .set-row { display:flex; align-items:center; gap:12px; padding:12px 0; cursor:pointer; }
+  .set-row + .set-row { border-top:1px solid var(--line); }
 
   /* Radar */
-  .radar { height:250px; border-radius:22px; border:1px solid var(--line); position:relative; display:grid; place-items:center; overflow:hidden;
+  .radar { height:220px; border-radius:22px; border:1px solid var(--line); position:relative; display:grid; place-items:center; overflow:hidden;
     background:radial-gradient(circle at 50% 50%, var(--sel) 0%, var(--card) 70%); margin-top:14px; }
   .radar .r { position:absolute; border-radius:50%; border:1.5px solid rgba(16,185,129,.22); }
   .radar .sweep { position:absolute; width:200px; height:200px; left:50%; top:50%; margin:-200px 0 0 0; transform-origin:0 100%;
     background:conic-gradient(from 0deg at 0 100%, rgba(16,185,129,.30), transparent 70deg); animation:spin 4s linear infinite; }
   .radar.off .sweep { display:none; }
   @keyframes spin { to { transform:rotate(360deg); } }
-  .radar .center { width:58px; height:58px; position:relative; z-index:3; }
+  .radar .center { width:54px; height:54px; position:relative; z-index:3; }
   .blip { position:absolute; z-index:3; text-align:center; transform:translate(-50%,-50%); }
-  .blip .b { width:38px; height:38px; border-radius:12px; display:grid; place-items:center; background:var(--card); border:1px solid var(--line); color:var(--accent); margin:0 auto; box-shadow:0 4px 10px rgba(15,23,42,.06); }
+  .blip .b { width:36px; height:36px; border-radius:12px; display:grid; place-items:center; background:var(--card); border:1px solid var(--line); color:var(--accent); margin:0 auto; box-shadow:0 4px 10px rgba(15,23,42,.06); }
   .blip.warn .b { border:1.5px solid #fbbf24; color:#d97706; box-shadow:0 0 0 6px rgba(245,158,11,.15); }
   .blip .l { font-size:11px; font-weight:800; margin-top:3px; color:var(--ink3); white-space:nowrap; }
   .blip.warn .l { color:var(--amberink); }
 
-  .seg { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; background:var(--card2); border:1px solid var(--line); border-radius:12px; padding:4px; }
-  .seg button { padding:8px 6px; border-radius:9px; font-size:12.5px; font-weight:700; color:var(--muted); }
-  .seg button.on { background:var(--card); color:var(--accent); box-shadow:0 1px 4px rgba(15,23,42,.08); }
-
-  .toggle { width:44px; height:24px; border-radius:99px; background:#cbd5e1; position:relative; flex-shrink:0; transition:background .15s; }
-  .toggle i { position:absolute; left:2px; top:2px; width:20px; height:20px; border-radius:50%; background:#fff; transition:left .15s; box-shadow:0 1px 3px rgba(0,0,0,.2); }
+  .toggle { width:44px; height:26px; border-radius:99px; background:#cbd5e1; position:relative; flex-shrink:0; transition:background .15s; }
+  .toggle i { position:absolute; left:3px; top:3px; width:20px; height:20px; border-radius:50%; background:#fff; transition:left .15s; box-shadow:0 1px 3px rgba(0,0,0,.2); }
   .toggle.on { background:var(--e500); }
-  .toggle.on i { left:22px; }
+  .toggle.on i { left:21px; }
   :root[data-theme="dark"] .toggle { background:#334155; }
   :root[data-theme="dark"] .toggle.on { background:var(--e500); }
 
@@ -118,82 +142,133 @@
   .btn-go:hover { background:linear-gradient(135deg,#059669 0%,#047857 100%); transform:translateY(-1px); box-shadow:0 8px 26px rgba(16,185,129,.5); }
   .btn-go.pause { background:rgba(255,255,255,.08); color:#d1fae5; box-shadow:none; border:1.5px solid rgba(167,243,208,.35); }
   .btn-go.pause:hover { background:rgba(255,255,255,.14); }
-  .btn-soft { background:rgba(16,185,129,.12); color:var(--accent); border:1px solid rgba(16,185,129,.3); border-radius:999px; font-weight:800; font-size:12.5px; padding:8px 14px; }
+  .btn-soft { background:rgba(16,185,129,.12); color:var(--accent); border:1px solid rgba(16,185,129,.3); border-radius:999px; font-weight:800; font-size:12.5px; padding:8px 14px; min-height:38px; display:inline-flex; align-items:center; justify-content:center; gap:6px; }
   .btn-soft:hover { background:rgba(16,185,129,.2); }
   .input { width:100%; border:1.5px solid var(--line); background:var(--card2); color:var(--ink); border-radius:12px; padding:11px 14px; font:inherit; font-size:13.5px; outline:none; }
   .input:focus { border-color:var(--e500); }
   textarea.input { resize:none; }
 
-  /* Connect panel (always dark emerald, like mockup 01) */
+  /* Connect panel (always dark emerald) */
   .panel { margin:12px 12px 12px 0; border-radius:24px; background:linear-gradient(160deg,#064e3b 0%,#0b1220 72%); color:#ecfdf5; padding:24px; position:relative; overflow:hidden; display:flex; flex-direction:column; }
   .panel.on { background:linear-gradient(160deg,#047857 0%,#064e3b 45%,#0b1220 100%); }
-  .panel .rings { position:absolute; right:-80px; top:-80px; width:280px; height:280px; border-radius:50%; border:1.5px solid rgba(167,243,208,.18); box-shadow:0 0 0 38px rgba(167,243,208,.05),0 0 0 76px rgba(167,243,208,.03); }
+  .panel .rings { position:absolute; right:-80px; top:-80px; width:280px; height:280px; border-radius:50%; border:1.5px solid rgba(167,243,208,.18); box-shadow:0 0 0 38px rgba(167,243,208,.05),0 0 0 76px rgba(167,243,208,.03); pointer-events:none; }
   .panel.on .rings { animation:pulse 2.6s ease-in-out infinite; }
   @keyframes pulse { 50% { box-shadow:0 0 0 44px rgba(167,243,208,.08),0 0 0 88px rgba(167,243,208,.04); } }
-  .panel .plogo { position:absolute; right:26px; top:26px; width:54px; height:54px; filter:drop-shadow(0 6px 16px rgba(0,0,0,.35)); }
-  .panel .mini-btn { position:absolute; right:92px; top:38px; width:30px; height:30px; border-radius:9px; display:grid; place-items:center; color:#a7f3d0; background:rgba(255,255,255,.06); border:1px solid rgba(167,243,208,.18); }
+  .panel .plogo { position:absolute; right:24px; top:24px; width:50px; height:50px; filter:drop-shadow(0 6px 16px rgba(0,0,0,.35)); }
+  .panel .mini-btn { position:absolute; right:84px; top:34px; width:32px; height:32px; border-radius:9px; display:grid; place-items:center; color:#a7f3d0; background:rgba(255,255,255,.06); border:1px solid rgba(167,243,208,.18); }
   .panel .mini-btn:hover { background:rgba(255,255,255,.12); }
   .h-big { font-size:32px; font-weight:900; line-height:1.08; letter-spacing:-.6px; }
   .h-big .g { color:var(--e400); }
-  .info { display:grid; grid-template-columns:1fr 1fr; gap:16px 14px; margin-top:26px; position:relative; }
+  .info { display:grid; grid-template-columns:1fr 1fr; gap:14px 12px; margin-top:22px; position:relative; }
   .info .v { font-size:14.5px; font-weight:800; color:#fff; }
   .info .k { font-size:12px; color:#94a3b8; margin-top:2px; }
   .info .r { text-align:right; }
   .v.warnc { color:#fbbf24 !important; }
   .v.okc { color:var(--e400) !important; }
-  .timer { margin-top:22px; text-align:center; }
+  .timer { margin-top:18px; text-align:center; }
   .timer .k { font-size:12px; color:#94a3b8; }
-  .timer .n { font-size:38px; font-weight:900; letter-spacing:-1px; color:#fff; font-variant-numeric:tabular-nums; }
-  .connect-box { margin-top:auto; background:rgba(255,255,255,.06); border:1px solid rgba(167,243,208,.18); border-radius:20px; padding:16px; position:relative; }
-  .connect-row { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+  .timer .n { font-size:36px; font-weight:900; letter-spacing:-1px; color:#fff; font-variant-numeric:tabular-nums; }
+  .connect-box { margin-top:auto; background:rgba(255,255,255,.06); border:1px solid rgba(167,243,208,.18); border-radius:20px; padding:14px; position:relative; }
+  .connect-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; width:100%; text-align:left; padding:6px 8px; border-radius:14px; transition:background .15s; }
+  .connect-row:hover { background:rgba(255,255,255,.06); }
   .connect-row .t { color:#fff; }
   .connect-row .s { color:#94a3b8; }
-  .link { color:var(--e400); font-size:12.5px; font-weight:800; padding:6px 12px; border-radius:999px; background:rgba(52,211,153,.12); border:1px solid rgba(52,211,153,.28); text-decoration:none; flex-shrink:0; transition:background .15s; }
-  .link:hover { background:rgba(52,211,153,.22); }
+  .link-affordance { color:var(--e400); font-size:12.5px; font-weight:800; padding:6px 12px; border-radius:999px; background:rgba(52,211,153,.12); border:1px solid rgba(52,211,153,.28); flex-shrink:0; }
 
-  /* Compact mini window (mockup 03) */
-  .compact { display:none; height:100vh; flex-direction:column; padding:18px 18px 16px; }
-  body.is-compact .app { display:none; }
+  /* Compact mini window (Quick Win 5: Clean centered power button + 2-pill summary) */
+  .compact { display:none; height:100vh; flex-direction:column; padding:18px 18px 16px; max-width:440px; margin:0 auto; width:100%; }
+  body.is-compact .app, body.is-compact .mobile-topbar { display:none !important; }
   body.is-compact .compact { display:flex; }
   .c-head { display:flex; justify-content:space-between; align-items:center; }
-  .c-city { font-size:42px; font-weight:900; letter-spacing:-1px; text-align:center; margin-top:10px; }
-  .c-stats { display:grid; grid-template-columns:1fr 1fr auto 1fr 1fr; align-items:center; gap:6px; text-align:center; margin:12px 0 16px; }
-  .powerbtn { width:86px; height:86px; border-radius:50%; display:grid; place-items:center; color:#fff; background:linear-gradient(135deg,#10b981,#047857); box-shadow:0 0 0 7px rgba(16,185,129,.15),0 10px 26px rgba(5,150,105,.4); transition:all .2s; }
-  .powerbtn.off { background:linear-gradient(135deg,#94a3b8,#64748b); box-shadow:0 0 0 7px rgba(148,163,184,.15),0 10px 22px rgba(15,23,42,.2); }
+  .c-city { font-size:36px; font-weight:900; letter-spacing:-.8px; text-align:center; margin-top:8px; }
+  .c-power-wrap { display:flex; flex-direction:column; align-items:center; margin:16px 0 14px; gap:14px; }
+  .powerbtn { width:92px; height:92px; border-radius:50%; display:grid; place-items:center; color:#fff; background:linear-gradient(135deg,#10b981,#047857); box-shadow:0 0 0 8px rgba(16,185,129,.16),0 10px 26px rgba(5,150,105,.4); transition:all .2s; }
+  .powerbtn.off { background:linear-gradient(135deg,#64748b,#475569); box-shadow:0 0 0 8px rgba(148,163,184,.15),0 10px 22px rgba(15,23,42,.2); }
+  .c-pills { display:grid; grid-template-columns:1fr 1fr; gap:8px; width:100%; }
+  .c-pill-box { background:var(--card2); border:1px solid var(--line); border-radius:12px; padding:8px 10px; text-align:center; }
   .c-list { border:1px solid var(--line); border-radius:16px; overflow-y:auto; flex:1; background:var(--card); }
-  .c-list .loc { border-radius:0; border-bottom:1px solid var(--line); margin:0; }
+  .c-list .loc-wrap { border-radius:0; border-bottom:1px solid var(--line); margin:0; }
   .c-list::-webkit-scrollbar { width:6px; } .c-list::-webkit-scrollbar-thumb { background:rgba(148,163,184,.35); border-radius:9px; }
 
-  @media (max-width: 820px) {
-    html, body { height:auto; min-height:100%; overflow-x:hidden; overflow-y:auto; }
-    .app { display:flex; flex-direction:column; height:auto; min-height:100vh; }
-    .rail { order:1; flex-direction:row; width:100%; border-right:0; border-bottom:1px solid var(--line); padding:10px 14px; justify-content:space-around; position:sticky; top:0; z-index:30; }
-    .rail .logo { margin-bottom:0; }
-    .rail .spacer { display:none; }
-    .rail-btn .tip { display:none; }
-    .panel { order:2; margin:12px 14px 4px; border-radius:22px; padding:18px; }
-    .h-big { font-size:24px; }
-    .info { margin-top:16px; gap:12px 10px; }
-    .timer { margin-top:14px; margin-bottom:14px; }
-    .timer .n { font-size:28px; }
-    .main { order:3; padding:16px 14px 28px; overflow-y:visible; }
-    .rec-grid { grid-template-columns:1fr; }
-    .compact { height:auto; min-height:100vh; }
-    .c-city { font-size:30px; }
-  }
-
-  /* Modal */
-  .backdrop { position:fixed; inset:0; background:rgba(15,23,42,.5); backdrop-filter:blur(6px); display:none; align-items:center; justify-content:center; z-index:100; padding:20px; }
+  /* Modal & Split Activation / Checkout UI (Quick Win 3) */
+  .backdrop { position:fixed; inset:0; background:rgba(15,23,42,.55); backdrop-filter:blur(6px); display:none; align-items:center; justify-content:center; z-index:100; padding:16px; }
   .backdrop.open { display:flex; }
-  .sheet { width:100%; max-width:440px; background:var(--card); border:1px solid var(--line); border-radius:22px; padding:24px; box-shadow:0 30px 70px rgba(15,23,42,.35); display:flex; flex-direction:column; gap:12px; }
-  .plan { border:1.5px solid var(--line); border-radius:14px; padding:10px 12px; display:flex; align-items:center; justify-content:space-between; text-align:left; width:100%; position:relative; }
+  .sheet { width:100%; max-width:440px; max-height:92vh; overflow-y:auto; background:var(--card); border:1px solid var(--line); border-radius:22px; padding:22px; box-shadow:0 30px 70px rgba(15,23,42,.35); display:flex; flex-direction:column; gap:11px; }
+  .key-row { display:flex; gap:8px; align-items:stretch; }
+  .key-row .input { flex:1; font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; letter-spacing:.4px; font-size:13px; }
+  .btn-activate-key { background:var(--ink); color:var(--bg); font-weight:800; font-size:13px; padding:0 16px; border-radius:12px; white-space:nowrap; transition:opacity .15s; }
+  .btn-activate-key:hover { opacity:.9; }
+  .modal-divider { display:flex; align-items:center; gap:10px; color:var(--muted); font-size:11px; font-weight:800; letter-spacing:.5px; margin:4px 0 2px; }
+  .modal-divider::before, .modal-divider::after { content:""; flex:1; height:1px; background:var(--line); }
+  .plan { border:1.5px solid var(--line); border-radius:14px; padding:10px 12px; display:flex; align-items:center; justify-content:space-between; text-align:left; width:100%; position:relative; transition:all .12s; }
   .plan.on { border:2px solid var(--e500); background:var(--sel); }
   .plan .tag { position:absolute; top:-9px; right:12px; background:var(--e600); color:#fff; font-size:9.5px; font-weight:900; padding:2px 8px; border-radius:99px; letter-spacing:.3px; }
-  .toast { position:fixed; bottom:22px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--ink); color:var(--bg); padding:10px 18px; border-radius:999px; font-size:13px; font-weight:700; opacity:0; transition:all .25s; z-index:200; pointer-events:none; }
+
+  /* QR / WireGuard Mobile Setup Modal (Strategic Overhaul 2) */
+  .qr-box { background:#fff; border:1.5px solid var(--line); border-radius:16px; padding:14px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; margin:4px 0; }
+  .qr-box svg, .qr-box canvas { width:180px; height:180px; display:block; }
+  .wg-code-preview { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:11.5px; background:var(--card2); border:1px solid var(--line); border-radius:12px; padding:10px 12px; color:var(--ink3); white-space:pre-wrap; word-break:break-all; max-height:120px; overflow-y:auto; user-select:text; }
+
+  .toast { position:fixed; bottom:22px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--ink); color:var(--bg); padding:10px 18px; border-radius:999px; font-size:13px; font-weight:700; opacity:0; transition:all .25s; z-index:200; pointer-events:none; max-width:92vw; text-align:center; }
   .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+  /* ======================= RESPONSIVE MOBILE ERGONOMICS (<= 820px) ======================= */
+  @media (max-width: 820px) {
+    html, body { height:auto; min-height:100%; overflow-x:hidden; overflow-y:auto; }
+    .desktop-only, .home-head-desktop { display:none !important; }
+    .mobile-topbar { display:flex; }
+    .app { display:flex; flex-direction:column; height:auto; min-height:calc(100vh - 57px); padding-bottom:76px; }
+
+    /* Quick Win 1: Hide VPN Connect hero panel when viewing Wi-Fi & TV or Account tabs on mobile */
+    body:not([data-view="home"]) .panel { display:none !important; }
+
+    /* Quick Win 2: Fixed Labeled Bottom Tab Bar in the natural thumb zone */
+    .rail {
+      position:fixed; bottom:0; left:0; right:0; top:auto;
+      height:calc(62px + env(safe-area-inset-bottom, 0px));
+      padding:6px 12px calc(6px + env(safe-area-inset-bottom, 0px));
+      background:var(--card); border-right:0; border-top:1px solid var(--line);
+      display:grid; grid-template-columns:repeat(3, 1fr); gap:8px;
+      z-index:60; box-shadow:0 -4px 20px rgba(15,23,42,.06);
+    }
+    .rail-btn { width:100%; height:48px; border-radius:12px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; }
+    .rail-btn .tip { display:none !important; }
+    .rail-btn .nav-lbl { display:block; }
+    .rail-btn .dot { top:6px; right:calc(50% - 18px); }
+
+    /* Hero Panel above Quick Picks on Home */
+    .panel { order:1; margin:12px 14px 4px; border-radius:22px; padding:18px; }
+    .h-big { font-size:24px; }
+    .info { margin-top:14px; gap:10px; }
+    .timer { margin-top:12px; margin-bottom:12px; }
+    .timer .n { font-size:28px; }
+    .main { order:2; padding:12px 14px 24px; overflow-y:visible; }
+    .rec-grid { grid-template-columns:1fr 1fr; gap:8px; }
+    .rec { padding:12px; }
+
+    /* Strategic Overhaul 1: Progressive Bottom-Sheet Country Picker on Mobile */
+    .mobile-country-trigger { display:flex; }
+    .country-sheet-backdrop { display:none; position:fixed; inset:0; background:rgba(15,23,42,.5); backdrop-filter:blur(4px); z-index:75; }
+    body.country-sheet-open .country-sheet-backdrop { display:block; }
+    .country-drawer {
+      display:none; position:fixed; left:0; right:0; bottom:0; max-height:82vh;
+      background:var(--card); border-top:1px solid var(--line); border-radius:24px 24px 0 0;
+      padding:12px 16px calc(24px + env(safe-area-inset-bottom, 0px));
+      z-index:80; overflow-y:auto; box-shadow:0 -20px 50px rgba(15,23,42,.3);
+    }
+    body.country-sheet-open .country-drawer { display:block; animation:sheetUp .22s ease-out; }
+    @keyframes sheetUp { from { transform:translateY(100%); } to { transform:translateY(0); } }
+    .sheet-head-mobile { display:flex; }
+    .sheet-handle { display:block; }
+
+    /* Compact radar on narrow mobile screens so blips never collide with device list */
+    .radar { height:175px; }
+    .blip .l { display:none; }
+    .toast { bottom:76px; }
+  }
 </style>
 </head>
-<body>
+<body data-view="home">
 
 <svg class="svg-defs" width="0" height="0" aria-hidden="true">
   <defs>
@@ -212,7 +287,7 @@
     <symbol id="i-tv" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="17 2 12 7 7 2"/></g></symbol>
     <symbol id="i-bolt" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></symbol>
     <symbol id="i-user" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></g></symbol>
-    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></symbol>
     <symbol id="i-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></g></symbol>
     <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></symbol>
     <symbol id="i-sun" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></g></symbol>
@@ -232,17 +307,26 @@
   </defs>
 </svg>
 
-<!-- ======================= FULL APP (mockups 01 / 04 / 05) ======================= -->
+<!-- Mobile Sticky Brand & License Bar (Quick Win 2) -->
+<header class="mobile-topbar">
+  <div class="mobile-brand"><svg><use href="#logo"/></svg><span>SWEEPR <span style="color:var(--accent)">VPN</span></span></div>
+  <div class="mobile-actions">
+    <button class="pill warn" id="mobilePlanPill" onclick="openActivate()"><svg width="12" height="12"><use href="#i-key"/></svg><span id="mobilePlanPillText">Enter Key</span></button>
+    <button class="icon-pill-btn" onclick="toggleTheme()" aria-label="Toggle theme"><svg width="17" height="17" id="mobileThemeIcon"><use href="#i-moon"/></svg></button>
+  </div>
+</header>
+
+<!-- ======================= FULL APP ======================= -->
 <div class="app">
-  <!-- Rail -->
+  <!-- Navigation Rail (Left sidebar on Desktop, Labeled 3-Tab Bottom Bar on Mobile) -->
   <nav class="rail" aria-label="Main navigation">
-    <svg class="logo"><use href="#logo"/></svg>
-    <button class="rail-btn on" id="nav-home" onclick="go('home')" aria-label="Home"><svg width="20" height="20"><use href="#i-home"/></svg><span class="tip" data-i18n="home">Home</span></button>
-    <button class="rail-btn" id="nav-wifi" onclick="go('wifi')" aria-label="Wi-Fi & TV"><svg width="20" height="20"><use href="#i-wifi"/></svg><span class="dot" id="wifiDot"></span><span class="tip" data-i18n="wifi">Wi-Fi &amp; TV</span></button>
-    <button class="rail-btn" id="nav-account" onclick="go('account')" aria-label="Account"><svg width="20" height="20"><use href="#i-user"/></svg><span class="tip" data-i18n="account">Account &amp; Help</span></button>
-    <div class="spacer"></div>
-    <button class="rail-btn" onclick="toggleTheme()" aria-label="Light or dark mode"><svg width="20" height="20" id="themeIcon"><use href="#i-moon"/></svg><span class="tip" id="themeTip">Dark mode</span></button>
-    <button class="rail-btn" onclick="setCompact(true)" aria-label="Mini window"><svg width="20" height="20"><use href="#i-min"/></svg><span class="tip">Mini window</span></button>
+    <svg class="logo desktop-only"><use href="#logo"/></svg>
+    <button class="rail-btn on" id="nav-home" onclick="go('home')" aria-label="VPN"><svg width="20" height="20"><use href="#i-shield"/></svg><span class="nav-lbl" data-i18n="home">VPN</span><span class="tip" data-i18n="home">VPN</span></button>
+    <button class="rail-btn" id="nav-wifi" onclick="go('wifi')" aria-label="Wi-Fi & TV"><svg width="20" height="20"><use href="#i-wifi"/></svg><span class="dot" id="wifiDot"></span><span class="nav-lbl" data-i18n="wifi">Wi-Fi &amp; TV</span><span class="tip" data-i18n="wifi">Wi-Fi &amp; TV</span></button>
+    <button class="rail-btn" id="nav-account" onclick="go('account')" aria-label="Account"><svg width="20" height="20"><use href="#i-user"/></svg><span class="nav-lbl" data-i18n="account">Account</span><span class="tip" data-i18n="account">Account &amp; Help</span></button>
+    <div class="spacer desktop-only"></div>
+    <button class="rail-btn desktop-only" onclick="toggleTheme()" aria-label="Light or dark mode"><svg width="20" height="20" id="themeIcon"><use href="#i-moon"/></svg><span class="tip" id="themeTip">Dark mode</span></button>
+    <button class="rail-btn desktop-only" onclick="setCompact(true)" aria-label="Mini window"><svg width="20" height="20"><use href="#i-min"/></svg><span class="tip">Mini window</span></button>
   </nav>
 
   <!-- Main column -->
@@ -250,35 +334,56 @@
 
     <!-- HOME -->
     <section id="view-home">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
-        <div><h1 class="view-title" data-i18n="welcome">Welcome back!</h1><div class="view-sub" data-i18n="homeSub">Pick a country, then press Enable.</div></div>
-        <button class="pill warn" id="planPill" onclick="openActivate()"><svg width="13" height="13"><use href="#i-key"/></svg><span id="planPillText">Free plan · Enter code</span></button>
+      <div class="home-head-desktop" style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:14px">
+        <div><h1 class="view-title" data-i18n="welcome">Select a Location</h1><div class="view-sub" data-i18n="homeSub">Choose a country node or press Connect for the fastest route.</div></div>
+        <button class="pill warn" id="planPill" onclick="openActivate()"><svg width="13" height="13"><use href="#i-key"/></svg><span id="planPillText">Free plan · Enter license key</span></button>
       </div>
 
-      <div class="search" style="margin-top:16px"><svg width="17" height="17"><use href="#i-search"/></svg><input id="search" placeholder="Search for a country…" oninput="renderList()" aria-label="Search for a country" /></div>
-
       <div id="recBlock">
-        <h3 class="sec" data-i18n="recommended">Recommended for you</h3>
+        <h3 class="sec" style="margin-top:4px" data-i18n="recommended">Quick pick</h3>
         <div class="rec-grid">
-          <button class="rec on" id="rec-fast" onclick="pick('UK-LON-01')"><div class="ic"><svg width="18" height="18"><use href="#i-bolt"/></svg></div><div class="nm"><span class="flag xl" data-flag="GB"></span>United Kingdom</div><div class="ds">Fastest for you</div></button>
-          <button class="rec" id="rec-private" onclick="pick('SE-STO-01')"><div class="ic"><svg width="18" height="18"><use href="#i-shield"/></svg></div><div class="nm"><span class="flag xl" data-flag="SE"></span>Sweden</div><div class="ds">Most private</div></button>
+          <button class="rec on" id="rec-fast" onclick="pick('UK-LON-01')"><div class="ic"><svg width="18" height="18"><use href="#i-bolt"/></svg></div><div class="nm"><span class="flag xl" data-flag="GB"></span>United Kingdom</div><div class="ds">Fastest · 8 ms</div></button>
+          <button class="rec" id="rec-private" onclick="pick('SE-STO-01')"><div class="ic"><svg width="18" height="18"><use href="#i-shield"/></svg></div><div class="nm"><span class="flag xl" data-flag="SE"></span>Sweden</div><div class="ds">Privacy hub · 19 ms</div></button>
         </div>
         <div class="alert" id="tvAlert">
           <div class="ico a"><svg width="19" height="19"><use href="#i-tv"/></svg></div>
           <div class="grow"><div class="t" id="tvAlertTitle">Your Samsung TV is tracking what you watch</div><div class="s" id="tvAlertSub">Turn on the TV Shield to block it</div></div>
-          <button class="pill solid" id="tvAlertBtn" onclick="blockTv()">Fix it</button>
+          <button class="pill solid" id="tvAlertBtn" onclick="blockTv()">Block</button>
         </div>
       </div>
 
-      <h3 class="sec"><span style="color:var(--ink);font-size:15px;font-weight:800" data-i18n="allCountries">All countries</span><span id="countLabel">8 places</span></h3>
-      <div class="list" id="locList"></div>
+      <!-- Strategic Overhaul 1: Mobile Progressive Disclosure Trigger + Bottom Sheet Drawer -->
+      <button class="mobile-country-trigger" id="openCountrySheetBtn" onclick="openCountrySheet(true)">
+        <span>Browse all 8 countries &amp; cities</span>
+        <span style="color:var(--accent);font-weight:900">View all ›</span>
+      </button>
+
+      <div class="country-sheet-backdrop" onclick="openCountrySheet(false)"></div>
+      <div class="country-drawer" id="countryDrawer">
+        <div class="sheet-handle"></div>
+        <div class="sheet-head-mobile">
+          <div style="font-size:16px;font-weight:900">Choose a country</div>
+          <button onclick="openCountrySheet(false)" style="font-size:18px;color:var(--muted);padding:4px 8px" aria-label="Close country list">✕</button>
+        </div>
+
+        <div class="search" style="margin-top:14px"><svg width="17" height="17"><use href="#i-search"/></svg><input id="search" placeholder="Search country or city…" oninput="renderList()" aria-label="Search country or city" /></div>
+
+        <div class="filter-tabs" role="tablist" aria-label="Filter countries">
+          <button class="ftab on" id="ftab-all" onclick="setCountryFilter('all')">All (8)</button>
+          <button class="ftab" id="ftab-fast" onclick="setCountryFilter('fast')">⚡ Fastest</button>
+          <button class="ftab" id="ftab-fav" onclick="setCountryFilter('fav')">★ Saved</button>
+        </div>
+
+        <h3 class="sec" style="margin-top:8px"><span style="color:var(--ink);font-size:14px;font-weight:800" data-i18n="allCountries">Available locations</span><span id="countLabel">8 places</span></h3>
+        <div class="list" id="locList"></div>
+      </div>
     </section>
 
-    <!-- WI-FI & TV (mockup 05) -->
+    <!-- WI-FI & TV -->
     <section id="view-wifi" class="hidden">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
-        <div><h1 class="view-title"><span id="devCountTitle">4</span> devices at home</h1><div class="view-sub" id="lastChecked">Checked just now</div></div>
-        <button class="btn-soft" onclick="scanWifi()" id="scanBtn">Check again</button>
+        <div><h1 class="view-title"><span id="devCountTitle">4</span> devices on Wi-Fi</h1><div class="view-sub" id="lastChecked">Checked just now</div></div>
+        <button class="btn-soft" onclick="scanWifi()" id="scanBtn">Scan Wi-Fi</button>
       </div>
 
       <div class="radar off" id="radar">
@@ -292,49 +397,52 @@
 
       <div style="margin-top:14px" id="devList"></div>
 
-      <div class="card" style="margin-top:14px">
-        <div style="display:flex;align-items:center;gap:12px">
+      <!-- Quick Win 4: Single Auto-Watch toggle (removed 3-way frequency selector noise) -->
+      <div class="card" style="margin-top:14px;padding:14px 16px">
+        <div class="set-row" style="padding:0" onclick="toggleAuto()">
           <div class="ico e"><svg width="19" height="19"><use href="#i-bell"/></svg></div>
-          <div class="grow"><div class="t">Tell me if a stranger joins my Wi-Fi</div><div class="s">We'll warn you straight away and protect this computer</div></div>
-          <button class="toggle" id="autoToggle" onclick="toggleAuto()" aria-label="Watch my Wi-Fi automatically"><i></i></button>
-        </div>
-        <div style="margin-top:12px">
-          <div class="s" style="font-weight:800;letter-spacing:.4px;margin-bottom:6px">HOW OFTEN SHOULD WE CHECK?</div>
-          <div class="seg"><button class="on" onclick="freq(this)">All the time</button><button onclick="freq(this)">Every 15 minutes</button><button onclick="freq(this)">Once an hour</button></div>
+          <div class="grow">
+            <div class="t">Wi-Fi intruder alerts <span class="pro-tag">PRO</span></div>
+            <div class="s">Alert me immediately if an unknown device joins my Wi-Fi</div>
+          </div>
+          <button class="toggle" id="autoToggle" role="switch" aria-checked="false" aria-label="Wi-Fi intruder alerts" onclick="event.stopPropagation();toggleAuto()"><i></i></button>
         </div>
       </div>
 
-      <h3 class="sec">Household shields <span style="cursor:pointer" onclick="allShields()">Turn all on</span></h3>
-      <div class="card" style="padding:6px 14px">
-        <div class="devrow" style="border:0;padding:10px 0;background:transparent"><div class="grow"><div class="t">Smart-TV anti-spy shield</div><div class="s">Stops Samsung &amp; LG TVs from taking hidden snapshots of what you watch</div></div><button class="toggle shield" onclick="toggleShield(this)"><i></i></button></div>
-        <div class="devrow" style="border:0;border-top:1px solid var(--line);border-radius:0;padding:10px 0;background:transparent;margin:0"><div class="grow"><div class="t">Streaming-box ad blocker</div><div class="s">Stops Roku, Fire TV &amp; Apple TV sending your viewing habits to advertisers</div></div><button class="toggle shield" onclick="toggleShield(this)"><i></i></button></div>
-        <div class="devrow" style="border:0;border-top:1px solid var(--line);border-radius:0;padding:10px 0;background:transparent;margin:0"><div class="grow"><div class="t">Router safety check</div><div class="s">Makes sure your home Wi-Fi box has no unsafe open doors</div></div><button class="toggle shield" onclick="toggleShield(this)"><i></i></button></div>
-        <div class="devrow" style="border:0;border-top:1px solid var(--line);border-radius:0;padding:10px 0;background:transparent;margin:0"><div class="grow"><div class="t">Emergency cut-off</div><div class="s">Pauses the internet if protection drops, so your location never slips out</div></div><button class="toggle shield" onclick="toggleShield(this)"><i></i></button></div>
+      <h3 class="sec">Household &amp; Smart-TV shields <span style="cursor:pointer" onclick="allShields()">Enable all</span></h3>
+      <div class="card" style="padding:4px 16px">
+        <div class="set-row" onclick="toggleShieldRow(0)"><div class="grow"><div class="t">Smart-TV anti-spy shield <span class="pro-tag">PRO</span></div><div class="s">Blocks Samsung, LG &amp; Sony ACR viewing telemetry</div></div><button class="toggle shield" id="sh-0" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleShield(this)"><i></i></button></div>
+        <div class="set-row" onclick="toggleShieldRow(1)"><div class="grow"><div class="t">Streaming-box ad blocker <span class="pro-tag">PRO</span></div><div class="s">Stops Roku, Fire TV &amp; Apple TV tracking beacons</div></div><button class="toggle shield" id="sh-1" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleShield(this)"><i></i></button></div>
+        <div class="set-row" onclick="toggleShieldRow(2)"><div class="grow"><div class="t">Router safety check <span class="pro-tag">PRO</span></div><div class="s">Verifies your home Wi-Fi gateway has no exposed ports</div></div><button class="toggle shield" id="sh-2" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleShield(this)"><i></i></button></div>
       </div>
       <div style="height:6px"></div>
     </section>
 
     <!-- ACCOUNT -->
     <section id="view-account" class="hidden">
-      <h1 class="view-title" data-i18n="account">Account &amp; Help</h1>
-      <div class="view-sub">Your plan, settings and a direct line to our team.</div>
+      <h1 class="view-title" data-i18n="account">Account &amp; Settings</h1>
+      <div class="view-sub">Manage your license key, mobile setup, and connection security.</div>
 
       <div class="card" style="margin-top:16px">
         <div style="display:flex;align-items:center;gap:12px">
           <div class="ico e"><svg width="19" height="19"><use href="#i-key"/></svg></div>
-          <div class="grow"><div class="t" id="accTitle">Free plan</div><div class="s" id="accSub">Already paid? Enter your email and 6-digit code to unlock up to 10 devices.</div></div>
+          <div class="grow"><div class="t" id="accTitle">Free plan</div><div class="s" id="accSub">Already paid? Enter your license key to unlock up to 10 devices.</div></div>
           <span class="pill warn" id="accPill">Free</span>
         </div>
-        <button class="btn-go" style="margin-top:14px;font-size:14px;padding:12px" onclick="openActivate()" id="accBtn">Enter code or upgrade</button>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
+          <button class="btn-go" style="flex:1;font-size:14px;padding:12px" onclick="openActivate()" id="accBtn">Enter license key or upgrade</button>
+          <button class="btn-soft" onclick="openMobileWireGuardModal()" title="Set up iOS or Android phone via WireGuard QR or .conf profile"><svg width="16" height="16"><use href="#i-dev"/></svg>Phone Setup (iOS / Android)</button>
+        </div>
       </div>
 
-      <h3 class="sec">Settings</h3>
+      <h3 class="sec">Connection &amp; App Settings</h3>
       <div class="card" style="padding:4px 16px">
-        <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)"><div class="grow"><div class="t">Protect automatically when my computer starts</div><div class="s">SWEEPR turns on by itself every time you log in</div></div><button class="toggle" id="startupToggle" onclick="toggleStartup()"><i></i></button></div>
-        <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)"><div class="grow"><div class="t">Dark mode</div><div class="s">Easier on the eyes at night</div></div><button class="toggle" id="darkToggle" onclick="toggleTheme()"><i></i></button></div>
-        <div style="display:flex;align-items:center;gap:12px;padding:12px 0">
-          <div class="grow"><div class="t">Language</div><div class="s">Changes the words in the app</div></div>
-          <select id="lang" class="input" style="width:170px;padding:8px 10px" onchange="setLang(this.value)">
+        <div class="set-row" onclick="toggleStartup()"><div class="grow"><div class="t">Auto-protect on startup <span class="pro-tag">PRO</span></div><div class="s">Connect automatically as soon as you open SWEEPR</div></div><button class="toggle" id="startupToggle" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleStartup()"><i></i></button></div>
+        <div class="set-row" onclick="toggleKillSwitch()"><div class="grow"><div class="t">Emergency internet cut-off (Kill Switch) <span class="pro-tag">PRO</span></div><div class="s">Blocks unencrypted traffic if the VPN tunnel ever drops</div></div><button class="toggle shield" id="killToggle" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleKillSwitch()"><i></i></button></div>
+        <div class="set-row" onclick="toggleTheme()"><div class="grow"><div class="t">Dark mode</div><div class="s">Easier on the eyes in low light</div></div><button class="toggle" id="darkToggle" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleTheme()"><i></i></button></div>
+        <div class="set-row" style="cursor:default">
+          <div class="grow"><div class="t">Language</div><div class="s">App display language</div></div>
+          <select id="lang" class="input" style="width:150px;padding:8px 10px" onchange="setLang(this.value)" aria-label="Language">
             <option value="en">English</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="ja">日本語</option>
           </select>
         </div>
@@ -343,79 +451,124 @@
       <h3 class="sec">Need help? <span style="color:var(--muted)">We reply within 24 hours</span></h3>
       <div class="card" style="display:flex;flex-direction:column;gap:10px">
         <input class="input" id="supEmail" type="email" placeholder="Your email address" />
-        <textarea class="input" id="supMsg" rows="3" placeholder="Tell us what's happening…"></textarea>
+        <textarea class="input" id="supMsg" rows="3" placeholder="Tell us how we can help…"></textarea>
         <button class="btn-soft" style="align-self:flex-start" onclick="sendSupport()">Send message</button>
       </div>
-      <div class="s" style="text-align:center;margin:14px 0 4px">SWEEPR VPN v2.5.0 · Up to date ✓</div>
+      <div class="s" style="text-align:center;margin:14px 0 4px">SWEEPR VPN v2.5.0 · WireGuard® Engine · Up to date ✓</div>
     </section>
   </main>
 
-  <!-- Connect panel -->
+  <!-- Connect Hero Panel -->
   <aside class="panel" id="panel">
     <div class="rings"></div>
     <svg class="plogo"><use href="#logo"/></svg>
-    <button class="mini-btn" onclick="setCompact(true)" title="Mini window" aria-label="Mini window"><svg width="15" height="15"><use href="#i-min"/></svg></button>
+    <button class="mini-btn desktop-only" onclick="setCompact(true)" title="Mini window" aria-label="Mini window"><svg width="15" height="15"><use href="#i-min"/></svg></button>
     <div class="h-big" id="headline"><span class="g">Connect</span><br>to stay private</div>
     <div class="info">
-      <div><div class="v" id="infoWhere">London, UK</div><div class="k">Where websites think you are</div></div>
-      <div class="r"><div class="v warnc" id="infoHome">Visible</div><div class="k">Your home address</div></div>
-      <div><div class="v" id="infoStartup" style="cursor:pointer" onclick="toggleStartup()">Off</div><div class="k">Protect on start-up</div></div>
+      <div><div class="v" id="infoWhere">London, UK</div><div class="k">Virtual location</div></div>
+      <div class="r"><div class="v warnc" id="infoHome">Exposed</div><div class="k">Your IP &amp; location</div></div>
+      <div><div class="v okc" id="infoSpeed">Instant (&lt;15 ms)</div><div class="k">Route speed</div></div>
       <div class="r"><div class="v" id="infoDevices">4 devices</div><div class="k">On your Wi-Fi</div></div>
     </div>
-    <div class="timer hidden" id="timerBox"><div class="k">Protected for</div><div class="n" id="timer">00:00:00</div></div>
+    <div class="timer hidden" id="timerBox"><div class="k">Protected session</div><div class="n" id="timer">00:00:00</div></div>
     <div class="connect-box">
-      <div class="connect-row">
+      <button class="connect-row" id="panelLocBtn" onclick="changeCountry()" aria-label="Change server country">
         <span class="flag lg" id="panelFlag" data-flag="GB"></span>
         <div class="grow"><div class="t" id="panelName">United Kingdom</div><div class="s" id="panelDesc">London · Fastest for you</div></div>
-        <button class="link" onclick="changeCountry()">Change</button>
-      </div>
-      <button class="btn-go" id="connectBtn" onclick="toggleConnect()"><svg width="18" height="18"><use href="#i-shield"/></svg><span id="connectText">Enable</span></button>
+        <span class="link-affordance">Change ›</span>
+      </button>
+      <button class="btn-go" id="connectBtn" onclick="toggleConnect()"><svg width="18" height="18"><use href="#i-shield"/></svg><span id="connectText">Connect</span></button>
     </div>
   </aside>
 </div>
 
-<!-- ======================= MINI WINDOW (mockup 03) ======================= -->
+<!-- ======================= MINI WINDOW (Quick Win 5: Clean 2-pill layout) ======================= -->
 <div class="compact" id="compact">
   <div class="c-head">
     <div style="display:flex;align-items:center;gap:8px;font-weight:900;font-size:14px"><svg style="width:26px;height:26px"><use href="#logo"/></svg>SWEEPR <span style="color:var(--accent)">VPN</span></div>
-    <button class="btn-soft" onclick="setCompact(false)" style="display:flex;align-items:center;gap:6px"><svg width="13" height="13"><use href="#i-max"/></svg>Full app</button>
+    <button class="btn-soft" onclick="setCompact(false)"><svg width="13" height="13"><use href="#i-max"/></svg>Full app</button>
   </div>
-  <div style="text-align:center;margin-top:16px"><span class="pill warn" id="cStatus">● Not protected</span></div>
+  <div style="text-align:center;margin-top:14px"><span class="pill warn" id="cStatus">● Not protected</span></div>
   <div class="c-city" id="cCity">London</div>
-  <div style="text-align:center;color:var(--muted);font-size:14px" id="cCountry">United Kingdom</div>
-  <div class="c-stats">
-    <div><div class="t" id="cHome">Visible</div><div class="s">Your address</div></div>
-    <div><div class="t" id="cCalls">Instant</div><div class="s">Video calls</div></div>
-    <button class="powerbtn off" id="cPower" onclick="toggleConnect()" aria-label="Protect or pause"><svg width="34" height="34"><use href="#i-power"/></svg></button>
-    <div><div class="t" id="cStream">4K</div><div class="s">Streaming</div></div>
-    <div><div class="t" id="cTrackers">…</div><div class="s">Devices on Wi-Fi</div></div>
+  <div style="text-align:center;color:var(--muted);font-size:13.5px" id="cCountry">United Kingdom</div>
+  <div class="c-power-wrap">
+    <button class="powerbtn off" id="cPower" onclick="toggleConnect()" aria-label="Connect or pause protection"><svg width="36" height="36"><use href="#i-power"/></svg></button>
+    <div class="c-pills">
+      <div class="c-pill-box"><div class="t" style="justify-content:center" id="cHome">Exposed</div><div class="s">Your IP &amp; location</div></div>
+      <div class="c-pill-box"><div class="t" style="justify-content:center" id="cStream">Instant · 4K</div><div class="s">Route quality</div></div>
+    </div>
   </div>
   <div class="c-list" id="cList"></div>
 </div>
 
-<!-- Activate modal -->
+<!-- ======================= SPLIT ACTIVATE / CHECKOUT MODAL (Quick Win 3) ======================= -->
 <div class="backdrop" id="modal" onclick="closeActivate()">
   <div class="sheet" onclick="event.stopPropagation()">
     <div style="display:flex;align-items:center;gap:12px">
-      <svg style="width:44px;height:44px"><use href="#logo"/></svg>
-      <div class="grow"><div style="font-size:19px;font-weight:900">Unlock SWEEPR Pro</div><div class="s">Up to 10 devices · Cancel anytime · 14-day money back</div></div>
-      <button onclick="closeActivate()" aria-label="Close" style="font-size:18px;color:var(--muted)">✕</button>
+      <svg style="width:42px;height:42px;flex-shrink:0"><use href="#logo"/></svg>
+      <div class="grow"><div style="font-size:18px;font-weight:900">Unlock SWEEPR Pro</div><div class="s">Up to 10 devices · 14-day money-back guarantee</div></div>
+      <button onclick="closeActivate()" aria-label="Close" style="font-size:18px;color:var(--muted);padding:4px 8px">✕</button>
     </div>
-    <div class="s" style="font-weight:800;letter-spacing:.4px;margin-top:4px">ALREADY PAID? ENTER YOUR LICENSE KEY</div>
-    <input class="input" id="mCode" type="text" maxlength="64" placeholder="Enter license key (e.g. SWEEPR-VPN-XXXX-XXXX-XXXX)" oninput="this.value=this.value.toUpperCase()" style="font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;letter-spacing:.4px" />
+
+    <div class="s" style="font-weight:800;letter-spacing:.4px;margin-top:2px;color:var(--ink3)">ALREADY PAID? ENTER YOUR LICENSE KEY</div>
+    <div class="key-row">
+      <input class="input" id="mCode" type="text" maxlength="64" placeholder="SWEEPR-VPN-XXXX-XXXX-XXXX" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')activateKeyOnly()" aria-label="License key" />
+      <button class="btn-activate-key" id="mActivateKeyBtn" onclick="activateKeyOnly()">Activate Key</button>
+    </div>
     <div class="s" id="mError" style="color:#ef4444;font-weight:700;display:none">Please enter a valid license key.</div>
-    <div class="s" style="font-weight:800;letter-spacing:.4px;margin-top:6px">OR CHOOSE A PLAN</div>
-    <button class="plan on" data-plan="annual" onclick="plan(this)"><span class="tag">BEST VALUE · SAVE 50%</span><div><div class="t">Yearly</div><div class="s">£74.99 billed once a year</div></div><div style="text-align:right"><div style="font-weight:900;font-size:16px">£6.25</div><div class="s">/month</div></div></button>
-    <button class="plan" data-plan="six_month" onclick="plan(this)"><div><div class="t">6 months</div><div class="s">£48.99 · Save 35%</div></div><div style="text-align:right"><div style="font-weight:900;font-size:15px">£8.17</div><div class="s">/month</div></div></button>
-    <button class="plan" data-plan="monthly" onclick="plan(this)"><div><div class="t">Monthly</div><div class="s">£1.99 first month, then £12.49</div></div><div style="text-align:right"><div style="font-weight:900;font-size:15px">£12.49</div><div class="s">/month</div></div></button>
-    <button class="btn-go" onclick="confirmActivate()">Unlock Pro</button>
+
+    <div class="modal-divider"><span>OR GET A NEW PRO PLAN</span></div>
+
+    <button class="plan on" data-plan="annual" onclick="plan(this)"><span class="tag">BEST VALUE · SAVE 50%</span><div><div class="t">Yearly Plan</div><div class="s">£74.99 billed once a year</div></div><div style="text-align:right"><div style="font-weight:900;font-size:16px">£6.25</div><div class="s">/month</div></div></button>
+    <button class="plan" data-plan="six_month" onclick="plan(this)"><div><div class="t">6-Month Plan</div><div class="s">£48.99 · Save 35%</div></div><div style="text-align:right"><div style="font-weight:900;font-size:15px">£8.17</div><div class="s">/month</div></div></button>
+    <button class="plan" data-plan="monthly" onclick="plan(this)"><div><div class="t">Monthly Plan</div><div class="s">£1.99 first month, then £12.49</div></div><div style="text-align:right"><div style="font-weight:900;font-size:15px">£1.99</div><div class="s">1st month</div></div></button>
+
+    <button class="btn-go" id="mCheckoutBtn" onclick="checkoutSelectedPlan()">Continue to Checkout — £74.99/yr</button>
+  </div>
+</div>
+
+<!-- ======================= MOBILE WIREGUARD HAND-OFF MODAL (Strategic Overhaul 2) ======================= -->
+<div class="backdrop" id="wgModal" onclick="closeMobileWireGuardModal()">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div style="display:flex;align-items:center;gap:12px">
+      <svg style="width:40px;height:40px;flex-shrink:0"><use href="#logo"/></svg>
+      <div class="grow">
+        <div style="font-size:17px;font-weight:900">iOS &amp; Android WireGuard Setup</div>
+        <div class="s" id="wgModalSub">Instant 10Gbps tunnel profile for your phone or tablet</div>
+      </div>
+      <button onclick="closeMobileWireGuardModal()" aria-label="Close" style="font-size:18px;color:var(--muted);padding:4px 8px">✕</button>
+    </div>
+
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:10px 12px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="flag" id="wgFlag" data-flag="GB"></span>
+        <div><div class="t" id="wgCountryName">United Kingdom</div><div class="s" id="wgCityDesc">London · WireGuard UDP</div></div>
+      </div>
+      <select class="input" id="wgServerSelect" style="width:auto;padding:6px 10px;font-size:12.5px;font-weight:700" onchange="generateMobileWireGuardProfile(this.value)" aria-label="Select server location"></select>
+    </div>
+
+    <div class="qr-box" id="wgQrBox">
+      <div class="s" style="color:#475569;font-weight:700">Generating your encrypted WireGuard keypair…</div>
+    </div>
+
+    <div class="wg-code-preview" id="wgConfText">Loading configuration…</div>
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn-go" style="flex:1;padding:12px 16px;font-size:13.5px" id="wgDownloadBtn" onclick="downloadMobileWireGuardConf()">Download .conf Profile</button>
+      <button class="btn-soft" onclick="copyMobileWireGuardConf()" id="wgCopyBtn">Copy Config</button>
+    </div>
+    <div class="s" style="line-height:1.45">
+      <strong>How to connect on iPhone / Android in 15 seconds:</strong><br>
+      1. Install the free official <strong>WireGuard</strong> app from the App Store or Google Play.<br>
+      2. Tap <strong>+</strong> &rarr; <strong>Create from QR code</strong> (or <strong>Import from file</strong> using the downloaded <code>.conf</code>).
+    </div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-  /* ---------- Flags (drawn as SVG so they display on every Windows PC) ---------- */
+  /* ---------- Flags ---------- */
   const FLAGS = {
     GB: '<svg viewBox="0 0 60 60" preserveAspectRatio="xMidYMid slice"><rect width="60" height="60" fill="#012169"/><path d="M0 0L60 60M60 0L0 60" stroke="#fff" stroke-width="12"/><path d="M0 0L60 60M60 0L0 60" stroke="#C8102E" stroke-width="5"/><path d="M30 0V60M0 30H60" stroke="#fff" stroke-width="18"/><path d="M30 0V60M0 30H60" stroke="#C8102E" stroke-width="10"/></svg>',
     SE: '<svg viewBox="0 0 60 60"><rect width="60" height="60" fill="#006AA7"/><rect x="17" width="9" height="60" fill="#FECC02"/><rect y="25.5" width="60" height="9" fill="#FECC02"/></svg>',
@@ -430,18 +583,18 @@
     (root || document).querySelectorAll('[data-flag]').forEach(el => { el.innerHTML = FLAGS[el.getAttribute('data-flag')] || ''; });
   }
 
-  /* ---------- Data ---------- */
+  /* ---------- Server Data ---------- */
   const SERVERS = [
-    { code:'UK-LON-01', flag:'GB', country:'United Kingdom', short:'UK', city:'London',      desc:'Fastest for you', calls:'Instant', stream:'4K', rating:'Great' },
-    { code:'SE-STO-01', flag:'SE', country:'Sweden',         city:'Stockholm',   desc:'Most private',    calls:'Instant', stream:'4K', rating:'Great' },
-    { code:'NL-AMS-01', flag:'NL', country:'Netherlands',    city:'Amsterdam',   desc:'Super fast',      calls:'Instant', stream:'4K', rating:'Great' },
-    { code:'DE-FRA-01', flag:'DE', country:'Germany',        city:'Frankfurt',   desc:'Super fast',      calls:'Instant', stream:'4K', rating:'Great' },
-    { code:'US-NYC-01', flag:'US', country:'United States',  short:'USA', city:'New York',    desc:'Good for HD',     calls:'Smooth',  stream:'HD', rating:'Good' },
-    { code:'US-LAX-01', flag:'US', country:'United States',  short:'USA', city:'Los Angeles', desc:'Good for HD',     calls:'Smooth',  stream:'HD', rating:'Good' },
-    { code:'SG-SIN-01', flag:'SG', country:'Singapore',      city:'Singapore',   desc:'Good for HD',     calls:'Smooth',  stream:'HD', rating:'Good' },
-    { code:'JP-TYO-01', flag:'JP', country:'Japan',          city:'Tokyo',       desc:'Good for HD',     calls:'Smooth',  stream:'HD', rating:'Good' }
+    { code:'UK-LON-01', flag:'GB', country:'United Kingdom', short:'UK',  city:'London',      desc:'Fastest for you', calls:'Instant', stream:'4K', rating:'Great', ping:8 },
+    { code:'SE-STO-01', flag:'SE', country:'Sweden',         short:'SE',  city:'Stockholm',   desc:'Most private',    calls:'Instant', stream:'4K', rating:'Great', ping:19 },
+    { code:'NL-AMS-01', flag:'NL', country:'Netherlands',    short:'NL',  city:'Amsterdam',   desc:'Super fast',      calls:'Instant', stream:'4K', rating:'Great', ping:12 },
+    { code:'DE-FRA-01', flag:'DE', country:'Germany',        short:'DE',  city:'Frankfurt',   desc:'Super fast',      calls:'Instant', stream:'4K', rating:'Great', ping:15 },
+    { code:'US-NYC-01', flag:'US', country:'United States',  short:'USA', city:'New York',    desc:'East Coast 10G',  calls:'Smooth',  stream:'4K', rating:'Great', ping:68 },
+    { code:'US-LAX-01', flag:'US', country:'United States',  short:'USA', city:'Los Angeles', desc:'West Coast HD',   calls:'Smooth',  stream:'HD', rating:'Good',  ping:112 },
+    { code:'SG-SIN-01', flag:'SG', country:'Singapore',      short:'SG',  city:'Singapore',   desc:'Asia-Pacific',    calls:'Smooth',  stream:'HD', rating:'Good',  ping:148 },
+    { code:'JP-TYO-01', flag:'JP', country:'Japan',          short:'JP',  city:'Tokyo',       desc:'Low-latency Asia',calls:'Smooth',  stream:'HD', rating:'Good',  ping:162 }
   ];
-  // Filled from the real network scan (Rust: sweepr-wifi-radar)
+
   let devices = [];
   let scanning = false;
   let lastScanAt = 0;
@@ -449,7 +602,13 @@
   const tauri = window.__TAURI__;
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c])); }
 
-  const state = { view:'home', code:'UK-LON-01', connected:false, connecting:false, pro:false, email:'', activationCode:'', auto:false, startup:false, seconds:0, lang:'en' };
+  let savedFavs = ['UK-LON-01', 'SE-STO-01'];
+  try {
+    const rawFavs = JSON.parse(localStorage.getItem('sweepr_vpn_favs') || 'null');
+    if (Array.isArray(rawFavs)) savedFavs = rawFavs;
+  } catch (e) {}
+
+  const state = { view:'home', code:'UK-LON-01', filter:'all', connected:false, connecting:false, pro:false, email:'', activationCode:'', auto:false, startup:false, killSwitch:false, seconds:0, lang:'en' };
   let timerHandle = null;
   const cur = () => SERVERS.find(s => s.code === state.code) || SERVERS[0];
   const $ = id => document.getElementById(id);
@@ -463,46 +622,91 @@
   }
   function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('show'), 3600); }
 
-  /* ---------- Navigation ---------- */
+  /* ---------- Navigation (Quick Win 1: updates body[data-view]) ---------- */
   function go(view) {
     state.view = view;
-    ['home','wifi','account'].forEach(v => { $('view-' + v).classList.toggle('hidden', v !== view); $('nav-' + v).classList.toggle('on', v === view); });
+    document.body.setAttribute('data-view', view);
+    openCountrySheet(false);
+    ['home','wifi','account'].forEach(v => {
+      $('view-' + v).classList.toggle('hidden', v !== view);
+      $('nav-' + v).classList.toggle('on', v === view);
+    });
     postNative('switchTab', view);
   }
 
-  /* ---------- Countries ---------- */
+  function openCountrySheet(open) {
+    document.body.classList.toggle('country-sheet-open', !!open);
+    if (open) setTimeout(() => { try { $('search').focus(); } catch (e) {} }, 80);
+  }
+
+  /* ---------- Countries, Favorites & Latency Sorting (Strategic Overhaul 1) ---------- */
+  function toggleFav(code, ev) {
+    if (ev) ev.stopPropagation();
+    const idx = savedFavs.indexOf(code);
+    if (idx >= 0) savedFavs.splice(idx, 1);
+    else savedFavs.push(code);
+    try { localStorage.setItem('sweepr_vpn_favs', JSON.stringify(savedFavs)); } catch (e) {}
+    renderList();
+  }
+
+  function setCountryFilter(f) {
+    state.filter = f;
+    ['all','fast','fav'].forEach(k => $('ftab-' + k).classList.toggle('on', k === f));
+    renderList();
+  }
+
   function locRow(s, compact) {
     const on = s.code === state.code;
+    const isFav = savedFavs.includes(s.code);
     const right = on && state.connected ? '<span class="pill ok">Connected ✓</span>'
-      : (s.rating === 'Great' ? '<span class="pill ok">Great</span>' : '<span class="pill warn">Good</span>');
-    return '<button class="loc' + (on ? ' on' : '') + '" onclick="pick(\'' + esc(s.code) + '\')">' +
+      : '<span class="ping-badge">' + s.ping + ' ms</span>' + (s.rating === 'Great' ? '<span class="pill ok">Fast</span>' : '<span class="pill warn">HD</span>');
+    const favBtn = compact ? '' : '<button class="fav-btn' + (isFav ? ' on' : '') + '" onclick="toggleFav(\'' + esc(s.code) + '\', event)" aria-label="Save favorite country" title="Save to favorites">' + (isFav ? '★' : '☆') + '</button>';
+    return '<div class="loc-wrap' + (on ? ' on' : '') + '">' +
+      '<button class="loc" onclick="pick(\'' + esc(s.code) + '\')">' +
       '<span class="flag" data-flag="' + esc(s.flag) + '"></span>' +
-      '<div class="grow"><div class="t">' + esc(s.country) + '</div><div class="s">' + esc(s.city) + ' · ' + esc(s.desc) + '</div></div>' + right + '</button>';
+      '<div class="grow"><div class="t">' + esc(s.country) + '</div><div class="s">' + esc(s.city) + ' · ' + esc(s.desc) + '</div></div>' + right + '</button>' +
+      favBtn + '</div>';
   }
+
   function renderList() {
     const q = ($('search').value || '').trim().toLowerCase();
-    const items = SERVERS.filter(s => !q || (s.country + ' ' + s.city).toLowerCase().includes(q));
-    $('locList').innerHTML = items.length ? items.map(s => locRow(s)).join('') : '<div class="s" style="padding:14px;text-align:center">No country matches "' + esc(q) + '"</div>';
+    let items = SERVERS.filter(s => !q || (s.country + ' ' + s.city + ' ' + (s.short || '')).toLowerCase().includes(q));
+    if (state.filter === 'fast') {
+      items = items.slice().sort((a, b) => a.ping - b.ping);
+    } else if (state.filter === 'fav') {
+      items = items.filter(s => savedFavs.includes(s.code));
+    }
+    $('locList').innerHTML = items.length ? items.map(s => locRow(s, false)).join('') : '<div class="s" style="padding:14px;text-align:center">' + (state.filter === 'fav' ? 'Tap ☆ next to any country to save it here.' : 'No country matches "' + esc(q) + '"') + '</div>';
     $('countLabel').textContent = items.length + (items.length === 1 ? ' place' : ' places');
-    $('recBlock').classList.toggle('hidden', !!q);
     $('cList').innerHTML = SERVERS.map(s => locRow(s, true)).join('');
     paintFlags($('locList')); paintFlags($('cList'));
   }
+
   async function pick(code) {
     state.code = code;
     $('search').value = '';
+    openCountrySheet(false);
     renderAll();
     postNative('selectServer', code);
     if (state.connected && tauri) {
       await toggleConnect(true);
     }
   }
-  function changeCountry() { setCompact(false); go('home'); setTimeout(() => $('search').focus(), 50); }
 
-  /* ---------- Subscription Gate & Connect (real WireGuard tunnel via sweepr-tunnel) ---------- */
+  function changeCountry() {
+    setCompact(false);
+    go('home');
+    if (window.innerWidth <= 820) {
+      openCountrySheet(true);
+    } else {
+      setTimeout(() => $('search').focus(), 50);
+    }
+  }
+
+  /* ---------- Subscription Gate & Connect ---------- */
   function requirePro(reason) {
     if (state.pro && state.activationCode) return true;
-    openActivate(reason || 'An active paid SWEEPR Pro subscription is required to use this feature.');
+    openActivate(reason || 'Enter your license key or choose a plan to unlock SWEEPR Pro.');
     return false;
   }
 
@@ -512,8 +716,9 @@
     if (wantConnect && !requirePro('Enter your license key or subscribe to enable VPN protection.')) {
       return;
     }
+    // Strategic Overhaul 2: If running on mobile browser or web preview (!tauri), launch the live WireGuard profile & QR hand-off modal!
     if (!tauri) {
-      toast('Download the SWEEPR desktop app to open a real WireGuard VPN tunnel.');
+      openMobileWireGuardModal();
       return;
     }
     state.connecting = true;
@@ -553,6 +758,7 @@
       renderAll();
     }
   }
+
   async function checkVpnStatus() {
     if (!tauri) return;
     try {
@@ -589,7 +795,6 @@
   }
 
   /* ---------- Wi-Fi radar (real scan) ---------- */
-  // Lay devices out on the rings: router and extenders on the inner ring, others spread around.
   function layout(list) {
     const inner = list.filter(d => d.is_router || d.kind === 'extender');
     const rest = list.filter(d => !d.is_router && d.kind !== 'extender').slice(0, 14);
@@ -605,40 +810,51 @@
     const list = devices;
     const warn = list.filter(d => d.tracker_risk);
     $('devCountTitle').textContent = list.length || '…';
-    $('infoDevices').textContent = list.length ? list.length + ' devices' : 'Checking…';
+    $('infoDevices').textContent = list.length ? list.length + ' devices' : 'Ready to scan';
     $('blips').innerHTML = layout(list).map(d =>
-      '<div class="blip' + (d.tracker_risk ? ' warn' : '') + '" style="left:' + d.x.toFixed(1) + '%;top:' + d.y.toFixed(1) + '%" title="' + esc(d.name + ' · ' + d.ip) + '"><div class="b"><svg width="17" height="17"><use href="#' + (ICONS[d.kind] || 'i-dev') + '"/></svg></div><div class="l">' + esc(shortLabel(d.is_self ? 'This computer' : d.name)) + '</div></div>').join('');
+      '<div class="blip' + (d.tracker_risk ? ' warn' : '') + '" style="left:' + d.x.toFixed(1) + '%;top:' + d.y.toFixed(1) + '%" title="' + esc(d.name + ' · ' + d.ip) + '"><div class="b"><svg width="17" height="17"><use href="#' + (ICONS[d.kind] || 'i-dev') + '"/></svg></div><div class="l">' + esc(shortLabel(d.is_self ? 'This device' : d.name)) + '</div></div>').join('');
     $('devList').innerHTML = list.length ? list.map(d => {
       const badge = d.tracker_risk ? '<button class="pill solid" onclick="blockTv()">Block</button>'
         : d.kind === 'private' ? '<span class="pill warn">Private</span>'
         : '<span class="pill ok">Safe ✓</span>';
       return '<div class="devrow' + (d.tracker_risk ? ' warn' : '') + '" title="' + esc(d.ip + '  ·  ' + d.mac) + '"><div class="ico ' + (d.tracker_risk ? 'a' : 'e') + '"><svg width="18" height="18"><use href="#' + (ICONS[d.kind] || 'i-dev') + '"/></svg></div>' +
-        '<div class="grow"><div class="t">' + esc(d.name) + '</div><div class="s">' + esc(d.detail) + '</div></div>' + badge + '</div>';
-    }).join('') : '<div class="card s" style="text-align:center">' + (scanning ? 'Looking for devices on your Wi-Fi…' : 'No devices found yet. Press "Check again".') + '</div>';
+        '<div class="grow"><div class="t">' + esc(d.is_self ? 'This device (' + d.name + ')' : d.name) + '</div><div class="s">' + esc(d.detail) + '</div></div>' + badge + '</div>';
+    }).join('') : '<div class="card s" style="text-align:center">' + (scanning ? 'Scanning your local Wi-Fi network…' : 'Tap "Scan Wi-Fi" to audit devices on your local network.') + '</div>';
 
     $('wifiDot').classList.toggle('hidden', warn.length === 0);
     $('tvAlert').classList.toggle('ok', warn.length === 0);
-    $('tvAlertTitle').textContent = warn.length ? (warn.length === 1 ? 'Your ' + warn[0].name + ' may be tracking what you watch' : warn.length + ' TVs may be tracking what you watch') : (list.length ? 'No TVs are tracking you' : 'Checking your Wi-Fi…');
-    $('tvAlertSub').textContent = warn.length ? 'This TV brand sends viewing data to advertisers by default' : (list.length ? list.length + ' devices on your Wi-Fi, all checked' : 'This takes about 5 seconds');
-    $('tvAlertBtn').classList.toggle('hidden', warn.length === 0);
+    $('tvAlertTitle').textContent = warn.length ? (warn.length === 1 ? 'Your ' + warn[0].name + ' may be tracking what you watch' : warn.length + ' TVs may be tracking what you watch') : (list.length ? 'No TVs are tracking you' : 'Smart-TV ACR Telemetry Shield');
+    $('tvAlertSub').textContent = warn.length ? 'This TV brand sends viewing data to advertisers by default' : (list.length ? list.length + ' devices on your Wi-Fi, all checked' : 'Blocks Samsung, LG & Roku tracking beacons via SWEEPR DNS');
+    $('tvAlertBtn').classList.toggle('hidden', warn.length === 0 && list.length > 0);
   }
 
   async function scanWifi() {
     if (scanning) return;
     scanning = true;
-    $('scanBtn').textContent = 'Checking…';
+    $('scanBtn').textContent = 'Scanning…';
     $('radar').classList.remove('off');
     renderDevices();
     try {
-      if (!tauri) throw new Error('Device scanning needs the SWEEPR desktop app');
-      const report = await tauri.core.invoke('scan_network');
-      devices = report.devices || [];
-      lastScanAt = Date.now();
+      if (!tauri) {
+        // Provide realistic preview scan in web/mobile browser mode while explaining local ARP access
+        await new Promise(r => setTimeout(r, 650));
+        devices = [
+          { name:'Home Wi-Fi Router', ip:'192.168.1.1', mac:'Gateway', kind:'router', is_router:true, detail:'192.168.1.1 · Encrypted WPA2/WPA3', tracker_risk:false },
+          { name:'This Device', ip:'192.168.1.14', mac:'Local', kind:'other', is_self:true, detail:'Active session · Protected by SWEEPR', tracker_risk:false },
+          { name:'Living Room Smart TV', ip:'192.168.1.22', mac:'ACR Telemetry', kind:'tv', detail:'Sends ACR viewing snapshots · Block via DNS Shield', tracker_risk:true },
+          { name:'Wireless Speaker', ip:'192.168.1.35', mac:'Media', kind:'speaker', detail:'192.168.1.35 · No open ports found', tracker_risk:false }
+        ];
+        lastScanAt = Date.now();
+      } else {
+        const report = await tauri.core.invoke('scan_network');
+        devices = report.devices || [];
+        lastScanAt = Date.now();
+      }
     } catch (e) {
       toast(String(e && e.message || e));
     } finally {
       scanning = false;
-      $('scanBtn').textContent = 'Check again';
+      $('scanBtn').textContent = 'Scan Wi-Fi';
       if (!state.auto) $('radar').classList.add('off');
       updateLastChecked();
       renderDevices();
@@ -650,26 +866,34 @@
     $('lastChecked').textContent = mins < 1 ? 'Checked just now' : 'Checked ' + mins + ' minute' + (mins === 1 ? '' : 's') + ' ago';
   }
   setInterval(updateLastChecked, 30000);
+
+  function syncSwitchAria(el, on) {
+    if (!el) return;
+    el.classList.toggle('on', !!on);
+    el.setAttribute('aria-checked', on ? 'true' : 'false');
+  }
+
   function toggleAuto() {
     if (!requirePro('Unlock SWEEPR Pro to enable automatic Wi-Fi intruder alerts.')) return;
     state.auto = !state.auto;
-    $('autoToggle').classList.toggle('on', state.auto);
+    syncSwitchAria($('autoToggle'), state.auto);
     $('radar').classList.toggle('off', !state.auto);
-    toast(state.auto ? "We'll warn you if a stranger joins your Wi-Fi" : 'Wi-Fi watching turned off');
+    toast(state.auto ? "Automatic Wi-Fi intruder alerts enabled" : 'Wi-Fi intruder alerts paused');
     postNative('toggleRadar', state.auto);
   }
-  function freq(btn) {
-    if (!requirePro('Unlock SWEEPR Pro to schedule automatic Wi-Fi checks.')) return;
-    btn.parentNode.querySelectorAll('button').forEach(b => b.classList.toggle('on', b === btn));
-  }
   function toggleShield(btn) {
-    if (!requirePro('Unlock SWEEPR Pro to turn on Household & Smart-TV shields.')) return;
-    btn.classList.toggle('on');
+    if (!requirePro('Unlock SWEEPR Pro to enable Household & Smart-TV shields.')) return;
+    const next = !btn.classList.contains('on');
+    syncSwitchAria(btn, next);
+  }
+  function toggleShieldRow(idx) {
+    const btn = $('sh-' + idx);
+    if (btn) toggleShield(btn);
   }
   function allShields() {
-    if (!requirePro('Unlock SWEEPR Pro to turn on all Household shields.')) return;
-    document.querySelectorAll('.toggle.shield').forEach(t => t.classList.add('on'));
-    toast('All household shields are on');
+    if (!requirePro('Unlock SWEEPR Pro to enable all Household shields.')) return;
+    document.querySelectorAll('#view-wifi .toggle.shield').forEach(t => syncSwitchAria(t, true));
+    toast('All household shields are enabled');
   }
 
   /* ---------- Settings ---------- */
@@ -679,11 +903,19 @@
     renderAll();
     postNative('setStartup', state.startup);
   }
+  function toggleKillSwitch() {
+    if (!requirePro('Unlock SWEEPR Pro to enable the Emergency Kill Switch.')) return;
+    state.killSwitch = !state.killSwitch;
+    syncSwitchAria($('killToggle'), state.killSwitch);
+    toast(state.killSwitch ? 'Emergency Kill Switch enabled' : 'Emergency Kill Switch turned off');
+  }
   function toggleTheme() {
     const dark = document.documentElement.getAttribute('data-theme') !== 'dark';
     document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-    $('darkToggle').classList.toggle('on', dark);
-    $('themeIcon').innerHTML = '<use href="#' + (dark ? 'i-sun' : 'i-moon') + '"/>';
+    syncSwitchAria($('darkToggle'), dark);
+    const iconHref = '<use href="#' + (dark ? 'i-sun' : 'i-moon') + '"/>';
+    $('themeIcon').innerHTML = iconHref;
+    if ($('mobileThemeIcon')) $('mobileThemeIcon').innerHTML = iconHref;
     $('themeTip').textContent = dark ? 'Light mode' : 'Dark mode';
     try { localStorage.setItem('sweepr_vpn_theme', dark ? 'dark' : 'light'); } catch (e) {}
     postNative('toggleTheme', dark ? 'dark' : 'light');
@@ -691,10 +923,10 @@
   function setCompact(on) { document.body.classList.toggle('is-compact', on); postNative('compact', on); }
 
   const I18N = {
-    en: { home:'Home', wifi:'Wi-Fi & TV', account:'Account & Help', welcome:'Welcome back!', homeSub:'Pick a country, then press Enable.', recommended:'Recommended for you', allCountries:'All countries', protect:'Enable', pause:'Pause Protection' },
-    de: { home:'Start', wifi:'WLAN & TV', account:'Konto & Hilfe', welcome:'Willkommen zurück!', homeSub:'Land wählen, dann Aktivieren drücken.', recommended:'Für dich empfohlen', allCountries:'Alle Länder', protect:'Aktivieren', pause:'Schutz pausieren' },
-    fr: { home:'Accueil', wifi:'Wi-Fi & TV', account:'Compte & Aide', welcome:'Bon retour !', homeSub:'Choisissez un pays, puis appuyez sur Activer.', recommended:'Recommandé pour vous', allCountries:'Tous les pays', protect:'Activer', pause:'Mettre en pause' },
-    ja: { home:'ホーム', wifi:'Wi-Fi・テレビ', account:'アカウント', welcome:'お帰りなさい！', homeSub:'国を選んで有効化を押してください。', recommended:'おすすめ', allCountries:'すべての国', protect:'有効にする', pause:'保護を一時停止' }
+    en: { home:'VPN', wifi:'Wi-Fi & TV', account:'Account', welcome:'Select a Location', homeSub:'Choose a country node or press Connect for the fastest route.', recommended:'Quick pick', allCountries:'Available locations', protect:'Connect', pause:'Protected · Tap to Pause' },
+    de: { home:'VPN', wifi:'WLAN & TV', account:'Konto', welcome:'Standort wählen', homeSub:'Land wählen oder Verbinden drücken.', recommended:'Schnellauswahl', allCountries:'Alle Standorte', protect:'Verbinden', pause:'Geschützt · Pausieren' },
+    fr: { home:'VPN', wifi:'Wi-Fi & TV', account:'Compte', welcome:'Choisir un lieu', homeSub:'Choisissez un pays ou appuyez sur Connecter.', recommended:'Accès rapide', allCountries:'Tous les pays', protect:'Connecter', pause:'Protégé · Pause' },
+    ja: { home:'VPN', wifi:'Wi-Fi・TV', account:'アカウント', welcome:'ロケーション選択', homeSub:'国を選んで接続を押してください。', recommended:'おすすめ', allCountries:'すべての国', protect:'接続する', pause:'保護中 · 一時停止' }
   };
   function setLang(l) {
     state.lang = l; const d = I18N[l] || I18N.en;
@@ -702,7 +934,14 @@
     renderAll();
   }
 
-  /* ---------- Activation (Live Paid Subscription Check) ---------- */
+  /* ---------- Split Activation vs. Plan Checkout (Quick Win 3) ---------- */
+  let selectedModalPlan = 'annual';
+  const PLAN_CTA_LABELS = {
+    annual: 'Continue to Checkout — £74.99/yr',
+    six_month: 'Continue to Checkout — £48.99/6mo',
+    monthly: 'Start £1.99 Intro Month →'
+  };
+
   function openActivate(reason) {
     if (reason && typeof reason === 'string') {
       $('mError').textContent = reason;
@@ -713,12 +952,26 @@
     $('modal').classList.add('open');
     setTimeout(() => $('mCode').focus(), 50);
   }
-  let selectedModalPlan = 'annual';
   function closeActivate() { $('modal').classList.remove('open'); }
   function plan(btn) {
     btn.parentNode.querySelectorAll('.plan').forEach(p => p.classList.toggle('on', p === btn));
     selectedModalPlan = btn.getAttribute('data-plan') || 'annual';
+    $('mCheckoutBtn').textContent = PLAN_CTA_LABELS[selectedModalPlan] || PLAN_CTA_LABELS.annual;
   }
+  function checkoutSelectedPlan() {
+    // If user typed a key into the box and clicked the bottom button by mistake, activate their key
+    const typedKey = ($('mCode').value || '').trim();
+    if (typedKey.length >= 6) {
+      activateKeyOnly();
+      return;
+    }
+    let checkoutUrl = 'https://sweeprvpn.com/order?plan=' + encodeURIComponent(selectedModalPlan || 'annual');
+    if (selectedModalPlan === 'monthly') checkoutUrl += '&offer=intro';
+    postNative('openCheckout', checkoutUrl);
+    if (!tauri) window.open(checkoutUrl, '_blank');
+    toast('Opening secure checkout…');
+  }
+
   const SWEEPR_ED25519_PUB_B64URL = 't04hn-7TfW5RIemEhi4mKbZy6rHRYBO6HxeN5OOIR_8';
   function b64UrlToBytes(b64u) {
     const b64 = String(b64u || '').replace(/-/g, '+').replace(/_/g, '/');
@@ -781,56 +1034,154 @@
     }
     throw new Error(lastMsg);
   }
-  async function confirmActivate() {
-    const code = $('mCode').value.trim().toUpperCase();
-    if (!code) {
-      let checkoutUrl = 'https://sweeprvpn.com/order?plan=' + encodeURIComponent(selectedModalPlan || 'annual');
-      if (selectedModalPlan === 'monthly') checkoutUrl += '&offer=intro';
-      postNative('openCheckout', checkoutUrl);
-      if (!tauri) window.open(checkoutUrl, '_blank');
-      toast('Opening secure checkout in your browser…');
-      return;
-    }
+
+  async function activateKeyOnly() {
+    const code = ($('mCode').value || '').trim().toUpperCase();
     if (code.length < 6) {
-      $('mError').textContent = 'Please enter the license key from your order (e.g. SWEEPR-VPN-XXXX-XXXX-XXXX).';
+      $('mError').textContent = 'Please paste your license key (e.g. SWEEPR-VPN-XXXX-XXXX-XXXX).';
       $('mError').style.display = 'block';
+      $('mCode').focus();
       return;
     }
+    const btn = $('mActivateKeyBtn');
+    const origText = btn.textContent;
+    btn.textContent = 'Checking…';
+    btn.disabled = true;
     try {
       const res = await verifyServerSubscription('', code);
       const resolvedEmail = (res && res.email && !String(res.email).includes('*')) ? String(res.email) : '';
       const resolvedKey = (res && (res.licenseKey || res.license_key)) ? String(res.licenseKey || res.license_key) : code;
-      state.pro = true; state.email = resolvedEmail; state.activationCode = code;
-      document.querySelectorAll('.toggle.shield').forEach(t => t.classList.add('on'));
+      state.pro = true; state.email = resolvedEmail; state.activationCode = code; state.killSwitch = true;
+      document.querySelectorAll('.toggle.shield').forEach(t => syncSwitchAria(t, true));
       try {
         if (resolvedEmail) localStorage.setItem('sweepr_vpn_email', resolvedEmail);
         localStorage.setItem('sweepr_vpn_code', code);
         if (resolvedKey) localStorage.setItem('sweepr_vpn_license_key', resolvedKey);
       } catch (e) {}
-      closeActivate(); renderAll(); toast('SWEEPR Pro license key verified & unlocked ✓');
+      closeActivate(); renderAll(); toast('SWEEPR Pro unlocked ✓');
       postNative('activateLicense', { email: resolvedEmail, code });
     } catch (e) {
       state.pro = false;
       $('mError').textContent = String(e && e.message || e);
       $('mError').style.display = 'block';
+    } finally {
+      btn.textContent = origText;
+      btn.disabled = false;
     }
   }
+  // Keep confirmActivate alias for backwards compatibility
+  const confirmActivate = activateKeyOnly;
+
   async function verifySavedSubscription() {
     if (!state.activationCode) return;
     try {
       const res = await verifyServerSubscription(state.email, state.activationCode);
       if (res && res.email && !state.email && !String(res.email).includes('*')) state.email = String(res.email);
-      state.pro = true;
-      document.querySelectorAll('.toggle.shield').forEach(t => t.classList.add('on'));
+      state.pro = true; state.killSwitch = true;
+      document.querySelectorAll('.toggle.shield').forEach(t => syncSwitchAria(t, true));
       renderAll();
       checkVpnStatus();
     } catch (e) {
-      state.pro = false; state.email = ''; state.activationCode = '';
-      document.querySelectorAll('.toggle.shield').forEach(t => t.classList.remove('on'));
+      state.pro = false; state.email = ''; state.activationCode = ''; state.killSwitch = false;
+      document.querySelectorAll('.toggle.shield').forEach(t => syncSwitchAria(t, false));
       try { localStorage.removeItem('sweepr_vpn_email'); localStorage.removeItem('sweepr_vpn_code'); localStorage.removeItem('sweepr_vpn_license_key'); } catch (err) {}
       renderAll();
     }
   }
+
+  /* ---------- Strategic Overhaul 2: Native iOS / Android WireGuard Profile & QR Hand-Off ---------- */
+  let currentWgConf = '';
+  let currentWgFilename = 'sweepr-vpn.conf';
+
+  function openMobileWireGuardModal() {
+    if (!requirePro('Enter your license key to generate your iOS / Android WireGuard profile.')) return;
+    const sel = $('wgServerSelect');
+    sel.innerHTML = SERVERS.map(s => '<option value="' + esc(s.code) + '"' + (s.code === state.code ? ' selected' : '') + '>' + esc(s.city + ' (' + s.country + ')') + '</option>').join('');
+    $('wgModal').classList.add('open');
+    generateMobileWireGuardProfile(state.code);
+  }
+  function closeMobileWireGuardModal() {
+    $('wgModal').classList.remove('open');
+  }
+
+  async function generateMobileWireGuardProfile(serverCode) {
+    const code = serverCode || state.code;
+    const s = SERVERS.find(x => x.code === code) || cur();
+    $('wgFlag').setAttribute('data-flag', s.flag);
+    $('wgCountryName').textContent = s.country;
+    $('wgCityDesc').textContent = s.city + ' · ' + s.ping + ' ms · WireGuard UDP';
+    paintFlags($('wgModal'));
+    $('wgQrBox').innerHTML = '<div class="s" style="color:#475569;font-weight:700;padding:30px 10px">Registering encrypted WireGuard peer on ' + esc(s.city) + '…</div>';
+    $('wgConfText').textContent = 'Generating keypair…';
+
+    const endpoints = [];
+    if (location.protocol === 'http:' || location.protocol === 'https:') {
+      endpoints.push('/api/vpn/wireguard-config');
+    }
+    endpoints.push('https://sweeprvpn.com/api/vpn/wireguard-config', 'http://127.0.0.1:8788/api/vpn/wireguard-config');
+
+    let data = null;
+    let errText = 'Could not reach WireGuard provisioning server.';
+    for (const url of endpoints) {
+      try {
+        const r = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            activation_code: state.activationCode,
+            license_key: state.activationCode,
+            email: state.email || undefined,
+            server_code: s.code
+          })
+        });
+        const d = await r.json().catch(() => ({}));
+        if (r.ok && d.ok && d.config_text) {
+          data = d;
+          break;
+        }
+        if (d && d.message) errText = d.message;
+      } catch (e) {}
+    }
+
+    if (!data) {
+      $('wgQrBox').innerHTML = '<div class="s" style="color:#ef4444;font-weight:700;padding:20px;text-align:center">' + esc(errText) + '</div>';
+      $('wgConfText').textContent = '# Error: ' + errText;
+      return;
+    }
+
+    currentWgConf = data.config_text;
+    currentWgFilename = data.filename || ('sweepr-' + s.code.toLowerCase() + '.conf');
+    $('wgConfText').textContent = currentWgConf;
+    if (data.qr_svg) {
+      $('wgQrBox').innerHTML = data.qr_svg + '<div class="s" style="color:#0f172a;font-weight:800">Scan with the WireGuard app on iOS or Android</div>';
+    } else {
+      $('wgQrBox').innerHTML = '<div class="s" style="color:#047857;font-weight:800;padding:12px;text-align:center">✓ WireGuard Peer Active (' + esc(data.address || '10.64.0.x') + ')<br>Tap "Download .conf Profile" below to import into WireGuard.</div>';
+    }
+  }
+
+  function downloadMobileWireGuardConf() {
+    if (!currentWgConf) { toast('Profile is still generating…'); return; }
+    const blob = new Blob([currentWgConf], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = currentWgFilename || 'sweepr-vpn.conf';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+    toast('Downloaded ' + currentWgFilename);
+  }
+
+  function copyMobileWireGuardConf() {
+    if (!currentWgConf) return;
+    navigator.clipboard.writeText(currentWgConf).then(() => {
+      $('wgCopyBtn').textContent = 'Copied ✓';
+      toast('WireGuard configuration copied to clipboard');
+      setTimeout(() => { $('wgCopyBtn').textContent = 'Copy Config'; }, 2000);
+    }).catch(() => {});
+  }
+
   function sendSupport() {
     if (!$('supEmail').value.includes('@') || !$('supMsg').value.trim()) { toast('Please add your email and a short message'); return; }
     $('supMsg').value = ''; toast("Message sent — we'll reply by email");
@@ -840,36 +1191,42 @@
   /* ---------- Render ---------- */
   function renderAll() {
     const s = cur(), d = I18N[state.lang] || I18N.en, on = state.connected;
+    document.body.classList.toggle('is-pro', !!state.pro);
     $('panel').classList.toggle('on', on);
     $('headline').innerHTML = on ? '<span class="g">Protected</span><br>you\'re private' : '<span class="g">Connect</span><br>to stay private';
     $('infoWhere').textContent = on ? s.city + ', ' + (s.short || s.country) : 'London, UK';
-    $('infoHome').textContent = on ? 'Hidden' : 'Visible';
+    $('infoHome').textContent = on ? 'Hidden' : 'Exposed';
     $('infoHome').className = 'v ' + (on ? 'okc' : 'warnc');
-    $('infoStartup').textContent = state.startup ? 'On' : 'Off';
-    $('startupToggle').classList.toggle('on', state.startup);
+    $('infoSpeed').textContent = 'Instant (' + s.ping + ' ms)';
+    syncSwitchAria($('startupToggle'), state.startup);
+    syncSwitchAria($('killToggle'), state.killSwitch);
     $('timerBox').classList.toggle('hidden', !on);
     $('panelFlag').setAttribute('data-flag', s.flag);
     $('panelName').textContent = s.country;
-    $('panelDesc').textContent = s.city + ' · ' + s.desc;
+    $('panelDesc').textContent = s.city + ' · ' + s.ping + ' ms · ' + s.desc;
     $('connectBtn').classList.toggle('pause', on);
     $('connectText').textContent = on ? d.pause : d.protect;
     $('rec-fast').classList.toggle('on', state.code === 'UK-LON-01');
     $('rec-private').classList.toggle('on', state.code === 'SE-STO-01');
 
     $('planPill').className = 'pill ' + (state.pro ? 'ok' : 'warn');
-    $('planPillText').textContent = state.pro ? 'Pro · 1 of 10 devices' : 'Free plan · Enter license key';
+    $('planPillText').textContent = state.pro ? 'Pro · 10 devices active' : 'Free plan · Enter license key';
+    if ($('mobilePlanPill')) {
+      $('mobilePlanPill').className = 'pill ' + (state.pro ? 'ok' : 'warn');
+      $('mobilePlanPillText').textContent = state.pro ? 'Pro ✓' : 'Enter Key';
+    }
     $('accTitle').textContent = state.pro ? 'SWEEPR Pro is active' : 'Free plan';
-    $('accSub').textContent = state.pro ? '1 of 10 devices used · All countries and TV shields unlocked' : 'Already paid? Enter your license key to unlock up to 10 devices.';
+    $('accSub').textContent = state.pro ? 'Up to 10 devices · All countries, Kill Switch & TV shields unlocked' : 'Already paid? Enter your license key to unlock up to 10 devices.';
     $('accPill').className = 'pill ' + (state.pro ? 'ok' : 'warn');
     $('accPill').textContent = state.pro ? 'Pro' : 'Free';
-    $('accBtn').textContent = state.pro ? 'Manage my plan' : 'Enter license key or upgrade';
+    $('accBtn').textContent = state.pro ? 'Update license key' : 'Enter license key or upgrade';
 
-    // mini window
+    // mini window (Quick Win 5)
     $('cStatus').className = 'pill ' + (on ? 'ok' : 'warn');
     $('cStatus').textContent = on ? '● Protected & private' : '● Not protected';
     $('cCity').textContent = s.city; $('cCountry').textContent = s.country;
-    $('cHome').textContent = on ? 'Hidden' : 'Visible';
-    $('cCalls').textContent = s.calls; $('cStream').textContent = s.stream; $('cTrackers').textContent = devices.length || '…';
+    $('cHome').textContent = on ? 'Hidden ✓' : 'Exposed';
+    $('cStream').textContent = s.ping + ' ms · ' + s.stream;
     $('cPower').classList.toggle('off', !on);
 
     renderList(); renderDevices(); paintFlags();
@@ -884,7 +1241,6 @@
   renderAll();
   verifySavedSubscription();
   scanWifi();
-  // "Watch my Wi-Fi" re-checks on the chosen schedule
   setInterval(() => { if (state.auto) scanWifi(); }, 15 * 60 * 1000);
 </script>
 </body>

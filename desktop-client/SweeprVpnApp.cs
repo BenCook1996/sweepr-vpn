@@ -431,7 +431,7 @@ namespace SweeprVpnApp
         public static int RunSelfTest(string outFile)
         {
             string html = LoadEmbeddedTextResource("app-ui.html");
-            if (!html.Contains("Search for a country") || !html.Contains("Enable") || !html.Contains("view-wifi") || !html.Contains("is-compact"))
+            if ((!html.Contains("Search country or city") && !html.Contains("Search for a country")) || (!html.Contains("Connect") && !html.Contains("Enable")) || !html.Contains("view-wifi") || !html.Contains("is-compact"))
                 throw new Exception("Embedded WebView2 HTML UI missing Plain-English controls.");
 
             MainForm form = new MainForm();

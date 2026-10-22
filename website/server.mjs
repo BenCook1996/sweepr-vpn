@@ -735,6 +735,210 @@ const VPN_SERVER_LOCATIONS = [
   { code: 'JP-TYO-01', country: 'Japan', city: 'Tokyo Shinagawa', flag: '🇯🇵', pingMs: 162, speedMbps: 770, loadPct: 21, ip: '104.156.239.162', protocol: 'WireGuard 10Gbps' }
 ];
 
+// Zero-dependency ISO/IEC 18004 QR Code SVG generator (supports up to 367-byte WireGuard .conf payloads)
+function renderWireGuardQrSvg(text) {
+  try {
+    const bytes = Buffer.from(String(text || ''), 'utf8');
+    // Pick QR Version 10-L (<= 271 bytes) or Version 12-L (<= 367 bytes)
+    const ver = bytes.length <= 271 ? 10 : 12;
+    const size = 17 + ver * 4;
+    const alignCenters = ver === 10 ? [6, 28, 50] : [6, 32, 58];
+    const ecPerBlock = ver === 10 ? 18 : 24;
+    const blockLens = ver === 10 ? [68, 68, 69, 69] : [92, 92, 93, 93];
+    const totalDataBytes = blockLens.reduce((a, b) => a + b, 0);
+
+    // 1. Encode byte-mode bit stream (mode 0100 + 16-bit length for v10+)
+    const bits = [];
+    const pushBits = (val, len) => {
+      for (let i = len - 1; i >= 0; i--) bits.push((val >>> i) & 1);
+    };
+    pushBits(0b0100, 4);
+    pushBits(bytes.length, 16);
+    for (const b of bytes) pushBits(b, 8);
+    const maxBits = totalDataBytes * 8;
+    for (let i = 0; i < 4 && bits.length < maxBits; i++) bits.push(0);
+    while (bits.length % 8 !== 0) bits.push(0);
+    const dataWords = [];
+    for (let i = 0; i < bits.length; i += 8) {
+      let w = 0;
+      for (let j = 0; j < 8; j++) w = (w << 1) | bits[i + j];
+      dataWords.push(w);
+    }
+    let padToggle = true;
+    while (dataWords.length < totalDataBytes) {
+      dataWords.push(padToggle ? 0xec : 0x11);
+      padToggle = !padToggle;
+    }
+
+    // 2. GF(256) Reed-Solomon Error Correction (primitive polynomial 0x11D)
+    const gfExp = new Uint8Array(512);
+    const gfLog = new Uint8Array(256);
+    let x = 1;
+    for (let i = 0; i < 255; i++) {
+      gfExp[i] = x;
+      gfLog[x] = i;
+      x <<= 1;
+      if (x & 0x100) x ^= 0x11d;
+    }
+    for (let i = 255; i < 512; i++) gfExp[i] = gfExp[i - 255];
+    const gfMul = (a, b) => (a === 0 || b === 0 ? 0 : gfExp[gfLog[a] + gfLog[b]]);
+
+    let gen = [1];
+    for (let i = 0; i < ecPerBlock; i++) {
+      const next = new Array(gen.length + 1).fill(0);
+      for (let j = 0; j < gen.length; j++) {
+        next[j] ^= gen[j];
+        next[j + 1] ^= gfMul(gen[j], gfExp[i]);
+      }
+      gen = next;
+    }
+
+    const dataBlocks = [];
+    const ecBlocks = [];
+    let offset = 0;
+    for (const len of blockLens) {
+      const block = dataWords.slice(offset, offset + len);
+      offset += len;
+      dataBlocks.push(block);
+      const ec = new Array(ecPerBlock).fill(0);
+      for (const b of block) {
+        const factor = b ^ ec[0];
+        ec.shift();
+        ec.push(0);
+        for (let j = 0; j < ecPerBlock; j++) {
+          ec[j] ^= gfMul(gen[j + 1], factor);
+        }
+      }
+      ecBlocks.push(ec);
+    }
+
+    const finalWords = [];
+    const maxBlockLen = Math.max(...blockLens);
+    for (let i = 0; i < maxBlockLen; i++) {
+      for (let b = 0; b < dataBlocks.length; b++) {
+        if (i < dataBlocks[b].length) finalWords.push(dataBlocks[b][i]);
+      }
+    }
+    for (let i = 0; i < ecPerBlock; i++) {
+      for (let b = 0; b < ecBlocks.length; b++) {
+        finalWords.push(ecBlocks[b][i]);
+      }
+    }
+
+    // 3. Build Matrix & Function Patterns
+    const grid = Array.from({ length: size }, () => new Uint8Array(size));
+    const isFunc = Array.from({ length: size }, () => new Uint8Array(size));
+    const setFunc = (r, c, dark) => {
+      if (r < 0 || c < 0 || r >= size || c >= size) return;
+      grid[r][c] = dark ? 1 : 0;
+      isFunc[r][c] = 1;
+    };
+
+    const drawFinder = (r0, c0) => {
+      for (let dr = -1; dr <= 7; dr++) {
+        for (let dc = -1; dc <= 7; dc++) {
+          const onBorder = dr >= 0 && dr <= 6 && dc >= 0 && dc <= 6 && (dr === 0 || dr === 6 || dc === 0 || dc === 6 || (dr >= 2 && dr <= 4 && dc >= 2 && dc <= 4));
+          setFunc(r0 + dr, c0 + dc, onBorder);
+        }
+      }
+    };
+    drawFinder(0, 0);
+    drawFinder(0, size - 7);
+    drawFinder(size - 7, 0);
+
+    for (let i = 8; i < size - 8; i++) {
+      setFunc(6, i, i % 2 === 0);
+      setFunc(i, 6, i % 2 === 0);
+    }
+
+    for (const r of alignCenters) {
+      for (const c of alignCenters) {
+        if ((r === 6 && c === 6) || (r === 6 && c === size - 7) || (r === size - 7 && c === 6)) continue;
+        for (let dr = -2; dr <= 2; dr++) {
+          for (let dc = -2; dc <= 2; dc++) {
+            setFunc(r + dr, c + dc, Math.max(Math.abs(dr), Math.abs(dc)) !== 1);
+          }
+        }
+      }
+    }
+
+    // Reserve format & version areas
+    for (let i = 0; i <= 8; i++) {
+      if (i !== 6) {
+        isFunc[8][i] = 1;
+        isFunc[i][8] = 1;
+      }
+      if (i < 8) {
+        isFunc[8][size - 1 - i] = 1;
+        isFunc[size - 1 - i][8] = 1;
+      }
+    }
+    setFunc(size - 8, 8, true);
+
+    // Version info (BCH 18,6 with generator 0x1F25)
+    let remV = ver;
+    for (let i = 0; i < 12; i++) remV = (remV << 1) ^ ((remV >>> 11) * 0x1f25);
+    const verBits = (ver << 12) | remV;
+    for (let i = 0; i < 18; i++) {
+      const bit = ((verBits >>> i) & 1) === 1;
+      const a = size - 11 + (i % 3);
+      const b = Math.floor(i / 3);
+      setFunc(a, b, bit);
+      setFunc(b, a, bit);
+    }
+
+    // 4. Place Data & EC Bits in Zigzag
+    let bitIdx = 0;
+    const totalBits = finalWords.length * 8;
+    for (let right = size - 1; right >= 1; right -= 2) {
+      if (right === 6) right = 5;
+      for (let vert = 0; vert < size; vert++) {
+        for (let j = 0; j < 2; j++) {
+          const c = right - j;
+          const upward = ((right + 1) & 2) === 0;
+          const r = upward ? size - 1 - vert : vert;
+          if (!isFunc[r][c] && bitIdx < totalBits) {
+            const byte = finalWords[bitIdx >>> 3];
+            const bit = (byte >>> (7 - (bitIdx & 7))) & 1;
+            grid[r][c] = bit;
+            bitIdx++;
+          }
+        }
+      }
+    }
+
+    // Apply Mask 0 ((r + c) % 2 === 0) and write Format Info (EC Level L = 01, Mask = 000)
+    for (let r = 0; r < size; r++) {
+      for (let c = 0; c < size; c++) {
+        if (!isFunc[r][c] && (r + c) % 2 === 0) grid[r][c] ^= 1;
+      }
+    }
+    const fmtData = (0b01 << 3) | 0;
+    let remF = fmtData;
+    for (let i = 0; i < 10; i++) remF = (remF << 1) ^ ((remF >>> 9) * 0x537);
+    const fmtBits = ((fmtData << 10) | remF) ^ 0x5412;
+    for (let i = 0; i <= 5; i++) setFunc(8, i, ((fmtBits >>> i) & 1) === 1);
+    setFunc(8, 7, ((fmtBits >>> 6) & 1) === 1);
+    setFunc(8, 8, ((fmtBits >>> 7) & 1) === 1);
+    setFunc(7, 8, ((fmtBits >>> 8) & 1) === 1);
+    for (let i = 9; i < 15; i++) setFunc(14 - i, 8, ((fmtBits >>> i) & 1) === 1);
+    for (let i = 0; i < 8; i++) setFunc(size - 1 - i, 8, ((fmtBits >>> i) & 1) === 1);
+    for (let i = 8; i < 15; i++) setFunc(8, size - 15 + i, ((fmtBits >>> i) & 1) === 1);
+
+    // 5. Render compact SVG path
+    let pathD = '';
+    for (let r = 0; r < size; r++) {
+      for (let c = 0; c < size; c++) {
+        if (grid[r][c]) pathD += `M${c + 2},${r + 2}h1v1h-1z`;
+      }
+    }
+    const viewSize = size + 4;
+    return `<svg viewBox="0 0 ${viewSize} ${viewSize}" width="180" height="180" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg"><rect width="${viewSize}" height="${viewSize}" fill="#ffffff"/><path d="${pathD}" fill="#0f172a"/></svg>`;
+  } catch {
+    return '';
+  }
+}
+
 // ---------------------------------------------------------------- Real VPN servers
 // VPN_NODES (Railway variable) is created by scripts/provision-node.mjs:
 // [{ code, country, city, flag, ip, port, public_key, agent_port, agent_secret }]
@@ -1115,10 +1319,10 @@ function sendHtml(res, statusCode, html, extraHeaders = {}) {
 function renderPlatformDownloadPicker(osType = 'other') {
   const isMobile = osType === 'ios' || osType === 'android';
   const title = isMobile
-    ? 'Protect Your Phone &amp; Computer'
+    ? 'Instant Phone &amp; Computer Setup'
     : 'Choose Your Operating System';
   const subtitle = isMobile
-    ? 'You are visiting on a mobile device. One SWEEPR VPN Pro plan protects up to 10 devices across iPhone, Android, Windows, and Mac — or you can copy the desktop installer link for your computer below.'
+    ? 'Connect your iPhone or Android in 15 seconds with a 1-tap WireGuard profile, or get SWEEPR VPN Pro for up to 10 devices.'
     : 'Select your setup option below to start your free 30-second Home Wi-Fi &amp; Speed Scan or activate 1-click WireGuard protection.';
 
   return `<!DOCTYPE html>
@@ -1141,12 +1345,44 @@ function renderPlatformDownloadPicker(osType = 'other') {
       <span class="font-extrabold text-xl tracking-tight text-gray-900">SWEEPR <span class="text-emerald-600">VPN</span></span>
     </a>
     <h1 class="text-2xl font-black text-gray-900 mb-2">${title}</h1>
-    <p class="text-sm text-gray-600 mb-6 leading-relaxed">${subtitle}</p>
+    <p class="text-sm text-gray-600 mb-5 leading-relaxed">${subtitle}</p>
+
+    <!-- Instant iOS / Android WireGuard Profile Hand-Off -->
+    <div class="p-4 rounded-2xl border-2 border-emerald-500 bg-emerald-50/40 text-left mb-5">
+      <div class="flex items-center justify-between gap-2 mb-2">
+        <div class="font-extrabold text-sm text-emerald-950">iOS &amp; Android 1-Tap WireGuard Setup</div>
+        <span class="text-[11px] font-extrabold uppercase tracking-wider bg-emerald-600 text-white px-2.5 py-0.5 rounded-full">Instant Tunnel</span>
+      </div>
+      <p class="text-xs text-gray-600 mb-3">Already have a license key? Enter it below to download your ready-to-import WireGuard profile or QR code.</p>
+      <div class="flex flex-col sm:flex-row gap-2 mb-2">
+        <input id="dlLicenseKey" type="text" maxlength="64" placeholder="SWEEPR-VPN-XXXX-XXXX-XXXX" oninput="this.value=this.value.toUpperCase()" class="flex-1 rounded-xl border border-gray-300 bg-white px-3 py-2.5 text-xs font-mono text-gray-900 focus:border-emerald-600 focus:outline-none" />
+        <select id="dlServerCode" class="rounded-xl border border-gray-300 bg-white px-3 py-2.5 text-xs font-bold text-gray-800">
+          <option value="UK-LON-01">🇬🇧 UK · London</option>
+          <option value="SE-STO-01">🇸🇪 Sweden · Stockholm</option>
+          <option value="NL-AMS-01">🇳🇱 Netherlands · Amsterdam</option>
+          <option value="DE-FRA-01">🇩🇪 Germany · Frankfurt</option>
+          <option value="US-NYC-01">🇺🇸 USA · New York</option>
+          <option value="US-LAX-01">🇺🇸 USA · Los Angeles</option>
+          <option value="SG-SIN-01">🇸🇬 Singapore</option>
+          <option value="JP-TYO-01">🇯🇵 Japan · Tokyo</option>
+        </select>
+      </div>
+      <button type="button" id="dlGenBtn" onclick="generateMobileConf()" class="btn btn-go w-full justify-center text-xs py-2.5">Generate WireGuard .conf &amp; QR Code</button>
+      <div id="dlError" class="hidden text-xs font-bold text-red-600 mt-2"></div>
+      <div id="dlResult" class="hidden mt-3 pt-3 border-t border-emerald-200/70 text-center">
+        <div id="dlQrWrap" class="bg-white rounded-xl p-3 border border-gray-200 inline-flex flex-col items-center mb-2"></div>
+        <div class="flex gap-2 justify-center">
+          <button type="button" onclick="downloadGeneratedConf()" class="btn btn-go text-xs py-2 px-4">Download .conf File</button>
+          <button type="button" id="dlCopyConfBtn" onclick="copyGeneratedConf()" class="btn btn-ghost text-xs py-2 px-3 border border-gray-300 bg-white">Copy Config</button>
+        </div>
+      </div>
+    </div>
+
     <div class="space-y-3 text-left mb-6">
-      <a href="/order?plan=annual" class="flex items-center justify-between gap-3 p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50/50 hover:bg-emerald-50 transition-all no-underline text-gray-900">
+      <a href="/order?plan=annual" class="flex items-center justify-between gap-3 p-4 rounded-xl border border-gray-200 bg-white hover:border-emerald-400 transition-all no-underline text-gray-900">
         <div>
-          <div class="font-extrabold text-sm text-emerald-950">Get SWEEPR VPN Pro (Up to 10 Devices)</div>
-          <div class="text-xs text-emerald-800/80">Instant WireGuard setup for iOS, Android, Windows &amp; Mac &bull; Save 50%</div>
+          <div class="font-extrabold text-sm text-gray-900">Need a License Key? Get SWEEPR VPN Pro</div>
+          <div class="text-xs text-gray-500">Protects up to 10 devices across iOS, Android, Windows &amp; Mac &bull; Save 50%</div>
         </div>
         <span class="btn btn-go text-xs py-2 px-3 shrink-0">Get Pro &rarr;</span>
       </a>
@@ -1166,10 +1402,72 @@ function renderPlatformDownloadPicker(osType = 'other') {
       </a>
     </div>
     <div class="flex flex-col sm:flex-row gap-3 justify-center pt-4 border-t border-gray-100">
-      <a href="/app" class="btn btn-ghost w-full justify-center border border-gray-200">Try Interactive App Preview</a>
+      <a href="/app" class="btn btn-ghost w-full justify-center border border-gray-200">Open Interactive Web App</a>
       <a href="/?home=1" class="btn btn-ghost w-full justify-center">Back to Home</a>
     </div>
   </div>
+  <script>
+    let _dlConfText = '';
+    let _dlConfFile = 'sweepr-vpn.conf';
+    try {
+      const saved = localStorage.getItem('sweepr_vpn_license_key') || localStorage.getItem('sweepr_vpn_code') || '';
+      if (saved) document.getElementById('dlLicenseKey').value = saved;
+    } catch (e) {}
+    async function generateMobileConf() {
+      const key = (document.getElementById('dlLicenseKey').value || '').trim().toUpperCase();
+      const srv = document.getElementById('dlServerCode').value || 'UK-LON-01';
+      const errEl = document.getElementById('dlError');
+      const resEl = document.getElementById('dlResult');
+      const btn = document.getElementById('dlGenBtn');
+      errEl.classList.add('hidden');
+      if (key.length < 6) {
+        errEl.textContent = 'Please enter your license key (e.g. SWEEPR-VPN-XXXX-XXXX-XXXX).';
+        errEl.classList.remove('hidden');
+        return;
+      }
+      btn.textContent = 'Generating WireGuard profile…';
+      btn.disabled = true;
+      try {
+        const r = await fetch('/api/vpn/wireguard-config', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ license_key: key, activation_code: key, server_code: srv })
+        });
+        const d = await r.json().catch(() => ({}));
+        if (!r.ok || !d.ok || !d.config_text) {
+          throw new Error(d.message || 'Could not generate profile. Check your license key.');
+        }
+        _dlConfText = d.config_text;
+        _dlConfFile = d.filename || ('sweepr-' + srv.toLowerCase() + '.conf');
+        try { localStorage.setItem('sweepr_vpn_code', key); localStorage.setItem('sweepr_vpn_license_key', key); } catch (e) {}
+        document.getElementById('dlQrWrap').innerHTML = (d.qr_svg || '') + '<div class="text-[11px] font-bold text-gray-700 mt-1">Scan in WireGuard App (iOS / Android)</div>';
+        resEl.classList.remove('hidden');
+      } catch (e) {
+        errEl.textContent = e.message || String(e);
+        errEl.classList.remove('hidden');
+      } finally {
+        btn.textContent = 'Generate WireGuard .conf & QR Code';
+        btn.disabled = false;
+      }
+    }
+    function downloadGeneratedConf() {
+      if (!_dlConfText) return;
+      const blob = new Blob([_dlConfText], { type: 'text/plain;charset=utf-8' });
+      const u = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = u; a.download = _dlConfFile;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(u), 2000);
+    }
+    function copyGeneratedConf() {
+      if (!_dlConfText) return;
+      navigator.clipboard.writeText(_dlConfText).then(() => {
+        const b = document.getElementById('dlCopyConfBtn');
+        b.textContent = 'Copied ✓';
+        setTimeout(() => { b.textContent = 'Copy Config'; }, 2000);
+      });
+    }
+  </script>
 </body>
 </html>`;
 }
@@ -3060,6 +3358,72 @@ const server = http.createServer(async (req, res) => {
       }, {}, req);
     } catch (e) {
       return sendJson(res, 502, { ok: false, error: 'server_unreachable', message: 'That location is not responding. Please try another.' }, {}, req);
+    }
+  }
+
+  // Mobile & Web WireGuard profile generator (iOS / Android / macOS / Linux .conf + QR SVG)
+  if (pathname === '/api/vpn/wireguard-config' && req.method === 'POST') {
+    if (!checkRateLimit(req, 'vpn_wg_config', 15, 60000)) {
+      return sendJson(res, 429, { ok: false, error: 'rate_limit_exceeded', message: 'Too many requests. Please wait a minute.' }, {}, req);
+    }
+    const body = await readJsonBody(req);
+    if (body && body.__tooLarge) return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, {}, req);
+    const rawKey = String(body?.activation_code || body?.license_key || '').trim();
+    const rawCode = String(body?.server_code || 'UK-LON-01').trim().toUpperCase();
+    const serverCode = rawCode === 'CH-ZRH-01' ? 'SE-STO-01' : rawCode;
+    const licence = await resolveVpnLicence(rawKey, body?.email);
+    if (!licence) {
+      return sendJson(res, 401, { ok: false, error: 'licence_required', message: 'Please enter a valid active SWEEPR Pro license key.' }, {}, req);
+    }
+    const nodes = loadVpnNodes();
+    const node = nodes.find((n) => n.code === serverCode) || nodes[0];
+    if (!node) {
+      return sendJson(res, 404, { ok: false, error: 'server_unavailable', message: 'That location is temporarily unavailable.' }, {}, req);
+    }
+    try {
+      const { publicKey, privateKey } = crypto.generateKeyPairSync('x25519');
+      const jwk = privateKey.export({ format: 'jwk' });
+      const clientPrivateKey = Buffer.from(jwk.d, 'base64url').toString('base64');
+      const clientPublicKey = Buffer.from(jwk.x, 'base64url').toString('base64');
+
+      const r = await callNodeAgent(node, 'POST', '/peers', { public_key: clientPublicKey, licence: licence.id });
+      const pinnedPubKey = String(node.public_key || '').trim();
+      const agentPubKey = String(r.public_key || '').trim();
+      if (pinnedPubKey && agentPubKey && pinnedPubKey !== agentPubKey) {
+        throw new Error('node_public_key_mismatch');
+      }
+      const serverPubKey = pinnedPubKey || agentPubKey;
+      const assignedAddress = String(r.address || '10.64.0.2/32').trim();
+      const assignedDns = String(r.dns || '10.64.0.1').trim();
+      const endpoint = `${node.ip}:${node.port || 51820}`;
+
+      const configText = [
+        '[Interface]',
+        `PrivateKey = ${clientPrivateKey}`,
+        `Address = ${assignedAddress}`,
+        `DNS = ${assignedDns}`,
+        '',
+        '[Peer]',
+        `PublicKey = ${serverPubKey}`,
+        'AllowedIPs = 0.0.0.0/0, ::/0',
+        `Endpoint = ${endpoint}`,
+        'PersistentKeepalive = 25',
+        ''
+      ].join('\n');
+
+      const qrSvg = renderWireGuardQrSvg(configText);
+      return sendJson(res, 200, {
+        ok: true,
+        filename: `sweepr-${node.code.toLowerCase()}.conf`,
+        config_text: configText,
+        qr_svg: qrSvg,
+        address: assignedAddress,
+        dns: assignedDns,
+        endpoint,
+        server: { code: node.code, country: node.country, city: node.city, flag: node.flag }
+      }, {}, req);
+    } catch (e) {
+      return sendJson(res, 502, { ok: false, error: 'server_unreachable', message: 'Could not register mobile WireGuard peer on that location. Please try another country.' }, {}, req);
     }
   }
 
