@@ -1435,8 +1435,17 @@ function renderPlatformDownloadPicker(osType = 'other') {
     let _dlConfText = '';
     let _dlConfFile = 'sweepr-vpn.conf';
     try {
-      const saved = localStorage.getItem('sweepr_vpn_license_key') || localStorage.getItem('sweepr_vpn_code') || '';
-      if (saved) document.getElementById('dlLicenseKey').value = saved;
+      const p = new URLSearchParams(window.location.search || '');
+      const urlKey = (p.get('key') || p.get('code') || '').trim().toUpperCase();
+      const saved = urlKey || localStorage.getItem('sweepr_vpn_license_key') || localStorage.getItem('sweepr_vpn_code') || '';
+      if (saved) {
+        document.getElementById('dlLicenseKey').value = saved;
+        localStorage.setItem('sweepr_vpn_code', saved);
+        localStorage.setItem('sweepr_vpn_license_key', saved);
+      }
+      if (urlKey && p.get('autoconf') === '1') {
+        setTimeout(() => generateMobileConf(), 120);
+      }
     } catch (e) {}
     async function generateMobileConf() {
       const key = (document.getElementById('dlLicenseKey').value || '').trim().toUpperCase();
@@ -1544,6 +1553,13 @@ function renderCheckoutSuccessPage(acc, isCancelled = false, isPopup = false) {
     try {
       localStorage.removeItem('sweepr_visited_order');
       document.cookie = 'sweepr_visited_order=; path=/; max-age=0';
+      if ('${licenseKey}') {
+        localStorage.setItem('sweepr_vpn_code', '${licenseKey}');
+        localStorage.setItem('sweepr_vpn_license_key', '${licenseKey}');
+      }
+      if ('${email}') {
+        localStorage.setItem('sweepr_vpn_email', '${email}');
+      }
       if (${isPopup ? 'true' : 'false'}) {
         const redirectUrl = '/checkout/success?web=1&subscription_id=${subscriptionId}&account_id=${accountId}';
         const msg = { type: 'paypal_success', redirectUrl, subscriptionId: '${subscriptionId}', accountId: '${accountId}' };
@@ -1603,12 +1619,15 @@ function renderCheckoutSuccessPage(acc, isCancelled = false, isPopup = false) {
       </div>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-      <a href="/download" class="py-3.5 px-5 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-black text-sm shadow-lg no-underline">
-        Download SWEEPR VPN
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+      <a href="/download?key=${encodeURIComponent(acc?.licenseKey || '')}&amp;autoconf=1" class="py-3.5 px-4 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-black text-xs sm:text-sm shadow-lg no-underline">
+        Download &amp; Setup App
       </a>
-      <a href="/dashboard" class="py-3.5 px-5 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-sm border border-slate-700 no-underline">
-        Open Customer Portal
+      <a href="/app?key=${encodeURIComponent(acc?.licenseKey || '')}" class="py-3.5 px-4 rounded-full bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 font-extrabold text-xs sm:text-sm border border-emerald-500/40 no-underline">
+        Open Web / Mobile App
+      </a>
+      <a href="/dashboard" class="py-3.5 px-4 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs sm:text-sm border border-slate-700 no-underline">
+        Customer Portal
       </a>
     </div>
   </div>

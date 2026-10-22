@@ -416,8 +416,8 @@
     <!-- WI-FI & TV -->
     <section id="view-wifi" class="hidden">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
-        <div><h1 class="view-title"><span id="devCountTitle">4</span> devices on Wi-Fi</h1><div class="view-sub" id="lastChecked">Checked just now</div></div>
-        <button class="btn-soft" onclick="scanWifi()" id="scanBtn">Scan Wi-Fi</button>
+        <div><h1 class="view-title"><span id="devCountTitle">4</span> <span data-i18n="wifiTitle">devices on Wi-Fi</span></h1><div class="view-sub" id="lastChecked">Checked just now</div></div>
+        <button class="btn-soft" onclick="scanWifi()" id="scanBtn" data-i18n="scanBtn">Scan Wi-Fi</button>
       </div>
 
       <div class="radar off" id="radar">
@@ -436,26 +436,26 @@
         <div class="set-row" style="padding:0" onclick="toggleAuto()">
           <div class="ico e"><svg width="19" height="19"><use href="#i-bell"/></svg></div>
           <div class="grow">
-            <div class="t">Wi-Fi intruder alerts <span class="pro-tag">PRO</span></div>
-            <div class="s">Alert me immediately if an unknown device joins my Wi-Fi</div>
+            <div class="t"><span data-i18n="intruderTitle">Wi-Fi intruder alerts</span> <span class="pro-tag">PRO</span></div>
+            <div class="s" data-i18n="intruderSub">Alert me immediately if an unknown device joins my Wi-Fi</div>
           </div>
           <button class="toggle" id="autoToggle" role="switch" aria-checked="false" aria-label="Wi-Fi intruder alerts" onclick="event.stopPropagation();toggleAuto()"><i></i></button>
         </div>
       </div>
 
-      <h3 class="sec">Household &amp; Smart-TV shields <span style="cursor:pointer" onclick="allShields()">Enable all</span></h3>
+      <h3 class="sec"><span style="color:var(--ink);font-size:15px;font-weight:800" data-i18n="shieldsHeader">Household &amp; Smart-TV shields</span> <span style="cursor:pointer" onclick="allShields()" data-i18n="enableAll">Enable all</span></h3>
       <div class="card" style="padding:4px 16px">
-        <div class="set-row" onclick="toggleShieldRow(0)"><div class="grow"><div class="t">Smart-TV anti-spy shield <span class="pro-tag">PRO</span></div><div class="s">Blocks Samsung, LG &amp; Sony ACR viewing telemetry</div></div><button class="toggle shield" id="sh-0" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleShield(this)"><i></i></button></div>
-        <div class="set-row" onclick="toggleShieldRow(1)"><div class="grow"><div class="t">Streaming-box ad blocker <span class="pro-tag">PRO</span></div><div class="s">Stops Roku, Fire TV &amp; Apple TV tracking beacons</div></div><button class="toggle shield" id="sh-1" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleShield(this)"><i></i></button></div>
-        <div class="set-row" onclick="toggleShieldRow(2)"><div class="grow"><div class="t">Router safety check <span class="pro-tag">PRO</span></div><div class="s">Verifies your home Wi-Fi gateway has no exposed ports</div></div><button class="toggle shield" id="sh-2" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleShield(this)"><i></i></button></div>
+        <div class="set-row" onclick="toggleShieldRow(0)"><div class="grow"><div class="t"><span data-i18n="shTvTitle">Smart-TV anti-spy shield</span> <span class="pro-tag">PRO</span></div><div class="s" data-i18n="shTvSub">Blocks Samsung, LG &amp; Sony ACR viewing telemetry</div></div><button class="toggle shield" id="sh-0" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleShield(this)"><i></i></button></div>
+        <div class="set-row" onclick="toggleShieldRow(1)"><div class="grow"><div class="t"><span data-i18n="shBoxTitle">Streaming-box ad blocker</span> <span class="pro-tag">PRO</span></div><div class="s" data-i18n="shBoxSub">Stops Roku, Fire TV &amp; Apple TV tracking beacons</div></div><button class="toggle shield" id="sh-1" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleShield(this)"><i></i></button></div>
+        <div class="set-row" onclick="toggleShieldRow(2)"><div class="grow"><div class="t"><span data-i18n="shRtrTitle">Router safety check</span> <span class="pro-tag">PRO</span></div><div class="s" data-i18n="shRtrSub">Verifies your home Wi-Fi gateway has no exposed ports</div></div><button class="toggle shield" id="sh-2" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleShield(this)"><i></i></button></div>
       </div>
       <div style="height:6px"></div>
     </section>
 
     <!-- ACCOUNT -->
     <section id="view-account" class="hidden">
-      <h1 class="view-title" data-i18n="account">Account &amp; Settings</h1>
-      <div class="view-sub">Manage your license key, mobile setup, and connection security.</div>
+      <h1 class="view-title" data-i18n="accountHeader">Account &amp; Settings</h1>
+      <div class="view-sub" data-i18n="accountSub">Manage your license key, mobile setup, and connection security.</div>
 
       <div class="card" style="margin-top:16px">
         <div style="display:flex;align-items:center;gap:12px">
@@ -463,30 +463,41 @@
           <div class="grow"><div class="t" id="accTitle">Free plan</div><div class="s" id="accSub">Already paid? Enter your license key to unlock up to 10 devices.</div></div>
           <span class="pill warn" id="accPill">Free</span>
         </div>
+        <!-- Active License Key Display & 1-Tap Copy (Item 2) -->
+        <div id="activeKeyBar" class="hidden" style="margin-top:12px;padding:10px 12px;border-radius:12px;background:var(--card2);border:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
+          <div style="min-width:0">
+            <div class="s" style="font-size:10.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase" data-i18n="activeKeyLabel">Active License Key</div>
+            <div id="activeKeyVal" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-weight:800;font-size:13px;color:var(--accent);margin-top:2px;word-break:break-all">SWEEPR-VPN-••••</div>
+          </div>
+          <div style="display:flex;gap:6px;flex-shrink:0">
+            <button class="btn-soft" style="padding:6px 11px;min-height:32px;font-size:11.5px" onclick="toggleKeyMask()" id="maskKeyBtn">Show</button>
+            <button class="btn-soft" style="padding:6px 11px;min-height:32px;font-size:11.5px" onclick="copyActiveLicenseKey()" id="copyKeyBtn">Copy Key</button>
+          </div>
+        </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
           <button class="btn-go" style="flex:1;font-size:14px;padding:12px" onclick="openActivate()" id="accBtn">Enter license key or upgrade</button>
-          <button class="btn-soft" onclick="openMobileWireGuardModal()" title="Set up iOS or Android phone via WireGuard QR or .conf profile"><svg width="16" height="16"><use href="#i-dev"/></svg>Phone Setup (iOS / Android)</button>
+          <button class="btn-soft" onclick="openMobileWireGuardModal()" title="Set up iOS or Android phone via WireGuard QR or .conf profile"><svg width="16" height="16"><use href="#i-dev"/></svg><span data-i18n="phoneSetupBtn">Phone Setup (iOS / Android)</span></button>
         </div>
       </div>
 
-      <h3 class="sec">Connection &amp; App Settings</h3>
+      <h3 class="sec" data-i18n="settingsHeader">Connection &amp; App Settings</h3>
       <div class="card" style="padding:4px 16px">
-        <div class="set-row" onclick="toggleStartup()"><div class="grow"><div class="t">Auto-protect on startup <span class="pro-tag">PRO</span></div><div class="s">Connect automatically as soon as you open SWEEPR</div></div><button class="toggle" id="startupToggle" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleStartup()"><i></i></button></div>
-        <div class="set-row" onclick="toggleKillSwitch()"><div class="grow"><div class="t">Emergency internet cut-off (Kill Switch) <span class="pro-tag">PRO</span></div><div class="s">Blocks unencrypted traffic if the VPN tunnel ever drops</div></div><button class="toggle shield" id="killToggle" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleKillSwitch()"><i></i></button></div>
-        <div class="set-row" onclick="toggleTheme()"><div class="grow"><div class="t">Dark mode</div><div class="s">Easier on the eyes in low light</div></div><button class="toggle" id="darkToggle" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleTheme()"><i></i></button></div>
+        <div class="set-row" onclick="toggleStartup()"><div class="grow"><div class="t"><span data-i18n="startupTitle">Auto-protect on startup</span> <span class="pro-tag">PRO</span></div><div class="s" data-i18n="startupSub">Connect automatically as soon as you open SWEEPR</div></div><button class="toggle" id="startupToggle" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleStartup()"><i></i></button></div>
+        <div class="set-row" onclick="toggleKillSwitch()"><div class="grow"><div class="t"><span data-i18n="killTitle">Emergency internet cut-off (Kill Switch)</span> <span class="pro-tag">PRO</span></div><div class="s" data-i18n="killSub">Blocks unencrypted traffic if the VPN tunnel ever drops</div></div><button class="toggle shield" id="killToggle" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleKillSwitch()"><i></i></button></div>
+        <div class="set-row" onclick="toggleTheme()"><div class="grow"><div class="t" data-i18n="darkTitle">Dark mode</div><div class="s" data-i18n="darkSub">Easier on the eyes in low light</div></div><button class="toggle" id="darkToggle" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleTheme()"><i></i></button></div>
         <div class="set-row" style="cursor:default">
-          <div class="grow"><div class="t">Language</div><div class="s">App display language</div></div>
+          <div class="grow"><div class="t" data-i18n="langTitle">Language</div><div class="s" data-i18n="langSub">App display language</div></div>
           <select id="lang" class="input" style="width:150px;padding:8px 10px" onchange="setLang(this.value)" aria-label="Language">
             <option value="en">English</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="ja">日本語</option>
           </select>
         </div>
       </div>
 
-      <h3 class="sec">Need help? <span style="color:var(--muted)">We reply within 24 hours</span></h3>
+      <h3 class="sec"><span style="color:var(--ink);font-size:15px;font-weight:800" data-i18n="helpHeader">Need help?</span> <span style="color:var(--muted)" data-i18n="helpReply">We reply within 24 hours</span></h3>
       <div class="card" style="display:flex;flex-direction:column;gap:10px">
         <input class="input" id="supEmail" type="email" placeholder="Your email address" />
         <textarea class="input" id="supMsg" rows="3" placeholder="Tell us how we can help…"></textarea>
-        <button class="btn-soft" style="align-self:flex-start" onclick="sendSupport()">Send message</button>
+        <button class="btn-soft" style="align-self:flex-start" onclick="sendSupport()" data-i18n="sendBtn">Send message</button>
       </div>
       <div class="s" style="text-align:center;margin:14px 0 4px">SWEEPR VPN v2.5.0 · WireGuard® Engine · Up to date ✓</div>
     </section>
@@ -499,17 +510,17 @@
     <button class="mini-btn desktop-only" onclick="setCompact(true)" title="Mini window" aria-label="Mini window"><svg width="15" height="15"><use href="#i-min"/></svg></button>
     <div class="h-big" id="headline"><span class="g">Connect</span><br>to stay private</div>
     <div class="info">
-      <div><div class="v" id="infoWhere">London, UK</div><div class="k">Virtual location</div></div>
-      <div class="r"><div class="v warnc" id="infoHome">Exposed</div><div class="k">Your IP &amp; location</div></div>
-      <div><div class="v okc" id="infoSpeed">Instant (&lt;15 ms)</div><div class="k">Route speed</div></div>
-      <div class="r"><div class="v" id="infoDevices">4 devices</div><div class="k">On your Wi-Fi</div></div>
+      <div><div class="v" id="infoWhere">London, UK</div><div class="k" data-i18n="lblWhere">Virtual location</div></div>
+      <div class="r"><div class="v warnc" id="infoHome">Exposed</div><div class="k" data-i18n="lblIp">Your IP &amp; location</div></div>
+      <div><div class="v okc" id="infoSpeed">Instant (&lt;15 ms)</div><div class="k" data-i18n="lblSpeed">Route speed</div></div>
+      <div class="r"><div class="v" id="infoDevices">4 devices</div><div class="k" data-i18n="lblWifi">On your Wi-Fi</div></div>
     </div>
-    <div class="timer hidden" id="timerBox"><div class="k">Protected session</div><div class="n" id="timer">00:00:00</div></div>
+    <div class="timer hidden" id="timerBox"><div class="k" data-i18n="lblSession">Protected session</div><div class="n" id="timer">00:00:00</div></div>
     <div class="connect-box">
       <button class="connect-row" id="panelLocBtn" onclick="changeCountry()" aria-label="Change server country">
         <span class="flag lg" id="panelFlag" data-flag="GB"></span>
         <div class="grow"><div class="t" id="panelName">United Kingdom</div><div class="s" id="panelDesc">London · Fastest for you</div></div>
-        <span class="link-affordance">Change ›</span>
+        <span class="link-affordance" data-i18n="changeBtn">Change ›</span>
       </button>
       <button class="btn-go" id="connectBtn" onclick="toggleConnect()"><svg width="18" height="18"><use href="#i-shield"/></svg><span id="connectText">Connect</span></button>
     </div>
@@ -976,15 +987,138 @@
   function setCompact(on) { document.body.classList.toggle('is-compact', on); postNative('compact', on); }
 
   const I18N = {
-    en: { home:'VPN', wifi:'Wi-Fi & TV', account:'Account', welcome:'Select a Location', homeSub:'Choose a country node or press Connect for the fastest route.', recommended:'Quick pick', allCountries:'Available locations', protect:'Connect', pause:'Protected · Tap to Pause' },
-    de: { home:'VPN', wifi:'WLAN & TV', account:'Konto', welcome:'Standort wählen', homeSub:'Land wählen oder Verbinden drücken.', recommended:'Schnellauswahl', allCountries:'Alle Standorte', protect:'Verbinden', pause:'Geschützt · Pausieren' },
-    fr: { home:'VPN', wifi:'Wi-Fi & TV', account:'Compte', welcome:'Choisir un lieu', homeSub:'Choisissez un pays ou appuyez sur Connecter.', recommended:'Accès rapide', allCountries:'Tous les pays', protect:'Connecter', pause:'Protégé · Pause' },
-    ja: { home:'VPN', wifi:'Wi-Fi・TV', account:'アカウント', welcome:'ロケーション選択', homeSub:'国を選んで接続を押してください。', recommended:'おすすめ', allCountries:'すべての国', protect:'接続する', pause:'保護中 · 一時停止' }
+    en: {
+      home:'VPN', wifi:'Wi-Fi & TV', account:'Account', welcome:'Select a Location',
+      homeSub:'Choose a country node or press Connect for the fastest route.', recommended:'Quick pick',
+      allCountries:'Available locations', protect:'Connect', pause:'Protected · Tap to Pause',
+      wifiTitle:'devices on Wi-Fi', scanBtn:'Scan Wi-Fi', intruderTitle:'Wi-Fi intruder alerts',
+      intruderSub:'Alert me immediately if an unknown device joins my Wi-Fi',
+      shieldsHeader:'Household & Smart-TV shields', enableAll:'Enable all',
+      shTvTitle:'Smart-TV anti-spy shield', shTvSub:'Blocks Samsung, LG & Sony ACR viewing telemetry',
+      shBoxTitle:'Streaming-box ad blocker', shBoxSub:'Stops Roku, Fire TV & Apple TV tracking beacons',
+      shRtrTitle:'Router safety check', shRtrSub:'Verifies your home Wi-Fi gateway has no exposed ports',
+      accountHeader:'Account & Settings', accountSub:'Manage your license key, mobile setup, and connection security.',
+      activeKeyLabel:'Active License Key', phoneSetupBtn:'Phone Setup (iOS / Android)',
+      settingsHeader:'Connection & App Settings', startupTitle:'Auto-protect on startup',
+      startupSub:'Connect automatically as soon as you open SWEEPR',
+      killTitle:'Emergency internet cut-off (Kill Switch)', killSub:'Blocks unencrypted traffic if the VPN tunnel ever drops',
+      darkTitle:'Dark mode', darkSub:'Easier on the eyes in low light', langTitle:'Language', langSub:'App display language',
+      helpHeader:'Need help?', helpReply:'We reply within 24 hours', sendBtn:'Send message',
+      lblWhere:'Virtual location', lblIp:'Your IP & location', lblSpeed:'Route speed', lblWifi:'On your Wi-Fi',
+      lblSession:'Protected session', changeBtn:'Change ›'
+    },
+    de: {
+      home:'VPN', wifi:'WLAN & TV', account:'Konto', welcome:'Standort wählen',
+      homeSub:'Land wählen oder Verbinden drücken für die schnellste Route.', recommended:'Schnellauswahl',
+      allCountries:'Verfügbare Standorte', protect:'Verbinden', pause:'Geschützt · Pausieren',
+      wifiTitle:'Geräte im WLAN', scanBtn:'WLAN prüfen', intruderTitle:'WLAN-Eindringlingswarnung',
+      intruderSub:'Sofortige Warnung, wenn ein unbekanntes Gerät beitritt',
+      shieldsHeader:'Haushalts- & Smart-TV-Schutz', enableAll:'Alle aktivieren',
+      shTvTitle:'Smart-TV Anti-Spionage', shTvSub:'Blockiert Samsung, LG & Sony ACR-Telemetrie',
+      shBoxTitle:'Streaming-Box Werbeblocker', shBoxSub:'Stoppt Roku, Fire TV & Apple TV Tracker',
+      shRtrTitle:'Router-Sicherheitscheck', shRtrSub:'Prüft Ihren WLAN-Router auf offene Ports',
+      accountHeader:'Konto & Einstellungen', accountSub:'Lizenzschlüssel, Smartphone-Setup und Verbindungsschutz.',
+      activeKeyLabel:'Aktiver Lizenzschlüssel', phoneSetupBtn:'Handy-Setup (iOS / Android)',
+      settingsHeader:'Verbindungs- & App-Einstellungen', startupTitle:'Automatischer Schutz beim Start',
+      startupSub:'Automatisch verbinden, sobald SWEEPR startet',
+      killTitle:'Notfall-Internetsperre (Kill Switch)', killSub:'Blockiert unverschlüsselten Verkehr bei Verbindungsabbruch',
+      darkTitle:'Dunkelmodus', darkSub:'Angenehmer für die Augen bei Nacht', langTitle:'Sprache', langSub:'Anzeigesprache der App',
+      helpHeader:'Hilfe benötigt?', helpReply:'Antwort innerhalb von 24 Stunden', sendBtn:'Nachricht senden',
+      lblWhere:'Virtueller Standort', lblIp:'Ihre IP & Standort', lblSpeed:'Geschwindigkeit', lblWifi:'Im Heim-WLAN',
+      lblSession:'Geschützte Sitzung', changeBtn:'Ändern ›'
+    },
+    fr: {
+      home:'VPN', wifi:'Wi-Fi & TV', account:'Compte', welcome:'Choisir un lieu',
+      homeSub:'Choisissez un pays ou appuyez sur Connecter.', recommended:'Accès rapide',
+      allCountries:'Lieux disponibles', protect:'Connecter', pause:'Protégé · Pause',
+      wifiTitle:'appareils sur le Wi-Fi', scanBtn:'Scanner le Wi-Fi', intruderTitle:'Alertes d’intrusion Wi-Fi',
+      intruderSub:'M’alerter immédiatement si un appareil inconnu rejoint mon Wi-Fi',
+      shieldsHeader:'Boucliers Maison & Smart-TV', enableAll:'Tout activer',
+      shTvTitle:'Bouclier anti-espion Smart-TV', shTvSub:'Bloque la télémétrie ACR Samsung, LG et Sony',
+      shBoxTitle:'Bloqueur de pub boîtier TV', shBoxSub:'Bloque les traqueurs Roku, Fire TV et Apple TV',
+      shRtrTitle:'Vérification sécurité routeur', shRtrSub:'Vérifie qu’aucun port risqué n’est ouvert',
+      accountHeader:'Compte & Paramètres', accountSub:'Gérez votre clé de licence, mobile et sécurité.',
+      activeKeyLabel:'Clé de licence active', phoneSetupBtn:'Config Mobile (iOS / Android)',
+      settingsHeader:'Paramètres de connexion', startupTitle:'Protection auto au démarrage',
+      startupSub:'Se connecter dès l’ouverture de SWEEPR',
+      killTitle:'Arrêt d’urgence Internet (Kill Switch)', killSub:'Bloque le trafic non chiffré si le VPN coupe',
+      darkTitle:'Mode sombre', darkSub:'Plus doux pour les yeux la nuit', langTitle:'Langue', langSub:'Langue de l’application',
+      helpHeader:'Besoin d’aide ?', helpReply:'Réponse sous 24 heures', sendBtn:'Envoyer',
+      lblWhere:'Position virtuelle', lblIp:'Votre IP & position', lblSpeed:'Vitesse', lblWifi:'Sur votre Wi-Fi',
+      lblSession:'Session protégée', changeBtn:'Changer ›'
+    },
+    ja: {
+      home:'VPN', wifi:'Wi-Fi・TV', account:'アカウント', welcome:'ロケーション選択',
+      homeSub:'国を選ぶか「接続する」を押して最速ルートに接続します。', recommended:'クイック選択',
+      allCountries:'利用可能な国・地域', protect:'接続する', pause:'保護中 · 一時停止',
+      wifiTitle:'台のWi-Fi接続機器', scanBtn:'Wi-Fiをスキャン', intruderTitle:'Wi-Fi侵入アラート',
+      intruderSub:'不明な機器がWi-Fiに接続したらすぐに通知します',
+      shieldsHeader:'ホーム＆スマートTV保護', enableAll:'すべて有効化',
+      shTvTitle:'スマートTV追跡ブロック', shTvSub:'Samsung・LG・Sonyの視聴データ送信を遮断',
+      shBoxTitle:'ストリーミング広告ブロック', shBoxSub:'Roku・Fire TV・Apple TVの広告追跡を停止',
+      shRtrTitle:'ルーター安全性チェック', shRtrSub:'自宅Wi-Fiルーターの危険なポート開放を検査',
+      accountHeader:'アカウントと設定', accountSub:'ライセンスキー、スマホ設定、通信セキュリティの管理',
+      activeKeyLabel:'有効なライセンスキー', phoneSetupBtn:'スマホ設定 (iOS / Android)',
+      settingsHeader:'通信・アプリ設定', startupTitle:'起動時に自動保護',
+      startupSub:'SWEEPRを開くと同時に自動接続します',
+      killTitle:'緊急通信遮断 (キルスイッチ)', killSub:'VPN切断時に暗号化されていない通信を遮断します',
+      darkTitle:'ダークモード', darkSub:'夜間でも目に優しい配色', langTitle:'言語', langSub:'アプリの表示言語',
+      helpHeader:'サポート', helpReply:'24時間以内に返信します', sendBtn:'メッセージを送信',
+      lblWhere:'仮想ロケーション', lblIp:'IPと現在地', lblSpeed:'通信速度', lblWifi:'Wi-Fi上の機器',
+      lblSession:'保護された時間', changeBtn:'変更 ›'
+    }
   };
   function setLang(l) {
     state.lang = l; const d = I18N[l] || I18N.en;
     document.querySelectorAll('[data-i18n]').forEach(el => { const k = el.getAttribute('data-i18n'); if (d[k]) el.textContent = d[k]; });
+    try { localStorage.setItem('sweepr_vpn_lang', l); } catch (e) {}
     renderAll();
+  }
+
+  let keyMaskRevealed = false;
+  function formatMaskedKey(raw) {
+    const k = String(raw || '').trim();
+    if (!k) return '—';
+    if (keyMaskRevealed || k.length <= 8) return k;
+    return k.slice(0, 10) + '••••-••••-' + k.slice(-4);
+  }
+  function toggleKeyMask() {
+    keyMaskRevealed = !keyMaskRevealed;
+    if ($('maskKeyBtn')) $('maskKeyBtn').textContent = keyMaskRevealed ? 'Hide' : 'Show';
+    if ($('activeKeyVal')) $('activeKeyVal').textContent = formatMaskedKey(state.activationCode);
+  }
+  function copyActiveLicenseKey() {
+    if (!state.activationCode) return;
+    navigator.clipboard.writeText(state.activationCode).then(() => {
+      if ($('copyKeyBtn')) $('copyKeyBtn').textContent = 'Copied ✓';
+      toast('License key copied to clipboard');
+      setTimeout(() => { if ($('copyKeyBtn')) $('copyKeyBtn').textContent = 'Copy Key'; }, 2000);
+    }).catch(() => {});
+  }
+
+  async function refreshLiveServerStatus() {
+    const endpoints = [];
+    if (location.protocol === 'http:' || location.protocol === 'https:') endpoints.push('/api/vpn/servers');
+    endpoints.push('https://sweeprvpn.com/api/vpn/servers');
+    for (const url of endpoints) {
+      try {
+        const t0 = performance.now();
+        const r = await fetch(url);
+        const rtt = Math.max(4, Math.round((performance.now() - t0) * 0.35));
+        const d = await r.json().catch(() => ({}));
+        if (r.ok && d && Array.isArray(d.servers) && d.servers.length) {
+          d.servers.forEach(live => {
+            const match = SERVERS.find(s => s.code === live.code);
+            if (match) {
+              match.online = live.online !== false;
+              if (match.code === 'UK-LON-01') match.ping = Math.min(25, rtt);
+            }
+          });
+          renderAll();
+          break;
+        }
+      } catch (e) {}
+    }
   }
 
   /* ---------- Split Activation vs. Plan Checkout (Quick Win 3) ---------- */
@@ -1273,6 +1407,12 @@
     $('accPill').className = 'pill ' + (state.pro ? 'ok' : 'warn');
     $('accPill').textContent = state.pro ? 'Pro' : 'Free';
     $('accBtn').textContent = state.pro ? 'Update license key' : 'Enter license key or upgrade';
+    if ($('activeKeyBar')) {
+      $('activeKeyBar').classList.toggle('hidden', !state.pro || !state.activationCode);
+      if (state.pro && state.activationCode && $('activeKeyVal')) {
+        $('activeKeyVal').textContent = formatMaskedKey(state.activationCode);
+      }
+    }
 
     // mini window (Quick Win 5)
     $('cStatus').className = 'pill ' + (on ? 'ok' : 'warn');
@@ -1287,12 +1427,23 @@
 
   try {
     if (localStorage.getItem('sweepr_vpn_theme') === 'dark') toggleTheme();
+    const savedLang = localStorage.getItem('sweepr_vpn_lang') || '';
+    if (savedLang && I18N[savedLang]) { $('lang').value = savedLang; setLang(savedLang); }
     const savedEmail = localStorage.getItem('sweepr_vpn_email') || '';
     const savedCode = localStorage.getItem('sweepr_vpn_code') || localStorage.getItem('sweepr_vpn_license_key') || '';
     if (savedCode) { state.email = savedEmail; state.activationCode = savedCode; }
+    const urlParams = new URLSearchParams(location.search || '');
+    const urlKey = (urlParams.get('key') || urlParams.get('code') || '').trim().toUpperCase();
+    if (urlKey.length >= 6) {
+      state.activationCode = urlKey;
+      if ($('mCode')) $('mCode').value = urlKey;
+      try { localStorage.setItem('sweepr_vpn_code', urlKey); localStorage.setItem('sweepr_vpn_license_key', urlKey); } catch (e) {}
+      try { history.replaceState(null, '', location.pathname); } catch (e) {}
+    }
   } catch (e) {}
   renderAll();
   verifySavedSubscription();
+  refreshLiveServerStatus();
   scanWifi();
   setInterval(() => { if (state.auto) scanWifi(); }, 15 * 60 * 1000);
 </script>
