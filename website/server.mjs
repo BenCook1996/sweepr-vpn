@@ -916,6 +916,63 @@ function signSessionCookie(accountId, email) {
   return `${payload}.${sig}`;
 }
 
+function verifySessionCookie(req) {
+  try {
+    const rawCookies = req.headers.cookie || '';
+    const match = rawCookies.match(/(?:^|;\s*)sweepr_session=([^;]+)/);
+    if (!match || !match[1]) return null;
+    const token = decodeURIComponent(match[1].trim());
+    const dotIdx = token.indexOf('.');
+    if (dotIdx <= 0) return null;
+    const payloadB64 = token.slice(0, dotIdx);
+    const sigB64 = token.slice(dotIdx + 1);
+    const expectedSig = crypto.createHmac('sha256', SESSION_SECRET).update(payloadB64).digest('base64url');
+    if (!safeCompareStrings(sigB64, expectedSig)) return null;
+    const parsed = JSON.parse(Buffer.from(payloadB64, 'base64url').toString('utf8'));
+    if (!parsed || !parsed.sub) return null;
+    const nowSec = Math.floor(Date.now() / 1000);
+    if (parsed.exp && Number(parsed.exp) < nowSec) return null;
+    return {
+      accountId: String(parsed.sub),
+      email: String(parsed.email || '').trim().toLowerCase()
+    };
+  } catch {
+    return null;
+  }
+}
+
+async function syncPayPalCustomerEmail(sub, acc) {
+  if (!STRIPE_SECRET_KEY || !sub || !acc) return;
+  try {
+    const currentEmail = (acc.email || '').trim().toLowerCase();
+    if (currentEmail && !currentEmail.endsWith('@pending.sweeprvpn.com')) return;
+
+    let pm = typeof sub.default_payment_method === 'object' && sub.default_payment_method ? sub.default_payment_method : null;
+    if (!pm) {
+      const latestInv = sub.latest_invoice;
+      const pi = latestInv?.payment_intent;
+      if (pi && typeof pi.payment_method === 'object' && pi.payment_method) {
+        pm = pi.payment_method;
+      } else if (typeof sub.default_payment_method === 'string') {
+        pm = await stripeRequest('GET', `payment_methods/${encodeURIComponent(sub.default_payment_method)}`).catch(() => null);
+      }
+    }
+    const payerEmail = String(pm?.paypal?.payer_email || pm?.billing_details?.email || '').trim().toLowerCase();
+    if (payerEmail && isValidEmail(payerEmail) && !payerEmail.endsWith('@pending.sweeprvpn.com')) {
+      const existing = accountsByEmail.get(payerEmail);
+      if (!existing || existing.id === acc.id) {
+        if (acc.email) accountsByEmail.delete(acc.email);
+        acc.email = payerEmail;
+        accountsByEmail.set(payerEmail, acc);
+        const custId = typeof sub.customer === 'string' ? sub.customer : sub.customer?.id || acc.stripe_customer_id;
+        if (custId) {
+          await stripeRequest('POST', `customers/${encodeURIComponent(custId)}`, { email: payerEmail }).catch(() => {});
+        }
+      }
+    }
+  } catch {}
+}
+
 function hasWifiRadarInBody(body) {
   if (!body) return false;
   if (body.wifiRadarAddon || body.wifi_radar) return true;
@@ -966,6 +1023,7 @@ const CANONICAL_REDIRECTS = {
   '/pricing.html': '/pricing',
   '/order.html': '/order',
   '/login.html': '/login',
+  '/dashboard.html': '/dashboard',
   '/refund.html': '/refund',
   '/terms.html': '/terms',
   '/privacy.html': '/privacy',
@@ -984,6 +1042,7 @@ const ROUTE_ALIASES = {
   '/order': 'order.html',
   '/checkout': 'order.html',
   '/login': 'login.html',
+  '/dashboard': 'dashboard.html',
   '/refund': 'refund.html',
   '/terms': 'terms.html',
   '/privacy': 'privacy.html',
@@ -1159,10 +1218,15 @@ function renderCheckoutSuccessPage(acc, isCancelled = false, isPopup = false) {
       localStorage.removeItem('sweepr_visited_order');
       document.cookie = 'sweepr_visited_order=; path=/; max-age=0';
       if (${isPopup ? 'true' : 'false'}) {
-        const msg = { type: 'sweepr_checkout_complete', subscriptionId: '${subscriptionId}', accountId: '${accountId}' };
-        try { new BroadcastChannel('sweepr_checkout').postMessage(msg); } catch (e) {}
+        const redirectUrl = '/checkout/success?web=1&subscription_id=${subscriptionId}&account_id=${accountId}';
+        const msg = { type: 'paypal_success', redirectUrl, subscriptionId: '${subscriptionId}', accountId: '${accountId}' };
+        const msg2 = { type: 'sweepr_checkout_complete', redirectUrl, subscriptionId: '${subscriptionId}', accountId: '${accountId}' };
+        try { new BroadcastChannel('sweepr_paypal_checkout').postMessage(msg); } catch (e) {}
+        try { new BroadcastChannel('sweepr_checkout').postMessage(msg2); } catch (e) {}
+        try { localStorage.setItem('sweepr_paypal_event', JSON.stringify({ ...msg, ts: Date.now() })); } catch (e) {}
         if (window.opener) {
           try { window.opener.postMessage(msg, window.location.origin); } catch (e) {}
+          try { window.opener.postMessage(msg2, window.location.origin); } catch (e) {}
           setTimeout(() => window.close(), 400);
         }
       }
@@ -1203,6 +1267,7 @@ function renderCheckoutSuccessPage(acc, isCancelled = false, isPopup = false) {
         <div>✓ 1-Click Private Browsing &amp; Public Wi-Fi Protection (8 Global Locations)</div>
         <div>✓ Streaming Speed Booster &amp; Automatic Drop Protection</div>
         <div>✓ Home Wi-Fi Device Scanner &amp; Smart-TV Spy Blocker Included Free</div>
+        ${acc?.wifiRadarAddon ? '<div class="text-emerald-300 font-semibold">✓ SWEEPR Wi-Fi Radar &amp; Smart-TV Shield Add-on Active</div>' : ''}
       </div>
     </div>
 
@@ -1210,7 +1275,7 @@ function renderCheckoutSuccessPage(acc, isCancelled = false, isPopup = false) {
       <a href="/download" class="py-3.5 px-5 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-black text-sm shadow-lg no-underline">
         Download SWEEPR VPN
       </a>
-      <a href="/login" class="py-3.5 px-5 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-sm border border-slate-700 no-underline">
+      <a href="/dashboard" class="py-3.5 px-5 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-sm border border-slate-700 no-underline">
         Open Customer Portal
       </a>
     </div>
@@ -1855,6 +1920,8 @@ const server = http.createServer(async (req, res) => {
         status: 'active'
       });
 
+      await syncPayPalCustomerEmail(sub, acc);
+
       const totalAmount = (sub.items?.data || []).reduce(
         (sum, it) => sum + (it.price?.unit_amount || 0) * (it.quantity || 1),
         0
@@ -2038,7 +2105,9 @@ const server = http.createServer(async (req, res) => {
     let acc = accountsById.get(accountId) || accountsBySubscriptionId.get(subscriptionId) || null;
     if (subscriptionId && STRIPE_SECRET_KEY) {
       try {
-        const sub = await stripeRequest('GET', `subscriptions/${encodeURIComponent(subscriptionId)}`);
+        const sub = await stripeRequest('GET', `subscriptions/${encodeURIComponent(subscriptionId)}`, {
+          expand: ['default_payment_method', 'latest_invoice.payment_intent.payment_method']
+        });
         if (sub.status !== 'active' && sub.status !== 'trialing') {
           res.writeHead(302, { Location: '/order?error=payment_cancelled', ...COMMON_SECURITY_HEADERS });
           return res.end();
@@ -2051,9 +2120,11 @@ const server = http.createServer(async (req, res) => {
           email: acc?.email || sub.metadata?.email || 'customer@sweeprvpn.com',
           plan: sub.metadata?.plan || acc?.plan || 'annual',
           wifiRadarAddon: sub.metadata?.wifi_radar === 'true' || acc?.wifiRadarAddon,
+          stripeCustomerId: typeof sub.customer === 'string' ? sub.customer : sub.customer?.id,
           subscriptionId: sub.id,
           status: 'active'
         });
+        await syncPayPalCustomerEmail(sub, acc);
         try {
           const crmSynced = await crm.syncSubscription({
             email: acc.email,
@@ -2085,8 +2156,11 @@ const server = http.createServer(async (req, res) => {
       return res.end();
     }
 
+    const sessionToken = signSessionCookie(acc.id, acc.email);
+    const isHttps = PUBLIC_URL.startsWith('https://') || req.headers['x-forwarded-proto'] === 'https';
     return sendHtml(res, 200, renderCheckoutSuccessPage(acc, false, isPopup), {
-      'X-Robots-Tag': 'noindex, nofollow'
+      'X-Robots-Tag': 'noindex, nofollow',
+      'Set-Cookie': `sweepr_session=${sessionToken}; Path=/; HttpOnly; SameSite=Lax${isHttps ? '; Secure' : ''}; Max-Age=${86400 * 30}`
     });
   }
 
@@ -2335,7 +2409,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   // Customer Portal Login & OTP Verification
-  if (pathname === '/api/portal-login' && req.method === 'POST') {
+  if ((pathname === '/api/portal-login' || pathname === '/v1/account/send-otp') && req.method === 'POST') {
     if (!checkRateLimit(req, 'portal_login', 5, 60000)) {
       return sendJson(res, 429, { otpSent: false, error: 'Too many login attempts. Please wait a minute and try again.' }, {}, req);
     }
@@ -2420,7 +2494,7 @@ const server = http.createServer(async (req, res) => {
     return sendJson(res, 200, { ok: true, otpSent: true }, {}, req);
   }
 
-  if (pathname === '/api/verify-otp' && req.method === 'POST') {
+  if ((pathname === '/api/verify-otp' || pathname === '/v1/account/verify-otp') && req.method === 'POST') {
     if (!checkRateLimit(req, 'verify_otp', 5, 60000)) {
       return sendJson(res, 429, { ok: false, error: 'Too many verification attempts. Please wait a minute and try again.' }, {}, req);
     }
@@ -2435,21 +2509,45 @@ const server = http.createServer(async (req, res) => {
     let acc = accountsByEmail.get(email);
     let crmReachable = false;
     let crmVerified = false;
+    const portalDeviceId = String(body.deviceId || `portal_${crypto.createHash('sha256').update(email).digest('hex').slice(0, 12)}`);
     try {
-      const crmRes = await crm.activateDevice({
+      const otpRes = await crm.verifyOtp({
         email,
-        otp: code,
-        deviceId: `portal_${crypto.createHash('sha256').update(email).digest('hex').slice(0, 12)}`,
-        deviceName: 'SWEEPR Customer Portal',
-        os: 'web',
-        appVersion: '2.5.0'
+        code,
+        deviceId: portalDeviceId,
+        platform: String(body.platform || 'web'),
+        deviceLabel: String(body.deviceLabel || 'SWEEPR Customer Portal')
       });
-      if (crmRes && crmRes._httpStatus && crmRes._httpStatus < 500) {
+      if (otpRes && otpRes._httpStatus && otpRes._httpStatus < 500) {
         crmReachable = true;
-        const synced = syncLocalCacheFromCrm(crmRes, email, code);
-        if (crmRes.valid && synced) {
-          acc = synced;
+        if (otpRes.ok) {
+          acc = upsertLocalAccount({
+            email,
+            plan: otpRes.plan || acc?.plan || 'annual',
+            wifiRadarAddon: Array.isArray(otpRes.addons) ? otpRes.addons.includes('wifi_radar') : Boolean(acc?.wifiRadarAddon),
+            status: 'active',
+            licenseKey: otpRes.license_key || acc?.licenseKey,
+            activationCode: code
+          });
           crmVerified = true;
+        }
+      }
+      if (!crmVerified) {
+        const crmRes = await crm.activateDevice({
+          email,
+          otp: code,
+          deviceId: portalDeviceId,
+          deviceName: 'SWEEPR Customer Portal',
+          os: 'web',
+          appVersion: '2.5.0'
+        });
+        if (crmRes && crmRes._httpStatus && crmRes._httpStatus < 500) {
+          crmReachable = true;
+          const synced = syncLocalCacheFromCrm(crmRes, email, code);
+          if (crmRes.valid && synced) {
+            acc = synced;
+            crmVerified = true;
+          }
         }
       }
     } catch {}
@@ -2466,7 +2564,7 @@ const server = http.createServer(async (req, res) => {
       return sendJson(
         res,
         200,
-        { ok: true, redirect: '/support' },
+        { ok: true, redirect: '/dashboard', license_key: acc.licenseKey, plan: acc.plan, status: acc.status },
         {
           'Set-Cookie': `sweepr_session=${sessionToken}; Path=/; HttpOnly; SameSite=Lax${isHttps ? '; Secure' : ''}; Max-Age=${86400 * 30}`
         },
@@ -2475,6 +2573,360 @@ const server = http.createServer(async (req, res) => {
     }
 
     return sendJson(res, 401, { ok: false, error: 'Invalid or expired 6-digit login code.' }, {}, req);
+  }
+
+  // Customer Portal Logout
+  if (pathname === '/api/logout' && req.method === 'POST') {
+    const isHttps = PUBLIC_URL.startsWith('https://') || req.headers['x-forwarded-proto'] === 'https';
+    return sendJson(
+      res,
+      200,
+      { ok: true },
+      {
+        'Set-Cookie': `sweepr_session=; Path=/; HttpOnly; SameSite=Lax${isHttps ? '; Secure' : ''}; Max-Age=0`
+      },
+      req
+    );
+  }
+
+  // Customer Portal Dashboard Data (Matches sweeprcleaner /api/dashboard-data)
+  if (pathname === '/api/dashboard-data' && req.method === 'GET') {
+    const sess = verifySessionCookie(req);
+    if (!sess) {
+      return sendJson(res, 401, { error: 'unauthorized' }, {}, req);
+    }
+
+    let acc =
+      accountsById.get(sess.accountId) ||
+      (sess.email ? accountsByEmail.get(sess.email) : null);
+
+    // If not in local cache yet (e.g. after server restart), hydrate from Stripe or CRM
+    if ((!acc || acc.status !== 'active') && sess.email && STRIPE_SECRET_KEY) {
+      try {
+        const custList = await stripeRequest('GET', 'customers', { email: sess.email, limit: 5 });
+        for (const cust of custList.data || []) {
+          if (cust.deleted) continue;
+          const subs = await stripeRequest('GET', 'subscriptions', { customer: cust.id, status: 'all', limit: 5 });
+          const activeSub = (subs.data || []).find((s) => s.status === 'active' || s.status === 'trialing' || s.status === 'past_due');
+          if (activeSub) {
+            acc = upsertLocalAccount({
+              email: sess.email,
+              name: cust.name || '',
+              country: activeSub.metadata?.country || 'GB',
+              stripeCustomerId: cust.id,
+              subscriptionId: activeSub.id,
+              plan: activeSub.metadata?.plan || 'annual',
+              wifiRadarAddon: activeSub.metadata?.wifi_radar === 'true' || (activeSub.metadata?.addons || '').includes('wifi_radar'),
+              status: 'active'
+            });
+            break;
+          }
+        }
+      } catch {}
+    }
+
+    if (!acc) {
+      return sendJson(res, 404, { error: 'account_not_found' }, {}, req);
+    }
+
+    let paymentMethod = null;
+    let billingAddress = null;
+    let subscriptionDetails = null;
+    let cancelAtPeriodEnd = Boolean(acc.cancel_at_period_end);
+    let currentPeriodEnd = acc.current_period_end || null;
+
+    if (STRIPE_SECRET_KEY && acc.stripe_customer_id) {
+      try {
+        const cust = await stripeRequest('GET', `customers/${encodeURIComponent(acc.stripe_customer_id)}`, {
+          expand: ['invoice_settings.default_payment_method']
+        });
+        if (cust && !cust.deleted) {
+          if (cust.address) {
+            billingAddress = {
+              line1: cust.address.line1 || '',
+              line2: cust.address.line2 || '',
+              city: cust.address.city || '',
+              state: cust.address.state || '',
+              postal_code: cust.address.postal_code || '',
+              country: cust.address.country || ''
+            };
+          }
+          const defPm = cust.invoice_settings?.default_payment_method;
+          if (defPm && typeof defPm === 'object' && defPm.card) {
+            paymentMethod = {
+              id: defPm.id,
+              brand: defPm.card.brand || 'card',
+              last4: defPm.card.last4 || '••••',
+              exp_month: defPm.card.exp_month || 0,
+              exp_year: defPm.card.exp_year || 0
+            };
+          }
+        }
+      } catch {}
+
+      if (acc.stripe_subscription_id && acc.stripe_subscription_id.startsWith('sub_')) {
+        try {
+          const sub = await stripeRequest('GET', `subscriptions/${encodeURIComponent(acc.stripe_subscription_id)}`);
+          cancelAtPeriodEnd = Boolean(sub.cancel_at_period_end);
+          if (sub.current_period_end) {
+            currentPeriodEnd = sub.current_period_end * 1000;
+          }
+          const item = sub.items?.data?.[0];
+          const price = item?.price;
+          if (price) {
+            subscriptionDetails = {
+              unit_amount: price.unit_amount ?? null,
+              currency: (price.currency || 'gbp').toUpperCase(),
+              interval: price.recurring?.interval || 'year',
+              interval_count: price.recurring?.interval_count || 1
+            };
+          }
+        } catch {}
+      }
+    }
+
+    const localizedPricing = buildLocalizedPricing(acc.country || 'GB');
+    const addons = acc.wifiRadarAddon ? ['wifi_radar'] : [];
+
+    return sendJson(
+      res,
+      200,
+      {
+        account_id: acc.id,
+        email: acc.email,
+        name: acc.name || '',
+        plan: acc.plan || 'annual',
+        status: acc.status || 'active',
+        activation_code: acc.activation_code,
+        licenseKey: acc.licenseKey,
+        addons,
+        addon_pricing: {
+          wifi_radar: {
+            annualFormatted: localizedPricing.wifiRadarAnnualFormatted,
+            annualMonthlyEqFormatted: localizedPricing.wifiRadarAnnualMonthlyEqFormatted,
+            sixMonthFormatted: localizedPricing.wifiRadarSixMonthFormatted,
+            monthlyFormatted: localizedPricing.wifiRadarMonthlyFormatted
+          }
+        },
+        current_period_end: currentPeriodEnd,
+        cancel_at_period_end: cancelAtPeriodEnd,
+        has_stripe: Boolean(acc.stripe_customer_id),
+        stripe_configured: Boolean(STRIPE_SECRET_KEY),
+        stripe_publishable_key: STRIPE_PUBLISHABLE_KEY || null,
+        payment_method: paymentMethod,
+        billing_address: billingAddress,
+        subscription_details: subscriptionDetails,
+        devices: Array.isArray(acc.devices) ? acc.devices : []
+      },
+      { 'Cache-Control': 'no-store' },
+      req
+    );
+  }
+
+  // Customer Portal 1-Click Add-on Upgrade ("wifi_radar")
+  if (pathname === '/api/portal/purchase-addon' && req.method === 'POST') {
+    const sess = verifySessionCookie(req);
+    if (!sess) return sendJson(res, 401, { error: 'unauthorized' }, {}, req);
+    const acc = accountsById.get(sess.accountId) || (sess.email ? accountsByEmail.get(sess.email) : null);
+    if (!acc) return sendJson(res, 404, { error: 'account_not_found' }, {}, req);
+    if (acc.status !== 'active') {
+      return sendJson(res, 402, { error: 'Active SWEEPR VPN Pro subscription required to attach an add-on.' }, {}, req);
+    }
+
+    const body = await readJsonBody(req);
+    if (body && body.__tooLarge) return sendJson(res, 413, { error: 'payload_too_large' }, {}, req);
+    const addon = String(body?.addon || 'wifi_radar').trim().toLowerCase();
+    if (addon !== 'wifi_radar') {
+      return sendJson(res, 400, { error: 'unsupported_addon' }, {}, req);
+    }
+
+    if (acc.wifiRadarAddon) {
+      return sendJson(res, 200, { ok: true, addons: ['wifi_radar'], already_active: true }, {}, req);
+    }
+
+    if (STRIPE_SECRET_KEY && acc.stripe_subscription_id && acc.stripe_subscription_id.startsWith('sub_')) {
+      try {
+        const sub = await stripeRequest('GET', `subscriptions/${encodeURIComponent(acc.stripe_subscription_id)}`);
+        const firstPrice = sub.items?.data?.[0]?.price;
+        const interval = firstPrice?.recurring?.interval || (acc.plan === 'annual' ? 'year' : 'month');
+        const intervalCount = firstPrice?.recurring?.interval_count || (acc.plan === 'six_month' ? 6 : 1);
+        const currency = firstPrice?.currency || 'gbp';
+        const tierPricing = buildLocalizedPricing(acc.country || 'GB', currency);
+        const unitAmount =
+          interval === 'year'
+            ? tierPricing.wifiRadarAnnualAmount
+            : intervalCount === 6
+            ? tierPricing.wifiRadarSixMonthAmount
+            : tierPricing.wifiRadarMonthlyAmount;
+
+        const radarProductId = await getStripeWifiRadarProductId();
+        await stripeRequest('POST', `subscriptions/${encodeURIComponent(sub.id)}`, {
+          items: [
+            ...(sub.items?.data || []).map((it) => ({ id: it.id })),
+            {
+              price_data: {
+                currency,
+                product: radarProductId,
+                unit_amount: unitAmount,
+                recurring: {
+                  interval,
+                  ...(intervalCount > 1 ? { interval_count: intervalCount } : {})
+                }
+              }
+            }
+          ],
+          metadata: {
+            ...(sub.metadata || {}),
+            wifi_radar: 'true',
+            addons: 'wifi_radar'
+          },
+          proration_behavior: 'always_invoice',
+          payment_behavior: 'error_if_incomplete'
+        });
+      } catch (err) {
+        return sendJson(res, 402, { error: err.message || 'Payment failed for add-on upgrade.' }, {}, req);
+      }
+    }
+
+    acc.wifiRadarAddon = true;
+    acc.entitlements = buildVpnEntitlements(true);
+    crm.syncSubscription({
+      email: acc.email,
+      name: acc.name || undefined,
+      country: acc.country || 'GB',
+      plan: acc.plan || 'annual',
+      status: acc.status,
+      stripe_customer_id: acc.stripe_customer_id,
+      stripe_subscription_id: acc.stripe_subscription_id,
+      activation_code: acc.activation_code,
+      license_key: acc.licenseKey,
+      addons: ['wifi_radar'],
+      notes: 'Add-on activated: wifi_radar'
+    }).catch(() => {});
+
+    return sendJson(res, 200, { ok: true, addons: ['wifi_radar'] }, {}, req);
+  }
+
+  // Customer Portal Cancel Subscription at Period End
+  if (pathname === '/api/portal/cancel-subscription' && req.method === 'POST') {
+    const sess = verifySessionCookie(req);
+    if (!sess) return sendJson(res, 401, { error: 'unauthorized' }, {}, req);
+    const acc = accountsById.get(sess.accountId) || (sess.email ? accountsByEmail.get(sess.email) : null);
+    if (!acc || acc.status !== 'active') {
+      return sendJson(res, 400, { error: 'No active subscription found to cancel.' }, {}, req);
+    }
+
+    const body = await readJsonBody(req);
+    const reason = String(body?.reason || 'unspecified').trim().slice(0, 120);
+
+    if (STRIPE_SECRET_KEY && acc.stripe_subscription_id && acc.stripe_subscription_id.startsWith('sub_')) {
+      try {
+        await stripeRequest('POST', `subscriptions/${encodeURIComponent(acc.stripe_subscription_id)}`, {
+          cancel_at_period_end: true,
+          metadata: {
+            cancel_reason: reason
+          }
+        });
+      } catch (err) {
+        console.error('[portal] stripe cancel_at_period_end error:', err.message);
+      }
+    }
+
+    acc.cancel_at_period_end = true;
+    acc.current_period_end = acc.current_period_end || Date.now() + 30 * 86400 * 1000;
+    crm.syncSubscription({
+      email: acc.email,
+      name: acc.name || undefined,
+      country: acc.country || 'GB',
+      plan: acc.plan || 'annual',
+      status: acc.status,
+      addons: acc.wifiRadarAddon ? ['wifi_radar'] : [],
+      notes: `Scheduled cancellation at period end (${reason})`
+    }).catch(() => {});
+
+    return sendJson(
+      res,
+      200,
+      {
+        ok: true,
+        status: acc.status,
+        cancel_at_period_end: true,
+        current_period_end: acc.current_period_end
+      },
+      {},
+      req
+    );
+  }
+
+  // Customer Portal Reactivate Subscription
+  if (pathname === '/api/portal/reactivate-subscription' && req.method === 'POST') {
+    const sess = verifySessionCookie(req);
+    if (!sess) return sendJson(res, 401, { error: 'unauthorized' }, {}, req);
+    const acc = accountsById.get(sess.accountId) || (sess.email ? accountsByEmail.get(sess.email) : null);
+    if (!acc || acc.status !== 'active') {
+      return sendJson(res, 400, { error: 'No active subscription found.' }, {}, req);
+    }
+
+    if (STRIPE_SECRET_KEY && acc.stripe_subscription_id && acc.stripe_subscription_id.startsWith('sub_')) {
+      try {
+        await stripeRequest('POST', `subscriptions/${encodeURIComponent(acc.stripe_subscription_id)}`, {
+          cancel_at_period_end: false
+        });
+      } catch (err) {
+        return sendJson(res, 400, { error: err.message || 'Failed to reactivate subscription.' }, {}, req);
+      }
+    }
+
+    acc.cancel_at_period_end = false;
+    crm.syncSubscription({
+      email: acc.email,
+      name: acc.name || undefined,
+      country: acc.country || 'GB',
+      plan: acc.plan || 'annual',
+      status: acc.status,
+      addons: acc.wifiRadarAddon ? ['wifi_radar'] : [],
+      notes: 'Customer reactivated subscription'
+    }).catch(() => {});
+
+    return sendJson(
+      res,
+      200,
+      {
+        ok: true,
+        status: acc.status,
+        cancel_at_period_end: false,
+        current_period_end: acc.current_period_end || null
+      },
+      {},
+      req
+    );
+  }
+
+  // Customer Portal Billing Portal Redirect / Session
+  if (pathname === '/api/billing-portal' && (req.method === 'GET' || req.method === 'POST')) {
+    const sess = verifySessionCookie(req);
+    if (!sess) {
+      if (req.method === 'POST') return sendJson(res, 401, { error: 'unauthorized' }, {}, req);
+      res.writeHead(302, { Location: '/login', ...COMMON_SECURITY_HEADERS });
+      return res.end();
+    }
+    const acc = accountsById.get(sess.accountId) || (sess.email ? accountsByEmail.get(sess.email) : null);
+    if (STRIPE_SECRET_KEY && acc?.stripe_customer_id) {
+      try {
+        const portalSession = await stripeRequest('POST', 'billing_portal/sessions', {
+          customer: acc.stripe_customer_id,
+          return_url: `${resolveTrustedOrigin(req)}/dashboard`
+        });
+        if (portalSession?.url) {
+          if (req.method === 'POST') return sendJson(res, 200, { url: portalSession.url }, {}, req);
+          res.writeHead(302, { Location: portalSession.url, ...COMMON_SECURITY_HEADERS });
+          return res.end();
+        }
+      } catch {}
+    }
+    if (req.method === 'POST') return sendJson(res, 200, { url: '/dashboard' }, {}, req);
+    res.writeHead(302, { Location: '/dashboard', ...COMMON_SECURITY_HEADERS });
+    return res.end();
   }
 
   // VPN server list: only real servers from VPN_NODES (no secrets are ever sent)
@@ -2559,7 +3011,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   const isOrderRoute = pathname === '/order' || pathname === '/checkout';
-  const isLoginRoute = pathname === '/login';
+  const isLoginRoute = pathname === '/login' || pathname === '/dashboard';
 
   if (ROUTE_ALIASES[pathname]) {
     pathname = '/' + ROUTE_ALIASES[pathname];

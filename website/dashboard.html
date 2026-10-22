@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="color-scheme" content="light">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Portal Dashboard | SWEEPR VPN</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="shortcut icon" href="/favicon.svg">
+  <script src="https://cdn.tailwindcss.com/3.4.5"></script>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+
+  <header class="bg-white border-b border-gray-200 py-4 px-4 sm:px-6 flex justify-between items-center gap-2">
+    <a href="/?home=1" class="flex items-center gap-2.5 sm:gap-3 min-w-0 text-inherit no-underline">
+      <div class="logo-box text-sm w-8 h-8">S</div>
+      <span class="font-bold text-base sm:text-lg truncate">SWEEPR <span class="text-emerald-600">VPN</span> Portal</span>
+    </a>
+    <div class="flex items-center gap-4">
+      <span id="userEmail" class="text-sm text-gray-500 hidden sm:inline-block">Loading...</span>
+      <button type="button" id="logoutBtn" class="text-sm font-medium text-gray-500 hover:text-gray-800 cursor-pointer">Log Out</button>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto p-4 sm:p-6 mt-4 sm:mt-8 w-full flex-1">
+
+    <div id="loading" class="text-center py-12 text-gray-500">Loading your account...</div>
+
+    <div id="dashboardContent" class="hidden space-y-6">
+
+      <!-- Subscription Overview Card -->
+      <div class="glass-card p-5 sm:p-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white shadow-sm rounded-2xl border border-gray-100">
+        <div>
+          <h2 class="text-xl sm:text-2xl font-bold mb-1">Your Subscription</h2>
+          <p class="text-gray-500 text-sm sm:text-base mb-4">Manage your SWEEPR VPN Pro access, activation key, and billing.</p>
+          <div class="flex flex-wrap items-center gap-2.5">
+            <a id="manageBillingBtn" href="/api/billing-portal" class="hidden inline-flex items-center gap-2 text-sm font-semibold text-emerald-700 bg-emerald-50 px-4 py-2 rounded-lg hover:bg-emerald-100 transition-colors border border-emerald-200 no-underline">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+              Manage Billing &amp; Payments
+            </a>
+            <button type="button" id="cancelSubBtn" onclick="cancelSubscription()" class="hidden inline-flex items-center gap-1.5 text-xs font-semibold text-gray-600 bg-gray-100 px-3.5 py-2 rounded-lg hover:bg-red-50 hover:text-red-700 transition-colors border border-gray-200 cursor-pointer">
+              Cancel Auto-Renewal
+            </button>
+            <button type="button" id="reactivateSubBtn" onclick="reactivateSubscription()" class="hidden inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 bg-emerald-50 px-3.5 py-2 rounded-lg hover:bg-emerald-100 transition-colors border border-emerald-200 cursor-pointer">
+              Reactivate Auto-Renewal
+            </button>
+          </div>
+          <p id="cancelNoticeText" class="hidden text-xs text-amber-700 font-medium mt-2"></p>
+        </div>
+        <div class="text-left sm:text-right w-full sm:w-auto pt-3 sm:pt-0 border-t sm:border-t-0 border-gray-100 flex sm:block items-center justify-between">
+          <span id="statusBadge" class="inline-block px-3 py-1 rounded-full text-sm font-semibold tracking-wide bg-emerald-100 text-emerald-800 uppercase">ACTIVE</span>
+          <div id="planName" class="text-lg font-black sm:mt-2 uppercase tracking-wide">ANNUAL</div>
+        </div>
+      </div>
+
+      <!-- Instant Activation Code & License Key Card -->
+      <div class="glass-card p-5 sm:p-6 bg-white shadow-sm rounded-2xl border border-gray-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <div class="text-xs font-bold uppercase tracking-wider text-gray-400">6-Digit App Activation Code</div>
+          <div class="flex items-center gap-3 mt-1">
+            <span id="activationCodeText" class="font-mono text-2xl sm:text-3xl font-black text-emerald-600 tracking-widest">------</span>
+            <button type="button" id="copyCodeBtn" class="px-3 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-xs font-bold cursor-pointer">
+              Copy Code
+            </button>
+          </div>
+          <p class="text-xs text-gray-500 mt-1">Enter your email and this 6-digit code inside the SWEEPR VPN app to unlock Pro on up to 10 devices.</p>
+        </div>
+        <div class="text-left sm:text-right border-t sm:border-t-0 border-gray-100 pt-3 sm:pt-0 w-full sm:w-auto">
+          <div class="text-xs font-bold uppercase tracking-wider text-gray-400">Pro License Key</div>
+          <div id="licenseKeyText" class="font-mono text-xs sm:text-sm font-bold text-gray-800 bg-gray-100 px-3 py-1.5 rounded-lg mt-1 inline-block">SWEEPR-VPN-PRO</div>
+        </div>
+      </div>
+
+      <!-- SWEEPR Wi-Fi Radar & Smart-TV Shield Add-on Card -->
+      <div id="wifiRadarPortalCard" class="glass-card p-6 sm:p-8 bg-gradient-to-br from-amber-50/70 via-white to-emerald-50/60 shadow-sm rounded-2xl border border-amber-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-5">
+        <div>
+          <div class="flex items-center gap-2 mb-1.5">
+            <span id="wifiRadarPortalBadge" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-extrabold uppercase tracking-wider bg-amber-100 text-amber-900 border border-amber-300">
+              📡 Paid Add-on Available
+            </span>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900">SWEEPR Wi-Fi Radar &amp; Smart-TV Shield</h3>
+          <p class="text-sm text-gray-600 mt-1 max-w-xl leading-relaxed">
+            Get instant alerts when an unknown device joins your home Wi-Fi, automatically block Smart-TV screenshot tracking (Samsung, LG, Roku, Fire TV), and monitor background data leaks 24/7.
+          </p>
+        </div>
+        <div class="shrink-0 w-full sm:w-auto">
+          <button
+            type="button"
+            id="activateWifiRadarAddonBtn"
+            onclick="purchaseAddon('wifi_radar', 'activateWifiRadarAddonBtn')"
+            class="w-full sm:w-auto px-5 py-3 rounded-xl font-bold text-sm text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm transition-all cursor-pointer"
+          >
+            Add for <span id="portalWifiRadarAddonPrice">£14.99/yr</span>
+          </button>
+          <div id="wifiRadarAddonActivePill" class="hidden inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+            <span>✓</span> Active on Your Account
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="glass-card p-6 bg-white shadow-sm rounded-2xl border border-gray-100">
+          <h3 class="font-bold text-lg mb-2">Linked Devices</h3>
+          <p class="text-sm text-gray-500 mb-4">You can protect up to 10 devices on your SWEEPR VPN Pro license.</p>
+          <ul id="deviceList" class="space-y-3">
+            <!-- Populated by JS -->
+          </ul>
+        </div>
+
+        <div class="glass-card p-6 bg-white shadow-sm rounded-2xl border border-gray-100 flex flex-col justify-center items-center text-center">
+          <h3 class="font-bold text-lg mb-2">Need the app?</h3>
+          <p class="text-sm text-gray-500 mb-6">Download the latest version of SWEEPR VPN for Windows, Mac, iOS, or Android.</p>
+          <a href="/download" class="btn btn-go justify-center gap-2 w-full max-w-xs no-underline">
+            <span>Download SWEEPR VPN</span>
+          </a>
+          <p class="text-xs text-gray-400 mt-4 max-w-xs leading-relaxed">
+            If Windows SmartScreen shows a prompt on first launch, click <strong>More info &rarr; Run anyway</strong> to start the installer.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="mt-16 py-8 text-center text-gray-500 text-xs border-t border-gray-200/60">
+    <div class="flex flex-wrap justify-center gap-6 mb-3 font-medium">
+      <a href="/refund" class="hover:text-emerald-700 transition-colors">Refund Policy</a>
+      <a href="/terms" class="hover:text-emerald-700 transition-colors">Terms of Service</a>
+      <a href="/privacy" class="hover:text-emerald-700 transition-colors">Privacy Policy</a>
+      <a href="/support" class="hover:text-emerald-700 transition-colors">Support &amp; Help</a>
+    </div>
+    <p class="text-gray-400">&copy; 2026 SWEEPR VPN. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function escapeHtml(v) {
+      return String(v ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      try {
+        await fetch('/api/logout', { method: 'POST' });
+      } catch {}
+      window.location.href = '/';
+    });
+
+    async function load() {
+      try {
+        const res = await fetch('/api/dashboard-data');
+        if (!res.ok) {
+          window.location.href = '/login';
+          return;
+        }
+        const data = await res.json();
+
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('dashboardContent').classList.remove('hidden');
+
+        document.getElementById('userEmail').textContent = data.email || 'User';
+        document.getElementById('planName').textContent = String(data.plan || 'annual').replace('_', '-').toUpperCase();
+
+        const codeEl = document.getElementById('activationCodeText');
+        const keyEl = document.getElementById('licenseKeyText');
+        const copyBtn = document.getElementById('copyCodeBtn');
+        if (codeEl && data.activation_code) {
+          codeEl.textContent = data.activation_code;
+        }
+        if (keyEl && data.licenseKey) {
+          keyEl.textContent = data.licenseKey;
+        }
+        if (copyBtn && data.activation_code) {
+          copyBtn.onclick = () => {
+            navigator.clipboard.writeText(data.activation_code);
+            copyBtn.textContent = 'Copied ✓';
+            setTimeout(() => { copyBtn.textContent = 'Copy Code'; }, 2000);
+          };
+        }
+
+        if (data.has_stripe) {
+          const billingBtn = document.getElementById('manageBillingBtn');
+          billingBtn.classList.remove('hidden');
+          billingBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            try {
+              const r = await fetch('/api/billing-portal', { method: 'POST' });
+              const d = await r.json();
+              if (d.url) window.location.href = d.url;
+            } catch {}
+          });
+        }
+
+        const cancelBtn = document.getElementById('cancelSubBtn');
+        const reactivateBtn = document.getElementById('reactivateSubBtn');
+        const cancelNotice = document.getElementById('cancelNoticeText');
+        if (data.status === 'active') {
+          if (data.cancel_at_period_end) {
+            if (cancelBtn) cancelBtn.classList.add('hidden');
+            if (reactivateBtn) reactivateBtn.classList.remove('hidden');
+            if (cancelNotice) {
+              cancelNotice.classList.remove('hidden');
+              cancelNotice.textContent = data.current_period_end
+                ? `Auto-renewal is cancelled. Your Pro access remains active until ${new Date(data.current_period_end).toLocaleDateString()}.`
+                : 'Auto-renewal is cancelled for the end of your current billing period.';
+            }
+          } else {
+            if (cancelBtn) cancelBtn.classList.remove('hidden');
+            if (reactivateBtn) reactivateBtn.classList.add('hidden');
+            if (cancelNotice) cancelNotice.classList.add('hidden');
+          }
+        }
+
+        const statusBadge = document.getElementById('statusBadge');
+        statusBadge.textContent = data.status || 'active';
+        if (data.status !== 'active') {
+          statusBadge.className = 'inline-block px-3 py-1 rounded-full text-sm font-semibold tracking-wide bg-gray-100 text-gray-800 uppercase';
+        }
+
+        const hasWifiRadar = Array.isArray(data.addons) && data.addons.includes('wifi_radar');
+        const activateBtn = document.getElementById('activateWifiRadarAddonBtn');
+        const activePill = document.getElementById('wifiRadarAddonActivePill');
+        const portalBadge = document.getElementById('wifiRadarPortalBadge');
+        const priceSpan = document.getElementById('portalWifiRadarAddonPrice');
+
+        if (data.addon_pricing?.wifi_radar && priceSpan) {
+          const wp = data.addon_pricing.wifi_radar;
+          priceSpan.textContent = data.plan === 'monthly'
+            ? `${wp.monthlyFormatted}/mo`
+            : data.plan === 'six_month'
+            ? `${wp.sixMonthFormatted}/6mo`
+            : `${wp.annualFormatted}/yr`;
+        }
+        if (hasWifiRadar) {
+          if (activateBtn) activateBtn.classList.add('hidden');
+          if (activePill) activePill.classList.remove('hidden');
+          if (portalBadge) {
+            portalBadge.textContent = '✓ Add-on Unlocked';
+            portalBadge.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-900 border border-emerald-300';
+          }
+        }
+
+        const deviceList = document.getElementById('deviceList');
+        if (data.devices && data.devices.length > 0) {
+          deviceList.innerHTML = data.devices.map(d => `
+            <li class="flex justify-between items-center p-3 rounded-lg bg-gray-50 border border-gray-100">
+              <div class="flex items-center gap-3">
+                <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                <div>
+                  <div class="text-sm font-semibold text-gray-800">${escapeHtml(d.name || 'SWEEPR VPN Device')}</div>
+                  <div class="text-xs text-gray-400 font-mono">${escapeHtml(String(d.id ?? '').substring(0, 14))}</div>
+                </div>
+              </div>
+              <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">Active</span>
+            </li>
+          `).join('');
+        } else {
+          deviceList.innerHTML = '<li class="text-sm text-gray-500 italic">No devices linked yet. Enter your 6-digit activation code in the SWEEPR VPN app to link a device.</li>';
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function purchaseAddon(addonId, btnId) {
+      const btn = document.getElementById(btnId);
+      if (!btn) return;
+      const orig = btn.innerHTML;
+      btn.disabled = true;
+      btn.textContent = 'Activating...';
+      try {
+        const res = await fetch('/api/portal/purchase-addon', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ addon: addonId })
+        });
+        const data = await res.json();
+        if (res.ok && data.ok) {
+          await load();
+        } else {
+          alert(data.error || 'Could not activate add-on. Please ensure your subscription is active.');
+          btn.disabled = false;
+          btn.innerHTML = orig;
+        }
+      } catch (e) {
+        btn.disabled = false;
+        btn.innerHTML = orig;
+      }
+    }
+
+    async function cancelSubscription() {
+      if (!confirm('Are you sure you want to cancel automatic renewal at the end of your current billing period?')) return;
+      try {
+        const res = await fetch('/api/portal/cancel-subscription', { method: 'POST' });
+        const data = await res.json();
+        if (res.ok && data.ok) {
+          await load();
+        } else {
+          alert(data.error || 'Unable to cancel subscription right now.');
+        }
+      } catch (e) {}
+    }
+
+    async function reactivateSubscription() {
+      try {
+        const res = await fetch('/api/portal/reactivate-subscription', { method: 'POST' });
+        const data = await res.json();
+        if (res.ok && data.ok) {
+          await load();
+        } else {
+          alert(data.error || 'Unable to reactivate subscription right now.');
+        }
+      } catch (e) {}
+    }
+
+    load();
+  </script>
+</body>
+</html>

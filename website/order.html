@@ -376,11 +376,52 @@
           </div>
         </div>
 
+        <!-- Paid Add-on Order Bump: SWEEPR Wi-Fi Radar & Smart-TV Shield -->
+        <div
+          id="wifiRadarBumpCard"
+          onclick="toggleWifiRadarAddon()"
+          class="bg-gradient-to-br from-amber-50/90 via-white to-emerald-50/60 rounded-xl p-4 border-2 border-amber-300/90 hover:border-emerald-500 shadow-sm cursor-pointer transition-all select-none"
+        >
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-start gap-3">
+              <input
+                type="checkbox"
+                id="wifiRadarCheckbox"
+                onclick="event.stopPropagation(); toggleWifiRadarAddon(this.checked);"
+                class="mt-1 w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 cursor-pointer shrink-0"
+              />
+              <div>
+                <div class="flex flex-wrap items-center gap-1.5 mb-1">
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-extrabold bg-amber-100 text-amber-900 border border-amber-300 uppercase tracking-wide">
+                    📡 OPTIONAL PAID ADD-ON
+                  </span>
+                  <span id="wifiRadarAddonPriceBadge" class="text-xs font-extrabold text-emerald-700">
+                    + £14.99/yr (£1.25/mo eq.)
+                  </span>
+                </div>
+                <h3 class="font-bold text-gray-900 text-sm">Add SWEEPR Wi-Fi Radar &amp; Smart-TV Shield</h3>
+                <p class="text-xs text-gray-600 mt-0.5 leading-relaxed">
+                  Get instant alerts when an unknown device joins your home Wi-Fi, automatically block Smart-TV screenshot tracking (Samsung, LG, Roku, Fire TV), and monitor background data leaks 24/7.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Order Breakdown Card -->
         <div class="bg-white rounded-xl p-5 border border-gray-200/80 shadow-sm space-y-3 text-sm">
           <div class="flex items-center justify-between text-gray-700">
             <span id="summaryPlanTitle">SWEEPR VPN Pro (Annual Plan)</span>
             <span id="summaryPlanPrice" class="font-semibold text-gray-900">£74.99/year</span>
+          </div>
+
+          <!-- Paid Add-on Line Item (Shows when SWEEPR Wi-Fi Radar & Smart-TV Shield is checked) -->
+          <div id="addonSummaryRow" class="hidden flex items-center justify-between text-gray-700 border-t border-dashed border-gray-200 pt-2">
+            <span class="flex items-center gap-1.5">
+              <span class="text-emerald-600 font-bold">+</span>
+              <span>SWEEPR Wi-Fi Radar &amp; Smart-TV Shield</span>
+            </span>
+            <span id="addonSummaryPrice" class="font-semibold text-gray-900">£14.99/yr</span>
           </div>
 
           <!-- Savings Line (Annual / 6-Month) -->
@@ -446,11 +487,14 @@
           <div class="flex items-center gap-3 min-w-0">
             <img src="/logo-mint-glass.svg" alt="SWEEPR VPN" width="36" height="36" class="w-9 h-9 rounded-lg shrink-0" />
             <div class="min-w-0">
-              <div class="text-xs font-extrabold text-white truncate">SWEEPR VPN Pro (2026 Edition)</div>
+              <div id="mobileQuickPlanText" class="text-xs font-extrabold text-white truncate">SWEEPR VPN Pro (2026 Edition)</div>
               <div class="text-[11px] text-emerald-400 font-semibold truncate">+ 2 Free Gifts Included &bull; Up to 10 Devices</div>
             </div>
           </div>
-          <a href="#orderDetailsColumn" class="text-[11px] font-bold text-slate-300 hover:text-white underline shrink-0">View Details &darr;</a>
+          <div class="text-right shrink-0">
+            <div id="mobileQuickTotalText" class="text-base font-black text-white">£74.99</div>
+            <a href="#orderDetailsColumn" class="text-[10px] font-bold text-slate-300 hover:text-white underline block">View Details &darr;</a>
+          </div>
         </div>
 
         <!-- Green Guarantee Box (With direct link to Refund Policy) -->
@@ -789,10 +833,11 @@
     </div>
   </div>
 
-  <!-- CHECKOUT CLIENT SCRIPT (Matched to sweeprcleaner.com/order — Live Stripe Elements + Google Pay + Apple Pay) -->
+  <!-- CHECKOUT CLIENT SCRIPT (Matched to sweeprcleaner.com/order — Live Stripe Elements + Google Pay + Apple Pay + PayPal) -->
   <script>
     let selectedPlan = 'annual'; // 'annual' | 'six_month' | 'monthly' (determined on /pricing)
     let isDiscountApplied = false;
+    let isWifiRadarAddonSelected = false;
     let discountModalShown = false;
     let inactivityTimer = null;
     let stripe = null;
@@ -815,19 +860,56 @@
     function calculateTotalPence() {
       const p = getActivePricingObj();
       if (p) {
-        const majorVal = selectedPlan === 'annual'
+        const baseMajor = selectedPlan === 'annual'
           ? p.annual
           : selectedPlan === 'six_month'
           ? p.sixMonth
           : isDiscountApplied
           ? p.introFirstMonth
           : p.monthly;
-        return p.decimals === 0 ? Math.round(majorVal) : Math.round(majorVal * 100);
+        const addonMajor = isWifiRadarAddonSelected
+          ? (selectedPlan === 'annual'
+              ? p.addonAnnual
+              : selectedPlan === 'six_month'
+              ? p.addonSixMonth
+              : p.addonMonthly)
+          : 0;
+        const totalMajor = baseMajor + addonMajor;
+        return p.decimals === 0 ? Math.round(totalMajor) : Math.round(totalMajor * 100);
       }
       const cfg = checkoutConfig && checkoutConfig.pricing;
-      if (selectedPlan === 'annual') return cfg?.annualAmount ?? 7499;
-      if (selectedPlan === 'six_month') return cfg?.sixMonthAmount ?? 4899;
-      return isDiscountApplied ? (cfg?.introMonthlyAmount ?? 199) : (cfg?.monthlyAmount ?? 1249);
+      const base = selectedPlan === 'annual'
+        ? (cfg?.annualAmount ?? 7499)
+        : selectedPlan === 'six_month'
+        ? (cfg?.sixMonthAmount ?? 4899)
+        : isDiscountApplied
+        ? (cfg?.introMonthlyAmount ?? 199)
+        : (cfg?.monthlyAmount ?? 1249);
+      const addon = isWifiRadarAddonSelected
+        ? (selectedPlan === 'annual'
+            ? (cfg?.wifiRadarAnnualAmount ?? 1499)
+            : selectedPlan === 'six_month'
+            ? (cfg?.wifiRadarSixMonthAmount ?? 999)
+            : (cfg?.wifiRadarMonthlyAmount ?? 199))
+        : 0;
+      return base + addon;
+    }
+
+    function toggleWifiRadarAddon(forceState) {
+      const cb = document.getElementById('wifiRadarCheckbox');
+      const card = document.getElementById('wifiRadarBumpCard');
+      if (typeof forceState === 'boolean') {
+        isWifiRadarAddonSelected = forceState;
+      } else {
+        isWifiRadarAddonSelected = !isWifiRadarAddonSelected;
+      }
+      if (cb) cb.checked = isWifiRadarAddonSelected;
+      if (card) {
+        card.className = isWifiRadarAddonSelected
+          ? 'bg-gradient-to-br from-emerald-50/90 via-white to-teal-50/70 rounded-xl p-4 border-2 border-emerald-500 shadow-md cursor-pointer transition-all select-none ring-2 ring-emerald-500/15'
+          : 'bg-gradient-to-br from-amber-50/90 via-white to-emerald-50/60 rounded-xl p-4 border-2 border-amber-300/90 hover:border-emerald-500 shadow-sm cursor-pointer transition-all select-none';
+      }
+      selectOrderPlan(selectedPlan);
     }
 
     function updatePaymentRequestTotal() {
@@ -859,6 +941,9 @@
       const productTagContent = document.getElementById('productTagContent');
       const summaryPlanTitle = document.getElementById('summaryPlanTitle');
       const summaryPlanPrice = document.getElementById('summaryPlanPrice');
+      const addonSummaryRow = document.getElementById('addonSummaryRow');
+      const addonSummaryPrice = document.getElementById('addonSummaryPrice');
+      const wifiRadarAddonPriceBadge = document.getElementById('wifiRadarAddonPriceBadge');
       const savingsSummaryRow = document.getElementById('savingsSummaryRow');
       const savingsSummaryLabel = document.getElementById('savingsSummaryLabel');
       const savingsSummaryAmount = document.getElementById('savingsSummaryAmount');
@@ -870,6 +955,8 @@
       const totalTodayLabel = document.getElementById('totalTodayLabel');
       const totalTodayText = document.getElementById('totalTodayText');
       const termsConsentLabel = document.getElementById('termsConsentLabel');
+      const mobileQuickTotalText = document.getElementById('mobileQuickTotalText');
+      const mobileQuickPlanText = document.getElementById('mobileQuickPlanText');
 
       let basePrice = p.annual;
 
@@ -884,11 +971,16 @@
         }
         if (summaryPlanTitle) summaryPlanTitle.textContent = 'SWEEPR VPN Pro (Annual Plan)';
         if (summaryPlanPrice) summaryPlanPrice.textContent = `${p.annualStr}/year`;
+        if (wifiRadarAddonPriceBadge) {
+          wifiRadarAddonPriceBadge.textContent = `+ ${p.addonAnnualStr}/yr (${p.addonAnnualPerMonthStr || '£1.25'}/mo eq.)`;
+        }
+        if (addonSummaryPrice) addonSummaryPrice.textContent = `${p.addonAnnualStr}/yr`;
         if (savingsSummaryRow) savingsSummaryRow.classList.remove('hidden');
         if (savingsSummaryLabel) savingsSummaryLabel.textContent = 'Annual Plan Savings (Save 50%)';
         if (savingsSummaryAmount) savingsSummaryAmount.textContent = `- ${p.annualSavingsStr}`;
         if (savingsSummaryNote) savingsSummaryNote.textContent = `Billed annually at ${p.annualStr}/year (${p.annualPerMonthStr}/month equivalent) instead of standard ${p.annualRegularStr}/year.`;
         if (discountSummaryRow) discountSummaryRow.classList.add('hidden');
+        if (mobileQuickPlanText) mobileQuickPlanText.textContent = 'SWEEPR VPN Pro (Annual Plan — Save 50%)';
       } else if (plan === 'six_month') {
         basePrice = p.sixMonth;
         if (productPriceTop) productPriceTop.textContent = p.sixMonthStr;
@@ -900,15 +992,29 @@
         }
         if (summaryPlanTitle) summaryPlanTitle.textContent = 'SWEEPR VPN Pro (6-Month Plan)';
         if (summaryPlanPrice) summaryPlanPrice.textContent = `${p.sixMonthStr}/6 months`;
+        if (wifiRadarAddonPriceBadge) {
+          wifiRadarAddonPriceBadge.textContent = `+ ${p.addonSixMonthStr}/6mo (${p.addonSixMonthPerMonthStr || '£1.67'}/mo eq.)`;
+        }
+        if (addonSummaryPrice) addonSummaryPrice.textContent = `${p.addonSixMonthStr}/6mo`;
         if (savingsSummaryRow) savingsSummaryRow.classList.remove('hidden');
         if (savingsSummaryLabel) savingsSummaryLabel.textContent = '6-Month Plan Savings (Save 35%)';
         if (savingsSummaryAmount) savingsSummaryAmount.textContent = `- ${p.sixMonthSavingsStr}`;
         if (savingsSummaryNote) savingsSummaryNote.textContent = `Billed every 6 months at ${p.sixMonthStr} (${p.sixMonthPerMonthStr}/month equivalent) instead of standard ${p.sixMonthRegularStr}/6-months.`;
         if (discountSummaryRow) discountSummaryRow.classList.add('hidden');
+        if (mobileQuickPlanText) mobileQuickPlanText.textContent = 'SWEEPR VPN Pro (6-Month Plan — Save 35%)';
       } else {
         if (savingsSummaryRow) savingsSummaryRow.classList.add('hidden');
         if (summaryPlanTitle) summaryPlanTitle.textContent = 'SWEEPR VPN Pro (Monthly Plan)';
         if (summaryPlanPrice) summaryPlanPrice.textContent = `${p.monthlyStr}/month`;
+        if (wifiRadarAddonPriceBadge) {
+          wifiRadarAddonPriceBadge.textContent = `+ ${p.addonMonthlyStr}/mo`;
+        }
+        if (addonSummaryPrice) addonSummaryPrice.textContent = `${p.addonMonthlyStr}/mo`;
+        if (mobileQuickPlanText) {
+          mobileQuickPlanText.textContent = isDiscountApplied
+            ? `SWEEPR VPN Pro (1st Month ${p.introStr} Intro)`
+            : 'SWEEPR VPN Pro (Monthly Plan)';
+        }
 
         if (isDiscountApplied) {
           basePrice = p.introFirstMonth;
@@ -932,16 +1038,33 @@
         }
       }
 
-      const totalStr = p.fmt(basePrice);
+      if (addonSummaryRow) {
+        if (isWifiRadarAddonSelected) {
+          addonSummaryRow.classList.remove('hidden');
+        } else {
+          addonSummaryRow.classList.add('hidden');
+        }
+      }
+
+      const addonMajor = isWifiRadarAddonSelected
+        ? (plan === 'annual' ? p.addonAnnual : plan === 'six_month' ? p.addonSixMonth : p.addonMonthly)
+        : 0;
+      const totalTodayMajor = basePrice + addonMajor;
+      const recurringBaseMajor = plan === 'annual' ? p.annual : plan === 'six_month' ? p.sixMonth : p.monthly;
+      const recurringTotalMajor = recurringBaseMajor + addonMajor;
+
+      const totalStr = p.fmt(totalTodayMajor);
+      const recurringStr = p.fmt(recurringTotalMajor);
       if (totalTodayLabel) totalTodayLabel.textContent = `Total Today (${p.code})`;
       if (totalTodayText) totalTodayText.textContent = totalStr;
+      if (mobileQuickTotalText) mobileQuickTotalText.textContent = totalStr;
 
       if (termsConsentLabel) {
         if (plan === 'monthly' && isDiscountApplied) {
-          termsConsentLabel.textContent = `I agree to pay ${p.introStr} today for my 1st month. My subscription will automatically renew at the standard price of ${p.monthlyStr} monthly thereafter unless cancelled. The ${p.introSavingsStr} introductory discount applies to month 1 only and never reduces future ${p.monthlyStr} renewals. I can cancel anytime via my online portal.`;
+          termsConsentLabel.textContent = `I agree to pay ${totalStr} today for my 1st month. My subscription will automatically renew at the standard price of ${recurringStr} monthly thereafter unless cancelled. The ${p.introSavingsStr} introductory discount applies to month 1 only and never reduces future ${recurringStr} renewals. I can cancel anytime via my online portal.`;
         } else {
           const cycleWord = plan === 'annual' ? 'annually' : plan === 'six_month' ? 'every 6 months' : 'monthly';
-          termsConsentLabel.textContent = `I agree to pay ${totalStr} today which will auto renew at ${totalStr} ${cycleWord} unless I cancel before my next renewal. I can cancel anytime via my online portal. Prices may change with notice.`;
+          termsConsentLabel.textContent = `I agree to pay ${totalStr} today which will auto renew at ${recurringStr} ${cycleWord} unless I cancel before my next renewal. I can cancel anytime via my online portal. Prices may change with notice.`;
         }
       }
 
@@ -1122,6 +1245,8 @@
             name: payerName,
             applyDiscount: isDiscountApplied && selectedPlan === 'monthly',
             plan: selectedPlan,
+            wifiRadarAddon: isWifiRadarAddonSelected,
+            addons: isWifiRadarAddonSelected ? ['wifi_radar'] : [],
             currency: activeCurrencyCode.toLowerCase(),
             paymentMethod: 'google_pay'
           })
@@ -1222,6 +1347,8 @@
                   name: payerName,
                   applyDiscount: isDiscountApplied && selectedPlan === 'monthly',
                   plan: selectedPlan,
+                  wifiRadarAddon: isWifiRadarAddonSelected,
+                  addons: isWifiRadarAddonSelected ? ['wifi_radar'] : [],
                   currency: activeCurrency,
                   paymentMethod: 'wallet'
                 })
@@ -1447,7 +1574,169 @@
       if (expressGPayBtn) expressGPayBtn.disabled = true;
 
       try {
-        // Case A: Live Stripe Elements on-page card confirmation
+        // Case A: Direct PayPal Popup Authorization (Matches sweeprcleaner.com/order)
+        if (method === 'paypal') {
+          const width = 500;
+          const height = 680;
+          const left = Math.max(0, Math.round(window.screenX + (window.outerWidth - width) / 2));
+          const top = Math.max(0, Math.round(window.screenY + (window.outerHeight - height) / 2));
+          const popupWin = window.open(
+            'about:blank',
+            'PayPalCheckout',
+            `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes,status=yes`
+          );
+
+          if (popupWin && popupWin.document) {
+            popupWin.document.write(`
+              <!DOCTYPE html>
+              <html>
+              <head><title>Connecting to PayPal...</title></head>
+              <body style="font-family:system-ui,-apple-system,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;height:90vh;margin:0;background:#f8fafc;color:#1e293b;">
+                <div style="font-size:26px;font-weight:900;font-style:italic;color:#003087;margin-bottom:14px;">Pay<span style="color:#0079c1;">Pal</span></div>
+                <div style="font-size:14px;color:#64748b;">Connecting securely to PayPal...</div>
+              </body>
+              </html>
+            `);
+          }
+
+          const subRes = await fetch('/api/create-subscription', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: email || undefined,
+              name: cardName || undefined,
+              address: billingAddress || undefined,
+              postcode: billingPostcode || undefined,
+              applyDiscount: isDiscountApplied && selectedPlan === 'monthly',
+              plan: selectedPlan,
+              wifiRadarAddon: isWifiRadarAddonSelected,
+              addons: isWifiRadarAddonSelected ? ['wifi_radar'] : [],
+              currency: activeCurrency,
+              paymentMethod: 'paypal',
+              popup: Boolean(popupWin)
+            })
+          });
+
+          const subData = await subRes.json();
+          if (!subRes.ok || !subData.redirectUrl) {
+            if (popupWin && !popupWin.closed) popupWin.close();
+            throw new Error(subData.error || 'Unable to initialize PayPal checkout.');
+          }
+
+          if (!popupWin || popupWin.closed) {
+            window.location.href = subData.redirectUrl;
+            return;
+          }
+
+          popupWin.location.href = subData.redirectUrl;
+
+          const successRedirectUrl = `/checkout/success?web=1&subscription_id=${encodeURIComponent(subData.subscriptionId)}&account_id=${encodeURIComponent(subData.accountId)}`;
+          let completed = false;
+          let bc = null;
+          let bc2 = null;
+          let pollTimer = null;
+
+          const completePayPalCheckout = (targetUrl) => {
+            if (completed) return;
+            completed = true;
+            if (pollTimer) clearInterval(pollTimer);
+            window.removeEventListener('message', onPopupMessage);
+            window.removeEventListener('storage', onStorageEvent);
+            try { if (bc) bc.close(); } catch (e) {}
+            try { if (bc2) bc2.close(); } catch (e) {}
+            try { if (popupWin && !popupWin.closed) popupWin.close(); } catch (e) {}
+            window.location.href = targetUrl || successRedirectUrl;
+          };
+
+          const cancelPayPalCheckout = (errMsg) => {
+            if (completed) return;
+            completed = true;
+            if (pollTimer) clearInterval(pollTimer);
+            window.removeEventListener('message', onPopupMessage);
+            window.removeEventListener('storage', onStorageEvent);
+            try { if (bc) bc.close(); } catch (e) {}
+            try { if (bc2) bc2.close(); } catch (e) {}
+            try { if (popupWin && !popupWin.closed) popupWin.close(); } catch (e) {}
+            if (errMsg) showError(errMsg);
+            restoreButtons();
+          };
+
+          const onPopupMessage = (ev) => {
+            if (!ev.data) return;
+            if (ev.data.type === 'paypal_success' || ev.data.type === 'sweepr_checkout_complete') {
+              completePayPalCheckout(ev.data.redirectUrl || successRedirectUrl);
+            } else if (ev.data.type === 'paypal_cancelled') {
+              cancelPayPalCheckout('PayPal authorization was cancelled. No charge was made.');
+            }
+          };
+
+          const onStorageEvent = (ev) => {
+            if (ev.key === 'sweepr_paypal_event' && ev.newValue) {
+              try {
+                const payload = JSON.parse(ev.newValue);
+                if (payload.type === 'paypal_success') {
+                  completePayPalCheckout(payload.redirectUrl);
+                } else if (payload.type === 'paypal_cancelled') {
+                  cancelPayPalCheckout('PayPal authorization was cancelled. No charge was made.');
+                }
+              } catch (e) {}
+            }
+          };
+
+          window.addEventListener('message', onPopupMessage);
+          window.addEventListener('storage', onStorageEvent);
+
+          try {
+            if ('BroadcastChannel' in window) {
+              bc = new BroadcastChannel('sweepr_paypal_checkout');
+              bc.onmessage = onPopupMessage;
+              bc2 = new BroadcastChannel('sweepr_checkout');
+              bc2.onmessage = onPopupMessage;
+            }
+          } catch (e) {}
+
+          let pollInFlight = false;
+          let closedGraceTicks = 0;
+
+          pollTimer = setInterval(async () => {
+            if (completed || pollInFlight) return;
+            const isClosed = !popupWin || popupWin.closed;
+
+            pollInFlight = true;
+            try {
+              const checkRes = await fetch('/api/confirm-subscription', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  subscriptionId: subData.subscriptionId,
+                  accountId: subData.accountId,
+                  checkOnly: true
+                })
+              });
+              if (checkRes.ok) {
+                const checkData = await checkRes.json();
+                if (checkData && checkData.ok) {
+                  completePayPalCheckout(checkData.redirect || successRedirectUrl);
+                  return;
+                }
+              }
+            } catch (e) {
+            } finally {
+              pollInFlight = false;
+            }
+
+            if (isClosed && !completed) {
+              closedGraceTicks += 1;
+              if (closedGraceTicks >= 2) {
+                cancelPayPalCheckout();
+              }
+            }
+          }, 1500);
+
+          return;
+        }
+
+        // Case B: Live Stripe Elements on-page card confirmation
         if (stripe && cardElements && method === 'card') {
           if (!cardName) {
             document.getElementById('cardName')?.focus();
@@ -1465,6 +1754,8 @@
               postcode: billingPostcode,
               applyDiscount: isDiscountApplied && selectedPlan === 'monthly',
               plan: selectedPlan,
+              wifiRadarAddon: isWifiRadarAddonSelected,
+              addons: isWifiRadarAddonSelected ? ['wifi_radar'] : [],
               currency: activeCurrency,
               paymentMethod: 'card'
             })
@@ -1508,7 +1799,7 @@
           return;
         }
 
-        // Case B: Fallback on-page Card / Wallet confirmation
+        // Case C: Fallback on-page Card / Wallet confirmation
         let rawNum = '';
         if (method === 'card') {
           if (!cardName) {
@@ -1543,6 +1834,8 @@
             postcode: billingPostcode || undefined,
             applyDiscount: isDiscountApplied && selectedPlan === 'monthly',
             plan: selectedPlan,
+            wifiRadarAddon: isWifiRadarAddonSelected,
+            addons: isWifiRadarAddonSelected ? ['wifi_radar'] : [],
             currency: activeCurrency,
             paymentMethod: method,
             confirmOnServer: true,
@@ -1584,7 +1877,7 @@
         const res = await fetch('/api/checkout-config');
         if (res.ok) {
           checkoutConfig = await res.json();
-          if (window.Stripe && checkoutConfig.publishableKey) {
+          if (checkoutConfig.elementsEnabled && window.Stripe && checkoutConfig.publishableKey) {
             setupStripeElements(checkoutConfig.publishableKey);
           }
         }
@@ -1605,6 +1898,8 @@
       const planParam = urlParams.get('plan');
       const offerParam = urlParams.get('offer');
       const discountParam = urlParams.get('discount');
+      const addonParam = urlParams.get('addon');
+      const wifiRadarParam = urlParams.get('wifi_radar');
       const errorParam = urlParams.get('error');
       const emailParam = urlParams.get('email');
 
@@ -1614,6 +1909,10 @@
 
       if (errorParam === 'payment_cancelled' || errorParam === 'payment_incomplete') {
         showError('Your payment was cancelled or not completed. No charge was made — please try again below.');
+      }
+
+      if (addonParam === 'wifi_radar' || wifiRadarParam === '1' || wifiRadarParam === 'true') {
+        toggleWifiRadarAddon(true);
       }
 
       let storedPlan = null;

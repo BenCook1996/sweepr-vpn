@@ -406,9 +406,9 @@
     <input class="input" id="mCode" type="text" maxlength="6" placeholder="6-digit code from your email" />
     <div class="s" id="mError" style="color:#ef4444;font-weight:700;display:none">Please check your email and 6-digit code.</div>
     <div class="s" style="font-weight:800;letter-spacing:.4px;margin-top:6px">OR CHOOSE A PLAN</div>
-    <button class="plan on" onclick="plan(this)"><span class="tag">BEST VALUE · SAVE 50%</span><div><div class="t">Yearly</div><div class="s">£74.99 billed once a year</div></div><div style="text-align:right"><div style="font-weight:900;font-size:16px">£6.25</div><div class="s">/month</div></div></button>
-    <button class="plan" onclick="plan(this)"><div><div class="t">6 months</div><div class="s">£48.99 · Save 35%</div></div><div style="text-align:right"><div style="font-weight:900;font-size:15px">£8.17</div><div class="s">/month</div></div></button>
-    <button class="plan" onclick="plan(this)"><div><div class="t">Monthly</div><div class="s">£1.99 first month, then £12.49</div></div><div style="text-align:right"><div style="font-weight:900;font-size:15px">£12.49</div><div class="s">/month</div></div></button>
+    <button class="plan on" data-plan="annual" onclick="plan(this)"><span class="tag">BEST VALUE · SAVE 50%</span><div><div class="t">Yearly</div><div class="s">£74.99 billed once a year</div></div><div style="text-align:right"><div style="font-weight:900;font-size:16px">£6.25</div><div class="s">/month</div></div></button>
+    <button class="plan" data-plan="six_month" onclick="plan(this)"><div><div class="t">6 months</div><div class="s">£48.99 · Save 35%</div></div><div style="text-align:right"><div style="font-weight:900;font-size:15px">£8.17</div><div class="s">/month</div></div></button>
+    <button class="plan" data-plan="monthly" onclick="plan(this)"><div><div class="t">Monthly</div><div class="s">£1.99 first month, then £12.49</div></div><div style="text-align:right"><div style="font-weight:900;font-size:15px">£12.49</div><div class="s">/month</div></div></button>
     <button class="btn-go" onclick="confirmActivate()">Unlock Pro</button>
   </div>
 </div>
@@ -459,7 +459,7 @@
     if (!tauri) return;
     try {
       if (action === 'compact') tauri.core.invoke('set_compact', { compact: !!payload });
-      else if (action === 'openCheckout') tauri.opener.openUrl('https://sweeprvpn.com/order');
+      else if (action === 'openCheckout') tauri.opener.openUrl(typeof payload === 'string' && payload.startsWith('https://') ? payload : 'https://sweeprvpn.com/order');
     } catch (e) {}
   }
   function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('show'), 3600); }
@@ -714,8 +714,12 @@
     $('modal').classList.add('open');
     setTimeout(() => $('mEmail').focus(), 50);
   }
+  let selectedModalPlan = 'annual';
   function closeActivate() { $('modal').classList.remove('open'); }
-  function plan(btn) { btn.parentNode.querySelectorAll('.plan').forEach(p => p.classList.toggle('on', p === btn)); }
+  function plan(btn) {
+    btn.parentNode.querySelectorAll('.plan').forEach(p => p.classList.toggle('on', p === btn));
+    selectedModalPlan = btn.getAttribute('data-plan') || 'annual';
+  }
   const SWEEPR_ED25519_PUB_B64URL = 't04hn-7TfW5RIemEhi4mKbZy6rHRYBO6HxeN5OOIR_8';
   function b64UrlToBytes(b64u) {
     const b64 = String(b64u || '').replace(/-/g, '+').replace(/_/g, '/');
@@ -780,7 +784,15 @@
   }
   async function confirmActivate() {
     const email = $('mEmail').value.trim(), code = $('mCode').value.trim();
-    if (!email && !code) { postNative('openCheckout', true); window.open('https://sweeprvpn.com/order', '_blank'); toast('Opening secure checkout in your browser…'); return; }
+    if (!code) {
+      let checkoutUrl = 'https://sweeprvpn.com/order?plan=' + encodeURIComponent(selectedModalPlan || 'annual');
+      if (selectedModalPlan === 'monthly') checkoutUrl += '&offer=intro';
+      if (email && email.includes('@')) checkoutUrl += '&email=' + encodeURIComponent(email);
+      postNative('openCheckout', checkoutUrl);
+      if (!tauri) window.open(checkoutUrl, '_blank');
+      toast('Opening secure checkout in your browser…');
+      return;
+    }
     if (!email.includes('@') || code.length < 6) {
       $('mError').textContent = 'Please enter the email address and 6-digit activation code from your order.';
       $('mError').style.display = 'block';

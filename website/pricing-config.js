@@ -132,6 +132,8 @@
     const c = SWEEPR_PRICING[currencyCode] || SWEEPR_PRICING.GBP;
     const annualPerMonth = c.decimals === 0 ? Math.round(c.annual / 12) : Math.round((c.annual / 12) * 100) / 100;
     const sixMonthPerMonth = c.decimals === 0 ? Math.round(c.sixMonth / 6) : Math.round((c.sixMonth / 6) * 100) / 100;
+    const addonAnnualPerMonth = c.decimals === 0 ? Math.round(c.addonAnnual / 12) : Math.round((c.addonAnnual / 12) * 100) / 100;
+    const addonSixMonthPerMonth = c.decimals === 0 ? Math.round(c.addonSixMonth / 6) : Math.round((c.addonSixMonth / 6) * 100) / 100;
     const annualRegular = c.monthly * 12;
     const sixMonthRegular = c.monthly * 6;
     const annualSavingsAmt = annualRegular - c.annual;
@@ -154,7 +156,9 @@
       introSavingsStr: formatAmount(c, introSavingsAmt),
       addonMonthlyStr: formatAmount(c, c.addonMonthly),
       addonSixMonthStr: formatAmount(c, c.addonSixMonth),
-      addonAnnualStr: formatAmount(c, c.addonAnnual)
+      addonAnnualStr: formatAmount(c, c.addonAnnual),
+      addonAnnualPerMonthStr: formatAmount(c, addonAnnualPerMonth),
+      addonSixMonthPerMonthStr: formatAmount(c, addonSixMonthPerMonth)
     };
   }
 
