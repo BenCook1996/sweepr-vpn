@@ -157,6 +157,7 @@ $bmp256.Save("$root\desktop-client\app-icon.png", [System.Drawing.Imaging.ImageF
 $bmp256.Dispose()
 $bmp64 = New-VpnShieldBitmap -Size 64
 $bmp64.Save("$root\website\favicon.png", [System.Drawing.Imaging.ImageFormat]::Png)
+$bmp64.Save("$root\website\favicon-dark.png", [System.Drawing.Imaging.ImageFormat]::Png)
 $bmp64.Dispose()
 $bmp32 = New-VpnShieldBitmap -Size 32
 $bmp32.Save("$root\website\icon-32x32.png", [System.Drawing.Imaging.ImageFormat]::Png)

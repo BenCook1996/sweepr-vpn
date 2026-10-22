@@ -2360,7 +2360,7 @@ const server = http.createServer(async (req, res) => {
     return sendJson(res, 404, { valid: false, error: 'key_not_found' }, {}, req);
   }
 
-  // Service-authenticated VPN Peer Revocation Endpoint (called by sweepr_crm on refund/cancellation/device revocation)
+  // Service-authenticated VPN Peer Revocation & Key Rotation Endpoint (called by sweepr_crm on refund/cancellation/device revocation/key reset)
   if (pathname === '/api/vpn/revoke' && req.method === 'POST') {
     if (!hasValidCrmServiceKey(req)) {
       return sendJson(res, 401, { ok: false, error: 'unauthorized' }, {}, req);
@@ -2371,26 +2371,81 @@ const server = http.createServer(async (req, res) => {
     const accountId = String(body?.account_id || '').trim();
     const activationCode = String(body?.activation_code || '').trim();
     const licenseKey = String(body?.license_key || body?.licenseKey || '').trim();
+    const newActivationCode = String(body?.new_activation_code || '').trim();
+    const newLicenseKey = String(body?.new_license_key || '').trim().toUpperCase();
+    const isKeyRotation = Boolean(body?.action === 'key_reset' || newActivationCode || newLicenseKey);
 
-    const localAcc =
+    let localAcc =
       (accountId ? accountsById.get(accountId) : null) ||
       (email ? accountsByEmail.get(email) : null) ||
       (activationCode ? licenses.get(activationCode) : null) ||
       (licenseKey ? licenses.get(licenseKey.toUpperCase()) : null);
 
-    if (localAcc) {
+    const oldCodeToEvict = activationCode || localAcc?.activation_code || '';
+    const oldKeyToEvict = licenseKey || localAcc?.licenseKey || '';
+    if (oldCodeToEvict) licenses.delete(oldCodeToEvict);
+    if (oldKeyToEvict) {
+      licenses.delete(oldKeyToEvict);
+      licenses.delete(oldKeyToEvict.toUpperCase());
+    }
+
+    if (isKeyRotation) {
+      if (!localAcc && email) {
+        localAcc = upsertLocalAccount({
+          email,
+          plan: body?.plan || 'annual',
+          status: body?.status || 'active'
+        });
+      }
+      if (localAcc) {
+        if (accountId && localAcc.id !== accountId) {
+          accountsById.delete(localAcc.id);
+          localAcc.id = accountId;
+          localAcc.account_id = accountId;
+          accountsById.set(accountId, localAcc);
+        }
+        if (newActivationCode && /^\d{6}$/.test(newActivationCode)) {
+          licenses.delete(localAcc.activation_code);
+          localAcc.activation_code = newActivationCode;
+        }
+        if (newLicenseKey) {
+          licenses.delete(localAcc.licenseKey);
+          localAcc.licenseKey = newLicenseKey;
+        }
+        if (body?.status) {
+          localAcc.status = String(body.status);
+        }
+        if (localAcc.status === 'active' || localAcc.status === 'trialing') {
+          licenses.set(localAcc.activation_code, localAcc);
+          licenses.set(localAcc.licenseKey, localAcc);
+        }
+      }
+    } else if (localAcc) {
       localAcc.status = 'canceled';
       licenses.delete(localAcc.activation_code);
       licenses.delete(localAcc.licenseKey);
     }
 
     const result = await revokeLicenceOnAllNodes({
-      id: accountId || localAcc?.id,
-      activation_code: activationCode || localAcc?.activation_code,
-      licenseKey: licenseKey || localAcc?.licenseKey,
+      id: isKeyRotation ? undefined : (accountId || localAcc?.id),
+      activation_code: oldCodeToEvict,
+      licenseKey: oldKeyToEvict,
       keys: Array.isArray(body?.keys) ? body.keys : []
     });
-    return sendJson(res, 200, { ok: true, ...result }, {}, req);
+    return sendJson(
+      res,
+      200,
+      {
+        ok: true,
+        rotated: isKeyRotation,
+        ...(isKeyRotation && localAcc
+          ? { activation_code: localAcc.activation_code, license_key: localAcc.licenseKey }
+          : {}),
+        ...result
+      },
+      {},
+      req
+    );
   }
 
   // VPN Customer Support Ticket Submission
