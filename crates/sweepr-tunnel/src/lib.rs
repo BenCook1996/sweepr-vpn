@@ -393,7 +393,8 @@ fn call_connect_api(
         "public_key": public_key,
         "server_code": server_code,
         "email": email.unwrap_or(""),
-        "activation_code": activation_code.unwrap_or("")
+        "activation_code": activation_code.unwrap_or(""),
+        "license_key": activation_code.unwrap_or("")
     })
     .to_string();
 
@@ -435,6 +436,7 @@ fn call_activate_api(
     let url = format!("{}/api/vpn/activate", api_base.trim_end_matches('/'));
     let body = serde_json::json!({
         "email": email.trim(),
+        "key": code.trim(),
         "activation_code": code.trim(),
         "otp": code.trim(),
         "os": std::env::consts::OS,
@@ -565,8 +567,9 @@ pub fn verify_subscription(
 ) -> Result<SubscriptionStatus, String> {
     let clean_email = email.trim();
     let clean_code = code.trim();
-    if clean_email.is_empty() || !clean_email.contains('@') || clean_code.len() < 6 {
-        return Err("Please enter the email address and 6-digit code from your order.".into());
+    let is_full_key = clean_code.len() >= 12 && clean_code.to_ascii_uppercase().starts_with("SWEEPR-");
+    if (!is_full_key && (clean_email.is_empty() || !clean_email.contains('@'))) || clean_code.len() < 6 {
+        return Err("Please enter the license key and email address from your order.".into());
     }
 
     let candidates = default_api_candidates(api_url);
@@ -593,7 +596,7 @@ pub fn verify_subscription(
 
     if !is_active {
         let msg = resp.message.unwrap_or_else(|| {
-            "No active paid subscription found for that email and activation code.".into()
+            "No active paid subscription found for that email and license key.".into()
         });
         return Err(msg);
     }

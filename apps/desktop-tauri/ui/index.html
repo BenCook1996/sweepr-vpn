@@ -401,10 +401,10 @@
       <div class="grow"><div style="font-size:19px;font-weight:900">Unlock SWEEPR Pro</div><div class="s">Up to 10 devices · Cancel anytime · 14-day money back</div></div>
       <button onclick="closeActivate()" aria-label="Close" style="font-size:18px;color:var(--muted)">✕</button>
     </div>
-    <div class="s" style="font-weight:800;letter-spacing:.4px;margin-top:4px">ALREADY PAID? ENTER YOUR CODE</div>
+    <div class="s" style="font-weight:800;letter-spacing:.4px;margin-top:4px">ALREADY PAID? ENTER YOUR LICENSE KEY</div>
     <input class="input" id="mEmail" type="email" placeholder="Email you used at checkout" />
-    <input class="input" id="mCode" type="text" maxlength="6" placeholder="6-digit code from your email" />
-    <div class="s" id="mError" style="color:#ef4444;font-weight:700;display:none">Please check your email and 6-digit code.</div>
+    <input class="input" id="mCode" type="text" maxlength="64" placeholder="License key from your email (e.g. SWEEPR-VPN-XXXX-XXXX-XXXX)" style="font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;text-transform:uppercase" />
+    <div class="s" id="mError" style="color:#ef4444;font-weight:700;display:none">Please check your email and license key.</div>
     <div class="s" style="font-weight:800;letter-spacing:.4px;margin-top:6px">OR CHOOSE A PLAN</div>
     <button class="plan on" data-plan="annual" onclick="plan(this)"><span class="tag">BEST VALUE · SAVE 50%</span><div><div class="t">Yearly</div><div class="s">£74.99 billed once a year</div></div><div style="text-align:right"><div style="font-weight:900;font-size:16px">£6.25</div><div class="s">/month</div></div></button>
     <button class="plan" data-plan="six_month" onclick="plan(this)"><div><div class="t">6 months</div><div class="s">£48.99 · Save 35%</div></div><div style="text-align:right"><div style="font-weight:900;font-size:15px">£8.17</div><div class="s">/month</div></div></button>
@@ -502,7 +502,7 @@
 
   /* ---------- Subscription Gate & Connect (real WireGuard tunnel via sweepr-tunnel) ---------- */
   function requirePro(reason) {
-    if (state.pro && state.email && state.activationCode) return true;
+    if (state.pro && state.activationCode) return true;
     openActivate(reason || 'An active paid SWEEPR Pro subscription is required to use this feature.');
     return false;
   }
@@ -510,7 +510,7 @@
   async function toggleConnect(reconnectOnly) {
     if (state.connecting) return;
     const wantConnect = reconnectOnly ? true : !state.connected;
-    if (wantConnect && !requirePro('Enter your activation code or subscribe to enable VPN protection.')) {
+    if (wantConnect && !requirePro('Enter your license key or subscribe to enable VPN protection.')) {
       return;
     }
     if (!tauri) {
@@ -757,13 +757,13 @@
       endpoints.push('/api/vpn/activate');
     }
     endpoints.push('https://sweeprvpn.com/api/vpn/activate', 'http://127.0.0.1:8788/api/vpn/activate', 'http://127.0.0.1:8080/api/vpn/activate');
-    let lastMsg = 'No active paid subscription found for that email and code.';
+    let lastMsg = 'No active paid subscription found for that email and license key.';
     for (const url of endpoints) {
       try {
         const r = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, activation_code: code, otp: code, project_id: 'vpn' })
+          body: JSON.stringify({ email, key: code, activation_code: code, otp: code, project_id: 'vpn' })
         });
         const d = await r.json().catch(() => ({}));
         if (r.ok && d.ok && d.valid) {
@@ -783,7 +783,7 @@
     throw new Error(lastMsg);
   }
   async function confirmActivate() {
-    const email = $('mEmail').value.trim(), code = $('mCode').value.trim();
+    const email = $('mEmail').value.trim(), code = $('mCode').value.trim().toUpperCase();
     if (!code) {
       let checkoutUrl = 'https://sweeprvpn.com/order?plan=' + encodeURIComponent(selectedModalPlan || 'annual');
       if (selectedModalPlan === 'monthly') checkoutUrl += '&offer=intro';
@@ -793,18 +793,25 @@
       toast('Opening secure checkout in your browser…');
       return;
     }
-    if (!email.includes('@') || code.length < 6) {
-      $('mError').textContent = 'Please enter the email address and 6-digit activation code from your order.';
+    const isFullKey = /^SWEEPR-[A-Z0-9-]{8,}$/i.test(code);
+    if ((!isFullKey && !email.includes('@')) || code.length < 6) {
+      $('mError').textContent = 'Please enter the license key (e.g. SWEEPR-VPN-XXXX-XXXX-XXXX) and email address from your order.';
       $('mError').style.display = 'block';
       return;
     }
     try {
-      await verifyServerSubscription(email, code);
-      state.pro = true; state.email = email; state.activationCode = code;
+      const res = await verifyServerSubscription(email, code);
+      const resolvedEmail = (res && res.email && !String(res.email).includes('*')) ? String(res.email) : email;
+      const resolvedKey = (res && (res.licenseKey || res.license_key)) ? String(res.licenseKey || res.license_key) : code;
+      state.pro = true; state.email = resolvedEmail; state.activationCode = code;
       document.querySelectorAll('.toggle.shield').forEach(t => t.classList.add('on'));
-      try { localStorage.setItem('sweepr_vpn_email', email); localStorage.setItem('sweepr_vpn_code', code); } catch (e) {}
-      closeActivate(); renderAll(); toast('SWEEPR Pro subscription verified & unlocked ✓');
-      postNative('activateLicense', { email, code });
+      try {
+        if (resolvedEmail) localStorage.setItem('sweepr_vpn_email', resolvedEmail);
+        localStorage.setItem('sweepr_vpn_code', code);
+        if (resolvedKey) localStorage.setItem('sweepr_vpn_license_key', resolvedKey);
+      } catch (e) {}
+      closeActivate(); renderAll(); toast('SWEEPR Pro license key verified & unlocked ✓');
+      postNative('activateLicense', { email: resolvedEmail, code });
     } catch (e) {
       state.pro = false;
       $('mError').textContent = String(e && e.message || e);
@@ -812,9 +819,10 @@
     }
   }
   async function verifySavedSubscription() {
-    if (!state.email || !state.activationCode) return;
+    if (!state.activationCode) return;
     try {
-      await verifyServerSubscription(state.email, state.activationCode);
+      const res = await verifyServerSubscription(state.email, state.activationCode);
+      if (res && res.email && !state.email && !String(res.email).includes('*')) state.email = String(res.email);
       state.pro = true;
       document.querySelectorAll('.toggle.shield').forEach(t => t.classList.add('on'));
       renderAll();
@@ -822,7 +830,7 @@
     } catch (e) {
       state.pro = false; state.email = ''; state.activationCode = '';
       document.querySelectorAll('.toggle.shield').forEach(t => t.classList.remove('on'));
-      try { localStorage.removeItem('sweepr_vpn_email'); localStorage.removeItem('sweepr_vpn_code'); } catch (err) {}
+      try { localStorage.removeItem('sweepr_vpn_email'); localStorage.removeItem('sweepr_vpn_code'); localStorage.removeItem('sweepr_vpn_license_key'); } catch (err) {}
       renderAll();
     }
   }
@@ -852,12 +860,12 @@
     $('rec-private').classList.toggle('on', state.code === 'SE-STO-01');
 
     $('planPill').className = 'pill ' + (state.pro ? 'ok' : 'warn');
-    $('planPillText').textContent = state.pro ? 'Pro · 1 of 10 devices' : 'Free plan · Enter code';
+    $('planPillText').textContent = state.pro ? 'Pro · 1 of 10 devices' : 'Free plan · Enter license key';
     $('accTitle').textContent = state.pro ? 'SWEEPR Pro is active' : 'Free plan';
-    $('accSub').textContent = state.pro ? '1 of 10 devices used · All countries and TV shields unlocked' : 'Already paid? Enter your email and 6-digit code to unlock up to 10 devices.';
+    $('accSub').textContent = state.pro ? '1 of 10 devices used · All countries and TV shields unlocked' : 'Already paid? Enter your email and license key to unlock up to 10 devices.';
     $('accPill').className = 'pill ' + (state.pro ? 'ok' : 'warn');
     $('accPill').textContent = state.pro ? 'Pro' : 'Free';
-    $('accBtn').textContent = state.pro ? 'Manage my plan' : 'Enter code or upgrade';
+    $('accBtn').textContent = state.pro ? 'Manage my plan' : 'Enter license key or upgrade';
 
     // mini window
     $('cStatus').className = 'pill ' + (on ? 'ok' : 'warn');
@@ -872,9 +880,9 @@
 
   try {
     if (localStorage.getItem('sweepr_vpn_theme') === 'dark') toggleTheme();
-    const savedEmail = localStorage.getItem('sweepr_vpn_email');
-    const savedCode = localStorage.getItem('sweepr_vpn_code');
-    if (savedEmail && savedCode) { state.email = savedEmail; state.activationCode = savedCode; }
+    const savedEmail = localStorage.getItem('sweepr_vpn_email') || '';
+    const savedCode = localStorage.getItem('sweepr_vpn_code') || localStorage.getItem('sweepr_vpn_license_key') || '';
+    if (savedCode) { state.email = savedEmail; state.activationCode = savedCode; }
   } catch (e) {}
   renderAll();
   verifySavedSubscription();

@@ -1251,16 +1251,21 @@ function renderCheckoutSuccessPage(acc, isCancelled = false, isPopup = false) {
     <div class="bg-slate-900/90 border border-slate-700/80 rounded-2xl p-5 space-y-3 text-left">
       <div class="flex items-center justify-between border-b border-slate-800 pb-3">
         <div>
-          <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">6-Digit App &amp; Portal Activation Key</div>
-          <div id="activationKeyText" class="font-mono text-2xl sm:text-3xl font-black text-emerald-400 tracking-widest mt-0.5">${activationCode}</div>
+          <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Product License Key (Enter in App)</div>
+          <div id="licenseKeyText" class="font-mono text-lg sm:text-xl font-black text-emerald-400 tracking-wider mt-0.5">${licenseKey}</div>
         </div>
-        <button onclick="navigator.clipboard.writeText('${activationCode}'); this.textContent='Copied ✓';" class="px-3.5 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 text-xs font-bold cursor-pointer">
-          Copy Code
+        <button onclick="navigator.clipboard.writeText('${licenseKey}'); this.textContent='Copied ✓';" class="px-3.5 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 text-xs font-bold cursor-pointer shrink-0">
+          Copy License Key
         </button>
       </div>
       <div class="flex items-center justify-between text-xs text-slate-300 pt-1">
-        <span>Pro License Reference:</span>
-        <span class="font-mono font-bold text-white bg-slate-800 px-2.5 py-1 rounded">${licenseKey}</span>
+        <div>
+          <span class="text-slate-400">6-Digit Portal &amp; Quick Code:</span>
+          <span id="activationKeyText" class="font-mono font-bold text-white bg-slate-800 px-2.5 py-1 rounded ml-1.5">${activationCode}</span>
+        </div>
+        <button onclick="navigator.clipboard.writeText('${activationCode}'); this.textContent='Copied ✓';" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-[11px] font-bold cursor-pointer">
+          Copy Code
+        </button>
       </div>
       <div class="text-xs text-slate-400 space-y-1 pt-2 border-t border-slate-800/80">
         <div class="font-bold text-slate-200 mb-1">Unlocked on your account (Up to 10 Devices):</div>
@@ -2144,6 +2149,11 @@ const server = http.createServer(async (req, res) => {
             acc.activation_code = crmSynced.activation_code;
             licenses.set(acc.activation_code, acc);
           }
+          if (crmSynced && crmSynced.license_key) {
+            licenses.delete(acc.licenseKey);
+            acc.licenseKey = crmSynced.license_key;
+            licenses.set(acc.licenseKey, acc);
+          }
         } catch {}
       } catch {
         res.writeHead(302, { Location: '/order?error=payment_incomplete', ...COMMON_SECURITY_HEADERS });
@@ -2187,10 +2197,10 @@ const server = http.createServer(async (req, res) => {
       }
     } else {
       if (!code || code.length < 6) {
-        return sendJson(res, 400, { ok: false, valid: false, error: 'missing_or_invalid_activation_code', message: 'Please enter the 6-digit activation code from your order.' }, {}, req);
+        return sendJson(res, 400, { ok: false, valid: false, error: 'missing_or_invalid_activation_code', message: 'Please enter the license key from your order.' }, {}, req);
       }
       if (/^\d{6}$/.test(code) && !isValidEmail(normEmail) && !hasValidCrmServiceKey(req)) {
-        return sendJson(res, 400, { ok: false, valid: false, error: 'email_required_for_short_code', message: 'Please enter your account email address along with your 6-digit activation code.' }, {}, req);
+        return sendJson(res, 400, { ok: false, valid: false, error: 'email_required_for_short_code', message: 'Please enter your account email address along with your code, or enter your full SWEEPR-VPN-XXXX-XXXX-XXXX license key.' }, {}, req);
       }
     }
 
@@ -2251,7 +2261,7 @@ const server = http.createServer(async (req, res) => {
             ok: false,
             valid: false,
             error: cleanData.error || 'invalid_activation_code',
-            message: cleanData.message || 'No active paid subscription found for that email and activation code.'
+            message: cleanData.message || 'No active paid subscription found for that email and license key.'
           },
           {},
           req
@@ -2293,7 +2303,7 @@ const server = http.createServer(async (req, res) => {
       }
     }
 
-    return sendJson(res, 401, { ok: false, valid: false, error: 'invalid_activation_code', message: 'No active paid subscription found for that email and activation code.' }, {}, req);
+    return sendJson(res, 401, { ok: false, valid: false, error: 'invalid_activation_code', message: 'No active paid subscription found for that email and license key.' }, {}, req);
   }
 
   // VPN Key Verification (Authoritatively backed by centralized sweepr_crm first)
@@ -3010,7 +3020,7 @@ const server = http.createServer(async (req, res) => {
     }
     const licence = await resolveVpnLicence(String(body?.activation_code || body?.license_key || '').trim(), body?.email);
     if (!licence) {
-      return sendJson(res, 401, { ok: false, error: 'licence_required', message: 'Enter your activation code to connect. It is in your order email.' }, {}, req);
+      return sendJson(res, 401, { ok: false, error: 'licence_required', message: 'Enter your license key to connect. It is in your order email.' }, {}, req);
     }
     const node = loadVpnNodes().find((n) => n.code === serverCode);
     if (!node) {
