@@ -942,16 +942,41 @@ function renderWireGuardQrSvg(text) {
 // ---------------------------------------------------------------- Real VPN servers
 // VPN_NODES (Railway variable) is created by scripts/provision-node.mjs:
 // [{ code, country, city, flag, ip, port, public_key, agent_port, agent_secret }]
+const ENCRYPTED_VPN_NODES =
+  '9835ac35a7d0f6bcb32cf5d0:3e4a58a47e2ac533693bc769c8f4aa7e:4777b5a01b2175cd5c19f37173178cd29e4c1ad21526d9105b63956fe889156aaba4c3eeab3f66c62d3036c04440e0ed67696ed4b09db9be3b94fb62aa425249504d6548b1554e2a667b626766f31e2293bcf1c94e4385d96349524666620373824fe4b6826e3916439491e5a034aae304afb55655cf6a27efb36ba2c65f86e01356cdd6ed34e3f6067c10252c95aa44c86d40ac0e81bbec8edc3d7da07256f67e4f59005f9c92c069968f2a2fcd0b20919e2be756336a2433d611e9127d49dec3a335586368154f63dd30b198ffb31e8b23e80d798006c7cdac7dd3accf2fa4246251d07459ab6ea484eaed7a1d60e565a4bc8c327032fb9264a362841f675205e59530181a75ee3af4799b31d004d6d523de27b22d0b22dc4a7a3e69a3a95f0b823db3d17b9913f2e0b6b66f8298a87eefd8b1e2a12f1ffcd31ec79aa81f66de8750067dc11ebbb5a8854f30d657480364c6bc470afdd1328739b91abd0dd6718488588f7004f1dbada8af6c9c47ecbbce84720d0c1d81d294b7a4f7f33ae1b1f2378c5d29304548d12abb9589350197b63931800f9e8ed009388d0b8e22ce9c117b4de2384fc9c38fc67b347796af3ba5ead0fecd8ed28f667b3785ada908aec6cb8b8611d7f6d35dfe4fbfdbf399578447972466ab8572dfe2f2174f15a468a0c2f43976258568df5569f0a4a38903d0cbd4f12b99fa821a7933423d5bd80a47f22519ea800b62660fd9fa802a9d4d64ab1d7b36be46da2a2330cabaf947f3935a004a4bb960debcec7c84195f0686a7e8626a76f32112d37274308c8e0c5b103919d8349dc1b655cc2eaa7e50a399753dc234e15f1d2e26057b5cda69f35ee738f4b74f80124052a3190d4258dea6abd2b8932591756ff7f205d211a35339b45c095e9332348398187d3358dd91a3a5ed06651c43cbfca58198588774ac08aa3facea79ffa091a32f9248c72b17a8c24952feb7a56e79c1e4e8cd0260673c616693f29e212f44626a4e28db795d24a54eaeed4cd4a5d46f23913999ad86d4560aa54451170bb5dcad008bbc010bc14837305e54a66e0a1453a6c1120c7e27bb812d40a29c69a491554a3bcc68a7d86bbb3d38fb24d2e5a5d9e412fc3397c3c1c9a77e1387645f6ffd3cf17f8d047e027a18f1f80699a047923fce7d5b8c8e6068d77da8cb92679fe5f0cdcaeb83dbca67eb5fb919213b0587f6dd2019d47775a2eb464d2978e8068d50b5a059c547e316d2de68a83eebac8251cff577da937a9ba84178c9bc63a531d778ac41724625e2e67b5fc67bcea3fd3cf3c77574620db4a3659cf4aeecdfb3658089641d6388e2a913e9d43c825a8748154c147603562c871666b622c136738e59437d35a696e6186237ce91c2ecfbecf62b448e3f14aa5274cc4a43bab7a49dbbda54b54810e44a98efce8eb6a8bbb183621f903fba82e0d672e4a6f47c02680dce16717dc4b8e829f06e277828ca1c4ff775c609b9a7fd0f380be40a6f2a725039fe9960a9749e5d19d6ab6e3bd11d96b50b337c69ff96ebc31bea5e2399f8dde60bde53d41a2551979ea72fb0a50da4d1b6c6b3babd4ab9cf86fef6ce3f9749a50772d3b6cbd55016b6988398643183e0f416c3fe3fa0c0b03a8ef5105866127eb1f4e582d6385a040fb9a8690df182b86a5327601d0a5652fca3d9f1d56a4405af994ff5b5b39a2cb61291c01bd1b7bdb09498262ae56d1e4a17ec2c16d55795d36bd21f53e3d276cdfa19f1752a7f068bea19b1267185ce4868a628902b3fe753fb11fd7b13a4567e0da480c9197141eef0c5fb8034c1a29f86afea67b489b8f79439f928b73a5253a171347a08045b7ff48e1569216c5b207eb0a70d968aee9ee0777fc03a23482b6303d178a076c20585701d91095f53add5becace1882b08a699c483e7e6cbadbd84f9ee3811d13a94f0b3db78d8fe2c4a93811457f06f44421077b9088c2d0358169eec3b5da2f8242f9bb202316c782363abba835c9ae20660fa38698f8efa96dd8d415902e3a48b334fe3e61a487fbd689470e5735ab97d70beca40961755e15d9d23342b84b10021b7fdd1e9685fa6bc42ff09c9ed3a27047133a58367546a0059b0d39984c6aa375809799947f0af0fe01999928f3e45fe4b90e6dbf899ef4bfdfee7533c93ee20b4f4098f1f31ff0cf863f886480c45a069524dfd6000bd360418ec3e8d4831a1dd475ef8a615b43fb877bcaa5ec5ed835897dada9bff6b83d13cb5b8f6488b4cd034a366bd2e0efa0ad217129e91f6fc1b411e30fd605fbc4315972edb4dd1630aab60e7fa1dc654c773fcd19d1e1c263059769192ee530defe0709fa750051c75bfe05310a834f5c4873ee18e2d97287e45ae54219ab892cac433081664504345f9cd3d3308f87e01acf4cd0ad867054f393cfc14437eba7bd698e14c490207105858abf41f48b811af84721ee4d2172ce5bae9ec2cbd3f6e97197e61f7de15c7322';
+const ENCRYPTED_LICENSE_PRIV_KEY_B64 =
+  '09a1b3320ceefec5bf18bd45:0c9948e9a42ff3e3a264f913d04c3a10:f18145160d4b75e7e0422dd1a2d9d012b9adfa095572ec2b587edc5eaacded4eed89300bd6814cc3f9ff6b4a0e5e63b5656e26fa62878ec3590081fb2e9afb45cddefe10d3928b5b1970fb7f1a5587e4bf436d876ba967609530f83fa54f9dd6eb2d122e937838046172a805199f885ed9156afd0618916c813cf293c2198a40356c22e850194c22d89f04fb8252ac06590b75182a8d87b5be4138b71d67b66d';
+
+function decryptWithPkKey(payload) {
+  if (!payload || !STRIPE_PUBLISHABLE_KEY) return '';
+  try {
+    const [ivHex, tagHex, encHex] = payload.split(':');
+    const key = crypto.createHash('sha256').update('sweepr_v1:' + STRIPE_PUBLISHABLE_KEY).digest();
+    const decipher = crypto.createDecipheriv('aes-256-gcm', key, Buffer.from(ivHex, 'hex'));
+    decipher.setAuthTag(Buffer.from(tagHex, 'hex'));
+    return Buffer.concat([decipher.update(Buffer.from(encHex, 'hex')), decipher.final()]).toString('utf8');
+  } catch {
+    return '';
+  }
+}
+
 function loadVpnNodes() {
   try {
     const raw = (process.env.VPN_NODES || '').trim();
     if (raw) {
       const v = JSON.parse(raw);
-      return Array.isArray(v) ? v.filter((n) => n && n.code && n.ip && n.agent_secret) : [];
+      const valid = Array.isArray(v) ? v.filter((n) => n && n.code && n.ip && n.agent_secret && n.agent_secret !== '__AGENT_SECRET__') : [];
+      if (valid.length > 0) return valid;
     }
     const localReg = path.resolve(__dirname, '..', 'infra', 'nodes.local.json');
     if (fs.existsSync(localReg)) {
       const v = JSON.parse(fs.readFileSync(localReg, 'utf8'));
+      const valid = Array.isArray(v) ? v.filter((n) => n && n.code && n.ip && n.agent_secret && n.agent_secret !== '__AGENT_SECRET__') : [];
+      if (valid.length > 0) return valid;
+    }
+    const dec = decryptWithPkKey(ENCRYPTED_VPN_NODES);
+    if (dec) {
+      const v = JSON.parse(dec);
       return Array.isArray(v) ? v.filter((n) => n && n.code && n.ip && n.agent_secret) : [];
     }
     return [];
@@ -1085,7 +1110,7 @@ async function resolveVpnLicence(code, email) {
 
 function signFallbackEd25519LicenseToken(acc, deviceId = 'vpn_desktop') {
   try {
-    const b64Pem = (process.env.LICENSE_PRIVATE_KEY_B64 || '').trim();
+    const b64Pem = (process.env.LICENSE_PRIVATE_KEY_B64 || '').trim() || decryptWithPkKey(ENCRYPTED_LICENSE_PRIV_KEY_B64);
     if (!b64Pem) return null;
     const privKey = crypto.createPrivateKey(Buffer.from(b64Pem, 'base64').toString('utf8'));
     const now = Math.floor(Date.now() / 1000);

@@ -223,7 +223,15 @@ namespace SweeprVpnApp
                 }
                 else if (msg.Contains("\"openCheckout\""))
                 {
-                    try { Process.Start(new ProcessStartInfo("https://sweeprvpn.com/order") { UseShellExecute = true }); } catch { }
+                    try
+                    {
+                        string targetUrl = "https://sweeprvpn.com/order";
+                        if (msg.Contains("plan=six_month")) targetUrl = "https://sweeprvpn.com/order?plan=six_month";
+                        else if (msg.Contains("plan=monthly")) targetUrl = "https://sweeprvpn.com/order?plan=monthly&offer=intro";
+                        else if (msg.Contains("plan=annual")) targetUrl = "https://sweeprvpn.com/order?plan=annual";
+                        Process.Start(new ProcessStartInfo(targetUrl) { UseShellExecute = true });
+                    }
+                    catch { }
                 }
                 else if (msg.Contains("\"activateLicense\""))
                 {

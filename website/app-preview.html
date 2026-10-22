@@ -634,6 +634,7 @@
   let lastScanAt = 0;
   const ICONS = { router:'i-wifi', extender:'i-wifi', computer:'i-pc', tv:'i-tv', speaker:'i-speaker', printer:'i-printer', camera:'i-camera', console:'i-game', smart_home:'i-bulb', private:'i-lock', other:'i-dev' };
   const tauri = window.__TAURI__;
+  const isWebView2 = !!(window.chrome && window.chrome.webview && typeof window.chrome.webview.postMessage === 'function');
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c])); }
 
   let savedFavs = ['UK-LON-01', 'SE-STO-01'];
@@ -648,6 +649,9 @@
   const $ = id => document.getElementById(id);
 
   function postNative(action, payload) {
+    if (isWebView2) {
+      try { window.chrome.webview.postMessage(JSON.stringify({ action, payload })); } catch (e) {}
+    }
     if (!tauri) return;
     try {
       if (action === 'compact') tauri.core.invoke('set_compact', { compact: !!payload });
@@ -748,6 +752,21 @@
     if (state.connecting) return;
     const wantConnect = reconnectOnly ? true : !state.connected;
     if (wantConnect && !requirePro('Enter your license key or subscribe to enable VPN protection.')) {
+      return;
+    }
+    if (!tauri && isWebView2) {
+      state.connected = wantConnect;
+      postNative('toggleConnection', wantConnect);
+      if (state.connected) {
+        state.seconds = 0;
+        clearInterval(timerHandle);
+        timerHandle = setInterval(tick, 1000);
+        toast('Protected via ' + cur().city + ' (WireGuard)');
+      } else {
+        clearInterval(timerHandle);
+        toast('Protection paused');
+      }
+      renderAll();
       return;
     }
     // Strategic Overhaul 2: If running on mobile browser or web preview (!tauri), launch the live WireGuard profile & QR hand-off modal!
@@ -1002,7 +1021,7 @@
     let checkoutUrl = 'https://sweeprvpn.com/order?plan=' + encodeURIComponent(selectedModalPlan || 'annual');
     if (selectedModalPlan === 'monthly') checkoutUrl += '&offer=intro';
     postNative('openCheckout', checkoutUrl);
-    if (!tauri) window.open(checkoutUrl, '_blank');
+    if (!tauri && !isWebView2) window.open(checkoutUrl, '_blank');
     toast('Opening secure checkout…');
   }
 
