@@ -181,6 +181,26 @@ function checkRateLimit(req, bucketName, maxRequests = 30, windowMs = 60000) {
   return entry.count <= maxRequests;
 }
 
+// AES-256-GCM encrypted live Stripe credentials for SWEEPR VPN (acct_1USluy0Fq96R9TfN), keyed by CRM_ADMIN_PASSWORD
+const ENCRYPTED_LIVE_SK =
+  'b69e8d08228536390a88f032:d3262e7ee59be48f9dfb5448e995ba20:59c4ee424575c26bbee1691fae0a52663a26aa3245fbaa86c169ca4b8509334df7c9f52a91c77d6bf267c9d25560c7e7e3bb95d4cc32af2b26ae861553d588cf974135928391d5a176db06caed63f054a4a3696a2a15bb6c9f74ca45185da8d1aa64daf92e02a3d8fc1ffd';
+const ENCRYPTED_LIVE_WHSEC =
+  '2331ea8dc0639222a52fc494:e221342ced4b76c725adcd5a9ffa39ed:da898f00038b99af5ffa2da5af3bb8cdd75e66db2bbecb1da54a1e969741a6a1603a685d8906';
+
+function decryptWithAdminKey(payload) {
+  const adminSecret = (process.env.CRM_ADMIN_PASSWORD || '').trim();
+  if (!payload || !adminSecret) return '';
+  try {
+    const [ivHex, tagHex, encHex] = payload.split(':');
+    const key = crypto.createHash('sha256').update(adminSecret).digest();
+    const decipher = crypto.createDecipheriv('aes-256-gcm', key, Buffer.from(ivHex, 'hex'));
+    decipher.setAuthTag(Buffer.from(tagHex, 'hex'));
+    const out = Buffer.concat([decipher.update(Buffer.from(encHex, 'hex')), decipher.final()]).toString('utf8');
+    if (out) return out;
+  } catch {}
+  return '';
+}
+
 function resolveStripeSecretKey() {
   const envKey = (process.env.STRIPE_SECRET_KEY || process.env.VPN_STRIPE_SECRET_KEY || '').trim();
   if (
@@ -191,6 +211,8 @@ function resolveStripeSecretKey() {
   ) {
     return envKey;
   }
+  const dec = decryptWithAdminKey(ENCRYPTED_LIVE_SK);
+  if (dec.startsWith('sk_live_') || dec.startsWith('rk_live_')) return dec;
   return '';
 }
 
@@ -200,6 +222,10 @@ const IS_LIVE_STRIPE = STRIPE_SECRET_KEY.startsWith('sk_live_') || STRIPE_SECRET
 function resolveStripeWebhookSecret() {
   const envWh = (process.env.STRIPE_WEBHOOK_SECRET || process.env.VPN_STRIPE_WEBHOOK_SECRET || '').trim();
   if (envWh.startsWith('whsec_')) return envWh;
+  if (IS_LIVE_STRIPE) {
+    const dec = decryptWithAdminKey(ENCRYPTED_LIVE_WHSEC);
+    if (dec.startsWith('whsec_')) return dec;
+  }
   return '';
 }
 
@@ -2319,8 +2345,79 @@ const server = http.createServer(async (req, res) => {
     if (!isValidEmail(email)) {
       return sendJson(res, 400, { otpSent: false, error: 'Please enter a valid email address.' }, {}, req);
     }
-    reportToSweeprCrm('/v1/account/send-otp?project=vpn', { email, project_id: 'vpn' });
-    return sendJson(res, 200, { otpSent: true }, {}, req);
+
+    let localAcc = accountsByEmail.get(email);
+    let isSignedUp = Boolean(localAcc && localAcc.status === 'active');
+
+    // If not in local cache as active, check Stripe for an active/trialing/past_due subscription before requesting OTP
+    if (!isSignedUp && STRIPE_SECRET_KEY) {
+      try {
+        const custList = await stripeRequest('GET', 'customers', { email, limit: 5 });
+        for (const cust of custList.data || []) {
+          if (cust.deleted) continue;
+          const subs = await stripeRequest('GET', 'subscriptions', { customer: cust.id, status: 'all', limit: 5 });
+          const activeSub = (subs.data || []).find((s) => s.status === 'active' || s.status === 'trialing' || s.status === 'past_due');
+          if (activeSub) {
+            localAcc = upsertLocalAccount({
+              email,
+              name: cust.name || '',
+              stripeCustomerId: cust.id,
+              subscriptionId: activeSub.id,
+              plan: activeSub.metadata?.plan || 'annual',
+              wifiRadarAddon: activeSub.metadata?.wifi_radar === 'true',
+              status: 'active'
+            });
+            isSignedUp = true;
+            break;
+          }
+        }
+      } catch {}
+    }
+
+    // Request OTP from central sweepr_crm (which also verifies the email is signed up before sending a 6-digit OTP email)
+    let crmOtpSent = false;
+    let crmReachable = false;
+    try {
+      const crmRes = await crm.sendOtp(email);
+      if (crmRes && crmRes._httpStatus && crmRes._httpStatus < 500) {
+        crmReachable = true;
+        if (crmRes.otpSent) {
+          crmOtpSent = true;
+        } else if (crmRes._httpStatus === 404 && isSignedUp && localAcc) {
+          // Sync local active subscription to CRM and retry OTP send
+          await crm.syncSubscription({
+            email: localAcc.email,
+            name: localAcc.name || undefined,
+            country: localAcc.country || 'GB',
+            plan: localAcc.plan || 'annual',
+            status: 'active',
+            stripe_customer_id: localAcc.stripe_customer_id,
+            stripe_subscription_id: localAcc.stripe_subscription_id,
+            activation_code: localAcc.activation_code,
+            license_key: localAcc.licenseKey,
+            addons: localAcc.wifiRadarAddon ? ['wifi_radar'] : []
+          }).catch(() => {});
+          const retryRes = await crm.sendOtp(email).catch(() => null);
+          if (retryRes && retryRes.otpSent) crmOtpSent = true;
+        }
+      }
+    } catch {}
+
+    if (!crmOtpSent && (!isSignedUp || crmReachable)) {
+      return sendJson(
+        res,
+        404,
+        {
+          ok: false,
+          otpSent: false,
+          error: 'No account found for this email address. Please sign up first or check your email.'
+        },
+        {},
+        req
+      );
+    }
+
+    return sendJson(res, 200, { ok: true, otpSent: true }, {}, req);
   }
 
   if (pathname === '/api/verify-otp' && req.method === 'POST') {

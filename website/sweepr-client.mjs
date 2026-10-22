@@ -127,6 +127,20 @@ export class SweeprCrmClient {
     return { _httpStatus: res.status, ...data };
   }
 
+  async sendOtp(email) {
+    const res = await fetch(`${this.crmUrl}/v1/account/send-otp?project=${encodeURIComponent(this.projectId)}`, {
+      method: 'POST',
+      headers: this.headers(),
+      signal: AbortSignal.timeout(6000),
+      body: JSON.stringify({
+        project_id: this.projectId,
+        email: String(email || '').trim().toLowerCase(),
+      }),
+    });
+    const data = await res.json().catch(() => ({}));
+    return { _httpStatus: res.status, ...data };
+  }
+
   async syncSubscription(params = {}) {
     const res = await fetch(`${this.crmUrl}/api/crm/subscriptions?project=${encodeURIComponent(this.projectId)}`, {
       method: 'POST',
@@ -177,6 +191,25 @@ export class SweeprCrmClient {
       headers: this.headers(),
       signal: AbortSignal.timeout(6000),
       body: JSON.stringify(payload),
+    });
+    const data = await res.json().catch(() => ({}));
+    return { _httpStatus: res.status, ...data };
+  }
+
+  async verifyOtp({ email, code, deviceId, platform = 'web', deviceLabel = 'SWEEPR Customer Portal' } = {}) {
+    const res = await fetch(`${this.crmUrl}/v1/account/verify-otp?project=${encodeURIComponent(this.projectId)}`, {
+      method: 'POST',
+      headers: this.headers(),
+      signal: AbortSignal.timeout(6000),
+      body: JSON.stringify({
+        project_id: this.projectId,
+        email: String(email || '').trim().toLowerCase(),
+        code: String(code || '').trim(),
+        device_id: deviceId || `portal_vpn_${Date.now()}`,
+        device_type: 'pc',
+        platform,
+        device_label: deviceLabel,
+      }),
     });
     const data = await res.json().catch(() => ({}));
     return { _httpStatus: res.status, ...data };
