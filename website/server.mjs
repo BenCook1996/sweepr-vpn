@@ -2168,7 +2168,51 @@ self.addEventListener('fetch', e => {
         expand: ['latest_invoice.payment_intent']
       };
 
-      const subscription = await stripeRequest('POST', 'subscriptions', subParams);
+      let subscription = null;
+      try {
+        subscription = await stripeRequest('POST', 'subscriptions', subParams);
+      } catch (subErr) {
+        if (isPayPal && String(subErr.message || '').toLowerCase().includes('paypal')) {
+          const hostOrigin = resolveTrustedOrigin(req);
+          const sessionParams = {
+            mode: 'subscription',
+            customer: customerId,
+            line_items: subItems.map((it) => ({
+              price_data: it.price_data,
+              quantity: 1
+            })),
+            ...(introCouponId ? { discounts: [{ coupon: introCouponId }] } : {}),
+            subscription_data: {
+              metadata: {
+                ...metadata,
+                intro_offer_applied: introCouponId ? 'true' : 'false'
+              }
+            },
+            metadata: {
+              ...metadata,
+              intro_offer_applied: introCouponId ? 'true' : 'false'
+            },
+            success_url: `${hostOrigin}/checkout/success?web=1&session_id={CHECKOUT_SESSION_ID}&account_id=${encodeURIComponent(acc.id)}${isPopup ? '&popup=1' : ''}`,
+            cancel_url: `${hostOrigin}/order?error=payment_cancelled`
+          };
+          const checkoutSession = await stripeRequest('POST', 'checkout/sessions', sessionParams);
+          if (checkoutSession?.url) {
+            return sendJson(
+              res,
+              200,
+              {
+                redirectUrl: checkoutSession.url,
+                subscriptionId: checkoutSession.id,
+                accountId: acc.id,
+                plan
+              },
+              {},
+              req
+            );
+          }
+        }
+        throw subErr;
+      }
       acc.stripe_subscription_id = subscription.id;
       accountsBySubscriptionId.set(subscription.id, acc);
 
