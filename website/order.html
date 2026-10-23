@@ -31,6 +31,7 @@
     #googlePayButtonContainer > div,
     #googlePayButtonContainer button {
       width: 100% !important;
+      min-width: 0 !important;
       height: 44px !important;
       min-height: 44px !important;
     }
@@ -552,39 +553,45 @@
             </label>
           </div>
 
-          <!-- Express Payment Buttons (PayPal, Apple Pay & Official Dynamic Google Pay) -->
-          <div class="space-y-2.5 pt-2">
-            <!-- PayPal Express Button (Visible by default) -->
-            <button type="button" id="paypalBtn" onclick="triggerCheckout('paypal')" class="w-full h-11 bg-[#ffc439] hover:bg-[#f4bb33] text-[#003087] font-bold rounded-xl flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer">
+          <!-- Express Payment Buttons (PayPal, Google Pay & Apple Pay on 1 Row) -->
+          <div class="grid grid-cols-3 gap-2 sm:gap-2.5 pt-2">
+            <!-- 1. PayPal Express Button -->
+            <button type="button" id="paypalBtn" onclick="triggerCheckout('paypal')" class="w-full h-11 bg-[#ffc439] hover:bg-[#f4bb33] text-[#003087] font-bold rounded-xl flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer min-w-0 px-2">
               <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 2.28A.773.773 0 0 1 5.707 1.6h6.71c2.878 0 4.863 1.38 4.417 4.21-.522 3.314-2.816 5.093-6.06 5.093H8.397l-1.32 10.434Z" fill="#003087"/>
                 <path d="M19.442 6.84c-.48 3.394-2.927 5.475-6.517 5.475h-2.16l-1.266 8.382a.559.559 0 0 1-.552.474H5.694l1.15-9.088 1.553-1.288h2.377c3.244 0 5.538-1.78 6.06-5.093.103-.654.095-1.233-.01-1.74.197.095.383.204.558.327 1.547 1.09 2.275 2.753 2.06 4.551Z" fill="#0079C1"/>
               </svg>
-              <span class="italic font-black text-xl tracking-tighter text-[#003087] leading-none">Pay<span class="text-[#0079c1]">Pal</span></span>
+              <span class="italic font-black text-base sm:text-lg tracking-tighter text-[#003087] leading-none">Pay<span class="text-[#0079c1]">Pal</span></span>
             </button>
 
-            <!-- Native Stripe PaymentRequest Container (Apple Pay on Safari) -->
-            <div id="stripePaymentRequestContainer" class="hidden w-full">
-              <div id="paymentRequestBtn"></div>
+            <!-- 2. Google Pay Express Button Slot -->
+            <div class="w-full min-w-0">
+              <!-- Official Dynamic Google Pay Button Container -->
+              <div id="googlePayButtonContainer" class="hidden w-full h-11 overflow-hidden rounded-xl"></div>
+
+              <!-- Styled GPay Express Button (Visible until dynamic Google Pay card button mounts) -->
+              <button type="button" id="expressGPayBtn" onclick="triggerExpressWallet('google_pay')" class="w-full h-11 bg-[#202124] hover:bg-black text-white font-medium rounded-xl flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer text-sm px-2">
+                <span class="font-semibold text-sm sm:text-base inline-flex items-center tracking-tight">
+                  <span class="text-[#4285F4] font-bold">G</span><span class="text-[#EA4335] font-bold">o</span><span class="text-[#FBBC05] font-bold">o</span><span class="text-[#4285F4] font-bold">g</span><span class="text-[#34A853] font-bold">l</span><span class="text-[#EA4335] font-bold">e</span>&nbsp;<span class="text-white font-semibold">Pay</span>
+                </span>
+              </button>
             </div>
 
-            <!-- Styled Apple Pay Express Button (Visible by default until native Apple Pay button mounts) -->
-            <button type="button" id="expressApplePayBtn" onclick="triggerExpressWallet('apple_pay')" class="w-full h-11 bg-black hover:bg-[#1a1a1a] text-white font-semibold rounded-xl flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer text-sm">
-              <svg class="w-4 h-4 fill-current -mt-0.5 shrink-0" viewBox="0 0 170 170" aria-hidden="true">
-                <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.13-1.9-14.34-6.08-3.69-3.03-7.61-7.82-11.77-14.37-5.93-9.19-10.72-19.64-14.38-31.34-3.66-11.7-5.49-22.46-5.49-32.28 0-12.29 3.06-22.41 9.19-30.36 6.13-7.95 13.97-12.04 23.52-12.27 4.7 0 9.89 1.38 15.58 4.14 5.69 2.76 9.34 4.19 10.97 4.3 1.22 0 5.19-1.66 11.9-4.97 6.38-3.03 11.95-4.3 16.71-3.82 12.63 1.02 22.13 5.99 28.5 14.92-11.33 6.87-16.86 16.47-16.59 28.79.22 9.61 3.79 17.61 10.71 23.99 4.78 4.46 10.45 7.21 17.01 8.25-1.36 4.16-2.96 8.19-4.82 12.11zM119.22 31.04c0 7.53-2.75 14.56-8.26 21.1-6.64 7.77-14.68 12.25-23.42 11.53-.17-.93-.26-1.92-.26-2.98 0-7.22 3.14-14.94 8.71-21.32 2.78-3.2 6.31-5.86 10.59-7.98 4.28-2.11 8.33-3.29 12.15-3.53.33 1.11.49 2.17.49 3.18z"/>
-              </svg>
-              <span class="font-semibold text-base tracking-tight">Pay</span>
-            </button>
+            <!-- 3. Apple Pay Express Button Slot -->
+            <div class="w-full min-w-0">
+              <!-- Native Stripe PaymentRequest Container (Apple Pay on Safari) -->
+              <div id="stripePaymentRequestContainer" class="hidden w-full">
+                <div id="paymentRequestBtn"></div>
+              </div>
 
-            <!-- Official Dynamic Google Pay Button Container (Shows stored card art + last 4 digits) -->
-            <div id="googlePayButtonContainer" class="hidden w-full h-11 overflow-hidden rounded-xl"></div>
-
-            <!-- Styled GPay Express Button (Remains visible until dynamic Google Pay card button mounts) -->
-            <button type="button" id="expressGPayBtn" onclick="triggerExpressWallet('google_pay')" class="w-full h-11 bg-[#202124] hover:bg-black text-white font-medium rounded-xl flex items-center justify-center gap-2 transition-all shadow-xs cursor-pointer text-sm">
-              <span class="font-semibold text-base inline-flex items-center tracking-tight">
-                <span class="text-[#4285F4] font-bold">G</span><span class="text-[#EA4335] font-bold">o</span><span class="text-[#FBBC05] font-bold">o</span><span class="text-[#4285F4] font-bold">g</span><span class="text-[#34A853] font-bold">l</span><span class="text-[#EA4335] font-bold">e</span>&nbsp;<span class="text-white font-semibold">Pay</span>
-              </span>
-            </button>
+              <!-- Styled Apple Pay Express Button (Visible by default until native Apple Pay button mounts) -->
+              <button type="button" id="expressApplePayBtn" onclick="triggerExpressWallet('apple_pay')" class="w-full h-11 bg-black hover:bg-[#1a1a1a] text-white font-semibold rounded-xl flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer text-sm px-2">
+                <svg class="w-4 h-4 fill-current -mt-0.5 shrink-0" viewBox="0 0 170 170" aria-hidden="true">
+                  <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.13-1.9-14.34-6.08-3.69-3.03-7.61-7.82-11.77-14.37-5.93-9.19-10.72-19.64-14.38-31.34-3.66-11.7-5.49-22.46-5.49-32.28 0-12.29 3.06-22.41 9.19-30.36 6.13-7.95 13.97-12.04 23.52-12.27 4.7 0 9.89 1.38 15.58 4.14 5.69 2.76 9.34 4.19 10.97 4.3 1.22 0 5.19-1.66 11.9-4.97 6.38-3.03 11.95-4.3 16.71-3.82 12.63 1.02 22.13 5.99 28.5 14.92-11.33 6.87-16.86 16.47-16.59 28.79.22 9.61 3.79 17.61 10.71 23.99 4.78 4.46 10.45 7.21 17.01 8.25-1.36 4.16-2.96 8.19-4.82 12.11zM119.22 31.04c0 7.53-2.75 14.56-8.26 21.1-6.64 7.77-14.68 12.25-23.42 11.53-.17-.93-.26-1.92-.26-2.98 0-7.22 3.14-14.94 8.71-21.32 2.78-3.2 6.31-5.86 10.59-7.98 4.28-2.11 8.33-3.29 12.15-3.53.33 1.11.49 2.17.49 3.18z"/>
+                </svg>
+                <span class="font-semibold text-sm sm:text-base tracking-tight">Pay</span>
+              </button>
+            </div>
           </div>
 
           <!-- Divider OR & Card Logos -->
