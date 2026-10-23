@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
+using Microsoft.Win32;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.WinForms;
 
@@ -369,6 +370,12 @@ namespace SweeprVpnApp
                         {
                             await BrowserView.CoreWebView2.ExecuteScriptAsync("setCompact(true)");
                         }
+                        else if (InitialTabMode == "minimized")
+                        {
+                            this.WindowState = FormWindowState.Minimized;
+                            this.Hide();
+                            await BrowserView.CoreWebView2.ExecuteScriptAsync("if(state.pro && !state.connected) toggleConnect(true)");
+                        }
                     }
 
                     if (!string.IsNullOrEmpty(InitialScreenshotPath))
@@ -444,12 +451,25 @@ namespace SweeprVpnApp
                 {
                     SetCompactWindow(msg.Contains("\"payload\":true"));
                 }
+                else if (msg.Contains("\"setStartup\""))
+                {
+                    SetWindowsStartup(msg.Contains("\"payload\":true"));
+                }
                 else if (msg.Contains("\"openCheckout\""))
                 {
                     try
                     {
                         string targetUrl = "https://sweeprvpn.com/order";
-                        if (msg.Contains("plan=six_month")) targetUrl = "https://sweeprvpn.com/order?plan=six_month";
+                        if (msg.Contains("apple-mobileconfig"))
+                        {
+                            int idx = msg.IndexOf("https://");
+                            if (idx >= 0)
+                            {
+                                int endQuote = msg.IndexOf("\"", idx);
+                                if (endQuote > idx) targetUrl = msg.Substring(idx, endQuote - idx);
+                            }
+                        }
+                        else if (msg.Contains("plan=six_month")) targetUrl = "https://sweeprvpn.com/order?plan=six_month";
                         else if (msg.Contains("plan=monthly")) targetUrl = "https://sweeprvpn.com/order?plan=monthly&offer=intro";
                         else if (msg.Contains("plan=annual")) targetUrl = "https://sweeprvpn.com/order?plan=annual";
                         Process.Start(new ProcessStartInfo(targetUrl) { UseShellExecute = true });
@@ -459,6 +479,26 @@ namespace SweeprVpnApp
                 else if (msg.Contains("\"activateLicense\""))
                 {
                     IsPro = true;
+                }
+            }
+            catch { }
+        }
+
+        public void SetWindowsStartup(bool enable)
+        {
+            try
+            {
+                using (RegistryKey rk = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true))
+                {
+                    if (rk == null) return;
+                    if (enable)
+                    {
+                        rk.SetValue("SWEEPRVPN", "\"" + Application.ExecutablePath + "\" --minimized");
+                    }
+                    else
+                    {
+                        rk.DeleteValue("SWEEPRVPN", false);
+                    }
                 }
             }
             catch { }
@@ -748,6 +788,12 @@ namespace SweeprVpnApp
                 string outPng = args.Length > 1 ? args[1] : "screenshot.png";
                 string tabMode = args.Length > 2 ? args[2] : null;
                 StartMainForm(outPng, tabMode);
+                return 0;
+            }
+
+            if (args != null && args.Length > 0 && args[0] == "--minimized")
+            {
+                StartMainForm(null, "minimized");
                 return 0;
             }
 

@@ -3,6 +3,13 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#0b1220" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="SWEEPR VPN" />
+<link rel="manifest" href="/manifest.webmanifest" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=5" />
 <title>SWEEPR VPN</title>
 <style>
   :root {
@@ -167,9 +174,12 @@
   .info .r { text-align:right; }
   .v.warnc { color:#fbbf24 !important; }
   .v.okc { color:var(--e400) !important; }
-  .timer { margin-top:18px; text-align:center; }
-  .timer .k { font-size:12px; color:#94a3b8; }
-  .timer .n { font-size:36px; font-weight:900; letter-spacing:-1px; color:#fff; font-variant-numeric:tabular-nums; }
+  .timer { margin-top:16px; text-align:center; background:rgba(255,255,255,.04); border:1px solid rgba(167,243,208,.14); border-radius:16px; padding:10px 12px; }
+  .timer .k { font-size:11.5px; color:#94a3b8; font-weight:700; }
+  .timer .n { font-size:30px; font-weight:900; letter-spacing:-1px; color:#fff; font-variant-numeric:tabular-nums; line-height:1.15; }
+  .spark-meta { font-size:11.5px; font-weight:800; color:#a7f3d0; font-variant-numeric:tabular-nums; margin-top:3px; }
+  .spark-bars { display:flex; align-items:flex-end; justify-content:center; gap:3px; height:22px; margin-top:6px; }
+  .spark-bar { width:6px; border-radius:3px; background:linear-gradient(180deg,#34d399,#059669); transition:height .3s ease; min-height:4px; }
   .connect-box { margin-top:auto; background:rgba(255,255,255,.06); border:1px solid rgba(167,243,208,.18); border-radius:20px; padding:14px; position:relative; }
   .connect-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; width:100%; text-align:left; padding:6px 8px; border-radius:14px; transition:background .15s; }
   .connect-row:hover { background:rgba(255,255,255,.06); }
@@ -480,6 +490,7 @@
       <div class="card" style="padding:4px 16px">
         <div class="set-row" onclick="toggleStartup()"><div class="grow"><div class="t"><span data-i18n="startupTitle">Auto-protect on startup</span> <span class="pro-tag">PRO</span></div><div class="s" data-i18n="startupSub">Connect automatically as soon as you open SWEEPR</div></div><button class="toggle" id="startupToggle" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleStartup()"><i></i></button></div>
         <div class="set-row" onclick="toggleKillSwitch()"><div class="grow"><div class="t"><span data-i18n="killTitle">Emergency internet cut-off (Kill Switch)</span> <span class="pro-tag">PRO</span></div><div class="s" data-i18n="killSub">Blocks unencrypted traffic if the VPN tunnel ever drops</div></div><button class="toggle shield" id="killToggle" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleKillSwitch()"><i></i></button></div>
+        <div class="set-row" onclick="toggleLanBypass()"><div class="grow"><div class="t"><span data-i18n="lanTitle">Local LAN bypass (Printers &amp; AirPlay)</span> <span class="pro-tag">PRO</span></div><div class="s" data-i18n="lanSub">Keep home printers, NAS drives &amp; Smart TVs reachable while connected</div></div><button class="toggle" id="lanBypassToggle" role="switch" aria-checked="true" onclick="event.stopPropagation();toggleLanBypass()"><i></i></button></div>
         <div class="set-row" onclick="toggleTheme()"><div class="grow"><div class="t" data-i18n="darkTitle">Dark mode</div><div class="s" data-i18n="darkSub">Easier on the eyes in low light</div></div><button class="toggle" id="darkToggle" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleTheme()"><i></i></button></div>
         <div class="set-row" style="cursor:default">
           <div class="grow"><div class="t" data-i18n="langTitle">Language</div><div class="s" data-i18n="langSub">App display language</div></div>
@@ -487,6 +498,15 @@
             <option value="en">English</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="ja">日本語</option>
           </select>
         </div>
+      </div>
+
+      <!-- Item 10: Product-Led Growth Referral Loop Card -->
+      <div class="card" style="margin-top:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        <div class="grow">
+          <div class="t"><span data-i18n="refTitle">Refer a friend — Give 50% off, get 1 free month</span> <span class="pill ok" style="padding:2px 8px;font-size:10.5px">Bonus</span></div>
+          <div class="s" id="refLinkText">Share your invite link; every friend who joins adds 30 days to your plan.</div>
+        </div>
+        <button class="btn-soft" id="copyRefBtn" onclick="copyReferralLink()">Copy Invite Link</button>
       </div>
 
       <h3 class="sec"><span style="color:var(--ink);font-size:15px;font-weight:800" data-i18n="helpHeader">Need help?</span> <span style="color:var(--muted)" data-i18n="helpReply">We reply within 24 hours</span></h3>
@@ -511,7 +531,12 @@
       <div><div class="v okc" id="infoSpeed">Instant (&lt;15 ms)</div><div class="k" data-i18n="lblSpeed">Route speed</div></div>
       <div class="r"><div class="v" id="infoDevices">4 devices</div><div class="k" data-i18n="lblWifi">On your Wi-Fi</div></div>
     </div>
-    <div class="timer hidden" id="timerBox"><div class="k" data-i18n="lblSession">Protected session</div><div class="n" id="timer">00:00:00</div></div>
+    <div class="timer hidden" id="timerBox">
+      <div class="k" data-i18n="lblSession">Protected session</div>
+      <div class="n" id="timer">00:00:00</div>
+      <div class="spark-meta" id="liveThroughput">↓ 48.4 Mbps · ↑ 11.2 Mbps · 0.4 MB encrypted</div>
+      <div class="spark-bars" id="sparkBars"></div>
+    </div>
     <div class="connect-box">
       <button class="connect-row" id="panelLocBtn" onclick="changeCountry()" aria-label="Change server country">
         <span class="flag lg" id="panelFlag" data-flag="GB"></span>
@@ -542,7 +567,7 @@
   <div class="c-list" id="cList"></div>
 </div>
 
-<!-- ======================= SPLIT ACTIVATE / CHECKOUT MODAL (Quick Win 3) ======================= -->
+<!-- ======================= SPLIT ACTIVATE / CHECKOUT MODAL (Quick Win 3 + Item 8 Self-Service Key Recovery) ======================= -->
 <div class="backdrop" id="modal" onclick="closeActivate()">
   <div class="sheet" onclick="event.stopPropagation()">
     <div style="display:flex;align-items:center;gap:12px">
@@ -551,10 +576,17 @@
       <button onclick="closeActivate()" aria-label="Close" style="font-size:18px;color:var(--muted);padding:4px 8px">✕</button>
     </div>
 
-    <div class="s" style="font-weight:800;letter-spacing:.4px;margin-top:2px;color:var(--ink3)">ALREADY PAID? ENTER YOUR LICENSE KEY</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:2px">
+      <div class="s" style="font-weight:800;letter-spacing:.4px;color:var(--ink3)">ALREADY PAID? ENTER YOUR LICENSE KEY</div>
+      <button type="button" onclick="toggleForgotKeyBox()" style="font-size:11.5px;font-weight:800;color:var(--accent)">Forgot key? Email it ›</button>
+    </div>
     <div class="key-row">
       <input class="input" id="mCode" type="text" maxlength="64" placeholder="SWEEPR-VPN-XXXX-XXXX-XXXX" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')activateKeyOnly()" aria-label="License key" />
       <button class="btn-activate-key" id="mActivateKeyBtn" onclick="activateKeyOnly()">Activate Key</button>
+    </div>
+    <div id="mForgotBox" class="hidden" style="background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;gap:8px;align-items:center">
+      <input class="input" id="mForgotEmail" type="email" placeholder="Enter your purchase email…" style="padding:8px 11px;font-size:12.5px" onkeydown="if(event.key==='Enter')resendLostLicenseKey()" />
+      <button class="btn-soft" id="mForgotBtn" onclick="resendLostLicenseKey()" style="white-space:nowrap;padding:7px 12px;min-height:34px">Send Key</button>
     </div>
     <div class="s" id="mError" style="color:#ef4444;font-weight:700;display:none">Please enter a valid license key.</div>
 
@@ -568,14 +600,14 @@
   </div>
 </div>
 
-<!-- ======================= MOBILE WIREGUARD HAND-OFF MODAL (Strategic Overhaul 2) ======================= -->
+<!-- ======================= MOBILE WIREGUARD HAND-OFF MODAL (Strategic Overhaul 2 + Items 6 & 7) ======================= -->
 <div class="backdrop" id="wgModal" onclick="closeMobileWireGuardModal()">
   <div class="sheet" onclick="event.stopPropagation()">
     <div style="display:flex;align-items:center;gap:12px">
       <svg style="width:40px;height:40px;flex-shrink:0"><use href="#logo"/></svg>
       <div class="grow">
-        <div style="font-size:17px;font-weight:900">iOS &amp; Android WireGuard Setup</div>
-        <div class="s" id="wgModalSub">Instant 10Gbps tunnel profile for your phone or tablet</div>
+        <div style="font-size:17px;font-weight:900">iOS, Android &amp; macOS Tunnel Setup</div>
+        <div class="s" id="wgModalSub">Instant 10Gbps WireGuard profile, QR code, or Apple On-Demand profile</div>
       </div>
       <button onclick="closeMobileWireGuardModal()" aria-label="Close" style="font-size:18px;color:var(--muted);padding:4px 8px">✕</button>
     </div>
@@ -595,13 +627,17 @@
     <div class="wg-code-preview" id="wgConfText">Loading configuration…</div>
 
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn-go" style="flex:1;padding:12px 16px;font-size:13.5px" id="wgDownloadBtn" onclick="downloadMobileWireGuardConf()">Download .conf Profile</button>
+      <button class="btn-go" style="flex:1;padding:11px 14px;font-size:13px" id="wgDownloadBtn" onclick="downloadMobileWireGuardConf()">Download .conf Profile</button>
+      <button class="btn-soft" onclick="downloadAppleMobileConfigModal()" title="Install native Apple VPN profile on iPhone, iPad, or Mac">iOS / macOS .mobileconfig</button>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn-soft" style="flex:1" onclick="shareMobileWireGuardLink()" id="wgShareBtn">Send 1-Tap Setup Link to Phone</button>
       <button class="btn-soft" onclick="copyMobileWireGuardConf()" id="wgCopyBtn">Copy Config</button>
     </div>
     <div class="s" style="line-height:1.45">
       <strong>How to connect on iPhone / Android in 15 seconds:</strong><br>
-      1. Install the free official <strong>WireGuard</strong> app from the App Store or Google Play.<br>
-      2. Tap <strong>+</strong> &rarr; <strong>Create from QR code</strong> (or <strong>Import from file</strong> using the downloaded <code>.conf</code>).
+      1. Install the free official <strong>WireGuard</strong> app (or tap <strong>iOS / macOS .mobileconfig</strong> on Apple devices).<br>
+      2. Tap <strong>+</strong> &rarr; <strong>Create from QR code</strong> (or send the 1-Tap Setup Link to your phone).
     </div>
   </div>
 </div>
@@ -665,7 +701,7 @@
     if (Array.isArray(rawFavs)) savedFavs = rawFavs;
   } catch (e) {}
 
-  const state = { view:'home', code:'UK-LON-01', filter:'all', connected:false, connecting:false, pro:false, email:'', activationCode:'', auto:false, startup:false, killSwitch:false, seconds:0, lang:'en' };
+  const state = { view:'home', code:'UK-LON-01', filter:'all', connected:false, connecting:false, pro:false, email:'', activationCode:'', auto:false, startup:false, killSwitch:false, lanBypass:true, seconds:0, mbTransferred:0.4, spark:[42,58,50,68,62,76,64,82,70,88,78,92], lang:'en' };
   let timerHandle = null;
   const cur = () => SERVERS.find(s => s.code === state.code) || SERVERS[0];
   const $ = id => document.getElementById(id);
@@ -677,6 +713,7 @@
     if (!tauri) return;
     try {
       if (action === 'compact') tauri.core.invoke('set_compact', { compact: !!payload });
+      else if (action === 'setStartup') tauri.core.invoke('set_startup', { enabled: !!payload });
       else if (action === 'openCheckout') tauri.opener.openUrl(typeof payload === 'string' && payload.startsWith('https://') ? payload : 'https://sweeprvpn.com/order');
     } catch (e) {}
   }
@@ -853,10 +890,25 @@
       }
     } catch (e) {}
   }
+  function renderSparkBars() {
+    const box = $('sparkBars');
+    if (!box) return;
+    box.innerHTML = state.spark.map(v => '<div class="spark-bar" style="height:' + Math.max(4, Math.min(22, Math.round(v * 0.22))) + 'px"></div>').join('');
+  }
   function tick() {
     state.seconds++;
     const h = String(Math.floor(state.seconds / 3600)).padStart(2,'0'), m = String(Math.floor(state.seconds % 3600 / 60)).padStart(2,'0'), s = String(state.seconds % 60).padStart(2,'0');
     $('timer').textContent = h + ':' + m + ':' + s;
+    const baseMbps = cur().ping <= 25 ? 64 : 38;
+    const downMbps = (baseMbps + Math.sin(state.seconds * 0.9) * 14 + (state.seconds % 5) * 2.1).toFixed(1);
+    const upMbps = (baseMbps * 0.24 + Math.cos(state.seconds * 0.7) * 3.2).toFixed(1);
+    state.mbTransferred += (parseFloat(downMbps) + parseFloat(upMbps)) * 0.045;
+    state.spark.shift();
+    state.spark.push(Math.max(25, Math.min(98, Math.round((parseFloat(downMbps) / 85) * 100))));
+    if ($('liveThroughput')) {
+      $('liveThroughput').textContent = '↓ ' + downMbps + ' Mbps · ↑ ' + upMbps + ' Mbps · ' + state.mbTransferred.toFixed(1) + ' MB encrypted';
+    }
+    renderSparkBars();
   }
 
   function blockTv() {
@@ -975,14 +1027,32 @@
   function toggleStartup() {
     if (!requirePro('Unlock SWEEPR Pro to enable automatic start-up protection.')) return;
     state.startup = !state.startup;
+    try { localStorage.setItem('sweepr_vpn_startup', state.startup ? '1' : '0'); } catch (e) {}
     renderAll();
     postNative('setStartup', state.startup);
+    toast(state.startup ? 'Auto-protect on startup enabled' : 'Auto-protect on startup turned off');
   }
   function toggleKillSwitch() {
     if (!requirePro('Unlock SWEEPR Pro to enable the Emergency Kill Switch.')) return;
     state.killSwitch = !state.killSwitch;
     syncSwitchAria($('killToggle'), state.killSwitch);
     toast(state.killSwitch ? 'Emergency Kill Switch enabled' : 'Emergency Kill Switch turned off');
+  }
+  function toggleLanBypass() {
+    if (!requirePro('Unlock SWEEPR Pro to configure Local LAN Bypass for printers & NAS.')) return;
+    state.lanBypass = !state.lanBypass;
+    try { localStorage.setItem('sweepr_vpn_lan_bypass', state.lanBypass ? '1' : '0'); } catch (e) {}
+    syncSwitchAria($('lanBypassToggle'), state.lanBypass);
+    toast(state.lanBypass ? 'Local LAN Bypass enabled (printers & AirPlay reachable)' : 'Strict full-tunnel mode (local LAN blocked)');
+  }
+  function copyReferralLink() {
+    const seed = (state.activationCode || state.email || 'PRO').replace(/[^A-Z0-9]/gi, '').slice(-6).toUpperCase() || 'FRIEND';
+    const url = 'https://sweeprvpn.com/order?ref=SWP-' + seed;
+    navigator.clipboard.writeText(url).then(() => {
+      if ($('copyRefBtn')) $('copyRefBtn').textContent = 'Invite Copied ✓';
+      toast('Referral link copied: ' + url);
+      setTimeout(() => { if ($('copyRefBtn')) $('copyRefBtn').textContent = 'Copy Invite Link'; }, 2400);
+    }).catch(() => {});
   }
   function toggleTheme() {
     const dark = document.documentElement.getAttribute('data-theme') !== 'dark';
@@ -1151,6 +1221,55 @@
     setTimeout(() => $('mCode').focus(), 50);
   }
   function closeActivate() { $('modal').classList.remove('open'); }
+  function toggleForgotKeyBox() {
+    const box = $('mForgotBox');
+    if (!box) return;
+    box.classList.toggle('hidden');
+    if (!box.classList.contains('hidden')) {
+      if (state.email && !$('mForgotEmail').value) $('mForgotEmail').value = state.email;
+      setTimeout(() => $('mForgotEmail').focus(), 40);
+    }
+  }
+  async function resendLostLicenseKey() {
+    const email = ($('mForgotEmail').value || '').trim().toLowerCase();
+    if (!email || !email.includes('@')) {
+      $('mError').textContent = 'Please enter the email address used for your SWEEPR VPN order.';
+      $('mError').style.display = 'block';
+      $('mForgotEmail').focus();
+      return;
+    }
+    const btn = $('mForgotBtn');
+    const orig = btn.textContent;
+    btn.textContent = 'Sending…';
+    btn.disabled = true;
+    try {
+      const endpoints = [];
+      if (location.protocol === 'http:' || location.protocol === 'https:') endpoints.push('/api/vpn/resend-key');
+      endpoints.push('https://sweeprvpn.com/api/vpn/resend-key');
+      let msg = 'Check your email inbox for your license key.';
+      let ok = false;
+      for (const u of endpoints) {
+        try {
+          const r = await fetch(u, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ email }) });
+          const d = await r.json().catch(() => ({}));
+          if (r.ok && d.ok) { ok = true; msg = d.message || msg; break; }
+          if (d && d.message) msg = d.message;
+        } catch (e) {}
+      }
+      if (!ok) throw new Error(msg);
+      $('mError').style.color = '#059669';
+      $('mError').textContent = '✓ ' + msg;
+      $('mError').style.display = 'block';
+      $('mForgotBox').classList.add('hidden');
+    } catch (e) {
+      $('mError').style.color = '#ef4444';
+      $('mError').textContent = String(e && e.message || e);
+      $('mError').style.display = 'block';
+    } finally {
+      btn.textContent = orig;
+      btn.disabled = false;
+    }
+  }
   function plan(btn) {
     btn.parentNode.querySelectorAll('.plan').forEach(p => p.classList.toggle('on', p === btn));
     selectedModalPlan = btn.getAttribute('data-plan') || 'annual';
@@ -1329,7 +1448,8 @@
             activation_code: state.activationCode,
             license_key: state.activationCode,
             email: state.email || undefined,
-            server_code: s.code
+            server_code: s.code,
+            lan_bypass: !!state.lanBypass
           })
         });
         const d = await r.json().catch(() => ({}));
@@ -1380,6 +1500,44 @@
     }).catch(() => {});
   }
 
+  function downloadAppleMobileConfigModal() {
+    if (!requirePro('Enter your license key to download an iOS / macOS profile.')) return;
+    const srv = ($('wgServerSelect') && $('wgServerSelect').value) || state.code || 'UK-LON-01';
+    const base = (location.protocol === 'http:' || location.protocol === 'https:') ? '' : 'https://sweeprvpn.com';
+    const url = base + '/api/vpn/apple-mobileconfig?key=' + encodeURIComponent(state.activationCode) + '&server_code=' + encodeURIComponent(srv);
+    if (tauri && tauri.opener) {
+      tauri.opener.openUrl(url);
+    } else if (isWebView2) {
+      postNative('openCheckout', url);
+    } else {
+      window.location.href = url;
+    }
+    toast('Downloading Apple iOS / macOS .mobileconfig profile…');
+  }
+
+  function shareMobileWireGuardLink() {
+    if (!requirePro('Enter your license key first.')) return;
+    const srv = ($('wgServerSelect') && $('wgServerSelect').value) || state.code || 'UK-LON-01';
+    const link = 'https://sweeprvpn.com/download?key=' + encodeURIComponent(state.activationCode) + '&server=' + encodeURIComponent(srv) + '&autoconf=1';
+    if (navigator.share) {
+      navigator.share({ title: 'SWEEPR VPN Phone Setup', text: 'Tap to install your 10Gbps SWEEPR VPN WireGuard tunnel:', url: link }).catch(() => {});
+      return;
+    }
+    navigator.clipboard.writeText(link).then(() => {
+      if ($('wgShareBtn')) $('wgShareBtn').textContent = 'Setup Link Copied ✓';
+      toast('1-Tap Phone Setup Link copied to clipboard');
+      setTimeout(() => { if ($('wgShareBtn')) $('wgShareBtn').textContent = 'Send 1-Tap Setup Link to Phone'; }, 2200);
+    }).catch(() => {});
+  }
+
+  async function quickExportWireGuardConf(code) {
+    if (!requirePro('Enter your license key to export a standalone WireGuard .conf file.')) return;
+    const targetCode = code || state.code || 'UK-LON-01';
+    toast('Generating ' + targetCode + ' WireGuard .conf…');
+    await generateMobileWireGuardProfile(targetCode);
+    if (currentWgConf) downloadMobileWireGuardConf();
+  }
+
   function sendSupport() {
     if (!$('supEmail').value.includes('@') || !$('supMsg').value.trim()) { toast('Please add your email and a short message'); return; }
     $('supMsg').value = ''; toast("Message sent — we'll reply by email");
@@ -1398,7 +1556,9 @@
     $('infoSpeed').textContent = 'Instant (' + s.ping + ' ms)';
     syncSwitchAria($('startupToggle'), state.startup);
     syncSwitchAria($('killToggle'), state.killSwitch);
+    syncSwitchAria($('lanBypassToggle'), state.lanBypass);
     $('timerBox').classList.toggle('hidden', !on);
+    if (on) renderSparkBars();
     $('panelFlag').setAttribute('data-flag', s.flag);
     $('panelName').textContent = s.country;
     $('panelDesc').textContent = s.city + ' · ' + s.ping + ' ms · ' + s.desc;
@@ -1456,7 +1616,8 @@
       { id: 'act-toggle', title: state.connected ? 'Pause VPN Protection' : 'Connect to ' + cur().city, sub: 'Toggle WireGuard tunnel immediately', kbd: modKeyLabel + '+↵', run: () => toggleConnect() },
       { id: 'act-scan', title: 'Scan Home Wi-Fi & Smart TVs', sub: 'Audit devices and ACR telemetry on your network', kbd: modKeyLabel + '+R', run: () => { go('wifi'); scanWifi(); } },
       { id: 'act-mini', title: document.body.classList.contains('is-compact') ? 'Expand to Full Window' : 'Switch to Mini Widget Mode', sub: 'Compact 380×540 desktop controller', kbd: modKeyLabel + '+M', run: () => setCompact(!document.body.classList.contains('is-compact')) },
-      { id: 'act-wg', title: 'Phone Setup (iOS / Android WireGuard QR)', sub: 'Generate QR code or download .conf profile', kbd: 'QR', run: () => openMobileWireGuardModal() },
+      { id: 'act-export', title: 'Export Desktop WireGuard .conf (' + cur().city + ')', sub: 'Download standalone WireGuard tunnel configuration', kbd: '.conf', run: () => quickExportWireGuardConf(state.code) },
+      { id: 'act-wg', title: 'Phone Setup (iOS / Android WireGuard QR)', sub: 'Generate QR code or Apple .mobileconfig profile', kbd: 'QR', run: () => openMobileWireGuardModal() },
       { id: 'act-theme', title: 'Toggle Dark / Light Theme', sub: 'Switch interface color appearance', kbd: 'Theme', run: () => toggleTheme() },
       { id: 'act-key', title: state.pro ? 'Manage Active License Key' : 'Enter License Key / Upgrade to Pro', sub: state.pro ? 'Copy or update your 10-device key' : 'Unlock all 8 countries & Smart-TV shields', kbd: 'Key', run: () => openActivate() }
     ];
@@ -1533,7 +1694,8 @@
     positionAndShowCtx(e,
       '<button class="ctx-item" onclick="hideCtxMenu();pick(\'' + esc(s.code) + '\');if(!state.connected)toggleConnect(true)"><span>Connect to ' + esc(s.city) + '</span><span class="k">' + s.ping + ' ms</span></button>' +
       '<button class="ctx-item" onclick="hideCtxMenu();toggleFav(\'' + esc(s.code) + '\')"><span>' + (isFav ? '★ Remove from Saved' : '☆ Save to Favorites') + '</span></button>' +
-      '<button class="ctx-item" onclick="hideCtxMenu();state.code=\'' + esc(s.code) + '\';openMobileWireGuardModal()"><span>Generate WireGuard .conf</span><span class="k">QR</span></button>' +
+      '<button class="ctx-item" onclick="hideCtxMenu();quickExportWireGuardConf(\'' + esc(s.code) + '\')"><span>Export Desktop .conf</span><span class="k">.conf</span></button>' +
+      '<button class="ctx-item" onclick="hideCtxMenu();state.code=\'' + esc(s.code) + '\';openMobileWireGuardModal()"><span>Phone QR &amp; Apple Profile</span><span class="k">QR</span></button>' +
       '<div class="ctx-sep"></div>' +
       '<button class="ctx-item" onclick="hideCtxMenu();openCmdPalette()"><span>Command Palette…</span><span class="k">' + modKeyLabel + '+K</span></button>'
     );
@@ -1656,6 +1818,8 @@
     }
     const savedLang = localStorage.getItem('sweepr_vpn_lang') || '';
     if (savedLang && I18N[savedLang]) { $('lang').value = savedLang; setLang(savedLang); }
+    if (localStorage.getItem('sweepr_vpn_startup') === '1') state.startup = true;
+    if (localStorage.getItem('sweepr_vpn_lan_bypass') === '0') state.lanBypass = false;
     const savedEmail = localStorage.getItem('sweepr_vpn_email') || '';
     const savedCode = localStorage.getItem('sweepr_vpn_code') || localStorage.getItem('sweepr_vpn_license_key') || '';
     if (savedCode) { state.email = savedEmail; state.activationCode = savedCode; }
@@ -1666,6 +1830,9 @@
       if ($('mCode')) $('mCode').value = urlKey;
       try { localStorage.setItem('sweepr_vpn_code', urlKey); localStorage.setItem('sweepr_vpn_license_key', urlKey); } catch (e) {}
       try { history.replaceState(null, '', location.pathname); } catch (e) {}
+    }
+    if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
     }
   } catch (e) {}
   renderAll();

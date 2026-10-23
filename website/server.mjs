@@ -1396,8 +1396,9 @@ function renderPlatformDownloadPicker(osType = 'other') {
       <div id="dlError" class="hidden text-xs font-bold text-red-600 mt-2"></div>
       <div id="dlResult" class="hidden mt-3 pt-3 border-t border-emerald-200/70 text-center">
         <div id="dlQrWrap" class="bg-white rounded-xl p-3 border border-gray-200 inline-flex flex-col items-center mb-2"></div>
-        <div class="flex gap-2 justify-center">
+        <div class="flex flex-wrap gap-2 justify-center">
           <button type="button" onclick="downloadGeneratedConf()" class="btn btn-go text-xs py-2 px-4">Download .conf File</button>
+          <button type="button" onclick="downloadAppleMobileConfig()" class="btn btn-ghost text-xs py-2 px-3 border border-emerald-300 bg-white text-emerald-800 font-bold">iOS / macOS .mobileconfig</button>
           <button type="button" id="dlCopyConfBtn" onclick="copyGeneratedConf()" class="btn btn-ghost text-xs py-2 px-3 border border-gray-300 bg-white">Copy Config</button>
         </div>
       </div>
@@ -1437,6 +1438,11 @@ function renderPlatformDownloadPicker(osType = 'other') {
     try {
       const p = new URLSearchParams(window.location.search || '');
       const urlKey = (p.get('key') || p.get('code') || '').trim().toUpperCase();
+      const urlSrv = (p.get('server') || '').trim().toUpperCase();
+      if (urlSrv) {
+        const sel = document.getElementById('dlServerCode');
+        if (sel && Array.from(sel.options).some(o => o.value === urlSrv)) sel.value = urlSrv;
+      }
       const saved = urlKey || localStorage.getItem('sweepr_vpn_license_key') || localStorage.getItem('sweepr_vpn_code') || '';
       if (saved) {
         document.getElementById('dlLicenseKey').value = saved;
@@ -1447,6 +1453,17 @@ function renderPlatformDownloadPicker(osType = 'other') {
         setTimeout(() => generateMobileConf(), 120);
       }
     } catch (e) {}
+    function downloadAppleMobileConfig() {
+      const key = (document.getElementById('dlLicenseKey').value || '').trim().toUpperCase();
+      const srv = document.getElementById('dlServerCode').value || 'UK-LON-01';
+      if (key.length < 6) {
+        const errEl = document.getElementById('dlError');
+        errEl.textContent = 'Please enter your license key first.';
+        errEl.classList.remove('hidden');
+        return;
+      }
+      window.location.href = '/api/vpn/apple-mobileconfig?key=' + encodeURIComponent(key) + '&server_code=' + encodeURIComponent(srv);
+    }
     async function generateMobileConf() {
       const key = (document.getElementById('dlLicenseKey').value || '').trim().toUpperCase();
       const srv = document.getElementById('dlServerCode').value || 'UK-LON-01';
@@ -1670,9 +1687,65 @@ const server = http.createServer(async (req, res) => {
     crm.reportBotHit({ userAgent: ua, path: pathname, status: 200 });
   }
 
+  // Installable PWA Web App Manifest & Service Worker (Item 5)
+  if (pathname === '/manifest.webmanifest' && req.method === 'GET') {
+    return sendJson(
+      res,
+      200,
+      {
+        name: 'SWEEPR VPN — Easy Privacy & Home Wi-Fi Shield',
+        short_name: 'SWEEPR VPN',
+        description: '1-Click WireGuard VPN, Smart-TV ACR Telemetry Blocker, and Home Wi-Fi Device Radar.',
+        start_url: '/app',
+        scope: '/',
+        display: 'standalone',
+        orientation: 'portrait-primary',
+        background_color: '#0b1220',
+        theme_color: '#047857',
+        icons: [
+          { src: '/favicon.svg?v=5', sizes: 'any', type: 'image/svg+xml', purpose: 'any maskable' },
+          { src: '/favicon.png?v=5', sizes: '64x64', type: 'image/png' },
+          { src: '/apple-touch-icon.png?v=5', sizes: '180x180', type: 'image/png' }
+        ]
+      },
+      { 'Content-Type': 'application/manifest+json; charset=utf-8', 'Cache-Control': 'public, max-age=3600' },
+      req
+    );
+  }
+
+  if (pathname === '/sw.js' && req.method === 'GET') {
+    const swScript = `const CACHE = 'sweepr-vpn-pwa-v2.5';
+const ASSETS = ['/app', '/favicon.svg?v=5', '/logo-emerald.svg?v=5'];
+self.addEventListener('install', e => {
+  self.skipWaiting();
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).catch(() => {}));
+});
+self.addEventListener('activate', e => {
+  e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim()));
+});
+self.addEventListener('fetch', e => {
+  if (e.request.method !== 'GET' || e.request.url.includes('/api/')) return;
+  e.respondWith(fetch(e.request).then(res => {
+    if (res && res.status === 200 && (e.request.url.endsWith('/app') || e.request.url.includes('favicon'))) {
+      const clone = res.clone();
+      caches.open(CACHE).then(c => c.put(e.request, clone)).catch(() => {});
+    }
+    return res;
+  }).catch(() => caches.match(e.request)));
+});`;
+    res.writeHead(200, {
+      'Content-Type': 'application/javascript; charset=utf-8',
+      'Service-Worker-Allowed': '/',
+      'Cache-Control': 'no-cache',
+      ...COMMON_SECURITY_HEADERS
+    });
+    return res.end(swScript);
+  }
+
   // Handle /download route (matches sweeprcleaner.com/download)
   if (pathname === '/download' && req.method === 'GET') {
     const requestedPlatform = (urlObj.searchParams.get('platform') || '').toLowerCase();
+    const hasSetupParams = Boolean(urlObj.searchParams.get('key') || urlObj.searchParams.get('code') || urlObj.searchParams.get('autoconf') === '1');
     const uaLower = ua.toLowerCase();
 
     let osType = 'windows';
@@ -1694,8 +1767,8 @@ const server = http.createServer(async (req, res) => {
     }).catch(() => {});
 
     const forceWinExe = requestedPlatform === 'win' || requestedPlatform === 'windows';
-    if (!forceWinExe && osType !== 'windows') {
-      return sendHtml(res, 200, renderPlatformDownloadPicker(osType), {
+    if (!forceWinExe && (osType !== 'windows' || hasSetupParams)) {
+      return sendHtml(res, 200, renderPlatformDownloadPicker(hasSetupParams ? 'ios' : osType), {
         'X-Robots-Tag': 'noindex, follow'
       });
     }
@@ -3440,8 +3513,26 @@ const server = http.createServer(async (req, res) => {
       const assignedAddress = String(r.address || '10.64.0.2/32').trim();
       const assignedDns = String(r.dns || '10.64.0.1').trim();
       const endpoint = `${node.ip}:${node.port || 51820}`;
+      const lanBypass = Boolean(body?.lan_bypass);
+      const allowedIps = lanBypass
+        ? '1.0.0.0/8, 2.0.0.0/7, 4.0.0.0/6, 8.0.0.0/7, 10.64.0.0/16, 11.0.0.0/8, 12.0.0.0/6, 16.0.0.0/4, 32.0.0.0/3, 64.0.0.0/2, 128.0.0.0/3, 160.0.0.0/5, 168.0.0.0/6, 172.0.0.0/12, 172.32.0.0/11, 172.64.0.0/10, 172.128.0.0/9, 173.0.0.0/8, 174.0.0.0/7, 176.0.0.0/4, 192.0.0.0/9, 192.128.0.0/11, 192.160.0.0/13, 192.169.0.0/16, 192.170.0.0/15, 192.172.0.0/14, 192.176.0.0/12, 192.192.0.0/10, 193.0.0.0/8, 194.0.0.0/7, 196.0.0.0/6, 200.0.0.0/5, 208.0.0.0/4'
+        : '0.0.0.0/0, ::/0';
 
       const configText = [
+        '[Interface]',
+        `PrivateKey = ${clientPrivateKey}`,
+        `Address = ${assignedAddress}`,
+        `DNS = ${assignedDns}`,
+        '',
+        '[Peer]',
+        `PublicKey = ${serverPubKey}`,
+        `AllowedIPs = ${allowedIps}`,
+        `Endpoint = ${endpoint}`,
+        'PersistentKeepalive = 25',
+        ''
+      ].join('\n');
+
+      const qrText = [
         '[Interface]',
         `PrivateKey = ${clientPrivateKey}`,
         `Address = ${assignedAddress}`,
@@ -3455,12 +3546,13 @@ const server = http.createServer(async (req, res) => {
         ''
       ].join('\n');
 
-      const qrSvg = renderWireGuardQrSvg(configText);
+      const qrSvg = renderWireGuardQrSvg(qrText);
       return sendJson(res, 200, {
         ok: true,
         filename: `sweepr-${node.code.toLowerCase()}.conf`,
         config_text: configText,
         qr_svg: qrSvg,
+        lan_bypass: lanBypass,
         address: assignedAddress,
         dns: assignedDns,
         endpoint,
@@ -3469,6 +3561,157 @@ const server = http.createServer(async (req, res) => {
     } catch (e) {
       return sendJson(res, 502, { ok: false, error: 'server_unreachable', message: 'Could not register mobile WireGuard peer on that location. Please try another country.' }, {}, req);
     }
+  }
+
+  // Apple iOS / macOS Configuration Profile Generator (.mobileconfig) (Item 7)
+  if (pathname === '/api/vpn/apple-mobileconfig' && (req.method === 'GET' || req.method === 'POST')) {
+    if (!checkRateLimit(req, 'vpn_mobileconfig', 15, 60000)) {
+      return sendJson(res, 429, { ok: false, error: 'rate_limit_exceeded' }, {}, req);
+    }
+    const body = req.method === 'POST' ? await readJsonBody(req) : {};
+    const rawKey = String(body?.activation_code || body?.license_key || urlObj.searchParams.get('key') || urlObj.searchParams.get('code') || '').trim();
+    const rawCode = String(body?.server_code || urlObj.searchParams.get('server_code') || 'UK-LON-01').trim().toUpperCase();
+    const serverCode = rawCode === 'CH-ZRH-01' ? 'SE-STO-01' : rawCode;
+    const licence = await resolveVpnLicence(rawKey, body?.email || urlObj.searchParams.get('email'));
+    if (!licence) {
+      return sendJson(res, 401, { ok: false, error: 'licence_required', message: 'Please enter a valid active SWEEPR Pro license key.' }, {}, req);
+    }
+    const nodes = loadVpnNodes();
+    const node = nodes.find((n) => n.code === serverCode) || nodes[0];
+    if (!node) {
+      return sendJson(res, 404, { ok: false, error: 'server_unavailable' }, {}, req);
+    }
+    try {
+      const { privateKey } = crypto.generateKeyPairSync('x25519');
+      const jwk = privateKey.export({ format: 'jwk' });
+      const clientPrivateKey = Buffer.from(jwk.d, 'base64url').toString('base64');
+      const clientPublicKey = Buffer.from(jwk.x, 'base64url').toString('base64');
+      const r = await callNodeAgent(node, 'POST', '/peers', { public_key: clientPublicKey, licence: licence.id });
+      const serverPubKey = String(node.public_key || r.public_key || '').trim();
+      const assignedAddress = String(r.address || '10.64.0.2/32').trim();
+      const assignedDns = String(r.dns || '10.64.0.1').trim();
+      const endpoint = `${node.ip}:${node.port || 51820}`;
+      const wgConf = `[Interface]\nPrivateKey = ${clientPrivateKey}\nAddress = ${assignedAddress}\nDNS = ${assignedDns}\n\n[Peer]\nPublicKey = ${serverPubKey}\nAllowedIPs = 0.0.0.0/0, ::/0\nEndpoint = ${endpoint}\nPersistentKeepalive = 25`;
+      const uuidProfile = crypto.randomUUID().toUpperCase();
+      const uuidVpn = crypto.randomUUID().toUpperCase();
+      const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>PayloadDisplayName</key>
+  <string>SWEEPR VPN (${escapeHtml(node.city)}, ${escapeHtml(node.country)})</string>
+  <key>PayloadIdentifier</key>
+  <string>com.sweeprvpn.profile.${escapeHtml(node.code.toLowerCase())}</string>
+  <key>PayloadOrganization</key>
+  <string>SWEEPR VPN</string>
+  <key>PayloadRemovalDisallowed</key>
+  <false/>
+  <key>PayloadType</key>
+  <string>Configuration</string>
+  <key>PayloadUUID</key>
+  <string>${uuidProfile}</string>
+  <key>PayloadVersion</key>
+  <integer>1</integer>
+  <key>PayloadContent</key>
+  <array>
+    <dict>
+      <key>PayloadDescription</key>
+      <string>Configures SWEEPR VPN WireGuard 10Gbps tunnel and Smart-TV DNS Shield</string>
+      <key>PayloadDisplayName</key>
+      <string>SWEEPR VPN — ${escapeHtml(node.city)}</string>
+      <key>PayloadIdentifier</key>
+      <string>com.sweeprvpn.wg.${escapeHtml(node.code.toLowerCase())}</string>
+      <key>PayloadType</key>
+      <string>com.apple.vpn.managed</string>
+      <key>PayloadUUID</key>
+      <string>${uuidVpn}</string>
+      <key>PayloadVersion</key>
+      <integer>1</integer>
+      <key>UserDefinedName</key>
+      <string>SWEEPR VPN (${escapeHtml(node.city)})</string>
+      <key>VPNType</key>
+      <string>VPN</string>
+      <key>VPNSubType</key>
+      <string>com.wireguard.ios</string>
+      <key>VPN</key>
+      <dict>
+        <key>AuthenticationMethod</key>
+        <string>Password</string>
+        <key>RemoteAddress</key>
+        <string>${escapeHtml(endpoint)}</string>
+      </dict>
+      <key>VendorConfig</key>
+      <dict>
+        <key>WgQuickConfig</key>
+        <string>${escapeHtml(wgConf)}</string>
+      </dict>
+    </dict>
+  </array>
+</dict>
+</plist>`;
+      res.writeHead(200, {
+        'Content-Type': 'application/x-apple-aspen-config; charset=utf-8',
+        'Content-Disposition': `attachment; filename="sweepr-vpn-${node.code.toLowerCase()}.mobileconfig"`,
+        'Cache-Control': 'no-store',
+        ...COMMON_SECURITY_HEADERS
+      });
+      return res.end(xml);
+    } catch (e) {
+      return sendJson(res, 502, { ok: false, error: 'server_unreachable', message: 'Could not generate Apple profile right now.' }, {}, req);
+    }
+  }
+
+  // Self-Service Lost License Key Recovery by Email (Item 8)
+  if (pathname === '/api/vpn/resend-key' && req.method === 'POST') {
+    if (!checkRateLimit(req, 'resend_key', 5, 60000)) {
+      return sendJson(res, 429, { ok: false, error: 'rate_limit_exceeded', message: 'Too many requests. Please wait a minute and try again.' }, {}, req);
+    }
+    const body = await readJsonBody(req);
+    if (body && body.__tooLarge) return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, {}, req);
+    const email = String(body?.email || '').trim().toLowerCase();
+    if (!isValidEmail(email)) {
+      return sendJson(res, 400, { ok: false, error: 'invalid_email', message: 'Please enter a valid email address.' }, {}, req);
+    }
+
+    let localAcc = accountsByEmail.get(email);
+    if (!localAcc && STRIPE_SECRET_KEY) {
+      try {
+        const custList = await stripeRequest('GET', 'customers', { email, limit: 5 });
+        for (const cust of custList.data || []) {
+          if (cust.deleted) continue;
+          const subs = await stripeRequest('GET', 'subscriptions', { customer: cust.id, status: 'all', limit: 5 });
+          const activeSub = (subs.data || []).find((s) => s.status === 'active' || s.status === 'trialing' || s.status === 'past_due');
+          if (activeSub) {
+            localAcc = upsertLocalAccount({
+              email,
+              name: cust.name || '',
+              stripeCustomerId: cust.id,
+              subscriptionId: activeSub.id,
+              plan: activeSub.metadata?.plan || 'annual',
+              wifiRadarAddon: activeSub.metadata?.wifi_radar === 'true',
+              status: 'active'
+            });
+            break;
+          }
+        }
+      } catch {}
+    }
+
+    let emailed = false;
+    try {
+      const crmRes = await crm.sendOtp(email);
+      if (crmRes && crmRes.otpSent) emailed = true;
+    } catch {}
+
+    if (!emailed && !localAcc) {
+      return sendJson(res, 404, { ok: false, error: 'not_found', message: 'No active SWEEPR VPN subscription was found for that email address.' }, {}, req);
+    }
+
+    return sendJson(res, 200, {
+      ok: true,
+      sent: true,
+      message: `We've sent your activation code & license details to ${email}. Check your inbox (and spam folder).`
+    }, {}, req);
   }
 
   // Wi-Fi device scanning now runs inside the desktop app (it can only see the customer's own network).

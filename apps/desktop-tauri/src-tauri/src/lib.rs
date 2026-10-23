@@ -73,6 +73,83 @@ fn set_compact(window: tauri::WebviewWindow, compact: bool) -> Result<(), String
     r.map_err(|e| e.to_string())
 }
 
+/// Configures OS auto-start on login across Windows, macOS, and Linux.
+#[tauri::command]
+fn set_startup(enabled: bool) -> Result<(), String> {
+    let exe = std::env::current_exe().map_err(|e| e.to_string())?;
+    let exe_str = exe.to_string_lossy().to_string();
+    #[cfg(target_os = "windows")]
+    {
+        let status = if enabled {
+            std::process::Command::new("reg")
+                .args([
+                    "add",
+                    r"HKCU\Software\Microsoft\Windows\CurrentVersion\Run",
+                    "/v",
+                    "SWEEPRVPN",
+                    "/t",
+                    "REG_SZ",
+                    "/d",
+                    &format!("\"{}\" --minimized", exe_str),
+                    "/f",
+                ])
+                .status()
+        } else {
+            std::process::Command::new("reg")
+                .args([
+                    "delete",
+                    r"HKCU\Software\Microsoft\Windows\CurrentVersion\Run",
+                    "/v",
+                    "SWEEPRVPN",
+                    "/f",
+                ])
+                .status()
+        };
+        let _ = status;
+    }
+    #[cfg(target_os = "macos")]
+    {
+        if let Ok(home) = std::env::var("HOME") {
+            let plist_dir = std::path::PathBuf::from(home).join("Library/LaunchAgents");
+            let _ = std::fs::create_dir_all(&plist_dir);
+            let plist_path = plist_dir.join("com.sweepr.vpn.plist");
+            if enabled {
+                let content = format!(
+                    r#"<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+<key>Label</key><string>com.sweepr.vpn</string>
+<key>ProgramArguments</key><array><string>{}</string></array>
+<key>RunAtLoad</key><true/>
+</dict></plist>"#,
+                    exe_str
+                );
+                let _ = std::fs::write(plist_path, content);
+            } else {
+                let _ = std::fs::remove_file(plist_path);
+            }
+        }
+    }
+    #[cfg(target_os = "linux")]
+    {
+        if let Ok(home) = std::env::var("HOME") {
+            let dir = std::path::PathBuf::from(home).join(".config/autostart");
+            let _ = std::fs::create_dir_all(&dir);
+            let path = dir.join("sweepr-vpn.desktop");
+            if enabled {
+                let content = format!(
+                    "[Desktop Entry]\nType=Application\nName=SWEEPR VPN\nExec=\"{}\"\nX-GNOME-Autostart-enabled=true\n",
+                    exe_str
+                );
+                let _ = std::fs::write(path, content);
+            } else {
+                let _ = std::fs::remove_file(path);
+            }
+        }
+    }
+    Ok(())
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     // Headless scan for support and automated tests: `sweepr-vpn --scan-json`
@@ -101,8 +178,19 @@ pub fn run() {
             vpn_status,
             connect_vpn,
             disconnect_vpn,
-            set_compact
+            set_compact,
+            set_startup
         ])
+        .on_window_event(|window, event| {
+            if let tauri::WindowEvent::CloseRequested { api, .. } = event {
+                if let Ok(st) = sweepr_tunnel::status() {
+                    if st.connected {
+                        api.prevent_close();
+                        let _ = window.minimize();
+                    }
+                }
+            }
+        })
         .setup(|app| {
             if let Some(w) = app.get_webview_window("main") {
                 let _ = w.set_title("SWEEPR VPN");
