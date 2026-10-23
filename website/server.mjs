@@ -1687,6 +1687,20 @@ const server = http.createServer(async (req, res) => {
     crm.reportBotHit({ userAgent: ua, path: pathname, status: 200 });
   }
 
+  // Apple Pay Domain Verification File (Required by Stripe & Apple for on-page Apple Pay sheet)
+  if (pathname === '/.well-known/apple-developer-merchantid-domain-association' && req.method === 'GET') {
+    const assocPath = path.join(__dirname, '.well-known', 'apple-developer-merchantid-domain-association');
+    if (fs.existsSync(assocPath)) {
+      const body = fs.readFileSync(assocPath, 'utf8');
+      res.writeHead(200, {
+        'Content-Type': 'text/plain; charset=utf-8',
+        'Cache-Control': 'public, max-age=86400',
+        ...COMMON_SECURITY_HEADERS
+      });
+      return res.end(body);
+    }
+  }
+
   // Installable PWA Web App Manifest & Service Worker (Item 5)
   if (pathname === '/manifest.webmanifest' && req.method === 'GET') {
     return sendJson(
