@@ -28,12 +28,23 @@
   <script src="https://js.stripe.com/v3/"></script>
   <script src="https://pay.google.com/gp/p/js/pay.js" async></script>
   <style>
-    #googlePayButtonContainer > div,
-    #googlePayButtonContainer button {
-      width: 100% !important;
-      min-width: 0 !important;
+    #googlePayButtonContainer .gpay-single-card-clip {
+      width: 94px !important;
+      height: 36px !important;
+      overflow: hidden !important;
+      position: relative !important;
+      flex-shrink: 0 !important;
+    }
+    #googlePayButtonContainer .gpay-single-card-clip > div,
+    #googlePayButtonContainer .gpay-single-card-clip button,
+    #googlePayButtonContainer .gpay-single-card-clip iframe {
+      width: 240px !important;
+      min-width: 240px !important;
+      max-width: 240px !important;
       height: 44px !important;
       min-height: 44px !important;
+      margin-left: -36px !important;
+      margin-top: -4px !important;
     }
 
     /* Stripe custom element container styling (Matches sweeprcleaner.com/order) */
@@ -566,8 +577,8 @@
 
             <!-- 2. Google Pay Express Button Slot -->
             <div class="w-full min-w-0">
-              <!-- Official Dynamic Google Pay Button Container -->
-              <div id="googlePayButtonContainer" class="hidden w-full h-11 overflow-hidden rounded-xl"></div>
+              <!-- Official Dynamic Google Pay Button Container (Centered 1-Card Clip) -->
+              <div id="googlePayButtonContainer" class="hidden w-full h-11 bg-black hover:bg-[#1a1a1a] overflow-hidden rounded-xl items-center justify-center transition-all shadow-xs cursor-pointer"></div>
 
               <!-- Styled GPay Express Button (Visible until dynamic Google Pay card button mounts) -->
               <button type="button" id="expressGPayBtn" onclick="triggerExpressWallet('google_pay')" class="w-full h-11 bg-[#202124] hover:bg-black text-white font-medium rounded-xl flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer text-sm px-2">
@@ -1223,12 +1234,22 @@
                 allowedPaymentMethods: [baseCardPaymentMethod],
                 buttonColor: 'black',
                 buttonType: 'plain',
-                buttonRadius: 12,
+                buttonRadius: 0,
                 buttonSizeMode: 'fill'
               });
 
-              container.appendChild(gpayButton);
+              const clipWrap = document.createElement('div');
+              clipWrap.className = 'gpay-single-card-clip';
+              clipWrap.appendChild(gpayButton);
+
+              container.onclick = (e) => {
+                if (e.target === container || e.target === clipWrap) {
+                  handleGooglePayClick(cardPaymentMethod);
+                }
+              };
+              container.appendChild(clipWrap);
               container.classList.remove('hidden');
+              container.classList.add('flex');
 
               const fallbackBtn = document.getElementById('expressGPayBtn');
               if (fallbackBtn) fallbackBtn.classList.add('hidden');
