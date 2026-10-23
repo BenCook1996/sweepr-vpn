@@ -563,16 +563,24 @@
               <span class="italic font-black text-xl tracking-tighter text-[#003087]">Pay<span class="text-[#0079c1]">Pal</span></span>
             </button>
 
-            <!-- Official Dynamic Google Pay Button Container (Shows stored card art + last 4 digits) -->
-            <div id="googlePayButtonContainer" class="hidden w-full h-11 overflow-hidden rounded-xl"></div>
-
             <!-- Native Stripe PaymentRequest Container (Apple Pay on Safari) -->
             <div id="stripePaymentRequestContainer" class="hidden w-full">
               <div id="paymentRequestBtn"></div>
             </div>
 
+            <!-- Styled Apple Pay Express Button (Visible by default until native Apple Pay button mounts) -->
+            <button type="button" id="expressApplePayBtn" onclick="triggerExpressWallet('apple_pay')" class="w-full h-11 bg-black hover:bg-[#1a1a1a] text-white font-semibold rounded-xl flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer text-sm">
+              <svg class="w-4 h-4 fill-current -mt-0.5 shrink-0" viewBox="0 0 170 170" aria-hidden="true">
+                <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.13-1.9-14.34-6.08-3.69-3.03-7.61-7.82-11.77-14.37-5.93-9.19-10.72-19.64-14.38-31.34-3.66-11.7-5.49-22.46-5.49-32.28 0-12.29 3.06-22.41 9.19-30.36 6.13-7.95 13.97-12.04 23.52-12.27 4.7 0 9.89 1.38 15.58 4.14 5.69 2.76 9.34 4.19 10.97 4.3 1.22 0 5.19-1.66 11.9-4.97 6.38-3.03 11.95-4.3 16.71-3.82 12.63 1.02 22.13 5.99 28.5 14.92-11.33 6.87-16.86 16.47-16.59 28.79.22 9.61 3.79 17.61 10.71 23.99 4.78 4.46 10.45 7.21 17.01 8.25-1.36 4.16-2.96 8.19-4.82 12.11zM119.22 31.04c0 7.53-2.75 14.56-8.26 21.1-6.64 7.77-14.68 12.25-23.42 11.53-.17-.93-.26-1.92-.26-2.98 0-7.22 3.14-14.94 8.71-21.32 2.78-3.2 6.31-5.86 10.59-7.98 4.28-2.11 8.33-3.29 12.15-3.53.33 1.11.49 2.17.49 3.18z"/>
+              </svg>
+              <span class="font-semibold text-base tracking-tight">Pay</span>
+            </button>
+
+            <!-- Official Dynamic Google Pay Button Container (Shows stored card art + last 4 digits) -->
+            <div id="googlePayButtonContainer" class="hidden w-full h-11 overflow-hidden rounded-xl"></div>
+
             <!-- Styled GPay Express Button (Remains visible until dynamic Google Pay card button mounts) -->
-            <button type="button" id="expressGPayBtn" onclick="triggerExpressWallet()" class="w-full h-11 bg-[#202124] hover:bg-black text-white font-medium rounded-xl flex items-center justify-center gap-2 transition-all shadow-xs cursor-pointer text-sm">
+            <button type="button" id="expressGPayBtn" onclick="triggerExpressWallet('google_pay')" class="w-full h-11 bg-[#202124] hover:bg-black text-white font-medium rounded-xl flex items-center justify-center gap-2 transition-all shadow-xs cursor-pointer text-sm">
               <span class="font-semibold text-base inline-flex items-center tracking-tight">
                 <span class="text-[#4285F4] font-bold">G</span><span class="text-[#EA4335] font-bold">o</span><span class="text-[#FBBC05] font-bold">o</span><span class="text-[#4285F4] font-bold">g</span><span class="text-[#34A853] font-bold">l</span><span class="text-[#EA4335] font-bold">e</span>&nbsp;<span class="text-white font-semibold">Pay</span>
               </span>
@@ -1203,9 +1211,7 @@
               container.classList.remove('hidden');
 
               const fallbackBtn = document.getElementById('expressGPayBtn');
-              const prContainer = document.getElementById('stripePaymentRequestContainer');
               if (fallbackBtn) fallbackBtn.classList.add('hidden');
-              if (prContainer) prContainer.classList.add('hidden');
             }
           })
           .catch((err) => {
@@ -1357,11 +1363,8 @@
             });
             prButton.mount(prBtnMount);
             prButton.on('ready', () => {
-              const gpayContainer = document.getElementById('googlePayButtonContainer');
-              if (!gpayContainer || gpayContainer.classList.contains('hidden')) {
-                prContainer.classList.remove('hidden');
-                document.getElementById('expressGPayBtn').classList.add('hidden');
-              }
+              prContainer.classList.remove('hidden');
+              document.getElementById('expressApplePayBtn')?.classList.add('hidden');
             });
           }
 
@@ -1515,14 +1518,19 @@
       selectOrderPlan(selectedPlan);
     };
 
-    function triggerExpressWallet() {
-      if (paymentRequestInstance) {
+    function triggerExpressWallet(walletType = 'wallet') {
+      const termsConsent = document.getElementById('termsConsent');
+      const legalConsent = document.getElementById('legalConsent');
+      if (termsConsent) termsConsent.checked = true;
+      if (legalConsent) legalConsent.checked = true;
+
+      if (paymentRequestInstance && canMakePaymentReady) {
         try {
           paymentRequestInstance.show();
           return;
         } catch (err) {}
       }
-      triggerCheckout('wallet');
+      triggerCheckout(walletType);
     }
 
     function showError(msg) {
@@ -1547,7 +1555,9 @@
       const email = emailInput ? emailInput.value.trim() : '';
       const activeCurrency = (getActivePricingObj()?.code || 'GBP').toLowerCase();
 
-      if (method !== 'paypal') {
+      const isExpressRedirect = method === 'paypal' || ((method === 'apple_pay' || method === 'google_pay' || method === 'wallet') && Boolean(stripe));
+
+      if (!isExpressRedirect) {
         if (!termsConsent?.checked || (legalConsent && !legalConsent.checked)) {
           showError('Please agree to the subscription terms, Terms of Service, and Privacy Policy to proceed.');
           return;
@@ -1570,9 +1580,11 @@
       const btn = document.getElementById('submitBtn');
       const paypalBtn = document.getElementById('paypalBtn');
       const expressGPayBtn = document.getElementById('expressGPayBtn');
+      const expressApplePayBtn = document.getElementById('expressApplePayBtn');
       const originalBtnHTML = btn ? btn.innerHTML : '';
       const originalPaypalHTML = paypalBtn ? paypalBtn.innerHTML : '';
       const originalGPayHTML = expressGPayBtn ? expressGPayBtn.innerHTML : '';
+      const originalApplePayHTML = expressApplePayBtn ? expressApplePayBtn.innerHTML : '';
 
       const restoreButtons = () => {
         if (btn) {
@@ -1587,6 +1599,10 @@
         if (expressGPayBtn) {
           expressGPayBtn.disabled = false;
           expressGPayBtn.innerHTML = originalGPayHTML;
+        }
+        if (expressApplePayBtn) {
+          expressApplePayBtn.disabled = false;
+          expressApplePayBtn.innerHTML = originalApplePayHTML;
         }
       };
 
@@ -1603,6 +1619,7 @@
       }
       if (paypalBtn) paypalBtn.disabled = true;
       if (expressGPayBtn) expressGPayBtn.disabled = true;
+      if (expressApplePayBtn) expressApplePayBtn.disabled = true;
 
       try {
         // Case A: Direct PayPal Popup Authorization (Matches sweeprcleaner.com/order)
@@ -1859,7 +1876,7 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            email,
+            email: email || undefined,
             name: cardName || undefined,
             address: billingAddress || undefined,
             postcode: billingPostcode || undefined,
@@ -1869,6 +1886,7 @@
             addons: isWifiRadarAddonSelected ? ['wifi_radar'] : [],
             currency: activeCurrency,
             paymentMethod: method,
+            hostedCheckout: (method === 'apple_pay' || method === 'google_pay' || method === 'wallet') && Boolean(stripe),
             confirmOnServer: true,
             cardNumber: rawNum || undefined
           })

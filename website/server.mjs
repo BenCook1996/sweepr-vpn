@@ -1960,7 +1960,7 @@ self.addEventListener('fetch', e => {
 
     const paymentMethod = typeof body.paymentMethod === 'string' ? body.paymentMethod.toLowerCase() : 'card';
     const isPayPal = paymentMethod === 'paypal';
-    const isWallet = paymentMethod === 'wallet' || paymentMethod === 'google_pay';
+    const isWallet = paymentMethod === 'wallet' || paymentMethod === 'google_pay' || paymentMethod === 'apple_pay';
     const isPopup = Boolean(body.popup);
     const providedEmail = (body.email || '').trim().toLowerCase();
     if (providedEmail && !isValidEmail(providedEmail)) {
@@ -2111,6 +2111,46 @@ self.addEventListener('fetch', e => {
       const introCouponId = canUseIntroCoupon
         ? await getOrCreateIntroCoupon(localizedPricing.currency, localizedPricing.introSavingsAmount)
         : '';
+
+      if (body.hostedCheckout) {
+        const hostOrigin = resolveTrustedOrigin(req);
+        const sessionParams = {
+          mode: 'subscription',
+          customer: customerId,
+          line_items: subItems.map((it) => ({
+            price_data: it.price_data,
+            quantity: 1
+          })),
+          ...(introCouponId ? { discounts: [{ coupon: introCouponId }] } : {}),
+          subscription_data: {
+            metadata: {
+              ...metadata,
+              intro_offer_applied: introCouponId ? 'true' : 'false'
+            }
+          },
+          metadata: {
+            ...metadata,
+            intro_offer_applied: introCouponId ? 'true' : 'false'
+          },
+          success_url: `${hostOrigin}/checkout/success?web=1&session_id={CHECKOUT_SESSION_ID}&account_id=${encodeURIComponent(acc.id)}`,
+          cancel_url: `${hostOrigin}/order?error=payment_cancelled`
+        };
+        const checkoutSession = await stripeRequest('POST', 'checkout/sessions', sessionParams);
+        if (checkoutSession?.url) {
+          return sendJson(
+            res,
+            200,
+            {
+              redirectUrl: checkoutSession.url,
+              sessionId: checkoutSession.id,
+              accountId: acc.id,
+              plan
+            },
+            {},
+            req
+          );
+        }
+      }
 
       const subParams = {
         customer: customerId,
@@ -2516,7 +2556,8 @@ self.addEventListener('fetch', e => {
       res.writeHead(429, { 'Content-Type': 'text/plain; charset=utf-8', ...COMMON_SECURITY_HEADERS });
       return res.end('Too Many Requests');
     }
-    const subscriptionId = (urlObj.searchParams.get('subscription_id') || '').trim();
+    let subscriptionId = (urlObj.searchParams.get('subscription_id') || '').trim();
+    const sessionId = (urlObj.searchParams.get('session_id') || '').trim();
     const accountId = (urlObj.searchParams.get('account_id') || '').trim();
     const redirectStatus = (urlObj.searchParams.get('redirect_status') || '').trim();
     const isPopup = urlObj.searchParams.get('popup') === '1';
@@ -2524,6 +2565,15 @@ self.addEventListener('fetch', e => {
     if (redirectStatus === 'failed' || redirectStatus === 'canceled') {
       res.writeHead(302, { Location: '/order?error=payment_cancelled', ...COMMON_SECURITY_HEADERS });
       return res.end();
+    }
+
+    if (!subscriptionId && sessionId && STRIPE_SECRET_KEY) {
+      try {
+        const cs = await stripeRequest('GET', `checkout/sessions/${encodeURIComponent(sessionId)}`);
+        if (cs && cs.subscription) {
+          subscriptionId = typeof cs.subscription === 'string' ? cs.subscription : cs.subscription.id;
+        }
+      } catch {}
     }
 
     let acc = accountsById.get(accountId) || accountsBySubscriptionId.get(subscriptionId) || null;
