@@ -175,6 +175,47 @@
     return 'GBP';
   }
 
+  const LANG_FLAGS = {
+    en: { flag: '🇬🇧', code: 'EN', label: 'English' },
+    de: { flag: '🇩🇪', code: 'DE', label: 'Deutsch' },
+    fr: { flag: '🇫🇷', code: 'FR', label: 'Français' },
+    es: { flag: '🇪🇸', code: 'ES', label: 'Español' },
+    it: { flag: '🇮🇹', code: 'IT', label: 'Italiano' },
+    pt: { flag: '🇵🇹', code: 'PT', label: 'Português' },
+    nl: { flag: '🇳🇱', code: 'NL', label: 'Nederlands' },
+    ja: { flag: '🇯🇵', code: 'JA', label: '日本語' }
+  };
+
+  function getActiveLanguage() {
+    try {
+      const saved = localStorage.getItem('sweepr_vpn_lang') || localStorage.getItem('deepblock_lang');
+      if (saved && LANG_FLAGS[saved]) return saved;
+    } catch (e) {}
+    return 'en';
+  }
+
+  function setLanguage(langCode) {
+    const chosen = LANG_FLAGS[langCode] || LANG_FLAGS.en;
+    try {
+      localStorage.setItem('sweepr_vpn_lang', langCode);
+      localStorage.setItem('deepblock_lang', langCode);
+    } catch (e) {}
+
+    const flagEl = document.getElementById('currentLangFlag');
+    const codeEl = document.getElementById('currentLangCode');
+    const langMenu = document.getElementById('langDropdownMenu');
+    const langBtn = document.getElementById('langDropdownBtn');
+    const langChevron = document.getElementById('langDropdownChevron');
+
+    if (flagEl) flagEl.textContent = chosen.flag;
+    if (codeEl) codeEl.textContent = chosen.code;
+    if (langMenu) langMenu.classList.add('hidden');
+    if (langBtn) langBtn.setAttribute('aria-expanded', 'false');
+    if (langChevron) langChevron.classList.remove('rotate-180');
+  }
+
+  window.setLanguage = setLanguage;
+
   function applyCurrencyToDOM(currencyCode) {
     const p = getComputedPricing(currencyCode);
     window.SWEEPR_ACTIVE_PRICING = p;
@@ -185,18 +226,6 @@
         el.textContent = p[key];
       }
     });
-
-    const flagEl = document.getElementById('currentLangFlag');
-    const codeEl = document.getElementById('currentLangCode');
-    if (flagEl) flagEl.textContent = p.flag;
-    if (codeEl) codeEl.textContent = p.code;
-
-    const menu = document.getElementById('langDropdownMenu');
-    const btn = document.getElementById('langDropdownBtn');
-    const chevron = document.getElementById('langDropdownChevron');
-    if (menu) menu.classList.add('hidden');
-    if (btn) btn.setAttribute('aria-expanded', 'false');
-    if (chevron) chevron.classList.remove('rotate-180');
 
     if (typeof window.onSweeprCurrencyChanged === 'function') {
       window.onSweeprCurrencyChanged(p);
@@ -217,9 +246,10 @@
   document.addEventListener('DOMContentLoaded', () => {
     const mount = document.getElementById('currencySelectorMount');
     const activeCode = getActiveCurrency();
-    const activeObj = SWEEPR_PRICING[activeCode] || SWEEPR_PRICING.GBP;
+    const activeLangCode = getActiveLanguage();
+    const activeLang = LANG_FLAGS[activeLangCode] || LANG_FLAGS.en;
 
-    if (mount) {
+    if (mount && !document.getElementById('langDropdownBtn')) {
       const isDarkHeader = mount.getAttribute('data-theme') === 'dark' || Boolean(mount.closest('header.bg-\\[\\#232931\\]'));
       const btnClasses = isDarkHeader
         ? 'text-xs flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 border border-white/15 cursor-pointer font-medium text-white transition-colors'
@@ -228,62 +258,75 @@
 
       mount.innerHTML = `
         <div class="relative inline-block text-left" id="langDropdownContainer">
-          <button type="button" id="langDropdownBtn" class="${btnClasses}" aria-expanded="false" aria-label="Select Currency">
-            <span class="text-base" id="currentLangFlag">${activeObj.flag}</span>
-            <span class="text-xs font-bold tracking-wide" id="currentLangCode">${activeObj.code}</span>
+          <button type="button" id="langDropdownBtn" class="${btnClasses}" aria-expanded="false" aria-label="Select Language">
+            <span class="text-sm" id="currentLangFlag">${activeLang.flag}</span>
+            <span class="text-xs font-bold tracking-wide" id="currentLangCode">${activeLang.code}</span>
             <svg id="langDropdownChevron" class="w-3 h-3 ${chevronColor} transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
             </svg>
           </button>
 
-          <div id="langDropdownMenu" class="hidden absolute right-0 mt-2 w-48 bg-white/95 backdrop-blur-xl border border-gray-200/90 rounded-2xl shadow-xl p-1.5 z-50 transition-all text-gray-800">
+          <div id="langDropdownMenu" class="hidden absolute right-0 mt-2 w-44 bg-white/95 backdrop-blur-xl border border-gray-200/90 rounded-2xl shadow-xl p-1.5 z-50 transition-all text-gray-800">
             <div class="space-y-0.5 text-xs">
-              ${Object.values(SWEEPR_PRICING).map(c => `
-                <button type="button" onclick="window.setSweeprCurrency('${c.code}')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 transition-colors font-medium cursor-pointer">
-                  <span class="flex items-center gap-2"><span>${c.flag}</span> <span>${c.name}</span></span>
-                  <span class="text-[10px] text-gray-400 font-mono">${c.symbol.trim()}</span>
-                </button>
-              `).join('')}
+              <button type="button" onclick="setLanguage('en')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 transition-colors font-medium cursor-pointer">
+                <span class="flex items-center gap-2"><span>🇬🇧</span> <span>English</span></span>
+                <span class="text-[10px] text-gray-400 font-mono">EN</span>
+              </button>
+              <button type="button" onclick="setLanguage('de')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 transition-colors font-medium cursor-pointer">
+                <span class="flex items-center gap-2"><span>🇩🇪</span> <span>Deutsch</span></span>
+                <span class="text-[10px] text-gray-400 font-mono">DE</span>
+              </button>
+              <button type="button" onclick="setLanguage('fr')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 transition-colors font-medium cursor-pointer">
+                <span class="flex items-center gap-2"><span>🇫🇷</span> <span>Français</span></span>
+                <span class="text-[10px] text-gray-400 font-mono">FR</span>
+              </button>
+              <button type="button" onclick="setLanguage('es')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 transition-colors font-medium cursor-pointer">
+                <span class="flex items-center gap-2"><span>🇪🇸</span> <span>Español</span></span>
+                <span class="text-[10px] text-gray-400 font-mono">ES</span>
+              </button>
             </div>
           </div>
         </div>
       `;
+    }
 
-      const btn = document.getElementById('langDropdownBtn');
-      const menu = document.getElementById('langDropdownMenu');
-      const chevron = document.getElementById('langDropdownChevron');
+    setLanguage(activeLangCode);
 
-      if (btn && menu) {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const isHidden = menu.classList.contains('hidden');
-          if (isHidden) {
-            menu.classList.remove('hidden');
-            btn.setAttribute('aria-expanded', 'true');
-            if (chevron) chevron.classList.add('rotate-180');
-          } else {
-            menu.classList.add('hidden');
-            btn.setAttribute('aria-expanded', 'false');
-            if (chevron) chevron.classList.remove('rotate-180');
-          }
-        });
+    const btn = document.getElementById('langDropdownBtn');
+    const menu = document.getElementById('langDropdownMenu');
+    const chevron = document.getElementById('langDropdownChevron');
 
-        document.addEventListener('click', (e) => {
-          if (!menu.contains(e.target) && !btn.contains(e.target)) {
-            menu.classList.add('hidden');
-            btn.setAttribute('aria-expanded', 'false');
-            if (chevron) chevron.classList.remove('rotate-180');
-          }
-        });
+    if (btn && menu && !btn.dataset.langListenerAttached) {
+      btn.dataset.langListenerAttached = '1';
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isHidden = menu.classList.contains('hidden');
+        if (isHidden) {
+          menu.classList.remove('hidden');
+          btn.setAttribute('aria-expanded', 'true');
+          if (chevron) chevron.classList.add('rotate-180');
+        } else {
+          menu.classList.add('hidden');
+          btn.setAttribute('aria-expanded', 'false');
+          if (chevron) chevron.classList.remove('rotate-180');
+        }
+      });
 
-        document.addEventListener('keydown', (e) => {
-          if (e.key === 'Escape') {
-            menu.classList.add('hidden');
-            btn.setAttribute('aria-expanded', 'false');
-            if (chevron) chevron.classList.remove('rotate-180');
-          }
-        });
-      }
+      document.addEventListener('click', (e) => {
+        if (!menu.contains(e.target) && !btn.contains(e.target)) {
+          menu.classList.add('hidden');
+          btn.setAttribute('aria-expanded', 'false');
+          if (chevron) chevron.classList.remove('rotate-180');
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          menu.classList.add('hidden');
+          btn.setAttribute('aria-expanded', 'false');
+          if (chevron) chevron.classList.remove('rotate-180');
+        }
+      });
     }
 
     applyCurrencyToDOM(activeCode);
