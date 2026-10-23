@@ -2117,6 +2117,7 @@ self.addEventListener('fetch', e => {
         const sessionParams = {
           mode: 'subscription',
           customer: customerId,
+          managed_payments: { enabled: false },
           line_items: subItems.map((it) => ({
             price_data: it.price_data,
             quantity: 1
@@ -2177,6 +2178,7 @@ self.addEventListener('fetch', e => {
           const sessionParams = {
             mode: 'subscription',
             customer: customerId,
+            managed_payments: { enabled: false },
             line_items: subItems.map((it) => ({
               price_data: it.price_data,
               quantity: 1
@@ -2346,12 +2348,25 @@ self.addEventListener('fetch', e => {
     }
     const body = await readJsonBody(req);
     if (body && body.__tooLarge) return sendJson(res, 413, { error: 'payload_too_large' }, {}, req);
-    const subscriptionId = typeof body?.subscriptionId === 'string' ? body.subscriptionId.trim() : '';
+    let subscriptionId = typeof body?.subscriptionId === 'string' ? body.subscriptionId.trim() : '';
     const accountId = typeof body?.accountId === 'string' ? body.accountId.trim() : '';
     const checkOnly = Boolean(body?.checkOnly);
     if (!subscriptionId) return sendJson(res, 400, { error: 'missing_subscription_id' }, {}, req);
 
     try {
+      if (subscriptionId.startsWith('cs_')) {
+        const cs = await stripeRequest('GET', `checkout/sessions/${encodeURIComponent(subscriptionId)}`);
+        if (!cs || !cs.subscription) {
+          return sendJson(
+            res,
+            checkOnly ? 200 : 402,
+            { ok: false, status: cs?.status || 'open' },
+            {},
+            req
+          );
+        }
+        subscriptionId = typeof cs.subscription === 'string' ? cs.subscription : cs.subscription.id;
+      }
       const sub = await stripeRequest('GET', `subscriptions/${encodeURIComponent(subscriptionId)}`, {
         expand: ['default_payment_method', 'latest_invoice.payment_intent.payment_method']
       });
