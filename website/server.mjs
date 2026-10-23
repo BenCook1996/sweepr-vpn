@@ -3899,9 +3899,9 @@ self.addEventListener('fetch', e => {
     } else if (isLoginRoute) {
       headers['X-Robots-Tag'] = 'noindex, nofollow';
       headers['Cache-Control'] = 'no-store, no-cache, must-revalidate';
-    } else if (/^(favicon|logo-|padlock-favicon|icon-)/i.test(baseName) || ext === '.ico') {
+    } else if (/^(favicon|logo-|padlock-favicon|icon-)/i.test(baseName) || ext === '.ico' || ext === '.js' || ext === '.css') {
       headers['Cache-Control'] = 'public, max-age=0, must-revalidate';
-    } else if (['.svg', '.png', '.css', '.js', '.webp', '.avif', '.woff2', '.woff', '.ttf'].includes(ext)) {
+    } else if (['.svg', '.png', '.webp', '.avif', '.woff2', '.woff', '.ttf'].includes(ext)) {
       headers['Cache-Control'] = 'public, max-age=300, stale-while-revalidate=3600';
     } else if (ext === '.html') {
       headers['Cache-Control'] = 'public, max-age=0, must-revalidate';

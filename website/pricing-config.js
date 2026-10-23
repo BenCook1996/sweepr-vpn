@@ -195,10 +195,12 @@
   }
 
   function setLanguage(langCode) {
+    if (!LANG_FLAGS[langCode]) langCode = 'en';
     const chosen = LANG_FLAGS[langCode] || LANG_FLAGS.en;
     try {
       localStorage.setItem('sweepr_vpn_lang', langCode);
       localStorage.setItem('deepblock_lang', langCode);
+      localStorage.setItem('sweepr_lang', langCode);
     } catch (e) {}
 
     const flagEl = document.getElementById('currentLangFlag');
