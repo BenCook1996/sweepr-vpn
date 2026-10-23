@@ -203,16 +203,17 @@
   .c-list::-webkit-scrollbar { width:6px; } .c-list::-webkit-scrollbar-thumb { background:rgba(148,163,184,.35); border-radius:9px; }
 
   /* Modal & Split Activation / Checkout UI (Quick Win 3) */
-  .backdrop { position:fixed; inset:0; background:rgba(15,23,42,.55); backdrop-filter:blur(6px); display:none; align-items:center; justify-content:center; z-index:100; padding:16px; }
+  .backdrop { position:fixed; inset:0; background:rgba(15,23,42,.55); backdrop-filter:blur(6px); display:none; align-items:center; justify-content:center; z-index:100; padding:12px; }
   .backdrop.open { display:flex; }
-  .sheet { width:100%; max-width:440px; max-height:92vh; overflow-y:auto; background:var(--card); border:1px solid var(--line); border-radius:22px; padding:22px; box-shadow:0 30px 70px rgba(15,23,42,.35); display:flex; flex-direction:column; gap:11px; }
+  .sheet { width:100%; max-width:440px; max-height:96vh; overflow-y:auto; scrollbar-width:none; -ms-overflow-style:none; background:var(--card); border:1px solid var(--line); border-radius:22px; padding:18px 20px; box-shadow:0 30px 70px rgba(15,23,42,.35); display:flex; flex-direction:column; gap:9px; }
+  .sheet::-webkit-scrollbar, .main::-webkit-scrollbar, .c-list::-webkit-scrollbar, .cmd-list::-webkit-scrollbar, .wg-code-preview::-webkit-scrollbar, .country-drawer::-webkit-scrollbar { display:none; width:0; height:0; }
   .key-row { display:flex; gap:8px; align-items:stretch; }
   .key-row .input { flex:1; font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; letter-spacing:.4px; font-size:13px; }
   .btn-activate-key { background:var(--ink); color:var(--bg); font-weight:800; font-size:13px; padding:0 16px; border-radius:12px; white-space:nowrap; transition:opacity .15s; }
   .btn-activate-key:hover { opacity:.9; }
-  .modal-divider { display:flex; align-items:center; gap:10px; color:var(--muted); font-size:11px; font-weight:800; letter-spacing:.5px; margin:4px 0 2px; }
+  .modal-divider { display:flex; align-items:center; gap:10px; color:var(--muted); font-size:11px; font-weight:800; letter-spacing:.5px; margin:2px 0 1px; }
   .modal-divider::before, .modal-divider::after { content:""; flex:1; height:1px; background:var(--line); }
-  .plan { border:1.5px solid var(--line); border-radius:14px; padding:10px 12px; display:flex; align-items:center; justify-content:space-between; text-align:left; width:100%; position:relative; transition:all .12s; }
+  .plan { border:1.5px solid var(--line); border-radius:14px; padding:9px 12px; display:flex; align-items:center; justify-content:space-between; text-align:left; width:100%; position:relative; transition:all .12s; }
   .plan.on { border:2px solid var(--e500); background:var(--sel); }
   .plan .tag { position:absolute; top:-9px; right:12px; background:var(--e600); color:#fff; font-size:9.5px; font-weight:900; padding:2px 8px; border-radius:99px; letter-spacing:.3px; }
 
@@ -577,8 +578,8 @@
     </div>
 
     <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:2px">
-      <div class="s" style="font-weight:800;letter-spacing:.4px;color:var(--ink3)">ALREADY PAID? ENTER YOUR LICENSE KEY</div>
-      <button type="button" onclick="toggleForgotKeyBox()" style="font-size:11.5px;font-weight:800;color:var(--accent)">Forgot key? Email it ›</button>
+      <div class="s" style="font-weight:800;letter-spacing:.3px;color:var(--ink3);white-space:nowrap;font-size:11px">ALREADY PAID? ENTER YOUR LICENSE KEY</div>
+      <button type="button" onclick="toggleForgotKeyBox()" style="font-size:11.5px;font-weight:800;color:var(--accent);white-space:nowrap;flex-shrink:0">Forgot key? Email it ›</button>
     </div>
     <div class="key-row">
       <input class="input" id="mCode" type="text" maxlength="64" placeholder="SWEEPR-VPN-XXXX-XXXX-XXXX" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')activateKeyOnly()" aria-label="License key" />
