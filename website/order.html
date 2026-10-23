@@ -269,23 +269,16 @@
       <div id="currencySelectorMount" data-theme="dark"></div>
     </div>
 
-    <!-- Center Headline & Subline (Dynamic based on introductory discount state) -->
+    <!-- Center Headline & Subline (Matched to sweeprdeepblock.com/order) -->
     <div class="max-w-4xl mx-auto text-center pt-5 pb-3">
-      <!-- Item 9: Live IP & ISP Exposure Status Pill + Item 10: Referral Bonus Pill -->
-      <div class="flex flex-wrap items-center justify-center gap-2 mb-3">
-        <div id="liveIpBanner" class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-400/40 text-amber-200 text-[11.5px] font-bold">
-          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-          <span id="liveIpText">Your IP &amp; ISP location are currently visible — Encrypt in 1 click</span>
-        </div>
-        <div id="refBonusBanner" class="hidden items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-200 text-[11.5px] font-bold">
-          <span>🎁 Friend Invite Applied: +1 Bonus Month Free</span>
-        </div>
+      <div id="refBonusBanner" class="hidden items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-200 text-[11.5px] font-bold mb-2">
+        <span>🎁 Friend Invite Applied: +1 Bonus Month Free</span>
       </div>
       <h1 id="bannerTitle" class="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight">
-        Get Complete Protection for 2026
+        Get Complete Online Privacy &amp; Wi-Fi Protection for 2026
       </h1>
       <p id="bannerSubtitle" class="text-gray-300 text-xs sm:text-sm md:text-base mt-1.5 font-normal max-w-2xl mx-auto">
-        Get Fast 1-Click Privacy, Streaming Speed Booster, And Home Wi-Fi Protection Included
+        Keep Your Browsing Private in 1 Click, Stop Internet Slowdowns &amp; Protect Every Device on Your Home Wi-Fi
       </p>
     </div>
     <script>
@@ -297,33 +290,51 @@
             var rb = document.getElementById('refBonusBanner');
             if (rb) { rb.classList.remove('hidden'); rb.classList.add('inline-flex'); }
           }
-          fetch('/api/tools/network-check').then(function(r){return r.json();}).then(function(d){
-            if (d && d.ip) {
-              var el = document.getElementById('liveIpText');
-              if (el) el.textContent = 'Your IP (' + d.ip + (d.country ? ' · ' + d.country : '') + ') is currently exposed — Hide it now';
-            }
-          }).catch(function(){});
         } catch(e){}
       })();
     </script>
   </header>
 
-  <!-- MAIN 2-COLUMN CHECKOUT LAYOUT (Exact match to sweeprcleaner.com/order — plan is determined from /pricing) -->
-  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-12 w-full flex-1">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-10 items-start">
-      
-      <!-- LEFT COLUMN: Product Overview, Included Bundles & Pricing Breakdown -->
-      <div id="orderDetailsColumn" class="lg:col-span-6 space-y-6 order-2 lg:order-1">
-        
-        <!-- Main Product Item Card -->
-        <div class="bg-white rounded-2xl p-5 sm:p-6 border border-gray-200/80 shadow-sm flex items-start justify-between gap-4">
-          <div class="flex items-start gap-4">
+  <!-- MAIN 2-COLUMN CHECKOUT LAYOUT — Concept C: 1-Screen Express Checkout (Matched to sweeprdeepblock.com/order) -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-5 sm:py-8 w-full flex-1">
+    <!-- Top Segmented Plan Switcher Bar (Instant 1-Click Plan Switching on /order) -->
+    <div class="bg-white rounded-2xl p-1.5 sm:p-2 border border-gray-200/90 shadow-xs mb-5 grid grid-cols-1 sm:grid-cols-3 gap-1.5 sm:gap-2">
+      <button type="button" id="planTabAnnual" onclick="selectOrderPlan('annual')" class="py-2 sm:py-2.5 px-3 rounded-xl bg-emerald-600 text-white font-extrabold text-xs sm:text-sm shadow-xs cursor-pointer transition-all">
+        ★ Annual — £6.25/mo (Save 50%)
+      </button>
+      <button type="button" id="planTabSixMonth" onclick="selectOrderPlan('six_month')" class="py-2 sm:py-2.5 px-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-700 font-bold text-xs sm:text-sm cursor-pointer transition-all">
+        6-Month — £8.17/mo (Save 35%)
+      </button>
+      <button type="button" id="planTabMonthly" onclick="selectOrderPlan('monthly')" class="py-2 sm:py-2.5 px-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-700 font-bold text-xs sm:text-sm cursor-pointer transition-all">
+        Monthly — £12.49/mo
+      </button>
+    </div>
+
+    <!-- Mobile Quick-Jump Bar (Visible on phones/tablets so users can jump straight to payment) -->
+    <div class="lg:hidden mb-4 bg-white rounded-xl p-3 border border-emerald-200 shadow-xs flex items-center justify-between gap-3">
+      <div>
+        <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-700">SWEEPR VPN Pro</div>
+        <div class="text-xs text-gray-600">10 Devices • 14-Day Refund Guarantee</div>
+      </div>
+      <a href="#checkoutBox" class="btn btn-go !h-9 !px-3.5 text-xs font-bold shrink-0">
+        Jump to Payment &darr;
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+
+      <!-- LEFT COLUMN: Unified 1-Screen Order Summary Card (Matched to sweeprdeepblock.com/order) -->
+      <div id="orderDetailsColumn" class="lg:col-span-6 bg-white rounded-2xl p-5 sm:p-6 border border-gray-200/90 shadow-md space-y-4">
+
+        <!-- 1. Main Product Header -->
+        <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3.5 border-b border-gray-100 pb-4">
+          <div class="flex items-start gap-3.5">
             <!-- 3D Box Mockup -->
-            <div class="software-box shrink-0 mt-0.5">
+            <div class="software-box shrink-0 mt-0.5 ml-1 sm:ml-0">
               <div class="box-spine"></div>
               <div class="box-face">
                 <div class="flex items-center justify-between w-full">
-                  <img src="/logo-mint-glass.svg" alt="SWEEPR VPN" width="18" height="18" style="width: 18px; height: 18px; border-radius: 4px;" />
+                  <img src="/logo-mint-glass.svg" alt="SWEEPR VPN" width="16" height="16" class="w-4 h-4 rounded-sm" />
                   <div class="box-badge">2026</div>
                 </div>
                 <div>
@@ -334,23 +345,20 @@
               </div>
             </div>
 
-            <!-- Product Details -->
-            <div>
-              <!-- Discount / Savings Badge -->
-              <div id="productTag" class="mb-1.5">
+            <div class="min-w-0 flex-1">
+              <div id="productTag" class="mb-1">
                 <span id="productTagContent" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-bold text-emerald-800 bg-emerald-100 border border-emerald-300">
-                  <svg class="w-3 h-3 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>
+                  <svg class="w-3 h-3 text-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>
                   Save 50% vs monthly billing
                 </span>
               </div>
-
-              <h2 class="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">SWEEPR VPN Pro All-Access</h2>
-              <p id="productSubtitle" class="text-xs text-gray-500 mt-1">
-                2026 All-in-One Online Privacy, Wi-Fi Protection &amp; Speed Booster Suite
+              <h2 class="text-lg sm:text-xl font-black text-gray-900 tracking-tight leading-snug">SWEEPR VPN Pro All-Access</h2>
+              <p id="productSubtitle" class="text-xs text-gray-500 mt-0.5 leading-relaxed">
+                Keep your browsing private in 1 click, stop internet slowdowns &amp; scan every device on your home Wi-Fi
               </p>
-              <div class="flex items-center gap-2 mt-2 text-xs text-gray-600">
+              <div class="flex flex-wrap items-center gap-x-2 gap-y-1 mt-1.5 text-xs text-gray-600">
                 <span class="inline-flex items-center gap-1 text-emerald-600 font-semibold">
-                  <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                  <svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
                   Covers Up to 10 Devices
                 </span>
                 <span>•</span>
@@ -359,148 +367,122 @@
             </div>
           </div>
 
-          <!-- Product Price -->
-          <div class="text-right shrink-0">
+          <div class="flex sm:block items-baseline justify-between pt-2 sm:pt-0 border-t sm:border-t-0 border-gray-100 text-left sm:text-right shrink-0">
             <div id="productPriceTop" class="text-2xl font-black text-gray-900 tracking-tight">£74.99</div>
             <div id="productPriceSub" class="text-[11px] text-gray-500 font-medium">per year (£6.25/mo)</div>
           </div>
         </div>
 
-        <!-- Included Bundle Item 1 (Matched to sweeprcleaner.com/order) -->
-        <div class="bg-white rounded-xl p-4 border border-gray-200/80 shadow-sm flex items-center justify-between gap-4">
-          <div class="flex items-start gap-3.5">
-            <div class="w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center shrink-0 mt-0.5 text-gray-600 bg-gray-50">
-              <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        <!-- 2. Included Free Bonuses (Full-Width Compact Rows — Matched to sweeprdeepblock.com/order) -->
+        <div class="grid grid-cols-1 gap-2">
+          <div class="bg-emerald-50/60 border border-emerald-200/80 rounded-xl px-3.5 py-2.5 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5">
+              <span class="text-base shrink-0">🎁</span>
+              <div>
+                <div class="font-bold text-gray-900 text-xs sm:text-sm">Streaming &amp; Gaming Speed Booster</div>
+                <div class="text-[11px] text-gray-500">Stops your internet provider from slowing down evening 4K streaming</div>
+              </div>
             </div>
-            <div>
-              <h3 class="font-bold text-gray-900 text-sm">1-Click Private Browsing &amp; Streaming Speed Booster</h3>
-              <p class="text-xs text-gray-500 mt-0.5 leading-relaxed">
-                Fast, private 10 Gbps servers in 8 global locations with zero activity logs, plus encrypted routing to stop evening streaming buffering
-              </p>
-            </div>
+            <span class="px-2.5 py-0.5 rounded-md text-[10px] font-extrabold text-emerald-800 bg-white border border-emerald-200 uppercase shrink-0">INCLUDED FREE</span>
           </div>
-          <div class="shrink-0">
-            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 uppercase tracking-wide">
-              <span>🎁</span> INCLUDED FREE
-            </span>
+
+          <div class="bg-emerald-50/60 border border-emerald-200/80 rounded-xl px-3.5 py-2.5 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5">
+              <span class="text-base shrink-0">🎁</span>
+              <div>
+                <div class="font-bold text-gray-900 text-xs sm:text-sm">Home Wi-Fi Device Scanner</div>
+                <div class="text-[11px] text-gray-500">See every laptop, phone &amp; Smart TV connected to your Wi-Fi in seconds</div>
+              </div>
+            </div>
+            <span class="px-2.5 py-0.5 rounded-md text-[10px] font-extrabold text-emerald-800 bg-white border border-emerald-200 uppercase shrink-0">INCLUDED FREE</span>
           </div>
         </div>
 
-        <!-- Included Bundle Item 2 (Matched to sweeprcleaner.com/order) -->
-        <div class="bg-white rounded-xl p-4 border border-gray-200/80 shadow-sm flex items-center justify-between gap-4">
-          <div class="flex items-start gap-3.5">
-            <div class="w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center shrink-0 mt-0.5 text-gray-600 bg-gray-50">
-              <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-            </div>
-            <div>
-              <h3 class="font-bold text-gray-900 text-sm">Home Wi-Fi Scanner, Smart-TV Spy Blocker &amp; Auto-Protect</h3>
-              <p class="text-xs text-gray-500 mt-0.5 leading-relaxed">
-                See every device on your Wi-Fi, stop Smart TVs from taking screenshots, automatically block unsafe drops, and protect up to 10 devices
-              </p>
-            </div>
-          </div>
-          <div class="shrink-0">
-            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 uppercase tracking-wide">
-              <span>🎁</span> INCLUDED FREE
-            </span>
-          </div>
-        </div>
-
-        <!-- Paid Add-on Order Bump: SWEEPR Wi-Fi Radar & Smart-TV Shield -->
-        <div
-          id="wifiRadarBumpCard"
-          onclick="toggleWifiRadarAddon()"
-          class="bg-gradient-to-br from-emerald-50/90 via-white to-teal-50/70 rounded-xl p-4 border-2 border-emerald-500 shadow-md cursor-pointer transition-all select-none ring-2 ring-emerald-500/15"
-        >
-          <div class="flex items-start justify-between gap-3">
+        <!-- 3. 1-CLICK PAID ORDER BUMP: SWEEPR Wi-Fi Radar & Smart-TV Shield (Checked by default, matched to sweeprdeepblock.com/order) -->
+        <div id="wifiRadarBumpCard" class="bg-emerald-50/60 rounded-xl p-3.5 sm:p-4 border border-emerald-200/80 hover:border-emerald-300 transition-all">
+          <label class="flex items-start justify-between gap-3 cursor-pointer select-none">
             <div class="flex items-start gap-3">
               <input
                 type="checkbox"
                 id="wifiRadarCheckbox"
                 checked
-                onclick="event.stopPropagation(); toggleWifiRadarAddon(this.checked);"
-                class="mt-1 w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 cursor-pointer shrink-0"
+                onchange="toggleWifiRadarAddon(this.checked)"
+                class="mt-0.5 w-5 h-5 rounded border-emerald-300 text-emerald-600 accent-emerald-600 focus:ring-emerald-500 cursor-pointer shrink-0"
               />
               <div>
                 <div class="flex flex-wrap items-center gap-1.5 mb-1">
-                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-extrabold bg-amber-100 text-amber-900 border border-amber-300 uppercase tracking-wide">
-                    📡 OPTIONAL PAID ADD-ON
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider bg-white text-emerald-800 border border-emerald-200">
+                    ⚡ 1-CLICK WI-FI &amp; TV ADD-ON
                   </span>
-                  <span id="wifiRadarAddonPriceBadge" class="text-xs font-extrabold text-emerald-700">
+                  <span id="wifiRadarAddonPriceBadge" class="text-xs font-extrabold text-emerald-800 bg-emerald-100/80 px-2 py-0.5 rounded border border-emerald-200">
                     + £14.99/yr (£1.25/mo eq.)
                   </span>
                 </div>
-                <h3 class="font-bold text-gray-900 text-sm">Add SWEEPR Wi-Fi Radar &amp; Smart-TV Shield</h3>
-                <p class="text-xs text-gray-600 mt-0.5 leading-relaxed">
-                  Get instant alerts when an unknown device joins your home Wi-Fi, automatically block Smart-TV screenshot tracking (Samsung, LG, Roku, Fire TV), and monitor background data leaks 24/7.
+                <h3 class="font-extrabold text-gray-900 text-xs sm:text-sm leading-snug">
+                  Add “SWEEPR Wi-Fi Radar &amp; Smart-TV Shield” — 24/7 Network Guard
+                </h3>
+                <p class="text-[11px] sm:text-xs text-gray-600 mt-0.5 leading-relaxed">
+                  Get instant alerts when an unknown device joins your home Wi-Fi and automatically block Smart TVs (Samsung, LG, Roku, Fire TV) from tracking what you watch.
                 </p>
               </div>
             </div>
-          </div>
+          </label>
         </div>
 
-        <!-- Order Breakdown Card -->
-        <div class="bg-white rounded-xl p-5 border border-gray-200/80 shadow-sm space-y-3 text-sm">
+        <!-- 4. Itemized Breakdown & Total Today -->
+        <div class="bg-gray-50/80 rounded-xl p-4 border border-gray-200/80 space-y-2.5 text-xs sm:text-sm">
           <div class="flex items-center justify-between text-gray-700">
             <span id="summaryPlanTitle">SWEEPR VPN Pro (Annual Plan)</span>
             <span id="summaryPlanPrice" class="font-semibold text-gray-900">£74.99/year</span>
           </div>
 
-          <!-- Paid Add-on Line Item (Shows when SWEEPR Wi-Fi Radar & Smart-TV Shield is checked) -->
-          <div id="addonSummaryRow" class="flex items-center justify-between text-gray-700 border-t border-dashed border-gray-200 pt-2">
-            <span class="flex items-center gap-1.5">
-              <span class="text-emerald-600 font-bold">+</span>
-              <span>SWEEPR Wi-Fi Radar &amp; Smart-TV Shield</span>
+          <div id="addonSummaryRow" class="flex items-center justify-between text-emerald-800 bg-emerald-50/90 px-2.5 py-1.5 rounded-lg border border-emerald-200/80">
+            <span class="flex items-center gap-1.5 font-semibold text-xs">
+              <span>⚡</span>
+              <span>SWEEPR Wi-Fi Radar &amp; Smart-TV Shield Add-On</span>
             </span>
-            <span id="addonSummaryPrice" class="font-semibold text-gray-900">£14.99/yr</span>
+            <span id="addonSummaryPrice" class="font-bold text-gray-900 text-xs">+ £14.99/year</span>
           </div>
 
-          <!-- Savings Line (Annual / 6-Month) -->
-          <div id="savingsSummaryRow" class="flex flex-col gap-1 text-emerald-600 font-medium border-t border-dashed border-gray-200 pt-2">
-            <div class="flex items-center justify-between">
-              <span class="flex items-center gap-1.5">
-                <span id="savingsSummaryLabel">Annual Plan Savings (Save 50%)</span>
-              </span>
+          <!-- Savings Line -->
+          <div id="savingsSummaryRow" class="flex flex-col gap-0.5 text-emerald-600 font-medium border-t border-dashed border-gray-200 pt-2">
+            <div class="flex items-center justify-between text-xs">
+              <span id="savingsSummaryLabel">Annual Plan Savings (Save 50%)</span>
               <span id="savingsSummaryAmount" class="font-bold">- £74.89</span>
             </div>
-            <div id="savingsSummaryNote" class="text-[11px] text-gray-500 font-normal">
+            <div id="savingsSummaryNote" class="text-[10px] text-gray-500 font-normal">
               Billed annually at £74.99/year (£6.25/month equivalent) instead of standard £149.88/year.
             </div>
           </div>
 
-          <!-- Discount Line (Shows when 1st month discount is applied) -->
-          <div id="discountSummaryRow" class="hidden flex flex-col gap-1 text-emerald-600 font-medium border-t border-dashed border-gray-200 pt-2">
-            <div class="flex items-center justify-between">
-              <span class="flex items-center gap-1.5">
-                <span>Introductory 1st-Month Discount (<strong id="discountSaveStrong" class="font-bold">Save £10.50</strong>)</span>
-              </span>
+          <!-- Discount Line (Shows when £1.99 1st month discount is applied) -->
+          <div id="discountSummaryRow" class="hidden flex flex-col gap-0.5 text-emerald-600 font-medium border-t border-dashed border-gray-200 pt-2">
+            <div class="flex items-center justify-between text-xs">
+              <span>Introductory 1st-Month Discount (<strong id="discountSaveStrong" class="font-bold">Save £10.50</strong>)</span>
               <span id="discountAmountMinus" class="font-bold">- £10.50</span>
             </div>
-            <div id="discountNoteText" class="text-[11px] text-gray-500 font-normal">
+            <div id="discountNoteText" class="text-[10px] text-gray-500 font-normal">
               Discount applies strictly to month 1. All future monthly renewals are billed at the standard rate of £12.49/month unless cancelled.
             </div>
           </div>
 
-          <div class="pt-3 border-t border-gray-200 flex items-center justify-between">
-            <span id="totalTodayLabel" class="font-bold text-gray-900 text-base">Total Today (GBP)</span>
-            <span id="totalTodayText" class="font-black text-2xl text-gray-900">£89.98</span>
+          <div class="pt-2.5 border-t border-gray-200 flex items-center justify-between">
+            <span id="totalTodayLabel" class="font-bold text-gray-900 text-sm sm:text-base">Total Today (GBP)</span>
+            <span id="totalTodayText" class="font-black text-xl sm:text-2xl text-gray-900">£89.98</span>
           </div>
         </div>
 
-        <!-- Authentic Trust Badges -->
-        <div class="pt-2 flex flex-wrap items-center justify-center gap-6 opacity-90 py-2">
-          <!-- 14-Day Guarantee Badge -->
-          <div class="flex items-center gap-2 border border-gray-200 bg-white px-3.5 py-2 rounded-lg shadow-xs">
-            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        <!-- 5. Compact Trust Badges Row -->
+        <div class="grid grid-cols-2 gap-3 pt-1">
+          <div class="flex items-center gap-2 border border-gray-200 bg-gray-50/60 px-3 py-2 rounded-xl">
+            <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
             <div class="text-left">
               <div class="text-[9px] font-bold text-gray-500 uppercase leading-none">14-DAY REFUND</div>
               <div class="text-[10px] font-extrabold text-gray-900 leading-tight">100% RISK-FREE</div>
             </div>
           </div>
-
-          <!-- 256-Bit SSL Encrypted Badge -->
-          <div class="flex items-center gap-2 border border-gray-200 bg-white px-3.5 py-2 rounded-lg shadow-xs">
-            <svg class="w-5 h-5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
+          <div class="flex items-center gap-2 border border-gray-200 bg-gray-50/60 px-3 py-2 rounded-xl">
+            <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
             <div class="text-left">
               <div class="text-[9px] font-bold text-gray-500 uppercase leading-none">BANK-GRADE SECURITY</div>
               <div class="text-[10px] font-extrabold text-gray-900 leading-tight">256-BIT SSL ENCRYPTED</div>
@@ -510,24 +492,9 @@
 
       </div>
 
-      <!-- RIGHT COLUMN: Payment Form (Matched to sweeprcleaner.com/order) -->
-      <div id="checkoutBox" class="lg:col-span-6 bg-white p-5 sm:p-8 rounded-2xl border border-gray-200/90 shadow-md order-1 lg:order-2">
+      <!-- RIGHT COLUMN: Express Payment Form (Matched to sweeprdeepblock.com/order) -->
+      <div id="checkoutBox" class="lg:col-span-6 bg-white p-5 sm:p-6 rounded-2xl border border-gray-200/90 shadow-md">
         
-        <!-- Compact Mobile Order Summary Banner (Visible on Mobile/Tablet so Checkout is Above the Fold) -->
-        <div class="lg:hidden bg-slate-900 text-white rounded-xl p-3.5 mb-4 flex items-center justify-between gap-3 border border-slate-800">
-          <div class="flex items-center gap-3 min-w-0">
-            <img src="/logo-mint-glass.svg" alt="SWEEPR VPN" width="36" height="36" class="w-9 h-9 rounded-lg shrink-0" />
-            <div class="min-w-0">
-              <div id="mobileQuickPlanText" class="text-xs font-extrabold text-white truncate">SWEEPR VPN Pro (2026 Edition)</div>
-              <div class="text-[11px] text-emerald-400 font-semibold truncate">+ 2 Free Gifts Included &bull; Up to 10 Devices</div>
-            </div>
-          </div>
-          <div class="text-right shrink-0">
-            <div id="mobileQuickTotalText" class="text-base font-black text-white">£89.98</div>
-            <a href="#orderDetailsColumn" class="text-[10px] font-bold text-slate-300 hover:text-white underline block">View Details &darr;</a>
-          </div>
-        </div>
-
         <!-- Green Guarantee Box (With direct link to Refund Policy) -->
         <div class="bg-[#f0fdf4] border border-[#bbf7d0] rounded-xl p-4 mb-6 text-xs text-gray-700 leading-relaxed flex items-start gap-2.5">
           <svg class="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -945,8 +912,8 @@
       if (cb) cb.checked = isWifiRadarAddonSelected;
       if (card) {
         card.className = isWifiRadarAddonSelected
-          ? 'bg-gradient-to-br from-emerald-50/90 via-white to-teal-50/70 rounded-xl p-4 border-2 border-emerald-500 shadow-md cursor-pointer transition-all select-none ring-2 ring-emerald-500/15'
-          : 'bg-gradient-to-br from-amber-50/90 via-white to-emerald-50/60 rounded-xl p-4 border-2 border-amber-300/90 hover:border-emerald-500 shadow-sm cursor-pointer transition-all select-none';
+          ? 'bg-emerald-50/60 rounded-xl p-3.5 sm:p-4 border border-emerald-200/80 hover:border-emerald-300 transition-all cursor-pointer select-none'
+          : 'bg-gray-50/80 rounded-xl p-3.5 sm:p-4 border border-gray-200 hover:border-emerald-300 transition-all cursor-pointer select-none';
       }
       selectOrderPlan(selectedPlan);
     }
@@ -981,6 +948,7 @@
       const summaryPlanTitle = document.getElementById('summaryPlanTitle');
       const summaryPlanPrice = document.getElementById('summaryPlanPrice');
       const addonSummaryRow = document.getElementById('addonSummaryRow');
+      const addonSummaryTitle = document.getElementById('addonSummaryTitle');
       const addonSummaryPrice = document.getElementById('addonSummaryPrice');
       const wifiRadarAddonPriceBadge = document.getElementById('wifiRadarAddonPriceBadge');
       const savingsSummaryRow = document.getElementById('savingsSummaryRow');
@@ -994,8 +962,8 @@
       const totalTodayLabel = document.getElementById('totalTodayLabel');
       const totalTodayText = document.getElementById('totalTodayText');
       const termsConsentLabel = document.getElementById('termsConsentLabel');
-      const mobileQuickTotalText = document.getElementById('mobileQuickTotalText');
-      const mobileQuickPlanText = document.getElementById('mobileQuickPlanText');
+
+      const tagSvg = '<svg class="w-3.5 h-3.5 text-brand-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 .995.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg> ';
 
       let basePrice = p.annual;
 
@@ -1005,55 +973,49 @@
         if (productPriceSub) productPriceSub.textContent = `per year (${p.annualPerMonthStr}/mo)`;
         if (productTag) productTag.classList.remove('hidden');
         if (productTagContent) {
-          productTagContent.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-bold text-emerald-800 bg-emerald-100 border border-emerald-300';
-          productTagContent.innerHTML = `<svg class="w-3 h-3 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg> Save 50% vs monthly billing`;
+          productTagContent.innerHTML = `${tagSvg}Save 50% vs monthly billing`;
         }
         if (summaryPlanTitle) summaryPlanTitle.textContent = 'SWEEPR VPN Pro (Annual Plan)';
         if (summaryPlanPrice) summaryPlanPrice.textContent = `${p.annualStr}/year`;
         if (wifiRadarAddonPriceBadge) {
           wifiRadarAddonPriceBadge.textContent = `+ ${p.addonAnnualStr}/yr (${p.addonAnnualPerMonthStr || '£1.25'}/mo eq.)`;
         }
-        if (addonSummaryPrice) addonSummaryPrice.textContent = `${p.addonAnnualStr}/yr`;
+        if (addonSummaryTitle) addonSummaryTitle.textContent = 'SWEEPR Wi-Fi Radar & Smart-TV Shield (Annual)';
+        if (addonSummaryPrice) addonSummaryPrice.textContent = `+ ${p.addonAnnualStr}/year`;
         if (savingsSummaryRow) savingsSummaryRow.classList.remove('hidden');
         if (savingsSummaryLabel) savingsSummaryLabel.textContent = 'Annual Plan Savings (Save 50%)';
         if (savingsSummaryAmount) savingsSummaryAmount.textContent = `- ${p.annualSavingsStr}`;
-        if (savingsSummaryNote) savingsSummaryNote.textContent = `Billed annually at ${p.annualStr}/year (${p.annualPerMonthStr}/month equivalent) instead of standard ${p.annualRegularStr}/year.`;
+        if (savingsSummaryNote) savingsSummaryNote.textContent = `(Included in ${p.annualStr}/yr rate vs 12 × ${p.monthlyStr}/mo)`;
         if (discountSummaryRow) discountSummaryRow.classList.add('hidden');
-        if (mobileQuickPlanText) mobileQuickPlanText.textContent = 'SWEEPR VPN Pro (Annual Plan — Save 50%)';
       } else if (plan === 'six_month') {
         basePrice = p.sixMonth;
         if (productPriceTop) productPriceTop.textContent = p.sixMonthStr;
         if (productPriceSub) productPriceSub.textContent = `every 6 months (${p.sixMonthPerMonthStr}/mo)`;
         if (productTag) productTag.classList.remove('hidden');
         if (productTagContent) {
-          productTagContent.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-bold text-teal-800 bg-teal-100 border border-teal-300';
-          productTagContent.innerHTML = `<svg class="w-3 h-3 text-teal-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg> Save 35% vs monthly billing`;
+          productTagContent.innerHTML = `${tagSvg}Save 35% vs monthly billing`;
         }
         if (summaryPlanTitle) summaryPlanTitle.textContent = 'SWEEPR VPN Pro (6-Month Plan)';
         if (summaryPlanPrice) summaryPlanPrice.textContent = `${p.sixMonthStr}/6 months`;
         if (wifiRadarAddonPriceBadge) {
           wifiRadarAddonPriceBadge.textContent = `+ ${p.addonSixMonthStr}/6mo (${p.addonSixMonthPerMonthStr || '£1.67'}/mo eq.)`;
         }
-        if (addonSummaryPrice) addonSummaryPrice.textContent = `${p.addonSixMonthStr}/6mo`;
+        if (addonSummaryTitle) addonSummaryTitle.textContent = 'SWEEPR Wi-Fi Radar & Smart-TV Shield (6-Month)';
+        if (addonSummaryPrice) addonSummaryPrice.textContent = `+ ${p.addonSixMonthStr}/6 months`;
         if (savingsSummaryRow) savingsSummaryRow.classList.remove('hidden');
         if (savingsSummaryLabel) savingsSummaryLabel.textContent = '6-Month Plan Savings (Save 35%)';
         if (savingsSummaryAmount) savingsSummaryAmount.textContent = `- ${p.sixMonthSavingsStr}`;
-        if (savingsSummaryNote) savingsSummaryNote.textContent = `Billed every 6 months at ${p.sixMonthStr} (${p.sixMonthPerMonthStr}/month equivalent) instead of standard ${p.sixMonthRegularStr}/6-months.`;
+        if (savingsSummaryNote) savingsSummaryNote.textContent = `(Included in ${p.sixMonthStr}/6mo rate vs 6 × ${p.monthlyStr}/mo)`;
         if (discountSummaryRow) discountSummaryRow.classList.add('hidden');
-        if (mobileQuickPlanText) mobileQuickPlanText.textContent = 'SWEEPR VPN Pro (6-Month Plan — Save 35%)';
       } else {
         if (savingsSummaryRow) savingsSummaryRow.classList.add('hidden');
         if (summaryPlanTitle) summaryPlanTitle.textContent = 'SWEEPR VPN Pro (Monthly Plan)';
         if (summaryPlanPrice) summaryPlanPrice.textContent = `${p.monthlyStr}/month`;
         if (wifiRadarAddonPriceBadge) {
-          wifiRadarAddonPriceBadge.textContent = `+ ${p.addonMonthlyStr}/mo`;
+          wifiRadarAddonPriceBadge.textContent = `+ ${p.addonMonthlyStr}/month`;
         }
-        if (addonSummaryPrice) addonSummaryPrice.textContent = `${p.addonMonthlyStr}/mo`;
-        if (mobileQuickPlanText) {
-          mobileQuickPlanText.textContent = isDiscountApplied
-            ? `SWEEPR VPN Pro (1st Month ${p.introStr} Intro)`
-            : 'SWEEPR VPN Pro (Monthly Plan)';
-        }
+        if (addonSummaryTitle) addonSummaryTitle.textContent = 'SWEEPR Wi-Fi Radar & Smart-TV Shield (Monthly)';
+        if (addonSummaryPrice) addonSummaryPrice.textContent = `+ ${p.addonMonthlyStr}/month`;
 
         if (isDiscountApplied) {
           basePrice = p.introFirstMonth;
@@ -1061,8 +1023,7 @@
           if (productPriceSub) productPriceSub.textContent = `1st month (renews ${p.monthlyStr}/mo)`;
           if (productTag) productTag.classList.remove('hidden');
           if (productTagContent) {
-            productTagContent.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-bold text-emerald-800 bg-emerald-100 border border-emerald-300';
-            productTagContent.innerHTML = `<svg class="w-3 h-3 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg> Save ${p.introSavingsStr} off 1st month`;
+            productTagContent.innerHTML = `${tagSvg}Save ${p.introSavingsStr} off 1st month`;
           }
           if (discountSummaryRow) discountSummaryRow.classList.remove('hidden');
           if (discountSaveStrong) discountSaveStrong.textContent = `Save ${p.introSavingsStr}`;
@@ -1096,7 +1057,6 @@
       const recurringStr = p.fmt(recurringTotalMajor);
       if (totalTodayLabel) totalTodayLabel.textContent = `Total Today (${p.code})`;
       if (totalTodayText) totalTodayText.textContent = totalStr;
-      if (mobileQuickTotalText) mobileQuickTotalText.textContent = totalStr;
 
       if (termsConsentLabel) {
         if (plan === 'monthly' && isDiscountApplied) {
@@ -1105,6 +1065,26 @@
           const cycleWord = plan === 'annual' ? 'annually' : plan === 'six_month' ? 'every 6 months' : 'monthly';
           termsConsentLabel.textContent = `I agree to pay ${totalStr} today which will auto renew at ${recurringStr} ${cycleWord} unless I cancel before my next renewal. I can cancel anytime via my online portal. Prices may change with notice.`;
         }
+      }
+
+      const tabAnnual = document.getElementById('planTabAnnual');
+      const tabSix = document.getElementById('planTabSixMonth');
+      const tabMonthly = document.getElementById('planTabMonthly');
+      const activeTabCls = 'py-2 sm:py-2.5 px-3 rounded-xl bg-emerald-600 text-white font-extrabold text-xs sm:text-sm shadow-xs cursor-pointer transition-all';
+      const inactiveTabCls = 'py-2 sm:py-2.5 px-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-700 font-bold text-xs sm:text-sm cursor-pointer transition-all';
+      if (tabAnnual) {
+        tabAnnual.className = plan === 'annual' ? activeTabCls : inactiveTabCls;
+        tabAnnual.textContent = `★ Annual — ${p.annualPerMonthStr}/mo (Save 50%)`;
+      }
+      if (tabSix) {
+        tabSix.className = plan === 'six_month' ? activeTabCls : inactiveTabCls;
+        tabSix.textContent = `6-Month — ${p.sixMonthPerMonthStr}/mo (Save 35%)`;
+      }
+      if (tabMonthly) {
+        tabMonthly.className = plan === 'monthly' ? activeTabCls : inactiveTabCls;
+        tabMonthly.textContent = isDiscountApplied && plan === 'monthly'
+          ? `Monthly — ${p.introStr} 1st mo`
+          : `Monthly — ${p.monthlyStr}/mo`;
       }
 
       updatePaymentRequestTotal();
