@@ -648,7 +648,7 @@
             <!-- 1. Name On Card -->
             <div>
               <label for="cardName" class="block text-xs font-bold text-gray-700 mb-1">Name On Card</label>
-              <input type="text" id="cardName" required placeholder="John Doe" autocomplete="cc-name"
+              <input type="text" id="cardName" name="name" required placeholder="John Doe" autocomplete="name"
                 class="w-full p-2.5 sm:p-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all">
             </div>
 
@@ -657,7 +657,7 @@
               <label class="block text-xs font-bold text-gray-700 mb-1">Card Number</label>
               <div class="relative">
                 <div id="stripeCardNumber" class="stripe-input-box hidden"></div>
-                <input type="text" id="fallbackCardNumber" inputmode="numeric" autocomplete="cc-number" placeholder="4000 1234 5678 9010" maxlength="19"
+                <input type="text" id="fallbackCardNumber" name="cardnumber" inputmode="numeric" autocomplete="cc-number" placeholder="4000 1234 5678 9010" maxlength="19"
                   class="w-full p-2.5 sm:p-3 pr-10 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all font-mono">
                 <!-- Padlock Icon inside input -->
                 <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-gray-400">
@@ -671,7 +671,7 @@
               <div>
                 <label class="block text-xs font-bold text-gray-700 mb-1">Expiry Date (MM/YY)</label>
                 <div id="stripeCardExpiry" class="stripe-input-box hidden"></div>
-                <input type="text" id="fallbackCardExpiry" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/YY" maxlength="5"
+                <input type="text" id="fallbackCardExpiry" name="exp-date" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/YY" maxlength="5"
                   class="w-full p-2.5 sm:p-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all font-mono">
               </div>
 
@@ -686,7 +686,7 @@
                   </div>
                 </div>
                 <div id="stripeCardCvc" class="stripe-input-box hidden"></div>
-                <input type="password" id="fallbackCardCvc" inputmode="numeric" autocomplete="cc-csc" placeholder="•••" maxlength="4"
+                <input type="password" id="fallbackCardCvc" name="cvc" inputmode="numeric" autocomplete="cc-csc" placeholder="•••" maxlength="4"
                   class="w-full p-2.5 sm:p-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all font-mono">
               </div>
             </div>
@@ -695,12 +695,12 @@
             <div class="grid grid-cols-2 gap-3">
               <div>
                 <label for="billingAddress" class="block text-xs font-bold text-gray-700 mb-1">Address</label>
-                <input type="text" id="billingAddress" required placeholder="Street address" autocomplete="address-line1"
+                <input type="text" id="billingAddress" name="address" required placeholder="Street address" autocomplete="street-address"
                   class="w-full p-2.5 sm:p-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all">
               </div>
               <div>
                 <label for="billingPostcode" class="block text-xs font-bold text-gray-700 mb-1">Post Code</label>
-                <input type="text" id="billingPostcode" required placeholder="Postcode / ZIP" autocomplete="postal-code"
+                <input type="text" id="billingPostcode" name="postal" required placeholder="Postcode / ZIP" autocomplete="postal-code"
                   class="w-full p-2.5 sm:p-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all uppercase">
               </div>
             </div>
@@ -708,7 +708,7 @@
             <!-- 5. Email Address -->
             <div>
               <label for="email" class="block text-xs font-bold text-gray-700 mb-1">Email Address</label>
-              <input type="email" id="email" required placeholder="you@example.com" autocomplete="email"
+              <input type="email" id="email" name="email" required placeholder="you@example.com" autocomplete="email"
                 class="w-full p-2.5 sm:p-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all">
             </div>
 
@@ -1184,15 +1184,32 @@
         const cardCvcEl = elements.create('cardCvc', { style: cvcElementStyles, placeholder: '•••' });
 
         document.getElementById('stripeCardNumber').classList.remove('hidden');
-        document.getElementById('fallbackCardNumber').classList.add('hidden');
+        const fbNum = document.getElementById('fallbackCardNumber');
+        if (fbNum) { fbNum.classList.add('hidden'); fbNum.disabled = true; fbNum.removeAttribute('autocomplete'); }
         document.getElementById('stripeCardExpiry').classList.remove('hidden');
-        document.getElementById('fallbackCardExpiry').classList.add('hidden');
+        const fbExp = document.getElementById('fallbackCardExpiry');
+        if (fbExp) { fbExp.classList.add('hidden'); fbExp.disabled = true; fbExp.removeAttribute('autocomplete'); }
         document.getElementById('stripeCardCvc').classList.remove('hidden');
-        document.getElementById('fallbackCardCvc').classList.add('hidden');
+        const fbCvc = document.getElementById('fallbackCardCvc');
+        if (fbCvc) { fbCvc.classList.add('hidden'); fbCvc.disabled = true; fbCvc.removeAttribute('autocomplete'); }
 
         cardNumberEl.mount('#stripeCardNumber');
         cardExpiryEl.mount('#stripeCardExpiry');
         cardCvcEl.mount('#stripeCardCvc');
+
+        let expiryComplete = false;
+        cardExpiryEl.on('change', (ev) => {
+          expiryComplete = Boolean(ev.complete);
+          if (ev.complete) cardCvcEl.focus();
+        });
+        cardNumberEl.on('change', (ev) => {
+          if (ev.complete) {
+            setTimeout(() => {
+              if (expiryComplete) cardCvcEl.focus();
+              else cardExpiryEl.focus();
+            }, 60);
+          }
+        });
 
         cardElements = { cardNumberEl, cardExpiryEl, cardCvcEl };
 
