@@ -277,74 +277,88 @@
         <span>🔒 Zero Activity Logs</span>
       </div>
     </div>
-    <div class="flex-1 relative w-full max-w-lg">
-      <div class="glass-card p-5 sm:p-6 flex flex-col gap-3.5 transform sm:rotate-1 hover:rotate-0 transition-transform duration-500">
-        <!-- Desktop UI Inspired Header Card (Updates Live When Clicking Country Pills) -->
-        <div class="flex items-center justify-between gap-3 bg-emerald-50/80 border border-emerald-200/90 rounded-2xl p-3.5">
-          <div class="flex items-center gap-3">
-            <div class="w-11 h-11 rounded-full flex items-center justify-center bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-md shadow-emerald-500/25 shrink-0">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M9 12l2 2 4-4"></path></svg>
-            </div>
-            <div class="text-left">
-              <div class="flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span class="text-[11px] font-extrabold uppercase tracking-wider text-emerald-700">10 Gbps Encrypted Tunnel</span>
+    <div class="flex-1 relative w-full max-w-md mx-auto">
+      <!-- Ambient Emerald Glow Behind Slanted Card -->
+      <div class="absolute -inset-4 bg-gradient-to-tr from-emerald-200/35 via-teal-100/25 to-transparent rounded-3xl blur-2xl pointer-events-none"></div>
+
+      <div class="relative glass-card p-6 sm:p-7 flex flex-col items-center text-center gap-4 transform sm:rotate-2 hover:rotate-0 transition-transform duration-500 bg-white/90 border border-emerald-100/90 shadow-xl">
+        <!-- Top Title: Country Selector -->
+        <div class="w-full">
+          <div class="text-xs font-extrabold uppercase tracking-wider text-gray-500 mb-2.5">Country Selector</div>
+
+          <!-- 4 Interactive Flag Buttons in Sleek Pill Track -->
+          <div class="grid grid-cols-4 gap-2 bg-gray-50/90 border border-gray-200/80 p-1.5 rounded-2xl" role="group" aria-label="Select VPN Server Country">
+            <!-- UK (Default Active) -->
+            <button type="button" onclick="selectHeroServer('United Kingdom \u00b7 London', '11 ms', '10 Gbps', this)" class="hero-srv-pill flex flex-col items-center justify-center gap-1 py-2 px-2 rounded-xl border-2 border-emerald-500 bg-white shadow-xs cursor-pointer transition-all" aria-label="United Kingdom">
+              <span class="w-7 h-5 rounded-xs overflow-hidden border border-gray-200 shadow-2xs block">
+                <svg viewBox="0 0 60 40" class="w-full h-full block"><rect width="60" height="40" fill="#012169"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#fff" stroke-width="8"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#C8102E" stroke-width="4"/><path d="M30,0V40 M0,20H60" stroke="#fff" stroke-width="12"/><path d="M30,0V40 M0,20H60" stroke="#C8102E" stroke-width="7"/></svg>
+              </span>
+              <span class="text-[10px] font-extrabold text-gray-900 leading-none">UK</span>
+            </button>
+
+            <!-- USA -->
+            <button type="button" onclick="selectHeroServer('United States \u00b7 New York', '64 ms', '10 Gbps', this)" class="hero-srv-pill flex flex-col items-center justify-center gap-1 py-2 px-2 rounded-xl border-2 border-transparent hover:border-emerald-200 bg-transparent hover:bg-white/80 cursor-pointer transition-all" aria-label="United States">
+              <span class="w-7 h-5 rounded-xs overflow-hidden border border-gray-200 shadow-2xs block">
+                <svg viewBox="0 0 60 40" class="w-full h-full block"><rect width="60" height="40" fill="#B22234"/><path d="M0,6H60 M0,15H60 M0,25H60 M0,34H60" stroke="#fff" stroke-width="4"/><rect width="26" height="22" fill="#3C3B6E"/></svg>
+              </span>
+              <span class="text-[10px] font-bold text-gray-600 leading-none">USA</span>
+            </button>
+
+            <!-- Germany -->
+            <button type="button" onclick="selectHeroServer('Germany \u00b7 Frankfurt', '18 ms', '10 Gbps', this)" class="hero-srv-pill flex flex-col items-center justify-center gap-1 py-2 px-2 rounded-xl border-2 border-transparent hover:border-emerald-200 bg-transparent hover:bg-white/80 cursor-pointer transition-all" aria-label="Germany">
+              <span class="w-7 h-5 rounded-xs overflow-hidden border border-gray-200 shadow-2xs block">
+                <svg viewBox="0 0 60 39" class="w-full h-full block"><rect width="60" height="13" y="0" fill="#000"/><rect width="60" height="13" y="13" fill="#D00"/><rect width="60" height="13" y="26" fill="#FFCE00"/></svg>
+              </span>
+              <span class="text-[10px] font-bold text-gray-600 leading-none">DE</span>
+            </button>
+
+            <!-- Japan -->
+            <button type="button" onclick="selectHeroServer('Japan \u00b7 Tokyo', '138 ms', '10 Gbps', this)" class="hero-srv-pill flex flex-col items-center justify-center gap-1 py-2 px-2 rounded-xl border-2 border-transparent hover:border-emerald-200 bg-transparent hover:bg-white/80 cursor-pointer transition-all" aria-label="Japan">
+              <span class="w-7 h-5 rounded-xs overflow-hidden border border-gray-200 shadow-2xs block">
+                <svg viewBox="0 0 60 40" class="w-full h-full block"><rect width="60" height="40" fill="#fff"/><circle cx="30" cy="20" r="11" fill="#BC002D"/></svg>
+              </span>
+              <span class="text-[10px] font-bold text-gray-600 leading-none">JP</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Center Glowing Emerald Shield Orb (Matches Option B Mockup) -->
+        <div class="py-2 flex flex-col items-center">
+          <div class="relative flex items-center justify-center">
+            <!-- Soft Radial Mint Halo -->
+            <div class="w-28 h-28 rounded-full bg-emerald-400/20 flex items-center justify-center shadow-[0_0_45px_rgba(16,185,129,0.4)]">
+              <!-- Metallic/Pearl Middle Ring -->
+              <div class="w-22 h-22 rounded-full bg-gradient-to-b from-white via-emerald-50/90 to-emerald-100/90 border-2 border-emerald-400/70 flex items-center justify-center shadow-md p-3">
+                <!-- Inner Crisp White Shield Circle -->
+                <div class="w-14 h-14 rounded-full bg-white shadow-inner border border-emerald-100 flex items-center justify-center text-emerald-600">
+                  <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M12 8v4m0 4h.01"></path>
+                  </svg>
+                </div>
               </div>
-              <h3 id="heroVpnCity" class="font-black text-gray-900 text-base leading-tight mt-0.5">United Kingdom &middot; London</h3>
             </div>
           </div>
-          <span id="heroVpnPing" class="text-xs font-extrabold text-emerald-700 bg-white border border-emerald-200 px-2.5 py-1 rounded-full shadow-2xs shrink-0">11 ms &bull; Online ✓</span>
-        </div>
-
-        <!-- Interactive Server Location Switcher Pills (Crisp Cross-Platform SVG Flags) -->
-        <div class="grid grid-cols-4 gap-1.5" role="group" aria-label="Preview VPN Server Locations">
-          <button type="button" onclick="selectHeroServer('United Kingdom \u00b7 London', '11 ms \u2022 Online \u2713', this)" class="hero-srv-pill flex items-center justify-center gap-1.5 px-2 py-2 rounded-xl border-2 border-emerald-500 bg-emerald-50/70 text-xs font-extrabold text-gray-900 cursor-pointer transition-all">
-            <span class="w-4 h-3 rounded-xs overflow-hidden border border-gray-200 shrink-0 inline-block">
-              <svg viewBox="0 0 60 40" class="w-full h-full block"><rect width="60" height="40" fill="#012169"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#fff" stroke-width="8"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#C8102E" stroke-width="4"/><path d="M30,0V40 M0,20H60" stroke="#fff" stroke-width="12"/><path d="M30,0V40 M0,20H60" stroke="#C8102E" stroke-width="7"/></svg>
-            </span>
-            <span>UK</span>
-          </button>
-          <button type="button" onclick="selectHeroServer('United States \u00b7 New York', '64 ms \u2022 Online \u2713', this)" class="hero-srv-pill flex items-center justify-center gap-1.5 px-2 py-2 rounded-xl border border-gray-200 bg-white hover:border-emerald-300 text-xs font-bold text-gray-700 cursor-pointer transition-all">
-            <span class="w-4 h-3 rounded-xs overflow-hidden border border-gray-200 shrink-0 inline-block">
-              <svg viewBox="0 0 60 40" class="w-full h-full block"><rect width="60" height="40" fill="#B22234"/><path d="M0,6H60 M0,15H60 M0,25H60 M0,34H60" stroke="#fff" stroke-width="4"/><rect width="26" height="22" fill="#3C3B6E"/></svg>
-            </span>
-            <span>USA</span>
-          </button>
-          <button type="button" onclick="selectHeroServer('Germany \u00b7 Frankfurt', '18 ms \u2022 Online \u2713', this)" class="hero-srv-pill flex items-center justify-center gap-1.5 px-2 py-2 rounded-xl border border-gray-200 bg-white hover:border-emerald-300 text-xs font-bold text-gray-700 cursor-pointer transition-all">
-            <span class="w-4 h-3 rounded-xs overflow-hidden border border-gray-200 shrink-0 inline-block">
-              <svg viewBox="0 0 60 39" class="w-full h-full block"><rect width="60" height="13" y="0" fill="#000"/><rect width="60" height="13" y="13" fill="#D00"/><rect width="60" height="13" y="26" fill="#FFCE00"/></svg>
-            </span>
-            <span>DE</span>
-          </button>
-          <button type="button" onclick="selectHeroServer('Japan \u00b7 Tokyo', '138 ms \u2022 Online \u2713', this)" class="hero-srv-pill flex items-center justify-center gap-1.5 px-2 py-2 rounded-xl border border-gray-200 bg-white hover:border-emerald-300 text-xs font-bold text-gray-700 cursor-pointer transition-all">
-            <span class="w-4 h-3 rounded-xs overflow-hidden border border-gray-200 shrink-0 inline-block">
-              <svg viewBox="0 0 60 40" class="w-full h-full block"><rect width="60" height="40" fill="#fff"/><circle cx="30" cy="20" r="11" fill="#BC002D"/></svg>
-            </span>
-            <span>JP</span>
-          </button>
-        </div>
-
-        <!-- 3 Compact Status Tiles -->
-        <div class="grid grid-cols-3 gap-2.5 text-left">
-          <div class="bg-white border border-gray-200/90 hover:border-emerald-300 rounded-2xl p-3 shadow-xs transition-colors">
-            <span class="inline-block text-[10px] font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded-full mb-1">10 Gbps</span>
-            <div class="text-sm font-black text-gray-900 leading-tight">Full Speed</div>
-            <div class="text-[11px] font-semibold text-gray-500 mt-0.5">No Throttling</div>
-          </div>
-
-          <div class="bg-white border border-gray-200/90 hover:border-emerald-300 rounded-2xl p-3 shadow-xs transition-colors">
-            <span class="inline-block text-[10px] font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded-full mb-1">Hidden ✓</span>
-            <div class="text-sm font-black text-gray-900 leading-tight">IP Hidden</div>
-            <div class="text-[11px] font-semibold text-gray-500 mt-0.5">0 Activity Logs</div>
-          </div>
-
-          <div class="bg-white border border-gray-200/90 hover:border-emerald-300 rounded-2xl p-3 shadow-xs transition-colors">
-            <span class="inline-block text-[10px] font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded-full mb-1">Safe ✓</span>
-            <div class="text-sm font-black text-gray-900 leading-tight">Wi-Fi &amp; TV</div>
-            <div class="text-[11px] font-semibold text-gray-500 mt-0.5">10 Devices</div>
+          <div id="heroVpnCity" class="text-sm font-black text-gray-900 mt-3">United Kingdom &middot; London</div>
+          <div class="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-700 mt-0.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>IP Hidden &bull; 0 Activity Logs</span>
           </div>
         </div>
 
+        <!-- 2-Column Divided Latency & Stats Row (Matches Option B Mockup) -->
+        <div class="grid grid-cols-2 divide-x divide-gray-200 w-full py-2.5 bg-gray-50/70 rounded-2xl border border-gray-200/70">
+          <div class="px-3 text-center">
+            <div class="text-xs font-extrabold text-gray-700">Latency</div>
+            <div id="heroVpnPing" class="text-base font-black text-gray-900 mt-0.5">11 ms</div>
+          </div>
+          <div class="px-3 text-center">
+            <div class="text-xs font-extrabold text-gray-700">Stats</div>
+            <div id="heroVpnSpeed" class="text-base font-black text-gray-900 mt-0.5">10 Gbps</div>
+          </div>
+        </div>
+
+        <!-- Full-Width Green Enable Now Button -->
         <a href="/order" class="btn btn-go w-full mt-0.5 gap-2 text-base font-extrabold py-3.5 justify-center">
           <span>Enable Now</span>
           <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
@@ -402,16 +416,18 @@
   </footer>
 
   <script>
-    function selectHeroServer(city, ping, btnEl) {
+    function selectHeroServer(city, ping, speed, btnEl) {
       var cityEl = document.getElementById('heroVpnCity');
       var pingEl = document.getElementById('heroVpnPing');
+      var speedEl = document.getElementById('heroVpnSpeed');
       if (cityEl) cityEl.textContent = city;
       if (pingEl) pingEl.textContent = ping;
+      if (speedEl && speed) speedEl.textContent = speed;
       document.querySelectorAll('.hero-srv-pill').forEach(function(b) {
-        b.className = 'hero-srv-pill flex items-center justify-center gap-1.5 px-2 py-2 rounded-xl border border-gray-200 bg-white hover:border-emerald-300 text-xs font-bold text-gray-700 cursor-pointer transition-all';
+        b.className = 'hero-srv-pill flex flex-col items-center justify-center gap-1 py-2 px-2 rounded-xl border-2 border-transparent hover:border-emerald-200 bg-transparent hover:bg-white/80 cursor-pointer transition-all';
       });
       if (btnEl) {
-        btnEl.className = 'hero-srv-pill flex items-center justify-center gap-1.5 px-2 py-2 rounded-xl border-2 border-emerald-500 bg-emerald-50/70 text-xs font-extrabold text-gray-900 cursor-pointer transition-all';
+        btnEl.className = 'hero-srv-pill flex flex-col items-center justify-center gap-1 py-2 px-2 rounded-xl border-2 border-emerald-500 bg-white shadow-xs cursor-pointer transition-all';
       }
     }
   </script>
