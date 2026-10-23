@@ -20,7 +20,13 @@ const PUBLIC_URL = (process.env.PUBLIC_URL || `http://localhost:${PORT}`).replac
 const SWEEPR_CRM_URL = (process.env.SWEEPR_CRM_URL || 'http://localhost:8788').replace(/\/+$/, '');
 const SWEEPR_CRM_API_KEY = (process.env.SWEEPR_CRM_API_KEY || '').trim();
 const ALLOW_DEMO_ACCOUNT = process.env.ALLOW_DEMO_ACCOUNT === 'true' && process.env.NODE_ENV !== 'production';
-const SESSION_SECRET = (process.env.SESSION_SECRET || '').trim() || crypto.randomBytes(32).toString('hex');
+const SESSION_SECRET =
+  (process.env.SESSION_SECRET || '').trim() ||
+  (process.env.LICENSE_PRIVATE_KEY_B64
+    ? crypto.createHash('sha256').update(`sweepr-session:${process.env.LICENSE_PRIVATE_KEY_B64}`).digest('hex')
+    : (process.env.CRM_ADMIN_PASSWORD
+      ? crypto.createHash('sha256').update(`sweepr-session:${process.env.CRM_ADMIN_PASSWORD}`).digest('hex')
+      : crypto.randomBytes(32).toString('hex')));
 const TRUST_PROXY = process.env.TRUST_PROXY === 'true' || Boolean(process.env.RAILWAY_ENVIRONMENT);
 const MAX_BODY_BYTES = 64 * 1024;
 const MAX_LOCAL_ACCOUNTS = 10000;
@@ -41,7 +47,6 @@ const ALLOWED_STATIC_EXTENSIONS = new Set([
   '.html',
   '.css',
   '.js',
-  '.json',
   '.xml',
   '.txt',
   '.svg',
@@ -143,6 +148,23 @@ function resolveTrustedOrigin(req) {
   return PUBLIC_URL;
 }
 
+function isSameOriginOrTrusted(req) {
+  const fetchSite = req?.headers?.['sec-fetch-site'];
+  if (fetchSite === 'cross-site') return false;
+
+  const rawOrigin = req?.headers?.origin;
+  if (rawOrigin === 'null') return false;
+  if (rawOrigin) {
+    const trusted = resolveTrustedOrigin(req);
+    return rawOrigin.replace(/\/+$/, '') === trusted.replace(/\/+$/, '');
+  }
+  if (fetchSite === 'same-origin' || fetchSite === 'same-site' || fetchSite === 'none') {
+    return true;
+  }
+  const ct = String(req?.headers?.['content-type'] || '').toLowerCase();
+  return ct.startsWith('application/json') || Boolean(req?.headers?.['x-requested-with']);
+}
+
 function getClientIp(req) {
   if (TRUST_PROXY) {
     if (process.env.TRUST_CLOUDFLARE === 'true') {
@@ -168,6 +190,14 @@ function checkRateLimit(req, bucketName, maxRequests = 30, windowMs = 60000) {
     if (rateLimitBuckets.size >= 10000) {
       for (const [k, v] of rateLimitBuckets.entries()) {
         if (now > v.resetAt) rateLimitBuckets.delete(k);
+      }
+      if (rateLimitBuckets.size >= 10000) {
+        for (const [k, v] of rateLimitBuckets.entries()) {
+          if (v.count <= 1) {
+            rateLimitBuckets.delete(k);
+            if (rateLimitBuckets.size < 9000) break;
+          }
+        }
       }
       if (rateLimitBuckets.size >= 10000) {
         const oldestKey = rateLimitBuckets.keys().next().value;
@@ -384,7 +414,8 @@ async function stripeRequest(method, endpoint, params) {
   let url = `https://api.stripe.com/v1/${cleanEndpoint}`;
   const headers = {
     Authorization: `Bearer ${STRIPE_SECRET_KEY}`,
-    'Stripe-Version': '2024-06-20'
+    'Stripe-Version': '2024-06-20',
+    'User-Agent': 'SweeprVPN/2.5 (+https://sweeprvpn.com)'
   };
   const fetchOpts = { method, headers };
 
@@ -3184,6 +3215,9 @@ self.addEventListener('fetch', e => {
 
   // Customer Portal Logout
   if (pathname === '/api/logout' && req.method === 'POST') {
+    if (!isSameOriginOrTrusted(req)) {
+      return sendJson(res, 403, { ok: false, error: 'forbidden_cross_site' }, {}, req);
+    }
     const isHttps = PUBLIC_URL.startsWith('https://') || req.headers['x-forwarded-proto'] === 'https';
     return sendJson(
       res,
@@ -3332,6 +3366,7 @@ self.addEventListener('fetch', e => {
 
   // Customer Portal 1-Click Add-on Upgrade ("wifi_radar")
   if (pathname === '/api/portal/purchase-addon' && req.method === 'POST') {
+    if (!isSameOriginOrTrusted(req)) return sendJson(res, 403, { error: 'forbidden_cross_site' }, {}, req);
     const sess = verifySessionCookie(req);
     if (!sess) return sendJson(res, 401, { error: 'unauthorized' }, {}, req);
     const acc = accountsById.get(sess.accountId) || (sess.email ? accountsByEmail.get(sess.email) : null);
@@ -3416,6 +3451,7 @@ self.addEventListener('fetch', e => {
 
   // Customer Portal Cancel Subscription at Period End
   if (pathname === '/api/portal/cancel-subscription' && req.method === 'POST') {
+    if (!isSameOriginOrTrusted(req)) return sendJson(res, 403, { error: 'forbidden_cross_site' }, {}, req);
     const sess = verifySessionCookie(req);
     if (!sess) return sendJson(res, 401, { error: 'unauthorized' }, {}, req);
     const acc = accountsById.get(sess.accountId) || (sess.email ? accountsByEmail.get(sess.email) : null);
@@ -3467,6 +3503,7 @@ self.addEventListener('fetch', e => {
 
   // Customer Portal Reactivate Subscription
   if (pathname === '/api/portal/reactivate-subscription' && req.method === 'POST') {
+    if (!isSameOriginOrTrusted(req)) return sendJson(res, 403, { error: 'forbidden_cross_site' }, {}, req);
     const sess = verifySessionCookie(req);
     if (!sess) return sendJson(res, 401, { error: 'unauthorized' }, {}, req);
     const acc = accountsById.get(sess.accountId) || (sess.email ? accountsByEmail.get(sess.email) : null);
@@ -3826,14 +3863,11 @@ self.addEventListener('fetch', e => {
       if (crmRes && crmRes.otpSent) emailed = true;
     } catch {}
 
-    if (!emailed && !localAcc) {
-      return sendJson(res, 404, { ok: false, error: 'not_found', message: 'No active SWEEPR VPN subscription was found for that email address.' }, {}, req);
-    }
-
+    // Anti-enumeration defense: Return uniform confirmation regardless of account existence
     return sendJson(res, 200, {
       ok: true,
       sent: true,
-      message: `We've sent your activation code & license details to ${email}. Check your inbox (and spam folder).`
+      message: `If an active SWEEPR VPN subscription is registered to ${email}, we have sent your activation code & license details. Check your inbox (and spam folder).`
     }, {}, req);
   }
 
