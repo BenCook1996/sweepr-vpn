@@ -61,15 +61,14 @@ async fn disconnect_vpn() -> Result<sweepr_tunnel::TunnelStatus, String> {
 fn set_compact(window: tauri::WebviewWindow, compact: bool) -> Result<(), String> {
     let r = if compact {
         window
-            .set_min_size(Some(LogicalSize::new(480.0, 600.0)))
-            .and_then(|_| window.set_size(LogicalSize::new(560.0, 700.0)))
+            .set_min_size(Some(LogicalSize::new(340.0, 480.0)))
+            .and_then(|_| window.set_size(LogicalSize::new(380.0, 540.0)))
             .and_then(|_| window.set_always_on_top(true))
     } else {
         window
             .set_always_on_top(false)
-            .and_then(|_| window.set_min_size(Some(LogicalSize::new(1020.0, 680.0))))
+            .and_then(|_| window.set_min_size(Some(LogicalSize::new(480.0, 520.0))))
             .and_then(|_| window.set_size(LogicalSize::new(1160.0, 770.0)))
-            .and_then(|_| window.center())
     };
     r.map_err(|e| e.to_string())
 }

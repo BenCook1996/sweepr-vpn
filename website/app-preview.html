@@ -3,41 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>SWEEPR VPN Interactive App Preview &amp; Wi-Fi Radar</title>
-<meta name="description" content="Experience SWEEPR VPN directly in your browser: 1-click 10Gbps WireGuard encryption, instant 30-second Home Wi-Fi LAN device audit, and Smart-TV ACR telemetry blocking." />
-<link rel="canonical" href="https://sweeprvpn.com/app" />
-<link rel="icon" type="image/svg+xml" href="/logo-emerald.svg?v=5" />
-<link rel="icon" type="image/png" sizes="64x64" href="/favicon.png?v=5" />
-<link rel="shortcut icon" href="/favicon.ico?v=5" />
-<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-<meta property="og:type" content="website" />
-<meta property="og:site_name" content="SWEEPR VPN" />
-<meta property="og:locale" content="en_GB" />
-<meta property="og:url" content="https://sweeprvpn.com/app" />
-<meta property="og:title" content="SWEEPR VPN Interactive App Preview &amp; Wi-Fi Radar" />
-<meta property="og:description" content="Test 1-click WireGuard connections, 30-second Home Wi-Fi Scanner, and Smart-TV ACR spy blocking in your browser." />
-<meta property="og:image" content="https://sweeprvpn.com/og-image.png" />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:url" content="https://sweeprvpn.com/app" />
-<meta name="twitter:title" content="SWEEPR VPN Interactive App Preview &amp; Wi-Fi Radar" />
-<meta name="twitter:description" content="Interactive demo of SWEEPR VPN: 10Gbps WireGuard client, 30s Wi-Fi device audit, and Smart-TV ACR shield." />
-<meta name="twitter:image" content="https://sweeprvpn.com/og-image.png" />
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "SWEEPR VPN Pro Desktop App",
-  "operatingSystem": "Windows 10, Windows 11, macOS, Linux, iOS, Android",
-  "applicationCategory": "SecurityApplication",
-  "fileSize": "3.7MB",
-  "downloadUrl": "https://sweeprvpn.com/download",
-  "offers": {
-    "@type": "Offer",
-    "price": "1.99",
-    "priceCurrency": "GBP"
-  }
-}
-</script>
+<title>SWEEPR VPN</title>
 <style>
   :root {
     --e400:#34d399; --e500:#10b981; --e600:#059669; --e700:#047857; --mint:#a7f3d0; --mint50:#ecfdf5;
@@ -52,7 +18,7 @@
   }
   * { box-sizing:border-box; margin:0; padding:0; }
   html, body { height:100%; overflow:hidden; user-select:none; }
-  body { font-family:"Segoe UI Variable","Segoe UI",-apple-system,Inter,Roboto,sans-serif; font-size:14px; color:var(--ink); background:var(--bg); -webkit-font-smoothing:antialiased; transition:background .2s,color .2s; }
+  body { font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI Variable","Segoe UI",Inter,Roboto,sans-serif; font-size:14px; color:var(--ink); background:var(--bg); -webkit-font-smoothing:antialiased; transition:background .2s,color .2s; }
   button { font:inherit; cursor:pointer; border:0; background:none; color:inherit; }
   :focus-visible { outline:2px solid var(--e500); outline-offset:2px; }
   .hidden { display:none !important; }
@@ -80,15 +46,17 @@
   .rail .spacer { flex:1; }
 
   /* Main column */
-  .main { padding:20px 22px; overflow-y:auto; }
-  .main::-webkit-scrollbar { width:6px; } .main::-webkit-scrollbar-thumb { background:rgba(148,163,184,.35); border-radius:9px; }
-  h1.view-title { font-size:22px; font-weight:900; letter-spacing:-.4px; }
+  .main { padding:18px 20px; overflow-y:auto; scrollbar-width:thin; scrollbar-color:rgba(148,163,184,.35) transparent; }
+  h1.view-title { font-size:21px; font-weight:900; letter-spacing:-.4px; }
   .view-sub { color:var(--muted); font-size:13px; margin-top:2px; }
-  h3.sec { font-size:15px; font-weight:800; margin:18px 0 10px; display:flex; justify-content:space-between; align-items:center; }
+  h3.sec { font-size:14.5px; font-weight:800; margin:16px 0 9px; display:flex; justify-content:space-between; align-items:center; }
   h3.sec span { font-size:12px; font-weight:700; color:var(--accent); }
-  .search { display:flex; align-items:center; gap:10px; border:1.5px solid var(--line); border-radius:14px; padding:0 14px; height:44px; color:var(--muted); background:var(--card); }
-  .search input { flex:1; border:0; outline:0; background:transparent; font:inherit; font-size:14px; color:var(--ink); }
+  .search { display:flex; align-items:center; gap:10px; border:1.5px solid var(--line); border-radius:14px; padding:0 12px 0 14px; height:42px; color:var(--muted); background:var(--card); }
+  .search input { flex:1; border:0; outline:0; background:transparent; font:inherit; font-size:13.5px; color:var(--ink); }
   .search:focus-within { border-color:var(--e500); }
+  .kbd-hint { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:10.5px; font-weight:800; color:var(--muted); background:var(--card2); border:1px solid var(--line); border-radius:6px; padding:2px 6px; cursor:pointer; user-select:none; }
+  .kbd-hint:hover { color:var(--ink); border-color:var(--e500); }
+  .loc-wrap.kb-focus { outline:2px solid var(--e500); background:var(--sel); }
 
   /* Country filter tabs (All / Fastest / Saved) */
   .filter-tabs { display:flex; gap:6px; margin:12px 0 10px; }
@@ -242,6 +210,34 @@
   .qr-box { background:#fff; border:1.5px solid var(--line); border-radius:16px; padding:14px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; margin:4px 0; }
   .qr-box svg, .qr-box canvas { width:180px; height:180px; display:block; }
   .wg-code-preview { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:11.5px; background:var(--card2); border:1px solid var(--line); border-radius:12px; padding:10px 12px; color:var(--ink3); white-space:pre-wrap; word-break:break-all; max-height:120px; overflow-y:auto; user-select:text; }
+
+  /* Desktop Command Palette (Ctrl/Cmd+K) & Custom Right-Click Context Menu */
+  .cmd-sheet { width:100%; max-width:500px; background:var(--card); border:1px solid var(--line); border-radius:20px; padding:12px; box-shadow:0 30px 70px rgba(15,23,42,.4); display:flex; flex-direction:column; gap:8px; }
+  .cmd-input-row { display:flex; align-items:center; gap:10px; padding:6px 10px 10px; border-bottom:1px solid var(--line); color:var(--muted); }
+  .cmd-input-row input { flex:1; border:0; outline:0; background:transparent; font:inherit; font-size:14.5px; font-weight:700; color:var(--ink); }
+  .cmd-list { max-height:310px; overflow-y:auto; display:flex; flex-direction:column; gap:2px; scrollbar-width:thin; }
+  .cmd-item { display:flex; align-items:center; justify-content:space-between; gap:10px; width:100%; text-align:left; padding:9px 11px; border-radius:11px; font-size:13px; font-weight:700; color:var(--ink); transition:background .1s; }
+  .cmd-item:hover, .cmd-item.active { background:var(--sel); color:var(--accent); }
+  .cmd-item .cmd-k { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:11px; color:var(--muted); background:var(--card2); border:1px solid var(--line); padding:2px 6px; border-radius:6px; }
+
+  .ctx-menu { position:fixed; z-index:250; min-width:215px; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:6px; box-shadow:0 16px 40px rgba(15,23,42,.25); display:none; flex-direction:column; gap:2px; }
+  .ctx-menu.open { display:flex; }
+  .ctx-item { display:flex; align-items:center; justify-content:space-between; gap:14px; width:100%; text-align:left; padding:8px 10px; border-radius:9px; font-size:12.5px; font-weight:700; color:var(--ink); }
+  .ctx-item:hover { background:var(--sel); color:var(--accent); }
+  .ctx-item span.k { font-size:11px; color:var(--muted); font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+  .ctx-sep { height:1px; background:var(--line); margin:3px 4px; }
+
+  /* Desktop Information Density & Half-Screen Snap Layout Support */
+  @media (min-width: 821px) {
+    #recBlock > h3.sec, #recBlock > .rec-grid { display:none; }
+    #recBlock > .alert { margin-top:0; margin-bottom:12px; }
+  }
+  @media (min-width: 821px) and (max-width: 1000px) {
+    .app { grid-template-columns:60px 1fr 310px; }
+    .panel { padding:18px; margin:10px 10px 10px 0; }
+    .h-big { font-size:25px; }
+    .main { padding:16px; }
+  }
 
   .toast { position:fixed; bottom:22px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--ink); color:var(--bg); padding:10px 18px; border-radius:999px; font-size:13px; font-weight:700; opacity:0; transition:all .25s; z-index:200; pointer-events:none; max-width:92vw; text-align:center; }
   .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
@@ -400,7 +396,7 @@
           <button onclick="openCountrySheet(false)" style="font-size:18px;color:var(--muted);padding:4px 8px" aria-label="Close country list">✕</button>
         </div>
 
-        <div class="search" style="margin-top:14px"><svg width="17" height="17"><use href="#i-search"/></svg><input id="search" placeholder="Search country or city…" oninput="renderList()" aria-label="Search country or city" /></div>
+        <div class="search" style="margin-top:14px"><svg width="17" height="17"><use href="#i-search"/></svg><input id="search" placeholder="Search country or city…" oninput="renderList()" aria-label="Search country or city" /><kbd class="kbd-hint desktop-only" onclick="openCmdPalette()" title="Command Palette (Ctrl+K)" style="cursor:pointer">Ctrl K</kbd></div>
 
         <div class="filter-tabs" role="tablist" aria-label="Filter countries">
           <button class="ftab on" id="ftab-all" onclick="setCountryFilter('all')">All (8)</button>
@@ -610,6 +606,21 @@
   </div>
 </div>
 
+<!-- ======================= DESKTOP COMMAND PALETTE (Ctrl/Cmd + K) ======================= -->
+<div class="backdrop" id="cmdModal" onclick="closeCmdPalette()">
+  <div class="cmd-sheet" onclick="event.stopPropagation()">
+    <div class="cmd-input-row">
+      <svg width="17" height="17" style="color:var(--accent);flex-shrink:0"><use href="#i-search"/></svg>
+      <input id="cmdInput" placeholder="Type a country, city, or command…" oninput="renderCmdList()" onkeydown="handleCmdKey(event)" autocomplete="off" aria-label="Command palette search" />
+      <kbd class="kbd-hint" onclick="closeCmdPalette()" style="cursor:pointer">ESC</kbd>
+    </div>
+    <div class="cmd-list" id="cmdList"></div>
+  </div>
+</div>
+
+<!-- ======================= DESKTOP CUSTOM RIGHT-CLICK MENU ======================= -->
+<div class="ctx-menu" id="ctxMenu" role="menu"></div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -710,7 +721,7 @@
     const right = on && state.connected ? '<span class="pill ok">Connected ✓</span>'
       : '<span class="ping-badge">' + s.ping + ' ms</span>' + (s.rating === 'Great' ? '<span class="pill ok">Fast</span>' : '<span class="pill warn">HD</span>');
     const favBtn = compact ? '' : '<button class="fav-btn' + (isFav ? ' on' : '') + '" onclick="toggleFav(\'' + esc(s.code) + '\', event)" aria-label="Save favorite country" title="Save to favorites">' + (isFav ? '★' : '☆') + '</button>';
-    return '<div class="loc-wrap' + (on ? ' on' : '') + '">' +
+    return '<div class="loc-wrap' + (on ? ' on' : '') + '" data-code="' + esc(s.code) + '" oncontextmenu="showLocCtx(event, \'' + esc(s.code) + '\')">' +
       '<button class="loc" onclick="pick(\'' + esc(s.code) + '\')">' +
       '<span class="flag" data-flag="' + esc(s.flag) + '"></span>' +
       '<div class="grow"><div class="t">' + esc(s.country) + '</div><div class="s">' + esc(s.city) + ' · ' + esc(s.desc) + '</div></div>' + right + '</button>' +
@@ -1425,8 +1436,224 @@
     renderList(); renderDevices(); paintFlags();
   }
 
+  /* ---------- Desktop Command Palette (Ctrl/Cmd+K), Right-Click Menu & Keyboard Engine ---------- */
+  const isMacOS = /Mac|iPhone|iPad/i.test(navigator.platform || navigator.userAgent || '');
+  const modKeyLabel = isMacOS ? '⌘' : 'Ctrl';
+  let cmdIndex = 0;
+  let cmdFiltered = [];
+  let searchKbIndex = -1;
+
+  function getCmdActions() {
+    const serverItems = SERVERS.map(s => ({
+      id: 'srv-' + s.code,
+      title: 'Connect to ' + s.country + ' (' + s.city + ')',
+      sub: s.ping + ' ms · ' + s.desc,
+      flag: s.flag,
+      kbd: s.code === state.code ? 'Selected' : (s.ping + ' ms'),
+      run: () => { pick(s.code); if (!state.connected) toggleConnect(true); }
+    }));
+    const cmdItems = [
+      { id: 'act-toggle', title: state.connected ? 'Pause VPN Protection' : 'Connect to ' + cur().city, sub: 'Toggle WireGuard tunnel immediately', kbd: modKeyLabel + '+↵', run: () => toggleConnect() },
+      { id: 'act-scan', title: 'Scan Home Wi-Fi & Smart TVs', sub: 'Audit devices and ACR telemetry on your network', kbd: modKeyLabel + '+R', run: () => { go('wifi'); scanWifi(); } },
+      { id: 'act-mini', title: document.body.classList.contains('is-compact') ? 'Expand to Full Window' : 'Switch to Mini Widget Mode', sub: 'Compact 380×540 desktop controller', kbd: modKeyLabel + '+M', run: () => setCompact(!document.body.classList.contains('is-compact')) },
+      { id: 'act-wg', title: 'Phone Setup (iOS / Android WireGuard QR)', sub: 'Generate QR code or download .conf profile', kbd: 'QR', run: () => openMobileWireGuardModal() },
+      { id: 'act-theme', title: 'Toggle Dark / Light Theme', sub: 'Switch interface color appearance', kbd: 'Theme', run: () => toggleTheme() },
+      { id: 'act-key', title: state.pro ? 'Manage Active License Key' : 'Enter License Key / Upgrade to Pro', sub: state.pro ? 'Copy or update your 10-device key' : 'Unlock all 8 countries & Smart-TV shields', kbd: 'Key', run: () => openActivate() }
+    ];
+    return serverItems.concat(cmdItems);
+  }
+
+  function openCmdPalette() {
+    hideCtxMenu();
+    $('cmdModal').classList.add('open');
+    $('cmdInput').value = '';
+    cmdIndex = 0;
+    renderCmdList();
+    setTimeout(() => $('cmdInput').focus(), 30);
+  }
+  function closeCmdPalette() {
+    $('cmdModal').classList.remove('open');
+  }
+  function renderCmdList() {
+    const q = ($('cmdInput').value || '').trim().toLowerCase();
+    const all = getCmdActions();
+    cmdFiltered = all.filter(it => !q || (it.title + ' ' + it.sub).toLowerCase().includes(q));
+    if (cmdIndex >= cmdFiltered.length) cmdIndex = 0;
+    $('cmdList').innerHTML = cmdFiltered.length ? cmdFiltered.map((it, i) =>
+      '<button class="cmd-item' + (i === cmdIndex ? ' active' : '') + '" onclick="execCmdItem(' + i + ')" onmouseenter="cmdIndex=' + i + ';highlightCmdItems()">' +
+      (it.flag ? '<span class="flag" style="width:24px;height:24px" data-flag="' + esc(it.flag) + '"></span>' : '<div class="ico e" style="width:24px;height:24px;border-radius:7px"><svg width="14" height="14"><use href="#i-bolt"/></svg></div>') +
+      '<div class="grow"><div class="t" style="font-size:13px">' + esc(it.title) + '</div><div class="s" style="font-size:11.5px">' + esc(it.sub) + '</div></div>' +
+      '<kbd class="kbd-hint">' + esc(it.kbd) + '</kbd></button>'
+    ).join('') : '<div class="s" style="padding:16px;text-align:center">No matching countries or commands</div>';
+    paintFlags($('cmdList'));
+  }
+  function highlightCmdItems() {
+    document.querySelectorAll('#cmdList .cmd-item').forEach((el, idx) => el.classList.toggle('active', idx === cmdIndex));
+  }
+  function execCmdItem(idx) {
+    const item = cmdFiltered[idx];
+    closeCmdPalette();
+    if (item && typeof item.run === 'function') item.run();
+  }
+  function handleCmdKey(e) {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (cmdFiltered.length) { cmdIndex = (cmdIndex + 1) % cmdFiltered.length; highlightCmdItems(); }
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (cmdFiltered.length) { cmdIndex = (cmdIndex - 1 + cmdFiltered.length) % cmdFiltered.length; highlightCmdItems(); }
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      execCmdItem(cmdIndex);
+    } else if (e.key === 'Escape') {
+      e.preventDefault();
+      closeCmdPalette();
+    }
+  }
+
+  /* ---------- Custom Desktop Right-Click Context Menu ---------- */
+  function hideCtxMenu() {
+    const m = $('ctxMenu');
+    if (m) m.classList.remove('open');
+  }
+  function positionAndShowCtx(e, html) {
+    e.preventDefault();
+    e.stopPropagation();
+    const m = $('ctxMenu');
+    m.innerHTML = html;
+    m.classList.add('open');
+    const x = Math.min(e.clientX, window.innerWidth - 230);
+    const y = Math.min(e.clientY, window.innerHeight - 250);
+    m.style.left = Math.max(8, x) + 'px';
+    m.style.top = Math.max(8, y) + 'px';
+  }
+  function showLocCtx(e, code) {
+    const s = SERVERS.find(x => x.code === code) || cur();
+    const isFav = savedFavs.includes(s.code);
+    positionAndShowCtx(e,
+      '<button class="ctx-item" onclick="hideCtxMenu();pick(\'' + esc(s.code) + '\');if(!state.connected)toggleConnect(true)"><span>Connect to ' + esc(s.city) + '</span><span class="k">' + s.ping + ' ms</span></button>' +
+      '<button class="ctx-item" onclick="hideCtxMenu();toggleFav(\'' + esc(s.code) + '\')"><span>' + (isFav ? '★ Remove from Saved' : '☆ Save to Favorites') + '</span></button>' +
+      '<button class="ctx-item" onclick="hideCtxMenu();state.code=\'' + esc(s.code) + '\';openMobileWireGuardModal()"><span>Generate WireGuard .conf</span><span class="k">QR</span></button>' +
+      '<div class="ctx-sep"></div>' +
+      '<button class="ctx-item" onclick="hideCtxMenu();openCmdPalette()"><span>Command Palette…</span><span class="k">' + modKeyLabel + '+K</span></button>'
+    );
+  }
+  document.addEventListener('contextmenu', e => {
+    if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+    if (e.target && e.target.closest && e.target.closest('.loc-wrap')) return;
+    positionAndShowCtx(e,
+      '<button class="ctx-item" onclick="hideCtxMenu();toggleConnect()"><span>' + (state.connected ? 'Pause VPN Protection' : 'Connect to ' + esc(cur().city)) + '</span><span class="k">' + modKeyLabel + '+↵</span></button>' +
+      '<button class="ctx-item" onclick="hideCtxMenu();openCmdPalette()"><span>Command Palette…</span><span class="k">' + modKeyLabel + '+K</span></button>' +
+      '<button class="ctx-item" onclick="hideCtxMenu();go(\'wifi\');scanWifi()"><span>Scan Home Wi-Fi</span><span class="k">' + modKeyLabel + '+R</span></button>' +
+      '<button class="ctx-item" onclick="hideCtxMenu();setCompact(!document.body.classList.contains(\'is-compact\'))"><span>Toggle Mini Widget</span><span class="k">' + modKeyLabel + '+M</span></button>' +
+      '<div class="ctx-sep"></div>' +
+      '<button class="ctx-item" onclick="hideCtxMenu();toggleTheme()"><span>Switch Dark / Light Theme</span></button>'
+    );
+  });
+  document.addEventListener('click', hideCtxMenu);
+
+  /* ---------- Global Keyboard Shortcuts & Arrow-Key Country Navigation ---------- */
+  document.addEventListener('keydown', e => {
+    const mod = e.ctrlKey || e.metaKey;
+    const tag = (e.target && e.target.tagName) || '';
+    const inInput = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
+
+    if (mod && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      if ($('cmdModal').classList.contains('open')) closeCmdPalette();
+      else openCmdPalette();
+      return;
+    }
+    if (mod && e.key === 'Enter') {
+      e.preventDefault();
+      toggleConnect();
+      return;
+    }
+    if (mod && e.key.toLowerCase() === 'm') {
+      e.preventDefault();
+      setCompact(!document.body.classList.contains('is-compact'));
+      return;
+    }
+    if (mod && e.key.toLowerCase() === 'r') {
+      e.preventDefault();
+      go('wifi');
+      scanWifi();
+      return;
+    }
+    if (mod && (e.key === '1' || e.key === '2' || e.key === '3')) {
+      e.preventDefault();
+      go(e.key === '1' ? 'home' : e.key === '2' ? 'wifi' : 'account');
+      return;
+    }
+    if (e.key === 'Escape') {
+      hideCtxMenu();
+      if ($('cmdModal').classList.contains('open')) { closeCmdPalette(); return; }
+      if ($('modal').classList.contains('open')) { closeActivate(); return; }
+      if ($('wgModal').classList.contains('open')) { closeMobileWireGuardModal(); return; }
+      if (document.body.classList.contains('country-sheet-open')) { openCountrySheet(false); return; }
+      return;
+    }
+    if (!inInput && e.key === '/') {
+      e.preventDefault();
+      go('home');
+      $('search').focus();
+      return;
+    }
+    if (e.target === $('search') && (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'Enter')) {
+      const rows = Array.from(document.querySelectorAll('#locList .loc-wrap'));
+      if (!rows.length) return;
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        searchKbIndex = Math.min(rows.length - 1, searchKbIndex + 1);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        searchKbIndex = Math.max(0, searchKbIndex - 1);
+      } else if (e.key === 'Enter' && searchKbIndex >= 0 && rows[searchKbIndex]) {
+        e.preventDefault();
+        const code = rows[searchKbIndex].getAttribute('data-code');
+        if (code) pick(code);
+        return;
+      }
+      rows.forEach((r, idx) => r.classList.toggle('kb-focus', idx === searchKbIndex));
+    }
+  });
+
+  /* ---------- Global License Key Paste & Drag-and-Drop Auto-Activation ---------- */
+  function tryAutoDetectLicenseKey(rawText) {
+    const m = String(rawText || '').toUpperCase().match(/SWEEPR-[A-Z0-9-]{6,48}/);
+    if (m && m[0]) {
+      openActivate();
+      $('mCode').value = m[0];
+      activateKeyOnly();
+      return true;
+    }
+    return false;
+  }
+  document.addEventListener('paste', e => {
+    const tag = (e.target && e.target.tagName) || '';
+    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+    const text = (e.clipboardData && e.clipboardData.getData('text')) || '';
+    if (tryAutoDetectLicenseKey(text)) e.preventDefault();
+  });
+  document.addEventListener('dragover', e => { e.preventDefault(); });
+  document.addEventListener('drop', e => {
+    e.preventDefault();
+    const files = e.dataTransfer && e.dataTransfer.files;
+    if (files && files.length > 0) {
+      const reader = new FileReader();
+      reader.onload = ev => tryAutoDetectLicenseKey(ev.target && ev.target.result);
+      reader.readAsText(files[0]);
+    } else if (e.dataTransfer) {
+      tryAutoDetectLicenseKey(e.dataTransfer.getData('text'));
+    }
+  });
+
   try {
-    if (localStorage.getItem('sweepr_vpn_theme') === 'dark') toggleTheme();
+    document.querySelectorAll('.search .kbd-hint').forEach(el => { el.textContent = modKeyLabel + ' K'; });
+    const savedTheme = localStorage.getItem('sweepr_vpn_theme');
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      toggleTheme();
+    }
     const savedLang = localStorage.getItem('sweepr_vpn_lang') || '';
     if (savedLang && I18N[savedLang]) { $('lang').value = savedLang; setLang(savedLang); }
     const savedEmail = localStorage.getItem('sweepr_vpn_email') || '';
