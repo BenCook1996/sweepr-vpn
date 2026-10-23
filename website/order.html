@@ -681,7 +681,7 @@
                   </div>
                 </div>
                 <div id="stripeCardCvc" class="stripe-input-box hidden"></div>
-                <input type="text" id="fallbackCardCvc" inputmode="numeric" autocomplete="cc-csc" placeholder="123" maxlength="4"
+                <input type="password" id="fallbackCardCvc" inputmode="numeric" autocomplete="cc-csc" placeholder="•••" maxlength="4"
                   class="w-full p-2.5 sm:p-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all font-mono">
               </div>
             </div>
@@ -1144,8 +1144,11 @@
     // 1. Mount Live Stripe Elements (#stripeCardNumber, #stripeCardExpiry, #stripeCardCvc)
     function setupStripeElements(publishableKey) {
       try {
+        const CVC_MASK_FONT_URI = 'url(data:font/ttf;base64,AAEAAAAKAIAAAwAgT1MvMltme8AAAACsAAAAVmNtYXAAWyDqAAABBAAAAFxnbHlmBIMGNQAAAWAAAAA4aGVhZGESQ6EAAAGYAAAANmhoZWEE5AD+AAAB0AAAACRobXR4BRQAeAAAAfQAAAAMbG9jYQAAABwAAAIAAAAACG1heHAABQAKAAACCAAAACBuYW1lAtsXXQAAAigAAABccG9zdP+fADMAAAKEAAAAIAABAfQBkAAFAAAB9AH0AAD/nAH0AfQAAAD6ADIA+gAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAABTV1BSAEAAICAiAu7/BgAAAu4A+gAAAAEAAAAAAAAAAAABAAMAAQAAAAwABABQAAAACAAIAAIAAAAgADkgIv//AAAAIAAqICL////hAADf4AABAAAABgAAAAAAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgABAHgAvgF8AcIABwAAAQABAAEAAQAA+gCCAAAAAP9+/34AAAAAAcIAAP9+/34AAAAAAIIAggAAAAEAAAABAAAAAAAAXw889QALA+gAAAAAAAAAAAAAAAAAAAAAAAAAAAH0ArwAAAAIAAIAAAAAAAAAAQAAAu7/BgAAAfQAAAAAAfQAAQAAAAAAAAAAAAAAAAAAAAMB9AAAASwAAAH0AHgAAAAAAAAAHAABAAAAAwAIAAEAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAABQBCAAMAAQQJAAEAGgAAAAMAAQQJAAIAGgAAAAMAAQQJAAMAGgAAAAMAAQQJAAQAGgAAAAMAAQQJAAYAGgAAAFMAdwBlAGUAcAByAEMAdgBjAE0AYQBzAGsAAwAAAAAAAP+cADIAAAABAAAAAAAAAAAAAAAAAAAAAA==)';
         stripe = Stripe(publishableKey);
-        elements = stripe.elements();
+        elements = stripe.elements({
+          fonts: [{ family: 'SweeprCvcMask', src: CVC_MASK_FONT_URI, weight: '400' }]
+        });
 
         const elementStyles = {
           base: {
@@ -1159,9 +1162,21 @@
           }
         };
 
+        const cvcElementStyles = {
+          base: {
+            fontSize: '14px',
+            color: '#1f2937',
+            fontFamily: 'SweeprCvcMask, monospace',
+            '::placeholder': { color: '#9ca3af' }
+          },
+          invalid: {
+            color: '#ef4444'
+          }
+        };
+
         const cardNumberEl = elements.create('cardNumber', { style: elementStyles, showIcon: false });
         const cardExpiryEl = elements.create('cardExpiry', { style: elementStyles });
-        const cardCvcEl = elements.create('cardCvc', { style: elementStyles });
+        const cardCvcEl = elements.create('cardCvc', { style: cvcElementStyles, placeholder: '•••' });
 
         document.getElementById('stripeCardNumber').classList.remove('hidden');
         document.getElementById('fallbackCardNumber').classList.add('hidden');
