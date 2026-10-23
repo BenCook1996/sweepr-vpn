@@ -11,6 +11,6 @@
     "seo:validate": "node .agents/skills/vpn-seo-and-geo/scripts/pseo_and_seo_validator.mjs --action validate"
   },
   "engines": {
-    "node": ">=22.23.4"
+    "node": ">=24.0.0"
   }
 }
