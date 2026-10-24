@@ -2281,7 +2281,7 @@ self.addEventListener('fetch', e => {
     pathname !== '/dashboard' &&
     pathname !== '/app' &&
     pathname !== '/app-preview' &&
-    !(pathname === '/download' && (urlObj.searchParams.get('key') || urlObj.searchParams.get('code') || urlObj.searchParams.get('autoconf') === '1')) &&
+    pathname !== '/download' &&
     (!path.extname(pathname) || path.extname(pathname).toLowerCase() === '.html')
   ) {
     const cookies = req.headers.cookie || '';
