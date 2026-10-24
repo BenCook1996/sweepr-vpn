@@ -758,7 +758,7 @@ namespace SweeprVpnApp
         public static int RunSelfTest(string outFile)
         {
             string html = LoadEmbeddedTextResource("app-ui.html");
-            if ((!html.Contains("Search country or city") && !html.Contains("Search for a country")) || (!html.Contains("Connect") && !html.Contains("Enable")) || !html.Contains("view-wifi") || !html.Contains("is-compact") || !html.Contains("cmdModal") || !html.Contains("ctxMenu"))
+            if ((!html.Contains("Search country or city") && !html.Contains("Search for a country")) || (!html.Contains("Connect") && !html.Contains("Enable")) || !html.Contains("view-wifi") || !html.Contains("is-compact") || !html.Contains("cmdModal") || !html.Contains("ctxMenu") || !html.Contains("toggleDesktopReverseQr") || !html.Contains("openDesktopPairOutQr"))
                 throw new Exception("Embedded WebView2 HTML UI missing Plain-English or Desktop controls.");
 
             using (MainForm form = new MainForm(null, null, true))
@@ -786,7 +786,7 @@ namespace SweeprVpnApp
                 if (!form.ActivateLicense("selftest@sweeprvpn.com", "123456") || !form.IsPro)
                     throw new Exception("ActivateLicense failed.");
 
-                string json = "{\"ok\":true,\"engine\":\"WebView2_Chromium_HighDPI\",\"faviconEmbedded\":true,\"systemTrayReady\":true,\"commandPaletteReady\":true,\"desktopSelfTest\":\"PASSED\",\"serversCount\":" + form.Servers.Count + ",\"lanDevicesFound\":" + form.DiscoveredLanDevices.Count + "}";
+                string json = "{\"ok\":true,\"engine\":\"WebView2_Chromium_HighDPI\",\"faviconEmbedded\":true,\"systemTrayReady\":true,\"commandPaletteReady\":true,\"qrDeviceLinkingReady\":true,\"desktopSelfTest\":\"PASSED\",\"serversCount\":" + form.Servers.Count + ",\"lanDevicesFound\":" + form.DiscoveredLanDevices.Count + "}";
                 if (!string.IsNullOrEmpty(outFile))
                 {
                     File.WriteAllText(outFile, json, Encoding.UTF8);

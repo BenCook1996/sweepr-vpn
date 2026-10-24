@@ -514,7 +514,26 @@
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
           <button class="btn-go" style="flex:1;font-size:14px;padding:12px" onclick="openActivate()" id="accBtn">Enter license key or upgrade</button>
+          <button class="btn-soft" onclick="openDesktopPairOutQr()" id="accLinkQrBtn" title="Link a phone, tablet, or computer by scanning a one-time QR code">📱 Link Device via QR</button>
           <button class="btn-soft" onclick="openMobileWireGuardModal()" title="Set up iOS or Android phone via WireGuard QR or .conf profile"><svg width="16" height="16"><use href="#i-dev"/></svg><span data-i18n="phoneSetupBtn">Phone Setup (iOS / Android)</span></button>
+        </div>
+        <!-- Flow A: Outgoing 120s One-Time Account Pairing QR Drawer + Linked Devices Slot Manager -->
+        <div id="accPairDrawer" class="hidden" style="margin-top:12px;padding:14px;border-radius:12px;background:var(--card2);border:1px solid var(--line);text-align:center">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <span class="t" style="font-size:12.5px">Scan with Phone or Tablet to Link Account</span>
+            <button type="button" class="s" style="font-weight:800;cursor:pointer" onclick="closeDesktopPairOutQr()">✕ Close</button>
+          </div>
+          <div class="qr-box" id="accPairQrBox" style="padding:12px;margin:0 auto;max-width:240px">
+            <div class="s">Generating 120s one-time pairing QR…</div>
+          </div>
+          <div class="s" id="accPairTimer" style="margin-top:8px;font-weight:800;color:var(--accent)">Single-use token · Expires in 02:00</div>
+        </div>
+        <div id="accDevicesBar" class="hidden" style="margin-top:12px;padding:10px 12px;border-radius:12px;background:var(--card2);border:1px solid var(--line)">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+            <span class="s" style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.4px">Linked Devices</span>
+            <span class="pill ok" id="accDevicesCountPill" style="padding:2px 8px;font-size:11px">1 / 10 active</span>
+          </div>
+          <div id="accDevicesList" style="display:flex;flex-direction:column;gap:6px"></div>
         </div>
       </div>
 
@@ -627,8 +646,16 @@
         <button type="button" class="btn-soft" onclick="pasteIntoKeyBox()" title="Paste from clipboard" style="padding:8px 11px;min-height:38px;white-space:nowrap;font-weight:800">Paste</button>
         <button class="btn-activate-key" id="mActivateKeyBtn" onclick="activateKeyOnly()">Activate Key</button>
       </div>
-      <div style="text-align:right">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+        <button type="button" onclick="toggleDesktopReverseQr()" style="font-size:11.5px;font-weight:800;color:var(--accent)">📱 Link by scanning QR with phone ›</button>
         <button type="button" onclick="toggleForgotKeyBox()" style="font-size:11.5px;font-weight:800;color:var(--accent)">Forgot key? Email it ›</button>
+      </div>
+      <div id="mReverseQrBox" class="hidden" style="background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center">
+        <div style="font-size:12px;font-weight:800;margin-bottom:6px">Scan with your Phone Camera or Customer Portal</div>
+        <div id="mReverseQrSvg" style="background:#fff;border-radius:10px;padding:8px;display:inline-block;border:1px solid var(--line)">
+          <span class="s" style="color:#475569">Generating pairing code…</span>
+        </div>
+        <div class="s" id="mReverseQrTimer" style="margin-top:6px;font-weight:800;color:var(--accent)">Waiting for phone approval (02:00)…</div>
       </div>
       <div id="mForgotBox" class="hidden" style="background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;gap:8px;align-items:center">
         <input class="input" id="mForgotEmail" type="email" placeholder="Enter your purchase email…" style="padding:8px 11px;font-size:12.5px" onkeydown="if(event.key==='Enter')resendLostLicenseKey()" />
@@ -1262,7 +1289,251 @@
     $('modal').classList.add('open');
     setTimeout(() => $('mCode').focus(), 50);
   }
-  function closeActivate() { $('modal').classList.remove('open'); }
+  function closeActivate() {
+    stopDesktopReverseQr();
+    $('modal').classList.remove('open');
+  }
+  function getOrCreateDesktopDeviceId() {
+    try {
+      let id = localStorage.getItem('sweepr_vpn_device_id');
+      if (!id) {
+        const rand = Math.random().toString(16).slice(2, 10) + Date.now().toString(16).slice(-4);
+        id = 'dev_vpn_' + rand;
+        localStorage.setItem('sweepr_vpn_device_id', id);
+      }
+      return id;
+    } catch (e) {
+      return 'dev_vpn_desktop';
+    }
+  }
+  function getDesktopDeviceMeta() {
+    const ua = navigator.userAgent || '';
+    let os = 'windows', name = 'Windows PC';
+    if (/iPhone|iPad|iPod/i.test(ua)) { os = 'ios'; name = 'iPhone / iPad'; }
+    else if (/Android/i.test(ua)) { os = 'android'; name = 'Android Phone'; }
+    else if (/Mac/i.test(ua)) { os = 'macos'; name = 'Mac'; }
+    else if (/Linux/i.test(ua)) { os = 'linux'; name = 'Linux PC'; }
+    return { id: getOrCreateDesktopDeviceId(), name: 'SWEEPR ' + name, os };
+  }
+  function getApiCandidateUrls(path) {
+    const list = [];
+    if ((location.protocol === 'http:' || location.protocol === 'https:') && location.hostname !== 'app.sweeprvpn.local') {
+      list.push(path);
+    }
+    list.push(
+      'http://localhost:3090' + path,
+      'http://localhost:8080' + path,
+      'https://sweeprvpn.com' + path
+    );
+    return list;
+  }
+  let reverseQrPollTimer = null;
+  let reverseQrCountdownTimer = null;
+  function stopDesktopReverseQr() {
+    if (reverseQrPollTimer) { clearInterval(reverseQrPollTimer); reverseQrPollTimer = null; }
+    if (reverseQrCountdownTimer) { clearInterval(reverseQrCountdownTimer); reverseQrCountdownTimer = null; }
+    if ($('mReverseQrBox')) $('mReverseQrBox').classList.add('hidden');
+  }
+  async function toggleDesktopReverseQr() {
+    const box = $('mReverseQrBox');
+    if (!box) return;
+    if (!box.classList.contains('hidden')) {
+      stopDesktopReverseQr();
+      return;
+    }
+    stopDesktopReverseQr();
+    box.classList.remove('hidden');
+    $('mReverseQrSvg').innerHTML = '<span class="s" style="color:#475569;padding:20px;display:inline-block">Generating 120s pairing QR…</span>';
+    $('mReverseQrTimer').textContent = 'Waiting for phone approval…';
+    const meta = getDesktopDeviceMeta();
+    let data = null;
+    let baseUsed = '';
+    for (const u of getApiCandidateUrls('/api/vpn/pair/challenge')) {
+      try {
+        const r = await fetch(u, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ device_id: meta.id, device_name: meta.name, os: meta.os })
+        });
+        const d = await r.json().catch(() => ({}));
+        if (r.ok && d.ok && d.challenge_id) {
+          data = d;
+          baseUsed = u.replace(/\/api\/vpn\/pair\/challenge$/, '');
+          break;
+        }
+      } catch (e) {}
+    }
+    if (!data) {
+      $('mReverseQrSvg').innerHTML = '<span class="s" style="color:#ef4444;padding:12px;display:inline-block">Could not reach pairing server.</span>';
+      return;
+    }
+    $('mReverseQrSvg').innerHTML = data.qr_svg || '';
+    let rem = Number(data.expires_in || 120);
+    const tick = () => {
+      const m = String(Math.floor(rem / 60)).padStart(2, '0');
+      const s = String(rem % 60).padStart(2, '0');
+      $('mReverseQrTimer').textContent = 'Scan with phone to link · Expires in ' + m + ':' + s;
+    };
+    tick();
+    reverseQrCountdownTimer = setInterval(() => {
+      rem = Math.max(0, rem - 1);
+      tick();
+      if (rem <= 0) stopDesktopReverseQr();
+    }, 1000);
+    reverseQrPollTimer = setInterval(async () => {
+      try {
+        const statusUrl = (baseUsed || '') + '/api/vpn/pair/status?c=' + encodeURIComponent(data.challenge_id) + '&s=' + encodeURIComponent(data.poll_secret);
+        const r = await fetch(statusUrl);
+        const d = await r.json().catch(() => ({}));
+        if (d && d.status === 'approved' && d.valid) {
+          stopDesktopReverseQr();
+          const resolvedEmail = d.email || '';
+          const resolvedKey = d.licenseKey || d.activation_code || '';
+          state.pro = true; state.email = resolvedEmail; state.activationCode = resolvedKey; state.killSwitch = true;
+          state.linkedDevices = Array.isArray(d.devices) ? d.devices : [];
+          state.maxDevices = d.max_devices || 10;
+          document.querySelectorAll('.toggle.shield').forEach(t => syncSwitchAria(t, true));
+          try {
+            if (resolvedEmail) localStorage.setItem('sweepr_vpn_email', resolvedEmail);
+            if (resolvedKey) {
+              localStorage.setItem('sweepr_vpn_code', resolvedKey);
+              localStorage.setItem('sweepr_vpn_license_key', resolvedKey);
+            }
+          } catch (e) {}
+          closeActivate(); renderAll(); toast('SWEEPR Pro linked via QR ✓');
+          postNative('activateLicense', { email: resolvedEmail, code: resolvedKey });
+        } else if (d && d.status === 'expired') {
+          stopDesktopReverseQr();
+        }
+      } catch (e) {}
+    }, 2000);
+  }
+
+  let outPairPollTimer = null;
+  let outPairCountdownTimer = null;
+  function closeDesktopPairOutQr() {
+    if (outPairPollTimer) { clearInterval(outPairPollTimer); outPairPollTimer = null; }
+    if (outPairCountdownTimer) { clearInterval(outPairCountdownTimer); outPairCountdownTimer = null; }
+    if ($('accPairDrawer')) $('accPairDrawer').classList.add('hidden');
+  }
+  async function openDesktopPairOutQr() {
+    if (!requirePro('Enter your license key first to link additional devices via QR.')) return;
+    closeDesktopPairOutQr();
+    const drawer = $('accPairDrawer');
+    if (!drawer) return;
+    drawer.classList.remove('hidden');
+    $('accPairQrBox').innerHTML = '<div class="s" style="color:#475569;padding:24px 8px">Generating 120s single-use pairing QR…</div>';
+    $('accPairTimer').textContent = '';
+    let data = null;
+    let baseUsed = '';
+    let errText = 'Could not generate pairing QR.';
+    for (const u of getApiCandidateUrls('/api/vpn/pair/create')) {
+      try {
+        const r = await fetch(u, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ key: state.activationCode, email: state.email || undefined, source: 'desktop' })
+        });
+        const d = await r.json().catch(() => ({}));
+        if (r.ok && d.ok && d.token) {
+          data = d;
+          baseUsed = u.replace(/\/api\/vpn\/pair\/create$/, '');
+          break;
+        }
+        if (d && d.message) errText = d.message;
+      } catch (e) {}
+    }
+    if (!data) {
+      $('accPairQrBox').innerHTML = '<div class="s" style="color:#ef4444;font-weight:700;padding:14px">' + esc(errText) + '</div>';
+      return;
+    }
+    if (Array.isArray(data.devices)) {
+      state.linkedDevices = data.devices;
+      state.maxDevices = data.max_devices || 10;
+      renderLinkedAccountDevices();
+    }
+    $('accPairQrBox').innerHTML = data.qr_svg + '<div class="s" style="color:#0f172a;font-weight:800">Scan with phone camera or SWEEPR app (' + (data.devices_used || 1) + ' / ' + (data.max_devices || 10) + ' slots used)</div>';
+    let rem = Number(data.expires_in || 120);
+    const tick = () => {
+      const m = String(Math.floor(rem / 60)).padStart(2, '0');
+      const s = String(rem % 60).padStart(2, '0');
+      $('accPairTimer').textContent = 'Single-use token · Expires in ' + m + ':' + s;
+    };
+    tick();
+    outPairCountdownTimer = setInterval(() => {
+      rem = Math.max(0, rem - 1);
+      tick();
+      if (rem <= 0) closeDesktopPairOutQr();
+    }, 1000);
+    outPairPollTimer = setInterval(async () => {
+      try {
+        const r = await fetch((baseUsed || '') + '/api/vpn/pair/check?t=' + encodeURIComponent(data.token));
+        const d = await r.json().catch(() => ({}));
+        if (d && d.status === 'redeemed') {
+          if (outPairPollTimer) { clearInterval(outPairPollTimer); outPairPollTimer = null; }
+          if (outPairCountdownTimer) { clearInterval(outPairCountdownTimer); outPairCountdownTimer = null; }
+          if (Array.isArray(d.devices)) state.linkedDevices = d.devices;
+          state.maxDevices = d.max_devices || 10;
+          $('accPairQrBox').innerHTML = '<div class="s" style="color:#047857;font-weight:800;padding:18px 8px">✓ Linked ' + esc((d.device && d.device.name) || 'New Device') + ' (' + (d.devices_used || 1) + ' / ' + (d.max_devices || 10) + ' slots)</div>';
+          $('accPairTimer').textContent = '';
+          renderAll();
+          toast('Device linked via QR ✓');
+        } else if (d && d.status === 'expired') {
+          closeDesktopPairOutQr();
+        }
+      } catch (e) {}
+    }, 2000);
+  }
+
+  async function revokeLinkedAccountDevice(deviceId) {
+    if (!deviceId || !state.activationCode) return;
+    for (const u of getApiCandidateUrls('/api/portal/revoke-device')) {
+      try {
+        const r = await fetch(u, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ key: state.activationCode, email: state.email || undefined, device_id: deviceId })
+        });
+        const d = await r.json().catch(() => ({}));
+        if (r.ok && d.ok) {
+          state.linkedDevices = Array.isArray(d.devices) ? d.devices : [];
+          state.maxDevices = d.max_devices || 10;
+          renderAll();
+          toast('Removed ' + (d.revoked_device_name || 'device') + ' ✓');
+          return;
+        }
+      } catch (e) {}
+    }
+  }
+
+  function renderLinkedAccountDevices() {
+    const bar = $('accDevicesBar');
+    const listEl = $('accDevicesList');
+    const pillEl = $('accDevicesCountPill');
+    if (!bar || !listEl || !pillEl) return;
+    if (!state.pro || !state.activationCode) {
+      bar.classList.add('hidden');
+      return;
+    }
+    bar.classList.remove('hidden');
+    const list = Array.isArray(state.linkedDevices) ? state.linkedDevices : [];
+    const maxD = state.maxDevices || 10;
+    const usedCount = Math.max(1, list.length);
+    pillEl.textContent = usedCount + ' / ' + maxD + ' active';
+    const myId = getOrCreateDesktopDeviceId();
+    if (!list.length) {
+      listEl.innerHTML = '<div class="s" style="font-size:12px">This device (' + esc(getDesktopDeviceMeta().name) + ') is linked and protected.</div>';
+      return;
+    }
+    listEl.innerHTML = list.map(d => {
+      const isMe = d.id === myId;
+      return '<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 8px;border-radius:8px;background:var(--card);border:1px solid var(--line)">' +
+        '<div style="min-width:0"><div class="t" style="font-size:12px">' + esc(d.name || 'SWEEPR Device') + (isMe ? ' <span class="pill ok" style="padding:1px 6px;font-size:10px">This device</span>' : '') + '</div>' +
+        '<div class="s" style="font-size:10.5px;font-family:monospace">' + esc(String(d.os || 'device').toUpperCase() + ' · ' + String(d.id || '').slice(0, 14)) + '</div></div>' +
+        (!isMe ? '<button class="btn-soft" style="padding:4px 9px;min-height:26px;font-size:11px;color:var(--danger)" onclick="revokeLinkedAccountDevice(\'' + esc(d.id) + '\')">Remove</button>' : '') +
+        '</div>';
+    }).join('');
+  }
   function extractCleanLicenseOrCode(raw) {
     const str = String(raw || '').trim().toUpperCase();
     const keyMatch = str.match(/SWEEPR\s*-\s*[A-Z0-9]{2,8}\s*-\s*[A-Z0-9]{4}\s*-\s*[A-Z0-9]{4}\s*-\s*[A-Z0-9]{4}/i);
@@ -1417,6 +1688,7 @@
   }
   async function verifyServerSubscription(email, rawCode) {
     const code = extractCleanLicenseOrCode(rawCode);
+    const meta = getDesktopDeviceMeta();
     if (tauri) {
       try {
         return await tauri.core.invoke('activate_subscription', { email, code, apiUrl: null });
@@ -1439,7 +1711,16 @@
         const r = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: email || undefined, key: code, activation_code: code, otp: code, project_id: 'vpn' })
+          body: JSON.stringify({
+            email: email || undefined,
+            key: code,
+            activation_code: code,
+            otp: code,
+            device_id: meta.id,
+            device_name: meta.name,
+            os: meta.os,
+            project_id: 'vpn'
+          })
         });
         const d = await r.json().catch(() => ({}));
         if (r.ok && d.ok && d.valid) {
@@ -1478,6 +1759,8 @@
       const resolvedEmail = (res && res.email && !String(res.email).includes('*')) ? String(res.email) : emailHint;
       const resolvedKey = (res && (res.licenseKey || res.license_key)) ? String(res.licenseKey || res.license_key) : code;
       state.pro = true; state.email = resolvedEmail; state.activationCode = resolvedKey; state.killSwitch = true;
+      state.linkedDevices = Array.isArray(res && res.devices) ? res.devices : [];
+      state.maxDevices = (res && res.max_devices) || 10;
       document.querySelectorAll('.toggle.shield').forEach(t => syncSwitchAria(t, true));
       try {
         if (resolvedEmail) localStorage.setItem('sweepr_vpn_email', resolvedEmail);
@@ -1504,6 +1787,8 @@
     try {
       const res = await verifyServerSubscription(state.email, state.activationCode);
       if (res && res.email && !state.email && !String(res.email).includes('*')) state.email = String(res.email);
+      if (res && Array.isArray(res.devices)) state.linkedDevices = res.devices;
+      if (res && res.max_devices) state.maxDevices = res.max_devices;
       state.pro = true; state.killSwitch = true;
       document.querySelectorAll('.toggle.shield').forEach(t => syncSwitchAria(t, true));
       renderAll();
@@ -1726,7 +2011,7 @@
     $('cStream').textContent = s.ping + ' ms · ' + s.stream;
     $('cPower').classList.toggle('off', !on);
 
-    renderList(); renderDevices(); paintFlags();
+    renderList(); renderDevices(); renderLinkedAccountDevices(); paintFlags();
   }
 
   /* ---------- Desktop Command Palette (Ctrl/Cmd+K), Right-Click Menu & Keyboard Engine ---------- */
@@ -1748,6 +2033,7 @@
     const cmdItems = [
       { id: 'act-toggle', title: state.connected ? 'Pause VPN Protection' : 'Connect to ' + cur().city, sub: 'Toggle WireGuard tunnel immediately', kbd: modKeyLabel + '+↵', run: () => toggleConnect() },
       { id: 'act-scan', title: 'Scan Home Wi-Fi & Smart TVs', sub: 'Audit devices and ACR telemetry on your network', kbd: modKeyLabel + '+R', run: () => { go('wifi'); scanWifi(); } },
+      { id: 'act-pair', title: 'Link Device via QR Code', sub: 'Pair a phone, tablet, or computer (up to 10 devices)', kbd: 'Pair', run: () => { if (state.pro) { go('account'); openDesktopPairOutQr(); } else { openActivate(); toggleDesktopReverseQr(); } } },
       { id: 'act-mini', title: document.body.classList.contains('is-compact') ? 'Expand to Full Window' : 'Switch to Mini Widget Mode', sub: 'Compact 380×540 desktop controller', kbd: modKeyLabel + '+M', run: () => setCompact(!document.body.classList.contains('is-compact')) },
       { id: 'act-export', title: 'Export Desktop WireGuard .conf (' + cur().city + ')', sub: 'Download standalone WireGuard tunnel configuration', kbd: '.conf', run: () => quickExportWireGuardConf(state.code) },
       { id: 'act-wg', title: 'Phone Setup (iOS / Android WireGuard QR)', sub: 'Generate QR code or Apple .mobileconfig profile', kbd: 'QR', run: () => openMobileWireGuardModal() },

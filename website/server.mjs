@@ -41,7 +41,8 @@ const COMMON_SECURITY_HEADERS = {
   'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
   'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
   'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
-  'Content-Security-Policy': "frame-ancestors 'self'; base-uri 'self'; object-src 'none'; form-action 'self'"
+  'Content-Security-Policy': "frame-ancestors 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' https://js.stripe.com https://www.googletagmanager.com",
+  'X-Sweepr-Api-Version': '2026-10'
 };
 
 const ALLOWED_STATIC_EXTENSIONS = new Set([
@@ -168,12 +169,12 @@ function isSameOriginOrTrusted(req) {
     return true;
   }
   const ct = String(req?.headers?.['content-type'] || '').toLowerCase();
-  return ct.startsWith('application/json') || Boolean(req?.headers?.['x-requested-with']);
+  return Boolean(req?.headers?.['x-requested-with']) || (ct.startsWith('application/json') && !fetchSite);
 }
 
 function getClientIp(req) {
   if (TRUST_PROXY) {
-    if (process.env.TRUST_CLOUDFLARE === 'true') {
+    if (process.env.TRUST_CLOUDFLARE !== 'false') {
       const cfIp = String(req.headers['cf-connecting-ip'] || '').trim();
       if (cfIp) return cfIp;
     }
@@ -187,17 +188,18 @@ function getClientIp(req) {
 }
 
 const rateLimitBuckets = new Map();
+const MAX_RATE_BUCKETS = 10000;
 function checkRateLimit(req, bucketName, maxRequests = 30, windowMs = 60000) {
   const ip = getClientIp(req);
   const key = `${bucketName}:${ip}`;
   const now = Date.now();
   let entry = rateLimitBuckets.get(key);
   if (!entry || now > entry.resetAt) {
-    if (rateLimitBuckets.size >= 10000) {
+    if (rateLimitBuckets.size >= MAX_RATE_BUCKETS) {
       for (const [k, v] of rateLimitBuckets.entries()) {
         if (now > v.resetAt) rateLimitBuckets.delete(k);
       }
-      if (rateLimitBuckets.size >= 10000) {
+      if (rateLimitBuckets.size >= MAX_RATE_BUCKETS) {
         for (const [k, v] of rateLimitBuckets.entries()) {
           if (v.count <= 1) {
             rateLimitBuckets.delete(k);
@@ -205,7 +207,7 @@ function checkRateLimit(req, bucketName, maxRequests = 30, windowMs = 60000) {
           }
         }
       }
-      if (rateLimitBuckets.size >= 10000) {
+      if (rateLimitBuckets.size >= MAX_RATE_BUCKETS) {
         const oldestKey = rateLimitBuckets.keys().next().value;
         if (oldestKey) rateLimitBuckets.delete(oldestKey);
       }
@@ -549,10 +551,99 @@ const accountsById = new Map();
 const accountsByEmail = new Map();
 const accountsBySubscriptionId = new Map();
 const portalOtpChallenges = new Map();
+const MAX_DEVICES_PER_ACCOUNT = 10;
+const PAIRING_TOKEN_TTL_MS = 120 * 1000;
+const pairingTokens = new Map();
+const pairingChallenges = new Map();
 const claimedIntroEmails = new Set();
 const claimedIntroCustomerIds = new Set();
 const claimedIntroCardFingerprints = new Set();
 const processedStripeWebhookEvents = new Set();
+
+function pruneExpiredPairingEntries() {
+  const now = Date.now();
+  for (const [k, v] of pairingTokens.entries()) {
+    if (!v || now > v.expiresAt + 60000) pairingTokens.delete(k);
+  }
+  for (const [k, v] of pairingChallenges.entries()) {
+    if (!v || now > v.expiresAt + 60000) pairingChallenges.delete(k);
+  }
+}
+
+function registerOrUpdateAccountDevice(acc, { deviceId, deviceName, os = 'windows', method = 'license_key' } = {}) {
+  if (!acc) return { ok: false, error: 'account_not_found' };
+  if (!Array.isArray(acc.devices)) acc.devices = [];
+  const rawId = String(deviceId || '').trim();
+  const cleanId = rawId
+    ? rawId.replace(/[^a-zA-Z0-9_.:-]/g, '').slice(0, 64)
+    : `dev_vpn_${crypto.randomBytes(6).toString('hex')}`;
+  const cleanOs = String(os || 'windows').trim().toLowerCase().slice(0, 24) || 'windows';
+  const defaultName =
+    cleanOs === 'ios' ? 'iPhone / iPad'
+    : cleanOs === 'android' ? 'Android Device'
+    : cleanOs === 'macos' ? 'Mac'
+    : cleanOs === 'linux' ? 'Linux PC'
+    : 'Windows PC';
+  const cleanName = String(deviceName || defaultName).trim().slice(0, 60) || defaultName;
+  const nowIso = new Date().toISOString();
+  const wgHash = crypto
+    .createHash('sha256')
+    .update(`sweepr-licence:${acc.licenseKey || acc.id}:${cleanId}`)
+    .digest('hex')
+    .slice(0, 32);
+
+  const existing = acc.devices.find((d) => d && d.id === cleanId);
+  if (acc.revokedDeviceIds && acc.revokedDeviceIds instanceof Set) {
+    acc.revokedDeviceIds.delete(cleanId);
+  }
+  if (existing) {
+    if (deviceName) existing.name = cleanName;
+    if (os) existing.os = cleanOs;
+    if (method) existing.method = method;
+    existing.last_seen_at = nowIso;
+    existing.wg_licence_hash = wgHash;
+    return {
+      ok: true,
+      device: existing,
+      devices_used: acc.devices.length,
+      device_count: acc.devices.length,
+      max_devices: MAX_DEVICES_PER_ACCOUNT,
+      device_limit: MAX_DEVICES_PER_ACCOUNT
+    };
+  }
+
+  if (acc.devices.length >= MAX_DEVICES_PER_ACCOUNT) {
+    return {
+      ok: false,
+      error: 'device_limit_reached',
+      message: `You have reached the ${MAX_DEVICES_PER_ACCOUNT}-device limit on your SWEEPR VPN Pro subscription. Please remove an existing device from your Customer Portal or app first.`,
+      devices: acc.devices,
+      devices_used: acc.devices.length,
+      device_count: acc.devices.length,
+      max_devices: MAX_DEVICES_PER_ACCOUNT,
+      device_limit: MAX_DEVICES_PER_ACCOUNT
+    };
+  }
+
+  const entry = {
+    id: cleanId,
+    name: cleanName,
+    os: cleanOs,
+    method: String(method || 'license_key'),
+    created_at: nowIso,
+    last_seen_at: nowIso,
+    wg_licence_hash: wgHash
+  };
+  acc.devices.push(entry);
+  return {
+    ok: true,
+    device: entry,
+    devices_used: acc.devices.length,
+    device_count: acc.devices.length,
+    max_devices: MAX_DEVICES_PER_ACCOUNT,
+    device_limit: MAX_DEVICES_PER_ACCOUNT
+  };
+}
 
 function recordBoundedSet(setObj, value, maxEntries = 10000) {
   if (!value) return;
@@ -1022,20 +1113,24 @@ function renderWireGuardQrSvg(text) {
 // VPN_NODES (Railway variable) is created by scripts/provision-node.mjs:
 // [{ code, country, city, flag, ip, port, public_key, agent_port, agent_secret }]
 const ENCRYPTED_VPN_NODES =
-  '9835ac35a7d0f6bcb32cf5d0:3e4a58a47e2ac533693bc769c8f4aa7e:4777b5a01b2175cd5c19f37173178cd29e4c1ad21526d9105b63956fe889156aaba4c3eeab3f66c62d3036c04440e0ed67696ed4b09db9be3b94fb62aa425249504d6548b1554e2a667b626766f31e2293bcf1c94e4385d96349524666620373824fe4b6826e3916439491e5a034aae304afb55655cf6a27efb36ba2c65f86e01356cdd6ed34e3f6067c10252c95aa44c86d40ac0e81bbec8edc3d7da07256f67e4f59005f9c92c069968f2a2fcd0b20919e2be756336a2433d611e9127d49dec3a335586368154f63dd30b198ffb31e8b23e80d798006c7cdac7dd3accf2fa4246251d07459ab6ea484eaed7a1d60e565a4bc8c327032fb9264a362841f675205e59530181a75ee3af4799b31d004d6d523de27b22d0b22dc4a7a3e69a3a95f0b823db3d17b9913f2e0b6b66f8298a87eefd8b1e2a12f1ffcd31ec79aa81f66de8750067dc11ebbb5a8854f30d657480364c6bc470afdd1328739b91abd0dd6718488588f7004f1dbada8af6c9c47ecbbce84720d0c1d81d294b7a4f7f33ae1b1f2378c5d29304548d12abb9589350197b63931800f9e8ed009388d0b8e22ce9c117b4de2384fc9c38fc67b347796af3ba5ead0fecd8ed28f667b3785ada908aec6cb8b8611d7f6d35dfe4fbfdbf399578447972466ab8572dfe2f2174f15a468a0c2f43976258568df5569f0a4a38903d0cbd4f12b99fa821a7933423d5bd80a47f22519ea800b62660fd9fa802a9d4d64ab1d7b36be46da2a2330cabaf947f3935a004a4bb960debcec7c84195f0686a7e8626a76f32112d37274308c8e0c5b103919d8349dc1b655cc2eaa7e50a399753dc234e15f1d2e26057b5cda69f35ee738f4b74f80124052a3190d4258dea6abd2b8932591756ff7f205d211a35339b45c095e9332348398187d3358dd91a3a5ed06651c43cbfca58198588774ac08aa3facea79ffa091a32f9248c72b17a8c24952feb7a56e79c1e4e8cd0260673c616693f29e212f44626a4e28db795d24a54eaeed4cd4a5d46f23913999ad86d4560aa54451170bb5dcad008bbc010bc14837305e54a66e0a1453a6c1120c7e27bb812d40a29c69a491554a3bcc68a7d86bbb3d38fb24d2e5a5d9e412fc3397c3c1c9a77e1387645f6ffd3cf17f8d047e027a18f1f80699a047923fce7d5b8c8e6068d77da8cb92679fe5f0cdcaeb83dbca67eb5fb919213b0587f6dd2019d47775a2eb464d2978e8068d50b5a059c547e316d2de68a83eebac8251cff577da937a9ba84178c9bc63a531d778ac41724625e2e67b5fc67bcea3fd3cf3c77574620db4a3659cf4aeecdfb3658089641d6388e2a913e9d43c825a8748154c147603562c871666b622c136738e59437d35a696e6186237ce91c2ecfbecf62b448e3f14aa5274cc4a43bab7a49dbbda54b54810e44a98efce8eb6a8bbb183621f903fba82e0d672e4a6f47c02680dce16717dc4b8e829f06e277828ca1c4ff775c609b9a7fd0f380be40a6f2a725039fe9960a9749e5d19d6ab6e3bd11d96b50b337c69ff96ebc31bea5e2399f8dde60bde53d41a2551979ea72fb0a50da4d1b6c6b3babd4ab9cf86fef6ce3f9749a50772d3b6cbd55016b6988398643183e0f416c3fe3fa0c0b03a8ef5105866127eb1f4e582d6385a040fb9a8690df182b86a5327601d0a5652fca3d9f1d56a4405af994ff5b5b39a2cb61291c01bd1b7bdb09498262ae56d1e4a17ec2c16d55795d36bd21f53e3d276cdfa19f1752a7f068bea19b1267185ce4868a628902b3fe753fb11fd7b13a4567e0da480c9197141eef0c5fb8034c1a29f86afea67b489b8f79439f928b73a5253a171347a08045b7ff48e1569216c5b207eb0a70d968aee9ee0777fc03a23482b6303d178a076c20585701d91095f53add5becace1882b08a699c483e7e6cbadbd84f9ee3811d13a94f0b3db78d8fe2c4a93811457f06f44421077b9088c2d0358169eec3b5da2f8242f9bb202316c782363abba835c9ae20660fa38698f8efa96dd8d415902e3a48b334fe3e61a487fbd689470e5735ab97d70beca40961755e15d9d23342b84b10021b7fdd1e9685fa6bc42ff09c9ed3a27047133a58367546a0059b0d39984c6aa375809799947f0af0fe01999928f3e45fe4b90e6dbf899ef4bfdfee7533c93ee20b4f4098f1f31ff0cf863f886480c45a069524dfd6000bd360418ec3e8d4831a1dd475ef8a615b43fb877bcaa5ec5ed835897dada9bff6b83d13cb5b8f6488b4cd034a366bd2e0efa0ad217129e91f6fc1b411e30fd605fbc4315972edb4dd1630aab60e7fa1dc654c773fcd19d1e1c263059769192ee530defe0709fa750051c75bfe05310a834f5c4873ee18e2d97287e45ae54219ab892cac433081664504345f9cd3d3308f87e01acf4cd0ad867054f393cfc14437eba7bd698e14c490207105858abf41f48b811af84721ee4d2172ce5bae9ec2cbd3f6e97197e61f7de15c7322';
+  '8f4f88e81ddab7d94a399d57:010c5f16f5298ffd02875619317e1c9e:aadfae75b18df85705903245d80bc7f8ceee98e47588069c3521d78a28fa7debaeddc969c536f97222f464d81d9b49816791078b2b468cf9ad7931dd0497f058df5a5c1445b01162cd4474dafbe3dcfa91492c119ef78162b9fc1a4dc4690164c043de7f72ee9dc948df4dc534b2c1d09ff4ec44f800b4e90f65953cc655165a97ce77f996fbd123a299bd3683262aa2934619f65a972c622a117743d5ef8a5a7c4065cacafc1b790c76610c5d45aaa30bbb2766247781888abe9120759eaca1a6ac7ed3a3d8edc80e82fcb1fcf00901db86525557acb2bfb7f7680377bb9e6b7b8d8de95eec262cee3c9eb5a4e5770f0eb7c24f3b2c3fc2d65ce713fb97333eb73eef8557b9a21ffe75930518f752f11a0a8f979166e5c8750acfcf51dafae93b39b064a72d7200139b75e918d742de3daff663a45ebbbc87dc2e93e21b1d5c9a47a95f2f02a1fa179d010097917d2e336d2207f4d76f8879c8c51ebdc1764aa98464ff620782fcb54df7cca5b2aed8d167fe1936e712aaa3ebd22265bd08f5097a7e597554a24aab4ed5e5995c12764247368c3a3d69ddcd1ab8353a7f2edcd6550c7d5c64a4c39ee8eb29e1df53558eac2395f49f8f11735cad90046d7a6c05cf7116fe1cce7c9d3eb2e60352481bc922ec0479344b5441c859d8933e03c9f929ee1f0b72ca98e252119dac2adac235e7b6e689b3019d2b4d88e7065422d387ea7283a6d4b2fb950fdd462a5bd976c7b7287fae49c489d6e7755f9631cd2a785bc1c47579dccf8750da964be83172f9ee1f5f297c5dba5fedb40fd1b951428131096569eac94375aad1c2af1f4dc316f7151d5db7d95f86dfc509b198bbd858c8bbd589fdbc9d692f50e600c89518dbca103c16d6bb0426b8f5b4d5a83ba54d0fd5926e0b62db1ca88e69b53a976528e28f63d3271ddd50614282d946bc425f1561ebea70ecdc779a1506b9c61d1d62e87218a380f996cd0459a5635c44cde2a7fa455d3846e52ee5ab451bcee12e10cf5561fcabe3ba4361635ff99ddb21b0266cbbe7ac38c3a372881bfdb64a24cae25809d7ec72ccf7e1e47b131439eb3941bc22ca5fe98be3a972830652ab343601b9be66aa4d4340738a489ca7b125bc3d6ca7174d7852977e1405d53bd7ca5bdc116a65c358907e90bab844146c29a470ac4e3fafa3ba85a9bced31ea808f6d126bc5ec00b65ccb8300822ea3d100e7176964bd1dfb2ca56df24599f4952eca6d80a586b041ac95e1a490ca5f5f032c76532e83bea9c4cfdaaefc65d0b2f2171b4ff1239f48228dc54fe7a355c116a0b2abacd7146d4c4984190a9b51d38a73ce6f787f22461a7026f94213ee72da247b8c3016bc97fb7a0f05eafbfbd4970c9faacb7fde5ae31f3620dbb73e5d92872c30ddd1de8eaf99edf8368c553f9ea6d010caa5814aea6f448d158ccd1077e7795891cd3f8a9441a77b029a98029244fed4073b18af6f122657d9abe2f014be5e3430d2f70a1868e46b1e5458408762ceb39156132c673327990e50b902c4a7095b60ce0155fee0ff0d14cbf2f5064aca227c3da792ebb5e64f41cd923bfc95869aabe7f752d0fdf5cfd06c5aab979fcad2f290e43cb34d3a4a8d4c6c513bcd9a1edeb42a1c84016864564cc5981d26366de317bf3821f88325004e74211bde743a7ea0318708f2c34904c38c5160b4e9fd93511d992b34f366d966a66aa8ea9320d9e185e609c19e6770609c75c405359b537dd48e45d30f35917bcd2c430b455d2d86f468f12690ef23026e097ddd23d22f37fcbb44c329cbfdaaae128454b7ad76fb5ed6079577f4cedc44f79997fda832b433460305f3c53d7a2bb456c4df78e240010d3279582c0fa9db9a284364763df146457a4ff1ed432563d9bdfe78a98a6126f5861f152ae9376d528509cda9a50dd56259167d1f9d90b3ce5c1afba8b0c51bb36982fd472c6d7323353a66abd2037afd2e537238debc34eb0dc97980f96496e4d42b0861ac6f67affdfde8ab1b440a7779db2e3c52675d9eb1c5f80cc2f7784f7ebd41f2dd047b84acc6317692a2d9f8384973ecede602ab530ea3130c2489af263b9d521f42bb4cf1f3b2bbe6fb5b1e6567df5a5dd14cc1e0d539997c548d49950d2eca7b3a35bca5279d68df8b3e1b52c8cbbc127e3e18d815547431a08d8e1e64f93f4165f2a265911e8422980f81712d3b80dadf38b03ea219a1d7be633998af4cd984b1db032511506e5358902ccc57548c40473725cfde2ca45ea2e1438e3c1954261206fb5aef8b76f7ef6fa71529bd50b9f8a59cdca09244e202eb63263fd9825e45e32f06ea792e366a5f7bb0f1534f05555a4952b99c91a860cf9732152f48d6eb6cf31f31a0045ace57927265dee430e350170546391e41292db7300379f0b68b4805e4786b41a1b6c64bc52fb533a0294e56439a9e715f655b687215ff1fc9e50ccd3c7c9035bfc885dea7c017bc020dbd2bf54cc666';
 const ENCRYPTED_LICENSE_PRIV_KEY_B64 =
-  '09a1b3320ceefec5bf18bd45:0c9948e9a42ff3e3a264f913d04c3a10:f18145160d4b75e7e0422dd1a2d9d012b9adfa095572ec2b587edc5eaacded4eed89300bd6814cc3f9ff6b4a0e5e63b5656e26fa62878ec3590081fb2e9afb45cddefe10d3928b5b1970fb7f1a5587e4bf436d876ba967609530f83fa54f9dd6eb2d122e937838046172a805199f885ed9156afd0618916c813cf293c2198a40356c22e850194c22d89f04fb8252ac06590b75182a8d87b5be4138b71d67b66d';
+  'f768e9721e298c69899c9448:01f3f60ab30a24f88eec036a8f83342a:e9dd6a2f72cf229c78d7ffcf2415f465c62386d32387c12120c8670eb1fc4485f2b44895ab2c0d1f86bc1b60bf19771a44628cc0697cc2fe0c5d8b789c0956d34d1c4796df12007ef241eb7aa10e36fa6aa9e5286e51a30b89e9f06c622062b5dfffdaa943cf3e72df5d36d46ffb919e1566c66c591e0cfa25cacf45dd0827e3383dfa7f666e6fd308e5cae234e86c3db0929bd4a503db609f89fdc6f9b3c5e5';
+const ENCRYPTED_SMTP_USER =
+  'a4043e8c7c5d0bf1df66a24d:0aa3cd11b41aea690e95491853d2e4cd:70256eb6d028c6c11e50de2fdba455b176f1546d22b65085423d';
+const ENCRYPTED_SMTP_PASS =
+  '74b1937c1b56de9b8691eb8c:096aab59dc0b0dd3ee18dc1feda09ff7:160defeca58906848629ef56b55c07ac';
 
-function decryptWithPkKey(payload) {
-  if (!payload || !STRIPE_PUBLISHABLE_KEY) return '';
+function decryptServerVault(payload) {
+  if (!payload || !STRIPE_SECRET_KEY) return '';
   try {
     const [ivHex, tagHex, encHex] = payload.split(':');
-    const key = crypto.createHash('sha256').update('sweepr_v1:' + STRIPE_PUBLISHABLE_KEY).digest();
+    const key = crypto.createHash('sha256').update('sweepr_vault_v2:' + STRIPE_SECRET_KEY).digest();
     const decipher = crypto.createDecipheriv('aes-256-gcm', key, Buffer.from(ivHex, 'hex'));
     decipher.setAuthTag(Buffer.from(tagHex, 'hex'));
     return Buffer.concat([decipher.update(Buffer.from(encHex, 'hex')), decipher.final()]).toString('utf8');
   } catch {
-    return '';
+    return decryptWithAdminKey(payload);
   }
 }
 
@@ -1053,7 +1148,7 @@ function loadVpnNodes() {
       const valid = Array.isArray(v) ? v.filter((n) => n && n.code && n.ip && n.agent_secret && n.agent_secret !== '__AGENT_SECRET__') : [];
       if (valid.length > 0) return valid;
     }
-    const dec = decryptWithPkKey(ENCRYPTED_VPN_NODES);
+    const dec = decryptServerVault(ENCRYPTED_VPN_NODES);
     if (dec) {
       const v = JSON.parse(dec);
       return Array.isArray(v) ? v.filter((n) => n && n.code && n.ip && n.agent_secret) : [];
@@ -1065,33 +1160,71 @@ function loadVpnNodes() {
 }
 
 const nodeHealthCache = new Map();
+const nodeCircuitState = new Map();
+
 async function nodeHealth(n) {
   const cached = nodeHealthCache.get(n.code);
   if (cached && Date.now() - cached.at < 30000) return cached.value;
   let value = null;
+  const t0 = performance.now();
   try {
-    const r = await fetch(`http://${n.ip}:${n.agent_port || 8787}/health`, { signal: AbortSignal.timeout(2500) });
-    if (r.ok) value = await r.json();
+    const scheme = n.agent_tls ? 'https' : 'http';
+    const r = await fetch(`${scheme}://${n.ip}:${n.agent_port || 8787}/health`, { signal: AbortSignal.timeout(2500) });
+    if (r.ok) {
+      const probeMs = Math.round(performance.now() - t0);
+      const prevSamples = (cached?.samples || []).slice(-19).concat(probeMs);
+      const sorted = [...prevSamples].sort((a, b) => a - b);
+      const p99Ms = sorted[Math.max(0, sorted.length - 1)] || probeMs;
+      value = { ...(await r.json()), probeMs, p99Ms };
+      nodeHealthCache.set(n.code, { at: Date.now(), value, samples: prevSamples });
+      return value;
+    }
   } catch {}
-  nodeHealthCache.set(n.code, { at: Date.now(), value });
+  nodeHealthCache.set(n.code, { at: Date.now(), value, samples: cached?.samples || [] });
   return value;
+}
+
+async function selectHealthyNodeForRegion(nodes, serverCode) {
+  const candidates = nodes.filter((n) => n.code === serverCode || n.code.startsWith(serverCode.slice(0, 6)));
+  if (candidates.length === 0) return null;
+  if (candidates.length === 1) return candidates[0];
+  const scored = await Promise.all(
+    candidates.map(async (n) => {
+      const h = await nodeHealth(n);
+      return { node: n, online: Boolean(h), devices: h?.devices ?? 9999 };
+    })
+  );
+  scored.sort((a, b) => Number(b.online) - Number(a.online) || a.devices - b.devices);
+  return scored[0].node;
 }
 
 // Requests to a node are signed with HMAC-SHA256 (timestamp + one-time nonce), see infra/node/sweepr_agent.py
 async function callNodeAgent(n, method, agentPath, payload) {
+  const cb = nodeCircuitState.get(n.code);
+  if (cb && cb.openUntil > Date.now()) {
+    throw new Error('node_circuit_open');
+  }
   const body = JSON.stringify(payload || {});
   const ts = String(Math.floor(Date.now() / 1000));
   const nonce = crypto.randomBytes(16).toString('hex');
   const sig = crypto.createHmac('sha256', n.agent_secret).update(`${method}\n${agentPath}\n${ts}\n${nonce}\n${body}`).digest('hex');
-  const r = await fetch(`http://${n.ip}:${n.agent_port || 8787}${agentPath}`, {
-    method,
-    headers: { 'Content-Type': 'application/json', 'X-Sweepr-Timestamp': ts, 'X-Sweepr-Nonce': nonce, 'X-Sweepr-Signature': sig },
-    body,
-    signal: AbortSignal.timeout(6000)
-  });
-  const data = await r.json().catch(() => ({}));
-  if (!r.ok || !data.ok) throw new Error(data.error || `agent_${r.status}`);
-  return data;
+  const scheme = n.agent_tls ? 'https' : 'http';
+  try {
+    const r = await fetch(`${scheme}://${n.ip}:${n.agent_port || 8787}${agentPath}`, {
+      method,
+      headers: { 'Content-Type': 'application/json', 'X-Sweepr-Timestamp': ts, 'X-Sweepr-Nonce': nonce, 'X-Sweepr-Signature': sig },
+      body,
+      signal: AbortSignal.timeout(6000)
+    });
+    const data = await r.json().catch(() => ({}));
+    if (!r.ok || !data.ok) throw new Error(data.error || `agent_${r.status}`);
+    if (cb) nodeCircuitState.delete(n.code);
+    return data;
+  } catch (err) {
+    const fails = (cb?.failures || 0) + 1;
+    nodeCircuitState.set(n.code, { failures: fails, openUntil: fails >= 3 ? Date.now() + 20000 : 0 });
+    throw err;
+  }
 }
 
 function computeVpnLicenceHash(rawKey) {
@@ -1121,6 +1254,11 @@ async function revokeLicenceOnAllNodes(accOrKeys) {
         rawCandidates.add(String(k).trim().toUpperCase());
       }
     }
+    if (Array.isArray(accOrKeys.devices)) {
+      for (const dev of accOrKeys.devices) {
+        if (dev && dev.wg_licence_hash) rawCandidates.add(String(dev.wg_licence_hash).trim());
+      }
+    }
   }
 
   const hashes = new Set();
@@ -1144,7 +1282,7 @@ async function revokeLicenceOnAllNodes(accOrKeys) {
 
 // Returns { id } for an active licence, where id is a one-way hash (servers never see the real key).
 // Authoritatively verifies against centralized sweepr_crm first, with local fallback if CRM is unreachable or key is in local cache.
-async function resolveVpnLicence(code, email) {
+async function resolveVpnLicence(code, email, deviceId) {
   const rawInput = String(code || '').trim();
   const extractedKey = rawInput.toUpperCase().match(/SWEEPR\s*-\s*[A-Z0-9]{2,8}\s*-\s*[A-Z0-9]{4}\s*-\s*[A-Z0-9]{4}\s*-\s*[A-Z0-9]{4}/i);
   const cleanCode = extractedKey
@@ -1158,13 +1296,18 @@ async function resolveVpnLicence(code, email) {
     return null;
   }
 
+  const cleanDevId = deviceId ? String(deviceId).trim().replace(/[^a-zA-Z0-9_.:-]/g, '').slice(0, 64) : '';
+  if (cleanDevId && local && local.revokedDeviceIds && local.revokedDeviceIds.has(cleanDevId)) {
+    return null;
+  }
+
   let key = null;
 
   try {
     const data = await crm.activateDevice({
       email: normEmail || undefined,
       otp: cleanCode,
-      deviceId: 'vpn_tunnel_' + crypto.createHash('sha256').update((normEmail || 'key') + ':' + cleanCode).digest('hex').slice(0, 12),
+      deviceId: cleanDevId || ('vpn_tunnel_' + crypto.createHash('sha256').update((normEmail || 'key') + ':' + cleanCode).digest('hex').slice(0, 12)),
       deviceName: 'SWEEPR VPN Tunnel',
       os: 'windows',
       appVersion: '2.5.0'
@@ -1196,17 +1339,18 @@ async function resolveVpnLicence(code, email) {
   }
 
   if (!key) return null;
-  return { id: computeVpnLicenceHash(key) };
+  return { id: computeVpnLicenceHash(cleanDevId ? `${key}:${cleanDevId}` : key) };
 }
 
 function signFallbackEd25519LicenseToken(acc, deviceId = 'vpn_desktop') {
   try {
-    const b64Pem = (process.env.LICENSE_PRIVATE_KEY_B64 || '').trim() || decryptWithPkKey(ENCRYPTED_LICENSE_PRIV_KEY_B64);
+    const b64Pem = (process.env.LICENSE_PRIVATE_KEY_B64 || '').trim() || decryptServerVault(ENCRYPTED_LICENSE_PRIV_KEY_B64);
     if (!b64Pem) return null;
     const privKey = crypto.createPrivateKey(Buffer.from(b64Pem, 'base64').toString('utf8'));
     const now = Math.floor(Date.now() / 1000);
     const exp = now + 72 * 3600;
-    const header = Buffer.from(JSON.stringify({ alg: 'EdDSA', typ: 'JWT' })).toString('base64url');
+    const kid = (process.env.SWEEPR_LICENSE_KID || 'ed25519-2026-01').trim();
+    const header = Buffer.from(JSON.stringify({ alg: 'EdDSA', typ: 'JWT', kid })).toString('base64url');
     const payload = Buffer.from(
       JSON.stringify({
         sub: acc.id,
@@ -1301,9 +1445,9 @@ async function sendWelcomeLicenseEmail(acc) {
   }
 
   const smtpUser = (process.env.SMTP_GMAIL_USER || '').trim().replace(/^["']|["']$/g, '') ||
-    decryptWithPkKey('292e02963cb47df56b0c11bf:ec9309892f80d12c4bc8d8f1c574a1c0:b28816343a58bc4241226fa1089541bcc2cda438670f8262ff09');
+    decryptServerVault(ENCRYPTED_SMTP_USER);
   const smtpPass = (process.env.SMTP_GMAIL_PASS || '').trim().replace(/\s+/g, '').replace(/^["']|["']$/g, '') ||
-    decryptWithPkKey('e6a41c129c37f88ca73363ed:8311a7406578f3c1a4b112d09adf4202:09f6b7df83870a06c01211c984d297b4');
+    decryptServerVault(ENCRYPTED_SMTP_PASS);
   if (smtpUser && smtpPass) {
     try {
       await new Promise((resolve, reject) => {
@@ -1966,7 +2110,7 @@ function renderCheckoutSuccessPage(acc, isCancelled = false, isPopup = false) {
 
 const server = http.createServer(async (req, res) => {
   const urlObj = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
-  let pathname = urlObj.pathname.replace(/\/+$/, '') || '/';
+  let pathname = (urlObj.pathname.replace(/\/+$/, '') || '/').replace(/^\/api\/v1\//, '/api/');
 
   // Handle CORS preflight requests for API routes with strict origin allowlist
   if (req.method === 'OPTIONS') {
@@ -3253,7 +3397,7 @@ self.addEventListener('fetch', e => {
     const body = await readJsonBody(req);
     if (body && body.__tooLarge) return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, {}, req);
     const bearerSecret = String(req.headers.authorization || '').replace(/^Bearer\s+/i, '').trim();
-    const rawCodeInput = String(body.otp || body.activation_code || body.key || body.refresh_token || bearerSecret || '').trim();
+    const rawCodeInput = String(body.otp || body.activation_code || body.key || body.code || body.license_key || body.refresh_token || bearerSecret || '').trim();
     const extractedKeyMatch = rawCodeInput.toUpperCase().match(/SWEEPR\s*-\s*[A-Z0-9]{2,8}\s*-\s*[A-Z0-9]{4}\s*-\s*[A-Z0-9]{4}\s*-\s*[A-Z0-9]{4}/i);
     const code = pathname === '/v1/license/refresh'
       ? rawCodeInput
@@ -3304,8 +3448,21 @@ self.addEventListener('fetch', e => {
         const syncedAcc = syncLocalCacheFromCrm(data, effectiveEmail, code);
         const { _httpStatus, ...cleanData } = data;
         if (cleanData.valid) {
-          const fallbackSigned = (!cleanData.token && !cleanData.license_token && (syncedAcc || preMatchedLocalAcc))
-            ? signFallbackEd25519LicenseToken(syncedAcc || preMatchedLocalAcc, body.device_id || 'vpn_desktop')
+          const targetAcc = syncedAcc || preMatchedLocalAcc;
+          let devReg = null;
+          if (targetAcc && (body.device_id || body.device_name)) {
+            devReg = registerOrUpdateAccountDevice(targetAcc, {
+              deviceId: body.device_id,
+              deviceName: body.device_name || 'SWEEPR VPN Device',
+              os: body.os || 'windows',
+              method: 'license_key'
+            });
+            if (!devReg.ok && devReg.error === 'device_limit_reached') {
+              return sendJson(res, 409, { ok: false, valid: false, ...devReg }, {}, req);
+            }
+          }
+          const fallbackSigned = (!cleanData.token && !cleanData.license_token && targetAcc)
+            ? signFallbackEd25519LicenseToken(targetAcc, devReg?.device?.id || body.device_id || 'vpn_desktop')
             : null;
           return sendJson(
             res,
@@ -3313,17 +3470,23 @@ self.addEventListener('fetch', e => {
             {
               ok: true,
               valid: true,
-              account_id: cleanData.account_id || syncedAcc?.id,
-              email: cleanData.email || syncedAcc?.email || effectiveEmail,
-              licenseKey: cleanData.licenseKey || cleanData.license_key || syncedAcc?.licenseKey,
-              activation_code: cleanData.activation_code || syncedAcc?.activation_code || code,
-              plan: cleanData.plan || syncedAcc?.plan || 'annual',
+              account_id: cleanData.account_id || targetAcc?.id,
+              email: cleanData.email || targetAcc?.email || effectiveEmail,
+              licenseKey: cleanData.licenseKey || cleanData.license_key || targetAcc?.licenseKey,
+              activation_code: cleanData.activation_code || targetAcc?.activation_code || code,
+              plan: cleanData.plan || targetAcc?.plan || 'annual',
               entitlements: cleanData.entitlements || {
                 status: cleanData.status || 'active',
                 plan: cleanData.plan || 'annual',
                 addons: cleanData.addons || []
               },
               status: cleanData.status || 'active',
+              device: devReg?.device || undefined,
+              devices: Array.isArray(targetAcc?.devices) ? targetAcc.devices : [],
+              devices_used: Array.isArray(targetAcc?.devices) ? targetAcc.devices.length : 1,
+              device_count: Array.isArray(targetAcc?.devices) ? targetAcc.devices.length : 1,
+              max_devices: MAX_DEVICES_PER_ACCOUNT,
+              device_limit: MAX_DEVICES_PER_ACCOUNT,
               token: cleanData.token || fallbackSigned?.token,
               license_token: cleanData.license_token || cleanData.token || fallbackSigned?.token,
               expires_at: cleanData.expires_at || fallbackSigned?.expires_at
@@ -3342,7 +3505,19 @@ self.addEventListener('fetch', e => {
         const vData = await crm.verifyKey(code, effectiveEmail || undefined);
         if (vData && vData.valid) {
           const syncedAcc = syncLocalCacheFromCrm(vData, effectiveEmail || vData.email || '', code) || preMatchedLocalAcc;
-          const signed = syncedAcc ? signFallbackEd25519LicenseToken(syncedAcc, body.device_id || 'vpn_desktop') : null;
+          let devReg = null;
+          if (syncedAcc && (body.device_id || body.device_name)) {
+            devReg = registerOrUpdateAccountDevice(syncedAcc, {
+              deviceId: body.device_id,
+              deviceName: body.device_name || 'SWEEPR VPN Device',
+              os: body.os || 'windows',
+              method: 'license_key'
+            });
+            if (!devReg.ok && devReg.error === 'device_limit_reached') {
+              return sendJson(res, 409, { ok: false, valid: false, ...devReg }, {}, req);
+            }
+          }
+          const signed = syncedAcc ? signFallbackEd25519LicenseToken(syncedAcc, devReg?.device?.id || body.device_id || 'vpn_desktop') : null;
           return sendJson(
             res,
             200,
@@ -3360,6 +3535,12 @@ self.addEventListener('fetch', e => {
                 addons: vData.addons || ['wifi_radar']
               },
               status: vData.status || 'active',
+              device: devReg?.device || undefined,
+              devices: Array.isArray(syncedAcc?.devices) ? syncedAcc.devices : [],
+              devices_used: Array.isArray(syncedAcc?.devices) ? syncedAcc.devices.length : 1,
+              device_count: Array.isArray(syncedAcc?.devices) ? syncedAcc.devices.length : 1,
+              max_devices: MAX_DEVICES_PER_ACCOUNT,
+              device_limit: MAX_DEVICES_PER_ACCOUNT,
               ...(signed ? { token: signed.token, license_token: signed.token, expires_at: signed.expires_at } : {})
             },
             {},
@@ -3382,9 +3563,21 @@ self.addEventListener('fetch', e => {
         safeCompareStrings(code.toUpperCase(), localAcc.licenseKey) ||
         licenses.get(code) === localAcc ||
         licenses.get(code.toUpperCase()) === localAcc;
-      const emailMatches = !normEmail || localAcc.email === normEmail;
+      const emailMatches = !normEmail || localAcc.email === normEmail || licenses.get(code) === localAcc || licenses.get(code.toUpperCase()) === localAcc;
       if (localAcc.status === 'active' && codeMatches && emailMatches) {
-        const signed = signFallbackEd25519LicenseToken(localAcc, body.device_id || 'vpn_desktop');
+        let devReg = null;
+        if (body.device_id || body.device_name) {
+          devReg = registerOrUpdateAccountDevice(localAcc, {
+            deviceId: body.device_id,
+            deviceName: body.device_name || 'SWEEPR VPN Device',
+            os: body.os || 'windows',
+            method: 'license_key'
+          });
+          if (!devReg.ok && devReg.error === 'device_limit_reached') {
+            return sendJson(res, 409, { ok: false, valid: false, ...devReg }, {}, req);
+          }
+        }
+        const signed = signFallbackEd25519LicenseToken(localAcc, devReg?.device?.id || body.device_id || 'vpn_desktop');
         return sendJson(
           res,
           200,
@@ -3398,6 +3591,12 @@ self.addEventListener('fetch', e => {
             plan: localAcc.plan,
             entitlements: localAcc.entitlements,
             status: localAcc.status,
+            device: devReg?.device || undefined,
+            devices: Array.isArray(localAcc.devices) ? localAcc.devices : [],
+            devices_used: Array.isArray(localAcc.devices) ? localAcc.devices.length : 1,
+            device_count: Array.isArray(localAcc.devices) ? localAcc.devices.length : 1,
+            max_devices: MAX_DEVICES_PER_ACCOUNT,
+            device_limit: MAX_DEVICES_PER_ACCOUNT,
             ...(signed ? { token: signed.token, license_token: signed.token, expires_at: signed.expires_at } : {})
           },
           {},
@@ -3418,6 +3617,610 @@ self.addEventListener('fetch', e => {
       {},
       req
     );
+  }
+
+  // ==========================================================================
+  // QR-Code Account & Device Linking (Flow A: Portal/Desktop -> Phone, Flow B: Phone -> Unactivated Desktop)
+  // ==========================================================================
+  if (pathname === '/api/vpn/pair/create' && req.method === 'POST') {
+    if (!checkRateLimit(req, 'vpn_pair_create', 20, 60000)) {
+      return sendJson(res, 429, { ok: false, error: 'rate_limit_exceeded', message: 'Too many requests. Please wait a minute.' }, {}, req);
+    }
+    pruneExpiredPairingEntries();
+    const body = await readJsonBody(req);
+    if (body && body.__tooLarge) return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, {}, req);
+
+    let acc = null;
+    const sess = verifySessionCookie(req);
+    if (sess) {
+      acc = accountsById.get(sess.accountId) || (sess.email ? accountsByEmail.get(sess.email) : null);
+    }
+    if (!acc) {
+      const rawKey = String(body?.key || body?.code || body?.license_key || body?.activation_code || '').replace(/\s+/g, '').toUpperCase();
+      if (rawKey) {
+        acc = licenses.get(rawKey) || licenses.get(rawKey.toUpperCase()) || null;
+      }
+    }
+
+    if (!acc || acc.status !== 'active') {
+      return sendJson(res, 401, { ok: false, error: 'unauthorized', message: 'Active SWEEPR VPN Pro subscription required to generate a device pairing QR code.' }, {}, req);
+    }
+    if (!Array.isArray(acc.devices)) acc.devices = [];
+    if (acc.devices.length >= MAX_DEVICES_PER_ACCOUNT) {
+      return sendJson(
+        res,
+        409,
+        {
+          ok: false,
+          error: 'device_limit_reached',
+          message: `All ${MAX_DEVICES_PER_ACCOUNT} device slots are currently in use. Please remove an existing device first to link a new one.`,
+          devices: acc.devices,
+          devices_used: acc.devices.length,
+          device_count: acc.devices.length,
+          max_devices: MAX_DEVICES_PER_ACCOUNT,
+          device_limit: MAX_DEVICES_PER_ACCOUNT
+        },
+        {},
+        req
+      );
+    }
+
+    const token = `ptk_${crypto.randomBytes(18).toString('base64url')}`;
+    const expiresAt = Date.now() + PAIRING_TOKEN_TTL_MS;
+    const baseOrigin = PUBLIC_URL.includes('localhost') && req.headers.host
+      ? `${req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http'}://${req.headers.host}`
+      : PUBLIC_URL;
+    const pairUrl = `${baseOrigin}/pair?t=${encodeURIComponent(token)}`;
+    const qrSvg = renderWireGuardQrSvg(pairUrl);
+
+    pairingTokens.set(token, {
+      token,
+      accountId: acc.id,
+      email: acc.email,
+      source: String(body?.source || (sess ? 'portal' : 'desktop')),
+      createdAt: Date.now(),
+      expiresAt,
+      used: false,
+      redeemedDevice: null
+    });
+
+    return sendJson(
+      res,
+      200,
+      {
+        ok: true,
+        token,
+        pair_token: token,
+        pair_url: pairUrl,
+        qr_svg: qrSvg,
+        expires_in: Math.round(PAIRING_TOKEN_TTL_MS / 1000),
+        expires_at: expiresAt,
+        devices: acc.devices,
+        devices_used: acc.devices.length,
+        device_count: acc.devices.length,
+        max_devices: MAX_DEVICES_PER_ACCOUNT,
+        device_limit: MAX_DEVICES_PER_ACCOUNT
+      },
+      { 'Cache-Control': 'no-store' },
+      req
+    );
+  }
+
+  if (pathname === '/api/vpn/pair/check' && req.method === 'GET') {
+    pruneExpiredPairingEntries();
+    const token = String(urlObj.searchParams.get('t') || urlObj.searchParams.get('token') || '').trim();
+    const entry = token ? pairingTokens.get(token) : null;
+    if (!entry) {
+      return sendJson(res, 200, { ok: true, status: 'expired' }, { 'Cache-Control': 'no-store' }, req);
+    }
+    const acc = accountsById.get(entry.accountId) || accountsByEmail.get(entry.email);
+    if (entry.used && entry.redeemedDevice) {
+      return sendJson(
+        res,
+        200,
+        {
+          ok: true,
+          status: 'redeemed',
+          device: entry.redeemedDevice,
+          linked_device: entry.redeemedDevice,
+          devices: Array.isArray(acc?.devices) ? acc.devices : [],
+          devices_used: Array.isArray(acc?.devices) ? acc.devices.length : 1,
+          device_count: Array.isArray(acc?.devices) ? acc.devices.length : 1,
+          max_devices: MAX_DEVICES_PER_ACCOUNT,
+          device_limit: MAX_DEVICES_PER_ACCOUNT
+        },
+        { 'Cache-Control': 'no-store' },
+        req
+      );
+    }
+    if (Date.now() > entry.expiresAt) {
+      return sendJson(res, 200, { ok: true, status: 'expired' }, { 'Cache-Control': 'no-store' }, req);
+    }
+    return sendJson(
+      res,
+      200,
+      {
+        ok: true,
+        status: 'pending',
+        expires_in: Math.max(0, Math.ceil((entry.expiresAt - Date.now()) / 1000)),
+        devices_used: Array.isArray(acc?.devices) ? acc.devices.length : 0,
+        device_count: Array.isArray(acc?.devices) ? acc.devices.length : 0,
+        max_devices: MAX_DEVICES_PER_ACCOUNT,
+        device_limit: MAX_DEVICES_PER_ACCOUNT
+      },
+      { 'Cache-Control': 'no-store' },
+      req
+    );
+  }
+
+  if (pathname === '/api/vpn/pair/redeem' && req.method === 'POST') {
+    if (!checkRateLimit(req, 'vpn_pair_redeem', 15, 60000)) {
+      return sendJson(res, 429, { ok: false, error: 'rate_limit_exceeded', message: 'Too many attempts. Please wait a minute.' }, {}, req);
+    }
+    pruneExpiredPairingEntries();
+    const body = await readJsonBody(req);
+    if (body && body.__tooLarge) return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, {}, req);
+    const token = String(body?.pair_token || body?.token || body?.t || '').trim();
+    const entry = token ? pairingTokens.get(token) : null;
+    if (!entry || entry.used || Date.now() > entry.expiresAt) {
+      return sendJson(
+        res,
+        401,
+        {
+          ok: false,
+          valid: false,
+          error: 'invalid_or_expired_pair_token',
+          message: 'This QR code has expired or has already been used. Please generate a fresh QR code.'
+        },
+        {},
+        req
+      );
+    }
+
+    const acc = accountsById.get(entry.accountId) || accountsByEmail.get(entry.email);
+    if (!acc || acc.status !== 'active') {
+      return sendJson(res, 403, { ok: false, valid: false, error: 'subscription_inactive', message: 'Subscription is no longer active.' }, {}, req);
+    }
+
+    const reg = registerOrUpdateAccountDevice(acc, {
+      deviceId: body?.device_id,
+      deviceName: body?.device_name,
+      os: body?.os || 'ios',
+      method: entry.source === 'desktop' ? 'qr_desktop' : 'qr_portal'
+    });
+    if (!reg.ok) {
+      return sendJson(res, 409, { ok: false, valid: false, ...reg }, {}, req);
+    }
+
+    entry.used = true;
+    entry.redeemedDevice = reg.device;
+    const signed = signFallbackEd25519LicenseToken(acc, reg.device.id);
+
+    return sendJson(
+      res,
+      200,
+      {
+        ok: true,
+        valid: true,
+        account_id: acc.id,
+        email: acc.email,
+        licenseKey: acc.licenseKey,
+        license_key: acc.licenseKey,
+        activation_code: acc.activation_code,
+        plan: acc.plan,
+        entitlements: acc.entitlements,
+        status: acc.status,
+        device: reg.device,
+        devices: acc.devices,
+        devices_used: acc.devices.length,
+        device_count: acc.devices.length,
+        max_devices: MAX_DEVICES_PER_ACCOUNT,
+        device_limit: MAX_DEVICES_PER_ACCOUNT,
+        ...(signed ? { token: signed.token, license_token: signed.token, expires_at: signed.expires_at } : {})
+      },
+      { 'Cache-Control': 'no-store' },
+      req
+    );
+  }
+
+  // Flow B: Unactivated Desktop/TV App creates a Reverse-QR challenge to be scanned by Phone
+  if (pathname === '/api/vpn/pair/challenge' && req.method === 'POST') {
+    if (!checkRateLimit(req, 'vpn_pair_challenge', 15, 60000)) {
+      return sendJson(res, 429, { ok: false, error: 'rate_limit_exceeded' }, {}, req);
+    }
+    pruneExpiredPairingEntries();
+    const body = await readJsonBody(req);
+    if (body && body.__tooLarge) return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, {}, req);
+
+    const challengeId = `chk_${crypto.randomBytes(16).toString('base64url')}`;
+    const pollSecret = `psec_${crypto.randomBytes(24).toString('base64url')}`;
+    const deviceId = String(body?.device_id || `dev_vpn_${crypto.randomBytes(6).toString('hex')}`).trim().slice(0, 64);
+    const os = String(body?.os || 'windows').trim().toLowerCase().slice(0, 24);
+    const deviceName = String(body?.device_name || 'SWEEPR VPN Desktop').trim().slice(0, 60);
+    const expiresAt = Date.now() + PAIRING_TOKEN_TTL_MS;
+
+    const baseOrigin = PUBLIC_URL.includes('localhost') && req.headers.host
+      ? `${req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http'}://${req.headers.host}`
+      : PUBLIC_URL;
+    const pairUrl = `${baseOrigin}/pair?c=${encodeURIComponent(challengeId)}`;
+    const qrSvg = renderWireGuardQrSvg(pairUrl);
+
+    pairingChallenges.set(challengeId, {
+      challengeId,
+      pollSecret,
+      deviceId,
+      deviceName,
+      os,
+      status: 'pending',
+      createdAt: Date.now(),
+      expiresAt,
+      approvedPayload: null
+    });
+
+    return sendJson(
+      res,
+      200,
+      {
+        ok: true,
+        challenge_id: challengeId,
+        poll_secret: pollSecret,
+        pair_url: pairUrl,
+        qr_svg: qrSvg,
+        expires_in: Math.round(PAIRING_TOKEN_TTL_MS / 1000),
+        expires_at: expiresAt
+      },
+      { 'Cache-Control': 'no-store' },
+      req
+    );
+  }
+
+  if (pathname === '/api/vpn/pair/status' && req.method === 'GET') {
+    pruneExpiredPairingEntries();
+    const challengeId = String(urlObj.searchParams.get('c') || urlObj.searchParams.get('challenge_id') || '').trim();
+    const pollSecret = String(urlObj.searchParams.get('s') || urlObj.searchParams.get('poll_secret') || '').trim();
+    const ch = challengeId ? pairingChallenges.get(challengeId) : null;
+    if (!ch) {
+      return sendJson(res, 404, { ok: false, status: 'expired', error: 'challenge_not_found_or_expired' }, { 'Cache-Control': 'no-store' }, req);
+    }
+    if (!pollSecret || !safeCompareStrings(pollSecret, ch.pollSecret)) {
+      return sendJson(res, 401, { ok: false, error: 'invalid_poll_secret' }, { 'Cache-Control': 'no-store' }, req);
+    }
+    if (ch.status === 'approved' && ch.approvedPayload) {
+      const payload = ch.approvedPayload;
+      ch.approvedPayload = null;
+      pairingChallenges.delete(challengeId);
+      return sendJson(res, 200, { ok: true, ...payload, status: 'approved' }, { 'Cache-Control': 'no-store' }, req);
+    }
+    if (Date.now() > ch.expiresAt) {
+      pairingChallenges.delete(challengeId);
+      return sendJson(res, 200, { ok: true, status: 'expired' }, { 'Cache-Control': 'no-store' }, req);
+    }
+    return sendJson(
+      res,
+      200,
+      {
+        ok: true,
+        status: 'pending',
+        expires_in: Math.max(0, Math.ceil((ch.expiresAt - Date.now()) / 1000))
+      },
+      { 'Cache-Control': 'no-store' },
+      req
+    );
+  }
+
+  if (pathname === '/api/vpn/pair/approve' && req.method === 'POST') {
+    if (!checkRateLimit(req, 'vpn_pair_approve', 15, 60000)) {
+      return sendJson(res, 429, { ok: false, error: 'rate_limit_exceeded', message: 'Too many attempts. Please wait a minute.' }, {}, req);
+    }
+    pruneExpiredPairingEntries();
+    const body = await readJsonBody(req);
+    if (body && body.__tooLarge) return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, {}, req);
+
+    const challengeId = String(body?.challenge_id || body?.c || '').trim();
+    const ch = challengeId ? pairingChallenges.get(challengeId) : null;
+    if (!ch || ch.status !== 'pending' || Date.now() > ch.expiresAt) {
+      return sendJson(res, 400, { ok: false, error: 'challenge_expired', message: 'This desktop QR code has expired. Click "Refresh QR" on your desktop app.' }, {}, req);
+    }
+
+    let acc = null;
+    const sess = verifySessionCookie(req);
+    if (sess) {
+      acc = accountsById.get(sess.accountId) || (sess.email ? accountsByEmail.get(sess.email) : null);
+    }
+    if (!acc) {
+      const rawKey = String(body?.key || body?.code || body?.license_key || body?.activation_code || '').replace(/\s+/g, '').toUpperCase();
+      if (rawKey) {
+        acc = licenses.get(rawKey) || licenses.get(rawKey.toUpperCase()) || null;
+      }
+    }
+
+    if (!acc || acc.status !== 'active') {
+      return sendJson(
+        res,
+        401,
+        {
+          ok: false,
+          error: 'auth_required',
+          message: 'Please enter your SWEEPR VPN license key (or log into your Customer Portal) to approve this device.'
+        },
+        {},
+        req
+      );
+    }
+
+    const reg = registerOrUpdateAccountDevice(acc, {
+      deviceId: ch.deviceId,
+      deviceName: ch.deviceName,
+      os: ch.os,
+      method: 'qr_desktop'
+    });
+    if (!reg.ok) {
+      return sendJson(res, 409, { ok: false, ...reg }, {}, req);
+    }
+
+    const signed = signFallbackEd25519LicenseToken(acc, reg.device.id);
+    ch.status = 'approved';
+    ch.approvedPayload = {
+      valid: true,
+      account_id: acc.id,
+      email: acc.email,
+      licenseKey: acc.licenseKey,
+      license_key: acc.licenseKey,
+      activation_code: acc.activation_code,
+      plan: acc.plan,
+      entitlements: acc.entitlements,
+      subscription_status: acc.status,
+      device: reg.device,
+      devices: acc.devices,
+      devices_used: acc.devices.length,
+      device_count: acc.devices.length,
+      max_devices: MAX_DEVICES_PER_ACCOUNT,
+      device_limit: MAX_DEVICES_PER_ACCOUNT,
+      ...(signed ? { token: signed.token, license_token: signed.token, expires_at: signed.expires_at } : {})
+    };
+
+    return sendJson(
+      res,
+      200,
+      {
+        ok: true,
+        approved: true,
+        status: 'approved',
+        device: reg.device,
+        devices: acc.devices,
+        devices_used: acc.devices.length,
+        device_count: acc.devices.length,
+        max_devices: MAX_DEVICES_PER_ACCOUNT,
+        device_limit: MAX_DEVICES_PER_ACCOUNT
+      },
+      { 'Cache-Control': 'no-store' },
+      req
+    );
+  }
+
+  // Self-Service Device Unlinking & Targeted WireGuard Peer Revocation
+  if ((pathname === '/api/portal/revoke-device' || pathname === '/api/vpn/devices/revoke') && req.method === 'POST') {
+    if (!checkRateLimit(req, 'revoke_device', 20, 60000)) {
+      return sendJson(res, 429, { ok: false, error: 'rate_limit_exceeded' }, {}, req);
+    }
+    const body = await readJsonBody(req);
+    if (body && body.__tooLarge) return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, {}, req);
+
+    let acc = null;
+    const sess = verifySessionCookie(req);
+    if (sess) {
+      acc = accountsById.get(sess.accountId) || (sess.email ? accountsByEmail.get(sess.email) : null);
+    }
+    if (!acc) {
+      const rawKey = String(body?.key || body?.code || body?.license_key || body?.activation_code || '').replace(/\s+/g, '').toUpperCase();
+      if (rawKey) acc = licenses.get(rawKey) || licenses.get(rawKey.toUpperCase()) || null;
+    }
+    if (!acc) {
+      return sendJson(res, 401, { ok: false, error: 'unauthorized', message: 'Please sign in to manage linked devices.' }, {}, req);
+    }
+    if (!Array.isArray(acc.devices)) acc.devices = [];
+
+    const targetDeviceId = String(body?.device_id || '').trim();
+    if (!targetDeviceId) {
+      return sendJson(res, 400, { ok: false, error: 'missing_device_id' }, {}, req);
+    }
+
+    const idx = acc.devices.findIndex((d) => d && d.id === targetDeviceId);
+    if (idx === -1) {
+      return sendJson(res, 404, { ok: false, error: 'device_not_found', devices: acc.devices, devices_used: acc.devices.length, device_count: acc.devices.length, max_devices: MAX_DEVICES_PER_ACCOUNT, device_limit: MAX_DEVICES_PER_ACCOUNT }, {}, req);
+    }
+
+    const [removed] = acc.devices.splice(idx, 1);
+    if (!acc.revokedDeviceIds || !(acc.revokedDeviceIds instanceof Set)) {
+      acc.revokedDeviceIds = new Set();
+    }
+    acc.revokedDeviceIds.add(targetDeviceId);
+
+    if (removed && removed.wg_licence_hash) {
+      revokeLicenceOnAllNodes(removed.wg_licence_hash).catch(() => {});
+    }
+
+    return sendJson(
+      res,
+      200,
+      {
+        ok: true,
+        revoked_device_id: targetDeviceId,
+        revoked_device_name: removed?.name || targetDeviceId,
+        devices: acc.devices,
+        devices_used: acc.devices.length,
+        device_count: acc.devices.length,
+        max_devices: MAX_DEVICES_PER_ACCOUNT,
+        device_limit: MAX_DEVICES_PER_ACCOUNT
+      },
+      { 'Cache-Control': 'no-store' },
+      req
+    );
+  }
+
+  // Mobile-First Universal QR Pairing Landing Page (/pair?t=... or /pair?c=...)
+  if (pathname === '/pair' && req.method === 'GET') {
+    pruneExpiredPairingEntries();
+    const t = String(urlObj.searchParams.get('t') || '').trim();
+    const c = String(urlObj.searchParams.get('c') || '').trim();
+    const sess = verifySessionCookie(req);
+    const sessAcc = sess ? (accountsById.get(sess.accountId) || (sess.email ? accountsByEmail.get(sess.email) : null)) : null;
+    const ch = c ? pairingChallenges.get(c) : null;
+
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Link Device | SWEEPR VPN</title>
+  <meta name="robots" content="noindex, nofollow">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f8fafc;color:#0f172a;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+    .card{background:#fff;border:1px solid #e2e8f0;border-radius:20px;box-shadow:0 16px 40px -12px rgba(15,23,42,.08);max-width:440px;width:100%;padding:28px 24px;display:flex;flex-direction:column;gap:16px}
+    .badge{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;font-size:12px;font-weight:800;background:#ecfdf5;color:#047857;border:1px solid #a7f3d0;align-self:flex-start}
+    h1{font-size:21px;font-weight:900;letter-spacing:-.02em}
+    p{font-size:14px;color:#475569;line-height:1.5}
+    .box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px}
+    .input{width:100%;padding:11px 14px;border:1px solid #cbd5e1;border-radius:12px;font-size:14px;font-family:monospace;font-weight:700}
+    .btn{width:100%;padding:13px 16px;border-radius:12px;border:none;font-size:14px;font-weight:800;cursor:pointer;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+    .btn-go{background:linear-gradient(135deg,#059669,#10b981);color:#fff;box-shadow:0 6px 18px -4px rgba(5,150,105,.4)}
+    .btn-soft{background:#f1f5f9;color:#0f172a;border:1px solid #e2e8f0}
+    .err{color:#dc2626;font-size:13px;font-weight:700;display:none}
+    .ok{color:#059669;font-size:13.5px;font-weight:800}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="badge">🔒 SWEEPR VPN Device Pairing</div>
+    <div id="pairBody">
+      ${t ? `
+        <h1>Linking This Device…</h1>
+        <p style="margin-top:6px">Verifying your one-time QR pairing token and reserving a device slot (up to 10 devices).</p>
+      ` : c ? `
+        <h1>Approve Desktop Device</h1>
+        <p style="margin-top:6px">Confirm linking <strong>${escapeHtml(ch ? ch.deviceName : 'SWEEPR VPN Desktop')}</strong> to your SWEEPR VPN Pro subscription.</p>
+        ${sessAcc ? `<div class="box" style="margin-top:12px"><div style="font-size:12px;color:#64748b;font-weight:700">SIGNED IN AS</div><div style="font-size:14px;font-weight:800">${escapeHtml(sessAcc.email)} (${(sessAcc.devices || []).length} / 10 devices used)</div></div>` : `
+        <div class="box" style="margin-top:12px">
+          <label style="font-size:12px;font-weight:800;color:#475569">Your License Key or 6-Digit Code</label>
+          <input id="approveKey" class="input" placeholder="SWEEPR-VPN-XXXX-XXXX-XXXX" />
+          <input id="approveEmail" class="input" type="email" placeholder="Account email (if using 6-digit code)" style="font-family:sans-serif;font-weight:600" />
+        </div>`}
+        <div id="pairErr" class="err" style="margin-top:10px"></div>
+        <button class="btn btn-go" style="margin-top:14px" id="approveBtn" onclick="approveDesktop()">Approve &amp; Unlock Desktop</button>
+      ` : `
+        <h1>Invalid Pairing Link</h1>
+        <p style="margin-top:6px">Please scan a fresh QR code from your SWEEPR VPN Customer Portal or Desktop App.</p>
+      `}
+    </div>
+  </div>
+  <script>
+    const token = ${JSON.stringify(t)};
+    const challengeId = ${JSON.stringify(c)};
+    const hasSession = ${JSON.stringify(Boolean(sessAcc))};
+    function detectOs() {
+      const ua = navigator.userAgent || '';
+      if (/iPhone|iPad|iPod/i.test(ua)) return { os: 'ios', name: 'iPhone / iPad' };
+      if (/Android/i.test(ua)) return { os: 'android', name: 'Android Phone' };
+      if (/Mac/i.test(ua)) return { os: 'macos', name: 'Mac' };
+      if (/Linux/i.test(ua)) return { os: 'linux', name: 'Linux PC' };
+      return { os: 'windows', name: 'Windows PC' };
+    }
+    function getOrCreateDeviceId() {
+      try {
+        let id = localStorage.getItem('sweepr_vpn_device_id');
+        if (!id) {
+          id = 'dev_vpn_' + Math.random().toString(16).slice(2, 10) + Date.now().toString(16).slice(-4);
+          localStorage.setItem('sweepr_vpn_device_id', id);
+        }
+        return id;
+      } catch (e) {
+        return 'dev_vpn_' + Date.now().toString(16);
+      }
+    }
+    async function redeemFlowA() {
+      const info = detectOs();
+      const devId = getOrCreateDeviceId();
+      try {
+        const r = await fetch('/api/vpn/pair/redeem', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token, device_id: devId, device_name: info.name, os: info.os })
+        });
+        const d = await r.json();
+        if (!r.ok || !d.ok) {
+          document.getElementById('pairBody').innerHTML = '<h1>Could Not Link Device</h1><p style="margin-top:8px;color:#dc2626;font-weight:700">' + (d.message || 'This QR code has expired.') + '</p><a href="/dashboard" class="btn btn-soft" style="margin-top:14px">Open Customer Portal</a>';
+          return;
+        }
+        try {
+          if (d.email) localStorage.setItem('sweepr_vpn_email', d.email);
+          if (d.licenseKey) {
+            localStorage.setItem('sweepr_vpn_code', d.licenseKey);
+            localStorage.setItem('sweepr_vpn_license_key', d.licenseKey);
+          }
+        } catch (e) {}
+        const deepLink = 'sweeprvpn://activate?key=' + encodeURIComponent(d.licenseKey || '') + '&device_id=' + encodeURIComponent(devId);
+        const mobileConfigUrl = '/api/vpn/apple-mobileconfig?key=' + encodeURIComponent(d.licenseKey || '') + '&server_code=UK-LON-01';
+        document.getElementById('pairBody').innerHTML =
+          '<h1>✓ Device Linked!</h1>' +
+          '<p style="margin-top:6px">This ' + info.name + ' is now linked to <strong>' + (d.email || 'your account') + '</strong> (Slot ' + d.devices_used + ' of ' + d.max_devices + ').</p>' +
+          '<div class="box" style="margin-top:12px"><div style="font-size:11px;font-weight:800;color:#64748b">ACTIVE LICENSE KEY</div><div style="font-family:monospace;font-weight:800;font-size:14px">' + (d.licenseKey || '') + '</div></div>' +
+          '<a href="' + deepLink + '" class="btn btn-go" style="margin-top:14px">Open in SWEEPR VPN App</a>' +
+          '<a href="' + mobileConfigUrl + '" class="btn btn-soft" style="margin-top:8px">Install 1-Tap iOS / macOS Tunnel Profile</a>' +
+          '<a href="/app-preview.html?key=' + encodeURIComponent(d.licenseKey || '') + '" class="btn btn-soft" style="margin-top:8px">Open Web Controller</a>';
+      } catch (e) {
+        document.getElementById('pairBody').innerHTML = '<h1>Connection Error</h1><p style="margin-top:8px">Please check your internet connection and scan the QR code again.</p>';
+      }
+    }
+    async function approveDesktop() {
+      const btn = document.getElementById('approveBtn');
+      const err = document.getElementById('pairErr');
+      err.style.display = 'none';
+      let key = '';
+      let email = '';
+      if (!hasSession) {
+        key = (document.getElementById('approveKey')?.value || localStorage.getItem('sweepr_vpn_license_key') || localStorage.getItem('sweepr_vpn_code') || '').trim();
+        email = (document.getElementById('approveEmail')?.value || localStorage.getItem('sweepr_vpn_email') || '').trim();
+      }
+      btn.disabled = true;
+      btn.textContent = 'Approving…';
+      try {
+        const r = await fetch('/api/vpn/pair/approve', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ challenge_id: challengeId, key, email })
+        });
+        const d = await r.json();
+        if (!r.ok || !d.ok) {
+          err.textContent = d.message || 'Could not approve device.';
+          err.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Approve & Unlock Desktop';
+          return;
+        }
+        document.getElementById('pairBody').innerHTML =
+          '<h1>✓ Desktop Unlocked!</h1>' +
+          '<p style="margin-top:6px">Your desktop app is now linked and unlocked (Slot ' + d.devices_used + ' of ' + d.max_devices + '). You can close this tab.</p>';
+      } catch (e) {
+        err.textContent = 'Network error. Please try again.';
+        err.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Approve & Unlock Desktop';
+      }
+    }
+    if (token) redeemFlowA();
+    else if (challengeId && !hasSession) {
+      try {
+        const savedKey = localStorage.getItem('sweepr_vpn_license_key') || localStorage.getItem('sweepr_vpn_code') || '';
+        const savedEmail = localStorage.getItem('sweepr_vpn_email') || '';
+        if (savedKey && document.getElementById('approveKey')) document.getElementById('approveKey').value = savedKey;
+        if (savedEmail && document.getElementById('approveEmail')) document.getElementById('approveEmail').value = savedEmail;
+      } catch (e) {}
+    }
+  </script>
+</body>
+</html>`;
+    return sendHtml(res, 200, html, { 'X-Robots-Tag': 'noindex, nofollow', 'Cache-Control': 'no-store' });
   }
 
   // VPN Key Verification (Authoritatively backed by centralized sweepr_crm first)
@@ -3660,9 +4463,9 @@ self.addEventListener('fetch', e => {
 
     if (!crmOtpSent && isSignedUp && localAcc) {
       const smtpUser = (process.env.SMTP_GMAIL_USER || '').trim().replace(/^["']|["']$/g, '') ||
-        decryptWithPkKey('292e02963cb47df56b0c11bf:ec9309892f80d12c4bc8d8f1c574a1c0:b28816343a58bc4241226fa1089541bcc2cda438670f8262ff09');
+        decryptServerVault(ENCRYPTED_SMTP_USER);
       const smtpPass = (process.env.SMTP_GMAIL_PASS || '').trim().replace(/\s+/g, '').replace(/^["']|["']$/g, '') ||
-        decryptWithPkKey('e6a41c129c37f88ca73363ed:8311a7406578f3c1a4b112d09adf4202:09f6b7df83870a06c01211c984d297b4');
+        decryptServerVault(ENCRYPTED_SMTP_PASS);
       if (smtpUser && smtpPass) {
         try {
           const subject = 'Your SWEEPR VPN Login & Activation Code';
@@ -3953,7 +4756,9 @@ self.addEventListener('fetch', e => {
         payment_method: paymentMethod,
         billing_address: billingAddress,
         subscription_details: subscriptionDetails,
-        devices: Array.isArray(acc.devices) ? acc.devices : []
+        devices: Array.isArray(acc.devices) ? acc.devices : [],
+        devices_used: Array.isArray(acc.devices) ? acc.devices.length : 0,
+        max_devices: MAX_DEVICES_PER_ACCOUNT
       },
       { 'Cache-Control': 'no-store' },
       req
@@ -4177,10 +4982,22 @@ self.addEventListener('fetch', e => {
 
   // VPN server list: only real servers from VPN_NODES (no secrets are ever sent)
   if (pathname === '/api/vpn/servers' && req.method === 'GET') {
+    if (!checkRateLimit(req, 'vpn_servers', 60, 60000)) {
+      return sendJson(res, 429, { ok: false, error: 'rate_limit_exceeded' }, {}, req);
+    }
     const nodes = loadVpnNodes();
     const servers = await Promise.all(nodes.map(async (n) => {
       const h = await nodeHealth(n);
-      return { code: n.code, country: n.country, city: n.city, flag: n.flag, online: Boolean(h), devices: h ? h.devices : null };
+      return {
+        code: n.code,
+        country: n.country,
+        city: n.city,
+        flag: n.flag,
+        online: Boolean(h),
+        devices: h ? h.devices : null,
+        probe_ms: h?.probeMs ?? null,
+        p99_ms: h?.p99Ms ?? null
+      };
     }));
     return sendJson(res, 200, { ok: true, servers }, {}, req);
   }
@@ -4199,11 +5016,11 @@ self.addEventListener('fetch', e => {
     if (!/^[A-Za-z0-9+/]{42}[AEIMQUYcgkosw480]=$/.test(publicKey)) {
       return sendJson(res, 400, { ok: false, error: 'invalid_public_key' }, {}, req);
     }
-    const licence = await resolveVpnLicence(String(body?.activation_code || body?.license_key || '').trim(), body?.email);
+    const licence = await resolveVpnLicence(String(body?.activation_code || body?.license_key || '').trim(), body?.email, body?.device_id);
     if (!licence) {
       return sendJson(res, 401, { ok: false, error: 'licence_required', message: 'Enter your license key to connect. It is in your order email.' }, {}, req);
     }
-    const node = loadVpnNodes().find((n) => n.code === serverCode);
+    const node = await selectHealthyNodeForRegion(loadVpnNodes(), serverCode);
     if (!node) {
       return sendJson(res, 404, { ok: false, error: 'server_unavailable', message: 'That location is not available right now. Please pick another.' }, {}, req);
     }
@@ -4232,7 +5049,7 @@ self.addEventListener('fetch', e => {
         server_public_key: serverPubKey,
         address: assignedAddress,
         dns: assignedDns,
-        allowed_ips: '0.0.0.0/0',
+        allowed_ips: '0.0.0.0/0, ::/0',
         server: { code: node.code, country: node.country, city: node.city, flag: node.flag }
       }, {}, req);
     } catch (e) {
@@ -4250,12 +5067,12 @@ self.addEventListener('fetch', e => {
     const rawKey = String(body?.activation_code || body?.license_key || '').trim();
     const rawCode = String(body?.server_code || 'UK-LON-01').trim().toUpperCase();
     const serverCode = rawCode === 'CH-ZRH-01' ? 'SE-STO-01' : rawCode;
-    const licence = await resolveVpnLicence(rawKey, body?.email);
+    const licence = await resolveVpnLicence(rawKey, body?.email, body?.device_id);
     if (!licence) {
       return sendJson(res, 401, { ok: false, error: 'licence_required', message: 'Please enter a valid active SWEEPR Pro license key.' }, {}, req);
     }
     const nodes = loadVpnNodes();
-    const node = nodes.find((n) => n.code === serverCode) || nodes[0];
+    const node = (await selectHealthyNodeForRegion(nodes, serverCode)) || nodes[0];
     if (!node) {
       return sendJson(res, 404, { ok: false, error: 'server_unavailable', message: 'That location is temporarily unavailable.' }, {}, req);
     }
@@ -4277,7 +5094,7 @@ self.addEventListener('fetch', e => {
       const endpoint = `${node.ip}:${node.port || 51820}`;
       const lanBypass = Boolean(body?.lan_bypass);
       const allowedIps = lanBypass
-        ? '1.0.0.0/8, 2.0.0.0/7, 4.0.0.0/6, 8.0.0.0/7, 10.64.0.0/16, 11.0.0.0/8, 12.0.0.0/6, 16.0.0.0/4, 32.0.0.0/3, 64.0.0.0/2, 128.0.0.0/3, 160.0.0.0/5, 168.0.0.0/6, 172.0.0.0/12, 172.32.0.0/11, 172.64.0.0/10, 172.128.0.0/9, 173.0.0.0/8, 174.0.0.0/7, 176.0.0.0/4, 192.0.0.0/9, 192.128.0.0/11, 192.160.0.0/13, 192.169.0.0/16, 192.170.0.0/15, 192.172.0.0/14, 192.176.0.0/12, 192.192.0.0/10, 193.0.0.0/8, 194.0.0.0/7, 196.0.0.0/6, 200.0.0.0/5, 208.0.0.0/4'
+        ? '1.0.0.0/8, 2.0.0.0/7, 4.0.0.0/6, 8.0.0.0/7, 10.64.0.0/16, 11.0.0.0/8, 12.0.0.0/6, 16.0.0.0/4, 32.0.0.0/3, 64.0.0.0/2, 128.0.0.0/3, 160.0.0.0/5, 168.0.0.0/6, 172.0.0.0/12, 172.32.0.0/11, 172.64.0.0/10, 172.128.0.0/9, 173.0.0.0/8, 174.0.0.0/7, 176.0.0.0/4, 192.0.0.0/9, 192.128.0.0/11, 192.160.0.0/13, 192.169.0.0/16, 192.170.0.0/15, 192.172.0.0/14, 192.176.0.0/12, 192.192.0.0/10, 193.0.0.0/8, 194.0.0.0/7, 196.0.0.0/6, 200.0.0.0/5, 208.0.0.0/4, ::/0'
         : '0.0.0.0/0, ::/0';
 
       const configText = [
@@ -4335,12 +5152,12 @@ self.addEventListener('fetch', e => {
     const rawKey = String(body?.activation_code || body?.license_key || urlObj.searchParams.get('key') || urlObj.searchParams.get('code') || '').trim();
     const rawCode = String(body?.server_code || urlObj.searchParams.get('server_code') || 'UK-LON-01').trim().toUpperCase();
     const serverCode = rawCode === 'CH-ZRH-01' ? 'SE-STO-01' : rawCode;
-    const licence = await resolveVpnLicence(rawKey, body?.email || urlObj.searchParams.get('email'));
+    const licence = await resolveVpnLicence(rawKey, body?.email || urlObj.searchParams.get('email'), body?.device_id || urlObj.searchParams.get('device_id'));
     if (!licence) {
       return sendJson(res, 401, { ok: false, error: 'licence_required', message: 'Please enter a valid active SWEEPR Pro license key.' }, {}, req);
     }
     const nodes = loadVpnNodes();
-    const node = nodes.find((n) => n.code === serverCode) || nodes[0];
+    const node = (await selectHealthyNodeForRegion(nodes, serverCode)) || nodes[0];
     if (!node) {
       return sendJson(res, 404, { ok: false, error: 'server_unavailable' }, {}, req);
     }
@@ -4539,9 +5356,9 @@ self.addEventListener('fetch', e => {
       // 2. Direct Zero-Dependency Gmail SMTPS (Port 465 via node:tls)
       if (!emailed) {
         const smtpUser = (process.env.SMTP_GMAIL_USER || '').trim().replace(/^["']|["']$/g, '') ||
-          decryptWithPkKey('292e02963cb47df56b0c11bf:ec9309892f80d12c4bc8d8f1c574a1c0:b28816343a58bc4241226fa1089541bcc2cda438670f8262ff09');
+          decryptServerVault(ENCRYPTED_SMTP_USER);
         const smtpPass = (process.env.SMTP_GMAIL_PASS || '').trim().replace(/\s+/g, '').replace(/^["']|["']$/g, '') ||
-          decryptWithPkKey('e6a41c129c37f88ca73363ed:8311a7406578f3c1a4b112d09adf4202:09f6b7df83870a06c01211c984d297b4');
+          decryptServerVault(ENCRYPTED_SMTP_PASS);
         if (smtpUser && smtpPass) {
           try {
             await new Promise((resolve, reject) => {

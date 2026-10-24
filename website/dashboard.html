@@ -104,12 +104,39 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="glass-card p-6 bg-white shadow-sm rounded-2xl border border-gray-100">
-          <h3 class="font-bold text-lg mb-2">Linked Devices</h3>
-          <p class="text-sm text-gray-500 mb-4">You can protect up to 10 devices on your SWEEPR VPN Pro license.</p>
-          <ul id="deviceList" class="space-y-3">
-            <!-- Populated by JS -->
-          </ul>
+        <div class="glass-card p-6 bg-white shadow-sm rounded-2xl border border-gray-100 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <h3 class="font-bold text-lg">Linked Devices</h3>
+              <span id="deviceCountBadge" class="text-xs font-extrabold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">0 / 10 Devices</span>
+            </div>
+            <p class="text-sm text-gray-500 mb-4">Protect up to 10 devices simultaneously. Scan a one-time QR code to link a phone, tablet, or computer without typing your license key.</p>
+
+            <button
+              type="button"
+              id="openPortalQrBtn"
+              onclick="generatePortalPairingQr()"
+              class="w-full mb-4 px-4 py-2.5 rounded-xl font-bold text-sm text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 transition-all flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <span>📱 Link New Device via QR Code</span>
+            </button>
+
+            <div id="portalQrDrawer" class="hidden mb-4 p-4 rounded-xl bg-gray-50 border border-emerald-200 text-center">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-800">One-Time Pairing QR</span>
+                <button type="button" onclick="closePortalPairingQr()" class="text-xs font-bold text-gray-400 hover:text-gray-700 cursor-pointer">✕ Close</button>
+              </div>
+              <div id="portalQrSvgBox" class="flex justify-center items-center py-2">
+                <span class="text-xs text-gray-500">Generating secure 120s pairing code…</span>
+              </div>
+              <div id="portalQrStatusText" class="text-xs font-semibold text-gray-600 mt-1">Scan with your phone camera or the SWEEPR VPN app</div>
+              <div id="portalQrTimerText" class="text-xs font-mono font-bold text-emerald-700 mt-1">Expires in 02:00</div>
+            </div>
+
+            <ul id="deviceList" class="space-y-3">
+              <!-- Populated by JS -->
+            </ul>
+          </div>
         </div>
 
         <div class="glass-card p-6 bg-white shadow-sm rounded-2xl border border-gray-100 flex flex-col justify-center items-center text-center">
@@ -248,26 +275,127 @@
           }
         }
 
+        const maxDevices = data.max_devices || 10;
+        const usedDevices = Array.isArray(data.devices) ? data.devices.length : 0;
+        const countBadge = document.getElementById('deviceCountBadge');
+        if (countBadge) {
+          countBadge.textContent = `${usedDevices} / ${maxDevices} Devices`;
+          countBadge.className = usedDevices >= maxDevices
+            ? 'text-xs font-extrabold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-300'
+            : 'text-xs font-extrabold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200';
+        }
+
         const deviceList = document.getElementById('deviceList');
         if (data.devices && data.devices.length > 0) {
           deviceList.innerHTML = data.devices.map(d => `
-            <li class="flex justify-between items-center p-3 rounded-lg bg-gray-50 border border-gray-100">
-              <div class="flex items-center gap-3">
-                <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                <div>
-                  <div class="text-sm font-semibold text-gray-800">${escapeHtml(d.name || 'SWEEPR VPN Device')}</div>
-                  <div class="text-xs text-gray-400 font-mono">${escapeHtml(String(d.id ?? '').substring(0, 14))}</div>
+            <li class="flex justify-between items-center p-3 rounded-lg bg-gray-50 border border-gray-100 gap-2">
+              <div class="flex items-center gap-3 min-w-0">
+                <svg class="w-5 h-5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                <div class="min-w-0">
+                  <div class="text-sm font-semibold text-gray-800 truncate">${escapeHtml(d.name || 'SWEEPR VPN Device')} <span class="text-xs text-gray-400 font-normal uppercase">(${escapeHtml(d.os || 'device')})</span></div>
+                  <div class="text-xs text-gray-400 font-mono truncate">${escapeHtml(String(d.id ?? '').substring(0, 18))}</div>
                 </div>
               </div>
-              <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">Active</span>
+              <div class="flex items-center gap-2 shrink-0">
+                <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">Active</span>
+                <button type="button" onclick="revokePortalDevice('${escapeHtml(String(d.id ?? ''))}')" class="text-xs font-bold text-red-600 hover:text-red-800 bg-red-50 hover:bg-red-100 border border-red-200 px-2.5 py-1 rounded-lg cursor-pointer">Remove</button>
+              </div>
             </li>
           `).join('');
         } else {
-          deviceList.innerHTML = '<li class="text-sm text-gray-500 italic">No devices linked yet. Enter your 6-digit activation code in the SWEEPR VPN app to link a device.</li>';
+          deviceList.innerHTML = '<li class="text-sm text-gray-500 italic">No devices linked yet. Click "Link New Device via QR Code" above or paste your license key in the SWEEPR VPN app.</li>';
         }
       } catch (err) {
         console.error(err);
       }
+    }
+
+    let portalQrPollTimer = null;
+    let portalQrCountdownTimer = null;
+
+    function closePortalPairingQr() {
+      if (portalQrPollTimer) { clearInterval(portalQrPollTimer); portalQrPollTimer = null; }
+      if (portalQrCountdownTimer) { clearInterval(portalQrCountdownTimer); portalQrCountdownTimer = null; }
+      const drawer = document.getElementById('portalQrDrawer');
+      if (drawer) drawer.classList.add('hidden');
+    }
+
+    async function generatePortalPairingQr() {
+      closePortalPairingQr();
+      const drawer = document.getElementById('portalQrDrawer');
+      const box = document.getElementById('portalQrSvgBox');
+      const statusEl = document.getElementById('portalQrStatusText');
+      const timerEl = document.getElementById('portalQrTimerText');
+      if (drawer) drawer.classList.remove('hidden');
+      if (box) box.innerHTML = '<span class="text-xs text-gray-500 py-6">Generating one-time 120s pairing QR…</span>';
+      if (statusEl) statusEl.textContent = 'Scan with your phone camera or the SWEEPR VPN app';
+      if (timerEl) timerEl.textContent = '';
+
+      try {
+        const res = await fetch('/api/vpn/pair/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ source: 'portal' })
+        });
+        const data = await res.json();
+        if (!res.ok || !data.ok) {
+          if (box) box.innerHTML = `<span class="text-xs font-bold text-red-600 py-4">${escapeHtml(data.message || 'Could not generate pairing QR.')}</span>`;
+          return;
+        }
+        if (box) {
+          box.innerHTML = `<div class="bg-white p-2 rounded-xl border border-gray-200 inline-block shadow-sm">${data.qr_svg || ''}</div>`;
+        }
+        let remaining = Number(data.expires_in || 120);
+        const renderTimer = () => {
+          const m = String(Math.floor(remaining / 60)).padStart(2, '0');
+          const s = String(remaining % 60).padStart(2, '0');
+          if (timerEl) timerEl.textContent = `Single-use token · Expires in ${m}:${s}`;
+        };
+        renderTimer();
+        portalQrCountdownTimer = setInterval(() => {
+          remaining = Math.max(0, remaining - 1);
+          renderTimer();
+          if (remaining <= 0) {
+            closePortalPairingQr();
+          }
+        }, 1000);
+
+        const pairToken = data.token;
+        portalQrPollTimer = setInterval(async () => {
+          try {
+            const chk = await fetch('/api/vpn/pair/check?t=' + encodeURIComponent(pairToken));
+            const cd = await chk.json();
+            if (cd.status === 'redeemed') {
+              if (portalQrPollTimer) { clearInterval(portalQrPollTimer); portalQrPollTimer = null; }
+              if (portalQrCountdownTimer) { clearInterval(portalQrCountdownTimer); portalQrCountdownTimer = null; }
+              if (box) box.innerHTML = `<div class="py-4 text-emerald-700 font-extrabold text-sm">✓ Linked ${escapeHtml(cd.device?.name || 'New Device')} (${cd.devices_used} / ${cd.max_devices} slots)</div>`;
+              if (timerEl) timerEl.textContent = '';
+              await load();
+            } else if (cd.status === 'expired') {
+              closePortalPairingQr();
+            }
+          } catch (e) {}
+        }, 2000);
+      } catch (e) {
+        if (box) box.innerHTML = '<span class="text-xs font-bold text-red-600 py-4">Network error generating QR code.</span>';
+      }
+    }
+
+    async function revokePortalDevice(deviceId) {
+      if (!deviceId) return;
+      try {
+        const res = await fetch('/api/portal/revoke-device', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ device_id: deviceId })
+        });
+        const data = await res.json();
+        if (res.ok && data.ok) {
+          await load();
+        } else {
+          alert(data.message || data.error || 'Could not remove device.');
+        }
+      } catch (e) {}
     }
 
     async function purchaseAddon(addonId, btnId) {
