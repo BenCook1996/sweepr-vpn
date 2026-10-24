@@ -871,19 +871,60 @@ namespace SweeprVpnApp
                     catch { }
                 }
 
+                // Try zero-UAC scheduled task switch if SWEEPRVPN_Switch is already registered from first install
+                if (!updatedInPlace)
+                {
+                    int taskQueryCode;
+                    RunProcessCapture("schtasks.exe", "/Query /TN \"SWEEPRVPN_Switch\"", out taskQueryCode);
+                    if (taskQueryCode == 0)
+                    {
+                        int taskRunCode;
+                        RunProcessCapture("schtasks.exe", "/Run /TN \"SWEEPRVPN_Switch\"", out taskRunCode);
+                        if (taskRunCode == 0)
+                        {
+                            for (int i = 0; i < 24; i++)
+                            {
+                                Thread.Sleep(250);
+                                if (IsTunnelServiceRunning())
+                                {
+                                    updatedInPlace = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
                 // Fallback to elevated setup if the service isn't installed or in-place config switch could not write to Program Files
                 if (!updatedInPlace || !IsTunnelServiceRunning())
                 {
-                    ProcessStartInfo psi = new ProcessStartInfo(Application.ExecutablePath, "--elevated-connect \"" + confPath + "\"");
-                    psi.Verb = "runas";
-                    psi.UseShellExecute = true;
-                    psi.WindowStyle = ProcessWindowStyle.Hidden;
-                    using (Process p = Process.Start(psi))
+                    string elevArgs = "--elevated-connect \"" + confPath + "\"";
+                    try
                     {
-                        if (p != null) p.WaitForExit(30000);
+                        ProcessStartInfo psi = new ProcessStartInfo(Application.ExecutablePath, elevArgs);
+                        psi.Verb = "runas";
+                        psi.UseShellExecute = true;
+                        psi.WindowStyle = ProcessWindowStyle.Hidden;
+                        using (Process p = Process.Start(psi))
+                        {
+                            if (p != null) p.WaitForExit(30000);
+                        }
+                    }
+                    catch
+                    {
+                        try
+                        {
+                            Type shellType = Type.GetTypeFromProgID("Shell.Application");
+                            if (shellType != null)
+                            {
+                                object shellObj = Activator.CreateInstance(shellType);
+                                shellType.InvokeMember("ShellExecute", BindingFlags.InvokeMethod, null, shellObj, new object[] { Application.ExecutablePath, elevArgs, "", "runas", 0 });
+                            }
+                        }
+                        catch { }
                     }
 
-                    for (int i = 0; i < 24; i++)
+                    for (int i = 0; i < 36; i++)
                     {
                         if (IsTunnelServiceRunning()) break;
                         Thread.Sleep(250);
@@ -925,6 +966,7 @@ namespace SweeprVpnApp
             {
                 int scCode;
                 RunProcessCapture("sc.exe", "stop \"WireGuardTunnel$sweepr0\"", out scCode);
+                RunProcessCapture("schtasks.exe", "/Run /TN \"SWEEPRVPN_Disconnect\"", out scCode);
                 for (int i = 0; i < 20; i++)
                 {
                     if (!IsTunnelServiceRunning()) break;
@@ -1588,6 +1630,41 @@ namespace SweeprVpnApp
                 RunHelperCmd("netsh.exe", "advfirewall firewall delete rule name=\"SWEEPR_VPN_Block_IPv6\"");
                 RunHelperCmd("netsh.exe", "advfirewall firewall add rule name=\"SWEEPR_VPN_Block_IPv6\" dir=out action=block protocol=any remoteip=2000::/3");
                 RunHelperCmd("ipconfig.exe", "/flushdns");
+
+                // Register zero-UAC SYSTEM helper tasks for subsequent country switches and disconnects
+                try
+                {
+                    string switchCmdPath = Path.Combine(pfWgDir, "sweepr_switch.cmd");
+                    string switchCmdBody =
+                        "@echo off\r\n" +
+                        "sc.exe stop \"WireGuardTunnel$sweepr0\" >nul 2>&1\r\n" +
+                        "timeout /t 1 /nobreak >nul 2>&1\r\n" +
+                        "copy /Y \"" + srcConfPath + "\" \"" + secureConfPath + "\" >nul 2>&1\r\n" +
+                        "icacls.exe \"" + secureConfPath + "\" /setowner \"SYSTEM\" >nul 2>&1\r\n" +
+                        "icacls.exe \"" + secureConfPath + "\" /inheritance:r /grant:r \"SYSTEM:(F)\" \"Administrators:(F)\" >nul 2>&1\r\n" +
+                        "netsh.exe advfirewall firewall delete rule name=\"SWEEPR_VPN_Block_IPv6\" >nul 2>&1\r\n" +
+                        "netsh.exe advfirewall firewall add rule name=\"SWEEPR_VPN_Block_IPv6\" dir=out action=block protocol=any remoteip=2000::/3 >nul 2>&1\r\n" +
+                        "sc.exe start \"WireGuardTunnel$sweepr0\" >nul 2>&1\r\n" +
+                        "ipconfig.exe /flushdns >nul 2>&1\r\n";
+                    File.WriteAllText(switchCmdPath, switchCmdBody, new UTF8Encoding(false));
+                    RunHelperCmd("icacls.exe", "\"" + switchCmdPath + "\" /setowner \"SYSTEM\"");
+                    RunHelperCmd("icacls.exe", "\"" + switchCmdPath + "\" /inheritance:r /grant:r \"SYSTEM:(F)\" \"Administrators:(F)\" \"*S-1-5-32-545:(RX)\"");
+                    RunHelperCmd("schtasks.exe", "/Create /TN \"SWEEPRVPN_Switch\" /TR \"\\\"" + switchCmdPath + "\\\"\" /SC ONCE /ST 00:00 /RU \"SYSTEM\" /RL HIGHEST /F");
+                    RunHelperCmd("icacls.exe", @"C:\Windows\System32\Tasks\SWEEPRVPN_Switch /grant ""*S-1-5-32-545:(RX)""");
+
+                    string discCmdPath = Path.Combine(pfWgDir, "sweepr_disconnect.cmd");
+                    string discCmdBody =
+                        "@echo off\r\n" +
+                        "sc.exe stop \"WireGuardTunnel$sweepr0\" >nul 2>&1\r\n" +
+                        "netsh.exe advfirewall firewall delete rule name=\"SWEEPR_VPN_Block_IPv6\" >nul 2>&1\r\n" +
+                        "ipconfig.exe /flushdns >nul 2>&1\r\n";
+                    File.WriteAllText(discCmdPath, discCmdBody, new UTF8Encoding(false));
+                    RunHelperCmd("icacls.exe", "\"" + discCmdPath + "\" /setowner \"SYSTEM\"");
+                    RunHelperCmd("icacls.exe", "\"" + discCmdPath + "\" /inheritance:r /grant:r \"SYSTEM:(F)\" \"Administrators:(F)\" \"*S-1-5-32-545:(RX)\"");
+                    RunHelperCmd("schtasks.exe", "/Create /TN \"SWEEPRVPN_Disconnect\" /TR \"\\\"" + discCmdPath + "\\\"\" /SC ONCE /ST 00:00 /RU \"SYSTEM\" /RL HIGHEST /F");
+                    RunHelperCmd("icacls.exe", @"C:\Windows\System32\Tasks\SWEEPRVPN_Disconnect /grant ""*S-1-5-32-545:(RX)""");
+                }
+                catch { }
                 diag.AppendLine("Service query:");
                 diag.AppendLine(RunHelperCmd("sc.exe", "query \"WireGuardTunnel$sweepr0\""));
                 diag.AppendLine("WireGuard dumplog:");
