@@ -31,7 +31,7 @@ final class SweeprVpnViewModel: ObservableObject {
     @Published var authToken: String = ""
     @Published var selectedServerCode: String = "UK-LON-01"
     @Published var deviceCount: Int = 1
-    @Published var deviceLimit: Int = 10
+    @Published var deviceLimit: Int = 3
     @Published var statusBanner: String = "Ready to protect your iPhone"
     @Published var showActivationSheet: Bool = false
     @Published var showQrScannerSheet: Bool = false
@@ -100,7 +100,7 @@ final class SweeprVpnViewModel: ObservableObject {
                 self.userEmail = decoded.email ?? self.userEmail
                 self.authToken = decoded.token ?? ""
                 self.deviceCount = decoded.device_count ?? 1
-                self.deviceLimit = decoded.device_limit ?? 10
+                self.deviceLimit = decoded.device_limit ?? 3
                 self.isPro = true
                 UserDefaults.standard.set(self.userEmail, forKey: "sweepr_email")
                 UserDefaults.standard.set(self.licenseKey, forKey: "sweepr_license_key")
@@ -109,7 +109,7 @@ final class SweeprVpnViewModel: ObservableObject {
                 self.showActivationSheet = false
                 self.statusBanner = "Linked via QR (\(self.deviceCount)/\(self.deviceLimit) devices active)"
             } else {
-                self.statusBanner = decoded.message ?? "QR pairing token expired or device limit (10) reached."
+                self.statusBanner = decoded.message ?? "QR pairing token expired or device limit (3) reached."
             }
         } catch {
             self.statusBanner = "Could not reach SWEEPR pairing server."
@@ -138,7 +138,7 @@ final class SweeprVpnViewModel: ObservableObject {
             let decoded = try JSONDecoder().decode(PairingApproveResponse.self, from: data)
             if decoded.ok {
                 self.deviceCount = decoded.device_count ?? self.deviceCount
-                self.deviceLimit = decoded.device_limit ?? 10
+                self.deviceLimit = decoded.device_limit ?? 3
                 self.showQrScannerSheet = false
                 self.statusBanner = "Desktop App unlocked! (\(self.deviceCount)/\(self.deviceLimit) devices active)"
             } else {

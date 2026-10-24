@@ -467,7 +467,7 @@ async function getStripeProductId() {
   }
   const created = await stripeRequest('POST', 'products', {
     name: 'SWEEPR VPN Pro',
-    description: 'SWEEPR VPN Pro — High-Speed Private Wi-Fi Encryption, ISP Throttling Protection & Zero-Logs Privacy (Up to 10 Devices)'
+    description: 'SWEEPR VPN Pro — High-Speed Private Wi-Fi Encryption, ISP Throttling Protection & Zero-Logs Privacy (Up to 3 Devices — Desktop or Mobile)'
   });
   cachedMainProductId = created.id;
   return created.id;
@@ -558,7 +558,7 @@ const accountsById = new Map();
 const accountsByEmail = new Map();
 const accountsBySubscriptionId = new Map();
 const portalOtpChallenges = new Map();
-const MAX_DEVICES_PER_ACCOUNT = 10;
+const MAX_DEVICES_PER_ACCOUNT = 3;
 const PAIRING_TOKEN_TTL_MS = 120 * 1000;
 const pairingTokens = new Map();
 const pairingChallenges = new Map();
@@ -623,7 +623,7 @@ function registerOrUpdateAccountDevice(acc, { deviceId, deviceName, os = 'window
     return {
       ok: false,
       error: 'device_limit_reached',
-      message: `You have reached the ${MAX_DEVICES_PER_ACCOUNT}-device limit on your SWEEPR VPN Pro subscription. Please remove an existing device from your Customer Portal or app first.`,
+      message: `You have reached the ${MAX_DEVICES_PER_ACCOUNT}-device limit on your SWEEPR VPN Pro subscription (any combination of desktop or mobile). Please remove an existing device from your Customer Portal or app first.`,
       devices: acc.devices,
       devices_used: acc.devices.length,
       device_count: acc.devices.length,
@@ -1424,10 +1424,10 @@ async function sendWelcomeLicenseEmail(acc) {
   const licenseKey = acc.licenseKey || 'SWEEPR-VPN-PRO';
   const activationCode = acc.activation_code || '849201';
   const subject = 'Welcome to SWEEPR VPN Pro — Your License Key & Setup Guide';
-  const textBody = `Hi ${acc.name || 'there'},\n\nThank you for subscribing to SWEEPR VPN Pro! Your subscription is active for up to 10 devices.\n\nFull Product License Key (Paste in App): ${licenseKey}\n6-Digit Quick Activation Code: ${activationCode}\nRegistered Email: ${email}\n\n1. Open SWEEPR VPN (or download at https://sweeprvpn.com/download?key=${encodeURIComponent(licenseKey)}&autoconf=1)\n2. Paste ${licenseKey} into the license key box to unlock all 8 global locations and Smart-TV shields.\n\nBest regards,\nThe SWEEPR VPN Team`;
+  const textBody = `Hi ${acc.name || 'there'},\n\nThank you for subscribing to SWEEPR VPN Pro! Your subscription is active for up to 3 devices (any combination of desktop or mobile).\n\nFull Product License Key (Paste in App): ${licenseKey}\n6-Digit Quick Activation Code: ${activationCode}\nRegistered Email: ${email}\n\n1. Open SWEEPR VPN (or download at https://sweeprvpn.com/download?key=${encodeURIComponent(licenseKey)}&autoconf=1)\n2. Paste ${licenseKey} into the license key box to unlock all 8 global locations and Smart-TV shields.\n\nBest regards,\nThe SWEEPR VPN Team`;
   const htmlBody = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:520px;margin:0 auto;padding:28px 24px;color:#0f172a;background:#ffffff;border:1px solid #e2e8f0;border-radius:16px">
   <h2 style="margin:0 0 8px;font-size:21px;font-weight:800;color:#0f172a">Welcome to SWEEPR VPN Pro! 🎉</h2>
-  <p style="margin:0 0 18px;font-size:14px;color:#475569">Hi ${escapeHtml(acc.name || 'there')}, your subscription is active across up to 10 devices. Here are your credentials:</p>
+  <p style="margin:0 0 18px;font-size:14px;color:#475569">Hi ${escapeHtml(acc.name || 'there')}, your subscription is active across up to 3 devices (any combination of desktop or mobile). Here are your credentials:</p>
   <div style="background:#f0fdf4;border:2px dashed #10b981;border-radius:12px;padding:18px;text-align:center;margin:18px 0">
     <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#047857;margin-bottom:6px">Full Product License Key (Paste in App)</div>
     <div style="font-family:monospace;font-size:19px;font-weight:800;color:#0f172a;letter-spacing:1px">${escapeHtml(licenseKey)}</div>
@@ -1793,7 +1793,7 @@ function renderPlatformDownloadPicker(osType = 'other') {
     ? 'Instant Phone &amp; Computer Setup'
     : 'Choose Your Operating System';
   const subtitle = isMobile
-    ? 'Connect your iPhone or Android in 15 seconds with a 1-tap WireGuard profile, or get SWEEPR VPN Pro for up to 10 devices.'
+    ? 'Connect your iPhone or Android in 15 seconds with a 1-tap WireGuard profile, or get SWEEPR VPN Pro for up to 3 devices (desktop or mobile).'
     : 'Select your setup option below to start your free 30-second Home Wi-Fi &amp; Speed Scan or activate 1-click WireGuard protection.';
 
   return `<!DOCTYPE html>
@@ -1854,7 +1854,7 @@ function renderPlatformDownloadPicker(osType = 'other') {
       <a href="/order?plan=annual" class="flex items-center justify-between gap-3 p-4 rounded-xl border border-gray-200 bg-white hover:border-emerald-400 transition-all no-underline text-gray-900">
         <div>
           <div class="font-extrabold text-sm text-gray-900">Need a License Key? Get SWEEPR VPN Pro</div>
-          <div class="text-xs text-gray-500">Protects up to 10 devices across iOS, Android, Windows &amp; Mac &bull; Save 50%</div>
+          <div class="text-xs text-gray-500">Protects up to 3 devices (any combination of desktop or mobile) &bull; Save 50%</div>
         </div>
         <span class="btn btn-go text-xs py-2 px-3 shrink-0">Get Pro &rarr;</span>
       </a>
@@ -2095,7 +2095,7 @@ function renderCheckoutSuccessPage(acc, isCancelled = false, isPopup = false) {
         </button>
       </div>
       <div class="text-xs text-slate-400 space-y-1 pt-2 border-t border-slate-800/80">
-        <div class="font-bold text-slate-200 mb-1">Unlocked on your account (Up to 10 Devices):</div>
+        <div class="font-bold text-slate-200 mb-1">Unlocked on your account (Up to 3 Devices — Desktop or Mobile):</div>
         <div>✓ 1-Click Private Browsing &amp; Public Wi-Fi Protection (8 Global Locations)</div>
         <div>✓ Streaming Speed Booster &amp; Automatic Drop Protection</div>
         <div>✓ Home Wi-Fi Device Scanner &amp; Smart-TV Spy Blocker Included Free</div>
@@ -4107,11 +4107,11 @@ self.addEventListener('fetch', e => {
     <div id="pairBody">
       ${t ? `
         <h1>Linking This Device…</h1>
-        <p style="margin-top:6px">Verifying your one-time QR pairing token and reserving a device slot (up to 10 devices).</p>
+        <p style="margin-top:6px">Verifying your one-time QR pairing token and reserving a device slot (up to ${MAX_DEVICES_PER_ACCOUNT} devices — desktop or mobile).</p>
       ` : c ? `
         <h1>Approve Desktop Device</h1>
         <p style="margin-top:6px">Confirm linking <strong>${escapeHtml(ch ? ch.deviceName : 'SWEEPR VPN Desktop')}</strong> to your SWEEPR VPN Pro subscription.</p>
-        ${sessAcc ? `<div class="box" style="margin-top:12px"><div style="font-size:12px;color:#64748b;font-weight:700">SIGNED IN AS</div><div style="font-size:14px;font-weight:800">${escapeHtml(sessAcc.email)} (${(sessAcc.devices || []).length} / 10 devices used)</div></div>` : `
+        ${sessAcc ? `<div class="box" style="margin-top:12px"><div style="font-size:12px;color:#64748b;font-weight:700">SIGNED IN AS</div><div style="font-size:14px;font-weight:800">${escapeHtml(sessAcc.email)} (${(sessAcc.devices || []).length} / ${MAX_DEVICES_PER_ACCOUNT} devices used)</div></div>` : `
         <div class="box" style="margin-top:12px">
           <label style="font-size:12px;font-weight:800;color:#475569">Your License Key or 6-Digit Code</label>
           <input id="approveKey" class="input" placeholder="SWEEPR-VPN-XXXX-XXXX-XXXX" />
@@ -5332,10 +5332,10 @@ self.addEventListener('fetch', e => {
         notes: 'Resend Key Sync'
       }).catch(() => {});
       const subject = 'Your SWEEPR VPN Pro License Key & Activation Code';
-      const textBody = `Hi ${localAcc.name || 'there'},\n\nHere are your active SWEEPR VPN Pro subscription credentials (up to 10 devices):\n\nFull Product License Key: ${licenseKey}\n6-Digit Quick Activation Code: ${activationCode}\nRegistered Email: ${email}\n\nPaste ${licenseKey} into the license key field inside SWEEPR VPN to unlock all 8 global locations and Smart-TV shields.\n\nBest regards,\nThe SWEEPR VPN Team`;
+      const textBody = `Hi ${localAcc.name || 'there'},\n\nHere are your active SWEEPR VPN Pro subscription credentials (up to 3 devices — desktop or mobile):\n\nFull Product License Key: ${licenseKey}\n6-Digit Quick Activation Code: ${activationCode}\nRegistered Email: ${email}\n\nPaste ${licenseKey} into the license key field inside SWEEPR VPN to unlock all 8 global locations and Smart-TV shields.\n\nBest regards,\nThe SWEEPR VPN Team`;
       const htmlBody = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:520px;margin:0 auto;padding:28px 24px;color:#0f172a;background:#ffffff;border:1px solid #e2e8f0;border-radius:16px">
   <h2 style="margin:0 0 8px;font-size:21px;font-weight:800;color:#0f172a">Your SWEEPR VPN Pro License Key</h2>
-  <p style="margin:0 0 18px;font-size:14px;color:#475569">Hi ${escapeHtml(localAcc.name || 'there')}, here are your active SWEEPR VPN Pro credentials (up to 10 devices):</p>
+  <p style="margin:0 0 18px;font-size:14px;color:#475569">Hi ${escapeHtml(localAcc.name || 'there')}, here are your active SWEEPR VPN Pro credentials (up to 3 devices — desktop or mobile):</p>
   <div style="background:#f0fdf4;border:2px dashed #10b981;border-radius:12px;padding:18px;text-align:center;margin:18px 0">
     <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#047857;margin-bottom:6px">Full Product License Key (Paste in App)</div>
     <div style="font-family:monospace;font-size:19px;font-weight:800;color:#0f172a;letter-spacing:1px">${escapeHtml(licenseKey)}</div>

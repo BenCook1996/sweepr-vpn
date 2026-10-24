@@ -67,7 +67,7 @@
               Copy Code
             </button>
           </div>
-          <p class="text-xs text-gray-500 mt-1">Enter your email and this 6-digit code inside the SWEEPR VPN app to unlock Pro on up to 10 devices.</p>
+          <p class="text-xs text-gray-500 mt-1">Enter your email and this 6-digit code inside the SWEEPR VPN app to unlock Pro on up to 3 devices (any combination of desktop or mobile).</p>
         </div>
         <div class="text-left sm:text-right border-t sm:border-t-0 border-gray-100 pt-3 sm:pt-0 w-full sm:w-auto">
           <div class="text-xs font-bold uppercase tracking-wider text-gray-400">Pro License Key</div>
@@ -108,9 +108,9 @@
           <div>
             <div class="flex items-center justify-between gap-2 mb-2">
               <h3 class="font-bold text-lg">Linked Devices</h3>
-              <span id="deviceCountBadge" class="text-xs font-extrabold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">0 / 10 Devices</span>
+              <span id="deviceCountBadge" class="text-xs font-extrabold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">0 / 3 Devices</span>
             </div>
-            <p class="text-sm text-gray-500 mb-4">Protect up to 10 devices simultaneously. Scan a one-time QR code to link a phone, tablet, or computer without typing your license key.</p>
+            <p class="text-sm text-gray-500 mb-4">Protect up to 3 devices simultaneously (any combination of desktop or mobile). Scan a one-time QR code to link a phone, tablet, or computer without typing your license key.</p>
 
             <button
               type="button"
@@ -275,7 +275,7 @@
           }
         }
 
-        const maxDevices = data.max_devices || 10;
+        const maxDevices = data.max_devices || 3;
         const usedDevices = Array.isArray(data.devices) ? data.devices.length : 0;
         const countBadge = document.getElementById('deviceCountBadge');
         if (countBadge) {

@@ -6,7 +6,7 @@ public keys on the WireGuard interface when sweeprvpn.com asks it to.
 
 Privacy: it keeps NO browsing or connection logs. The only stored data is
 (public key, private tunnel address, hashed licence id, added-at date) so a
-licence can be limited to 10 devices. Request logging is disabled.
+licence can be limited to 3 devices. Request logging is disabled.
 
 Security: every request must carry an HMAC-SHA256 signature made with the
 shared AGENT_SECRET plus a timestamp (60-second window) and a one-time nonce.
@@ -20,7 +20,7 @@ SECRET = open(os.path.join(CONF_DIR, "agent.secret")).read().strip().encode()
 IFACE = "wg0"
 NET = ipaddress.ip_network("10.64.0.0/16")
 SERVER_ADDR = ipaddress.ip_address("10.64.0.1")
-MAX_DEVICES = int(os.environ.get("SWEEPR_MAX_DEVICES", "10"))
+MAX_DEVICES = int(os.environ.get("SWEEPR_MAX_DEVICES", "3"))
 PEER_TTL_SECONDS = int(os.environ.get("SWEEPR_PEER_TTL_SECONDS", str(72 * 3600)))
 PORT = int(os.environ.get("SWEEPR_AGENT_PORT", "8787"))
 KEY_RE = re.compile(r"^[A-Za-z0-9+/]{42}[AEIMQUYcgkosw480]=$")

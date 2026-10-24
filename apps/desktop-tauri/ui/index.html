@@ -498,7 +498,7 @@
       <div class="card" style="margin-top:16px">
         <div style="display:flex;align-items:center;gap:12px">
           <div class="ico e"><svg width="19" height="19"><use href="#i-key"/></svg></div>
-          <div class="grow"><div class="t" id="accTitle">Free plan</div><div class="s" id="accSub">Already paid? Enter your license key to unlock up to 10 devices.</div></div>
+          <div class="grow"><div class="t" id="accTitle">Free plan</div><div class="s" id="accSub">Already paid? Enter your license key to unlock up to 3 devices (desktop or mobile).</div></div>
           <span class="pill warn" id="accPill">Free</span>
         </div>
         <!-- Active License Key Display & 1-Tap Copy (Item 2) -->
@@ -531,7 +531,7 @@
         <div id="accDevicesBar" class="hidden" style="margin-top:12px;padding:10px 12px;border-radius:12px;background:var(--card2);border:1px solid var(--line)">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
             <span class="s" style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.4px">Linked Devices</span>
-            <span class="pill ok" id="accDevicesCountPill" style="padding:2px 8px;font-size:11px">1 / 10 active</span>
+            <span class="pill ok" id="accDevicesCountPill" style="padding:2px 8px;font-size:11px">1 / 3 active</span>
           </div>
           <div id="accDevicesList" style="display:flex;flex-direction:column;gap:6px"></div>
         </div>
@@ -624,7 +624,7 @@
   <div class="sheet" onclick="event.stopPropagation()">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:2px">
       <svg style="width:40px;height:40px;flex-shrink:0"><use href="#logo"/></svg>
-      <div class="grow"><div style="font-size:18px;font-weight:900">Unlock SWEEPR Pro</div><div class="s">Up to 10 devices · 14-day money-back guarantee</div></div>
+      <div class="grow"><div style="font-size:18px;font-weight:900">Unlock SWEEPR Pro</div><div class="s">Up to 3 devices (desktop or mobile) · 14-day money-back guarantee</div></div>
       <button onclick="closeActivate()" aria-label="Close" style="font-size:18px;color:var(--muted);padding:4px 8px">✕</button>
     </div>
 
@@ -1391,7 +1391,7 @@
           const resolvedKey = d.licenseKey || d.activation_code || '';
           state.pro = true; state.email = resolvedEmail; state.activationCode = resolvedKey; state.killSwitch = true;
           state.linkedDevices = Array.isArray(d.devices) ? d.devices : [];
-          state.maxDevices = d.max_devices || 10;
+          state.maxDevices = d.max_devices || 3;
           document.querySelectorAll('.toggle.shield').forEach(t => syncSwitchAria(t, true));
           try {
             if (resolvedEmail) localStorage.setItem('sweepr_vpn_email', resolvedEmail);
@@ -1449,10 +1449,10 @@
     }
     if (Array.isArray(data.devices)) {
       state.linkedDevices = data.devices;
-      state.maxDevices = data.max_devices || 10;
+      state.maxDevices = data.max_devices || 3;
       renderLinkedAccountDevices();
     }
-    $('accPairQrBox').innerHTML = data.qr_svg + '<div class="s" style="color:#0f172a;font-weight:800">Scan with phone camera or SWEEPR app (' + (data.devices_used || 1) + ' / ' + (data.max_devices || 10) + ' slots used)</div>';
+    $('accPairQrBox').innerHTML = data.qr_svg + '<div class="s" style="color:#0f172a;font-weight:800">Scan with phone camera or SWEEPR app (' + (data.devices_used || 1) + ' / ' + (data.max_devices || 3) + ' slots used)</div>';
     let rem = Number(data.expires_in || 120);
     const tick = () => {
       const m = String(Math.floor(rem / 60)).padStart(2, '0');
@@ -1473,8 +1473,8 @@
           if (outPairPollTimer) { clearInterval(outPairPollTimer); outPairPollTimer = null; }
           if (outPairCountdownTimer) { clearInterval(outPairCountdownTimer); outPairCountdownTimer = null; }
           if (Array.isArray(d.devices)) state.linkedDevices = d.devices;
-          state.maxDevices = d.max_devices || 10;
-          $('accPairQrBox').innerHTML = '<div class="s" style="color:#047857;font-weight:800;padding:18px 8px">✓ Linked ' + esc((d.device && d.device.name) || 'New Device') + ' (' + (d.devices_used || 1) + ' / ' + (d.max_devices || 10) + ' slots)</div>';
+          state.maxDevices = d.max_devices || 3;
+          $('accPairQrBox').innerHTML = '<div class="s" style="color:#047857;font-weight:800;padding:18px 8px">✓ Linked ' + esc((d.device && d.device.name) || 'New Device') + ' (' + (d.devices_used || 1) + ' / ' + (d.max_devices || 3) + ' slots)</div>';
           $('accPairTimer').textContent = '';
           renderAll();
           toast('Device linked via QR ✓');
@@ -1497,7 +1497,7 @@
         const d = await r.json().catch(() => ({}));
         if (r.ok && d.ok) {
           state.linkedDevices = Array.isArray(d.devices) ? d.devices : [];
-          state.maxDevices = d.max_devices || 10;
+          state.maxDevices = d.max_devices || 3;
           renderAll();
           toast('Removed ' + (d.revoked_device_name || 'device') + ' ✓');
           return;
@@ -1517,7 +1517,7 @@
     }
     bar.classList.remove('hidden');
     const list = Array.isArray(state.linkedDevices) ? state.linkedDevices : [];
-    const maxD = state.maxDevices || 10;
+    const maxD = state.maxDevices || 3;
     const usedCount = Math.max(1, list.length);
     pillEl.textContent = usedCount + ' / ' + maxD + ' active';
     const myId = getOrCreateDesktopDeviceId();
@@ -1760,7 +1760,7 @@
       const resolvedKey = (res && (res.licenseKey || res.license_key)) ? String(res.licenseKey || res.license_key) : code;
       state.pro = true; state.email = resolvedEmail; state.activationCode = resolvedKey; state.killSwitch = true;
       state.linkedDevices = Array.isArray(res && res.devices) ? res.devices : [];
-      state.maxDevices = (res && res.max_devices) || 10;
+      state.maxDevices = (res && res.max_devices) || 3;
       document.querySelectorAll('.toggle.shield').forEach(t => syncSwitchAria(t, true));
       try {
         if (resolvedEmail) localStorage.setItem('sweepr_vpn_email', resolvedEmail);
@@ -1986,13 +1986,13 @@
     $('rec-private').classList.toggle('on', state.code === 'SE-STO-01');
 
     $('planPill').className = 'pill ' + (state.pro ? 'ok' : 'warn');
-    $('planPillText').textContent = state.pro ? 'Pro · 10 devices active' : 'Free plan · Enter license key';
+    $('planPillText').textContent = state.pro ? 'Pro · 3 devices active' : 'Free plan · Enter license key';
     if ($('mobilePlanPill')) {
       $('mobilePlanPill').className = 'pill ' + (state.pro ? 'ok' : 'warn');
       $('mobilePlanPillText').textContent = state.pro ? 'Pro ✓' : 'Enter Key';
     }
     $('accTitle').textContent = state.pro ? 'SWEEPR Pro is active' : 'Free plan';
-    $('accSub').textContent = state.pro ? 'Up to 10 devices · All countries, Kill Switch & TV shields unlocked' : 'Already paid? Enter your license key to unlock up to 10 devices.';
+    $('accSub').textContent = state.pro ? 'Up to 3 devices (desktop or mobile) · All countries, Kill Switch & TV shields unlocked' : 'Already paid? Enter your license key to unlock up to 3 devices (desktop or mobile).';
     $('accPill').className = 'pill ' + (state.pro ? 'ok' : 'warn');
     $('accPill').textContent = state.pro ? 'Pro' : 'Free';
     $('accBtn').textContent = state.pro ? 'Update license key' : 'Enter license key or upgrade';
@@ -2033,12 +2033,12 @@
     const cmdItems = [
       { id: 'act-toggle', title: state.connected ? 'Pause VPN Protection' : 'Connect to ' + cur().city, sub: 'Toggle WireGuard tunnel immediately', kbd: modKeyLabel + '+↵', run: () => toggleConnect() },
       { id: 'act-scan', title: 'Scan Home Wi-Fi & Smart TVs', sub: 'Audit devices and ACR telemetry on your network', kbd: modKeyLabel + '+R', run: () => { go('wifi'); scanWifi(); } },
-      { id: 'act-pair', title: 'Link Device via QR Code', sub: 'Pair a phone, tablet, or computer (up to 10 devices)', kbd: 'Pair', run: () => { if (state.pro) { go('account'); openDesktopPairOutQr(); } else { openActivate(); toggleDesktopReverseQr(); } } },
+      { id: 'act-pair', title: 'Link Device via QR Code', sub: 'Pair a phone, tablet, or computer (up to 3 devices)', kbd: 'Pair', run: () => { if (state.pro) { go('account'); openDesktopPairOutQr(); } else { openActivate(); toggleDesktopReverseQr(); } } },
       { id: 'act-mini', title: document.body.classList.contains('is-compact') ? 'Expand to Full Window' : 'Switch to Mini Widget Mode', sub: 'Compact 380×540 desktop controller', kbd: modKeyLabel + '+M', run: () => setCompact(!document.body.classList.contains('is-compact')) },
       { id: 'act-export', title: 'Export Desktop WireGuard .conf (' + cur().city + ')', sub: 'Download standalone WireGuard tunnel configuration', kbd: '.conf', run: () => quickExportWireGuardConf(state.code) },
       { id: 'act-wg', title: 'Phone Setup (iOS / Android WireGuard QR)', sub: 'Generate QR code or Apple .mobileconfig profile', kbd: 'QR', run: () => openMobileWireGuardModal() },
       { id: 'act-theme', title: 'Toggle Dark / Light Theme', sub: 'Switch interface color appearance', kbd: 'Theme', run: () => toggleTheme() },
-      { id: 'act-key', title: state.pro ? 'Manage Active License Key' : 'Enter License Key / Upgrade to Pro', sub: state.pro ? 'Copy or update your 10-device key' : 'Unlock all 8 countries & Smart-TV shields', kbd: 'Key', run: () => openActivate() }
+      { id: 'act-key', title: state.pro ? 'Manage Active License Key' : 'Enter License Key / Upgrade to Pro', sub: state.pro ? 'Copy or update your 3-device key' : 'Unlock all 8 countries & Smart-TV shields', kbd: 'Key', run: () => openActivate() }
     ];
     return serverItems.concat(cmdItems);
   }

@@ -29,7 +29,7 @@ fun SweeprVpnScreen(
     var userEmail by remember { mutableStateOf(initialEmail) }
     var licenseKey by remember { mutableStateOf(initialLicenseKey) }
     var deviceCount by remember { mutableStateOf(1) }
-    var deviceLimit by remember { mutableStateOf(10) }
+    var deviceLimit by remember { mutableStateOf(3) }
     var statusBanner by remember { mutableStateOf("Ready to protect your Android device") }
     var showQrSheet by remember { mutableStateOf(false) }
     var qrPayloadInput by remember { mutableStateOf("") }
@@ -56,12 +56,12 @@ fun SweeprVpnScreen(
                     licenseKey = json.optString("license_key", licenseKey)
                     userEmail = json.optString("email", userEmail)
                     deviceCount = json.optInt("device_count", 1)
-                    deviceLimit = json.optInt("device_limit", 10)
+                    deviceLimit = json.optInt("device_limit", 3)
                     isPro = true
                     showQrSheet = false
                     statusBanner = "Linked via QR ($deviceCount/$deviceLimit devices active)"
                 } else {
-                    statusBanner = json.optString("message", "QR pairing token expired or 10-device limit reached.")
+                    statusBanner = json.optString("message", "QR pairing token expired or 3-device limit reached.")
                 }
             } catch (e: Exception) {
                 statusBanner = "Could not reach SWEEPR pairing server."
@@ -92,7 +92,7 @@ fun SweeprVpnScreen(
                 val json = JSONObject(body)
                 if (json.optBoolean("ok", false)) {
                     deviceCount = json.optInt("device_count", deviceCount)
-                    deviceLimit = json.optInt("device_limit", 10)
+                    deviceLimit = json.optInt("device_limit", 3)
                     showQrSheet = false
                     statusBanner = "Desktop App unlocked! ($deviceCount/$deviceLimit devices active)"
                 } else {
