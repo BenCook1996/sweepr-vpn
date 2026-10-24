@@ -2503,6 +2503,7 @@ self.addEventListener('fetch', e => {
 
     const paymentMethod = typeof body.paymentMethod === 'string' ? body.paymentMethod.toLowerCase() : 'card';
     const isPayPal = paymentMethod === 'paypal';
+    const isRedirectMethod = ['paypal', 'revolut_pay', 'amazon_pay', 'ideal', 'bancontact', 'cashapp', 'kakao_pay', 'naver_pay'].includes(paymentMethod);
     const isWallet = paymentMethod === 'wallet' || paymentMethod === 'google_pay' || paymentMethod === 'apple_pay';
     const isPopup = Boolean(body.popup);
     const providedEmail = (body.email || '').trim().toLowerCase();
@@ -2511,8 +2512,8 @@ self.addEventListener('fetch', e => {
     }
     const email =
       (providedEmail ? providedEmail : null) ||
-      (isPayPal || isWallet
-        ? `${isPayPal ? 'paypal' : 'wallet'}_${crypto.randomBytes(4).toString('hex')}@pending.sweeprvpn.com`
+      (isRedirectMethod || isWallet
+        ? `${isRedirectMethod ? paymentMethod : 'wallet'}_${crypto.randomBytes(4).toString('hex')}@pending.sweeprvpn.com`
         : null);
 
     if (!email) {
@@ -2708,7 +2709,7 @@ self.addEventListener('fetch', e => {
         payment_behavior: 'default_incomplete',
         payment_settings: {
           save_default_payment_method: 'on_subscription',
-          payment_method_types: isPayPal ? ['paypal'] : ['card']
+          payment_method_types: isRedirectMethod ? [paymentMethod] : ['card']
         },
         ...(introCouponId ? { discounts: [{ coupon: introCouponId }] } : {}),
         metadata: {
@@ -2722,9 +2723,9 @@ self.addEventListener('fetch', e => {
       try {
         subscription = await stripeRequest('POST', 'subscriptions', subParams);
       } catch (subErr) {
-        if (isPayPal && String(subErr.message || '').toLowerCase().includes('paypal')) {
+        if (isRedirectMethod) {
           const hostOrigin = resolveTrustedOrigin(req);
-          // Tier 2: Direct PayPal PaymentIntent (works immediately once PayPal is linked in Stripe, even before Reference Transactions approval)
+          // Tier 2: Direct Redirect PaymentIntent
           try {
             const baseAmount = canUseIntroCoupon ? localizedPricing.introFirstMonthAmount : unitAmount;
             const addonAmount = includeWifiRadar
@@ -2740,10 +2741,10 @@ self.addEventListener('fetch', e => {
               amount: directPayPalAmount,
               currency: localizedPricing.currency,
               customer: customerId,
-              payment_method_types: ['paypal'],
+              payment_method_types: [paymentMethod],
               confirm: true,
               payment_method_data: {
-                type: 'paypal',
+                type: paymentMethod,
                 ...(providedEmail || name
                   ? {
                       billing_details: {
@@ -2807,7 +2808,7 @@ self.addEventListener('fetch', e => {
           try {
             checkoutSession = await stripeRequest('POST', 'checkout/sessions', {
               ...baseSessionParams,
-              payment_method_types: ['paypal', 'card']
+              payment_method_types: [paymentMethod, 'card']
             });
           } catch {
             checkoutSession = await stripeRequest('POST', 'checkout/sessions', baseSessionParams);
@@ -2845,12 +2846,12 @@ self.addEventListener('fetch', e => {
       const hostOrigin = resolveTrustedOrigin(req);
       const returnUrl = `${hostOrigin}/checkout/success?web=1&subscription_id=${encodeURIComponent(subscription.id)}&account_id=${encodeURIComponent(acc.id)}${isPopup ? '&popup=1' : ''}`;
 
-      if (isPayPal) {
+      if (isRedirectMethod) {
         const rawClientIp = getClientIp(req);
         const mandateIp = !rawClientIp || rawClientIp === '::1' ? '127.0.0.1' : rawClientIp;
         const confirmedPi = await stripeRequest('POST', `payment_intents/${encodeURIComponent(paymentIntent.id)}/confirm`, {
           payment_method_data: {
-            type: 'paypal',
+            type: paymentMethod,
             ...(providedEmail || name
               ? {
                   billing_details: {
@@ -2874,7 +2875,7 @@ self.addEventListener('fetch', e => {
 
         const redirectUrl = confirmedPi.next_action?.redirect_to_url?.url || null;
         if (!redirectUrl) {
-          return sendJson(res, 500, { error: 'Could not initialize PayPal authorization redirect.' }, {}, req);
+          return sendJson(res, 500, { error: 'Could not initialize payment authorization redirect.' }, {}, req);
         }
 
         return sendJson(
