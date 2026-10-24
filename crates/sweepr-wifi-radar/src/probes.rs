@@ -96,7 +96,7 @@ pub fn ssdp_discover(wait: Duration) -> Vec<(Ipv4Addr, SsdpInfo)> {
         std::thread::spawn(move || {
             let mut info = SsdpInfo { server, ..Default::default() };
             for loc in locs.iter().take(3) {
-                if let Some(xml) = http_get(loc, Duration::from_millis(1500)) {
+                if let Some(xml) = http_get(loc, ip, Duration::from_millis(1500)) {
                     info.friendly_name = xml_tag(&xml, "friendlyName");
                     info.manufacturer = xml_tag(&xml, "manufacturer");
                     info.model = xml_tag(&xml, "modelName");
@@ -113,19 +113,29 @@ pub fn ssdp_discover(wait: Duration) -> Vec<(Ipv4Addr, SsdpInfo)> {
     out
 }
 
-fn http_get(url: &str, timeout: Duration) -> Option<String> {
+fn http_get(url: &str, expected_ip: Ipv4Addr, timeout: Duration) -> Option<String> {
     let rest = url.strip_prefix("http://")?;
     let (hostport, path) = match rest.find('/') { Some(i) => (&rest[..i], &rest[i..]), None => (rest, "/") };
+    if path.contains(['\r', '\n']) || hostport.contains(['\r', '\n']) {
+        return None;
+    }
     let addr: SocketAddr = if hostport.contains(':') { hostport.parse().ok()? } else { format!("{hostport}:80").parse().ok()? };
-    // Only talk to devices on the local network.
-    match addr.ip() { IpAddr::V4(v4) if v4.is_private() || v4.is_link_local() => {}, _ => return None }
+    // Enforce that the SSDP Location URL host matches the UDP responder IP (SSRF prevention)
+    // and only communicates with private/link-local LAN hosts on non-privileged UPnP ports (or 80).
+    match addr.ip() {
+        IpAddr::V4(v4) if v4 == expected_ip && (v4.is_private() || v4.is_link_local()) && !v4.is_loopback() => {}
+        _ => return None,
+    }
+    if addr.port() < 1024 && addr.port() != 80 {
+        return None;
+    }
     let mut s = TcpStream::connect_timeout(&addr, timeout).ok()?;
     let _ = s.set_read_timeout(Some(timeout));
     let _ = s.set_write_timeout(Some(timeout));
     let req = format!("GET {path} HTTP/1.0\r\nHost: {hostport}\r\nUser-Agent: SWEEPR/1.0\r\nConnection: close\r\n\r\n");
     s.write_all(req.as_bytes()).ok()?;
     let mut buf = Vec::new();
-    let _ = s.take(256 * 1024).read_to_end(&mut buf);
+    let _ = s.take(64 * 1024).read_to_end(&mut buf);
     if buf.is_empty() { return None; }
     Some(String::from_utf8_lossy(&buf).into_owned())
 }
@@ -261,4 +271,23 @@ pub fn reverse_dns(ips: &[Ipv4Addr], wait: Duration) -> Vec<(Ipv4Addr, String)> 
     let mut out = Vec::new();
     while let Ok(item) = rx.recv_timeout(deadline.saturating_duration_since(Instant::now())) { out.push(item); }
     out
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn ssdp_http_get_blocks_ssrf_and_privileged_ports() {
+        let responder = Ipv4Addr::new(192, 168, 1, 50);
+        let timeout = Duration::from_millis(50);
+        // Reject cross-host SSRF (URL host != UDP responder IP)
+        assert!(http_get("http://192.168.1.1:80/desc.xml", responder, timeout).is_none());
+        // Reject loopback SSRF
+        assert!(http_get("http://127.0.0.1:8080/desc.xml", Ipv4Addr::new(127, 0, 0, 1), timeout).is_none());
+        // Reject privileged non-HTTP ports (< 1024 except 80)
+        assert!(http_get("http://192.168.1.50:22/desc.xml", responder, timeout).is_none());
+        // Reject CRLF header injection
+        assert!(http_get("http://192.168.1.50:1900/desc.xml\r\nX-Injected: 1", responder, timeout).is_none());
+    }
 }

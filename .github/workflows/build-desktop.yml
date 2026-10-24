@@ -48,7 +48,9 @@ jobs:
       - name: Rust cache
         uses: Swatinem/rust-cache@v2
         with:
-          workspaces: 'apps/desktop-tauri/src-tauri -> target'
+          workspaces: |
+            . -> target
+            apps/desktop-tauri/src-tauri -> target
 
       - name: Install Tauri CLI dependencies
         working-directory: apps/desktop-tauri

@@ -61,6 +61,7 @@ pub fn read_name(msg: &[u8], mut pos: usize) -> Option<(String, usize)> {
 #[derive(Debug, Clone)]
 pub struct Record {
     pub name: String,
+    #[allow(dead_code)]
     pub rtype: u16,
     pub data: RData,
 }

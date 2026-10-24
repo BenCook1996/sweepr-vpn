@@ -164,7 +164,7 @@ pub fn scan_network(opts: ScanOptions) -> Result<ScanReport, String> {
 
     let ips: Vec<Ipv4Addr> = table.iter().map(|(ip, _)| *ip).collect();
     let t_rptr = { let ips = ips.clone(); std::thread::spawn(move || probes::mdns_reverse(&ips, Duration::from_millis(1200))) };
-    let rdns = probes::reverse_dns(&ips, Duration::from_millis(2500));
+    let rdns = probes::reverse_dns(&ips, Duration::from_millis(1200));
 
     let ssdp = t_ssdp.join().unwrap_or_default();
     let mdns = t_mdns.join().unwrap_or_default();

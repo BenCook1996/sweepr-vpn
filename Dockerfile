@@ -9,6 +9,7 @@ COPY website ./website
 
 ENV NODE_ENV=production
 ENV PORT=8080
+ENV TRUST_CLOUDFLARE=true
 EXPOSE 8080
 
 USER node

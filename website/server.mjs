@@ -414,7 +414,7 @@ function flattenStripeParams(obj, prefix = '', res = new URLSearchParams()) {
   return res;
 }
 
-async function stripeRequest(method, endpoint, params) {
+async function stripeRequest(method, endpoint, params, idempotencyKey = '') {
   if (!STRIPE_SECRET_KEY) {
     throw new Error('Stripe is not configured on this server.');
   }
@@ -423,9 +423,10 @@ async function stripeRequest(method, endpoint, params) {
   const headers = {
     Authorization: `Bearer ${STRIPE_SECRET_KEY}`,
     'Stripe-Version': '2024-06-20',
+    ...(idempotencyKey ? { 'Idempotency-Key': idempotencyKey } : {}),
     'User-Agent': 'SweeprVPN/2.5 (+https://sweeprvpn.com)'
   };
-  const fetchOpts = { method, headers };
+  const fetchOpts = { method, headers, signal: AbortSignal.timeout(12000) };
 
   if (params && Object.keys(params).length > 0) {
     const encoded = flattenStripeParams(params).toString();
@@ -437,7 +438,13 @@ async function stripeRequest(method, endpoint, params) {
     }
   }
 
-  const res = await fetch(url, fetchOpts);
+  let res;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    res = await fetch(url, { ...fetchOpts, signal: AbortSignal.timeout(12000) });
+    if (res.status !== 429 && res.status < 502) break;
+    if (method !== 'GET' && !idempotencyKey) break;
+    await new Promise((r) => setTimeout(r, 150 * Math.pow(2, attempt) + Math.random() * 80));
+  }
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
     const err = new Error(data?.error?.message || `Stripe error (${res.status})`);
@@ -1180,6 +1187,9 @@ async function nodeHealth(n) {
       return value;
     }
   } catch {}
+  if (cached?.value) {
+    crm.reportTelemetryEvent({ event_name: 'vpn_node_down', category: 'infra', properties: { code: n.code, ip: n.ip } }).catch(() => {});
+  }
   nodeHealthCache.set(n.code, { at: Date.now(), value, samples: cached?.samples || [] });
   return value;
 }
@@ -1223,6 +1233,7 @@ async function callNodeAgent(n, method, agentPath, payload) {
   } catch (err) {
     const fails = (cb?.failures || 0) + 1;
     nodeCircuitState.set(n.code, { failures: fails, openUntil: fails >= 3 ? Date.now() + 20000 : 0 });
+    nodeHealthCache.set(n.code, { at: Date.now(), value: null, samples: nodeHealthCache.get(n.code)?.samples || [] });
     throw err;
   }
 }

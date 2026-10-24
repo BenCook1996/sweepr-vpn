@@ -238,6 +238,24 @@ def peer_reaper_loop():
             pass
 
 
+class BoundedHTTPServer(ThreadingHTTPServer):
+    request_queue_size = 64
+    allow_reuse_address = True
+    _sem = threading.BoundedSemaphore(32)
+
+    def process_request(self, request, client_address):
+        if not self._sem.acquire(blocking=False):
+            self.close_request(request)
+            return
+        super().process_request(request, client_address)
+
+    def process_request_thread(self, request, client_address):
+        try:
+            super().process_request_thread(request, client_address)
+        finally:
+            self._sem.release()
+
+
 if __name__ == "__main__":
     with lock:
         st = load()
@@ -251,4 +269,13 @@ if __name__ == "__main__":
         except Exception:
             pass
     threading.Thread(target=peer_reaper_loop, daemon=True).start()
-    ThreadingHTTPServer(("0.0.0.0", PORT), Handler).serve_forever()
+    srv = BoundedHTTPServer(("0.0.0.0", PORT), Handler)
+    cert_path = os.environ.get("SWEEPR_TLS_CERT", "")
+    key_path = os.environ.get("SWEEPR_TLS_KEY", "")
+    if cert_path and key_path and os.path.exists(cert_path) and os.path.exists(key_path):
+        import ssl
+        ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+        ctx.minimum_version = ssl.TLSVersion.TLSv1_3
+        ctx.load_cert_chain(certfile=cert_path, keyfile=key_path)
+        srv.socket = ctx.wrap_socket(srv.socket, server_side=True)
+    srv.serve_forever()

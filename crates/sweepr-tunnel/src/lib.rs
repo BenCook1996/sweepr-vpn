@@ -417,6 +417,10 @@ fn call_connect_api(
     let mut cmd = Command::new(curl_bin());
     cmd.args([
         "-sS",
+        "--retry",
+        "2",
+        "--retry-delay",
+        "1",
         "--max-time",
         "10",
         "-X",
@@ -463,6 +467,10 @@ fn call_activate_api(
     let mut cmd = Command::new(curl_bin());
     cmd.args([
         "-sS",
+        "--retry",
+        "2",
+        "--retry-delay",
+        "1",
         "--max-time",
         "10",
         "-X",
@@ -495,6 +503,16 @@ pub fn verify_ed25519_license_token(token: &str) -> Result<(), String> {
     if parts.len() != 3 {
         return Err("Invalid license signature format.".into());
     }
+    let header_bytes = B64URL
+        .decode(parts[0])
+        .map_err(|_| "Malformed license token header.".to_string())?;
+    let header: serde_json::Value = serde_json::from_slice(&header_bytes)
+        .map_err(|_| "Invalid license token header JSON.".to_string())?;
+    let kid = header.get("kid").and_then(|v| v.as_str()).unwrap_or("ed25519-2026-01");
+    let pub_key_b64 = match kid {
+        "ed25519-2026-01" | _ => SWEEPR_LICENSE_PUBLIC_KEY_B64URL,
+    };
+
     let signing_input = format!("{}.{}", parts[0], parts[1]);
     let sig_bytes = B64URL
         .decode(parts[2])
@@ -505,7 +523,7 @@ pub fn verify_ed25519_license_token(token: &str) -> Result<(), String> {
     let signature = Signature::from_bytes(&sig_arr);
 
     let pub_bytes = B64URL
-        .decode(SWEEPR_LICENSE_PUBLIC_KEY_B64URL)
+        .decode(pub_key_b64)
         .map_err(|_| "Internal public key decode error.".to_string())?;
     let pub_arr: [u8; 32] = pub_bytes
         .try_into()
@@ -946,7 +964,17 @@ pub fn connect(req: ConnectRequest) -> Result<TunnelStatus, String> {
         .to_string();
     let address = resp.address.unwrap_or_else(|| "10.64.0.2/32".into()).trim().to_string();
     let dns = resp.dns.unwrap_or_else(|| "10.64.0.1".into()).trim().to_string();
-    let allowed_ips = resp.allowed_ips.unwrap_or_else(|| "0.0.0.0/0".into()).trim().to_string();
+    let raw_allowed_ips = resp
+        .allowed_ips
+        .unwrap_or_else(|| "0.0.0.0/0, ::/0".into())
+        .trim()
+        .to_string();
+    // Enforce dual-stack AllowedIPs (::/0) so IPv6 never leaks outside the WireGuard tunnel
+    let allowed_ips = if raw_allowed_ips.contains(':') {
+        raw_allowed_ips
+    } else {
+        format!("{raw_allowed_ips}, ::/0")
+    };
 
     validate_wg_conf_fields(&server_pub, &endpoint, &address, &dns, &allowed_ips)?;
 
@@ -1030,6 +1058,19 @@ fn validate_wg_conf_fields(
     Ok(())
 }
 
+/// Measures physical network RTT (ms) to a VPN node endpoint using a bounded TCP handshake probe.
+pub fn probe_endpoint_rtt_ms(endpoint: &str, timeout_ms: u64) -> Option<u32> {
+    let addr: std::net::SocketAddr = endpoint.parse().ok()?;
+    let probe_addr = std::net::SocketAddr::new(addr.ip(), 8787);
+    let t0 = std::time::Instant::now();
+    let _ = std::net::TcpStream::connect_timeout(
+        &probe_addr,
+        std::time::Duration::from_millis(timeout_ms),
+    )
+    .ok()?;
+    Some(t0.elapsed().as_millis() as u32)
+}
+
 pub fn disconnect() -> Result<TunnelStatus, String> {
     bring_tunnel_down()?;
     let _ = fs::remove_file(conf_path());
@@ -1065,8 +1106,8 @@ mod tests {
         // Verify forged/unsigned token is rejected by Ed25519 verifier
         assert!(verify_ed25519_license_token("eyJhbGciOiJFZERTQSJ9.eyJzdGF0dXMiOiJhY3RpdmUifQ.AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA").is_err());
 
-        // Verify valid WireGuard config fields pass and newline/PostUp injection is rejected
-        assert!(validate_wg_conf_fields(&kp.public_key, "78.141.205.68:51820", "10.64.0.2/32", "10.64.0.1", "0.0.0.0/0").is_ok());
+        // Verify valid WireGuard config fields (including dual-stack IPv6 ::/0) pass and newline/PostUp injection is rejected
+        assert!(validate_wg_conf_fields(&kp.public_key, "78.141.205.68:51820", "10.64.0.2/32", "10.64.0.1", "0.0.0.0/0, ::/0").is_ok());
         assert!(validate_wg_conf_fields(&kp.public_key, "78.141.205.68:51820", "10.64.0.2/32\nPostUp = calc.exe", "10.64.0.1", "0.0.0.0/0").is_err());
         assert!(validate_wg_conf_fields(&kp.public_key, "78.141.205.68:51820", "10.64.0.2/32", "10.64.0.1\nPostUp = id", "0.0.0.0/0").is_err());
 

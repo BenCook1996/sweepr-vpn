@@ -13,7 +13,8 @@ ufw disable || true
 systemctl stop ufw || true
 
 apt-get -o DPkg::Lock::Timeout=180 update -y
-apt-get -o DPkg::Lock::Timeout=180 install -y --no-install-recommends wireguard-tools nftables unbound python3 ca-certificates
+apt-get -o DPkg::Lock::Timeout=180 install -y --no-install-recommends wireguard-tools nftables unbound python3 ca-certificates systemd-timesyncd
+timedatectl set-ntp true || systemctl enable --now systemd-timesyncd || true
 
 # ---------------------------------------------------------------- WireGuard
 install -d -m 700 /etc/wireguard /etc/sweepr
@@ -36,11 +37,14 @@ cat > /etc/sysctl.d/90-sweepr.conf <<EOF
 net.ipv4.ip_forward = 1
 net.core.default_qdisc = fq
 net.ipv4.tcp_congestion_control = bbr
+net.core.rmem_max = 67108864
+net.core.wmem_max = 67108864
 EOF
 sysctl --system >/dev/null || true
 
 # ---------------------------------------------------------------- Firewall + NAT
 WAN=$(ip -4 route show default | awk '{print $5; exit}')
+CONTROL_PLANE_CIDR="${SWEEPR_CONTROL_PLANE_CIDR:-0.0.0.0/0}"
 cat > /etc/nftables.conf <<EOF
 #!/usr/sbin/nft -f
 flush ruleset
@@ -52,7 +56,7 @@ table inet sweepr {
     ip protocol icmp accept
     tcp dport 22 accept
     udp dport ${WG_PORT} accept
-    tcp dport ${AGENT_PORT} accept
+    ip saddr ${CONTROL_PLANE_CIDR} tcp dport ${AGENT_PORT} accept
     iifname "wg0" udp dport 53 accept
     iifname "wg0" tcp dport 53 accept
   }
@@ -135,6 +139,8 @@ server:
   hide-identity: yes
   hide-version: yes
   qname-minimisation: yes
+  aggressive-nsec: yes
+  harden-dnssec-stripped: yes
   prefetch: yes
   include: "/etc/unbound/sweepr-blocklist.conf"
 EOF

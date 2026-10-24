@@ -57,5 +57,17 @@
   - **Remediation Implemented**: Guarded loopback endpoints so they are only queried in explicit local development environments (`location.hostname === 'localhost' || location.hostname === '127.0.0.1'`).
 - **Vuln 8 (Short-Code Activation Rate-Limiting & Verification Consistency)**: Verified and unified rate-limiting and validation rules across `sweepr_crm/src/app.ts` (`handleLicenseActivate`, `handleVerifyKey`), ensuring 6-digit short codes strictly require account email or verified service credentials, and are bounded by `portalTargetLimiter` lockout rules.
 
+## 2026-10-24 (Pass 2) — 84-Topic Network Protocol, Distributed Systems & Defensive Cybersecurity Audit Remediations
+- **Fix 1 (Secrets Management — Server-Only Key Derivation for Encrypted Vault Blobs)**: Replaced `decryptWithPkKey()` (which derived its AES-256-GCM key from the public `STRIPE_PUBLISHABLE_KEY`) with `decryptServerVault()` in `website/server.mjs`, keyed by the private server-only secret (`STRIPE_SECRET_KEY` / `CRM_ADMIN_PASSWORD`), and re-encrypted `ENCRYPTED_VPN_NODES`, `ENCRYPTED_LICENSE_PRIV_KEY_B64`, `ENCRYPTED_SMTP_USER`, and `ENCRYPTED_SMTP_PASS`.
+- **Fix 2 (Dual-Stack IPv6 Leak & Windows WFP Kill-Switch Protection)**: Updated `POST /api/vpn/connect` and `POST /api/vpn/wireguard-config` in `website/server.mjs` as well as `connect()` in `crates/sweepr-tunnel/src/lib.rs` to always include `::/0` (`AllowedIPs = 0.0.0.0/0, ::/0`), preventing IPv6 traffic and DNS lookups from bypassing the WireGuard tunnel on dual-stack networks.
+- **Fix 3 (Local Wi-Fi Scanner UPnP/SSDP Cross-Host SSRF Prevention)**: Hardened `http_get()` in `crates/sweepr-wifi-radar/src/probes.rs` to verify that the SSDP `Location` URL host IPv4 address strictly matches the UDP responder `src` IP, reject loopback and privileged ports (`< 1024` except `80`), cap XML payload reads at `64 KB`, and strip CR/LF injection vectors.
+- **Fix 4 (Cloudflare Real-IP Rate-Limit Bucketing & `/api/vpn/servers` Throttling)**: Updated `getClientIp()` in `website/server.mjs` and `Dockerfile` (`ENV TRUST_CLOUDFLARE=true`) so `cf-connecting-ip` is honored behind Cloudflare Edge (preventing false 429s across shared POPs), bounded `rateLimitBuckets` at `MAX_RATE_BUCKETS = 10000`, and added `checkRateLimit(req, 'vpn_servers', 60, 60000)` to `GET /api/vpn/servers`.
+- **Fix 5 (Node Control Plane Backpressure, Circuit Breakers, Health-Weighted Load Balancing & TLS Support)**:
+  - Upgraded `infra/node/sweepr_agent.py` to use `BoundedHTTPServer` (`request_queue_size = 64`, `threading.BoundedSemaphore(32)`, `timeout = 5`) and optional TLS 1.3 socket wrapping (`SWEEPR_TLS_CERT` / `SWEEPR_TLS_KEY`).
+  - Added per-node circuit breakers (`nodeCircuitState`), rolling `probeMs`/`p99Ms` telemetry, and `selectHealthyNodeForRegion()` in `website/server.mjs`.
+  - Updated `infra/node/setup-node.sh` with `systemd-timesyncd` NTP clock sync, 64 MB kernel UDP buffers (`rmem_max`/`wmem_max`), `SWEEPR_CONTROL_PLANE_CIDR` firewall scoping, and Unbound `aggressive-nsec` + `harden-dnssec-stripped`.
+- **Fix 6 (Ed25519 JWT Key Rotation `kid` Header, CSP Hardening & API Versioning)**: Added `kid: 'ed25519-2026-01'` to signed offline license JWT headers in `website/server.mjs` and `crates/sweepr-tunnel/src/lib.rs`, added `script-src` and `X-Sweepr-Api-Version: 2026-10` to `COMMON_SECURITY_HEADERS`, and normalized `/api/v1/` routes.
+
+
 
 
