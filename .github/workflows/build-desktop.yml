@@ -7,6 +7,7 @@ on:
       - main
     paths:
       - 'apps/desktop-tauri/**'
+      - 'crates/**'
       - 'scripts/build-mac-dmg.mjs'
       - '.github/workflows/build-desktop.yml'
     tags:

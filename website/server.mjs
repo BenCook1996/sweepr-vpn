@@ -5227,9 +5227,9 @@ self.addEventListener('fetch', e => {
       const r = await callNodeAgent(node, 'POST', '/peers', { public_key: clientPublicKey, licence: licence.id });
       const serverPubKey = String(node.public_key || r.public_key || '').trim();
       const assignedAddress = String(r.address || '10.64.0.2/32').trim();
-      const assignedDns = String(r.dns || '10.64.0.1').trim();
+      const assignedDns = '1.1.1.1, 1.0.0.1';
       const endpoint = `${node.ip}:${node.port || 51820}`;
-      const wgConf = `[Interface]\nPrivateKey = ${clientPrivateKey}\nAddress = ${assignedAddress}\nDNS = ${assignedDns}\n\n[Peer]\nPublicKey = ${serverPubKey}\nAllowedIPs = 0.0.0.0/0, ::/0\nEndpoint = ${endpoint}\nPersistentKeepalive = 25`;
+      const wgConf = `[Interface]\nPrivateKey = ${clientPrivateKey}\nAddress = ${assignedAddress}\nDNS = ${assignedDns}\nMTU = 1280\n\n[Peer]\nPublicKey = ${serverPubKey}\nAllowedIPs = 0.0.0.0/0, ::/0\nEndpoint = ${endpoint}\nPersistentKeepalive = 25`;
       const uuidProfile = crypto.randomUUID().toUpperCase();
       const uuidVpn = crypto.randomUUID().toUpperCase();
       const xml = `<?xml version="1.0" encoding="UTF-8"?>

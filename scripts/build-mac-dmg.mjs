@@ -160,12 +160,44 @@ def handle_ipc(cmd, args):
         except Exception as e:
             return {"active": False, "error": str(e)}
     if cmd == "connect_vpn":
-        srv = args.get("server_code") or "UK-LON-01"
-        state = {"connected": True, "server_code": srv, "assigned_ip": "10.66.66.2", "public_key": "macOS-WireGuard-Client"}
-        (DATA_DIR / "tunnel_state.json").write_text(json.dumps(state), "utf-8")
-        return state
+        srv = args.get("serverCode") or args.get("server_code") or "UK-LON-01"
+        code = (args.get("activationCode") or args.get("activation_code") or "").strip()
+        email = (args.get("email") or "").strip()
+        req = urllib.request.Request(
+            f"{API_URL}/api/vpn/wireguard-config",
+            data=json.dumps({
+                "server_code": srv,
+                "activation_code": code,
+                "license_key": code,
+                "email": email,
+                "lan_bypass": False,
+                "device_id": args.get("deviceId") or "mac_desktop"
+            }).encode("utf-8"),
+            headers={"Content-Type": "application/json"},
+            method="POST"
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=15) as resp:
+                data = json.loads(resp.read().decode("utf-8"))
+            conf_text = data.get("config_text") or ""
+            if not conf_text or "[Interface]" not in conf_text:
+                return {"connected": False, "error": data.get("message") or "Invalid WireGuard config"}
+            conf_path = DATA_DIR / "sweepr0.conf"
+            conf_path.write_text(conf_text, "utf-8")
+            os.chmod(conf_path, 0o600)
+            osa = f'do shell script "export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH; wg-quick down \'{conf_path}\' >/dev/null 2>&1 || true; wg-quick up \'{conf_path}\'; networksetup -setv6off Wi-Fi >/dev/null 2>&1 || true; dscacheutil -flushcache >/dev/null 2>&1 || true; killall -HUP mDNSResponder >/dev/null 2>&1 || true" with administrator privileges'
+            subprocess.run(["/usr/bin/osascript", "-e", osa], check=True)
+            state = {"connected": True, "server_code": srv, "address": data.get("address", "10.64.0.2/32"), "endpoint": data.get("endpoint", "")}
+            (DATA_DIR / "tunnel_state.json").write_text(json.dumps(state), "utf-8")
+            return state
+        except Exception as e:
+            return {"connected": False, "error": str(e)}
     if cmd == "disconnect_vpn":
-        state = {"connected": False, "server_code": None, "assigned_ip": None, "public_key": "macOS-WireGuard-Client"}
+        conf_path = DATA_DIR / "sweepr0.conf"
+        if conf_path.exists():
+            osa = f'do shell script "export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH; wg-quick down \'{conf_path}\' >/dev/null 2>&1 || true; networksetup -setv6automatic Wi-Fi >/dev/null 2>&1 || true; dscacheutil -flushcache >/dev/null 2>&1 || true; killall -HUP mDNSResponder >/dev/null 2>&1 || true" with administrator privileges'
+            subprocess.run(["/usr/bin/osascript", "-e", osa], check=False)
+        state = {"connected": False, "server_code": None, "address": None}
         (DATA_DIR / "tunnel_state.json").write_text(json.dumps(state), "utf-8")
         return state
     return {}

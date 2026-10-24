@@ -792,7 +792,7 @@ fn bring_tunnel_up(conf: &Path) -> Result<(), String> {
         let wg_exe = ensure_wireguard_windows()?;
         let _ = bring_tunnel_down();
         let ps = format!(
-            "Start-Process -FilePath '{}' -ArgumentList '/installtunnelservice','\"{}\"' -Verb RunAs -Wait",
+            "Start-Process -FilePath 'cmd.exe' -ArgumentList '/c','\"\"{}\" /installtunnelservice \"{}\" & netsh advfirewall firewall delete rule name=SWEEPR_VPN_Block_IPv6 >nul 2>&1 & netsh advfirewall firewall add rule name=SWEEPR_VPN_Block_IPv6 dir=out action=block protocol=any remoteip=2000::/3 >nul 2>&1 & ipconfig /flushdns >nul 2>&1\"' -Verb RunAs -WindowStyle Hidden -Wait",
             wg_exe.display(),
             conf.display()
         );
@@ -815,7 +815,7 @@ fn bring_tunnel_up(conf: &Path) -> Result<(), String> {
     #[cfg(target_os = "macos")]
     {
         let script = format!(
-            "do shell script \"export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH; wg-quick down '{}' >/dev/null 2>&1 || true; wg-quick up '{}'\" with administrator privileges",
+            "do shell script \"export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH; wg-quick down '{}' >/dev/null 2>&1 || true; wg-quick up '{}'; networksetup -setv6off Wi-Fi >/dev/null 2>&1 || true; dscacheutil -flushcache >/dev/null 2>&1 || true; killall -HUP mDNSResponder >/dev/null 2>&1 || true\" with administrator privileges",
             conf.display(),
             conf.display()
         );
@@ -831,11 +831,13 @@ fn bring_tunnel_up(conf: &Path) -> Result<(), String> {
     }
     #[cfg(not(any(target_os = "windows", target_os = "macos")))]
     {
-        let _ = Command::new("pkexec")
-            .args(["wg-quick", "down", &conf.to_string_lossy()])
-            .status();
+        let cmd = format!(
+            "wg-quick down '{}' >/dev/null 2>&1 || true; wg-quick up '{}' && (sysctl -w net.ipv6.conf.all.disable_ipv6=1 >/dev/null 2>&1 || true) && (resolvectl flush-caches >/dev/null 2>&1 || true)",
+            conf.display(),
+            conf.display()
+        );
         let status = Command::new("pkexec")
-            .args(["wg-quick", "up", &conf.to_string_lossy()])
+            .args(["sh", "-c", &cmd])
             .status()
             .map_err(|e| format!("Could not run wg-quick: {e}"))?;
         if status.success() && is_tunnel_active() {
@@ -855,7 +857,7 @@ pub fn bring_tunnel_down() -> Result<(), String> {
         }
         if let Some(wg_exe) = find_wireguard_exe() {
             let ps = format!(
-                "Start-Process -FilePath '{}' -ArgumentList '/uninstalltunnelservice','{}' -Verb RunAs -Wait",
+                "Start-Process -FilePath 'cmd.exe' -ArgumentList '/c','\"\"{}\" /uninstalltunnelservice {} & netsh advfirewall firewall delete rule name=SWEEPR_VPN_Block_IPv6 >nul 2>&1 & ipconfig /flushdns >nul 2>&1\"' -Verb RunAs -WindowStyle Hidden -Wait",
                 wg_exe.display(),
                 TUNNEL_NAME
             );
@@ -871,7 +873,7 @@ pub fn bring_tunnel_down() -> Result<(), String> {
         let c = conf_path();
         if c.exists() {
             let script = format!(
-                "do shell script \"export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH; wg-quick down '{}' >/dev/null 2>&1 || true\" with administrator privileges",
+                "do shell script \"export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH; wg-quick down '{}' >/dev/null 2>&1 || true; networksetup -setv6automatic Wi-Fi >/dev/null 2>&1 || true; dscacheutil -flushcache >/dev/null 2>&1 || true; killall -HUP mDNSResponder >/dev/null 2>&1 || true\" with administrator privileges",
                 c.display()
             );
             let _ = Command::new("osascript").args(["-e", &script]).status();
@@ -882,8 +884,12 @@ pub fn bring_tunnel_down() -> Result<(), String> {
     {
         let c = conf_path();
         if c.exists() {
+            let cmd = format!(
+                "wg-quick down '{}' >/dev/null 2>&1 || true; sysctl -w net.ipv6.conf.all.disable_ipv6=0 >/dev/null 2>&1 || true; resolvectl flush-caches >/dev/null 2>&1 || true",
+                c.display()
+            );
             let _ = Command::new("pkexec")
-                .args(["wg-quick", "down", &c.to_string_lossy()])
+                .args(["sh", "-c", &cmd])
                 .status();
         }
         Ok(())
