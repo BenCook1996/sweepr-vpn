@@ -449,23 +449,23 @@
               Encrypts your traffic so your internet provider cannot inspect or throttle your evening 4K streaming and gaming speeds.
             </p>
           </div>
-          <div class="space-y-2.5 mt-4 bg-gray-50/90 p-3.5 rounded-xl border border-gray-200/80">
+          <div class="space-y-2.5 mt-4 bg-gray-50/90 p-3.5 rounded-xl border border-gray-200/80 cursor-pointer select-none" onclick="replayVpnSpeedBars()" title="Click to replay speed comparison">
             <div>
               <div class="flex justify-between text-xs font-extrabold text-emerald-800 mb-1">
                 <span>With SWEEPR VPN (Direct Peering)</span>
-                <span>Up to 940 Mbps ✓</span>
+                <span class="tabular-nums" id="vpnSpeedPeakLabel">Up to 940 Mbps ✓</span>
               </div>
               <div class="w-full h-2.5 bg-gray-200 rounded-full overflow-hidden">
-                <div class="h-full bg-emerald-500 rounded-full" style="width: 94%"></div>
+                <div id="vpnSpeedPeakBar" class="vpn-speed-bar-fill bg-emerald-500 rounded-full" style="transform: scaleX(0.94)"></div>
               </div>
             </div>
             <div>
               <div class="flex justify-between text-xs font-semibold text-gray-500 mb-1">
                 <span>Congested Peak-Hour ISP Route</span>
-                <span>38 Mbps (Shaped)</span>
+                <span class="tabular-nums">38 Mbps (Shaped)</span>
               </div>
               <div class="w-full h-2.5 bg-gray-200 rounded-full overflow-hidden">
-                <div class="h-full bg-amber-400 rounded-full" style="width: 24%"></div>
+                <div id="vpnSpeedThrottledBar" class="vpn-speed-bar-fill bg-amber-400 rounded-full" style="transform: scaleX(0.24)"></div>
               </div>
             </div>
             <p class="text-[10px] text-gray-400 leading-tight pt-0.5">*Illustrative 1 Gbps fibre benchmark comparing direct WireGuard peering vs congested evening ISP transit. Actual speeds depend on your baseline ISP line rate.</p>
@@ -540,11 +540,31 @@
   </footer>
 
   <script>
+    var _currentHeroPingNum = 11;
     function selectHeroServer(city, ping, speed, btnEl) {
       var cityEl = document.getElementById('heroVpnCity');
       var metaEl = document.getElementById('heroVpnMeta');
       if (cityEl) cityEl.textContent = city;
-      if (metaEl) metaEl.textContent = (ping || '11 ms') + ' \u2022 ' + (speed || '10 Gbps') + ' \u2022 Wi-Fi & TV Shield On';
+      var targetPing = parseInt(String(ping || '11'), 10) || 11;
+      var fromPing = _currentHeroPingNum;
+      _currentHeroPingNum = targetPing;
+      var spd = speed || '10 Gbps';
+      if (metaEl) {
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          metaEl.textContent = targetPing + ' ms \u2022 ' + spd + ' \u2022 Wi-Fi & TV Shield On';
+        } else {
+          var start = performance.now();
+          var duration = 150;
+          function tickPing(now) {
+            var t = Math.min(1, (now - start) / duration);
+            var eased = 1 - Math.pow(1 - t, 4);
+            var cur = Math.round(fromPing + (targetPing - fromPing) * eased);
+            metaEl.textContent = cur + ' ms \u2022 ' + spd + ' \u2022 Wi-Fi & TV Shield On';
+            if (t < 1) requestAnimationFrame(tickPing);
+          }
+          requestAnimationFrame(tickPing);
+        }
+      }
       document.querySelectorAll('.hero-srv-pill').forEach(function(b) {
         b.className = 'hero-srv-pill flex flex-col items-center justify-center gap-1 py-2 px-2 rounded-xl border-2 border-transparent hover:border-emerald-200 bg-transparent hover:bg-white/80 cursor-pointer transition-all';
       });
@@ -552,6 +572,37 @@
         btnEl.className = 'hero-srv-pill flex flex-col items-center justify-center gap-1 py-2 px-2 rounded-xl border-2 border-emerald-500 bg-white shadow-xs cursor-pointer transition-all';
       }
     }
+
+    function replayVpnSpeedBars() {
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var peakBar = document.getElementById('vpnSpeedPeakBar');
+      var lbl = document.getElementById('vpnSpeedPeakLabel');
+      if (peakBar) {
+        peakBar.style.transition = 'none';
+        peakBar.style.transform = 'scaleX(0.24)';
+        requestAnimationFrame(function() {
+          requestAnimationFrame(function() {
+            peakBar.style.transition = 'transform 180ms cubic-bezier(0.16, 1, 0.3, 1)';
+            peakBar.style.transform = 'scaleX(0.94)';
+          });
+        });
+      }
+      if (lbl) {
+        var start = performance.now();
+        var duration = 180;
+        function tickMbps(now) {
+          var t = Math.min(1, (now - start) / duration);
+          var eased = 1 - Math.pow(1 - t, 4);
+          var val = Math.round(38 + (940 - 38) * eased);
+          lbl.textContent = 'Up to ' + val + ' Mbps \u2713';
+          if (t < 1) requestAnimationFrame(tickMbps);
+        }
+        requestAnimationFrame(tickMbps);
+      }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(replayVpnSpeedBars, 120);
+    });
     (function() {
       try {
         var ua = (navigator.userAgent || '').toLowerCase();

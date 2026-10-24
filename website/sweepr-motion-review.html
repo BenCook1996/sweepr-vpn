@@ -1,0 +1,2506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SWEEPR Ecosystem — Ultra-Crisp Motion &amp; Micro-Interaction Sandbox (Pre vs. Post)</title>
+  <style>
+    :root {
+      --bg: #090d16;
+      --bg-elevated: #0f172a;
+      --card: #111827;
+      --card-inner: #0b1120;
+      --border: #1e293b;
+      --border-subtle: rgba(148, 163, 184, 0.14);
+      --text: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --muted: #64748b;
+      --emerald-400: #34d399;
+      --emerald-500: #10b981;
+      --emerald-600: #059669;
+      --emerald-glow: rgba(16, 185, 129, 0.18);
+      --amber-400: #fbbf24;
+      --rose-500: #f43f5e;
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+      --time-scale: 1;
+    }
+
+    body.reduced-motion {
+      --time-scale: 0.001 !important;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI Variable", "Segoe UI", Inter, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 110px;
+    }
+
+    .tabular {
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum" 1;
+    }
+
+    /* Sticky Top Header & Inspector Toolbar */
+    .top-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(9, 13, 22, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 24px;
+    }
+
+    .header-inner {
+      max-width: 1380px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .brand-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .brand-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-mark {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #052e16;
+      font-weight: 900;
+      font-size: 16px;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 2px 10px rgba(16, 185, 129, 0.35);
+    }
+
+    .brand-title h1 {
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-sub {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .laws-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .law-pill {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--emerald-400);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      white-space: nowrap;
+    }
+
+    .controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .filter-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .filter-tab {
+      background: var(--bg-elevated);
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 70ms var(--ease-out-expo), background 140ms var(--ease-out-expo), border-color 140ms var(--ease-out-expo), color 140ms var(--ease-out-expo);
+    }
+
+    .filter-tab:hover {
+      border-color: rgba(16, 185, 129, 0.45);
+      color: #fff;
+    }
+
+    .filter-tab:active {
+      transform: scale(0.985);
+    }
+
+    .filter-tab.active {
+      background: rgba(16, 185, 129, 0.16);
+      color: var(--emerald-400);
+      border-color: var(--emerald-500);
+    }
+
+    .speed-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .speed-label {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+    }
+
+    .speed-group {
+      display: inline-flex;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 2px;
+      gap: 2px;
+    }
+
+    .speed-btn {
+      background: transparent;
+      color: var(--text-secondary);
+      border: none;
+      padding: 5px 10px;
+      border-radius: 7px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 120ms var(--ease-out-expo), color 120ms var(--ease-out-expo);
+    }
+
+    .speed-btn.active {
+      background: var(--emerald-600);
+      color: #fff;
+    }
+
+    .trigger-all-btn {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #052e16;
+      border: none;
+      padding: 6px 13px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 70ms var(--ease-out-expo), filter 130ms var(--ease-out-expo);
+    }
+
+    .trigger-all-btn:hover {
+      filter: brightness(1.08);
+    }
+
+    .trigger-all-btn:active {
+      transform: scale(0.985);
+    }
+
+    /* Main Content Container */
+    .container {
+      max-width: 1380px;
+      margin: 22px auto;
+      padding: 0 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    /* Stack Discovery Summary Banner */
+    .stack-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 12px;
+    }
+
+    .stack-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .stack-card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .stack-badge {
+      font-size: 10.5px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 99px;
+      background: rgba(16, 185, 129, 0.14);
+      color: var(--emerald-400);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .stack-meta {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    /* Comparison Row Card */
+    .motion-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: border-color 150ms var(--ease-out-expo), box-shadow 150ms var(--ease-out-expo);
+    }
+
+    .motion-card.approved {
+      border-color: rgba(16, 185, 129, 0.55);
+      box-shadow: 0 8px 30px rgba(16, 185, 129, 0.07);
+    }
+
+    .motion-card-header {
+      padding: 14px 18px;
+      background: rgba(15, 23, 42, 0.75);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .card-title-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .change-id {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: rgba(16, 185, 129, 0.16);
+      color: var(--emerald-400);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .timing-pill {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: #94a3b8;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sync-trigger-btn {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--emerald-400);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 70ms var(--ease-out-expo), background 140ms var(--ease-out-expo);
+    }
+
+    .sync-trigger-btn:hover {
+      background: rgba(16, 185, 129, 0.25);
+    }
+
+    .sync-trigger-btn:active {
+      transform: scale(0.985);
+    }
+
+    .approve-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12.5px;
+      font-weight: 800;
+      color: #e2e8f0;
+      cursor: pointer;
+      padding: 5px 11px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      user-select: none;
+    }
+
+    .approve-label input {
+      accent-color: var(--emerald-500);
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+    }
+
+    /* Pre vs Post Split Stage */
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid var(--border);
+    }
+
+    @media (max-width: 920px) {
+      .comparison-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .stage-col {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .stage-col.pre-col {
+      background: rgba(11, 17, 32, 0.65);
+      border-right: 1px solid var(--border);
+    }
+
+    .stage-col.post-col {
+      background: radial-gradient(circle at top right, rgba(16, 185, 129, 0.06), rgba(11, 17, 32, 0.85) 65%);
+    }
+
+    .stage-col-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .stage-tag {
+      font-size: 10.5px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .stage-tag.pre {
+      background: rgba(148, 163, 184, 0.12);
+      color: #94a3b8;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+    }
+
+    .stage-tag.post {
+      background: rgba(16, 185, 129, 0.16);
+      color: var(--emerald-400);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+    }
+
+    .stage-desc {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    /* Interactive Demo Widget Box */
+    .widget-box {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 14px;
+      padding: 16px;
+      min-height: 175px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .widget-box.light-surface {
+      background: #f8fafc;
+      border-color: #e2e8f0;
+      color: #0f172a;
+    }
+
+    /* Shared Ultra-Crisp Primitives for POST Widgets */
+    .tactile-btn {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 999px;
+      padding: 10px 18px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+    }
+
+    .post-tactile {
+      transition:
+        transform calc(75ms * var(--time-scale)) var(--ease-out-expo),
+        box-shadow calc(140ms * var(--ease-out-expo)) var(--ease-out-expo),
+        background-color calc(140ms * var(--time-scale)) var(--ease-out-expo);
+      will-change: transform;
+    }
+
+    .post-tactile:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+    }
+
+    .post-tactile:active,
+    .post-tactile.pressing {
+      transform: scale(0.985) !important;
+    }
+
+    /* Progress & Bar Tracks (Compositor scaleX only) */
+    .bar-track {
+      width: 100%;
+      height: 8px;
+      background: rgba(148, 163, 184, 0.18);
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .bar-fill-pre {
+      height: 100%;
+      background: #10b981;
+      border-radius: 999px;
+    }
+
+    .bar-fill-post {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, #10b981, #34d399);
+      border-radius: 999px;
+      transform-origin: left center;
+      transform: scaleX(0);
+      transition: transform calc(180ms * var(--time-scale)) var(--ease-out-expo);
+      will-change: transform;
+    }
+
+    /* Staggered List Rows */
+    .sim-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 11px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .light-surface .sim-row {
+      background: #ffffff;
+      border-color: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .stagger-item-post {
+      opacity: 0;
+      transform: translateY(5px);
+      transition:
+        opacity calc(150ms * var(--time-scale)) var(--ease-out-expo),
+        transform calc(150ms * var(--time-scale)) var(--ease-out-expo);
+    }
+
+    .stagger-item-post.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Custom SVG Checkmark Draw */
+    .custom-chk {
+      width: 18px;
+      height: 18px;
+      border-radius: 5px;
+      border: 1.5px solid #10b981;
+      background: rgba(16, 185, 129, 0.16);
+      display: inline-grid;
+      place-items: center;
+      cursor: pointer;
+      transition: transform calc(75ms * var(--time-scale)) var(--ease-out-expo), background calc(120ms * var(--time-scale)) var(--ease-out-expo);
+    }
+
+    .custom-chk.unchecked {
+      background: transparent;
+      border-color: #64748b;
+    }
+
+    .custom-chk svg path {
+      stroke-dasharray: 20;
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset calc(120ms * var(--time-scale)) var(--ease-out-expo);
+    }
+
+    .custom-chk.unchecked svg path {
+      stroke-dashoffset: 20;
+    }
+
+    /* Compositor Toggle Switch */
+    .comp-switch {
+      width: 44px;
+      height: 24px;
+      border-radius: 999px;
+      background: #475569;
+      border: none;
+      padding: 3px;
+      cursor: pointer;
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      transition: background-color calc(140ms * var(--time-scale)) var(--ease-out-expo), transform calc(70ms * var(--time-scale)) var(--ease-out-expo);
+    }
+
+    .comp-switch:active {
+      transform: scale(0.96);
+    }
+
+    .comp-switch.on {
+      background: #10b981;
+    }
+
+    .comp-switch-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+      transform: translateX(0);
+      transition: transform calc(140ms * var(--time-scale)) var(--ease-out-expo);
+    }
+
+    .comp-switch.on .comp-switch-thumb {
+      transform: translateX(20px);
+    }
+
+    /* Footer Metadata & Code Diff Drawer */
+    .card-footer {
+      padding: 10px 18px;
+      background: rgba(9, 13, 22, 0.55);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 12px;
+    }
+
+    .ux-value {
+      color: var(--text-secondary);
+    }
+
+    .ux-value strong {
+      color: var(--emerald-400);
+    }
+
+    .drawer-toggle {
+      background: transparent;
+      color: #94a3b8;
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 7px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .drawer-toggle:hover {
+      color: #fff;
+      border-color: #475569;
+    }
+
+    .code-drawer {
+      display: none;
+      padding: 14px 18px;
+      background: #060911;
+      border-top: 1px solid var(--border);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 11.5px;
+      color: #a7f3d0;
+      overflow-x: auto;
+    }
+
+    .code-drawer.open {
+      display: block;
+    }
+
+    .code-path {
+      color: #94a3b8;
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    /* Sticky Bottom Export Bar */
+    .export-bar {
+      position: fixed;
+      bottom: 0;
+      inset-x: 0;
+      z-index: 120;
+      background: rgba(9, 13, 22, 0.94);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(16, 185, 129, 0.35);
+      padding: 12px 24px;
+      box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .export-inner {
+      max-width: 1380px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .export-status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+      min-width: 260px;
+    }
+
+    .export-count-pill {
+      background: var(--emerald-500);
+      color: #052e16;
+      font-weight: 900;
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .export-ids-preview {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 680px;
+    }
+
+    .export-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .copy-prompt-btn {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #052e16;
+      border: none;
+      padding: 9px 16px;
+      border-radius: 9px;
+      font-size: 12.5px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: transform 70ms var(--ease-out-expo);
+    }
+
+    .copy-prompt-btn:active {
+      transform: scale(0.985);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sticky Top Inspector Bar -->
+  <header class="top-header">
+    <div class="header-inner">
+      <div class="brand-row">
+        <div class="brand-title">
+          <div class="logo-mark">S</div>
+          <div>
+            <h1>SWEEPR Ecosystem — Ultra-Crisp Micro-Interaction Sandbox</h1>
+            <div class="brand-sub">Linear / Raycast / macOS HIG Choreography • 100ms–180ms • Compositor-Only (transform &amp; opacity) • 100% Silent</div>
+          </div>
+        </div>
+        <div class="laws-pills">
+          <span class="law-pill">Active Press: 70ms scale(0.985)</span>
+          <span class="law-pill">Transitions: 120–180ms cubic-bezier(0.16, 1, 0.3, 1)</span>
+          <span class="law-pill">Counters: tabular-nums</span>
+          <span class="law-pill">Idle CPU: 0.0%</span>
+        </div>
+      </div>
+
+      <div class="controls-row">
+        <div class="filter-tabs" role="tablist" aria-label="Product Filter">
+          <button type="button" class="filter-tab active" onclick="filterCards('all', this)">All Changes (14)</button>
+          <button type="button" class="filter-tab" onclick="filterCards('cleaner', this)">1. SWEEPR Cleaner (4)</button>
+          <button type="button" class="filter-tab" onclick="filterCards('vpn', this)">2. SWEEPR VPN (4)</button>
+          <button type="button" class="filter-tab" onclick="filterCards('deepblock', this)">3. SWEEPR Deepblock (4)</button>
+          <button type="button" class="filter-tab" onclick="filterCards('stripe', this)">4. Shared £1.99 Stripe Flow (2)</button>
+        </div>
+
+        <div class="speed-controls">
+          <span class="speed-label">Speed Inspector:</span>
+          <div class="speed-group">
+            <button type="button" class="speed-btn active" onclick="setSpeedMode(1, false, this)">1x Snappy</button>
+            <button type="button" class="speed-btn" onclick="setSpeedMode(4, false, this)">0.25x Slow-Mo</button>
+            <button type="button" class="speed-btn" onclick="setSpeedMode(1, true, this)">Reduced Motion</button>
+          </div>
+          <button type="button" class="trigger-all-btn" onclick="triggerAllVisible()">▶ Trigger All Visible</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Phase 1 Tech Stack Discovery Summary -->
+    <section class="stack-grid" aria-label="Discovered Repository Tech Stacks">
+      <div class="stack-card">
+        <div class="stack-card-head">
+          <span>1. SWEEPR Cleaner (sweepr-desktop)</span>
+          <span class="stack-badge">Svelte 5 + Tauri v2 + Tailwind</span>
+        </div>
+        <div class="stack-meta">
+          <strong>Web:</strong> Vanilla HTML/JS + Tailwind CDN + <code>server/public/style.css</code><br/>
+          <strong>App:</strong> Svelte 5 Runes (<code>$state</code>, <code>$derived</code>) in <code>app/src/components/Cleaner.svelte</code> &amp; <code>ActivateModal.svelte</code>. Zero external motion bloat.
+        </div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-card-head">
+          <span>2. SWEEPR VPN (sweepr-vpn)</span>
+          <span class="stack-badge">Vanilla HTML/CSS + Tauri v2 / WebView2</span>
+        </div>
+        <div class="stack-meta">
+          <strong>Web:</strong> <code>website/index.html</code> + <code>website/style.css</code><br/>
+          <strong>App:</strong> Unified CSS variables + Vanilla JS in <code>apps/desktop-tauri/ui/index.html</code> &amp; <code>desktop-client/app-ui.html</code>.
+        </div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-card-head">
+          <span>3. SWEEPR Deepblock (sweepr-deepblock)</span>
+          <span class="stack-badge">MV3 Extension + Shadow DOM + Web</span>
+        </div>
+        <div class="stack-meta">
+          <strong>Web:</strong> <code>website/index.html</code> + <code>website/style.css</code><br/>
+          <strong>Extension:</strong> 360×500px <code>extension/popup.html</code> + Shadow-DOM Scam Alert in <code>extension/content/deepblock-content.js</code>.
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- 1. SWEEPR CLEANER (CLN-01 to CLN-04)                                -->
+    <!-- =================================================================== -->
+
+    <!-- CLN-01 -->
+    <article class="motion-card approved" data-product="cleaner" data-id="CLN-01">
+      <div class="motion-card-header">
+        <div class="card-title-group">
+          <span class="change-id">CLN-01</span>
+          <h2 class="card-title">Website Hero CTA Press &amp; Sample Scan Storage Fill</h2>
+          <span class="timing-pill">75ms press • 180ms cubic-bezier(0.16, 1, 0.3, 1)</span>
+        </div>
+        <div class="card-actions">
+          <button type="button" class="sync-trigger-btn" onclick="triggerCard('CLN-01')">▶ Trigger Both Side-by-Side</button>
+          <label class="approve-label">
+            <input type="checkbox" checked onchange="toggleApprove('CLN-01', this.checked)" />
+            <span>Approve Change</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="comparison-grid">
+        <!-- PRE -->
+        <div class="stage-col pre-col">
+          <div class="stage-col-head">
+            <span class="stage-tag pre">PRE (Current Static State)</span>
+            <span class="stage-desc">Static 12.4 GB badge &amp; rows; no tactile pointerdown scale or bar sweep</span>
+          </div>
+          <div class="widget-box light-surface" id="pre-CLN-01">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+              <div>
+                <div style="font-size:11px;font-weight:800;color:#047857;text-transform:uppercase;">Sample 60-Sec Scan Result</div>
+                <div style="font-size:24px;font-weight:900;color:#0f172a;" id="pre-cln01-num">12.4 GB Found</div>
+              </div>
+              <button type="button" class="tactile-btn" onclick="triggerCard('CLN-01')">Download Free Scanner →</button>
+            </div>
+            <div class="bar-track" style="background:#e2e8f0;">
+              <div class="bar-fill-pre" id="pre-cln01-bar" style="width:100%;"></div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;font-size:11.5px;font-weight:700;color:#334155;">
+              <div class="sim-row"><span>System Junk</span><span style="color:#047857;font-weight:800;">6.8 GB</span></div>
+              <div class="sim-row"><span>Browser Cache</span><span style="color:#047857;font-weight:800;">3.4 GB</span></div>
+              <div class="sim-row"><span>Duplicates</span><span style="color:#047857;font-weight:800;">2.2 GB</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- POST -->
+        <div class="stage-col post-col">
+          <div class="stage-col-head">
+            <span class="stage-tag post">POST (Ultra-Crisp Micro-Interaction)</span>
+            <span class="stage-desc">70ms scale(0.985) press + GPU scaleX(0→1) storage bar + tabular-nums roll</span>
+          </div>
+          <div class="widget-box light-surface" id="post-CLN-01">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+              <div>
+                <div style="font-size:11px;font-weight:800;color:#047857;text-transform:uppercase;">Sample 60-Sec Scan Result</div>
+                <div style="font-size:24px;font-weight:900;color:#0f172a;" class="tabular" id="post-cln01-num">12.4 GB Found</div>
+              </div>
+              <button type="button" class="tactile-btn post-tactile" id="post-cln01-btn" onclick="triggerCard('CLN-01')">Download Free Scanner →</button>
+            </div>
+            <div class="bar-track" style="background:#e2e8f0;">
+              <div class="bar-fill-post" id="post-cln01-bar" style="transform:scaleX(1);"></div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;font-size:11.5px;font-weight:700;color:#334155;">
+              <div class="sim-row stagger-item-post visible" id="post-cln01-r1"><span>✓ System Junk</span><span class="tabular" style="color:#047857;font-weight:800;">6.8 GB</span></div>
+              <div class="sim-row stagger-item-post visible" id="post-cln01-r2"><span>✓ Browser Cache</span><span class="tabular" style="color:#047857;font-weight:800;">3.4 GB</span></div>
+              <div class="sim-row stagger-item-post visible" id="post-cln01-r3"><span>✓ Duplicates</span><span class="tabular" style="color:#047857;font-weight:800;">2.2 GB</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="ux-value"><strong>UX Value:</strong> Immediate physical button response on click + progressive storage bar fill proves the scanner is fast and lightweight before the user even downloads.</div>
+        <button type="button" class="drawer-toggle" onclick="toggleDrawer(this)">View File Path &amp; Diff ▾</button>
+      </div>
+      <div class="code-drawer">
+        <span class="code-path">File: desktop_cleaner/server/public/style.css &amp; desktop_cleaner/server/public/index.html</span>
+<pre>.btn-primary, .btn-go {
+  transition: transform 75ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-primary:active, .btn-go:active {
+  transform: scale(0.985);
+}
+.hero-scan-counter {
+  font-variant-numeric: tabular-nums;
+}</pre>
+      </div>
+    </article>
+
+    <!-- CLN-02 -->
+    <article class="motion-card approved" data-product="cleaner" data-id="CLN-02">
+      <div class="motion-card-header">
+        <div class="card-title-group">
+          <span class="change-id">CLN-02</span>
+          <h2 class="card-title">In-App Smart Scan Rolling Counter &amp; 20ms Staggered Results Cascade</h2>
+          <span class="timing-pill">150ms crossfade • 20ms stagger • cubic-bezier(0.16, 1, 0.3, 1)</span>
+        </div>
+        <div class="card-actions">
+          <button type="button" class="sync-trigger-btn" onclick="triggerCard('CLN-02')">▶ Trigger Both Side-by-Side</button>
+          <label class="approve-label">
+            <input type="checkbox" checked onchange="toggleApprove('CLN-02', this.checked)" />
+            <span>Approve Change</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="comparison-grid">
+        <!-- PRE -->
+        <div class="stage-col pre-col">
+          <div class="stage-col-head">
+            <span class="stage-tag pre">PRE (Current Abrupt State)</span>
+            <span class="stage-desc">Abrupt DOM swap from "Scanning…" to 12.4 GB; all rows pop in on 1 frame</span>
+          </div>
+          <div class="widget-box" id="pre-CLN-02">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div>
+                <div style="font-size:28px;font-weight:900;letter-spacing:-0.8px;" id="pre-cln02-num">12.4 GB</div>
+                <div style="font-size:11.5px;color:#94a3b8;" id="pre-cln02-sub">Personal files and logins stay untouched</div>
+              </div>
+              <button type="button" class="tactile-btn" onclick="triggerCard('CLN-02')">Smart Scan</button>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;" id="pre-cln02-list">
+              <div class="sim-row"><span>System &amp; Browser Cache</span><span style="color:#34d399;">6.8 GB</span></div>
+              <div class="sim-row"><span>App Cache &amp; Trash</span><span style="color:#34d399;">3.4 GB</span></div>
+              <div class="sim-row"><span>App Leftovers &amp; Duplicates</span><span style="color:#34d399;">2.2 GB</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- POST -->
+        <div class="stage-col post-col">
+          <div class="stage-col-head">
+            <span class="stage-tag post">POST (Ultra-Crisp Micro-Interaction)</span>
+            <span class="stage-desc">Smooth tabular-nums roll (0.0 → 12.4 GB) + 20ms staggered row cascade</span>
+          </div>
+          <div class="widget-box" id="post-CLN-02">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div>
+                <div style="font-size:28px;font-weight:900;letter-spacing:-0.8px;" class="tabular" id="post-cln02-num">12.4 GB</div>
+                <div style="font-size:11.5px;color:#94a3b8;" id="post-cln02-sub">Personal files and logins stay untouched</div>
+              </div>
+              <button type="button" class="tactile-btn post-tactile" id="post-cln02-btn" onclick="triggerCard('CLN-02')">Smart Scan</button>
+            </div>
+            <div class="bar-track">
+              <div class="bar-fill-post" id="post-cln02-bar" style="transform:scaleX(1);"></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div class="sim-row stagger-item-post visible" id="post-cln02-r1"><span>System &amp; Browser Cache</span><span class="tabular" style="color:#34d399;">6.8 GB</span></div>
+              <div class="sim-row stagger-item-post visible" id="post-cln02-r2"><span>App Cache &amp; Trash</span><span class="tabular" style="color:#34d399;">3.4 GB</span></div>
+              <div class="sim-row stagger-item-post visible" id="post-cln02-r3"><span>App Leftovers &amp; Duplicates</span><span class="tabular" style="color:#34d399;">2.2 GB</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="ux-value"><strong>UX Value:</strong> Eliminates horizontal text jitter during live byte counting and guides the eye smoothly down discovered junk categories.</div>
+        <button type="button" class="drawer-toggle" onclick="toggleDrawer(this)">View File Path &amp; Diff ▾</button>
+      </div>
+      <div class="code-drawer">
+        <span class="code-path">File: desktop_cleaner/app/src/components/Cleaner.svelte</span>
+<pre>.hero-number, .row-size, .detail-bytes {
+  font-variant-numeric: tabular-nums;
+}
+.clean-row-card {
+  animation: rowCascadeIn 150ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.clean-row-card:nth-child(2) { animation-delay: 20ms; }
+.clean-row-card:nth-child(3) { animation-delay: 40ms; }
+@keyframes rowCascadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}</pre>
+      </div>
+    </article>
+
+    <!-- CLN-03 -->
+    <article class="motion-card approved" data-product="cleaner" data-id="CLN-03">
+      <div class="motion-card-header">
+        <div class="card-title-group">
+          <span class="change-id">CLN-03</span>
+          <h2 class="card-title">Category Accordion Drawer &amp; 120ms SVG Stroke-Draw Checkboxes</h2>
+          <span class="timing-pill">150ms chevron rotate • 120ms stroke-dashoffset</span>
+        </div>
+        <div class="card-actions">
+          <button type="button" class="sync-trigger-btn" onclick="triggerCard('CLN-03')">▶ Trigger Both Side-by-Side</button>
+          <label class="approve-label">
+            <input type="checkbox" checked onchange="toggleApprove('CLN-03', this.checked)" />
+            <span>Approve Change</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="comparison-grid">
+        <!-- PRE -->
+        <div class="stage-col pre-col">
+          <div class="stage-col-head">
+            <span class="stage-tag pre">PRE (Current Abrupt State)</span>
+            <span class="stage-desc">Text glyph swap (▾/▴) + unstyled checkbox snap + instant drawer mount</span>
+          </div>
+          <div class="widget-box" id="pre-CLN-03">
+            <div class="sim-row" style="cursor:pointer;" onclick="triggerCard('CLN-03')">
+              <span style="display:flex;align-items:center;gap:8px;">
+                <input type="checkbox" id="pre-cln03-chk" checked style="width:15px;height:15px;" />
+                <span>System &amp; Browser Cache</span>
+              </span>
+              <span style="display:flex;align-items:center;gap:8px;">
+                <span style="color:#34d399;">6.8 GB</span>
+                <span id="pre-cln03-chev">▴</span>
+              </span>
+            </div>
+            <div id="pre-cln03-drawer" style="display:flex;flex-direction:column;gap:5px;padding-left:14px;font-size:11.5px;color:#cbd5e1;">
+              <div class="sim-row"><span>Windows Update &amp; Temp Cache</span><span>4.1 GB</span></div>
+              <div class="sim-row"><span>Chrome / Edge Shader &amp; Media Cache</span><span>2.7 GB</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- POST -->
+        <div class="stage-col post-col">
+          <div class="stage-col-head">
+            <span class="stage-tag post">POST (Ultra-Crisp Micro-Interaction)</span>
+            <span class="stage-desc">150ms SVG chevron rotate(180deg) + 120ms SVG checkmark draw + crisp drawer</span>
+          </div>
+          <div class="widget-box" id="post-CLN-03">
+            <div class="sim-row" style="cursor:pointer;" onclick="triggerCard('CLN-03')">
+              <span style="display:flex;align-items:center;gap:8px;">
+                <span class="custom-chk" id="post-cln03-chk">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#34d399" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2.5 6.2L5 8.7L9.5 3.5" />
+                  </svg>
+                </span>
+                <span>System &amp; Browser Cache</span>
+              </span>
+              <span style="display:flex;align-items:center;gap:8px;">
+                <span class="tabular" style="color:#34d399;">6.8 GB</span>
+                <svg id="post-cln03-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.4" style="transform:rotate(180deg);transition:transform calc(150ms * var(--time-scale)) var(--ease-out-expo);">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </span>
+            </div>
+            <div id="post-cln03-drawer" style="display:flex;flex-direction:column;gap:5px;padding-left:14px;font-size:11.5px;color:#cbd5e1;transition:opacity calc(150ms * var(--time-scale)) var(--ease-out-expo), transform calc(150ms * var(--time-scale)) var(--ease-out-expo);">
+              <div class="sim-row"><span>Windows Update &amp; Temp Cache</span><span class="tabular">4.1 GB</span></div>
+              <div class="sim-row"><span>Chrome / Edge Shader &amp; Media Cache</span><span class="tabular">2.7 GB</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="ux-value"><strong>UX Value:</strong> Inspecting files before deletion feels like a native macOS utility rather than a web form.</div>
+        <button type="button" class="drawer-toggle" onclick="toggleDrawer(this)">View File Path &amp; Diff ▾</button>
+      </div>
+      <div class="code-drawer">
+        <span class="code-path">File: desktop_cleaner/app/src/components/Cleaner.svelte</span>
+<pre>.row-expand-chevron {
+  transition: transform 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.row-expand-chevron.open {
+  transform: rotate(180deg);
+}
+.row-details {
+  animation: detailsReveal 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes detailsReveal {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}</pre>
+      </div>
+    </article>
+
+    <!-- CLN-04 -->
+    <article class="motion-card approved" data-product="cleaner" data-id="CLN-04">
+      <div class="motion-card-header">
+        <div class="card-title-group">
+          <span class="change-id">CLN-04</span>
+          <h2 class="card-title">Cleanup Depletion Payoff (12.4 GB → 0.0 GB) &amp; 7-Day Safety Undo Badge</h2>
+          <span class="timing-pill">180ms depletion • 160ms badge lock-in</span>
+        </div>
+        <div class="card-actions">
+          <button type="button" class="sync-trigger-btn" onclick="triggerCard('CLN-04')">▶ Trigger Both Side-by-Side</button>
+          <label class="approve-label">
+            <input type="checkbox" checked onchange="toggleApprove('CLN-04', this.checked)" />
+            <span>Approve Change</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="comparison-grid">
+        <!-- PRE -->
+        <div class="stage-col pre-col">
+          <div class="stage-col-head">
+            <span class="stage-tag pre">PRE (Current Abrupt State)</span>
+            <span class="stage-desc">Abrupt jump from 12.4 GB to "12.4 GB Cleaned" with static ✓ icon</span>
+          </div>
+          <div class="widget-box" id="pre-CLN-04">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div>
+                <div style="font-size:26px;font-weight:900;" id="pre-cln04-num">12.4 GB Cleaned</div>
+                <div style="font-size:12px;color:#94a3b8;" id="pre-cln04-sub">Backed up in Undo for 7 days</div>
+              </div>
+              <button type="button" class="tactile-btn" onclick="triggerCard('CLN-04')">Clean 12.4 GB</button>
+            </div>
+            <div class="sim-row" id="pre-cln04-badge">
+              <span>✓ Cleanup Complete</span>
+              <span style="color:#34d399;">7-Day Undo Active</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- POST -->
+        <div class="stage-col post-col">
+          <div class="stage-col-head">
+            <span class="stage-tag post">POST (Ultra-Crisp Micro-Interaction)</span>
+            <span class="stage-desc">Rapid 12.4 → 0.0 GB depletion + scaleX(1→0) sweep + emerald Undo lock-in</span>
+          </div>
+          <div class="widget-box" id="post-CLN-04">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div>
+                <div style="font-size:26px;font-weight:900;" class="tabular" id="post-cln04-num">0.0 GB Remaining • 12.4 GB Freed</div>
+                <div style="font-size:12px;color:#94a3b8;" id="post-cln04-sub">Reclaimed space verified • 0 background CPU</div>
+              </div>
+              <button type="button" class="tactile-btn post-tactile" id="post-cln04-btn" onclick="triggerCard('CLN-04')">Clean 12.4 GB</button>
+            </div>
+            <div class="bar-track">
+              <div class="bar-fill-post" id="post-cln04-bar" style="transform:scaleX(0);"></div>
+            </div>
+            <div class="sim-row" id="post-cln04-badge" style="border-color:rgba(16,185,129,0.45);background:rgba(16,185,129,0.12);transition:transform calc(160ms * var(--time-scale)) var(--ease-out-expo), opacity calc(160ms * var(--time-scale)) var(--ease-out-expo);">
+              <span style="color:#34d399;font-weight:800;">🛡️ Protected by 7-Day Safety Undo</span>
+              <span style="color:#a7f3d0;font-size:11px;">1-Click Restore Ready ✓</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="ux-value"><strong>UX Value:</strong> Watching 12.4 GB rapidly drain to 0.0 GB delivers visceral proof of reclaimed disk space while reassuring the user their files are backed up for 7 days.</div>
+        <button type="button" class="drawer-toggle" onclick="toggleDrawer(this)">View File Path &amp; Diff ▾</button>
+      </div>
+      <div class="code-drawer">
+        <span class="code-path">File: desktop_cleaner/app/src/components/Cleaner.svelte</span>
+<pre>.done-badge {
+  animation: badgeLockIn 160ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes badgeLockIn {
+  from { opacity: 0; transform: scale(0.94) translateY(3px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}</pre>
+      </div>
+    </article>
+
+    <!-- =================================================================== -->
+    <!-- 2. SWEEPR VPN (VPN-01 to VPN-04)                                    -->
+    <!-- =================================================================== -->
+
+    <!-- VPN-01 -->
+    <article class="motion-card approved" data-product="vpn" data-id="VPN-01">
+      <div class="motion-card-header">
+        <div class="card-title-group">
+          <span class="change-id">VPN-01</span>
+          <h2 class="card-title">Website Server Pill Switcher (ms Interpolation) &amp; 940 Mbps Speed Bar</h2>
+          <span class="timing-pill">140ms pill switch • 180ms scaleX speed bar</span>
+        </div>
+        <div class="card-actions">
+          <button type="button" class="sync-trigger-btn" onclick="triggerCard('VPN-01')">▶ Trigger Both Side-by-Side</button>
+          <label class="approve-label">
+            <input type="checkbox" checked onchange="toggleApprove('VPN-01', this.checked)" />
+            <span>Approve Change</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="comparison-grid">
+        <!-- PRE -->
+        <div class="stage-col pre-col">
+          <div class="stage-col-head">
+            <span class="stage-tag pre">PRE (Current Static State)</span>
+            <span class="stage-desc">Instant string replacement on ping (11 ms → 64 ms) + static 94% bar</span>
+          </div>
+          <div class="widget-box light-surface" id="pre-VPN-01">
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;">
+              <button type="button" class="sim-row" id="pre-vpn01-uk" onclick="triggerCard('VPN-01', 'uk')" style="justify-content:center;border:2px solid #10b981;">🇬🇧 UK</button>
+              <button type="button" class="sim-row" id="pre-vpn01-us" onclick="triggerCard('VPN-01', 'us')" style="justify-content:center;">🇺🇸 USA</button>
+              <button type="button" class="sim-row" id="pre-vpn01-de" onclick="triggerCard('VPN-01', 'de')" style="justify-content:center;">🇩🇪 DE</button>
+              <button type="button" class="sim-row" id="pre-vpn01-jp" onclick="triggerCard('VPN-01', 'jp')" style="justify-content:center;">🇯🇵 JP</button>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <span style="font-weight:900;font-size:14px;" id="pre-vpn01-city">United Kingdom · London</span>
+              <span style="font-weight:800;font-size:12px;color:#047857;" id="pre-vpn01-ping">11 ms • 10 Gbps</span>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:11.5px;font-weight:800;color:#065f46;margin-bottom:4px;">
+                <span>With SWEEPR VPN (Direct Peering)</span>
+                <span>Up to 940 Mbps ✓</span>
+              </div>
+              <div class="bar-track" style="background:#e2e8f0;">
+                <div class="bar-fill-pre" style="width:94%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- POST -->
+        <div class="stage-col post-col">
+          <div class="stage-col-head">
+            <span class="stage-tag post">POST (Ultra-Crisp Micro-Interaction)</span>
+            <span class="stage-desc">70ms pill press + tabular-nums ping interpolation + GPU scaleX(0→0.94) bar</span>
+          </div>
+          <div class="widget-box light-surface" id="post-VPN-01">
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;">
+              <button type="button" class="sim-row post-tactile" id="post-vpn01-uk" onclick="triggerCard('VPN-01', 'uk')" style="justify-content:center;border:2px solid #10b981;">🇬🇧 UK</button>
+              <button type="button" class="sim-row post-tactile" id="post-vpn01-us" onclick="triggerCard('VPN-01', 'us')" style="justify-content:center;">🇺🇸 USA</button>
+              <button type="button" class="sim-row post-tactile" id="post-vpn01-de" onclick="triggerCard('VPN-01', 'de')" style="justify-content:center;">🇩🇪 DE</button>
+              <button type="button" class="sim-row post-tactile" id="post-vpn01-jp" onclick="triggerCard('VPN-01', 'jp')" style="justify-content:center;">🇯🇵 JP</button>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <span style="font-weight:900;font-size:14px;" id="post-vpn01-city">United Kingdom · London</span>
+              <span style="font-weight:800;font-size:12px;color:#047857;" class="tabular" id="post-vpn01-ping">11 ms • 10 Gbps</span>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:11.5px;font-weight:800;color:#065f46;margin-bottom:4px;">
+                <span>With SWEEPR VPN (Direct Peering)</span>
+                <span class="tabular" id="post-vpn01-mbps">Up to 940 Mbps ✓</span>
+              </div>
+              <div class="bar-track" style="background:#e2e8f0;">
+                <div class="bar-fill-post" id="post-vpn01-bar" style="transform:scaleX(0.94);"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="ux-value"><strong>UX Value:</strong> Switching server pills feels like hardware routing—latency interpolates smoothly and the 940 Mbps bar visually proves anti-throttling speed.</div>
+        <button type="button" class="drawer-toggle" onclick="toggleDrawer(this)">View File Path &amp; Diff ▾</button>
+      </div>
+      <div class="code-drawer">
+        <span class="code-path">File: vpn/website/index.html &amp; vpn/website/style.css</span>
+<pre>.hero-srv-pill {
+  transition: transform 75ms cubic-bezier(0.16, 1, 0.3, 1), border-color 140ms cubic-bezier(0.16, 1, 0.3, 1), background-color 140ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hero-srv-pill:active { transform: scale(0.975); }
+#heroVpnMeta { font-variant-numeric: tabular-nums; }</pre>
+      </div>
+    </article>
+
+    <!-- VPN-02 -->
+    <article class="motion-card approved" data-product="vpn" data-id="VPN-02">
+      <div class="motion-card-header">
+        <div class="card-title-group">
+          <span class="change-id">VPN-02</span>
+          <h2 class="card-title">In-App 1-Click Connect 3-State Machine &amp; IP Cipher Masking</h2>
+          <span class="timing-pill">75ms press • 160ms cipher mask • 0.0% idle CPU</span>
+        </div>
+        <div class="card-actions">
+          <button type="button" class="sync-trigger-btn" onclick="triggerCard('VPN-02')">▶ Trigger Both Side-by-Side</button>
+          <label class="approve-label">
+            <input type="checkbox" checked onchange="toggleApprove('VPN-02', this.checked)" />
+            <span>Approve Change</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="comparison-grid">
+        <!-- PRE -->
+        <div class="stage-col pre-col">
+          <div class="stage-col-head">
+            <span class="stage-tag pre">PRE (Current Abrupt State)</span>
+            <span class="stage-desc">Single-frame text swap ("Exposed" → "Hidden • 0 Logs") + infinite CSS ring spin</span>
+          </div>
+          <div class="widget-box" id="pre-VPN-02" style="background:linear-gradient(160deg,#064e3b 0%,#0b1220 75%);">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div>
+                <div style="font-size:20px;font-weight:900;" id="pre-vpn02-title">Connected &amp; Protected</div>
+                <div style="font-size:12px;color:#a7f3d0;">United Kingdom · London (10 Gbps)</div>
+              </div>
+              <span class="law-pill" id="pre-vpn02-ip">Hidden • 0 Logs</span>
+            </div>
+            <button type="button" class="tactile-btn" id="pre-vpn02-btn" onclick="triggerCard('VPN-02')">Enable 10 Gbps Tunnel</button>
+          </div>
+        </div>
+
+        <!-- POST -->
+        <div class="stage-col post-col">
+          <div class="stage-col-head">
+            <span class="stage-tag post">POST (Ultra-Crisp Micro-Interaction)</span>
+            <span class="stage-desc">3-State transition (Disconnected → Establishing → Connected) + IP cipher scramble</span>
+          </div>
+          <div class="widget-box" id="post-VPN-02" style="background:linear-gradient(160deg,#047857 0%,#0b1220 75%);transition:border-color calc(160ms * var(--time-scale)) var(--ease-out-expo);">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div>
+                <div style="font-size:20px;font-weight:900;" id="post-vpn02-title">Connected &amp; Protected</div>
+                <div style="font-size:12px;color:#a7f3d0;" id="post-vpn02-sub">United Kingdom · London • 11 ms</div>
+              </div>
+              <span class="law-pill tabular" id="post-vpn02-ip" style="font-family:ui-monospace,monospace;">Hidden • 0 Logs</span>
+            </div>
+            <div class="bar-track">
+              <div class="bar-fill-post" id="post-vpn02-bar" style="transform:scaleX(1);"></div>
+            </div>
+            <button type="button" class="tactile-btn post-tactile" id="post-vpn02-btn" onclick="triggerCard('VPN-02')">Enable 10 Gbps Tunnel</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="ux-value"><strong>UX Value:</strong> The 160ms cipher-masking scramble (<code>82.14.194.21 → 82.••.•••.•• → Hidden • 0 Logs</code>) makes IP encryption visibly tangible while settling to 0.0% idle CPU.</div>
+        <button type="button" class="drawer-toggle" onclick="toggleDrawer(this)">View File Path &amp; Diff ▾</button>
+      </div>
+      <div class="code-drawer">
+        <span class="code-path">File: vpn/apps/desktop-tauri/ui/index.html &amp; vpn/desktop-client/app-ui.html</span>
+<pre>function animateIpMask(el) {
+  const frames = ['82.14.194.21', '82.14.•••.••', '82.••.•••.••', '••.••.•••.••', 'Hidden • 0 Logs'];
+  frames.forEach((txt, i) => setTimeout(() => { el.textContent = txt; }, i * 35));
+}</pre>
+      </div>
+    </article>
+
+    <!-- VPN-03 -->
+    <article class="motion-card approved" data-product="vpn" data-id="VPN-03">
+      <div class="motion-card-header">
+        <div class="card-title-group">
+          <span class="change-id">VPN-03</span>
+          <h2 class="card-title">Home Wi-Fi Device Scanner Sweep &amp; 20ms Staggered Device Reveal</h2>
+          <span class="timing-pill">180ms bar sweep • 20ms stagger • cubic-bezier(0.16, 1, 0.3, 1)</span>
+        </div>
+        <div class="card-actions">
+          <button type="button" class="sync-trigger-btn" onclick="triggerCard('VPN-03')">▶ Trigger Both Side-by-Side</button>
+          <label class="approve-label">
+            <input type="checkbox" checked onchange="toggleApprove('VPN-03', this.checked)" />
+            <span>Approve Change</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="comparison-grid">
+        <!-- PRE -->
+        <div class="stage-col pre-col">
+          <div class="stage-col-head">
+            <span class="stage-tag pre">PRE (Current Static State)</span>
+            <span class="stage-desc">Button text changes to "Scanning…" for 650ms while device rows remain static</span>
+          </div>
+          <div class="widget-box" id="pre-VPN-03">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <span style="font-weight:800;font-size:13px;" id="pre-vpn03-status">4 Devices Found on Home Wi-Fi</span>
+              <button type="button" class="tactile-btn" style="padding:6px 12px;font-size:11.5px;" id="pre-vpn03-btn" onclick="triggerCard('VPN-03')">Scan Wi-Fi</button>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:5px;">
+              <div class="sim-row"><span>📺 Living Room Samsung TV (192.168.1.48)</span><span style="color:#fbbf24;">ACR Risk</span></div>
+              <div class="sim-row"><span>💻 Benjamin's MacBook Air (192.168.1.14)</span><span style="color:#34d399;">Protected</span></div>
+              <div class="sim-row"><span>📱 iPhone 16 Pro (192.168.1.22)</span><span style="color:#34d399;">Trusted</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- POST -->
+        <div class="stage-col post-col">
+          <div class="stage-col-head">
+            <span class="stage-tag post">POST (Ultra-Crisp Micro-Interaction)</span>
+            <span class="stage-desc">scaleX(0→1) LAN sweep + 20ms staggered device row discovery</span>
+          </div>
+          <div class="widget-box" id="post-VPN-03">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <span style="font-weight:800;font-size:13px;" class="tabular" id="post-vpn03-status">4 Devices Found on Home Wi-Fi</span>
+              <button type="button" class="tactile-btn post-tactile" style="padding:6px 12px;font-size:11.5px;" id="post-vpn03-btn" onclick="triggerCard('VPN-03')">Scan Wi-Fi</button>
+            </div>
+            <div class="bar-track">
+              <div class="bar-fill-post" id="post-vpn03-bar" style="transform:scaleX(1);"></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:5px;">
+              <div class="sim-row stagger-item-post visible" id="post-vpn03-r1"><span>📺 Living Room Samsung TV (192.168.1.48)</span><span style="color:#fbbf24;">ACR Risk</span></div>
+              <div class="sim-row stagger-item-post visible" id="post-vpn03-r2"><span>💻 Benjamin's MacBook Air (192.168.1.14)</span><span style="color:#34d399;">Protected</span></div>
+              <div class="sim-row stagger-item-post visible" id="post-vpn03-r3"><span>📱 iPhone 16 Pro (192.168.1.22)</span><span style="color:#34d399;">Trusted</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="ux-value"><strong>UX Value:</strong> Shows ARP/LAN discovery happening live across the local subnet so the user trusts the scanner actually inspected their router.</div>
+        <button type="button" class="drawer-toggle" onclick="toggleDrawer(this)">View File Path &amp; Diff ▾</button>
+      </div>
+      <div class="code-drawer">
+        <span class="code-path">File: vpn/apps/desktop-tauri/ui/index.html &amp; vpn/desktop-client/app-ui.html</span>
+<pre>.devrow {
+  transition: opacity 140ms cubic-bezier(0.16, 1, 0.3, 1), transform 140ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.devrow.scanning-hidden {
+  opacity: 0;
+  transform: translateY(4px);
+}</pre>
+      </div>
+    </article>
+
+    <!-- VPN-04 -->
+    <article class="motion-card approved" data-product="vpn" data-id="VPN-04">
+      <div class="motion-card-header">
+        <div class="card-title-group">
+          <span class="change-id">VPN-04</span>
+          <h2 class="card-title">Smart-TV ACR Tracking Shield Compositor Toggle Switch</h2>
+          <span class="timing-pill">140ms translateX(18px) • cubic-bezier(0.16, 1, 0.3, 1)</span>
+        </div>
+        <div class="card-actions">
+          <button type="button" class="sync-trigger-btn" onclick="triggerCard('VPN-04')">▶ Trigger Both Side-by-Side</button>
+          <label class="approve-label">
+            <input type="checkbox" checked onchange="toggleApprove('VPN-04', this.checked)" />
+            <span>Approve Change</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="comparison-grid">
+        <!-- PRE -->
+        <div class="stage-col pre-col">
+          <div class="stage-col-head">
+            <span class="stage-tag pre">PRE (Current Layout-Property State)</span>
+            <span class="stage-desc">Animates non-composited `left: 3px → 21px` with generic ease</span>
+          </div>
+          <div class="widget-box" id="pre-VPN-04">
+            <div class="sim-row" style="padding:12px;">
+              <div>
+                <div style="font-size:13.5px;font-weight:800;">Smart-TV ACR Tracking Shield</div>
+                <div style="font-size:11.5px;color:#94a3b8;" id="pre-vpn04-sub">Blocks Samsung, LG, Roku &amp; Fire TV viewing telemetry</div>
+              </div>
+              <button type="button" id="pre-vpn04-sw" onclick="triggerCard('VPN-04')" style="width:44px;height:24px;border-radius:99px;background:#10b981;border:none;position:relative;cursor:pointer;">
+                <i id="pre-vpn04-thumb" style="position:absolute;top:3px;left:23px;width:18px;height:18px;border-radius:50%;background:#fff;"></i>
+              </button>
+            </div>
+            <div class="sim-row">
+              <span>📺 Living Room Samsung TV</span>
+              <span id="pre-vpn04-pill" style="color:#34d399;font-weight:800;">ACR Blocked ✓</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- POST -->
+        <div class="stage-col post-col">
+          <div class="stage-col-head">
+            <span class="stage-tag post">POST (Ultra-Crisp Micro-Interaction)</span>
+            <span class="stage-desc">Compositor-only `transform: translateX(20px)` + scale(0.96) active press</span>
+          </div>
+          <div class="widget-box" id="post-VPN-04">
+            <div class="sim-row" style="padding:12px;">
+              <div>
+                <div style="font-size:13.5px;font-weight:800;">Smart-TV ACR Tracking Shield</div>
+                <div style="font-size:11.5px;color:#94a3b8;" id="post-vpn04-sub">Blocks Samsung, LG, Roku &amp; Fire TV viewing telemetry</div>
+              </div>
+              <button type="button" class="comp-switch on" id="post-vpn04-sw" onclick="triggerCard('VPN-04')" aria-label="Toggle Smart-TV Shield">
+                <span class="comp-switch-thumb"></span>
+              </button>
+            </div>
+            <div class="sim-row" id="post-vpn04-row" style="border-color:rgba(16,185,129,0.4);background:rgba(16,185,129,0.1);transition:all calc(140ms * var(--time-scale)) var(--ease-out-expo);">
+              <span>📺 Living Room Samsung TV</span>
+              <span id="post-vpn04-pill" style="color:#34d399;font-weight:800;">ACR Blocked • 0 Telemetry ✓</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="ux-value"><strong>UX Value:</strong> Replaces layout-thrashing <code>left</code> transitions with 120fps GPU <code>transform: translateX()</code> and immediate Smart-TV row status feedback.</div>
+        <button type="button" class="drawer-toggle" onclick="toggleDrawer(this)">View File Path &amp; Diff ▾</button>
+      </div>
+      <div class="code-drawer">
+        <span class="code-path">File: vpn/apps/desktop-tauri/ui/index.html &amp; vpn/desktop-client/app-ui.html</span>
+<pre>.toggle {
+  transition: background-color 140ms cubic-bezier(0.16, 1, 0.3, 1), transform 70ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.toggle:active { transform: scale(0.96); }
+.toggle i {
+  left: 3px;
+  transform: translateX(0);
+  transition: transform 140ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.toggle.on i {
+  left: 3px;
+  transform: translateX(18px);
+}</pre>
+      </div>
+    </article>
+
+    <!-- =================================================================== -->
+    <!-- 3. SWEEPR DEEPBLOCK (DBK-01 to DBK-04)                              -->
+    <!-- =================================================================== -->
+
+    <!-- DBK-01 -->
+    <article class="motion-card approved" data-product="deepblock" data-id="DBK-01">
+      <div class="motion-card-header">
+        <div class="card-title-group">
+          <span class="change-id">DBK-01</span>
+          <h2 class="card-title">Website Before/After Video Ad Slider: GPU Clip-Path &amp; 400ms Load Nudge</h2>
+          <span class="timing-pill">400ms load nudge (50% → 44% → 50%) • 0ms drag lag</span>
+        </div>
+        <div class="card-actions">
+          <button type="button" class="sync-trigger-btn" onclick="triggerCard('DBK-01')">▶ Trigger Both Side-by-Side</button>
+          <label class="approve-label">
+            <input type="checkbox" checked onchange="toggleApprove('DBK-01', this.checked)" />
+            <span>Approve Change</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="comparison-grid">
+        <!-- PRE -->
+        <div class="stage-col pre-col">
+          <div class="stage-col-head">
+            <span class="stage-tag pre">PRE (Current Static Load State)</span>
+            <span class="stage-desc">Sits motionless at 46% on load; animates layout `width` &amp; `left`</span>
+          </div>
+          <div class="widget-box" id="pre-DBK-01" style="padding:0;min-height:165px;">
+            <div style="position:relative;height:165px;width:100%;background:#064e3b;display:flex;align-items:center;justify-content:center;">
+              <div style="text-align:center;">
+                <div style="font-size:13px;font-weight:900;color:#6ee7b7;">✓ WITH SWEEPR DEEPBLOCK</div>
+                <div style="font-size:11.5px;color:#d1fae5;">Video Plays Immediately • 0 Cookie Pop-Ups</div>
+              </div>
+              <div id="pre-dbk01-clip" style="position:absolute;inset:0;width:50%;overflow:hidden;background:#4c0519;border-right:2px solid #fb7185;display:flex;align-items:center;justify-content:center;">
+                <div style="font-size:12px;font-weight:800;color:#fda4af;padding:10px;">✗ WITHOUT DEEPBLOCK (Video Ad 1 of 2 + Cookie Wall)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- POST -->
+        <div class="stage-col post-col">
+          <div class="stage-col-head">
+            <span class="stage-tag post">POST (Ultra-Crisp Micro-Interaction)</span>
+            <span class="stage-desc">400ms initial nudge (50% → 44% → 50%) + compositor clip-path / translate3d</span>
+          </div>
+          <div class="widget-box" id="post-DBK-01" style="padding:0;min-height:165px;cursor:ew-resize;" onpointermove="if(event.buttons===1)scrubPostSlider(event)">
+            <div style="position:relative;height:165px;width:100%;background:#064e3b;display:flex;align-items:center;justify-content:center;">
+              <div style="text-align:center;">
+                <div style="font-size:13px;font-weight:900;color:#6ee7b7;">✓ WITH SWEEPR DEEPBLOCK</div>
+                <div style="font-size:11.5px;color:#d1fae5;">Video Plays Immediately • 0 Cookie Pop-Ups</div>
+              </div>
+              <div id="post-dbk01-clip" style="position:absolute;inset:0;background:#4c0519;clip-path:inset(0 50% 0 0);display:flex;align-items:center;justify-content:center;will-change:clip-path;">
+                <div style="font-size:12px;font-weight:800;color:#fda4af;padding:10px;">✗ WITHOUT DEEPBLOCK (Video Ad 1 of 2 + Cookie Wall)</div>
+              </div>
+              <div id="post-dbk01-handle" style="position:absolute;top:0;bottom:0;left:50%;width:2px;background:#34d399;transform:translate3d(0,0,0);pointer-events:none;">
+                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:30px;height:30px;border-radius:50%;background:#10b981;color:#052e16;font-weight:900;font-size:11px;display:grid;place-items:center;border:2px solid #fff;">‹ ›</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="ux-value"><strong>UX Value:</strong> The subtle 400ms load nudge (`50% → 44% → 50%`) immediately signals interactivity without requiring instructions, while `clip-path` eliminates layout reflow during drag.</div>
+        <button type="button" class="drawer-toggle" onclick="toggleDrawer(this)">View File Path &amp; Diff ▾</button>
+      </div>
+      <div class="code-drawer">
+        <span class="code-path">File: adblocker/website/index.html</span>
+<pre>// 400ms initial load nudge (50% -> 44% -> 50%) respecting prefers-reduced-motion
+if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  clip.style.transition = 'clip-path 200ms cubic-bezier(0.22, 1, 0.36, 1)';
+  setHeroSlider(44);
+  setTimeout(() => setHeroSlider(50), 200);
+  setTimeout(() => { clip.style.transition = 'none'; }, 420);
+}</pre>
+      </div>
+    </article>
+
+    <!-- DBK-02 -->
+    <article class="motion-card approved" data-product="deepblock" data-id="DBK-02">
+      <div class="motion-card-header">
+        <div class="card-title-group">
+          <span class="change-id">DBK-02</span>
+          <h2 class="card-title">Total Tab &amp; RAM Tamer Gauge Drop (7.1 GB → 1.2 GB)</h2>
+          <span class="timing-pill">180ms scaleX(0.88 → 0.18) • tabular-nums</span>
+        </div>
+        <div class="card-actions">
+          <button type="button" class="sync-trigger-btn" onclick="triggerCard('DBK-02')">▶ Trigger Both Side-by-Side</button>
+          <label class="approve-label">
+            <input type="checkbox" checked onchange="toggleApprove('DBK-02', this.checked)" />
+            <span>Approve Change</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="comparison-grid">
+        <!-- PRE -->
+        <div class="stage-col pre-col">
+          <div class="stage-col-head">
+            <span class="stage-tag pre">PRE (Current Static Card)</span>
+            <span class="stage-desc">Static 7.1 GB (88%) and 1.2 GB (18%) bars with no interactive RAM drop</span>
+          </div>
+          <div class="widget-box" id="pre-DBK-02">
+            <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:800;">
+              <span>45 Open Browser Tabs</span>
+              <span style="color:#f87171;" id="pre-dbk02-ram">7.1 GB → 1.2 GB RAM</span>
+            </div>
+            <div class="bar-track">
+              <div class="bar-fill-pre" id="pre-dbk02-bar" style="width:18%;background:#34d399;"></div>
+            </div>
+            <button type="button" class="tactile-btn" onclick="triggerCard('DBK-02')">Simulate Tab &amp; RAM Tamer</button>
+          </div>
+        </div>
+
+        <!-- POST -->
+        <div class="stage-col post-col">
+          <div class="stage-col-head">
+            <span class="stage-tag post">POST (Ultra-Crisp Micro-Interaction)</span>
+            <span class="stage-desc">Smooth 180ms scaleX(0.88 → 0.18) gauge drop + rolling tabular-nums GB readout</span>
+          </div>
+          <div class="widget-box" id="post-DBK-02">
+            <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:800;">
+              <span>45 Open Browser Tabs</span>
+              <span class="tabular" style="color:#34d399;" id="post-dbk02-ram">1.2 GB RAM (83% Saved ✓)</span>
+            </div>
+            <div class="bar-track">
+              <div class="bar-fill-post" id="post-dbk02-bar" style="transform:scaleX(0.18);"></div>
+            </div>
+            <button type="button" class="tactile-btn post-tactile" onclick="triggerCard('DBK-02')">Simulate Tab &amp; RAM Tamer (+£14.99/yr)</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="ux-value"><strong>UX Value:</strong> Visually dropping the red 7.1 GB bar down to a calm emerald 1.2 GB makes the +£14.99/yr Tab &amp; RAM Tamer add-on immediately desirable.</div>
+        <button type="button" class="drawer-toggle" onclick="toggleDrawer(this)">View File Path &amp; Diff ▾</button>
+      </div>
+      <div class="code-drawer">
+        <span class="code-path">File: adblocker/website/index.html</span>
+<pre>.ram-gauge-fill {
+  transform-origin: left center;
+  transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1), background-color 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}</pre>
+      </div>
+    </article>
+
+    <!-- DBK-03 -->
+    <article class="motion-card approved" data-product="deepblock" data-id="DBK-03">
+      <div class="motion-card-header">
+        <div class="card-title-group">
+          <span class="change-id">DBK-03</span>
+          <h2 class="card-title">360×500px Extension Popup: Site Shield Switch, Ticker &amp; RAM Pulse</h2>
+          <span class="timing-pill">140ms switch • 160ms RAM reclaimed pulse</span>
+        </div>
+        <div class="card-actions">
+          <button type="button" class="sync-trigger-btn" onclick="triggerCard('DBK-03')">▶ Trigger Both Side-by-Side</button>
+          <label class="approve-label">
+            <input type="checkbox" checked onchange="toggleApprove('DBK-03', this.checked)" />
+            <span>Approve Change</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="comparison-grid">
+        <!-- PRE -->
+        <div class="stage-col pre-col">
+          <div class="stage-col-head">
+            <span class="stage-tag pre">PRE (Current Popup State)</span>
+            <span class="stage-desc">Switch uses `left`/`right` layout transition; "Pause Inactive Tabs" jumps text</span>
+          </div>
+          <div class="widget-box" id="pre-DBK-03">
+            <div class="sim-row">
+              <div>
+                <div style="font-weight:800;">youtube.com</div>
+                <div style="font-size:11px;color:#34d399;">✓ Site Shield Active</div>
+              </div>
+              <span id="pre-dbk03-count" style="font-weight:900;color:#34d399;">14 Ads • 3 Cookies</span>
+            </div>
+            <div class="sim-row">
+              <span id="pre-dbk03-ram">420 MB Freed Across 6 Sleeping Tabs</span>
+              <button type="button" class="tactile-btn" style="padding:5px 10px;font-size:11px;" onclick="triggerCard('DBK-03')">Pause Inactive Tabs Now</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- POST -->
+        <div class="stage-col post-col">
+          <div class="stage-col-head">
+            <span class="stage-tag post">POST (Ultra-Crisp Micro-Interaction)</span>
+            <span class="stage-desc">Compositor switch + tabular-nums ticker + 160ms memory-reclaimed pulse</span>
+          </div>
+          <div class="widget-box" id="post-DBK-03">
+            <div class="sim-row">
+              <div>
+                <div style="font-weight:800;">youtube.com</div>
+                <div style="font-size:11px;color:#34d399;">✓ Site Shield Active</div>
+              </div>
+              <span id="post-dbk03-count" class="tabular" style="font-weight:900;color:#34d399;">14 Ads • 3 Cookies</span>
+            </div>
+            <div class="sim-row" id="post-dbk03-ramrow" style="transition:transform calc(150ms * var(--time-scale)) var(--ease-out-expo), border-color calc(150ms * var(--time-scale)) var(--ease-out-expo), background-color calc(150ms * var(--time-scale)) var(--ease-out-expo);">
+              <span class="tabular" id="post-dbk03-ram" style="color:#34d399;font-weight:800;">420 MB Freed Across 6 Sleeping Tabs ✓</span>
+              <button type="button" class="tactile-btn post-tactile" style="padding:5px 10px;font-size:11px;" onclick="triggerCard('DBK-03')">Pause Inactive Tabs Now</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="ux-value"><strong>UX Value:</strong> Makes the 360×500px browser toolbar popup feel as crisp as Raycast, with zero layout jank and instant feedback when pausing background tabs.</div>
+        <button type="button" class="drawer-toggle" onclick="toggleDrawer(this)">View File Path &amp; Diff ▾</button>
+      </div>
+      <div class="code-drawer">
+        <span class="code-path">File: adblocker/extension/popup.html &amp; adblocker/extension/popup.js</span>
+<pre>.switch-btn::after {
+  left: 3px;
+  right: auto;
+  transform: translateX(18px);
+  transition: transform 140ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.switch-btn.off::after, .site-card.paused .switch-btn::after {
+  transform: translateX(0);
+}
+.stat-num, #ramSavedBadge { font-variant-numeric: tabular-nums; }</pre>
+      </div>
+    </article>
+
+    <!-- DBK-04 -->
+    <article class="motion-card approved" data-product="deepblock" data-id="DBK-04">
+      <div class="motion-card-header">
+        <div class="card-title-group">
+          <span class="change-id">DBK-04</span>
+          <h2 class="card-title">In-Page Fake Online Shop Warning Banner Entrance</h2>
+          <span class="timing-pill">160ms translateY(-6px→0) + scale(0.985→1) • blur(8px)</span>
+        </div>
+        <div class="card-actions">
+          <button type="button" class="sync-trigger-btn" onclick="triggerCard('DBK-04')">▶ Trigger Both Side-by-Side</button>
+          <label class="approve-label">
+            <input type="checkbox" checked onchange="toggleApprove('DBK-04', this.checked)" />
+            <span>Approve Change</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="comparison-grid">
+        <!-- PRE -->
+        <div class="stage-col pre-col">
+          <div class="stage-col-head">
+            <span class="stage-tag pre">PRE (Current Abrupt DOM Append)</span>
+            <span class="stage-desc">Appends Shadow-DOM warning card into `document.body` on a single frame</span>
+          </div>
+          <div class="widget-box" id="pre-DBK-04">
+            <div id="pre-dbk04-banner" style="background:#fffbeb;border:1.5px solid #fbbf24;border-radius:12px;padding:12px;color:#0f172a;display:flex;flex-direction:column;gap:8px;">
+              <div style="display:flex;justify-content:space-between;font-size:10.5px;font-weight:800;color:#92400e;">
+                <span>⚠️ SWEEPR SHOP SHIELD · CAUTION</span>
+                <span>luxury-outlet-90off.shop</span>
+              </div>
+              <div style="font-size:13px;font-weight:900;">Hold on — this store shows 3 signs of a risky online shop</div>
+              <button type="button" class="tactile-btn" style="border-radius:8px;padding:7px 12px;font-size:12px;" onclick="triggerCard('DBK-04')">← Take Me Back to Safety</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- POST -->
+        <div class="stage-col post-col">
+          <div class="stage-col-head">
+            <span class="stage-tag post">POST (Ultra-Crisp Micro-Interaction)</span>
+            <span class="stage-desc">160ms slide-down + scale(0.985→1) + backdrop-filter: blur(8px)</span>
+          </div>
+          <div class="widget-box" id="post-DBK-04">
+            <div id="post-dbk04-banner" style="background:rgba(255,251,235,0.96);backdrop-filter:blur(8px);border:1.5px solid #fbbf24;border-radius:12px;padding:12px;color:#0f172a;display:flex;flex-direction:column;gap:8px;transition:opacity calc(160ms * var(--time-scale)) var(--ease-out-expo), transform calc(160ms * var(--time-scale)) var(--ease-out-expo);">
+              <div style="display:flex;justify-content:space-between;font-size:10.5px;font-weight:800;color:#92400e;">
+                <span>⚠️ SWEEPR SHOP SHIELD · CAUTION</span>
+                <span>luxury-outlet-90off.shop</span>
+              </div>
+              <div style="font-size:13px;font-weight:900;">Hold on — this store shows 3 signs of a risky online shop</div>
+              <button type="button" class="tactile-btn post-tactile" style="border-radius:8px;padding:7px 12px;font-size:12px;" onclick="triggerCard('DBK-04')">← Take Me Back to Safety</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="ux-value"><strong>UX Value:</strong> Commands immediate protective authority when a user lands on a scam store without shifting page layout (`CLS = 0`).</div>
+        <button type="button" class="drawer-toggle" onclick="toggleDrawer(this)">View File Path &amp; Diff ▾</button>
+      </div>
+      <div class="code-drawer">
+        <span class="code-path">File: adblocker/extension/content/deepblock-content.js</span>
+<pre>card.animate([
+  { opacity: 0, transform: 'translateY(-6px) scale(0.985)' },
+  { opacity: 1, transform: 'translateY(0) scale(1)' }
+], { duration: 160, easing: 'cubic-bezier(0.16, 1, 0.3, 1)', fill: 'forwards' });</pre>
+      </div>
+    </article>
+
+    <!-- =================================================================== -->
+    <!-- 4. SHARED £1.99 STRIPE UNLOCK FLOW (STR-01 to STR-02)               -->
+    <!-- =================================================================== -->
+
+    <!-- STR-01 -->
+    <article class="motion-card approved" data-product="stripe" data-id="STR-01">
+      <div class="motion-card-header">
+        <div class="card-title-group">
+          <span class="change-id">STR-01</span>
+          <h2 class="card-title">Shared £1.99 1st-Month Pro Unlock Sheet Elevation (160ms Entry / 100ms Exit)</h2>
+          <span class="timing-pill">160ms translateY(4px→0) scale(0.98→1) • cubic-bezier(0.16, 1, 0.3, 1)</span>
+        </div>
+        <div class="card-actions">
+          <button type="button" class="sync-trigger-btn" onclick="triggerCard('STR-01')">▶ Trigger Both Side-by-Side</button>
+          <label class="approve-label">
+            <input type="checkbox" checked onchange="toggleApprove('STR-01', this.checked)" />
+            <span>Approve Change</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="comparison-grid">
+        <!-- PRE -->
+        <div class="stage-col pre-col">
+          <div class="stage-col-head">
+            <span class="stage-tag pre">PRE (Current Modal Open)</span>
+            <span class="stage-desc">Instant `display: none → flex` modal mount on clicking Clean / Enable VPN</span>
+          </div>
+          <div class="widget-box" id="pre-STR-01">
+            <div id="pre-str01-sheet" style="background:#111827;border:1px solid #334155;border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <span style="font-weight:900;font-size:14px;">Unlock SWEEPR Pro</span>
+                <span class="law-pill">1st Month £1.99</span>
+              </div>
+              <div style="font-size:12px;color:#94a3b8;">Instant activation across Desktop &amp; Mobile • 14-Day Money-Back Guarantee</div>
+              <button type="button" class="tactile-btn" onclick="triggerCard('STR-01')">Unlock for £1.99 →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- POST -->
+        <div class="stage-col post-col">
+          <div class="stage-col-head">
+            <span class="stage-tag post">POST (Ultra-Crisp Micro-Interaction)</span>
+            <span class="stage-desc">70ms trigger press → 160ms sheet elevation (translateY(4px) scale(0.98) → 1)</span>
+          </div>
+          <div class="widget-box" id="post-STR-01">
+            <div id="post-str01-sheet" style="background:#111827;border:1px solid rgba(16,185,129,0.45);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;box-shadow:0 16px 40px rgba(0,0,0,0.45);transition:opacity calc(160ms * var(--time-scale)) var(--ease-out-expo), transform calc(160ms * var(--time-scale)) var(--ease-out-expo);">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <span style="font-weight:900;font-size:14px;">Unlock SWEEPR Pro</span>
+                <span class="law-pill">1st Month £1.99</span>
+              </div>
+              <div style="font-size:12px;color:#94a3b8;">Instant activation across Desktop &amp; Mobile • 14-Day Money-Back Guarantee</div>
+              <button type="button" class="tactile-btn post-tactile" onclick="triggerCard('STR-01')">Unlock for £1.99 →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="ux-value"><strong>UX Value:</strong> Elevating the £1.99 Pro unlock sheet with Stripe/macOS-grade `160ms` precision makes the upgrade prompt feel native and trustworthy.</div>
+        <button type="button" class="drawer-toggle" onclick="toggleDrawer(this)">View File Path &amp; Diff ▾</button>
+      </div>
+      <div class="code-drawer">
+        <span class="code-path">File: Cleaner ActivateModal.svelte, VPN index.html (.modal .box), Deepblock popup.html</span>
+<pre>@keyframes sweeprSheetEnter {
+  from { opacity: 0; transform: translateY(4px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.modal-sheet, .modal .box {
+  animation: sweeprSheetEnter 160ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}</pre>
+      </div>
+    </article>
+
+    <!-- STR-02 -->
+    <article class="motion-card approved" data-product="stripe" data-id="STR-02">
+      <div class="motion-card-header">
+        <div class="card-title-group">
+          <span class="change-id">STR-02</span>
+          <h2 class="card-title">Stripe Payment Confirmed: Lock-to-Unlock SVG Morph &amp; Auto-Resume</h2>
+          <span class="timing-pill">160ms shackle lift + SVG checkmark draw</span>
+        </div>
+        <div class="card-actions">
+          <button type="button" class="sync-trigger-btn" onclick="triggerCard('STR-02')">▶ Trigger Both Side-by-Side</button>
+          <label class="approve-label">
+            <input type="checkbox" checked onchange="toggleApprove('STR-02', this.checked)" />
+            <span>Approve Change</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="comparison-grid">
+        <!-- PRE -->
+        <div class="stage-col pre-col">
+          <div class="stage-col-head">
+            <span class="stage-tag pre">PRE (Current Abrupt Close)</span>
+            <span class="stage-desc">Modal closes immediately on webhook/poll without lock-to-unlock visual confirmation</span>
+          </div>
+          <div class="widget-box" id="pre-STR-02">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div style="display:flex;align-items:center;gap:10px;">
+                <div style="width:42px;height:42px;border-radius:12px;background:rgba(16,185,129,0.14);display:grid;place-items:center;font-size:18px;" id="pre-str02-icon">🔓</div>
+                <div>
+                  <div style="font-weight:900;font-size:15px;" id="pre-str02-title">SWEEPR Pro Active</div>
+                  <div style="font-size:12px;color:#94a3b8;" id="pre-str02-sub">License verified via Stripe</div>
+                </div>
+              </div>
+              <button type="button" class="tactile-btn" onclick="triggerCard('STR-02')">Simulate Payment Success</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- POST -->
+        <div class="stage-col post-col">
+          <div class="stage-col-head">
+            <span class="stage-tag post">POST (Ultra-Crisp Micro-Interaction)</span>
+            <span class="stage-desc">160ms SVG lock shackle release + stroke-draw checkmark + Pro badge morph</span>
+          </div>
+          <div class="widget-box" id="post-STR-02">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div style="display:flex;align-items:center;gap:12px;">
+                <div id="post-str02-badge" style="width:44px;height:44px;border-radius:12px;background:rgba(16,185,129,0.16);border:1px solid rgba(16,185,129,0.45);display:grid;place-items:center;transition:transform calc(160ms * var(--time-scale)) var(--ease-out-expo);">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="5" y="11" width="14" height="10" rx="2" />
+                    <path id="post-str02-shackle" d="M8 11V7a4 4 0 017.4-2" style="transform-origin:16px 11px;transform:translateY(-2px) rotate(12deg);transition:transform calc(160ms * var(--time-scale)) var(--ease-out-expo);" />
+                    <path id="post-str02-check" d="M9.5 16l1.8 1.8 3.6-3.6" style="stroke-dasharray:14;stroke-dashoffset:0;transition:stroke-dashoffset calc(140ms * var(--time-scale)) var(--ease-out-expo);" />
+                  </svg>
+                </div>
+                <div>
+                  <div style="font-weight:900;font-size:15px;color:#ecfdf5;" id="post-str02-title">Pro Activated • Full Protection Unlocked ✓</div>
+                  <div style="font-size:12px;color:#6ee7b7;" id="post-str02-sub">Stripe £1.99 verified — Resuming task automatically…</div>
+                </div>
+              </div>
+              <button type="button" class="tactile-btn post-tactile" onclick="triggerCard('STR-02')">Simulate Payment Success</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="ux-value"><strong>UX Value:</strong> Gives paying customers an unmistakable, Apple Pay–style confirmation ceremony the moment their £1.99 Stripe payment succeeds before auto-resuming their scan or VPN tunnel.</div>
+        <button type="button" class="drawer-toggle" onclick="toggleDrawer(this)">View File Path &amp; Diff ▾</button>
+      </div>
+      <div class="code-drawer">
+        <span class="code-path">File: Cleaner ActivateModal.svelte, VPN index.html, Deepblock order.html / popup.js</span>
+<pre>.lock-shackle.unlocked {
+  transform: translateY(-2px) rotate(12deg);
+  transition: transform 160ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.unlock-check {
+  stroke-dasharray: 14;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 140ms cubic-bezier(0.16, 1, 0.3, 1) 60ms;
+}</pre>
+      </div>
+    </article>
+  </main>
+
+  <!-- Sticky Bottom Export Bar -->
+  <footer class="export-bar">
+    <div class="export-inner">
+      <div class="export-status">
+        <span class="export-count-pill" id="approvedCountPill">14 / 14 Approved</span>
+        <span class="export-ids-preview" id="approvedIdsPreview">Approved IDs: CLN-01, CLN-02, CLN-03, CLN-04, VPN-01, VPN-02, VPN-03, VPN-04, DBK-01, DBK-02, DBK-03, DBK-04, STR-01, STR-02</span>
+      </div>
+      <div class="export-actions">
+        <button type="button" class="drawer-toggle" onclick="setAllApprovals(true)">Select All</button>
+        <button type="button" class="drawer-toggle" onclick="setAllApprovals(false)">Clear All</button>
+        <button type="button" class="copy-prompt-btn" id="copyPromptBtn" onclick="copyApprovedPrompt()">📋 Copy Approved Changes Prompt</button>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    let timeScale = 1;
+    let isReducedMotion = false;
+    const approvedSet = new Set([
+      'CLN-01', 'CLN-02', 'CLN-03', 'CLN-04',
+      'VPN-01', 'VPN-02', 'VPN-03', 'VPN-04',
+      'DBK-01', 'DBK-02', 'DBK-03', 'DBK-04',
+      'STR-01', 'STR-02'
+    ]);
+
+    function setSpeedMode(scale, reduced, btn) {
+      timeScale = reduced ? 0.001 : scale;
+      isReducedMotion = Boolean(reduced);
+      document.documentElement.style.setProperty('--time-scale', String(timeScale));
+      document.body.classList.toggle('reduced-motion', isReducedMotion);
+      document.querySelectorAll('.speed-btn').forEach((b) => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+    }
+
+    function filterCards(product, btn) {
+      document.querySelectorAll('.filter-tab').forEach((b) => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('.motion-card').forEach((card) => {
+        if (product === 'all' || card.dataset.product === product) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    function toggleDrawer(btn) {
+      const card = btn.closest('.motion-card');
+      const drawer = card ? card.querySelector('.code-drawer') : null;
+      if (!drawer) return;
+      const open = drawer.classList.toggle('open');
+      btn.textContent = open ? 'Hide File Path & Diff ▴' : 'View File Path & Diff ▾';
+    }
+
+    function toggleApprove(id, checked) {
+      if (checked) approvedSet.add(id);
+      else approvedSet.delete(id);
+      const card = document.querySelector(`.motion-card[data-id="${id}"]`);
+      if (card) card.classList.toggle('approved', checked);
+      updateExportBar();
+    }
+
+    function setAllApprovals(checked) {
+      document.querySelectorAll('.motion-card').forEach((card) => {
+        const id = card.dataset.id;
+        const input = card.querySelector('.approve-label input');
+        if (input) input.checked = checked;
+        if (checked) approvedSet.add(id);
+        else approvedSet.delete(id);
+        card.classList.toggle('approved', checked);
+      });
+      updateExportBar();
+    }
+
+    function updateExportBar() {
+      const list = Array.from(approvedSet);
+      document.getElementById('approvedCountPill').textContent = `${list.length} / 14 Approved`;
+      document.getElementById('approvedIdsPreview').textContent =
+        list.length > 0 ? `Approved IDs: ${list.join(', ')}` : 'No changes selected';
+    }
+
+    function copyApprovedPrompt() {
+      const list = Array.from(approvedSet);
+      const promptText = list.length
+        ? `Implement the following approved SWEEPR micro-interaction changes across the repositories: ${list.join(', ')}`
+        : 'No micro-interaction changes selected.';
+      navigator.clipboard.writeText(promptText).then(() => {
+        const btn = document.getElementById('copyPromptBtn');
+        const prev = btn.textContent;
+        btn.textContent = '✓ Copied Approved Prompt!';
+        setTimeout(() => { btn.textContent = prev; }, 1800);
+      });
+    }
+
+    function animateNumber(el, from, to, baseDurationMs, formatter) {
+      if (!el) return;
+      if (isReducedMotion) {
+        el.textContent = formatter(to);
+        return;
+      }
+      const duration = Math.max(16, baseDurationMs * timeScale);
+      const start = performance.now();
+      function tick(now) {
+        const t = Math.min(1, (now - start) / duration);
+        // cubic-bezier(0.16, 1, 0.3, 1) approximation: 1 - Math.pow(1 - t, 4)
+        const eased = 1 - Math.pow(1 - t, 4);
+        const current = from + (to - from) * eased;
+        el.textContent = formatter(current);
+        if (t < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    function pulseButtonPress(btn) {
+      if (!btn || isReducedMotion) return;
+      btn.classList.add('pressing');
+      setTimeout(() => btn.classList.remove('pressing'), 75 * timeScale);
+    }
+
+    // Card-Specific Synchronized Triggers
+    let cln03Open = true;
+    let vpn01Idx = 0;
+    const vpnServers = [
+      { key: 'uk', city: 'United Kingdom · London', ping: 11 },
+      { key: 'us', city: 'United States · New York', ping: 64 },
+      { key: 'de', city: 'Germany · Frankfurt', ping: 16 },
+      { key: 'jp', city: 'Japan · Tokyo', ping: 138 }
+    ];
+    let currentVpnPing = 11;
+    let vpn04On = true;
+    let dbk03Ads = 14;
+    let dbk03Ram = 420;
+
+    function triggerCard(id, arg) {
+      const scale = timeScale;
+
+      if (id === 'CLN-01') {
+        pulseButtonPress(document.getElementById('post-cln01-btn'));
+        const bar = document.getElementById('post-cln01-bar');
+        const rows = ['post-cln01-r1', 'post-cln01-r2', 'post-cln01-r3'].map((r) => document.getElementById(r));
+        if (bar) {
+          bar.style.transition = 'none';
+          bar.style.transform = 'scaleX(0)';
+          rows.forEach((r) => r && r.classList.remove('visible'));
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              bar.style.transition = `transform ${180 * scale}ms cubic-bezier(0.16, 1, 0.3, 1)`;
+              bar.style.transform = 'scaleX(1)';
+              rows.forEach((r, idx) => {
+                setTimeout(() => r && r.classList.add('visible'), idx * 20 * scale);
+              });
+            });
+          });
+        }
+        animateNumber(document.getElementById('post-cln01-num'), 0, 12.4, 180, (v) => `${v.toFixed(1)} GB Found`);
+      }
+
+      if (id === 'CLN-02') {
+        pulseButtonPress(document.getElementById('post-cln02-btn'));
+        // PRE: abrupt jump
+        const preNum = document.getElementById('pre-cln02-num');
+        const preList = document.getElementById('pre-cln02-list');
+        if (preNum && preList) {
+          preNum.textContent = 'Scanning…';
+          preList.style.visibility = 'hidden';
+          setTimeout(() => {
+            preNum.textContent = '12.4 GB';
+            preList.style.visibility = 'visible';
+          }, 180 * scale);
+        }
+        // POST: smooth roll + 20ms cascade
+        const bar = document.getElementById('post-cln02-bar');
+        const rows = ['post-cln02-r1', 'post-cln02-r2', 'post-cln02-r3'].map((r) => document.getElementById(r));
+        rows.forEach((r) => r && r.classList.remove('visible'));
+        if (bar) {
+          bar.style.transition = 'none';
+          bar.style.transform = 'scaleX(0)';
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              bar.style.transition = `transform ${180 * scale}ms cubic-bezier(0.16, 1, 0.3, 1)`;
+              bar.style.transform = 'scaleX(1)';
+            });
+          });
+        }
+        animateNumber(document.getElementById('post-cln02-num'), 0, 12.4, 180, (v) => `${v.toFixed(1)} GB`);
+        rows.forEach((r, idx) => {
+          setTimeout(() => r && r.classList.add('visible'), (70 + idx * 20) * scale);
+        });
+      }
+
+      if (id === 'CLN-03') {
+        cln03Open = !cln03Open;
+        // PRE
+        const preDrawer = document.getElementById('pre-cln03-drawer');
+        const preChev = document.getElementById('pre-cln03-chev');
+        const preChk = document.getElementById('pre-cln03-chk');
+        if (preDrawer) preDrawer.style.display = cln03Open ? 'flex' : 'none';
+        if (preChev) preChev.textContent = cln03Open ? '▴' : '▾';
+        if (preChk) preChk.checked = cln03Open;
+
+        // POST
+        const postDrawer = document.getElementById('post-cln03-drawer');
+        const postChev = document.getElementById('post-cln03-chev');
+        const postChk = document.getElementById('post-cln03-chk');
+        if (postChev) postChev.style.transform = cln03Open ? 'rotate(180deg)' : 'rotate(0deg)';
+        if (postChk) postChk.classList.toggle('unchecked', !cln03Open);
+        if (postDrawer) {
+          postDrawer.style.opacity = cln03Open ? '1' : '0.15';
+          postDrawer.style.transform = cln03Open ? 'translateY(0)' : 'translateY(-4px)';
+        }
+      }
+
+      if (id === 'CLN-04') {
+        pulseButtonPress(document.getElementById('post-cln04-btn'));
+        // PRE
+        const preNum = document.getElementById('pre-cln04-num');
+        if (preNum) {
+          preNum.textContent = 'Cleaning…';
+          setTimeout(() => { preNum.textContent = '12.4 GB Cleaned'; }, 180 * scale);
+        }
+        // POST
+        const bar = document.getElementById('post-cln04-bar');
+        const badge = document.getElementById('post-cln04-badge');
+        if (bar) {
+          bar.style.transition = 'none';
+          bar.style.transform = 'scaleX(1)';
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              bar.style.transition = `transform ${180 * scale}ms cubic-bezier(0.22, 1, 0.36, 1)`;
+              bar.style.transform = 'scaleX(0)';
+            });
+          });
+        }
+        if (badge) {
+          badge.style.opacity = '0.3';
+          badge.style.transform = 'scale(0.96)';
+          setTimeout(() => {
+            badge.style.opacity = '1';
+            badge.style.transform = 'scale(1)';
+          }, 140 * scale);
+        }
+        animateNumber(document.getElementById('post-cln04-num'), 12.4, 0.0, 180, (v) =>
+          v <= 0.05 ? '0.0 GB Remaining • 12.4 GB Freed' : `${v.toFixed(1)} GB Remaining…`
+        );
+      }
+
+      if (id === 'VPN-01') {
+        if (arg) {
+          vpn01Idx = vpnServers.findIndex((s) => s.key === arg);
+        } else {
+          vpn01Idx = (vpn01Idx + 1) % vpnServers.length;
+        }
+        const srv = vpnServers[vpn01Idx];
+        // PRE
+        ['uk', 'us', 'de', 'jp'].forEach((k) => {
+          const el = document.getElementById(`pre-vpn01-${k}`);
+          if (el) el.style.border = k === srv.key ? '2px solid #10b981' : '1px solid #e2e8f0';
+          const pel = document.getElementById(`post-vpn01-${k}`);
+          if (pel) pel.style.border = k === srv.key ? '2px solid #10b981' : '1px solid #e2e8f0';
+        });
+        document.getElementById('pre-vpn01-city').textContent = srv.city;
+        document.getElementById('pre-vpn01-ping').textContent = `${srv.ping} ms • 10 Gbps`;
+
+        // POST
+        document.getElementById('post-vpn01-city').textContent = srv.city;
+        animateNumber(document.getElementById('post-vpn01-ping'), currentVpnPing, srv.ping, 150, (v) => `${Math.round(v)} ms • 10 Gbps`);
+        currentVpnPing = srv.ping;
+
+        const bar = document.getElementById('post-vpn01-bar');
+        if (bar) {
+          bar.style.transition = 'none';
+          bar.style.transform = 'scaleX(0.24)';
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              bar.style.transition = `transform ${180 * scale}ms cubic-bezier(0.16, 1, 0.3, 1)`;
+              bar.style.transform = 'scaleX(0.94)';
+            });
+          });
+        }
+        animateNumber(document.getElementById('post-vpn01-mbps'), 38, 940, 180, (v) => `Up to ${Math.round(v)} Mbps ✓`);
+      }
+
+      if (id === 'VPN-02') {
+        pulseButtonPress(document.getElementById('post-vpn02-btn'));
+        // PRE: abrupt
+        const preTitle = document.getElementById('pre-vpn02-title');
+        const preIp = document.getElementById('pre-vpn02-ip');
+        preTitle.textContent = 'Disconnected';
+        preIp.textContent = '82.14.194.21 (Exposed)';
+        setTimeout(() => {
+          preTitle.textContent = 'Connected & Protected';
+          preIp.textContent = 'Hidden • 0 Logs';
+        }, 160 * scale);
+
+        // POST: 3-state cipher mask
+        const postTitle = document.getElementById('post-vpn02-title');
+        const postIp = document.getElementById('post-vpn02-ip');
+        const bar = document.getElementById('post-vpn02-bar');
+        postTitle.textContent = 'Establishing 10 Gbps Tunnel…';
+        if (bar) {
+          bar.style.transition = 'none';
+          bar.style.transform = 'scaleX(0)';
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              bar.style.transition = `transform ${160 * scale}ms cubic-bezier(0.16, 1, 0.3, 1)`;
+              bar.style.transform = 'scaleX(1)';
+            });
+          });
+        }
+        const frames = ['82.14.194.21', '82.14.•••.••', '82.••.•••.••', '••.••.•••.••', 'Hidden • 0 Logs'];
+        frames.forEach((f, idx) => {
+          setTimeout(() => {
+            if (postIp) postIp.textContent = f;
+            if (idx === frames.length - 1 && postTitle) {
+              postTitle.textContent = 'Connected & Protected';
+            }
+          }, idx * 35 * scale);
+        });
+      }
+
+      if (id === 'VPN-03') {
+        pulseButtonPress(document.getElementById('post-vpn03-btn'));
+        // PRE
+        const preBtn = document.getElementById('pre-vpn03-btn');
+        if (preBtn) {
+          preBtn.textContent = 'Scanning…';
+          setTimeout(() => { preBtn.textContent = 'Scan Wi-Fi'; }, 180 * scale);
+        }
+        // POST
+        const bar = document.getElementById('post-vpn03-bar');
+        const rows = ['post-vpn03-r1', 'post-vpn03-r2', 'post-vpn03-r3'].map((r) => document.getElementById(r));
+        rows.forEach((r) => r && r.classList.remove('visible'));
+        if (bar) {
+          bar.style.transition = 'none';
+          bar.style.transform = 'scaleX(0)';
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              bar.style.transition = `transform ${180 * scale}ms cubic-bezier(0.16, 1, 0.3, 1)`;
+              bar.style.transform = 'scaleX(1)';
+            });
+          });
+        }
+        rows.forEach((r, idx) => {
+          setTimeout(() => r && r.classList.add('visible'), (60 + idx * 20) * scale);
+        });
+      }
+
+      if (id === 'VPN-04') {
+        vpn04On = !vpn04On;
+        // PRE
+        const preSw = document.getElementById('pre-vpn04-sw');
+        const preThumb = document.getElementById('pre-vpn04-thumb');
+        const prePill = document.getElementById('pre-vpn04-pill');
+        if (preSw) preSw.style.background = vpn04On ? '#10b981' : '#475569';
+        if (preThumb) preThumb.style.left = vpn04On ? '23px' : '3px';
+        if (prePill) {
+          prePill.textContent = vpn04On ? 'ACR Blocked ✓' : 'Unprotected';
+          prePill.style.color = vpn04On ? '#34d399' : '#fbbf24';
+        }
+        // POST
+        const postSw = document.getElementById('post-vpn04-sw');
+        const postPill = document.getElementById('post-vpn04-pill');
+        const postRow = document.getElementById('post-vpn04-row');
+        if (postSw) postSw.classList.toggle('on', vpn04On);
+        if (postPill) {
+          postPill.textContent = vpn04On ? 'ACR Blocked • 0 Telemetry ✓' : 'ACR Telemetry Exposed';
+          postPill.style.color = vpn04On ? '#34d399' : '#fbbf24';
+        }
+        if (postRow) {
+          postRow.style.borderColor = vpn04On ? 'rgba(16,185,129,0.4)' : 'rgba(251,191,36,0.4)';
+          postRow.style.background = vpn04On ? 'rgba(16,185,129,0.1)' : 'rgba(251,191,36,0.08)';
+        }
+      }
+
+      if (id === 'DBK-01') {
+        // Trigger the 400ms initial load nudge on POST while PRE stays static
+        const clip = document.getElementById('post-dbk01-clip');
+        const handle = document.getElementById('post-dbk01-handle');
+        if (clip && handle && !isReducedMotion) {
+          clip.style.transition = `clip-path ${180 * scale}ms cubic-bezier(0.22, 1, 0.36, 1)`;
+          handle.style.transition = `left ${180 * scale}ms cubic-bezier(0.22, 1, 0.36, 1)`;
+          clip.style.clipPath = 'inset(0 58% 0 0)';
+          handle.style.left = '42%';
+          setTimeout(() => {
+            clip.style.clipPath = 'inset(0 50% 0 0)';
+            handle.style.left = '50%';
+          }, 190 * scale);
+        }
+      }
+
+      if (id === 'DBK-02') {
+        const bar = document.getElementById('post-dbk02-bar');
+        const ram = document.getElementById('post-dbk02-ram');
+        if (bar) {
+          bar.style.transition = 'none';
+          bar.style.transform = 'scaleX(0.88)';
+          bar.style.background = '#f43f5e';
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              bar.style.transition = `transform ${180 * scale}ms cubic-bezier(0.16, 1, 0.3, 1), background-color ${180 * scale}ms cubic-bezier(0.16, 1, 0.3, 1)`;
+              bar.style.transform = 'scaleX(0.18)';
+              bar.style.background = 'linear-gradient(90deg, #10b981, #34d399)';
+            });
+          });
+        }
+        animateNumber(ram, 7.1, 1.2, 180, (v) => `${v.toFixed(1)} GB RAM (83% Saved ✓)`);
+      }
+
+      if (id === 'DBK-03') {
+        const prevAds = dbk03Ads;
+        const prevRam = dbk03Ram;
+        dbk03Ads += 4;
+        dbk03Ram += 140;
+        document.getElementById('pre-dbk03-count').textContent = `${dbk03Ads} Ads • 3 Cookies`;
+        document.getElementById('pre-dbk03-ram').textContent = `${dbk03Ram} MB Freed Across 8 Sleeping Tabs`;
+
+        animateNumber(document.getElementById('post-dbk03-count'), prevAds, dbk03Ads, 140, (v) => `${Math.round(v)} Ads • 3 Cookies`);
+        animateNumber(document.getElementById('post-dbk03-ram'), prevRam, dbk03Ram, 160, (v) => `${Math.round(v)} MB Freed Across 8 Sleeping Tabs ✓`);
+        const row = document.getElementById('post-dbk03-ramrow');
+        if (row && !isReducedMotion) {
+          row.style.transform = 'scale(0.985)';
+          row.style.borderColor = '#10b981';
+          row.style.background = 'rgba(16,185,129,0.16)';
+          setTimeout(() => {
+            row.style.transform = 'scale(1)';
+            row.style.background = 'rgba(255,255,255,0.04)';
+          }, 150 * scale);
+        }
+      }
+
+      if (id === 'DBK-04') {
+        const preBanner = document.getElementById('pre-dbk04-banner');
+        const postBanner = document.getElementById('post-dbk04-banner');
+        if (preBanner) {
+          preBanner.style.visibility = 'hidden';
+          setTimeout(() => { preBanner.style.visibility = 'visible'; }, 80 * scale);
+        }
+        if (postBanner) {
+          postBanner.style.transition = 'none';
+          postBanner.style.opacity = '0';
+          postBanner.style.transform = 'translateY(-6px) scale(0.985)';
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              postBanner.style.transition = `opacity ${160 * scale}ms cubic-bezier(0.16, 1, 0.3, 1), transform ${160 * scale}ms cubic-bezier(0.16, 1, 0.3, 1)`;
+              postBanner.style.opacity = '1';
+              postBanner.style.transform = 'translateY(0) scale(1)';
+            });
+          });
+        }
+      }
+
+      if (id === 'STR-01') {
+        const preSheet = document.getElementById('pre-str01-sheet');
+        const postSheet = document.getElementById('post-str01-sheet');
+        if (preSheet) {
+          preSheet.style.visibility = 'hidden';
+          setTimeout(() => { preSheet.style.visibility = 'visible'; }, 60 * scale);
+        }
+        if (postSheet) {
+          postSheet.style.transition = 'none';
+          postSheet.style.opacity = '0';
+          postSheet.style.transform = 'translateY(5px) scale(0.98)';
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              postSheet.style.transition = `opacity ${160 * scale}ms cubic-bezier(0.16, 1, 0.3, 1), transform ${160 * scale}ms cubic-bezier(0.16, 1, 0.3, 1)`;
+              postSheet.style.opacity = '1';
+              postSheet.style.transform = 'translateY(0) scale(1)';
+            });
+          });
+        }
+      }
+
+      if (id === 'STR-02') {
+        const shackle = document.getElementById('post-str02-shackle');
+        const check = document.getElementById('post-str02-check');
+        const badge = document.getElementById('post-str02-badge');
+        if (shackle && check && badge) {
+          shackle.style.transition = 'none';
+          check.style.transition = 'none';
+          shackle.style.transform = 'translateY(0) rotate(0deg)';
+          check.style.strokeDashoffset = '14';
+          badge.style.transform = 'scale(0.94)';
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              shackle.style.transition = `transform ${160 * scale}ms cubic-bezier(0.16, 1, 0.3, 1)`;
+              check.style.transition = `stroke-dashoffset ${140 * scale}ms cubic-bezier(0.16, 1, 0.3, 1) ${50 * scale}ms`;
+              badge.style.transform = 'scale(1)';
+              shackle.style.transform = 'translateY(-2px) rotate(12deg)';
+              check.style.strokeDashoffset = '0';
+            });
+          });
+        }
+      }
+    }
+
+    function scrubPostSlider(e) {
+      const box = document.getElementById('post-DBK-01');
+      const clip = document.getElementById('post-dbk01-clip');
+      const handle = document.getElementById('post-dbk01-handle');
+      if (!box || !clip || !handle) return;
+      const rect = box.getBoundingClientRect();
+      const pct = Math.max(8, Math.min(92, ((e.clientX - rect.left) / Math.max(1, rect.width)) * 100));
+      clip.style.transition = 'none';
+      handle.style.transition = 'none';
+      clip.style.clipPath = `inset(0 ${100 - pct}% 0 0)`;
+      handle.style.left = `${pct}%`;
+    }
+
+    function triggerAllVisible() {
+      document.querySelectorAll('.motion-card').forEach((card, idx) => {
+        if (card.style.display !== 'none') {
+          setTimeout(() => triggerCard(card.dataset.id), idx * 60);
+        }
+      });
+    }
+  </script>
+</body>
+</html>
