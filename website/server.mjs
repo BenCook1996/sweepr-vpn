@@ -1633,8 +1633,10 @@ function renderCheckoutSuccessPage(acc, isCancelled = false, isPopup = false) {
   <script src="https://cdn.tailwindcss.com/3.4.5"></script>
   <script>
     try {
+      localStorage.removeItem('sweepr_order_draft');
       localStorage.removeItem('sweepr_visited_order');
-      document.cookie = 'sweepr_visited_order=; path=/; max-age=0';
+      document.cookie = 'sweepr_order_draft=; path=/; max-age=0; SameSite=Lax';
+      document.cookie = 'sweepr_visited_order=; path=/; max-age=0; SameSite=Lax';
       if ('${licenseKey}') {
         localStorage.setItem('sweepr_vpn_code', '${licenseKey}');
         localStorage.setItem('sweepr_vpn_license_key', '${licenseKey}');
@@ -1859,6 +1861,36 @@ self.addEventListener('fetch', e => {
     return res.end(swScript);
   }
 
+  // 30-Minute Order Draft Redirect: if visitor filled out any details on /order in the last 30 mins
+  // (indicated by sweepr_order_draft=1 cookie, Max-Age=1800), redirect any revisited site page straight to /order.
+  if (
+    req.method === 'GET' &&
+    !pathname.startsWith('/api/') &&
+    !pathname.startsWith('/checkout/') &&
+    !pathname.startsWith('/.well-known/') &&
+    pathname !== '/order' &&
+    pathname !== '/checkout' &&
+    pathname !== '/login' &&
+    pathname !== '/dashboard' &&
+    pathname !== '/app' &&
+    pathname !== '/app-preview' &&
+    !(pathname === '/download' && (urlObj.searchParams.get('key') || urlObj.searchParams.get('code') || urlObj.searchParams.get('autoconf') === '1')) &&
+    (!path.extname(pathname) || path.extname(pathname).toLowerCase() === '.html')
+  ) {
+    const cookies = req.headers.cookie || '';
+    const hasActiveOrderDraft = /(?:^|;\s*)sweepr_order_draft=1(?:;|$)/.test(cookies);
+    const bypassRedirect = urlObj.searchParams.get('noredirect') === '1';
+    const referer = req.headers.referer || '';
+    const isLegalFromOrder =
+      (pathname === '/terms' || pathname === '/privacy' || pathname === '/refund') &&
+      referer.includes('/order');
+
+    if (hasActiveOrderDraft && !bypassRedirect && !BOT_UA_RE.test(ua) && !isLegalFromOrder) {
+      res.writeHead(302, { Location: '/order', ...COMMON_SECURITY_HEADERS });
+      return res.end();
+    }
+  }
+
   // Handle /download route (matches sweeprcleaner.com/download)
   if (pathname === '/download' && req.method === 'GET') {
     const requestedPlatform = (urlObj.searchParams.get('platform') || '').toLowerCase();
@@ -1906,28 +1938,6 @@ self.addEventListener('fetch', e => {
       req.on('close', () => exeStream.destroy());
       exeStream.on('error', () => { if (!res.headersSent) res.writeHead(500); res.end(); });
       return exeStream.pipe(res);
-    }
-  }
-
-  // Returning-visitor redirect on `/` -> `/order` if sweepr_visited_order=1 cookie is present
-  if (pathname === '/' && req.method === 'GET') {
-    const cookies = req.headers.cookie || '';
-    const hasVisitedOrder = cookies.includes('sweepr_visited_order=1');
-    const bypassRedirect =
-      urlObj.searchParams.get('noredirect') === '1' ||
-      urlObj.searchParams.get('home') === '1' ||
-      urlObj.searchParams.has('gclid') ||
-      urlObj.searchParams.has('msclkid') ||
-      urlObj.searchParams.has('wbraid') ||
-      urlObj.searchParams.has('gbraid') ||
-      urlObj.searchParams.has('utm_source');
-    const referer = req.headers.referer || '';
-    const fromOrderPage = referer.includes('/order');
-
-    if (hasVisitedOrder && !bypassRedirect && !BOT_UA_RE.test(ua) && !fromOrderPage) {
-      const qs = urlObj.search || '';
-      res.writeHead(302, { Location: `/order${qs}`, ...COMMON_SECURITY_HEADERS });
-      return res.end();
     }
   }
 
@@ -4055,18 +4065,25 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  fs.readFile(filePath, (err, content) => {
+  fs.readFile(filePath, (err, rawContent) => {
     if (err) {
       res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8', ...COMMON_SECURITY_HEADERS });
       res.end('<h1>404 - Page Not Found</h1><p><a href="/?home=1">Return to SWEEPR VPN Home</a></p>');
       return;
+    }
+    let content = rawContent;
+    if (ext === '.html' && !isOrderRoute && !isLoginRoute) {
+      const htmlStr = rawContent.toString('utf8');
+      if (!htmlStr.includes('sweepr-order-draft-redirect') && /<head[^>]*>/i.test(htmlStr)) {
+        const draftRedirectSnippet = `<script id="sweepr-order-draft-redirect">(function(){function c(){try{if(/bot|crawl|spider|slurp|google|bing|gpt|claude|perplexity|applebot|duckduck|yandex/i.test(navigator.userAgent||''))return;var p=window.location.pathname.replace(/\\/+$/,'')||'/';if(/^\\/(order|checkout|login|dashboard|app)(\\b|\\/|\\$)/i.test(p))return;var q=new URLSearchParams(window.location.search);if(q.get('noredirect')==='1')return;var r=document.referrer||'';try{if(/^\\/(terms|privacy|refund)(\\b|\\/|\\$)/i.test(p)&&r&&/^\\/(order|checkout)(\\b|\\/|\\$)/i.test(new URL(r).pathname))return;}catch(e){}var raw=localStorage.getItem('sweepr_order_draft');if(raw){var d=JSON.parse(raw);var age=Date.now()-(Number(d&&d.updatedAt)||0);if(d&&d.hasFilledDetails&&age>=0&&age<=1800000){window.location.replace('/order');return;}else if(age>1800000){localStorage.removeItem('sweepr_order_draft');document.cookie='sweepr_order_draft=; Path=/; Max-Age=0; SameSite=Lax';}}if(/(?:^|;\\s*)sweepr_order_draft=1(?:;|$)/.test(document.cookie)){window.location.replace('/order');}}catch(e){}}c();window.addEventListener('pageshow',c);})();</script>`;
+        content = Buffer.from(htmlStr.replace(/<head[^>]*>/i, (m) => `${m}\n  ${draftRedirectSnippet}`), 'utf8');
+      }
     }
     const headers = {
       'Content-Type': MIME_TYPES[ext] || 'application/octet-stream',
       ...COMMON_SECURITY_HEADERS
     };
     if (isOrderRoute) {
-      headers['Set-Cookie'] = 'sweepr_visited_order=1; Path=/; Max-Age=2592000; SameSite=Lax';
       headers['X-Robots-Tag'] = 'noindex, follow';
       headers['Cache-Control'] = 'no-store, no-cache, must-revalidate';
     } else if (isLoginRoute) {

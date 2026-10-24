@@ -5,24 +5,38 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SWEEPR VPN — Fast, Simple VPN &amp; Home Wi-Fi Speed Scanner</title>
-  <script>
+  <script id="sweepr-order-draft-redirect">
     (function() {
-      try {
-        if (/bot|crawl|spider|slurp|google|bing|gpt|claude|perplexity|applebot|duckduck|yandex/i.test(navigator.userAgent || '')) return;
-        var params = new URLSearchParams(window.location.search);
-        if (params.get('home') === '1' || params.get('noredirect') === '1' || params.has('gclid') || params.has('msclkid') || params.has('wbraid') || params.has('gbraid') || params.has('utm_source')) return;
-        var ref = document.referrer || '';
-        var fromOrder = false;
+      function checkOrderDraftRedirect() {
         try {
-          if (ref && new URL(ref).origin === window.location.origin && /^\/(order|checkout)(\b|\/|$)/i.test(new URL(ref).pathname)) {
-            fromOrder = true;
+          if (/bot|crawl|spider|slurp|google|bing|gpt|claude|perplexity|applebot|duckduck|yandex/i.test(navigator.userAgent || '')) return;
+          var path = window.location.pathname.replace(/\/+$/, '') || '/';
+          if (/^\/(order|checkout|login|dashboard|app)(\b|\/|$)/i.test(path)) return;
+          var params = new URLSearchParams(window.location.search);
+          if (params.get('noredirect') === '1') return;
+          var ref = document.referrer || '';
+          try {
+            if (/^\/(terms|privacy|refund)(\b|\/|$)/i.test(path) && ref && /^\/(order|checkout)(\b|\/|$)/i.test(new URL(ref).pathname)) return;
+          } catch (e) {}
+          var raw = localStorage.getItem('sweepr_order_draft');
+          if (raw) {
+            var draft = JSON.parse(raw);
+            var age = Date.now() - (Number(draft && draft.updatedAt) || 0);
+            if (draft && draft.hasFilledDetails && age >= 0 && age <= 30 * 60 * 1000) {
+              window.location.replace('/order');
+              return;
+            } else if (age > 30 * 60 * 1000) {
+              localStorage.removeItem('sweepr_order_draft');
+              document.cookie = 'sweepr_order_draft=; Path=/; Max-Age=0; SameSite=Lax';
+            }
+          }
+          if (/(?:^|;\s*)sweepr_order_draft=1(?:;|$)/.test(document.cookie)) {
+            window.location.replace('/order');
           }
         } catch (e) {}
-        var visitedOrder = localStorage.getItem('sweepr_visited_order') === '1' || /(?:^|;\s*)sweepr_visited_order=1(?:;|$)/.test(document.cookie);
-        if (visitedOrder && !fromOrder) {
-          window.location.replace('/order' + (window.location.search || ''));
-        }
-      } catch (e) {}
+      }
+      checkOrderDraftRedirect();
+      window.addEventListener('pageshow', checkOrderDraftRedirect);
     })();
   </script>
   <meta name="description" content="Keep your browsing private in 1 click, see every device on your home Wi-Fi, and stop internet slowdowns. Tiny ~14MB app with zero popups. Try it free today.">
