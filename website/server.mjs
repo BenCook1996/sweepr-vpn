@@ -1240,6 +1240,25 @@ function hasWifiRadarInBody(body) {
   return false;
 }
 
+function extractAffiliateRef(req, urlObj, body) {
+  const fromBody = String(body?.ref || body?.affiliate_code || body?.referral_code || body?.attribution?.ref || '').trim();
+  const fromQuery = String(
+    urlObj?.searchParams?.get('ref') ||
+    urlObj?.searchParams?.get('aff') ||
+    urlObj?.searchParams?.get('referral') ||
+    ''
+  ).trim();
+  let fromCookie = '';
+  const rawCookies = String(req?.headers?.cookie || '');
+  const m = rawCookies.match(/(?:^|;\s*)sweepr_ref=([^;]+)/);
+  if (m && m[1]) {
+    try {
+      fromCookie = decodeURIComponent(m[1].trim());
+    } catch {}
+  }
+  return (fromBody || fromQuery || fromCookie).replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 64);
+}
+
 function reportToSweeprCrm(pathAndQuery, body) {
   try {
     const headers = {
@@ -1733,6 +1752,44 @@ const server = http.createServer(async (req, res) => {
     crm.reportBotHit({ userAgent: ua, path: pathname, status: 200 });
   }
 
+  // Capture Affiliate / Partner ?ref= or ?aff= into a 90-day sweepr_ref cookie and report click to Central CRM
+  if (req.method === 'GET' && !pathname.startsWith('/api/')) {
+    const urlRef = String(
+      urlObj.searchParams.get('ref') ||
+      urlObj.searchParams.get('aff') ||
+      urlObj.searchParams.get('referral') ||
+      ''
+    )
+      .trim()
+      .replace(/[^a-zA-Z0-9_-]/g, '')
+      .slice(0, 64);
+    if (urlRef) {
+      res.setHeader('Set-Cookie', `sweepr_ref=${encodeURIComponent(urlRef)}; Path=/; Max-Age=${86400 * 90}; SameSite=Lax`);
+      if (!BOT_UA_RE.test(ua)) {
+        crm.reportAffiliateClick({
+          code: urlRef,
+          landingPath: pathname,
+          referrer: req.headers.referer || ''
+        }).catch(() => {});
+      }
+    }
+  }
+
+  if (pathname === '/api/affiliate/click' && req.method === 'POST') {
+    if (!checkRateLimit(req, 'aff_click', 30, 60000)) {
+      return sendJson(res, 429, { error: 'rate_limit_exceeded' }, {}, req);
+    }
+    const body = await readJsonBody(req);
+    const code = extractAffiliateRef(req, urlObj, body);
+    if (!code) return sendJson(res, 400, { ok: false, error: 'missing_code' }, {}, req);
+    crm.reportAffiliateClick({
+      code,
+      landingPath: typeof body?.landing_path === 'string' ? body.landing_path.slice(0, 250) : '/',
+      referrer: typeof body?.referrer === 'string' ? body.referrer.slice(0, 250) : req.headers.referer || ''
+    }).catch(() => {});
+    return sendJson(res, 200, { ok: true }, {}, req);
+  }
+
   // Apple Pay Domain Verification File (Required by Stripe & Apple for on-page Apple Pay sheet)
   if (pathname === '/.well-known/apple-developer-merchantid-domain-association' && req.method === 'GET') {
     const assocPath = path.join(__dirname, '.well-known', 'apple-developer-merchantid-domain-association');
@@ -2070,13 +2127,15 @@ self.addEventListener('fetch', e => {
       wifiRadarAddon: includeWifiRadar,
       status: 'pending'
     });
+    const refCode = extractAffiliateRef(req, urlObj, body);
+    if (refCode) acc.ref = refCode;
 
     crm.reportTelemetryEvent({
       event_name: 'checkout_started',
       category: 'funnel',
       account_id: acc.id,
       os: 'web',
-      properties: { plan, wifiRadarAddon: includeWifiRadar, paymentMethod }
+      properties: { plan, wifiRadarAddon: includeWifiRadar, paymentMethod, ...(refCode ? { ref: refCode } : {}) }
     }).catch(() => {});
 
     try {
@@ -2087,7 +2146,8 @@ self.addEventListener('fetch', e => {
         plan,
         wifi_radar: includeWifiRadar ? 'true' : 'false',
         addons: includeWifiRadar ? 'wifi_radar' : '',
-        country: localizedPricing.country
+        country: localizedPricing.country,
+        ...(refCode ? { ref: refCode } : {})
       };
 
       let customerId = acc.stripe_customer_id;
@@ -2514,6 +2574,8 @@ self.addEventListener('fetch', e => {
       );
 
       try {
+        const refCode = sub.metadata?.ref || acc.ref || extractAffiliateRef(req, urlObj, body);
+        if (refCode) acc.ref = refCode;
         const crmSynced = await crm.syncSubscription({
           email: acc.email,
           name: acc.name || undefined,
@@ -2527,6 +2589,7 @@ self.addEventListener('fetch', e => {
           activation_code: acc.activation_code,
           license_key: acc.licenseKey,
           addons: acc.wifiRadarAddon ? ['wifi_radar'] : [],
+          ref: refCode || undefined,
           notes: `Stripe Live Subscription ${sub.id} (${acc.licenseKey})`
         });
         if (crmSynced && crmSynced.activation_code && /^\d{6}$/.test(crmSynced.activation_code)) {
@@ -2640,6 +2703,7 @@ self.addEventListener('fetch', e => {
             activation_code: acc.activation_code,
             license_key: acc.licenseKey,
             addons: acc.wifiRadarAddon ? ['wifi_radar'] : [],
+            ref: obj.metadata?.ref || acc.ref || undefined,
             notes: `Stripe Webhook ${event.type} (${obj.id})`
           }).catch(() => {});
         }
@@ -2689,6 +2753,12 @@ self.addEventListener('fetch', e => {
       return res.end();
     }
 
+    // Require verifiable payment proof (session_id or subscription_id)
+    if (!subscriptionId && !sessionId) {
+      res.writeHead(302, { Location: '/order?error=payment_incomplete', ...COMMON_SECURITY_HEADERS });
+      return res.end();
+    }
+
     if (!subscriptionId && sessionId && STRIPE_SECRET_KEY) {
       try {
         const cs = await stripeRequest('GET', `checkout/sessions/${encodeURIComponent(sessionId)}`);
@@ -2696,6 +2766,11 @@ self.addEventListener('fetch', e => {
           subscriptionId = typeof cs.subscription === 'string' ? cs.subscription : cs.subscription.id;
         }
       } catch {}
+    }
+
+    if (STRIPE_SECRET_KEY && !subscriptionId) {
+      res.writeHead(302, { Location: '/order?error=payment_incomplete', ...COMMON_SECURITY_HEADERS });
+      return res.end();
     }
 
     let acc = accountsById.get(accountId) || accountsBySubscriptionId.get(subscriptionId) || null;
@@ -2722,6 +2797,8 @@ self.addEventListener('fetch', e => {
         });
         await syncPayPalCustomerEmail(sub, acc);
         try {
+          const refCode = sub.metadata?.ref || acc.ref || extractAffiliateRef(req, urlObj, {});
+          if (refCode) acc.ref = refCode;
           const crmSynced = await crm.syncSubscription({
             email: acc.email,
             name: acc.name || undefined,
@@ -2733,6 +2810,7 @@ self.addEventListener('fetch', e => {
             activation_code: acc.activation_code,
             license_key: acc.licenseKey,
             addons: acc.wifiRadarAddon ? ['wifi_radar'] : [],
+            ref: refCode || undefined,
             notes: `Checkout Success Sync (${sub.id})`
           });
           if (crmSynced && crmSynced.activation_code && /^\d{6}$/.test(crmSynced.activation_code)) {
@@ -3567,6 +3645,11 @@ self.addEventListener('fetch', e => {
 
   // Customer Portal Billing Portal Redirect / Session
   if (pathname === '/api/billing-portal' && (req.method === 'GET' || req.method === 'POST')) {
+    if (!isSameOriginOrTrusted(req)) {
+      if (req.method === 'POST') return sendJson(res, 403, { error: 'forbidden_cross_site' }, {}, req);
+      res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8', ...COMMON_SECURITY_HEADERS });
+      return res.end('Forbidden (cross-site)');
+    }
     const sess = verifySessionCookie(req);
     if (!sess) {
       if (req.method === 'POST') return sendJson(res, 401, { error: 'unauthorized' }, {}, req);

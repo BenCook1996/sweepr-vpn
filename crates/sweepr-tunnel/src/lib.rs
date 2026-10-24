@@ -370,14 +370,30 @@ fn save_state(st: &PersistedState) -> Result<(), String> {
 // API communication via OS curl (works on Windows 10/11, macOS, and Linux)
 // ---------------------------------------------------------------------------
 
-fn curl_bin() -> &'static str {
+#[cfg(target_os = "windows")]
+fn powershell_bin() -> PathBuf {
+    let sys_root = std::env::var("SystemRoot").unwrap_or_else(|_| "C:\\Windows".to_string());
+    let p = Path::new(&sys_root).join("System32\\WindowsPowerShell\\v1.0\\powershell.exe");
+    if p.exists() { p } else { PathBuf::from("powershell.exe") }
+}
+
+#[cfg(target_os = "windows")]
+fn sc_bin() -> PathBuf {
+    let sys_root = std::env::var("SystemRoot").unwrap_or_else(|_| "C:\\Windows".to_string());
+    let p = Path::new(&sys_root).join("System32\\sc.exe");
+    if p.exists() { p } else { PathBuf::from("sc.exe") }
+}
+
+fn curl_bin() -> PathBuf {
     #[cfg(target_os = "windows")]
     {
-        "C:\\Windows\\System32\\curl.exe"
+        let sys_root = std::env::var("SystemRoot").unwrap_or_else(|_| "C:\\Windows".to_string());
+        let p = Path::new(&sys_root).join("System32\\curl.exe");
+        if p.exists() { p } else { PathBuf::from("curl.exe") }
     }
     #[cfg(not(target_os = "windows"))]
     {
-        "curl"
+        PathBuf::from("curl")
     }
 }
 
@@ -530,8 +546,13 @@ fn is_allowed_api_url(u: &str, allow_local: bool) -> bool {
     if trimmed.is_empty() || trimmed.chars().any(|c| c.is_whitespace() || c.is_control()) {
         return false;
     }
-    if trimmed.starts_with("https://") {
-        return true;
+    // Only allow verified SWEEPR VPN production HTTPS endpoints to prevent SSRF / credential exfiltration
+    if let Some(rest) = trimmed.strip_prefix("https://") {
+        let host_and_rest = rest.split('/').next().unwrap_or("");
+        let host = host_and_rest.split(':').next().unwrap_or("").to_ascii_lowercase();
+        if host == "sweeprvpn.com" || host == "www.sweeprvpn.com" || host == "api.sweeprvpn.com" {
+            return true;
+        }
     }
     allow_local
         && (trimmed.starts_with("http://127.0.0.1:")
@@ -680,7 +701,7 @@ fn ensure_wireguard_windows() -> Result<PathBuf, String> {
             "$p = '{}'; $sig = Get-AuthenticodeSignature -LiteralPath $p; if ($sig.Status -ne 'Valid') {{ Remove-Item -LiteralPath $p -Force -ErrorAction SilentlyContinue; exit 1 }}; Start-Process -FilePath $p -ArgumentList '/install','/quiet' -Verb RunAs -Wait",
             installer.display()
         );
-        let mut run = Command::new("powershell");
+        let mut run = Command::new(powershell_bin());
         run.args(["-NoProfile", "-WindowStyle", "Hidden", "-Command", &ps]);
         {
             use std::os::windows::process::CommandExt;
@@ -699,7 +720,7 @@ pub fn is_tunnel_active() -> bool {
     {
         use std::os::windows::process::CommandExt;
         let svc_name = format!("WireGuardTunnel${TUNNEL_NAME}");
-        if let Ok(out) = Command::new("sc")
+        if let Ok(out) = Command::new(sc_bin())
             .args(["query", &svc_name])
             .creation_flags(0x08000000)
             .output()
@@ -734,7 +755,7 @@ fn bring_tunnel_up(conf: &Path) -> Result<(), String> {
             wg_exe.display(),
             conf.display()
         );
-        let status = Command::new("powershell")
+        let status = Command::new(powershell_bin())
             .args(["-NoProfile", "-WindowStyle", "Hidden", "-Command", &ps])
             .creation_flags(0x08000000)
             .status()
@@ -797,7 +818,7 @@ pub fn bring_tunnel_down() -> Result<(), String> {
                 wg_exe.display(),
                 TUNNEL_NAME
             );
-            let _ = Command::new("powershell")
+            let _ = Command::new(powershell_bin())
                 .args(["-NoProfile", "-WindowStyle", "Hidden", "-Command", &ps])
                 .creation_flags(0x08000000)
                 .status();
@@ -1034,5 +1055,14 @@ mod tests {
         assert!(validate_wg_conf_fields(&kp.public_key, "78.141.205.68:51820", "10.64.0.2/32", "10.64.0.1", "0.0.0.0/0").is_ok());
         assert!(validate_wg_conf_fields(&kp.public_key, "78.141.205.68:51820", "10.64.0.2/32\nPostUp = calc.exe", "10.64.0.1", "0.0.0.0/0").is_err());
         assert!(validate_wg_conf_fields(&kp.public_key, "78.141.205.68:51820", "10.64.0.2/32", "10.64.0.1\nPostUp = id", "0.0.0.0/0").is_err());
+
+        // SSRF defense: Verify untrusted domains are rejected and trusted SWEEPR domains are accepted
+        assert!(is_allowed_api_url("https://sweeprvpn.com", false));
+        assert!(is_allowed_api_url("https://www.sweeprvpn.com/api", false));
+        assert!(is_allowed_api_url("https://api.sweeprvpn.com:443", false));
+        assert!(!is_allowed_api_url("https://attacker-controlled.com", false));
+        assert!(!is_allowed_api_url("https://sweeprvpn.com.attacker.com", false));
+        assert!(!is_allowed_api_url("http://127.0.0.1:8080", false));
+        assert!(is_allowed_api_url("http://127.0.0.1:8080", true));
     }
 }

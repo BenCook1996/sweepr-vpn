@@ -155,6 +155,9 @@ Save-MultiSizeVpnIco -Path "$root\website\favicon.ico"
 $bmp256 = New-VpnShieldBitmap -Size 256
 $bmp256.Save("$root\desktop-client\app-icon.png", [System.Drawing.Imaging.ImageFormat]::Png)
 $bmp256.Dispose()
+$bmp180 = New-VpnShieldBitmap -Size 180
+$bmp180.Save("$root\website\apple-touch-icon.png", [System.Drawing.Imaging.ImageFormat]::Png)
+$bmp180.Dispose()
 $bmp64 = New-VpnShieldBitmap -Size 64
 $bmp64.Save("$root\website\favicon.png", [System.Drawing.Imaging.ImageFormat]::Png)
 $bmp64.Save("$root\website\favicon-dark.png", [System.Drawing.Imaging.ImageFormat]::Png)

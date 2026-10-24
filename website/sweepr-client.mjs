@@ -160,12 +160,35 @@ export class SweeprCrmClient {
         stripe_subscription_id: params.stripeSubscriptionId ?? params.stripe_subscription_id,
         activation_code: params.activationCode ?? params.activation_code,
         license_key: params.licenseKey ?? params.license_key,
+        ref: params.ref ?? params.affiliateCode ?? params.affiliate_code,
+        affiliate_code: params.affiliateCode ?? params.affiliate_code ?? params.ref,
         addons: params.addons || [],
         notes: params.notes,
       }),
     });
     const data = await res.json().catch(() => ({}));
     return { _httpStatus: res.status, ...data };
+  }
+
+  async reportAffiliateClick({ code, landingPath = '/', referrer = null, country = null } = {}) {
+    if (!code) return { ok: false };
+    try {
+      const res = await fetch(`${this.crmUrl}/v1/affiliate/click`, {
+        method: 'POST',
+        headers: this.headers(),
+        signal: AbortSignal.timeout(3500),
+        body: JSON.stringify({
+          project_id: this.projectId,
+          code: String(code).trim().toLowerCase(),
+          landing_path: landingPath,
+          referrer,
+          country,
+        }),
+      });
+      return res.json().catch(() => ({ ok: res.ok }));
+    } catch {
+      return { ok: false };
+    }
   }
 
   async portalLookup(lookup) {

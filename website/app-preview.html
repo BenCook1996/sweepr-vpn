@@ -10,7 +10,68 @@
 <link rel="manifest" href="/manifest.webmanifest" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=5" />
-<title>SWEEPR VPN</title>
+<title>Interactive Live App Preview &amp; Web Client | SWEEPR VPN</title>
+<meta name="description" content="Try the interactive live SWEEPR VPN web preview. Test 1-click 10Gbps WireGuard connections, simulate real-time Wi-Fi radar device scans, and explore Smart-TV shield settings." />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+<link rel="canonical" href="https://sweeprvpn.com/app" />
+<link rel="preconnect" href="https://cdn.tailwindcss.com" />
+
+<!-- Open Graph / Social Meta -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="SWEEPR VPN" />
+<meta property="og:locale" content="en_GB" />
+<meta property="og:url" content="https://sweeprvpn.com/app" />
+<meta property="og:title" content="SWEEPR VPN: Interactive Live App Preview &amp; Web Client" />
+<meta property="og:description" content="Try the interactive live SWEEPR VPN web preview. Test 1-click 10Gbps WireGuard connections and real-time Wi-Fi device scanning." />
+<meta property="og:image" content="https://sweeprvpn.com/og-image.png" />
+<meta property="og:image:alt" content="SWEEPR VPN Interactive Live Web App Interface" />
+
+<!-- Twitter Meta -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content="https://sweeprvpn.com/app" />
+<meta name="twitter:title" content="SWEEPR VPN: Interactive Live App Preview &amp; Web Client" />
+<meta name="twitter:description" content="Try the interactive live SWEEPR VPN web preview with real-time Wi-Fi radar and WireGuard tunnels." />
+<meta name="twitter:image" content="https://sweeprvpn.com/og-image.png" />
+
+<!-- Structured Data (JSON-LD) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "SWEEPR VPN Web App Preview",
+      "url": "https://sweeprvpn.com/app",
+      "operatingSystem": "Web, Windows 10, Windows 11, macOS, Linux",
+      "applicationCategory": "SecurityApplication",
+      "description": "Interactive live web preview of SWEEPR VPN and Home Wi-Fi Scanner.",
+      "offers": {
+        "@type": "Offer",
+        "price": "1.99",
+        "priceCurrency": "GBP",
+        "priceValidUntil": "2027-12-31"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://sweeprvpn.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Live App Preview",
+          "item": "https://sweeprvpn.com/app"
+        }
+      ]
+    }
+  ]
+}
+</script>
 <style>
   :root {
     --e400:#34d399; --e500:#10b981; --e600:#059669; --e700:#047857; --mint:#a7f3d0; --mint50:#ecfdf5;
@@ -731,7 +792,10 @@
     try {
       if (action === 'compact') tauri.core.invoke('set_compact', { compact: !!payload });
       else if (action === 'setStartup') tauri.core.invoke('set_startup', { enabled: !!payload });
-      else if (action === 'openCheckout') tauri.opener.openUrl(typeof payload === 'string' && payload.startsWith('https://') ? payload : 'https://sweeprvpn.com/order');
+      else if (action === 'openCheckout') {
+        const safeUrl = (typeof payload === 'string' && (payload.startsWith('https://sweeprvpn.com/') || payload.startsWith('https://www.sweeprvpn.com/'))) ? payload : 'https://sweeprvpn.com/order';
+        tauri.opener.openUrl(safeUrl);
+      }
     } catch (e) {}
   }
   function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('show'), 3600); }
@@ -1329,7 +1393,7 @@
         const sig = b64UrlToBytes(parts[2]);
         return await window.crypto.subtle.verify({ name: 'Ed25519' }, pubKey, sig, data);
       }
-      return parts[2].length >= 80;
+      return false;
     } catch (e) {
       return false;
     }
@@ -1342,7 +1406,10 @@
     if (location.protocol === 'http:' || location.protocol === 'https:') {
       endpoints.push('/api/vpn/activate');
     }
-    endpoints.push('https://sweeprvpn.com/api/vpn/activate', 'http://127.0.0.1:8788/api/vpn/activate', 'http://127.0.0.1:8080/api/vpn/activate');
+    endpoints.push('https://sweeprvpn.com/api/vpn/activate');
+    if (typeof location !== 'undefined' && (location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+      endpoints.push('http://127.0.0.1:8788/api/vpn/activate', 'http://127.0.0.1:8080/api/vpn/activate');
+    }
     let lastMsg = 'No active paid subscription found for that license key.';
     for (const url of endpoints) {
       try {
@@ -1452,7 +1519,10 @@
     if (location.protocol === 'http:' || location.protocol === 'https:') {
       endpoints.push('/api/vpn/wireguard-config');
     }
-    endpoints.push('https://sweeprvpn.com/api/vpn/wireguard-config', 'http://127.0.0.1:8788/api/vpn/wireguard-config');
+    endpoints.push('https://sweeprvpn.com/api/vpn/wireguard-config');
+    if (typeof location !== 'undefined' && (location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+      endpoints.push('http://127.0.0.1:8788/api/vpn/wireguard-config', 'http://127.0.0.1:8080/api/vpn/wireguard-config');
+    }
 
     let data = null;
     let errText = 'Could not reach WireGuard provisioning server.';

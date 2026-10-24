@@ -80,8 +80,11 @@ fn set_startup(enabled: bool) -> Result<(), String> {
     let exe_str = exe.to_string_lossy().to_string();
     #[cfg(target_os = "windows")]
     {
+        let sys_root = std::env::var("SystemRoot").unwrap_or_else(|_| "C:\\Windows".to_string());
+        let reg_bin = std::path::Path::new(&sys_root).join("System32\\reg.exe");
+        let reg_cmd = if reg_bin.exists() { reg_bin.to_string_lossy().to_string() } else { "reg".to_string() };
         let status = if enabled {
-            std::process::Command::new("reg")
+            std::process::Command::new(&reg_cmd)
                 .args([
                     "add",
                     r"HKCU\Software\Microsoft\Windows\CurrentVersion\Run",
@@ -95,7 +98,7 @@ fn set_startup(enabled: bool) -> Result<(), String> {
                 ])
                 .status()
         } else {
-            std::process::Command::new("reg")
+            std::process::Command::new(&reg_cmd)
                 .args([
                     "delete",
                     r"HKCU\Software\Microsoft\Windows\CurrentVersion\Run",

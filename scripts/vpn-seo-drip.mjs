@@ -45,6 +45,7 @@ const AUTH_HEADER = 'Basic ' + Buffer.from(`${CRM_USER}:${CRM_PASS}`).toString('
 
 const VPN_SEED_PATH = path.join(WEBSITE_DIR, 'outreach-seed.json');
 const SHARED_CRM_SEED_PATH = 'c:/Users/Benjamin/Downloads/desktop_cleaner/server/src/outreach-seed.json';
+const CENTRAL_CRM_SEED_PATH = 'C:/Users/Benjamin/Downloads/sweepr_crm/src/outreach-seed.json';
 const SITEMAP_PATH = path.join(WEBSITE_DIR, 'sitemap.xml');
 const PAD_PATH = path.join(WEBSITE_DIR, 'pad.xml');
 const INDEXING_QUEUE_PATH = path.join(WEBSITE_DIR, 'indexing-queue.json');
@@ -184,13 +185,20 @@ function loadTargetItemsFromSitemap() {
   });
 }
 
-async function publishTelegraph(item, lang, runTag) {
+let cachedTelegraphToken = null;
+async function getTelegraphToken() {
+  if (cachedTelegraphToken) return cachedTelegraphToken;
   const accRes = await fetch(
     'https://api.telegra.ph/createAccount?short_name=SWEEPRVPN&author_name=SWEEPR+VPN+Security+Lab&author_url=https://sweeprvpn.com',
     { signal: AbortSignal.timeout(15000) }
   );
   const acc = await accRes.json();
-  const token = acc?.result?.access_token;
+  cachedTelegraphToken = acc?.result?.access_token;
+  return cachedTelegraphToken;
+}
+
+async function publishTelegraph(item, lang, runTag) {
+  let token = await getTelegraphToken();
   if (!token) throw new Error('Telegraph token error');
 
   const title = `[${lang.code}] ${lang.prefix} ${item.name} (${runTag})`;
@@ -222,7 +230,7 @@ async function publishTelegraph(item, lang, runTag) {
     }
   ];
 
-  const r = await fetch('https://api.telegra.ph/createPage', {
+  let r = await fetch('https://api.telegra.ph/createPage', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -234,8 +242,25 @@ async function publishTelegraph(item, lang, runTag) {
     }),
     signal: AbortSignal.timeout(15000)
   });
-  const j = await r.json();
-  if (!j.ok || !j.result?.url) throw new Error('Telegraph createPage error');
+  let j = await r.json();
+  if (!j.ok) {
+    cachedTelegraphToken = null;
+    token = await getTelegraphToken();
+    r = await fetch('https://api.telegra.ph/createPage', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        access_token: token,
+        title,
+        author_name: 'SWEEPR VPN Security Lab',
+        author_url: 'https://sweeprvpn.com',
+        content
+      }),
+      signal: AbortSignal.timeout(15000)
+    });
+    j = await r.json();
+  }
+  if (!j.ok || !j.result?.url) throw new Error('Telegraph createPage error: ' + (j?.error || 'unknown'));
   const urlSlug = j.result.url.split('/').pop() || runTag;
   return {
     url: j.result.url,
@@ -278,7 +303,7 @@ async function publishCatbox(item, lang, idx, runTag) {
     method: 'POST',
     body: fd,
     headers: { 'User-Agent': 'Mozilla/5.0' },
-    signal: AbortSignal.timeout(2500)
+    signal: AbortSignal.timeout(10000)
   });
   const url = (await r.text()).trim();
   if (!url.startsWith('https://files.catbox.moe/')) throw new Error('Catbox upload error');
@@ -401,7 +426,7 @@ async function syncEntryToCrm(entry, sourceUrl) {
       method: 'POST',
       headers: crmHeaders,
       body: payload,
-      signal: AbortSignal.timeout(2500)
+      signal: AbortSignal.timeout(10000)
     }).catch(() => {})
   ]);
 }
@@ -512,6 +537,13 @@ async function runVpnDrip(targetCount = 300) {
     } catch {}
   }
 
+  let centralSeed = null;
+  if (fs.existsSync(CENTRAL_CRM_SEED_PATH)) {
+    try {
+      centralSeed = JSON.parse(fs.readFileSync(CENTRAL_CRM_SEED_PATH, 'utf8'));
+    } catch {}
+  }
+
   // Query live CRM first to check what sites and (platform, language, targetUrl) combinations were already posted
   const crmState = await fetchExistingCrmState(vpnSeed);
   console.log(
@@ -524,6 +556,7 @@ async function runVpnDrip(targetCount = 300) {
     if (!existingMsgIds.has(dirSub.message_id)) {
       vpnSeed.unshift(dirSub);
       if (Array.isArray(sharedSeed)) sharedSeed.push(dirSub);
+      if (Array.isArray(centralSeed)) centralSeed.push(dirSub);
     } else {
       const found = vpnSeed.find((e) => e.message_id === dirSub.message_id);
       if (found) found.how = dirSub.how;
@@ -632,6 +665,7 @@ async function runVpnDrip(targetCount = 300) {
         };
         vpnSeed.push(entry);
         if (Array.isArray(sharedSeed)) sharedSeed.push(entry);
+        if (Array.isArray(centralSeed)) centralSeed.push(entry);
         completed++;
         await syncEntryToCrm(entry, res.url);
       })
@@ -646,6 +680,11 @@ async function runVpnDrip(targetCount = 300) {
   if (Array.isArray(sharedSeed)) {
     try {
       fs.writeFileSync(SHARED_CRM_SEED_PATH, JSON.stringify(sharedSeed, null, 2), 'utf8');
+    } catch {}
+  }
+  if (Array.isArray(centralSeed)) {
+    try {
+      fs.writeFileSync(CENTRAL_CRM_SEED_PATH, JSON.stringify(centralSeed, null, 2), 'utf8');
     } catch {}
   }
 
@@ -669,21 +708,28 @@ async function runVpnDrip(targetCount = 300) {
 
   console.log(`[SWEEPR VPN Drip ${runTag}] Published, logged & verified ${completed} new dofollow backlinks. Total VPN CRM outreach entries: ${vpnSeed.length}`);
 
-  // Submit all canonical sitemap URLs + pad.xml to Bing IndexNow API & ping search engines
+  // Submit all canonical sitemap URLs + pad.xml + pending URLs to Bing IndexNow API & ping search engines
   let indexStatus = { sitemapUrls: 0, bingRes: 'N/A', indexNowRes: 'N/A', googlePing: 'N/A', bingPing: 'N/A' };
   try {
-    const sitemapUrls = items.map((it) => it.url);
-    if (!sitemapUrls.includes('https://sweeprvpn.com/pad.xml')) {
-      sitemapUrls.push('https://sweeprvpn.com/pad.xml');
-    }
-    indexStatus.sitemapUrls = sitemapUrls.length;
-
-    let queue = { indexnow_key: INDEXNOW_KEY, gsc_requested: [], bing_requested: [], directory_forms_submitted: ['https://www.saashub.com/sweepr-vpn/added', 'https://www.launchingnext.com/submit/'], last_indexnow_ping: null, last_sitemap_ping: null };
+    let queue = { indexnow_key: INDEXNOW_KEY, gsc_requested: [], bing_requested: [], directory_forms_submitted: ['https://www.saashub.com/sweepr-vpn/added', 'https://www.launchingnext.com/submit/'], last_indexnow_ping: null, last_sitemap_ping: null, pending_urls: [] };
     if (fs.existsSync(INDEXING_QUEUE_PATH)) {
       try {
         queue = { ...queue, ...JSON.parse(fs.readFileSync(INDEXING_QUEUE_PATH, 'utf8')) };
       } catch {}
     }
+
+    const sitemapUrls = items.map((it) => it.url);
+    if (!sitemapUrls.includes('https://sweeprvpn.com/pad.xml')) {
+      sitemapUrls.push('https://sweeprvpn.com/pad.xml');
+    }
+    if (Array.isArray(queue.pending_urls)) {
+      for (const u of queue.pending_urls) {
+        if (!sitemapUrls.includes(u)) {
+          sitemapUrls.push(u);
+        }
+      }
+    }
+    indexStatus.sitemapUrls = sitemapUrls.length;
 
     const indexNowPayload = {
       host: 'sweeprvpn.com',

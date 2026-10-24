@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unraid 6.12 WireGuard Client & Container VPN Routing Guide WireGuard VPN Setup Guide (2026) | SWEEPR VPN</title>
+  <meta name="description" content="Step-by-step Unraid 6.12 WireGuard Client & Container VPN Routing Guide WireGuard VPN setup guide. Configure 10Gbps RAM-only endpoints, optimal MTU, in-tunnel DNS (10.66.0.1), and kill-switch routing." />
+  <link rel="canonical" href="https://sweeprvpn.com/setup/unraid-wireguard-docker-tunnel" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Unraid 6.12 WireGuard Client & Container VPN Routing Guide WireGuard VPN Setup Guide (2026) | SWEEPR VPN" />
+  <meta property="og:description" content="Step-by-step Unraid 6.12 WireGuard Client & Container VPN Routing Guide WireGuard VPN setup guide. Configure 10Gbps RAM-only endpoints, optimal MTU, in-tunnel DNS (10.66.0.1), and kill-switch routing." />
+  <meta property="og:url" content="https://sweeprvpn.com/setup/unraid-wireguard-docker-tunnel" />
+  <meta property="og:site_name" content="SWEEPR VPN" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Can I run Unraid 6.12 WireGuard Client & Container VPN Routing Guide alongside the SWEEPR VPN desktop app?","acceptedAnswer":{"@type":"Answer","text":"Yes. Every SWEEPR VPN plan supports up to 10 simultaneous WireGuard peers across routers, NAS appliances, Linux servers, Windows, macOS, iOS, and Android."}},{"@type":"Question","name":"What DNS server should I use on Unraid 6.12 WireGuard Client & Container VPN Routing Guide?","acceptedAnswer":{"@type":"Answer","text":"Always set your WireGuard interface DNS to 10.66.0.1 so DNS queries travel inside the encrypted WireGuard tunnel and cannot be intercepted by your ISP."}},{"@type":"Question","name":"Why are my HTTPS pages stalling after enabling WireGuard on Unraid 6.12 WireGuard Client & Container VPN Routing Guide?","acceptedAnswer":{"@type":"Answer","text":"If your ISP uses PPPoE (such as BT, Sky, TalkTalk, Plusnet, or Vodafone FTTP), lower the WireGuard interface MTU from 1420 to 1412 and enable TCP MSS clamping to 1352–1360."}}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"SWEEPR VPN","operatingSystem":"Windows 10, Windows 11, macOS, Linux, iOS, Android, OpenWrt","applicationCategory":"SecurityApplication","downloadUrl":"https://sweeprvpn.com/SWEEPRVPN.exe","fileSize":"3.7MB","offers":{"@type":"AggregateOffer","priceCurrency":"GBP","lowPrice":"1.99","highPrice":"74.99","offerCount":"3"}}</script>
+  <style>
+    :root { --bg:#070b14; --card:#0f172a; --border:#1e293b; --text:#f8fafc; --muted:#94a3b8; --accent:#10b981; --accent2:#38bdf8; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; background:var(--bg); color:var(--text); line-height:1.68; }
+    header { border-bottom:1px solid var(--border); background:rgba(7,11,20,0.92); position:sticky; top:0; z-index:20; backdrop-filter:blur(10px); }
+    .nav { max-width:1100px; margin:0 auto; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+    .brand { font-weight:800; font-size:1.15rem; color:var(--text); text-decoration:none; letter-spacing:-0.02em; }
+    .brand span { color:var(--accent); }
+    .nav-links { display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
+    .nav-links a { color:var(--muted); text-decoration:none; font-size:0.92rem; }
+    .nav-links a:hover { color:var(--text); }
+    .btn { display:inline-block; background:var(--accent); color:#042f2e; font-weight:700; padding:10px 18px; border-radius:8px; text-decoration:none; }
+    .btn-outline { display:inline-block; border:1px solid var(--accent2); color:var(--accent2); font-weight:600; padding:10px 18px; border-radius:8px; text-decoration:none; }
+    main { max-width:1020px; margin:0 auto; padding:42px 20px 72px; }
+    .badge { display:inline-block; background:rgba(16,185,129,0.14); color:var(--accent); border:1px solid rgba(16,185,129,0.35); padding:4px 12px; border-radius:999px; font-size:0.8rem; font-weight:700; margin-bottom:14px; }
+    h1 { font-size:2.15rem; line-height:1.2; margin:0 0 16px; letter-spacing:-0.02em; }
+    h2 { font-size:1.45rem; margin:34px 0 12px; color:#e2e8f0; }
+    h3 { font-size:1.12rem; margin:20px 0 8px; color:#f1f5f9; }
+    .lead { font-size:1.12rem; color:var(--muted); max-width:840px; margin-bottom:26px; }
+    .cta-strip { background:linear-gradient(135deg,#0f172a,#064e3b); border:1px solid rgba(16,185,129,0.4); border-radius:14px; padding:22px; margin:26px 0; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; }
+    .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:22px; margin:20px 0; }
+    table { width:100%; border-collapse:collapse; margin:18px 0; background:var(--card); border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+    th, td { padding:12px 14px; text-align:left; border-bottom:1px solid var(--border); font-size:0.94rem; }
+    th { background:#111c33; color:var(--accent2); font-weight:700; }
+    pre { background:#020617; border:1px solid var(--border); padding:16px; border-radius:10px; overflow-x:auto; color:#a7f3d0; font-size:0.88rem; }
+    code { font-family:ui-monospace,SFMono-Regular,Consolas,monospace; }
+    .grid-3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; margin:20px 0; }
+    .stat-box { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px; }
+    .stat-label { font-size:0.8rem; color:var(--muted); text-transform:uppercase; }
+    .stat-val { font-size:1.3rem; font-weight:800; color:var(--accent); margin-top:4px; }
+    footer { border-top:1px solid var(--border); padding:32px 20px; text-align:center; color:var(--muted); font-size:0.88rem; }
+    footer a { color:var(--accent2); text-decoration:none; margin:0 8px; }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="nav" aria-label="Primary Navigation">
+      <a class="brand" href="/">SWEEPR <span>VPN</span></a>
+      <div class="nav-links">
+        <a href="/download">Free 30s Wi-Fi Scanner</a>
+        <a href="/pricing">Pricing (£1.99 Trial)</a>
+        <a href="/tools/leak-test">IP &amp; DNS Leak Test</a>
+        <a href="/tools/isp-throttling-test">ISP Speed Checker</a>
+        <a class="btn" href="/download">Download (~3.7 MB)</a>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <span class="badge">NAS & Storage Appliance Setup Guide • WireGuard 10Gbps</span>
+    <h1>Unraid 6.12 WireGuard Client & Container VPN Routing Guide: High-Speed 10Gbps WireGuard VPN Setup Guide</h1>
+    <p class="lead">Configure built-in WireGuard VPN Manager on Unraid 6.12 (`Settings -> VPN Manager -> Add Tunnel`), route container network interfaces, and prevent ISP torrent throttling.</p>
+
+    <div class="cta-strip">
+      <div>
+        <strong>Run the Free 30-Second Home Wi-Fi &amp; ISP Speed Diagnostic</strong>
+        <div style="color:var(--muted);font-size:0.93rem;">Featherlight ~3.7 MB native Rust + Tauri v2 app • No credit card required for Wi-Fi device scanner • £1.99 1st-Month Pro Trial</div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <a class="btn" href="/download">Download Free Scanner</a>
+        <a class="btn-outline" href="/pricing">View Plans (Save 50% Yearly)</a>
+      </div>
+    </div>
+
+    
+    <h2>Why Run SWEEPR VPN WireGuard on Unraid 6.12 WireGuard Client & Container VPN Routing Guide?</h2>
+    <p>Unlike proprietary VPN clients that lock you into closed-source daemons, <strong>SWEEPR VPN</strong> provides one-click native WireGuard configuration generator files alongside our featherlight ~3.7 MB desktop app. Running SWEEPR VPN on <strong>Unraid 6.12 WireGuard Client & Container VPN Routing Guide</strong> (NAS & Storage Appliance) gives you:</p>
+    <ul>
+      <li><strong>10Gbps RAM-Only Bare-Metal Endpoints:</strong> Direct peering in London (<code>4ms</code>), Amsterdam (<code>8ms</code>), Frankfurt (<code>11ms</code>), Stockholm (<code>14ms</code>), Zurich, and New York.</li>
+      <li><strong>In-Tunnel DNS &amp; Smart-TV ACR Shield:</strong> Point DNS to <code>10.66.0.1</code> to block ISP DNS hijacking and Smart-TV Automatic Content Recognition (ACR) screenshot telemetry across your LAN.</li>
+      <li><strong>Zero Disk Persistence:</strong> All SWEEPR VPN WireGuard nodes boot from cryptographically verified RAM images with zero connection or DNS logs.</li>
+    </ul>
+
+    <h2>Step-by-Step Configuration Commands for Unraid 6.12 WireGuard Client & Container VPN Routing Guide</h2>
+    <pre><code># Settings -> VPN Manager -> Add Tunnel -> Import SWEEPR Profile
+# Set Type: "VPN Tunneled Access for Docker"
+# Subnet Routing: Route all container egress through wg0
+# Peer Endpoint: ams01.sweeprvpn.com:51820</code></pre>
+
+    <h2>Recommended Endpoint &amp; MTU Reference Table</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Endpoint Node</th>
+          <th>Hostname / Port</th>
+          <th>Typical UK/EU Latency</th>
+          <th>Recommended MTU</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>London Docklands (UK-LON-01)</td><td><code>lon01.sweeprvpn.com:51820</code></td><td>4 ms</td><td>1420 (Cable/DHCP) / 1412 (PPPoE)</td></tr>
+        <tr><td>Amsterdam Core (NL-AMS-01)</td><td><code>ams01.sweeprvpn.com:51820</code></td><td>8 ms</td><td>1420 (Cable/DHCP) / 1412 (PPPoE)</td></tr>
+        <tr><td>Frankfurt IX (DE-FRA-01)</td><td><code>fra01.sweeprvpn.com:51820</code></td><td>11 ms</td><td>1420 (Cable/DHCP) / 1412 (PPPoE)</td></tr>
+        <tr><td>Stockholm Core (SE-STO-01)</td><td><code>sto01.sweeprvpn.com:51820</code></td><td>14 ms</td><td>1420 (Cable/DHCP) / 1412 (PPPoE)</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Transparent Anchor Pricing &amp; 30-Day Money-Back Guarantee</h2>
+    <p>Unlike legacy VPNs that trap you in 24-month renewals or 250 MB bloated installers, SWEEPR VPN offers straightforward pricing with an instant free 30-second Home Wi-Fi Device Scanner:</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Plan Tier</th>
+          <th>Billing Cycle</th>
+          <th>Effective Monthly Cost</th>
+          <th>Included Features</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Yearly Plan (Core Cash Cow — Save 50%)</strong></td>
+          <td>£74.99 / year ($95.99 USD | €89.99 EUR)</td>
+          <td><strong>£6.25 / mo</strong></td>
+          <td>10Gbps RAM-Only WireGuard (UK, NL, DE, SE, CH, US), 10 Devices, Kernel Kill-Switch, 30-Day Guarantee</td>
+        </tr>
+        <tr>
+          <td><strong>6-Monthly Plan (Mid-Tier Anchor — Save 35%)</strong></td>
+          <td>£48.99 / 6 months ($61.99 USD | €58.99 EUR)</td>
+          <td><strong>£8.17 / mo</strong></td>
+          <td>All 10Gbps WireGuard Core Locations, In-Tunnel DNS, Port-Forwarding &amp; Streaming Support</td>
+        </tr>
+        <tr>
+          <td><strong>Monthly Plan (Flexible + £1.99 1st Month)</strong></td>
+          <td>£1.99 1st Month, then £12.49 / mo</td>
+          <td>£12.49 / mo</td>
+          <td>Cancel anytime in 1 click, full 10Gbps WireGuard &amp; Wi-Fi diagnostic access</td>
+        </tr>
+        <tr>
+          <td><strong>SWEEPR Wi-Fi Radar &amp; Smart-TV Shield Add-On</strong></td>
+          <td>+£14.99/yr | +£9.99/6mo | +£1.99/mo</td>
+          <td>Optional Add-On</td>
+          <td>24/7 Unknown Wi-Fi Intruder Alerts + Samsung/LG/Sony/Roku/Fire TV ACR Spy Blocker</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Frequently Asked Questions</h2>
+    <div class="card"><h3>Can I run Unraid 6.12 WireGuard Client & Container VPN Routing Guide alongside the SWEEPR VPN desktop app?</h3><p>Yes. Every SWEEPR VPN plan supports up to 10 simultaneous WireGuard peers across routers, NAS appliances, Linux servers, Windows, macOS, iOS, and Android.</p></div>
+<div class="card"><h3>What DNS server should I use on Unraid 6.12 WireGuard Client & Container VPN Routing Guide?</h3><p>Always set your WireGuard interface DNS to 10.66.0.1 so DNS queries travel inside the encrypted WireGuard tunnel and cannot be intercepted by your ISP.</p></div>
+<div class="card"><h3>Why are my HTTPS pages stalling after enabling WireGuard on Unraid 6.12 WireGuard Client & Container VPN Routing Guide?</h3><p>If your ISP uses PPPoE (such as BT, Sky, TalkTalk, Plusnet, or Vodafone FTTP), lower the WireGuard interface MTU from 1420 to 1412 and enable TCP MSS clamping to 1352–1360.</p></div>
+
+    <h2>Related Technical Guides &amp; Free Diagnostic Tools</h2>
+    <div class="card">
+      <ul>
+        <li><a href="/setup/openwrt-wireguard-router" style="color:var(--accent2);">OpenWrt 23.05 WireGuard Router Setup Guide</a></li>
+        <li><a href="/setup/asuswrt-merlin-vpn-router" style="color:var(--accent2);">Asuswrt-Merlin WireGuard VPN Director Guide</a></li>
+        <li><a href="/guides/fix-wireguard-mtu-fragmentation-pppoe" style="color:var(--accent2);">Optimal WireGuard MTU Calculator for Fibre & 5G</a></li>
+        <li><a href="/tools/leak-test" style="color:var(--accent2);">Free Browser IP, DNS &amp; WebRTC Leak Test</a></li>
+        <li><a href="/tools/isp-throttling-test" style="color:var(--accent2);">Free ISP Evening Throttling &amp; Latency Checker</a></li>
+        <li><a href="/download" style="color:var(--accent2);">Download SWEEPR VPN &amp; Free 30-Second Home Wi-Fi Scanner (~3.7 MB)</a></li>
+      </ul>
+    </div>
+  </main>
+  <footer>
+    <p>&copy; 2026 SWEEPR VPN Security Lab. Built in Rust + Tauri v2 with Audited Kernel WireGuard &amp; RAM-Only Servers.</p>
+    <p>
+      <a href="/">Home</a> |
+      <a href="/pricing">Pricing</a> |
+      <a href="/download">Download</a> |
+      <a href="/tools/leak-test">Leak Test</a> |
+      <a href="/tools/isp-throttling-test">ISP Speed Test</a> |
+      <a href="/pad.xml">PAD 4.0 XML</a> |
+      <a href="/privacy">Privacy Policy</a>
+    </p>
+  </footer>
+</body>
+</html>

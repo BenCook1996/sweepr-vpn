@@ -731,7 +731,10 @@
     try {
       if (action === 'compact') tauri.core.invoke('set_compact', { compact: !!payload });
       else if (action === 'setStartup') tauri.core.invoke('set_startup', { enabled: !!payload });
-      else if (action === 'openCheckout') tauri.opener.openUrl(typeof payload === 'string' && payload.startsWith('https://') ? payload : 'https://sweeprvpn.com/order');
+      else if (action === 'openCheckout') {
+        const safeUrl = (typeof payload === 'string' && (payload.startsWith('https://sweeprvpn.com/') || payload.startsWith('https://www.sweeprvpn.com/'))) ? payload : 'https://sweeprvpn.com/order';
+        tauri.opener.openUrl(safeUrl);
+      }
     } catch (e) {}
   }
   function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('show'), 3600); }
@@ -1329,7 +1332,7 @@
         const sig = b64UrlToBytes(parts[2]);
         return await window.crypto.subtle.verify({ name: 'Ed25519' }, pubKey, sig, data);
       }
-      return parts[2].length >= 80;
+      return false;
     } catch (e) {
       return false;
     }
@@ -1342,7 +1345,10 @@
     if (location.protocol === 'http:' || location.protocol === 'https:') {
       endpoints.push('/api/vpn/activate');
     }
-    endpoints.push('https://sweeprvpn.com/api/vpn/activate', 'http://127.0.0.1:8788/api/vpn/activate', 'http://127.0.0.1:8080/api/vpn/activate');
+    endpoints.push('https://sweeprvpn.com/api/vpn/activate');
+    if (typeof location !== 'undefined' && (location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+      endpoints.push('http://127.0.0.1:8788/api/vpn/activate', 'http://127.0.0.1:8080/api/vpn/activate');
+    }
     let lastMsg = 'No active paid subscription found for that license key.';
     for (const url of endpoints) {
       try {
@@ -1452,7 +1458,10 @@
     if (location.protocol === 'http:' || location.protocol === 'https:') {
       endpoints.push('/api/vpn/wireguard-config');
     }
-    endpoints.push('https://sweeprvpn.com/api/vpn/wireguard-config', 'http://127.0.0.1:8788/api/vpn/wireguard-config');
+    endpoints.push('https://sweeprvpn.com/api/vpn/wireguard-config');
+    if (typeof location !== 'undefined' && (location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+      endpoints.push('http://127.0.0.1:8788/api/vpn/wireguard-config', 'http://127.0.0.1:8080/api/vpn/wireguard-config');
+    }
 
     let data = null;
     let errText = 'Could not reach WireGuard provisioning server.';

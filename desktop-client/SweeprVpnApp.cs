@@ -472,6 +472,12 @@ namespace SweeprVpnApp
                         else if (msg.Contains("plan=six_month")) targetUrl = "https://sweeprvpn.com/order?plan=six_month";
                         else if (msg.Contains("plan=monthly")) targetUrl = "https://sweeprvpn.com/order?plan=monthly&offer=intro";
                         else if (msg.Contains("plan=annual")) targetUrl = "https://sweeprvpn.com/order?plan=annual";
+                        // Defensive URL whitelist: strictly enforce trusted SWEEPR domain
+                        if (!targetUrl.StartsWith("https://sweeprvpn.com/", StringComparison.OrdinalIgnoreCase) &&
+                            !targetUrl.StartsWith("https://www.sweeprvpn.com/", StringComparison.OrdinalIgnoreCase))
+                        {
+                            targetUrl = "https://sweeprvpn.com/order";
+                        }
                         Process.Start(new ProcessStartInfo(targetUrl) { UseShellExecute = true });
                     }
                     catch { }
@@ -585,7 +591,8 @@ namespace SweeprVpnApp
 
             try
             {
-                ProcessStartInfo psi = new ProcessStartInfo("arp", "-a");
+                string arpPath = Path.Combine(Environment.SystemDirectory, "arp.exe");
+                ProcessStartInfo psi = new ProcessStartInfo(File.Exists(arpPath) ? arpPath : "arp", "-a");
                 psi.RedirectStandardOutput = true;
                 psi.UseShellExecute = false;
                 psi.CreateNoWindow = true;

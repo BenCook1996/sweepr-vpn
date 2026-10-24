@@ -23,7 +23,19 @@ pub fn is_locally_administered(mac: &str) -> bool {
     u8::from_str_radix(mac.get(0..2).unwrap_or("00"), 16).map(|b| b & 0x02 != 0).unwrap_or(false)
 }
 
+#[cfg(windows)]
+fn arp_bin() -> std::path::PathBuf {
+    let sys_root = std::env::var("SystemRoot").unwrap_or_else(|_| "C:\\Windows".to_string());
+    let p = std::path::Path::new(&sys_root).join("System32\\arp.exe");
+    if p.exists() { p } else { std::path::PathBuf::from("arp.exe") }
+}
+
 fn run(cmd: &str, args: &[&str]) -> String {
+    #[cfg(windows)]
+    let c_path = if cmd == "arp" { arp_bin().to_string_lossy().to_string() } else { cmd.to_string() };
+    #[cfg(windows)]
+    let mut c = Command::new(&c_path);
+    #[cfg(not(windows))]
     let mut c = Command::new(cmd);
     c.args(args);
     #[cfg(windows)]

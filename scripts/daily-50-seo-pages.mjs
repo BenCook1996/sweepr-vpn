@@ -73,7 +73,30 @@ const NETWORKS_AND_ISPS = [
   { slug: 'vodafone-kabel-deutschland', name: 'Vodafone Kabel Deutschland', asn: 'AS3209', tech: 'DOCSIS 3.1 Dual-Stack Lite (DS-Lite)', mtu: 1380, peakHours: '19:00–23:00 CET', throttlingType: 'DS-Lite AFTR tunnel bottlenecks and evening cable segment congestion' },
   { slug: 'kpn-glasvezel-nl', name: 'KPN Glasvezel Netherlands', asn: 'AS1136', tech: 'FTTH PPPoE VLAN 6', mtu: 1412, peakHours: '19:30–23:00 CET', throttlingType: 'PPPoE 8-byte header overhead and evening streaming transit queues' },
   { slug: 'ziggo-cable-nl', name: 'Ziggo Cable Internet Netherlands', asn: 'AS33915', tech: 'DOCSIS 3.1 EuroDOCSIS', mtu: 1420, peakHours: '19:30–23:00 CET', throttlingType: 'DOCSIS upstream jitter and ConnectBox NAT table limits' },
-  { slug: 'swisscom-blue-internet-ch', name: 'Swisscom blue Internet Switzerland', asn: 'AS3303', tech: 'XGS-PON / FTTH', mtu: 1420, peakHours: '19:30–22:30 CET', throttlingType: 'Strict Swisscom transit peering disputes with third-party European networks' }
+  { slug: 'swisscom-blue-internet-ch', name: 'Swisscom blue Internet Switzerland', asn: 'AS3303', tech: 'XGS-PON / FTTH', mtu: 1420, peakHours: '19:30–22:30 CET', throttlingType: 'Strict Swisscom transit peering disputes with third-party European networks' },
+  { slug: 'plusnet-broadband-uk', name: 'Plusnet Fibre Broadband UK', asn: 'AS3243', tech: 'Openreach FTTP / VDSL2 PPPoE', mtu: 1412, peakHours: '19:00–23:00 UK', throttlingType: 'BT Group wholesale traffic management and PPPoE 1492 encapsulation overhead' },
+  { slug: 'rebel-internet-uk', name: 'Rebel Internet Wi-Fi 6 FTTP UK', asn: 'AS216172', tech: 'FTTP / CGNAT Wholesale', mtu: 1420, peakHours: '19:00–23:00 UK', throttlingType: 'Wholesale carrier CGNAT port exhaustion and Wi-Fi transit bufferbloat' },
+  { slug: 'cuckoo-broadband-uk', name: 'Cuckoo Full Fibre Broadband UK', asn: 'AS212460', tech: 'FTTP / AllPoints Fibre CGNAT', mtu: 1420, peakHours: '18:30–23:00 UK', throttlingType: 'Carrier CGNAT UDP state timeouts and regional backhaul queuing' },
+  { slug: 'g-network-london', name: 'G.Network London Full Fibre', asn: 'AS206440', tech: 'FTTP / 100% Dedicated Fibre', mtu: 1420, peakHours: '19:00–23:00 UK', throttlingType: 'Central London peering exchange congestion during peak streaming hours' },
+  { slug: 'grain-connect-uk', name: 'Grain Full Fibre Broadband UK', asn: 'AS201452', tech: 'FTTP / Point-to-Point CGNAT', mtu: 1420, peakHours: '19:00–22:30 UK', throttlingType: 'Strict CGNAT shared IPv4 blocks and UDP session drops' },
+  { slug: 'b4rn-rural-broadband', name: 'B4RN 1Gbps Rural Broadband UK', asn: 'AS201509', tech: 'Community FTTP / Dedicated Fibre', mtu: 1420, peakHours: '19:00–22:30 UK', throttlingType: 'Rural backhaul aggregation peering to Telehouse London' },
+  { slug: 'wightfibre-full-fibre', name: 'WightFibre Isle of Wight Full Fibre', asn: 'AS13008', tech: 'FTTP / Subsea Solent Cable', mtu: 1420, peakHours: '19:00–23:00 UK', throttlingType: 'Subsea Solent cable transit bottlenecks and London IXP hops' },
+  { slug: 'jurassic-fibre-uk', name: 'Jurassic Fibre Southwest UK', asn: 'AS211831', tech: 'FTTP / CGNAT (100.64.0.0/10)', mtu: 1420, peakHours: '19:00–22:30 UK', throttlingType: 'Devon and Somerset regional backhaul transit queuing' },
+  { slug: 'wildanet-cornwall', name: 'Wildanet Cornwall Full Fibre & Wireless', asn: 'AS206327', tech: 'FTTP & Fixed Wireless / CGNAT', mtu: 1420, peakHours: '19:00–23:00 UK', throttlingType: 'Fixed wireless link jitter, PPPoE overhead, and CGNAT port mapping' },
+  { slug: 'truespeed-broadband', name: 'Truespeed Full Fibre West of England', asn: 'AS208466', tech: 'FTTP / Active Ethernet PPPoE', mtu: 1412, peakHours: '19:00–22:30 UK', throttlingType: 'Evening transit queuing and PPPoE MTU fragmentation' },
+  { slug: 'ogi-full-fibre-wales', name: 'Ogi Full Fibre Wales', asn: 'AS212727', tech: 'FTTP / CGNAT', mtu: 1420, peakHours: '19:00–23:00 UK', throttlingType: 'South Wales aggregation to London transit links' },
+  { slug: 'gofibre-scotland', name: 'GoFibre Scotland & North UK', asn: 'AS212355', tech: 'FTTP / DHCP', mtu: 1420, peakHours: '19:00–22:30 UK', throttlingType: 'Scottish borders backhaul latency spikes and transit hops' },
+  { slug: 'aussie-broadband-australia', name: 'Aussie Broadband NBN Australia', asn: 'AS4764', tech: 'NBN FTTP / HFC (CVC Optimised)', mtu: 1412, peakHours: '19:00–23:00 AEST', throttlingType: 'Peak CVC congestion and international submarine cable transit to US/UK' },
+  { slug: 'optus-nbn-australia', name: 'Optus NBN Broadband Australia', asn: 'AS7474', tech: 'NBN HFC / FTTP / FTTN', mtu: 1412, peakHours: '19:00–23:00 AEST', throttlingType: 'Evening submarine cable congestion and aggressive video flow shaping' },
+  { slug: 'bouygues-bbox-fibre-fr', name: 'Bouygues Telecom Bbox Fibre France', asn: 'AS5410', tech: 'FTTH GPON VLAN 100', mtu: 1420, peakHours: '19:30–23:00 CET', throttlingType: 'Transit peering bottlenecks toward Frankfurt and London CDNs' },
+  { slug: 'sfr-fibre-box-fr', name: 'SFR Fibre Box 8 France', asn: 'AS15557', tech: 'FTTH GPON / FTTB DOCSIS', mtu: 1420, peakHours: '19:30–23:00 CET', throttlingType: 'IPv6 CGNAT transition and evening streaming bitrate throttling' },
+  { slug: '1und1-dsl-glasfaser-de', name: '1&1 DSL & Glasfaser Germany', asn: 'AS8560', tech: 'Versatel Core FTTH / VDSL', mtu: 1412, peakHours: '19:00–23:00 CET', throttlingType: 'Versatel peering congestion to Cloudflare, Discord, and gaming CDNs' },
+  { slug: 'sunrise-internet-ch', name: 'Sunrise Internet Switzerland', asn: 'AS6730', tech: 'FTTH / Hybrid Coax', mtu: 1420, peakHours: '19:30–22:30 CET', throttlingType: 'Swiss transit dispute hops and evening streaming queues' },
+  { slug: 'frontier-fiber-us', name: 'Frontier Fiber Internet US', asn: 'AS5650', tech: 'XGS-PON / DHCP ONT', mtu: 1420, peakHours: '19:00–23:00 EST/PST', throttlingType: 'Regional peering bottlenecks and evening UDP packet loss' },
+  { slug: 'google-fiber-us', name: 'Google Fiber 1Gbps–5Gbps US', asn: 'AS16591', tech: '10G-PON / DHCP', mtu: 1420, peakHours: '19:30–23:00 US', throttlingType: 'Google gateway routing and IPv6 peering saturation' },
+  { slug: 'optimum-altice-cable-us', name: 'Optimum Altice Cable & Fiber US', asn: 'AS6128', tech: 'DOCSIS 3.1 / FTTH', mtu: 1420, peakHours: '19:00–23:30 EST', throttlingType: 'DOCSIS upstream bufferbloat and evening transit queues' },
+  { slug: 'windstream-kinetic-fiber', name: 'Windstream Kinetic Fiber US', asn: 'AS7029', tech: 'GPON FTTH / PPPoE', mtu: 1412, peakHours: '19:00–22:30 EST', throttlingType: 'Rural aggregation hops and evening streaming bitrate drops' },
+  { slug: 'centurylink-quantum-fiber', name: 'CenturyLink & Quantum Fiber US', asn: 'AS209', tech: 'GPON PPPoE VLAN 201', mtu: 1412, peakHours: '19:00–23:00 EST/PST', throttlingType: 'PPPoE 1492 encapsulation overhead and Level 3 peering drops' }
 ];
 
 const USE_CASES = [
@@ -334,6 +357,199 @@ const SETUP_GUIDES = [
       '# Allow UDP 3074 & Teredo passthrough on local LAN gateway',
       '# Verify 0% packet loss in Xbox Network Settings -> Test network speed & statistics'
     ]
+  },
+  {
+    slug: 'opnsense-24-kernel-wireguard',
+    name: 'OPNsense 24.x Kernel WireGuard & Multi-WAN Gateway',
+    category: 'Enterprise Firewall & Gateway',
+    keyword: 'opnsense 24 kernel wireguard vpn client setup policy routing',
+    summary: 'Configure a high-performance WireGuard kernel tunnel (kmod) on OPNsense 24.x, complete with Policy-Based Routing, DNS-over-TLS (Unbound), and automated kill-switch rules for your entire LAN.',
+    commands: [
+      '# OPNsense 24.x WireGuard Kernel (kmod) Setup:',
+      '# 1. VPN -> WireGuard -> Instances -> Add: Name=wg_sweepr, Tunnel Address=10.66.18.42/32, MTU=1420',
+      '# 2. Endpoints -> Add: Server=lon01.sweeprvpn.com:51820, Allowed IPs=0.0.0.0/0, Keepalive=25',
+      '# 3. Interfaces -> Assignments -> Enable optX as SWEEPR_VPN',
+      '# 4. Firewall -> Rules -> LAN -> Policy Routing Gateway -> SWEEPR_VPN'
+    ]
+  },
+  {
+    slug: 'pfsense-plus-wireguard-client',
+    name: 'pfSense Plus / CE 2.7+ WireGuard Client & Policy Gateway',
+    category: 'Enterprise Firewall & Gateway',
+    keyword: 'pfsense wireguard vpn client policy routing setup',
+    summary: 'Step-by-step pfSense Plus / CE 2.7+ WireGuard package configuration. Set up peer tunnels to SWEEPR London 10Gbps RAM-only nodes, gateway monitoring, and outbound NAT rules.',
+    commands: [
+      '# In pfSense WebGUI:',
+      '# VPN -> WireGuard -> Tunnels -> Add Tunnel (Listen Port 51820, MTU 1412/1420)',
+      '# VPN -> WireGuard -> Peers -> Add Peer (Endpoint lon01.sweeprvpn.com:51820, AllowedIPs 0.0.0.0/0)',
+      '# Interfaces -> Interface Assignments -> Assign tun_wg0 -> Set IPv4 Static (10.66.x.x)',
+      '# Firewall -> NAT -> Outbound -> Hybrid Outbound NAT Rule -> Interface SWEEPR_WG'
+    ]
+  },
+  {
+    slug: 'firewalla-gold-wireguard-vpn',
+    name: 'Firewalla Gold & Purple WireGuard VPN Client Configuration',
+    category: 'Hardware Firewall & Router',
+    keyword: 'firewalla gold wireguard vpn client profile setup',
+    summary: 'Import a native SWEEPR VPN WireGuard profile into Firewalla Gold / Purple via the Firewalla mobile app (`Network -> VPN Client`) to route specific devices, gaming consoles, or Smart TVs.',
+    commands: [
+      '# In Firewalla App:',
+      '# 1. Tap Network -> VPN Client -> Add VPN Connection -> WireGuard',
+      '# 2. Import sweepr-uk-lon01.conf profile with MTU 1420',
+      '# 3. Under Apply To, select Apple TV, Smart TVs, or entire Home Network',
+      '# 4. Enable Internet Kill Switch for selected devices'
+    ]
+  },
+  {
+    slug: 'keenetic-titan-wireguard-router',
+    name: 'Keenetic Titan & Hero Wi-Fi 6 WireGuard VPN Client Setup',
+    category: 'Wi-Fi 6 Mesh Router',
+    keyword: 'keenetic wireguard vpn client setup guide',
+    summary: 'Set up SWEEPR VPN on KeeneticOS 4.x routers with hardware-accelerated WireGuard crypto, Policy-Based Connection Priorities, and Smart-TV ad telemetry blocking.',
+    commands: [
+      '# In Keenetic Web Control Panel:',
+      '# Internet -> Other Connections -> WireGuard -> Add Connection',
+      '# Paste SWEEPR VPN Interface PrivateKey and lon01.sweeprvpn.com Peer',
+      '# Network Rules -> Connection Priorities -> Drag SWEEPR VPN to Main Policy'
+    ]
+  },
+  {
+    slug: 'draytek-vigor-wireguard-client',
+    name: 'DrayTek Vigor 2865 & 2927 WireGuard VPN Tunnel Guide',
+    category: 'Business VDSL/FTTP Router',
+    keyword: 'draytek vigor 2865 wireguard vpn setup guide',
+    summary: 'Deploy a high-speed WireGuard LAN-to-LAN / Dial-Out VPN tunnel on DrayTek Vigor 2865/2927 series routers connected to UK Openreach FTTP or Virgin Media business broadband.',
+    commands: [
+      '# In DrayTek Vigor Web Configurator:',
+      '# VPN and Remote Access -> LAN to LAN -> Profile 1: Call-Out -> WireGuard',
+      '# Server IP: lon01.sweeprvpn.com | Port: 51820 | Pre-Shared Key: Auto',
+      '# Set Tunnel MTU to 1412 (PPPoE) or 1420 (DHCP) | Persistent Keepalive: 25s'
+    ]
+  },
+  {
+    slug: 'gl-inet-slate-ax-travel-router',
+    name: 'GL.iNet Slate AX (GL-AXT1800) WireGuard Travel Router Guide',
+    category: 'Pocket Travel Router',
+    keyword: 'gl inet slate ax wireguard travel router setup',
+    summary: 'Configure GL.iNet Slate AX for hotel captive portal bypass, WPA3 hotel Wi-Fi repeating, and unthrottled 500+ Mbps WireGuard routing to SWEEPR VPN 10Gbps RAM-only nodes.',
+    commands: [
+      '# Connect to Slate AX Admin Panel (192.168.8.1):',
+      '# 1. Repeater -> Scan & Connect to Hotel / Airbnb Guest Wi-Fi',
+      '# 2. VPN -> WireGuard Client -> Add New Profile -> Import SWEEPR .conf',
+      '# 3. Enable Block Non-VPN Traffic (Kill Switch) and Drop-in Gateway mode'
+    ]
+  },
+  {
+    slug: 'openwrt-luci-wireguard-interface',
+    name: 'OpenWrt 23.05 LuCI WireGuard Client & Firewall Zone Setup',
+    category: 'Open-Source Router OS',
+    keyword: 'openwrt luci wireguard client setup tutorial 2026',
+    summary: 'Comprehensive guide to configuring a native WireGuard interface, firewall forwarding zone, and MSS clamping rules in OpenWrt 23.05 using both LuCI web UI and SSH command line.',
+    commands: [
+      'opkg update && opkg install luci-proto-wireguard wireguard-tools',
+      'uci set network.sweepr=interface',
+      'uci set network.sweepr.proto="wireguard"',
+      'uci set network.sweepr.private_key="<GENERATED_PRIVATE_KEY>"',
+      'uci set network.sweepr.mtu="1420"',
+      'uci commit network && /etc/init.d/network reload'
+    ]
+  },
+  {
+    slug: 'ubiquiti-edgerouter-wireguard',
+    name: 'Ubiquiti EdgeRouter 4 & EdgeRouter X WireGuard Kernel Setup',
+    category: 'EdgeOS Router',
+    keyword: 'ubiquiti edgerouter wireguard kernel setup edgeos',
+    summary: 'Install the high-performance WireGuard kernel module on EdgeOS v2.0.9+, assign wg0 interface, configure masquerade NAT, and route specific subnets via SWEEPR VPN.',
+    commands: [
+      '# On EdgeRouter SSH:',
+      'sudo dpkg -i wireguard-v2.0.9-*.deb',
+      'configure',
+      'set interfaces wireguard wg0 address 10.66.18.42/32',
+      'set interfaces wireguard wg0 listen-port 51820',
+      'set interfaces wireguard wg0 peer <SWEEPR_PUBKEY> endpoint lon01.sweeprvpn.com:51820',
+      'commit; save'
+    ]
+  },
+  {
+    slug: 'asus-rog-rapture-wireguard-fusion',
+    name: 'ASUS ROG Rapture WireGuard VPN Fusion Policy Routing',
+    category: 'Gaming Router',
+    keyword: 'asus rog rapture wireguard vpn fusion setup low ping',
+    summary: 'Configure ASUS VPN Fusion on ROG Rapture GT-AXE16000 / GT6 routers to route PS5, PC, and Xbox gaming sessions over a low-jitter 4ms London WireGuard tunnel while regular traffic uses WAN.',
+    commands: [
+      '# ASUSWRT ROG GUI:',
+      '# 1. VPN -> VPN Fusion -> Add Profile -> WireGuard',
+      '# 2. Upload SWEEPR UK-LON-01 WireGuard profile (MTU 1412/1420)',
+      '# 3. Add Gaming PC and Consoles to Device Assignment List',
+      '# 4. Verify NAT Type 2 / Open NAT in EA FC, Warzone, and CS2'
+    ]
+  },
+  {
+    slug: 'truenas-scale-wireguard-container',
+    name: 'TrueNAS SCALE 24.x WireGuard & Docker App Routing Guide',
+    category: 'Storage & Homelab OS',
+    keyword: 'truenas scale wireguard vpn app routing setup',
+    summary: 'Run SWEEPR VPN on TrueNAS SCALE Dragonfish (Debian-based) to isolate automated download containers and media management stacks behind a 10Gbps RAM-only encrypted tunnel.',
+    commands: [
+      '# In TrueNAS SCALE Shell:',
+      'sudo apt-get update && sudo apt-get install -y wireguard-tools',
+      'sudo install -m 600 sweepr-ams01.conf /etc/wireguard/sweepr.conf',
+      'sudo wg-quick up sweepr',
+      'curl -s https://sweeprvpn.com/api/ip-check'
+    ]
+  },
+  {
+    slug: 'unraid-wireguard-docker-tunnel',
+    name: 'Unraid 6.12 WireGuard Client & Container VPN Routing Guide',
+    category: 'NAS & Storage Appliance',
+    keyword: 'unraid wireguard vpn tunnel setup docker routing',
+    summary: 'Configure built-in WireGuard VPN Manager on Unraid 6.12 (`Settings -> VPN Manager -> Add Tunnel`), route container network interfaces, and prevent ISP torrent throttling.',
+    commands: [
+      '# Settings -> VPN Manager -> Add Tunnel -> Import SWEEPR Profile',
+      '# Set Type: "VPN Tunneled Access for Docker"',
+      '# Subnet Routing: Route all container egress through wg0',
+      '# Peer Endpoint: ams01.sweeprvpn.com:51820'
+    ]
+  },
+  {
+    slug: 'steamos-steam-deck-wireguard',
+    name: 'Steam Deck (SteamOS 3.5+) Low-Ping WireGuard Gaming Guide',
+    category: 'Handheld Gaming Console',
+    keyword: 'steam deck steamos wireguard vpn setup low ping',
+    summary: 'Install and configure WireGuard on Steam Deck (SteamOS Desktop & Game Mode) for stable public Wi-Fi gaming, travel hotel encryption, and protection from ISP evening throttling.',
+    commands: [
+      '# In Steam Deck Desktop Mode Terminal:',
+      'nmcli connection import type wireguard file sweepr-uk-lon01.conf',
+      'nmcli connection up sweepr-uk-lon01',
+      '# Verify connection in Steam Deck Game Mode Quick Access Menu'
+    ]
+  },
+  {
+    slug: 'debian-12-headless-wireguard-gateway',
+    name: 'Debian 12 / Ubuntu 24.04 Headless WireGuard nftables Gateway',
+    category: 'Linux Server & Homelab',
+    keyword: 'debian 12 ubuntu 24 04 headless wireguard nftables gateway',
+    summary: 'Turn any minimal Debian 12 bookworm or Ubuntu 24.04 LTS headless server or VM into a dedicated 10Gbps home gateway with nftables masquerade NAT and systemd automation.',
+    commands: [
+      'sudo apt update && sudo apt install -y wireguard nftables',
+      'sudo cp sweepr-lon01.conf /etc/wireguard/wg0.conf',
+      'sudo sysctl -w net.ipv4.ip_forward=1',
+      'sudo systemctl enable --now wg-quick@wg0'
+    ]
+  },
+  {
+    slug: 'wsl2-windows-subsystem-wireguard',
+    name: 'WSL2 (Windows Subsystem for Linux 2) Native WireGuard Tunnel',
+    category: 'Developer Environment',
+    keyword: 'wsl2 wireguard vpn setup windows 11 developer',
+    summary: 'Configure persistent WireGuard networking inside Windows Subsystem for Linux 2 (WSL2) with mirrord/bridged networking, keeping developer SSH and Docker pulls fast and secure.',
+    commands: [
+      '# Inside Ubuntu/Debian on WSL2:',
+      'sudo apt install -y wireguard-tools resolvconf',
+      'sudo wg-quick up /etc/wireguard/sweepr-lon01.conf',
+      'wg show',
+      'git clone git@github.com:my-org/private-repo.git'
+    ]
   }
 ];
 
@@ -351,7 +567,19 @@ const COMPETITORS = [
   { slug: 'vyprvpn', name: 'VyprVPN', price: '£48.00–£96.00/yr', installerSize: '~120 MB', ramUsage: '~185 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'Switzerland / USA (Certida LLC)' },
   { slug: 'hide-me-vpn', name: 'hide.me VPN', price: '£59.99–£89.99/yr', installerSize: '~105 MB', ramUsage: '~165 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'Malaysia' },
   { slug: 'tunnelbear', name: 'TunnelBear VPN', price: '£95.88/yr ($9.99/mo)', installerSize: '~150 MB', ramUsage: '~210 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'Canada (McAfee Corp / Five Eyes)' },
-  { slug: 'airvpn', name: 'AirVPN (Eddie Client)', price: '€49.00–€79.00/yr', installerSize: '~90 MB (Mono/.NET Eddie UI)', ramUsage: '~190 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'Italy (Complex Legacy UI)' }
+  { slug: 'airvpn', name: 'AirVPN (Eddie Client)', price: '€49.00–€79.00/yr', installerSize: '~90 MB (Mono/.NET Eddie UI)', ramUsage: '~190 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'Italy (Complex Legacy UI)' },
+  { slug: 'purevpn', name: 'PureVPN', price: '£39.95 yr 1 → £79.99/yr renewal', installerSize: '~140 MB', ramUsage: '~210 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'British Virgin Islands (Previous US FBI Logging History)' },
+  { slug: 'ivacy-vpn', name: 'Ivacy VPN', price: '£36.00/yr (£60 renewal)', installerSize: '~130 MB', ramUsage: '~195 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'Singapore (PureVPN White-Label Infrastructure)' },
+  { slug: 'privadovpn', name: 'PrivadoVPN', price: '£47.88/yr ($59.88/yr)', installerSize: '~110 MB', ramUsage: '~165 MB', hasWifiScanner: 'No', hasAcrBlocker: 'Basic Adblock Only', jurisdiction: 'Switzerland' },
+  { slug: 'goose-vpn', name: 'GOOSE VPN', price: '€59.00/yr (€12.99/mo)', installerSize: '~120 MB', ramUsage: '~180 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'Netherlands (14 Eyes)' },
+  { slug: 'fastestvpn', name: 'FastestVPN', price: '£40.00/yr (Lifetime Deal Traps)', installerSize: '~95 MB', ramUsage: '~150 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'Cayman Islands' },
+  { slug: 'hotspot-shield', name: 'Hotspot Shield', price: '£83.88/yr ($95.88/yr)', installerSize: '~150 MB (Proprietary Hydra SDK)', ramUsage: '~225 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'USA (Aura / Five Eyes)' },
+  { slug: 'betternet', name: 'Betternet VPN', price: '£79.99/yr ($95.99/yr)', installerSize: '~140 MB (Aura SDK Trackers)', ramUsage: '~215 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'USA (Aura / Five Eyes)' },
+  { slug: 'avira-phantom-vpn', name: 'Avira Phantom VPN', price: '£59.99/yr (Renewal £79.99)', installerSize: '~220 MB (Antivirus Bundle)', ramUsage: '~250 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'Germany / USA (Gen Digital)' },
+  { slug: 'panda-dome-vpn', name: 'Panda Dome VPN', price: '£64.99/yr (Renewal £89.99)', installerSize: '~180 MB', ramUsage: '~230 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'Spain (Hotspot Shield Reseller)' },
+  { slug: 'malwarebytes-privacy-vpn', name: 'Malwarebytes Privacy VPN', price: '£49.99/yr ($59.99/yr)', installerSize: '~115 MB', ramUsage: '~170 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'USA (Resold Mullvad Infrastructure at 2x Price)' },
+  { slug: 'f-secure-freedome', name: 'F-Secure Freedome VPN', price: '£49.90/yr', installerSize: '~130 MB', ramUsage: '~185 MB', hasWifiScanner: 'Wi-Fi Protection Only', hasAcrBlocker: 'Tracking Protection Only', jurisdiction: 'Finland (14 Eyes)' },
+  { slug: 'adguard-vpn', name: 'AdGuard VPN', price: '£43.99/yr ($47.88/yr)', installerSize: '~125 MB (Proprietary Protocol)', ramUsage: '~175 MB', hasWifiScanner: 'No', hasAcrBlocker: 'DNS-Only', jurisdiction: 'Cyprus' }
 ];
 
 const SECURITY_GUIDES = [
@@ -402,6 +630,54 @@ const SECURITY_GUIDES = [
     keyword: 'detect cgnat 100.64.0.0 bypass wireguard vpn',
     domains: ['RFC 6598 Shared Address Space (100.64.0.0/10)', 'UDP Session Table Exhaustion', 'PersistentKeepalive = 25', 'Dedicated 10Gbps WireGuard Exit'],
     summary: 'Learn how to test if your ISP places your router behind RFC 6598 CGNAT (`100.64.0.0/10`) and how SWEEPR VPN prevents CGNAT UDP port exhaustion and IP reputation blocks.'
+  },
+  {
+    slug: 'block-tcl-google-tv-acr-telemetry',
+    title: 'How to Block TCL Google TV ACR Screenshot Telemetry (2026)',
+    h1: 'How to Block TCL Google TV ACR Tracking & Ad Spyware at Router Level',
+    keyword: 'block tcl smart tv acr screenshot telemetry tracking',
+    domains: ['tcl.com/telemetry', 'api.tclclouds.com', 'logs.tcl.com', 'analytics.tclclouds.com', 'data.hismarttv.com'],
+    summary: 'TCL Android & Google TVs transmit continuous viewing fingerprints, HDMI input metadata, and installed app lists back to regional analytics servers every few minutes.'
+  },
+  {
+    slug: 'block-panasonic-smart-tv-telemetry',
+    title: 'How to Block Panasonic My Home Screen ACR Telemetry (2026 Guide)',
+    h1: 'Stop Panasonic Smart TV ACR Tracking & Home Screen Telemetry Beacons',
+    keyword: 'block panasonic my home screen acr tracking',
+    domains: ['viera.panasonic.com', 'logs.viera.panasonic.net', 'acr.panasonic.com', 'tracking.panasonic.eu'],
+    summary: 'Panasonic My Home Screen and Android TV models submit viewing telemetry, HDMI connected device identifiers, and ad interaction logs even when privacy toggles are set to restricted.'
+  },
+  {
+    slug: 'prevent-windows-11-dns-leaks-doh',
+    title: 'How to Fix Windows 11 Smart Multi-Homed Name Resolution DNS Leaks',
+    h1: 'Fix Windows 11 Multi-Homed DNS Leaks & Bypass ISP Port 53 Interception',
+    keyword: 'windows 11 dns leak fix smart multi homed name resolution wireguard',
+    domains: ['DisableSmartNameResolution = 1', 'In-Tunnel DNS 10.66.0.1', 'Zero IPv6 DNS Fallback Leaks', 'ForceEncryptedDnsInTunnel'],
+    summary: 'Windows 11 sends simultaneous DNS queries across all network adapters (Wi-Fi, Ethernet, and VPN) by default, leaking your web activity to your ISP router. Learn how SWEEPR VPN’s Rust engine binds DNS exclusively to 10.66.0.1.'
+  },
+  {
+    slug: 'detect-hotel-wifi-evil-twin-ap',
+    title: 'How to Detect Evil Twin & Rogue Access Points on Hotel Wi-Fi (2026)',
+    h1: 'How to Detect Evil Twin Hotspots & ARP Poisoning on Hotel & Airport Wi-Fi',
+    keyword: 'detect evil twin wifi rogue access point hotel travel vpn',
+    domains: ['BSSID / ESSID Spoofing Detection', 'Duplicate Gateway MAC / ARP Poisoning Audit', 'Forced ChaCha20-Poly1305 WireGuard Tunnel', 'Automated Captive-Portal Isolation'],
+    summary: 'Cybercriminals deploy Wi-Fi Pineapples in hotels and airports broadcasting identical SSIDs to intercept login credentials. Learn how SWEEPR VPN’s 30-second Wi-Fi device audit instantly detects spoofed gateways.'
+  },
+  {
+    slug: 'stop-5g-hotspot-carrier-throttling',
+    title: 'How to Stop 5G Hotspot & Mobile Tethering Throttling (2026 MTU Guide)',
+    h1: 'How to Stop Mobile Carrier 5G Hotspot Throttling & DPI Tethering Caps',
+    keyword: 'stop 5g hotspot carrier throttling mtu clamping wireguard',
+    domains: ['Mobile Carrier TTL / HL Inspection (Default TTL 64)', 'DPI User-Agent & Port Flow Classification', 'WireGuard MTU Clamping (MTU 1380 for 5G)', '464XLAT NAT64 Translation Optimization'],
+    summary: 'Mobile operators inspect packet Time-To-Live (TTL) and TCP headers to detect tethering and throttle laptops to 3G speeds. SWEEPR VPN encapsulates all tethered traffic into a single encrypted WireGuard UDP stream.'
+  },
+  {
+    slug: 'audit-home-iot-botnet-vulnerabilities',
+    title: 'How to Audit Home IoT Plugs & Cameras for Botnet Activity in 30 Seconds',
+    h1: 'Audit Smart Home Plugs, IP Cameras & IoT Devices for Botnets in 30 Seconds',
+    keyword: 'audit smart home iot devices botnet scanner free wifi audit',
+    domains: ['Mirai & Mozi Telnet Port 23 / 2323 Scan', 'Open RTSP Port 554 IP Camera Streams', 'UPnP IGD Rogue WAN Port Forwarding Audit', 'IEEE OUI Hardware Vendor Fingerprint Check'],
+    summary: 'Cheap smart plugs, light bulbs, and security cameras often have default telnet passwords and open UPnP ports exposing them to Mirai botnets. SWEEPR VPN’s free 30-second Home Wi-Fi Scanner surfaces vulnerable devices in one click.'
   }
 ];
 
@@ -763,7 +1039,7 @@ PersistentKeepalive = 25</code></pre>`;
 
     const relatedLinks = [
       { href: '/setup/openwrt-wireguard-router', label: 'OpenWrt 23.05 WireGuard Router Setup Guide' },
-      { href: '/setup/asuswrt-merlin-vpn-client', label: 'Asuswrt-Merlin WireGuard VPN Director Guide' },
+      { href: '/setup/asuswrt-merlin-vpn-router', label: 'Asuswrt-Merlin WireGuard VPN Director Guide' },
       { href: '/guides/fix-wireguard-mtu-fragmentation-pppoe', label: 'Optimal WireGuard MTU Calculator for Fibre & 5G' }
     ];
 
@@ -885,8 +1161,8 @@ PersistentKeepalive = 25</code></pre>`;
   ];
 
   const relatedLinks = [
-    { href: '/guides/block-samsung-tv-acr-tracking', label: 'How to Block Samsung Smart-TV ACR Spying' },
-    { href: '/guides/block-lg-webos-acr-tracking', label: 'How to Block LG webOS ACR Tracking' },
+    { href: '/guides/stop-samsung-smart-tv-acr-tracking', label: 'How to Block Samsung Smart-TV ACR Spying' },
+    { href: '/guides/stop-lg-smart-tv-acr-spying', label: 'How to Block LG webOS ACR Tracking' },
     { href: '/guides/detect-unknown-devices-on-home-wifi', label: 'How to Detect Unknown Devices on Your Home Wi-Fi in 30 Seconds' }
   ];
 

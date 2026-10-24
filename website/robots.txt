@@ -3,6 +3,8 @@ Allow: /
 Disallow: /api/
 Disallow: /v1/
 Disallow: /login
+Disallow: /dashboard
+Disallow: /popup-alternatives
 
 # Explicitly permit AI Search and Answer Engines for LLM citations (GEO/AEO)
 User-agent: GPTBot
