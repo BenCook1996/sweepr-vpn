@@ -596,11 +596,11 @@
 
     <div class="s" id="mError" style="color:#ef4444;font-weight:700;display:none">Please enter a valid license key.</div>
 
-    <button class="plan on" data-plan="annual" onclick="plan(this)"><span class="tag">BEST VALUE · SAVE 50%</span><div><div class="t">Yearly Plan</div><div class="s">£74.99 billed once a year</div></div><div style="text-align:right"><div style="font-weight:900;font-size:16px">£6.25</div><div class="s">/month</div></div></button>
+    <button class="plan on" data-plan="monthly" onclick="plan(this)"><span class="tag">POPULAR · £1.99 INTRO</span><div><div class="t">1st-Month Trial</div><div class="s">£1.99 first month, then £12.49/mo</div></div><div style="text-align:right"><div style="font-weight:900;font-size:16px;color:var(--accent)">£1.99</div><div class="s">today</div></div></button>
+    <button class="plan" data-plan="annual" onclick="plan(this)"><div><div class="t">Yearly Plan</div><div class="s">£74.99 billed once a year · Save 50%</div></div><div style="text-align:right"><div style="font-weight:900;font-size:15px">£6.25</div><div class="s">/month</div></div></button>
     <button class="plan" data-plan="six_month" onclick="plan(this)"><div><div class="t">6-Month Plan</div><div class="s">£48.99 · Save 35%</div></div><div style="text-align:right"><div style="font-weight:900;font-size:15px">£8.17</div><div class="s">/month</div></div></button>
-    <button class="plan" data-plan="monthly" onclick="plan(this)"><div><div class="t">1st-Month Trial</div><div class="s">£1.99 first month, then £12.49</div></div><div style="text-align:right"><div style="font-weight:900;font-size:15px;color:var(--accent)">£1.99</div><div class="s">1st month</div></div></button>
 
-    <button class="btn-go" id="mCheckoutBtn" onclick="checkoutSelectedPlan()">Continue to Checkout — £74.99/yr</button>
+    <button class="btn-go" id="mCheckoutBtn" onclick="checkoutSelectedPlan()">Continue — £1.99 (1st Month)</button>
 
     <div style="text-align:center;margin-top:2px">
       <button type="button" onclick="document.getElementById('mKeySection').classList.toggle('hidden')" style="font-size:12px;font-weight:700;color:var(--muted)">Already have a license key? Enter it ›</button>
@@ -990,10 +990,10 @@
         // Provide realistic preview scan in web/mobile browser mode while explaining local ARP access
         await new Promise(r => setTimeout(r, 650));
         devices = [
-          { name:'Home Wi-Fi Router', ip:'192.168.1.1', mac:'Gateway', kind:'router', is_router:true, detail:'192.168.1.1 · Encrypted WPA2/WPA3', tracker_risk:false },
-          { name:'This Device', ip:'192.168.1.14', mac:'Local', kind:'other', is_self:true, detail:'Active session · Protected by SWEEPR', tracker_risk:false },
-          { name:'Living Room Smart TV', ip:'192.168.1.22', mac:'ACR Telemetry', kind:'tv', detail:'Sends ACR viewing snapshots · Block via DNS Shield', tracker_risk:true },
-          { name:'Wireless Speaker', ip:'192.168.1.35', mac:'Media', kind:'speaker', detail:'192.168.1.35 · No open ports found', tracker_risk:false }
+          { name:'Living Room Smart TV', ip:'192.168.1.22', mac:'Smart TV', kind:'tv', detail:'Smart-TV viewing trackers blocked', tracker_risk:false },
+          { name:'This Device', ip:'192.168.1.14', mac:'Local', kind:'computer', is_self:true, detail:'Encrypted 10 Gbps VPN tunnel', tracker_risk:false },
+          { name:'Home Wi-Fi Router', ip:'192.168.1.1', mac:'Gateway', kind:'router', is_router:true, detail:'Encrypted WPA2/WPA3 gateway', tracker_risk:false },
+          { name:'Wireless Speaker', ip:'192.168.1.35', mac:'Media', kind:'speaker', detail:'Verified device on home Wi-Fi', tracker_risk:false }
         ];
         lastScanAt = Date.now();
       } else {
@@ -1095,7 +1095,7 @@
     en: {
       home:'VPN', wifi:'Wi-Fi & TV', account:'Account', welcome:'Select a Location',
       homeSub:'Choose a Country', recommended:'Quick pick',
-      allCountries:'Available locations', protect:'Connect', pause:'Protected · Tap to Pause',
+      allCountries:'Available locations', protect:'Connect', pause:'Connected ✓',
       wifiTitle:'devices on Wi-Fi', scanBtn:'Scan Wi-Fi', intruderTitle:'Wi-Fi intruder alerts',
       intruderSub:'Alert me immediately if an unknown device joins my Wi-Fi',
       shieldsHeader:'Household & Smart-TV shields', enableAll:'Enable all',
@@ -1227,11 +1227,11 @@
   }
 
   /* ---------- Split Activation vs. Plan Checkout (Quick Win 3) ---------- */
-  let selectedModalPlan = 'annual';
+  let selectedModalPlan = 'monthly';
   const PLAN_CTA_LABELS = {
-    annual: 'Continue to Checkout — £74.99/yr',
-    six_month: 'Continue to Checkout — £48.99/6mo',
-    monthly: 'Start £1.99 Intro Month →'
+    monthly: 'Continue — £1.99 (1st Month)',
+    annual: 'Continue — £74.99/yr (Save 50%)',
+    six_month: 'Continue — £48.99/6mo (Save 35%)'
   };
 
   function openActivate(reason) {
@@ -1590,7 +1590,7 @@
     syncSwitchAria($('startupToggle'), state.startup);
     syncSwitchAria($('killToggle'), state.killSwitch);
     syncSwitchAria($('lanBypassToggle'), state.lanBypass);
-    $('timerBox').classList.toggle('hidden', !on);
+    $('timerBox').classList.add('hidden');
     if (on) renderSparkBars();
     $('panelFlag').setAttribute('data-flag', s.flag);
     $('panelName').textContent = s.country;
