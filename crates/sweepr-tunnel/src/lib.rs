@@ -587,7 +587,11 @@ pub fn verify_subscription(
     api_url: Option<String>,
 ) -> Result<SubscriptionStatus, String> {
     let clean_email = email.trim();
-    let clean_code = code.trim();
+    let clean_code: String = code
+        .chars()
+        .filter(|c| !c.is_whitespace())
+        .collect::<String>()
+        .to_ascii_uppercase();
     if clean_code.len() < 6 {
         return Err("Please enter the license key from your order.".into());
     }
@@ -598,10 +602,20 @@ pub fn verify_subscription(
     let mut resp_opt: Option<ApiActivateResponse> = None;
 
     for base in &candidates {
-        match call_activate_api(base, clean_email, clean_code) {
+        match call_activate_api(base, clean_email, &clean_code) {
             Ok(r) => {
-                resp_opt = Some(r);
-                break;
+                let is_ok = r.ok == Some(true) && r.valid == Some(true);
+                if is_ok {
+                    resp_opt = Some(r);
+                    break;
+                } else {
+                    if let Some(ref m) = r.message {
+                        last_err = m.clone();
+                    }
+                    if resp_opt.is_none() {
+                        resp_opt = Some(r);
+                    }
+                }
             }
             Err(e) => {
                 last_err = e;

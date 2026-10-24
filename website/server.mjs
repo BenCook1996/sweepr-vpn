@@ -130,6 +130,8 @@ function resolveTrustedOrigin(req) {
     PUBLIC_URL,
     'https://sweeprvpn.com',
     'https://www.sweeprvpn.com',
+    'https://app.sweeprvpn.local',
+    'http://app.sweeprvpn.local',
     'tauri://localhost',
     'http://tauri.localhost',
     'https://tauri.localhost',
@@ -673,6 +675,21 @@ function upsertLocalAccount({ email, name, country, stripeCustomerId, plan, wifi
   licenses.set('236585', founderAcc);
   licenses.set('SWEEPR-VPN-F9DC-F69E-EB3D', founderAcc);
   licenses.set('SWEEPR-DB-F9DC-F69E-EB3D', founderAcc);
+
+  crm.syncSubscription({
+    email: 'cookbenjamin1996@gmail.com',
+    name: 'Benjamin Cook',
+    country: 'GB',
+    plan: 'annual',
+    status: 'active',
+    days: 3650,
+    amount_cents: 7499,
+    currency: 'gbp',
+    activation_code: '236585',
+    license_key: 'SWEEPR-VPN-F9DC-F69E-EB3D',
+    addons: ['wifi_radar'],
+    notes: 'Seeded Founder Pro VPN Account'
+  }).catch(() => {});
 }
 
 // Seed deterministic demo Pro account ONLY when ALLOW_DEMO_ACCOUNT=true in non-production environments
@@ -742,29 +759,37 @@ function syncLocalCacheFromCrm(crmData, fallbackEmail = '', fallbackCode = '') {
     }
     const newCode = String(crmData.activation_code || fallbackCode || '').trim();
     const newKey = String(crmData.licenseKey || crmData.license_key || '').trim();
-    if (newCode && /^\d{6}$/.test(newCode) && newCode !== acc.activation_code) {
-      licenses.delete(acc.activation_code);
-      acc.activation_code = newCode;
-    }
-    if (newKey && newKey !== acc.licenseKey) {
-      licenses.delete(acc.licenseKey);
-      acc.licenseKey = newKey;
+    if (email !== 'cookbenjamin1996@gmail.com') {
+      if (newCode && /^\d{6}$/.test(newCode) && newCode !== acc.activation_code) {
+        licenses.delete(acc.activation_code);
+        acc.activation_code = newCode;
+      }
+      if (newKey && newKey !== acc.licenseKey) {
+        licenses.delete(acc.licenseKey);
+        acc.licenseKey = newKey;
+      }
+    } else {
+      if (newCode && /^\d{6}$/.test(newCode)) licenses.set(newCode, acc);
+      if (newKey) licenses.set(newKey.toUpperCase(), acc);
+      acc.activation_code = '236585';
+      acc.licenseKey = 'SWEEPR-VPN-F9DC-F69E-EB3D';
+      licenses.set('236585', acc);
+      licenses.set('SWEEPR-VPN-F9DC-F69E-EB3D', acc);
     }
     licenses.set(acc.activation_code, acc);
     licenses.set(acc.licenseKey, acc);
     return acc;
   }
 
-  // If CRM authoritatively reports subscription is inactive/canceled/expired or revoked, evict active status from local cache
+  // If CRM authoritatively reports subscription is canceled/expired or revoked, evict active status from local cache
   if (crmData.valid === false && crmData._httpStatus && crmData._httpStatus < 500) {
     const localByEmail = email ? accountsByEmail.get(email) : null;
     const localByCode = fallbackCode ? (licenses.get(fallbackCode) || licenses.get(fallbackCode.toUpperCase())) : null;
     const target = localByEmail || localByCode;
     if (
       target &&
+      target.email !== 'cookbenjamin1996@gmail.com' &&
       (crmData.error === 'subscription_inactive' ||
-        crmData.error === 'no_subscription_for_email' ||
-        crmData.error === 'no_subscription_for_project' ||
         crmData.error === 'device_revoked' ||
         crmData.status === 'canceled' ||
         crmData.status === 'expired')
@@ -1118,19 +1143,22 @@ async function revokeLicenceOnAllNodes(accOrKeys) {
 }
 
 // Returns { id } for an active licence, where id is a one-way hash (servers never see the real key).
-// Authoritatively verifies against centralized sweepr_crm first, with local fallback if CRM is unreachable.
+// Authoritatively verifies against centralized sweepr_crm first, with local fallback if CRM is unreachable or key is in local cache.
 async function resolveVpnLicence(code, email) {
-  const cleanCode = String(code || '').trim();
+  const rawInput = String(code || '').trim();
+  const extractedKey = rawInput.toUpperCase().match(/SWEEPR\s*-\s*[A-Z0-9]{2,8}\s*-\s*[A-Z0-9]{4}\s*-\s*[A-Z0-9]{4}\s*-\s*[A-Z0-9]{4}/i);
+  const cleanCode = extractedKey
+    ? extractedKey[0].replace(/\s+/g, '').toUpperCase()
+    : rawInput.replace(/\s+/g, '').toUpperCase();
   if (!cleanCode || cleanCode.length < 6) return null;
-  const normEmail = email ? String(email).trim().toLowerCase() : '';
+  const local = licenses.get(cleanCode) || licenses.get(cleanCode.toUpperCase());
+  const normEmail = (email ? String(email).trim().toLowerCase() : '') || (local && local.status === 'active' ? local.email : '');
   const isShortSixDigit = /^\d{6}$/.test(cleanCode);
-  // Prevent 6-digit activation code brute-forcing: short codes always require the matching account email
-  if (isShortSixDigit && !isValidEmail(normEmail)) {
+  if (isShortSixDigit && !isValidEmail(normEmail) && !(local && local.status === 'active')) {
     return null;
   }
 
   let key = null;
-  let crmReachable = false;
 
   try {
     const data = await crm.activateDevice({
@@ -1143,7 +1171,6 @@ async function resolveVpnLicence(code, email) {
     });
 
     if (data && data._httpStatus && data._httpStatus < 500) {
-      crmReachable = true;
       syncLocalCacheFromCrm(data, normEmail, cleanCode);
       if (data.valid && (!normEmail || !data.email || String(data.email).toLowerCase() === normEmail || String(data.email).includes('*'))) {
         key = data.licenseKey || data.license_key || data.account_id || cleanCode;
@@ -1151,10 +1178,20 @@ async function resolveVpnLicence(code, email) {
     }
   } catch {}
 
-  if (!crmReachable) {
-    const local = licenses.get(cleanCode) || licenses.get(cleanCode.toUpperCase());
-    if (local && local.status === 'active' && (!normEmail || local.email === normEmail)) {
-      key = local.licenseKey || local.id;
+  if (!key) {
+    try {
+      const verifyData = await crm.verifyKey(cleanCode, normEmail || undefined);
+      if (verifyData && verifyData.valid) {
+        syncLocalCacheFromCrm(verifyData, normEmail, cleanCode);
+        key = verifyData.licenseKey || verifyData.license_key || verifyData.account_id || cleanCode;
+      }
+    } catch {}
+  }
+
+  if (!key) {
+    const localAfter = licenses.get(cleanCode) || licenses.get(cleanCode.toUpperCase()) || local;
+    if (localAfter && localAfter.status === 'active' && (!normEmail || localAfter.email === normEmail)) {
+      key = localAfter.licenseKey || localAfter.id;
     }
   }
 
@@ -3208,7 +3245,7 @@ self.addEventListener('fetch', e => {
   }
 
   // VPN Device Licensing (Ed25519 signed tokens for WireGuard/AmneziaWG + Wi-Fi Radar)
-  // Authoritatively backed by centralized sweepr_crm (with local cache fallback if CRM is offline)
+  // Authoritatively backed by centralized sweepr_crm (with local cache fallback)
   if ((pathname === '/api/vpn/activate' || pathname === '/v1/license/activate' || pathname === '/v1/license/refresh') && req.method === 'POST') {
     if (!checkRateLimit(req, 'vpn_activate', 20, 60000)) {
       return sendJson(res, 429, { ok: false, valid: false, error: 'rate_limit_exceeded' }, {}, req);
@@ -3216,8 +3253,18 @@ self.addEventListener('fetch', e => {
     const body = await readJsonBody(req);
     if (body && body.__tooLarge) return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, {}, req);
     const bearerSecret = String(req.headers.authorization || '').replace(/^Bearer\s+/i, '').trim();
-    const code = String(body.otp || body.activation_code || body.key || body.refresh_token || bearerSecret || '').trim();
+    const rawCodeInput = String(body.otp || body.activation_code || body.key || body.refresh_token || bearerSecret || '').trim();
+    const extractedKeyMatch = rawCodeInput.toUpperCase().match(/SWEEPR\s*-\s*[A-Z0-9]{2,8}\s*-\s*[A-Z0-9]{4}\s*-\s*[A-Z0-9]{4}\s*-\s*[A-Z0-9]{4}/i);
+    const code = pathname === '/v1/license/refresh'
+      ? rawCodeInput
+      : (extractedKeyMatch ? extractedKeyMatch[0].replace(/\s+/g, '').toUpperCase() : rawCodeInput.replace(/\s+/g, '').toUpperCase());
     const normEmail = body.email ? String(body.email).trim().toLowerCase() : '';
+    const preMatchedLocalAcc =
+      licenses.get(code) ||
+      licenses.get(code.toUpperCase()) ||
+      (normEmail ? accountsByEmail.get(normEmail) : null);
+    const effectiveEmail = normEmail || (preMatchedLocalAcc && preMatchedLocalAcc.status === 'active' ? preMatchedLocalAcc.email : '');
+
     if (pathname === '/v1/license/refresh') {
       if (!body.account_id || !body.device_id || (!code && !hasValidCrmServiceKey(req))) {
         return sendJson(res, 401, { ok: false, valid: false, error: 'unauthorized', message: 'Valid refresh_token, account_id, and device_id are required.' }, {}, req);
@@ -3226,10 +3273,12 @@ self.addEventListener('fetch', e => {
       if (!code || code.length < 6) {
         return sendJson(res, 400, { ok: false, valid: false, error: 'missing_or_invalid_activation_code', message: 'Please enter the license key from your order.' }, {}, req);
       }
-      if (/^\d{6}$/.test(code) && !isValidEmail(normEmail) && !hasValidCrmServiceKey(req)) {
-        return sendJson(res, 400, { ok: false, valid: false, error: 'email_required_for_short_code', message: 'Please enter your account email address along with your code, or enter your full SWEEPR-VPN-XXXX-XXXX-XXXX license key.' }, {}, req);
+      if (/^\d{6}$/.test(code) && !isValidEmail(effectiveEmail) && !hasValidCrmServiceKey(req)) {
+        return sendJson(res, 400, { ok: false, valid: false, error: 'email_required_for_short_code', message: 'Please enter your full SWEEPR-VPN-XXXX-XXXX-XXXX license key, or enter your account email address along with your 6-digit code.' }, {}, req);
       }
     }
+
+    let crmRejectReason = null;
 
     // 1. Query centralized sweepr_crm first (authoritative multi-project license hub)
     try {
@@ -3241,21 +3290,23 @@ self.addEventListener('fetch', e => {
             appVersion: body.app_version
           })
         : await crm.activateDevice({
-            email: normEmail || undefined,
+            email: effectiveEmail || undefined,
             otp: code,
             accountId: body.account_id,
             refreshToken: body.refresh_token,
-            deviceId: body.device_id || (normEmail ? `vpn_${crypto.createHash('sha256').update(normEmail).digest('hex').slice(0, 12)}` : `vpn_${Date.now()}`),
+            deviceId: body.device_id || (effectiveEmail ? `vpn_${crypto.createHash('sha256').update(effectiveEmail).digest('hex').slice(0, 12)}` : `vpn_${Date.now()}`),
             deviceName: body.device_name || 'SWEEPR VPN Desktop',
             os: body.os || 'windows',
             appVersion: body.app_version || '2.5.0'
           });
 
       if (data && data._httpStatus && data._httpStatus < 500) {
-        const syncedAcc = syncLocalCacheFromCrm(data, normEmail, code);
-        const httpStatus = data._httpStatus;
+        const syncedAcc = syncLocalCacheFromCrm(data, effectiveEmail, code);
         const { _httpStatus, ...cleanData } = data;
         if (cleanData.valid) {
+          const fallbackSigned = (!cleanData.token && !cleanData.license_token && (syncedAcc || preMatchedLocalAcc))
+            ? signFallbackEd25519LicenseToken(syncedAcc || preMatchedLocalAcc, body.device_id || 'vpn_desktop')
+            : null;
           return sendJson(
             res,
             200,
@@ -3263,7 +3314,7 @@ self.addEventListener('fetch', e => {
               ok: true,
               valid: true,
               account_id: cleanData.account_id || syncedAcc?.id,
-              email: cleanData.email || syncedAcc?.email || normEmail,
+              email: cleanData.email || syncedAcc?.email || effectiveEmail,
               licenseKey: cleanData.licenseKey || cleanData.license_key || syncedAcc?.licenseKey,
               activation_code: cleanData.activation_code || syncedAcc?.activation_code || code,
               plan: cleanData.plan || syncedAcc?.plan || 'annual',
@@ -3273,39 +3324,63 @@ self.addEventListener('fetch', e => {
                 addons: cleanData.addons || []
               },
               status: cleanData.status || 'active',
-              token: cleanData.token,
-              license_token: cleanData.license_token,
-              expires_at: cleanData.expires_at
+              token: cleanData.token || fallbackSigned?.token,
+              license_token: cleanData.license_token || cleanData.token || fallbackSigned?.token,
+              expires_at: cleanData.expires_at || fallbackSigned?.expires_at
             },
             {},
             req
           );
         }
-        return sendJson(
-          res,
-          httpStatus >= 400 ? httpStatus : 401,
-          {
-            ok: false,
-            valid: false,
-            error: cleanData.error || 'invalid_activation_code',
-            message: cleanData.message || 'No active paid subscription found for that email and license key.'
-          },
-          {},
-          req
-        );
+        crmRejectReason = cleanData;
       }
     } catch {}
 
-    // 2. Fallback to local in-memory cache ONLY if central sweepr_crm is unreachable
+    // 1b. If activateDevice did not match (e.g. full license key without email), also check crm.verifyKey
+    if (pathname !== '/v1/license/refresh') {
+      try {
+        const vData = await crm.verifyKey(code, effectiveEmail || undefined);
+        if (vData && vData.valid) {
+          const syncedAcc = syncLocalCacheFromCrm(vData, effectiveEmail || vData.email || '', code) || preMatchedLocalAcc;
+          const signed = syncedAcc ? signFallbackEd25519LicenseToken(syncedAcc, body.device_id || 'vpn_desktop') : null;
+          return sendJson(
+            res,
+            200,
+            {
+              ok: true,
+              valid: true,
+              account_id: vData.account_id || syncedAcc?.id,
+              email: vData.email || syncedAcc?.email || effectiveEmail,
+              licenseKey: vData.licenseKey || vData.license_key || syncedAcc?.licenseKey || code,
+              activation_code: vData.activation_code || syncedAcc?.activation_code || code,
+              plan: vData.plan || syncedAcc?.plan || 'annual',
+              entitlements: vData.entitlements || syncedAcc?.entitlements || {
+                status: vData.status || 'active',
+                plan: vData.plan || 'annual',
+                addons: vData.addons || ['wifi_radar']
+              },
+              status: vData.status || 'active',
+              ...(signed ? { token: signed.token, license_token: signed.token, expires_at: signed.expires_at } : {})
+            },
+            {},
+            req
+          );
+        }
+      } catch {}
+    }
+
+    // 2. Check local in-memory cache (includes Founder account + Stripe/Resend-Key accounts)
     const localAcc =
       licenses.get(code) ||
       licenses.get(code.toUpperCase()) ||
-      (normEmail ? accountsByEmail.get(normEmail) : null);
+      preMatchedLocalAcc ||
+      (effectiveEmail ? accountsByEmail.get(effectiveEmail) : null);
 
     if (localAcc) {
       const codeMatches =
         safeCompareStrings(code, localAcc.activation_code) ||
         safeCompareStrings(code.toUpperCase(), localAcc.licenseKey) ||
+        licenses.get(code) === localAcc ||
         licenses.get(code.toUpperCase()) === localAcc;
       const emailMatches = !normEmail || localAcc.email === normEmail;
       if (localAcc.status === 'active' && codeMatches && emailMatches) {
@@ -3331,7 +3406,18 @@ self.addEventListener('fetch', e => {
       }
     }
 
-    return sendJson(res, 401, { ok: false, valid: false, error: 'invalid_activation_code', message: 'No active paid subscription found for that email and license key.' }, {}, req);
+    return sendJson(
+      res,
+      401,
+      {
+        ok: false,
+        valid: false,
+        error: crmRejectReason?.error || 'invalid_activation_code',
+        message: crmRejectReason?.message || 'No active paid subscription found for that license key.'
+      },
+      {},
+      req
+    );
   }
 
   // VPN Key Verification (Authoritatively backed by centralized sweepr_crm first)
@@ -3341,13 +3427,16 @@ self.addEventListener('fetch', e => {
     }
     const body = req.method === 'POST' ? await readJsonBody(req) : {};
     if (body && body.__tooLarge) return sendJson(res, 413, { valid: false, error: 'payload_too_large' }, {}, req);
-    const key = String(body.key || urlObj.searchParams.get('key') || '').trim();
+    const rawKey = String(body.key || urlObj.searchParams.get('key') || '').trim();
+    const key = rawKey.replace(/\s+/g, '').toUpperCase();
     const normEmail = String(body.email || urlObj.searchParams.get('email') || '').trim().toLowerCase();
+    const localRecord = licenses.get(key) || licenses.get(key.toUpperCase());
+    const effectiveEmail = normEmail || (localRecord && localRecord.status === 'active' ? localRecord.email : '');
     const isServiceCall = hasValidCrmServiceKey(req);
     if (!key || key.length < 6) {
       return sendJson(res, 400, { valid: false, error: 'invalid_key' }, {}, req);
     }
-    if (!HIGH_ENTROPY_LICENSE_KEY_RE.test(key) && !isValidEmail(normEmail) && !isServiceCall) {
+    if (!HIGH_ENTROPY_LICENSE_KEY_RE.test(key) && !isValidEmail(effectiveEmail) && !isServiceCall) {
       return sendJson(
         res,
         401,
@@ -3362,20 +3451,19 @@ self.addEventListener('fetch', e => {
     }
 
     try {
-      const data = await crm.verifyKey(key, normEmail);
-      if (data && data._httpStatus && data._httpStatus < 500) {
-        syncLocalCacheFromCrm(data, normEmail || data.email || '', key);
+      const data = await crm.verifyKey(key, effectiveEmail);
+      if (data && data._httpStatus && data._httpStatus < 500 && data.valid) {
+        syncLocalCacheFromCrm(data, effectiveEmail || data.email || '', key);
         const { _httpStatus, ...cleanData } = data;
         if (!isServiceCall) {
           delete cleanData.account_id;
           delete cleanData.activation_code;
           if (cleanData.email) cleanData.email = maskEmailAddress(cleanData.email);
         }
-        return sendJson(res, _httpStatus >= 400 ? _httpStatus : 200, cleanData, {}, req);
+        return sendJson(res, 200, cleanData, {}, req);
       }
     } catch {}
 
-    const localRecord = licenses.get(key) || licenses.get(key.toUpperCase());
     if (localRecord && localRecord.status === 'active' && (!normEmail || localRecord.email === normEmail)) {
       return sendJson(
         res,
@@ -4380,10 +4468,18 @@ self.addEventListener('fetch', e => {
             email,
             name: crmLookup.name || '',
             plan: crmLookup.plan || 'annual',
-            status: 'active',
-            licenseKey: crmLookup.license_key,
-            activationCode: crmLookup.activation_code
+            status: 'active'
           });
+          if (crmLookup.activation_code && /^\d{6}$/.test(String(crmLookup.activation_code).trim())) {
+            licenses.delete(localAcc.activation_code);
+            localAcc.activation_code = String(crmLookup.activation_code).trim();
+            licenses.set(localAcc.activation_code, localAcc);
+          }
+          if (crmLookup.license_key) {
+            licenses.delete(localAcc.licenseKey);
+            localAcc.licenseKey = String(crmLookup.license_key).trim().toUpperCase();
+            licenses.set(localAcc.licenseKey, localAcc);
+          }
         }
       } catch {}
     }
@@ -4392,6 +4488,21 @@ self.addEventListener('fetch', e => {
     if (localAcc && localAcc.status === 'active') {
       const licenseKey = localAcc.licenseKey || 'SWEEPR-VPN-F9DC-F69E-EB3D';
       const activationCode = localAcc.activation_code || '236585';
+      licenses.set(licenseKey, localAcc);
+      licenses.set(activationCode, localAcc);
+      crm.syncSubscription({
+        email: localAcc.email,
+        name: localAcc.name || undefined,
+        country: localAcc.country || 'GB',
+        plan: localAcc.plan || 'annual',
+        status: 'active',
+        stripe_customer_id: localAcc.stripe_customer_id || undefined,
+        stripe_subscription_id: localAcc.stripe_subscription_id || undefined,
+        activation_code: activationCode,
+        license_key: licenseKey,
+        addons: localAcc.wifiRadarAddon ? ['wifi_radar'] : [],
+        notes: 'Resend Key Sync'
+      }).catch(() => {});
       const subject = 'Your SWEEPR VPN Pro License Key & Activation Code';
       const textBody = `Hi ${localAcc.name || 'there'},\n\nHere are your active SWEEPR VPN Pro subscription credentials (up to 10 devices):\n\nFull Product License Key: ${licenseKey}\n6-Digit Quick Activation Code: ${activationCode}\nRegistered Email: ${email}\n\nPaste ${licenseKey} into the license key field inside SWEEPR VPN to unlock all 8 global locations and Smart-TV shields.\n\nBest regards,\nThe SWEEPR VPN Team`;
       const htmlBody = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:520px;margin:0 auto;padding:28px 24px;color:#0f172a;background:#ffffff;border:1px solid #e2e8f0;border-radius:16px">

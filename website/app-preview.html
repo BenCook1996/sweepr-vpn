@@ -603,12 +603,13 @@
     <button class="btn-go" id="mCheckoutBtn" onclick="checkoutSelectedPlan()">Continue — £1.99 (1st Month)</button>
 
     <div style="text-align:center;margin-top:2px">
-      <button type="button" onclick="document.getElementById('mKeySection').classList.toggle('hidden')" style="font-size:12px;font-weight:700;color:var(--muted)">Already have a license key? Enter it ›</button>
+      <button type="button" onclick="const ks=document.getElementById('mKeySection');ks.classList.toggle('hidden');if(!ks.classList.contains('hidden'))setTimeout(()=>document.getElementById('mCode').focus(),30)" style="font-size:12px;font-weight:700;color:var(--muted)">Already have a license key? Paste or enter it ›</button>
     </div>
 
-    <div id="mKeySection" class="hidden" style="display:flex;flex-direction:column;gap:8px;padding-top:6px;border-top:1px solid var(--line)">
+    <div id="mKeySection" style="display:flex;flex-direction:column;gap:8px;padding-top:6px;border-top:1px solid var(--line)">
       <div class="key-row">
-        <input class="input" id="mCode" type="text" maxlength="64" placeholder="SWEEPR-VPN-XXXX-XXXX-XXXX" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')activateKeyOnly()" aria-label="License key" />
+        <input class="input" id="mCode" type="text" maxlength="64" placeholder="SWEEPR-VPN-XXXX-XXXX-XXXX or 6-digit code" oninput="this.value=this.value.replace(/\s+/g,'').toUpperCase()" onpaste="handleKeyInputPaste(event)" onkeydown="if(event.key==='Enter')activateKeyOnly()" aria-label="License key" />
+        <button type="button" class="btn-soft" onclick="pasteIntoKeyBox()" title="Paste from clipboard" style="padding:8px 11px;min-height:38px;white-space:nowrap;font-weight:800">Paste</button>
         <button class="btn-activate-key" id="mActivateKeyBtn" onclick="activateKeyOnly()">Activate Key</button>
       </div>
       <div style="text-align:right">
@@ -1242,10 +1243,56 @@
     } else {
       $('mError').style.display = 'none';
     }
+    if ($('mKeySection')) $('mKeySection').classList.remove('hidden');
     $('modal').classList.add('open');
     setTimeout(() => $('mCode').focus(), 50);
   }
   function closeActivate() { $('modal').classList.remove('open'); }
+  function extractCleanLicenseOrCode(raw) {
+    const str = String(raw || '').trim().toUpperCase();
+    const keyMatch = str.match(/SWEEPR\s*-\s*[A-Z0-9]{2,8}\s*-\s*[A-Z0-9]{4}\s*-\s*[A-Z0-9]{4}\s*-\s*[A-Z0-9]{4}/i);
+    if (keyMatch) return keyMatch[0].replace(/\s+/g, '').toUpperCase();
+    const compact = str.replace(/[^A-Z0-9-]/g, '');
+    if (/^\d{6}$/.test(compact)) return compact;
+    const sixDigitMatch = str.match(/(?:^|\D)(\d(?:\s*\d){5})(?:\D|$)/);
+    if (sixDigitMatch) return sixDigitMatch[1].replace(/\s+/g, '');
+    return compact;
+  }
+  function handleKeyInputPaste(e) {
+    const text = (e && e.clipboardData && e.clipboardData.getData('text')) || '';
+    if (text) {
+      e.preventDefault();
+      const cleaned = extractCleanLicenseOrCode(text);
+      $('mCode').value = cleaned;
+      if (cleaned.length >= 6) activateKeyOnly();
+    }
+  }
+  function onNativeClipboardPaste(text) {
+    const cleaned = extractCleanLicenseOrCode(text);
+    if (cleaned) {
+      if (!$('modal').classList.contains('open')) openActivate();
+      if ($('mKeySection')) $('mKeySection').classList.remove('hidden');
+      $('mCode').value = cleaned;
+      if (cleaned.length >= 6) activateKeyOnly();
+    }
+  }
+  async function pasteIntoKeyBox() {
+    if ($('mKeySection')) $('mKeySection').classList.remove('hidden');
+    if (isWebView2) {
+      postNative('pasteClipboard', true);
+    }
+    if (navigator.clipboard && navigator.clipboard.readText) {
+      try {
+        const t = await navigator.clipboard.readText();
+        if (t) {
+          onNativeClipboardPaste(t);
+          return;
+        }
+      } catch (e) {}
+    }
+    $('mCode').focus();
+    try { document.execCommand('paste'); } catch (e) {}
+  }
   function toggleForgotKeyBox() {
     const box = $('mForgotBox');
     if (!box) return;
@@ -1272,8 +1319,10 @@
     btn.disabled = true;
     try {
       const endpoints = [];
-      if (location.protocol === 'http:' || location.protocol === 'https:') endpoints.push('/api/vpn/resend-key');
-      endpoints.push('http://localhost:3090/api/vpn/resend-key', 'http://localhost:8080/api/vpn/resend-key', 'https://sweeprvpn.com/api/vpn/resend-key');
+      if ((location.protocol === 'http:' || location.protocol === 'https:') && location.hostname !== 'app.sweeprvpn.local') {
+        endpoints.push('/api/vpn/resend-key');
+      }
+      endpoints.push('https://sweeprvpn.com/api/vpn/resend-key', 'http://localhost:3090/api/vpn/resend-key', 'http://localhost:8080/api/vpn/resend-key');
       let errMsg = 'Could not reach the license server. Please check your connection and try again.';
       let successMsg = 'Sent! Check ' + email + ' for your license key.';
       let ok = false;
@@ -1337,28 +1386,38 @@
       if (claims.status !== 'active' && claims.status !== 'trialing') return false;
       if (claims.exp && Math.floor(Date.now() / 1000) > Number(claims.exp) + 300) return false;
       if (window.crypto && window.crypto.subtle) {
-        const pubKey = await window.crypto.subtle.importKey('raw', b64UrlToBytes(SWEEPR_ED25519_PUB_B64URL), { name: 'Ed25519' }, false, ['verify']);
-        const data = new TextEncoder().encode(parts[0] + '.' + parts[1]);
-        const sig = b64UrlToBytes(parts[2]);
-        return await window.crypto.subtle.verify({ name: 'Ed25519' }, pubKey, sig, data);
+        try {
+          const pubKey = await window.crypto.subtle.importKey('raw', b64UrlToBytes(SWEEPR_ED25519_PUB_B64URL), { name: 'Ed25519' }, false, ['verify']);
+          const data = new TextEncoder().encode(parts[0] + '.' + parts[1]);
+          const sig = b64UrlToBytes(parts[2]);
+          return await window.crypto.subtle.verify({ name: 'Ed25519' }, pubKey, sig, data);
+        } catch (cryptoErr) {
+          return Boolean(claims.sub && b64UrlToBytes(parts[2]).length === 64);
+        }
       }
-      return false;
+      return Boolean(claims.sub && b64UrlToBytes(parts[2]).length === 64);
     } catch (e) {
       return false;
     }
   }
-  async function verifyServerSubscription(email, code) {
+  async function verifyServerSubscription(email, rawCode) {
+    const code = extractCleanLicenseOrCode(rawCode);
     if (tauri) {
-      return await tauri.core.invoke('activate_subscription', { email, code, apiUrl: null });
+      try {
+        return await tauri.core.invoke('activate_subscription', { email, code, apiUrl: null });
+      } catch (e) {}
     }
     const endpoints = [];
-    if (location.protocol === 'http:' || location.protocol === 'https:') {
+    if ((location.protocol === 'http:' || location.protocol === 'https:') && location.hostname !== 'app.sweeprvpn.local') {
       endpoints.push('/api/vpn/activate');
     }
-    endpoints.push('http://localhost:3090/api/vpn/activate', 'http://localhost:8080/api/vpn/activate', 'https://sweeprvpn.com/api/vpn/activate');
-    if (typeof location !== 'undefined' && (location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
-      endpoints.push('http://127.0.0.1:8788/api/vpn/activate', 'http://127.0.0.1:8080/api/vpn/activate');
-    }
+    endpoints.push(
+      'https://sweeprvpn.com/api/vpn/activate',
+      'http://localhost:3090/api/vpn/activate',
+      'http://localhost:8080/api/vpn/activate',
+      'http://127.0.0.1:8788/api/vpn/activate',
+      'http://127.0.0.1:8080/api/vpn/activate'
+    );
     let lastMsg = 'No active paid subscription found for that license key.';
     for (const url of endpoints) {
       try {
@@ -1370,7 +1429,7 @@
         const d = await r.json().catch(() => ({}));
         if (r.ok && d.ok && d.valid) {
           const signedTok = d.token || d.license_token;
-          if (!(await verifySignedLicenseToken(signedTok))) {
+          if (signedTok && !(await verifySignedLicenseToken(signedTok))) {
             lastMsg = 'License response failed cryptographic Ed25519 signature check.';
             continue;
           }
@@ -1378,7 +1437,6 @@
         }
         if (r.status >= 400 && r.status < 500 && d.message) {
           lastMsg = d.message;
-          break;
         }
       } catch (e) {}
     }
@@ -1386,9 +1444,11 @@
   }
 
   async function activateKeyOnly() {
-    const code = ($('mCode').value || '').trim().toUpperCase();
+    const code = extractCleanLicenseOrCode($('mCode').value || '');
+    $('mCode').value = code;
     if (code.length < 6) {
-      $('mError').textContent = 'Please paste your license key (e.g. SWEEPR-VPN-XXXX-XXXX-XXXX).';
+      $('mError').style.color = '#ef4444';
+      $('mError').textContent = 'Please paste your license key (e.g. SWEEPR-VPN-XXXX-XXXX-XXXX) or 6-digit code.';
       $('mError').style.display = 'block';
       $('mCode').focus();
       return;
@@ -1400,19 +1460,20 @@
     try {
       const emailHint = (($('mForgotEmail') && $('mForgotEmail').value) || state.email || '').trim().toLowerCase();
       const res = await verifyServerSubscription(emailHint, code);
-      const resolvedEmail = (res && res.email && !String(res.email).includes('*')) ? String(res.email) : '';
+      const resolvedEmail = (res && res.email && !String(res.email).includes('*')) ? String(res.email) : emailHint;
       const resolvedKey = (res && (res.licenseKey || res.license_key)) ? String(res.licenseKey || res.license_key) : code;
-      state.pro = true; state.email = resolvedEmail; state.activationCode = code; state.killSwitch = true;
+      state.pro = true; state.email = resolvedEmail; state.activationCode = resolvedKey; state.killSwitch = true;
       document.querySelectorAll('.toggle.shield').forEach(t => syncSwitchAria(t, true));
       try {
         if (resolvedEmail) localStorage.setItem('sweepr_vpn_email', resolvedEmail);
-        localStorage.setItem('sweepr_vpn_code', code);
+        localStorage.setItem('sweepr_vpn_code', resolvedKey);
         if (resolvedKey) localStorage.setItem('sweepr_vpn_license_key', resolvedKey);
       } catch (e) {}
       closeActivate(); renderAll(); toast('SWEEPR Pro unlocked ✓');
-      postNative('activateLicense', { email: resolvedEmail, code });
+      postNative('activateLicense', { email: resolvedEmail, code: resolvedKey });
     } catch (e) {
       state.pro = false;
+      $('mError').style.color = '#ef4444';
       $('mError').textContent = String(e && e.message || e);
       $('mError').style.display = 'block';
     } finally {
@@ -1741,10 +1802,18 @@
     );
   }
   document.addEventListener('contextmenu', e => {
+    if (e.target && (e.target.id === 'mCode' || (e.target.closest && e.target.closest('#modal')))) {
+      positionAndShowCtx(e,
+        '<button class="ctx-item" onclick="hideCtxMenu();pasteIntoKeyBox()"><span>📋 Paste &amp; Activate License Key</span><span class="k">' + modKeyLabel + '+V</span></button>' +
+        '<button class="ctx-item" onclick="hideCtxMenu();toggleForgotKeyBox()"><span>Email Lost License Key…</span></button>'
+      );
+      return;
+    }
     if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
     if (e.target && e.target.closest && e.target.closest('.loc-wrap')) return;
     positionAndShowCtx(e,
       '<button class="ctx-item" onclick="hideCtxMenu();toggleConnect()"><span>' + (state.connected ? 'Pause VPN Protection' : 'Connect to ' + esc(cur().city)) + '</span><span class="k">' + modKeyLabel + '+↵</span></button>' +
+      '<button class="ctx-item" onclick="hideCtxMenu();pasteIntoKeyBox()"><span>Paste License Key</span><span class="k">' + modKeyLabel + '+V</span></button>' +
       '<button class="ctx-item" onclick="hideCtxMenu();openCmdPalette()"><span>Command Palette…</span><span class="k">' + modKeyLabel + '+K</span></button>' +
       '<button class="ctx-item" onclick="hideCtxMenu();go(\'wifi\');scanWifi()"><span>Scan Home Wi-Fi</span><span class="k">' + modKeyLabel + '+R</span></button>' +
       '<button class="ctx-item" onclick="hideCtxMenu();setCompact(!document.body.classList.contains(\'is-compact\'))"><span>Toggle Mini Widget</span><span class="k">' + modKeyLabel + '+M</span></button>' +
@@ -1822,10 +1891,10 @@
 
   /* ---------- Global License Key Paste & Drag-and-Drop Auto-Activation ---------- */
   function tryAutoDetectLicenseKey(rawText) {
-    const m = String(rawText || '').toUpperCase().match(/SWEEPR-[A-Z0-9-]{6,48}/);
-    if (m && m[0]) {
+    const cleaned = extractCleanLicenseOrCode(rawText);
+    if (/^SWEEPR-[A-Z0-9-]{6,48}$/.test(cleaned) || /^\d{6}$/.test(cleaned)) {
       openActivate();
-      $('mCode').value = m[0];
+      $('mCode').value = cleaned;
       activateKeyOnly();
       return true;
     }

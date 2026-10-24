@@ -341,10 +341,17 @@ namespace SweeprVpnApp
                 var env = await CoreWebView2Environment.CreateAsync(null, userDataFolder);
                 await BrowserView.EnsureCoreWebView2Async(env);
 
-                BrowserView.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
+                BrowserView.CoreWebView2.Settings.AreDefaultContextMenusEnabled = true;
                 BrowserView.CoreWebView2.Settings.AreDevToolsEnabled = false;
                 BrowserView.CoreWebView2.Settings.IsStatusBarEnabled = false;
                 BrowserView.CoreWebView2.WebMessageReceived += OnWebMessageReceived;
+                BrowserView.CoreWebView2.PermissionRequested += (s, pe) =>
+                {
+                    if (pe.PermissionKind == CoreWebView2PermissionKind.ClipboardRead)
+                    {
+                        pe.State = CoreWebView2PermissionState.Allow;
+                    }
+                };
 
                 string html = Program.LoadEmbeddedTextResource("app-ui.html");
                 BrowserView.CoreWebView2.NavigationCompleted += async (s, e) =>
@@ -399,7 +406,22 @@ namespace SweeprVpnApp
                     }
                 };
 
-                BrowserView.NavigateToString(html);
+                try
+                {
+                    string uiFolder = Path.Combine(userDataFolder, "ui_host");
+                    Directory.CreateDirectory(uiFolder);
+                    File.WriteAllText(Path.Combine(uiFolder, "index.html"), html, Encoding.UTF8);
+                    BrowserView.CoreWebView2.SetVirtualHostNameToFolderMapping(
+                        "app.sweeprvpn.local",
+                        uiFolder,
+                        CoreWebView2HostResourceAccessKind.Allow
+                    );
+                    BrowserView.CoreWebView2.Navigate("https://app.sweeprvpn.local/index.html");
+                }
+                catch
+                {
+                    BrowserView.NavigateToString(html);
+                }
             }
             catch (Exception)
             {
@@ -484,6 +506,19 @@ namespace SweeprVpnApp
                 else if (msg.Contains("\"activateLicense\""))
                 {
                     IsPro = true;
+                }
+                else if (msg.Contains("\"pasteClipboard\""))
+                {
+                    try
+                    {
+                        string clip = Clipboard.ContainsText() ? Clipboard.GetText() : "";
+                        if (!string.IsNullOrEmpty(clip))
+                        {
+                            string safeClip = clip.Replace("\\", "\\\\").Replace("'", "\\'").Replace("\r", " ").Replace("\n", " ");
+                            ExecuteJsSafe("onNativeClipboardPaste('" + safeClip + "')");
+                        }
+                    }
+                    catch { }
                 }
             }
             catch { }
