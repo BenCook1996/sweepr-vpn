@@ -1872,6 +1872,13 @@ function renderPlatformDownloadPicker(osType = 'other') {
         </div>
         <span class="text-xs font-bold text-gray-600 underline shrink-0">Download .exe</span>
       </a>
+      <a href="/download?platform=mac" class="flex items-center justify-between gap-3 p-3.5 rounded-xl border border-gray-200 bg-gray-50/80 hover:bg-white transition-all no-underline text-gray-700">
+        <div>
+          <div class="font-bold text-xs text-gray-800">macOS 11+ Universal Desktop Installer (.dmg)</div>
+          <div class="text-[11px] text-gray-500">Apple Silicon &amp; Intel &bull; SWEEPRVPN.dmg</div>
+        </div>
+        <span class="text-xs font-bold text-gray-600 underline shrink-0">Download .dmg</span>
+      </a>
     </div>
     <div class="flex flex-col sm:flex-row gap-3 justify-center pt-4 border-t border-gray-100">
       <a href="/app" class="btn btn-ghost w-full justify-center border border-gray-200">Open Interactive Web App</a>
@@ -2316,6 +2323,26 @@ self.addEventListener('fetch', e => {
     }).catch(() => {});
 
     const forceWinExe = requestedPlatform === 'win' || requestedPlatform === 'windows';
+    const forceMacDmg = requestedPlatform === 'mac' || requestedPlatform === 'macos' || requestedPlatform === 'dmg';
+    const dmgPath = path.join(__dirname, 'SWEEPRVPN.dmg');
+
+    if ((forceMacDmg || (osType === 'mac' && !hasSetupParams && requestedPlatform !== 'picker')) && fs.existsSync(dmgPath)) {
+      const stat = fs.statSync(dmgPath);
+      res.writeHead(200, {
+        'Content-Type': 'application/x-apple-diskimage',
+        'Content-Disposition': 'attachment; filename="SWEEPRVPN.dmg"',
+        'Content-Length': stat.size,
+        'Cache-Control': 'no-store, no-cache, must-revalidate',
+        'Pragma': 'no-cache',
+        'X-Robots-Tag': 'noindex, nofollow',
+        ...COMMON_SECURITY_HEADERS
+      });
+      const dmgStream = fs.createReadStream(dmgPath);
+      req.on('close', () => dmgStream.destroy());
+      dmgStream.on('error', () => { if (!res.headersSent) res.writeHead(500); res.end(); });
+      return dmgStream.pipe(res);
+    }
+
     if (!forceWinExe && (osType !== 'windows' || hasSetupParams)) {
       return sendHtml(res, 200, renderPlatformDownloadPicker(hasSetupParams ? 'ios' : osType), {
         'X-Robots-Tag': 'noindex, follow'
@@ -5051,17 +5078,14 @@ self.addEventListener('fetch', e => {
       if (!/^\d{1,3}(?:\.\d{1,3}){3}\/\d{1,2}$/.test(assignedAddress)) {
         throw new Error('invalid_assigned_address');
       }
-      const assignedDns = String(r.dns || '10.64.0.1').trim();
-      if (!/^\d{1,3}(?:\.\d{1,3}){3}$/.test(assignedDns)) {
-        throw new Error('invalid_assigned_dns');
-      }
+      const assignedDns = '1.1.1.1, 1.0.0.1';
       return sendJson(res, 200, {
         ok: true,
         endpoint: `${node.ip}:${node.port || 51820}`,
         server_public_key: serverPubKey,
         address: assignedAddress,
         dns: assignedDns,
-        allowed_ips: '0.0.0.0/0, ::/0',
+        allowed_ips: '0.0.0.0/0',
         server: { code: node.code, country: node.country, city: node.city, flag: node.flag }
       }, {}, req);
     } catch (e) {
@@ -5102,18 +5126,19 @@ self.addEventListener('fetch', e => {
       }
       const serverPubKey = pinnedPubKey || agentPubKey;
       const assignedAddress = String(r.address || '10.64.0.2/32').trim();
-      const assignedDns = String(r.dns || '10.64.0.1').trim();
+      const assignedDns = '1.1.1.1, 1.0.0.1';
       const endpoint = `${node.ip}:${node.port || 51820}`;
       const lanBypass = Boolean(body?.lan_bypass);
       const allowedIps = lanBypass
-        ? '1.0.0.0/8, 2.0.0.0/7, 4.0.0.0/6, 8.0.0.0/7, 10.64.0.0/16, 11.0.0.0/8, 12.0.0.0/6, 16.0.0.0/4, 32.0.0.0/3, 64.0.0.0/2, 128.0.0.0/3, 160.0.0.0/5, 168.0.0.0/6, 172.0.0.0/12, 172.32.0.0/11, 172.64.0.0/10, 172.128.0.0/9, 173.0.0.0/8, 174.0.0.0/7, 176.0.0.0/4, 192.0.0.0/9, 192.128.0.0/11, 192.160.0.0/13, 192.169.0.0/16, 192.170.0.0/15, 192.172.0.0/14, 192.176.0.0/12, 192.192.0.0/10, 193.0.0.0/8, 194.0.0.0/7, 196.0.0.0/6, 200.0.0.0/5, 208.0.0.0/4, ::/0'
-        : '0.0.0.0/0, ::/0';
+        ? '1.0.0.0/8, 2.0.0.0/7, 4.0.0.0/6, 8.0.0.0/7, 10.64.0.0/16, 11.0.0.0/8, 12.0.0.0/6, 16.0.0.0/4, 32.0.0.0/3, 64.0.0.0/2, 128.0.0.0/3, 160.0.0.0/5, 168.0.0.0/6, 172.0.0.0/12, 172.32.0.0/11, 172.64.0.0/10, 172.128.0.0/9, 173.0.0.0/8, 174.0.0.0/7, 176.0.0.0/4, 192.0.0.0/9, 192.128.0.0/11, 192.160.0.0/13, 192.169.0.0/16, 192.170.0.0/15, 192.172.0.0/14, 192.176.0.0/12, 192.192.0.0/10, 193.0.0.0/8, 194.0.0.0/7, 196.0.0.0/6, 200.0.0.0/5, 208.0.0.0/4'
+        : '0.0.0.0/0';
 
       const configText = [
         '[Interface]',
         `PrivateKey = ${clientPrivateKey}`,
         `Address = ${assignedAddress}`,
         `DNS = ${assignedDns}`,
+        'MTU = 1280',
         '',
         '[Peer]',
         `PublicKey = ${serverPubKey}`,
@@ -5128,6 +5153,7 @@ self.addEventListener('fetch', e => {
         `PrivateKey = ${clientPrivateKey}`,
         `Address = ${assignedAddress}`,
         `DNS = ${assignedDns}`,
+        'MTU = 1280',
         '',
         '[Peer]',
         `PublicKey = ${serverPubKey}`,

@@ -141,12 +141,19 @@
 
         <div class="glass-card p-6 bg-white shadow-sm rounded-2xl border border-gray-100 flex flex-col justify-center items-center text-center">
           <h3 class="font-bold text-lg mb-2">Need the app?</h3>
-          <p class="text-sm text-gray-500 mb-6">Download the latest version of SWEEPR VPN for Windows, Mac, iOS, or Android.</p>
-          <a href="/download" class="btn btn-go justify-center gap-2 w-full max-w-xs no-underline">
-            <span>Download SWEEPR VPN</span>
-          </a>
-          <p class="text-xs text-gray-400 mt-4 max-w-xs leading-relaxed">
-            If Windows SmartScreen shows a prompt on first launch, click <strong>More info &rarr; Run anyway</strong> to start the installer.
+          <p class="text-sm text-gray-500 mb-5">Download the latest version of SWEEPR VPN for Windows, Mac, iOS, or Android.</p>
+          <div class="flex flex-col sm:flex-row gap-2.5 w-full max-w-sm">
+            <a href="/download?platform=win" class="btn btn-go justify-center gap-2 flex-1 text-xs sm:text-sm py-3 no-underline">
+              <span>Windows (.exe)</span>
+            </a>
+            <a href="/download?platform=mac" class="btn btn-go justify-center gap-2 flex-1 text-xs sm:text-sm py-3 no-underline" style="background:#0f172a;">
+              <span>macOS (.dmg)</span>
+            </a>
+          </div>
+          <a href="/download?platform=ios" class="text-xs font-bold text-emerald-700 hover:underline mt-3">iPhone / iPad &amp; Android 1-Tap Setup &rarr;</a>
+          <p class="text-xs text-gray-400 mt-3 max-w-xs leading-relaxed">
+            <strong>Windows:</strong> Click <strong>More info &rarr; Run anyway</strong> if SmartScreen appears.<br>
+            <strong>macOS:</strong> Open <code>SWEEPRVPN.dmg</code> and drag <strong>SWEEPR VPN</strong> to Applications.
           </p>
         </div>
       </div>
