@@ -30,6 +30,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { DatabaseSync } from 'node:sqlite';
+import { execFileSync } from 'node:child_process';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const VPN_ROOT = path.resolve(__dirname, '..');
@@ -606,19 +607,25 @@ async function runVpnDrip(targetCount = 300) {
     fallbackCursor++;
   }
 
-  const selectedQueue = unpostedQueue.slice(0, targetCount);
   const nowIso = new Date().toISOString();
   const runTag = nowIso.slice(0, 13).replace('T', '-');
   let completed = 0;
-  const BATCH_SIZE = 10;
+  let attempts = 0;
+  const BATCH_SIZE = 8;
+  const maxAttempts = Math.min(unpostedQueue.length, targetCount * 2);
 
   console.log(`=== SWEEPR VPN 6-Hourly Backlink & PAD Syndication Drip (Target: ${targetCount} new unposted CRM targets | Policy: NO EMAILS) ===`);
 
-  for (let i = 0; i < selectedQueue.length; i += BATCH_SIZE) {
-    const batch = selectedQueue.slice(i, i + BATCH_SIZE);
+  while (completed < targetCount && attempts < maxAttempts && attempts < unpostedQueue.length) {
+    const batchRemaining = targetCount - completed;
+    const currentBatchSize = Math.min(BATCH_SIZE, batchRemaining);
+    const batch = unpostedQueue.slice(attempts, attempts + currentBatchSize);
+    const currentAttemptStart = attempts;
+    attempts += batch.length;
+
     const results = await Promise.all(
       batch.map(async (task, offset) => {
-        const idx = i + offset;
+        const idx = currentAttemptStart + offset;
         const { platform, item, lang, comboKey } = task;
         try {
           const res =
@@ -660,7 +667,7 @@ async function runVpnDrip(targetCount = 300) {
           how: res.how,
           category: res.category,
           status: 'listed',
-          message_id: `vpn-drip-${runTag}-${i + j}-${Date.now()}`,
+          message_id: `vpn-drip-${runTag}-${currentAttemptStart + j}-${Date.now()}`,
           reached_out_at: Math.floor(Date.now() / 1000)
         };
         vpnSeed.push(entry);
@@ -670,9 +677,10 @@ async function runVpnDrip(targetCount = 300) {
         await syncEntryToCrm(entry, res.url);
       })
     );
-    console.log(`[Batch ${Math.floor(i / BATCH_SIZE) + 1}/${Math.ceil(selectedQueue.length / BATCH_SIZE)}] Published & synced ${completed}/${targetCount} live backlinks to CRM`);
-    if (i + BATCH_SIZE < selectedQueue.length) {
-      await new Promise((resolve) => setTimeout(resolve, 350));
+    const pct = ((completed / targetCount) * 100).toFixed(1);
+    console.log(`[Batch ${Math.ceil(attempts / BATCH_SIZE)}] Progress: ${completed}/${targetCount} published (${pct}%)`);
+    if (completed < targetCount) {
+      await new Promise((resolve) => setTimeout(resolve, 250));
     }
   }
 
@@ -784,6 +792,25 @@ async function runVpnDrip(targetCount = 300) {
   console.log(`✓ Live Backlink Verification: Triggered /api/crm/seo/backlinks/verify?project=vpn`);
   console.log(`✓ STRICT RULE AUDIT: 0 emails sent. No SMTP / no email outreach.`);
   console.log('==========================================================================\n');
+
+  if (!process.argv.includes('--no-push') && completed > 0) {
+    try {
+      execFileSync(
+        'git',
+        ['add', 'website/outreach-seed.json', 'website/indexing-queue.json', 'website/pad.xml', 'scripts/vpn-seo-drip.mjs'],
+        { cwd: VPN_ROOT, stdio: 'inherit' }
+      );
+      execFileSync(
+        'git',
+        ['commit', '-m', `chore(seo): sync ${completed} syndication backlinks & indexing queue [6-hourly workflow]`],
+        { cwd: VPN_ROOT, stdio: 'inherit' }
+      );
+      execFileSync('git', ['push', 'origin', 'main'], { cwd: VPN_ROOT, stdio: 'inherit' });
+      console.log('[6-Hourly Workflow] Committed and pushed to GitHub (origin/main) -> Railway auto-deploy triggered.');
+    } catch (gitErr) {
+      console.warn('[6-Hourly Workflow] Git auto-push skipped or failed:', gitErr?.message || gitErr);
+    }
+  }
 }
 
 const countArg = Number(process.argv[2]) || 300;
