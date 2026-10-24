@@ -1913,7 +1913,14 @@ self.addEventListener('fetch', e => {
   if (pathname === '/' && req.method === 'GET') {
     const cookies = req.headers.cookie || '';
     const hasVisitedOrder = cookies.includes('sweepr_visited_order=1');
-    const bypassRedirect = urlObj.searchParams.get('noredirect') === '1' || urlObj.searchParams.get('home') === '1';
+    const bypassRedirect =
+      urlObj.searchParams.get('noredirect') === '1' ||
+      urlObj.searchParams.get('home') === '1' ||
+      urlObj.searchParams.has('gclid') ||
+      urlObj.searchParams.has('msclkid') ||
+      urlObj.searchParams.has('wbraid') ||
+      urlObj.searchParams.has('gbraid') ||
+      urlObj.searchParams.has('utm_source');
     const referer = req.headers.referer || '';
     const fromOrderPage = referer.includes('/order');
 
@@ -1937,6 +1944,11 @@ self.addEventListener('fetch', e => {
     }
     const localizedPricing = resolvePricingForRequest(req, urlObj);
     const clientIp = getClientIp(req);
+    const isSweeprNode = Array.isArray(VPN_SERVERS) && VPN_SERVERS.some((s) => s.ip === clientIp);
+    const cfIsp = String(req.headers['cf-iporg'] || req.headers['x-asn-org'] || '').trim();
+    const ispLabel = isSweeprNode
+      ? 'SWEEPR Zero-Log WireGuard Network (Protected)'
+      : cfIsp || `Residential / Consumer ISP (${localizedPricing.country || 'Unencrypted Transit'})`;
     return sendJson(
       res,
       200,
@@ -1945,7 +1957,8 @@ self.addEventListener('fetch', e => {
         ip: clientIp === '::1' || clientIp === '127.0.0.1' ? 'Public IPv4 (Unencrypted)' : clientIp,
         country: localizedPricing.country,
         countryFlag: localizedPricing.countryFlag,
-        encrypted: false,
+        isp: ispLabel,
+        encrypted: isSweeprNode,
         timestamp: Date.now()
       },
       { 'Cache-Control': 'no-store' },

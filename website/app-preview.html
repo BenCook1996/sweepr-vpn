@@ -10,68 +10,7 @@
 <link rel="manifest" href="/manifest.webmanifest" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=5" />
-<title>Interactive Live App Preview &amp; Web Client | SWEEPR VPN</title>
-<meta name="description" content="Try the interactive live SWEEPR VPN web preview. Test 1-click 10Gbps WireGuard connections, simulate real-time Wi-Fi radar device scans, and explore Smart-TV shield settings." />
-<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-<link rel="canonical" href="https://sweeprvpn.com/app" />
-<link rel="preconnect" href="https://cdn.tailwindcss.com" />
-
-<!-- Open Graph / Social Meta -->
-<meta property="og:type" content="website" />
-<meta property="og:site_name" content="SWEEPR VPN" />
-<meta property="og:locale" content="en_GB" />
-<meta property="og:url" content="https://sweeprvpn.com/app" />
-<meta property="og:title" content="SWEEPR VPN: Interactive Live App Preview &amp; Web Client" />
-<meta property="og:description" content="Try the interactive live SWEEPR VPN web preview. Test 1-click 10Gbps WireGuard connections and real-time Wi-Fi device scanning." />
-<meta property="og:image" content="https://sweeprvpn.com/og-image.png" />
-<meta property="og:image:alt" content="SWEEPR VPN Interactive Live Web App Interface" />
-
-<!-- Twitter Meta -->
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:url" content="https://sweeprvpn.com/app" />
-<meta name="twitter:title" content="SWEEPR VPN: Interactive Live App Preview &amp; Web Client" />
-<meta name="twitter:description" content="Try the interactive live SWEEPR VPN web preview with real-time Wi-Fi radar and WireGuard tunnels." />
-<meta name="twitter:image" content="https://sweeprvpn.com/og-image.png" />
-
-<!-- Structured Data (JSON-LD) -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "SoftwareApplication",
-      "name": "SWEEPR VPN Web App Preview",
-      "url": "https://sweeprvpn.com/app",
-      "operatingSystem": "Web, Windows 10, Windows 11, macOS, Linux",
-      "applicationCategory": "SecurityApplication",
-      "description": "Interactive live web preview of SWEEPR VPN and Home Wi-Fi Scanner.",
-      "offers": {
-        "@type": "Offer",
-        "price": "1.99",
-        "priceCurrency": "GBP",
-        "priceValidUntil": "2027-12-31"
-      }
-    },
-    {
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://sweeprvpn.com/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Live App Preview",
-          "item": "https://sweeprvpn.com/app"
-        }
-      ]
-    }
-  ]
-}
-</script>
+<title>SWEEPR VPN</title>
 <style>
   :root {
     --e400:#34d399; --e500:#10b981; --e600:#059669; --e700:#047857; --mint:#a7f3d0; --mint50:#ecfdf5;
@@ -315,11 +254,11 @@
   .ctx-item span.k { font-size:11px; color:var(--muted); font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
   .ctx-sep { height:1px; background:var(--line); margin:3px 4px; }
 
-  /* Desktop Information Density & Half-Screen Snap Layout Support */
-  @media (min-width: 821px) {
-    #recBlock > h3.sec, #recBlock > .rec-grid { display:none; }
-    #recBlock > .alert { margin-top:0; margin-bottom:12px; }
-  }
+  /* Desktop Information Density & Minimalist De-Cluttered View */
+  #recBlock > h3.sec, #recBlock > .rec-grid, #countryDrawer > .search, #countryDrawer > .filter-tabs, #countryDrawer > h3.sec, .fav-btn { display:none !important; }
+  #recBlock > .alert { margin-top:0; margin-bottom:14px; }
+  .ping-dot { display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--e400); margin-right:6px; vertical-align:middle; }
+  .panel-meta-line { font-size:13.5px; color:#a7f3d0; font-weight:600; margin-top:12px; position:relative; z-index:2; }
   @media (min-width: 821px) and (max-width: 1000px) {
     .app { grid-template-columns:60px 1fr 310px; }
     .panel { padding:18px; margin:10px 10px 10px 0; }
@@ -597,26 +536,27 @@
     </section>
   </main>
 
-  <!-- Connect Hero Panel -->
-  <aside class="panel" id="panel">
+  <!-- Connect Hero Panel (Minimalist De-Cluttered Layout) -->
+  <aside class="panel" id="panel" style="justify-content:center;align-items:center;text-align:center">
     <div class="rings"></div>
     <svg class="plogo"><use href="#logo"/></svg>
     <button class="mini-btn desktop-only" onclick="setCompact(true)" title="Mini window" aria-label="Mini window"><svg width="15" height="15"><use href="#i-min"/></svg></button>
     <div class="h-big" id="headline"><span class="g">Connect</span><br>to stay private</div>
-    <div class="info">
+    <div class="panel-meta-line" id="panelMetaLine">London, UK &bull; 8 ms &bull; 4 Wi-Fi devices safe</div>
+    <div class="info hidden">
       <div><div class="v" id="infoWhere">London, UK</div><div class="k" data-i18n="lblWhere">Virtual location</div></div>
       <div class="r"><div class="v warnc" id="infoHome">Exposed</div><div class="k" data-i18n="lblIp">Your IP &amp; location</div></div>
       <div><div class="v okc" id="infoSpeed">Instant (&lt;15 ms)</div><div class="k" data-i18n="lblSpeed">Route speed</div></div>
       <div class="r"><div class="v" id="infoDevices">4 devices</div><div class="k" data-i18n="lblWifi">On your Wi-Fi</div></div>
     </div>
-    <div class="timer hidden" id="timerBox">
+    <div class="timer hidden" id="timerBox" style="width:100%">
       <div class="k" data-i18n="lblSession">Protected session</div>
       <div class="n" id="timer">00:00:00</div>
       <div class="spark-meta" id="liveThroughput">↓ 48.4 Mbps · ↑ 11.2 Mbps · 0.4 MB encrypted</div>
       <div class="spark-bars" id="sparkBars"></div>
     </div>
-    <div class="connect-box">
-      <button class="connect-row" id="panelLocBtn" onclick="changeCountry()" aria-label="Change server country">
+    <div style="width:100%;max-width:260px;margin-top:24px;position:relative;z-index:2">
+      <button class="connect-row hidden" id="panelLocBtn" onclick="changeCountry()" aria-label="Change server country">
         <span class="flag lg" id="panelFlag" data-flag="GB"></span>
         <div class="grow"><div class="t" id="panelName">United Kingdom</div><div class="s" id="panelDesc">London · Fastest for you</div></div>
         <span class="link-affordance" data-i18n="changeBtn">Change ›</span>
@@ -645,36 +585,40 @@
   <div class="c-list" id="cList"></div>
 </div>
 
-<!-- ======================= SPLIT ACTIVATE / CHECKOUT MODAL (Quick Win 3 + Item 8 Self-Service Key Recovery) ======================= -->
+<!-- ======================= MINIMALIST UNLOCK SWEEPR PRO MODAL ======================= -->
 <div class="backdrop" id="modal" onclick="closeActivate()">
   <div class="sheet" onclick="event.stopPropagation()">
-    <div style="display:flex;align-items:center;gap:12px">
-      <svg style="width:42px;height:42px;flex-shrink:0"><use href="#logo"/></svg>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:2px">
+      <svg style="width:40px;height:40px;flex-shrink:0"><use href="#logo"/></svg>
       <div class="grow"><div style="font-size:18px;font-weight:900">Unlock SWEEPR Pro</div><div class="s">Up to 10 devices · 14-day money-back guarantee</div></div>
       <button onclick="closeActivate()" aria-label="Close" style="font-size:18px;color:var(--muted);padding:4px 8px">✕</button>
     </div>
 
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:2px">
-      <div class="s" style="font-weight:800;letter-spacing:.3px;color:var(--ink3);white-space:nowrap;font-size:11px">ALREADY PAID? ENTER YOUR LICENSE KEY</div>
-      <button type="button" onclick="toggleForgotKeyBox()" style="font-size:11.5px;font-weight:800;color:var(--accent);white-space:nowrap;flex-shrink:0">Forgot key? Email it ›</button>
-    </div>
-    <div class="key-row">
-      <input class="input" id="mCode" type="text" maxlength="64" placeholder="SWEEPR-VPN-XXXX-XXXX-XXXX" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')activateKeyOnly()" aria-label="License key" />
-      <button class="btn-activate-key" id="mActivateKeyBtn" onclick="activateKeyOnly()">Activate Key</button>
-    </div>
-    <div id="mForgotBox" class="hidden" style="background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;gap:8px;align-items:center">
-      <input class="input" id="mForgotEmail" type="email" placeholder="Enter your purchase email…" style="padding:8px 11px;font-size:12.5px" onkeydown="if(event.key==='Enter')resendLostLicenseKey()" />
-      <button class="btn-soft" id="mForgotBtn" onclick="resendLostLicenseKey()" style="white-space:nowrap;padding:7px 12px;min-height:34px">Send Key</button>
-    </div>
     <div class="s" id="mError" style="color:#ef4444;font-weight:700;display:none">Please enter a valid license key.</div>
-
-    <div class="modal-divider"><span>OR GET A NEW PRO PLAN</span></div>
 
     <button class="plan on" data-plan="annual" onclick="plan(this)"><span class="tag">BEST VALUE · SAVE 50%</span><div><div class="t">Yearly Plan</div><div class="s">£74.99 billed once a year</div></div><div style="text-align:right"><div style="font-weight:900;font-size:16px">£6.25</div><div class="s">/month</div></div></button>
     <button class="plan" data-plan="six_month" onclick="plan(this)"><div><div class="t">6-Month Plan</div><div class="s">£48.99 · Save 35%</div></div><div style="text-align:right"><div style="font-weight:900;font-size:15px">£8.17</div><div class="s">/month</div></div></button>
-    <button class="plan" data-plan="monthly" onclick="plan(this)"><div><div class="t">Monthly Plan</div><div class="s">£1.99 first month, then £12.49</div></div><div style="text-align:right"><div style="font-weight:900;font-size:15px">£1.99</div><div class="s">1st month</div></div></button>
+    <button class="plan" data-plan="monthly" onclick="plan(this)"><div><div class="t">1st-Month Trial</div><div class="s">£1.99 first month, then £12.49</div></div><div style="text-align:right"><div style="font-weight:900;font-size:15px;color:var(--accent)">£1.99</div><div class="s">1st month</div></div></button>
 
     <button class="btn-go" id="mCheckoutBtn" onclick="checkoutSelectedPlan()">Continue to Checkout — £74.99/yr</button>
+
+    <div style="text-align:center;margin-top:2px">
+      <button type="button" onclick="document.getElementById('mKeySection').classList.toggle('hidden')" style="font-size:12px;font-weight:700;color:var(--muted)">Already have a license key? Enter it ›</button>
+    </div>
+
+    <div id="mKeySection" class="hidden" style="display:flex;flex-direction:column;gap:8px;padding-top:6px;border-top:1px solid var(--line)">
+      <div class="key-row">
+        <input class="input" id="mCode" type="text" maxlength="64" placeholder="SWEEPR-VPN-XXXX-XXXX-XXXX" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')activateKeyOnly()" aria-label="License key" />
+        <button class="btn-activate-key" id="mActivateKeyBtn" onclick="activateKeyOnly()">Activate Key</button>
+      </div>
+      <div style="text-align:right">
+        <button type="button" onclick="toggleForgotKeyBox()" style="font-size:11.5px;font-weight:800;color:var(--accent)">Forgot key? Email it ›</button>
+      </div>
+      <div id="mForgotBox" class="hidden" style="background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;gap:8px;align-items:center">
+        <input class="input" id="mForgotEmail" type="email" placeholder="Enter your purchase email…" style="padding:8px 11px;font-size:12.5px" onkeydown="if(event.key==='Enter')resendLostLicenseKey()" />
+        <button class="btn-soft" id="mForgotBtn" onclick="resendLostLicenseKey()" style="white-space:nowrap;padding:7px 12px;min-height:34px">Send Key</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -835,15 +779,12 @@
 
   function locRow(s, compact) {
     const on = s.code === state.code;
-    const isFav = savedFavs.includes(s.code);
     const right = on && state.connected ? '<span class="pill ok">Connected ✓</span>'
-      : '<span class="ping-badge">' + s.ping + ' ms</span>' + (s.rating === 'Great' ? '<span class="pill ok">Fast</span>' : '<span class="pill warn">HD</span>');
-    const favBtn = compact ? '' : '<button class="fav-btn' + (isFav ? ' on' : '') + '" onclick="toggleFav(\'' + esc(s.code) + '\', event)" aria-label="Save favorite country" title="Save to favorites">' + (isFav ? '★' : '☆') + '</button>';
+      : '<span class="ping-badge"><span class="ping-dot"></span>' + s.ping + ' ms</span>';
     return '<div class="loc-wrap' + (on ? ' on' : '') + '" data-code="' + esc(s.code) + '" oncontextmenu="showLocCtx(event, \'' + esc(s.code) + '\')">' +
       '<button class="loc" onclick="pick(\'' + esc(s.code) + '\')">' +
       '<span class="flag" data-flag="' + esc(s.flag) + '"></span>' +
-      '<div class="grow"><div class="t">' + esc(s.country) + '</div><div class="s">' + esc(s.city) + ' · ' + esc(s.desc) + '</div></div>' + right + '</button>' +
-      favBtn + '</div>';
+      '<div class="grow"><div class="t">' + esc(s.country) + '</div></div>' + right + '</button></div>';
   }
 
   function renderList() {
@@ -1636,7 +1577,10 @@
     const s = cur(), d = I18N[state.lang] || I18N.en, on = state.connected;
     document.body.classList.toggle('is-pro', !!state.pro);
     $('panel').classList.toggle('on', on);
-    $('headline').innerHTML = on ? '<span class="g">Protected</span><br>you\'re private' : '<span class="g">Connect</span><br>to stay private';
+    $('headline').innerHTML = on ? '<span class="g">Connected</span><br>to stay private' : '<span class="g">Connect</span><br>to stay private';
+    if ($('panelMetaLine')) {
+      $('panelMetaLine').textContent = s.city + ', ' + (s.short || s.country) + ' \u2022 ' + s.ping + ' ms \u2022 ' + (devices.length || 4) + ' Wi-Fi devices safe';
+    }
     $('infoWhere').textContent = on ? s.city + ', ' + (s.short || s.country) : 'London, UK';
     $('infoHome').textContent = on ? 'Hidden' : 'Exposed';
     $('infoHome').className = 'v ' + (on ? 'okc' : 'warnc');

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="color-scheme" content="light">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SWEEPR VPN — De-Cluttered Hero Prototype (Mockup A)</title>
+  <link rel="icon" type="image/svg+xml" href="/logo-emerald.svg?v=5">
+  <script src="https://cdn.tailwindcss.com/3.4.5"></script>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body class="text-gray-800 flex flex-col min-h-screen overflow-x-hidden">
+
+  <!-- Tiny Floating Prototype Switcher (Bottom-Right Corner Only — Zero Top Clutter) -->
+  <div class="fixed bottom-4 right-4 z-50 flex items-center gap-2 bg-white/95 backdrop-blur-md border border-emerald-200 shadow-lg rounded-full px-3.5 py-1.5 text-xs font-bold text-gray-700">
+    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+    <span>De-Cluttered Hero (Mockup A)</span>
+    <span class="text-gray-300">|</span>
+    <a href="/prototype-mockup-b.html" class="text-emerald-700 hover:underline">View De-Cluttered App (Mockup B) &rarr;</a>
+  </div>
+
+  <!-- Navigation (Simplified: Removed 'Why SWEEPR' & 'Login' clutter) -->
+  <nav class="navbar glass-card px-4 sm:px-6 py-3.5 flex justify-between items-center z-50">
+    <a href="/" class="flex items-center gap-2.5 text-inherit no-underline">
+      <div class="logo-box">S</div>
+      <span class="font-extrabold text-lg sm:text-xl tracking-tight text-gray-900">SWEEPR <span class="text-emerald-600">VPN</span></span>
+    </a>
+
+    <div class="hidden md:flex gap-8 font-medium text-gray-600 text-sm items-center">
+      <a href="#features" class="hover:text-emerald-600 transition-colors">Features</a>
+      <a href="/tools/leak-test" class="hover:text-emerald-600 transition-colors">Free Leak Test</a>
+      <a href="/pricing" class="hover:text-emerald-600 transition-colors">Pricing</a>
+    </div>
+
+    <div class="flex gap-2.5 items-center">
+      <button type="button" class="btn btn-ghost text-xs flex items-center gap-1.5 px-2.5 py-1.5 font-bold text-gray-700">
+        <span>🇬🇧</span>
+        <span>EN</span>
+      </button>
+      <a href="/order?plan=monthly&offer=intro" class="btn btn-go gap-2 text-sm">
+        <span>Try for £1.99</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero Section: Ultra-Clean Apple-Style Frosted Mint Hero -->
+  <main class="flex-1 pt-28 md:pt-36 pb-20 px-6 max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-14 text-center md:text-left">
+    <div class="flex-1">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/90 mb-5">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span>10 Gbps VPN &bull; Wi-Fi Scanner &bull; Smart-TV Shield</span>
+      </div>
+
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-black mb-5 leading-[1.06] tracking-tight text-gray-900">
+        <span class="whitespace-nowrap">Secure your Wi&#8209;Fi.</span><br>
+        <span style="color: var(--accent);">In seconds.</span>
+      </h1>
+
+      <p class="text-lg md:text-xl text-gray-600 mb-8 max-w-lg mx-auto md:mx-0 leading-relaxed">
+        Private 1-click browsing, a 30-second home Wi-Fi device check, and Smart-TV tracking protection.
+      </p>
+
+      <!-- Clean 2-Button CTA Row (Auto-detects OS label with zero extra boxes) -->
+      <div class="flex flex-col sm:flex-row items-center gap-3.5 justify-center md:justify-start">
+        <a href="/download" id="downloadBtn" class="btn btn-go btn-big pulse-glow gap-2.5 w-full sm:w-auto justify-center">
+          <span id="osDownloadText">Free Download</span>
+          <svg class="arrow-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+        <a href="/order?plan=monthly&offer=intro" class="btn btn-big bg-white border border-gray-300 hover:border-emerald-400 text-gray-800 w-full sm:w-auto justify-center font-bold">
+          Start 1st Month — £1.99
+        </a>
+      </div>
+
+      <!-- Quiet 1-Line Reassurance Strip -->
+      <div class="flex flex-wrap items-center gap-x-3.5 gap-y-1 justify-center md:justify-start mt-5 text-xs text-gray-500 font-semibold">
+        <span id="osSubCaption" class="text-gray-700">Windows, Mac, iOS, Android &amp; Linux</span>
+        <span>&bull;</span>
+        <span>🛡️ 14-Day Money-Back Guarantee</span>
+      </div>
+    </div>
+
+    <!-- Right Interactive Slanted Card (Stripped of extra labels & stat boxes) -->
+    <div class="flex-1 relative w-full max-w-sm mx-auto">
+      <div class="absolute -inset-4 bg-gradient-to-tr from-emerald-200/35 via-teal-100/25 to-transparent rounded-3xl blur-2xl pointer-events-none"></div>
+
+      <div class="relative glass-card p-6 sm:p-7 flex flex-col items-center text-center gap-5 transform sm:rotate-1 hover:rotate-0 transition-transform duration-500 bg-white/90 border border-emerald-100/90 shadow-xl">
+
+        <!-- 4 Flag Pills Only (Removed redundant 'COUNTRY SELECTOR' heading) -->
+        <div class="grid grid-cols-4 gap-2 bg-gray-50/90 border border-gray-200/80 p-1.5 rounded-2xl w-full" role="group" aria-label="Select VPN Server Country">
+          <button type="button" onclick="selectHeroServer('United Kingdom \u00b7 London', '11 ms', this)" class="hero-srv-pill flex flex-col items-center justify-center gap-1 py-2 px-2 rounded-xl border-2 border-emerald-500 bg-white shadow-xs cursor-pointer transition-all">
+            <span class="w-7 h-5 rounded-xs overflow-hidden border border-gray-200 block">
+              <svg viewBox="0 0 60 40" class="w-full h-full block"><rect width="60" height="40" fill="#012169"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#fff" stroke-width="8"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#C8102E" stroke-width="4"/><path d="M30,0V40 M0,20H60" stroke="#fff" stroke-width="12"/><path d="M30,0V40 M0,20H60" stroke="#C8102E" stroke-width="7"/></svg>
+            </span>
+            <span class="text-[10px] font-extrabold text-gray-900 leading-none">UK</span>
+          </button>
+
+          <button type="button" onclick="selectHeroServer('United States \u00b7 New York', '64 ms', this)" class="hero-srv-pill flex flex-col items-center justify-center gap-1 py-2 px-2 rounded-xl border-2 border-transparent hover:border-emerald-200 bg-transparent hover:bg-white/80 cursor-pointer transition-all">
+            <span class="w-7 h-5 rounded-xs overflow-hidden border border-gray-200 block">
+              <svg viewBox="0 0 60 40" class="w-full h-full block"><rect width="60" height="40" fill="#B22234"/><path d="M0,6H60 M0,15H60 M0,25H60 M0,34H60" stroke="#fff" stroke-width="4"/><rect width="26" height="22" fill="#3C3B6E"/></svg>
+            </span>
+            <span class="text-[10px] font-bold text-gray-600 leading-none">USA</span>
+          </button>
+
+          <button type="button" onclick="selectHeroServer('Germany \u00b7 Frankfurt', '16 ms', this)" class="hero-srv-pill flex flex-col items-center justify-center gap-1 py-2 px-2 rounded-xl border-2 border-transparent hover:border-emerald-200 bg-transparent hover:bg-white/80 cursor-pointer transition-all">
+            <span class="w-7 h-5 rounded-xs overflow-hidden border border-gray-200 block">
+              <svg viewBox="0 0 60 39" class="w-full h-full block"><rect width="60" height="13" y="0" fill="#000"/><rect width="60" height="13" y="13" fill="#D00"/><rect width="60" height="13" y="26" fill="#FFCE00"/></svg>
+            </span>
+            <span class="text-[10px] font-bold text-gray-600 leading-none">DE</span>
+          </button>
+
+          <button type="button" onclick="selectHeroServer('Japan \u00b7 Tokyo', '138 ms', this)" class="hero-srv-pill flex flex-col items-center justify-center gap-1 py-2 px-2 rounded-xl border-2 border-transparent hover:border-emerald-200 bg-transparent hover:bg-white/80 cursor-pointer transition-all">
+            <span class="w-7 h-5 rounded-xs overflow-hidden border border-gray-200 block">
+              <svg viewBox="0 0 60 40" class="w-full h-full block"><rect width="60" height="40" fill="#fff"/><circle cx="30" cy="20" r="11" fill="#BC002D"/></svg>
+            </span>
+            <span class="text-[10px] font-bold text-gray-600 leading-none">JP</span>
+          </button>
+        </div>
+
+        <!-- Center Glowing Shield Orb -->
+        <div class="py-1 flex flex-col items-center">
+          <div class="w-28 h-28 rounded-full bg-emerald-400/20 flex items-center justify-center shadow-[0_0_45px_rgba(16,185,129,0.35)]">
+            <div class="w-22 h-22 rounded-full bg-gradient-to-b from-white via-emerald-50/90 to-emerald-100/90 border-2 border-emerald-400/70 flex items-center justify-center shadow-md p-3">
+              <div class="w-14 h-14 rounded-full bg-white shadow-inner border border-emerald-100 flex items-center justify-center text-emerald-600">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M9 12l2 2 4-4"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div id="heroVpnCity" class="text-base font-black text-gray-900 mt-3.5">United Kingdom &middot; London</div>
+          <div id="heroVpnMeta" class="text-xs font-semibold text-emerald-700 mt-0.5">11 ms &bull; 10 Gbps &bull; Wi-Fi &amp; TV Shield On</div>
+        </div>
+
+        <!-- Single Action Button -->
+        <a href="/order?plan=monthly&offer=intro" class="btn btn-go w-full gap-2 text-base font-extrabold py-3.5 justify-center">
+          <span>Enable Now</span>
+          <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    function selectHeroServer(city, ping, btn) {
+      document.getElementById('heroVpnCity').textContent = city;
+      document.getElementById('heroVpnMeta').textContent = `${ping} • 10 Gbps • Wi-Fi & TV Shield On`;
+      document.querySelectorAll('.hero-srv-pill').forEach(b => {
+        b.className = 'hero-srv-pill flex flex-col items-center justify-center gap-1 py-2 px-2 rounded-xl border-2 border-transparent hover:border-emerald-200 bg-transparent hover:bg-white/80 cursor-pointer transition-all';
+      });
+      if (btn) {
+        btn.className = 'hero-srv-pill flex flex-col items-center justify-center gap-1 py-2 px-2 rounded-xl border-2 border-emerald-500 bg-white shadow-xs cursor-pointer transition-all';
+      }
+    }
+
+    // Quiet OS-aware button label (Zero extra tabs or boxes)
+    (function detectOsQuietly() {
+      const ua = navigator.userAgent.toLowerCase();
+      const btnText = document.getElementById('osDownloadText');
+      if (/iphone|ipad|ipod/.test(ua)) btnText.textContent = 'Free iPhone Setup';
+      else if (ua.includes('android')) btnText.textContent = 'Free Android Setup';
+      else if (ua.includes('mac os') || ua.includes('macintosh')) btnText.textContent = 'Free Mac Download';
+      else if (ua.includes('linux')) btnText.textContent = 'Free Linux Setup';
+      else btnText.textContent = 'Free Download';
+    })();
+  </script>
+</body>
+</html>
