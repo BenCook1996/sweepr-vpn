@@ -1222,11 +1222,115 @@ function verifySessionCookie(req) {
   }
 }
 
-async function syncPayPalCustomerEmail(sub, acc) {
+async function sendWelcomeLicenseEmail(acc) {
+  if (!acc || acc.welcomeEmailSent) return false;
+  const email = String(acc.email || '').trim().toLowerCase();
+  if (!isValidEmail(email) || email.endsWith('@pending.sweeprvpn.com') || email === 'customer@sweeprvpn.com') {
+    return false;
+  }
+  acc.welcomeEmailSent = true;
+  const licenseKey = acc.licenseKey || 'SWEEPR-VPN-PRO';
+  const activationCode = acc.activation_code || '849201';
+  const subject = 'Welcome to SWEEPR VPN Pro — Your License Key & Setup Guide';
+  const textBody = `Hi ${acc.name || 'there'},\n\nThank you for subscribing to SWEEPR VPN Pro! Your subscription is active for up to 10 devices.\n\nFull Product License Key (Paste in App): ${licenseKey}\n6-Digit Quick Activation Code: ${activationCode}\nRegistered Email: ${email}\n\n1. Open SWEEPR VPN (or download at https://sweeprvpn.com/download?key=${encodeURIComponent(licenseKey)}&autoconf=1)\n2. Paste ${licenseKey} into the license key box to unlock all 8 global locations and Smart-TV shields.\n\nBest regards,\nThe SWEEPR VPN Team`;
+  const htmlBody = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:520px;margin:0 auto;padding:28px 24px;color:#0f172a;background:#ffffff;border:1px solid #e2e8f0;border-radius:16px">
+  <h2 style="margin:0 0 8px;font-size:21px;font-weight:800;color:#0f172a">Welcome to SWEEPR VPN Pro! 🎉</h2>
+  <p style="margin:0 0 18px;font-size:14px;color:#475569">Hi ${escapeHtml(acc.name || 'there')}, your subscription is active across up to 10 devices. Here are your credentials:</p>
+  <div style="background:#f0fdf4;border:2px dashed #10b981;border-radius:12px;padding:18px;text-align:center;margin:18px 0">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#047857;margin-bottom:6px">Full Product License Key (Paste in App)</div>
+    <div style="font-family:monospace;font-size:19px;font-weight:800;color:#0f172a;letter-spacing:1px">${escapeHtml(licenseKey)}</div>
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#047857;margin:14px 0 4px">6-Digit Portal &amp; Quick Code</div>
+    <div style="font-family:monospace;font-size:26px;font-weight:800;color:#059669;letter-spacing:6px">${escapeHtml(activationCode)}</div>
+  </div>
+  <p style="margin:0;font-size:13px;color:#64748b;line-height:1.5">Copy <strong>${escapeHtml(licenseKey)}</strong> and paste it into SWEEPR VPN to activate protection immediately.</p>
+</div>`;
+
+  const resendKey = String(process.env.RESEND_API_KEY || '').trim();
+  if (resendKey) {
+    try {
+      const r = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${resendKey}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          from: process.env.EMAIL_FROM || 'SWEEPR VPN <onboarding@resend.dev>',
+          to: [email],
+          subject,
+          text: textBody,
+          html: htmlBody
+        })
+      });
+      if (r.ok) return true;
+    } catch {}
+  }
+
+  const smtpUser = (process.env.SMTP_GMAIL_USER || '').trim().replace(/^["']|["']$/g, '') ||
+    decryptWithPkKey('292e02963cb47df56b0c11bf:ec9309892f80d12c4bc8d8f1c574a1c0:b28816343a58bc4241226fa1089541bcc2cda438670f8262ff09');
+  const smtpPass = (process.env.SMTP_GMAIL_PASS || '').trim().replace(/\s+/g, '').replace(/^["']|["']$/g, '') ||
+    decryptWithPkKey('e6a41c129c37f88ca73363ed:8311a7406578f3c1a4b112d09adf4202:09f6b7df83870a06c01211c984d297b4');
+  if (smtpUser && smtpPass) {
+    try {
+      await new Promise((resolve, reject) => {
+        const sock = tls.connect(465, 'smtp.gmail.com', { servername: 'smtp.gmail.com', timeout: 8000 });
+        let step = 0, buf = '';
+        const boundary = '----=_Part_SWEEPR_' + Date.now().toString(36);
+        const mime = [
+          `From: "SWEEPR VPN" <${smtpUser}>`,
+          `To: <${email}>`,
+          `Subject: =?UTF-8?B?${Buffer.from(subject, 'utf8').toString('base64')}?=`,
+          `Date: ${new Date().toUTCString()}`,
+          'MIME-Version: 1.0',
+          `Content-Type: multipart/alternative; boundary="${boundary}"`,
+          '',
+          `--${boundary}`,
+          'Content-Type: text/plain; charset="UTF-8"',
+          'Content-Transfer-Encoding: base64',
+          '',
+          Buffer.from(textBody, 'utf8').toString('base64').replace(/(.{76})/g, '$1\r\n'),
+          '',
+          `--${boundary}`,
+          'Content-Type: text/html; charset="UTF-8"',
+          'Content-Transfer-Encoding: base64',
+          '',
+          Buffer.from(htmlBody, 'utf8').toString('base64').replace(/(.{76})/g, '$1\r\n'),
+          '',
+          `--${boundary}--`,
+          '.',
+          ''
+        ].join('\r\n');
+        const fail = (err) => { try { sock.destroy(); } catch {} reject(err); };
+        sock.on('timeout', () => fail(new Error('timeout')));
+        sock.on('error', fail);
+        sock.on('data', (chunk) => {
+          buf += chunk.toString('utf8');
+          const lines = buf.split('\r\n');
+          buf = lines.pop() || '';
+          for (const line of lines) {
+            if (!line || (line.length >= 4 && line[3] === '-')) continue;
+            const code = parseInt(line.slice(0, 3), 10);
+            if (code >= 400) return fail(new Error(line));
+            if (step === 0 && code === 220) { step = 1; sock.write('EHLO sweeprvpn.com\r\n'); }
+            else if (step === 1 && code === 250) { step = 2; sock.write('AUTH LOGIN\r\n'); }
+            else if (step === 2 && code === 334) { step = 3; sock.write(Buffer.from(smtpUser, 'utf8').toString('base64') + '\r\n'); }
+            else if (step === 3 && code === 334) { step = 4; sock.write(Buffer.from(smtpPass, 'utf8').toString('base64') + '\r\n'); }
+            else if (step === 4 && code === 235) { step = 5; sock.write(`MAIL FROM:<${smtpUser}>\r\n`); }
+            else if (step === 5 && code === 250) { step = 6; sock.write(`RCPT TO:<${email}>\r\n`); }
+            else if (step === 6 && code === 250) { step = 7; sock.write('DATA\r\n'); }
+            else if (step === 7 && code === 354) { step = 8; sock.write(mime + '\r\n'); }
+            else if (step === 8 && code === 250) { step = 9; sock.write('QUIT\r\n'); try { sock.end(); } catch {} resolve(true); }
+          }
+        });
+      });
+      return true;
+    } catch {}
+  }
+  return false;
+}
+
+async function syncPayPalCustomerEmail(sub, acc, cs = null) {
   if (!STRIPE_SECRET_KEY || !sub || !acc) return;
   try {
     const currentEmail = (acc.email || '').trim().toLowerCase();
-    if (currentEmail && !currentEmail.endsWith('@pending.sweeprvpn.com')) return;
+    const needsEmailSync = !currentEmail || currentEmail.endsWith('@pending.sweeprvpn.com') || currentEmail === 'customer@sweeprvpn.com';
 
     let pm = typeof sub.default_payment_method === 'object' && sub.default_payment_method ? sub.default_payment_method : null;
     if (!pm) {
@@ -1238,20 +1342,82 @@ async function syncPayPalCustomerEmail(sub, acc) {
         pm = await stripeRequest('GET', `payment_methods/${encodeURIComponent(sub.default_payment_method)}`).catch(() => null);
       }
     }
-    const payerEmail = String(pm?.paypal?.payer_email || pm?.billing_details?.email || '').trim().toLowerCase();
-    if (payerEmail && isValidEmail(payerEmail) && !payerEmail.endsWith('@pending.sweeprvpn.com')) {
+
+    let payerEmail = String(
+      pm?.paypal?.payer_email ||
+      pm?.billing_details?.email ||
+      cs?.customer_details?.email ||
+      cs?.customer_email ||
+      sub?.latest_invoice?.customer_email ||
+      ''
+    ).trim().toLowerCase();
+    const payerName = String(
+      pm?.billing_details?.name ||
+      cs?.customer_details?.name ||
+      ''
+    ).trim();
+
+    const custId = typeof sub.customer === 'string' ? sub.customer : sub.customer?.id || acc.stripe_customer_id;
+    if ((!payerEmail || payerEmail.endsWith('@pending.sweeprvpn.com')) && custId) {
+      const cust = await stripeRequest('GET', `customers/${encodeURIComponent(custId)}`).catch(() => null);
+      if (cust && !cust.deleted && cust.email && !String(cust.email).toLowerCase().endsWith('@pending.sweeprvpn.com')) {
+        payerEmail = String(cust.email).trim().toLowerCase();
+      }
+    }
+
+    if (payerName && !acc.name) acc.name = payerName;
+
+    if (needsEmailSync && payerEmail && isValidEmail(payerEmail) && !payerEmail.endsWith('@pending.sweeprvpn.com')) {
       const existing = accountsByEmail.get(payerEmail);
       if (!existing || existing.id === acc.id) {
         if (acc.email) accountsByEmail.delete(acc.email);
         acc.email = payerEmail;
         accountsByEmail.set(payerEmail, acc);
-        const custId = typeof sub.customer === 'string' ? sub.customer : sub.customer?.id || acc.stripe_customer_id;
         if (custId) {
-          await stripeRequest('POST', `customers/${encodeURIComponent(custId)}`, { email: payerEmail }).catch(() => {});
+          await stripeRequest('POST', `customers/${encodeURIComponent(custId)}`, {
+            email: payerEmail,
+            ...(acc.name ? { name: acc.name } : {})
+          }).catch(() => {});
         }
       }
     }
+    sendWelcomeLicenseEmail(acc).catch(() => {});
   } catch {}
+}
+
+async function fetchStripeSubOrPayPalIntent(id) {
+  if (!id) return null;
+  if (id.startsWith('pi_')) {
+    const pi = await stripeRequest('GET', `payment_intents/${encodeURIComponent(id)}`, {
+      expand: ['payment_method', 'latest_charge']
+    });
+    if (!pi) return null;
+    const pm = typeof pi.payment_method === 'object' ? pi.payment_method : null;
+    return {
+      id: pi.id,
+      object: 'payment_intent',
+      status: pi.status === 'succeeded' ? 'active' : pi.status,
+      customer: pi.customer,
+      currency: pi.currency,
+      metadata: pi.metadata || {},
+      default_payment_method: pm,
+      latest_invoice: {
+        payment_intent: pi,
+        customer_email:
+          pi.receipt_email ||
+          pm?.paypal?.payer_email ||
+          pm?.billing_details?.email ||
+          pi.latest_charge?.billing_details?.email ||
+          null
+      },
+      items: {
+        data: [{ price: { unit_amount: pi.amount || 0 }, quantity: 1 }]
+      }
+    };
+  }
+  return stripeRequest('GET', `subscriptions/${encodeURIComponent(id)}`, {
+    expand: ['default_payment_method', 'latest_invoice.payment_intent.payment_method']
+  });
 }
 
 function hasWifiRadarInBody(body) {
@@ -1623,12 +1789,31 @@ function renderCheckoutSuccessPage(acc, isCancelled = false, isPopup = false) {
   <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png?v=5">
   <link rel="shortcut icon" href="/favicon.ico?v=5">
   <script src="https://cdn.tailwindcss.com/3.4.5"></script>
+  ${
+    isPopup
+      ? `<script>
+    try {
+      const payload = { type: 'paypal_cancelled', ts: Date.now() };
+      if (window.opener && !window.opener.closed) {
+        window.opener.postMessage(payload, window.location.origin);
+      }
+      if (typeof BroadcastChannel !== 'undefined') {
+        const bc = new BroadcastChannel('sweepr_paypal_checkout');
+        bc.postMessage(payload);
+        bc.close();
+      }
+      localStorage.setItem('sweepr_paypal_event', JSON.stringify(payload));
+      setTimeout(() => { try { window.close(); } catch {} }, 300);
+    } catch {}
+  </script>`
+      : ''
+  }
 </head>
 <body class="bg-slate-950 text-white min-h-screen flex items-center justify-center p-6 font-sans">
   <div class="max-w-md w-full bg-slate-900 border border-slate-800 rounded-2xl p-8 text-center space-y-4 shadow-2xl">
     <h1 class="text-2xl font-black">Checkout Cancelled</h1>
-    <p class="text-sm text-slate-400">No charge was made to your account. You can return to the order page anytime.</p>
-    <a href="/order" class="inline-block w-full py-3 px-6 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm no-underline">Return to Order Page</a>
+    <p class="text-sm text-slate-400">No charge was made to your account. ${isPopup ? 'This window will close automatically.' : 'You can return to the order page anytime.'}</p>
+    <a href="/order" onclick="${isPopup ? 'try{window.close();return false;}catch{}' : ''}" class="inline-block w-full py-3 px-6 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm no-underline">${isPopup ? 'Close Window' : 'Return to Order Page'}</a>
   </div>
 </body>
 </html>`;
@@ -2155,7 +2340,10 @@ self.addEventListener('fetch', e => {
     const applyDiscount = Boolean(body.applyDiscount || body.discountApplied) && plan === 'monthly';
     const includeWifiRadar = hasWifiRadarInBody(body);
 
-    const localizedPricing = resolvePricingForRequest(req, urlObj, body);
+    let localizedPricing = resolvePricingForRequest(req, urlObj, body);
+    if (isPayPal && localizedPricing.currency === 'jpy') {
+      localizedPricing = resolvePricingForRequest(req, urlObj, { ...body, currency: 'usd' });
+    }
     const canonicalEmail = canonicalizeEmailForAntiAbuse(email);
     const existingAcc = accountsByEmail.get(email);
     const wasAlreadyActive = Boolean(existingAcc && existingAcc.status === 'active');
@@ -2344,7 +2532,64 @@ self.addEventListener('fetch', e => {
       } catch (subErr) {
         if (isPayPal && String(subErr.message || '').toLowerCase().includes('paypal')) {
           const hostOrigin = resolveTrustedOrigin(req);
-          const sessionParams = {
+          // Tier 2: Direct PayPal PaymentIntent (works immediately once PayPal is linked in Stripe, even before Reference Transactions approval)
+          try {
+            const baseAmount = canUseIntroCoupon ? localizedPricing.introFirstMonthAmount : unitAmount;
+            const addonAmount = includeWifiRadar
+              ? isAnnual
+                ? localizedPricing.wifiRadarAnnualAmount
+                : isSixMonth
+                ? localizedPricing.wifiRadarSixMonthAmount
+                : localizedPricing.wifiRadarMonthlyAmount
+              : 0;
+            const directPayPalAmount = baseAmount + addonAmount;
+            const directReturnUrl = `${hostOrigin}/checkout/success?web=1&account_id=${encodeURIComponent(acc.id)}${isPopup ? '&popup=1' : ''}`;
+            const directPi = await stripeRequest('POST', 'payment_intents', {
+              amount: directPayPalAmount,
+              currency: localizedPricing.currency,
+              customer: customerId,
+              payment_method_types: ['paypal'],
+              confirm: true,
+              payment_method_data: {
+                type: 'paypal',
+                ...(providedEmail || name
+                  ? {
+                      billing_details: {
+                        ...(providedEmail ? { email: providedEmail } : {}),
+                        ...(name ? { name } : {})
+                      }
+                    }
+                  : {})
+              },
+              description: `SWEEPR VPN Pro (${isAnnual ? 'Annual' : isSixMonth ? '6-Month' : 'Monthly'})`,
+              metadata: {
+                ...metadata,
+                intro_offer_applied: introCouponId ? 'true' : 'false'
+              },
+              return_url: directReturnUrl
+            });
+            const directRedirectUrl = directPi?.next_action?.redirect_to_url?.url || null;
+            if (directPi?.id && directRedirectUrl) {
+              acc.stripe_subscription_id = directPi.id;
+              accountsBySubscriptionId.set(directPi.id, acc);
+              return sendJson(
+                res,
+                200,
+                {
+                  redirectUrl: directRedirectUrl,
+                  subscriptionId: directPi.id,
+                  accountId: acc.id,
+                  plan,
+                  livemode: Boolean(directPi.livemode)
+                },
+                {},
+                req
+              );
+            }
+          } catch {}
+
+          // Tier 3: Stripe Hosted Checkout Session fallback
+          const baseSessionParams = {
             mode: 'subscription',
             customer: customerId,
             managed_payments: { enabled: false },
@@ -2364,9 +2609,17 @@ self.addEventListener('fetch', e => {
               intro_offer_applied: introCouponId ? 'true' : 'false'
             },
             success_url: `${hostOrigin}/checkout/success?web=1&session_id={CHECKOUT_SESSION_ID}&account_id=${encodeURIComponent(acc.id)}${isPopup ? '&popup=1' : ''}`,
-            cancel_url: `${hostOrigin}/order?error=payment_cancelled`
+            cancel_url: isPopup ? `${hostOrigin}/checkout/cancel?popup=1` : `${hostOrigin}/order?error=payment_cancelled`
           };
-          const checkoutSession = await stripeRequest('POST', 'checkout/sessions', sessionParams);
+          let checkoutSession = null;
+          try {
+            checkoutSession = await stripeRequest('POST', 'checkout/sessions', {
+              ...baseSessionParams,
+              payment_method_types: ['paypal', 'card']
+            });
+          } catch {
+            checkoutSession = await stripeRequest('POST', 'checkout/sessions', baseSessionParams);
+          }
           if (checkoutSession?.url) {
             return sendJson(
               res,
@@ -2401,6 +2654,8 @@ self.addEventListener('fetch', e => {
       const returnUrl = `${hostOrigin}/checkout/success?web=1&subscription_id=${encodeURIComponent(subscription.id)}&account_id=${encodeURIComponent(acc.id)}${isPopup ? '&popup=1' : ''}`;
 
       if (isPayPal) {
+        const rawClientIp = getClientIp(req);
+        const mandateIp = !rawClientIp || rawClientIp === '::1' ? '127.0.0.1' : rawClientIp;
         const confirmedPi = await stripeRequest('POST', `payment_intents/${encodeURIComponent(paymentIntent.id)}/confirm`, {
           payment_method_data: {
             type: 'paypal',
@@ -2417,7 +2672,7 @@ self.addEventListener('fetch', e => {
             customer_acceptance: {
               type: 'online',
               online: {
-                ip_address: '127.0.0.1',
+                ip_address: mandateIp,
                 user_agent: req.headers['user-agent'] || 'Mozilla/5.0'
               }
             }
@@ -2523,22 +2778,22 @@ self.addEventListener('fetch', e => {
     if (!subscriptionId) return sendJson(res, 400, { error: 'missing_subscription_id' }, {}, req);
 
     try {
+      let checkoutSessionObj = null;
       if (subscriptionId.startsWith('cs_')) {
-        const cs = await stripeRequest('GET', `checkout/sessions/${encodeURIComponent(subscriptionId)}`);
-        if (!cs || !cs.subscription) {
+        checkoutSessionObj = await stripeRequest('GET', `checkout/sessions/${encodeURIComponent(subscriptionId)}`);
+        if (!checkoutSessionObj || (!checkoutSessionObj.subscription && !checkoutSessionObj.payment_intent)) {
           return sendJson(
             res,
             checkOnly ? 200 : 402,
-            { ok: false, status: cs?.status || 'open' },
+            { ok: false, status: checkoutSessionObj?.status || 'open' },
             {},
             req
           );
         }
-        subscriptionId = typeof cs.subscription === 'string' ? cs.subscription : cs.subscription.id;
+        const resolvedRef = checkoutSessionObj.subscription || checkoutSessionObj.payment_intent;
+        subscriptionId = typeof resolvedRef === 'string' ? resolvedRef : resolvedRef.id;
       }
-      const sub = await stripeRequest('GET', `subscriptions/${encodeURIComponent(subscriptionId)}`, {
-        expand: ['default_payment_method', 'latest_invoice.payment_intent.payment_method']
-      });
+      const sub = await fetchStripeSubOrPayPalIntent(subscriptionId);
 
       if (sub.status !== 'active' && sub.status !== 'trialing') {
         return sendJson(
@@ -2612,7 +2867,7 @@ self.addEventListener('fetch', e => {
         status: 'active'
       });
 
-      await syncPayPalCustomerEmail(sub, acc);
+      await syncPayPalCustomerEmail(sub, acc, checkoutSessionObj);
 
       const totalAmount = (sub.items?.data || []).reduce(
         (sum, it) => sum + (it.price?.unit_amount || 0) * (it.quantity || 1),
@@ -2721,37 +2976,79 @@ self.addEventListener('fetch', e => {
       if (
         event.type === 'customer.subscription.created' ||
         event.type === 'customer.subscription.updated' ||
-        event.type === 'customer.subscription.deleted'
+        event.type === 'customer.subscription.deleted' ||
+        event.type === 'checkout.session.completed' ||
+        event.type === 'invoice.paid' ||
+        event.type === 'invoice.payment_succeeded' ||
+        event.type === 'payment_intent.succeeded'
       ) {
-        const subStatus = obj.status === 'active' || obj.status === 'trialing' ? 'active' : obj.status || 'canceled';
-        const metaEmail = obj.metadata?.email || '';
-        const metaPlan = obj.metadata?.plan || 'annual';
-        const hasWifiRadar = obj.metadata?.wifi_radar === 'true' || (obj.metadata?.addons || '').includes('wifi_radar');
-        if (metaEmail || obj.id) {
-          const acc = upsertLocalAccount({
-            email: metaEmail || `${obj.id}@stripe.sweeprvpn.com`,
-            stripeCustomerId: typeof obj.customer === 'string' ? obj.customer : obj.customer?.id,
-            subscriptionId: obj.id,
-            plan: metaPlan,
-            wifiRadarAddon: hasWifiRadar,
-            status: subStatus
-          });
-          if (subStatus !== 'active') {
-            revokeLicenceOnAllNodes(acc).catch(() => {});
+        let subObj = obj;
+        let sessionObj = null;
+        if (event.type === 'checkout.session.completed') {
+          sessionObj = obj;
+          const refObj = obj.subscription || obj.payment_intent;
+          const subId = typeof refObj === 'string' ? refObj : refObj?.id;
+          if (subId && STRIPE_SECRET_KEY) {
+            subObj = await fetchStripeSubOrPayPalIntent(subId).catch(() => obj);
           }
-          crm.syncSubscription({
-            email: acc.email,
-            country: obj.metadata?.country || acc.country || 'GB',
-            plan: acc.plan,
-            status: subStatus,
-            stripe_customer_id: acc.stripe_customer_id,
-            stripe_subscription_id: obj.id,
-            activation_code: acc.activation_code,
-            license_key: acc.licenseKey,
-            addons: acc.wifiRadarAddon ? ['wifi_radar'] : [],
-            ref: obj.metadata?.ref || acc.ref || undefined,
-            notes: `Stripe Webhook ${event.type} (${obj.id})`
-          }).catch(() => {});
+        } else if (event.type === 'invoice.paid' || event.type === 'invoice.payment_succeeded') {
+          const subId = typeof obj.subscription === 'string' ? obj.subscription : obj.subscription?.id;
+          if (subId && STRIPE_SECRET_KEY) {
+            subObj = await fetchStripeSubOrPayPalIntent(subId).catch(() => null);
+          } else {
+            subObj = null;
+          }
+        } else if (event.type === 'payment_intent.succeeded') {
+          if (!obj.invoice && obj.metadata?.project_id === 'vpn' && obj.id && STRIPE_SECRET_KEY) {
+            subObj = await fetchStripeSubOrPayPalIntent(obj.id).catch(() => null);
+          } else {
+            subObj = null;
+          }
+        }
+
+        if (subObj && subObj.id) {
+          const subStatus =
+            subObj.status === 'active' || subObj.status === 'trialing' ? 'active' : subObj.status || 'canceled';
+          const metaEmail =
+            sessionObj?.customer_details?.email ||
+            subObj.metadata?.email ||
+            sessionObj?.metadata?.email ||
+            '';
+          const metaPlan = subObj.metadata?.plan || sessionObj?.metadata?.plan || 'annual';
+          const hasWifiRadar =
+            subObj.metadata?.wifi_radar === 'true' ||
+            (subObj.metadata?.addons || '').includes('wifi_radar') ||
+            sessionObj?.metadata?.wifi_radar === 'true';
+          if (metaEmail || subObj.id) {
+            const acc = upsertLocalAccount({
+              email: metaEmail || `${subObj.id}@stripe.sweeprvpn.com`,
+              name: sessionObj?.customer_details?.name || undefined,
+              stripeCustomerId: typeof subObj.customer === 'string' ? subObj.customer : subObj.customer?.id,
+              subscriptionId: subObj.id,
+              plan: metaPlan,
+              wifiRadarAddon: hasWifiRadar,
+              status: subStatus
+            });
+            if (subStatus === 'active') {
+              await syncPayPalCustomerEmail(subObj, acc, sessionObj);
+            } else {
+              revokeLicenceOnAllNodes(acc).catch(() => {});
+            }
+            crm.syncSubscription({
+              email: acc.email,
+              name: acc.name || undefined,
+              country: subObj.metadata?.country || acc.country || 'GB',
+              plan: acc.plan,
+              status: subStatus,
+              stripe_customer_id: acc.stripe_customer_id,
+              stripe_subscription_id: subObj.id,
+              activation_code: acc.activation_code,
+              license_key: acc.licenseKey,
+              addons: acc.wifiRadarAddon ? ['wifi_radar'] : [],
+              ref: subObj.metadata?.ref || acc.ref || undefined,
+              notes: `Stripe Webhook ${event.type} (${subObj.id})`
+            }).catch(() => {});
+          }
         }
       } else if (event.type === 'charge.refunded' || event.type === 'charge.dispute.created') {
         const custId = typeof obj.customer === 'string' ? obj.customer : obj.customer?.id;
@@ -2788,13 +3085,22 @@ self.addEventListener('fetch', e => {
       res.writeHead(429, { 'Content-Type': 'text/plain; charset=utf-8', ...COMMON_SECURITY_HEADERS });
       return res.end('Too Many Requests');
     }
-    let subscriptionId = (urlObj.searchParams.get('subscription_id') || '').trim();
+    let subscriptionId = (
+      urlObj.searchParams.get('subscription_id') ||
+      urlObj.searchParams.get('payment_intent') ||
+      ''
+    ).trim();
     const sessionId = (urlObj.searchParams.get('session_id') || '').trim();
     const accountId = (urlObj.searchParams.get('account_id') || '').trim();
     const redirectStatus = (urlObj.searchParams.get('redirect_status') || '').trim();
     const isPopup = urlObj.searchParams.get('popup') === '1';
 
     if (redirectStatus === 'failed' || redirectStatus === 'canceled') {
+      if (isPopup) {
+        return sendHtml(res, 200, renderCheckoutSuccessPage(null, true, true), {
+          'X-Robots-Tag': 'noindex, nofollow'
+        });
+      }
       res.writeHead(302, { Location: '/order?error=payment_cancelled', ...COMMON_SECURITY_HEADERS });
       return res.end();
     }
@@ -2805,11 +3111,13 @@ self.addEventListener('fetch', e => {
       return res.end();
     }
 
+    let checkoutSessionObj = null;
     if (!subscriptionId && sessionId && STRIPE_SECRET_KEY) {
       try {
-        const cs = await stripeRequest('GET', `checkout/sessions/${encodeURIComponent(sessionId)}`);
-        if (cs && cs.subscription) {
-          subscriptionId = typeof cs.subscription === 'string' ? cs.subscription : cs.subscription.id;
+        checkoutSessionObj = await stripeRequest('GET', `checkout/sessions/${encodeURIComponent(sessionId)}`);
+        const resolvedRef = checkoutSessionObj?.subscription || checkoutSessionObj?.payment_intent;
+        if (resolvedRef) {
+          subscriptionId = typeof resolvedRef === 'string' ? resolvedRef : resolvedRef.id;
         }
       } catch {}
     }
@@ -2822,10 +3130,13 @@ self.addEventListener('fetch', e => {
     let acc = accountsById.get(accountId) || accountsBySubscriptionId.get(subscriptionId) || null;
     if (subscriptionId && STRIPE_SECRET_KEY) {
       try {
-        const sub = await stripeRequest('GET', `subscriptions/${encodeURIComponent(subscriptionId)}`, {
-          expand: ['default_payment_method', 'latest_invoice.payment_intent.payment_method']
-        });
+        const sub = await fetchStripeSubOrPayPalIntent(subscriptionId);
         if (sub.status !== 'active' && sub.status !== 'trialing') {
+          if (isPopup) {
+            return sendHtml(res, 200, renderCheckoutSuccessPage(null, true, true), {
+              'X-Robots-Tag': 'noindex, nofollow'
+            });
+          }
           res.writeHead(302, { Location: '/order?error=payment_cancelled', ...COMMON_SECURITY_HEADERS });
           return res.end();
         }
@@ -2841,7 +3152,7 @@ self.addEventListener('fetch', e => {
           subscriptionId: sub.id,
           status: 'active'
         });
-        await syncPayPalCustomerEmail(sub, acc);
+        await syncPayPalCustomerEmail(sub, acc, checkoutSessionObj);
         try {
           const refCode = sub.metadata?.ref || acc.ref || extractAffiliateRef(req, urlObj, {});
           if (refCode) acc.ref = refCode;
@@ -2890,7 +3201,8 @@ self.addEventListener('fetch', e => {
   }
 
   if (req.method === 'GET' && pathname === '/checkout/cancel') {
-    return sendHtml(res, 200, renderCheckoutSuccessPage(null, true, false), {
+    const isPopup = urlObj.searchParams.get('popup') === '1';
+    return sendHtml(res, 200, renderCheckoutSuccessPage(null, true, isPopup), {
       'X-Robots-Tag': 'noindex, nofollow'
     });
   }
