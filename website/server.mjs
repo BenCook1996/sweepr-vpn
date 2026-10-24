@@ -1286,12 +1286,17 @@ const CANONICAL_REDIRECTS = {
   '/terms.html': '/terms',
   '/privacy.html': '/privacy',
   '/support.html': '/support',
+  '/app-preview.html': '/app',
+  '/app-preview': '/app',
   '/vs-totalvpn.html': '/vs/totalvpn',
   '/vs-totalvpn': '/vs/totalvpn',
   '/alternatives-totalvpn.html': '/alternatives/totalvpn',
   '/alternatives-totalvpn': '/alternatives/totalvpn',
   '/leak-test.html': '/tools/leak-test',
-  '/isp-throttling-test.html': '/tools/isp-throttling-test'
+  '/isp-throttling-test.html': '/tools/isp-throttling-test',
+  '/setup/asuswrt-merlin-vpn-client': '/setup/asuswrt-merlin-vpn-router',
+  '/guides/block-samsung-tv-acr-tracking': '/guides/stop-samsung-smart-tv-acr-tracking',
+  '/guides/block-lg-webos-acr-tracking': '/guides/stop-lg-smart-tv-acr-spying'
 };
 
 const ROUTE_ALIASES = {
@@ -1315,6 +1320,14 @@ const ROUTE_ALIASES = {
 
 function readRawBody(req, maxBytes = MAX_BODY_BYTES) {
   return new Promise((resolve, reject) => {
+    const declaredLen = Number(req.headers?.['content-length'] || 0);
+    if (Number.isFinite(declaredLen) && declaredLen > maxBytes) {
+      try { req.resume(); } catch {}
+      const err = new Error('payload_too_large');
+      err.statusCode = 413;
+      reject(err);
+      return;
+    }
     let body = '';
     let totalBytes = 0;
     let rejected = false;
@@ -1323,6 +1336,8 @@ function readRawBody(req, maxBytes = MAX_BODY_BYTES) {
       totalBytes += chunk.length;
       if (totalBytes > maxBytes) {
         rejected = true;
+        body = '';
+        try { req.resume(); } catch {}
         const err = new Error('payload_too_large');
         err.statusCode = 413;
         reject(err);
@@ -1830,7 +1845,10 @@ self.addEventListener('fetch', e => {
         'X-Robots-Tag': 'noindex, nofollow',
         ...COMMON_SECURITY_HEADERS
       });
-      return fs.createReadStream(exePath).pipe(res);
+      const exeStream = fs.createReadStream(exePath);
+      req.on('close', () => exeStream.destroy());
+      exeStream.on('error', () => { if (!res.headersSent) res.writeHead(500); res.end(); });
+      return exeStream.pipe(res);
     }
   }
 
@@ -3460,6 +3478,7 @@ self.addEventListener('fetch', e => {
     }
 
     const body = await readJsonBody(req);
+    if (body && body.__tooLarge) return sendJson(res, 413, { error: 'payload_too_large' }, {}, req);
     const reason = String(body?.reason || 'unspecified').trim().slice(0, 120);
 
     if (STRIPE_SECRET_KEY && acc.stripe_subscription_id && acc.stripe_subscription_id.startsWith('sub_')) {
@@ -3729,6 +3748,7 @@ self.addEventListener('fetch', e => {
       return sendJson(res, 429, { ok: false, error: 'rate_limit_exceeded' }, {}, req);
     }
     const body = req.method === 'POST' ? await readJsonBody(req) : {};
+    if (body && body.__tooLarge) return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, {}, req);
     const rawKey = String(body?.activation_code || body?.license_key || urlObj.searchParams.get('key') || urlObj.searchParams.get('code') || '').trim();
     const rawCode = String(body?.server_code || urlObj.searchParams.get('server_code') || 'UK-LON-01').trim().toUpperCase();
     const serverCode = rawCode === 'CH-ZRH-01' ? 'SE-STO-01' : rawCode;
@@ -3913,6 +3933,29 @@ self.addEventListener('fetch', e => {
   ) {
     res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8', ...COMMON_SECURITY_HEADERS });
     res.end('<h1>404 - Page Not Found</h1><p><a href="/?home=1">Return to SWEEPR VPN Home</a></p>');
+    return;
+  }
+
+  if (ext === '.exe') {
+    fs.stat(filePath, (statErr, stats) => {
+      if (statErr || !stats.isFile()) {
+        res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8', ...COMMON_SECURITY_HEADERS });
+        res.end('<h1>404 - Page Not Found</h1><p><a href="/?home=1">Return to SWEEPR VPN Home</a></p>');
+        return;
+      }
+      res.writeHead(200, {
+        'Content-Type': MIME_TYPES[ext] || 'application/vnd.microsoft.portable-executable',
+        'Content-Disposition': `attachment; filename="${path.basename(filePath)}"`,
+        'Content-Length': stats.size,
+        'Cache-Control': 'no-store, no-cache, must-revalidate',
+        'X-Robots-Tag': 'noindex, nofollow',
+        ...COMMON_SECURITY_HEADERS
+      });
+      const exeStream = fs.createReadStream(filePath);
+      req.on('close', () => exeStream.destroy());
+      exeStream.on('error', () => { if (!res.headersSent) res.writeHead(500); res.end(); });
+      exeStream.pipe(res);
+    });
     return;
   }
 
