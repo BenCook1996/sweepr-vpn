@@ -543,7 +543,7 @@
       <div class="card" style="padding:4px 16px">
         <div class="set-row" onclick="toggleStartup()"><div class="grow"><div class="t"><span data-i18n="startupTitle">Auto-protect on startup</span> <span class="pro-tag">PRO</span></div><div class="s" data-i18n="startupSub">Connect automatically as soon as you open SWEEPR</div></div><button class="toggle" id="startupToggle" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleStartup()"><i></i></button></div>
         <div class="set-row" onclick="toggleKillSwitch()"><div class="grow"><div class="t"><span data-i18n="killTitle">Emergency internet cut-off (Kill Switch)</span> <span class="pro-tag">PRO</span></div><div class="s" data-i18n="killSub">Blocks unencrypted traffic if the VPN tunnel ever drops</div></div><button class="toggle shield" id="killToggle" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleKillSwitch()"><i></i></button></div>
-        <div class="set-row" onclick="toggleLanBypass()"><div class="grow"><div class="t"><span data-i18n="lanTitle">Local LAN bypass (Printers &amp; AirPlay)</span> <span class="pro-tag">PRO</span></div><div class="s" data-i18n="lanSub">Keep home printers, NAS drives &amp; Smart TVs reachable while connected</div></div><button class="toggle" id="lanBypassToggle" role="switch" aria-checked="true" onclick="event.stopPropagation();toggleLanBypass()"><i></i></button></div>
+        <div class="set-row" onclick="toggleLanBypass()"><div class="grow"><div class="t"><span data-i18n="lanTitle">Local LAN bypass (Printers &amp; AirPlay)</span> <span class="pro-tag">PRO</span></div><div class="s" data-i18n="lanSub">Keep home printers, NAS drives &amp; Smart TVs reachable while connected</div></div><button class="toggle" id="lanBypassToggle" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleLanBypass()"><i></i></button></div>
         <div class="set-row" onclick="toggleTheme()"><div class="grow"><div class="t" data-i18n="darkTitle">Dark mode</div><div class="s" data-i18n="darkSub">Easier on the eyes in low light</div></div><button class="toggle" id="darkToggle" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleTheme()"><i></i></button></div>
         <div class="set-row" style="cursor:default">
           <div class="grow"><div class="t" data-i18n="langTitle">Language</div><div class="s" data-i18n="langSub">App display language</div></div>
@@ -770,7 +770,7 @@
     if (Array.isArray(rawFavs)) savedFavs = rawFavs;
   } catch (e) {}
 
-  const state = { view:'home', code:'UK-LON-01', filter:'all', connected:false, connecting:false, pro:false, email:'', activationCode:'', auto:false, startup:false, killSwitch:false, lanBypass:true, seconds:0, mbTransferred:0.4, spark:[42,58,50,68,62,76,64,82,70,88,78,92], lang:'en' };
+  const state = { view:'home', code:'UK-LON-01', filter:'all', connected:false, connecting:false, pro:false, email:'', activationCode:'', auto:false, startup:false, killSwitch:false, lanBypass:false, seconds:0, mbTransferred:0.4, spark:[42,58,50,68,62,76,64,82,70,88,78,92], lang:'en' };
   let timerHandle = null;
   const cur = () => SERVERS.find(s => s.code === state.code) || SERVERS[0];
   const $ = id => document.getElementById(id);
@@ -883,11 +883,12 @@
 
   async function pick(code) {
     state.code = code;
+    try { localStorage.setItem('sweepr_vpn_server_code', code); } catch (e) {}
     $('search').value = '';
     openCountrySheet(false);
     renderAll();
     postNative('selectServer', code);
-    if (state.connected && (tauri || isWebView2)) {
+    if ((state.connected || (state.pro && state.activationCode)) && (tauri || isWebView2)) {
       await toggleConnect(true);
     }
   }
@@ -1007,7 +1008,6 @@
     if (isWebView2 && !tauri) {
       try {
         const st = await invokeWebView2('vpnStatus', {}, 10000);
-        if (st && st.server_code) state.code = st.server_code;
         if (st && st.connected) {
           if (!state.pro) {
             await invokeWebView2('disconnectVpn', {}, 15000);
@@ -1016,7 +1016,14 @@
             return;
           }
           state.connected = true;
-          if (st.server_code) state.code = st.server_code;
+          const savedCode = localStorage.getItem('sweepr_vpn_server_code') || '';
+          if (savedCode && st.server_code && savedCode !== st.server_code && !state.connecting) {
+            state.code = savedCode;
+            renderAll();
+            await toggleConnect(true);
+            return;
+          }
+          if (st.server_code && !state.connecting) state.code = st.server_code;
           clearInterval(timerHandle);
           timerHandle = setInterval(tick, 1000);
           renderAll();
@@ -2345,7 +2352,10 @@
     const savedLang = localStorage.getItem('sweepr_vpn_lang') || '';
     if (savedLang && I18N[savedLang]) { $('lang').value = savedLang; setLang(savedLang); }
     if (localStorage.getItem('sweepr_vpn_startup') === '1') state.startup = true;
-    if (localStorage.getItem('sweepr_vpn_lan_bypass') === '0') state.lanBypass = false;
+    state.lanBypass = false;
+    try { localStorage.setItem('sweepr_vpn_lan_bypass', '0'); } catch (e) {}
+    const savedSrv = localStorage.getItem('sweepr_vpn_server_code') || '';
+    if (savedSrv && SERVERS.some(s => s.code === savedSrv)) state.code = savedSrv;
     const savedEmail = localStorage.getItem('sweepr_vpn_email') || '';
     const savedCode = localStorage.getItem('sweepr_vpn_code') || localStorage.getItem('sweepr_vpn_license_key') || '';
     if (savedCode) { state.email = savedEmail; state.activationCode = savedCode; state.pro = true; }

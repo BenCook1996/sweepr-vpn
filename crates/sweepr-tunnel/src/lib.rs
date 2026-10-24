@@ -33,6 +33,8 @@ pub struct ConnectRequest {
     pub email: Option<String>,
     pub activation_code: Option<String>,
     pub api_url: Option<String>,
+    pub lan_bypass: Option<bool>,
+    pub device_id: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -403,6 +405,7 @@ fn call_connect_api(
     server_code: &str,
     email: Option<&str>,
     activation_code: Option<&str>,
+    device_id: Option<&str>,
 ) -> Result<ApiConnectResponse, String> {
     let url = format!("{}/api/vpn/connect", api_base.trim_end_matches('/'));
     let body = serde_json::json!({
@@ -410,7 +413,8 @@ fn call_connect_api(
         "server_code": server_code,
         "email": email.unwrap_or(""),
         "activation_code": activation_code.unwrap_or(""),
-        "license_key": activation_code.unwrap_or("")
+        "license_key": activation_code.unwrap_or(""),
+        "device_id": device_id.unwrap_or("")
     })
     .to_string();
 
@@ -690,6 +694,7 @@ fn find_wireguard_exe() -> Option<PathBuf> {
     let candidates = [
         PathBuf::from(r"C:\Program Files\WireGuard\wireguard.exe"),
         PathBuf::from(r"C:\Program Files (x86)\WireGuard\wireguard.exe"),
+        app_data_dir().join(r"wg_extract\WireGuard\wireguard.exe"),
     ];
     for c in candidates {
         if c.exists() {
@@ -712,37 +717,41 @@ fn ensure_wireguard_windows() -> Result<PathBuf, String> {
     if let Some(p) = find_wireguard_exe() {
         return Ok(p);
     }
-    // Automatically download and install the official signed WireGuard Windows client
-    let installer = app_data_dir().join("wireguard-installer.exe");
+    // Extract official signed WireGuard MSI into %LOCALAPPDATA%\SweeprVPN\wg_extract without requiring UAC
+    let msi = app_data_dir().join("wireguard-amd64.msi");
+    let extract_dir = app_data_dir().join("wg_extract");
     let mut dl = Command::new(curl_bin());
     dl.args([
         "-sSL",
         "--max-time",
         "45",
         "-o",
-        &installer.to_string_lossy(),
-        "https://download.wireguard.com/windows-client/wireguard-installer.exe",
+        &msi.to_string_lossy(),
+        "https://download.wireguard.com/windows-client/wireguard-amd64-0.5.3.msi",
     ]);
     {
         use std::os::windows::process::CommandExt;
         dl.creation_flags(0x08000000);
     }
     let dl_ok = dl.status().map(|s| s.success()).unwrap_or(false);
-    if dl_ok && installer.exists() {
-        let ps = format!(
-            "$p = '{}'; $sig = Get-AuthenticodeSignature -LiteralPath $p; if ($sig.Status -ne 'Valid') {{ Remove-Item -LiteralPath $p -Force -ErrorAction SilentlyContinue; exit 1 }}; Start-Process -FilePath $p -ArgumentList '/install','/quiet' -Verb RunAs -Wait",
-            installer.display()
-        );
-        let mut run = Command::new(powershell_bin());
-        run.args(["-NoProfile", "-WindowStyle", "Hidden", "-Command", &ps]);
+    if dl_ok && msi.exists() {
+        let sys_root = std::env::var("SystemRoot").unwrap_or_else(|_| "C:\\Windows".to_string());
+        let msiexec = Path::new(&sys_root).join("System32\\msiexec.exe");
+        let mut ex = Command::new(if msiexec.exists() { msiexec } else { PathBuf::from("msiexec.exe") });
+        ex.args([
+            "/a",
+            &msi.to_string_lossy(),
+            "/qn",
+            &format!("TARGETDIR={}", extract_dir.display()),
+        ]);
         {
             use std::os::windows::process::CommandExt;
-            run.creation_flags(0x08000000);
+            ex.creation_flags(0x08000000);
         }
-        let _ = run.status();
+        let _ = ex.status();
     }
     find_wireguard_exe().ok_or_else(|| {
-        "WireGuard tunnel driver is required. Please approve the Windows installer prompt and try again."
+        "WireGuard tunnel driver is required. Please check your internet connection and try again."
             .to_string()
     })
 }
@@ -806,7 +815,7 @@ fn bring_tunnel_up(conf: &Path) -> Result<(), String> {
     #[cfg(target_os = "macos")]
     {
         let script = format!(
-            "do shell script \"wg-quick down '{}' >/dev/null 2>&1 || true; wg-quick up '{}'\" with administrator privileges",
+            "do shell script \"export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH; wg-quick down '{}' >/dev/null 2>&1 || true; wg-quick up '{}'\" with administrator privileges",
             conf.display(),
             conf.display()
         );
@@ -862,7 +871,7 @@ pub fn bring_tunnel_down() -> Result<(), String> {
         let c = conf_path();
         if c.exists() {
             let script = format!(
-                "do shell script \"wg-quick down '{}' >/dev/null 2>&1 || true\" with administrator privileges",
+                "do shell script \"export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH; wg-quick down '{}' >/dev/null 2>&1 || true\" with administrator privileges",
                 c.display()
             );
             let _ = Command::new("osascript").args(["-e", &script]).status();
@@ -905,9 +914,8 @@ pub fn status() -> Result<TunnelStatus, String> {
 }
 
 pub fn connect(req: ConnectRequest) -> Result<TunnelStatus, String> {
-    let email = req.email.as_deref().unwrap_or("").trim();
     let code = req.activation_code.as_deref().unwrap_or("").trim();
-    if email.is_empty() || code.len() < 6 {
+    if code.len() < 6 {
         return Err(
             "An active paid SWEEPR Pro subscription is required. Please enter your activation code or upgrade."
                 .into(),
@@ -928,6 +936,7 @@ pub fn connect(req: ConnectRequest) -> Result<TunnelStatus, String> {
             &req.server_code,
             req.email.as_deref(),
             req.activation_code.as_deref(),
+            req.device_id.as_deref(),
         ) {
             Ok(r) => {
                 resp_opt = Some(r);
@@ -963,23 +972,18 @@ pub fn connect(req: ConnectRequest) -> Result<TunnelStatus, String> {
         .trim()
         .to_string();
     let address = resp.address.unwrap_or_else(|| "10.64.0.2/32".into()).trim().to_string();
-    let dns = resp.dns.unwrap_or_else(|| "10.64.0.1".into()).trim().to_string();
-    let raw_allowed_ips = resp
-        .allowed_ips
-        .unwrap_or_else(|| "0.0.0.0/0, ::/0".into())
-        .trim()
-        .to_string();
-    // Enforce dual-stack AllowedIPs (::/0) so IPv6 never leaks outside the WireGuard tunnel
-    let allowed_ips = if raw_allowed_ips.contains(':') {
-        raw_allowed_ips
+    let dns = "1.1.1.1, 1.0.0.1".to_string();
+    let lan_bypass = req.lan_bypass.unwrap_or(false);
+    let allowed_ips = if lan_bypass {
+        "1.0.0.0/8, 2.0.0.0/7, 4.0.0.0/6, 8.0.0.0/7, 10.64.0.0/16, 11.0.0.0/8, 12.0.0.0/6, 16.0.0.0/4, 32.0.0.0/3, 64.0.0.0/2, 128.0.0.0/3, 160.0.0.0/5, 168.0.0.0/6, 172.0.0.0/12, 172.32.0.0/11, 172.64.0.0/10, 172.128.0.0/9, 173.0.0.0/8, 174.0.0.0/7, 176.0.0.0/4, 192.0.0.0/9, 192.128.0.0/11, 192.160.0.0/13, 192.169.0.0/16, 192.170.0.0/15, 192.172.0.0/14, 192.176.0.0/12, 192.192.0.0/10, 193.0.0.0/8, 194.0.0.0/7, 196.0.0.0/6, 200.0.0.0/5, 208.0.0.0/4".to_string()
     } else {
-        format!("{raw_allowed_ips}, ::/0")
+        "0.0.0.0/0".to_string()
     };
 
     validate_wg_conf_fields(&server_pub, &endpoint, &address, &dns, &allowed_ips)?;
 
     let wg_conf = format!(
-        "[Interface]\nPrivateKey = {}\nAddress = {}\nDNS = {}\n\n[Peer]\nPublicKey = {}\nEndpoint = {}\nAllowedIPs = {}\nPersistentKeepalive = 25\n",
+        "[Interface]\nPrivateKey = {}\nAddress = {}\nDNS = {}\nMTU = 1280\n\n[Peer]\nPublicKey = {}\nEndpoint = {}\nAllowedIPs = {}\nPersistentKeepalive = 25\n",
         st.private_key, address, dns, server_pub, endpoint, allowed_ips
     );
 
@@ -1035,8 +1039,11 @@ fn validate_wg_conf_fields(
     {
         return Err("Invalid tunnel IPv4 CIDR address.".into());
     }
-    if dns.parse::<std::net::Ipv4Addr>().is_err() {
-        return Err("Invalid tunnel DNS IPv4 address.".into());
+    for d in dns.split(',') {
+        let dt = d.trim();
+        if dt.is_empty() || dt.parse::<std::net::IpAddr>().is_err() {
+            return Err("Invalid tunnel DNS IPv4 address.".into());
+        }
     }
     for token in allowed_ips.split(',') {
         let tok = token.trim();
