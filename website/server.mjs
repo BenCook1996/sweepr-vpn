@@ -1788,13 +1788,18 @@ function sendHtml(res, statusCode, html, extraHeaders = {}) {
 }
 
 function renderPlatformDownloadPicker(osType = 'other') {
-  const isMobile = osType === 'ios' || osType === 'android';
-  const title = isMobile
-    ? 'Instant Phone &amp; Computer Setup'
-    : 'Choose Your Operating System';
-  const subtitle = isMobile
-    ? 'Connect your iPhone or Android in 15 seconds with a 1-tap WireGuard profile, or get SWEEPR VPN Pro for up to 3 devices (desktop or mobile).'
-    : 'Select your setup option below to start your free 30-second Home Wi-Fi &amp; Speed Scan or activate 1-click WireGuard protection.';
+  const isQr = osType === 'qr';
+  const isMobile = osType === 'ios' || osType === 'android' || isQr;
+  const title = isQr
+    ? 'QR Code Connection Setup'
+    : isMobile
+      ? 'Instant Phone &amp; Computer Setup'
+      : 'Choose Your Operating System';
+  const subtitle = isQr
+    ? 'Enter your license key below to generate a 1-tap WireGuard QR code or profile for iPhone, Android, Mac, or Windows.'
+    : isMobile
+      ? 'Connect your iPhone or Android in 15 seconds with a 1-tap WireGuard profile, or get SWEEPR VPN Pro for up to 3 devices (desktop or mobile).'
+      : 'Select your setup option below to start your free 30-second Home Wi-Fi &amp; Speed Scan or activate 1-click WireGuard protection.';
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -2282,6 +2287,7 @@ self.addEventListener('fetch', e => {
     pathname !== '/app' &&
     pathname !== '/app-preview' &&
     pathname !== '/download' &&
+    pathname !== '/qr-setup' &&
     (!path.extname(pathname) || path.extname(pathname).toLowerCase() === '.html')
   ) {
     const cookies = req.headers.cookie || '';
@@ -2298,11 +2304,24 @@ self.addEventListener('fetch', e => {
     }
   }
 
+  // Dedicated QR Code Connection Setup route (/qr-setup)
+  if (pathname === '/qr-setup' && (req.method === 'GET' || req.method === 'HEAD')) {
+    return sendHtml(res, 200, renderPlatformDownloadPicker('qr'), {
+      'X-Robots-Tag': 'noindex, follow'
+    });
+  }
+
   // Handle /download route (matches sweeprcleaner.com/download)
   if (pathname === '/download' && (req.method === 'GET' || req.method === 'HEAD')) {
     const requestedPlatform = (urlObj.searchParams.get('platform') || '').toLowerCase();
     const hasSetupParams = Boolean(urlObj.searchParams.get('key') || urlObj.searchParams.get('code') || urlObj.searchParams.get('autoconf') === '1');
     const uaLower = ua.toLowerCase();
+
+    if (requestedPlatform === 'qr') {
+      return sendHtml(res, 200, renderPlatformDownloadPicker('qr'), {
+        'X-Robots-Tag': 'noindex, follow'
+      });
+    }
 
     let osType = 'windows';
     if (requestedPlatform === 'mac' || requestedPlatform === 'macos') osType = 'mac';

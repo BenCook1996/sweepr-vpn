@@ -376,6 +376,7 @@
     <symbol id="i-bulb" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.3h6c0-1 .4-1.8 1-2.3A7 7 0 0 0 12 2z"/></g></symbol>
     <symbol id="i-lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></g></symbol>
     <symbol id="i-bell" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></g></symbol>
+      <symbol id="i-qr" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM18 18h3v3h-3zM14 19h2M19 14h2"/></g></symbol>
   </defs>
 </svg>
 
@@ -395,6 +396,7 @@
     <svg class="logo desktop-only"><use href="#logo"/></svg>
     <button class="rail-btn on" id="nav-home" onclick="go('home')" aria-label="VPN"><svg width="20" height="20"><use href="#i-shield"/></svg><span class="nav-lbl" data-i18n="home">VPN</span><span class="tip" data-i18n="home">VPN</span></button>
     <button class="rail-btn" id="nav-wifi" onclick="go('wifi')" aria-label="Wi-Fi & TV"><svg width="20" height="20"><use href="#i-wifi"/></svg><span class="dot" id="wifiDot"></span><span class="nav-lbl" data-i18n="wifi">Wi-Fi &amp; TV</span><span class="tip" data-i18n="wifi">Wi-Fi &amp; TV</span></button>
+    <button class="rail-btn" id="nav-qr" onclick="openMobileWireGuardModal()" aria-label="QR Code Setup"><svg width="20" height="20"><use href="#i-qr"/></svg><span class="nav-lbl">QR Setup</span><span class="tip">QR Code Setup</span></button>
     <button class="rail-btn" id="nav-account" onclick="go('account')" aria-label="Account"><svg width="20" height="20"><use href="#i-user"/></svg><span class="nav-lbl" data-i18n="account">Account</span><span class="tip" data-i18n="account">Account &amp; Help</span></button>
     <div class="spacer desktop-only"></div>
     <button class="rail-btn desktop-only" onclick="toggleTheme()" aria-label="Light or dark mode"><svg width="20" height="20" id="themeIcon"><use href="#i-moon"/></svg><span class="tip" id="themeTip">Dark mode</span></button>
@@ -773,6 +775,39 @@
   const cur = () => SERVERS.find(s => s.code === state.code) || SERVERS[0];
   const $ = id => document.getElementById(id);
 
+  let _wv2Seq = 1;
+  const _wv2Pending = {};
+  window.onNativeVpnBridgeResponse = function(reqId, result) {
+    const p = _wv2Pending[reqId];
+    if (!p) return;
+    delete _wv2Pending[reqId];
+    if (result && result.error) p.reject(new Error(result.error));
+    else p.resolve(result);
+  };
+  function invokeWebView2(action, payload, timeoutMs) {
+    return new Promise((resolve, reject) => {
+      if (!isWebView2) return reject(new Error('WebView2 host unavailable'));
+      const reqId = 'wv2_' + (_wv2Seq++) + '_' + Date.now();
+      const timer = setTimeout(() => {
+        if (_wv2Pending[reqId]) {
+          delete _wv2Pending[reqId];
+          reject(new Error('WireGuard tunnel engine timed out'));
+        }
+      }, timeoutMs || 45000);
+      _wv2Pending[reqId] = {
+        resolve: (res) => { clearTimeout(timer); resolve(res); },
+        reject: (err) => { clearTimeout(timer); reject(err); }
+      };
+      try {
+        window.chrome.webview.postMessage(JSON.stringify({ action, reqId, payload: payload || {} }));
+      } catch (e) {
+        clearTimeout(timer);
+        delete _wv2Pending[reqId];
+        reject(e);
+      }
+    });
+  }
+
   function postNative(action, payload) {
     if (isWebView2) {
       try { window.chrome.webview.postMessage(JSON.stringify({ action, payload })); } catch (e) {}
@@ -852,7 +887,7 @@
     openCountrySheet(false);
     renderAll();
     postNative('selectServer', code);
-    if (state.connected && tauri) {
+    if (state.connected && (tauri || isWebView2)) {
       await toggleConnect(true);
     }
   }
@@ -881,18 +916,46 @@
       return;
     }
     if (!tauri && isWebView2) {
-      state.connected = wantConnect;
-      postNative('toggleConnection', wantConnect);
-      if (state.connected) {
-        state.seconds = 0;
+      state.connecting = true;
+      $('connectText').textContent = wantConnect ? 'Connecting…' : 'Disconnecting…';
+      try {
+        if (wantConnect) {
+          const st = await invokeWebView2('connectVpn', {
+            serverCode: state.code,
+            email: state.email || '',
+            activationCode: state.activationCode || '',
+            lanBypass: !!state.lanBypass,
+            deviceId: getOrCreateDesktopDeviceId()
+          }, 45000);
+          state.connected = !!(st && st.connected);
+          if (state.connected) {
+            state.seconds = 0;
+            clearInterval(timerHandle);
+            timerHandle = setInterval(tick, 1000);
+            toast('Protected via ' + cur().city + ' (' + ((st && st.address) || 'WireGuard') + ')');
+          } else {
+            clearInterval(timerHandle);
+            toast((st && st.error) || 'Could not start WireGuard tunnel');
+          }
+        } else {
+          const st = await invokeWebView2('disconnectVpn', {}, 20000);
+          state.connected = !!(st && st.connected);
+          clearInterval(timerHandle);
+          toast('Protection paused');
+        }
+      } catch (e) {
+        state.connected = false;
         clearInterval(timerHandle);
-        timerHandle = setInterval(tick, 1000);
-        toast('Protected via ' + cur().city + ' (WireGuard)');
-      } else {
-        clearInterval(timerHandle);
-        toast('Protection paused');
+        const errMsg = String((e && e.message) || e);
+        toast(errMsg);
+        if (/licence|license|subscription|activation/i.test(errMsg)) {
+          state.pro = false;
+          openActivate(errMsg);
+        }
+      } finally {
+        state.connecting = false;
+        renderAll();
       }
-      renderAll();
       return;
     }
     // Strategic Overhaul 2: If running on mobile browser or web preview (!tauri), launch the live WireGuard profile & QR hand-off modal!
@@ -908,7 +971,9 @@
           serverCode: state.code,
           email: state.email,
           activationCode: state.activationCode,
-          apiUrl: null
+          apiUrl: null,
+          lanBypass: !!state.lanBypass,
+          deviceId: getOrCreateDesktopDeviceId()
         });
         state.connected = !!st.connected;
         if (state.connected) {
@@ -939,6 +1004,29 @@
   }
 
   async function checkVpnStatus() {
+    if (isWebView2 && !tauri) {
+      try {
+        const st = await invokeWebView2('vpnStatus', {}, 10000);
+        if (st && st.server_code) state.code = st.server_code;
+        if (st && st.connected) {
+          if (!state.pro) {
+            await invokeWebView2('disconnectVpn', {}, 15000);
+            state.connected = false;
+            renderAll();
+            return;
+          }
+          state.connected = true;
+          if (st.server_code) state.code = st.server_code;
+          clearInterval(timerHandle);
+          timerHandle = setInterval(tick, 1000);
+          renderAll();
+        } else {
+          state.connected = false;
+          renderAll();
+        }
+      } catch (e) {}
+      return;
+    }
     if (!tauri) return;
     try {
       const st = await tauri.core.invoke('vpn_status');
@@ -1029,7 +1117,7 @@
     $('radar').classList.remove('off');
     renderDevices();
     try {
-      if (!tauri) {
+      if (!tauri && !isWebView2) {
         // Provide realistic preview scan in web/mobile browser mode while explaining local ARP access
         await new Promise(r => setTimeout(r, 650));
         devices = [
@@ -1038,6 +1126,10 @@
           { name:'Home Wi-Fi Router', ip:'192.168.1.1', mac:'Gateway', kind:'router', is_router:true, detail:'Encrypted WPA2/WPA3 gateway', tracker_risk:false },
           { name:'Wireless Speaker', ip:'192.168.1.35', mac:'Media', kind:'speaker', detail:'Verified device on home Wi-Fi', tracker_risk:false }
         ];
+        lastScanAt = Date.now();
+      } else if (isWebView2 && !tauri) {
+        const report = await invokeWebView2('scanNetwork', {}, 25000);
+        devices = (report && report.devices) || [];
         lastScanAt = Date.now();
       } else {
         const report = await tauri.core.invoke('scan_network');
@@ -1111,6 +1203,9 @@
     try { localStorage.setItem('sweepr_vpn_lan_bypass', state.lanBypass ? '1' : '0'); } catch (e) {}
     syncSwitchAria($('lanBypassToggle'), state.lanBypass);
     toast(state.lanBypass ? 'Local LAN Bypass enabled (printers & AirPlay reachable)' : 'Strict full-tunnel mode (local LAN blocked)');
+    if (state.connected && (tauri || isWebView2)) {
+      toggleConnect(true);
+    }
   }
   function copyReferralLink() {
     const seed = (state.activationCode || state.email || 'PRO').replace(/[^A-Z0-9]/gi, '').slice(-6).toUpperCase() || 'FRIEND';
@@ -1794,10 +1889,14 @@
       renderAll();
       checkVpnStatus();
     } catch (e) {
-      state.pro = false; state.email = ''; state.activationCode = ''; state.killSwitch = false;
-      document.querySelectorAll('.toggle.shield').forEach(t => syncSwitchAria(t, false));
-      try { localStorage.removeItem('sweepr_vpn_email'); localStorage.removeItem('sweepr_vpn_code'); localStorage.removeItem('sweepr_vpn_license_key'); } catch (err) {}
+      const msg = String((e && e.message) || e || '');
+      if (/invalid|revoked|expired|failed cryptographic/i.test(msg)) {
+        state.pro = false; state.email = ''; state.activationCode = ''; state.killSwitch = false;
+        document.querySelectorAll('.toggle.shield').forEach(t => syncSwitchAria(t, false));
+        try { localStorage.removeItem('sweepr_vpn_email'); localStorage.removeItem('sweepr_vpn_code'); localStorage.removeItem('sweepr_vpn_license_key'); } catch (err) {}
+      }
       renderAll();
+      checkVpnStatus();
     }
   }
 
@@ -2249,7 +2348,7 @@
     if (localStorage.getItem('sweepr_vpn_lan_bypass') === '0') state.lanBypass = false;
     const savedEmail = localStorage.getItem('sweepr_vpn_email') || '';
     const savedCode = localStorage.getItem('sweepr_vpn_code') || localStorage.getItem('sweepr_vpn_license_key') || '';
-    if (savedCode) { state.email = savedEmail; state.activationCode = savedCode; }
+    if (savedCode) { state.email = savedEmail; state.activationCode = savedCode; state.pro = true; }
     const urlParams = new URLSearchParams(location.search || '');
     const urlKey = (urlParams.get('key') || urlParams.get('code') || '').trim().toUpperCase();
     if (urlKey.length >= 6) {
