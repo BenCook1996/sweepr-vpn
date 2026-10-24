@@ -3,13 +3,19 @@ name: Build SWEEPR VPN Desktop (Windows, macOS, Linux)
 on:
   workflow_dispatch:
   push:
+    branches:
+      - main
+    paths:
+      - 'apps/desktop-tauri/**'
+      - 'scripts/build-mac-dmg.mjs'
+      - '.github/workflows/build-desktop.yml'
     tags:
       - 'v*'
 
 jobs:
   build-desktop:
     permissions:
-      contents: read
+      contents: write
     strategy:
       fail-fast: false
       matrix:
@@ -59,6 +65,28 @@ jobs:
       - name: Build Tauri application & installers
         working-directory: apps/desktop-tauri
         run: npx tauri build ${{ matrix.args }}
+
+      - name: Package signed macOS UDIF DMG with custom Volume Icon & commit to website
+        if: matrix.os_name == 'macos'
+        run: |
+          APP_BUNDLE=$(find apps/desktop-tauri/src-tauri/target -name "SWEEPR VPN.app" -type d | head -n 1)
+          if [ -n "$APP_BUNDLE" ]; then
+            codesign --force --deep --sign - "$APP_BUNDLE"
+            STAGE_DIR=$(mktemp -d)
+            cp -R "$APP_BUNDLE" "$STAGE_DIR/"
+            ln -s /Applications "$STAGE_DIR/Applications"
+            cp apps/desktop-tauri/src-tauri/icons/icon.icns "$STAGE_DIR/.VolumeIcon.icns"
+            SetFile -c icnC "$STAGE_DIR/.VolumeIcon.icns" || true
+            SetFile -a C "$STAGE_DIR" || true
+            hdiutil create -volname "SWEEPR VPN" -srcfolder "$STAGE_DIR" -ov -format UDZO website/SWEEPRVPN.dmg
+            if [ "${{ github.ref_name }}" = "main" ]; then
+              git config user.name "github-actions[bot]"
+              git config user.email "github-actions[bot]@users.noreply.github.com"
+              git pull --rebase origin main || true
+              git add website/SWEEPRVPN.dmg
+              git diff --staged --quiet || (git commit -m "chore(mac): update native Universal UDIF SWEEPRVPN.dmg with icon [skip ci]" && git push origin HEAD:main)
+            fi
+          fi
 
       - name: Upload installers as workflow artifacts
         uses: actions/upload-artifact@v4

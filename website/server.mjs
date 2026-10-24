@@ -2299,7 +2299,7 @@ self.addEventListener('fetch', e => {
   }
 
   // Handle /download route (matches sweeprcleaner.com/download)
-  if (pathname === '/download' && req.method === 'GET') {
+  if (pathname === '/download' && (req.method === 'GET' || req.method === 'HEAD')) {
     const requestedPlatform = (urlObj.searchParams.get('platform') || '').toLowerCase();
     const hasSetupParams = Boolean(urlObj.searchParams.get('key') || urlObj.searchParams.get('code') || urlObj.searchParams.get('autoconf') === '1');
     const uaLower = ua.toLowerCase();
@@ -2337,6 +2337,7 @@ self.addEventListener('fetch', e => {
         'X-Robots-Tag': 'noindex, nofollow',
         ...COMMON_SECURITY_HEADERS
       });
+      if (req.method === 'HEAD') return res.end();
       const dmgStream = fs.createReadStream(dmgPath);
       req.on('close', () => dmgStream.destroy());
       dmgStream.on('error', () => { if (!res.headersSent) res.writeHead(500); res.end(); });
