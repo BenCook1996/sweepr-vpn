@@ -77,6 +77,18 @@ export class SweeprCrmClient {
     }
   }
 
+  async _parseCrmRes(res) {
+    const ct = String(res.headers.get('content-type') || '').toLowerCase();
+    if (!ct.includes('application/json')) {
+      return { _httpStatus: 503, _notCrm: true };
+    }
+    const data = await res.json().catch(() => null);
+    if (!data || typeof data !== 'object') {
+      return { _httpStatus: 503, _notCrm: true };
+    }
+    return { _httpStatus: res.status, ...data };
+  }
+
   async activateDevice({ email, otp, accountId, refreshToken, deviceId, deviceName, os, appVersion }) {
     const res = await fetch(`${this.crmUrl}/v1/license/activate`, {
       method: 'POST',
@@ -95,8 +107,7 @@ export class SweeprCrmClient {
         app_version: appVersion,
       }),
     });
-    const data = await res.json().catch(() => ({}));
-    return { _httpStatus: res.status, ...data };
+    return this._parseCrmRes(res);
   }
 
   async refreshLicense({ accountId, refreshToken, deviceId, appVersion }) {
@@ -112,8 +123,7 @@ export class SweeprCrmClient {
         app_version: appVersion,
       }),
     });
-    const data = await res.json().catch(() => ({}));
-    return { _httpStatus: res.status, ...data };
+    return this._parseCrmRes(res);
   }
 
   async verifyKey(key, email = '') {
@@ -123,8 +133,7 @@ export class SweeprCrmClient {
       headers: this.headers(),
       signal: AbortSignal.timeout(6000),
     });
-    const data = await res.json().catch(() => ({}));
-    return { _httpStatus: res.status, ...data };
+    return this._parseCrmRes(res);
   }
 
   async sendOtp(email) {
@@ -137,8 +146,7 @@ export class SweeprCrmClient {
         email: String(email || '').trim().toLowerCase(),
       }),
     });
-    const data = await res.json().catch(() => ({}));
-    return { _httpStatus: res.status, ...data };
+    return this._parseCrmRes(res);
   }
 
   async syncSubscription(params = {}) {
@@ -201,8 +209,7 @@ export class SweeprCrmClient {
       signal: AbortSignal.timeout(6000),
       body: JSON.stringify(payload),
     });
-    const data = await res.json().catch(() => ({}));
-    return { _httpStatus: res.status, ...data };
+    return this._parseCrmRes(res);
   }
 
   async portalCancel(lookup, immediate = false) {
@@ -215,8 +222,7 @@ export class SweeprCrmClient {
       signal: AbortSignal.timeout(6000),
       body: JSON.stringify(payload),
     });
-    const data = await res.json().catch(() => ({}));
-    return { _httpStatus: res.status, ...data };
+    return this._parseCrmRes(res);
   }
 
   async verifyOtp({ email, code, deviceId, platform = 'web', deviceLabel = 'SWEEPR Customer Portal' } = {}) {
@@ -234,8 +240,7 @@ export class SweeprCrmClient {
         device_label: deviceLabel,
       }),
     });
-    const data = await res.json().catch(() => ({}));
-    return { _httpStatus: res.status, ...data };
+    return this._parseCrmRes(res);
   }
 
   async fetchPricing(opts = {}) {
