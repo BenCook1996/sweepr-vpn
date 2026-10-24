@@ -436,14 +436,29 @@
       </div>
     </section>
 
-    <!-- WI-FI & TV -->
+    <!-- WI-FI & TV (De-Cluttered: 1 Unified Master Shield + Plain-English Device List) -->
     <section id="view-wifi" class="hidden">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
         <div><h1 class="view-title"><span id="devCountTitle">4</span> <span data-i18n="wifiTitle">devices on Wi-Fi</span></h1><div class="view-sub" id="lastChecked">Checked just now</div></div>
         <button class="btn-soft" onclick="scanWifi()" id="scanBtn" data-i18n="scanBtn">Scan Wi-Fi</button>
       </div>
 
-      <div class="radar off" id="radar">
+      <!-- Unified Master Shield Card (Replaces 4 Fragmented Toggles) -->
+      <div class="card" style="margin-top:16px;padding:14px 16px">
+        <div class="set-row" style="padding:0" onclick="toggleAuto()">
+          <div class="ico e"><svg width="19" height="19"><use href="#i-shield"/></svg></div>
+          <div class="grow">
+            <div class="t"><span data-i18n="intruderTitle">Full Home &amp; Smart-TV Shield</span> <span class="pro-tag">PRO</span></div>
+            <div class="s" data-i18n="intruderSub">Blocks Samsung, LG &amp; Roku viewing trackers and alerts you to unknown Wi-Fi devices</div>
+          </div>
+          <button class="toggle" id="autoToggle" role="switch" aria-checked="false" aria-label="Full Home and Smart-TV Shield" onclick="event.stopPropagation();toggleAuto()"><i></i></button>
+        </div>
+      </div>
+
+      <div style="margin-top:12px" id="devList"></div>
+
+      <!-- Hidden Legacy Radar & Individual Toggles (Preserved for JS Compatibility) -->
+      <div class="radar off hidden" id="radar">
         <div class="r" style="width:420px;height:420px"></div>
         <div class="r" style="width:300px;height:300px"></div>
         <div class="r" style="width:180px;height:180px"></div>
@@ -451,26 +466,11 @@
         <svg class="center"><use href="#logo"/></svg>
         <div id="blips"></div>
       </div>
-
-      <div style="margin-top:14px" id="devList"></div>
-
-      <!-- Quick Win 4: Single Auto-Watch toggle (removed 3-way frequency selector noise) -->
-      <div class="card" style="margin-top:14px;padding:14px 16px">
-        <div class="set-row" style="padding:0" onclick="toggleAuto()">
-          <div class="ico e"><svg width="19" height="19"><use href="#i-bell"/></svg></div>
-          <div class="grow">
-            <div class="t"><span data-i18n="intruderTitle">Wi-Fi intruder alerts</span> <span class="pro-tag">PRO</span></div>
-            <div class="s" data-i18n="intruderSub">Alert me immediately if an unknown device joins my Wi-Fi</div>
-          </div>
-          <button class="toggle" id="autoToggle" role="switch" aria-checked="false" aria-label="Wi-Fi intruder alerts" onclick="event.stopPropagation();toggleAuto()"><i></i></button>
-        </div>
-      </div>
-
-      <h3 class="sec"><span style="color:var(--ink);font-size:15px;font-weight:800" data-i18n="shieldsHeader">Household &amp; Smart-TV shields</span> <span style="cursor:pointer" onclick="allShields()" data-i18n="enableAll">Enable all</span></h3>
-      <div class="card" style="padding:4px 16px">
-        <div class="set-row" onclick="toggleShieldRow(0)"><div class="grow"><div class="t"><span data-i18n="shTvTitle">Smart-TV anti-spy shield</span> <span class="pro-tag">PRO</span></div><div class="s" data-i18n="shTvSub">Blocks Samsung, LG &amp; Sony ACR viewing telemetry</div></div><button class="toggle shield" id="sh-0" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleShield(this)"><i></i></button></div>
-        <div class="set-row" onclick="toggleShieldRow(1)"><div class="grow"><div class="t"><span data-i18n="shBoxTitle">Streaming-box ad blocker</span> <span class="pro-tag">PRO</span></div><div class="s" data-i18n="shBoxSub">Stops Roku, Fire TV &amp; Apple TV tracking beacons</div></div><button class="toggle shield" id="sh-1" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleShield(this)"><i></i></button></div>
-        <div class="set-row" onclick="toggleShieldRow(2)"><div class="grow"><div class="t"><span data-i18n="shRtrTitle">Router safety check</span> <span class="pro-tag">PRO</span></div><div class="s" data-i18n="shRtrSub">Verifies your home Wi-Fi gateway has no exposed ports</div></div><button class="toggle shield" id="sh-2" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleShield(this)"><i></i></button></div>
+      <div class="hidden">
+        <h3 class="sec"><span data-i18n="shieldsHeader">Household &amp; Smart-TV shields</span> <span onclick="allShields()" data-i18n="enableAll">Enable all</span></h3>
+        <button class="toggle shield" id="sh-0" role="switch" aria-checked="false" onclick="toggleShield(this)"><i></i></button>
+        <button class="toggle shield" id="sh-1" role="switch" aria-checked="false" onclick="toggleShield(this)"><i></i></button>
+        <button class="toggle shield" id="sh-2" role="switch" aria-checked="false" onclick="toggleShield(this)"><i></i></button>
       </div>
       <div style="height:6px"></div>
     </section>
@@ -646,8 +646,6 @@
       <div class="s" style="color:#475569;font-weight:700">Generating your encrypted WireGuard keypair…</div>
     </div>
 
-    <div class="wg-code-preview" id="wgConfText">Loading configuration…</div>
-
     <div style="display:flex;gap:8px;flex-wrap:wrap">
       <button class="btn-go" style="flex:1;padding:11px 14px;font-size:13px" id="wgDownloadBtn" onclick="downloadMobileWireGuardConf()">Download .conf Profile</button>
       <button class="btn-soft" onclick="downloadAppleMobileConfigModal()" title="Install native Apple VPN profile on iPhone, iPad, or Mac">iOS / macOS .mobileconfig</button>
@@ -656,6 +654,10 @@
       <button class="btn-soft" style="flex:1" onclick="shareMobileWireGuardLink()" id="wgShareBtn">Send 1-Tap Setup Link to Phone</button>
       <button class="btn-soft" onclick="copyMobileWireGuardConf()" id="wgCopyBtn">Copy Config</button>
     </div>
+    <div style="text-align:center">
+      <button type="button" onclick="document.getElementById('wgConfText').classList.toggle('hidden')" style="font-size:11.5px;color:var(--muted);font-weight:700">Show technical WireGuard config ›</button>
+    </div>
+    <div class="wg-code-preview hidden" id="wgConfText">Loading configuration…</div>
     <div class="s" style="line-height:1.45">
       <strong>How to connect on iPhone / Android in 15 seconds:</strong><br>
       1. Install the free official <strong>WireGuard</strong> app (or tap <strong>iOS / macOS .mobileconfig</strong> on Apple devices).<br>

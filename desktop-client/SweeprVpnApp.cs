@@ -179,7 +179,7 @@ namespace SweeprVpnApp
             TrayStatusItem = new ToolStripMenuItem("○ Not Protected — London, UK") { Enabled = false };
             TrayToggleItem = new ToolStripMenuItem("Connect VPN", null, (s, e) =>
             {
-                RestoreFromTray();
+                ToggleConnection();
                 ExecuteJsSafe("toggleConnect()");
             });
             TrayLocMenu = new ToolStripMenuItem("Switch Country (8)");
@@ -189,7 +189,6 @@ namespace SweeprVpnApp
                 ToolStripMenuItem locItem = new ToolStripMenuItem(srv.City + " (" + srv.Code + ")", null, (s, e) =>
                 {
                     SelectServer(code);
-                    RestoreFromTray();
                     ExecuteJsSafe("pick('" + code + "'); if(!state.connected) toggleConnect(true);");
                 });
                 locItem.Tag = code;

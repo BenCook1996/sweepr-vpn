@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>SWEEPR VPN — De-Cluttered App Prototype (Mockup B)</title>
+<title>SWEEPR VPN — De-Cluttered Desktop, Tray &amp; Mobile App Prototype</title>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5" />
+<script src="https://cdn.tailwindcss.com/3.4.5"></script>
 <style>
   :root {
     --e400:#34d399; --e500:#10b981; --e600:#059669; --e700:#047857;
@@ -18,18 +19,34 @@
   body {
     font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI Variable","Segoe UI",Inter,sans-serif;
     font-size:14px; color:var(--ink); background:#dcece5;
-    display:grid; place-items:center; padding:20px;
+    display:grid; place-items:center; padding:20px 20px 64px;
     -webkit-font-smoothing:antialiased;
   }
   button { font:inherit; cursor:pointer; border:0; background:none; color:inherit; }
 
-  /* Floating Window Frame */
+  /* 1. Desktop Window Frame */
   .window {
-    width:100%; max-width:960px; height:600px;
+    width:100%; max-width:960px; height:590px;
     background:var(--bg); border-radius:24px;
     box-shadow:0 30px 80px rgba(15,23,42,.18), 0 0 0 1px rgba(15,23,42,.06);
-    display:grid; grid-template-columns:68px 1fr 360px;
-    overflow:hidden; position:relative;
+    display:grid; grid-template-columns:68px 1fr 350px;
+    overflow:hidden; position:relative; transition:all .22s ease;
+  }
+
+  /* 2. Compact System Tray / Menu Bar Popover Mode (350x490) */
+  .window.is-tray {
+    max-width:350px; height:490px;
+    grid-template-columns:1fr;
+    border-radius:22px;
+  }
+
+  /* 3. Mobile Portrait One-Handed Thumb-Zone Mode (380x660) */
+  .window.is-mobile {
+    max-width:380px; height:650px;
+    grid-template-columns:1fr;
+    grid-template-rows:1fr auto;
+    border-radius:38px;
+    border:7px solid #0f172a;
   }
 
   /* Slim 3-Icon Rail */
@@ -38,33 +55,45 @@
     display:flex; flex-direction:column; align-items:center;
     gap:12px; padding:22px 0;
   }
+  .window.is-mobile .rail {
+    flex-direction:row; justify-content:space-around;
+    padding:8px 12px; border-right:0; border-top:1px solid var(--line);
+    background:#fff; order:2;
+  }
+  .window.is-tray .rail { display:none; }
+
   .rail-btn {
     width:44px; height:44px; border-radius:14px;
-    display:grid; place-items:center; color:#64748b; transition:all .15s;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
+    color:#64748b; transition:all .15s;
   }
   .rail-btn:hover { background:rgba(5,150,105,.08); color:var(--ink); }
   .rail-btn.on { background:#064e3b; color:#fff; box-shadow:0 6px 16px rgba(6,78,59,.25); }
+  .rail-lbl { display:none; font-size:10px; font-weight:800; }
+  .window.is-mobile .rail-btn { width:84px; height:46px; border-radius:12px; }
+  .window.is-mobile .rail-lbl { display:block; }
   .rail .spacer { flex:1; }
+  .window.is-mobile .rail .spacer { display:none; }
 
-  /* De-Cluttered Center Column (No Search Bar, No Filter Tabs, No Duplicate Quick Picks) */
-  .main { padding:32px 34px; display:flex; flex-direction:column; justify-content:space-between; }
-  h1.title { font-size:26px; font-weight:800; letter-spacing:-.5px; color:var(--ink); }
+  /* Center Column */
+  .main { padding:30px 32px; overflow-y:auto; display:flex; flex-direction:column; gap:14px; }
+  .window.is-mobile .main { padding:18px; }
+  .window.is-tray .main { display:none; }
+
+  h1.title { font-size:25px; font-weight:800; letter-spacing:-.5px; color:var(--ink); }
   .sub { font-size:13px; color:var(--muted); margin-top:2px; }
 
   .tv-pill {
     display:flex; align-items:center; justify-content:space-between; gap:12px;
     background:var(--amberbg); border:1px solid var(--amberline);
-    border-radius:14px; padding:11px 14px; margin:18px 0 14px;
+    border-radius:14px; padding:11px 14px;
     color:var(--amberink); font-weight:600; font-size:13.5px;
   }
-  .tv-pill.safe {
-    background:var(--sel); border-color:rgba(16,185,129,.3); color:#065f46;
-  }
+  .tv-pill.safe { background:var(--sel); border-color:rgba(16,185,129,.3); color:#065f46; }
   .tv-btn {
     background:#064e3b; color:#fff; font-size:12px; font-weight:700;
-    padding:6px 13px; border-radius:9px; transition:opacity .15s;
+    padding:6px 13px; border-radius:9px;
   }
-  .tv-btn:hover { opacity:.9; }
 
   .loc-list { display:flex; flex-direction:column; gap:2px; }
   .loc-row {
@@ -78,18 +107,23 @@
   .ping { display:flex; align-items:center; gap:6px; font-size:13px; color:var(--muted); font-variant-numeric:tabular-nums; }
   .ping::before { content:""; width:7px; height:7px; border-radius:50%; background:#34d399; }
 
-  /* De-Cluttered Right Connection Panel */
+  /* Right Connection Panel */
   .panel {
     margin:14px 14px 14px 0; border-radius:22px;
     background:linear-gradient(165deg,#064e3b 0%,#043927 100%);
-    color:#fff; padding:32px 28px; position:relative; overflow:hidden;
+    color:#fff; padding:32px 26px; position:relative; overflow:hidden;
     display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
   }
+  .window.is-tray .panel {
+    margin:0; border-radius:0; height:100%; justify-content:space-between; padding:22px;
+  }
+  .window.is-mobile .panel { display:none; }
+
   .rings {
-    position:absolute; inset:50% auto auto 50%; width:320px; height:320px;
+    position:absolute; inset:50% auto auto 50%; width:310px; height:310px;
     transform:translate(-50%,-50%); border-radius:50%;
     border:1px solid rgba(167,243,208,.14);
-    box-shadow:0 0 0 42px rgba(167,243,208,.05), 0 0 0 84px rgba(167,243,208,.03), 0 0 0 126px rgba(167,243,208,.015);
+    box-shadow:0 0 0 42px rgba(167,243,208,.05), 0 0 0 84px rgba(167,243,208,.03);
     pointer-events:none;
   }
   .panel.on .rings { animation:breathe 3.6s ease-in-out infinite; }
@@ -97,17 +131,23 @@
     0%, 100% { transform:translate(-50%,-50%) scale(1); }
     50% { transform:translate(-50%,-50%) scale(1.05); }
   }
-  .panel-title { font-size:28px; font-weight:800; line-height:1.18; letter-spacing:-.5px; position:relative; z-index:2; }
+  .panel-title { font-size:27px; font-weight:800; line-height:1.16; letter-spacing:-.5px; position:relative; z-index:2; }
   .panel-meta { font-size:13px; color:#a7f3d0; margin-top:10px; position:relative; z-index:2; }
   .connect-pill {
-    margin-top:26px; background:#fff; color:#064e3b;
+    margin-top:24px; background:#fff; color:#064e3b;
     font-size:15px; font-weight:800; padding:13px 34px; border-radius:999px;
     box-shadow:0 10px 25px rgba(0,0,0,.2); position:relative; z-index:2;
     transition:transform .15s;
   }
   .connect-pill:hover { transform:translateY(-1px); }
 
-  /* De-Cluttered Upgrade Modal (Only 3 Clean Plans + 1 Button; Key Input Collapsed) */
+  /* Toggle Switch */
+  .toggle { width:44px; height:26px; border-radius:99px; background:#cbd5e1; position:relative; flex-shrink:0; transition:background .15s; }
+  .toggle i { position:absolute; left:3px; top:3px; width:20px; height:20px; border-radius:50%; background:#fff; transition:left .15s; box-shadow:0 1px 3px rgba(0,0,0,.2); }
+  .toggle.on { background:var(--e600); }
+  .toggle.on i { left:21px; }
+
+  /* Minimalist Unlock SWEEPR Pro Modal */
   .backdrop {
     position:fixed; inset:0; background:rgba(15,23,42,.45); backdrop-filter:blur(5px);
     display:none; align-items:center; justify-content:center; z-index:100; padding:16px;
@@ -128,122 +168,214 @@
     width:100%; background:var(--e600); color:#fff; border-radius:999px;
     font-weight:800; font-size:14.5px; padding:13px; margin-top:4px;
   }
-
-  @media (max-width: 820px) {
-    body { padding:0; }
-    .window { height:100vh; border-radius:0; grid-template-columns:1fr; grid-template-rows:auto 1fr auto; }
-    .rail { flex-direction:row; justify-content:space-around; padding:10px; border-right:0; border-top:1px solid var(--line); order:3; }
-    .rail .spacer { display:none; }
-    .panel { order:1; margin:12px; padding:24px 18px; }
-    .main { order:2; padding:16px 18px; overflow-y:auto; }
-  }
 </style>
 </head>
 <body>
 
-  <!-- Tiny Bottom-Right Prototype Switcher -->
-  <div style="position:fixed;bottom:14px;right:14px;z-index:120;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #cbd5e1;border-radius:999px;padding:6px 14px;font-size:12px;font-weight:700;box-shadow:0 6px 20px rgba(0,0,0,.08)">
-    <button onclick="openModal(true)" style="color:#059669;font-weight:800">Preview Minimal £1.99 Sheet</button>
-    <span style="color:#cbd5e1">|</span>
-    <a href="/prototype-mockup-a.html" style="color:#334155;text-decoration:none">&larr; Hero (Mockup A)</a>
+  <!-- Bottom Floating View Switcher (Lets You Test All 4 De-Cluttered App Views) -->
+  <div class="fixed bottom-3.5 left-1/2 -translate-x-1/2 z-50 flex flex-wrap items-center gap-1.5 bg-white/95 backdrop-blur-md border border-slate-300 shadow-xl rounded-full px-3 py-1.5 text-xs font-bold text-slate-700">
+    <button onclick="setMode('desktop-vpn')" id="mBtnVpn" class="px-3 py-1 rounded-full bg-emerald-700 text-white">1. Desktop VPN</button>
+    <button onclick="setMode('desktop-wifi')" id="mBtnWifi" class="px-3 py-1 rounded-full hover:bg-slate-100">2. Wi-Fi &amp; TV Shield</button>
+    <button onclick="setMode('tray')" id="mBtnTray" class="px-3 py-1 rounded-full hover:bg-slate-100">3. Tray Mini Popover</button>
+    <button onclick="setMode('mobile')" id="mBtnMobile" class="px-3 py-1 rounded-full hover:bg-slate-100">4. Mobile Thumb-Zone</button>
+    <button onclick="openModal(true)" class="px-3 py-1 rounded-full bg-amber-100 text-amber-900">5. £1.99 Unlock Sheet</button>
   </div>
 
-  <div class="window">
-    <!-- Left Rail (3 Icons Only) -->
+  <div class="window" id="appWindow">
+    <!-- Left Rail (Desktop) / Bottom Thumb Bar (Mobile) -->
     <nav class="rail" aria-label="Main navigation">
-      <button class="rail-btn on" title="VPN"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></button>
-      <button class="rail-btn" title="Wi-Fi &amp; TV" onclick="openModal(true)"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1"/></svg></button>
+      <button class="rail-btn on" id="navVpn" onclick="switchTab('vpn')" title="VPN">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span class="rail-lbl">VPN</span>
+      </button>
+      <button class="rail-btn" id="navWifi" onclick="switchTab('wifi')" title="Wi-Fi &amp; TV">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1"/></svg>
+        <span class="rail-lbl">Wi-Fi &amp; TV</span>
+      </button>
       <div class="spacer"></div>
-      <button class="rail-btn" title="Account" onclick="openModal(true)"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg></button>
+      <button class="rail-btn" id="navAcc" onclick="openModal(true)" title="Account">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
+        <span class="rail-lbl">Account</span>
+      </button>
     </nav>
 
-    <!-- Center Column: Choose a Country (No Search Bar, No Filter Tabs, No Duplicate Quick Picks) -->
+    <!-- Center Column -->
     <main class="main">
-      <div>
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div>
-            <h1 class="title">Select a Location</h1>
-            <div class="sub">Choose a Country</div>
+
+      <!-- TAB 1: VPN LOCATION PICKER ( plus Mobile Thumb-Zone Card when in Mobile Mode ) -->
+      <div id="tabVpn" class="flex flex-col justify-between h-full gap-3">
+        <div>
+          <div class="flex items-center justify-between">
+            <div>
+              <h1 class="title">Select a Location</h1>
+              <div class="sub">Choose a Country</div>
+            </div>
+            <button onclick="openModal(true)" class="text-xs font-extrabold px-3 py-1 rounded-full bg-emerald-100 text-emerald-800">Pro ✓</button>
+          </div>
+
+          <!-- Single Subtle Smart-TV Tracking Bar -->
+          <div class="tv-pill mt-4 mb-3" id="tvBar">
+            <span>📺 Samsung TV tracking detected</span>
+            <button class="tv-btn" onclick="blockTv()">Block</button>
+          </div>
+
+          <!-- Clean Country List (No Search Box, No Filter Tabs, No Stars) -->
+          <div class="loc-list">
+            <button class="loc-row on" onclick="pickNode('United Kingdom', 'London', '8 ms', this)">
+              <span class="loc-left">
+                <span class="flag"><svg viewBox="0 0 60 40"><rect width="60" height="40" fill="#012169"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#fff" stroke-width="8"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#C8102E" stroke-width="4"/><path d="M30,0V40 M0,20H60" stroke="#fff" stroke-width="12"/><path d="M30,0V40 M0,20H60" stroke="#C8102E" stroke-width="7"/></svg></span>
+                <span>United Kingdom</span>
+              </span>
+              <span class="ping">8 ms</span>
+            </button>
+
+            <button class="loc-row" onclick="pickNode('Sweden', 'Stockholm', '19 ms', this)">
+              <span class="loc-left">
+                <span class="flag"><svg viewBox="0 0 60 40"><rect width="60" height="40" fill="#006AA7"/><rect x="17" width="8" height="40" fill="#FECC02"/><rect y="16" width="60" height="8" fill="#FECC02"/></svg></span>
+                <span>Sweden</span>
+              </span>
+              <span class="ping">19 ms</span>
+            </button>
+
+            <button class="loc-row" onclick="pickNode('Netherlands', 'Amsterdam', '14 ms', this)">
+              <span class="loc-left">
+                <span class="flag"><svg viewBox="0 0 60 40"><rect width="60" height="13.3" fill="#AE1C28"/><rect y="13.3" width="60" height="13.3" fill="#fff"/><rect y="26.6" width="60" height="13.4" fill="#21468B"/></svg></span>
+                <span>Netherlands</span>
+              </span>
+              <span class="ping">14 ms</span>
+            </button>
+
+            <button class="loc-row" onclick="pickNode('Germany', 'Frankfurt', '16 ms', this)">
+              <span class="loc-left">
+                <span class="flag"><svg viewBox="0 0 60 39"><rect width="60" height="13" fill="#000"/><rect y="13" width="60" height="13" fill="#D00"/><rect y="26" width="60" height="13" fill="#FFCE00"/></svg></span>
+                <span>Germany</span>
+              </span>
+              <span class="ping">16 ms</span>
+            </button>
+
+            <button class="loc-row" onclick="pickNode('United States', 'New York', '68 ms', this)">
+              <span class="loc-left">
+                <span class="flag"><svg viewBox="0 0 60 40"><rect width="60" height="40" fill="#B22234"/><path d="M0,6H60 M0,15H60 M0,25H60 M0,34H60" stroke="#fff" stroke-width="4"/><rect width="26" height="22" fill="#3C3B6E"/></svg></span>
+                <span>United States</span>
+              </span>
+              <span class="ping">68 ms</span>
+            </button>
+
+            <button class="loc-row" onclick="pickNode('Japan', 'Tokyo', '142 ms', this)">
+              <span class="loc-left">
+                <span class="flag"><svg viewBox="0 0 60 40"><rect width="60" height="40" fill="#fff"/><circle cx="30" cy="20" r="11" fill="#BC002D"/></svg></span>
+                <span>Japan</span>
+              </span>
+              <span class="ping">142 ms</span>
+            </button>
           </div>
         </div>
 
-        <!-- Single Subtle Smart-TV Tracking Bar -->
-        <div class="tv-pill" id="tvBar">
-          <span>📺 Samsung TV tracking detected</span>
-          <button class="tv-btn" id="tvBtn" onclick="blockTv()">Block</button>
-        </div>
-
-        <!-- Clean Country List -->
-        <div class="loc-list" id="locList">
-          <button class="loc-row on" onclick="pickNode('United Kingdom', 'London', '8 ms', this)">
-            <span class="loc-left">
-              <span class="flag"><svg viewBox="0 0 60 40"><rect width="60" height="40" fill="#012169"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#fff" stroke-width="8"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#C8102E" stroke-width="4"/><path d="M30,0V40 M0,20H60" stroke="#fff" stroke-width="12"/><path d="M30,0V40 M0,20H60" stroke="#C8102E" stroke-width="7"/></svg></span>
-              <span>United Kingdom</span>
-            </span>
-            <span class="ping">8 ms</span>
-          </button>
-
-          <button class="loc-row" onclick="pickNode('Sweden', 'Stockholm', '19 ms', this)">
-            <span class="loc-left">
-              <span class="flag"><svg viewBox="0 0 60 40"><rect width="60" height="40" fill="#006AA7"/><rect x="17" width="8" height="40" fill="#FECC02"/><rect y="16" width="60" height="8" fill="#FECC02"/></svg></span>
-              <span>Sweden</span>
-            </span>
-            <span class="ping">19 ms</span>
-          </button>
-
-          <button class="loc-row" onclick="pickNode('Netherlands', 'Amsterdam', '14 ms', this)">
-            <span class="loc-left">
-              <span class="flag"><svg viewBox="0 0 60 40"><rect width="60" height="13.3" fill="#AE1C28"/><rect y="13.3" width="60" height="13.3" fill="#fff"/><rect y="26.6" width="60" height="13.4" fill="#21468B"/></svg></span>
-              <span>Netherlands</span>
-            </span>
-            <span class="ping">14 ms</span>
-          </button>
-
-          <button class="loc-row" onclick="pickNode('Germany', 'Frankfurt', '16 ms', this)">
-            <span class="loc-left">
-              <span class="flag"><svg viewBox="0 0 60 39"><rect width="60" height="13" fill="#000"/><rect y="13" width="60" height="13" fill="#D00"/><rect y="26" width="60" height="13" fill="#FFCE00"/></svg></span>
-              <span>Germany</span>
-            </span>
-            <span class="ping">16 ms</span>
-          </button>
-
-          <button class="loc-row" onclick="pickNode('United States', 'New York', '68 ms', this)">
-            <span class="loc-left">
-              <span class="flag"><svg viewBox="0 0 60 40"><rect width="60" height="40" fill="#B22234"/><path d="M0,6H60 M0,15H60 M0,25H60 M0,34H60" stroke="#fff" stroke-width="4"/><rect width="26" height="22" fill="#3C3B6E"/></svg></span>
-              <span>United States</span>
-            </span>
-            <span class="ping">68 ms</span>
-          </button>
-
-          <button class="loc-row" onclick="pickNode('Singapore', 'Singapore', '152 ms', this)">
-            <span class="loc-left">
-              <span class="flag"><svg viewBox="0 0 60 40"><rect width="60" height="20" fill="#EF3340"/><rect y="20" width="60" height="20" fill="#fff"/></svg></span>
-              <span>Singapore</span>
-            </span>
-            <span class="ping">152 ms</span>
-          </button>
-
-          <button class="loc-row" onclick="pickNode('Japan', 'Tokyo', '142 ms', this)">
-            <span class="loc-left">
-              <span class="flag"><svg viewBox="0 0 60 40"><rect width="60" height="40" fill="#fff"/><circle cx="30" cy="20" r="11" fill="#BC002D"/></svg></span>
-              <span>Japan</span>
-            </span>
-            <span class="ping">142 ms</span>
-          </button>
+        <!-- Mobile One-Handed Thumb-Zone Connect Bar (Shown in Mobile Mode) -->
+        <div id="mobileThumbCard" class="hidden bg-emerald-950 text-white rounded-2xl p-4 flex items-center justify-between gap-3 shadow-lg">
+          <div>
+            <div class="text-xs text-emerald-300 font-bold" id="mobStatus">● Protected &amp; Private</div>
+            <div class="text-sm font-extrabold mt-0.5" id="mobCity">London, UK &bull; 8 ms</div>
+          </div>
+          <button onclick="toggleConnect()" id="mobConnectBtn" class="bg-white text-emerald-950 font-extrabold text-xs px-4 py-2.5 rounded-full">Connected &#10003;</button>
         </div>
       </div>
+
+      <!-- TAB 2: DE-CLUTTERED WI-FI & SMART-TV SHIELD VIEW (1 Unified Toggle + 4 Plain-English Devices) -->
+      <div id="tabWifi" class="hidden flex-col gap-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="title">4 devices on Wi-Fi</h1>
+            <div class="sub">Checked just now &bull; Home router safe</div>
+          </div>
+          <button onclick="toast('Wi-Fi scan complete — 4 devices safe')" class="text-xs font-extrabold px-3.5 py-2 rounded-full bg-emerald-100 text-emerald-800">Scan Wi-Fi</button>
+        </div>
+
+        <!-- 1 Unified Master Toggle (Replaces 4 Fragmented Toggles) -->
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 flex items-center justify-between gap-3">
+          <div>
+            <div class="font-extrabold text-sm text-slate-900">Full Home &amp; Smart-TV Shield</div>
+            <div class="text-xs text-slate-500 mt-0.5">Blocks Samsung, LG &amp; Roku viewing trackers and alerts you if an unknown device joins your Wi-Fi</div>
+          </div>
+          <button class="toggle on" onclick="this.classList.toggle('on')" aria-label="Full Home and Smart-TV Shield"><i></i></button>
+        </div>
+
+        <!-- Clean Plain-English Device Rows (No Scary Raw MAC Addresses) -->
+        <div class="space-y-2">
+          <div class="bg-white border border-slate-200 rounded-2xl p-3.5 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <span class="text-lg">📺</span>
+              <div>
+                <div class="font-bold text-sm text-slate-900">Living Room Samsung TV</div>
+                <div class="text-xs text-slate-500">Smart-TV viewing trackers blocked</div>
+              </div>
+            </div>
+            <span class="text-xs font-extrabold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700">Shielded &#10003;</span>
+          </div>
+
+          <div class="bg-white border border-slate-200 rounded-2xl p-3.5 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <span class="text-lg">💻</span>
+              <div>
+                <div class="font-bold text-sm text-slate-900">This Computer</div>
+                <div class="text-xs text-slate-500">Encrypted 10 Gbps VPN tunnel</div>
+              </div>
+            </div>
+            <span class="text-xs font-extrabold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700">Protected &#10003;</span>
+          </div>
+
+          <div class="bg-white border border-slate-200 rounded-2xl p-3.5 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <span class="text-lg">📱</span>
+              <div>
+                <div class="font-bold text-sm text-slate-900">Family iPhone</div>
+                <div class="text-xs text-slate-500">Verified Apple device on home Wi-Fi</div>
+              </div>
+            </div>
+            <span class="text-xs font-extrabold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700">Safe &#10003;</span>
+          </div>
+
+          <div class="bg-white border border-slate-200 rounded-2xl p-3.5 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <span class="text-lg">📶</span>
+              <div>
+                <div class="font-bold text-sm text-slate-900">Home Wi-Fi Router</div>
+                <div class="text-xs text-slate-500">WPA2/WPA3 encrypted &bull; No open ports</div>
+              </div>
+            </div>
+            <span class="text-xs font-extrabold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700">Safe &#10003;</span>
+          </div>
+        </div>
+      </div>
+
     </main>
 
-    <!-- Right Panel: Calm Concentric Rings + Single Metadata Line + 1 Button -->
+    <!-- Right Panel (Also Serves as the Compact System Tray / Menu Bar Popover) -->
     <aside class="panel on" id="panel">
       <div class="rings"></div>
-      <div class="panel-title" id="panelTitle">Connected to<br>stay private</div>
-      <div class="panel-meta" id="panelMeta">London, UK &bull; 8 ms &bull; 4 Wi-Fi devices safe</div>
-      <button class="connect-pill" id="connectBtn" onclick="toggleConnect()">Connected &#10003;</button>
+
+      <!-- Tray Header (Only Shown in Tray Popover Mode) -->
+      <div id="trayTopBar" class="hidden w-full flex items-center justify-between text-xs font-bold text-emerald-200 z-10">
+        <span>SWEEPR VPN</span>
+        <button onclick="setMode('desktop-vpn')" class="underline">Open Full App &nearr;</button>
+      </div>
+
+      <div class="my-auto flex flex-col items-center z-10">
+        <div class="panel-title" id="panelTitle">Connected to<br>stay private</div>
+        <div class="panel-meta" id="panelMeta">London, UK &bull; 8 ms &bull; 4 Wi-Fi devices safe</div>
+        <button class="connect-pill" id="connectBtn" onclick="toggleConnect()">Connected &#10003;</button>
+      </div>
+
+      <!-- Tray Quick Country Switcher (Only Shown in Tray Popover Mode) -->
+      <div id="trayQuickList" class="hidden w-full bg-white/10 rounded-2xl p-2 space-y-1 text-xs font-bold z-10">
+        <button onclick="pickNode('United Kingdom', 'London', '8 ms')" class="w-full flex justify-between px-3 py-1.5 rounded-xl bg-white/15"><span>🇬🇧 United Kingdom</span><span class="text-emerald-300">8 ms</span></button>
+        <button onclick="pickNode('Sweden', 'Stockholm', '19 ms')" class="w-full flex justify-between px-3 py-1.5 rounded-xl hover:bg-white/10"><span>🇸🇪 Sweden</span><span class="text-emerald-300">19 ms</span></button>
+        <button onclick="pickNode('United States', 'New York', '68 ms')" class="w-full flex justify-between px-3 py-1.5 rounded-xl hover:bg-white/10"><span>🇺🇸 United States</span><span class="text-emerald-300">68 ms</span></button>
+      </div>
     </aside>
   </div>
 
-  <!-- Minimalist Unlock SWEEPR Pro Modal (3 Clean Plans + 1 Button; License Key Tucked Into Footer Link) -->
+  <!-- Minimalist Unlock SWEEPR Pro Modal -->
   <div class="backdrop" id="modal" onclick="openModal(false)">
     <div class="sheet" onclick="event.stopPropagation()">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
@@ -289,7 +421,6 @@
 
       <button class="btn-go" id="checkoutBtn" onclick="window.location.href=selectedUrl">Continue — £1.99 (1st Month)</button>
 
-      <!-- Quiet Collapsible License Key Link Instead of Always-Visible Input Box Clutter -->
       <div style="text-align:center;margin-top:2px">
         <button onclick="document.getElementById('keyBox').style.display='flex'" style="font-size:12px;color:var(--muted);font-weight:600">Already have a license key? Enter it &rsaquo;</button>
         <div id="keyBox" style="display:none;gap:6px;margin-top:8px">
@@ -306,11 +437,54 @@
     let currentPing = '8 ms';
     let selectedUrl = '/order?plan=monthly&offer=intro';
 
+    function switchTab(tab) {
+      document.getElementById('tabVpn').classList.toggle('hidden', tab !== 'vpn');
+      document.getElementById('tabWifi').classList.toggle('hidden', tab !== 'wifi');
+      document.getElementById('tabWifi').classList.toggle('flex', tab === 'wifi');
+      document.getElementById('navVpn').classList.toggle('on', tab === 'vpn');
+      document.getElementById('navWifi').classList.toggle('on', tab === 'wifi');
+    }
+
+    function setMode(mode) {
+      const win = document.getElementById('appWindow');
+      const trayTop = document.getElementById('trayTopBar');
+      const trayList = document.getElementById('trayQuickList');
+      const mobCard = document.getElementById('mobileThumbCard');
+      win.classList.remove('is-tray', 'is-mobile');
+      trayTop.classList.add('hidden');
+      trayList.classList.add('hidden');
+      mobCard.classList.add('hidden');
+
+      ['mBtnVpn','mBtnWifi','mBtnTray','mBtnMobile'].forEach(id => {
+        document.getElementById(id).className = 'px-3 py-1 rounded-full hover:bg-slate-100';
+      });
+
+      if (mode === 'desktop-wifi') {
+        switchTab('wifi');
+        document.getElementById('mBtnWifi').className = 'px-3 py-1 rounded-full bg-emerald-700 text-white';
+      } else if (mode === 'tray') {
+        win.classList.add('is-tray');
+        trayTop.classList.remove('hidden');
+        trayList.classList.remove('hidden');
+        document.getElementById('mBtnTray').className = 'px-3 py-1 rounded-full bg-emerald-700 text-white';
+      } else if (mode === 'mobile') {
+        switchTab('vpn');
+        win.classList.add('is-mobile');
+        mobCard.classList.remove('hidden');
+        document.getElementById('mBtnMobile').className = 'px-3 py-1 rounded-full bg-emerald-700 text-white';
+      } else {
+        switchTab('vpn');
+        document.getElementById('mBtnVpn').className = 'px-3 py-1 rounded-full bg-emerald-700 text-white';
+      }
+    }
+
     function pickNode(country, city, ping, row) {
       currentCity = `${city}, ${country === 'United Kingdom' ? 'UK' : country}`;
       currentPing = ping;
-      document.querySelectorAll('.loc-row').forEach(r => r.classList.remove('on'));
-      if (row) row.classList.add('on');
+      if (row) {
+        document.querySelectorAll('.loc-row').forEach(r => r.classList.remove('on'));
+        row.classList.add('on');
+      }
       updatePanel();
     }
 
@@ -324,22 +498,31 @@
       const title = document.getElementById('panelTitle');
       const meta = document.getElementById('panelMeta');
       const btn = document.getElementById('connectBtn');
+      const mobStatus = document.getElementById('mobStatus');
+      const mobCity = document.getElementById('mobCity');
+      const mobBtn = document.getElementById('mobConnectBtn');
       if (connected) {
         panel.classList.add('on');
         title.innerHTML = 'Connected to<br>stay private';
         meta.innerHTML = `${currentCity} &bull; ${currentPing} &bull; 4 Wi-Fi devices safe`;
         btn.innerHTML = 'Connected &#10003;';
+        mobStatus.textContent = '● Protected & Private';
+        mobCity.innerHTML = `${currentCity} &bull; ${currentPing}`;
+        mobBtn.innerHTML = 'Connected &#10003;';
       } else {
         panel.classList.remove('on');
         title.innerHTML = 'Connect to<br>stay private';
         meta.innerHTML = `${currentCity} &bull; Ready to protect`;
         btn.textContent = 'Connect';
+        mobStatus.textContent = '○ Not Protected';
+        mobCity.innerHTML = `${currentCity} &bull; Ready`;
+        mobBtn.textContent = 'Connect';
       }
     }
 
     function blockTv() {
       const bar = document.getElementById('tvBar');
-      bar.className = 'tv-pill safe';
+      bar.className = 'tv-pill safe mt-4 mb-3';
       bar.innerHTML = '<span>&#10003; Samsung TV tracking blocked</span><span style="font-size:12px;font-weight:800">Shield On</span>';
     }
 
