@@ -1,0 +1,30 @@
+# Created using wingetcreate 1.6.0.0
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.defaultLocale.1.6.0.schema.json
+
+PackageIdentifier: SWEEPR.VPN
+PackageVersion: 1.0.0
+PackageLocale: en-US
+Publisher: SWEEPR VPN Inc.
+PublisherUrl: https://sweeprvpn.com
+PublisherSupportUrl: https://sweeprvpn.com/support
+PrivacyUrl: https://sweeprvpn.com/privacy
+Author: SWEEPR VPN Engineering
+PackageName: SWEEPR VPN
+PackageUrl: https://sweeprvpn.com
+License: Freemium
+LicenseUrl: https://sweeprvpn.com/terms
+Copyright: Copyright (c) 2026 SWEEPR VPN Inc.
+ShortDescription: Lightweight 10Gbps WireGuard VPN, free 30-second Home Wi-Fi device scanner, and Smart-TV ACR spy blocker.
+Description: >-
+  SWEEPR VPN is an ultra-lightweight (~3.7 MB) 10Gbps WireGuard VPN and Free 30-Second Home Wi-Fi Security Scanner for Windows 10 and Windows 11.
+  Stops ISP evening streaming & gaming throttling, identifies all connected devices on your home Wi-Fi, and blocks Smart-TV ACR telemetry spying.
+Moniker: sweepr-vpn
+Tags:
+  - network-scanner
+  - privacy
+  - security
+  - vpn
+  - wifi-scanner
+  - wireguard
+ManifestType: defaultLocale
+ManifestVersion: 1.6.0
