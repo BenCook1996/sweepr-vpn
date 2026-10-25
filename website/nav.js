@@ -46,6 +46,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Mobile Hamburger Menu & Slide-Down Drawer Injection
   const nav = document.querySelector('nav.glass-nav');
+  if (nav) {
+    const brandLink = nav.querySelector('a[href="/"], a[href="/?home=1"]');
+    if (brandLink) {
+      brandLink.style.whiteSpace = 'nowrap';
+      brandLink.style.flexShrink = '0';
+    }
+  }
   if (nav && !document.getElementById('mobileNavBtn')) {
     const rightGroup = nav.children[nav.children.length - 1];
     if (rightGroup) {

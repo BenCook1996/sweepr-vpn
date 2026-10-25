@@ -6,7 +6,7 @@ import crypto from 'node:crypto';
 import zlib from 'node:zlib';
 import { fileURLToPath } from 'node:url';
 import { SweeprCrmClient } from './sweepr-client.mjs';
-import { VPN_ANDROID_HTML } from '../scripts/vpn-mobile-ui.mjs';
+import { VPN_ANDROID_HTML } from './vpn-mobile-ui.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SAFE_STATIC_ROOT = path.resolve(__dirname) + path.sep;
@@ -69,6 +69,7 @@ const ALLOWED_STATIC_EXTENSIONS = new Set([
 const BLOCKED_STATIC_FILES = new Set([
   'server.mjs',
   'sweepr-client.mjs',
+  'vpn-mobile-ui.mjs',
   'package.json',
   'package-lock.json',
   'railway.json',
