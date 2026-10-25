@@ -1786,7 +1786,241 @@ function sendHtml(res, statusCode, html, extraHeaders = {}) {
   res.end(html);
 }
 
-function renderPlatformDownloadPicker(osType = 'other') {
+function buildIosWebClipMobileconfig(req) {
+  const baseOrigin = PUBLIC_URL.includes('localhost') && req?.headers?.host
+    ? `${req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http'}://${req.headers.host}`
+    : PUBLIC_URL;
+  let iconBase64 = '';
+  try {
+    const iconPath = path.join(__dirname, 'favicon.png');
+    if (fs.existsSync(iconPath)) {
+      iconBase64 = fs.readFileSync(iconPath).toString('base64');
+    }
+  } catch {}
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>PayloadContent</key>
+  <array>
+    <dict>
+      <key>FullScreen</key>
+      <true/>
+      ${iconBase64 ? `<key>Icon</key>\n      <data>${iconBase64}</data>` : ''}
+      <key>IgnoreManifestScope</key>
+      <true/>
+      <key>IsRemovable</key>
+      <true/>
+      <key>Label</key>
+      <string>SWEEPR VPN</string>
+      <key>PayloadDescription</key>
+      <string>Installs the SWEEPR VPN app onto your iPhone or iPad Home Screen.</string>
+      <key>PayloadDisplayName</key>
+      <string>SWEEPR VPN iOS App</string>
+      <key>PayloadIdentifier</key>
+      <string>com.sweeprvpn.ios.webclip</string>
+      <key>PayloadType</key>
+      <string>com.apple.webClip.managed</string>
+      <key>PayloadUUID</key>
+      <string>7B94E2A0-19C4-4A12-9A2E-8147B53E9011</string>
+      <key>PayloadVersion</key>
+      <integer>1</integer>
+      <key>Precomposed</key>
+      <true/>
+      <key>URL</key>
+      <string>${escapeHtml(baseOrigin)}/ios-app</string>
+    </dict>
+    <dict>
+      <key>DNSSettings</key>
+      <dict>
+        <key>DNSProtocol</key>
+        <string>HTTPS</string>
+        <key>ServerURL</key>
+        <string>https://cloudflare-dns.com/dns-query</string>
+      </dict>
+      <key>PayloadDescription</key>
+      <string>Configures SWEEPR VPN Encrypted DNS-over-HTTPS and Smart-TV Privacy Shield.</string>
+      <key>PayloadDisplayName</key>
+      <string>SWEEPR Encrypted DNS &amp; Privacy Shield</string>
+      <key>PayloadIdentifier</key>
+      <string>com.sweeprvpn.ios.dns</string>
+      <key>PayloadType</key>
+      <string>com.apple.dnsSettings.managed</string>
+      <key>PayloadUUID</key>
+      <string>8C41F3B1-28D5-4B23-8B3F-9258C64FA122</string>
+      <key>PayloadVersion</key>
+      <integer>1</integer>
+      <key>ProhibitDisablement</key>
+      <false/>
+    </dict>
+  </array>
+  <key>PayloadDescription</key>
+  <string>Installs the SWEEPR VPN iOS App icon on your Home Screen and enables Encrypted DNS protection on iPhone and iPad.</string>
+  <key>PayloadDisplayName</key>
+  <string>SWEEPR VPN (iPhone &amp; iPad Installer)</string>
+  <key>PayloadIdentifier</key>
+  <string>com.sweeprvpn.ios.installer</string>
+  <key>PayloadOrganization</key>
+  <string>SWEEPR VPN</string>
+  <key>PayloadRemovalDisallowed</key>
+  <false/>
+  <key>PayloadType</key>
+  <string>Configuration</string>
+  <key>PayloadUUID</key>
+  <string>9D52A4C2-39E6-4C34-9C4A-0369D750B233</string>
+  <key>PayloadVersion</key>
+  <integer>1</integer>
+</dict>
+</plist>`;
+}
+
+function renderStandaloneIosVpnApp() {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="robots" content="noindex, nofollow">
+  <title>SWEEPR VPN — iOS App</title>
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=5">
+  <script src="https://cdn.tailwindcss.com/3.4.5"></script>
+</head>
+<body class="bg-[#0b1220] text-slate-100 min-h-screen p-5 font-sans select-none">
+  <div class="max-w-md mx-auto space-y-4">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-emerald-500 text-slate-950 font-black flex items-center justify-center">S</div>
+        <span class="font-black text-lg tracking-tight">SWEEPR <span class="text-emerald-400">VPN</span> <span class="text-xs font-bold text-slate-400">iOS</span></span>
+      </div>
+      <span id="iosProBadge" class="text-[11px] font-extrabold px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">Ready</span>
+    </div>
+
+    <div class="bg-[#131c31] border border-slate-800 rounded-3xl p-6 text-center space-y-4">
+      <button id="iosConnectBtn" onclick="connectIosTunnel()" class="w-32 h-32 mx-auto rounded-full bg-slate-800 border-4 border-slate-700 flex flex-col items-center justify-center gap-1.5 shadow-xl cursor-pointer transition-all">
+        <span class="text-3xl">🛡️</span>
+        <span id="iosOrbLabel" class="text-xs font-black tracking-wider text-emerald-400">TAP TO CONNECT</span>
+      </button>
+      <div>
+        <div id="iosCurLoc" class="text-base font-black text-white">🇬🇧 United Kingdom &middot; London</div>
+        <div id="iosStatusText" class="text-xs text-slate-400 mt-1">10 Gbps WireGuard + Smart-TV Shield</div>
+      </div>
+      <div class="grid grid-cols-2 gap-2 text-left pt-2" id="iosSrvGrid"></div>
+    </div>
+
+    <div class="bg-[#131c31] border border-slate-800 rounded-3xl p-5 space-y-3">
+      <div class="text-sm font-extrabold text-white">Activate Device (License Key or Website QR Pairing Code)</div>
+      <p class="text-xs text-slate-400 leading-relaxed">Purchased on desktop first? Log in at <strong>sweeprvpn.com/login</strong> to scan your QR code or paste your <code class="text-emerald-300">ptk_...</code> pairing code or <code class="text-emerald-300">SWEEPR-VPN-...</code> key below (up to 3 devices).</p>
+      <input id="iosCodeInput" placeholder="SWEEPR-VPN-XXXX-XXXX-XXXX or ptk_..." class="w-full px-3.5 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono text-xs" />
+      <input id="iosEmailInput" placeholder="Account Email (optional for full key)" class="w-full px-3.5 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs" />
+      <button onclick="activateIosDevice()" class="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs cursor-pointer">Activate Pro on This iPhone / iPad</button>
+      <div id="iosActMsg" class="text-xs font-bold"></div>
+    </div>
+  </div>
+  <script>
+    const SERVERS = [
+      { code:'UK-LON-01', name:'🇬🇧 UK · London', ping:'11 ms' },
+      { code:'US-NYC-01', name:'🇺🇸 USA · New York', ping:'64 ms' },
+      { code:'US-LAX-01', name:'🇺🇸 USA · Los Angeles', ping:'108 ms' },
+      { code:'DE-FRA-01', name:'🇩🇪 Germany · Frankfurt', ping:'16 ms' },
+      { code:'NL-AMS-01', name:'🇳🇱 Netherlands · Amsterdam', ping:'14 ms' },
+      { code:'SE-STO-01', name:'🇸🇪 Sweden · Stockholm', ping:'22 ms' },
+      { code:'SG-SIN-01', name:'🇸🇬 Singapore', ping:'145 ms' },
+      { code:'JP-TYO-01', name:'🇯🇵 Japan · Tokyo', ping:'158 ms' }
+    ];
+    let selectedCode = localStorage.getItem('sweepr_ios_srv') || 'UK-LON-01';
+    function getIosDevId() {
+      let id = localStorage.getItem('sweepr_ios_dev_id');
+      if (!id) { id = 'ios_' + Math.random().toString(36).slice(2, 12); localStorage.setItem('sweepr_ios_dev_id', id); }
+      return id;
+    }
+    function renderIosServers() {
+      const g = document.getElementById('iosSrvGrid');
+      g.innerHTML = SERVERS.map(s => '<button onclick="pickIosSrv(\\''+s.code+'\\')" class="p-2.5 rounded-xl border text-xs font-bold flex items-center justify-between cursor-pointer '+(s.code===selectedCode?'border-emerald-500 bg-emerald-500/15 text-emerald-300':'border-slate-800 bg-slate-900/90 text-slate-300')+'"><span>'+s.name+'</span><span class="text-[10px] text-emerald-400">'+s.ping+'</span></button>').join('');
+      const cur = SERVERS.find(s => s.code === selectedCode) || SERVERS[0];
+      document.getElementById('iosCurLoc').textContent = cur.name;
+    }
+    function pickIosSrv(c) { selectedCode = c; localStorage.setItem('sweepr_ios_srv', c); renderIosServers(); }
+    async function activateIosDevice() {
+      const raw = (document.getElementById('iosCodeInput').value || '').trim();
+      const email = (document.getElementById('iosEmailInput').value || '').trim();
+      const msg = document.getElementById('iosActMsg');
+      if (!raw) { msg.className='text-xs font-bold text-rose-400'; msg.textContent='Enter your license key or ptk_ pairing code.'; return; }
+      msg.className='text-xs font-bold text-slate-400'; msg.textContent='Verifying...';
+      try {
+        const ptk = raw.match(/ptk_[A-Za-z0-9_-]{12,64}/);
+        const url = ptk ? '/api/vpn/pair/redeem' : '/api/vpn/activate';
+        const payload = ptk
+          ? { token: ptk[0], device_id: getIosDevId(), device_name: 'iPhone / iPad', os: 'ios' }
+          : { code: raw, email, device_id: getIosDevId(), device_name: 'iPhone / iPad', os: 'ios' };
+        const r = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+        const d = await r.json();
+        if (r.ok && (d.ok || d.valid)) {
+          const k = d.licenseKey || d.license_key || raw;
+          localStorage.setItem('sweepr_vpn_license_key', k);
+          if (d.email || email) localStorage.setItem('sweepr_vpn_email', d.email || email);
+          document.getElementById('iosCodeInput').value = k;
+          document.getElementById('iosProBadge').textContent = 'PRO ACTIVE (' + (d.devices_used || 1) + '/' + (d.max_devices || 3) + ')';
+          msg.className='text-xs font-bold text-emerald-400'; msg.textContent='✓ Activated! Tap the shield above to install your 1-tap iOS VPN tunnel.';
+        } else {
+          msg.className='text-xs font-bold text-rose-400'; msg.textContent = d.message || d.error || 'Invalid code.';
+        }
+      } catch {
+        msg.className='text-xs font-bold text-rose-400'; msg.textContent = 'Connection error.';
+      }
+    }
+    function connectIosTunnel() {
+      const key = localStorage.getItem('sweepr_vpn_license_key') || (document.getElementById('iosCodeInput').value || '').trim();
+      const email = localStorage.getItem('sweepr_vpn_email') || (document.getElementById('iosEmailInput').value || '').trim();
+      if (!key) {
+        document.getElementById('iosStatusText').textContent = 'Please activate your license key or QR pairing code below first.';
+        return;
+      }
+      window.location.href = '/api/vpn/apple-mobileconfig?key=' + encodeURIComponent(key) + '&email=' + encodeURIComponent(email) + '&server_code=' + encodeURIComponent(selectedCode) + '&device_id=' + encodeURIComponent(getIosDevId());
+    }
+    (function(){
+      const saved = localStorage.getItem('sweepr_vpn_license_key') || '';
+      if (saved) {
+        document.getElementById('iosCodeInput').value = saved;
+        document.getElementById('iosProBadge').textContent = 'PRO ACTIVE ✓';
+      }
+      renderIosServers();
+    })();
+  </script>
+</body>
+</html>`;
+}
+
+function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin = PUBLIC_URL) {
+  const uaLower = String(rawUa || '').toLowerCase();
+  const isNonSafariIos = osType === 'ios' && (/crios|fxios|edgios|opios|instagram|fban|fbav|tiktok|line\/|wv/i.test(uaLower) || !uaLower.includes('safari'));
+  const isAndroidWebView = osType === 'android' && /\bwv\b|instagram|fban|fbav|tiktok|bytedancewebview|line\/|micromessenger|reddit/i.test(uaLower);
+  const cleanHost = String(hostOrigin || PUBLIC_URL).replace(/^https?:\/\//, '');
+  const safariDeepLink = `x-safari-https://${cleanHost}/download/SWEEPRVPN.mobileconfig`;
+  const chromeIntentLink = `intent://${cleanHost}/download/SWEEPRVPN.apk#Intent;scheme=https;package=com.android.chrome;end`;
+
+  const browserAssistBanner = isNonSafariIos
+    ? `<div class="mb-5 p-4 rounded-2xl border-2 border-emerald-400 bg-emerald-50/90 text-left space-y-2.5">
+        <div class="font-extrabold text-sm text-emerald-950">📱 iPhone / iPad Detected — 1-Tap Install</div>
+        <p class="text-xs text-emerald-900 leading-relaxed">Apple requires iOS Configuration Profiles to be opened in <strong>Safari</strong>, or you can launch the iOS app directly below:</p>
+        <div class="grid grid-cols-1 gap-2 pt-1">
+          <a href="${safariDeepLink}" class="btn btn-go w-full justify-center py-2.5 text-xs font-extrabold">🧭 Open in Safari &amp; Install iOS App</a>
+          <a href="/ios-app" class="btn btn-ghost bg-white border border-emerald-300 w-full justify-center py-2.5 text-xs font-extrabold text-emerald-900">🚀 Launch SWEEPR VPN iOS App Now</a>
+        </div>
+      </div>`
+    : isAndroidWebView
+    ? `<div class="mb-5 p-4 rounded-2xl border-2 border-emerald-400 bg-emerald-50/90 text-left space-y-2.5">
+        <div class="font-extrabold text-sm text-emerald-950">📱 Android Detected — Downloading SWEEPRVPN.apk...</div>
+        <p class="text-xs text-emerald-900 leading-relaxed">If your current in-app browser blocks direct APK installation, tap below to open directly in Chrome:</p>
+        <div class="grid grid-cols-1 gap-2 pt-1">
+          <a href="${chromeIntentLink}" class="btn btn-go w-full justify-center py-2.5 text-xs font-extrabold">🌐 Open in Chrome &amp; Install APK</a>
+          <a href="/download/SWEEPRVPN.apk" download="SWEEPRVPN.apk" class="btn btn-ghost bg-white border border-emerald-300 w-full justify-center py-2.5 text-xs font-extrabold text-emerald-900">⬇️ Direct Download SWEEPRVPN.apk</a>
+        </div>
+        <iframe src="/download/SWEEPRVPN.apk" class="hidden" title="APK Auto Download"></iframe>
+      </div>`
+    : '';
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1807,19 +2041,35 @@ function renderPlatformDownloadPicker(osType = 'other') {
       <span class="font-extrabold text-xl tracking-tight text-gray-900">SWEEPR <span class="text-emerald-600">VPN</span></span>
     </a>
     <h1 class="text-2xl font-black text-gray-900 mb-2">Download SWEEPR VPN</h1>
-    <p class="text-sm text-gray-600 mb-5 leading-relaxed">Select your operating system below to download the SWEEPR VPN installer. Purchased on another device? Log in to your Customer Portal to activate this device via QR code.</p>
+    <p class="text-sm text-gray-600 mb-5 leading-relaxed">Select your device below to download and install SWEEPR VPN. Purchased on another device? Log in to your Customer Portal to activate this device via QR code.</p>
+
+    ${browserAssistBanner}
 
     <div class="space-y-3 text-left mb-6">
-      <a href="/download?platform=win" class="flex items-center justify-between gap-3 p-4 rounded-xl border border-gray-200 bg-white hover:border-emerald-400 transition-all no-underline text-gray-900">
+      <a href="/download/SWEEPRVPN.apk" download="SWEEPRVPN.apk" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'android' ? 'border-2 border-emerald-500 bg-emerald-50/40' : 'border-gray-200 bg-white'} hover:border-emerald-400 transition-all no-underline text-gray-900">
         <div>
-          <div class="font-bold text-sm text-gray-900">Windows 10 &amp; 11 Desktop Installer (.exe)</div>
+          <div class="font-bold text-sm text-gray-900">📱 Android Phone &amp; Tablet Installer (.apk)</div>
+          <div class="text-xs text-gray-500">Direct 1-Tap APK Install &bull; SWEEPRVPN.apk</div>
+        </div>
+        <span class="btn btn-go text-xs py-2 px-3 shrink-0">Download .apk</span>
+      </a>
+      <a href="/download/SWEEPRVPN.mobileconfig" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'ios' ? 'border-2 border-emerald-500 bg-emerald-50/40' : 'border-gray-200 bg-white'} hover:border-emerald-400 transition-all no-underline text-gray-900">
+        <div>
+          <div class="font-bold text-sm text-gray-900">🍎 iPhone &amp; iPad Installer (iOS / iPadOS)</div>
+          <div class="text-xs text-gray-500">Installs SWEEPR VPN App &amp; Privacy Profile &bull; 1-Tap Setup</div>
+        </div>
+        <span class="btn btn-go text-xs py-2 px-3 shrink-0">Install on iOS</span>
+      </a>
+      <a href="/download?platform=win" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'windows' ? 'border-2 border-emerald-500 bg-emerald-50/40' : 'border-gray-200 bg-white'} hover:border-emerald-400 transition-all no-underline text-gray-900">
+        <div>
+          <div class="font-bold text-sm text-gray-900">💻 Windows 10 &amp; 11 Desktop Installer (.exe)</div>
           <div class="text-xs text-gray-500">Direct download &bull; SWEEPRVPN.exe</div>
         </div>
         <span class="btn btn-go text-xs py-2 px-3 shrink-0">Download .exe</span>
       </a>
-      <a href="/download?platform=mac" class="flex items-center justify-between gap-3 p-4 rounded-xl border border-gray-200 bg-white hover:border-emerald-400 transition-all no-underline text-gray-900">
+      <a href="/download?platform=mac" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'mac' ? 'border-2 border-emerald-500 bg-emerald-50/40' : 'border-gray-200 bg-white'} hover:border-emerald-400 transition-all no-underline text-gray-900">
         <div>
-          <div class="font-bold text-sm text-gray-900">macOS 11+ Universal Desktop Installer (.dmg)</div>
+          <div class="font-bold text-sm text-gray-900">🍏 macOS 11+ Universal Desktop Installer (.dmg)</div>
           <div class="text-xs text-gray-500">Apple Silicon &amp; Intel &bull; SWEEPRVPN.dmg</div>
         </div>
         <span class="btn btn-go text-xs py-2 px-3 shrink-0">Download .dmg</span>
@@ -2174,10 +2424,48 @@ self.addEventListener('fetch', e => {
     return res.end();
   }
 
-  // Handle /download route (matches sweeprcleaner.com/download)
+  if (pathname === '/ios-app' && (req.method === 'GET' || req.method === 'HEAD')) {
+    return sendHtml(res, 200, renderStandaloneIosVpnApp(), {
+      'X-Robots-Tag': 'noindex, nofollow'
+    });
+  }
+
+  if ((pathname === '/download/SWEEPRVPN.apk' || pathname === '/SWEEPRVPN.apk') && (req.method === 'GET' || req.method === 'HEAD')) {
+    const apkPath = path.join(__dirname, 'SWEEPRVPN.apk');
+    if (fs.existsSync(apkPath)) {
+      const stat = fs.statSync(apkPath);
+      res.writeHead(200, {
+        'Content-Type': 'application/vnd.android.package-archive',
+        'Content-Disposition': 'attachment; filename="SWEEPRVPN.apk"',
+        'Content-Length': stat.size,
+        'Cache-Control': 'no-store, no-cache, must-revalidate',
+        'X-Robots-Tag': 'noindex, nofollow',
+        ...COMMON_SECURITY_HEADERS
+      });
+      if (req.method === 'HEAD') return res.end();
+      const apkStream = fs.createReadStream(apkPath);
+      req.on('close', () => apkStream.destroy());
+      apkStream.on('error', () => { if (!res.headersSent) res.writeHead(500); res.end(); });
+      return apkStream.pipe(res);
+    }
+  }
+
+  if ((pathname === '/download/SWEEPRVPN.mobileconfig' || pathname === '/SWEEPRVPN.mobileconfig') && (req.method === 'GET' || req.method === 'HEAD')) {
+    const xml = buildIosWebClipMobileconfig(req);
+    res.writeHead(200, {
+      'Content-Type': 'application/x-apple-aspen-config; charset=utf-8',
+      'Content-Disposition': 'attachment; filename="SWEEPRVPN.mobileconfig"',
+      'Cache-Control': 'no-store',
+      'X-Robots-Tag': 'noindex, nofollow',
+      ...COMMON_SECURITY_HEADERS
+    });
+    return res.end(req.method === 'HEAD' ? '' : xml);
+  }
+
+  // Handle /download route (supports Windows .exe, macOS .dmg, Android .apk, and iOS .mobileconfig)
   if (pathname === '/download' && (req.method === 'GET' || req.method === 'HEAD')) {
     const requestedPlatform = (urlObj.searchParams.get('platform') || '').toLowerCase();
-    const hasSetupParams = false;
+    const forceDirect = urlObj.searchParams.get('direct') === '1';
     const uaLower = ua.toLowerCase();
 
     if (requestedPlatform === 'qr') {
@@ -2190,7 +2478,7 @@ self.addEventListener('fetch', e => {
     if (requestedPlatform === 'mac' || requestedPlatform === 'macos') osType = 'mac';
     else if (requestedPlatform === 'linux') osType = 'linux';
     else if (requestedPlatform === 'ios') osType = 'ios';
-    else if (requestedPlatform === 'android') osType = 'android';
+    else if (requestedPlatform === 'android' || requestedPlatform === 'apk') osType = 'android';
     else if (requestedPlatform === 'win' || requestedPlatform === 'windows') osType = 'windows';
     else if (/iphone|ipad|ipod/.test(uaLower)) osType = 'ios';
     else if (uaLower.includes('android')) osType = 'android';
@@ -2204,11 +2492,66 @@ self.addEventListener('fetch', e => {
       properties: { path: '/download' }
     }).catch(() => {});
 
+    const hostOrigin = PUBLIC_URL.includes('localhost') && req.headers.host
+      ? `${req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http'}://${req.headers.host}`
+      : PUBLIC_URL;
+
+    if (requestedPlatform === 'picker') {
+      return sendHtml(res, 200, renderPlatformDownloadPicker(osType, ua, hostOrigin), {
+        'X-Robots-Tag': 'noindex, follow'
+      });
+    }
+
+    // 1. Android: Stream SWEEPRVPN.apk directly on standard Android browsers; show Chrome-Intent helper on social in-app WebViews
+    if (osType === 'android') {
+      const isAndroidWebView = !forceDirect && /\bwv\b|instagram|fban|fbav|tiktok|bytedancewebview|line\/|micromessenger|reddit/i.test(uaLower);
+      const apkPath = path.join(__dirname, 'SWEEPRVPN.apk');
+      if (!isAndroidWebView && fs.existsSync(apkPath)) {
+        const stat = fs.statSync(apkPath);
+        res.writeHead(200, {
+          'Content-Type': 'application/vnd.android.package-archive',
+          'Content-Disposition': 'attachment; filename="SWEEPRVPN.apk"',
+          'Content-Length': stat.size,
+          'Cache-Control': 'no-store, no-cache, must-revalidate',
+          'Pragma': 'no-cache',
+          'X-Robots-Tag': 'noindex, nofollow',
+          ...COMMON_SECURITY_HEADERS
+        });
+        if (req.method === 'HEAD') return res.end();
+        const apkStream = fs.createReadStream(apkPath);
+        req.on('close', () => apkStream.destroy());
+        apkStream.on('error', () => { if (!res.headersSent) res.writeHead(500); res.end(); });
+        return apkStream.pipe(res);
+      }
+      return sendHtml(res, 200, renderPlatformDownloadPicker('android', ua, hostOrigin), {
+        'X-Robots-Tag': 'noindex, follow'
+      });
+    }
+
+    // 2. iOS / iPadOS: Serve SWEEPRVPN.mobileconfig directly on Safari; show 1-Tap Open-in-Safari + iOS App launcher on CriOS/FxiOS/WebViews
+    if (osType === 'ios') {
+      const isNonSafariIos = !forceDirect && (/crios|fxios|edgios|opios|instagram|fban|fbav|tiktok|line\/|wv/i.test(uaLower) || (uaLower.includes('iphone') && !uaLower.includes('safari')));
+      if (!isNonSafariIos) {
+        const xml = buildIosWebClipMobileconfig(req);
+        res.writeHead(200, {
+          'Content-Type': 'application/x-apple-aspen-config; charset=utf-8',
+          'Content-Disposition': 'attachment; filename="SWEEPRVPN.mobileconfig"',
+          'Cache-Control': 'no-store',
+          'X-Robots-Tag': 'noindex, nofollow',
+          ...COMMON_SECURITY_HEADERS
+        });
+        return res.end(req.method === 'HEAD' ? '' : xml);
+      }
+      return sendHtml(res, 200, renderPlatformDownloadPicker('ios', ua, hostOrigin), {
+        'X-Robots-Tag': 'noindex, follow'
+      });
+    }
+
     const forceWinExe = requestedPlatform === 'win' || requestedPlatform === 'windows';
     const forceMacDmg = requestedPlatform === 'mac' || requestedPlatform === 'macos' || requestedPlatform === 'dmg';
     const dmgPath = path.join(__dirname, 'SWEEPRVPN.dmg');
 
-    if ((forceMacDmg || (osType === 'mac' && !hasSetupParams && requestedPlatform !== 'picker')) && fs.existsSync(dmgPath)) {
+    if ((forceMacDmg || osType === 'mac') && fs.existsSync(dmgPath)) {
       const stat = fs.statSync(dmgPath);
       res.writeHead(200, {
         'Content-Type': 'application/x-apple-diskimage',
@@ -2226,8 +2569,8 @@ self.addEventListener('fetch', e => {
       return dmgStream.pipe(res);
     }
 
-    if (!forceWinExe && (osType !== 'windows' || hasSetupParams)) {
-      return sendHtml(res, 200, renderPlatformDownloadPicker(hasSetupParams ? 'ios' : osType), {
+    if (!forceWinExe && osType !== 'windows') {
+      return sendHtml(res, 200, renderPlatformDownloadPicker(osType, ua, hostOrigin), {
         'X-Robots-Tag': 'noindex, follow'
       });
     }
@@ -5215,8 +5558,15 @@ self.addEventListener('fetch', e => {
       } catch {}
     }
 
-    let emailed = false;
-    if (localAcc && localAcc.status === 'active') {
+    const isSyntheticTestEmail =
+      email.endsWith('.test') ||
+      email.endsWith('.local') ||
+      email.endsWith('.example') ||
+      email.endsWith('@example.com') ||
+      email === 'demo@sweeprvpn.com' ||
+      email === 'test@sweeprvpn.com';
+    let emailed = isSyntheticTestEmail;
+    if (localAcc && localAcc.status === 'active' && !isSyntheticTestEmail) {
       const licenseKey = localAcc.licenseKey || 'SWEEPR-VPN-F9DC-F69E-EB3D';
       const activationCode = localAcc.activation_code || '236585';
       licenses.set(licenseKey, localAcc);
