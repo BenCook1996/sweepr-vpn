@@ -60,7 +60,10 @@ const ALLOWED_STATIC_EXTENSIONS = new Set([
   '.woff2',
   '.woff',
   '.ttf',
-  '.exe'
+  '.exe',
+  '.dmg',
+  '.apk',
+  '.mobileconfig'
 ]);
 
 const BLOCKED_STATIC_FILES = new Set([

@@ -776,7 +776,7 @@
     if (Array.isArray(rawFavs)) savedFavs = rawFavs;
   } catch (e) {}
 
-  const state = { view:'home', code:'UK-LON-01', filter:'all', connected:false, connecting:false, pro:false, email:'', activationCode:'', auto:false, startup:false, killSwitch:false, lanBypass:false, seconds:0, mbTransferred:0.4, spark:[42,58,50,68,62,76,64,82,70,88,78,92], lang:'en' };
+  const state = { view:'home', code:'UK-LON-01', filter:'all', connected:false, connecting:false, pro:false, email:'', activationCode:'', auto:false, startup:false, killSwitch:false, lanBypass:false, shields:[true, true, true], seconds:0, mbTransferred:0.4, spark:[42,58,50,68,62,76,64,82,70,88,78,92], lang:'en' };
   let timerHandle = null;
   const cur = () => SERVERS.find(s => s.code === state.code) || SERVERS[0];
   const $ = id => document.getElementById(id);
@@ -789,6 +789,10 @@
     delete _wv2Pending[reqId];
     if (result && result.error) p.reject(new Error(result.error));
     else p.resolve(result);
+  };
+  window.onNativeIntruderAlert = function(devName, ip, mac) {
+    toast('⚠️ Wi-Fi Intruder Alert: New device joined (' + (devName || 'Unknown') + ' · ' + (ip || mac) + ')');
+    scanWifi();
   };
   function invokeWebView2(action, payload, timeoutMs) {
     return new Promise((resolve, reject) => {
@@ -822,6 +826,8 @@
     try {
       if (action === 'compact') tauri.core.invoke('set_compact', { compact: !!payload });
       else if (action === 'setStartup') tauri.core.invoke('set_startup', { enabled: !!payload });
+      else if (action === 'setKillSwitch') tauri.core.invoke('set_kill_switch', { enabled: !!payload }).catch(() => {});
+      else if (action === 'setShields') tauri.core.invoke('set_smart_tv_shields', payload || {}).catch(() => {});
       else if (action === 'openCheckout') {
         const safeUrl = (typeof payload === 'string' && (payload.startsWith('https://sweeprvpn.com/') || payload.startsWith('https://www.sweeprvpn.com/'))) ? payload : 'https://sweeprvpn.com/order';
         tauri.opener.openUrl(safeUrl);
@@ -1174,15 +1180,45 @@
   function toggleAuto() {
     if (!requirePro('Unlock SWEEPR Pro to enable automatic Wi-Fi intruder alerts.')) return;
     state.auto = !state.auto;
+    try { localStorage.setItem('sweepr_vpn_auto_radar', state.auto ? '1' : '0'); } catch (e) {}
     syncSwitchAria($('autoToggle'), state.auto);
     $('radar').classList.toggle('off', !state.auto);
-    toast(state.auto ? "Automatic Wi-Fi intruder alerts enabled" : 'Wi-Fi intruder alerts paused');
+    toast(state.auto ? "Automatic Wi-Fi intruder alerts enabled (monitoring every 60s)" : 'Wi-Fi intruder alerts paused');
     postNative('toggleRadar', state.auto);
+  }
+  async function syncHouseholdShieldsToNative(toastFallback) {
+    const payload = {
+      tvAcr: !!state.shields[0],
+      streamingAds: !!state.shields[1],
+      routerCheck: !!state.shields[2]
+    };
+    try { localStorage.setItem('sweepr_vpn_shields', JSON.stringify(state.shields)); } catch (e) {}
+    if (isWebView2 && !tauri) {
+      try {
+        const res = await invokeWebView2('setShields', payload, 8000);
+        if (payload.routerCheck && res && res.router && res.router.summary) {
+          toast(res.router.summary);
+          return;
+        }
+      } catch (e) {}
+    } else {
+      postNative('setShields', payload);
+    }
+    if (toastFallback) toast(toastFallback);
   }
   function toggleShield(btn) {
     if (!requirePro('Unlock SWEEPR Pro to enable Household & Smart-TV shields.')) return;
     const next = !btn.classList.contains('on');
     syncSwitchAria(btn, next);
+    const id = btn.id || '';
+    const idx = id === 'sh-0' ? 0 : id === 'sh-1' ? 1 : 2;
+    state.shields[idx] = next;
+    const labels = [
+      next ? 'Smart-TV ACR telemetry sinkhole enabled' : 'Smart-TV anti-spy shield paused',
+      next ? 'Streaming-box tracker blocker enabled' : 'Streaming-box tracker blocker paused',
+      next ? 'Home router security check enabled' : 'Home router safety check paused'
+    ];
+    syncHouseholdShieldsToNative(labels[idx]);
   }
   function toggleShieldRow(idx) {
     const btn = $('sh-' + idx);
@@ -1190,8 +1226,9 @@
   }
   function allShields() {
     if (!requirePro('Unlock SWEEPR Pro to enable all Household shields.')) return;
+    state.shields = [true, true, true];
     document.querySelectorAll('#view-wifi .toggle.shield').forEach(t => syncSwitchAria(t, true));
-    toast('All household shields are enabled');
+    syncHouseholdShieldsToNative('All household shields & router security checks enabled ✓');
   }
 
   /* ---------- Settings ---------- */
@@ -1203,11 +1240,17 @@
     postNative('setStartup', state.startup);
     toast(state.startup ? 'Auto-protect on startup enabled' : 'Auto-protect on startup turned off');
   }
-  function toggleKillSwitch() {
+  async function toggleKillSwitch() {
     if (!requirePro('Unlock SWEEPR Pro to enable the Emergency Kill Switch.')) return;
     state.killSwitch = !state.killSwitch;
+    try { localStorage.setItem('sweepr_vpn_killswitch', state.killSwitch ? '1' : '0'); } catch (e) {}
     syncSwitchAria($('killToggle'), state.killSwitch);
-    toast(state.killSwitch ? 'Emergency Kill Switch enabled' : 'Emergency Kill Switch turned off');
+    if (isWebView2 && !tauri) {
+      try { await invokeWebView2('setKillSwitch', { enabled: state.killSwitch }, 6000); } catch (e) {}
+    } else {
+      postNative('setKillSwitch', state.killSwitch);
+    }
+    toast(state.killSwitch ? 'Emergency Kill Switch enabled — non-VPN leaks blocked' : 'Emergency Kill Switch turned off');
   }
   function toggleLanBypass() {
     if (!requirePro('Unlock SWEEPR Pro to configure Local LAN Bypass for printers & NAS.')) return;
@@ -2190,6 +2233,8 @@
     syncSwitchAria($('startupToggle'), state.startup);
     syncSwitchAria($('killToggle'), state.killSwitch);
     syncSwitchAria($('lanBypassToggle'), state.lanBypass);
+    syncSwitchAria($('autoToggle'), state.auto);
+    [0, 1, 2].forEach(i => syncSwitchAria($('sh-' + i), state.pro && state.shields[i]));
     $('timerBox').classList.add('hidden');
     if (on) renderSparkBars();
     $('panelFlag').setAttribute('data-flag', s.flag);
@@ -2456,13 +2501,26 @@
     const savedLang = localStorage.getItem('sweepr_vpn_lang') || '';
     if (savedLang && I18N[savedLang]) { $('lang').value = savedLang; setLang(savedLang); }
     if (localStorage.getItem('sweepr_vpn_startup') === '1') state.startup = true;
-    state.lanBypass = false;
-    try { localStorage.setItem('sweepr_vpn_lan_bypass', '0'); } catch (e) {}
+    state.lanBypass = localStorage.getItem('sweepr_vpn_lan_bypass') === '1';
+    if (localStorage.getItem('sweepr_vpn_auto_radar') === '1') state.auto = true;
+    const savedKs = localStorage.getItem('sweepr_vpn_killswitch');
+    if (savedKs !== null) state.killSwitch = savedKs === '1';
+    try {
+      const rawShields = JSON.parse(localStorage.getItem('sweepr_vpn_shields') || 'null');
+      if (Array.isArray(rawShields) && rawShields.length === 3) state.shields = rawShields.map(Boolean);
+    } catch (e) {}
     const savedSrv = localStorage.getItem('sweepr_vpn_server_code') || '';
     if (savedSrv && SERVERS.some(s => s.code === savedSrv)) state.code = savedSrv;
     const savedEmail = localStorage.getItem('sweepr_vpn_email') || '';
     const savedCode = localStorage.getItem('sweepr_vpn_code') || localStorage.getItem('sweepr_vpn_license_key') || '';
-    if (savedCode) { state.email = savedEmail; state.activationCode = savedCode; state.pro = true; }
+    if (savedCode) {
+      state.email = savedEmail;
+      state.activationCode = savedCode;
+      state.pro = true;
+      if (savedKs === null) state.killSwitch = true;
+      postNative('toggleRadar', state.auto);
+      postNative('setKillSwitch', state.killSwitch);
+    }
     const urlParams = new URLSearchParams(location.search || '');
     const urlKey = (urlParams.get('key') || urlParams.get('code') || '').trim().toUpperCase();
     if (urlKey.length >= 6) {

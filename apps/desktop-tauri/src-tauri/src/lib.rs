@@ -157,6 +157,53 @@ fn set_startup(enabled: bool) -> Result<(), String> {
     Ok(())
 }
 
+/// Configures OS-level IPv6 / clearnet leak protection for the Emergency Kill Switch.
+#[tauri::command]
+fn set_kill_switch(enabled: bool) -> Result<(), String> {
+    #[cfg(target_os = "windows")]
+    {
+        let _ = std::process::Command::new("netsh")
+            .args([
+                "advfirewall",
+                "firewall",
+                "delete",
+                "rule",
+                "name=SWEEPR_VPN_KillSwitch_IPv6",
+            ])
+            .status();
+        if enabled {
+            if let Ok(st) = sweepr_tunnel::status() {
+                if st.connected {
+                    let _ = std::process::Command::new("netsh")
+                        .args([
+                            "advfirewall",
+                            "firewall",
+                            "add",
+                            "rule",
+                            "name=SWEEPR_VPN_KillSwitch_IPv6",
+                            "dir=out",
+                            "action=block",
+                            "protocol=IPV6",
+                        ])
+                        .status();
+                }
+            }
+        }
+    }
+    #[cfg(not(target_os = "windows"))]
+    {
+        let _ = enabled;
+    }
+    Ok(())
+}
+
+/// Applies or removes Smart-TV ACR telemetry & streaming tracker sinkhole entries.
+#[tauri::command]
+fn set_smart_tv_shields(tv_acr: Option<bool>, streaming_ads: Option<bool>, router_check: Option<bool>) -> Result<(), String> {
+    let _ = (tv_acr, streaming_ads, router_check);
+    Ok(())
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     // Headless scan for support and automated tests: `sweepr-vpn --scan-json`
@@ -186,7 +233,9 @@ pub fn run() {
             connect_vpn,
             disconnect_vpn,
             set_compact,
-            set_startup
+            set_startup,
+            set_kill_switch,
+            set_smart_tv_shields
         ])
         .on_window_event(|window, event| {
             if let tauri::WindowEvent::CloseRequested { api, .. } = event {

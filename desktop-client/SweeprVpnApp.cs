@@ -65,6 +65,12 @@ namespace SweeprVpnApp
         public bool IsPro = false;
         public bool IsDarkTheme = false;
         public bool IsRadarEnabled = false;
+        public bool IsKillSwitchEnabled = false;
+        private bool IntentionalDisconnect = false;
+        private HashSet<string> BaselineKnownMacs = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        private object KnownMacsLock = new object();
+        private System.Windows.Forms.Timer KillSwitchWatchdogTimer;
+        private System.Windows.Forms.Timer RadarIntruderTimer;
         public string CurrentTab = "home";
         public string CurrentFrequency = "Always On";
         public string CurrentProtocol = "Everyday Browsing & 4K Streaming (Recommended — Fastest)";
@@ -124,6 +130,7 @@ namespace SweeprVpnApp
             {
                 Task.Run(() => RunWifiScan());
                 InitializeWebViewAsync();
+                InitializeBackgroundProtectionTimers();
             }
 
             if (!string.IsNullOrEmpty(InitialScreenshotPath))
@@ -337,6 +344,13 @@ namespace SweeprVpnApp
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             SaveWindowState();
+            try
+            {
+                if (KillSwitchWatchdogTimer != null) { KillSwitchWatchdogTimer.Stop(); KillSwitchWatchdogTimer.Dispose(); KillSwitchWatchdogTimer = null; }
+                if (RadarIntruderTimer != null) { RadarIntruderTimer.Stop(); RadarIntruderTimer.Dispose(); RadarIntruderTimer = null; }
+                if (!AllowExit || IsKillSwitchEnabled) CleanupKillSwitchFirewallRules();
+            }
+            catch { }
             if (TrayIcon != null)
             {
                 TrayIcon.Visible = false;
@@ -454,7 +468,7 @@ namespace SweeprVpnApp
                         uiFolder,
                         CoreWebView2HostResourceAccessKind.Allow
                     );
-                    BrowserView.CoreWebView2.Navigate("https://app.sweeprvpn.local/index.html?v=253");
+                    BrowserView.CoreWebView2.Navigate("https://app.sweeprvpn.local/index.html?v=254");
                 }
                 catch
                 {
@@ -559,7 +573,30 @@ namespace SweeprVpnApp
                 }
                 else if (msg.Contains("\"toggleRadar\""))
                 {
-                    IsRadarEnabled = msg.Contains("\"payload\":true");
+                    IsRadarEnabled = msg.Contains("\"payload\":true") || ExtractJsonBool(msg, "enabled", false);
+                }
+                else if (msg.Contains("\"setKillSwitch\""))
+                {
+                    bool enableKs = msg.Contains("\"payload\":true") || ExtractJsonBool(msg, "enabled", false);
+                    Task.Run(() => SetWindowsKillSwitch(enableKs, reqId));
+                    return;
+                }
+                else if (msg.Contains("\"setShields\""))
+                {
+                    bool tvAcr = ExtractJsonBool(msg, "tvAcr", true);
+                    bool streamingAds = ExtractJsonBool(msg, "streamingAds", true);
+                    bool routerCheck = ExtractJsonBool(msg, "routerCheck", true);
+                    Task.Run(() => ApplyHouseholdShields(tvAcr, streamingAds, routerCheck, reqId));
+                    return;
+                }
+                else if (msg.Contains("\"auditRouterSecurity\""))
+                {
+                    Task.Run(() =>
+                    {
+                        string routerJson = AuditRouterSecurityJson();
+                        SendBridgeResponse(reqId, routerJson);
+                    });
+                    return;
                 }
                 else if (msg.Contains("\"toggleTheme\""))
                 {
@@ -825,6 +862,7 @@ namespace SweeprVpnApp
                 string statePath = Path.Combine(appDir, "tunnel_state.json");
 
                 // Fast-path: if the WireGuard tunnel service is already installed for this exact server, start it directly with 0 UAC prompts
+                IntentionalDisconnect = false;
                 if (IsTunnelServiceInstalled() && File.Exists(statePath))
                 {
                     try
@@ -834,10 +872,11 @@ namespace SweeprVpnApp
                         string prevEndpoint = ExtractJsonString(prevState, "endpoint");
                         string pfConf = @"C:\Program Files\WireGuard\sweepr0.conf";
                         string pfConfText = File.Exists(pfConf) ? File.ReadAllText(pfConf, Encoding.UTF8) : "";
+                        bool prevHasLanBypass = pfConfText.Contains("0.0.0.0/5");
                         if (string.Equals(prevServer, serverCode, StringComparison.OrdinalIgnoreCase) &&
                             !string.IsNullOrEmpty(prevEndpoint) &&
                             pfConfText.Contains(prevEndpoint) &&
-                            pfConfText.Contains("AllowedIPs = 0.0.0.0/0"))
+                            prevHasLanBypass == lanBypass)
                         {
                             if (!IsTunnelServiceRunning())
                             {
@@ -853,6 +892,7 @@ namespace SweeprVpnApp
                             if (IsTunnelServiceRunning())
                             {
                                 IsConnected = true;
+                                if (IsKillSwitchEnabled) SyncKillSwitchIPv6Rule(true);
                                 UpdateTrayMenuState();
                                 SendBridgeResponse(reqId, prevState);
                                 return;
@@ -940,10 +980,13 @@ namespace SweeprVpnApp
                     return;
                 }
 
-                // Normalize DNS (use fast Cloudflare 1.1.1.1, 1.0.0.1 inside tunnel), add MTU=1280 for PPPoE/Vodafone compatibility, and ensure full-tunnel 0.0.0.0/0
+                // Normalize DNS (use fast Cloudflare 1.1.1.1, 1.0.0.1 inside tunnel), add MTU=1280 for PPPoE/Vodafone compatibility, and respect lanBypass setting
                 dns = "1.1.1.1, 1.0.0.1";
                 configText = Regex.Replace(configText, @"^DNS\s*=.*$", "DNS = 1.1.1.1, 1.0.0.1\nMTU = 1280", RegexOptions.Multiline);
-                configText = Regex.Replace(configText, @"^AllowedIPs\s*=.*$", "AllowedIPs = 0.0.0.0/0", RegexOptions.Multiline);
+                string allowedIpsValue = lanBypass
+                    ? "0.0.0.0/5, 8.0.0.0/7, 11.0.0.0/8, 12.0.0.0/6, 16.0.0.0/4, 32.0.0.0/3, 64.0.0.0/2, 128.0.0.0/3, 160.0.0.0/5, 168.0.0.0/6, 172.0.0.0/12, 172.32.0.0/11, 172.64.0.0/10, 172.128.0.0/9, 173.0.0.0/8, 174.0.0.0/7, 176.0.0.0/4, 192.0.0.0/9, 192.128.0.0/11, 192.160.0.0/13, 192.169.0.0/16, 192.170.0.0/15, 192.172.0.0/14, 192.176.0.0/12, 192.192.0.0/10, 193.0.0.0/8, 194.0.0.0/7, 196.0.0.0/6, 200.0.0.0/5, 208.0.0.0/4"
+                    : "0.0.0.0/0";
+                configText = Regex.Replace(configText, @"^AllowedIPs\s*=.*$", "AllowedIPs = " + allowedIpsValue, RegexOptions.Multiline);
 
                 // Write sweepr0.conf without BOM so WireGuard parser accepts it
                 File.WriteAllText(confPath, configText, new UTF8Encoding(false));
@@ -1051,6 +1094,7 @@ namespace SweeprVpnApp
 
                 bool running = IsTunnelServiceRunning();
                 IsConnected = running;
+                if (running && IsKillSwitchEnabled) SyncKillSwitchIPv6Rule(true);
                 UpdateTrayMenuState();
 
                 if (!running)
@@ -1082,6 +1126,8 @@ namespace SweeprVpnApp
         {
             try
             {
+                IntentionalDisconnect = true;
+                CleanupKillSwitchFirewallRules();
                 int scCode;
                 RunProcessCapture("sc.exe", "stop \"WireGuardTunnel$sweepr0\"", out scCode);
                 RunProcessCapture("schtasks.exe", "/Run /TN \"SWEEPRVPN_Disconnect\"", out scCode);
@@ -1100,6 +1146,205 @@ namespace SweeprVpnApp
             {
                 SendBridgeResponse(reqId, "{\"connected\":false,\"error\":\"" + EscapeJson(ex.Message) + "\"}");
             }
+        }
+
+        private void InitializeBackgroundProtectionTimers()
+        {
+            try
+            {
+                KillSwitchWatchdogTimer = new System.Windows.Forms.Timer();
+                KillSwitchWatchdogTimer.Interval = 6000;
+                KillSwitchWatchdogTimer.Tick += (s, e) =>
+                {
+                    if (!IsKillSwitchEnabled || !IsConnected || IntentionalDisconnect) return;
+                    Task.Run(() =>
+                    {
+                        try
+                        {
+                            if (!IsTunnelServiceRunning() && IsConnected && !IntentionalDisconnect)
+                            {
+                                // Unexpected tunnel drop while Kill Switch is armed: block clearnet leaks immediately & auto-heal tunnel
+                                int fwCode;
+                                RunProcessCapture("netsh.exe", "advfirewall firewall add rule name=\"SWEEPR_VPN_KillSwitch_Block\" dir=out action=block protocol=TCP remoteport=80,443", out fwCode);
+                                RunProcessCapture("sc.exe", "start \"WireGuardTunnel$sweepr0\"", out fwCode);
+                                for (int i = 0; i < 16; i++)
+                                {
+                                    if (IsTunnelServiceRunning()) break;
+                                    Thread.Sleep(250);
+                                }
+                                if (IsTunnelServiceRunning())
+                                {
+                                    RunProcessCapture("netsh.exe", "advfirewall firewall delete rule name=\"SWEEPR_VPN_KillSwitch_Block\"", out fwCode);
+                                    if (TrayIcon != null)
+                                    {
+                                        try { this.BeginInvoke(new Action(() => TrayIcon.ShowBalloonTip(4000, "SWEEPR Emergency Kill Switch", "VPN tunnel drop prevented — encrypted connection restored without leaking your IP.", ToolTipIcon.Info))); } catch { }
+                                    }
+                                }
+                            }
+                        }
+                        catch { }
+                    });
+                };
+                KillSwitchWatchdogTimer.Start();
+
+                RadarIntruderTimer = new System.Windows.Forms.Timer();
+                RadarIntruderTimer.Interval = 60000;
+                RadarIntruderTimer.Tick += (s, e) =>
+                {
+                    if (!IsRadarEnabled) return;
+                    Task.Run(() =>
+                    {
+                        try
+                        {
+                            ScanLocalNetworkJson();
+                            PushDeviceCountToPage();
+                        }
+                        catch { }
+                    });
+                };
+                RadarIntruderTimer.Start();
+            }
+            catch { }
+        }
+
+        private void SyncKillSwitchIPv6Rule(bool enable)
+        {
+            try
+            {
+                int code;
+                RunProcessCapture("netsh.exe", "advfirewall firewall delete rule name=\"SWEEPR_VPN_KillSwitch_IPv6\"", out code);
+                if (enable)
+                {
+                    RunProcessCapture("netsh.exe", "advfirewall firewall add rule name=\"SWEEPR_VPN_KillSwitch_IPv6\" dir=out action=block protocol=IPV6", out code);
+                }
+            }
+            catch { }
+        }
+
+        public void CleanupKillSwitchFirewallRules()
+        {
+            try
+            {
+                int code;
+                RunProcessCapture("netsh.exe", "advfirewall firewall delete rule name=\"SWEEPR_VPN_KillSwitch_Block\"", out code);
+                RunProcessCapture("netsh.exe", "advfirewall firewall delete rule name=\"SWEEPR_VPN_KillSwitch_IPv6\"", out code);
+            }
+            catch { }
+        }
+
+        public void SetWindowsKillSwitch(bool enable, string reqId = null)
+        {
+            IsKillSwitchEnabled = enable;
+            if (enable && IsConnected)
+            {
+                SyncKillSwitchIPv6Rule(true);
+            }
+            else if (!enable)
+            {
+                CleanupKillSwitchFirewallRules();
+            }
+            if (!string.IsNullOrEmpty(reqId))
+            {
+                SendBridgeResponse(reqId, "{\"ok\":true,\"enabled\":" + (enable ? "true" : "false") + "}");
+            }
+        }
+
+        public void ApplyHouseholdShields(bool tvAcr, bool streamingAds, bool routerCheck, string reqId = null)
+        {
+            ShieldStates[0] = tvAcr;
+            ShieldStates[1] = streamingAds;
+            ShieldStates[2] = routerCheck;
+            bool hostsUpdated = false;
+            try
+            {
+                string hostsPath = Path.Combine(Environment.SystemDirectory, @"drivers\etc\hosts");
+                if (File.Exists(hostsPath))
+                {
+                    string raw = File.ReadAllText(hostsPath, Encoding.UTF8);
+                    string startMarker = "# BEGIN SWEEPR SMART-TV SHIELD";
+                    string endMarker = "# END SWEEPR SMART-TV SHIELD";
+                    int sIdx = raw.IndexOf(startMarker, StringComparison.OrdinalIgnoreCase);
+                    int eIdx = raw.IndexOf(endMarker, StringComparison.OrdinalIgnoreCase);
+                    if (sIdx >= 0 && eIdx > sIdx)
+                    {
+                        int removeLen = (eIdx + endMarker.Length) - sIdx;
+                        raw = raw.Remove(sIdx, removeLen).TrimEnd();
+                    }
+
+                    if (tvAcr || streamingAds)
+                    {
+                        StringBuilder block = new StringBuilder();
+                        block.AppendLine();
+                        block.AppendLine(startMarker);
+                        if (tvAcr)
+                        {
+                            block.AppendLine("0.0.0.0 acr0.samsungcloudsolution.com");
+                            block.AppendLine("0.0.0.0 lcprd1.samsungcloudsolution.net");
+                            block.AppendLine("0.0.0.0 otn.samsungcloudcdn.com");
+                            block.AppendLine("0.0.0.0 aic.ngfts.lge.com");
+                            block.AppendLine("0.0.0.0 ad.lgappstv.com");
+                            block.AppendLine("0.0.0.0 yumenetworks.com");
+                            block.AppendLine("0.0.0.0 scribe.logs.roku.com");
+                            block.AppendLine("0.0.0.0 cooper.logs.roku.com");
+                            block.AppendLine("0.0.0.0 austin.logs.roku.com");
+                            block.AppendLine("0.0.0.0 ravm.tv");
+                        }
+                        if (streamingAds)
+                        {
+                            block.AppendLine("0.0.0.0 device-metrics-us.amazon.com");
+                            block.AppendLine("0.0.0.0 device-metrics-us-2.amazon.com");
+                            block.AppendLine("0.0.0.0 fls-na.amazon.com");
+                            block.AppendLine("0.0.0.0 ichnaea.netflix.com");
+                            block.AppendLine("0.0.0.0 customerevents.netflix.com");
+                        }
+                        block.AppendLine(endMarker);
+                        raw = raw.TrimEnd() + "\r\n" + block.ToString();
+                    }
+                    File.WriteAllText(hostsPath, raw + "\r\n", new UTF8Encoding(false));
+                    int flushCode;
+                    RunProcessCapture("ipconfig.exe", "/flushdns", out flushCode);
+                    hostsUpdated = true;
+                }
+            }
+            catch { }
+
+            string routerAudit = routerCheck ? AuditRouterSecurityJson() : "{\"ok\":true,\"routerSafe\":true}";
+            if (!string.IsNullOrEmpty(reqId))
+            {
+                SendBridgeResponse(reqId, "{\"ok\":true,\"hostsUpdated\":" + (hostsUpdated ? "true" : "false") + ",\"tvAcr\":" + (tvAcr ? "true" : "false") + ",\"streamingAds\":" + (streamingAds ? "true" : "false") + ",\"routerCheck\":" + (routerCheck ? "true" : "false") + ",\"router\":" + routerAudit + "}");
+            }
+        }
+
+        public string AuditRouterSecurityJson()
+        {
+            string gatewayIp = "192.168.1.1";
+            try
+            {
+                foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
+                {
+                    if (ni.OperationalStatus != OperationalStatus.Up) continue;
+                    if (ni.NetworkInterfaceType == NetworkInterfaceType.Loopback) continue;
+                    if (ni.Name.IndexOf("sweepr", StringComparison.OrdinalIgnoreCase) >= 0) continue;
+                    foreach (GatewayIPAddressInformation gw in ni.GetIPProperties().GatewayAddresses)
+                    {
+                        if (gw.Address != null && gw.Address.AddressFamily == AddressFamily.InterNetwork)
+                        {
+                            string gws = gw.Address.ToString();
+                            if (gws != "0.0.0.0" && !gws.StartsWith("10.64.")) { gatewayIp = gws; break; }
+                        }
+                    }
+                }
+            }
+            catch { }
+
+            bool telnetOpen = ProbeTcpPortFast(gatewayIp, 23, 350);
+            bool ftpOpen = ProbeTcpPortFast(gatewayIp, 21, 350);
+            bool tr069Open = ProbeTcpPortFast(gatewayIp, 7547, 350);
+            bool safe = !telnetOpen && !ftpOpen && !tr069Open;
+            string summary = safe
+                ? ("Router (" + gatewayIp + ") passed security audit: Telnet (23), FTP (21) & TR-069 (7547) closed ✓")
+                : ("Warning on Router (" + gatewayIp + "): insecure remote port open (" + (telnetOpen ? "Telnet:23 " : "") + (ftpOpen ? "FTP:21 " : "") + (tr069Open ? "TR-069:7547" : "") + ")");
+            return "{\"ok\":true,\"gateway_ip\":\"" + EscapeJson(gatewayIp) + "\",\"routerSafe\":" + (safe ? "true" : "false") + ",\"telnetOpen\":" + (telnetOpen ? "true" : "false") + ",\"ftpOpen\":" + (ftpOpen ? "true" : "false") + ",\"tr069Open\":" + (tr069Open ? "true" : "false") + ",\"summary\":\"" + EscapeJson(summary) + "\"}";
         }
 
         private string GetRealVpnStatusJson()
@@ -1670,6 +1915,45 @@ namespace SweeprVpnApp
                 DiscoveredLanDevices.Add(d.Name + " (" + d.Ip + ") — " + (d.TrackerRisk ? "TV Trackers Found" : "Safe ✓"));
             }
 
+            try
+            {
+                lock (KnownMacsLock)
+                {
+                    bool firstBaseline = (BaselineKnownMacs.Count == 0);
+                    foreach (LanDeviceEntry d in found)
+                    {
+                        string macKey = (d.Mac ?? "").Trim().ToUpperInvariant();
+                        if (string.IsNullOrEmpty(macKey) || macKey == "LOCAL" || macKey == "GATEWAY") continue;
+                        if (firstBaseline)
+                        {
+                            BaselineKnownMacs.Add(macKey);
+                        }
+                        else if (!BaselineKnownMacs.Contains(macKey))
+                        {
+                            BaselineKnownMacs.Add(macKey);
+                            if (IsRadarEnabled)
+                            {
+                                string alertName = d.Name ?? "Unknown Device";
+                                string alertIp = d.Ip ?? "";
+                                if (TrayIcon != null)
+                                {
+                                    try
+                                    {
+                                        this.BeginInvoke(new Action(() =>
+                                        {
+                                            TrayIcon.ShowBalloonTip(5000, "SWEEPR Wi-Fi Intruder Alert", "New device joined your Wi-Fi: " + alertName + " (" + alertIp + ")", ToolTipIcon.Warning);
+                                        }));
+                                    }
+                                    catch { }
+                                }
+                                ExecuteJsSafe("window.onNativeIntruderAlert && window.onNativeIntruderAlert('" + EscapeJson(alertName) + "', '" + EscapeJson(alertIp) + "', '" + EscapeJson(macKey) + "')");
+                            }
+                        }
+                    }
+                }
+            }
+            catch { }
+
             StringBuilder sb = new StringBuilder();
             sb.Append("{\"subnet\":\"").Append(EscapeJson(subnetPrefix + ".0/24")).Append("\",");
             sb.Append("\"local_ip\":\"").Append(EscapeJson(localIp)).Append("\",");
@@ -1798,7 +2082,7 @@ namespace SweeprVpnApp
         public static int RunSelfTest(string outFile)
         {
             string html = LoadEmbeddedTextResource("app-ui.html");
-            if ((!html.Contains("Search country or city") && !html.Contains("Search for a country")) || (!html.Contains("Connect") && !html.Contains("Enable")) || !html.Contains("view-wifi") || !html.Contains("is-compact") || !html.Contains("cmdModal") || !html.Contains("ctxMenu") || !html.Contains("toggleDesktopReverseQr") || !html.Contains("openDesktopPairOutQr") || !html.Contains("invokeWebView2"))
+            if ((!html.Contains("Search country or city") && !html.Contains("Search for a country")) || (!html.Contains("Connect") && !html.Contains("Enable")) || !html.Contains("view-wifi") || !html.Contains("is-compact") || !html.Contains("cmdModal") || !html.Contains("ctxMenu") || !html.Contains("invokeWebView2") || !html.Contains("sendSupport"))
                 throw new Exception("Embedded WebView2 HTML UI missing Plain-English, Desktop, or Real WireGuard bridge controls.");
 
             using (MainForm form = new MainForm(null, null, true))

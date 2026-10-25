@@ -32,14 +32,38 @@ body {
 }
 
 .glass-nav {
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border-bottom: 1px solid var(--border);
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 50;
+  z-index: 10000;
+}
+
+.glass-nav.mobile-menu-open {
+  background: #ffffff !important;
+}
+
+#mobileNavBackdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 9998;
+}
+
+#mobileNavDrawer {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  z-index: 9999 !important;
+}
+
+#mobileNavDrawer.hidden,
+#mobileNavBackdrop.hidden {
+  display: none !important;
 }
 
 .glass-card {
@@ -84,6 +108,22 @@ button.btn,
   [type="submit"].btn,
   [type="button"].btn {
     padding: 0 20px;
+  }
+}
+
+.btn.hidden,
+button.btn.hidden,
+[type="submit"].btn.hidden,
+[type="button"].btn.hidden {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .btn.md\:inline-flex,
+  button.btn.md\:inline-flex,
+  [type="submit"].btn.md\:inline-flex,
+  [type="button"].btn.md\:inline-flex {
+    display: inline-flex;
   }
 }
 
