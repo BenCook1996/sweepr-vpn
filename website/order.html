@@ -873,25 +873,34 @@
                     <img src="/logo-mint-glass.svg" width="14" height="14" class="w-3.5 h-3.5 rounded" alt="SWEEPR VPN">
                     <span class="text-[9px] font-bold tracking-tight">SWEEPR VPN PRO</span>
                   </div>
-                  <span class="text-[8px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-semibold">ACTIVATED</span>
+                  <span class="text-[8px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-semibold">ENCRYPTED</span>
                 </div>
-                <!-- Status Circle -->
-                <div class="text-center py-2">
-                  <div class="w-12 h-12 mx-auto rounded-full bg-emerald-500/10 border-2 border-emerald-500 flex items-center justify-center text-emerald-400 mb-1 shadow-inner">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                <!-- VPN Tunnel Card -->
+                <div class="bg-gray-800/90 border border-emerald-500/30 rounded-lg p-2 mb-2">
+                  <div class="flex items-center justify-between text-[8px] text-gray-400 mb-1">
+                    <span class="font-mono text-emerald-300">🇬🇧 London, UK • WireGuard®</span>
+                    <span class="text-emerald-400 font-bold">10 Gbps</span>
                   </div>
-                  <div class="text-[10px] font-bold text-white">100% Protected &amp; Private</div>
-                  <div class="text-[8px] text-gray-400">Connected • London, UK</div>
+                  <div class="text-[11px] font-black text-white leading-tight">VPN Tunnel Connected</div>
+                  <div class="text-[8px] text-gray-400 mt-0.5 font-mono">IP Masked → 185.212.•••.•••</div>
                 </div>
                 <!-- Mini Stats -->
-                <div class="grid grid-cols-2 gap-1.5 pt-1 text-[8px]">
-                  <div class="bg-gray-800/80 p-1.5 rounded">
-                    <div class="text-gray-400">Speed Boost</div>
-                    <div class="text-emerald-400 font-bold">Active</div>
+                <div class="grid grid-cols-2 gap-1.5 text-[8px]">
+                  <div class="bg-gray-800/80 p-1.5 rounded border border-gray-700/60">
+                    <div class="text-gray-400">Encryption</div>
+                    <div class="text-emerald-400 font-bold">AES-256-GCM</div>
                   </div>
-                  <div class="bg-gray-800/80 p-1.5 rounded">
-                    <div class="text-gray-400">Home Wi-Fi</div>
-                    <div class="text-emerald-400 font-bold">19 Devices Safe</div>
+                  <div class="bg-gray-800/80 p-1.5 rounded border border-gray-700/60">
+                    <div class="text-gray-400">Kill Switch</div>
+                    <div class="text-emerald-400 font-bold">Armed &amp; Active</div>
+                  </div>
+                  <div class="bg-gray-800/80 p-1.5 rounded border border-gray-700/60">
+                    <div class="text-gray-400">ISP &amp; Wi-Fi Spying</div>
+                    <div class="text-emerald-400 font-bold">0 Logs / Blocked</div>
+                  </div>
+                  <div class="bg-gray-800/80 p-1.5 rounded border border-gray-700/60">
+                    <div class="text-gray-400">Streaming Speed</div>
+                    <div class="text-emerald-400 font-bold">Unthrottled</div>
                   </div>
                 </div>
               </div>
@@ -1789,7 +1798,7 @@
       clearTimeout(inactivityTimer);
       inactivityTimer = setTimeout(() => {
         showDiscountModal();
-      }, 30000);
+      }, 90000);
     }
 
     function resetInactivityTimer() {
@@ -1797,7 +1806,7 @@
         clearTimeout(inactivityTimer);
         inactivityTimer = setTimeout(() => {
           showDiscountModal();
-        }, 30000);
+        }, 90000);
       }
     }
 
