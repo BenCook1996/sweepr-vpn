@@ -35,6 +35,8 @@ async fn connect_vpn(
     server_code: String,
     email: Option<String>,
     activation_code: Option<String>,
+    lan_bypass: Option<bool>,
+    device_id: Option<String>,
 ) -> Result<sweepr_tunnel::TunnelStatus, String> {
     tauri::async_runtime::spawn_blocking(move || {
         sweepr_tunnel::connect(sweepr_tunnel::ConnectRequest {
@@ -42,6 +44,8 @@ async fn connect_vpn(
             email,
             activation_code,
             api_url: None,
+            lan_bypass,
+            device_id,
         })
     })
     .await

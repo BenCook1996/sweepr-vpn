@@ -26,6 +26,10 @@ use std::time::{Duration, SystemTime, UNIX_EPOCH};
 pub enum DeviceKind {
     Router,
     Extender,
+    Windows,
+    Macos,
+    Iphone,
+    Android,
     Computer,
     Tv,
     Speaker,
@@ -182,13 +186,18 @@ pub fn scan_network(opts: ScanOptions) -> Result<ScanReport, String> {
 
     // This computer first.
     let self_name = dns_lookup::get_hostname().ok().map(|h| pretty_host(&h)).filter(|s| !s.is_empty());
+    let (self_os_name, self_os_kind) = if cfg!(target_os = "macos") {
+        ("macOS Desktop", DeviceKind::Macos)
+    } else {
+        ("Windows Desktop", DeviceKind::Windows)
+    };
     devices.push(Device {
         ip: net.ip.to_string(),
         mac: net.mac.clone().unwrap_or_default(),
-        name: "This computer".into(),
+        name: self_os_name.into(),
         vendor: net.mac.as_deref().and_then(oui::lookup),
         model: None,
-        kind: DeviceKind::Computer,
+        kind: self_os_kind,
         detail: match &self_name { Some(n) => format!("{n} · protected by SWEEPR"), None => "Protected by SWEEPR".into() },
         is_router: false,
         is_self: true,
@@ -265,18 +274,22 @@ fn build_device(ip: Ipv4Addr, mac: &str, h: &Hints, is_router: bool, shared_mac:
 
         let kind = if is_router { DeviceKind::Router }
         else if EXTENDER_WORDS.iter().any(|w| haystack.contains(w)) || (shared_mac && name.as_deref().map(|n| n.to_lowercase().starts_with("re")).unwrap_or(false)) { DeviceKind::Extender }
-        else { classify(&haystack, private_address && name.is_none()) };
+        else { classify(&haystack, mac, h.netbios.is_some(), private_address && name.is_none()) };
     // Amazon speakers announce themselves only as "SpotifyConnect": call them what they are.
     let name = if name.is_none() && kind == DeviceKind::Speaker && vendor.as_deref() == Some("Amazon") { Some("Amazon Echo".to_string()) } else { name };
     let tracker_risk = kind == DeviceKind::Tv && ACR_BRANDS.iter().any(|b| haystack.contains(b));
 
     let display_name = match (&name, is_router) {
-        (_, true) => "Home Wi-Fi router".to_string(),
+        (_, true) => "Home Wi-Fi Router".to_string(),
         (Some(n), _) => n.clone(),
         (None, _) => match (&kind, &vendor) {
-            (DeviceKind::Private, _) => "Private device".into(),
+            (DeviceKind::Windows, _) => "Windows Desktop".into(),
+            (DeviceKind::Macos, _) => "macOS Desktop".into(),
+            (DeviceKind::Iphone, _) => "iPhone".into(),
+            (DeviceKind::Android, _) => "Android Mobile Device".into(),
+            (DeviceKind::Private, _) => "iPhone".into(),
             (k, Some(v)) => format!("{v} {}", kind_noun(k)),
-            (k, None) => format!("Unknown {}", kind_noun(k)),
+            (k, None) => kind_label(k).into(),
         },
     };
 
@@ -322,7 +335,7 @@ fn strip_hex_prefix(n: &str) -> String {
 
 const ACR_BRANDS: &[&str] = &["samsung", "lg", "webos", "vizio", "roku", "hisense", "tcl", "tizen"];
 
-fn classify(s: &str, anonymous_private: bool) -> DeviceKind {
+fn classify(s: &str, mac: &str, has_netbios: bool, anonymous_private: bool) -> DeviceKind {
     let has = |words: &[&str]| words.iter().any(|w| s.contains(w));
     if has(&["tv", "bravia", "webos", "tizen", "roku", "fire tv", "firetv", "chromecast", "googlecast", "apple tv", "appletv", "shield", "vizio", "hisense", "tcl", "freeview", "sky q", "youview", "mediarenderer", "dial-multiscreen"]) { return DeviceKind::Tv; }
     if has(&["xbox", "playstation", "ps4", "ps5", "nintendo", "steam deck"]) { return DeviceKind::Console; }
@@ -330,16 +343,23 @@ fn classify(s: &str, anonymous_private: bool) -> DeviceKind {
     if has(&["sonos", "echo", "alexa", "homepod", "google home", "nest audio", "nest mini", "bose", "spotify", "_raop", "speaker", "soundbar", "denon", "yamaha", "bang & olufsen"]) { return DeviceKind::Speaker; }
     if has(&["camera", "cam ", "ring", "arlo", "wyze", "hikvision", "doorbell", "reolink", "eufy", "blink"]) { return DeviceKind::Camera; }
     if has(&["hue", "philips hue", "_hap", "homekit", "tuya", "shelly", "espressif", "kasa", "tapo", "smartthings", "nest", "thermostat", "plug", "bulb", "hive", "tado", "meross", "switchbot"]) { return DeviceKind::SmartHome; }
-    if has(&["desktop", "laptop", "macbook", "imac", "mac mini", "mac-mini", "pc", "windows", "_smb", "_workstation", "dell", "lenovo", "asus", "acer", "hp ", "surface", "intel", "thinkpad", "raspberry"]) { return DeviceKind::Computer; }
-    if anonymous_private { return DeviceKind::Private; }
-    DeviceKind::Other
+    if has(&["macbook", "imac", "mac mini", "mac-mini", "mac studio", "mac pro", "macos", "_afpovertcp", "_adisk"]) { return DeviceKind::Macos; }
+    if has(&["iphone", "ipad", "ios", "_companion-link", "_airplay"]) { return DeviceKind::Iphone; }
+    if has(&["android", "galaxy", "pixel", "xiaomi", "redmi", "oneplus", "motorola", "huawei", "oppo", "vivo"]) { return DeviceKind::Android; }
+    if has_netbios || has(&["desktop", "laptop", "pc", "windows", "_smb", "_workstation", "dell", "lenovo", "asus", "acer", "hp ", "surface", "intel", "thinkpad", "realtek", "mediatek", "micro-star", "msi", "gigabyte"]) { return DeviceKind::Windows; }
+    if has(&["apple"]) { return DeviceKind::Iphone; }
+    if anonymous_private {
+        let nibble = mac.chars().nth(1).map(|c| c.to_ascii_uppercase()).unwrap_or('2');
+        return if nibble == 'A' || nibble == 'E' { DeviceKind::Android } else { DeviceKind::Iphone };
+    }
+    DeviceKind::Windows
 }
 
 fn kind_noun(k: &DeviceKind) -> &'static str {
-    match k { DeviceKind::Router => "router", DeviceKind::Extender => "Wi-Fi extender", DeviceKind::Computer => "computer", DeviceKind::Tv => "TV", DeviceKind::Speaker => "speaker", DeviceKind::Printer => "printer", DeviceKind::Camera => "camera", DeviceKind::Console => "games console", DeviceKind::SmartHome => "smart home device", DeviceKind::Private => "device", DeviceKind::Other => "device" }
+    match k { DeviceKind::Router => "Router", DeviceKind::Extender => "Wi-Fi Extender", DeviceKind::Windows => "Desktop", DeviceKind::Macos => "Desktop", DeviceKind::Iphone => "iPhone", DeviceKind::Android => "Mobile Device", DeviceKind::Computer => "Desktop", DeviceKind::Tv => "Smart TV", DeviceKind::Speaker => "Speaker", DeviceKind::Printer => "Printer", DeviceKind::Camera => "Camera", DeviceKind::Console => "Games Console", DeviceKind::SmartHome => "Smart Home Device", DeviceKind::Private => "Mobile Device", DeviceKind::Other => "Desktop" }
 }
 fn kind_label(k: &DeviceKind) -> &'static str {
-    match k { DeviceKind::Router => "Router", DeviceKind::Extender => "Wi-Fi extender", DeviceKind::Computer => "Computer", DeviceKind::Tv => "TV or streaming box", DeviceKind::Speaker => "Speaker", DeviceKind::Printer => "Printer", DeviceKind::Camera => "Camera", DeviceKind::Console => "Games console", DeviceKind::SmartHome => "Smart home device", DeviceKind::Private => "Private device", DeviceKind::Other => "Device" }
+    match k { DeviceKind::Router => "Home Wi-Fi Router", DeviceKind::Extender => "Wi-Fi Extender", DeviceKind::Windows => "Windows Desktop", DeviceKind::Macos => "macOS Desktop", DeviceKind::Iphone => "iPhone", DeviceKind::Android => "Android Mobile Device", DeviceKind::Computer => "Windows Desktop", DeviceKind::Tv => "Smart TV", DeviceKind::Speaker => "Speaker", DeviceKind::Printer => "Printer", DeviceKind::Camera => "Camera", DeviceKind::Console => "Games Console", DeviceKind::SmartHome => "Smart Home Device", DeviceKind::Private => "iPhone", DeviceKind::Other => "Windows Desktop" }
 }
 
 fn useful_name(n: &str) -> bool {

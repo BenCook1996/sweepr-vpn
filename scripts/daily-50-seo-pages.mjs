@@ -1232,7 +1232,8 @@ async function runDaily50Pages(targetCount = 50, force = false) {
     { loc: 'https://sweeprvpn.com/support', priority: '0.6', changefreq: 'monthly' },
     { loc: 'https://sweeprvpn.com/refund', priority: '0.5', changefreq: 'monthly' },
     { loc: 'https://sweeprvpn.com/privacy', priority: '0.5', changefreq: 'monthly' },
-    { loc: 'https://sweeprvpn.com/terms', priority: '0.5', changefreq: 'monthly' }
+    { loc: 'https://sweeprvpn.com/terms', priority: '0.5', changefreq: 'monthly' },
+    { loc: 'https://sweeprvpn.com/pad.xml', priority: '0.5', changefreq: 'monthly' }
   ];
 
   const allPseoPagesOnDisk = [];

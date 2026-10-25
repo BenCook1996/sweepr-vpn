@@ -376,7 +376,11 @@
     <symbol id="i-bulb" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.3h6c0-1 .4-1.8 1-2.3A7 7 0 0 0 12 2z"/></g></symbol>
     <symbol id="i-lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></g></symbol>
     <symbol id="i-bell" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></g></symbol>
-      <symbol id="i-qr" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM18 18h3v3h-3zM14 19h2M19 14h2"/></g></symbol>
+    <symbol id="i-qr" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM18 18h3v3h-3zM14 19h2M19 14h2"/></g></symbol>
+    <symbol id="i-windows" viewBox="0 0 24 24"><path fill="currentColor" d="M3 3.5h8.2v8.2H3V3.5zm9.8 0H21v8.2h-8.2V3.5zM3 13.3h8.2V21.5H3v-8.2zm9.8 0H21V21.5h-8.2v-8.2z"/></symbol>
+    <symbol id="i-apple" viewBox="0 0 24 24"><path fill="currentColor" d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></symbol>
+    <symbol id="i-mac" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></g><path fill="currentColor" d="M13.6 12.6c-.35.34-.73.29-1.1.13-.39-.16-.75-.17-1.16 0-.51.22-.79.16-1.09-.13-1.74-1.8-1.48-4.53.5-4.63.48.03.82.26 1.1.29.42-.09.82-.33 1.27-.3.54.04.95.26 1.21.64-1.11.67-.85 2.13.17 2.54-.2.53-.47 1.07-.9 1.46zm-1.79-4.65c-.05-.8.59-1.45 1.33-1.52.1.92-.83 1.6-1.33 1.52z"/></symbol>
+    <symbol id="i-android" viewBox="0 0 24 24"><path fill="currentColor" d="M17.6 9.48l1.84-3.18c.16-.31.04-.69-.26-.85-.29-.15-.65-.06-.83.22l-1.88 3.24a11.46 11.46 0 0 0-8.94 0L5.65 5.67c-.19-.28-.54-.37-.83-.22-.3.16-.42.54-.26.85L6.4 9.48A10.78 10.78 0 0 0 2 18h20a10.78 10.78 0 0 0-4.4-8.52zM7 15.25a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5zm10 0a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5z"/></symbol>
   </defs>
 </svg>
 
@@ -396,7 +400,6 @@
     <svg class="logo desktop-only"><use href="#logo"/></svg>
     <button class="rail-btn on" id="nav-home" onclick="go('home')" aria-label="VPN"><svg width="20" height="20"><use href="#i-shield"/></svg><span class="nav-lbl" data-i18n="home">VPN</span><span class="tip" data-i18n="home">VPN</span></button>
     <button class="rail-btn" id="nav-wifi" onclick="go('wifi')" aria-label="Wi-Fi & TV"><svg width="20" height="20"><use href="#i-wifi"/></svg><span class="dot" id="wifiDot"></span><span class="nav-lbl" data-i18n="wifi">Wi-Fi &amp; TV</span><span class="tip" data-i18n="wifi">Wi-Fi &amp; TV</span></button>
-    <button class="rail-btn" id="nav-qr" onclick="openMobileWireGuardModal()" aria-label="QR Code Setup"><svg width="20" height="20"><use href="#i-qr"/></svg><span class="nav-lbl">QR Setup</span><span class="tip">QR Code Setup</span></button>
     <button class="rail-btn" id="nav-account" onclick="go('account')" aria-label="Account"><svg width="20" height="20"><use href="#i-user"/></svg><span class="nav-lbl" data-i18n="account">Account</span><span class="tip" data-i18n="account">Account &amp; Help</span></button>
     <div class="spacer desktop-only"></div>
     <button class="rail-btn desktop-only" onclick="toggleTheme()" aria-label="Light or dark mode"><svg width="20" height="20" id="themeIcon"><use href="#i-moon"/></svg><span class="tip" id="themeTip">Dark mode</span></button>
@@ -516,19 +519,6 @@
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
           <button class="btn-go" style="flex:1;font-size:14px;padding:12px" onclick="openActivate()" id="accBtn">Enter license key or upgrade</button>
-          <button class="btn-soft" onclick="openDesktopPairOutQr()" id="accLinkQrBtn" title="Link a phone, tablet, or computer by scanning a one-time QR code">📱 Link Device via QR</button>
-          <button class="btn-soft" onclick="openMobileWireGuardModal()" title="Set up iOS or Android phone via WireGuard QR or .conf profile"><svg width="16" height="16"><use href="#i-dev"/></svg><span data-i18n="phoneSetupBtn">Phone Setup (iOS / Android)</span></button>
-        </div>
-        <!-- Flow A: Outgoing 120s One-Time Account Pairing QR Drawer + Linked Devices Slot Manager -->
-        <div id="accPairDrawer" class="hidden" style="margin-top:12px;padding:14px;border-radius:12px;background:var(--card2);border:1px solid var(--line);text-align:center">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-            <span class="t" style="font-size:12.5px">Scan with Phone or Tablet to Link Account</span>
-            <button type="button" class="s" style="font-weight:800;cursor:pointer" onclick="closeDesktopPairOutQr()">✕ Close</button>
-          </div>
-          <div class="qr-box" id="accPairQrBox" style="padding:12px;margin:0 auto;max-width:240px">
-            <div class="s">Generating 120s one-time pairing QR…</div>
-          </div>
-          <div class="s" id="accPairTimer" style="margin-top:8px;font-weight:800;color:var(--accent)">Single-use token · Expires in 02:00</div>
         </div>
         <div id="accDevicesBar" class="hidden" style="margin-top:12px;padding:10px 12px;border-radius:12px;background:var(--card2);border:1px solid var(--line)">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
@@ -566,7 +556,10 @@
       <div class="card" style="display:flex;flex-direction:column;gap:10px">
         <input class="input" id="supEmail" type="email" placeholder="Your email address" />
         <textarea class="input" id="supMsg" rows="3" placeholder="Tell us how we can help…"></textarea>
-        <button class="btn-soft" style="align-self:flex-start" onclick="sendSupport()" data-i18n="sendBtn">Send message</button>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <button class="btn-soft" id="supSendBtn" style="align-self:flex-start" onclick="sendSupport()" data-i18n="sendBtn">Send message</button>
+          <span class="s" id="supStatusText" style="font-weight:700;display:none"></span>
+        </div>
       </div>
       <div class="s" style="text-align:center;margin:14px 0 4px">SWEEPR VPN v2.5.0 · WireGuard® Engine · Up to date ✓</div>
     </section>
@@ -644,20 +637,12 @@
 
     <div id="mKeySection" style="display:flex;flex-direction:column;gap:8px;padding-top:6px;border-top:1px solid var(--line)">
       <div class="key-row">
-        <input class="input" id="mCode" type="text" maxlength="64" placeholder="SWEEPR-VPN-XXXX-XXXX-XXXX or 6-digit code" oninput="this.value=this.value.replace(/\s+/g,'').toUpperCase()" onpaste="handleKeyInputPaste(event)" onkeydown="if(event.key==='Enter')activateKeyOnly()" aria-label="License key" />
+        <input class="input" id="mCode" type="text" maxlength="128" placeholder="License key, 6-digit code, or website QR pairing code" oninput="this.value=this.value.replace(/\s+/g,'')" onpaste="handleKeyInputPaste(event)" onkeydown="if(event.key==='Enter')activateKeyOnly()" aria-label="License key" />
         <button type="button" class="btn-soft" onclick="pasteIntoKeyBox()" title="Paste from clipboard" style="padding:8px 11px;min-height:38px;white-space:nowrap;font-weight:800">Paste</button>
         <button class="btn-activate-key" id="mActivateKeyBtn" onclick="activateKeyOnly()">Activate Key</button>
       </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-        <button type="button" onclick="toggleDesktopReverseQr()" style="font-size:11.5px;font-weight:800;color:var(--accent)">📱 Link by scanning QR with phone ›</button>
+      <div style="display:flex;align-items:center;justify-content:flex-end;gap:8px">
         <button type="button" onclick="toggleForgotKeyBox()" style="font-size:11.5px;font-weight:800;color:var(--accent)">Forgot key? Email it ›</button>
-      </div>
-      <div id="mReverseQrBox" class="hidden" style="background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center">
-        <div style="font-size:12px;font-weight:800;margin-bottom:6px">Scan with your Phone Camera or Customer Portal</div>
-        <div id="mReverseQrSvg" style="background:#fff;border-radius:10px;padding:8px;display:inline-block;border:1px solid var(--line)">
-          <span class="s" style="color:#475569">Generating pairing code…</span>
-        </div>
-        <div class="s" id="mReverseQrTimer" style="margin-top:6px;font-weight:800;color:var(--accent)">Waiting for phone approval (02:00)…</div>
       </div>
       <div id="mForgotBox" class="hidden" style="background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;gap:8px;align-items:center">
         <input class="input" id="mForgotEmail" type="email" placeholder="Enter your purchase email…" style="padding:8px 11px;font-size:12.5px" onkeydown="if(event.key==='Enter')resendLostLicenseKey()" />
@@ -759,7 +744,28 @@
   let devices = [];
   let scanning = false;
   let lastScanAt = 0;
-  const ICONS = { router:'i-wifi', extender:'i-wifi', computer:'i-pc', tv:'i-tv', speaker:'i-speaker', printer:'i-printer', camera:'i-camera', console:'i-game', smart_home:'i-bulb', private:'i-lock', other:'i-dev' };
+  const ICONS = { windows:'i-windows', macos:'i-mac', iphone:'i-apple', ipad:'i-apple', android:'i-android', router:'i-wifi', extender:'i-wifi', computer:'i-windows', tv:'i-tv', speaker:'i-speaker', printer:'i-printer', camera:'i-camera', console:'i-game', smart_home:'i-bulb', private:'i-apple', other:'i-android' };
+  function resolveDeviceIcon(d) {
+    const k = String((d && d.kind) || '').toLowerCase();
+    const nm = String((d && d.name) || '').toLowerCase();
+    if (k === 'windows' || nm.includes('windows')) return 'i-windows';
+    if (k === 'macos' || nm.includes('macos') || nm.includes('macbook') || nm.includes('imac')) return 'i-mac';
+    if (k === 'iphone' || k === 'ipad' || nm.includes('iphone') || nm.includes('ipad') || nm.includes('ios')) return 'i-apple';
+    if (k === 'android' || nm.includes('android')) return 'i-android';
+    if (d && d.is_self) return /mac/i.test(navigator.userAgent || '') ? 'i-mac' : 'i-windows';
+    return ICONS[k] || 'i-windows';
+  }
+  function resolveDeviceDisplayName(d) {
+    if (!d) return 'Windows Desktop';
+    const raw = String(d.name || '').trim();
+    if (d.is_self) {
+      const selfOs = /mac/i.test(navigator.userAgent || '') ? 'macOS Desktop' : 'Windows Desktop';
+      return (raw && raw.toLowerCase() !== 'this computer' && raw.toLowerCase() !== 'this device' ? raw : selfOs) + ' (This Device)';
+    }
+    if (!raw || raw === 'Home Wi-Fi Device' || raw === 'Unknown device') return 'Windows Desktop';
+    if (raw === 'Phone / Tablet (Private Wi-Fi Address)' || raw === 'Private device') return 'iPhone';
+    return raw;
+  }
   const tauri = window.__TAURI__;
   const isWebView2 = !!(window.chrome && window.chrome.webview && typeof window.chrome.webview.postMessage === 'function');
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c])); }
@@ -1101,13 +1107,12 @@
     $('devCountTitle').textContent = list.length || '…';
     $('infoDevices').textContent = list.length ? list.length + ' devices' : 'Ready to scan';
     $('blips').innerHTML = layout(list).map(d =>
-      '<div class="blip' + (d.tracker_risk ? ' warn' : '') + '" style="left:' + d.x.toFixed(1) + '%;top:' + d.y.toFixed(1) + '%" title="' + esc(d.name + ' · ' + d.ip) + '"><div class="b"><svg width="17" height="17"><use href="#' + (ICONS[d.kind] || 'i-dev') + '"/></svg></div><div class="l">' + esc(shortLabel(d.is_self ? 'This device' : d.name)) + '</div></div>').join('');
+      '<div class="blip' + (d.tracker_risk ? ' warn' : '') + '" style="left:' + d.x.toFixed(1) + '%;top:' + d.y.toFixed(1) + '%" title="' + esc(resolveDeviceDisplayName(d) + ' · ' + d.ip) + '"><div class="b"><svg width="17" height="17"><use href="#' + resolveDeviceIcon(d) + '"/></svg></div><div class="l">' + esc(shortLabel(resolveDeviceDisplayName(d))) + '</div></div>').join('');
     $('devList').innerHTML = list.length ? list.map((d, idx) => {
       const badge = d.tracker_risk ? '<button class="pill solid" onclick="blockTv()">Block</button>'
-        : d.kind === 'private' ? '<span class="pill warn">Private</span>'
         : '<span class="pill ok">Safe ✓</span>';
-      return '<div class="devrow' + (d.tracker_risk ? ' warn' : '') + '" style="--row-idx:' + idx + '" title="' + esc(d.ip + '  ·  ' + d.mac) + '"><div class="ico ' + (d.tracker_risk ? 'a' : 'e') + '"><svg width="18" height="18"><use href="#' + (ICONS[d.kind] || 'i-dev') + '"/></svg></div>' +
-        '<div class="grow"><div class="t">' + esc(d.is_self ? 'This device (' + d.name + ')' : d.name) + '</div><div class="s">' + esc(d.detail) + '</div></div>' + badge + '</div>';
+      return '<div class="devrow' + (d.tracker_risk ? ' warn' : '') + '" style="--row-idx:' + idx + '" title="' + esc(d.ip + '  ·  ' + d.mac) + '"><div class="ico ' + (d.tracker_risk ? 'a' : 'e') + '"><svg width="18" height="18"><use href="#' + resolveDeviceIcon(d) + '"/></svg></div>' +
+        '<div class="grow"><div class="t">' + esc(resolveDeviceDisplayName(d)) + '</div><div class="s">' + esc(d.detail) + '</div></div>' + badge + '</div>';
     }).join('') : '<div class="card s" style="text-align:center">' + (scanning ? 'Scanning your local Wi-Fi network…' : 'Tap "Scan Wi-Fi" to audit devices on your local network.') + '</div>';
 
     $('wifiDot').classList.toggle('hidden', warn.length === 0);
@@ -1637,7 +1642,10 @@
     }).join('');
   }
   function extractCleanLicenseOrCode(raw) {
-    const str = String(raw || '').trim().toUpperCase();
+    const rawStr = String(raw || '').trim();
+    const ptkMatch = rawStr.match(/ptk_[A-Za-z0-9_-]{12,64}/);
+    if (ptkMatch) return ptkMatch[0];
+    const str = rawStr.toUpperCase();
     const keyMatch = str.match(/SWEEPR\s*-\s*[A-Z0-9]{2,8}\s*-\s*[A-Z0-9]{4}\s*-\s*[A-Z0-9]{4}\s*-\s*[A-Z0-9]{4}/i);
     if (keyMatch) return keyMatch[0].replace(/\s+/g, '').toUpperCase();
     const compact = str.replace(/[^A-Z0-9-]/g, '');
@@ -1791,6 +1799,22 @@
   async function verifyServerSubscription(email, rawCode) {
     const code = extractCleanLicenseOrCode(rawCode);
     const meta = getDesktopDeviceMeta();
+    if (code.startsWith('ptk_')) {
+      let lastErr = 'This QR pairing code has expired or already been used.';
+      for (const url of getApiCandidateUrls('/api/vpn/pair/redeem')) {
+        try {
+          const r = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: code, pair_token: code, device_id: meta.id, device_name: meta.name, os: meta.os })
+          });
+          const d = await r.json().catch(() => ({}));
+          if (r.ok && d.ok && d.valid) return d;
+          if (d && d.message) lastErr = d.message;
+        } catch (e) {}
+      }
+      throw new Error(lastErr);
+    }
     if (tauri) {
       try {
         return await tauri.core.invoke('activate_subscription', { email, code, apiUrl: null });
@@ -2042,10 +2066,95 @@
     if (currentWgConf) downloadMobileWireGuardConf();
   }
 
-  function sendSupport() {
-    if (!$('supEmail').value.includes('@') || !$('supMsg').value.trim()) { toast('Please add your email and a short message'); return; }
-    $('supMsg').value = ''; toast("Message sent — we'll reply by email");
-    postNative('support', true);
+  async function sendSupport() {
+    const email = ($('supEmail').value || '').trim().toLowerCase();
+    const message = ($('supMsg').value || '').trim();
+    const statusEl = $('supStatusText');
+    if (!email.includes('@') || !message) {
+      toast('Please add your email and a short message');
+      return;
+    }
+    const btn = $('supSendBtn');
+    const origLabel = btn ? btn.textContent : 'Send message';
+    if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+    if (statusEl) { statusEl.style.display = 'none'; }
+
+    const meta = getDesktopDeviceMeta();
+    const subject = 'SWEEPR VPN App Support (' + meta.name + ')';
+    const payload = {
+      project_id: 'vpn',
+      email,
+      subject,
+      message,
+      os: meta.os || 'windows',
+      app_version: '2.5.0',
+      device_id: meta.id,
+      diagnostics: {
+        server_code: state.code,
+        connected: !!state.connected,
+        pro: !!state.pro
+      }
+    };
+
+    let sentOk = false;
+    let ticketId = '';
+    if (isWebView2 && !tauri) {
+      try {
+        const res = await invokeWebView2('sendSupportTicket', payload, 15000);
+        if (res && res.ok) {
+          sentOk = true;
+          ticketId = res.ticket_id ? String(res.ticket_id) : '';
+        }
+      } catch (e) {}
+    }
+
+    if (!sentOk) {
+      const urls = [
+        'http://127.0.0.1:8788/api/support/contact',
+        'http://localhost:8788/api/support/contact',
+        'http://127.0.0.1:8080/api/vpn/support',
+        'http://localhost:8080/api/vpn/support',
+        'https://sweeprvpn.com/api/vpn/support'
+      ];
+      if ((location.protocol === 'http:' || location.protocol === 'https:') && location.hostname !== 'app.sweeprvpn.local') {
+        urls.unshift('/api/vpn/support');
+      }
+      for (const u of urls) {
+        try {
+          const r = await fetch(u, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'x-sweepr-project': 'vpn' },
+            body: JSON.stringify(payload)
+          });
+          const d = await r.json().catch(() => ({}));
+          if (r.ok && d && d.ok) {
+            sentOk = true;
+            ticketId = d.ticket_id ? String(d.ticket_id) : '';
+            break;
+          }
+        } catch (e) {}
+      }
+    }
+
+    if (btn) { btn.disabled = false; btn.textContent = origLabel; }
+    if (sentOk) {
+      $('supMsg').value = '';
+      const msgText = '✓ Sent to SWEEPR Support' + (ticketId ? ' (Ticket #' + ticketId + ')' : '') + " — we'll reply by email";
+      if (statusEl) {
+        statusEl.style.color = 'var(--accent)';
+        statusEl.textContent = msgText;
+        statusEl.style.display = 'inline';
+      }
+      toast(msgText);
+    } else {
+      const errText = 'Could not reach support server — please check your connection';
+      if (statusEl) {
+        statusEl.style.color = 'var(--danger)';
+        statusEl.textContent = errText;
+        statusEl.style.display = 'inline';
+      }
+      toast(errText);
+    }
   }
 
   /* ---------- Render ---------- */
@@ -2139,10 +2248,7 @@
     const cmdItems = [
       { id: 'act-toggle', title: state.connected ? 'Pause VPN Protection' : 'Connect to ' + cur().city, sub: 'Toggle WireGuard tunnel immediately', kbd: modKeyLabel + '+↵', run: () => toggleConnect() },
       { id: 'act-scan', title: 'Scan Home Wi-Fi & Smart TVs', sub: 'Audit devices and ACR telemetry on your network', kbd: modKeyLabel + '+R', run: () => { go('wifi'); scanWifi(); } },
-      { id: 'act-pair', title: 'Link Device via QR Code', sub: 'Pair a phone, tablet, or computer (up to 3 devices)', kbd: 'Pair', run: () => { if (state.pro) { go('account'); openDesktopPairOutQr(); } else { openActivate(); toggleDesktopReverseQr(); } } },
       { id: 'act-mini', title: document.body.classList.contains('is-compact') ? 'Expand to Full Window' : 'Switch to Mini Widget Mode', sub: 'Compact 380×540 desktop controller', kbd: modKeyLabel + '+M', run: () => setCompact(!document.body.classList.contains('is-compact')) },
-      { id: 'act-export', title: 'Export Desktop WireGuard .conf (' + cur().city + ')', sub: 'Download standalone WireGuard tunnel configuration', kbd: '.conf', run: () => quickExportWireGuardConf(state.code) },
-      { id: 'act-wg', title: 'Phone Setup (iOS / Android WireGuard QR)', sub: 'Generate QR code or Apple .mobileconfig profile', kbd: 'QR', run: () => openMobileWireGuardModal() },
       { id: 'act-theme', title: 'Toggle Dark / Light Theme', sub: 'Switch interface color appearance', kbd: 'Theme', run: () => toggleTheme() },
       { id: 'act-key', title: state.pro ? 'Manage Active License Key' : 'Enter License Key / Upgrade to Pro', sub: state.pro ? 'Copy or update your 3-device key' : 'Unlock all 8 countries & Smart-TV shields', kbd: 'Key', run: () => openActivate() }
     ];
@@ -2219,8 +2325,6 @@
     positionAndShowCtx(e,
       '<button class="ctx-item" onclick="hideCtxMenu();pick(\'' + esc(s.code) + '\');if(!state.connected)toggleConnect(true)"><span>Connect to ' + esc(s.city) + '</span><span class="k">' + s.ping + ' ms</span></button>' +
       '<button class="ctx-item" onclick="hideCtxMenu();toggleFav(\'' + esc(s.code) + '\')"><span>' + (isFav ? '★ Remove from Saved' : '☆ Save to Favorites') + '</span></button>' +
-      '<button class="ctx-item" onclick="hideCtxMenu();quickExportWireGuardConf(\'' + esc(s.code) + '\')"><span>Export Desktop .conf</span><span class="k">.conf</span></button>' +
-      '<button class="ctx-item" onclick="hideCtxMenu();state.code=\'' + esc(s.code) + '\';openMobileWireGuardModal()"><span>Phone QR &amp; Apple Profile</span><span class="k">QR</span></button>' +
       '<div class="ctx-sep"></div>' +
       '<button class="ctx-item" onclick="hideCtxMenu();openCmdPalette()"><span>Command Palette…</span><span class="k">' + modKeyLabel + '+K</span></button>'
     );

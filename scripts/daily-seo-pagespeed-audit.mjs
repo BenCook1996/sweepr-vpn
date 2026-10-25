@@ -130,9 +130,13 @@ const allCanonicalPages = [
 
 // Rebuild and synchronize sitemap.xml with today's date
 const todayStr = new Date().toISOString().slice(0, 10);
+const sitemapEntries = [
+  ...allCanonicalPages,
+  { canonicalLoc: 'https://sweeprvpn.com/pad.xml', changefreq: 'monthly', priority: '0.5' }
+];
 const newSitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${allCanonicalPages
+${sitemapEntries
   .map(
     (u) => `  <url>
     <loc>${u.canonicalLoc}</loc>
