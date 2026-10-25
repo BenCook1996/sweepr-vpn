@@ -860,47 +860,115 @@
 
         </div>
 
-        <!-- Right Column: Laptop UI Mockup with Sweepr VPN App Displayed -->
+        <!-- Right Column: Laptop UI Mockup with Realistic Sweepr VPN Desktop App UI -->
         <div class="hidden md:block md:col-span-5">
           <div class="laptop-frame">
             <div class="laptop-screen">
               <div class="laptop-notch"></div>
-              <!-- Inner App Window -->
-              <div class="bg-gray-900 rounded-lg p-3 text-white text-left font-sans">
-                <!-- App Header -->
-                <div class="flex items-center justify-between border-b border-gray-800 pb-2 mb-2">
-                  <div class="flex items-center gap-1.5">
-                    <img src="/logo-mint-glass.svg" width="14" height="14" class="w-3.5 h-3.5 rounded" alt="SWEEPR VPN">
-                    <span class="text-[9px] font-bold tracking-tight">SWEEPR VPN PRO</span>
+              <!-- Realistic 3-Column Miniature of desktop-client/app-ui.html -->
+              <div class="bg-[#0b1220] rounded-lg overflow-hidden border border-slate-800 text-white text-left font-sans grid grid-cols-12" style="min-height: 196px;">
+                <!-- Column 1: Left Icon Navigation Rail (.rail) -->
+                <div class="col-span-2 bg-[#080e1a] border-r border-slate-800/90 py-2 px-1 flex flex-col items-center justify-between">
+                  <div class="flex flex-col items-center gap-2 w-full">
+                    <img src="/logo-mint-glass.svg" width="16" height="16" class="w-4 h-4 rounded" alt="SWEEPR VPN">
+                    <div class="w-full py-1 rounded bg-emerald-500/15 border border-emerald-500/30 flex flex-col items-center text-emerald-400">
+                      <span class="text-[9px] leading-none">🛡️</span>
+                      <span class="text-[6px] font-bold mt-0.5">VPN</span>
+                    </div>
+                    <div class="w-full py-1 rounded flex flex-col items-center text-slate-400 relative">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 absolute top-0.5 right-1.5"></span>
+                      <span class="text-[9px] leading-none">📶</span>
+                      <span class="text-[6px] font-semibold mt-0.5">Wi-Fi</span>
+                    </div>
+                    <div class="w-full py-1 rounded flex flex-col items-center text-slate-400">
+                      <span class="text-[9px] leading-none">👤</span>
+                      <span class="text-[6px] font-semibold mt-0.5">Acct</span>
+                    </div>
                   </div>
-                  <span class="text-[8px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-semibold">ENCRYPTED</span>
+                  <div class="text-[8px] text-slate-500">🌙</div>
                 </div>
-                <!-- VPN Tunnel Card -->
-                <div class="bg-gray-800/90 border border-emerald-500/30 rounded-lg p-2 mb-2">
-                  <div class="flex items-center justify-between text-[8px] text-gray-400 mb-1">
-                    <span class="font-mono text-emerald-300">🇬🇧 London, UK • WireGuard®</span>
-                    <span class="text-emerald-400 font-bold">10 Gbps</span>
+
+                <!-- Column 2: Center Location Picker & Smart-TV Shield (#view-home) -->
+                <div class="col-span-5 p-2 bg-[#0f172a] border-r border-slate-800/80 flex flex-col justify-between">
+                  <div>
+                    <div class="flex items-center justify-between mb-1">
+                      <div>
+                        <div class="text-[8.5px] font-black text-white leading-none">Select a Location</div>
+                        <div class="text-[6.5px] text-slate-400 mt-0.5">Choose a Country</div>
+                      </div>
+                      <span class="text-[6px] px-1 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold">PRO</span>
+                    </div>
+
+                    <!-- Quick Pick Grid (.rec-grid) -->
+                    <div class="text-[6px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Quick pick</div>
+                    <div class="grid grid-cols-2 gap-1 mb-1.5">
+                      <div class="bg-emerald-500/10 border border-emerald-500/60 rounded p-1">
+                        <div class="text-[7.5px] font-extrabold text-white truncate">🇬🇧 UK</div>
+                        <div class="text-[6px] text-emerald-400 font-bold">Fastest · 8ms</div>
+                      </div>
+                      <div class="bg-slate-800/90 border border-slate-700/70 rounded p-1">
+                        <div class="text-[7.5px] font-extrabold text-slate-200 truncate">🇸🇪 Sweden</div>
+                        <div class="text-[6px] text-slate-400">Privacy · 19ms</div>
+                      </div>
+                    </div>
+
+                    <!-- Smart-TV Tracker Shield Alert (.alert) -->
+                    <div class="bg-amber-500/10 border border-amber-500/30 rounded p-1 mb-1.5 flex items-center justify-between gap-1">
+                      <div class="truncate">
+                        <div class="text-[6.5px] font-bold text-amber-200 truncate">📺 TV Shield Active</div>
+                        <div class="text-[5.5px] text-amber-300/80 truncate">Samsung ACR blocked</div>
+                      </div>
+                      <span class="text-[6px] px-1 py-0.5 rounded bg-emerald-500 text-slate-950 font-black flex-shrink-0">ON</span>
+                    </div>
                   </div>
-                  <div class="text-[11px] font-black text-white leading-tight">VPN Tunnel Connected</div>
-                  <div class="text-[8px] text-gray-400 mt-0.5 font-mono">IP Masked → 185.212.•••.•••</div>
+
+                  <!-- Country Rows (#locList) -->
+                  <div class="space-y-1">
+                    <div class="flex items-center justify-between bg-slate-800/80 border border-emerald-500/40 rounded px-1.5 py-0.5 text-[7px]">
+                      <span class="font-bold text-white truncate">🇬🇧 United Kingdom</span>
+                      <span class="text-emerald-400 font-mono text-[6.5px]">8ms ●</span>
+                    </div>
+                    <div class="flex items-center justify-between bg-slate-800/40 rounded px-1.5 py-0.5 text-[7px]">
+                      <span class="font-medium text-slate-300 truncate">🇺🇸 United States</span>
+                      <span class="text-emerald-400 font-mono text-[6.5px]">24ms ●</span>
+                    </div>
+                  </div>
                 </div>
-                <!-- Mini Stats -->
-                <div class="grid grid-cols-2 gap-1.5 text-[8px]">
-                  <div class="bg-gray-800/80 p-1.5 rounded border border-gray-700/60">
-                    <div class="text-gray-400">Encryption</div>
-                    <div class="text-emerald-400 font-bold">AES-256-GCM</div>
+
+                <!-- Column 3: Right Connect Hero Panel (.panel.on) -->
+                <div class="col-span-5 p-2 flex flex-col items-center justify-between text-center relative overflow-hidden" style="background: linear-gradient(160deg, #047857 0%, #064e3b 48%, #0b1220 100%);">
+                  <div class="w-full flex flex-col items-center">
+                    <div class="w-6 h-6 rounded-full bg-emerald-400/20 border border-emerald-300/40 flex items-center justify-center mb-1 shadow-sm">
+                      <img src="/logo-mint-glass.svg" width="14" height="14" class="w-3.5 h-3.5 rounded" alt="Shield">
+                    </div>
+                    <div class="text-[9.5px] font-black leading-tight text-white">You're <span class="text-emerald-300">protected</span></div>
+                    <div class="text-[6px] text-emerald-100/80 mt-0.5">London, UK • 8 ms • 4 devices</div>
                   </div>
-                  <div class="bg-gray-800/80 p-1.5 rounded border border-gray-700/60">
-                    <div class="text-gray-400">Kill Switch</div>
-                    <div class="text-emerald-400 font-bold">Armed &amp; Active</div>
+
+                  <!-- Protected Session Timer Box (#timerBox) -->
+                  <div class="w-full bg-slate-950/55 border border-emerald-300/20 rounded-md p-1.5 my-1">
+                    <div class="text-[5.5px] uppercase tracking-wider text-emerald-200/80 font-bold">Protected session</div>
+                    <div class="text-[10px] font-mono font-black text-white leading-tight">01:42:18</div>
+                    <div class="text-[5.5px] text-emerald-300 font-mono">↓ 84.2 Mbps · ↑ 22.8 Mbps</div>
+                    <div class="flex items-end justify-center gap-0.5 h-2 mt-1">
+                      <span class="w-1 h-1 bg-emerald-400/70 rounded-t"></span>
+                      <span class="w-1 h-1.5 bg-emerald-400/80 rounded-t"></span>
+                      <span class="w-1 h-2 bg-emerald-300 rounded-t"></span>
+                      <span class="w-1 h-1.5 bg-emerald-400/90 rounded-t"></span>
+                      <span class="w-1 h-2 bg-emerald-300 rounded-t"></span>
+                      <span class="w-1 h-1 bg-emerald-400/75 rounded-t"></span>
+                    </div>
                   </div>
-                  <div class="bg-gray-800/80 p-1.5 rounded border border-gray-700/60">
-                    <div class="text-gray-400">ISP &amp; Wi-Fi Spying</div>
-                    <div class="text-emerald-400 font-bold">0 Logs / Blocked</div>
-                  </div>
-                  <div class="bg-gray-800/80 p-1.5 rounded border border-gray-700/60">
-                    <div class="text-gray-400">Streaming Speed</div>
-                    <div class="text-emerald-400 font-bold">Unthrottled</div>
+
+                  <!-- Active Server & Connect Pill (#connectBtn) -->
+                  <div class="w-full space-y-1">
+                    <div class="w-full bg-slate-950/50 border border-emerald-300/25 rounded px-1.5 py-0.5 flex items-center justify-between text-[6.5px]">
+                      <span class="font-bold text-white truncate">🇬🇧 UK · London</span>
+                      <span class="text-emerald-300 font-bold">Change ›</span>
+                    </div>
+                    <div class="w-full py-1 rounded-full bg-gradient-to-r from-emerald-400 to-emerald-500 text-slate-950 font-black text-[7.5px] shadow">
+                      🛡️ Connected ✓
+                    </div>
                   </div>
                 </div>
               </div>
