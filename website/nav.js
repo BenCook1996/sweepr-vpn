@@ -111,7 +111,10 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
 
           <div class="pt-2 border-t border-gray-100 flex flex-col gap-2">
-            <a href="/order?plan=annual" class="mobile-nav-link btn btn-go w-full justify-center py-3 text-sm font-extrabold">
+            <a href="/download" class="mobile-nav-link btn btn-go w-full justify-center py-3 text-sm font-extrabold">
+              <span>Install Now</span>
+            </a>
+            <a href="/order?plan=annual" class="mobile-nav-link btn btn-ghost border border-emerald-200 bg-emerald-50/70 text-emerald-900 w-full justify-center py-2.5 text-xs font-extrabold">
               <span>Get SWEEPR VPN Pro &mdash; Save 50%</span>
             </a>
             <div class="grid grid-cols-2 gap-2">
@@ -162,4 +165,23 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   }
+
+  // Ensure iPadOS (which sends a Macintosh User-Agent with multi-touch) and mobile devices route /download links to the mobile app installer
+  try {
+    const ua = (navigator.userAgent || '').toLowerCase();
+    const isIpadOs = navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
+    const isIos = /iphone|ipad|ipod/.test(ua) || isIpadOs;
+    const isAndroid = ua.includes('android');
+    const isOtherMobile = /mobile|iemobile|opera mini/.test(ua);
+    if (isIos || isAndroid || isOtherMobile) {
+      const targetHref = isIos ? '/download?platform=ios' : '/download?platform=android';
+      document.querySelectorAll('a[href="/download"]').forEach((a) => {
+        a.setAttribute('href', targetHref);
+      });
+      const osBtnLbl = document.getElementById('osDownloadText');
+      if (osBtnLbl) {
+        osBtnLbl.textContent = 'Install Now';
+      }
+    }
+  } catch {}
 });

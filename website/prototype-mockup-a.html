@@ -156,11 +156,11 @@
     // Quiet OS-aware button label (Zero extra tabs or boxes)
     (function detectOsQuietly() {
       const ua = navigator.userAgent.toLowerCase();
+      const isIpadOs = navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
       const btnText = document.getElementById('osDownloadText');
-      if (/iphone|ipad|ipod/.test(ua)) btnText.textContent = 'Free iPhone Setup';
-      else if (ua.includes('android')) btnText.textContent = 'Free Android Setup';
-      else if (ua.includes('mac os') || ua.includes('macintosh')) btnText.textContent = 'Free Mac Download';
-      else if (ua.includes('linux')) btnText.textContent = 'Free Linux Setup';
+      if (/iphone|ipad|ipod|android|mobile|iemobile|opera mini/.test(ua) || isIpadOs) btnText.textContent = 'Install Now';
+      else if (ua.includes('mac os') || ua.includes('macintosh')) btnText.textContent = 'Free Download';
+      else if (ua.includes('linux')) btnText.textContent = 'Free Download';
       else btnText.textContent = 'Free Download';
     })();
   </script>
