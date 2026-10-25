@@ -2465,8 +2465,9 @@ self.addEventListener('fetch', e => {
   // Handle /download route (supports Windows .exe, macOS .dmg, Android .apk, and iOS .mobileconfig)
   if (pathname === '/download' && (req.method === 'GET' || req.method === 'HEAD')) {
     const requestedPlatform = (urlObj.searchParams.get('platform') || '').toLowerCase();
-    const forceDirect = urlObj.searchParams.get('direct') === '1';
     const uaLower = ua.toLowerCase();
+    const chPlatform = String(req.headers['sec-ch-ua-platform'] || '').toLowerCase();
+    const chMobile = String(req.headers['sec-ch-ua-mobile'] || '').toLowerCase();
 
     if (requestedPlatform === 'qr') {
       const sess = verifySessionCookie(req);
@@ -2480,10 +2481,10 @@ self.addEventListener('fetch', e => {
     else if (requestedPlatform === 'ios') osType = 'ios';
     else if (requestedPlatform === 'android' || requestedPlatform === 'apk') osType = 'android';
     else if (requestedPlatform === 'win' || requestedPlatform === 'windows') osType = 'windows';
-    else if (/iphone|ipad|ipod/.test(uaLower)) osType = 'ios';
-    else if (uaLower.includes('android')) osType = 'android';
-    else if (uaLower.includes('mac os') || uaLower.includes('macintosh')) osType = 'mac';
-    else if (uaLower.includes('linux')) osType = 'linux';
+    else if (/iphone|ipad|ipod/.test(uaLower) || chPlatform.includes('ios')) osType = 'ios';
+    else if (uaLower.includes('android') || chPlatform.includes('android') || (chMobile === '?1' && uaLower.includes('linux')) || /mobile|iemobile|opera mini/.test(uaLower)) osType = 'android';
+    else if (uaLower.includes('mac os') || uaLower.includes('macintosh') || chPlatform.includes('mac')) osType = 'mac';
+    else if (uaLower.includes('linux') || chPlatform.includes('linux')) osType = 'linux';
 
     crm.reportTelemetryEvent({
       event_name: 'installer_downloaded',
@@ -2502,11 +2503,10 @@ self.addEventListener('fetch', e => {
       });
     }
 
-    // 1. Android: Stream SWEEPRVPN.apk directly on standard Android browsers; show Chrome-Intent helper on social in-app WebViews
+    // 1. Android: Always stream SWEEPRVPN.apk directly without showing a picker page
     if (osType === 'android') {
-      const isAndroidWebView = !forceDirect && /\bwv\b|instagram|fban|fbav|tiktok|bytedancewebview|line\/|micromessenger|reddit/i.test(uaLower);
       const apkPath = path.join(__dirname, 'SWEEPRVPN.apk');
-      if (!isAndroidWebView && fs.existsSync(apkPath)) {
+      if (fs.existsSync(apkPath)) {
         const stat = fs.statSync(apkPath);
         res.writeHead(200, {
           'Content-Type': 'application/vnd.android.package-archive',
@@ -2523,28 +2523,19 @@ self.addEventListener('fetch', e => {
         apkStream.on('error', () => { if (!res.headersSent) res.writeHead(500); res.end(); });
         return apkStream.pipe(res);
       }
-      return sendHtml(res, 200, renderPlatformDownloadPicker('android', ua, hostOrigin), {
-        'X-Robots-Tag': 'noindex, follow'
-      });
     }
 
-    // 2. iOS / iPadOS: Serve SWEEPRVPN.mobileconfig directly on Safari; show 1-Tap Open-in-Safari + iOS App launcher on CriOS/FxiOS/WebViews
+    // 2. iOS / iPadOS: Always serve SWEEPRVPN.mobileconfig directly without showing a picker page
     if (osType === 'ios') {
-      const isNonSafariIos = !forceDirect && (/crios|fxios|edgios|opios|instagram|fban|fbav|tiktok|line\/|wv/i.test(uaLower) || (uaLower.includes('iphone') && !uaLower.includes('safari')));
-      if (!isNonSafariIos) {
-        const xml = buildIosWebClipMobileconfig(req);
-        res.writeHead(200, {
-          'Content-Type': 'application/x-apple-aspen-config; charset=utf-8',
-          'Content-Disposition': 'attachment; filename="SWEEPRVPN.mobileconfig"',
-          'Cache-Control': 'no-store',
-          'X-Robots-Tag': 'noindex, nofollow',
-          ...COMMON_SECURITY_HEADERS
-        });
-        return res.end(req.method === 'HEAD' ? '' : xml);
-      }
-      return sendHtml(res, 200, renderPlatformDownloadPicker('ios', ua, hostOrigin), {
-        'X-Robots-Tag': 'noindex, follow'
+      const xml = buildIosWebClipMobileconfig(req);
+      res.writeHead(200, {
+        'Content-Type': 'application/x-apple-aspen-config; charset=utf-8',
+        'Content-Disposition': 'attachment; filename="SWEEPRVPN.mobileconfig"',
+        'Cache-Control': 'no-store',
+        'X-Robots-Tag': 'noindex, nofollow',
+        ...COMMON_SECURITY_HEADERS
       });
+      return res.end(req.method === 'HEAD' ? '' : xml);
     }
 
     const forceWinExe = requestedPlatform === 'win' || requestedPlatform === 'windows';
