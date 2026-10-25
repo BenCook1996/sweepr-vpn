@@ -5,7 +5,6 @@ RUN apt-get update && apt-get upgrade -y --no-install-recommends && rm -rf /var/
 WORKDIR /app
 
 COPY package.json ./
-COPY scripts ./scripts
 COPY website ./website
 
 ENV NODE_ENV=production
