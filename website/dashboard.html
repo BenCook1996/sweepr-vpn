@@ -110,7 +110,7 @@
               <h3 class="font-bold text-lg">Linked Devices</h3>
               <span id="deviceCountBadge" class="text-xs font-extrabold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">0 / 3 Devices</span>
             </div>
-            <p class="text-sm text-gray-500 mb-4">Protect up to 3 devices simultaneously (any combination of desktop or mobile). Scan a one-time QR code to link a phone, tablet, or computer without typing your license key.</p>
+            <p class="text-sm text-gray-500 mb-4">Purchased on desktop and downloaded the app separately on another device? Generate a one-time QR code below to activate your account on your separate device (up to 3 devices — desktop or mobile).</p>
 
             <button
               type="button"
@@ -118,18 +118,22 @@
               onclick="generatePortalPairingQr()"
               class="w-full mb-4 px-4 py-2.5 rounded-xl font-bold text-sm text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
-              <span>📱 Link New Device via QR Code</span>
+              <span>📱 Activate Separate Device via QR Code</span>
             </button>
 
             <div id="portalQrDrawer" class="hidden mb-4 p-4 rounded-xl bg-gray-50 border border-emerald-200 text-center">
               <div class="flex items-center justify-between mb-2">
-                <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-800">One-Time Pairing QR</span>
+                <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-800">One-Time Device Activation QR</span>
                 <button type="button" onclick="closePortalPairingQr()" class="text-xs font-bold text-gray-400 hover:text-gray-700 cursor-pointer">✕ Close</button>
               </div>
               <div id="portalQrSvgBox" class="flex justify-center items-center py-2">
                 <span class="text-xs text-gray-500">Generating secure 120s pairing code…</span>
               </div>
-              <div id="portalQrStatusText" class="text-xs font-semibold text-gray-600 mt-1">Scan with your phone camera or the SWEEPR VPN app</div>
+              <div id="portalQrStatusText" class="text-xs font-semibold text-gray-600 mt-1">Scan with your separate device or paste the pairing code in the SWEEPR VPN app</div>
+              <div id="portalQrTokenRow" class="hidden mt-2 flex items-center justify-center gap-2">
+                <code id="portalQrTokenVal" class="text-xs font-mono font-bold bg-white border border-gray-200 px-2.5 py-1 rounded-lg text-gray-800"></code>
+                <button type="button" id="portalQrCopyBtn" class="text-xs font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-2.5 py-1 rounded-lg cursor-pointer">Copy Pairing Code</button>
+              </div>
               <div id="portalQrTimerText" class="text-xs font-mono font-bold text-emerald-700 mt-1">Expires in 02:00</div>
             </div>
 
@@ -140,8 +144,8 @@
         </div>
 
         <div class="glass-card p-6 bg-white shadow-sm rounded-2xl border border-gray-100 flex flex-col justify-center items-center text-center">
-          <h3 class="font-bold text-lg mb-2">Need the app?</h3>
-          <p class="text-sm text-gray-500 mb-5">Download the latest version of SWEEPR VPN for Windows, Mac, iOS, or Android.</p>
+          <h3 class="font-bold text-lg mb-2">Need the app on another device?</h3>
+          <p class="text-sm text-gray-500 mb-5">Download the latest version of SWEEPR VPN on your separate device, then use the QR code on the left to activate your account.</p>
           <div class="flex flex-col sm:flex-row gap-2.5 w-full max-w-sm">
             <a href="/download?platform=win" class="btn btn-go justify-center gap-2 flex-1 text-xs sm:text-sm py-3 no-underline">
               <span>Windows (.exe)</span>
@@ -150,7 +154,6 @@
               <span>macOS (.dmg)</span>
             </a>
           </div>
-          <a href="/download?platform=ios" class="text-xs font-bold text-emerald-700 hover:underline mt-3">iPhone / iPad &amp; Android 1-Tap Setup &rarr;</a>
           <p class="text-xs text-gray-400 mt-3 max-w-xs leading-relaxed">
             <strong>Windows:</strong> Click <strong>More info &rarr; Run anyway</strong> if SmartScreen appears.<br>
             <strong>macOS:</strong> Open <code>SWEEPRVPN.dmg</code> and drag <strong>SWEEPR VPN</strong> to Applications.
@@ -351,6 +354,20 @@
         }
         if (box) {
           box.innerHTML = `<div class="bg-white p-2 rounded-xl border border-gray-200 inline-block shadow-sm">${data.qr_svg || ''}</div>`;
+        }
+        const tokenRow = document.getElementById('portalQrTokenRow');
+        const tokenVal = document.getElementById('portalQrTokenVal');
+        const copyTokenBtn = document.getElementById('portalQrCopyBtn');
+        if (tokenRow && tokenVal && data.token) {
+          tokenVal.textContent = data.token;
+          tokenRow.classList.remove('hidden');
+          if (copyTokenBtn) {
+            copyTokenBtn.onclick = () => {
+              navigator.clipboard.writeText(data.token);
+              copyTokenBtn.textContent = 'Copied ✓';
+              setTimeout(() => { copyTokenBtn.textContent = 'Copy Pairing Code'; }, 2000);
+            };
+          }
         }
         let remaining = Number(data.expires_in || 120);
         const renderTimer = () => {

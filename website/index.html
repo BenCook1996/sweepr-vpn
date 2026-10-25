@@ -11,7 +11,7 @@
         try {
           if (/bot|crawl|spider|slurp|google|bing|gpt|claude|perplexity|applebot|duckduck|yandex/i.test(navigator.userAgent || '')) return;
           var path = window.location.pathname.replace(/\/+$/, '') || '/';
-          if (/^\/(order|checkout|login|dashboard|app|qr-setup|download)(\b|\/|$)/i.test(path)) return;
+          if (/^\/(order|checkout|login|dashboard|download)(\b|\/|$)/i.test(path)) return;
           var params = new URLSearchParams(window.location.search);
           if (params.get('noredirect') === '1') return;
           var ref = document.referrer || '';
@@ -175,7 +175,7 @@
       <div class="hidden md:flex items-center gap-2">
         <a href="/#features" class="btn btn-ghost text-sm">Features</a>
         <a href="/pricing" class="btn btn-ghost text-sm">Pricing</a>
-        <a href="/qr-setup" class="btn btn-ghost text-sm">QR Code Setup</a>
+
         <!-- Consolidated Compare & Guides Menu -->
         <div class="relative inline-block text-left" id="navDropdownContainer">
           <button type="button" id="navDropdownBtn" class="btn btn-ghost text-sm flex items-center gap-1.5 cursor-pointer font-medium" aria-expanded="false" aria-haspopup="true">
@@ -188,21 +188,6 @@
           <!-- Dropdown Flyout with Visual Tiles -->
           <div id="navDropdownMenu" class="hidden absolute left-0 md:left-1/2 md:-translate-x-1/2 mt-2 w-[340px] sm:w-[420px] bg-white/95 backdrop-blur-xl border border-gray-200/90 rounded-2xl shadow-2xl p-2.5 z-50 transition-all">
             <div class="grid grid-cols-1 gap-1.5">
-              <!-- Tile 0: QR Code Connection Setup -->
-              <a href="/qr-setup" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
-                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
-                  </svg>
-                </div>
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center justify-between gap-1 mb-0.5">
-                    <span class="text-sm font-bold text-gray-900 group-hover:text-emerald-700 transition-colors">QR Code Connection Setup</span>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">iOS &amp; Android</span>
-                  </div>
-                  <p class="text-xs text-gray-500 leading-snug line-clamp-2">Connect your phone or tablet in 15 seconds with a 1-tap WireGuard QR code or profile.</p>
-                </div>
-              </a>
               <!-- Tile 1: SWEEPR VPN vs Total VPN -->
               <a href="/vs/totalvpn" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
                 <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">

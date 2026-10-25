@@ -69,7 +69,6 @@ console.log('\n[Phase 1] Auditing Sitemap, Disk Manifest & Route Alignment...');
 const CORE_STATIC_ROUTES = [
   { urlPath: '/', file: 'index.html', priority: '1.0', changefreq: 'weekly' },
   { urlPath: '/pricing', file: 'pricing.html', priority: '0.9', changefreq: 'weekly' },
-  { urlPath: '/app', file: 'app-preview.html', priority: '0.8', changefreq: 'weekly' },
   { urlPath: '/tools/leak-test', file: 'leak-test.html', priority: '0.8', changefreq: 'weekly' },
   { urlPath: '/tools/isp-throttling-test', file: 'isp-throttling-test.html', priority: '0.8', changefreq: 'weekly' },
   { urlPath: '/vs/totalvpn', file: 'vs-totalvpn.html', priority: '0.8', changefreq: 'monthly' },
@@ -311,6 +310,7 @@ const validInternalUrls = new Set([
   ...allCanonicalPages.map((p) => p.canonicalLoc),
   '/',
   '/download',
+  '/qr-setup',
   '/checkout',
   '/order',
   '/login',
@@ -458,7 +458,7 @@ if (brokenInternalLinks.length === 0) {
 // Server Canonical Redirects Check
 const serverCode = fs.readFileSync(SERVER_PATH, 'utf8');
 const hasCanonicalRedirects = serverCode.includes('CANONICAL_REDIRECTS') && serverCode.includes("'/pricing.html': '/pricing'");
-const hasAppRedirect = serverCode.includes("'/app-preview.html': '/app'");
+const hasAppRedirect = serverCode.includes("'/app-preview.html': '/download'");
 if (hasCanonicalRedirects && hasAppRedirect) {
   pass('technicalSeo', 'Server Canonical 301 Architecture', 'Legacy .html and alias routes seamlessly 301 redirected to clean URLs');
 } else {

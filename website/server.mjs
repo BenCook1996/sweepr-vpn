@@ -1686,8 +1686,9 @@ const CANONICAL_REDIRECTS = {
   '/terms.html': '/terms',
   '/privacy.html': '/privacy',
   '/support.html': '/support',
-  '/app-preview.html': '/app',
-  '/app-preview': '/app',
+  '/app': '/download',
+  '/app-preview.html': '/download',
+  '/app-preview': '/download',
   '/vs-totalvpn.html': '/vs/totalvpn',
   '/vs-totalvpn': '/vs/totalvpn',
   '/alternatives-totalvpn.html': '/alternatives/totalvpn',
@@ -1713,9 +1714,7 @@ const ROUTE_ALIASES = {
   '/vs/totalvpn': 'vs-totalvpn.html',
   '/alternatives/totalvpn': 'alternatives-totalvpn.html',
   '/tools/leak-test': 'leak-test.html',
-  '/tools/isp-throttling-test': 'isp-throttling-test.html',
-  '/app': 'app-preview.html',
-  '/app-preview': 'app-preview.html'
+  '/tools/isp-throttling-test': 'isp-throttling-test.html'
 };
 
 function readRawBody(req, maxBytes = MAX_BODY_BYTES) {
@@ -1788,19 +1787,6 @@ function sendHtml(res, statusCode, html, extraHeaders = {}) {
 }
 
 function renderPlatformDownloadPicker(osType = 'other') {
-  const isQr = osType === 'qr';
-  const isMobile = osType === 'ios' || osType === 'android' || isQr;
-  const title = isQr
-    ? 'QR Code Connection Setup'
-    : isMobile
-      ? 'Instant Phone &amp; Computer Setup'
-      : 'Choose Your Operating System';
-  const subtitle = isQr
-    ? 'Enter your license key below to generate a 1-tap WireGuard QR code or profile for iPhone, Android, Mac, or Windows.'
-    : isMobile
-      ? 'Connect your iPhone or Android in 15 seconds with a 1-tap WireGuard profile, or get SWEEPR VPN Pro for up to 3 devices (desktop or mobile).'
-      : 'Select your setup option below to start your free 30-second Home Wi-Fi &amp; Speed Scan or activate 1-click WireGuard protection.';
-
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1820,163 +1806,43 @@ function renderPlatformDownloadPicker(osType = 'other') {
       <div class="logo-box">S</div>
       <span class="font-extrabold text-xl tracking-tight text-gray-900">SWEEPR <span class="text-emerald-600">VPN</span></span>
     </a>
-    <h1 class="text-2xl font-black text-gray-900 mb-2">${title}</h1>
-    <p class="text-sm text-gray-600 mb-5 leading-relaxed">${subtitle}</p>
-
-    <!-- Instant iOS / Android WireGuard Profile Hand-Off -->
-    <div class="p-4 rounded-2xl border-2 border-emerald-500 bg-emerald-50/40 text-left mb-5">
-      <div class="flex items-center justify-between gap-2 mb-2">
-        <div class="font-extrabold text-sm text-emerald-950">iOS &amp; Android 1-Tap WireGuard Setup</div>
-        <span class="text-[11px] font-extrabold uppercase tracking-wider bg-emerald-600 text-white px-2.5 py-0.5 rounded-full">Instant Tunnel</span>
-      </div>
-      <p class="text-xs text-gray-600 mb-3">Already have a license key? Enter it below to download your ready-to-import WireGuard profile or QR code.</p>
-      <div class="flex flex-col sm:flex-row gap-2 mb-2">
-        <input id="dlLicenseKey" type="text" maxlength="64" placeholder="SWEEPR-VPN-XXXX-XXXX-XXXX" oninput="this.value=this.value.toUpperCase()" class="flex-1 rounded-xl border border-gray-300 bg-white px-3 py-2.5 text-xs font-mono text-gray-900 focus:border-emerald-600 focus:outline-none" />
-        <select id="dlServerCode" class="rounded-xl border border-gray-300 bg-white px-3 py-2.5 text-xs font-bold text-gray-800">
-          <option value="UK-LON-01">🇬🇧 UK · London</option>
-          <option value="SE-STO-01">🇸🇪 Sweden · Stockholm</option>
-          <option value="NL-AMS-01">🇳🇱 Netherlands · Amsterdam</option>
-          <option value="DE-FRA-01">🇩🇪 Germany · Frankfurt</option>
-          <option value="US-NYC-01">🇺🇸 USA · New York</option>
-          <option value="US-LAX-01">🇺🇸 USA · Los Angeles</option>
-          <option value="SG-SIN-01">🇸🇬 Singapore</option>
-          <option value="JP-TYO-01">🇯🇵 Japan · Tokyo</option>
-        </select>
-      </div>
-      <button type="button" id="dlGenBtn" onclick="generateMobileConf()" class="btn btn-go w-full justify-center text-xs py-2.5">Generate WireGuard .conf &amp; QR Code</button>
-      <div id="dlError" class="hidden text-xs font-bold text-red-600 mt-2"></div>
-      <div id="dlResult" class="hidden mt-3 pt-3 border-t border-emerald-200/70 text-center">
-        <div id="dlQrWrap" class="bg-white rounded-xl p-3 border border-gray-200 inline-flex flex-col items-center mb-2"></div>
-        <div class="flex flex-wrap gap-2 justify-center">
-          <button type="button" onclick="downloadGeneratedConf()" class="btn btn-go text-xs py-2 px-4">Download .conf File</button>
-          <button type="button" onclick="downloadAppleMobileConfig()" class="btn btn-ghost text-xs py-2 px-3 border border-emerald-300 bg-white text-emerald-800 font-bold">iOS / macOS .mobileconfig</button>
-          <button type="button" id="dlCopyConfBtn" onclick="copyGeneratedConf()" class="btn btn-ghost text-xs py-2 px-3 border border-gray-300 bg-white">Copy Config</button>
-        </div>
-      </div>
-    </div>
+    <h1 class="text-2xl font-black text-gray-900 mb-2">Download SWEEPR VPN</h1>
+    <p class="text-sm text-gray-600 mb-5 leading-relaxed">Select your operating system below to download the SWEEPR VPN installer. Purchased on another device? Log in to your Customer Portal to activate this device via QR code.</p>
 
     <div class="space-y-3 text-left mb-6">
-      <a href="/order?plan=annual" class="flex items-center justify-between gap-3 p-4 rounded-xl border border-gray-200 bg-white hover:border-emerald-400 transition-all no-underline text-gray-900">
+      <a href="/download?platform=win" class="flex items-center justify-between gap-3 p-4 rounded-xl border border-gray-200 bg-white hover:border-emerald-400 transition-all no-underline text-gray-900">
+        <div>
+          <div class="font-bold text-sm text-gray-900">Windows 10 &amp; 11 Desktop Installer (.exe)</div>
+          <div class="text-xs text-gray-500">Direct download &bull; SWEEPRVPN.exe</div>
+        </div>
+        <span class="btn btn-go text-xs py-2 px-3 shrink-0">Download .exe</span>
+      </a>
+      <a href="/download?platform=mac" class="flex items-center justify-between gap-3 p-4 rounded-xl border border-gray-200 bg-white hover:border-emerald-400 transition-all no-underline text-gray-900">
+        <div>
+          <div class="font-bold text-sm text-gray-900">macOS 11+ Universal Desktop Installer (.dmg)</div>
+          <div class="text-xs text-gray-500">Apple Silicon &amp; Intel &bull; SWEEPRVPN.dmg</div>
+        </div>
+        <span class="btn btn-go text-xs py-2 px-3 shrink-0">Download .dmg</span>
+      </a>
+      <a href="/login" class="flex items-center justify-between gap-3 p-4 rounded-xl border border-emerald-200 bg-emerald-50/50 hover:border-emerald-400 transition-all no-underline text-gray-900">
+        <div>
+          <div class="font-extrabold text-sm text-gray-900">Already Purchased? Activate via QR Code</div>
+          <div class="text-xs text-gray-500">Log in to your Customer Portal to scan or use your QR code to activate a separate device</div>
+        </div>
+        <span class="text-xs font-extrabold text-emerald-700 bg-white border border-emerald-200 px-3 py-1.5 rounded-full shrink-0">Customer Login &rarr;</span>
+      </a>
+      <a href="/order?plan=annual" class="flex items-center justify-between gap-3 p-4 rounded-xl border border-gray-200 bg-gray-50/80 hover:bg-white transition-all no-underline text-gray-900">
         <div>
           <div class="font-extrabold text-sm text-gray-900">Need a License Key? Get SWEEPR VPN Pro</div>
           <div class="text-xs text-gray-500">Protects up to 3 devices (any combination of desktop or mobile) &bull; Save 50%</div>
         </div>
-        <span class="btn btn-go text-xs py-2 px-3 shrink-0">Get Pro &rarr;</span>
-      </a>
-      <button type="button" onclick="navigator.clipboard.writeText(window.location.origin + '/download'); this.querySelector('.copy-pill').textContent='Copied ✓';" class="w-full flex items-center justify-between gap-3 p-4 rounded-xl border border-gray-200 bg-white hover:border-emerald-300 transition-all text-left cursor-pointer">
-        <div>
-          <div class="font-bold text-sm text-gray-900">Send Desktop Installer Link to Your PC / Mac</div>
-          <div class="text-xs text-gray-500">Copy <span class="font-mono">sweeprvpn.com/download</span> to open on your computer</div>
-        </div>
-        <span class="copy-pill text-xs font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-full shrink-0">Copy Link</span>
-      </button>
-      <a href="/download?platform=win" class="flex items-center justify-between gap-3 p-3.5 rounded-xl border border-gray-200 bg-gray-50/80 hover:bg-white transition-all no-underline text-gray-700">
-        <div>
-          <div class="font-bold text-xs text-gray-800">Windows 10 &amp; 11 Desktop Installer (.exe)</div>
-          <div class="text-[11px] text-gray-500">Direct download &bull; SWEEPRVPN.exe</div>
-        </div>
-        <span class="text-xs font-bold text-gray-600 underline shrink-0">Download .exe</span>
-      </a>
-      <a href="/download?platform=mac" class="flex items-center justify-between gap-3 p-3.5 rounded-xl border border-gray-200 bg-gray-50/80 hover:bg-white transition-all no-underline text-gray-700">
-        <div>
-          <div class="font-bold text-xs text-gray-800">macOS 11+ Universal Desktop Installer (.dmg)</div>
-          <div class="text-[11px] text-gray-500">Apple Silicon &amp; Intel &bull; SWEEPRVPN.dmg</div>
-        </div>
-        <span class="text-xs font-bold text-gray-600 underline shrink-0">Download .dmg</span>
+        <span class="text-xs font-bold text-emerald-700 underline shrink-0">Get Pro &rarr;</span>
       </a>
     </div>
-    <div class="flex flex-col sm:flex-row gap-3 justify-center pt-4 border-t border-gray-100">
-      <a href="/app" class="btn btn-ghost w-full justify-center border border-gray-200">Open Interactive Web App</a>
+    <div class="flex justify-center pt-4 border-t border-gray-100">
       <a href="/?home=1" class="btn btn-ghost w-full justify-center">Back to Home</a>
     </div>
   </div>
-  <script>
-    let _dlConfText = '';
-    let _dlConfFile = 'sweepr-vpn.conf';
-    try {
-      const p = new URLSearchParams(window.location.search || '');
-      const urlKey = (p.get('key') || p.get('code') || '').trim().toUpperCase();
-      const urlSrv = (p.get('server') || '').trim().toUpperCase();
-      if (urlSrv) {
-        const sel = document.getElementById('dlServerCode');
-        if (sel && Array.from(sel.options).some(o => o.value === urlSrv)) sel.value = urlSrv;
-      }
-      const saved = urlKey || localStorage.getItem('sweepr_vpn_license_key') || localStorage.getItem('sweepr_vpn_code') || '';
-      if (saved) {
-        document.getElementById('dlLicenseKey').value = saved;
-        localStorage.setItem('sweepr_vpn_code', saved);
-        localStorage.setItem('sweepr_vpn_license_key', saved);
-      }
-      if (urlKey && p.get('autoconf') === '1') {
-        setTimeout(() => generateMobileConf(), 120);
-      }
-    } catch (e) {}
-    function downloadAppleMobileConfig() {
-      const key = (document.getElementById('dlLicenseKey').value || '').trim().toUpperCase();
-      const srv = document.getElementById('dlServerCode').value || 'UK-LON-01';
-      if (key.length < 6) {
-        const errEl = document.getElementById('dlError');
-        errEl.textContent = 'Please enter your license key first.';
-        errEl.classList.remove('hidden');
-        return;
-      }
-      window.location.href = '/api/vpn/apple-mobileconfig?key=' + encodeURIComponent(key) + '&server_code=' + encodeURIComponent(srv);
-    }
-    async function generateMobileConf() {
-      const key = (document.getElementById('dlLicenseKey').value || '').trim().toUpperCase();
-      const srv = document.getElementById('dlServerCode').value || 'UK-LON-01';
-      const errEl = document.getElementById('dlError');
-      const resEl = document.getElementById('dlResult');
-      const btn = document.getElementById('dlGenBtn');
-      errEl.classList.add('hidden');
-      if (key.length < 6) {
-        errEl.textContent = 'Please enter your license key (e.g. SWEEPR-VPN-XXXX-XXXX-XXXX).';
-        errEl.classList.remove('hidden');
-        return;
-      }
-      btn.textContent = 'Generating WireGuard profile…';
-      btn.disabled = true;
-      try {
-        const r = await fetch('/api/vpn/wireguard-config', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ license_key: key, activation_code: key, server_code: srv })
-        });
-        const d = await r.json().catch(() => ({}));
-        if (!r.ok || !d.ok || !d.config_text) {
-          throw new Error(d.message || 'Could not generate profile. Check your license key.');
-        }
-        _dlConfText = d.config_text;
-        _dlConfFile = d.filename || ('sweepr-' + srv.toLowerCase() + '.conf');
-        try { localStorage.setItem('sweepr_vpn_code', key); localStorage.setItem('sweepr_vpn_license_key', key); } catch (e) {}
-        document.getElementById('dlQrWrap').innerHTML = (d.qr_svg || '') + '<div class="text-[11px] font-bold text-gray-700 mt-1">Scan in WireGuard App (iOS / Android)</div>';
-        resEl.classList.remove('hidden');
-      } catch (e) {
-        errEl.textContent = e.message || String(e);
-        errEl.classList.remove('hidden');
-      } finally {
-        btn.textContent = 'Generate WireGuard .conf & QR Code';
-        btn.disabled = false;
-      }
-    }
-    function downloadGeneratedConf() {
-      if (!_dlConfText) return;
-      const blob = new Blob([_dlConfText], { type: 'text/plain;charset=utf-8' });
-      const u = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = u; a.download = _dlConfFile;
-      document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(() => URL.revokeObjectURL(u), 2000);
-    }
-    function copyGeneratedConf() {
-      if (!_dlConfText) return;
-      navigator.clipboard.writeText(_dlConfText).then(() => {
-        const b = document.getElementById('dlCopyConfBtn');
-        b.textContent = 'Copied ✓';
-        setTimeout(() => { b.textContent = 'Copy Config'; }, 2000);
-      });
-    }
-  </script>
 </body>
 </html>`;
 }
@@ -2115,15 +1981,12 @@ function renderCheckoutSuccessPage(acc, isCancelled = false, isPopup = false) {
       </div>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-      <a href="/download?key=${encodeURIComponent(acc?.licenseKey || '')}&amp;autoconf=1" class="py-3.5 px-4 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-black text-xs sm:text-sm shadow-lg no-underline">
-        Download &amp; Setup App
-      </a>
-      <a href="/app?key=${encodeURIComponent(acc?.licenseKey || '')}" class="py-3.5 px-4 rounded-full bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 font-extrabold text-xs sm:text-sm border border-emerald-500/40 no-underline">
-        Open Web / Mobile App
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+      <a href="/download" class="py-3.5 px-4 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-black text-xs sm:text-sm shadow-lg no-underline">
+        Download App
       </a>
       <a href="/dashboard" class="py-3.5 px-4 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs sm:text-sm border border-slate-700 no-underline">
-        Customer Portal
+        Customer Portal &amp; QR Setup
       </a>
     </div>
   </div>
@@ -2304,23 +2167,23 @@ self.addEventListener('fetch', e => {
     }
   }
 
-  // Dedicated QR Code Connection Setup route (/qr-setup)
+  // QR Code Connection is only available when the customer logs in on the website (/dashboard)
   if (pathname === '/qr-setup' && (req.method === 'GET' || req.method === 'HEAD')) {
-    return sendHtml(res, 200, renderPlatformDownloadPicker('qr'), {
-      'X-Robots-Tag': 'noindex, follow'
-    });
+    const sess = verifySessionCookie(req);
+    res.writeHead(302, { Location: sess ? '/dashboard' : '/login', ...COMMON_SECURITY_HEADERS });
+    return res.end();
   }
 
   // Handle /download route (matches sweeprcleaner.com/download)
   if (pathname === '/download' && (req.method === 'GET' || req.method === 'HEAD')) {
     const requestedPlatform = (urlObj.searchParams.get('platform') || '').toLowerCase();
-    const hasSetupParams = Boolean(urlObj.searchParams.get('key') || urlObj.searchParams.get('code') || urlObj.searchParams.get('autoconf') === '1');
+    const hasSetupParams = false;
     const uaLower = ua.toLowerCase();
 
     if (requestedPlatform === 'qr') {
-      return sendHtml(res, 200, renderPlatformDownloadPicker('qr'), {
-        'X-Robots-Tag': 'noindex, follow'
-      });
+      const sess = verifySessionCookie(req);
+      res.writeHead(302, { Location: sess ? '/dashboard' : '/login', ...COMMON_SECURITY_HEADERS });
+      return res.end();
     }
 
     let osType = 'windows';
@@ -3694,15 +3557,9 @@ self.addEventListener('fetch', e => {
     if (sess) {
       acc = accountsById.get(sess.accountId) || (sess.email ? accountsByEmail.get(sess.email) : null);
     }
-    if (!acc) {
-      const rawKey = String(body?.key || body?.code || body?.license_key || body?.activation_code || '').replace(/\s+/g, '').toUpperCase();
-      if (rawKey) {
-        acc = licenses.get(rawKey) || licenses.get(rawKey.toUpperCase()) || null;
-      }
-    }
 
     if (!acc || acc.status !== 'active') {
-      return sendJson(res, 401, { ok: false, error: 'unauthorized', message: 'Active SWEEPR VPN Pro subscription required to generate a device pairing QR code.' }, {}, req);
+      return sendJson(res, 401, { ok: false, error: 'unauthorized', message: 'Please log in to your Customer Portal on the website to generate a QR code for activating a separate device.' }, {}, req);
     }
     if (!Array.isArray(acc.devices)) acc.devices = [];
     if (acc.devices.length >= MAX_DEVICES_PER_ACCOUNT) {
@@ -4221,12 +4078,11 @@ self.addEventListener('fetch', e => {
         const deepLink = 'sweeprvpn://activate?key=' + encodeURIComponent(d.licenseKey || '') + '&device_id=' + encodeURIComponent(devId);
         const mobileConfigUrl = '/api/vpn/apple-mobileconfig?key=' + encodeURIComponent(d.licenseKey || '') + '&server_code=UK-LON-01';
         document.getElementById('pairBody').innerHTML =
-          '<h1>✓ Device Linked!</h1>' +
+          '<h1>✓ Account Activated on This Device!</h1>' +
           '<p style="margin-top:6px">This ' + info.name + ' is now linked to <strong>' + (d.email || 'your account') + '</strong> (Slot ' + d.devices_used + ' of ' + d.max_devices + ').</p>' +
           '<div class="box" style="margin-top:12px"><div style="font-size:11px;font-weight:800;color:#64748b">ACTIVE LICENSE KEY</div><div style="font-family:monospace;font-weight:800;font-size:14px">' + (d.licenseKey || '') + '</div></div>' +
           '<a href="' + deepLink + '" class="btn btn-go" style="margin-top:14px">Open in SWEEPR VPN App</a>' +
-          '<a href="' + mobileConfigUrl + '" class="btn btn-soft" style="margin-top:8px">Install 1-Tap iOS / macOS Tunnel Profile</a>' +
-          '<a href="/app-preview.html?key=' + encodeURIComponent(d.licenseKey || '') + '" class="btn btn-soft" style="margin-top:8px">Open Web Controller</a>';
+          '<a href="/download" class="btn btn-soft" style="margin-top:8px">Download SWEEPR VPN App</a>';
       } catch (e) {
         document.getElementById('pairBody').innerHTML = '<h1>Connection Error</h1><p style="margin-top:8px">Please check your internet connection and scan the QR code again.</p>';
       }

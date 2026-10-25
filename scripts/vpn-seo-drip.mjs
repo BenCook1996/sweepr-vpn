@@ -797,7 +797,7 @@ async function runVpnDrip(targetCount = 300) {
     try {
       execFileSync(
         'git',
-        ['add', 'website', 'scripts/vpn-seo-drip.mjs'],
+        ['add', 'website', 'scripts/vpn-seo-drip.mjs', 'scripts/daily-seo-pagespeed-audit.mjs'],
         { cwd: VPN_ROOT, stdio: 'inherit' }
       );
       execFileSync(

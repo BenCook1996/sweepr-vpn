@@ -8,41 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const menu = document.getElementById('navDropdownMenu');
   const chevron = document.getElementById('navDropdownChevron');
 
-  // Ensure "QR Code Setup" is present in desktop nav bar & dropdown across all pages
-  const desktopNavGroup = document.querySelector('nav.glass-nav .hidden.md\\:flex');
-  if (desktopNavGroup && !desktopNavGroup.querySelector('a[href="/qr-setup"]')) {
-    const qrLink = document.createElement('a');
-    qrLink.href = '/qr-setup';
-    qrLink.className = 'btn btn-ghost text-sm';
-    qrLink.textContent = 'QR Code Setup';
-    const dropdownContainer = document.getElementById('navDropdownContainer');
-    if (dropdownContainer) {
-      desktopNavGroup.insertBefore(qrLink, dropdownContainer);
-    } else {
-      desktopNavGroup.appendChild(qrLink);
-    }
-  }
-  if (menu && !menu.querySelector('a[href="/qr-setup"]')) {
-    const grid = menu.querySelector('.grid');
-    if (grid) {
-      const tile = document.createElement('a');
-      tile.href = '/qr-setup';
-      tile.className = 'flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group';
-      tile.innerHTML =
-        '<div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">' +
-        '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>' +
-        '</div>' +
-        '<div class="flex-1 min-w-0">' +
-        '<div class="flex items-center justify-between gap-1 mb-0.5">' +
-        '<span class="text-sm font-bold text-gray-900 group-hover:text-emerald-700 transition-colors">QR Code Connection Setup</span>' +
-        '<span class="text-[10px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">iOS &amp; Android</span>' +
-        '</div>' +
-        '<p class="text-xs text-gray-500 leading-snug line-clamp-2">Connect your phone or tablet in 15 seconds with a 1-tap WireGuard QR code or profile.</p>' +
-        '</div>';
-      grid.insertBefore(tile, grid.firstChild);
-    }
-  }
-
   if (btn && menu) {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -108,10 +73,6 @@ document.addEventListener('DOMContentLoaded', () => {
             </a>
             <a href="/pricing" class="mobile-nav-link flex items-center gap-2.5 p-3 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200/80 text-gray-900 font-bold text-sm no-underline">
               <span>💎 Pricing</span>
-            </a>
-            <a href="/qr-setup" class="col-span-2 mobile-nav-link flex items-center justify-between p-3 rounded-xl bg-emerald-50/70 hover:bg-emerald-100/70 border border-emerald-200 text-emerald-950 font-bold text-sm no-underline">
-              <span>📱 QR Code Connection Setup</span>
-              <span class="text-[10px] font-extrabold uppercase text-emerald-700 bg-white border border-emerald-200 px-2 py-0.5 rounded-full">iOS &amp; Android</span>
             </a>
           </div>
 
