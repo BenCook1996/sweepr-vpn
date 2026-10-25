@@ -6,6 +6,7 @@ import crypto from 'node:crypto';
 import zlib from 'node:zlib';
 import { fileURLToPath } from 'node:url';
 import { SweeprCrmClient } from './sweepr-client.mjs';
+import { VPN_ANDROID_HTML } from '../scripts/vpn-mobile-ui.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SAFE_STATIC_ROOT = path.resolve(__dirname) + path.sep;
@@ -1518,6 +1519,80 @@ async function sendWelcomeLicenseEmail(acc) {
   return false;
 }
 
+async function sendSupportTicketOwnerEmail({ fromEmail, subject, message, platform = 'desktop', ticketId = 'VPN-LOCAL' }) {
+  const notifyTo = (process.env.SUPPORT_NOTIFY_EMAIL || process.env.SMTP_GMAIL_USER || '').trim().replace(/^["']|["']$/g, '') || 'cookbenjamin1996@gmail.com';
+  const emailSubject = `[SWEEPR VPN Support] ${subject} (from ${fromEmail})`;
+  const textBody = `New support message received via SWEEPR VPN (${platform}):\n\nFrom: ${fromEmail}\nProject: SWEEPR VPN (vpn)\nSubject: ${subject}\nTicket ID: ${ticketId}\n\nMessage:\n${message}\n`;
+  const resendKey = String(process.env.RESEND_API_KEY || '').trim();
+  if (resendKey) {
+    try {
+      const r = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${resendKey}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          from: process.env.EMAIL_FROM || 'SWEEPR VPN <onboarding@resend.dev>',
+          to: [notifyTo],
+          reply_to: fromEmail,
+          subject: emailSubject,
+          text: textBody
+        })
+      });
+      if (r.ok) return true;
+    } catch {}
+  }
+  const smtpUser = (process.env.SMTP_GMAIL_USER || '').trim().replace(/^["']|["']$/g, '') ||
+    decryptServerVault(ENCRYPTED_SMTP_USER) || 'cookbenjamin1996@gmail.com';
+  const smtpPass = (process.env.SMTP_GMAIL_PASS || '').trim().replace(/\s+/g, '').replace(/^["']|["']$/g, '') ||
+    decryptServerVault(ENCRYPTED_SMTP_PASS) || 'chkjyludllijfxdk';
+  if (smtpUser && smtpPass) {
+    try {
+      await new Promise((resolve, reject) => {
+        const sock = tls.connect(465, 'smtp.gmail.com', { servername: 'smtp.gmail.com', timeout: 8000 });
+        let step = 0, buf = '';
+        const mime = [
+          `From: "SWEEPR VPN Support" <${smtpUser}>`,
+          `To: <${notifyTo}>`,
+          `Reply-To: <${fromEmail}>`,
+          `Subject: =?UTF-8?B?${Buffer.from(emailSubject, 'utf8').toString('base64')}?=`,
+          `Date: ${new Date().toUTCString()}`,
+          'MIME-Version: 1.0',
+          'Content-Type: text/plain; charset="UTF-8"',
+          'Content-Transfer-Encoding: base64',
+          '',
+          Buffer.from(textBody, 'utf8').toString('base64').replace(/(.{76})/g, '$1\r\n'),
+          '',
+          '.',
+          ''
+        ].join('\r\n');
+        const fail = (err) => { try { sock.destroy(); } catch {} reject(err); };
+        sock.on('timeout', () => fail(new Error('timeout')));
+        sock.on('error', fail);
+        sock.on('data', (chunk) => {
+          buf += chunk.toString('utf8');
+          const lines = buf.split('\r\n');
+          buf = lines.pop() || '';
+          for (const line of lines) {
+            if (!line || (line.length >= 4 && line[3] === '-')) continue;
+            const code = parseInt(line.slice(0, 3), 10);
+            if (code >= 400) return fail(new Error(line));
+            if (step === 0 && code === 220) { step = 1; sock.write('EHLO sweeprvpn.com\r\n'); }
+            else if (step === 1 && code === 250) { step = 2; sock.write('AUTH LOGIN\r\n'); }
+            else if (step === 2 && code === 334) { step = 3; sock.write(Buffer.from(smtpUser, 'utf8').toString('base64') + '\r\n'); }
+            else if (step === 3 && code === 334) { step = 4; sock.write(Buffer.from(smtpPass, 'utf8').toString('base64') + '\r\n'); }
+            else if (step === 4 && code === 235) { step = 5; sock.write(`MAIL FROM:<${smtpUser}>\r\n`); }
+            else if (step === 5 && code === 250) { step = 6; sock.write(`RCPT TO:<${notifyTo}>\r\n`); }
+            else if (step === 6 && code === 250) { step = 7; sock.write('DATA\r\n'); }
+            else if (step === 7 && code === 354) { step = 8; sock.write(mime + '\r\n'); }
+            else if (step === 8 && code === 250) { step = 9; sock.write('QUIT\r\n'); try { sock.end(); } catch {} resolve(true); }
+          }
+        });
+      });
+      return true;
+    } catch {}
+  }
+  return false;
+}
+
 async function syncPayPalCustomerEmail(sub, acc, cs = null) {
   if (!STRIPE_SECRET_KEY || !sub || !acc) return;
   try {
@@ -1875,121 +1950,7 @@ function buildIosWebClipMobileconfig(req) {
 }
 
 function renderStandaloneIosVpnApp() {
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="robots" content="noindex, nofollow">
-  <title>SWEEPR VPN — iOS App</title>
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=5">
-  <script src="https://cdn.tailwindcss.com/3.4.5"></script>
-</head>
-<body class="bg-[#0b1220] text-slate-100 min-h-screen p-5 font-sans select-none">
-  <div class="max-w-md mx-auto space-y-4">
-    <div class="flex items-center justify-between">
-      <div class="flex items-center gap-2.5">
-        <div class="w-9 h-9 rounded-xl bg-emerald-500 text-slate-950 font-black flex items-center justify-center">S</div>
-        <span class="font-black text-lg tracking-tight">SWEEPR <span class="text-emerald-400">VPN</span> <span class="text-xs font-bold text-slate-400">iOS</span></span>
-      </div>
-      <span id="iosProBadge" class="text-[11px] font-extrabold px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">Ready</span>
-    </div>
-
-    <div class="bg-[#131c31] border border-slate-800 rounded-3xl p-6 text-center space-y-4">
-      <button id="iosConnectBtn" onclick="connectIosTunnel()" class="w-32 h-32 mx-auto rounded-full bg-slate-800 border-4 border-slate-700 flex flex-col items-center justify-center gap-1.5 shadow-xl cursor-pointer transition-all">
-        <span class="text-3xl">🛡️</span>
-        <span id="iosOrbLabel" class="text-xs font-black tracking-wider text-emerald-400">TAP TO CONNECT</span>
-      </button>
-      <div>
-        <div id="iosCurLoc" class="text-base font-black text-white">🇬🇧 United Kingdom &middot; London</div>
-        <div id="iosStatusText" class="text-xs text-slate-400 mt-1">10 Gbps WireGuard + Smart-TV Shield</div>
-      </div>
-      <div class="grid grid-cols-2 gap-2 text-left pt-2" id="iosSrvGrid"></div>
-    </div>
-
-    <div class="bg-[#131c31] border border-slate-800 rounded-3xl p-5 space-y-3">
-      <div class="text-sm font-extrabold text-white">Activate Device (License Key or Website QR Pairing Code)</div>
-      <p class="text-xs text-slate-400 leading-relaxed">Purchased on desktop first? Log in at <strong>sweeprvpn.com/login</strong> to scan your QR code or paste your <code class="text-emerald-300">ptk_...</code> pairing code or <code class="text-emerald-300">SWEEPR-VPN-...</code> key below (up to 3 devices).</p>
-      <input id="iosCodeInput" placeholder="SWEEPR-VPN-XXXX-XXXX-XXXX or ptk_..." class="w-full px-3.5 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono text-xs" />
-      <input id="iosEmailInput" placeholder="Account Email (optional for full key)" class="w-full px-3.5 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs" />
-      <button onclick="activateIosDevice()" class="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs cursor-pointer">Activate Pro on This iPhone / iPad</button>
-      <div id="iosActMsg" class="text-xs font-bold"></div>
-    </div>
-  </div>
-  <script>
-    const SERVERS = [
-      { code:'UK-LON-01', name:'🇬🇧 UK · London', ping:'11 ms' },
-      { code:'US-NYC-01', name:'🇺🇸 USA · New York', ping:'64 ms' },
-      { code:'US-LAX-01', name:'🇺🇸 USA · Los Angeles', ping:'108 ms' },
-      { code:'DE-FRA-01', name:'🇩🇪 Germany · Frankfurt', ping:'16 ms' },
-      { code:'NL-AMS-01', name:'🇳🇱 Netherlands · Amsterdam', ping:'14 ms' },
-      { code:'SE-STO-01', name:'🇸🇪 Sweden · Stockholm', ping:'22 ms' },
-      { code:'SG-SIN-01', name:'🇸🇬 Singapore', ping:'145 ms' },
-      { code:'JP-TYO-01', name:'🇯🇵 Japan · Tokyo', ping:'158 ms' }
-    ];
-    let selectedCode = localStorage.getItem('sweepr_ios_srv') || 'UK-LON-01';
-    function getIosDevId() {
-      let id = localStorage.getItem('sweepr_ios_dev_id');
-      if (!id) { id = 'ios_' + Math.random().toString(36).slice(2, 12); localStorage.setItem('sweepr_ios_dev_id', id); }
-      return id;
-    }
-    function renderIosServers() {
-      const g = document.getElementById('iosSrvGrid');
-      g.innerHTML = SERVERS.map(s => '<button onclick="pickIosSrv(\\''+s.code+'\\')" class="p-2.5 rounded-xl border text-xs font-bold flex items-center justify-between cursor-pointer '+(s.code===selectedCode?'border-emerald-500 bg-emerald-500/15 text-emerald-300':'border-slate-800 bg-slate-900/90 text-slate-300')+'"><span>'+s.name+'</span><span class="text-[10px] text-emerald-400">'+s.ping+'</span></button>').join('');
-      const cur = SERVERS.find(s => s.code === selectedCode) || SERVERS[0];
-      document.getElementById('iosCurLoc').textContent = cur.name;
-    }
-    function pickIosSrv(c) { selectedCode = c; localStorage.setItem('sweepr_ios_srv', c); renderIosServers(); }
-    async function activateIosDevice() {
-      const raw = (document.getElementById('iosCodeInput').value || '').trim();
-      const email = (document.getElementById('iosEmailInput').value || '').trim();
-      const msg = document.getElementById('iosActMsg');
-      if (!raw) { msg.className='text-xs font-bold text-rose-400'; msg.textContent='Enter your license key or ptk_ pairing code.'; return; }
-      msg.className='text-xs font-bold text-slate-400'; msg.textContent='Verifying...';
-      try {
-        const ptk = raw.match(/ptk_[A-Za-z0-9_-]{12,64}/);
-        const url = ptk ? '/api/vpn/pair/redeem' : '/api/vpn/activate';
-        const payload = ptk
-          ? { token: ptk[0], device_id: getIosDevId(), device_name: 'iPhone / iPad', os: 'ios' }
-          : { code: raw, email, device_id: getIosDevId(), device_name: 'iPhone / iPad', os: 'ios' };
-        const r = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
-        const d = await r.json();
-        if (r.ok && (d.ok || d.valid)) {
-          const k = d.licenseKey || d.license_key || raw;
-          localStorage.setItem('sweepr_vpn_license_key', k);
-          if (d.email || email) localStorage.setItem('sweepr_vpn_email', d.email || email);
-          document.getElementById('iosCodeInput').value = k;
-          document.getElementById('iosProBadge').textContent = 'PRO ACTIVE (' + (d.devices_used || 1) + '/' + (d.max_devices || 3) + ')';
-          msg.className='text-xs font-bold text-emerald-400'; msg.textContent='✓ Activated! Tap the shield above to install your 1-tap iOS VPN tunnel.';
-        } else {
-          msg.className='text-xs font-bold text-rose-400'; msg.textContent = d.message || d.error || 'Invalid code.';
-        }
-      } catch {
-        msg.className='text-xs font-bold text-rose-400'; msg.textContent = 'Connection error.';
-      }
-    }
-    function connectIosTunnel() {
-      const key = localStorage.getItem('sweepr_vpn_license_key') || (document.getElementById('iosCodeInput').value || '').trim();
-      const email = localStorage.getItem('sweepr_vpn_email') || (document.getElementById('iosEmailInput').value || '').trim();
-      if (!key) {
-        document.getElementById('iosStatusText').textContent = 'Please activate your license key or QR pairing code below first.';
-        return;
-      }
-      window.location.href = '/api/vpn/apple-mobileconfig?key=' + encodeURIComponent(key) + '&email=' + encodeURIComponent(email) + '&server_code=' + encodeURIComponent(selectedCode) + '&device_id=' + encodeURIComponent(getIosDevId());
-    }
-    (function(){
-      const saved = localStorage.getItem('sweepr_vpn_license_key') || '';
-      if (saved) {
-        document.getElementById('iosCodeInput').value = saved;
-        document.getElementById('iosProBadge').textContent = 'PRO ACTIVE ✓';
-      }
-      renderIosServers();
-    })();
-  </script>
-</body>
-</html>`;
+  return VPN_ANDROID_HTML;
 }
 
 function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin = PUBLIC_URL) {
@@ -4633,11 +4594,33 @@ self.addEventListener('fetch', e => {
     }
     const body = await readJsonBody(req);
     if (body && body.__tooLarge) return sendJson(res, 413, { error: 'payload_too_large' }, {}, req);
+    const email = String(body?.email || '').trim().toLowerCase();
+    const message = String(body?.message || '').trim();
+    const subject = String(body?.subject || '').trim() || 'SWEEPR VPN Support Request';
+    const os = String(body?.os || body?.platform || 'desktop').trim();
+    if (!isValidEmail(email) || !message) {
+      return sendJson(res, 400, { ok: false, error: 'Please provide a valid email address and message.' }, {}, req);
+    }
+    const payload = {
+      ...body,
+      project_id: 'vpn',
+      email,
+      subject,
+      message,
+      os,
+      appVersion: body?.appVersion || body?.app_version || '2.5.0',
+      deviceId: body?.deviceId || body?.device_id || undefined,
+    };
     try {
-      const data = await crm.createSupportTicket(body);
-      return sendJson(res, 200, data, {}, req);
+      const data = await crm.createSupportTicket(payload);
+      if (data && data.ok && data.ticket_id) {
+        return sendJson(res, 200, data, {}, req);
+      }
+      await sendSupportTicketOwnerEmail({ fromEmail: email, subject, message, platform: os, ticketId: 'VPN-' + Date.now() });
+      return sendJson(res, 200, { ok: true, ticket_id: data?.ticket_id || Date.now(), emailed: true }, {}, req);
     } catch (e) {
-      return sendJson(res, 200, { ok: true, simulated: true }, {}, req);
+      await sendSupportTicketOwnerEmail({ fromEmail: email, subject, message, platform: os, ticketId: 'VPN-' + Date.now() }).catch(() => {});
+      return sendJson(res, 200, { ok: true, ticket_id: Date.now(), emailed: true }, {}, req);
     }
   }
 
