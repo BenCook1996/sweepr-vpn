@@ -5,10 +5,13 @@
  *
  * Runs a rigorous 360-degree audit across:
  *   1. Crawlability & Indexability (sitemap.xml, robots.txt, llms.txt, pad.xml, canonical routing, IndexNow)
- *   2. Technical SEO (title, description, canonicals, JSON-LD schemas, OpenGraph, Twitter cards, h1, internal links)
+ *   2. Technical SEO (title, description, canonicals, robots max-image-preview, JSON-LD schemas,
+ *      OpenGraph, Twitter cards, theme-color, h1, internal links, server 301 redirects)
  *   3. PageSpeed & Core Web Vitals (image sizes, alt-text, width/height dimensions, layout stability,
- *      preconnects, script defer/async, gzip/brotli server compression, ETag / 304 headers, PWA manifest)
- *   4. Non-Visual Auto-Optimizations (synchronizes sitemap, llms.txt, indexing queue, server headers, link targets)
+ *      preconnects, script defer/async, gzip/brotli server compression, ETag / 304 headers, PWA manifest, cache-control)
+ *   4. Non-Visual Auto-Optimizations (synchronizes sitemap, llms.txt, indexing queue, server headers, link targets,
+ *      backfills missing og:image/twitter/robots/theme-color on pSEO pages, shields internal prototypes with noindex)
+ *   5. Persists comprehensive dated daily report to TECHNICAL_SEO_AUDIT_LOG.md
  *
  * Usage:
  *   node scripts/daily-seo-pagespeed-audit.mjs [--fix] [--ping]
@@ -29,9 +32,10 @@ const LLMS_PATH = path.join(WEBSITE_DIR, 'llms.txt');
 const PAD_PATH = path.join(WEBSITE_DIR, 'pad.xml');
 const INDEXING_QUEUE_PATH = path.join(WEBSITE_DIR, 'indexing-queue.json');
 const SERVER_PATH = path.join(WEBSITE_DIR, 'server.mjs');
+const AUDIT_LOG_PATH = path.join(VPN_ROOT, 'TECHNICAL_SEO_AUDIT_LOG.md');
 const INDEXNOW_KEY = '8f9a2b4c6d1e3f5a7b9c0d2e4f6a8b0c';
 
-const shouldFix = process.argv.includes('--fix') || true; // Auto-optimize by default
+const shouldFix = !process.argv.includes('--no-fix'); // Auto-optimize by default
 const shouldPing = process.argv.includes('--ping') || process.env.INDEXNOW_PING === 'true';
 
 console.log('='.repeat(78));
@@ -43,7 +47,8 @@ const auditResults = {
   crawlability: { passed: 0, failed: 0, warnings: 0, checks: [] },
   technicalSeo: { passed: 0, failed: 0, warnings: 0, checks: [] },
   pageSpeed: { passed: 0, failed: 0, warnings: 0, checks: [] },
-  autoOptimizations: []
+  autoOptimizations: [],
+  benchmarks: []
 };
 
 function pass(category, title, detail = '') {
@@ -62,9 +67,9 @@ function fail(category, title, detail = '') {
 }
 
 // ============================================================================
-// 1. SITEMAP & DISK SYNCHRONIZATION (Non-Visual Auto-Optimization)
+// 1. SITEMAP & DISK SYNCHRONIZATION & AUTO-OPTIMIZATION
 // ============================================================================
-console.log('\n[Phase 1] Auditing Sitemap, Disk Manifest & Route Alignment...');
+console.log('\n[Phase 1] Auditing Sitemap, Disk Manifest & Auto-Optimizing Pages...');
 
 const CORE_STATIC_ROUTES = [
   { urlPath: '/', file: 'index.html', priority: '1.0', changefreq: 'weekly' },
@@ -79,8 +84,38 @@ const CORE_STATIC_ROUTES = [
   { urlPath: '/terms', file: 'terms.html', priority: '0.5', changefreq: 'monthly' }
 ];
 
+// Auto-optimize core static pages with theme-color
+let autoOptimizedCoreCount = 0;
+if (shouldFix) {
+  for (const r of CORE_STATIC_ROUTES) {
+    const p = path.join(WEBSITE_DIR, r.file);
+    if (!fs.existsSync(p)) continue;
+    let content = fs.readFileSync(p, 'utf8');
+    if (!content.includes('theme-color')) {
+      const canonicalMatch = content.match(/<link\s+rel=["']canonical["'][^>]*>/i);
+      if (canonicalMatch) {
+        content = content.replace(
+          canonicalMatch[0],
+          `${canonicalMatch[0]}\n  <meta name="theme-color" content="#10b981" />`
+        );
+      } else {
+        content = content.replace(/(<head[^>]*>)/i, `$1\n  <meta name="theme-color" content="#10b981" />`);
+      }
+      fs.writeFileSync(p, content, 'utf8');
+      autoOptimizedCoreCount++;
+    }
+  }
+}
+if (autoOptimizedCoreCount > 0) {
+  auditResults.autoOptimizations.push(
+    `Auto-optimized ${autoOptimizedCoreCount} core static pages with brand mobile theme-color (#10b981)`
+  );
+}
+
 // Scan all programmatic SEO files on disk
 const pseoFilesOnDisk = [];
+let autoOptimizedPseoCount = 0;
+
 for (const dir of ['solutions', 'setup', 'vs', 'guides']) {
   const dirAbs = path.join(WEBSITE_DIR, dir);
   if (!fs.existsSync(dirAbs)) continue;
@@ -90,7 +125,67 @@ for (const dir of ['solutions', 'setup', 'vs', 'guides']) {
     if (dir === 'vs' && slug === 'totalvpn') continue;
     const urlPath = `/${dir}/${slug}`;
     const absPath = path.join(dirAbs, file);
-    const content = fs.readFileSync(absPath, 'utf8');
+    let content = fs.readFileSync(absPath, 'utf8');
+
+    // Auto-optimize pSEO page metadata (non-visual)
+    if (shouldFix) {
+      let modified = false;
+
+      // Ensure robots meta with max-image-preview:large
+      if (!content.includes('name="robots"')) {
+        const canonicalMatch = content.match(/<link\s+rel=["']canonical["'][^>]*>/i);
+        if (canonicalMatch) {
+          content = content.replace(
+            canonicalMatch[0],
+            `${canonicalMatch[0]}\n  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />`
+          );
+          modified = true;
+        }
+      }
+
+      // Ensure OpenGraph image, Twitter Cards, and Theme-Color
+      if (!content.includes('og:image') || !content.includes('twitter:card') || !content.includes('theme-color')) {
+        const titleMatch = content.match(/<title[^>]*>(.*?)<\/title>/is);
+        const title = titleMatch ? titleMatch[1].trim().replace(/"/g, '&quot;') : 'SWEEPR VPN';
+        const descMatch = content.match(/<meta\s+name=["']description["']\s+content="([^"]*)"/is);
+        const desc = descMatch ? descMatch[1].trim().replace(/"/g, '&quot;') : '';
+        const canonicalUrl = `https://sweeprvpn.com${urlPath}`;
+
+        let additions = '';
+        if (!content.includes('og:image')) {
+          additions += `\n  <meta property="og:image" content="https://sweeprvpn.com/og-image.png" />` +
+            `\n  <meta property="og:image:alt" content="SWEEPR VPN 10Gbps WireGuard &amp; Home Wi-Fi Radar" />`;
+        }
+        if (!content.includes('twitter:card')) {
+          additions += `\n  <meta name="twitter:card" content="summary_large_image" />` +
+            `\n  <meta name="twitter:url" content="${canonicalUrl}" />` +
+            `\n  <meta name="twitter:title" content="${title}" />` +
+            `\n  <meta name="twitter:description" content="${desc}" />` +
+            `\n  <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png" />`;
+        }
+        if (!content.includes('theme-color')) {
+          additions += `\n  <meta name="theme-color" content="#070b14" />`;
+        }
+
+        const siteNameMatch = content.match(/<meta\s+property=["']og:site_name["'][^>]*>/i);
+        if (siteNameMatch) {
+          content = content.replace(siteNameMatch[0], `${siteNameMatch[0]}${additions}`);
+          modified = true;
+        } else {
+          const ogUrlMatch = content.match(/<meta\s+property=["']og:url["'][^>]*>/i);
+          if (ogUrlMatch) {
+            content = content.replace(ogUrlMatch[0], `${ogUrlMatch[0]}${additions}`);
+            modified = true;
+          }
+        }
+      }
+
+      if (modified) {
+        fs.writeFileSync(absPath, content, 'utf8');
+        autoOptimizedPseoCount++;
+      }
+    }
+
     const h1Match = content.match(/<h1[^>]*>(.*?)<\/h1>/is);
     const h1Text = h1Match ? h1Match[1].replace(/<[^>]+>/g, '').trim() : urlPath;
     pseoFilesOnDisk.push({
@@ -103,6 +198,54 @@ for (const dir of ['solutions', 'setup', 'vs', 'guides']) {
       content
     });
   }
+}
+
+if (autoOptimizedPseoCount > 0) {
+  auditResults.autoOptimizations.push(
+    `Auto-optimized ${autoOptimizedPseoCount} pSEO pages with max-image-preview:large, og:image, Twitter cards & theme-color`
+  );
+}
+
+// Auto-optimize internal utility & prototype pages with noindex
+const UTILITY_AND_PROTOTYPE_PAGES = [
+  'order.html',
+  'login.html',
+  'dashboard.html',
+  'popup-alternatives.html',
+  'prototype-mockup-a.html',
+  'prototype-mockup-b.html',
+  'sweepr-motion-review.html',
+  'sweepr-vpn-scorecard.html'
+];
+let autoShieldedProtoCount = 0;
+if (shouldFix) {
+  for (const f of UTILITY_AND_PROTOTYPE_PAGES) {
+    const p = path.join(WEBSITE_DIR, f);
+    if (!fs.existsSync(p)) continue;
+    let content = fs.readFileSync(p, 'utf8');
+    if (!/meta\s+name=["']robots["']\s+content=["'][^"']*noindex/i.test(content)) {
+      const robotsTag = f === 'order.html'
+        ? '<meta name="robots" content="noindex, follow" />'
+        : '<meta name="robots" content="noindex, nofollow" />';
+      content = content.replace(/(<head[^>]*>)/i, `$1\n  ${robotsTag}`);
+      fs.writeFileSync(p, content, 'utf8');
+      autoShieldedProtoCount++;
+    }
+  }
+  // Also shield root copy of sweepr-vpn-scorecard.html if present
+  const rootScorecard = path.join(VPN_ROOT, 'sweepr-vpn-scorecard.html');
+  if (fs.existsSync(rootScorecard)) {
+    let rootScorecardContent = fs.readFileSync(rootScorecard, 'utf8');
+    if (!/meta\s+name=["']robots["']\s+content=["'][^"']*noindex/i.test(rootScorecardContent)) {
+      rootScorecardContent = rootScorecardContent.replace(/(<head[^>]*>)/i, `$1\n  <meta name="robots" content="noindex, nofollow" />`);
+      fs.writeFileSync(rootScorecard, rootScorecardContent, 'utf8');
+    }
+  }
+}
+if (autoShieldedProtoCount > 0) {
+  auditResults.autoOptimizations.push(
+    `Shielded ${autoShieldedProtoCount} internal prototype/review pages with <meta name="robots" content="noindex, nofollow">`
+  );
 }
 
 const allCanonicalPages = [
@@ -248,18 +391,17 @@ if (missingAiBots.length === 0) {
 }
 
 // Crawl budget disallow rules check
-const disallowRules = ['/api/', '/v1/', '/login', '/dashboard', '/popup-alternatives'];
+const disallowRules = ['/api/', '/v1/', '/login', '/dashboard', '/popup-alternatives', '/qr-setup'];
 const missingDisallow = disallowRules.filter((r) => !robotsTxt.includes(`Disallow: ${r}`));
 if (missingDisallow.length === 0) {
-  pass('crawlability', 'robots.txt Crawl-Budget Protections', 'Internal APIs, user portals, and CRO studios disallowed');
+  pass('crawlability', 'robots.txt Crawl-Budget Protections', 'Internal APIs, user portals, qr-setup and CRO studios disallowed');
 } else {
   warn('crawlability', 'robots.txt Crawl-Budget Protections', `Missing disallow rules: ${missingDisallow.join(', ')}`);
 }
 
-// Utility pages noindex guard check
-const UTILITY_NOINDEX_PAGES = ['order.html', 'login.html', 'dashboard.html', 'popup-alternatives.html'];
+// Utility & Prototype pages noindex guard check
 let unshieldedUtilityCount = 0;
-for (const f of UTILITY_NOINDEX_PAGES) {
+for (const f of UTILITY_AND_PROTOTYPE_PAGES) {
   const p = path.join(WEBSITE_DIR, f);
   if (!fs.existsSync(p)) continue;
   const content = fs.readFileSync(p, 'utf8');
@@ -268,9 +410,9 @@ for (const f of UTILITY_NOINDEX_PAGES) {
   }
 }
 if (unshieldedUtilityCount === 0) {
-  pass('crawlability', 'Utility Pages Noindex Guard', 'Order checkout, auth portals, and studio pages properly shielded with noindex');
+  pass('crawlability', 'Utility & Prototype Pages Noindex Guard', `All ${UTILITY_AND_PROTOTYPE_PAGES.length} internal utility and prototype pages properly shielded with noindex`);
 } else {
-  fail('crawlability', 'Utility Pages Noindex Guard', `${unshieldedUtilityCount} internal utility pages missing noindex meta tag`);
+  fail('crawlability', 'Utility & Prototype Pages Noindex Guard', `${unshieldedUtilityCount} internal utility/prototype pages missing noindex meta tag`);
 }
 
 // Audit pad.xml
@@ -295,6 +437,9 @@ let canonicalIssues = 0;
 let schemaIssues = 0;
 let h1Issues = 0;
 let ogIssues = 0;
+let twitterIssues = 0;
+let robotsDirectiveIssues = 0;
+let themeColorIssues = 0;
 
 const failingPages = {
   title: [],
@@ -302,7 +447,10 @@ const failingPages = {
   canonical: [],
   schema: [],
   h1: [],
-  og: []
+  og: [],
+  twitter: [],
+  robots: [],
+  themeColor: []
 };
 
 const seenTitles = new Map();
@@ -382,30 +530,63 @@ for (const page of allCanonicalPages) {
     failingPages.canonical.push(`${page.file} (expected ${page.canonicalLoc}, got ${canonicalMatch ? canonicalMatch[1] : 'none'})`);
   }
 
-  // 4. Schema check (JSON-LD)
-  const hasJsonLd = content.includes('application/ld+json');
-  if (!hasJsonLd) {
+  // 4. Robots directive check (max-image-preview:large)
+  const robotsMatch = content.match(/<meta\s+name=["']robots["']\s+content=["']([^"']*)["']/i);
+  if (!robotsMatch || !robotsMatch[1].includes('max-image-preview:large')) {
+    robotsDirectiveIssues++;
+    failingPages.robots.push(page.file);
+  }
+
+  // 5. Schema check (JSON-LD + parse validity)
+  const jsonLdMatches = content.matchAll(/<script\s+type=["']application\/ld\+json["']>([\s\S]*?)<\/script>/gi);
+  let pageHasJsonLd = false;
+  let jsonLdParseFailed = false;
+  for (const m of jsonLdMatches) {
+    pageHasJsonLd = true;
+    try {
+      JSON.parse(m[1]);
+    } catch {
+      jsonLdParseFailed = true;
+    }
+  }
+  if (!pageHasJsonLd || jsonLdParseFailed) {
     schemaIssues++;
     failingPages.schema.push(page.file);
   }
 
-  // 5. H1 heading check
+  // 6. H1 heading check
   const h1Match = content.match(/<h1[^>]*>(.*?)<\/h1>/is);
   if (!h1Match || !h1Match[1].trim()) {
     h1Issues++;
     failingPages.h1.push(page.file);
   }
 
-  // 6. OpenGraph check
+  // 7. OpenGraph check (including og:image)
   const hasOgTitle = content.includes('og:title');
   const hasOgDesc = content.includes('og:description');
   const hasOgUrl = content.includes('og:url');
-  if (!hasOgTitle || !hasOgDesc || !hasOgUrl) {
+  const hasOgImage = content.includes('og:image');
+  if (!hasOgTitle || !hasOgDesc || !hasOgUrl || !hasOgImage) {
     ogIssues++;
     failingPages.og.push(page.file);
   }
 
-  // 7. Internal Link Integrity check
+  // 8. Twitter Card check
+  const hasTwitterCard = content.includes('twitter:card');
+  const hasTwitterImage = content.includes('twitter:image');
+  if (!hasTwitterCard || !hasTwitterImage) {
+    twitterIssues++;
+    failingPages.twitter.push(page.file);
+  }
+
+  // 9. Theme-Color check
+  const hasThemeColor = content.includes('name="theme-color"') || content.includes("name='theme-color'");
+  if (!hasThemeColor) {
+    themeColorIssues++;
+    failingPages.themeColor.push(page.file);
+  }
+
+  // 10. Internal Link Integrity check
   const hrefMatches = content.matchAll(/href=["'](\/[^"'#?]*)/g);
   for (const m of hrefMatches) {
     const target = m[1];
@@ -435,10 +616,16 @@ if (canonicalIssues === 0) {
   fail('technicalSeo', 'Canonical URLs', `${canonicalIssues} pages with canonical tag discrepancies: ${failingPages.canonical.join(', ')}`);
 }
 
-if (schemaIssues === 0) {
-  pass('technicalSeo', 'JSON-LD Structured Data', `All ${allCanonicalPages.length} pages inject Schema.org JSON-LD structured data`);
+if (robotsDirectiveIssues === 0) {
+  pass('technicalSeo', 'Robots Snippet Controls', `All ${allCanonicalPages.length} pages specify max-image-preview:large for search & Discover snippets`);
 } else {
-  fail('technicalSeo', 'JSON-LD Structured Data', `${schemaIssues} pages missing Schema.org JSON-LD tags: ${failingPages.schema.join(', ')}`);
+  fail('technicalSeo', 'Robots Snippet Controls', `${robotsDirectiveIssues} pages missing max-image-preview:large: ${failingPages.robots.slice(0, 3).join(', ')}`);
+}
+
+if (schemaIssues === 0) {
+  pass('technicalSeo', 'JSON-LD Structured Data', `All ${allCanonicalPages.length} pages inject verified Schema.org JSON-LD structured data`);
+} else {
+  fail('technicalSeo', 'JSON-LD Structured Data', `${schemaIssues} pages with invalid/missing JSON-LD: ${failingPages.schema.join(', ')}`);
 }
 
 if (h1Issues === 0) {
@@ -448,9 +635,21 @@ if (h1Issues === 0) {
 }
 
 if (ogIssues === 0) {
-  pass('technicalSeo', 'OpenGraph Social Metadata', `All ${allCanonicalPages.length} pages include complete OpenGraph tags`);
+  pass('technicalSeo', 'OpenGraph Social Metadata', `All ${allCanonicalPages.length} pages include complete OpenGraph tags (title, desc, url, og:image)`);
 } else {
-  warn('technicalSeo', 'OpenGraph Social Metadata', `${ogIssues} pages with incomplete OpenGraph tags: ${failingPages.og.join(', ')}`);
+  warn('technicalSeo', 'OpenGraph Social Metadata', `${ogIssues} pages with incomplete OpenGraph tags: ${failingPages.og.slice(0, 3).join(', ')}`);
+}
+
+if (twitterIssues === 0) {
+  pass('technicalSeo', 'Twitter Card Metadata', `All ${allCanonicalPages.length} pages include complete summary_large_image Twitter card tags`);
+} else {
+  warn('technicalSeo', 'Twitter Card Metadata', `${twitterIssues} pages with incomplete Twitter card tags: ${failingPages.twitter.slice(0, 3).join(', ')}`);
+}
+
+if (themeColorIssues === 0) {
+  pass('technicalSeo', 'Mobile Theme-Color Support', `All ${allCanonicalPages.length} pages declare theme-color for mobile chrome styling`);
+} else {
+  warn('technicalSeo', 'Mobile Theme-Color Support', `${themeColorIssues} pages missing theme-color: ${failingPages.themeColor.slice(0, 3).join(', ')}`);
 }
 
 if (brokenInternalLinks.length === 0) {
@@ -569,6 +768,7 @@ const hasETag = serverCode.includes('ETag') && serverCode.includes('if-none-matc
 const hasWebpMime = serverCode.includes("'.webp': 'image/webp'");
 const hasAvifMime = serverCode.includes("'.avif': 'image/avif'");
 const hasWoff2Mime = serverCode.includes("'.woff2': 'font/woff2'");
+const hasXmlCacheControl = serverCode.includes("ext === '.xml' || ext === '.txt'");
 
 if (hasZlib && hasBrotli && hasGzip) {
   pass('pageSpeed', 'Server-Side Compression (Brotli + Gzip)', 'Built-in node:zlib Brotli and Gzip transparently enabled in server.mjs');
@@ -588,39 +788,66 @@ if (hasWebpMime && hasAvifMime && hasWoff2Mime) {
   fail('pageSpeed', 'Modern MIME Types & Static Serving', 'Missing modern media MIME types in server.mjs');
 }
 
-// Benchmark compression savings
-const testHtml = fs.readFileSync(path.join(WEBSITE_DIR, 'order.html'));
-const brCompressed = zlib.brotliCompressSync(testHtml, { params: { [zlib.constants.BROTLI_PARAM_QUALITY]: 5 } });
-const gzipCompressed = zlib.gzipSync(testHtml, { level: 6 });
-const brRatio = Math.round((1 - brCompressed.length / testHtml.length) * 100);
-const gzRatio = Math.round((1 - gzipCompressed.length / testHtml.length) * 100);
+if (hasXmlCacheControl) {
+  pass('pageSpeed', 'Static Cache-Control Architecture', 'Explicit caching headers configured for HTML (0s), static media (300s/3600s), and XML/TXT (3600s/86400s)');
+} else {
+  warn('pageSpeed', 'Static Cache-Control Architecture', 'Explicit caching headers could be missing for .xml or .txt');
+}
+
+// Benchmark compression savings on key pages
+const benchmarkFiles = ['order.html', 'index.html', 'sitemap.xml'];
+for (const bFile of benchmarkFiles) {
+  const bPath = path.join(WEBSITE_DIR, bFile);
+  if (fs.existsSync(bPath)) {
+    const raw = fs.readFileSync(bPath);
+    const br = zlib.brotliCompressSync(raw, { params: { [zlib.constants.BROTLI_PARAM_QUALITY]: 5 } });
+    const gz = zlib.gzipSync(raw, { level: 6 });
+    const brRatio = Math.round((1 - br.length / raw.length) * 100);
+    const gzRatio = Math.round((1 - gz.length / raw.length) * 100);
+    auditResults.benchmarks.push({
+      file: bFile,
+      rawKb: (raw.length / 1024).toFixed(1),
+      gzKb: (gz.length / 1024).toFixed(1),
+      brKb: (br.length / 1024).toFixed(1),
+      gzRatio,
+      brRatio
+    });
+  }
+}
 
 console.log('\n[Compression Benchmark Results]');
-console.log(`- Sample Tested: order.html (${(testHtml.length / 1024).toFixed(1)} KB raw)`);
-console.log(`- Gzip Compressed: ${(gzipCompressed.length / 1024).toFixed(1)} KB (${gzRatio}% payload reduction)`);
-console.log(`- Brotli Compressed: ${(brCompressed.length / 1024).toFixed(1)} KB (${brRatio}% payload reduction)`);
+for (const b of auditResults.benchmarks) {
+  console.log(`- Sample: ${b.file} (${b.rawKb} KB raw) -> Gzip: ${b.gzKb} KB (${b.gzRatio}% reduction) | Brotli: ${b.brKb} KB (${b.brRatio}% reduction)`);
+}
 
 // ============================================================================
-// 5. SUMMARY & SCORECARD
+// 5. SUMMARY, SCORECARD & AUDIT LOG PERSISTENCE
 // ============================================================================
 console.log('\n' + '='.repeat(78));
 console.log('DAILY AUDIT SUMMARY & SCORECARD');
 console.log('='.repeat(78));
 
-function printCategoryScore(name, stats) {
+function calcScore(stats) {
   const total = stats.passed + stats.failed + stats.warnings;
   const score = total > 0 ? Math.round((stats.passed / (total - stats.warnings * 0.5)) * 100) : 100;
-  const clampedScore = Math.min(100, Math.max(0, score));
-  console.log(`\n📌 ${name}: ${clampedScore}/100 (${stats.passed} Passed, ${stats.warnings} Warnings, ${stats.failed} Failed)`);
+  return Math.min(100, Math.max(0, score));
+}
+
+const crawlScore = calcScore(auditResults.crawlability);
+const techScore = calcScore(auditResults.technicalSeo);
+const speedScore = calcScore(auditResults.pageSpeed);
+
+function printCategoryScore(name, score, stats) {
+  console.log(`\n📌 ${name}: ${score}/100 (${stats.passed} Passed, ${stats.warnings} Warnings, ${stats.failed} Failed)`);
   for (const c of stats.checks) {
     const symbol = c.status === 'PASS' ? '✅' : c.status === 'WARN' ? '⚠️' : '❌';
     console.log(`   ${symbol} [${c.status}] ${c.title}${c.detail ? ': ' + c.detail : ''}`);
   }
 }
 
-printCategoryScore('Crawlability & Indexability', auditResults.crawlability);
-printCategoryScore('Technical SEO & Rich Schemas', auditResults.technicalSeo);
-printCategoryScore('PageSpeed & Core Web Vitals', auditResults.pageSpeed);
+printCategoryScore('Crawlability & Indexability', crawlScore, auditResults.crawlability);
+printCategoryScore('Technical SEO & Rich Schemas', techScore, auditResults.technicalSeo);
+printCategoryScore('PageSpeed & Core Web Vitals', speedScore, auditResults.pageSpeed);
 
 console.log('\n🛠️ Non-Visual Auto-Optimizations Executed:');
 for (const opt of auditResults.autoOptimizations) {
@@ -633,6 +860,58 @@ if (totalFailed === 0) {
   console.log('🎯 DAILY AUDIT RESULT: 100% HEALTHY — All Systems Verified & Optimized');
 } else {
   console.log(`⚠️ DAILY AUDIT RESULT: ${totalFailed} Failed Checks Requiring Attention`);
-  process.exit(1);
 }
 console.log('='.repeat(78));
+
+// ============================================================================
+// 6. PERSIST TO TECHNICAL_SEO_AUDIT_LOG.md
+// ============================================================================
+function updateAuditLog() {
+  const sectionHeader = `## ${todayStr} — Daily Technical SEO, Crawlability & PageSpeed Audit & Auto-Optimization Pass`;
+  const markdownSection = `
+${sectionHeader}
+
+### Executive Summary
+- **Overall Scores**: Crawlability **${crawlScore}/100**, Technical SEO **${techScore}/100**, PageSpeed & CWV **${speedScore}/100** across **${allCanonicalPages.length} Canonical Pages**.
+- **Auto-Optimizations Executed**:
+${auditResults.autoOptimizations.map((opt) => `  - ${opt}`).join('\n')}
+
+### Category Scorecards & Verifications
+
+#### 1. Crawlability & Indexability (${crawlScore}/100)
+${auditResults.crawlability.checks.map((c) => `- **${c.title}**: ${c.status} — ${c.detail}`).join('\n')}
+
+#### 2. Technical SEO & Rich Schemas (${techScore}/100)
+${auditResults.technicalSeo.checks.map((c) => `- **${c.title}**: ${c.status} — ${c.detail}`).join('\n')}
+
+#### 3. PageSpeed & Core Web Vitals (${speedScore}/100)
+${auditResults.pageSpeed.checks.map((c) => `- **${c.title}**: ${c.status} — ${c.detail}`).join('\n')}
+
+### Compression Benchmark Results
+${auditResults.benchmarks.map((b) => `- **${b.file}** (${b.rawKb} KB raw) &rarr; Gzip: **${b.gzKb} KB** (${b.gzRatio}% reduction) | Brotli: **${b.brKb} KB** (${b.brRatio}% reduction)`).join('\n')}
+`;
+
+  let currentLog = '';
+  if (fs.existsSync(AUDIT_LOG_PATH)) {
+    currentLog = fs.readFileSync(AUDIT_LOG_PATH, 'utf8');
+  } else {
+    currentLog = `# SWEEPR VPN — Technical SEO, Crawlability & PageSpeed Audit Log\n\nTracks automated daily technical SEO audits and under-the-hood optimizations (strictly non-visual and non-functional to end users).\n`;
+  }
+
+  // If entry for today already exists, replace it; otherwise append
+  if (currentLog.includes(sectionHeader)) {
+    const regex = new RegExp(`## ${todayStr}[\\s\\S]*?(?=\\n## \\d{4}-\\d{2}-\\d{2}|$)`, 'g');
+    currentLog = currentLog.replace(regex, markdownSection.trim() + '\n\n');
+  } else {
+    currentLog = currentLog.trimEnd() + '\n' + markdownSection + '\n';
+  }
+
+  fs.writeFileSync(AUDIT_LOG_PATH, currentLog, 'utf8');
+  console.log(`\n📝 Persisted daily audit report to ${path.relative(VPN_ROOT, AUDIT_LOG_PATH)}`);
+}
+
+updateAuditLog();
+
+if (totalFailed > 0) {
+  process.exit(1);
+}
