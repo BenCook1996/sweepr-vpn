@@ -43,7 +43,7 @@ class BillingHelper(
                 planKey = "monthly",
                 productId = PRODUCT_MONTHLY,
                 title = "Monthly Plan (Intro Offer)",
-                subtitle = "£1.99 first month, then £9.99/mo • Up to 3 devices",
+                subtitle = "£1.99 first month, then £12.49/mo • Up to 3 devices",
                 formattedPrice = "£1.99",
                 badge = "POPULAR • £1.99 INTRO"
             ),
@@ -51,16 +51,16 @@ class BillingHelper(
                 planKey = "annual",
                 productId = PRODUCT_ANNUAL,
                 title = "Annual Pro Plan",
-                subtitle = "£49.99/yr (£4.17/mo) • Save 58% • Up to 3 devices",
-                formattedPrice = "£49.99/yr",
-                badge = "BEST VALUE • SAVE 58%"
+                subtitle = "£74.99/yr (£6.25/mo) • Save 50% • Up to 3 devices",
+                formattedPrice = "£74.99/yr",
+                badge = "BEST VALUE • SAVE 50%"
             ),
             PlayPlanListing(
                 planKey = "six_month",
                 productId = PRODUCT_SIX_MONTH,
                 title = "6-Month Pro Plan",
-                subtitle = "£38.99 every 6 months • Save 35% • Up to 3 devices",
-                formattedPrice = "£38.99/6mo",
+                subtitle = "£48.99 every 6 months • Save 35% • Up to 3 devices",
+                formattedPrice = "£48.99/6mo",
                 badge = "SAVE 35%"
             )
         )
@@ -125,14 +125,34 @@ class BillingHelper(
                 val byId = detailsList.associateBy { it.productId }
                 _plans.value = DEFAULT_PLANS.map { item ->
                     val match = byId[item.productId]
-                    val offerPrice = match?.subscriptionOfferDetails
+                    val phases = match?.subscriptionOfferDetails
                         ?.firstOrNull()
                         ?.pricingPhases
                         ?.pricingPhaseList
-                        ?.firstOrNull()
-                        ?.formattedPrice
+                        .orEmpty()
+                    val firstPhase = phases.firstOrNull()
+                    val lastPhase = phases.lastOrNull()
+                    val periodLabel = when (item.planKey) {
+                        "monthly" -> "month"
+                        "six_month" -> "6 months"
+                        else -> "year"
+                    }
+                    val dynamicSubtitle = when {
+                        phases.size >= 2 && firstPhase != null && lastPhase != null ->
+                            "${firstPhase.formattedPrice} first period, then ${lastPhase.formattedPrice}/$periodLabel • Up to 3 devices"
+                        firstPhase != null ->
+                            "${firstPhase.formattedPrice} billed every $periodLabel • Cancel anytime • Up to 3 devices"
+                        else -> item.subtitle
+                    }
+                    val dynamicBadge = if (phases.size >= 2 && firstPhase != null) {
+                        "POPULAR • ${firstPhase.formattedPrice} INTRO"
+                    } else {
+                        item.badge
+                    }
                     item.copy(
-                        formattedPrice = offerPrice ?: item.formattedPrice,
+                        subtitle = dynamicSubtitle,
+                        formattedPrice = firstPhase?.formattedPrice ?: item.formattedPrice,
+                        badge = dynamicBadge,
                         productDetails = match
                     )
                 }

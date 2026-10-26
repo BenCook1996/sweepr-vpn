@@ -1083,14 +1083,36 @@
     if (!box) return;
     box.innerHTML = state.spark.map(v => '<div class="spark-bar" style="height:' + Math.max(4, Math.min(22, Math.round(v * 0.22))) + 'px"></div>').join('');
   }
-  function tick() {
+  let prevRxBytes = null;
+  let prevTxBytes = null;
+  async function tick() {
     state.seconds++;
     const h = String(Math.floor(state.seconds / 3600)).padStart(2,'0'), m = String(Math.floor(state.seconds % 3600 / 60)).padStart(2,'0'), s = String(state.seconds % 60).padStart(2,'0');
     $('timer').textContent = h + ':' + m + ':' + s;
-    const baseMbps = cur().ping <= 25 ? 64 : 38;
-    const downMbps = (baseMbps + Math.sin(state.seconds * 0.9) * 14 + (state.seconds % 5) * 2.1).toFixed(1);
-    const upMbps = (baseMbps * 0.24 + Math.cos(state.seconds * 0.7) * 3.2).toFixed(1);
-    state.mbTransferred += (parseFloat(downMbps) + parseFloat(upMbps)) * 0.045;
+    let downMbps = null;
+    let upMbps = null;
+    if (tauri && state.connected && state.seconds % 2 === 0) {
+      try {
+        const st = await tauri.core.invoke('vpn_status');
+        if (st && typeof st.rx_bytes === 'number' && typeof st.tx_bytes === 'number') {
+          if (prevRxBytes !== null && st.rx_bytes >= prevRxBytes && st.tx_bytes >= prevTxBytes) {
+            downMbps = (((st.rx_bytes - prevRxBytes) * 8) / (2 * 1000000)).toFixed(1);
+            upMbps = (((st.tx_bytes - prevTxBytes) * 8) / (2 * 1000000)).toFixed(1);
+          }
+          prevRxBytes = st.rx_bytes;
+          prevTxBytes = st.tx_bytes;
+          state.mbTransferred = (st.rx_bytes + st.tx_bytes) / (1024 * 1024);
+        }
+      } catch (e) {}
+    }
+    if (downMbps === null || upMbps === null) {
+      const baseMbps = cur().ping <= 25 ? 64 : 38;
+      downMbps = (baseMbps + Math.sin(state.seconds * 0.9) * 14 + (state.seconds % 5) * 2.1).toFixed(1);
+      upMbps = (baseMbps * 0.24 + Math.cos(state.seconds * 0.7) * 3.2).toFixed(1);
+      if (prevRxBytes === null) {
+        state.mbTransferred += (parseFloat(downMbps) + parseFloat(upMbps)) * 0.045;
+      }
+    }
     state.spark.shift();
     state.spark.push(Math.max(25, Math.min(98, Math.round((parseFloat(downMbps) / 85) * 100))));
     if ($('liveThroughput')) {
@@ -1194,10 +1216,12 @@
   function toggleAuto() {
     if (!requirePro('Unlock SWEEPR Pro to enable automatic Wi-Fi intruder alerts.')) return;
     state.auto = !state.auto;
+    state.shields = [state.auto, state.auto, state.auto];
     try { localStorage.setItem('sweepr_vpn_auto_radar', state.auto ? '1' : '0'); } catch (e) {}
     syncSwitchAria($('autoToggle'), state.auto);
+    [0, 1, 2].forEach(i => syncSwitchAria($('sh-' + i), state.pro && state.shields[i]));
     $('radar').classList.toggle('off', !state.auto);
-    toast(state.auto ? "Automatic Wi-Fi intruder alerts enabled (monitoring every 60s)" : 'Wi-Fi intruder alerts paused');
+    syncHouseholdShieldsToNative(state.auto ? "Full Home & Smart-TV Shield enabled (DNS 1.1.1.2 + Wi-Fi monitoring)" : 'Home & Smart-TV shields paused');
     postNative('toggleRadar', state.auto);
   }
   async function syncHouseholdShieldsToNative(toastFallback) {
@@ -2256,7 +2280,7 @@
     syncSwitchAria($('lanBypassToggle'), state.lanBypass);
     syncSwitchAria($('autoToggle'), state.auto);
     [0, 1, 2].forEach(i => syncSwitchAria($('sh-' + i), state.pro && state.shields[i]));
-    $('timerBox').classList.add('hidden');
+    $('timerBox').classList.toggle('hidden', !on);
     if (on) renderSparkBars();
     $('panelFlag').setAttribute('data-flag', s.flag);
     $('panelName').textContent = s.country;

@@ -274,11 +274,11 @@ fun SweeprVpnScreen(
         if (!isConnected) elapsedSec = 0L
     }
 
-    fun scanAndroidNetworkDiagnostics(): WifiDiagnosticsReport {
-        return try {
+    suspend fun scanAndroidNetworkDiagnostics(): WifiDiagnosticsReport = withContext(Dispatchers.IO) {
+        try {
             val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
-                ?: return WifiDiagnosticsReport()
-            val net = cm.activeNetwork ?: return WifiDiagnosticsReport(
+                ?: return@withContext WifiDiagnosticsReport()
+            val net = cm.activeNetwork ?: return@withContext WifiDiagnosticsReport(
                 transportLabel = "Offline",
                 localIp = "No active network",
                 gatewayIp = "—",
@@ -449,6 +449,12 @@ fun SweeprVpnScreen(
                 if (json.optBoolean("ok", false)) {
                     confText = json.optString("config_text", "")
                     assignedAddr = json.optString("address", "10.64.0.2/32")
+                    if (confText.contains("PrivateKey")) {
+                        prefs.edit()
+                            .putString("wg_cached_config_${targetSrv.code}", confText)
+                            .putString("wg_cached_addr_${targetSrv.code}", assignedAddr)
+                            .apply()
+                    }
                 } else if (conn.responseCode == 401 || conn.responseCode == 403) {
                     val errMsg = json.optString("message", "License key verification required.")
                     withContext(Dispatchers.Main) {
@@ -458,26 +464,34 @@ fun SweeprVpnScreen(
                     return@withContext
                 }
             } catch (_: Exception) {
-                // Offline/fallback peer parameters when node agent is unreachable
+                // Attempt cached WireGuard configuration for this node
             }
 
             if (confText.isBlank()) {
-                confText = """
-                    [Interface]
-                    Address = $assignedAddr
-                    DNS = $dnsValue
-                    MTU = 1420
+                val cachedConf = prefs.getString("wg_cached_config_${targetSrv.code}", "") ?: ""
+                val cachedAddr = prefs.getString("wg_cached_addr_${targetSrv.code}", "10.64.0.2/32") ?: "10.64.0.2/32"
+                if (cachedConf.contains("PrivateKey")) {
+                    confText = cachedConf
+                    assignedAddr = cachedAddr
+                }
+            }
 
-                    [Peer]
-                    Endpoint = 78.141.205.68:51820
-                    AllowedIPs = 0.0.0.0/0
-                    PersistentKeepalive = 25
-                """.trimIndent()
+            if (confText.isBlank() || !confText.contains("PrivateKey")) {
+                val errMsg = "Could not reach SWEEPR provisioning server. Check your connection."
+                withContext(Dispatchers.Main) {
+                    SweeprWireGuardVpnService.updateConnectingState(false, targetSrv.code, targetSrv.city, errMsg)
+                    statusBanner = errMsg
+                }
+                return@withContext
             }
 
             try {
                 File(context.filesDir, "sweepr0.conf").writeText(confText, Charsets.UTF_8)
             } catch (_: Exception) {}
+        }
+
+        if (confText.isBlank() || !confText.contains("PrivateKey")) {
+            return
         }
 
         val svcIntent = Intent(context, SweeprWireGuardVpnService::class.java).apply {
@@ -896,8 +910,47 @@ fun SweeprVpnScreen(
     LaunchedEffect(Unit) {
         refreshServers()
         refreshEgressStatus()
-        if (autoShieldWifi && isPro && !isConnected && wifiReport.isUntrustedPublicWifi && vpnDisclosureAccepted) {
+        val diag = scanAndroidNetworkDiagnostics()
+        wifiReport = diag
+        if (autoShieldWifi && isPro && !isConnected && diag.isUntrustedPublicWifi && vpnDisclosureAccepted) {
             executeWireGuardConnect(selectedServerCode)
+        }
+    }
+
+    DisposableEffect(autoShieldWifi, isPro, vpnDisclosureAccepted, selectedServerCode) {
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
+        val callback = object : ConnectivityManager.NetworkCallback() {
+            override fun onCapabilitiesChanged(network: android.net.Network, networkCapabilities: NetworkCapabilities) {
+                val hasWifi = networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+                val hasVpn = networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN)
+                val hasCaptive = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_CAPTIVE_PORTAL)
+                val isValidated = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+                val isNotMetered = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED)
+                if (hasWifi && !hasVpn && (hasCaptive || !isValidated || !isNotMetered)) {
+                    if (autoShieldWifi && isPro && vpnDisclosureAccepted && !SweeprWireGuardVpnService.tunnelState.value.isConnected) {
+                        scope.launch {
+                            executeWireGuardConnect(selectedServerCode)
+                        }
+                    }
+                }
+            }
+        }
+        try {
+            cm?.registerDefaultNetworkCallback(callback)
+        } catch (_: Exception) {}
+        onDispose {
+            try {
+                cm?.unregisterNetworkCallback(callback)
+            } catch (_: Exception) {}
+        }
+    }
+
+    LaunchedEffect(initialLicenseKey) {
+        if (initialLicenseKey.isNotBlank() && initialLicenseKey != licenseKey) {
+            licenseKey = initialLicenseKey
+            keyInput = initialLicenseKey
+            prefs.edit().putString("license_key", initialLicenseKey).apply()
+            activateLicenseKey()
         }
     }
 
@@ -1008,7 +1061,7 @@ fun SweeprVpnScreen(
                     selected = activeTab == 1,
                     onClick = {
                         activeTab = 1
-                        wifiReport = scanAndroidNetworkDiagnostics()
+                        scope.launch { wifiReport = scanAndroidNetworkDiagnostics() }
                     },
                     icon = { Icon(Icons.Default.Wifi, contentDescription = "Wi-Fi & Shields") },
                     label = { Text("Wi-Fi & Shields") }
@@ -1322,7 +1375,7 @@ fun SweeprVpnScreen(
                                     fontWeight = FontWeight.Bold,
                                     color = Color.White
                                 )
-                                OutlinedButton(onClick = { wifiReport = scanAndroidNetworkDiagnostics() }) {
+                                OutlinedButton(onClick = { scope.launch { wifiReport = scanAndroidNetworkDiagnostics() } }) {
                                     Text("Re-Scan")
                                 }
                             }
@@ -1427,6 +1480,9 @@ fun SweeprVpnScreen(
                                         killSwitchEnabled = enabled
                                         prefs.edit().putBoolean("kill_switch", enabled).apply()
                                         statusBanner = if (enabled) "Emergency Kill Switch armed" else "Emergency Kill Switch off"
+                                        if (isConnected) {
+                                            requestConnectWithDisclosureCheck(selectedServerCode)
+                                        }
                                     }
                                 )
                             }

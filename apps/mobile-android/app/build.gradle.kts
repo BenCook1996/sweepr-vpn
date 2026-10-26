@@ -1,7 +1,16 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
+}
+
+val localProps = Properties().apply {
+    val propFile = rootProject.file("local.properties")
+    if (propFile.exists()) {
+        propFile.inputStream().use { load(it) }
+    }
 }
 
 android {
@@ -29,9 +38,12 @@ android {
     signingConfigs {
         create("release") {
             storeFile = file("upload-keystore.jks")
-            storePassword = System.getenv("KEYSTORE_PASSWORD") ?: "SweeprVpn2026!"
-            keyAlias = System.getenv("KEY_ALIAS") ?: "sweeprvpn"
-            keyPassword = System.getenv("KEY_PASSWORD") ?: "SweeprVpn2026!"
+            storePassword = System.getenv("KEYSTORE_PASSWORD")
+                ?: localProps.getProperty("RELEASE_STORE_PASSWORD", "")
+            keyAlias = System.getenv("KEY_ALIAS")
+                ?: localProps.getProperty("RELEASE_KEY_ALIAS", "sweeprvpn")
+            keyPassword = System.getenv("KEY_PASSWORD")
+                ?: localProps.getProperty("RELEASE_KEY_PASSWORD", "")
         }
     }
 

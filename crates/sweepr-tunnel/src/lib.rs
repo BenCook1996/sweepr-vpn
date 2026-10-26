@@ -47,6 +47,10 @@ pub struct TunnelStatus {
     pub dns: Option<String>,
     pub public_key: String,
     pub message: String,
+    #[serde(default)]
+    pub rx_bytes: Option<u64>,
+    #[serde(default)]
+    pub tx_bytes: Option<u64>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -775,6 +779,22 @@ fn ensure_wireguard_windows() -> Result<PathBuf, String> {
     }
     let dl_ok = dl.status().map(|s| s.success()).unwrap_or(false);
     if dl_ok && msi.exists() {
+        let ps_verify = format!(
+            "$sig = Get-AuthenticodeSignature -FilePath '{}'; if ($sig.Status -eq 'Valid' -and $sig.SignerCertificate.Subject -match 'WireGuard') {{ exit 0 }} else {{ exit 1 }}",
+            msi.to_string_lossy().replace('\'', "''")
+        );
+        let mut ver_cmd = Command::new(powershell_bin());
+        ver_cmd.args(["-NoProfile", "-WindowStyle", "Hidden", "-Command", &ps_verify]);
+        {
+            use std::os::windows::process::CommandExt;
+            ver_cmd.creation_flags(0x08000000);
+        }
+        let sig_valid = ver_cmd.status().map(|s| s.success()).unwrap_or(false);
+        if !sig_valid {
+            let _ = fs::remove_file(&msi);
+            return Err("Downloaded WireGuard MSI failed Authenticode signature verification.".into());
+        }
+
         let sys_root = std::env::var("SystemRoot").unwrap_or_else(|_| "C:\\Windows".to_string());
         let msiexec = Path::new(&sys_root).join("System32\\msiexec.exe");
         let mut ex = Command::new(if msiexec.exists() { msiexec } else { PathBuf::from("msiexec.exe") });
@@ -940,9 +960,48 @@ pub fn bring_tunnel_down() -> Result<(), String> {
 // Public API exposed to Tauri commands
 // ---------------------------------------------------------------------------
 
+fn query_tunnel_transfer_bytes() -> (Option<u64>, Option<u64>) {
+    let mut wg_candidates = vec![PathBuf::from("wg")];
+    #[cfg(target_os = "windows")]
+    {
+        wg_candidates.insert(0, PathBuf::from(r"C:\Program Files\WireGuard\wg.exe"));
+        wg_candidates.insert(1, app_data_dir().join(r"wg_extract\WireGuard\wg.exe"));
+    }
+    for bin in wg_candidates {
+        let mut cmd = Command::new(&bin);
+        cmd.args(["show", TUNNEL_NAME, "transfer"]);
+        #[cfg(target_os = "windows")]
+        {
+            use std::os::windows::process::CommandExt;
+            cmd.creation_flags(0x08000000);
+        }
+        if let Ok(out) = cmd.output() {
+            if out.status.success() {
+                let text = String::from_utf8_lossy(&out.stdout);
+                for line in text.lines() {
+                    let parts: Vec<&str> = line.split_whitespace().collect();
+                    if parts.len() >= 3 {
+                        let rx = parts[1].parse::<u64>().ok();
+                        let tx = parts[2].parse::<u64>().ok();
+                        if rx.is_some() || tx.is_some() {
+                            return (rx, tx);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    (None, None)
+}
+
 pub fn status() -> Result<TunnelStatus, String> {
     let st = load_or_create_state()?;
     let active = is_tunnel_active();
+    let (rx_bytes, tx_bytes) = if active {
+        query_tunnel_transfer_bytes()
+    } else {
+        (None, None)
+    };
     Ok(TunnelStatus {
         connected: active,
         state: if active { "connected".into() } else { "disconnected".into() },
@@ -956,6 +1015,8 @@ pub fn status() -> Result<TunnelStatus, String> {
         } else {
             "Not connected".into()
         },
+        rx_bytes,
+        tx_bytes,
     })
 }
 
@@ -1018,13 +1079,26 @@ pub fn connect(req: ConnectRequest) -> Result<TunnelStatus, String> {
         .trim()
         .to_string();
     let address = resp.address.unwrap_or_else(|| "10.64.0.2/32".into()).trim().to_string();
-    let dns = resp
-        .dns
-        .as_deref()
-        .map(str::trim)
-        .filter(|s| !s.is_empty())
-        .unwrap_or("1.1.1.1, 1.0.0.1")
-        .to_string();
+    let shields_dns = fs::read_to_string(app_data_dir().join("shields.json"))
+        .ok()
+        .and_then(|raw| serde_json::from_str::<serde_json::Value>(&raw).ok())
+        .and_then(|val| {
+            let tv_acr = val.get("tv_acr").and_then(|v| v.as_bool()).unwrap_or(true);
+            let streaming_ads = val.get("streaming_ads").and_then(|v| v.as_bool()).unwrap_or(true);
+            if tv_acr || streaming_ads {
+                Some("1.1.1.2, 1.0.0.2".to_string())
+            } else {
+                None
+            }
+        });
+    let dns = shields_dns.unwrap_or_else(|| {
+        resp.dns
+            .as_deref()
+            .map(str::trim)
+            .filter(|s| !s.is_empty())
+            .unwrap_or("1.1.1.1, 1.0.0.1")
+            .to_string()
+    });
     let lan_bypass = req.lan_bypass.unwrap_or(false);
     let allowed_ips = if lan_bypass {
         "1.0.0.0/8, 2.0.0.0/7, 4.0.0.0/6, 8.0.0.0/7, 10.64.0.0/16, 11.0.0.0/8, 12.0.0.0/6, 16.0.0.0/4, 32.0.0.0/3, 64.0.0.0/2, 128.0.0.0/3, 160.0.0.0/5, 168.0.0.0/6, 172.0.0.0/12, 172.32.0.0/11, 172.64.0.0/10, 172.128.0.0/9, 173.0.0.0/8, 174.0.0.0/7, 176.0.0.0/4, 192.0.0.0/9, 192.128.0.0/11, 192.160.0.0/13, 192.169.0.0/16, 192.170.0.0/15, 192.172.0.0/14, 192.176.0.0/12, 192.192.0.0/10, 193.0.0.0/8, 194.0.0.0/7, 196.0.0.0/6, 200.0.0.0/5, 208.0.0.0/4".to_string()
@@ -1050,6 +1124,7 @@ pub fn connect(req: ConnectRequest) -> Result<TunnelStatus, String> {
     st.last_dns = Some(dns.clone());
     let _ = save_state(&st);
 
+    let (rx_bytes, tx_bytes) = query_tunnel_transfer_bytes();
     Ok(TunnelStatus {
         connected: true,
         state: "connected".into(),
@@ -1059,6 +1134,8 @@ pub fn connect(req: ConnectRequest) -> Result<TunnelStatus, String> {
         dns: Some(dns),
         public_key: st.public_key,
         message: "Protected by WireGuard encryption".into(),
+        rx_bytes,
+        tx_bytes,
     })
 }
 

@@ -12,3 +12,7 @@ Thumbs.db
 infra/nodes.local.json
 infra/.secret-*
 infra/userdata-*.sh
+
+# Runtime state & Android local properties
+website/data/
+apps/mobile-android/local.properties

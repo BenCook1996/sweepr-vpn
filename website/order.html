@@ -803,7 +803,7 @@
               <div class="w-4 h-4 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
               </div>
-              <span>Includes Full Pro Protection Across Up to 10 Computers &amp; Devices</span>
+              <span>Includes Full Pro Protection Across Up to 3 Computers &amp; Devices</span>
             </li>
             <li class="flex items-center gap-2.5">
               <div class="w-4 h-4 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
@@ -1023,18 +1023,12 @@
         const billingAddress = (document.getElementById('billingAddress')?.value || '').trim();
         const billingPostcode = (document.getElementById('billingPostcode')?.value || '').trim();
         const email = (document.getElementById('email')?.value || '').trim();
-        const fallbackCardNumber = (document.getElementById('fallbackCardNumber')?.value || '').trim();
-        const fallbackCardExpiry = (document.getElementById('fallbackCardExpiry')?.value || '').trim();
-        const fallbackCardCvc = (document.getElementById('fallbackCardCvc')?.value || '').trim();
 
         const hasFilledDetails = Boolean(
           cardName ||
           billingAddress ||
           billingPostcode ||
           email ||
-          fallbackCardNumber ||
-          fallbackCardExpiry ||
-          fallbackCardCvc ||
           stripeCardFieldTouched
         );
 
@@ -1048,8 +1042,6 @@
           billingAddress,
           billingPostcode,
           email,
-          fallbackCardNumber,
-          fallbackCardExpiry,
           plan: selectedPlan,
           wifiRadarAddon: isWifiRadarAddonSelected,
           isDiscountApplied: Boolean(isDiscountApplied),
@@ -1079,15 +1071,11 @@
         const addrEl = document.getElementById('billingAddress');
         const postEl = document.getElementById('billingPostcode');
         const emailEl = document.getElementById('email');
-        const fbNumEl = document.getElementById('fallbackCardNumber');
-        const fbExpEl = document.getElementById('fallbackCardExpiry');
 
         if (nameEl && !nameEl.value && draft.cardName) nameEl.value = draft.cardName;
         if (addrEl && !addrEl.value && draft.billingAddress) addrEl.value = draft.billingAddress;
         if (postEl && !postEl.value && draft.billingPostcode) postEl.value = draft.billingPostcode;
         if (emailEl && !emailEl.value && !urlParams?.get('email') && draft.email) emailEl.value = draft.email;
-        if (fbNumEl && !fbNumEl.value && draft.fallbackCardNumber) fbNumEl.value = draft.fallbackCardNumber;
-        if (fbExpEl && !fbExpEl.value && draft.fallbackCardExpiry) fbExpEl.value = draft.fallbackCardExpiry;
 
         const remainingSec = Math.max(1, Math.floor((ORDER_DRAFT_TTL_MS - ageMs) / 1000));
         document.cookie = `sweepr_order_draft=1; Path=/; Max-Age=${remainingSec}; SameSite=Lax`;

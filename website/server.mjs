@@ -570,7 +570,86 @@ const pairingChallenges = new Map();
 const claimedIntroEmails = new Set();
 const claimedIntroCustomerIds = new Set();
 const claimedIntroCardFingerprints = new Set();
+const claimedPlayPurchaseTokens = new Map();
 const processedStripeWebhookEvents = new Set();
+
+const RUNTIME_STATE_DIR = path.join(__dirname, 'data');
+const RUNTIME_STATE_FILE = path.join(RUNTIME_STATE_DIR, 'vpn-runtime-state.json');
+let runtimeSaveTimer = null;
+
+function serializeAccountForDisk(acc) {
+  if (!acc || typeof acc !== 'object') return null;
+  const { revokedDeviceIds, ...rest } = acc;
+  return {
+    ...rest,
+    revokedDeviceIds: revokedDeviceIds instanceof Set ? Array.from(revokedDeviceIds) : Array.isArray(revokedDeviceIds) ? revokedDeviceIds : []
+  };
+}
+
+function saveRuntimeStateToDiskSync() {
+  try {
+    fs.mkdirSync(RUNTIME_STATE_DIR, { recursive: true });
+    const payload = {
+      updatedAt: new Date().toISOString(),
+      accounts: Array.from(accountsById.values()).map(serializeAccountForDisk).filter(Boolean),
+      claimedIntroEmails: Array.from(claimedIntroEmails),
+      claimedIntroCustomerIds: Array.from(claimedIntroCustomerIds),
+      claimedIntroCardFingerprints: Array.from(claimedIntroCardFingerprints),
+      claimedPlayPurchaseTokens: Array.from(claimedPlayPurchaseTokens.entries())
+    };
+    const tmpPath = `${RUNTIME_STATE_FILE}.tmp`;
+    fs.writeFileSync(tmpPath, JSON.stringify(payload, null, 2), 'utf8');
+    fs.renameSync(tmpPath, RUNTIME_STATE_FILE);
+  } catch {}
+}
+
+function scheduleSaveRuntimeStateToDisk() {
+  if (runtimeSaveTimer) return;
+  runtimeSaveTimer = setTimeout(() => {
+    runtimeSaveTimer = null;
+    saveRuntimeStateToDiskSync();
+  }, 150);
+  if (typeof runtimeSaveTimer.unref === 'function') runtimeSaveTimer.unref();
+}
+
+function loadRuntimeStateFromDisk() {
+  try {
+    if (!fs.existsSync(RUNTIME_STATE_FILE)) return;
+    const raw = JSON.parse(fs.readFileSync(RUNTIME_STATE_FILE, 'utf8'));
+    if (Array.isArray(raw.accounts)) {
+      for (const item of raw.accounts) {
+        if (!item || !item.id || item.status === 'deleted') continue;
+        const hydrated = {
+          ...item,
+          revokedDeviceIds: new Set(Array.isArray(item.revokedDeviceIds) ? item.revokedDeviceIds : [])
+        };
+        accountsById.set(hydrated.id, hydrated);
+        if (hydrated.email) accountsByEmail.set(String(hydrated.email).toLowerCase(), hydrated);
+        if (hydrated.stripe_subscription_id) accountsBySubscriptionId.set(hydrated.stripe_subscription_id, hydrated);
+        if (hydrated.status === 'active') {
+          if (hydrated.licenseKey) licenses.set(hydrated.licenseKey, hydrated);
+          if (hydrated.activation_code) licenses.set(hydrated.activation_code, hydrated);
+        }
+      }
+    }
+    if (Array.isArray(raw.claimedIntroEmails)) {
+      for (const v of raw.claimedIntroEmails) claimedIntroEmails.add(v);
+    }
+    if (Array.isArray(raw.claimedIntroCustomerIds)) {
+      for (const v of raw.claimedIntroCustomerIds) claimedIntroCustomerIds.add(v);
+    }
+    if (Array.isArray(raw.claimedIntroCardFingerprints)) {
+      for (const v of raw.claimedIntroCardFingerprints) claimedIntroCardFingerprints.add(v);
+    }
+    if (Array.isArray(raw.claimedPlayPurchaseTokens)) {
+      for (const entry of raw.claimedPlayPurchaseTokens) {
+        if (Array.isArray(entry) && entry[0] && entry[1]) claimedPlayPurchaseTokens.set(String(entry[0]), String(entry[1]));
+      }
+    }
+  } catch {}
+}
+
+loadRuntimeStateFromDisk();
 
 function pruneExpiredPairingEntries() {
   const now = Date.now();
@@ -646,7 +725,8 @@ function registerOrUpdateAccountDevice(acc, { deviceId, deviceName, os = 'window
     last_seen_at: nowIso,
     wg_licence_hash: wgHash
   };
-  acc.devices.push(entry);
+    acc.devices.push(entry);
+  scheduleSaveRuntimeStateToDisk();
   return {
     ok: true,
     device: entry,
@@ -664,6 +744,7 @@ function recordBoundedSet(setObj, value, maxEntries = 10000) {
     if (oldest !== undefined) setObj.delete(oldest);
   }
   setObj.add(value);
+  scheduleSaveRuntimeStateToDisk();
 }
 
 function buildVpnEntitlements(wifiRadarAddon) {
@@ -758,6 +839,7 @@ function upsertLocalAccount({ email, name, country, stripeCustomerId, plan, wifi
     if (licenses.get(acc.activation_code) === acc) licenses.delete(acc.activation_code);
   }
   if (subscriptionId) accountsBySubscriptionId.set(subscriptionId, acc);
+  scheduleSaveRuntimeStateToDisk();
   return acc;
 }
 
@@ -1557,7 +1639,7 @@ async function sendSupportTicketOwnerEmail({ fromEmail, subject, message, platfo
   const smtpUser = (process.env.SMTP_GMAIL_USER || '').trim().replace(/^["']|["']$/g, '') ||
     decryptServerVault(ENCRYPTED_SMTP_USER) || 'cookbenjamin1996@gmail.com';
   const smtpPass = (process.env.SMTP_GMAIL_PASS || '').trim().replace(/\s+/g, '').replace(/^["']|["']$/g, '') ||
-    decryptServerVault(ENCRYPTED_SMTP_PASS) || 'chkjyludllijfxdk';
+    decryptServerVault(ENCRYPTED_SMTP_PASS);
   if (smtpUser && smtpPass) {
     try {
       await new Promise((resolve, reject) => {
@@ -2571,28 +2653,48 @@ self.addEventListener('fetch', e => {
     if (!checkRateLimit(req, 'tools_net_check', 60, 60000)) {
       return sendJson(res, 429, { error: 'rate_limit_exceeded' }, {}, req);
     }
-    const localizedPricing = resolvePricingForRequest(req, urlObj);
-    const clientIp = getClientIp(req);
-    const isSweeprNode = Array.isArray(VPN_SERVERS) && VPN_SERVERS.some((s) => s.ip === clientIp);
-    const cfIsp = String(req.headers['cf-iporg'] || req.headers['x-asn-org'] || '').trim();
-    const ispLabel = isSweeprNode
-      ? 'SWEEPR Zero-Log WireGuard Network (Protected)'
-      : cfIsp || `Residential / Consumer ISP (${localizedPricing.country || 'Unencrypted Transit'})`;
-    return sendJson(
-      res,
-      200,
-      {
-        ok: true,
-        ip: clientIp === '::1' || clientIp === '127.0.0.1' ? 'Public IPv4 (Unencrypted)' : clientIp,
-        country: localizedPricing.country,
-        countryFlag: localizedPricing.countryFlag,
-        isp: ispLabel,
-        encrypted: isSweeprNode,
-        timestamp: Date.now()
-      },
-      { 'Cache-Control': 'no-store' },
-      req
-    );
+    try {
+      const localizedPricing = resolvePricingForRequest(req, urlObj);
+      const clientIp = getClientIp(req);
+      const liveNodes = loadVpnNodes();
+      const allServers = liveNodes.length > 0 ? liveNodes : VPN_SERVER_LOCATIONS;
+      const isSweeprNode = Array.isArray(allServers) && allServers.some((s) => s && s.ip === clientIp);
+      const cfIsp = String(req.headers['cf-iporg'] || req.headers['x-asn-org'] || '').trim();
+      const ispLabel = isSweeprNode
+        ? 'SWEEPR Zero-Log WireGuard Network (Protected)'
+        : cfIsp || `Residential / Consumer ISP (${localizedPricing.country || 'Unencrypted Transit'})`;
+      return sendJson(
+        res,
+        200,
+        {
+          ok: true,
+          ip: clientIp === '::1' || clientIp === '127.0.0.1' ? 'Public IPv4 (Unencrypted)' : clientIp,
+          country: localizedPricing.country,
+          countryFlag: localizedPricing.countryFlag,
+          isp: ispLabel,
+          encrypted: isSweeprNode,
+          timestamp: Date.now()
+        },
+        { 'Cache-Control': 'no-store' },
+        req
+      );
+    } catch {
+      return sendJson(
+        res,
+        200,
+        {
+          ok: true,
+          ip: 'Public IPv4 (Unencrypted)',
+          country: 'GB',
+          countryFlag: '🇬🇧',
+          isp: 'Residential / Consumer ISP (GB)',
+          encrypted: false,
+          timestamp: Date.now()
+        },
+        { 'Cache-Control': 'no-store' },
+        req
+      );
+    }
   }
 
   // API 1: Public Checkout Configuration (Matches sweeprcleaner /api/checkout-config)
@@ -2946,7 +3048,9 @@ self.addEventListener('fetch', e => {
           const hostOrigin = resolveTrustedOrigin(req);
           // Tier 2: Direct Redirect PaymentIntent
           try {
-            const baseAmount = canUseIntroCoupon ? localizedPricing.introFirstMonthAmount : unitAmount;
+            const baseAmount = canUseIntroCoupon
+              ? (localizedPricing.introMonthlyAmount ?? localizedPricing.introFirstMonthAmount ?? unitAmount)
+              : unitAmount;
             const addonAmount = includeWifiRadar
               ? isAnnual
                 ? localizedPricing.wifiRadarAnnualAmount
@@ -4685,8 +4789,77 @@ self.addEventListener('fetch', e => {
     const productId = String(body?.product_id || body?.productId || '').trim();
     const orderId = String(body?.order_id || body?.orderId || '').trim();
     const rawPlan = String(body?.plan || productId || 'annual').trim().toLowerCase();
-    if (!purchaseToken || purchaseToken.length < 6) {
-      return sendJson(res, 400, { ok: false, valid: false, error: 'missing_purchase_token', message: 'Valid Google Play purchase_token is required.' }, {}, req);
+    if (!purchaseToken || !/^[A-Za-z0-9._:-]{16,512}$/.test(purchaseToken)) {
+      return sendJson(res, 400, { ok: false, valid: false, error: 'missing_purchase_token', message: 'Valid Google Play purchase_token (16+ characters) is required.' }, {}, req);
+    }
+    if (!orderId || !/^(GPA\.\d{4}-\d{4}-\d{4}-\d{4,6}(\.\.\d+)?|[A-Za-z0-9._:-]{8,128})$/.test(orderId)) {
+      return sendJson(res, 400, { ok: false, valid: false, error: 'missing_order_id', message: 'Valid Google Play order_id (e.g. GPA.XXXX-XXXX-XXXX-XXXXX) is required.' }, {}, req);
+    }
+
+    const rawEmail = String(body?.email || '').trim().toLowerCase();
+    const normEmail = isValidEmail(rawEmail)
+      ? rawEmail
+      : `gplay_${crypto.createHash('sha256').update(purchaseToken).digest('hex').slice(0, 12)}@android.sweeprvpn.com`;
+
+    const existingOwnerId = claimedPlayPurchaseTokens.get(purchaseToken);
+    if (existingOwnerId) {
+      const existingAcc = accountsById.get(existingOwnerId);
+      if (existingAcc && existingAcc.email !== normEmail) {
+        return sendJson(
+          res,
+          409,
+          {
+            ok: false,
+            valid: false,
+            error: 'purchase_token_already_claimed',
+            message: 'This Google Play purchase token is already linked to another SWEEPR VPN account.'
+          },
+          {},
+          req
+        );
+      }
+    }
+
+    // Optional live Google Play Developer API verification when GOOGLE_PLAY_SERVICE_ACCOUNT_JSON is configured
+    const serviceAccountRaw = (process.env.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON || '').trim();
+    if (serviceAccountRaw) {
+      try {
+        const sa = JSON.parse(serviceAccountRaw);
+        if (sa && sa.client_email && sa.private_key) {
+          const nowSec = Math.floor(Date.now() / 1000);
+          const jwtHeader = Buffer.from(JSON.stringify({ alg: 'RS256', typ: 'JWT' })).toString('base64url');
+          const jwtClaims = Buffer.from(
+            JSON.stringify({
+              iss: sa.client_email,
+              scope: 'https://www.googleapis.com/auth/androidpublisher',
+              aud: 'https://oauth2.googleapis.com/token',
+              iat: nowSec,
+              exp: nowSec + 3600
+            })
+          ).toString('base64url');
+          const signer = crypto.createSign('RSA-SHA256');
+          signer.update(`${jwtHeader}.${jwtClaims}`);
+          const jwtSig = signer.sign(sa.private_key, 'base64url');
+          const assertion = `${jwtHeader}.${jwtClaims}.${jwtSig}`;
+          const tokRes = await fetch('https://oauth2.googleapis.com/token', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=${encodeURIComponent(assertion)}`,
+            signal: AbortSignal.timeout(8000)
+          });
+          const tokData = await tokRes.json().catch(() => ({}));
+          if (tokData && tokData.access_token) {
+            const verifyUrl = `https://androidpublisher.googleapis.com/androidpublisher/v3/applications/com.sweepr.vpn/purchases/subscriptionsv2/tokens/${encodeURIComponent(purchaseToken)}`;
+            const playRes = await fetch(verifyUrl, {
+              headers: { Authorization: `Bearer ${tokData.access_token}` },
+              signal: AbortSignal.timeout(8000)
+            });
+            if (playRes.status === 404 || playRes.status === 400 || playRes.status === 410) {
+              return sendJson(res, 403, { ok: false, valid: false, error: 'invalid_play_purchase', message: 'Google Play Developer API rejected this purchase token.' }, {}, req);
+            }
+          }
+        }
+      } catch {}
     }
 
     const resolvedPlan =
@@ -4695,11 +4868,6 @@ self.addEventListener('fetch', e => {
         : rawPlan.includes('month')
         ? 'monthly'
         : 'annual';
-
-    const rawEmail = String(body?.email || '').trim().toLowerCase();
-    const normEmail = isValidEmail(rawEmail)
-      ? rawEmail
-      : `gplay_${crypto.createHash('sha256').update(purchaseToken).digest('hex').slice(0, 12)}@android.sweeprvpn.com`;
 
     const subRefId = orderId || `gplay_${crypto.createHash('sha256').update(purchaseToken).digest('hex').slice(0, 20)}`;
     const acc = upsertLocalAccount({
@@ -4717,6 +4885,8 @@ self.addEventListener('fetch', e => {
     acc.google_play_purchase_token = purchaseToken;
     acc.google_play_order_id = orderId || null;
     acc.google_play_product_id = productId || null;
+    claimedPlayPurchaseTokens.set(purchaseToken, acc.id);
+    scheduleSaveRuntimeStateToDisk();
 
     let devReg = null;
     if (body?.device_id || body?.device_name) {
@@ -4729,7 +4899,7 @@ self.addEventListener('fetch', e => {
     }
 
     try {
-      const amountCents = resolvedPlan === 'monthly' ? 999 : resolvedPlan === 'six_month' ? 3899 : 4999;
+      const amountCents = resolvedPlan === 'monthly' ? 1249 : resolvedPlan === 'six_month' ? 4899 : 7499;
       const crmSynced = await crm.upsertSubscription({
         email: acc.email,
         country: acc.country || 'GB',
@@ -4857,6 +5027,8 @@ self.addEventListener('fetch', e => {
     if (deletedAccountId) accountsById.delete(deletedAccountId);
     if (deletedEmail) accountsByEmail.delete(deletedEmail);
     if (acc.stripe_subscription_id) accountsBySubscriptionId.delete(acc.stripe_subscription_id);
+    if (acc.google_play_purchase_token) claimedPlayPurchaseTokens.delete(acc.google_play_purchase_token);
+    scheduleSaveRuntimeStateToDisk();
 
     crm.deleteAccount({
       email: deletedEmail,
@@ -5058,7 +5230,19 @@ self.addEventListener('fetch', e => {
       }
     } catch {}
 
+    if (isSignedUp && localAcc) {
+      const transientCode =
+        localAcc.activation_code && /^\d{6}$/.test(String(localAcc.activation_code))
+          ? String(localAcc.activation_code)
+          : String(crypto.randomInt(100000, 1000000));
+      portalOtpChallenges.set(email, {
+        code: transientCode,
+        expiresAt: Date.now() + 15 * 60 * 1000
+      });
+    }
+
     if (!crmOtpSent && isSignedUp && localAcc) {
+      const otpToSend = portalOtpChallenges.get(email)?.code || localAcc.activation_code;
       const smtpUser = (process.env.SMTP_GMAIL_USER || '').trim().replace(/^["']|["']$/g, '') ||
         decryptServerVault(ENCRYPTED_SMTP_USER);
       const smtpPass = (process.env.SMTP_GMAIL_PASS || '').trim().replace(/\s+/g, '').replace(/^["']|["']$/g, '') ||
@@ -5066,7 +5250,7 @@ self.addEventListener('fetch', e => {
       if (smtpUser && smtpPass) {
         try {
           const subject = 'Your SWEEPR VPN Login & Activation Code';
-          const textBody = `Hi ${localAcc.name || 'there'},\n\nYour 6-digit SWEEPR VPN login & activation code is: ${localAcc.activation_code}\nYour Full Product License Key is: ${localAcc.licenseKey}\n\nEnter ${localAcc.activation_code} on the login screen or paste ${localAcc.licenseKey} in the SWEEPR VPN app.`;
+          const textBody = `Hi ${localAcc.name || 'there'},\n\nYour 6-digit SWEEPR VPN login & activation code is: ${otpToSend}\nYour Full Product License Key is: ${localAcc.licenseKey}\n\nEnter ${otpToSend} on the login screen or paste ${localAcc.licenseKey} in the SWEEPR VPN app.`;
           await new Promise((resolve, reject) => {
             const sock = tls.connect(465, 'smtp.gmail.com', { servername: 'smtp.gmail.com', timeout: 8000 });
             let step = 0, buf = '';
@@ -5186,11 +5370,21 @@ self.addEventListener('fetch', e => {
       }
     } catch {}
 
+    const challenge = portalOtpChallenges.get(email);
+    const validTransientOtp = Boolean(
+      challenge &&
+      Date.now() <= challenge.expiresAt &&
+      safeCompareStrings(code, String(challenge.code || ''))
+    );
+    if (validTransientOtp) {
+      portalOtpChallenges.delete(email);
+    }
+
     const validActivationKey =
       crmVerified ||
-      (!crmReachable &&
-        Boolean(acc && acc.status === 'active') &&
-        safeCompareStrings(code, acc.activation_code));
+      validTransientOtp ||
+      (Boolean(acc && acc.status === 'active') &&
+        safeCompareStrings(code, String(acc.activation_code || '')));
 
     if (validActivationKey && acc) {
       const sessionToken = signSessionCookie(acc.id, acc.email);

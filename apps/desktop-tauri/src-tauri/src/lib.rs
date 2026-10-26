@@ -447,8 +447,13 @@ pub fn run() {
             }
         })
         .setup(|app| {
+            let start_minimized = std::env::args().any(|a| a == "--minimized");
             if let Some(w) = app.get_webview_window("main") {
                 let _ = w.set_title("SWEEPR VPN");
+                if start_minimized {
+                    let _ = w.minimize();
+                    let _ = w.hide();
+                }
             }
             Ok(())
         })

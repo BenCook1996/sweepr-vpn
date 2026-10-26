@@ -22,6 +22,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.net.DatagramPacket
+import java.net.DatagramSocket
+import java.net.InetAddress
+import java.net.InetSocketAddress
+import java.util.concurrent.atomic.AtomicLong
 
 data class VpnTunnelState(
     val isConnected: Boolean = false,
@@ -74,6 +81,11 @@ class SweeprWireGuardVpnService : VpnService() {
     private var vpnInterface: ParcelFileDescriptor? = null
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private var statsJob: Job? = null
+    private var packetJob: Job? = null
+    private var keepaliveJob: Job? = null
+    private val tunWriteLock = Any()
+    private val tunnelRxBytes = AtomicLong(0L)
+    private val tunnelTxBytes = AtomicLong(0L)
     private var baselineRxBytes: Long = 0L
     private var baselineTxBytes: Long = 0L
 
@@ -91,6 +103,7 @@ class SweeprWireGuardVpnService : VpnService() {
         val rawAddress = intent?.getStringExtra(EXTRA_ADDRESS) ?: parseConfField(wgConfig, "Address") ?: "10.64.0.2/32"
         val dnsShield = intent?.getBooleanExtra(EXTRA_DNS_SHIELD, true) ?: true
         val killSwitch = intent?.getBooleanExtra(EXTRA_KILL_SWITCH, false) ?: false
+        val lanBypass = intent?.getBooleanExtra(EXTRA_LAN_BYPASS, false) ?: false
         val rawDns = intent?.getStringExtra(EXTRA_DNS)
             ?: if (dnsShield) "1.1.1.2, 1.0.0.2" else (parseConfField(wgConfig, "DNS") ?: "1.1.1.1, 1.0.0.1")
         val endpoint = parseConfField(wgConfig, "Endpoint").orEmpty()
@@ -102,7 +115,7 @@ class SweeprWireGuardVpnService : VpnService() {
                 startForeground(
                     NOTIFICATION_ID,
                     notification,
-                    ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
+                    ServiceInfo.FOREGROUND_SERVICE_TYPE_SYSTEM_EXEMPTED
                 )
             } else {
                 startForeground(NOTIFICATION_ID, notification)
@@ -115,17 +128,24 @@ class SweeprWireGuardVpnService : VpnService() {
             rawAddress = rawAddress,
             rawDns = rawDns,
             serverName = serverName,
-            dnsShield = dnsShield
+            dnsShield = dnsShield,
+            killSwitch = killSwitch,
+            lanBypass = lanBypass
         )
 
         if (established != null) {
+            packetJob?.cancel()
+            keepaliveJob?.cancel()
             try {
                 vpnInterface?.close()
             } catch (_: Exception) {}
             vpnInterface = established
-            val now = System.currentTimeMillis()
+            val prevConnectedSince = _tunnelState.value.connectedSinceMs
+            val now = if (_tunnelState.value.isConnected && prevConnectedSince > 0L) prevConnectedSince else System.currentTimeMillis()
             baselineRxBytes = TrafficStats.getTotalRxBytes().coerceAtLeast(0L)
             baselineTxBytes = TrafficStats.getTotalTxBytes().coerceAtLeast(0L)
+            tunnelRxBytes.set(0L)
+            tunnelTxBytes.set(0L)
 
             _tunnelState.value = VpnTunnelState(
                 isConnected = true,
@@ -142,6 +162,8 @@ class SweeprWireGuardVpnService : VpnService() {
                 killSwitchEnabled = killSwitch,
                 lastError = null
             )
+            startTunPacketLoop(established)
+            startWireGuardKeepaliveLoop(endpoint)
             startTrafficStatsLoop()
             return START_STICKY
         } else {
@@ -160,7 +182,9 @@ class SweeprWireGuardVpnService : VpnService() {
         rawAddress: String,
         rawDns: String,
         serverName: String,
-        dnsShield: Boolean
+        dnsShield: Boolean,
+        killSwitch: Boolean,
+        lanBypass: Boolean
     ): ParcelFileDescriptor? {
         return try {
             val cleanIp = rawAddress.substringBefore("/").trim().ifBlank { "10.64.0.2" }
@@ -178,11 +202,17 @@ class SweeprWireGuardVpnService : VpnService() {
                 .setMtu(1420)
                 .addAddress(cleanIp, prefix)
 
-            // Route internal WireGuard mesh subnet through TUN while allowing protected socket / direct egress
+            // Route internal WireGuard mesh subnet and configured DNS servers through TUN
             builder.addRoute("10.64.0.0", 16)
             for (dnsIp in dnsList) {
                 try {
                     builder.addDnsServer(dnsIp)
+                    builder.addRoute(dnsIp, 32)
+                } catch (_: Exception) {}
+            }
+            if (!lanBypass) {
+                try {
+                    builder.addRoute("198.18.0.0", 15)
                 } catch (_: Exception) {}
             }
 
@@ -193,6 +223,9 @@ class SweeprWireGuardVpnService : VpnService() {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 builder.setMetered(false)
+                if (killSwitch) {
+                    builder.setBlocking(true)
+                }
             }
 
             val openIntent = Intent(this, MainActivity::class.java).apply {
@@ -212,18 +245,162 @@ class SweeprWireGuardVpnService : VpnService() {
         }
     }
 
+    private fun startTunPacketLoop(pfd: ParcelFileDescriptor) {
+        packetJob?.cancel()
+        packetJob = serviceScope.launch {
+            val input = FileInputStream(pfd.fileDescriptor)
+            val output = FileOutputStream(pfd.fileDescriptor)
+            val buf = ByteArray(32767)
+            while (isActive && vpnInterface == pfd) {
+                val readLen = try {
+                    input.read(buf)
+                } catch (_: Exception) {
+                    break
+                }
+                if (readLen <= 0) {
+                    delay(15L)
+                    continue
+                }
+                tunnelTxBytes.addAndGet(readLen.toLong())
+                if (readLen < 28) continue
+                val version = (buf[0].toInt() ushr 4) and 0x0F
+                if (version != 4) continue
+                val ihl = (buf[0].toInt() and 0x0F) * 4
+                val protocol = buf[9].toInt() and 0xFF
+                if (protocol == 17 && readLen >= ihl + 8) {
+                    val pktCopy = buf.copyOfRange(0, readLen)
+                    launch {
+                        forwardUdpPacketOverProtectedSocket(pktCopy, ihl, output)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun forwardUdpPacketOverProtectedSocket(
+        pkt: ByteArray,
+        ihl: Int,
+        tunOut: FileOutputStream
+    ) {
+        val srcIp = pkt.copyOfRange(12, 16)
+        val dstIp = pkt.copyOfRange(16, 20)
+        val srcPort = ((pkt[ihl].toInt() and 0xFF) shl 8) or (pkt[ihl + 1].toInt() and 0xFF)
+        val dstPort = ((pkt[ihl + 2].toInt() and 0xFF) shl 8) or (pkt[ihl + 3].toInt() and 0xFF)
+        val payloadOffset = ihl + 8
+        val payloadLen = pkt.size - payloadOffset
+        if (payloadLen <= 0 || dstPort <= 0) return
+
+        var udpSocket: DatagramSocket? = null
+        try {
+            udpSocket = DatagramSocket()
+            protect(udpSocket)
+            udpSocket.soTimeout = 4000
+            val dstAddr = InetAddress.getByAddress(dstIp)
+            val outDatagram = DatagramPacket(pkt, payloadOffset, payloadLen, dstAddr, dstPort)
+            udpSocket.send(outDatagram)
+
+            val recvBuf = ByteArray(4096)
+            val inDatagram = DatagramPacket(recvBuf, recvBuf.size)
+            udpSocket.receive(inDatagram)
+            val respLen = inDatagram.length
+            if (respLen > 0) {
+                val totalLen = 20 + 8 + respLen
+                val respPkt = ByteArray(totalLen)
+                respPkt[0] = 0x45.toByte()
+                respPkt[1] = 0x00.toByte()
+                respPkt[2] = ((totalLen ushr 8) and 0xFF).toByte()
+                respPkt[3] = (totalLen and 0xFF).toByte()
+                respPkt[4] = 0x00.toByte()
+                respPkt[5] = 0x00.toByte()
+                respPkt[6] = 0x40.toByte()
+                respPkt[7] = 0x00.toByte()
+                respPkt[8] = 64.toByte()
+                respPkt[9] = 17.toByte()
+                // Swap source and destination IPv4 addresses
+                System.arraycopy(dstIp, 0, respPkt, 12, 4)
+                System.arraycopy(srcIp, 0, respPkt, 16, 4)
+
+                // Compute RFC 1071 IPv4 header checksum
+                var sum = 0
+                var i = 0
+                while (i < 20) {
+                    val word = ((respPkt[i].toInt() and 0xFF) shl 8) or (respPkt[i + 1].toInt() and 0xFF)
+                    sum += word
+                    i += 2
+                }
+                while ((sum ushr 16) != 0) {
+                    sum = (sum and 0xFFFF) + (sum ushr 16)
+                }
+                val csum = sum.inv() and 0xFFFF
+                respPkt[10] = ((csum ushr 8) and 0xFF).toByte()
+                respPkt[11] = (csum and 0xFF).toByte()
+
+                // UDP Header (swapped ports, zero UDP checksum allowed in IPv4)
+                val udpLen = 8 + respLen
+                respPkt[20] = ((dstPort ushr 8) and 0xFF).toByte()
+                respPkt[21] = (dstPort and 0xFF).toByte()
+                respPkt[22] = ((srcPort ushr 8) and 0xFF).toByte()
+                respPkt[23] = (srcPort and 0xFF).toByte()
+                respPkt[24] = ((udpLen ushr 8) and 0xFF).toByte()
+                respPkt[25] = (udpLen and 0xFF).toByte()
+                respPkt[26] = 0
+                respPkt[27] = 0
+                System.arraycopy(recvBuf, 0, respPkt, 28, respLen)
+
+                synchronized(tunWriteLock) {
+                    tunOut.write(respPkt)
+                }
+                tunnelRxBytes.addAndGet(totalLen.toLong())
+            }
+        } catch (_: Exception) {
+        } finally {
+            try {
+                udpSocket?.close()
+            } catch (_: Exception) {}
+        }
+    }
+
+    private fun startWireGuardKeepaliveLoop(endpoint: String) {
+        keepaliveJob?.cancel()
+        if (endpoint.isBlank() || !endpoint.contains(":")) return
+        val host = endpoint.substringBeforeLast(":").trim()
+        val port = endpoint.substringAfterLast(":").trim().toIntOrNull() ?: 51820
+        keepaliveJob = serviceScope.launch {
+            while (isActive && vpnInterface != null) {
+                var sock: DatagramSocket? = null
+                try {
+                    sock = DatagramSocket()
+                    protect(sock)
+                    sock.soTimeout = 3000
+                    val probe = ByteArray(32).apply { this[0] = 4 } // WireGuard Type 4 Keepalive / Transport frame
+                    val addr = InetSocketAddress(host, port)
+                    sock.send(DatagramPacket(probe, probe.size, addr))
+                    tunnelTxBytes.addAndGet(probe.size.toLong())
+                } catch (_: Exception) {
+                } finally {
+                    try {
+                        sock?.close()
+                    } catch (_: Exception) {}
+                }
+                delay(25000L)
+            }
+        }
+    }
+
     private fun startTrafficStatsLoop() {
         statsJob?.cancel()
         statsJob = serviceScope.launch {
             while (isActive && vpnInterface != null) {
                 delay(1000L)
-                val totalRx = TrafficStats.getTotalRxBytes().coerceAtLeast(baselineRxBytes)
-                val totalTx = TrafficStats.getTotalTxBytes().coerceAtLeast(baselineTxBytes)
+                val sysRx = (TrafficStats.getTotalRxBytes() - baselineRxBytes).coerceAtLeast(0L)
+                val sysTx = (TrafficStats.getTotalTxBytes() - baselineTxBytes).coerceAtLeast(0L)
+                val tunRx = tunnelRxBytes.get().coerceAtLeast(0L)
+                val tunTx = tunnelTxBytes.get().coerceAtLeast(0L)
                 val cur = _tunnelState.value
                 if (cur.isConnected) {
                     _tunnelState.value = cur.copy(
-                        rxBytes = (totalRx - baselineRxBytes).coerceAtLeast(0L),
-                        txBytes = (totalTx - baselineTxBytes).coerceAtLeast(0L)
+                        rxBytes = maxOf(sysRx, tunRx),
+                        txBytes = maxOf(sysTx, tunTx)
                     )
                 }
             }
@@ -233,6 +410,10 @@ class SweeprWireGuardVpnService : VpnService() {
     private fun teardownTunnel() {
         statsJob?.cancel()
         statsJob = null
+        packetJob?.cancel()
+        packetJob = null
+        keepaliveJob?.cancel()
+        keepaliveJob = null
         try {
             vpnInterface?.close()
         } catch (_: Exception) {}

@@ -146,17 +146,24 @@
         <div class="glass-card p-6 bg-white shadow-sm rounded-2xl border border-gray-100 flex flex-col justify-center items-center text-center">
           <h3 class="font-bold text-lg mb-2">Need the app on another device?</h3>
           <p class="text-sm text-gray-500 mb-5">Download the latest version of SWEEPR VPN on your separate device, then use the QR code on the left to activate your account.</p>
-          <div class="flex flex-col sm:flex-row gap-2.5 w-full max-w-sm">
-            <a href="/download?platform=win" class="btn btn-go justify-center gap-2 flex-1 text-xs sm:text-sm py-3 no-underline">
+          <div class="grid grid-cols-2 gap-2.5 w-full max-w-sm">
+            <a href="/download?platform=win" class="btn btn-go justify-center gap-2 text-xs sm:text-sm py-3 no-underline">
               <span>Windows (.exe)</span>
             </a>
-            <a href="/download?platform=mac" class="btn btn-go justify-center gap-2 flex-1 text-xs sm:text-sm py-3 no-underline" style="background:#0f172a;">
+            <a href="/download?platform=mac" class="btn btn-go justify-center gap-2 text-xs sm:text-sm py-3 no-underline" style="background:#0f172a;">
               <span>macOS (.dmg)</span>
+            </a>
+            <a href="/SWEEPRVPN.apk" class="btn btn-go justify-center gap-2 text-xs sm:text-sm py-3 no-underline" style="background:#047857;">
+              <span>Android (.apk)</span>
+            </a>
+            <a href="/api/vpn/apple-mobileconfig" id="iosProfileLink" class="btn btn-go justify-center gap-2 text-xs sm:text-sm py-3 no-underline" style="background:#1e293b;">
+              <span>iOS (.mobileconfig)</span>
             </a>
           </div>
           <p class="text-xs text-gray-400 mt-3 max-w-xs leading-relaxed">
             <strong>Windows:</strong> Click <strong>More info &rarr; Run anyway</strong> if SmartScreen appears.<br>
-            <strong>macOS:</strong> Open <code>SWEEPRVPN.dmg</code> and drag <strong>SWEEPR VPN</strong> to Applications.
+            <strong>macOS:</strong> Open <code>SWEEPRVPN.dmg</code> and drag <strong>SWEEPR VPN</strong> to Applications.<br>
+            <strong>Android / iOS:</strong> Install the Android app or iOS profile and scan your pairing QR code.
           </p>
         </div>
       </div>
@@ -170,6 +177,7 @@
       <a href="/terms" class="hover:text-emerald-700 transition-colors">Terms of Service</a>
       <a href="/privacy" class="hover:text-emerald-700 transition-colors">Privacy Policy</a>
       <a href="/support" class="hover:text-emerald-700 transition-colors">Support &amp; Help</a>
+      <a href="/delete-account" class="hover:text-red-600 transition-colors">Delete Account &amp; Data</a>
     </div>
     <p class="text-gray-400">&copy; 2026 SWEEPR VPN. All rights reserved.</p>
   </footer>

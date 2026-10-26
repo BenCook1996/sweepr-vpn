@@ -28,6 +28,7 @@ pub enum DeviceKind {
     Extender,
     Windows,
     Macos,
+    Linux,
     Iphone,
     Android,
     Computer,
@@ -126,14 +127,57 @@ impl LocalNet {
     }
 }
 
+fn is_tunnel_or_virtual_iface(name: &str, ip: Ipv4Addr) -> bool {
+    let lower = name.to_ascii_lowercase();
+    let octets = ip.octets();
+    if ip.is_loopback() || (octets[0] == 10 && octets[1] == 64) || (octets[0] == 169 && octets[1] == 254) {
+        return true;
+    }
+    lower.contains("sweepr")
+        || lower.starts_with("utun")
+        || lower.starts_with("wg")
+        || lower.starts_with("tun")
+        || lower.starts_with("tap")
+        || lower.starts_with("loopback")
+}
+
+fn is_private_lan_ipv4(ip: Ipv4Addr) -> bool {
+    let o = ip.octets();
+    if o[0] == 10 && o[1] == 64 {
+        return false; // Exclude CGNAT / WireGuard 10.64.0.0/16 mesh
+    }
+    (o[0] == 192 && o[1] == 168)
+        || o[0] == 10
+        || (o[0] == 172 && (16..=31).contains(&o[1]))
+}
+
 fn detect_local_net() -> Result<LocalNet, String> {
     if let Ok(iface) = netdev::get_default_interface() {
         if let Some(v4) = iface.ipv4.first() {
-            let gateway = iface.gateway.as_ref().and_then(|g| g.ipv4.first().copied());
-            let mac = iface.mac_addr.map(|m| neighbours::normalise_mac(&m.to_string())).flatten();
-            return Ok(LocalNet { ip: v4.addr(), prefix: v4.prefix_len(), gateway, mac });
+            let ip = v4.addr();
+            if !is_tunnel_or_virtual_iface(&iface.name, ip) && is_private_lan_ipv4(ip) {
+                let gateway = iface.gateway.as_ref().and_then(|g| g.ipv4.first().copied());
+                let mac = iface.mac_addr.and_then(|m| neighbours::normalise_mac(&m.to_string()));
+                return Ok(LocalNet { ip, prefix: v4.prefix_len(), gateway, mac });
+            }
         }
     }
+
+    // Iterate physical interfaces to find active LAN IPv4 interface even when VPN tunnel is active
+    for iface in netdev::get_interfaces() {
+        if iface.is_loopback() {
+            continue;
+        }
+        for v4 in &iface.ipv4 {
+            let ip = v4.addr();
+            if !is_tunnel_or_virtual_iface(&iface.name, ip) && is_private_lan_ipv4(ip) {
+                let gateway = iface.gateway.as_ref().and_then(|g| g.ipv4.first().copied());
+                let mac = iface.mac_addr.and_then(|m| neighbours::normalise_mac(&m.to_string()));
+                return Ok(LocalNet { ip, prefix: v4.prefix_len(), gateway, mac });
+            }
+        }
+    }
+
     // Fallback: find the outgoing address without sending anything.
     let sock = std::net::UdpSocket::bind("0.0.0.0:0").map_err(|e| e.to_string())?;
     sock.connect("1.1.1.1:80").map_err(|e| e.to_string())?;
@@ -188,6 +232,8 @@ pub fn scan_network(opts: ScanOptions) -> Result<ScanReport, String> {
     let self_name = dns_lookup::get_hostname().ok().map(|h| pretty_host(&h)).filter(|s| !s.is_empty());
     let (self_os_name, self_os_kind) = if cfg!(target_os = "macos") {
         ("macOS Desktop", DeviceKind::Macos)
+    } else if cfg!(target_os = "linux") {
+        ("Linux Desktop", DeviceKind::Linux)
     } else {
         ("Windows Desktop", DeviceKind::Windows)
     };
@@ -285,6 +331,7 @@ fn build_device(ip: Ipv4Addr, mac: &str, h: &Hints, is_router: bool, shared_mac:
         (None, _) => match (&kind, &vendor) {
             (DeviceKind::Windows, _) => "Windows Desktop".into(),
             (DeviceKind::Macos, _) => "macOS Desktop".into(),
+            (DeviceKind::Linux, _) => "Linux Desktop".into(),
             (DeviceKind::Iphone, _) => "iPhone".into(),
             (DeviceKind::Android, _) => "Android Mobile Device".into(),
             (DeviceKind::Private, _) => "iPhone".into(),
@@ -356,10 +403,10 @@ fn classify(s: &str, mac: &str, has_netbios: bool, anonymous_private: bool) -> D
 }
 
 fn kind_noun(k: &DeviceKind) -> &'static str {
-    match k { DeviceKind::Router => "Router", DeviceKind::Extender => "Wi-Fi Extender", DeviceKind::Windows => "Desktop", DeviceKind::Macos => "Desktop", DeviceKind::Iphone => "iPhone", DeviceKind::Android => "Mobile Device", DeviceKind::Computer => "Desktop", DeviceKind::Tv => "Smart TV", DeviceKind::Speaker => "Speaker", DeviceKind::Printer => "Printer", DeviceKind::Camera => "Camera", DeviceKind::Console => "Games Console", DeviceKind::SmartHome => "Smart Home Device", DeviceKind::Private => "Mobile Device", DeviceKind::Other => "Desktop" }
+    match k { DeviceKind::Router => "Router", DeviceKind::Extender => "Wi-Fi Extender", DeviceKind::Windows => "Desktop", DeviceKind::Macos => "Desktop", DeviceKind::Linux => "Desktop", DeviceKind::Iphone => "iPhone", DeviceKind::Android => "Mobile Device", DeviceKind::Computer => "Desktop", DeviceKind::Tv => "Smart TV", DeviceKind::Speaker => "Speaker", DeviceKind::Printer => "Printer", DeviceKind::Camera => "Camera", DeviceKind::Console => "Games Console", DeviceKind::SmartHome => "Smart Home Device", DeviceKind::Private => "Mobile Device", DeviceKind::Other => "Desktop" }
 }
 fn kind_label(k: &DeviceKind) -> &'static str {
-    match k { DeviceKind::Router => "Home Wi-Fi Router", DeviceKind::Extender => "Wi-Fi Extender", DeviceKind::Windows => "Windows Desktop", DeviceKind::Macos => "macOS Desktop", DeviceKind::Iphone => "iPhone", DeviceKind::Android => "Android Mobile Device", DeviceKind::Computer => "Windows Desktop", DeviceKind::Tv => "Smart TV", DeviceKind::Speaker => "Speaker", DeviceKind::Printer => "Printer", DeviceKind::Camera => "Camera", DeviceKind::Console => "Games Console", DeviceKind::SmartHome => "Smart Home Device", DeviceKind::Private => "iPhone", DeviceKind::Other => "Windows Desktop" }
+    match k { DeviceKind::Router => "Home Wi-Fi Router", DeviceKind::Extender => "Wi-Fi Extender", DeviceKind::Windows => "Windows Desktop", DeviceKind::Macos => "macOS Desktop", DeviceKind::Linux => "Linux Desktop", DeviceKind::Iphone => "iPhone", DeviceKind::Android => "Android Mobile Device", DeviceKind::Computer => "Windows Desktop", DeviceKind::Tv => "Smart TV", DeviceKind::Speaker => "Speaker", DeviceKind::Printer => "Printer", DeviceKind::Camera => "Camera", DeviceKind::Console => "Games Console", DeviceKind::SmartHome => "Smart Home Device", DeviceKind::Private => "iPhone", DeviceKind::Other => "Windows Desktop" }
 }
 
 fn useful_name(n: &str) -> bool {
