@@ -186,16 +186,31 @@ function loadTargetItemsFromSitemap() {
   });
 }
 
-let cachedTelegraphToken = null;
+const tokenPool = [];
+let tokenIdx = 0;
 async function getTelegraphToken() {
-  if (cachedTelegraphToken) return cachedTelegraphToken;
-  const accRes = await fetch(
-    'https://api.telegra.ph/createAccount?short_name=SWEEPRVPN&author_name=SWEEPR+VPN+Security+Lab&author_url=https://sweeprvpn.com',
-    { signal: AbortSignal.timeout(15000) }
-  );
-  const acc = await accRes.json();
-  cachedTelegraphToken = acc?.result?.access_token;
-  return cachedTelegraphToken;
+  if (tokenPool.length >= 8) {
+    const token = tokenPool[tokenIdx % tokenPool.length];
+    tokenIdx++;
+    return token;
+  }
+  try {
+    const accRes = await fetch(
+      `https://api.telegra.ph/createAccount?short_name=SWEEPR_${tokenPool.length}_${Date.now().toString().slice(-4)}&author_name=SWEEPR+VPN+Security+Lab&author_url=https://sweeprvpn.com`,
+      { signal: AbortSignal.timeout(10000) }
+    );
+    const acc = await accRes.json();
+    if (acc?.result?.access_token) {
+      tokenPool.push(acc.result.access_token);
+      return acc.result.access_token;
+    }
+  } catch {}
+  if (tokenPool.length > 0) {
+    const token = tokenPool[tokenIdx % tokenPool.length];
+    tokenIdx++;
+    return token;
+  }
+  throw new Error('Telegraph token error');
 }
 
 async function publishTelegraph(item, lang, runTag) {
@@ -244,14 +259,13 @@ async function publishTelegraph(item, lang, runTag) {
     signal: AbortSignal.timeout(15000)
   });
   let j = await r.json();
-  if (!j.ok) {
-    cachedTelegraphToken = null;
-    token = await getTelegraphToken();
+  if (!j.ok || !j.result?.url) {
+    const freshToken = await getTelegraphToken();
     r = await fetch('https://api.telegra.ph/createPage', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        access_token: token,
+        access_token: freshToken,
         title,
         author_name: 'SWEEPR VPN Security Lab',
         author_url: 'https://sweeprvpn.com',
@@ -583,9 +597,24 @@ async function runVpnDrip(targetCount = 300) {
     }
   }
 
+  // Probe DPaste reachability (if blocked by Cloudflare challenge, route through Telegraph DR 89)
+  let dpasteAvailable = false;
+  try {
+    const probe = await fetch('https://dpaste.org/api/', {
+      method: 'POST',
+      body: new URLSearchParams({ content: 'SWEEPR VPN Probe', format: 'url' }),
+      signal: AbortSignal.timeout(4000)
+    });
+    const t = await probe.text();
+    dpasteAvailable = probe.ok && t.trim().startsWith('https://dpaste.org/');
+  } catch {
+    dpasteAvailable = false;
+  }
+  console.log(`[DPaste API Probe] Reachability: ${dpasteAvailable ? 'AVAILABLE' : 'BLOCKED/CHALLENGE (routing via Telegraph DR 89)'}`);
+  const platforms = dpasteAvailable ? ['telegra.ph', 'dpaste.org'] : ['telegra.ph'];
+
   // Build deduplicated queue of unposted (platform, lang, targetItem) combinations checked against live CRM
   const unpostedQueue = [];
-  const platforms = ['telegra.ph', 'dpaste.org'];
   for (const item of items) {
     for (const lang of LANGUAGES) {
       for (const platform of platforms) {
@@ -807,6 +836,16 @@ async function runVpnDrip(targetCount = 300) {
       );
       execFileSync('git', ['push', 'origin', 'main'], { cwd: VPN_ROOT, stdio: 'inherit' });
       console.log('[6-Hourly Workflow] Committed and pushed to GitHub (origin/main) -> Railway auto-deploy triggered.');
+
+      try {
+        const cleanerRoot = 'c:/Users/Benjamin/Downloads/desktop_cleaner';
+        execFileSync('git', ['add', 'server/src/outreach-seed.json'], { cwd: cleanerRoot, stdio: 'inherit' });
+        execFileSync('git', ['commit', '-m', `chore(seo): sync ${completed} syndication links & indexing queue`], { cwd: cleanerRoot, stdio: 'inherit' });
+        execFileSync('git', ['push', 'origin', 'main'], { cwd: cleanerRoot, stdio: 'inherit' });
+        console.log('[6-Hourly Workflow] desktop_cleaner seed committed and pushed to GitHub.');
+      } catch (cleanerErr) {
+        // skipped if clean
+      }
     } catch (gitErr) {
       console.warn('[6-Hourly Workflow] Git auto-push skipped or failed:', gitErr?.message || gitErr);
     }
