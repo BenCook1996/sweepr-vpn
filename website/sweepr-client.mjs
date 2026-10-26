@@ -178,6 +178,31 @@ export class SweeprCrmClient {
     return { _httpStatus: res.status, ...data };
   }
 
+  async upsertSubscription(params = {}) {
+    return this.syncSubscription(params);
+  }
+
+  async deleteAccount(params = {}) {
+    try {
+      const res = await fetch(`${this.crmUrl}/v1/account/delete`, {
+        method: 'POST',
+        headers: this.headers(),
+        signal: AbortSignal.timeout(6000),
+        body: JSON.stringify({
+          project_id: this.projectId,
+          email: params.email,
+          account_id: params.accountId ?? params.account_id,
+          key: params.key ?? params.licenseKey ?? params.license_key,
+          activation_code: params.activationCode ?? params.activation_code,
+          reason: params.reason || 'user_requested',
+        }),
+      });
+      return this._parseCrmRes(res);
+    } catch {
+      return { ok: false };
+    }
+  }
+
   async reportAffiliateClick({ code, landingPath = '/', referrer = null, country = null } = {}) {
     if (!code) return { ok: false };
     try {

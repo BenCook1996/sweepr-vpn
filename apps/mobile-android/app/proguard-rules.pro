@@ -1,0 +1,3 @@
+-keep class com.sweepr.vpn.** { *; }
+-keep class com.android.billingclient.** { *; }
+-dontwarn com.android.billingclient.**

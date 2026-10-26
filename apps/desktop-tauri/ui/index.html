@@ -519,6 +519,15 @@
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
           <button class="btn-go" style="flex:1;font-size:14px;padding:12px" onclick="openActivate()" id="accBtn">Enter license key or upgrade</button>
+          <button class="btn-soft" style="font-size:13px;padding:10px 14px" onclick="openDesktopPairOutQr()" id="accPairBtn"><svg width="15" height="15"><use href="#i-qr"/></svg>Link Phone via QR</button>
+        </div>
+        <div id="accPairDrawer" class="hidden" style="margin-top:12px;padding:14px;border-radius:12px;background:var(--card2);border:1px solid var(--line);text-align:center">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <span class="t" style="font-size:13px">Link Phone or Another Device via QR</span>
+            <button type="button" onclick="closeDesktopPairOutQr()" style="font-size:15px;color:var(--muted);padding:2px 6px" aria-label="Close QR drawer">✕</button>
+          </div>
+          <div class="qr-box" id="accPairQrBox" style="margin:6px auto"></div>
+          <div class="s" id="accPairTimer" style="margin-top:6px;font-weight:700"></div>
         </div>
         <div id="accDevicesBar" class="hidden" style="margin-top:12px;padding:10px 12px;border-radius:12px;background:var(--card2);border:1px solid var(--line)">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
@@ -641,8 +650,13 @@
         <button type="button" class="btn-soft" onclick="pasteIntoKeyBox()" title="Paste from clipboard" style="padding:8px 11px;min-height:38px;white-space:nowrap;font-weight:800">Paste</button>
         <button class="btn-activate-key" id="mActivateKeyBtn" onclick="activateKeyOnly()">Activate Key</button>
       </div>
-      <div style="display:flex;align-items:center;justify-content:flex-end;gap:8px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
+        <button type="button" onclick="toggleDesktopReverseQr()" style="font-size:11.5px;font-weight:800;color:var(--accent);display:inline-flex;align-items:center;gap:5px"><svg width="13" height="13"><use href="#i-qr"/></svg>Sign in with Phone QR ›</button>
         <button type="button" onclick="toggleForgotKeyBox()" style="font-size:11.5px;font-weight:800;color:var(--accent)">Forgot key? Email it ›</button>
+      </div>
+      <div id="mReverseQrBox" class="hidden" style="background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center">
+        <div id="mReverseQrSvg" class="qr-box" style="margin:0 auto"></div>
+        <div id="mReverseQrTimer" class="s" style="margin-top:8px;font-weight:700"></div>
       </div>
       <div id="mForgotBox" class="hidden" style="background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;gap:8px;align-items:center">
         <input class="input" id="mForgotEmail" type="email" placeholder="Enter your purchase email…" style="padding:8px 11px;font-size:12.5px" onkeydown="if(event.key==='Enter')resendLostLicenseKey()" />
@@ -1409,7 +1423,14 @@
             const match = SERVERS.find(s => s.code === live.code);
             if (match) {
               match.online = live.online !== false;
-              if (match.code === 'UK-LON-01') match.ping = Math.min(25, rtt);
+              const livePing = Number(live.probe_ms || live.pingMs || live.ping || 0);
+              if (livePing > 0) {
+                match.ping = Math.round(livePing);
+                match.pingMs = Math.round(livePing);
+              } else if (match.code === 'UK-LON-01') {
+                match.ping = Math.min(25, rtt);
+                match.pingMs = match.ping;
+              }
             }
           });
           renderAll();

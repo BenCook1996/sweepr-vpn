@@ -452,6 +452,44 @@ fn call_connect_api(
         .map_err(|_| "Unexpected response from SWEEPR server.".into())
 }
 
+pub fn default_device_id() -> String {
+    if let Ok(st) = load_or_create_state() {
+        let alnum: String = st
+            .public_key
+            .chars()
+            .filter(|c| c.is_ascii_alphanumeric())
+            .take(12)
+            .collect();
+        if !alnum.is_empty() {
+            return format!("dev_vpn_{}", alnum.to_ascii_lowercase());
+        }
+    }
+    format!("dev_vpn_{}", std::env::consts::OS)
+}
+
+pub fn default_device_name() -> String {
+    let raw_host = std::env::var("COMPUTERNAME")
+        .or_else(|_| std::env::var("HOSTNAME"))
+        .unwrap_or_default();
+    let clean_host: String = raw_host
+        .trim()
+        .chars()
+        .filter(|c| c.is_ascii_alphanumeric() || *c == '-' || *c == '_')
+        .take(32)
+        .collect();
+    let os_label = match std::env::consts::OS {
+        "windows" => "Windows PC",
+        "macos" => "Mac",
+        "linux" => "Linux PC",
+        other => other,
+    };
+    if clean_host.is_empty() {
+        format!("SWEEPR {os_label}")
+    } else {
+        format!("SWEEPR {os_label} ({clean_host})")
+    }
+}
+
 fn call_activate_api(
     api_base: &str,
     email: &str,
@@ -463,6 +501,8 @@ fn call_activate_api(
         "key": code.trim(),
         "activation_code": code.trim(),
         "otp": code.trim(),
+        "device_id": default_device_id(),
+        "device_name": default_device_name(),
         "os": std::env::consts::OS,
         "app_version": "2.5.0"
     })
@@ -978,7 +1018,13 @@ pub fn connect(req: ConnectRequest) -> Result<TunnelStatus, String> {
         .trim()
         .to_string();
     let address = resp.address.unwrap_or_else(|| "10.64.0.2/32".into()).trim().to_string();
-    let dns = "1.1.1.1, 1.0.0.1".to_string();
+    let dns = resp
+        .dns
+        .as_deref()
+        .map(str::trim)
+        .filter(|s| !s.is_empty())
+        .unwrap_or("1.1.1.1, 1.0.0.1")
+        .to_string();
     let lan_bypass = req.lan_bypass.unwrap_or(false);
     let allowed_ips = if lan_bypass {
         "1.0.0.0/8, 2.0.0.0/7, 4.0.0.0/6, 8.0.0.0/7, 10.64.0.0/16, 11.0.0.0/8, 12.0.0.0/6, 16.0.0.0/4, 32.0.0.0/3, 64.0.0.0/2, 128.0.0.0/3, 160.0.0.0/5, 168.0.0.0/6, 172.0.0.0/12, 172.32.0.0/11, 172.64.0.0/10, 172.128.0.0/9, 173.0.0.0/8, 174.0.0.0/7, 176.0.0.0/4, 192.0.0.0/9, 192.128.0.0/11, 192.160.0.0/13, 192.169.0.0/16, 192.170.0.0/15, 192.172.0.0/14, 192.176.0.0/12, 192.192.0.0/10, 193.0.0.0/8, 194.0.0.0/7, 196.0.0.0/6, 200.0.0.0/5, 208.0.0.0/4".to_string()

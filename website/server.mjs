@@ -1318,6 +1318,7 @@ async function resolveVpnLicence(code, email, deviceId) {
   }
 
   let key = null;
+  let resolvedAcc = local || null;
 
   try {
     const data = await crm.activateDevice({
@@ -1330,7 +1331,8 @@ async function resolveVpnLicence(code, email, deviceId) {
     });
 
     if (data && data._httpStatus && data._httpStatus < 500) {
-      syncLocalCacheFromCrm(data, normEmail, cleanCode);
+      const synced = syncLocalCacheFromCrm(data, normEmail, cleanCode);
+      if (synced) resolvedAcc = synced;
       if (data.valid && (!normEmail || !data.email || String(data.email).toLowerCase() === normEmail || String(data.email).includes('*'))) {
         key = data.licenseKey || data.license_key || data.account_id || cleanCode;
       }
@@ -1341,21 +1343,29 @@ async function resolveVpnLicence(code, email, deviceId) {
     try {
       const verifyData = await crm.verifyKey(cleanCode, normEmail || undefined);
       if (verifyData && verifyData.valid) {
-        syncLocalCacheFromCrm(verifyData, normEmail, cleanCode);
+        const synced = syncLocalCacheFromCrm(verifyData, normEmail, cleanCode);
+        if (synced) resolvedAcc = synced;
         key = verifyData.licenseKey || verifyData.license_key || verifyData.account_id || cleanCode;
       }
     } catch {}
   }
 
+  const localAfter = licenses.get(cleanCode) || licenses.get(cleanCode.toUpperCase()) || resolvedAcc || local || (normEmail ? accountsByEmail.get(normEmail) : null);
   if (!key) {
-    const localAfter = licenses.get(cleanCode) || licenses.get(cleanCode.toUpperCase()) || local;
     if (localAfter && localAfter.status === 'active' && (!normEmail || localAfter.email === normEmail)) {
       key = localAfter.licenseKey || localAfter.id;
+      resolvedAcc = localAfter;
     }
+  } else if (localAfter && localAfter.status === 'active') {
+    resolvedAcc = localAfter;
   }
 
   if (!key) return null;
-  return { id: computeVpnLicenceHash(cleanDevId ? `${key}:${cleanDevId}` : key) };
+  return {
+    id: computeVpnLicenceHash(cleanDevId ? `${key}:${cleanDevId}` : key),
+    account: resolvedAcc,
+    key
+  };
 }
 
 function signFallbackEd25519LicenseToken(acc, deviceId = 'vpn_desktop') {
@@ -3856,9 +3866,24 @@ self.addEventListener('fetch', e => {
     if (sess) {
       acc = accountsById.get(sess.accountId) || (sess.email ? accountsByEmail.get(sess.email) : null);
     }
+    if (!acc) {
+      const bearerKey = String(req.headers.authorization || '').replace(/^Bearer\s+/i, '').trim();
+      const rawKey = String(body?.key || body?.code || body?.license_key || body?.activation_code || bearerKey || '').trim();
+      const normEmail = body?.email ? String(body.email).trim().toLowerCase() : '';
+      if (rawKey) {
+        const resolved = await resolveVpnLicence(rawKey, normEmail, body?.device_id);
+        const cleanKey = rawKey.replace(/\s+/g, '').toUpperCase();
+        acc =
+          resolved?.account ||
+          licenses.get(cleanKey) ||
+          licenses.get(rawKey) ||
+          (normEmail ? accountsByEmail.get(normEmail) : null) ||
+          null;
+      }
+    }
 
     if (!acc || acc.status !== 'active') {
-      return sendJson(res, 401, { ok: false, error: 'unauthorized', message: 'Please log in to your Customer Portal on the website to generate a QR code for activating a separate device.' }, {}, req);
+      return sendJson(res, 401, { ok: false, error: 'unauthorized', message: 'Please enter a valid SWEEPR VPN license key or log in to your Customer Portal to generate a pairing QR code.' }, {}, req);
     }
     if (!Array.isArray(acc.devices)) acc.devices = [];
     if (acc.devices.length >= MAX_DEVICES_PER_ACCOUNT) {
@@ -4143,9 +4168,18 @@ self.addEventListener('fetch', e => {
       acc = accountsById.get(sess.accountId) || (sess.email ? accountsByEmail.get(sess.email) : null);
     }
     if (!acc) {
-      const rawKey = String(body?.key || body?.code || body?.license_key || body?.activation_code || '').replace(/\s+/g, '').toUpperCase();
+      const bearerKey = String(req.headers.authorization || '').replace(/^Bearer\s+/i, '').trim();
+      const rawKey = String(body?.key || body?.code || body?.license_key || body?.activation_code || bearerKey || '').trim();
+      const normEmail = body?.email ? String(body.email).trim().toLowerCase() : '';
       if (rawKey) {
-        acc = licenses.get(rawKey) || licenses.get(rawKey.toUpperCase()) || null;
+        const resolved = await resolveVpnLicence(rawKey, normEmail, body?.device_id);
+        const cleanKey = rawKey.replace(/\s+/g, '').toUpperCase();
+        acc =
+          resolved?.account ||
+          licenses.get(cleanKey) ||
+          licenses.get(rawKey) ||
+          (normEmail ? accountsByEmail.get(normEmail) : null) ||
+          null;
       }
     }
 
@@ -4227,8 +4261,19 @@ self.addEventListener('fetch', e => {
       acc = accountsById.get(sess.accountId) || (sess.email ? accountsByEmail.get(sess.email) : null);
     }
     if (!acc) {
-      const rawKey = String(body?.key || body?.code || body?.license_key || body?.activation_code || '').replace(/\s+/g, '').toUpperCase();
-      if (rawKey) acc = licenses.get(rawKey) || licenses.get(rawKey.toUpperCase()) || null;
+      const bearerKey = String(req.headers.authorization || '').replace(/^Bearer\s+/i, '').trim();
+      const rawKey = String(body?.key || body?.code || body?.license_key || body?.activation_code || bearerKey || '').trim();
+      const normEmail = body?.email ? String(body.email).trim().toLowerCase() : '';
+      if (rawKey) {
+        const resolved = await resolveVpnLicence(rawKey, normEmail, body?.device_id);
+        const cleanKey = rawKey.replace(/\s+/g, '').toUpperCase();
+        acc =
+          resolved?.account ||
+          licenses.get(cleanKey) ||
+          licenses.get(rawKey) ||
+          (normEmail ? accountsByEmail.get(normEmail) : null) ||
+          null;
+      }
     }
     if (!acc) {
       return sendJson(res, 401, { ok: false, error: 'unauthorized', message: 'Please sign in to manage linked devices.' }, {}, req);
@@ -4628,8 +4673,324 @@ self.addEventListener('fetch', e => {
     }
   }
 
+  // Google Play Billing Subscription Verification & Instant License Provisioning
+  if (pathname === '/api/vpn/google-play/verify' && req.method === 'POST') {
+    if (!checkRateLimit(req, 'google_play_verify', 15, 60000)) {
+      return sendJson(res, 429, { ok: false, valid: false, error: 'rate_limit_exceeded' }, {}, req);
+    }
+    const body = await readJsonBody(req);
+    if (body && body.__tooLarge) return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, {}, req);
+
+    const purchaseToken = String(body?.purchase_token || body?.purchaseToken || '').trim();
+    const productId = String(body?.product_id || body?.productId || '').trim();
+    const orderId = String(body?.order_id || body?.orderId || '').trim();
+    const rawPlan = String(body?.plan || productId || 'annual').trim().toLowerCase();
+    if (!purchaseToken || purchaseToken.length < 6) {
+      return sendJson(res, 400, { ok: false, valid: false, error: 'missing_purchase_token', message: 'Valid Google Play purchase_token is required.' }, {}, req);
+    }
+
+    const resolvedPlan =
+      rawPlan.includes('six') || rawPlan.includes('6m')
+        ? 'six_month'
+        : rawPlan.includes('month')
+        ? 'monthly'
+        : 'annual';
+
+    const rawEmail = String(body?.email || '').trim().toLowerCase();
+    const normEmail = isValidEmail(rawEmail)
+      ? rawEmail
+      : `gplay_${crypto.createHash('sha256').update(purchaseToken).digest('hex').slice(0, 12)}@android.sweeprvpn.com`;
+
+    const subRefId = orderId || `gplay_${crypto.createHash('sha256').update(purchaseToken).digest('hex').slice(0, 20)}`;
+    const acc = upsertLocalAccount({
+      email: normEmail,
+      country: 'GB',
+      subscriptionId: subRefId,
+      plan: resolvedPlan,
+      wifiRadarAddon: true,
+      status: 'active'
+    });
+
+    const durationDays = resolvedPlan === 'monthly' ? 31 : resolvedPlan === 'six_month' ? 183 : 366;
+    const expiresAtMs = Date.now() + durationDays * 86400 * 1000;
+    acc.current_period_end = expiresAtMs;
+    acc.google_play_purchase_token = purchaseToken;
+    acc.google_play_order_id = orderId || null;
+    acc.google_play_product_id = productId || null;
+
+    let devReg = null;
+    if (body?.device_id || body?.device_name) {
+      devReg = registerOrUpdateAccountDevice(acc, {
+        deviceId: body.device_id,
+        deviceName: body.device_name || 'Android Device',
+        os: body.os || 'android',
+        method: 'google_play'
+      });
+    }
+
+    try {
+      const amountCents = resolvedPlan === 'monthly' ? 999 : resolvedPlan === 'six_month' ? 3899 : 4999;
+      const crmSynced = await crm.upsertSubscription({
+        email: acc.email,
+        country: acc.country || 'GB',
+        plan: resolvedPlan,
+        status: 'active',
+        days: durationDays,
+        amount_cents: amountCents,
+        currency: 'gbp',
+        stripe_subscription_id: subRefId,
+        activation_code: acc.activation_code,
+        license_key: acc.licenseKey,
+        addons: ['wifi_radar'],
+        notes: `Google Play Billing (${productId || resolvedPlan}) order=${orderId || 'n/a'}`
+      });
+      if (crmSynced && crmSynced.activation_code && /^\d{6}$/.test(crmSynced.activation_code)) {
+        licenses.delete(acc.activation_code);
+        acc.activation_code = crmSynced.activation_code;
+        licenses.set(acc.activation_code, acc);
+      }
+      if (crmSynced && crmSynced.license_key) {
+        licenses.delete(acc.licenseKey);
+        acc.licenseKey = crmSynced.license_key;
+        licenses.set(acc.licenseKey, acc);
+      }
+    } catch {}
+
+    const signed = signFallbackEd25519LicenseToken(acc, devReg?.device?.id || body?.device_id || 'vpn_android');
+
+    return sendJson(
+      res,
+      200,
+      {
+        ok: true,
+        valid: true,
+        account_id: acc.id,
+        license_key: acc.licenseKey,
+        licenseKey: acc.licenseKey,
+        activation_code: acc.activation_code,
+        email: acc.email,
+        plan: acc.plan,
+        status: 'active',
+        expires_at: new Date(expiresAtMs).toISOString(),
+        wireguard_ready: true,
+        device: devReg?.device || undefined,
+        devices: Array.isArray(acc.devices) ? acc.devices : [],
+        devices_used: Array.isArray(acc.devices) ? acc.devices.length : 1,
+        device_count: Array.isArray(acc.devices) ? acc.devices.length : 1,
+        max_devices: MAX_DEVICES_PER_ACCOUNT,
+        device_limit: MAX_DEVICES_PER_ACCOUNT,
+        ...(signed ? { token: signed.token, license_token: signed.token } : {})
+      },
+      { 'Cache-Control': 'no-store' },
+      req
+    );
+  }
+
+  // Google Play Mandatory Account & Data Deletion (In-App API + Public Web URL)
+  if ((pathname === '/api/vpn/account/delete' || pathname === '/v1/account/delete') && req.method === 'POST') {
+    if (!checkRateLimit(req, 'account_delete', 10, 60000)) {
+      return sendJson(res, 429, { ok: false, error: 'rate_limit_exceeded', message: 'Too many requests. Please wait a minute.' }, {}, req);
+    }
+    const body = await readJsonBody(req);
+    if (body && body.__tooLarge) return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, {}, req);
+
+    const normEmail = String(body?.email || '').trim().toLowerCase();
+    const bearerKey = String(req.headers.authorization || '').replace(/^Bearer\s+/i, '').trim();
+    const rawKey = String(body?.key || body?.code || body?.license_key || body?.activation_code || bearerKey || '').trim();
+
+    let acc = null;
+    const sess = verifySessionCookie(req);
+    if (sess) {
+      acc = accountsById.get(sess.accountId) || (sess.email ? accountsByEmail.get(sess.email) : null);
+    }
+    if (!acc && rawKey) {
+      const resolved = await resolveVpnLicence(rawKey, normEmail, body?.device_id);
+      const cleanKey = rawKey.replace(/\s+/g, '').toUpperCase();
+      const candidate =
+        resolved?.account ||
+        licenses.get(cleanKey) ||
+        licenses.get(rawKey) ||
+        (normEmail ? accountsByEmail.get(normEmail) : null);
+      if (candidate) {
+        const keyMatches =
+          Boolean(resolved) ||
+          safeCompareStrings(cleanKey, String(candidate.licenseKey || '').toUpperCase()) ||
+          safeCompareStrings(cleanKey, String(candidate.activation_code || ''));
+        if (keyMatches && (!normEmail || candidate.email === normEmail)) {
+          acc = candidate;
+        }
+      }
+    }
+
+    if (!acc) {
+      return sendJson(
+        res,
+        401,
+        {
+          ok: false,
+          deleted: false,
+          error: 'unauthorized',
+          message: 'Please provide your registered account email and active license key or 6-digit activation code to confirm permanent account deletion.'
+        },
+        {},
+        req
+      );
+    }
+
+    const deletedEmail = acc.email;
+    const deletedAccountId = acc.id;
+    const deletedKey = acc.licenseKey;
+    const deletedCode = acc.activation_code;
+
+    if (STRIPE_SECRET_KEY && acc.stripe_subscription_id && String(acc.stripe_subscription_id).startsWith('sub_')) {
+      stripeRequest('DELETE', `subscriptions/${encodeURIComponent(acc.stripe_subscription_id)}`).catch(() => {});
+    }
+
+    await revokeLicenceOnAllNodes(acc).catch(() => {});
+
+    acc.status = 'deleted';
+    if (deletedCode) licenses.delete(deletedCode);
+    if (deletedKey) {
+      licenses.delete(deletedKey);
+      licenses.delete(deletedKey.toUpperCase());
+    }
+    if (deletedAccountId) accountsById.delete(deletedAccountId);
+    if (deletedEmail) accountsByEmail.delete(deletedEmail);
+    if (acc.stripe_subscription_id) accountsBySubscriptionId.delete(acc.stripe_subscription_id);
+
+    crm.deleteAccount({
+      email: deletedEmail,
+      account_id: deletedAccountId,
+      license_key: deletedKey,
+      activation_code: deletedCode,
+      reason: String(body?.reason || 'user_requested_deletion').slice(0, 120)
+    }).catch(() => {});
+    crm.portalCancel({ email: deletedEmail, key: deletedKey }, true).catch(() => {});
+
+    const isHttps = PUBLIC_URL.startsWith('https://') || req.headers['x-forwarded-proto'] === 'https';
+    return sendJson(
+      res,
+      200,
+      {
+        ok: true,
+        deleted: true,
+        message: 'Your SWEEPR VPN account, linked devices, and WireGuard keys have been permanently deleted.'
+      },
+      {
+        'Cache-Control': 'no-store',
+        'Set-Cookie': `sweepr_session=; Path=/; HttpOnly; SameSite=Lax${isHttps ? '; Secure' : ''}; Max-Age=0`
+      },
+      req
+    );
+  }
+
+  if ((pathname === '/delete-account' || pathname === '/account/delete') && req.method === 'GET') {
+    const sess = verifySessionCookie(req);
+    const sessAcc = sess ? (accountsById.get(sess.accountId) || (sess.email ? accountsByEmail.get(sess.email) : null)) : null;
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delete Account &amp; Data | SWEEPR VPN</title>
+  <meta name="description" content="Permanently delete your SWEEPR VPN account, linked devices, and subscription records.">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f8fafc;color:#0f172a;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+    .card{background:#fff;border:1px solid #e2e8f0;border-radius:20px;box-shadow:0 16px 40px -12px rgba(15,23,42,.08);max-width:500px;width:100%;padding:32px 26px;display:flex;flex-direction:column;gap:16px}
+    .badge{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;font-size:12px;font-weight:800;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;align-self:flex-start}
+    h1{font-size:22px;font-weight:900;letter-spacing:-.02em}
+    p,li{font-size:14px;color:#475569;line-height:1.55}
+    ul{padding-left:20px;display:flex;flex-direction:column;gap:6px}
+    .box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px}
+    label{font-size:12px;font-weight:800;color:#334155;text-transform:uppercase;letter-spacing:.04em}
+    .input{width:100%;padding:11px 14px;border:1px solid #cbd5e1;border-radius:12px;font-size:14px}
+    .btn{width:100%;padding:13px 16px;border-radius:12px;border:none;font-size:14px;font-weight:800;cursor:pointer;text-align:center;text-decoration:none}
+    .btn-danger{background:#dc2626;color:#fff;box-shadow:0 6px 18px -4px rgba(220,38,38,.35)}
+    .btn-soft{background:#f1f5f9;color:#0f172a;border:1px solid #e2e8f0}
+    .msg{font-size:13.5px;font-weight:700;display:none;padding:12px;border-radius:12px}
+    .msg.err{display:block;background:#fef2f2;color:#dc2626;border:1px solid #fecaca}
+    .msg.ok{display:block;background:#ecfdf5;color:#047857;border:1px solid #a7f3d0}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="badge">SWEEPR VPN • Data Safety &amp; Account Deletion</div>
+    <h1>Permanently Delete Your SWEEPR VPN Account</h1>
+    <p>You can permanently delete your SWEEPR VPN account and all associated personal data at any time from inside the SWEEPR VPN app (<strong>Account &rarr; Delete Account</strong>) or using the form below.</p>
+    <div class="box">
+      <label>What is deleted immediately:</label>
+      <ul>
+        <li>Your account email address, license key, and 6-digit activation code</li>
+        <li>All linked device records (up to 3 desktop/mobile slots)</li>
+        <li>All active WireGuard peer public keys across all 8 VPN server locations</li>
+        <li>Active recurring subscriptions are immediately cancelled</li>
+      </ul>
+      <p style="font-size:12.5px;color:#64748b;margin-top:4px"><strong>Zero-Logs Note:</strong> SWEEPR VPN never logs browsing history, DNS queries, traffic destination, or IP addresses.</p>
+    </div>
+    <div id="delFormWrap" class="box">
+      ${sessAcc ? `<p style="font-weight:700;color:#0f172a">Signed in as: ${escapeHtml(sessAcc.email)}</p>` : `
+      <div>
+        <label for="delEmail">Account Email Address</label>
+        <input id="delEmail" class="input" type="email" placeholder="you@example.com" required style="margin-top:5px" />
+      </div>
+      <div>
+        <label for="delKey">License Key or 6-Digit Activation Code</label>
+        <input id="delKey" class="input" type="text" placeholder="SWEEPR-VPN-XXXX-XXXX-XXXX or 6-digit code" required style="margin-top:5px;font-family:monospace;font-weight:700" />
+      </div>`}
+      <div>
+        <label for="delReason">Reason for leaving (optional)</label>
+        <input id="delReason" class="input" type="text" placeholder="Optional feedback…" style="margin-top:5px" />
+      </div>
+      <div id="delStatus" class="msg"></div>
+      <button id="delBtn" class="btn btn-danger" onclick="submitAccountDelete()">Permanently Delete My Account &amp; Data</button>
+    </div>
+    <a href="/?home=1" class="btn btn-soft">Return to SWEEPR VPN</a>
+  </div>
+  <script>
+    async function submitAccountDelete() {
+      const btn = document.getElementById('delBtn');
+      const st = document.getElementById('delStatus');
+      st.className = 'msg';
+      st.style.display = 'none';
+      const email = (document.getElementById('delEmail')?.value || '').trim();
+      const key = (document.getElementById('delKey')?.value || '').trim();
+      const reason = (document.getElementById('delReason')?.value || '').trim();
+      if (!confirm('Are you sure you want to permanently delete your SWEEPR VPN account and revoke all devices? This action cannot be undone.')) return;
+      btn.disabled = true;
+      btn.textContent = 'Deleting Account…';
+      try {
+        const r = await fetch('/api/vpn/account/delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, key, license_key: key, code: key, reason })
+        });
+        const d = await r.json().catch(() => ({}));
+        if (r.ok && d.ok && d.deleted) {
+          st.className = 'msg ok';
+          st.textContent = d.message || 'Your SWEEPR VPN account and data have been permanently deleted.';
+          btn.style.display = 'none';
+        } else {
+          st.className = 'msg err';
+          st.textContent = d.message || 'Could not verify account ownership. Please check your email and license key.';
+          btn.disabled = false;
+          btn.textContent = 'Permanently Delete My Account & Data';
+        }
+      } catch (e) {
+        st.className = 'msg err';
+        st.textContent = 'Network error. Please check your connection and try again.';
+        btn.disabled = false;
+        btn.textContent = 'Permanently Delete My Account & Data';
+      }
+    }
+  </script>
+</body>
+</html>`;
+    return sendHtml(res, 200, html, { 'Cache-Control': 'no-store' });
+  }
+
   // Customer Portal Login & OTP Verification
-  if ((pathname === '/api/portal-login' || pathname === '/v1/account/send-otp') && req.method === 'POST') {
+  if ((pathname === '/api/portal-login' || pathname === '/v1/account/send-otp' || pathname === '/api/vpn/otp/send') && req.method === 'POST') {
     if (!checkRateLimit(req, 'portal_login', 5, 60000)) {
       return sendJson(res, 429, { otpSent: false, error: 'Too many login attempts. Please wait a minute and try again.' }, {}, req);
     }
@@ -4767,7 +5128,7 @@ self.addEventListener('fetch', e => {
     return sendJson(res, 200, { ok: true, otpSent: true }, {}, req);
   }
 
-  if ((pathname === '/api/verify-otp' || pathname === '/v1/account/verify-otp') && req.method === 'POST') {
+  if ((pathname === '/api/verify-otp' || pathname === '/v1/account/verify-otp' || pathname === '/api/vpn/otp/verify') && req.method === 'POST') {
     if (!checkRateLimit(req, 'verify_otp', 5, 60000)) {
       return sendJson(res, 429, { ok: false, error: 'Too many verification attempts. Please wait a minute and try again.' }, {}, req);
     }
@@ -4833,11 +5194,25 @@ self.addEventListener('fetch', e => {
 
     if (validActivationKey && acc) {
       const sessionToken = signSessionCookie(acc.id, acc.email);
+      const signed = signFallbackEd25519LicenseToken(acc, portalDeviceId);
       const isHttps = PUBLIC_URL.startsWith('https://') || req.headers['x-forwarded-proto'] === 'https';
       return sendJson(
         res,
         200,
-        { ok: true, redirect: '/dashboard', license_key: acc.licenseKey, plan: acc.plan, status: acc.status },
+        {
+          ok: true,
+          valid: true,
+          redirect: '/dashboard',
+          email: acc.email,
+          license_key: acc.licenseKey,
+          licenseKey: acc.licenseKey,
+          activation_code: acc.activation_code,
+          plan: acc.plan,
+          status: acc.status,
+          devices_used: Array.isArray(acc.devices) ? acc.devices.length : 1,
+          max_devices: MAX_DEVICES_PER_ACCOUNT,
+          ...(signed ? { token: signed.token, license_token: signed.token } : {})
+        },
         {
           'Set-Cookie': `sweepr_session=${sessionToken}; Path=/; HttpOnly; SameSite=Lax${isHttps ? '; Secure' : ''}; Max-Age=${86400 * 30}`
         },
