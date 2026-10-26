@@ -767,11 +767,20 @@ function renderLayout({ title, description, canonicalUrl, badge, h1, lead, bodyH
   <title>${title}</title>
   <meta name="description" content="${description}" />
   <link rel="canonical" href="${canonicalUrl}" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta property="og:type" content="article" />
   <meta property="og:title" content="${title}" />
   <meta property="og:description" content="${description}" />
   <meta property="og:url" content="${canonicalUrl}" />
   <meta property="og:site_name" content="SWEEPR VPN" />
+  <meta property="og:image" content="https://sweeprvpn.com/og-image.png" />
+  <meta property="og:image:alt" content="SWEEPR VPN 10Gbps WireGuard &amp; Home Wi-Fi Radar" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="${canonicalUrl}" />
+  <meta name="twitter:title" content="${title}" />
+  <meta name="twitter:description" content="${description}" />
+  <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png" />
+  <meta name="theme-color" content="#070b14" />
   <script type="application/ld+json">${JSON.stringify(faqSchema)}</script>
   <script type="application/ld+json">${JSON.stringify(appSchema)}</script>
   <style>

@@ -826,7 +826,15 @@ async function runVpnDrip(targetCount = 300) {
     try {
       execFileSync(
         'git',
-        ['add', 'website', 'scripts/vpn-seo-drip.mjs', 'scripts/daily-seo-pagespeed-audit.mjs'],
+        [
+          'add',
+          'website',
+          'scripts/vpn-seo-drip.mjs',
+          'scripts/daily-seo-pagespeed-audit.mjs',
+          'scripts/daily-50-seo-pages.mjs',
+          'TECHNICAL_SEO_AUDIT_LOG.md',
+          'sweepr-vpn-scorecard.html'
+        ],
         { cwd: VPN_ROOT, stdio: 'inherit' }
       );
       execFileSync(
@@ -844,6 +852,16 @@ async function runVpnDrip(targetCount = 300) {
         execFileSync('git', ['push', 'origin', 'main'], { cwd: cleanerRoot, stdio: 'inherit' });
         console.log('[6-Hourly Workflow] desktop_cleaner seed committed and pushed to GitHub.');
       } catch (cleanerErr) {
+        // skipped if clean
+      }
+
+      try {
+        const crmRoot = 'C:/Users/Benjamin/Downloads/sweepr_crm';
+        execFileSync('git', ['add', 'src/outreach-seed.json'], { cwd: crmRoot, stdio: 'inherit' });
+        execFileSync('git', ['commit', '-m', `chore(seo): sync ${completed} syndication links & indexing queue [project=vpn]`], { cwd: crmRoot, stdio: 'inherit' });
+        execFileSync('git', ['push', 'origin', 'main'], { cwd: crmRoot, stdio: 'inherit' });
+        console.log('[6-Hourly Workflow] sweepr_crm seed committed and pushed to GitHub.');
+      } catch (crmErr) {
         // skipped if clean
       }
     } catch (gitErr) {
