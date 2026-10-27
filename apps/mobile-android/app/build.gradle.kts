@@ -85,4 +85,5 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
     implementation("com.android.billingclient:billing-ktx:7.1.1")
+    implementation("com.google.android.play:app-update-ktx:2.1.0")
 }

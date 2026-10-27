@@ -16,6 +16,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.appupdate.AppUpdateOptions
+import com.google.android.play.core.install.InstallStateUpdatedListener
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.InstallStatus
+import com.google.android.play.core.install.model.UpdateAvailability
 import java.util.UUID
 
 private val SweeprDarkColors = darkColorScheme(
@@ -37,6 +44,17 @@ class MainActivity : ComponentActivity() {
 
     private var deepLinkPairPayload by mutableStateOf<String?>(null)
     private var deepLinkLicenseKey by mutableStateOf<String?>(null)
+    private var resumeTick by mutableStateOf(0)
+    private var backendForceUpdate by mutableStateOf(false)
+    private lateinit var appUpdateManager: AppUpdateManager
+
+    private val installStateListener = InstallStateUpdatedListener { state ->
+        if (state.installStatus() == InstallStatus.DOWNLOADED) {
+            try {
+                appUpdateManager.completeUpdate()
+            } catch (_: Exception) {}
+        }
+    }
 
     private val notificationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -44,6 +62,12 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        appUpdateManager = AppUpdateManagerFactory.create(this)
+        try {
+            appUpdateManager.registerListener(installStateListener)
+        } catch (_: Exception) {}
+        checkPlayStoreInAppUpdate(resumeOnly = false)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
@@ -67,10 +91,73 @@ class MainActivity : ComponentActivity() {
                     initialEmail = prefs.getString("user_email", "") ?: "",
                     initialLicenseKey = deepLinkLicenseKey ?: (prefs.getString("license_key", "") ?: ""),
                     initialPairPayload = deepLinkPairPayload,
-                    onConsumePairPayload = { deepLinkPairPayload = null }
+                    onConsumePairPayload = { deepLinkPairPayload = null },
+                    resumeTick = resumeTick,
+                    onForceUpdateDetected = {
+                        backendForceUpdate = true
+                        checkPlayStoreInAppUpdate(resumeOnly = false, forceImmediate = true)
+                    }
                 )
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        resumeTick++
+        checkPlayStoreInAppUpdate(resumeOnly = true, forceImmediate = backendForceUpdate)
+    }
+
+    override fun onDestroy() {
+        try {
+            if (::appUpdateManager.isInitialized) {
+                appUpdateManager.unregisterListener(installStateListener)
+            }
+        } catch (_: Exception) {}
+        super.onDestroy()
+    }
+
+    @Suppress("DEPRECATION")
+    private fun checkPlayStoreInAppUpdate(resumeOnly: Boolean, forceImmediate: Boolean = false) {
+        if (!::appUpdateManager.isInitialized) return
+        try {
+            appUpdateManager.appUpdateInfo.addOnSuccessListener { info ->
+                try {
+                    if (info.installStatus() == InstallStatus.DOWNLOADED) {
+                        appUpdateManager.completeUpdate()
+                        return@addOnSuccessListener
+                    }
+                    if (info.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+                        appUpdateManager.startUpdateFlowForResult(
+                            info,
+                            this,
+                            AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build(),
+                            9101
+                        )
+                        return@addOnSuccessListener
+                    }
+                    if ((!resumeOnly || forceImmediate) && info.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
+                        val staleDays = info.clientVersionStalenessDays() ?: 0
+                        val highPriority = forceImmediate || info.updatePriority() >= 4 || staleDays >= 14
+                        if (highPriority && info.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                            appUpdateManager.startUpdateFlowForResult(
+                                info,
+                                this,
+                                AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build(),
+                                9101
+                            )
+                        } else if (!resumeOnly && info.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
+                            appUpdateManager.startUpdateFlowForResult(
+                                info,
+                                this,
+                                AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE).build(),
+                                9102
+                            )
+                        }
+                    }
+                } catch (_: Exception) {}
+            }
+        } catch (_: Exception) {}
     }
 
     override fun onNewIntent(intent: Intent) {

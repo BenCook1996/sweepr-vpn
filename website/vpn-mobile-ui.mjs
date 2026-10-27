@@ -878,6 +878,26 @@ async function toggleTunnel() {
   window.location.href = 'sweeprvpn://activate?key=' + encodeURIComponent(key) + '&email=' + encodeURIComponent(email);
 }
 
+async function checkMobileWebUpdate() {
+  try {
+    const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent || '');
+    const plat = isIos ? 'ios' : 'android';
+    const r = await fetch('/api/vpn/version?platform=' + plat + '&current_version=2.4.0');
+    const d = await r.json().catch(() => ({}));
+    if (r.ok && d && (d.force_update || d.update_available)) {
+      const targetUrl = isIos ? '/ios-app?update=' + encodeURIComponent(d.latest_version || 'latest') : (d.play_store_url || 'https://play.google.com/store/apps/details?id=com.sweepr.vpn');
+      if (d.force_update) {
+        const modal = document.createElement('div');
+        modal.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(11,17,32,0.92);display:flex;align-items:center;justify-content:center;padding:20px';
+        modal.innerHTML = '<div class="card" style="max-width:360px;width:100%;text-align:center"><div style="font-size:18px;font-weight:900;margin-bottom:8px">Mandatory Update Required</div><p style="font-size:13px;color:var(--muted);margin-bottom:16px">' + (d.notes || 'Please update SWEEPR VPN to the latest version.') + '</p><a href="' + targetUrl + '" class="btn-primary" style="display:block;text-decoration:none;text-align:center">Update Now</a></div>';
+        document.body.appendChild(modal);
+      } else {
+        showToast('SWEEPR VPN v' + (d.latest_version || '') + ' update available');
+      }
+    }
+  } catch (e) {}
+}
+
 (function init() {
   const savedTheme = localStorage.getItem('sweepr_vpn_theme') || 'light';
   applyTheme(savedTheme);
@@ -888,6 +908,7 @@ async function toggleTunnel() {
   }
   renderMobileShields();
   renderServers();
+  checkMobileWebUpdate();
 })();
 </script>
 </body>

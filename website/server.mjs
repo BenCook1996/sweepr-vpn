@@ -5844,6 +5844,66 @@ self.addEventListener('fetch', e => {
     return res.end();
   }
 
+  // App Version & Forced/Flexible Update Check Endpoint (Desktop, Android, iOS)
+  if ((pathname === '/api/vpn/version' || pathname === '/v1/updates/latest.json') && (req.method === 'GET' || req.method === 'HEAD')) {
+    if (!checkRateLimit(req, 'vpn_version', 60, 60000)) {
+      return sendJson(res, 429, { ok: false, error: 'rate_limit_exceeded' }, {}, req);
+    }
+    const isNewerSemver = (latestVer, currentVer) => {
+      const parse = (v) =>
+        String(v || '0.0.0')
+          .trim()
+          .replace(/^v/i, '')
+          .split(/[.-]/)
+          .slice(0, 3)
+          .map((n) => parseInt(n, 10) || 0);
+      const [lMaj = 0, lMin = 0, lPat = 0] = parse(latestVer);
+      const [cMaj = 0, cMin = 0, cPat = 0] = parse(currentVer);
+      if (lMaj !== cMaj) return lMaj > cMaj;
+      if (lMin !== cMin) return lMin > cMin;
+      return lPat > cPat;
+    };
+    const rawPlatform = String(urlObj.searchParams.get('platform') || 'windows').trim().toLowerCase();
+    const currentVersion = String(urlObj.searchParams.get('current_version') || urlObj.searchParams.get('version') || '').trim();
+    const desktopLatest = String(process.env.LATEST_VPN_DESKTOP_VERSION || process.env.LATEST_APP_VERSION || '0.1.0').trim();
+    const desktopMin = String(process.env.MIN_VPN_DESKTOP_VERSION || process.env.MIN_APP_VERSION || '0.1.0').trim();
+    const androidLatest = String(process.env.LATEST_VPN_ANDROID_VERSION || process.env.LATEST_ANDROID_VERSION || '2.4.0').trim();
+    const androidMin = String(process.env.MIN_VPN_ANDROID_VERSION || process.env.MIN_ANDROID_VERSION || '2.4.0').trim();
+    const forceEnv = process.env.FORCE_VPN_UPDATE === 'true' || process.env.FORCE_APP_UPDATE === 'true';
+
+    const isAndroid = rawPlatform === 'android';
+    const latestVersion = isAndroid ? androidLatest : desktopLatest;
+    const minVersion = isAndroid ? androidMin : desktopMin;
+    const updateAvailable = currentVersion ? isNewerSemver(latestVersion, currentVersion) : false;
+    const forceUpdate = currentVersion
+      ? isNewerSemver(minVersion, currentVersion) || (forceEnv && updateAvailable)
+      : forceEnv;
+
+    return sendJson(
+      res,
+      200,
+      {
+        ok: true,
+        version: latestVersion,
+        latest_version: latestVersion,
+        min_version: minVersion,
+        android_version: androidLatest,
+        android_min_version: androidMin,
+        update_available: updateAvailable,
+        force_update: forceUpdate,
+        notes:
+          process.env.LATEST_VPN_NOTES ||
+          'Security enhancements, faster WireGuard throughput, and stability improvements.',
+        url: 'https://sweeprvpn.com/download?platform=' + encodeURIComponent(rawPlatform || 'windows'),
+        play_store_url: 'https://play.google.com/store/apps/details?id=com.sweepr.vpn',
+        market_uri: 'market://details?id=com.sweepr.vpn',
+        pub_date: new Date().toISOString()
+      },
+      { 'Cache-Control': 'public, max-age=300' },
+      req
+    );
+  }
+
   // VPN server list: only real servers from VPN_NODES (no secrets are ever sent)
   if (pathname === '/api/vpn/servers' && req.method === 'GET') {
     if (!checkRateLimit(req, 'vpn_servers', 60, 60000)) {

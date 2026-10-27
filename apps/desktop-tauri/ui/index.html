@@ -410,6 +410,17 @@
   <!-- Main column -->
   <main class="main">
 
+    <!-- Optional Flexible Update Banner -->
+    <div id="updateTopBar" class="alert hidden" style="margin-bottom:14px;background:var(--accent-soft);border:1.5px solid var(--accent)">
+      <div class="ico e"><svg width="19" height="19"><use href="#i-shield"/></svg></div>
+      <div class="grow">
+        <div class="t" id="updateBarTitle">SWEEPR VPN Update Available</div>
+        <div class="s" id="updateBarSub">Update now for the latest WireGuard security &amp; throughput improvements.</div>
+      </div>
+      <button class="pill solid" id="updateBarBtn" onclick="installAppUpdate()">Update Now</button>
+      <button class="btn-soft" style="padding:4px 9px;min-height:28px;font-size:11.5px" onclick="$('updateTopBar').classList.add('hidden')">Later</button>
+    </div>
+
     <!-- HOME -->
     <section id="view-home">
       <div class="home-head-desktop" style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:14px">
@@ -2601,9 +2612,79 @@
       navigator.serviceWorker.register('/sw.js').catch(() => {});
     }
   } catch (e) {}
+  let pendingUpdateUrl = 'https://sweeprvpn.com/download';
+  function installAppUpdate() {
+    postNative('openCheckout', pendingUpdateUrl);
+    if (!tauri && !isWebView2) window.open(pendingUpdateUrl, '_blank');
+  }
+  function isDesktopSemverNewer(latest, current) {
+    const parse = v => String(v || '0.0.0').trim().replace(/^v/i, '').split(/[.-]/).slice(0, 3).map(n => parseInt(n, 10) || 0);
+    const [l0 = 0, l1 = 0, l2 = 0] = parse(latest);
+    const [c0 = 0, c1 = 0, c2 = 0] = parse(current);
+    if (l0 !== c0) return l0 > c0;
+    if (l1 !== c1) return l1 > c1;
+    return l2 > c2;
+  }
+  async function checkAppUpdate() {
+    try {
+      let data = null;
+      if (tauri && tauri.core) {
+        try {
+          data = await tauri.core.invoke('check_app_update', { apiUrl: null });
+        } catch (e) {}
+      }
+      if (!data) {
+        const ua = navigator.userAgent || '';
+        const plat = /mac/i.test(ua) ? 'macos' : (/linux/i.test(ua) ? 'linux' : 'windows');
+        const curVer = '0.1.0';
+        for (const u of getApiCandidateUrls('/api/vpn/version?platform=' + plat + '&current_version=' + curVer)) {
+          try {
+            const r = await fetch(u);
+            const d = await r.json().catch(() => ({}));
+            if (r.ok && d && d.ok) { data = d; break; }
+          } catch (e) {}
+        }
+      }
+      if (!data) return;
+      const latest = data.latest_version || data.version || '0.1.0';
+      const minVer = data.min_version || '0.1.0';
+      const curVer = data.current_version || '0.1.0';
+      const isNewer = Boolean(data.update_available) || isDesktopSemverNewer(latest, curVer);
+      const isForced = Boolean(data.force_update) || isDesktopSemverNewer(minVer, curVer);
+      if (data.url && /^https:\/\/(www\.)?sweeprvpn\.com/i.test(data.url)) {
+        pendingUpdateUrl = data.url;
+      }
+      if (isForced) {
+        let fm = $('forceUpdateModal');
+        if (!fm) {
+          fm = document.createElement('div');
+          fm.id = 'forceUpdateModal';
+          fm.className = 'modal open';
+          fm.style.zIndex = '9999';
+          fm.innerHTML =
+            '<div class="modal-card" style="max-width:440px;text-align:center">' +
+            '<div class="ico e" style="width:52px;height:52px;margin:0 auto 12px;border-radius:14px"><svg width="26" height="26"><use href="#i-shield"/></svg></div>' +
+            '<h2 style="font-size:20px;font-weight:900;margin:0 0 6px">Mandatory Update Required (v' + esc(latest) + ')</h2>' +
+            '<p class="s" style="font-size:13px;line-height:1.5;margin-bottom:16px">' + esc(data.notes || 'A critical security and WireGuard protocol update is required to continue using SWEEPR VPN.') + '</p>' +
+            '<button class="cta" style="width:100%" onclick="installAppUpdate()">Download &amp; Install Update</button>' +
+            '</div>';
+          document.body.appendChild(fm);
+        } else {
+          fm.classList.add('open');
+        }
+      } else if (isNewer && $('updateTopBar')) {
+        $('updateBarTitle').textContent = 'SWEEPR VPN v' + latest + ' Update Available';
+        if (data.notes) $('updateBarSub').textContent = data.notes;
+        $('updateTopBar').classList.remove('hidden');
+      }
+    } catch (e) {}
+  }
+
   renderAll();
   verifySavedSubscription();
   refreshLiveServerStatus();
+  checkAppUpdate();
+  setInterval(checkAppUpdate, 4 * 60 * 60 * 1000);
   scanWifi();
   setInterval(() => { if (state.auto) scanWifi(); }, 15 * 60 * 1000);
 </script>

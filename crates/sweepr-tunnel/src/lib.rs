@@ -744,6 +744,107 @@ pub fn verify_subscription_with_device(
     })
 }
 
+fn is_semver_newer(latest: &str, current: &str) -> bool {
+    let parse = |v: &str| -> (u32, u32, u32) {
+        let cleaned = v.trim().trim_start_matches(['v', 'V']);
+        let mut parts = cleaned
+            .split(['.', '-'])
+            .map(|p| p.parse::<u32>().unwrap_or(0));
+        (
+            parts.next().unwrap_or(0),
+            parts.next().unwrap_or(0),
+            parts.next().unwrap_or(0),
+        )
+    };
+    let (l0, l1, l2) = parse(latest);
+    let (c0, c1, c2) = parse(current);
+    if l0 != c0 {
+        return l0 > c0;
+    }
+    if l1 != c1 {
+        return l1 > c1;
+    }
+    l2 > c2
+}
+
+pub fn check_version_update(
+    current_version: &str,
+    api_url: Option<String>,
+) -> Result<serde_json::Value, String> {
+    let cur = current_version.trim();
+    let platform = std::env::consts::OS;
+    let candidates = default_api_candidates(api_url);
+    for base in &candidates {
+        let url = format!(
+            "{}/api/vpn/version?platform={}&current_version={}",
+            base.trim_end_matches('/'),
+            platform,
+            cur
+        );
+        let mut cmd = Command::new(curl_bin());
+        cmd.args(["-sS", "--max-time", "8", &url]);
+        #[cfg(target_os = "windows")]
+        {
+            use std::os::windows::process::CommandExt;
+            cmd.creation_flags(0x08000000);
+        }
+        if let Ok(out) = cmd.output() {
+            if out.status.success() {
+                let stdout = String::from_utf8_lossy(&out.stdout).trim().to_string();
+                if let Ok(val) = serde_json::from_str::<serde_json::Value>(&stdout) {
+                    let latest = val
+                        .get("latest_version")
+                        .or_else(|| val.get("version"))
+                        .and_then(|v| v.as_str())
+                        .unwrap_or(cur);
+                    let min_ver = val
+                        .get("min_version")
+                        .and_then(|v| v.as_str())
+                        .unwrap_or(cur);
+                    let update_available = val
+                        .get("update_available")
+                        .and_then(|v| v.as_bool())
+                        .unwrap_or(false)
+                        || is_semver_newer(latest, cur);
+                    let force_update = val
+                        .get("force_update")
+                        .and_then(|v| v.as_bool())
+                        .unwrap_or(false)
+                        || is_semver_newer(min_ver, cur);
+                    let notes = val
+                        .get("notes")
+                        .and_then(|v| v.as_str())
+                        .unwrap_or("Security enhancements, faster WireGuard throughput, and stability improvements.");
+                    let download_url = val
+                        .get("url")
+                        .and_then(|v| v.as_str())
+                        .unwrap_or("https://sweeprvpn.com/download");
+                    return Ok(serde_json::json!({
+                        "ok": true,
+                        "update_available": update_available,
+                        "force_update": force_update,
+                        "latest_version": latest,
+                        "min_version": min_ver,
+                        "current_version": cur,
+                        "notes": notes,
+                        "url": download_url
+                    }));
+                }
+            }
+        }
+    }
+    Ok(serde_json::json!({
+        "ok": true,
+        "update_available": false,
+        "force_update": false,
+        "latest_version": cur,
+        "min_version": cur,
+        "current_version": cur,
+        "notes": "",
+        "url": "https://sweeprvpn.com/download"
+    }))
+}
+
 // ---------------------------------------------------------------------------
 // OS Tunnel Management (Windows / macOS / Linux)
 // ---------------------------------------------------------------------------

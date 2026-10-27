@@ -45,6 +45,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.DialogProperties
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -83,7 +84,9 @@ fun SweeprVpnScreen(
     initialEmail: String = "",
     initialLicenseKey: String = "",
     initialPairPayload: String? = null,
-    onConsumePairPayload: () -> Unit = {}
+    onConsumePairPayload: () -> Unit = {},
+    resumeTick: Int = 0,
+    onForceUpdateDetected: () -> Unit = {}
 ) {
     val context = LocalContext.current
     val activity = context as? Activity
@@ -162,6 +165,11 @@ fun SweeprVpnScreen(
 
     var showDeleteConfirmDialog by remember { mutableStateOf(false) }
     var deleteReasonInput by remember { mutableStateOf("") }
+
+    var updateAvailable by remember { mutableStateOf(false) }
+    var forceUpdateRequired by remember { mutableStateOf(false) }
+    var latestAppVersion by remember { mutableStateOf(BuildConfig.VERSION_NAME) }
+    var updateReleaseNotes by remember { mutableStateOf("Security enhancements, faster WireGuard throughput, and stability improvements.") }
 
     var elapsedSec by remember { mutableLongStateOf(0L) }
 
@@ -921,7 +929,76 @@ fun SweeprVpnScreen(
         statusBanner = "Your SWEEPR VPN account and device records have been permanently deleted."
     }
 
+    fun openPlayStoreForUpdate() {
+        val pkg = context.packageName
+        try {
+            val marketIntent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$pkg")).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            context.startActivity(marketIntent)
+        } catch (_: Exception) {
+            try {
+                val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$pkg")).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+                context.startActivity(webIntent)
+            } catch (_: Exception) {}
+        }
+    }
+
+    fun isSemverNewer(latest: String, current: String): Boolean {
+        fun parseParts(v: String): List<Int> =
+            v.trim().removePrefix("v").removePrefix("V").split(".", "-").take(3).map { it.toIntOrNull() ?: 0 }
+        val l = parseParts(latest)
+        val c = parseParts(current)
+        val l0 = l.getOrElse(0) { 0 }; val c0 = c.getOrElse(0) { 0 }
+        if (l0 != c0) return l0 > c0
+        val l1 = l.getOrElse(1) { 0 }; val c1 = c.getOrElse(1) { 0 }
+        if (l1 != c1) return l1 > c1
+        val l2 = l.getOrElse(2) { 0 }; val c2 = c.getOrElse(2) { 0 }
+        return l2 > c2
+    }
+
+    suspend fun checkBackendAppVersion() {
+        withContext(Dispatchers.IO) {
+            try {
+                val curVer = BuildConfig.VERSION_NAME
+                val url = "https://sweeprvpn.com/api/vpn/version?platform=android&current_version=$curVer"
+                val conn = (URL(url).openConnection() as HttpURLConnection).apply {
+                    requestMethod = "GET"
+                    connectTimeout = 8000
+                    readTimeout = 8000
+                }
+                if (conn.responseCode in 200..299) {
+                    val body = conn.inputStream.bufferedReader().use { it.readText() }
+                    val json = JSONObject(body)
+                    val srvLatest = json.optString("android_version", json.optString("latest_version", curVer))
+                    val srvMin = json.optString("android_min_version", json.optString("min_version", curVer))
+                    val notes = json.optString("notes", updateReleaseNotes)
+                    val isNewer = json.optBoolean("update_available", false) || isSemverNewer(srvLatest, curVer)
+                    val isForced = json.optBoolean("force_update", false) || isSemverNewer(srvMin, curVer)
+                    withContext(Dispatchers.Main) {
+                        latestAppVersion = srvLatest
+                        updateReleaseNotes = notes
+                        updateAvailable = isNewer
+                        forceUpdateRequired = isForced
+                        if (isForced) {
+                            onForceUpdateDetected()
+                        }
+                    }
+                }
+            } catch (_: Exception) {}
+        }
+    }
+
+    LaunchedEffect(resumeTick) {
+        if (resumeTick > 0) {
+            checkBackendAppVersion()
+        }
+    }
+
     LaunchedEffect(Unit) {
+        checkBackendAppVersion()
         refreshServers()
         refreshEgressStatus()
         val diag = scanAndroidNetworkDiagnostics()
@@ -975,6 +1052,41 @@ fun SweeprVpnScreen(
             handleScannedQrPayload(initialPairPayload)
             onConsumePairPayload()
         }
+    }
+
+    if (forceUpdateRequired) {
+        AlertDialog(
+            onDismissRequest = { /* Mandatory update: non-dismissible */ },
+            properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false),
+            icon = { Icon(Icons.Default.Security, contentDescription = null, tint = Color(0xFF10B981)) },
+            title = {
+                Text(
+                    "Mandatory Update Required",
+                    fontWeight = FontWeight.ExtraBold
+                )
+            },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(
+                        "A critical security and WireGuard® protocol update (v$latestAppVersion) is required to continue using SWEEPR VPN.",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    Text(
+                        updateReleaseNotes,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color(0xFF94A3B8)
+                    )
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = { openPlayStoreForUpdate() },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF10B981))
+                ) {
+                    Text("Update on Google Play", color = Color(0xFF042F2E), fontWeight = FontWeight.Bold)
+                }
+            }
+        )
     }
 
     if (showVpnDisclosureDialog) {
@@ -1100,6 +1212,46 @@ fun SweeprVpnScreen(
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
             // Top Header Bar
+            if (updateAvailable && !forceUpdateRequired) {
+                Surface(
+                    shape = RoundedCornerShape(12.dp),
+                    color = Color(0xFF064E3B),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .border(1.dp, Color(0xFF10B981), RoundedCornerShape(12.dp))
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 14.dp, vertical = 10.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                "Update Available (v$latestAppVersion)",
+                                style = MaterialTheme.typography.labelLarge,
+                                fontWeight = FontWeight.ExtraBold,
+                                color = Color(0xFFA7F3D0)
+                            )
+                            Text(
+                                "Update on Google Play for the latest security & speed improvements.",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = Color(0xFFD1FAE5)
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Button(
+                            onClick = { openPlayStoreForUpdate() },
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF10B981)),
+                            contentPadding = PaddingValues(horizontal = 14.dp, vertical = 6.dp)
+                        ) {
+                            Text("Update", color = Color(0xFF042F2E), fontWeight = FontWeight.ExtraBold)
+                        }
+                    }
+                }
+            }
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,

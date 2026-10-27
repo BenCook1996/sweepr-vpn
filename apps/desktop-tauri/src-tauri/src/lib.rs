@@ -450,6 +450,20 @@ fn set_smart_tv_shields(
     Ok(current)
 }
 
+/// Checks if a newer or mandatory update of SWEEPR VPN is available.
+#[tauri::command]
+async fn check_app_update(
+    app: tauri::AppHandle,
+    api_url: Option<String>,
+) -> Result<serde_json::Value, String> {
+    let cur_ver = app.package_info().version.to_string();
+    tauri::async_runtime::spawn_blocking(move || {
+        sweepr_tunnel::check_version_update(&cur_ver, api_url)
+    })
+    .await
+    .map_err(|e| e.to_string())?
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     // Headless scan for support and automated tests: `sweepr-vpn --scan-json`
@@ -481,7 +495,8 @@ pub fn run() {
             set_compact,
             set_startup,
             set_kill_switch,
-            set_smart_tv_shields
+            set_smart_tv_shields,
+            check_app_update
         ])
         .on_window_event(|window, event| {
             if let tauri::WindowEvent::CloseRequested { api, .. } = event {
