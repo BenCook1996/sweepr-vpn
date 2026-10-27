@@ -13,9 +13,10 @@ async fn scan_network() -> Result<sweepr_wifi_radar::ScanReport, String> {
 async fn activate_subscription(
     email: String,
     code: String,
+    device_id: Option<String>,
 ) -> Result<sweepr_tunnel::SubscriptionStatus, String> {
     tauri::async_runtime::spawn_blocking(move || {
-        sweepr_tunnel::verify_subscription(email, code, None)
+        sweepr_tunnel::verify_subscription_with_device(email, code, None, device_id)
     })
     .await
     .map_err(|e| e.to_string())?
@@ -206,10 +207,10 @@ fn set_kill_switch(enabled: bool) -> Result<serde_json::Value, String> {
     #[cfg(target_os = "windows")]
     {
         use std::os::windows::process::CommandExt;
-        let del_cmd = "netsh advfirewall firewall delete rule name=SWEEPR_VPN_KillSwitch_IPv6 >nul 2>&1 & netsh advfirewall firewall delete rule name=SWEEPR_VPN_KillSwitch_DNS >nul 2>&1 & netsh advfirewall firewall delete rule name=SWEEPR_VPN_KillSwitch_Clearnet >nul 2>&1";
+        let del_cmd = "netsh advfirewall firewall delete rule name=SWEEPR_VPN_KillSwitch_IPv6 >nul 2>&1 & netsh advfirewall firewall delete rule name=SweeprVPN_KillSwitch_Block_IPv6 >nul 2>&1 & netsh advfirewall firewall delete rule name=SWEEPR_VPN_KillSwitch_DNS >nul 2>&1 & netsh advfirewall firewall delete rule name=SWEEPR_VPN_KillSwitch_Clearnet >nul 2>&1";
         let full_cmd = if enabled {
             format!(
-                "{del_cmd} & netsh advfirewall firewall add rule name=SWEEPR_VPN_KillSwitch_IPv6 dir=out action=block protocol=IPV6 >nul 2>&1 & netsh advfirewall firewall add rule name=SWEEPR_VPN_KillSwitch_DNS dir=out action=allow protocol=UDP remoteport=53 remoteip=1.1.1.1,1.0.0.1,1.1.1.2,1.0.0.2,9.9.9.9 >nul 2>&1 & netsh advfirewall firewall add rule name=SWEEPR_VPN_KillSwitch_Clearnet dir=out action=block protocol=UDP remoteport=53 >nul 2>&1"
+                "{del_cmd} & netsh advfirewall firewall add rule name=SWEEPR_VPN_KillSwitch_IPv6 dir=out action=block protocol=IPV6 >nul 2>&1 & netsh advfirewall firewall add rule name=SWEEPR_VPN_KillSwitch_DNS dir=out action=allow protocol=UDP remoteport=53 remoteip=1.1.1.1,1.0.0.1,1.1.1.2,1.0.0.2,9.9.9.9 >nul 2>&1 & netsh advfirewall firewall add rule name=SWEEPR_VPN_KillSwitch_Clearnet dir=out action=block protocol=UDP remoteport=53 remoteip=0.0.0.0-1.0.0.0,1.0.0.3-1.1.1.0,1.1.1.3-9.9.9.8,9.9.9.10-10.63.255.255,10.65.0.0-255.255.255.255 >nul 2>&1"
             )
         } else {
             del_cmd.to_string()
@@ -498,7 +499,6 @@ pub fn run() {
                 let _ = w.set_title("SWEEPR VPN");
                 if start_minimized {
                     let _ = w.minimize();
-                    let _ = w.hide();
                 }
             }
             Ok(())

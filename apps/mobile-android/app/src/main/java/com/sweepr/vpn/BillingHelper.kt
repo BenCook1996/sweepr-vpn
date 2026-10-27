@@ -85,6 +85,23 @@ class BillingHelper(
 
     private var pendingManualRestore: Boolean = false
     private var pendingPurchaseRequest: Pair<java.lang.ref.WeakReference<Activity>, String>? = null
+    private val mainHandler = android.os.Handler(android.os.Looper.getMainLooper())
+
+    private fun postBillingMessage(msg: String) {
+        if (android.os.Looper.myLooper() == android.os.Looper.getMainLooper()) {
+            onBillingMessage(msg)
+        } else {
+            mainHandler.post { onBillingMessage(msg) }
+        }
+    }
+
+    private fun postPurchaseVerified(productId: String, purchaseToken: String, orderId: String?, planKey: String) {
+        if (android.os.Looper.myLooper() == android.os.Looper.getMainLooper()) {
+            onPurchaseVerified(productId, purchaseToken, orderId, planKey)
+        } else {
+            mainHandler.post { onPurchaseVerified(productId, purchaseToken, orderId, planKey) }
+        }
+    }
 
     fun startConnection() {
         if (billingClient.isReady) {
@@ -112,9 +129,11 @@ class BillingHelper(
                         }
                     } else {
                         _isBillingReady.value = false
-                        if (pendingManualRestore) {
+                        val failedPurchase = pendingPurchaseRequest
+                        pendingPurchaseRequest = null
+                        if (pendingManualRestore || failedPurchase != null) {
                             pendingManualRestore = false
-                            onBillingMessage("Google Play Store is unavailable on this device.")
+                            postBillingMessage("Google Play Store is unavailable on this device. You can also subscribe at sweeprvpn.com/order.")
                         }
                     }
                 }
@@ -200,6 +219,12 @@ class BillingHelper(
                         }
                     }
                 }
+            } else {
+                val failedReq = pendingPurchaseRequest
+                pendingPurchaseRequest = null
+                if (failedReq != null) {
+                    postBillingMessage("Google Play subscription offers could not be loaded on this device. You can also subscribe at sweeprvpn.com/order.")
+                }
             }
         }
     }
@@ -210,12 +235,12 @@ class BillingHelper(
         if (!billingClient.isReady || details == null) {
             pendingPurchaseRequest = java.lang.ref.WeakReference(activity) to planKey
             startConnection()
-            onBillingMessage("Connecting to Google Play Billing… If Play Store is not signed in on this device, you can also complete checkout at sweeprvpn.com/order.")
+            postBillingMessage("Connecting to Google Play Billing… If Play Store is not signed in on this device, you can also complete checkout at sweeprvpn.com/order.")
             return false
         }
         val offerToken = details.subscriptionOfferDetails?.firstOrNull()?.offerToken
         if (offerToken.isNullOrBlank()) {
-            onBillingMessage("Subscription offer unavailable in Play Store for this region.")
+            postBillingMessage("Subscription offer unavailable in Play Store for this region.")
             return false
         }
         val productDetailsParams = BillingFlowParams.ProductDetailsParams.newBuilder()
@@ -233,7 +258,7 @@ class BillingHelper(
         if (!billingClient.isReady) {
             pendingManualRestore = true
             startConnection()
-            onBillingMessage("Connecting to Google Play Store to check active subscriptions…")
+            postBillingMessage("Connecting to Google Play Store to check active subscriptions…")
             return
         }
         val params = QueryPurchasesParams.newBuilder()
@@ -249,10 +274,10 @@ class BillingHelper(
                     }
                 }
                 if (!foundActive) {
-                    onBillingMessage("No active Google Play subscription found for this Google account.")
+                    postBillingMessage("No active Google Play subscription found for this Google account.")
                 }
             } else {
-                onBillingMessage("No active Google Play subscription found for this Google account.")
+                postBillingMessage("No active Google Play subscription found for this Google account.")
             }
         }
     }
@@ -264,15 +289,15 @@ class BillingHelper(
                     if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
                         handlePurchase(purchase)
                     } else if (purchase.purchaseState == Purchase.PurchaseState.PENDING) {
-                        onBillingMessage("Google Play purchase is pending payment confirmation.")
+                        postBillingMessage("Google Play purchase is pending payment confirmation.")
                     }
                 }
             }
             BillingClient.BillingResponseCode.USER_CANCELED -> {
-                onBillingMessage("Google Play checkout cancelled.")
+                postBillingMessage("Google Play checkout cancelled.")
             }
             else -> {
-                onBillingMessage("Google Play Billing message: ${result.debugMessage.ifBlank { "Could not complete purchase." }}")
+                postBillingMessage("Google Play Billing message: ${result.debugMessage.ifBlank { "Could not complete purchase." }}")
             }
         }
     }
@@ -289,10 +314,10 @@ class BillingHelper(
                 .setPurchaseToken(purchase.purchaseToken)
                 .build()
             billingClient.acknowledgePurchase(ackParams) {
-                onPurchaseVerified(productId, purchase.purchaseToken, purchase.orderId, planKey)
+                postPurchaseVerified(productId, purchase.purchaseToken, purchase.orderId, planKey)
             }
         } else {
-            onPurchaseVerified(productId, purchase.purchaseToken, purchase.orderId, planKey)
+            postPurchaseVerified(productId, purchase.purchaseToken, purchase.orderId, planKey)
         }
     }
 

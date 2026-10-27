@@ -40,12 +40,12 @@ jobs:
         if: matrix.os_name == 'linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf wireguard-tools
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf wireguard-tools libfuse2 file xdg-utils rpm
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '24.22.1'
+          node-version: '22'
 
       - name: Setup Rust stable
         uses: dtolnay/rust-toolchain@stable
@@ -65,6 +65,8 @@ jobs:
 
       - name: Build Tauri application & installers
         working-directory: apps/desktop-tauri
+        env:
+          APPIMAGE_EXTRACT_AND_RUN: "1"
         run: npx tauri build ${{ matrix.args }}
 
       - name: Package signed macOS UDIF DMG with custom Volume Icon & commit to website
@@ -98,4 +100,5 @@ jobs:
             apps/desktop-tauri/src-tauri/target/**/release/bundle/msi/*.msi
             apps/desktop-tauri/src-tauri/target/**/release/bundle/dmg/*.dmg
             apps/desktop-tauri/src-tauri/target/**/release/bundle/deb/*.deb
+            apps/desktop-tauri/src-tauri/target/**/release/bundle/rpm/*.rpm
             apps/desktop-tauri/src-tauri/target/**/release/bundle/appimage/*.AppImage

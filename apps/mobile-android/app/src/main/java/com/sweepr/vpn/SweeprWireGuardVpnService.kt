@@ -273,7 +273,7 @@ class SweeprWireGuardVpnService : VpnService() {
                     val pktCopy = buf.copyOfRange(0, readLen)
                     launch {
                         udpForwardSemaphore.withPermit {
-                            forwardUdpPacketOverProtectedSocket(pktCopy, ihl, output)
+                            forwardUdpPacketOverProtectedSocket(pktCopy, ihl, output, pfd)
                         }
                     }
                 }
@@ -284,7 +284,8 @@ class SweeprWireGuardVpnService : VpnService() {
     private fun forwardUdpPacketOverProtectedSocket(
         pkt: ByteArray,
         ihl: Int,
-        tunOut: FileOutputStream
+        tunOut: FileOutputStream,
+        pfd: ParcelFileDescriptor
     ) {
         val srcIp = pkt.copyOfRange(12, 16)
         val dstIp = pkt.copyOfRange(16, 20)
@@ -352,7 +353,7 @@ class SweeprWireGuardVpnService : VpnService() {
                 System.arraycopy(recvBuf, 0, respPkt, 28, respLen)
 
                 synchronized(tunWriteLock) {
-                    if (!serviceScope.isActive || vpnInterface == null) return
+                    if (!serviceScope.isActive || vpnInterface != pfd) return
                     try {
                         tunOut.write(respPkt)
                         tunOut.flush()

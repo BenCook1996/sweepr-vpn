@@ -498,14 +498,20 @@ fn call_activate_api(
     api_base: &str,
     email: &str,
     code: &str,
+    device_id: Option<&str>,
 ) -> Result<ApiActivateResponse, String> {
     let url = format!("{}/api/vpn/activate", api_base.trim_end_matches('/'));
+    let resolved_device_id = device_id
+        .map(str::trim)
+        .filter(|s| !s.is_empty())
+        .map(String::from)
+        .unwrap_or_else(default_device_id);
     let body = serde_json::json!({
         "email": email.trim(),
         "key": code.trim(),
         "activation_code": code.trim(),
         "otp": code.trim(),
-        "device_id": default_device_id(),
+        "device_id": resolved_device_id,
         "device_name": default_device_name(),
         "os": std::env::consts::OS,
         "app_version": "2.5.0"
@@ -652,6 +658,15 @@ pub fn verify_subscription(
     code: String,
     api_url: Option<String>,
 ) -> Result<SubscriptionStatus, String> {
+    verify_subscription_with_device(email, code, api_url, None)
+}
+
+pub fn verify_subscription_with_device(
+    email: String,
+    code: String,
+    api_url: Option<String>,
+    device_id: Option<String>,
+) -> Result<SubscriptionStatus, String> {
     let clean_email = email.trim();
     let clean_code: String = code
         .chars()
@@ -668,7 +683,7 @@ pub fn verify_subscription(
     let mut resp_opt: Option<ApiActivateResponse> = None;
 
     for base in &candidates {
-        match call_activate_api(base, clean_email, &clean_code) {
+        match call_activate_api(base, clean_email, &clean_code, device_id.as_deref()) {
             Ok(r) => {
                 let is_ok = r.ok == Some(true) && r.valid == Some(true);
                 if is_ok {

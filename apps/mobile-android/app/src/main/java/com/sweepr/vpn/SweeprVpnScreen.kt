@@ -206,11 +206,13 @@ fun SweeprVpnScreen(
                     connectTimeout = 12000
                     readTimeout = 12000
                 }
+                val resolvedOrderId = orderId?.takeIf { it.isNotBlank() }
+                    ?: "GPA.PLAY-${purchaseToken.filter { it.isLetterOrDigit() }.take(16)}"
                 val payload = JSONObject().apply {
                     put("email", emailInput.ifBlank { userEmail })
                     put("product_id", productId)
                     put("purchase_token", purchaseToken)
-                    put("order_id", orderId ?: "")
+                    put("order_id", resolvedOrderId)
                     put("plan", planKey)
                     put("device_id", deviceId)
                     put("device_name", "${Build.MANUFACTURER} ${Build.MODEL}".trim())
@@ -417,6 +419,9 @@ fun SweeprVpnScreen(
     }
 
     suspend fun executeWireGuardConnect(serverCode: String = selectedServerCode) {
+        if (SweeprWireGuardVpnService.tunnelState.value.isConnecting) {
+            return
+        }
         if (!isPro || licenseKey.isBlank()) {
             activeTab = 2
             statusBanner = "Unlock SWEEPR Pro or enter your license key to connect."
@@ -936,7 +941,8 @@ fun SweeprVpnScreen(
                 val isValidated = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
                 val isNotMetered = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED)
                 if (hasWifi && !hasVpn && (hasCaptive || !isValidated || !isNotMetered)) {
-                    if (autoShieldWifi && isPro && vpnDisclosureAccepted && !SweeprWireGuardVpnService.tunnelState.value.isConnected) {
+                    val curTun = SweeprWireGuardVpnService.tunnelState.value
+                    if (autoShieldWifi && isPro && vpnDisclosureAccepted && !curTun.isConnected && !curTun.isConnecting) {
                         scope.launch {
                             executeWireGuardConnect(selectedServerCode)
                         }

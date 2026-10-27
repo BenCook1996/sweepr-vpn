@@ -1922,7 +1922,7 @@
     }
     if (tauri) {
       try {
-        return await tauri.core.invoke('activate_subscription', { email, code, apiUrl: null });
+        return await tauri.core.invoke('activate_subscription', { email, code, apiUrl: null, deviceId: getOrCreateDesktopDeviceId() });
       } catch (e) {}
     }
     const endpoints = [];

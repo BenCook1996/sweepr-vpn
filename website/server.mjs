@@ -1390,9 +1390,10 @@ async function resolveVpnLicence(code, email, deviceId) {
     : rawInput.replace(/\s+/g, '').toUpperCase();
   if (!cleanCode || cleanCode.length < 6) return null;
   const local = licenses.get(cleanCode) || licenses.get(cleanCode.toUpperCase());
-  const normEmail = (email ? String(email).trim().toLowerCase() : '') || (local && local.status === 'active' ? local.email : '');
+  const isLocalActive = Boolean(local && (local.status === 'active' || local.status === 'trialing'));
+  const normEmail = (email ? String(email).trim().toLowerCase() : '') || (isLocalActive ? local.email : '');
   const isShortSixDigit = /^\d{6}$/.test(cleanCode);
-  if (isShortSixDigit && !isValidEmail(normEmail) && !(local && local.status === 'active')) {
+  if (isShortSixDigit && !isValidEmail(normEmail) && !isLocalActive) {
     return null;
   }
 
@@ -1435,17 +1436,24 @@ async function resolveVpnLicence(code, email, deviceId) {
   }
 
   const localAfter = licenses.get(cleanCode) || licenses.get(cleanCode.toUpperCase()) || resolvedAcc || local || (normEmail ? accountsByEmail.get(normEmail) : null);
+  const isLocalAfterActive = Boolean(localAfter && (localAfter.status === 'active' || localAfter.status === 'trialing'));
   if (!key) {
-    if (localAfter && localAfter.status === 'active' && (!normEmail || localAfter.email === normEmail)) {
+    if (isLocalAfterActive && (!normEmail || localAfter.email === normEmail)) {
       key = localAfter.licenseKey || localAfter.id;
       resolvedAcc = localAfter;
     }
-  } else if (localAfter && localAfter.status === 'active') {
+  } else if (isLocalAfterActive) {
     resolvedAcc = localAfter;
   }
 
   if (!key) return null;
+  if (cleanDevId && resolvedAcc && Array.isArray(resolvedAcc.devices)) {
+    if (!resolvedAcc.devices.some((d) => d && d.id === cleanDevId) && resolvedAcc.devices.length >= MAX_DEVICES_PER_ACCOUNT) {
+      return { valid: false, reason: 'device_limit_reached', maxDevices: MAX_DEVICES_PER_ACCOUNT };
+    }
+  }
   return {
+    valid: true,
     id: computeVpnLicenceHash(cleanDevId ? `${key}:${cleanDevId}` : key),
     account: resolvedAcc,
     key
@@ -5873,7 +5881,10 @@ self.addEventListener('fetch', e => {
       return sendJson(res, 400, { ok: false, error: 'invalid_public_key' }, {}, req);
     }
     const licence = await resolveVpnLicence(String(body?.activation_code || body?.license_key || '').trim(), body?.email, body?.device_id);
-    if (!licence) {
+    if (licence && licence.valid === false && licence.reason === 'device_limit_reached') {
+      return sendJson(res, 403, { ok: false, error: 'device_limit_reached', message: `You have reached the ${MAX_DEVICES_PER_ACCOUNT}-device limit on your SWEEPR VPN Pro subscription. Please remove a device from your Customer Portal first.` }, {}, req);
+    }
+    if (!licence || licence.valid === false) {
       return sendJson(res, 401, { ok: false, error: 'licence_required', message: 'Enter your license key to connect. It is in your order email.' }, {}, req);
     }
     const node = await selectHealthyNodeForRegion(loadVpnNodes(), serverCode);
@@ -5921,7 +5932,10 @@ self.addEventListener('fetch', e => {
     const rawCode = String(body?.server_code || 'UK-LON-01').trim().toUpperCase();
     const serverCode = rawCode === 'CH-ZRH-01' ? 'SE-STO-01' : rawCode;
     const licence = await resolveVpnLicence(rawKey, body?.email, body?.device_id);
-    if (!licence) {
+    if (licence && licence.valid === false && licence.reason === 'device_limit_reached') {
+      return sendJson(res, 403, { ok: false, error: 'device_limit_reached', message: `You have reached the ${MAX_DEVICES_PER_ACCOUNT}-device limit on your SWEEPR VPN Pro subscription. Please remove a device from your Customer Portal first.` }, {}, req);
+    }
+    if (!licence || licence.valid === false) {
       return sendJson(res, 401, { ok: false, error: 'licence_required', message: 'Please enter a valid active SWEEPR Pro license key.' }, {}, req);
     }
     const nodes = loadVpnNodes();
@@ -6021,7 +6035,10 @@ self.addEventListener('fetch', e => {
     const rawDnsShield = String(body?.dns_shield ?? urlObj.searchParams.get('dns_shield') ?? '1').trim().toLowerCase();
     const dnsShieldEnabled = rawDnsShield !== '0' && rawDnsShield !== 'false';
     const licence = await resolveVpnLicence(rawKey, emailHint, body?.device_id || urlObj.searchParams.get('device_id'));
-    if (!licence) {
+    if (licence && licence.valid === false && licence.reason === 'device_limit_reached') {
+      return sendJson(res, 403, { ok: false, error: 'device_limit_reached', message: `You have reached the ${MAX_DEVICES_PER_ACCOUNT}-device limit on your SWEEPR VPN Pro subscription. Please remove a device from your Customer Portal first.` }, {}, req);
+    }
+    if (!licence || licence.valid === false) {
       return sendJson(res, 401, { ok: false, error: 'licence_required', message: 'Please enter a valid active SWEEPR Pro license key.' }, {}, req);
     }
     const nodes = loadVpnNodes();
