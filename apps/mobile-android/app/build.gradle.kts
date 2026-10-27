@@ -15,7 +15,7 @@ val localProps = Properties().apply {
 
 android {
     namespace = "com.sweepr.vpn"
-    compileSdk = 35
+    compileSdk = 36
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -28,9 +28,9 @@ android {
     defaultConfig {
         applicationId = "com.sweepr.vpn"
         minSdk = 26
-        targetSdk = 35
-        versionCode = 12
-        versionName = "2.4.0"
+        targetSdk = 36
+        versionCode = 13
+        versionName = "2.4.1"
 
         resourceConfigurations += listOf("en", "de", "fr", "ja")
     }
@@ -97,6 +97,13 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material:material-icons-extended")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
-    implementation("com.android.billingclient:billing-ktx:7.1.1")
+    implementation("com.android.billingclient:billing-ktx:8.0.0")
     implementation("com.google.android.play:app-update-ktx:2.1.0")
+}
+
+configurations.all {
+    resolutionStrategy {
+        force("com.android.billingclient:billing:8.0.0")
+        force("com.android.billingclient:billing-ktx:8.0.0")
+    }
 }

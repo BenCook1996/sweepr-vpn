@@ -173,7 +173,8 @@ class BillingHelper(
             .setProductList(productList)
             .build()
 
-        billingClient.queryProductDetailsAsync(params) { result, detailsList ->
+        billingClient.queryProductDetailsAsync(params) { result, queryProductDetailsResult ->
+            val detailsList = queryProductDetailsResult.productDetailsList
             if (result.responseCode == BillingClient.BillingResponseCode.OK && detailsList.isNotEmpty()) {
                 val byId = detailsList.associateBy { it.productId }
                 _plans.value = DEFAULT_PLANS.map { item ->
