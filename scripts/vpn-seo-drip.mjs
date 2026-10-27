@@ -189,7 +189,7 @@ function loadTargetItemsFromSitemap() {
 const tokenPool = [];
 let tokenIdx = 0;
 async function getTelegraphToken() {
-  if (tokenPool.length >= 8) {
+  if (tokenPool.length >= 24) {
     const token = tokenPool[tokenIdx % tokenPool.length];
     tokenIdx++;
     return token;

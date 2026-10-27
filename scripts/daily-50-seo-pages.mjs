@@ -590,6 +590,212 @@ const SETUP_GUIDES = [
       'wg show',
       'git clone git@github.com:my-org/private-repo.git'
     ]
+  },
+  {
+    slug: 'ubiquiti-cloud-gateway-ultra',
+    name: 'Ubiquiti UniFi Cloud Gateway Ultra (UCG-Ultra) WireGuard Client',
+    category: 'UniFi OS 3.2+ Gateway',
+    keyword: 'unifi cloud gateway ultra wireguard client setup',
+    summary: 'Import a native SWEEPR VPN 10Gbps WireGuard .conf profile into UniFi OS 3.2+ on the Cloud Gateway Ultra to route entire VLANs through RAM-only London and Amsterdam nodes.',
+    commands: [
+      '# In UniFi Network 8.1+ Controller:',
+      '# 1. Settings -> VPN -> VPN Client -> Create New -> WireGuard',
+      '# 2. Upload sweepr-uk-lon01.conf (MTU 1412 for PPPoE or 1420 for DHCP)',
+      '# 3. Routing -> Policy-Based Routes -> Target Network -> Interface: SWEEPR-LON01'
+    ]
+  },
+  {
+    slug: 'gl-inet-b3000-marble-wireguard',
+    name: 'GL.iNet Marble (GL-B3000) Wi-Fi 6 WireGuard Home Router',
+    category: 'Home Wi-Fi 6 Router',
+    keyword: 'gl inet marble gl b3000 wireguard setup',
+    summary: 'Configure hardware-accelerated WireGuard encryption on the wall-mountable GL.iNet Marble router with native OpenWrt 23.05 and SWEEPR VPN 10Gbps RAM-only endpoints.',
+    commands: [
+      '# On GL.iNet Marble Admin Console (192.168.8.1):',
+      '# VPN -> WireGuard Client -> Add New Profile -> Upload sweepr-lon01.conf',
+      '# Set MTU to 1420 and enable Auto-Reconnect and Kill Switch'
+    ]
+  },
+  {
+    slug: 'gl-inet-spitz-ax-5g-router',
+    name: 'GL.iNet Spitz AX (GL-X3000) 5G Cellular WireGuard Gateway',
+    category: '5G Cellular & RV Router',
+    keyword: 'gl inet spitz ax gl x3000 5g wireguard vpn setup',
+    summary: 'Pair SWEEPR VPN with GL.iNet Spitz AX to defeat mobile operator 5G hotspot throttling, 464XLAT latency, and carrier CGNAT on EE, Three, O2, and T-Mobile.',
+    commands: [
+      '# SSH into Spitz AX (OpenWrt base):',
+      'uci set network.wgclient.mtu="1380"',
+      'uci commit network && /etc/init.d/network restart',
+      'wg show'
+    ]
+  },
+  {
+    slug: 'tp-link-omada-er605-wireguard',
+    name: 'TP-Link Omada ER605 / ER7206 WireGuard Gateway Setup',
+    category: 'SMB & Homelab Router',
+    keyword: 'tp link omada er605 wireguard vpn client setup',
+    summary: 'Configure a WireGuard client tunnel in Omada SDN Controller v5.x for ER605/ER7206 routers to isolate sensitive office subnets behind SWEEPR London 10Gbps RAM-only nodes.',
+    commands: [
+      '# In Omada Controller:',
+      '# Settings -> VPN -> WireGuard -> Add New WireGuard Interface',
+      '# Paste SWEEPR VPN Interface Address 10.66.18.42/32, Port 51820, MTU 1420',
+      '# Transmission -> Routing -> Policy Routing -> Apply to VLAN 20'
+    ]
+  },
+  {
+    slug: 'draytek-vigor-2962-wireguard',
+    name: 'DrayTek Vigor 2962 2.5Gbps Dual-WAN WireGuard Router',
+    category: 'High-Performance Business Gateway',
+    keyword: 'draytek vigor 2962 wireguard vpn client setup guide',
+    summary: 'Deploy hardware-accelerated 2.5Gbps WireGuard tunnels on DrayTek Vigor 2962 with multi-WAN failover, MSS clamping, and complete protection from ISP evening throttling.',
+    commands: [
+      '# In DrayTek Vigor Web Configurator:',
+      '# VPN and Remote Access -> LAN to LAN -> WireGuard Dial-Out',
+      '# Server: lon01.sweeprvpn.com:51820 | Pre-Shared Key: Auto | MTU: 1412',
+      '# Set Outbound Routing Table Priority to WireGuard Tunnel'
+    ]
+  },
+  {
+    slug: 'firewalla-gold-plus-wireguard',
+    name: 'Firewalla Gold Plus 2.5Gbps WireGuard & Cyber-Security Gateway',
+    category: 'Hardware Firewall & Router',
+    keyword: 'firewalla gold plus 2 5g wireguard client setup',
+    summary: 'Import SWEEPR VPN WireGuard configuration into Firewalla Gold Plus to enforce network-wide zero-log privacy, Smart-TV ACR blocking, and 2.5Gbps low-latency gaming routing.',
+    commands: [
+      '# In Firewalla App:',
+      '# Network -> VPN Client -> Add Profile -> WireGuard -> Import sweepr-lon01.conf',
+      '# Apply To: Gaming PC, Apple TV, Smart TVs',
+      '# Turn on Emergency Kill Switch and Force DNS over Tunnel'
+    ]
+  },
+  {
+    slug: 'netgate-6100-pfsense-wireguard',
+    name: 'Netgate 6100 pfSense Plus 10Gbps WireGuard Gateway Guide',
+    category: 'Enterprise 10GbE Security Appliance',
+    keyword: 'netgate 6100 pfsense plus wireguard 10gbps setup',
+    summary: 'Configure wire-speed WireGuard tunnels on the Netgate 6100 running pfSense Plus 24.x, utilizing Intel QuickAssist crypto offloading and SWEEPR 10Gbps RAM-only endpoints.',
+    commands: [
+      '# pfSense Plus GUI:',
+      '# VPN -> WireGuard -> Add Tunnel: Address 10.66.18.42/32, MTU 1420',
+      '# Peer: lon01.sweeprvpn.com:51820, Allowed IPs 0.0.0.0/0',
+      '# Firewall -> NAT -> Outbound -> Manual Outbound NAT for SWEEPR_WG interface'
+    ]
+  },
+  {
+    slug: 'protectli-vault-opnsense',
+    name: 'Protectli Vault 6-Port Core i5 OPNsense WireGuard Gateway',
+    category: 'Silent Fanless Firewall',
+    keyword: 'protectli vault opnsense wireguard vpn client setup',
+    summary: 'Build a dedicated, silent whole-home 10Gbps WireGuard gateway with Protectli Vault hardware and OPNsense 24.x, stopping ISP Deep Packet Inspection across all LAN devices.',
+    commands: [
+      '# In OPNsense WebGUI:',
+      '# VPN -> WireGuard -> Local: Name=sweepr_wg, Listen Port=51820, MTU=1420',
+      '# Endpoints -> Add: Server=lon01.sweeprvpn.com, Allowed IPs=0.0.0.0/0',
+      '# Firewall -> Rules -> LAN: Gateway=SWEEPR_VPN_GW'
+    ]
+  },
+  {
+    slug: 'casaos-docker-wireguard',
+    name: 'CasaOS & ZimaBoard Homelab WireGuard VPN Client Stack',
+    category: 'Personal Cloud & Homelab',
+    keyword: 'casaos zimaboard docker wireguard vpn setup guide',
+    summary: 'Run SWEEPR VPN on CasaOS and ZimaBoard to route all media server apps and automated downloaders through 10Gbps RAM-only Amsterdam and Stockholm nodes.',
+    commands: [
+      '# In CasaOS App Store -> Custom Install -> Docker Compose:',
+      '# Service: sweepr-vpn (WireGuard client container)',
+      '# Cap Add: NET_ADMIN',
+      '# Environment: WG_CONF_PATH=/DATA/AppData/sweepr/ams01.conf'
+    ]
+  },
+  {
+    slug: 'asustor-nas-adm-wireguard',
+    name: 'Asustor NAS (ADM 4.2+) WireGuard VPN Client Setup Guide',
+    category: 'NAS & Storage Appliance',
+    keyword: 'asustor adm wireguard vpn client setup',
+    summary: 'Configure SWEEPR VPN on Asustor NAS running ADM 4.2+ using native kernel WireGuard modules to protect off-site backup synchronizations from ISP throttling.',
+    commands: [
+      '# In Asustor ADM -> Settings -> Network -> Virtual Private Network (VPN):',
+      '# Add -> WireGuard -> Import sweepr-lon01.conf',
+      '# Set as Default Gateway for WAN egress'
+    ]
+  },
+  {
+    slug: 'nintendo-switch-wireguard-proxy',
+    name: 'Nintendo Switch OLED Low-NAT WireGuard Gaming Router Setup',
+    category: 'Console Gaming',
+    keyword: 'nintendo switch wireguard low ping nat type a setup',
+    summary: 'Achieve NAT Type A on Nintendo Switch and stop Mario Kart 8 Deluxe / Splatoon 3 communication errors by routing console traffic through a SWEEPR VPN WireGuard router.',
+    commands: [
+      '# On Router / Gateway (GL.iNet / pfSense / OpenWrt):',
+      '# Assign Switch static IP (e.g. 192.168.1.75)',
+      '# Route Switch IP through SWEEPR-LON01 10Gbps WireGuard peer',
+      '# Enable UDP port range 1024-65535 forwarding for Switch NAT Type A'
+    ]
+  },
+  {
+    slug: 'rog-ally-windows-11-wireguard',
+    name: 'ASUS ROG Ally & ROG Ally X Low-Latency WireGuard Gaming Setup',
+    category: 'Handheld Gaming PC',
+    keyword: 'asus rog ally wireguard vpn low latency gaming',
+    summary: 'Run SWEEPR VPN’s lightweight ~3.7 MB Rust client on ASUS ROG Ally to stabilize Wi-Fi 6E ping times, eliminate hotel Wi-Fi packet loss, and access cloud game saves securely.',
+    commands: [
+      '# Download and launch SWEEPR VPN (~3.7 MB native executable):',
+      '# Select London Docklands (4ms) or Amsterdam (8ms) 10Gbps Core',
+      '# Enable Built-in Kernel Kill-Switch and Low-Jitter Gaming Mode'
+    ]
+  },
+  {
+    slug: 'arch-linux-systemd-networkd',
+    name: 'Arch Linux systemd-networkd Native WireGuard Configuration',
+    category: 'Linux Power User',
+    keyword: 'arch linux systemd networkd wireguard vpn setup',
+    summary: 'Configure native, bloat-free WireGuard networking in Arch Linux using purely systemd-networkd (.netdev and .network files) without third-party daemon overhead.',
+    commands: [
+      'sudo cat << "EOF" > /etc/systemd/network/99-sweepr.netdev',
+      '[NetDev]',
+      'Name=wg-sweepr',
+      'Kind=wireguard',
+      '[WireGuard]',
+      'PrivateKey=<YOUR_PRIVATE_KEY>',
+      '[WireGuardPeer]',
+      'PublicKey=<SWEEPR_PUBKEY>',
+      'Endpoint=lon01.sweeprvpn.com:51820',
+      'AllowedIPs=0.0.0.0/0',
+      'EOF',
+      'sudo systemctl restart systemd-networkd'
+    ]
+  },
+  {
+    slug: 'nixos-declarative-wireguard',
+    name: 'NixOS Declarative WireGuard Interface Configuration Guide',
+    category: 'Declarative Linux OS',
+    keyword: 'nixos declarative wireguard networking vpn configuration',
+    summary: 'Declare your SWEEPR VPN 10Gbps WireGuard connection immutably in `/etc/nixos/configuration.nix` with automatic DNS resolution, MTU calibration, and firewall masquerading.',
+    commands: [
+      '# In /etc/nixos/configuration.nix:',
+      'networking.wireguard.interfaces.wg0 = {',
+      '  ips = [ "10.66.18.42/32" ];',
+      '  mtu = 1420;',
+      '  peers = [{',
+      '    publicKey = "<SWEEPR_PUBKEY>";',
+      '    endpoint = "lon01.sweeprvpn.com:51820";',
+      '    allowedIPs = [ "0.0.0.0/0" ];',
+      '  }];',
+      '};'
+    ]
+  },
+  {
+    slug: 'alpinelinux-diskless-wireguard',
+    name: 'Alpine Linux Diskless RAM-Run WireGuard Gateway Setup',
+    category: 'Ultra-Minimal Linux Gateway',
+    keyword: 'alpine linux diskless ram wireguard router gateway',
+    summary: 'Deploy an ultra-secure, diskless Alpine Linux WireGuard gateway running 100% in system RAM (<24 MB footprint) with SWEEPR VPN 10Gbps RAM-only bare-metal nodes.',
+    commands: [
+      'apk add wireguard-tools iptables',
+      'install -m 600 sweepr-lon01.conf /etc/wireguard/wg0.conf',
+      'wg-quick up wg0',
+      'lbu commit -d'
+    ]
   }
 ];
 
@@ -619,7 +825,23 @@ const COMPETITORS = [
   { slug: 'panda-dome-vpn', name: 'Panda Dome VPN', price: '£64.99/yr (Renewal £89.99)', installerSize: '~180 MB', ramUsage: '~230 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'Spain (Hotspot Shield Reseller)' },
   { slug: 'malwarebytes-privacy-vpn', name: 'Malwarebytes Privacy VPN', price: '£49.99/yr ($59.99/yr)', installerSize: '~115 MB', ramUsage: '~170 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'USA (Resold Mullvad Infrastructure at 2x Price)' },
   { slug: 'f-secure-freedome', name: 'F-Secure Freedome VPN', price: '£49.90/yr', installerSize: '~130 MB', ramUsage: '~185 MB', hasWifiScanner: 'Wi-Fi Protection Only', hasAcrBlocker: 'Tracking Protection Only', jurisdiction: 'Finland (14 Eyes)' },
-  { slug: 'adguard-vpn', name: 'AdGuard VPN', price: '£43.99/yr ($47.88/yr)', installerSize: '~125 MB (Proprietary Protocol)', ramUsage: '~175 MB', hasWifiScanner: 'No', hasAcrBlocker: 'DNS-Only', jurisdiction: 'Cyprus' }
+  { slug: 'adguard-vpn', name: 'AdGuard VPN', price: '£43.99/yr ($47.88/yr)', installerSize: '~125 MB (Proprietary Protocol)', ramUsage: '~175 MB', hasWifiScanner: 'No', hasAcrBlocker: 'DNS-Only', jurisdiction: 'Cyprus' },
+  { slug: 'surfshark-one', name: 'Surfshark One Suite', price: '£47.88 yr 1 → £79.99/yr renewal', installerSize: '~135 MB (Antivirus + VPN Daemons)', ramUsage: '~210 MB', hasWifiScanner: 'No', hasAcrBlocker: 'CleanWeb DNS Only', jurisdiction: 'Netherlands (Nine Eyes / Nord Security Group)' },
+  { slug: 'expressvpn-aircove', name: 'ExpressVPN & Aircove', price: '£84.99/yr ($99.99/yr)', installerSize: '~140 MB (Lightway SDK)', ramUsage: '~190 MB', hasWifiScanner: 'Basic Router Only', hasAcrBlocker: 'No', jurisdiction: 'British Virgin Islands (Kape Technologies)' },
+  { slug: 'keepsolid-vpn-unlimited', name: 'KeepSolid VPN Unlimited', price: '£59.99/yr ($79.99 Lifetime Traps)', installerSize: '~115 MB', ramUsage: '~165 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'USA (Five Eyes)' },
+  { slug: 'torguard-vpn', name: 'TorGuard Anonymous VPN', price: '£54.00/yr ($60/yr)', installerSize: '~95 MB (Qt5 OpenVPN/WG Client)', ramUsage: '~160 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'USA (Five Eyes)' },
+  { slug: 'privatevpn', name: 'PrivateVPN', price: '£48.00/yr ($59.00/yr)', installerSize: '~105 MB', ramUsage: '~155 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'Sweden (14 Eyes)' },
+  { slug: 'perfect-privacy', name: 'Perfect Privacy VPN', price: '€119.88/yr (€9.99/mo)', installerSize: '~120 MB', ramUsage: '~180 MB', hasWifiScanner: 'No', hasAcrBlocker: 'TrackStop DNS Only', jurisdiction: 'Switzerland' },
+  { slug: 'astrill-vpn', name: 'Astrill VPN', price: '£144.00/yr ($180/yr)', installerSize: '~130 MB (OpenWeb/StealthVPN)', ramUsage: '~195 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'Seychelles' },
+  { slug: 'le-vpn', name: 'Le VPN', price: '£49.99/yr (€59.88/yr)', installerSize: '~110 MB', ramUsage: '~150 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'Hong Kong' },
+  { slug: 'zoogvpn', name: 'ZoogVPN', price: '£35.88/yr ($44.99/yr)', installerSize: '~90 MB', ramUsage: '~140 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'Greece' },
+  { slug: 'vpn-ac', name: 'VPN.ac', price: '£45.00/yr ($56/yr)', installerSize: '~85 MB', ramUsage: '~135 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'Romania' },
+  { slug: 'ovpn-com', name: 'OVPN.com Sweden', price: '£59.88/yr ($71.88/yr)', installerSize: '~95 MB (Electron/WireGuard)', ramUsage: '~165 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'Sweden (Insurance-backed zero-logs)' },
+  { slug: 'ivpn-net', name: 'IVPN Pro', price: '£64.00/yr ($80/yr)', installerSize: '~85 MB (Open Source Client)', ramUsage: '~135 MB', hasWifiScanner: 'No', hasAcrBlocker: 'AntiTracker DNS Only', jurisdiction: 'Gibraltar' },
+  { slug: 'cactusvpn', name: 'CactusVPN', price: '£38.99/yr ($48.99/yr)', installerSize: '~95 MB', ramUsage: '~145 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'Canada (Five Eyes)' },
+  { slug: 'urban-vpn', name: 'Urban VPN Free', price: 'Free (Monetizes P2P Residential Proxy)', installerSize: '~160 MB (Background P2P Node)', ramUsage: '~240 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'USA (Peers route traffic via your IP)' },
+  { slug: 'hola-vpn', name: 'Hola VPN Free Proxy', price: 'Free (Resells Bandwidth via Luminati)', installerSize: '~140 MB (P2P Exit Node)', ramUsage: '~220 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'Israel / BVI (Severe privacy risk)' },
+  { slug: 'turbo-vpn', name: 'Turbo VPN', price: '£79.99/yr ($99.99/yr after trial)', installerSize: '~130 MB (Heavy Ads & Trackers)', ramUsage: '~200 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'Singapore (Innovative Connecting)' }
 ];
 
 const SECURITY_GUIDES = [
@@ -718,6 +940,102 @@ const SECURITY_GUIDES = [
     keyword: 'audit smart home iot devices botnet scanner free wifi audit',
     domains: ['Mirai & Mozi Telnet Port 23 / 2323 Scan', 'Open RTSP Port 554 IP Camera Streams', 'UPnP IGD Rogue WAN Port Forwarding Audit', 'IEEE OUI Hardware Vendor Fingerprint Check'],
     summary: 'Cheap smart plugs, light bulbs, and security cameras often have default telnet passwords and open UPnP ports exposing them to Mirai botnets. SWEEPR VPN’s free 30-second Home Wi-Fi Scanner surfaces vulnerable devices in one click.'
+  },
+  {
+    slug: 'block-roku-os-smart-tv-telemetry',
+    title: 'How to Block Roku OS ACR Tracking & Ad Telemetry at Router Level (2026)',
+    h1: 'How to Block Roku OS ACR Viewing Telemetry & Automated Screenshots on Home Wi-Fi',
+    keyword: 'block roku os smart tv acr tracking telemetry router dns',
+    domains: ['track.sr.roku.com', 'austin.logs.roku.com', 'sw.leadboltmobile.net', 'cloudservices.roku.com', 'ads.roku.com'],
+    summary: 'Roku OS players and Roku TV models continuously upload content screenshots and viewing metrics to ad-tracking domains over port 443. SWEEPR VPN’s Wi-Fi Radar Add-On neutralizes these beacons at the DNS sinkhole.'
+  },
+  {
+    slug: 'block-samsung-tizen-smart-hub-acr',
+    title: 'How to Block Samsung Tizen Smart Hub ACR & Viewing Telemetry (2026)',
+    h1: 'How to Block Samsung Tizen Smart Hub ACR & Automatic Content Recognition',
+    keyword: 'block samsung tizen smart tv acr tracking telemetry',
+    domains: ['samsungacr.com', 'acr0.samsungcloudsolution.com', 'gld.samsung-cloud.com', 'config.samsungads.com', 'lcprd1.samsungcloudsolution.net'],
+    summary: 'Samsung Tizen Smart TVs capture periodic video frames to identify TV shows, games, and streaming apps, uploading viewing fingerprints to regional Samsung ad servers.'
+  },
+  {
+    slug: 'block-lg-webos-liveplus-acr',
+    title: 'How to Stop LG webOS LivePlus ACR Tracking & Ad Beacons (2026 Guide)',
+    h1: 'How to Stop LG webOS LivePlus ACR Telemetry & Advertising Beacons at Router',
+    keyword: 'block lg webos liveplus acr tracking ad beacons',
+    domains: ['ibs.lgappstv.com', 'rdx2.lgtvsdp.com', 'lgsmartad.com', 'ngfts.lge.com', 'aic-gfts.lge.com'],
+    summary: 'LG webOS Smart TVs bundle LivePlus ACR technology to track on-screen content and HDMI input devices. Learn how SWEEPR VPN sinks LG ad-server domains across your entire home subnet.'
+  },
+  {
+    slug: 'block-vizio-smartcast-inscape-acr',
+    title: 'How to Stop Vizio SmartCast Inscape Data Harvesting at Router DNS (2026)',
+    h1: 'Stop Vizio SmartCast Inscape ACR Data Harvesting & Viewing Tracking',
+    keyword: 'stop vizio smartcast inscape acr data tracking dns router',
+    domains: ['tvinteractive.tv', 'inscape.tv', 'proserve.vizio.com', 'api.smartcast.vizio.com', 'cognitive.vizio.com'],
+    summary: 'Vizio SmartCast Inscape technology samples pixel patterns 100 times per second to track broadcast TV, streaming video, and console gameplay. SWEEPR VPN sinks Inscape beacons at the router level.'
+  },
+  {
+    slug: 'stop-isp-deep-packet-inspection-dpi',
+    title: 'How to Defeat ISP Deep Packet Inspection (DPI) & SNI Censorship in 2026',
+    h1: 'How to Defeat ISP Deep Packet Inspection (DPI) & SNI Censorship with WireGuard',
+    keyword: 'defeat isp deep packet inspection dpi sni censorship wireguard',
+    domains: ['ChaCha20-Poly1305 Symmetric Crypto', 'Plaintext SNI Masking', '10Gbps Bare-Metal UDP Tunneling', 'No TCP Fingerprint Resets'],
+    summary: 'ISPs deploy commercial DPI appliances to inspect unencrypted SNI headers and throttle specific traffic types. SWEEPR VPN wraps all flows into a single ChaCha20-Poly1305 encrypted WireGuard UDP stream.'
+  },
+  {
+    slug: 'detect-hotel-chromecast-spoofing',
+    title: 'How to Audit Hotel Wi-Fi for Rogue Chromecast & AirPlay Hijacking (2026)',
+    h1: 'How to Audit Hotel & Airbnb Wi-Fi for Rogue Cast Devices & Screen Hijackers',
+    keyword: 'hotel wifi chromecast airplay spoofing security audit scanner',
+    domains: ['mDNS _googlecast._tcp.local Query', 'SSDP DIAL Protocol Probe', 'Rogue AP Client Isolation Audit', 'In-Tunnel Wi-Fi Encryption'],
+    summary: 'Hotels with disabled client isolation let malicious actors stream unwanted content to in-room displays or harvest screen mirroring credentials. SWEEPR VPN’s 30-second Wi-Fi Scanner spots exposed cast devices instantly.'
+  },
+  {
+    slug: 'fix-udp-bufferbloat-wireguard-gaming',
+    title: 'How to Fix UDP Bufferbloat on FTTP Fibre for Low-Latency Gaming (2026)',
+    h1: 'How to Eliminate UDP Bufferbloat & Jitter Spikes on FTTP Fibre for Gaming',
+    keyword: 'fix udp bufferbloat fttp fibre gaming wireguard fq_codel cake',
+    domains: ['Bufferbloat Grade F to A+ Optimization', 'FQ_CoDel / CAKE Queue Disciplines', 'Tunneled WireGuard MTU 1412 Clamping', 'LINX London 4ms Core Peering'],
+    summary: 'Bufferbloat happens when oversized router queues introduce 100ms+ latency spikes whenever someone uploads a file or streams video. SWEEPR VPN direct 10Gbps WireGuard peering stabilizes frame pacing.'
+  },
+  {
+    slug: 'prevent-webrtc-ip-leak-chromium-firefox',
+    title: 'How to Prevent WebRTC STUN/TURN IP Leaks in Chrome, Brave & Firefox',
+    h1: 'How to Prevent Silent WebRTC STUN/TURN IP Address Leaks in All Browsers',
+    keyword: 'prevent webrtc stun turn ip leak chrome brave firefox wireguard',
+    domains: ['WebRTC STUN Candidate Enumeration', 'In-Tunnel Kernel Routing Table (0.0.0.0/0)', 'RFC 5766 TURN Relay Isolation', 'Zero Local Host Interface Leakage'],
+    summary: 'WebRTC STUN requests bypass standard browser proxy settings to expose your real public and local IP addresses. SWEEPR VPN’s native Windows/macOS kernel kill-switch forces STUN requests through the tunnel.'
+  },
+  {
+    slug: 'disable-ipv6-leak-windows-linux',
+    title: 'How to Prevent Silent IPv6 Tunnel Leaks on Dual-Stack Residential Fibre',
+    h1: 'How to Prevent Silent IPv6 Tunnel Leaks on Dual-Stack Residential Broadband',
+    keyword: 'prevent ipv6 tunnel leak dual stack broadband wireguard',
+    domains: ['AllowedIPs = 0.0.0.0/0, ::/0', 'Router Advertisement (RA) IPv6 Guard', 'In-Tunnel ULA IPv6 Routing (fd00::/8)', 'nftables / Windows NDIS Kernel Block'],
+    summary: 'Most VPNs only tunnel IPv4, leaving dual-stack IPv6 traffic completely exposed to your ISP and third-party trackers. SWEEPR VPN secures both IPv4 and IPv6 over native WireGuard.'
+  },
+  {
+    slug: 'detect-rogue-dhcp-server-guest-wifi',
+    title: 'How to Detect Rogue DHCP Servers & DNS Poisoning on Coworking Wi-Fi',
+    h1: 'How to Detect Rogue DHCP Servers & DNS Poisoning on Coworking & Guest Wi-Fi',
+    keyword: 'detect rogue dhcp server dns poisoning coworking wifi scanner',
+    domains: ['DHCP Offer / ACK Source IP Audit', 'Multiple Gateway Conflict Detection', 'In-Tunnel Encrypted DNS (10.66.0.1)', 'Static ARP Gateway Binding'],
+    summary: 'Rogue DHCP servers on guest networks hand out compromised DNS servers to hijack banking and email logins. SWEEPR VPN audits the LAN and enforces in-tunnel DNS resolution.'
+  },
+  {
+    slug: 'secure-smart-speaker-iot-isolation',
+    title: 'How to Isolate Alexa, Google Home & Smart Speakers on a WireGuard Subnet',
+    h1: 'How to Isolate Smart Speakers & IoT Gadgets From Your Primary Work Network',
+    keyword: 'isolate alexa google home smart speakers iot wireguard subnet',
+    domains: ['mDNS Repeater Isolation VLAN', 'Smart Speaker Egress Tunneling', 'Local Broadcast Containment', 'Zero-Log DNS Sinkholing'],
+    summary: 'Smart speakers continuously listen and communicate with cloud endpoints. Learn how to segregate smart speakers onto an isolated VLAN routed via SWEEPR VPN.'
+  },
+  {
+    slug: 'audit-home-nas-ransomware-wan-exposure',
+    title: 'How to Audit Your Synology/QNAP NAS for Open WAN Ports and UPnP Exposure',
+    h1: 'How to Audit Your Synology & QNAP NAS for Open WAN Ports and UPnP Leakage',
+    keyword: 'audit nas synology qnap open ports upnp exposure wireguard',
+    domains: ['UPnP IGD Automatic WAN Port Forwarding Probe', 'Exposed SMB Port 445 / 139 Audit', 'Exposed SSH Port 22 Probe', 'Dedicated Inbound WireGuard Access Only'],
+    summary: 'Automated UPnP can open your NAS storage directly to the public internet without your knowledge, exposing it to ransomware. SWEEPR VPN’s 30-second Wi-Fi audit flags dangerous open ports instantly.'
   }
 ];
 
