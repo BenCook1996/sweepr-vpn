@@ -4403,6 +4403,7 @@ self.addEventListener('fetch', e => {
     if (removed && removed.wg_licence_hash) {
       revokeLicenceOnAllNodes(removed.wg_licence_hash).catch(() => {});
     }
+    scheduleSaveRuntimeStateToDisk();
 
     return sendJson(
       res,
@@ -4711,11 +4712,13 @@ self.addEventListener('fetch', e => {
           licenses.set(localAcc.activation_code, localAcc);
           licenses.set(localAcc.licenseKey, localAcc);
         }
+        scheduleSaveRuntimeStateToDisk();
       }
     } else if (localAcc) {
       localAcc.status = 'canceled';
       licenses.delete(localAcc.activation_code);
       licenses.delete(localAcc.licenseKey);
+      scheduleSaveRuntimeStateToDisk();
     }
 
     const result = await revokeLicenceOnAllNodes({
@@ -4820,46 +4823,55 @@ self.addEventListener('fetch', e => {
       }
     }
 
-    // Optional live Google Play Developer API verification when GOOGLE_PLAY_SERVICE_ACCOUNT_JSON is configured
+    // Fail-closed live Google Play Developer API verification when GOOGLE_PLAY_SERVICE_ACCOUNT_JSON is configured
     const serviceAccountRaw = (process.env.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON || '').trim();
     if (serviceAccountRaw) {
       try {
         const sa = JSON.parse(serviceAccountRaw);
-        if (sa && sa.client_email && sa.private_key) {
-          const nowSec = Math.floor(Date.now() / 1000);
-          const jwtHeader = Buffer.from(JSON.stringify({ alg: 'RS256', typ: 'JWT' })).toString('base64url');
-          const jwtClaims = Buffer.from(
-            JSON.stringify({
-              iss: sa.client_email,
-              scope: 'https://www.googleapis.com/auth/androidpublisher',
-              aud: 'https://oauth2.googleapis.com/token',
-              iat: nowSec,
-              exp: nowSec + 3600
-            })
-          ).toString('base64url');
-          const signer = crypto.createSign('RSA-SHA256');
-          signer.update(`${jwtHeader}.${jwtClaims}`);
-          const jwtSig = signer.sign(sa.private_key, 'base64url');
-          const assertion = `${jwtHeader}.${jwtClaims}.${jwtSig}`;
-          const tokRes = await fetch('https://oauth2.googleapis.com/token', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: `grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=${encodeURIComponent(assertion)}`,
-            signal: AbortSignal.timeout(8000)
-          });
-          const tokData = await tokRes.json().catch(() => ({}));
-          if (tokData && tokData.access_token) {
-            const verifyUrl = `https://androidpublisher.googleapis.com/androidpublisher/v3/applications/com.sweepr.vpn/purchases/subscriptionsv2/tokens/${encodeURIComponent(purchaseToken)}`;
-            const playRes = await fetch(verifyUrl, {
-              headers: { Authorization: `Bearer ${tokData.access_token}` },
-              signal: AbortSignal.timeout(8000)
-            });
-            if (playRes.status === 404 || playRes.status === 400 || playRes.status === 410) {
-              return sendJson(res, 403, { ok: false, valid: false, error: 'invalid_play_purchase', message: 'Google Play Developer API rejected this purchase token.' }, {}, req);
-            }
-          }
+        if (!sa || !sa.client_email || !sa.private_key) {
+          return sendJson(res, 502, { ok: false, valid: false, error: 'play_verifier_misconfigured', message: 'Google Play service account credentials are incomplete.' }, {}, req);
         }
-      } catch {}
+        const nowSec = Math.floor(Date.now() / 1000);
+        const jwtHeader = Buffer.from(JSON.stringify({ alg: 'RS256', typ: 'JWT' })).toString('base64url');
+        const jwtClaims = Buffer.from(
+          JSON.stringify({
+            iss: sa.client_email,
+            scope: 'https://www.googleapis.com/auth/androidpublisher',
+            aud: 'https://oauth2.googleapis.com/token',
+            iat: nowSec,
+            exp: nowSec + 3600
+          })
+        ).toString('base64url');
+        const signer = crypto.createSign('RSA-SHA256');
+        signer.update(`${jwtHeader}.${jwtClaims}`);
+        const jwtSig = signer.sign(sa.private_key, 'base64url');
+        const assertion = `${jwtHeader}.${jwtClaims}.${jwtSig}`;
+        const tokRes = await fetch('https://oauth2.googleapis.com/token', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: `grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=${encodeURIComponent(assertion)}`,
+          signal: AbortSignal.timeout(8000)
+        });
+        const tokData = await tokRes.json().catch(() => ({}));
+        if (!tokRes.ok || !tokData || !tokData.access_token) {
+          return sendJson(res, 502, { ok: false, valid: false, error: 'play_oauth_failed', message: 'Could not authenticate with Google Play Developer API.' }, {}, req);
+        }
+        const verifyUrl = `https://androidpublisher.googleapis.com/androidpublisher/v3/applications/com.sweepr.vpn/purchases/subscriptionsv2/tokens/${encodeURIComponent(purchaseToken)}`;
+        const playRes = await fetch(verifyUrl, {
+          headers: { Authorization: `Bearer ${tokData.access_token}` },
+          signal: AbortSignal.timeout(8000)
+        });
+        if (!playRes.ok) {
+          return sendJson(res, 403, { ok: false, valid: false, error: 'invalid_play_purchase', message: 'Google Play Developer API rejected this purchase token.' }, {}, req);
+        }
+        const playBody = await playRes.json().catch(() => ({}));
+        const subState = String(playBody?.subscriptionState || '');
+        if (subState === 'SUBSCRIPTION_STATE_EXPIRED' || subState === 'SUBSCRIPTION_STATE_CANCELED') {
+          return sendJson(res, 403, { ok: false, valid: false, error: 'expired_play_purchase', message: 'This Google Play subscription is no longer active.' }, {}, req);
+        }
+      } catch (err) {
+        return sendJson(res, 502, { ok: false, valid: false, error: 'play_verification_unreachable', message: 'Could not verify Google Play purchase at this time. Please try again.' }, {}, req);
+      }
     }
 
     const resolvedPlan =
@@ -5638,6 +5650,7 @@ self.addEventListener('fetch', e => {
 
     acc.wifiRadarAddon = true;
     acc.entitlements = buildVpnEntitlements(true);
+    scheduleSaveRuntimeStateToDisk();
     crm.syncSubscription({
       email: acc.email,
       name: acc.name || undefined,
@@ -5684,6 +5697,7 @@ self.addEventListener('fetch', e => {
 
     acc.cancel_at_period_end = true;
     acc.current_period_end = acc.current_period_end || Date.now() + 30 * 86400 * 1000;
+    scheduleSaveRuntimeStateToDisk();
     crm.syncSubscription({
       email: acc.email,
       name: acc.name || undefined,
@@ -5729,6 +5743,7 @@ self.addEventListener('fetch', e => {
     }
 
     acc.cancel_at_period_end = false;
+    scheduleSaveRuntimeStateToDisk();
     crm.syncSubscription({
       email: acc.email,
       name: acc.name || undefined,
@@ -5953,10 +5968,23 @@ self.addEventListener('fetch', e => {
     }
     const body = req.method === 'POST' ? await readJsonBody(req) : {};
     if (body && body.__tooLarge) return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, {}, req);
-    const rawKey = String(body?.activation_code || body?.license_key || urlObj.searchParams.get('key') || urlObj.searchParams.get('code') || '').trim();
+    let rawKey = String(body?.activation_code || body?.license_key || urlObj.searchParams.get('key') || urlObj.searchParams.get('code') || '').trim();
+    let emailHint = String(body?.email || urlObj.searchParams.get('email') || '').trim();
+    if (!rawKey) {
+      const sess = verifySessionCookie(req);
+      if (sess) {
+        const sessAcc = accountsById.get(sess.accountId) || (sess.email ? accountsByEmail.get(sess.email) : null);
+        if (sessAcc && (sessAcc.status === 'active' || sessAcc.status === 'trialing')) {
+          rawKey = String(sessAcc.licenseKey || sessAcc.activation_code || '').trim();
+          if (!emailHint) emailHint = String(sessAcc.email || '');
+        }
+      }
+    }
     const rawCode = String(body?.server_code || urlObj.searchParams.get('server_code') || 'UK-LON-01').trim().toUpperCase();
     const serverCode = rawCode === 'CH-ZRH-01' ? 'SE-STO-01' : rawCode;
-    const licence = await resolveVpnLicence(rawKey, body?.email || urlObj.searchParams.get('email'), body?.device_id || urlObj.searchParams.get('device_id'));
+    const rawDnsShield = String(body?.dns_shield ?? urlObj.searchParams.get('dns_shield') ?? '1').trim().toLowerCase();
+    const dnsShieldEnabled = rawDnsShield !== '0' && rawDnsShield !== 'false';
+    const licence = await resolveVpnLicence(rawKey, emailHint, body?.device_id || urlObj.searchParams.get('device_id'));
     if (!licence) {
       return sendJson(res, 401, { ok: false, error: 'licence_required', message: 'Please enter a valid active SWEEPR Pro license key.' }, {}, req);
     }
@@ -5973,7 +6001,7 @@ self.addEventListener('fetch', e => {
       const r = await callNodeAgent(node, 'POST', '/peers', { public_key: clientPublicKey, licence: licence.id });
       const serverPubKey = String(node.public_key || r.public_key || '').trim();
       const assignedAddress = String(r.address || '10.64.0.2/32').trim();
-      const assignedDns = '1.1.1.1, 1.0.0.1';
+      const assignedDns = dnsShieldEnabled ? '1.1.1.2, 1.0.0.2' : '1.1.1.1, 1.0.0.1';
       const endpoint = `${node.ip}:${node.port || 51820}`;
       const wgConf = `[Interface]\nPrivateKey = ${clientPrivateKey}\nAddress = ${assignedAddress}\nDNS = ${assignedDns}\nMTU = 1280\n\n[Peer]\nPublicKey = ${serverPubKey}\nAllowedIPs = 0.0.0.0/0, ::/0\nEndpoint = ${endpoint}\nPersistentKeepalive = 25`;
       const uuidProfile = crypto.randomUUID().toUpperCase();

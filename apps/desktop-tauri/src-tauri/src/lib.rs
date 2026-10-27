@@ -379,9 +379,23 @@ fn set_smart_tv_shields(
         }
     }
 
+    let primary_dns = if any_enabled { "1.1.1.2" } else { "1.1.1.1" };
+    let secondary_dns = if any_enabled { "1.0.0.2" } else { "1.0.0.1" };
+    let tunnel_active = sweepr_tunnel::is_tunnel_active();
+
     #[cfg(target_os = "windows")]
     {
         use std::os::windows::process::CommandExt;
+        if tunnel_active {
+            let _ = std::process::Command::new("netsh")
+                .args(["interface", "ip", "set", "dns", "name=sweepr0", "static", primary_dns, "primary"])
+                .creation_flags(0x08000000)
+                .status();
+            let _ = std::process::Command::new("netsh")
+                .args(["interface", "ip", "add", "dns", "name=sweepr0", secondary_dns, "index=2"])
+                .creation_flags(0x08000000)
+                .status();
+        }
         let _ = std::process::Command::new("ipconfig")
             .args(["/flushdns"])
             .creation_flags(0x08000000)
@@ -389,12 +403,22 @@ fn set_smart_tv_shields(
     }
     #[cfg(target_os = "macos")]
     {
+        if tunnel_active {
+            let _ = std::process::Command::new("networksetup")
+                .args(["-setdnsservers", "Wi-Fi", primary_dns, secondary_dns])
+                .status();
+        }
         let _ = std::process::Command::new("dscacheutil")
             .args(["-flushcache"])
             .status();
     }
     #[cfg(target_os = "linux")]
     {
+        if tunnel_active {
+            let _ = std::process::Command::new("resolvectl")
+                .args(["dns", "sweepr0", primary_dns, secondary_dns])
+                .status();
+        }
         let _ = std::process::Command::new("resolvectl")
             .args(["flush-caches"])
             .status();

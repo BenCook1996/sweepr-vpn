@@ -574,7 +574,7 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
           <div style="font-size:14px;font-weight:800">Internet Kill Switch</div>
           <div style="font-size:11.5px;color:var(--muted)">Blocks traffic if the VPN tunnel drops</div>
         </div>
-        <span style="font-size:11.5px;font-weight:900;color:var(--accent-fg)">ACTIVE</span>
+        <button id="shieldBtnKillSwitch" class="c3-change-pill" style="border:none;cursor:pointer;font-size:11.5px;font-weight:900" onclick="toggleMobileShield('killSwitch')">ACTIVE</button>
       </div>
 
       <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)">
@@ -582,7 +582,7 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
           <div style="font-size:14px;font-weight:800">Untrusted Wi-Fi Auto-Shield</div>
           <div style="font-size:11.5px;color:var(--muted)">Secures airport, cafe &amp; hotel Wi-Fi</div>
         </div>
-        <span style="font-size:11.5px;font-weight:900;color:var(--accent-fg)">ACTIVE</span>
+        <button id="shieldBtnAutoWifi" class="c3-change-pill" style="border:none;cursor:pointer;font-size:11.5px;font-weight:900" onclick="toggleMobileShield('autoWifi')">ACTIVE</button>
       </div>
 
       <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0">
@@ -590,7 +590,7 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
           <div style="font-size:14px;font-weight:800">Smart-TV &amp; WebRTC Leak Block</div>
           <div style="font-size:11.5px;color:var(--muted)">Masks real UK/local IP from analytics</div>
         </div>
-        <span style="font-size:11.5px;font-weight:900;color:var(--accent-fg)">ACTIVE</span>
+        <button id="shieldBtnDnsShield" class="c3-change-pill" style="border:none;cursor:pointer;font-size:11.5px;font-weight:900" onclick="toggleMobileShield('dnsShield')">ACTIVE</button>
       </div>
     </div>
   </section>
@@ -669,6 +669,34 @@ const SERVERS = [
 
 let selectedCode = localStorage.getItem('sweepr_srv') || 'UK-LON-01';
 let connected = false;
+const mobileShields = {
+  killSwitch: localStorage.getItem('sweepr_mob_killswitch') !== '0',
+  autoWifi: localStorage.getItem('sweepr_mob_autowifi') !== '0',
+  dnsShield: localStorage.getItem('sweepr_mob_dnsshield') !== '0'
+};
+
+function renderMobileShields() {
+  const map = [
+    ['shieldBtnKillSwitch', mobileShields.killSwitch],
+    ['shieldBtnAutoWifi', mobileShields.autoWifi],
+    ['shieldBtnDnsShield', mobileShields.dnsShield]
+  ];
+  map.forEach(([id, on]) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = on ? 'ACTIVE' : 'OFF';
+    el.style.color = on ? 'var(--accent-fg)' : 'var(--muted)';
+    el.style.opacity = on ? '1' : '0.65';
+  });
+}
+
+function toggleMobileShield(key) {
+  mobileShields[key] = !mobileShields[key];
+  const storageKey = key === 'killSwitch' ? 'sweepr_mob_killswitch' : key === 'autoWifi' ? 'sweepr_mob_autowifi' : 'sweepr_mob_dnsshield';
+  localStorage.setItem(storageKey, mobileShields[key] ? '1' : '0');
+  renderMobileShields();
+  showToast((mobileShields[key] ? 'Enabled ' : 'Paused ') + (key === 'killSwitch' ? 'Kill Switch' : key === 'autoWifi' ? 'Wi-Fi Auto-Shield' : 'Smart-TV DNS Shield'));
+}
 
 function showToast(msg) {
   const t = document.getElementById('toast');
@@ -767,11 +795,14 @@ async function activateDevice() {
   msg.style.color = 'var(--muted)';
   msg.textContent = 'Verifying subscription...';
   try {
+    const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent || '');
+    const devOs = isIos ? 'ios' : 'android';
+    const devName = isIos ? 'iPhone / iPad' : 'Android Device';
     const ptk = raw.match(/ptk_[A-Za-z0-9_-]{12,64}/);
     const url = ptk ? (API_BASE + '/api/vpn/pair/redeem') : (API_BASE + '/api/vpn/activate');
     const body = ptk
-      ? { token: ptk[0], device_id: getDeviceId(), device_name: 'Mobile Device', os: 'mobile' }
-      : { code: raw, key: raw, email, device_id: getDeviceId(), device_name: 'Mobile Device', os: 'mobile' };
+      ? { token: ptk[0], device_id: getDeviceId(), device_name: devName, os: devOs }
+      : { code: raw, key: raw, email, device_id: getDeviceId(), device_name: devName, os: devOs };
     const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
     const d = await r.json();
     if (r.ok && (d.ok || d.valid)) {
@@ -823,9 +854,21 @@ async function toggleTunnel() {
   }
 
   lbl.textContent = 'SYNCING...';
-  pill.textContent = 'HANDSHAKING...';
-  head.textContent = 'Securing WireGuard Tunnel...';
-  sub.textContent = 'Assigning ' + cur.city + ' Virtual IPv4...';
+  pill.textContent = 'PROVISIONING...';
+  head.textContent = 'Preparing Native WireGuard Profile...';
+  sub.textContent = 'Target gateway: ' + cur.city + ' (' + cur.country + ')';
+
+  const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent || '');
+  const dnsFlag = mobileShields.dnsShield ? '1' : '0';
+  if (isIos) {
+    lbl.textContent = 'INSTALL PROFILE';
+    pill.textContent = 'PROFILE DOWNLOADING';
+    head.textContent = 'Install iOS VPN Profile in Settings';
+    sub.textContent = 'Approve profile in iOS Settings -> General -> VPN & Device Management';
+    showToast('Downloading iOS WireGuard profile...');
+    window.location.href = '/api/vpn/apple-mobileconfig?key=' + encodeURIComponent(key) + '&email=' + encodeURIComponent(email) + '&server_code=' + encodeURIComponent(selectedCode) + '&device_id=' + encodeURIComponent(getDeviceId()) + '&dns_shield=' + dnsFlag;
+    return;
+  }
 
   try {
     const r = await fetch(API_BASE + '/api/vpn/wireguard-config', {
@@ -837,22 +880,18 @@ async function toggleTunnel() {
         email,
         server_code: selectedCode,
         device_id: getDeviceId(),
+        dns_shield: mobileShields.dnsShield,
         lan_bypass: false
       })
     });
     const d = await r.json();
     if (r.ok && d.ok) {
-      connected = true;
-      orb.classList.add('connected');
-      pill.classList.add('connected');
-      pill.textContent = 'SHIELD ON \\u2022 ZERO LEAKS';
-      head.textContent = 'Your Connection is Private';
-      sub.textContent = 'Virtual IP: ' + (d.public_ip || cur.ip) + ' (' + cur.country + ')';
-      lbl.textContent = 'CONNECTED';
-      showToast('Connected to ' + cur.country);
-      if (!window.SweeprAndroid && /iphone|ipad|ipod/i.test(navigator.userAgent)) {
-        window.location.href = '/api/vpn/apple-mobileconfig?key=' + encodeURIComponent(key) + '&email=' + encodeURIComponent(email) + '&server_code=' + encodeURIComponent(selectedCode) + '&device_id=' + encodeURIComponent(getDeviceId());
-      }
+      lbl.textContent = 'OPEN ANDROID APP';
+      pill.textContent = 'READY FOR ANDROID VPN';
+      head.textContent = 'Opening SWEEPR Android App...';
+      sub.textContent = 'Gateway: ' + cur.city + ' (' + cur.country + ')';
+      showToast('Launching SWEEPR VPN Android app...');
+      window.location.href = 'sweeprvpn://activate?key=' + encodeURIComponent(key) + '&email=' + encodeURIComponent(email);
     } else {
       lbl.textContent = 'TAP TO CONNECT';
       pill.textContent = 'ACTIVATION REQUIRED';
@@ -876,6 +915,7 @@ async function toggleTunnel() {
     document.getElementById('codeInput').value = savedKey;
     document.getElementById('proBadge').textContent = 'PRO ACTIVE';
   }
+  renderMobileShields();
   renderServers();
 })();
 </script>

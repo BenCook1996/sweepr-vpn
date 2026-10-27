@@ -87,6 +87,7 @@ class BillingHelper(
         if (billingClient.isReady) {
             _isBillingReady.value = true
             querySubscriptionProducts()
+            syncOwnedPurchasesOnStartup()
             return
         }
         try {
@@ -95,6 +96,7 @@ class BillingHelper(
                     if (result.responseCode == BillingClient.BillingResponseCode.OK) {
                         _isBillingReady.value = true
                         querySubscriptionProducts()
+                        syncOwnedPurchasesOnStartup()
                     } else {
                         _isBillingReady.value = false
                     }
@@ -106,6 +108,21 @@ class BillingHelper(
             })
         } catch (_: Exception) {
             _isBillingReady.value = false
+        }
+    }
+
+    private fun syncOwnedPurchasesOnStartup() {
+        val params = QueryPurchasesParams.newBuilder()
+            .setProductType(BillingClient.ProductType.SUBS)
+            .build()
+        billingClient.queryPurchasesAsync(params) { result, purchases ->
+            if (result.responseCode == BillingClient.BillingResponseCode.OK && !purchases.isNullOrEmpty()) {
+                for (purchase in purchases) {
+                    if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
+                        handlePurchase(purchase)
+                    }
+                }
+            }
         }
     }
 

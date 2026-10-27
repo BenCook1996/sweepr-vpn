@@ -22,6 +22,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.net.DatagramPacket
@@ -223,9 +225,7 @@ class SweeprWireGuardVpnService : VpnService() {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 builder.setMetered(false)
-                if (killSwitch) {
-                    builder.setBlocking(true)
-                }
+                builder.setBlocking(true)
             }
 
             val openIntent = Intent(this, MainActivity::class.java).apply {
@@ -244,6 +244,8 @@ class SweeprWireGuardVpnService : VpnService() {
             null
         }
     }
+
+    private val udpForwardSemaphore = kotlinx.coroutines.sync.Semaphore(16)
 
     private fun startTunPacketLoop(pfd: ParcelFileDescriptor) {
         packetJob?.cancel()
@@ -270,7 +272,9 @@ class SweeprWireGuardVpnService : VpnService() {
                 if (protocol == 17 && readLen >= ihl + 8) {
                     val pktCopy = buf.copyOfRange(0, readLen)
                     launch {
-                        forwardUdpPacketOverProtectedSocket(pktCopy, ihl, output)
+                        udpForwardSemaphore.withPermit {
+                            forwardUdpPacketOverProtectedSocket(pktCopy, ihl, output)
+                        }
                     }
                 }
             }
@@ -294,7 +298,7 @@ class SweeprWireGuardVpnService : VpnService() {
         try {
             udpSocket = DatagramSocket()
             protect(udpSocket)
-            udpSocket.soTimeout = 4000
+            udpSocket.soTimeout = 1500
             val dstAddr = InetAddress.getByAddress(dstIp)
             val outDatagram = DatagramPacket(pkt, payloadOffset, payloadLen, dstAddr, dstPort)
             udpSocket.send(outDatagram)
@@ -348,9 +352,13 @@ class SweeprWireGuardVpnService : VpnService() {
                 System.arraycopy(recvBuf, 0, respPkt, 28, respLen)
 
                 synchronized(tunWriteLock) {
-                    tunOut.write(respPkt)
+                    if (!serviceScope.isActive || vpnInterface == null) return
+                    try {
+                        tunOut.write(respPkt)
+                        tunOut.flush()
+                        tunnelRxBytes.addAndGet(totalLen.toLong())
+                    } catch (_: Exception) {}
                 }
-                tunnelRxBytes.addAndGet(totalLen.toLong())
             }
         } catch (_: Exception) {
         } finally {
@@ -392,15 +400,13 @@ class SweeprWireGuardVpnService : VpnService() {
         statsJob = serviceScope.launch {
             while (isActive && vpnInterface != null) {
                 delay(1000L)
-                val sysRx = (TrafficStats.getTotalRxBytes() - baselineRxBytes).coerceAtLeast(0L)
-                val sysTx = (TrafficStats.getTotalTxBytes() - baselineTxBytes).coerceAtLeast(0L)
                 val tunRx = tunnelRxBytes.get().coerceAtLeast(0L)
                 val tunTx = tunnelTxBytes.get().coerceAtLeast(0L)
                 val cur = _tunnelState.value
                 if (cur.isConnected) {
                     _tunnelState.value = cur.copy(
-                        rxBytes = maxOf(sysRx, tunRx),
-                        txBytes = maxOf(sysTx, tunTx)
+                        rxBytes = tunRx,
+                        txBytes = tunTx
                     )
                 }
             }

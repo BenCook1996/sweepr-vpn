@@ -81,7 +81,12 @@ class MainActivity : ComponentActivity() {
 
     private fun extractDeepLink(intent: Intent?) {
         val data = intent?.data ?: return
-        if (data.scheme.equals("sweeprvpn", ignoreCase = true)) {
+        val scheme = data.scheme?.lowercase() ?: return
+        val host = data.host?.lowercase() ?: ""
+        val isCustomScheme = scheme == "sweeprvpn"
+        val isHttpsLink = (scheme == "https" || scheme == "http") &&
+            (host == "sweeprvpn.com" || host == "www.sweeprvpn.com")
+        if (isCustomScheme || isHttpsLink) {
             val token = data.getQueryParameter("t") ?: data.getQueryParameter("token")
             val challenge = data.getQueryParameter("c") ?: data.getQueryParameter("challenge_id")
             val key = data.getQueryParameter("key") ?: data.getQueryParameter("code")

@@ -908,7 +908,18 @@ fn bring_tunnel_up(conf: &Path) -> Result<(), String> {
     }
 }
 
+fn is_kill_switch_enabled_on_disk() -> bool {
+    let ks_path = app_data_dir().join("kill_switch.json");
+    if let Ok(raw) = fs::read_to_string(ks_path) {
+        if let Ok(val) = serde_json::from_str::<serde_json::Value>(&raw) {
+            return val.get("enabled").and_then(|v| v.as_bool()).unwrap_or(false);
+        }
+    }
+    false
+}
+
 pub fn bring_tunnel_down() -> Result<(), String> {
+    let ks_active = is_kill_switch_enabled_on_disk();
     #[cfg(target_os = "windows")]
     {
         use std::os::windows::process::CommandExt;
@@ -916,10 +927,16 @@ pub fn bring_tunnel_down() -> Result<(), String> {
             return Ok(());
         }
         if let Some(wg_exe) = find_wireguard_exe() {
+            let ipv6_cleanup = if ks_active {
+                ""
+            } else {
+                " & netsh advfirewall firewall delete rule name=SWEEPR_VPN_Block_IPv6 >nul 2>&1"
+            };
             let ps = format!(
-                "Start-Process -FilePath 'cmd.exe' -ArgumentList '/c','\"\"{}\" /uninstalltunnelservice {} & netsh advfirewall firewall delete rule name=SWEEPR_VPN_Block_IPv6 >nul 2>&1 & ipconfig /flushdns >nul 2>&1\"' -Verb RunAs -WindowStyle Hidden -Wait",
+                "Start-Process -FilePath 'cmd.exe' -ArgumentList '/c','\"\"{}\" /uninstalltunnelservice {}{} & ipconfig /flushdns >nul 2>&1\"' -Verb RunAs -WindowStyle Hidden -Wait",
                 wg_exe.display(),
-                TUNNEL_NAME
+                TUNNEL_NAME,
+                ipv6_cleanup
             );
             let _ = Command::new(powershell_bin())
                 .args(["-NoProfile", "-WindowStyle", "Hidden", "-Command", &ps])
@@ -932,9 +949,15 @@ pub fn bring_tunnel_down() -> Result<(), String> {
     {
         let c = conf_path();
         if c.exists() {
+            let ipv6_restore = if ks_active {
+                ""
+            } else {
+                " networksetup -setv6automatic Wi-Fi >/dev/null 2>&1 || true;"
+            };
             let script = format!(
-                "do shell script \"export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH; wg-quick down '{}' >/dev/null 2>&1 || true; networksetup -setv6automatic Wi-Fi >/dev/null 2>&1 || true; dscacheutil -flushcache >/dev/null 2>&1 || true; killall -HUP mDNSResponder >/dev/null 2>&1 || true\" with administrator privileges",
-                c.display()
+                "do shell script \"export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH; wg-quick down '{}' >/dev/null 2>&1 || true;{} dscacheutil -flushcache >/dev/null 2>&1 || true; killall -HUP mDNSResponder >/dev/null 2>&1 || true\" with administrator privileges",
+                c.display(),
+                ipv6_restore
             );
             let _ = Command::new("osascript").args(["-e", &script]).status();
         }
@@ -944,9 +967,15 @@ pub fn bring_tunnel_down() -> Result<(), String> {
     {
         let c = conf_path();
         if c.exists() {
+            let ipv6_restore = if ks_active {
+                ""
+            } else {
+                " sysctl -w net.ipv6.conf.all.disable_ipv6=0 >/dev/null 2>&1 || true;"
+            };
             let cmd = format!(
-                "wg-quick down '{}' >/dev/null 2>&1 || true; sysctl -w net.ipv6.conf.all.disable_ipv6=0 >/dev/null 2>&1 || true; resolvectl flush-caches >/dev/null 2>&1 || true",
-                c.display()
+                "wg-quick down '{}' >/dev/null 2>&1 || true;{} resolvectl flush-caches >/dev/null 2>&1 || true",
+                c.display(),
+                ipv6_restore
             );
             let _ = Command::new("pkexec")
                 .args(["sh", "-c", &cmd])

@@ -381,6 +381,7 @@
     <symbol id="i-apple" viewBox="0 0 24 24"><path fill="currentColor" d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></symbol>
     <symbol id="i-mac" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></g><path fill="currentColor" d="M13.6 12.6c-.35.34-.73.29-1.1.13-.39-.16-.75-.17-1.16 0-.51.22-.79.16-1.09-.13-1.74-1.8-1.48-4.53.5-4.63.48.03.82.26 1.1.29.42-.09.82-.33 1.27-.3.54.04.95.26 1.21.64-1.11.67-.85 2.13.17 2.54-.2.53-.47 1.07-.9 1.46zm-1.79-4.65c-.05-.8.59-1.45 1.33-1.52.1.92-.83 1.6-1.33 1.52z"/></symbol>
     <symbol id="i-android" viewBox="0 0 24 24"><path fill="currentColor" d="M17.6 9.48l1.84-3.18c.16-.31.04-.69-.26-.85-.29-.15-.65-.06-.83.22l-1.88 3.24a11.46 11.46 0 0 0-8.94 0L5.65 5.67c-.19-.28-.54-.37-.83-.22-.3.16-.42.54-.26.85L6.4 9.48A10.78 10.78 0 0 0 2 18h20a10.78 10.78 0 0 0-4.4-8.52zM7 15.25a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5zm10 0a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5z"/></symbol>
+    <symbol id="i-linux" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><polyline points="7 9 10 11.5 7 14"/><line x1="12" y1="14" x2="16" y2="14"/><line x1="8" y1="21" x2="16" y2="21"/></g></symbol>
   </defs>
 </svg>
 
@@ -758,22 +759,29 @@
   let devices = [];
   let scanning = false;
   let lastScanAt = 0;
-  const ICONS = { windows:'i-windows', macos:'i-mac', iphone:'i-apple', ipad:'i-apple', android:'i-android', router:'i-wifi', extender:'i-wifi', computer:'i-windows', tv:'i-tv', speaker:'i-speaker', printer:'i-printer', camera:'i-camera', console:'i-game', smart_home:'i-bulb', private:'i-apple', other:'i-android' };
+  const ICONS = { windows:'i-windows', macos:'i-mac', linux:'i-linux', iphone:'i-apple', ipad:'i-apple', android:'i-android', router:'i-wifi', extender:'i-wifi', computer:'i-windows', tv:'i-tv', speaker:'i-speaker', printer:'i-printer', camera:'i-camera', console:'i-game', smart_home:'i-bulb', private:'i-apple', other:'i-android' };
   function resolveDeviceIcon(d) {
     const k = String((d && d.kind) || '').toLowerCase();
     const nm = String((d && d.name) || '').toLowerCase();
     if (k === 'windows' || nm.includes('windows')) return 'i-windows';
     if (k === 'macos' || nm.includes('macos') || nm.includes('macbook') || nm.includes('imac')) return 'i-mac';
+    if (k === 'linux' || nm.includes('linux') || nm.includes('ubuntu') || nm.includes('fedora')) return 'i-linux';
     if (k === 'iphone' || k === 'ipad' || nm.includes('iphone') || nm.includes('ipad') || nm.includes('ios')) return 'i-apple';
     if (k === 'android' || nm.includes('android')) return 'i-android';
-    if (d && d.is_self) return /mac/i.test(navigator.userAgent || '') ? 'i-mac' : 'i-windows';
+    if (d && d.is_self) {
+      const ua = navigator.userAgent || '';
+      if (/mac/i.test(ua)) return 'i-mac';
+      if (/linux/i.test(ua)) return 'i-linux';
+      return 'i-windows';
+    }
     return ICONS[k] || 'i-windows';
   }
   function resolveDeviceDisplayName(d) {
     if (!d) return 'Windows Desktop';
     const raw = String(d.name || '').trim();
     if (d.is_self) {
-      const selfOs = /mac/i.test(navigator.userAgent || '') ? 'macOS Desktop' : 'Windows Desktop';
+      const ua = navigator.userAgent || '';
+      const selfOs = /mac/i.test(ua) ? 'macOS Desktop' : (/linux/i.test(ua) ? 'Linux Desktop' : 'Windows Desktop');
       return (raw && raw.toLowerCase() !== 'this computer' && raw.toLowerCase() !== 'this device' ? raw : selfOs) + ' (This Device)';
     }
     if (!raw || raw === 'Home Wi-Fi Device' || raw === 'Unknown device') return 'Windows Desktop';
@@ -1085,19 +1093,23 @@
   }
   let prevRxBytes = null;
   let prevTxBytes = null;
+  let lastDownMbps = '0.0';
+  let lastUpMbps = '0.0';
   async function tick() {
     state.seconds++;
     const h = String(Math.floor(state.seconds / 3600)).padStart(2,'0'), m = String(Math.floor(state.seconds % 3600 / 60)).padStart(2,'0'), s = String(state.seconds % 60).padStart(2,'0');
     $('timer').textContent = h + ':' + m + ':' + s;
     let downMbps = null;
     let upMbps = null;
-    if (tauri && state.connected && state.seconds % 2 === 0) {
+    if (tauri && state.connected) {
       try {
         const st = await tauri.core.invoke('vpn_status');
         if (st && typeof st.rx_bytes === 'number' && typeof st.tx_bytes === 'number') {
           if (prevRxBytes !== null && st.rx_bytes >= prevRxBytes && st.tx_bytes >= prevTxBytes) {
-            downMbps = (((st.rx_bytes - prevRxBytes) * 8) / (2 * 1000000)).toFixed(1);
-            upMbps = (((st.tx_bytes - prevTxBytes) * 8) / (2 * 1000000)).toFixed(1);
+            downMbps = (((st.rx_bytes - prevRxBytes) * 8) / 1000000).toFixed(1);
+            upMbps = (((st.tx_bytes - prevTxBytes) * 8) / 1000000).toFixed(1);
+            lastDownMbps = downMbps;
+            lastUpMbps = upMbps;
           }
           prevRxBytes = st.rx_bytes;
           prevTxBytes = st.tx_bytes;
@@ -1106,11 +1118,16 @@
       } catch (e) {}
     }
     if (downMbps === null || upMbps === null) {
-      const baseMbps = cur().ping <= 25 ? 64 : 38;
-      downMbps = (baseMbps + Math.sin(state.seconds * 0.9) * 14 + (state.seconds % 5) * 2.1).toFixed(1);
-      upMbps = (baseMbps * 0.24 + Math.cos(state.seconds * 0.7) * 3.2).toFixed(1);
-      if (prevRxBytes === null) {
-        state.mbTransferred += (parseFloat(downMbps) + parseFloat(upMbps)) * 0.045;
+      if (tauri) {
+        downMbps = lastDownMbps || '0.0';
+        upMbps = lastUpMbps || '0.0';
+      } else {
+        const baseMbps = cur().ping <= 25 ? 64 : 38;
+        downMbps = (baseMbps + Math.sin(state.seconds * 0.9) * 14 + (state.seconds % 5) * 2.1).toFixed(1);
+        upMbps = (baseMbps * 0.24 + Math.cos(state.seconds * 0.7) * 3.2).toFixed(1);
+        if (prevRxBytes === null) {
+          state.mbTransferred += (parseFloat(downMbps) + parseFloat(upMbps)) * 0.045;
+        }
       }
     }
     state.spark.shift();
@@ -2006,7 +2023,10 @@
       state.pro = true; state.killSwitch = true;
       document.querySelectorAll('.toggle.shield').forEach(t => syncSwitchAria(t, true));
       renderAll();
-      checkVpnStatus();
+      await checkVpnStatus();
+      if (state.startup && state.pro && !state.connected) {
+        toggleConnect(true);
+      }
     } catch (e) {
       const msg = String((e && e.message) || e || '');
       if (/invalid|revoked|expired|failed cryptographic/i.test(msg)) {
@@ -2015,7 +2035,10 @@
         try { localStorage.removeItem('sweepr_vpn_email'); localStorage.removeItem('sweepr_vpn_code'); localStorage.removeItem('sweepr_vpn_license_key'); } catch (err) {}
       }
       renderAll();
-      checkVpnStatus();
+      await checkVpnStatus();
+      if (state.startup && state.pro && !state.connected) {
+        toggleConnect(true);
+      }
     }
   }
 
