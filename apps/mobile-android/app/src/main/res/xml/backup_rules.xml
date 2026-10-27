@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Auto Backup rules for Android 11 and below (API 26-30).
+    Explicitly exclude sweepr_vpn_prefs.xml so device-bound WireGuard private keys,
+    activation keys, and refresh tokens are never backed up to Google Drive.
+-->
+<full-backup-content>
+    <exclude domain="sharedpref" path="sweepr_vpn_prefs.xml" />
+</full-backup-content>

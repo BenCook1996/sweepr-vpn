@@ -37,13 +37,17 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile = file("upload-keystore.jks")
-            storePassword = System.getenv("KEYSTORE_PASSWORD")
+            val ksFile = file("upload-keystore.jks")
+            val ksPassword = System.getenv("KEYSTORE_PASSWORD")
                 ?: localProps.getProperty("RELEASE_STORE_PASSWORD", "")
-            keyAlias = System.getenv("KEY_ALIAS")
-                ?: localProps.getProperty("RELEASE_KEY_ALIAS", "sweeprvpn")
-            keyPassword = System.getenv("KEY_PASSWORD")
-                ?: localProps.getProperty("RELEASE_KEY_PASSWORD", "")
+            if (ksFile.exists() && ksPassword.isNotBlank()) {
+                storeFile = ksFile
+                storePassword = ksPassword
+                keyAlias = System.getenv("KEY_ALIAS")
+                    ?: localProps.getProperty("RELEASE_KEY_ALIAS", "sweeprvpn")
+                keyPassword = System.getenv("KEY_PASSWORD")
+                    ?: localProps.getProperty("RELEASE_KEY_PASSWORD", ksPassword)
+            }
         }
     }
 
@@ -51,14 +55,22 @@ android {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
-            signingConfig = signingConfigs.getByName("release")
+            val relSigning = signingConfigs.getByName("release")
+            signingConfig = if (relSigning.storeFile?.exists() == true && !relSigning.storePassword.isNullOrBlank()) {
+                relSigning
+            } else {
+                signingConfigs.getByName("debug")
+            }
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
         debug {
-            signingConfig = signingConfigs.getByName("release")
+            val relSigning = signingConfigs.getByName("release")
+            if (relSigning.storeFile?.exists() == true && !relSigning.storePassword.isNullOrBlank()) {
+                signingConfig = relSigning
+            }
         }
     }
 
@@ -68,7 +80,7 @@ android {
     }
 
     lint {
-        checkReleaseBuilds = false
+        checkReleaseBuilds = true
         abortOnError = false
     }
 }
@@ -76,6 +88,7 @@ android {
 dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.activity:activity-compose:1.8.2")
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     implementation(platform("androidx.compose:compose-bom:2024.04.01"))

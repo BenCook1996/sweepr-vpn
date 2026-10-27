@@ -10,11 +10,14 @@
 
     <application
         android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.SweeprVpn">
+        android:theme="@style/Theme.SweeprVpn"
+        android:usesCleartextTraffic="false">
 
         <activity
             android:name=".MainActivity"
@@ -51,7 +54,15 @@
                     android:pathPrefix="/pair" />
                 <data
                     android:scheme="https"
+                    android:host="www.sweeprvpn.com"
+                    android:pathPrefix="/pair" />
+                <data
+                    android:scheme="https"
                     android:host="sweeprvpn.com"
+                    android:pathPrefix="/activate" />
+                <data
+                    android:scheme="https"
+                    android:host="www.sweeprvpn.com"
                     android:pathPrefix="/activate" />
             </intent-filter>
         </activity>
