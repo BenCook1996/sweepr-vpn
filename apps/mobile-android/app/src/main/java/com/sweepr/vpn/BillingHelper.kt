@@ -83,11 +83,19 @@ class BillingHelper(
         )
         .build()
 
+    private var pendingManualRestore: Boolean = false
+    private var pendingPurchaseRequest: Pair<java.lang.ref.WeakReference<Activity>, String>? = null
+
     fun startConnection() {
         if (billingClient.isReady) {
             _isBillingReady.value = true
             querySubscriptionProducts()
-            syncOwnedPurchasesOnStartup()
+            if (pendingManualRestore) {
+                pendingManualRestore = false
+                restorePurchases()
+            } else {
+                syncOwnedPurchasesOnStartup()
+            }
             return
         }
         try {
@@ -96,9 +104,18 @@ class BillingHelper(
                     if (result.responseCode == BillingClient.BillingResponseCode.OK) {
                         _isBillingReady.value = true
                         querySubscriptionProducts()
-                        syncOwnedPurchasesOnStartup()
+                        if (pendingManualRestore) {
+                            pendingManualRestore = false
+                            restorePurchases()
+                        } else {
+                            syncOwnedPurchasesOnStartup()
+                        }
                     } else {
                         _isBillingReady.value = false
+                        if (pendingManualRestore) {
+                            pendingManualRestore = false
+                            onBillingMessage("Google Play Store is unavailable on this device.")
+                        }
                     }
                 }
 
@@ -173,6 +190,16 @@ class BillingHelper(
                         productDetails = match
                     )
                 }
+                val queued = pendingPurchaseRequest
+                if (queued != null) {
+                    pendingPurchaseRequest = null
+                    val act = queued.first.get()
+                    if (act != null && !act.isFinishing && !act.isDestroyed) {
+                        act.runOnUiThread {
+                            launchPurchase(act, queued.second)
+                        }
+                    }
+                }
             }
         }
     }
@@ -181,6 +208,7 @@ class BillingHelper(
         val plan = _plans.value.firstOrNull { it.planKey == planKey } ?: _plans.value.first()
         val details = plan.productDetails
         if (!billingClient.isReady || details == null) {
+            pendingPurchaseRequest = java.lang.ref.WeakReference(activity) to planKey
             startConnection()
             onBillingMessage("Connecting to Google Play Billing… If Play Store is not signed in on this device, you can also complete checkout at sweeprvpn.com/order.")
             return false
@@ -203,6 +231,7 @@ class BillingHelper(
 
     fun restorePurchases() {
         if (!billingClient.isReady) {
+            pendingManualRestore = true
             startConnection()
             onBillingMessage("Connecting to Google Play Store to check active subscriptions…")
             return

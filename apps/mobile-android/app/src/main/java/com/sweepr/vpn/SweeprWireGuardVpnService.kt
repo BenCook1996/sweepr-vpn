@@ -223,9 +223,9 @@ class SweeprWireGuardVpnService : VpnService() {
                 builder.addDisallowedApplication(packageName)
             } catch (_: Exception) {}
 
+            builder.setBlocking(true)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 builder.setMetered(false)
-                builder.setBlocking(true)
             }
 
             val openIntent = Intent(this, MainActivity::class.java).apply {

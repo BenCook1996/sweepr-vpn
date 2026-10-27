@@ -626,7 +626,7 @@ function loadRuntimeStateFromDisk() {
         accountsById.set(hydrated.id, hydrated);
         if (hydrated.email) accountsByEmail.set(String(hydrated.email).toLowerCase(), hydrated);
         if (hydrated.stripe_subscription_id) accountsBySubscriptionId.set(hydrated.stripe_subscription_id, hydrated);
-        if (hydrated.status === 'active') {
+        if (hydrated.status === 'active' || hydrated.status === 'trialing') {
           if (hydrated.licenseKey) licenses.set(hydrated.licenseKey, hydrated);
           if (hydrated.activation_code) licenses.set(hydrated.activation_code, hydrated);
         }
@@ -752,7 +752,7 @@ function buildVpnEntitlements(wifiRadarAddon) {
     'vpn_wireguard_tunnel',
     'vpn_streaming_speed_booster',
     'vpn_auto_killswitch',
-    'vpn_multi_device_10'
+    'vpn_multi_device_3'
   ];
   if (wifiRadarAddon) {
     list.push('addon_wifi_radar_and_smart_tv_shield');
@@ -831,7 +831,7 @@ function upsertLocalAccount({ email, name, country, stripeCustomerId, plan, wifi
   if (normEmail) {
     accountsByEmail.set(normEmail, acc);
   }
-  if (acc.status === 'active') {
+  if (acc.status === 'active' || acc.status === 'trialing') {
     licenses.set(acc.licenseKey, acc);
     licenses.set(acc.activation_code, acc);
   } else {
@@ -963,6 +963,7 @@ function syncLocalCacheFromCrm(crmData, fallbackEmail = '', fallbackCode = '') {
     }
     licenses.set(acc.activation_code, acc);
     licenses.set(acc.licenseKey, acc);
+    scheduleSaveRuntimeStateToDisk();
     return acc;
   }
 
@@ -982,6 +983,7 @@ function syncLocalCacheFromCrm(crmData, fallbackEmail = '', fallbackCode = '') {
       target.status = crmData.status || 'canceled';
       licenses.delete(target.activation_code);
       licenses.delete(target.licenseKey);
+      scheduleSaveRuntimeStateToDisk();
       revokeLicenceOnAllNodes(target).catch(() => {});
     }
   }
@@ -2386,6 +2388,40 @@ const server = http.createServer(async (req, res) => {
       });
       return res.end(body);
     }
+  }
+
+  // Android App Links Digital Asset Links Verification (/.well-known/assetlinks.json)
+  if (pathname === '/.well-known/assetlinks.json' && (req.method === 'GET' || req.method === 'HEAD')) {
+    const extraFingerprints = String(process.env.ANDROID_APP_SHA256_FINGERPRINTS || '')
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean);
+    const fingerprints = Array.from(
+      new Set([
+        '98:36:22:82:8F:83:79:AA:32:A2:9B:C6:72:69:1F:B5:07:9E:04:1F:48:86:FB:84:DA:D3:B2:A1:BA:94:A8:D0',
+        ...extraFingerprints
+      ])
+    );
+    const payload = JSON.stringify(
+      [
+        {
+          relation: ['delegate_permission/common.handle_all_urls'],
+          target: {
+            namespace: 'android_app',
+            package_name: 'com.sweepr.vpn',
+            sha256_cert_fingerprints: fingerprints
+          }
+        }
+      ],
+      null,
+      2
+    );
+    res.writeHead(200, {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Cache-Control': 'public, max-age=3600',
+      ...COMMON_SECURITY_HEADERS
+    });
+    return res.end(req.method === 'HEAD' ? undefined : payload);
   }
 
   // Installable PWA Web App Manifest & Service Worker (Item 5)
@@ -6129,6 +6165,7 @@ self.addEventListener('fetch', e => {
             localAcc.licenseKey = String(crmLookup.license_key).trim().toUpperCase();
             licenses.set(localAcc.licenseKey, localAcc);
           }
+          scheduleSaveRuntimeStateToDisk();
         }
       } catch {}
     }

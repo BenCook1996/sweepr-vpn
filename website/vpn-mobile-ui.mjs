@@ -870,41 +870,12 @@ async function toggleTunnel() {
     return;
   }
 
-  try {
-    const r = await fetch(API_BASE + '/api/vpn/wireguard-config', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        license_key: key,
-        activation_code: key,
-        email,
-        server_code: selectedCode,
-        device_id: getDeviceId(),
-        dns_shield: mobileShields.dnsShield,
-        lan_bypass: false
-      })
-    });
-    const d = await r.json();
-    if (r.ok && d.ok) {
-      lbl.textContent = 'OPEN ANDROID APP';
-      pill.textContent = 'READY FOR ANDROID VPN';
-      head.textContent = 'Opening SWEEPR Android App...';
-      sub.textContent = 'Gateway: ' + cur.city + ' (' + cur.country + ')';
-      showToast('Launching SWEEPR VPN Android app...');
-      window.location.href = 'sweeprvpn://activate?key=' + encodeURIComponent(key) + '&email=' + encodeURIComponent(email);
-    } else {
-      lbl.textContent = 'TAP TO CONNECT';
-      pill.textContent = 'ACTIVATION REQUIRED';
-      head.textContent = 'Protection is Paused';
-      sub.textContent = d.message || 'Check license key in Profile';
-      showToast(d.message || 'Check license key');
-    }
-  } catch (e) {
-    lbl.textContent = 'TAP TO CONNECT';
-    pill.textContent = 'TAP ORB TO PROTECT';
-    head.textContent = 'Protection is Paused';
-    sub.textContent = 'Could not reach gateway';
-  }
+  lbl.textContent = 'OPEN ANDROID APP';
+  pill.textContent = 'READY FOR ANDROID VPN';
+  head.textContent = 'Opening SWEEPR Android App...';
+  sub.textContent = 'Gateway: ' + cur.city + ' (' + cur.country + ')';
+  showToast('Launching SWEEPR VPN Android app...');
+  window.location.href = 'sweeprvpn://activate?key=' + encodeURIComponent(key) + '&email=' + encodeURIComponent(email);
 }
 
 (function init() {

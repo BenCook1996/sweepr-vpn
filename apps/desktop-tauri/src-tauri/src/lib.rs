@@ -206,42 +206,25 @@ fn set_kill_switch(enabled: bool) -> Result<serde_json::Value, String> {
     #[cfg(target_os = "windows")]
     {
         use std::os::windows::process::CommandExt;
-        for rule_name in [
-            "name=SWEEPR_VPN_KillSwitch_IPv6",
-            "name=SWEEPR_VPN_KillSwitch_DNS",
-        ] {
-            let _ = std::process::Command::new("netsh")
-                .args(["advfirewall", "firewall", "delete", "rule", rule_name])
-                .creation_flags(0x08000000)
-                .status();
-        }
-        if enabled {
-            let _ = std::process::Command::new("netsh")
-                .args([
-                    "advfirewall",
-                    "firewall",
-                    "add",
-                    "rule",
-                    "name=SWEEPR_VPN_KillSwitch_IPv6",
-                    "dir=out",
-                    "action=block",
-                    "protocol=IPV6",
-                ])
-                .creation_flags(0x08000000)
-                .status();
-            let _ = std::process::Command::new("netsh")
-                .args([
-                    "advfirewall",
-                    "firewall",
-                    "add",
-                    "rule",
-                    "name=SWEEPR_VPN_KillSwitch_DNS",
-                    "dir=out",
-                    "action=allow",
-                    "protocol=UDP",
-                    "remoteport=53",
-                    "remoteip=1.1.1.1,1.0.0.1,1.1.1.2,1.0.0.2,9.9.9.9",
-                ])
+        let del_cmd = "netsh advfirewall firewall delete rule name=SWEEPR_VPN_KillSwitch_IPv6 >nul 2>&1 & netsh advfirewall firewall delete rule name=SWEEPR_VPN_KillSwitch_DNS >nul 2>&1 & netsh advfirewall firewall delete rule name=SWEEPR_VPN_KillSwitch_Clearnet >nul 2>&1";
+        let full_cmd = if enabled {
+            format!(
+                "{del_cmd} & netsh advfirewall firewall add rule name=SWEEPR_VPN_KillSwitch_IPv6 dir=out action=block protocol=IPV6 >nul 2>&1 & netsh advfirewall firewall add rule name=SWEEPR_VPN_KillSwitch_DNS dir=out action=allow protocol=UDP remoteport=53 remoteip=1.1.1.1,1.0.0.1,1.1.1.2,1.0.0.2,9.9.9.9 >nul 2>&1 & netsh advfirewall firewall add rule name=SWEEPR_VPN_KillSwitch_Clearnet dir=out action=block protocol=UDP remoteport=53 >nul 2>&1"
+            )
+        } else {
+            del_cmd.to_string()
+        };
+        let direct = std::process::Command::new("cmd")
+            .args(["/C", &full_cmd])
+            .creation_flags(0x08000000)
+            .status();
+        if !direct.map(|s| s.success()).unwrap_or(false) {
+            let ps = format!(
+                "Start-Process -FilePath 'cmd.exe' -ArgumentList '/c','\"{}\"' -Verb RunAs -WindowStyle Hidden -Wait",
+                full_cmd
+            );
+            let _ = std::process::Command::new("powershell")
+                .args(["-NoProfile", "-WindowStyle", "Hidden", "-Command", &ps])
                 .creation_flags(0x08000000)
                 .status();
         }
@@ -249,9 +232,16 @@ fn set_kill_switch(enabled: bool) -> Result<serde_json::Value, String> {
     #[cfg(target_os = "macos")]
     {
         let v6_mode = if enabled { "-setv6off" } else { "-setv6automatic" };
-        let _ = std::process::Command::new("networksetup")
+        let status = std::process::Command::new("networksetup")
             .args([v6_mode, "Wi-Fi"])
             .status();
+        if !status.map(|s| s.success()).unwrap_or(false) {
+            let script = format!(
+                "do shell script \"networksetup {} Wi-Fi >/dev/null 2>&1 || true; dscacheutil -flushcache >/dev/null 2>&1 || true\" with administrator privileges",
+                v6_mode
+            );
+            let _ = std::process::Command::new("osascript").args(["-e", &script]).status();
+        }
         let _ = std::process::Command::new("dscacheutil")
             .args(["-flushcache"])
             .status();
@@ -263,9 +253,14 @@ fn set_kill_switch(enabled: bool) -> Result<serde_json::Value, String> {
         } else {
             "net.ipv6.conf.all.disable_ipv6=0"
         };
-        let _ = std::process::Command::new("sysctl")
+        let status = std::process::Command::new("sysctl")
             .args(["-w", sysctl_val])
             .status();
+        if !status.map(|s| s.success()).unwrap_or(false) {
+            let _ = std::process::Command::new("pkexec")
+                .args(["sysctl", "-w", sysctl_val])
+                .status();
+        }
     }
     Ok(state_json)
 }
@@ -311,7 +306,8 @@ fn set_smart_tv_shields(
             .unwrap_or(true)
     });
 
-    let active_dns = if eff_tv_acr || eff_streaming_ads {
+    let any_enabled = eff_tv_acr || eff_streaming_ads;
+    let active_dns = if any_enabled {
         "1.1.1.2, 1.0.0.2"
     } else {
         "1.1.1.1, 1.0.0.1"
@@ -387,7 +383,7 @@ fn set_smart_tv_shields(
     {
         use std::os::windows::process::CommandExt;
         if tunnel_active {
-            let _ = std::process::Command::new("netsh")
+            let st1 = std::process::Command::new("netsh")
                 .args(["interface", "ip", "set", "dns", "name=sweepr0", "static", primary_dns, "primary"])
                 .creation_flags(0x08000000)
                 .status();
@@ -395,6 +391,20 @@ fn set_smart_tv_shields(
                 .args(["interface", "ip", "add", "dns", "name=sweepr0", secondary_dns, "index=2"])
                 .creation_flags(0x08000000)
                 .status();
+            if !st1.map(|s| s.success()).unwrap_or(false) {
+                let dns_cmd = format!(
+                    "netsh interface ip set dns name=sweepr0 static {} primary >nul 2>&1 & netsh interface ip add dns name=sweepr0 {} index=2 >nul 2>&1 & ipconfig /flushdns >nul 2>&1",
+                    primary_dns, secondary_dns
+                );
+                let ps = format!(
+                    "Start-Process -FilePath 'cmd.exe' -ArgumentList '/c','\"{}\"' -Verb RunAs -WindowStyle Hidden -Wait",
+                    dns_cmd
+                );
+                let _ = std::process::Command::new("powershell")
+                    .args(["-NoProfile", "-WindowStyle", "Hidden", "-Command", &ps])
+                    .creation_flags(0x08000000)
+                    .status();
+            }
         }
         let _ = std::process::Command::new("ipconfig")
             .args(["/flushdns"])
@@ -404,9 +414,16 @@ fn set_smart_tv_shields(
     #[cfg(target_os = "macos")]
     {
         if tunnel_active {
-            let _ = std::process::Command::new("networksetup")
+            let st = std::process::Command::new("networksetup")
                 .args(["-setdnsservers", "Wi-Fi", primary_dns, secondary_dns])
                 .status();
+            if !st.map(|s| s.success()).unwrap_or(false) {
+                let script = format!(
+                    "do shell script \"networksetup -setdnsservers Wi-Fi {} {} >/dev/null 2>&1 || true; dscacheutil -flushcache >/dev/null 2>&1 || true\" with administrator privileges",
+                    primary_dns, secondary_dns
+                );
+                let _ = std::process::Command::new("osascript").args(["-e", &script]).status();
+            }
         }
         let _ = std::process::Command::new("dscacheutil")
             .args(["-flushcache"])
@@ -415,9 +432,14 @@ fn set_smart_tv_shields(
     #[cfg(target_os = "linux")]
     {
         if tunnel_active {
-            let _ = std::process::Command::new("resolvectl")
+            let st = std::process::Command::new("resolvectl")
                 .args(["dns", "sweepr0", primary_dns, secondary_dns])
                 .status();
+            if !st.map(|s| s.success()).unwrap_or(false) {
+                let _ = std::process::Command::new("pkexec")
+                    .args(["resolvectl", "dns", "sweepr0", primary_dns, secondary_dns])
+                    .status();
+            }
         }
         let _ = std::process::Command::new("resolvectl")
             .args(["flush-caches"])

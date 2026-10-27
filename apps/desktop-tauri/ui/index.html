@@ -1024,8 +1024,8 @@
         toast('Protection paused');
       }
     } catch (e) {
-      state.connected = false;
-      clearInterval(timerHandle);
+      await checkVpnStatus();
+      if (!state.connected) clearInterval(timerHandle);
       const errMsg = String(e && e.message || e);
       toast(errMsg);
       if (/licence|subscription|activation/i.test(errMsg)) {
@@ -2356,7 +2356,7 @@
       sub: s.ping + ' ms · ' + s.desc,
       flag: s.flag,
       kbd: s.code === state.code ? 'Selected' : (s.ping + ' ms'),
-      run: () => { pick(s.code); if (!state.connected) toggleConnect(true); }
+      run: () => { pick(s.code); }
     }));
     const cmdItems = [
       { id: 'act-toggle', title: state.connected ? 'Pause VPN Protection' : 'Connect to ' + cur().city, sub: 'Toggle WireGuard tunnel immediately', kbd: modKeyLabel + '+↵', run: () => toggleConnect() },
@@ -2436,7 +2436,7 @@
     const s = SERVERS.find(x => x.code === code) || cur();
     const isFav = savedFavs.includes(s.code);
     positionAndShowCtx(e,
-      '<button class="ctx-item" onclick="hideCtxMenu();pick(\'' + esc(s.code) + '\');if(!state.connected)toggleConnect(true)"><span>Connect to ' + esc(s.city) + '</span><span class="k">' + s.ping + ' ms</span></button>' +
+      '<button class="ctx-item" onclick="hideCtxMenu();pick(\'' + esc(s.code) + '\')"><span>Connect to ' + esc(s.city) + '</span><span class="k">' + s.ping + ' ms</span></button>' +
       '<button class="ctx-item" onclick="hideCtxMenu();toggleFav(\'' + esc(s.code) + '\')"><span>' + (isFav ? '★ Remove from Saved' : '☆ Save to Favorites') + '</span></button>' +
       '<div class="ctx-sep"></div>' +
       '<button class="ctx-item" onclick="hideCtxMenu();openCmdPalette()"><span>Command Palette…</span><span class="k">' + modKeyLabel + '+K</span></button>'

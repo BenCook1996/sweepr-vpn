@@ -114,6 +114,11 @@ fun SweeprVpnScreen(
     var selectedServerCode by remember {
         mutableStateOf(prefs.getString("selected_server", "UK-LON-01") ?: "UK-LON-01")
     }
+    LaunchedEffect(tunnelState.isConnected, tunnelState.serverCode) {
+        if (tunnelState.isConnected && tunnelState.serverCode.isNotBlank()) {
+            selectedServerCode = tunnelState.serverCode
+        }
+    }
     var lanBypass by remember { mutableStateOf(prefs.getBoolean("lan_bypass", false)) }
     var killSwitchEnabled by remember { mutableStateOf(prefs.getBoolean("kill_switch", true)) }
     var autoShieldWifi by remember { mutableStateOf(prefs.getBoolean("auto_shield_wifi", true)) }
@@ -417,6 +422,8 @@ fun SweeprVpnScreen(
             statusBanner = "Unlock SWEEPR Pro or enter your license key to connect."
             return
         }
+        val prevServerCode = tunnelState.serverCode.ifBlank { selectedServerCode }
+        val prevServerName = tunnelState.serverName.ifBlank { "${currentServer.city}, ${currentServer.country}" }
         val targetSrv = servers.firstOrNull { it.code == serverCode } ?: currentServer
         SweeprWireGuardVpnService.updateConnectingState(true, targetSrv.code, "${targetSrv.city}, ${targetSrv.country}")
         statusBanner = "Provisioning encrypted WireGuard peer on ${targetSrv.city}…"
@@ -458,7 +465,8 @@ fun SweeprVpnScreen(
                 } else if (conn.responseCode == 401 || conn.responseCode == 403) {
                     val errMsg = json.optString("message", "License key verification required.")
                     withContext(Dispatchers.Main) {
-                        SweeprWireGuardVpnService.updateConnectingState(false, targetSrv.code, targetSrv.city, errMsg)
+                        if (tunnelState.isConnected) selectedServerCode = prevServerCode
+                        SweeprWireGuardVpnService.updateConnectingState(false, prevServerCode, prevServerName, errMsg)
                         statusBanner = errMsg
                     }
                     return@withContext
@@ -479,7 +487,8 @@ fun SweeprVpnScreen(
             if (confText.isBlank() || !confText.contains("PrivateKey")) {
                 val errMsg = "Could not reach SWEEPR provisioning server. Check your connection."
                 withContext(Dispatchers.Main) {
-                    SweeprWireGuardVpnService.updateConnectingState(false, targetSrv.code, targetSrv.city, errMsg)
+                    if (tunnelState.isConnected) selectedServerCode = prevServerCode
+                    SweeprWireGuardVpnService.updateConnectingState(false, prevServerCode, prevServerName, errMsg)
                     statusBanner = errMsg
                 }
                 return@withContext
