@@ -2329,12 +2329,21 @@ const server = http.createServer(async (req, res) => {
   }
 
   // 301 Permanent Redirect from legacy .html or non-canonical URLs to clean canonical URLs
-  if (req.method === 'GET' && CANONICAL_REDIRECTS[pathname]) {
+  if ((req.method === 'GET' || req.method === 'HEAD') && pathname.startsWith('/cdn-cgi/l/email-protection')) {
+    res.writeHead(301, { Location: '/support', 'X-Robots-Tag': 'noindex, nofollow', ...COMMON_SECURITY_HEADERS });
+    return res.end();
+  }
+  if ((req.method === 'GET' || req.method === 'HEAD') && /[).,\]]+$/.test(pathname) && pathname.length > 1) {
+    const cleanTarget = (pathname.replace(/[).,\]]+$/, '') || '/') + (urlObj.search || '');
+    res.writeHead(301, { Location: cleanTarget, ...COMMON_SECURITY_HEADERS });
+    return res.end();
+  }
+  if ((req.method === 'GET' || req.method === 'HEAD') && CANONICAL_REDIRECTS[pathname]) {
     const target = CANONICAL_REDIRECTS[pathname] + (urlObj.search || '');
     res.writeHead(301, { Location: target, ...COMMON_SECURITY_HEADERS });
     return res.end();
   }
-  if (req.method === 'GET' && /^\/(solutions|setup|vs|guides)\/[a-z0-9-]+\.html$/i.test(pathname)) {
+  if ((req.method === 'GET' || req.method === 'HEAD') && /^\/(solutions|setup|vs|guides)\/[a-z0-9-]+\.html$/i.test(pathname)) {
     const target = pathname.replace(/\.html$/i, '') + (urlObj.search || '');
     res.writeHead(301, { Location: target, ...COMMON_SECURITY_HEADERS });
     return res.end();
@@ -2342,6 +2351,14 @@ const server = http.createServer(async (req, res) => {
 
   // Forward AI & Search crawler hits to central SWEEPR CRM SEO Intelligence (project: vpn)
   const ua = req.headers['user-agent'] || '';
+  if ((req.method === 'GET' || req.method === 'HEAD') && pathname === '/' && urlObj.searchParams.get('home') === '1') {
+    const cookies = req.headers.cookie || '';
+    const hasActiveOrderDraft = /(?:^|;\s*)sweepr_order_draft=1(?:;|$)/.test(cookies);
+    if (BOT_UA_RE.test(ua) || !hasActiveOrderDraft) {
+      res.writeHead(301, { Location: '/', ...COMMON_SECURITY_HEADERS });
+      return res.end();
+    }
+  }
   if (req.method === 'GET' && BOT_UA_RE.test(ua) && !pathname.startsWith('/api/')) {
     crm.reportBotHit({ userAgent: ua, path: pathname, status: 200 });
   }
@@ -6489,6 +6506,7 @@ self.addEventListener('fetch', e => {
       headers['Cache-Control'] = 'public, max-age=300, stale-while-revalidate=3600';
     } else if (ext === '.xml' || ext === '.txt') {
       headers['Cache-Control'] = 'public, max-age=3600, stale-while-revalidate=86400';
+      if (baseName === 'pad.xml') headers['X-Robots-Tag'] = 'noindex, follow';
     } else if (ext === '.html') {
       headers['Cache-Control'] = 'public, max-age=0, must-revalidate';
     }
