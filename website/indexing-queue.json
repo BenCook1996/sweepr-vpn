@@ -1,5 +1,10 @@
 {
   "indexnow_key": "8f9a2b4c6d1e3f5a7b9c0d2e4f6a8b0c",
+  "gsc_requested": [],
+  "bing_requested": [],
+  "directory_forms_submitted": [],
+  "last_indexnow_ping": "2026-10-28T06:16:47.054Z",
+  "last_sitemap_ping": "2026-10-28T06:16:47.054Z",
   "pending_urls": [
     "https://sweeprvpn.com/solutions/hyperoptic-broadband-isp-throttling",
     "https://sweeprvpn.com/solutions/hyperoptic-broadband-gaming-packet-loss",
@@ -805,11 +810,6 @@
     "https://sweeprvpn.com/solutions/vodafone-ireland-siro-voip-teams-zoom-jitter",
     "https://sweeprvpn.com/solutions/vodafone-ireland-siro-wifi-arp-spoofing-protection"
   ],
-  "gsc_requested": [],
-  "bing_requested": [],
-  "directory_forms_submitted": [],
-  "last_indexnow_ping": "2026-10-28T00:19:53.442Z",
-  "last_sitemap_ping": "2026-10-28T00:19:53.442Z",
   "last_daily_50_batch": {
     "date": "2026-10-28",
     "newCount": 50,
