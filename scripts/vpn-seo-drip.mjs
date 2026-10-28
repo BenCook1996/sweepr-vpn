@@ -189,7 +189,7 @@ function loadTargetItemsFromSitemap() {
 const tokenPool = [];
 let tokenIdx = 0;
 async function getTelegraphToken() {
-  if (tokenPool.length >= 24) {
+  if (tokenPool.length >= 32) {
     const token = tokenPool[tokenIdx % tokenPool.length];
     tokenIdx++;
     return token;
@@ -211,6 +211,21 @@ async function getTelegraphToken() {
     return token;
   }
   throw new Error('Telegraph token error');
+}
+
+async function createFreshToken() {
+  try {
+    const accRes = await fetch(
+      `https://api.telegra.ph/createAccount?short_name=SWEEPR_f_${Date.now().toString().slice(-6)}&author_name=SWEEPR+VPN+Security+Lab&author_url=https://sweeprvpn.com`,
+      { signal: AbortSignal.timeout(10000) }
+    );
+    const acc = await accRes.json();
+    if (acc?.result?.access_token) {
+      tokenPool.push(acc.result.access_token);
+      return acc.result.access_token;
+    }
+  } catch {}
+  return getTelegraphToken();
 }
 
 async function publishTelegraph(item, lang, runTag) {
@@ -260,7 +275,7 @@ async function publishTelegraph(item, lang, runTag) {
   });
   let j = await r.json();
   if (!j.ok || !j.result?.url) {
-    const freshToken = await getTelegraphToken();
+    const freshToken = await createFreshToken();
     r = await fetch('https://api.telegra.ph/createPage', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -481,8 +496,8 @@ async function fetchExistingCrmState(localSeed = []) {
   }
 
   const allOutreachRows = [
-    ...(railwayOutreach.rows || []),
-    ...(cleanerOutreach.rows || []),
+    ...(railwayOutreach.rows || railwayOutreach.items || railwayOutreach.logs || []),
+    ...(cleanerOutreach.rows || cleanerOutreach.items || cleanerOutreach.logs || []),
     ...localSeed,
     ...localDbRows
   ];
