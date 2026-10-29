@@ -29,8 +29,8 @@ android {
         applicationId = "com.sweepr.vpn"
         minSdk = 26
         targetSdk = 36
-        versionCode = 13
-        versionName = "2.4.1"
+        versionCode = 15
+        versionName = "2.4.3"
 
         resourceConfigurations += listOf("en", "de", "fr", "ja")
     }

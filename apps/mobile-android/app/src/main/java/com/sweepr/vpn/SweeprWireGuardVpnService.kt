@@ -206,6 +206,13 @@ class SweeprWireGuardVpnService : VpnService() {
 
             // Route internal WireGuard mesh subnet and configured DNS servers through TUN
             builder.addRoute("10.64.0.0", 16)
+            val ipv6DnsList = if (dnsShield) listOf("2606:4700:4700::1112", "2606:4700:4700::1002") else listOf("2606:4700:4700::1111", "2606:4700:4700::1001")
+            for (ipv6Dns in ipv6DnsList) {
+                try {
+                    builder.addDnsServer(java.net.InetAddress.getByName(ipv6Dns))
+                    builder.addRoute(java.net.InetAddress.getByName(ipv6Dns), 128)
+                } catch (_: Exception) {}
+            }
             for (dnsIp in dnsList) {
                 try {
                     builder.addDnsServer(dnsIp)

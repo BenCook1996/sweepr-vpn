@@ -351,7 +351,7 @@ fun SweeprVpnScreen(
 
             val untrustedWifi = hasWifi && (hasCaptive || !isValidated || !isNotMetered) && !isConnected
             val riskText = when {
-                isConnected -> "Protected • 256-bit WireGuard + Zero-Logs DNS (${if (smartTvDnsShield) "Ad/Tracker Shield ON" else "Standard DNS"})"
+                isConnected -> "Protected • 256-bit WireGuard + Zero-Logs DNS (${if (smartTvDnsShield) "Encrypted DNS ON" else "Standard DNS"})"
                 hasCaptive -> "High Risk • Captive Portal / MitM Inspection Detected"
                 untrustedWifi -> "Elevated Risk • Public or Metered Wi-Fi without VPN Encryption"
                 else -> "Standard Unencrypted ISP Route (IP & DNS visible to ISP)"
