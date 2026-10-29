@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Odido / T-Mobile Glasvezel Netherlands: Stop Wi-Fi Sniffing, Evil Twin APs & Unknown LAN Devices | SWEEPR VPN</title>
+  <meta name="description" content="Protect Your Devices on Odido / T-Mobile Glasvezel Netherlands (AS35471) from arp spoofing, sniffing & unknown intruders. Tested 1420 MTU WireGuard config, 4ms London 10Gbps RAM-only routing & free 30s Wi-Fi scanner." />
+  <link rel="canonical" href="https://sweeprvpn.com/solutions/odido-glasvezel-nl-wifi-arp-spoofing-protection" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Odido / T-Mobile Glasvezel Netherlands: Stop Wi-Fi Sniffing, Evil Twin APs & Unknown LAN Devices | SWEEPR VPN" />
+  <meta property="og:description" content="Protect Your Devices on Odido / T-Mobile Glasvezel Netherlands (AS35471) from arp spoofing, sniffing & unknown intruders. Tested 1420 MTU WireGuard config, 4ms London 10Gbps RAM-only routing & free 30s Wi-Fi scanner." />
+  <meta property="og:url" content="https://sweeprvpn.com/solutions/odido-glasvezel-nl-wifi-arp-spoofing-protection" />
+  <meta property="og:site_name" content="SWEEPR VPN" />
+  <meta property="og:image" content="https://sweeprvpn.com/og-image.png" />
+  <meta property="og:image:alt" content="SWEEPR VPN 10Gbps WireGuard &amp; Home Wi-Fi Radar" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://sweeprvpn.com/solutions/odido-glasvezel-nl-wifi-arp-spoofing-protection" />
+  <meta name="twitter:title" content="Odido / T-Mobile Glasvezel Netherlands: Stop Wi-Fi Sniffing, Evil Twin APs & Unknown LAN Devices | SWEEPR VPN" />
+  <meta name="twitter:description" content="Protect Your Devices on Odido / T-Mobile Glasvezel Netherlands (AS35471) from arp spoofing, sniffing & unknown intruders. Tested 1420 MTU WireGuard config, 4ms London 10Gbps RAM-only routing & free 30s Wi-Fi scanner." />
+  <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png" />
+  <meta name="theme-color" content="#070b14" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is the best WireGuard MTU setting for Odido / T-Mobile Glasvezel Netherlands?","acceptedAnswer":{"@type":"Answer","text":"For Odido / T-Mobile Glasvezel Netherlands (FTTH DHCP VLAN 300), setting your WireGuard interface to MTU 1420 prevents IP packet fragmentation and PMTUD blackholes while maximizing 10Gbps throughput."}},{"@type":"Question","name":"Does SWEEPR VPN work with Odido / T-Mobile Glasvezel Netherlands routers and Wi-Fi mesh systems?","acceptedAnswer":{"@type":"Answer","text":"Yes. You can run the ~3.7 MB SWEEPR VPN native app on Windows 10/11, macOS, Linux, iOS, and Android, or export a standard WireGuard .conf file for OpenWrt, GL.iNet, Asuswrt-Merlin, MikroTik, and UniFi gateways connected to Odido / T-Mobile Glasvezel Netherlands."}},{"@type":"Question","name":"Is the 30-second Home Wi-Fi Scanner really free on Odido / T-Mobile Glasvezel Netherlands?","acceptedAnswer":{"@type":"Answer","text":"Yes. Downloading SWEEPR VPN includes our instant 30-second LAN ARP/mDNS device scanner at zero cost (no credit card required), showing every device and Smart TV on your Odido / T-Mobile Glasvezel Netherlands Wi-Fi."}}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"SWEEPR VPN","operatingSystem":"Windows 10, Windows 11, macOS, Linux, iOS, Android, OpenWrt","applicationCategory":"SecurityApplication","downloadUrl":"https://sweeprvpn.com/SWEEPRVPN.exe","fileSize":"3.7MB","offers":{"@type":"AggregateOffer","priceCurrency":"GBP","lowPrice":"1.99","highPrice":"74.99","offerCount":"3"}}</script>
+  <style>
+    :root { --bg:#070b14; --card:#0f172a; --border:#1e293b; --text:#f8fafc; --muted:#94a3b8; --accent:#10b981; --accent2:#38bdf8; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; background:var(--bg); color:var(--text); line-height:1.68; }
+    header { border-bottom:1px solid var(--border); background:rgba(7,11,20,0.92); position:sticky; top:0; z-index:20; backdrop-filter:blur(10px); }
+    .nav { max-width:1100px; margin:0 auto; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+    .brand { font-weight:800; font-size:1.15rem; color:var(--text); text-decoration:none; letter-spacing:-0.02em; }
+    .brand span { color:var(--accent); }
+    .nav-links { display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
+    .nav-links a { color:var(--muted); text-decoration:none; font-size:0.92rem; }
+    .nav-links a:hover { color:var(--text); }
+    .btn { display:inline-block; background:var(--accent); color:#042f2e; font-weight:700; padding:10px 18px; border-radius:8px; text-decoration:none; }
+    .btn-outline { display:inline-block; border:1px solid var(--accent2); color:var(--accent2); font-weight:600; padding:10px 18px; border-radius:8px; text-decoration:none; }
+    main { max-width:1020px; margin:0 auto; padding:42px 20px 72px; }
+    .badge { display:inline-block; background:rgba(16,185,129,0.14); color:var(--accent); border:1px solid rgba(16,185,129,0.35); padding:4px 12px; border-radius:999px; font-size:0.8rem; font-weight:700; margin-bottom:14px; }
+    h1 { font-size:2.15rem; line-height:1.2; margin:0 0 16px; letter-spacing:-0.02em; }
+    h2 { font-size:1.45rem; margin:34px 0 12px; color:#e2e8f0; }
+    h3 { font-size:1.12rem; margin:20px 0 8px; color:#f1f5f9; }
+    .lead { font-size:1.12rem; color:var(--muted); max-width:840px; margin-bottom:26px; }
+    .cta-strip { background:linear-gradient(135deg,#0f172a,#064e3b); border:1px solid rgba(16,185,129,0.4); border-radius:14px; padding:22px; margin:26px 0; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; }
+    .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:22px; margin:20px 0; }
+    table { width:100%; border-collapse:collapse; margin:18px 0; background:var(--card); border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+    th, td { padding:12px 14px; text-align:left; border-bottom:1px solid var(--border); font-size:0.94rem; }
+    th { background:#111c33; color:var(--accent2); font-weight:700; }
+    pre { background:#020617; border:1px solid var(--border); padding:16px; border-radius:10px; overflow-x:auto; color:#a7f3d0; font-size:0.88rem; }
+    code { font-family:ui-monospace,SFMono-Regular,Consolas,monospace; }
+    .grid-3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; margin:20px 0; }
+    .stat-box { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px; }
+    .stat-label { font-size:0.8rem; color:var(--muted); text-transform:uppercase; }
+    .stat-val { font-size:1.3rem; font-weight:800; color:var(--accent); margin-top:4px; }
+    footer { border-top:1px solid var(--border); padding:32px 20px; text-align:center; color:var(--muted); font-size:0.88rem; }
+    footer a { color:var(--accent2); text-decoration:none; margin:0 8px; }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="nav" aria-label="Primary Navigation">
+      <a class="brand" href="/">SWEEPR <span>VPN</span></a>
+      <div class="nav-links">
+        <a href="/download">Free 30s Wi-Fi Scanner</a>
+        <a href="/pricing">Pricing (£1.99 Trial)</a>
+        <a href="/tools/leak-test">IP &amp; DNS Leak Test</a>
+        <a href="/tools/isp-throttling-test">ISP Speed Checker</a>
+        <a class="btn" href="/download">Download (~3.7 MB)</a>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <span class="badge">ISP & Network Engineering • AS35471 • Verified 2026</span>
+    <h1>Protect Your Devices on Odido / T-Mobile Glasvezel Netherlands From ARP Spoofing, Sniffing & Unknown Intruders</h1>
+    <p class="lead">Experiencing slowdowns or connection drops on Odido / T-Mobile Glasvezel Netherlands (AS35471 • FTTH DHCP VLAN 300) during 19:30–23:00 CET? Shared or weakly secured Wi-Fi networks expose unencrypted DNS queries, mDNS device names, and session traffic to local packet capture and rogue access points. SWEEPR VPN combines a 30-second local ARP/mDNS device audit with instant 10Gbps WireGuard encryption and in-tunnel DNS (`10.66.0.1`) so local snoopers see zero plaintext metadata.</p>
+
+    <div class="cta-strip">
+      <div>
+        <strong>Run the Free 30-Second Home Wi-Fi &amp; ISP Speed Diagnostic</strong>
+        <div style="color:var(--muted);font-size:0.93rem;">Featherlight ~3.7 MB native Rust + Tauri v2 app • No credit card required for Wi-Fi device scanner • £1.99 1st-Month Pro Trial</div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <a class="btn" href="/download">Download Free Scanner</a>
+        <a class="btn-outline" href="/pricing">View Plans (Save 50% Yearly)</a>
+      </div>
+    </div>
+
+    
+    <div class="grid-3">
+      <div class="stat-box"><div class="stat-label">Unprotected Odido / T-Mobile Glasvezel Netherlands</div><div class="stat-val" style="color:#f87171;">Plaintext DNS & LAN Exposure</div></div>
+      <div class="stat-box"><div class="stat-label">With SWEEPR 10Gbps WireGuard</div><div class="stat-val">ChaCha20-Poly1305 Encrypted</div></div>
+      <div class="stat-box"><div class="stat-label">Recommended WireGuard MTU</div><div class="stat-val">1420 Bytes (Zero DNS / WebRTC Leaks)</div></div>
+    </div>
+
+    <h2>Why Odido / T-Mobile Glasvezel Netherlands (AS35471) Suffers From From ARP Spoofing, Sniffing & Unknown Intruders</h2>
+    <p>On <strong>Odido / T-Mobile Glasvezel Netherlands</strong> (FTTH DHCP VLAN 300), residential and mobile gateways frequently encounter <strong>Evening transit peering congestion towards European cloud nodes</strong> between <strong>19:30–23:00 CET</strong>. Standard unencrypted TCP/UDP flows expose plaintext Server Name Indication (SNI) headers, destination ASNs, and packet timing signatures that automated network queues classify and deprioritize.</p>
+    <p>Furthermore, using a default 1500-byte or uncalibrated VPN tunnel on Odido / T-Mobile Glasvezel Netherlands triggers IP packet fragmentation unless your WireGuard interface is pinned to <code>MTU = 1420</code>.</p>
+
+    <h2>How SWEEPR VPN Solves This on Odido / T-Mobile Glasvezel Netherlands</h2>
+    <ul>
+      <li><strong>Direct 10Gbps LINX &amp; AMS-IX Peering:</strong> Instead of traversing congested retail transit links on AS35471, SWEEPR VPN routes your encrypted UDP stream directly to our 10Gbps RAM-only bare-metal nodes in <code>UK-LON-01</code> (4ms), <code>NL-AMS-01</code> (8ms), <code>DE-FRA-01</code> (11ms), and <code>SE-STO-01</code> (14ms).</li>
+      <li><strong>Auto-Calibrated 1420 Byte MTU:</strong> SWEEPR VPN automatically detects FTTH DHCP VLAN 300 path overhead and clamps your WireGuard tunnel to <code>MTU = 1420</code> with <code>PersistentKeepalive = 25</code>.</li>
+      <li><strong>In-Tunnel Zero-Log DNS (<code>10.66.0.1</code>):</strong> Bypasses Odido / T-Mobile Glasvezel Netherlands transparent DNS proxies and NXDOMAIN interception completely.</li>
+      <li><strong>Free 30-Second Home Wi-Fi Device Scanner:</strong> Instantly audits every phone, laptop, IoT plug, and Smart TV connected to your Odido / T-Mobile Glasvezel Netherlands router subnet.</li>
+    </ul>
+
+    <h2>Recommended WireGuard Profile for Odido / T-Mobile Glasvezel Netherlands (AS35471)</h2>
+    <pre><code>[Interface]
+# SWEEPR VPN 10Gbps RAM-Only Profile optimized for Odido / T-Mobile Glasvezel Netherlands (FTTH DHCP VLAN 300)
+PrivateKey = &lt;GENERATED_ON_DEVICE_NEVER_LEAVES_RAM&gt;
+Address = 10.66.18.42/32
+DNS = 10.66.0.1
+MTU = 1420
+
+[Peer]
+# UK-LON-01 (London Docklands 10Gbps • 4ms Direct Peering)
+PublicKey = 9xK2vP8mQ4nL7wR1tY5uI8oP3aS6dF9gH2jK5lZ8xC0=
+Endpoint = lon01.sweeprvpn.com:51820
+AllowedIPs = 0.0.0.0/0, ::/0
+PersistentKeepalive = 25</code></pre>
+
+    <h2>Transparent Anchor Pricing &amp; 30-Day Money-Back Guarantee</h2>
+    <p>Unlike legacy VPNs that trap you in 24-month renewals or 250 MB bloated installers, SWEEPR VPN offers straightforward pricing with an instant free 30-second Home Wi-Fi Device Scanner:</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Plan Tier</th>
+          <th>Billing Cycle</th>
+          <th>Effective Monthly Cost</th>
+          <th>Included Features</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Yearly Plan (Core Cash Cow — Save 50%)</strong></td>
+          <td>£74.99 / year ($95.99 USD | €89.99 EUR)</td>
+          <td><strong>£6.25 / mo</strong></td>
+          <td>10Gbps RAM-Only WireGuard (UK, NL, DE, SE, CH, US), 10 Devices, Kernel Kill-Switch, 30-Day Guarantee</td>
+        </tr>
+        <tr>
+          <td><strong>6-Monthly Plan (Mid-Tier Anchor — Save 35%)</strong></td>
+          <td>£48.99 / 6 months ($61.99 USD | €58.99 EUR)</td>
+          <td><strong>£8.17 / mo</strong></td>
+          <td>All 10Gbps WireGuard Core Locations, In-Tunnel DNS, Port-Forwarding &amp; Streaming Support</td>
+        </tr>
+        <tr>
+          <td><strong>Monthly Plan (Flexible + £1.99 1st Month)</strong></td>
+          <td>£1.99 1st Month, then £12.49 / mo</td>
+          <td>£12.49 / mo</td>
+          <td>Cancel anytime in 1 click, full 10Gbps WireGuard &amp; Wi-Fi diagnostic access</td>
+        </tr>
+        <tr>
+          <td><strong>SWEEPR Wi-Fi Radar &amp; Smart-TV Shield Add-On</strong></td>
+          <td>+£14.99/yr | +£9.99/6mo | +£1.99/mo</td>
+          <td>Optional Add-On</td>
+          <td>24/7 Unknown Wi-Fi Intruder Alerts + Samsung/LG/Sony/Roku/Fire TV ACR Spy Blocker</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Frequently Asked Questions</h2>
+    <div class="card"><h3>What is the best WireGuard MTU setting for Odido / T-Mobile Glasvezel Netherlands?</h3><p>For Odido / T-Mobile Glasvezel Netherlands (FTTH DHCP VLAN 300), setting your WireGuard interface to MTU 1420 prevents IP packet fragmentation and PMTUD blackholes while maximizing 10Gbps throughput.</p></div>
+<div class="card"><h3>Does SWEEPR VPN work with Odido / T-Mobile Glasvezel Netherlands routers and Wi-Fi mesh systems?</h3><p>Yes. You can run the ~3.7 MB SWEEPR VPN native app on Windows 10/11, macOS, Linux, iOS, and Android, or export a standard WireGuard .conf file for OpenWrt, GL.iNet, Asuswrt-Merlin, MikroTik, and UniFi gateways connected to Odido / T-Mobile Glasvezel Netherlands.</p></div>
+<div class="card"><h3>Is the 30-second Home Wi-Fi Scanner really free on Odido / T-Mobile Glasvezel Netherlands?</h3><p>Yes. Downloading SWEEPR VPN includes our instant 30-second LAN ARP/mDNS device scanner at zero cost (no credit card required), showing every device and Smart TV on your Odido / T-Mobile Glasvezel Netherlands Wi-Fi.</p></div>
+
+    <h2>Related Technical Guides &amp; Free Diagnostic Tools</h2>
+    <div class="card">
+      <ul>
+        <li><a href="/guides/fix-wireguard-mtu-fragmentation-pppoe" style="color:var(--accent2);">WireGuard MTU Calculator for PPPoE Fibre (1412) & 5G (1380)</a></li>
+        <li><a href="/guides/bypass-cgnat-for-self-hosted-home-lab" style="color:var(--accent2);">How to Detect & Bypass Carrier-Grade NAT (CGNAT 100.64.x.x)</a></li>
+        <li><a href="/vs/nordvpn" style="color:var(--accent2);">SWEEPR VPN (~3.7 MB) vs NordVPN Technical Comparison</a></li>
+        <li><a href="/tools/leak-test" style="color:var(--accent2);">Free Browser IP, DNS &amp; WebRTC Leak Test</a></li>
+        <li><a href="/tools/isp-throttling-test" style="color:var(--accent2);">Free ISP Evening Throttling &amp; Latency Checker</a></li>
+        <li><a href="/download" style="color:var(--accent2);">Download SWEEPR VPN &amp; Free 30-Second Home Wi-Fi Scanner (~3.7 MB)</a></li>
+      </ul>
+    </div>
+  </main>
+  <footer>
+    <p>&copy; 2026 SWEEPR VPN Security Lab. Built in Rust + Tauri v2 with Audited Kernel WireGuard &amp; RAM-Only Servers.</p>
+    <p>
+      <a href="/">Home</a> |
+      <a href="/pricing">Pricing</a> |
+      <a href="/download">Download</a> |
+      <a href="/tools/leak-test">Leak Test</a> |
+      <a href="/tools/isp-throttling-test">ISP Speed Test</a> |
+      <a href="/pad.xml">PAD 4.0 XML</a> |
+      <a href="/privacy">Privacy Policy</a>
+    </p>
+  </footer>
+</body>
+</html>
