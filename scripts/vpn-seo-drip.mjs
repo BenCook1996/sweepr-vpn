@@ -848,6 +848,7 @@ async function runVpnDrip(targetCount = 300) {
           'scripts/daily-seo-pagespeed-audit.mjs',
           'scripts/daily-50-seo-pages.mjs',
           'TECHNICAL_SEO_AUDIT_LOG.md',
+          'SECURITY_AUDIT_LOG.md',
           'sweepr-vpn-scorecard.html'
         ],
         { cwd: VPN_ROOT, stdio: 'inherit' }
