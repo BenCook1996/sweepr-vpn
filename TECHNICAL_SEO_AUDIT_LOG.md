@@ -155,18 +155,19 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 ## 2026-10-29 — Daily Technical SEO, Crawlability & PageSpeed Audit & Auto-Optimization Pass
 
 ### Executive Summary
-- **Overall Scores**: Crawlability **100/100**, Technical SEO **100/100**, PageSpeed & CWV **100/100** across **852 Canonical Pages**.
+- **Overall Scores**: Crawlability **100/100**, Technical SEO **100/100**, PageSpeed & CWV **100/100** across **903 Canonical Pages**.
 - **Auto-Optimizations Executed**:
-  - Synchronized sitemap.xml with 852 canonical URLs and lastmod 2026-10-29
-  - Synchronized llms.txt with all 842 pSEO guides for GEO AI citations
+  - Auto-optimized 50 pSEO pages with max-image-preview:large, og:image, Twitter cards & theme-color
+  - Synchronized sitemap.xml with 903 canonical URLs and lastmod 2026-10-29
+  - Synchronized llms.txt with all 893 pSEO guides for GEO AI citations
 
 ### Category Scorecards & Verifications
 
 #### 1. Crawlability & Indexability (100/100)
-- **Sitemap Completeness & Freshness**: PASS — 852 canonical URLs registered with 0 missing
-- **GEO / LLM Discovery Manifest (llms.txt)**: PASS — Updated with 852 structured entry points
-- **Search Engine Indexing Queue**: PASS — 853 URLs queued for IndexNow / Search Console
-- **IndexNow Ping Broadcast**: PASS — 852 canonical URLs pinged to Bing & IndexNow
+- **Sitemap Completeness & Freshness**: PASS — 903 canonical URLs registered with 0 missing
+- **GEO / LLM Discovery Manifest (llms.txt)**: PASS — Updated with 903 structured entry points
+- **Search Engine Indexing Queue**: PASS — 904 URLs queued for IndexNow / Search Console
+- **IndexNow Ping Broadcast**: PASS — 903 canonical URLs pinged to Bing & IndexNow
 - **robots.txt Sitemap Directive**: PASS — Valid sitemap directive points to https://sweeprvpn.com/sitemap.xml
 - **robots.txt AI Crawler Allowances (GEO)**: PASS — All 7 major AI search bots explicitly permitted
 - **robots.txt Crawl-Budget Protections**: PASS — Internal APIs, user portals, qr-setup and CRO studios disallowed
@@ -174,16 +175,16 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 - **PAD 4.0 XML Feed**: PASS — Valid PAD 4.0 metadata for software directory syndication
 
 #### 2. Technical SEO & Rich Schemas (100/100)
-- **Page Titles**: PASS — All 852 pages have valid, descriptive <title> tags
-- **Meta Descriptions**: PASS — All 852 pages have compelling, search-optimized meta descriptions
-- **Canonical URLs**: PASS — All 852 pages have exact self-referencing canonical tags
-- **Robots Snippet Controls**: PASS — All 852 pages specify max-image-preview:large for search & Discover snippets
-- **JSON-LD Structured Data**: PASS — All 852 pages inject verified Schema.org JSON-LD structured data
-- **H1 Heading Hierarchy**: PASS — All 852 pages have exactly 1 descriptive <h1> heading
-- **OpenGraph Social Metadata**: PASS — All 852 pages include complete OpenGraph tags (title, desc, url, og:image)
-- **Twitter Card Metadata**: PASS — All 852 pages include complete summary_large_image Twitter card tags
-- **Mobile Theme-Color Support**: PASS — All 852 pages declare theme-color for mobile chrome styling
-- **Internal Link Integrity**: PASS — All internal links across 852 pages resolve to valid routes (0 broken links)
+- **Page Titles**: PASS — All 903 pages have valid, descriptive <title> tags
+- **Meta Descriptions**: PASS — All 903 pages have compelling, search-optimized meta descriptions
+- **Canonical URLs**: PASS — All 903 pages have exact self-referencing canonical tags
+- **Robots Snippet Controls**: PASS — All 903 pages specify max-image-preview:large for search & Discover snippets
+- **JSON-LD Structured Data**: PASS — All 903 pages inject verified Schema.org JSON-LD structured data
+- **H1 Heading Hierarchy**: PASS — All 903 pages have exactly 1 descriptive <h1> heading
+- **OpenGraph Social Metadata**: PASS — All 903 pages include complete OpenGraph tags (title, desc, url, og:image)
+- **Twitter Card Metadata**: PASS — All 903 pages include complete summary_large_image Twitter card tags
+- **Mobile Theme-Color Support**: PASS — All 903 pages declare theme-color for mobile chrome styling
+- **Internal Link Integrity**: PASS — All internal links across 903 pages resolve to valid routes (0 broken links)
 - **Server Canonical 301 Architecture**: PASS — Legacy .html and alias routes seamlessly 301 redirected to clean URLs
 
 #### 3. PageSpeed & Core Web Vitals (100/100)
@@ -201,5 +202,5 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 ### Compression Benchmark Results
 - **order.html** (123.9 KB raw) &rarr; Gzip: **28.4 KB** (77% reduction) | Brotli: **26.2 KB** (79% reduction)
 - **index.html** (41.2 KB raw) &rarr; Gzip: **9.3 KB** (77% reduction) | Brotli: **8.7 KB** (79% reduction)
-- **sitemap.xml** (167.1 KB raw) &rarr; Gzip: **5.5 KB** (97% reduction) | Brotli: **5.0 KB** (97% reduction)
+- **sitemap.xml** (177.3 KB raw) &rarr; Gzip: **5.8 KB** (97% reduction) | Brotli: **5.3 KB** (97% reduction)
 

@@ -13,12 +13,6 @@
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/app</loc>
-    <lastmod>2026-10-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://sweeprvpn.com/tools/leak-test</loc>
     <lastmod>2026-10-29</lastmod>
     <changefreq>weekly</changefreq>
@@ -62,12 +56,6 @@
   </url>
   <url>
     <loc>https://sweeprvpn.com/terms</loc>
-    <lastmod>2026-10-29</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://sweeprvpn.com/pad.xml</loc>
     <lastmod>2026-10-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -5429,5 +5417,11 @@
     <lastmod>2026-10-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/pad.xml</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
 </urlset>
