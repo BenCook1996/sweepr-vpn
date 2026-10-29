@@ -240,7 +240,8 @@ document.addEventListener('DOMContentLoaded', () => {
                   Your Android installer (<strong>SWEEPRVPN.apk</strong>) is downloading now. Tap <strong>Open</strong> in your browser notification bar to install, or launch directly below:
                 </p>
                 <div class="grid grid-cols-1 gap-2 pt-1">
-                  <a href="/download/SWEEPRVPN.apk" download="SWEEPRVPN.apk" class="btn btn-go w-full justify-center py-2.5 text-xs font-extrabold">⬇️ Download SWEEPRVPN.apk Again</a>
+                  <a href="https://play.google.com/apps/testing/com.sweepr.vpn" target="_blank" rel="noopener" class="btn btn-go w-full justify-center py-2.5 text-xs font-extrabold">▶️ Join Official Google Play Beta (Get 30 Days Pro Free)</a>
+                  <a href="/download/SWEEPRVPN.apk" download="SWEEPRVPN.apk" class="flex items-center justify-center rounded-xl border border-emerald-300 bg-emerald-50 text-emerald-900 w-full py-2 text-xs font-extrabold no-underline">⬇️ Download SWEEPRVPN.apk Again</a>
                   <a href="/ios-app" class="flex items-center justify-center rounded-xl border border-gray-200 bg-gray-50 text-gray-800 w-full py-2 text-xs font-bold no-underline">🚀 Open SWEEPR VPN Mobile App Now</a>
                 </div>
               </div>`;

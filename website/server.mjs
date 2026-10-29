@@ -2120,6 +2120,13 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
         </div>
         <span class="btn btn-go text-xs py-2 px-3 shrink-0">Download .apk</span>
       </a>
+      <a href="https://play.google.com/apps/testing/com.sweepr.vpn" target="_blank" rel="noopener" class="flex items-center justify-between gap-3 p-4 rounded-xl border border-emerald-300 bg-emerald-50/60 hover:border-emerald-500 transition-all no-underline text-gray-900">
+        <div>
+          <div class="font-extrabold text-sm text-gray-900">▶️ Join Official Google Play Beta (Get 30 Days Pro Free)</div>
+          <div class="text-xs text-gray-600">Opt in on Google Play &bull; Automatic Play Store Updates</div>
+        </div>
+        <span class="btn btn-go text-xs py-2 px-3 shrink-0">Join on Play Store &rarr;</span>
+      </a>
       <a href="/download/SWEEPRVPN.mobileconfig" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'ios' ? 'border-2 border-emerald-500 bg-emerald-50/40' : 'border-gray-200 bg-white'} hover:border-emerald-400 transition-all no-underline text-gray-900">
         <div>
           <div class="font-bold text-sm text-gray-900">🍎 iPhone &amp; iPad Installer (iOS / iPadOS)</div>
