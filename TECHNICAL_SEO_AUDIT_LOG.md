@@ -157,7 +157,6 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 ### Executive Summary
 - **Overall Scores**: Crawlability **100/100**, Technical SEO **100/100**, PageSpeed & CWV **100/100** across **903 Canonical Pages**.
 - **Auto-Optimizations Executed**:
-  - Auto-optimized 50 pSEO pages with max-image-preview:large, og:image, Twitter cards & theme-color
   - Synchronized sitemap.xml with 903 canonical URLs and lastmod 2026-10-29
   - Synchronized llms.txt with all 893 pSEO guides for GEO AI citations
 

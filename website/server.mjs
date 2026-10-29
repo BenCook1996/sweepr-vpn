@@ -147,7 +147,7 @@ function resolveTrustedOrigin(req) {
     'http://127.0.0.1:8788'
   ]);
   const rawOrigin = String(req?.headers?.origin || '').trim().replace(/\/+$/, '');
-  if (rawOrigin === 'null' && String(req?.url || '').startsWith('/api/vpn/')) return 'null';
+  if (rawOrigin === 'null') return PUBLIC_URL;
   if (rawOrigin && (allowedOrigins.has(rawOrigin) || /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(rawOrigin))) {
     return rawOrigin;
   }
@@ -3385,8 +3385,14 @@ self.addEventListener('fetch', e => {
         );
       }
 
-      if (sub.metadata?.account_id && accountId && sub.metadata.account_id !== accountId) {
-        return sendJson(res, 403, { ok: false, error: 'account_mismatch' }, {}, req);
+      const expectedAccountId = String(sub.metadata?.account_id || '').trim();
+      if (expectedAccountId) {
+        const sess = verifySessionCookie(req);
+        const matchesParam = accountId && safeCompareStrings(accountId, expectedAccountId);
+        const matchesSess = sess && safeCompareStrings(sess.accountId, expectedAccountId);
+        if (!matchesParam && !matchesSess) {
+          return sendJson(res, 403, { ok: false, error: 'account_mismatch' }, {}, req);
+        }
       }
 
       const metaAccountId = sub.metadata?.account_id || accountId;
@@ -3717,9 +3723,15 @@ self.addEventListener('fetch', e => {
           res.writeHead(302, { Location: '/order?error=payment_cancelled', ...COMMON_SECURITY_HEADERS });
           return res.end();
         }
-        if (sub.metadata?.account_id && accountId && sub.metadata.account_id !== accountId) {
-          res.writeHead(302, { Location: '/order?error=payment_incomplete', ...COMMON_SECURITY_HEADERS });
-          return res.end();
+        const expectedAccountId = String(sub.metadata?.account_id || '').trim();
+        if (expectedAccountId) {
+          const sess = verifySessionCookie(req);
+          const matchesParam = accountId && safeCompareStrings(accountId, expectedAccountId);
+          const matchesSess = sess && safeCompareStrings(sess.accountId, expectedAccountId);
+          if (!matchesParam && !matchesSess) {
+            res.writeHead(302, { Location: '/order?error=payment_incomplete', ...COMMON_SECURITY_HEADERS });
+            return res.end();
+          }
         }
         acc = upsertLocalAccount({
           email: acc?.email || sub.metadata?.email || 'customer@sweeprvpn.com',
@@ -4417,6 +4429,9 @@ self.addEventListener('fetch', e => {
     if (!checkRateLimit(req, 'revoke_device', 20, 60000)) {
       return sendJson(res, 429, { ok: false, error: 'rate_limit_exceeded' }, {}, req);
     }
+    if (req.headers.cookie && !isSameOriginOrTrusted(req)) {
+      return sendJson(res, 403, { ok: false, error: 'forbidden_cross_site' }, {}, req);
+    }
     const body = await readJsonBody(req);
     if (body && body.__tooLarge) return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, {}, req);
 
@@ -5033,6 +5048,9 @@ self.addEventListener('fetch', e => {
   if ((pathname === '/api/vpn/account/delete' || pathname === '/v1/account/delete') && req.method === 'POST') {
     if (!checkRateLimit(req, 'account_delete', 10, 60000)) {
       return sendJson(res, 429, { ok: false, error: 'rate_limit_exceeded', message: 'Too many requests. Please wait a minute.' }, {}, req);
+    }
+    if (req.headers.cookie && !isSameOriginOrTrusted(req)) {
+      return sendJson(res, 403, { ok: false, error: 'forbidden_cross_site' }, {}, req);
     }
     const body = await readJsonBody(req);
     if (body && body.__tooLarge) return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, {}, req);
@@ -5990,7 +6008,7 @@ self.addEventListener('fetch', e => {
         server_public_key: serverPubKey,
         address: assignedAddress,
         dns: assignedDns,
-        allowed_ips: '0.0.0.0/0',
+        allowed_ips: '0.0.0.0/0, ::/0',
         server: { code: node.code, country: node.country, city: node.city, flag: node.flag }
       }, {}, req);
     } catch (e) {
@@ -6039,7 +6057,7 @@ self.addEventListener('fetch', e => {
       const lanBypass = Boolean(body?.lan_bypass);
       const allowedIps = lanBypass
         ? '1.0.0.0/8, 2.0.0.0/7, 4.0.0.0/6, 8.0.0.0/7, 10.64.0.0/16, 11.0.0.0/8, 12.0.0.0/6, 16.0.0.0/4, 32.0.0.0/3, 64.0.0.0/2, 128.0.0.0/3, 160.0.0.0/5, 168.0.0.0/6, 172.0.0.0/12, 172.32.0.0/11, 172.64.0.0/10, 172.128.0.0/9, 173.0.0.0/8, 174.0.0.0/7, 176.0.0.0/4, 192.0.0.0/9, 192.128.0.0/11, 192.160.0.0/13, 192.169.0.0/16, 192.170.0.0/15, 192.172.0.0/14, 192.176.0.0/12, 192.192.0.0/10, 193.0.0.0/8, 194.0.0.0/7, 196.0.0.0/6, 200.0.0.0/5, 208.0.0.0/4'
-        : '0.0.0.0/0';
+        : '0.0.0.0/0, ::/0';
 
       const configText = [
         '[Interface]',
