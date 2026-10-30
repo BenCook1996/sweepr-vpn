@@ -181,8 +181,15 @@ for (const dir of ['solutions', 'setup', 'vs', 'guides']) {
       }
 
       if (modified) {
-        fs.writeFileSync(absPath, content, 'utf8');
-        autoOptimizedPseoCount++;
+        try {
+          fs.writeFileSync(absPath, content, 'utf8');
+          autoOptimizedPseoCount++;
+        } catch (err) {
+          try {
+            fs.writeFileSync(absPath, content, 'utf8');
+            autoOptimizedPseoCount++;
+          } catch {}
+        }
       }
     }
 

@@ -136,7 +136,35 @@ const NETWORKS_AND_ISPS = [
   { slug: 'metronet-fiber-us', name: 'MetroNet 100% Fiber Internet US', asn: 'AS53775', tech: 'GPON / CGNAT (100.64.0.0/10)', mtu: 1420, peakHours: '19:00–23:00 EST/CST', throttlingType: 'Strict CGNAT shared IPv4 blocks and Midwest regional transit hops' },
   { slug: 'fidium-fiber-us', name: 'Fidium Fiber by Consolidated Communications', asn: 'AS10578', tech: 'XGS-PON / DHCP ONT', mtu: 1420, peakHours: '19:00–22:30 EST', throttlingType: 'Consolidated backhaul aggregation and transatlantic peering queues' },
   { slug: 'ziply-fiber-us', name: 'Ziply Fiber 1Gbps–10Gbps US Northwest', asn: 'AS27017', tech: 'XGS-PON / DHCP', mtu: 1420, peakHours: '19:00–23:00 PST', throttlingType: 'Pacific Northwest to European/Asian endpoints transit hops' },
-  { slug: 'brightspeed-fiber-us', name: 'Brightspeed High-Speed Fiber US', asn: 'AS396515', tech: 'XGS-PON / PPPoE VLAN 201', mtu: 1412, peakHours: '19:00–23:00 US', throttlingType: 'PPPoE encapsulation overhead and legacy CenturyLink backhaul bottlenecks' }
+  { slug: 'brightspeed-fiber-us', name: 'Brightspeed High-Speed Fiber US', asn: 'AS396515', tech: 'XGS-PON / PPPoE VLAN 201', mtu: 1412, peakHours: '19:00–23:00 US', throttlingType: 'PPPoE encapsulation overhead and legacy CenturyLink backhaul bottlenecks' },
+  { slug: 'freedom-fibre-uk', name: 'Freedom Fibre Wholesale FTTP UK', asn: 'AS213076', tech: 'XGS-PON Wholesale / CGNAT', mtu: 1420, peakHours: '19:00–23:00 UK', throttlingType: 'Wholesale backhaul aggregation and shared CGNAT IPv4 address pool limits' },
+  { slug: 'octaplus-uk', name: 'Octaplus 1Gbps–2.5Gbps Fibre UK', asn: 'AS211116', tech: 'FTTP Openreach & CityFibre / CGNAT', mtu: 1412, peakHours: '19:00–22:30 UK', throttlingType: 'CityFibre/Openreach wholesale encapsulation delay and CGNAT session timeouts' },
+  { slug: 'swish-fibre-uk', name: 'Swish Fibre Home Counties 1Gbps', asn: 'AS210385', tech: 'FTTP 10G XGS-PON / DHCP', mtu: 1420, peakHours: '19:00–23:00 UK', throttlingType: 'London LINX evening exchange transit queuing' },
+  { slug: 'lit-fibre-uk', name: 'Lit Fibre Gigabit Altnet UK', asn: 'AS210940', tech: '10G XGS-PON / CGNAT (100.64.0.0/10)', mtu: 1420, peakHours: '18:30–23:00 UK', throttlingType: 'Carrier-Grade NAT port exhaustion and evening streaming bitrate drops' },
+  { slug: 'fastnet-uk', name: 'Fastnet Brighton & Sussex Broadband', asn: 'AS8455', tech: 'FTTP / VDSL2 PPPoE', mtu: 1412, peakHours: '19:00–22:30 UK', throttlingType: 'PPPoE encapsulation overhead and regional Sussex transit hops' },
+  { slug: 'quickline-telecom-uk', name: 'Quickline Rural 5G & Full Fibre UK', asn: 'AS50228', tech: 'FTTP & Fixed Wireless 5G / CGNAT', mtu: 1380, peakHours: '18:30–23:00 UK', throttlingType: 'Fixed wireless link jitter, 5G scheduling priority, and CGNAT port mapping' },
+  { slug: 'voneus-broadband-uk', name: 'Voneus Rural Broadband Full Fibre UK', asn: 'AS205798', tech: 'FTTP & Wireless / CGNAT', mtu: 1420, peakHours: '19:00–22:30 UK', throttlingType: 'Rural microwave backhaul queuing and shared CGNAT UDP table limits' },
+  { slug: 'grayshott-gigabit-uk', name: 'Grayshott Gigabit Rural Fibre UK', asn: 'AS215887', tech: 'FTTP XGS-PON / Dedicated DHCP', mtu: 1420, peakHours: '19:00–23:00 UK', throttlingType: 'Surrey and Hampshire regional aggregation transit bottlenecks' },
+  { slug: 'pine-media-uk', name: 'Pine Media Full Fibre Sheffield & North', asn: 'AS204958', tech: 'FTTP / Dedicated Symmetrical Fibre', mtu: 1420, peakHours: '19:00–22:30 UK', throttlingType: 'Northern England regional wholesale transit and evening streaming queues' },
+  { slug: 'connect-fibre-uk', name: 'Connect Fibre Hyperfast Community FTTP', asn: 'AS211728', tech: 'FTTP XGS-PON / CGNAT', mtu: 1420, peakHours: '18:30–23:00 UK', throttlingType: 'Shared CGNAT IPv4 address blocks and evening gaming flow traffic shaping' },
+  { slug: 'sonic-fiber-california', name: 'Sonic 10Gbps Symmetrical Fiber California', asn: 'AS46375', tech: '10G XGS-PON / Dedicated IPv4 & IPv6', mtu: 1420, peakHours: '19:00–23:00 PST', throttlingType: 'San Francisco & Bay Area peering exchange congestion to East Coast and European endpoints' },
+  { slug: 'astound-broadband-us', name: 'Astound Broadband (RCN / Wave / Grande)', asn: 'AS20214', tech: 'DOCSIS 3.1 & Fiber', mtu: 1420, peakHours: '19:00–23:30 US', throttlingType: 'DOCSIS upstream bufferbloat and congested regional peering interconnects' },
+  { slug: 'breezeline-cable-us', name: 'Breezeline Fiber & Cable US', asn: 'AS7011', tech: 'DOCSIS 3.1 / FTTH', mtu: 1420, peakHours: '19:00–23:00 EST', throttlingType: 'DOCSIS node contention and evening video streaming bitrate throttling' },
+  { slug: 'sparklight-cable-one-us', name: 'Sparklight (Cable One) High-Speed Internet', asn: 'AS11492', tech: 'DOCSIS 3.1 / Fiber', mtu: 1420, peakHours: '19:00–23:30 US', throttlingType: 'Strict data prioritization thresholds and evening UDP packet loss' },
+  { slug: 'midco-fiber-us', name: 'Midco Gigabit Fiber & Cable US', asn: 'AS11351', tech: 'DOCSIS 3.1 & FTTH', mtu: 1420, peakHours: '19:00–22:30 CST', throttlingType: 'Midwest regional aggregation hops and transatlantic transit latency' },
+  { slug: 'consolidated-communications-us', name: 'Consolidated Communications Broadband', asn: 'AS6167', tech: 'GPON / VDSL2 PPPoE', mtu: 1412, peakHours: '19:00–23:00 US', throttlingType: 'PPPoE encapsulation overhead and legacy copper backhaul congestion' },
+  { slug: 'tds-telecom-fiber-us', name: 'TDS Telecom 1Gbps–8Gbps All-Fiber', asn: 'AS4181', tech: 'XGS-PON / DHCP', mtu: 1420, peakHours: '19:00–23:00 US', throttlingType: 'Regional aggregation transit drops and evening gaming UDP jitter' },
+  { slug: 'altafiber-cincinnati-bell', name: 'altafiber (Cincinnati Bell) Gigabit Fiber', asn: 'AS5375', tech: 'GPON / XGS-PON DHCP', mtu: 1420, peakHours: '19:00–23:00 EST', throttlingType: 'Ohio Valley regional peering spikes and evening streaming queues' },
+  { slug: 'cogeco-connexion-canada', name: 'Cogeco Connexion Ultra-High Speed Canada', asn: 'AS11260', tech: 'DOCSIS 3.1 & EPON', mtu: 1420, peakHours: '19:00–23:00 EST', throttlingType: 'DOCSIS upstream queue saturation and Montreal transit congestion' },
+  { slug: 'sasktel-infinet-canada', name: 'SaskTel infiNET Gigabit Fiber Canada', asn: 'AS174', tech: 'GPON / PPPoE VLAN 1000', mtu: 1412, peakHours: '19:00–22:30 CST', throttlingType: 'PPPoE 1492 MTU overhead and long-haul Canadian transit hops' },
+  { slug: 'eastlink-canada', name: 'Eastlink Gigabit Internet Atlantic Canada', asn: 'AS11296', tech: 'DOCSIS 3.1 / Fiber', mtu: 1420, peakHours: '19:00–23:00 AST', throttlingType: 'Maritime Atlantic transit bottlenecks and evening streaming QoS' },
+  { slug: 'belong-nbn-australia', name: 'Belong NBN Broadband Australia', asn: 'AS1221', tech: 'NBN FTTP / HFC (Telstra Wholesale)', mtu: 1412, peakHours: '19:00–23:00 AEST', throttlingType: 'Telstra budget CVC bandwidth constraints and international submarine cable queuing' },
+  { slug: 'iinet-australia', name: 'iiNet NBN Broadband Australia', asn: 'AS4739', tech: 'NBN FTTP / FTTN PPPoE', mtu: 1412, peakHours: '19:00–23:00 AEST', throttlingType: 'PPPoE overhead and evening submarine cable transit to US/UK endpoints' },
+  { slug: 'dodo-nbn-australia', name: 'Dodo NBN Broadband Australia', asn: 'AS4804', tech: 'NBN FTTP / HFC (Vocus Core)', mtu: 1412, peakHours: '19:00–23:00 AEST', throttlingType: 'Vocus wholesale CVC contention and evening streaming buffering' },
+  { slug: '2degrees-broadband-nz', name: '2degrees Broadband New Zealand', asn: 'AS24436', tech: 'UFB FTTH PPPoE VLAN 10', mtu: 1412, peakHours: '19:00–23:00 NZST', throttlingType: 'Southern Cross subsea cable latency and PPPoE 1492 fragmentation' },
+  { slug: 'iliad-fibra-italy', name: 'Iliad Fibra 5Gbps 10G-EPON Italy', asn: 'AS29447', tech: '10G-EPON / IPv6 MAP-E (Shared IPv4)', mtu: 1380, peakHours: '19:30–23:00 CET', throttlingType: 'MAP-E 16-bit port block limitation (16,384 ports per user) and MTU reduction bottlenecks' },
+  { slug: 'post-telecom-luxembourg', name: 'POST Luxembourg 1Gbps–2.5Gbps Fibre', asn: 'AS6661', tech: 'FTTH GPON / PPPoE', mtu: 1412, peakHours: '19:30–22:30 CET', throttlingType: 'LU-CIX evening transit queues and PPPoE encapsulation overhead' },
+  { slug: 'play-upc-polska', name: 'Play / UPC Polska Swiatlowod & Cable', asn: 'AS6830', tech: 'DOCSIS 3.1 / FTTH GPON', mtu: 1420, peakHours: '19:00–23:00 CET', throttlingType: 'Warsaw PLIX transit queuing and DS-Lite AFTR tunnel overhead' }
 ];
 
 const USE_CASES = [
@@ -796,6 +824,122 @@ const SETUP_GUIDES = [
       'wg-quick up wg0',
       'lbu commit -d'
     ]
+  },
+  {
+    slug: 'proxmox-ve-8-sdn-wireguard',
+    name: 'Proxmox VE 8.2 SDN VNet WireGuard Gateway Setup',
+    category: 'Virtualization & SDN',
+    keyword: 'proxmox ve 8 sdn vnet wireguard vpn gateway setup',
+    summary: 'Deploy an automated WireGuard egress gateway inside Proxmox VE 8.2 Software-Defined Networking (SDN) VNets to route entire virtual datacenter subnets through SWEEPR VPN.',
+    commands: [
+      '# In Proxmox VE 8.2 Datacenter -> SDN -> VNets:',
+      '# Create VNet vnet-vpn with subnets 10.100.0.0/24',
+      '# Inside egress gateway container (Alpine Linux):',
+      'apk add wireguard-tools iptables && wg-quick up sweepr-lon01',
+      'iptables -t nat -A POSTROUTING -o sweepr-lon01 -j MASQUERADE'
+    ]
+  },
+  {
+    slug: 'tailscale-wireguard-exit-node',
+    name: 'Tailscale Subnet Router to SWEEPR WireGuard Exit Bridge',
+    category: 'Mesh VPN & Enterprise',
+    keyword: 'tailscale wireguard exit node bridge vpn setup',
+    summary: 'Chain Tailscale mesh devices to a high-speed SWEEPR VPN 10Gbps RAM-only WireGuard exit node with automated policy routing and zero DNS leaks.',
+    commands: [
+      '# On Linux Gateway Node:',
+      'echo "net.ipv4.ip_forward = 1" | sudo tee -a /etc/sysctl.d/99-tailscale-vpn.conf && sudo sysctl -p',
+      'sudo wg-quick up /etc/wireguard/sweepr-lon01.conf',
+      'sudo tailscale up --advertise-exit-node --accept-routes'
+    ]
+  },
+  {
+    slug: 'almalinux-9-wireguard-gateway',
+    name: 'AlmaLinux 9 & Rocky Linux 9 Enterprise WireGuard Gateway',
+    category: 'Enterprise Linux Gateway',
+    keyword: 'almalinux 9 rocky linux 9 wireguard gateway firewalld',
+    summary: 'Configure an enterprise-grade WireGuard gateway on RHEL 9 / AlmaLinux 9 / Rocky Linux 9 using native kernel modules, firewalld rich rules, and masquerading.',
+    commands: [
+      'sudo dnf install -y epel-release && sudo dnf install -y wireguard-tools iptables-services',
+      'sudo cp sweepr-ams01.conf /etc/wireguard/wg0.conf && sudo chmod 600 /etc/wireguard/wg0.conf',
+      'sudo firewall-cmd --zone=trusted --add-interface=wg0 --permanent',
+      'sudo firewall-cmd --zone=public --add-masquerade --permanent && sudo firewall-cmd --reload',
+      'sudo systemctl enable --now wg-quick@wg0'
+    ]
+  },
+  {
+    slug: 'vyos-1-4-wireguard-router',
+    name: 'VyOS 1.4 Rolling / LTS WireGuard Interface & BGP Setup',
+    category: 'Network OS & Routing',
+    keyword: 'vyos 1 4 wireguard client policy based routing setup',
+    summary: 'Configure a native WireGuard interface on VyOS 1.4 with Policy-Based Routing (PBR) and MSS clamping to bypass ISP traffic shaping across entire enterprise subnets.',
+    commands: [
+      'set interfaces wireguard wg01 address 10.66.18.42/32',
+      'set interfaces wireguard wg01 port 51820',
+      'set interfaces wireguard wg01 peer lon01 endpoint lon01.sweeprvpn.com:51820',
+      'set interfaces wireguard wg01 peer lon01 allowed-ips 0.0.0.0/0',
+      'set interfaces wireguard wg01 peer lon01 persistent-keepalive 25',
+      'commit; save'
+    ]
+  },
+  {
+    slug: 'openwrt-travel-glinet-dropin',
+    name: 'OpenWrt 23.05 Drop-In Gateway & Transparent WireGuard Proxy',
+    category: 'Open-Source Router OS',
+    keyword: 'openwrt 23 05 drop in gateway wireguard transparent proxy',
+    summary: 'Deploy OpenWrt 23.05 as a transparent drop-in gateway without replacing your existing ISP router, routing all LAN traffic through SWEEPR VPN 10Gbps bare-metal tunnels.',
+    commands: [
+      '# Disable DHCP server on OpenWrt drop-in LAN interface:',
+      'uci set dhcp.lan.ignore=1 && uci commit dhcp && /etc/init.d/dnsmasq restart',
+      '# Set static IP within ISP subnet (e.g. 192.168.1.2) and bring up WireGuard:',
+      'wg-quick up sweepr-lon01',
+      '# Point devices on your LAN to default gateway 192.168.1.2'
+    ]
+  },
+  {
+    slug: 'freebsd-14-wireguard-kmod',
+    name: 'FreeBSD 14.1 Kernel WireGuard (if_wg) & pf Firewall Setup',
+    category: 'BSD Firewall & Server',
+    keyword: 'freebsd 14 kernel wireguard if_wg pf nat gateway setup',
+    summary: 'Configure kernel-mode WireGuard (if_wg) on FreeBSD 14.1 with pf packet filter NAT translation and in-tunnel DNS resolution for unmatched stability and throughput.',
+    commands: [
+      'pkg install wireguard-tools',
+      'cat << "EOF" > /usr/local/etc/wireguard/wg0.conf',
+      '[Interface]',
+      'Address = 10.66.18.42/32',
+      'PrivateKey = <YOUR_KEY>',
+      '[Peer]',
+      'PublicKey = <SWEEPR_PUBKEY>',
+      'Endpoint = lon01.sweeprvpn.com:51820',
+      'AllowedIPs = 0.0.0.0/0',
+      'EOF',
+      'service wireguard restart'
+    ]
+  },
+  {
+    slug: 'fedora-silverblue-immutable-wireguard',
+    name: 'Fedora Silverblue 40 Immutable WireGuard VPN Guide',
+    category: 'Immutable Linux Workstation',
+    keyword: 'fedora silverblue 40 wireguard networkmanager ostree setup',
+    summary: 'Deploy SWEEPR VPN on Fedora Silverblue 40 OSTree immutable desktop using rootless NetworkManager keyfiles and native systemd-resolved DNS encryption.',
+    commands: [
+      'nmcli connection import type wireguard file sweepr-lon01.conf',
+      'nmcli connection modify sweepr-lon01 ipv4.dns "10.66.0.1"',
+      'nmcli connection modify sweepr-lon01 ipv4.ignore-auto-dns yes',
+      'nmcli connection up sweepr-lon01'
+    ]
+  },
+  {
+    slug: 'unifi-gateway-max-uxg-max',
+    name: 'Ubiquiti UniFi Gateway Max (UXG-Max) 2.5G WireGuard Setup',
+    category: 'UniFi OS Gateway',
+    keyword: 'unifi gateway max uxg max wireguard vpn client routing',
+    summary: 'Configure 2.5Gbps multi-gigabit WireGuard client routing on the UniFi Gateway Max (UXG-Max) with UniFi OS 4.x and assign specific LAN ports to SWEEPR London 10Gbps nodes.',
+    commands: [
+      '# UniFi Network Controller 8.x+:',
+      '# 1. Settings -> VPN -> VPN Client -> WireGuard -> Upload sweepr-uk-lon01.conf',
+      '# 2. Set MTU to 1420 (DHCP) or 1412 (PPPoE)',
+      '# 3. Settings -> Routing -> Policy-Based Routing -> Route IoT / Streaming VLAN via SWEEPR'
+    ]
   }
 ];
 
@@ -841,7 +985,12 @@ const COMPETITORS = [
   { slug: 'cactusvpn', name: 'CactusVPN', price: '£38.99/yr ($48.99/yr)', installerSize: '~95 MB', ramUsage: '~145 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'Canada (Five Eyes)' },
   { slug: 'urban-vpn', name: 'Urban VPN Free', price: 'Free (Monetizes P2P Residential Proxy)', installerSize: '~160 MB (Background P2P Node)', ramUsage: '~240 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'USA (Peers route traffic via your IP)' },
   { slug: 'hola-vpn', name: 'Hola VPN Free Proxy', price: 'Free (Resells Bandwidth via Luminati)', installerSize: '~140 MB (P2P Exit Node)', ramUsage: '~220 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'Israel / BVI (Severe privacy risk)' },
-  { slug: 'turbo-vpn', name: 'Turbo VPN', price: '£79.99/yr ($99.99/yr after trial)', installerSize: '~130 MB (Heavy Ads & Trackers)', ramUsage: '~200 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'Singapore (Innovative Connecting)' }
+  { slug: 'turbo-vpn', name: 'Turbo VPN', price: '£79.99/yr ($99.99/yr after trial)', installerSize: '~130 MB (Heavy Ads & Trackers)', ramUsage: '~200 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'Singapore (Innovative Connecting)' },
+  { slug: 'warp-plus-team', name: 'Cloudflare Zero Trust WARP', price: '$84.00/yr ($7/user/mo)', installerSize: '~115 MB', ramUsage: '~165 MB', hasWifiScanner: 'No', hasAcrBlocker: 'Gateway DNS Only', jurisdiction: 'USA (Full Enterprise Logging)' },
+  { slug: 'tailscale-saas', name: 'Tailscale Commercial SaaS', price: '$72.00/yr ($6/user/mo)', installerSize: '~80 MB', ramUsage: '~120 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No (MagicDNS Only)', jurisdiction: 'USA (Coordination Server Logs)' },
+  { slug: 'perimeter-81', name: 'Perimeter 81 (Check Point Harmony)', price: '£96.00/yr ($8/user/mo)', installerSize: '~160 MB', ramUsage: '~240 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'USA / Israel' },
+  { slug: 'nordlayer', name: 'NordLayer Business VPN', price: '£96.00/yr ($8/user/mo)', installerSize: '~145 MB', ramUsage: '~220 MB', hasWifiScanner: 'No', hasAcrBlocker: 'ThreatBlock DNS Only', jurisdiction: 'USA (Nord Security B2B)' },
+  { slug: 'twingate', name: 'Twingate Zero Trust Network Access', price: '$60.00/yr ($5/user/mo)', installerSize: '~95 MB', ramUsage: '~150 MB', hasWifiScanner: 'No', hasAcrBlocker: 'No', jurisdiction: 'USA (Logs User Access Metadata)' }
 ];
 
 const SECURITY_GUIDES = [
@@ -1036,6 +1185,38 @@ const SECURITY_GUIDES = [
     keyword: 'audit nas synology qnap open ports upnp exposure wireguard',
     domains: ['UPnP IGD Automatic WAN Port Forwarding Probe', 'Exposed SMB Port 445 / 139 Audit', 'Exposed SSH Port 22 Probe', 'Dedicated Inbound WireGuard Access Only'],
     summary: 'Automated UPnP can open your NAS storage directly to the public internet without your knowledge, exposing it to ransomware. SWEEPR VPN’s 30-second Wi-Fi audit flags dangerous open ports instantly.'
+  },
+  {
+    slug: 'block-philips-titan-os-acr',
+    title: 'How to Block Philips Titan OS & Ambilight ACR Tracking (2026)',
+    h1: 'How to Block Philips Titan OS & Ambilight ACR Screenshot Telemetry',
+    keyword: 'block philips titan os ambilight acr tracking router',
+    domains: ['philips.com/telemetry', 'titanos.tv/metrics', 'amzn.philips.tv', 'epg.corio.com', 'tracking.philips.eu'],
+    summary: 'Philips Titan OS smart TVs capture on-screen video frames to sync Ambilight data and upload viewing statistics to advertising partners.'
+  },
+  {
+    slug: 'block-sharp-aquos-google-tv-acr',
+    title: 'How to Block Sharp Aquos Google TV ACR Viewing Telemetry (2026)',
+    h1: 'Stop Sharp Aquos Google TV ACR Content Recognition at the Router Level',
+    keyword: 'block sharp aquos smart tv acr tracking telemetry dns',
+    domains: ['sharptelemetry.com', 'aquos-net.tv/logs', 'api.sharptv.net', 'adservice.google.com'],
+    summary: 'Sharp Aquos smart TVs monitor streaming content and connected HDMI inputs to deliver targeted household ads.'
+  },
+  {
+    slug: 'stop-isp-tcp-reset-attacks',
+    title: 'How to Defeat ISP TCP RST Packet Injection & Censorship in 2026',
+    h1: 'How to Bypass ISP TCP RST Packet Injection & Deep Packet Inspection with WireGuard',
+    keyword: 'defeat isp tcp rst injection deep packet inspection wireguard',
+    domains: ['Forged TCP RST Packet Drops', 'Encrypted UDP WireGuard Socket', 'Zero Plaintext TCP Headers', 'Automated SYN Re-transmissions'],
+    summary: 'ISPs inject spoofed TCP RST packets when their DPI appliances detect forbidden SNI hostnames. Encapsulating all TCP connections inside SWEEPR VPN’s WireGuard UDP tunnel completely defeats RST injection.'
+  },
+  {
+    slug: 'detect-rogue-mesh-repeaters',
+    title: 'How to Detect Rogue Wi-Fi Mesh Nodes & Extenders on Your Home LAN in 30 Seconds',
+    h1: 'How to Detect Rogue Wi-Fi Extenders & Unauthorized Repeaters on Your Network',
+    keyword: 'detect rogue wifi extender repeater lan scanner free tool',
+    domains: ['Duplicate BSSID / MAC Spoofing Check', 'mDNS Mesh Discovery Probe', 'Bridge Mode Promiscuous Device Audit', 'Free 30-Second SWEEPR LAN Scan'],
+    summary: 'Rogue Wi-Fi repeaters and compromised mesh nodes can act as man-in-the-middle packet sniffers on your home network. SWEEPR VPN’s 30-second Wi-Fi Device Scanner detects unauthorized bridges instantly.'
   }
 ];
 
