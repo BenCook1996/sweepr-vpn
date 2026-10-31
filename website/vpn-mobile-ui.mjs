@@ -911,7 +911,7 @@ async function toggleTunnel() {
     head.textContent = 'Install iOS VPN Profile in Settings';
     sub.textContent = 'Approve profile in iOS Settings -> General -> VPN & Device Management';
     showToast('Downloading iOS WireGuard profile...');
-    window.location.href = '/api/vpn/apple-mobileconfig?key=' + encodeURIComponent(key) + '&email=' + encodeURIComponent(email) + '&server_code=' + encodeURIComponent(selectedCode) + '&device_id=' + encodeURIComponent(getDeviceId()) + '&dns_shield=' + dnsFlag;
+    fetch('/api/vpn/apple-mobileconfig-ticket', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key, email, server_code: selectedCode, device_id: getDeviceId(), dns_shield: dnsFlag }) }).then(r => r.json()).then(td => { if (td && td.url) window.location.href = td.url; else showToast('Could not verify license for iOS profile'); }).catch(() => showToast('Network error'));
     return;
   }
 
@@ -934,7 +934,7 @@ async function checkMobileWebUpdate() {
       if (d.force_update) {
         const modal = document.createElement('div');
         modal.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(11,17,32,0.92);display:flex;align-items:center;justify-content:center;padding:20px';
-        modal.innerHTML = '<div class="card" style="max-width:360px;width:100%;text-align:center"><div style="font-size:18px;font-weight:900;margin-bottom:8px">Mandatory Update Required</div><p style="font-size:13px;color:var(--muted);margin-bottom:16px">' + (d.notes || 'Please update SWEEPR VPN to the latest version.') + '</p><a href="' + targetUrl + '" class="btn-primary" style="display:block;text-decoration:none;text-align:center">Update Now</a></div>';
+        modal.innerHTML = '<div class="card" style="max-width:360px;width:100%;text-align:center"><div style="font-size:18px;font-weight:900;margin-bottom:8px">Mandatory Update Required</div><p style="font-size:13px;color:var(--muted);margin-bottom:16px">' + escHtml(d.notes || 'Please update SWEEPR VPN to the latest version.') + '</p><a href="' + escHtml(targetUrl) + '" class="btn-primary" style="display:block;text-decoration:none;text-align:center">Update Now</a></div>';
         document.body.appendChild(modal);
       } else {
         showToast('SWEEPR VPN v' + (d.latest_version || '') + ' update available');
@@ -945,6 +945,14 @@ async function checkMobileWebUpdate() {
 
 
 let stealthMode = localStorage.getItem('sweepr_stealth_443') === '1';
+function escHtml(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
 function toggleStealthMode() {
   stealthMode = !stealthMode;
   localStorage.setItem('sweepr_stealth_443', stealthMode ? '1' : '0');
@@ -961,38 +969,49 @@ async function runInAppLeakCheck() {
     const r = await fetch('/api/tools/network-check');
     const d = await r.json();
     const rtt = Math.max(4, Math.round(performance.now() - t0));
-    out.innerHTML = '• Exit IP: <strong>' + (d.ip || 'Protected') + '</strong> (' + (d.country || 'GB') + ')<br>• Transit: ' + (d.isp || 'WireGuard Gateway') + '<br>• P2P Port Forwarding &amp; UDP-443: <strong style="color:var(--accent-fg)">OPEN (' + rtt + ' ms)</strong><br>• Smart-TV ACR &amp; WebRTC Leak: <strong style="color:var(--accent-fg)">0 LEAKS DETECTED</strong>';
+    out.innerHTML = '• Exit IP: <strong>' + escHtml(d.ip || 'Protected') + '</strong> (' + escHtml(d.country || 'GB') + ')<br>• Transit: ' + escHtml(d.isp || 'WireGuard Gateway') + '<br>• P2P Port Forwarding &amp; UDP-443: <strong style="color:var(--accent-fg)">OPEN (' + rtt + ' ms)</strong><br>• Smart-TV ACR &amp; WebRTC Leak: <strong style="color:var(--accent-fg)">0 LEAKS DETECTED</strong>';
   } catch (e) {
     out.textContent = '• WireGuard DNS & WebRTC Shield: ACTIVE (Zero Leaks)';
   }
 }
-function exportRouterWgConf() {
+async function exportRouterWgConf() {
   const preset = (document.getElementById('wgPresetSelect') || {}).value || 'gl-inet';
   const cur = SERVERS.find(s => s.code === selectedCode) || SERVERS[0];
-  const port = stealthMode ? '443' : '51820';
-  const conf = [
-    '# SWEEPR VPN WireGuard Config — Preset: ' + preset.toUpperCase(),
-    '# Gateway: ' + cur.country + ' (' + cur.city + ') [' + cur.code + ']',
-    '# Smart-TV ACR Sinkhole (gpm.samsungqbe.com, LG, Roku, Vizio, FireTV): ENABLED',
-    '[Interface]',
-    'Address = 10.66.66.2/32',
-    'DNS = 10.66.66.1, 1.1.1.1',
-    'MTU = 1380',
-    '',
-    '[Peer]',
-    'Endpoint = ' + cur.ip + ':' + port,
-    'AllowedIPs = 0.0.0.0/0, ::/0',
-    'PersistentKeepalive = 25',
-    ''
-  ].join('\n');
-  const blob = new Blob([conf], { type: 'text/plain;charset=utf-8' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'sweepr-' + preset + '-' + cur.code.toLowerCase() + '.conf';
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  showToast('Downloaded ' + a.download);
+  const key = localStorage.getItem('sweepr_key') || (document.getElementById('codeInput')?.value || '').trim();
+  const email = localStorage.getItem('sweepr_email') || (document.getElementById('emailInput')?.value || '').trim();
+  if (!key) {
+    showToast('Activate your Pro key first to export a router config');
+    switchTab('account');
+    return;
+  }
+  try {
+    const r = await fetch('/api/vpn/wireguard-config', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        license_key: key,
+        email,
+        server_code: cur.code,
+        device_id: getDeviceId() + '_router_' + preset
+      })
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok || !d.ok || !d.config_text) {
+      showToast(d.message || 'Could not generate router WireGuard config');
+      return;
+    }
+    const conf = '# SWEEPR VPN Router Config — Preset: ' + preset.toUpperCase() + '\n' + d.config_text;
+    const blob = new Blob([conf], { type: 'text/plain;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'sweepr-' + preset + '-' + cur.code.toLowerCase() + '.conf';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    showToast('Downloaded ' + a.download);
+  } catch (e) {
+    showToast('Network error generating router config');
+  }
 }
 
 (function init() {

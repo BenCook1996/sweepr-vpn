@@ -361,7 +361,7 @@
           return;
         }
         if (box) {
-          box.innerHTML = `<div class="bg-white p-2 rounded-xl border border-gray-200 inline-block shadow-sm">${data.qr_svg || ''}</div>`;
+          box.innerHTML = `<div class="bg-white p-2 rounded-xl border border-gray-200 inline-block shadow-sm">${String(data.qr_svg || '').startsWith('<svg') && !/<script|onload|onerror|javascript:/i.test(String(data.qr_svg || '')) ? data.qr_svg : ''}</div>`;
         }
         const tokenRow = document.getElementById('portalQrTokenRow');
         const tokenVal = document.getElementById('portalQrTokenVal');

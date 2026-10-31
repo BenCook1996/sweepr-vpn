@@ -147,7 +147,7 @@ function resolveTrustedOrigin(req) {
     'http://127.0.0.1:8788'
   ]);
   const rawOrigin = String(req?.headers?.origin || '').trim().replace(/\/+$/, '');
-  if (rawOrigin === 'null') return PUBLIC_URL;
+  if (rawOrigin === 'null') return '';
   if (rawOrigin && (allowedOrigins.has(rawOrigin) || /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(rawOrigin))) {
     return rawOrigin;
   }
@@ -168,6 +168,7 @@ function isSameOriginOrTrusted(req) {
   if (rawOrigin === 'null') return false;
   if (rawOrigin) {
     const trusted = resolveTrustedOrigin(req);
+    if (!trusted) return false;
     return rawOrigin.replace(/\/+$/, '') === trusted.replace(/\/+$/, '');
   }
   if (fetchSite === 'same-origin' || fetchSite === 'same-site' || fetchSite === 'none') {
@@ -177,11 +178,17 @@ function isSameOriginOrTrusted(req) {
   return Boolean(req?.headers?.['x-requested-with']) || (ct.startsWith('application/json') && !fetchSite);
 }
 
+function hasValidCloudflareHeaders(req) {
+  if (process.env.TRUST_CLOUDFLARE === 'false') return false;
+  const cfRay = String(req?.headers?.['cf-ray'] || '').trim();
+  return /^[0-9a-f]{16}-[A-Z]{3}$/i.test(cfRay);
+}
+
 function getClientIp(req) {
   if (TRUST_PROXY) {
-    if (process.env.TRUST_CLOUDFLARE !== 'false') {
+    if (hasValidCloudflareHeaders(req)) {
       const cfIp = String(req.headers['cf-connecting-ip'] || '').trim();
-      if (cfIp) return cfIp;
+      if (cfIp && /^[0-9a-fA-F.:]{3,45}$/.test(cfIp)) return cfIp;
     }
     const xff = String(req.headers['x-forwarded-for'] || '').trim();
     if (xff) {
@@ -190,6 +197,23 @@ function getClientIp(req) {
     }
   }
   return String(req.socket?.remoteAddress || '127.0.0.1').trim();
+}
+
+function setBoundedMap(map, key, val, maxEntries = 5000) {
+  if (!map.has(key) && map.size >= maxEntries) {
+    const now = Date.now();
+    for (const [k, v] of map.entries()) {
+      if (v && typeof v === 'object' && v.expiresAt && now > v.expiresAt) {
+        map.delete(k);
+      }
+    }
+    while (map.size >= maxEntries) {
+      const oldestKey = map.keys().next().value;
+      if (oldestKey === undefined) break;
+      map.delete(oldestKey);
+    }
+  }
+  map.set(key, val);
 }
 
 const rateLimitBuckets = new Map();
@@ -234,6 +258,14 @@ function decryptWithAdminKey(payload) {
   const adminSecret = (process.env.CRM_ADMIN_PASSWORD || '').trim();
   if (!payload || !adminSecret) return '';
   try {
+    if (payload.startsWith('v2:')) {
+      const [, saltHex, ivHex, tagHex, encHex] = payload.split(':');
+      const key = crypto.scryptSync(adminSecret, Buffer.from(saltHex, 'hex'), 32, { N: 16384, r: 8, p: 1 });
+      const decipher = crypto.createDecipheriv('aes-256-gcm', key, Buffer.from(ivHex, 'hex'));
+      decipher.setAuthTag(Buffer.from(tagHex, 'hex'));
+      const out = Buffer.concat([decipher.update(Buffer.from(encHex, 'hex')), decipher.final()]).toString('utf8');
+      if (out) return out;
+    }
     const [ivHex, tagHex, encHex] = payload.split(':');
     const key = crypto.createHash('sha256').update(adminSecret).digest();
     const decipher = crypto.createDecipheriv('aes-256-gcm', key, Buffer.from(ivHex, 'hex'));
@@ -567,13 +599,14 @@ const MAX_DEVICES_PER_ACCOUNT = 3;
 const PAIRING_TOKEN_TTL_MS = 120 * 1000;
 const pairingTokens = new Map();
 const pairingChallenges = new Map();
+const appleMobileconfigTickets = new Map();
 const claimedIntroEmails = new Set();
 const claimedIntroCustomerIds = new Set();
 const claimedIntroCardFingerprints = new Set();
 const claimedPlayPurchaseTokens = new Map();
 const processedStripeWebhookEvents = new Set();
 
-const RUNTIME_STATE_DIR = path.join(__dirname, 'data');
+const RUNTIME_STATE_DIR = process.env.SWEEPR_STATE_DIR || path.join(__dirname, 'data');
 const RUNTIME_STATE_FILE = path.join(RUNTIME_STATE_DIR, 'vpn-runtime-state.json');
 let runtimeSaveTimer = null;
 
@@ -598,9 +631,11 @@ function saveRuntimeStateToDiskSync() {
       claimedPlayPurchaseTokens: Array.from(claimedPlayPurchaseTokens.entries())
     };
     const tmpPath = `${RUNTIME_STATE_FILE}.tmp`;
-    fs.writeFileSync(tmpPath, JSON.stringify(payload, null, 2), 'utf8');
+    fs.writeFileSync(tmpPath, JSON.stringify(payload, null, 2), { encoding: 'utf8', mode: 0o600 });
     fs.renameSync(tmpPath, RUNTIME_STATE_FILE);
-  } catch {}
+  } catch (err) {
+    console.warn('[saveRuntimeStateToDiskSync] failed to persist state:', err?.message || err);
+  }
 }
 
 function scheduleSaveRuntimeStateToDisk() {
@@ -844,37 +879,42 @@ function upsertLocalAccount({ email, name, country, stripeCustomerId, plan, wifi
 }
 
 // Seed Founder Pro account (cookbenjamin1996@gmail.com — matches sweepr_crm sub_founder_vpn)
+// Never seed a hardcoded static 6-digit activation_code in source control; login requires a fresh CSPRNG email OTP or full high-entropy license key.
 {
-  const founderAcc = upsertLocalAccount({
-    email: 'cookbenjamin1996@gmail.com',
-    name: 'Benjamin Cook',
-    country: 'GB',
-    plan: 'annual',
-    wifiRadarAddon: true,
-    status: 'active'
-  });
-  licenses.delete(founderAcc.activation_code);
-  licenses.delete(founderAcc.licenseKey);
-  founderAcc.activation_code = '236585';
-  founderAcc.licenseKey = 'SWEEPR-VPN-F9DC-F69E-EB3D';
-  licenses.set('236585', founderAcc);
-  licenses.set('SWEEPR-VPN-F9DC-F69E-EB3D', founderAcc);
-  licenses.set('SWEEPR-DB-F9DC-F69E-EB3D', founderAcc);
+  const founderLicenseKey = (process.env.FOUNDER_LICENSE_KEY || '').trim().toUpperCase() ||
+    (STRIPE_SECRET_KEY
+      ? `SWEEPR-VPN-${crypto.createHmac('sha256', STRIPE_SECRET_KEY).update('founder:cookbenjamin1996@gmail.com').digest('hex').slice(0, 12).toUpperCase().match(/.{1,4}/g).join('-')}`
+      : '');
+  if (founderLicenseKey) {
+    const founderAcc = upsertLocalAccount({
+      email: 'cookbenjamin1996@gmail.com',
+      name: 'Benjamin Cook',
+      country: 'GB',
+      plan: 'annual',
+      wifiRadarAddon: true,
+      status: 'active'
+    });
+    licenses.delete(founderAcc.activation_code);
+    licenses.delete(founderAcc.licenseKey);
+    founderAcc.activation_code = String(crypto.randomInt(100000, 1000000));
+    founderAcc.licenseKey = founderLicenseKey;
+    licenses.set(founderLicenseKey, founderAcc);
 
-  crm.syncSubscription({
-    email: 'cookbenjamin1996@gmail.com',
-    name: 'Benjamin Cook',
-    country: 'GB',
-    plan: 'annual',
-    status: 'active',
-    days: 3650,
-    amount_cents: 7499,
-    currency: 'gbp',
-    activation_code: '236585',
-    license_key: 'SWEEPR-VPN-F9DC-F69E-EB3D',
-    addons: ['wifi_radar'],
-    notes: 'Seeded Founder Pro VPN Account'
-  }).catch(() => {});
+    crm.syncSubscription({
+      email: 'cookbenjamin1996@gmail.com',
+      name: 'Benjamin Cook',
+      country: 'GB',
+      plan: 'annual',
+      status: 'active',
+      days: 3650,
+      amount_cents: 7499,
+      currency: 'gbp',
+      activation_code: founderAcc.activation_code,
+      license_key: founderLicenseKey,
+      addons: ['wifi_radar'],
+      notes: 'Seeded Founder Pro VPN Account'
+    }).catch(() => {});
+  }
 }
 
 // Seed deterministic demo Pro account ONLY when ALLOW_DEMO_ACCOUNT=true in non-production environments
@@ -1297,21 +1337,38 @@ async function selectHealthyNodeForRegion(nodes, serverCode) {
   return scored[0].node;
 }
 
-// Requests to a node are signed with HMAC-SHA256 (timestamp + one-time nonce), see infra/node/sweepr_agent.py
+// Requests to a node are signed with HMAC-SHA256 (timestamp + one-time nonce) and optionally AES-256-GCM encrypted, see infra/node/sweepr_agent.py
 async function callNodeAgent(n, method, agentPath, payload) {
   const cb = nodeCircuitState.get(n.code);
   if (cb && cb.openUntil > Date.now()) {
     throw new Error('node_circuit_open');
   }
-  const body = JSON.stringify(payload || {});
+  const plainBody = JSON.stringify(payload || {});
   const ts = String(Math.floor(Date.now() / 1000));
   const nonce = crypto.randomBytes(16).toString('hex');
+  let body = plainBody;
+  const extraHeaders = {};
+  if (n.agent_encrypt || process.env.SWEEPR_ENCRYPT_AGENT_PAYLOAD === 'true') {
+    const encKey = crypto.createHash('sha256').update(`sweepr-agent-gcm:${n.agent_secret}:${ts}:${nonce}`).digest();
+    const iv = crypto.randomBytes(12);
+    const cipher = crypto.createCipheriv('aes-256-gcm', encKey, iv);
+    const ct = Buffer.concat([cipher.update(plainBody, 'utf8'), cipher.final()]);
+    const tag = cipher.getAuthTag();
+    body = JSON.stringify({ iv: iv.toString('hex'), tag: tag.toString('hex'), ct: ct.toString('hex') });
+    extraHeaders['X-Sweepr-Encrypted'] = '1';
+  }
   const sig = crypto.createHmac('sha256', n.agent_secret).update(`${method}\n${agentPath}\n${ts}\n${nonce}\n${body}`).digest('hex');
   const scheme = n.agent_tls ? 'https' : 'http';
   try {
     const r = await fetch(`${scheme}://${n.ip}:${n.agent_port || 8787}${agentPath}`, {
       method,
-      headers: { 'Content-Type': 'application/json', 'X-Sweepr-Timestamp': ts, 'X-Sweepr-Nonce': nonce, 'X-Sweepr-Signature': sig },
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Sweepr-Timestamp': ts,
+        'X-Sweepr-Nonce': nonce,
+        'X-Sweepr-Signature': sig,
+        ...extraHeaders
+      },
       body,
       signal: AbortSignal.timeout(6000)
     });
@@ -1380,6 +1437,23 @@ async function revokeLicenceOnAllNodes(accOrKeys) {
   return { revokedHashes: hashes.size, nodesContacted: nodes.length };
 }
 
+function isLocalAccountPeriodActive(acc) {
+  if (!acc || (acc.status !== 'active' && acc.status !== 'trialing')) return false;
+  if (acc.current_period_end) {
+    const endMs = typeof acc.current_period_end === 'number'
+      ? (acc.current_period_end < 1e12 ? acc.current_period_end * 1000 : acc.current_period_end)
+      : new Date(acc.current_period_end).getTime();
+    if (Number.isFinite(endMs) && Date.now() > endMs && String(acc.stripe_subscription_id || '').startsWith('pi_')) {
+      acc.status = 'expired';
+      licenses.delete(acc.licenseKey);
+      licenses.delete(acc.activation_code);
+      scheduleSaveRuntimeStateToDisk();
+      return false;
+    }
+  }
+  return true;
+}
+
 // Returns { id } for an active licence, where id is a one-way hash (servers never see the real key).
 // Authoritatively verifies against centralized sweepr_crm first, with local fallback if CRM is unreachable or key is in local cache.
 async function resolveVpnLicence(code, email, deviceId) {
@@ -1390,7 +1464,7 @@ async function resolveVpnLicence(code, email, deviceId) {
     : rawInput.replace(/\s+/g, '').toUpperCase();
   if (!cleanCode || cleanCode.length < 6) return null;
   const local = licenses.get(cleanCode) || licenses.get(cleanCode.toUpperCase());
-  const isLocalActive = Boolean(local && (local.status === 'active' || local.status === 'trialing'));
+  const isLocalActive = isLocalAccountPeriodActive(local);
   const clientProvidedEmail = email ? String(email).trim().toLowerCase() : '';
   const isShortSixDigit = /^\d{6}$/.test(cleanCode) || (!HIGH_ENTROPY_LICENSE_KEY_RE.test(cleanCode) && cleanCode.length < 16);
   if (isShortSixDigit && !isValidEmail(clientProvidedEmail)) {
@@ -1440,7 +1514,7 @@ async function resolveVpnLicence(code, email, deviceId) {
   }
 
   const localAfter = licenses.get(cleanCode) || licenses.get(cleanCode.toUpperCase()) || resolvedAcc || local || (normEmail ? accountsByEmail.get(normEmail) : null);
-  const isLocalAfterActive = Boolean(localAfter && (localAfter.status === 'active' || localAfter.status === 'trialing'));
+  const isLocalAfterActive = isLocalAccountPeriodActive(localAfter);
   if (!key) {
     const emailMatches = isShortSixDigit
       ? (Boolean(clientProvidedEmail) && localAfter.email.toLowerCase() === clientProvidedEmail)
@@ -1774,10 +1848,16 @@ async function fetchStripeSubOrPayPalIntent(id) {
     });
     if (!pi) return null;
     const pm = typeof pi.payment_method === 'object' ? pi.payment_method : null;
+    const metaPlan = String(pi.metadata?.plan || 'annual').toLowerCase();
+    const periodDays = metaPlan === 'monthly' ? 31 : metaPlan === 'six_month' ? 183 : 366;
+    const createdSec = Number(pi.created) || Math.floor(Date.now() / 1000);
+    const periodEndSec = createdSec + periodDays * 86400;
+    const isExpired = Math.floor(Date.now() / 1000) > periodEndSec;
     return {
       id: pi.id,
       object: 'payment_intent',
-      status: pi.status === 'succeeded' ? 'active' : pi.status,
+      status: pi.status === 'succeeded' ? (isExpired ? 'canceled' : 'active') : pi.status,
+      current_period_end: periodEndSec,
       customer: pi.customer,
       currency: pi.currency,
       metadata: pi.metadata || {},
@@ -2735,7 +2815,10 @@ self.addEventListener('fetch', e => {
       const liveNodes = loadVpnNodes();
       const allServers = liveNodes.length > 0 ? liveNodes : VPN_SERVER_LOCATIONS;
       const isSweeprNode = Array.isArray(allServers) && allServers.some((s) => s && s.ip === clientIp);
-      const cfIsp = String(req.headers['cf-iporg'] || req.headers['x-asn-org'] || '').trim();
+      const cfIsp = String(req.headers['cf-iporg'] || req.headers['x-asn-org'] || '')
+        .replace(/[<>"'&`\\]/g, '')
+        .trim()
+        .slice(0, 80);
       const ispLabel = isSweeprNode
         ? 'SWEEPR Zero-Log WireGuard Network (Protected)'
         : cfIsp || `Residential / Consumer ISP (${localizedPricing.country || 'Unencrypted Transit'})`;
@@ -2890,6 +2973,9 @@ self.addEventListener('fetch', e => {
 
   // API 2: Create Stripe Subscription for On-Page Stripe Elements, Google Pay, Apple Pay & PayPal (Matches sweeprcleaner)
   if (pathname === '/api/create-subscription' && req.method === 'POST') {
+    if (!isSameOriginOrTrusted(req)) {
+      return sendJson(res, 403, { error: 'forbidden_cross_site' }, {}, req);
+    }
     if (!checkRateLimit(req, 'create_sub', 15, 60000)) {
       return sendJson(res, 429, { error: 'Too many checkout attempts. Please wait a moment and try again.' }, {}, req);
     }
@@ -3122,11 +3208,9 @@ self.addEventListener('fetch', e => {
       } catch (subErr) {
         if (isRedirectMethod) {
           const hostOrigin = resolveTrustedOrigin(req);
-          // Tier 2: Direct Redirect PaymentIntent
+          // Tier 2: Direct Redirect PaymentIntent (one-time period charge; never allow £1.99 intro discount without recurring billing)
           try {
-            const baseAmount = canUseIntroCoupon
-              ? (localizedPricing.introMonthlyAmount ?? localizedPricing.introFirstMonthAmount ?? unitAmount)
-              : unitAmount;
+            const baseAmount = unitAmount;
             const addonAmount = includeWifiRadar
               ? isAnnual
                 ? localizedPricing.wifiRadarAnnualAmount
@@ -3156,7 +3240,7 @@ self.addEventListener('fetch', e => {
               description: `SWEEPR VPN Pro (${isAnnual ? 'Annual' : isSixMonth ? '6-Month' : 'Monthly'})`,
               metadata: {
                 ...metadata,
-                intro_offer_applied: introCouponId ? 'true' : 'false'
+                intro_offer_applied: 'false'
               },
               return_url: directReturnUrl
             });
@@ -3359,6 +3443,9 @@ self.addEventListener('fetch', e => {
 
   // API 2b: Confirm & Sync On-Page Subscription after Stripe Elements / Google Pay / Apple Pay confirmation
   if (pathname === '/api/confirm-subscription' && req.method === 'POST') {
+    if (!isSameOriginOrTrusted(req)) {
+      return sendJson(res, 403, { error: 'forbidden_cross_site' }, {}, req);
+    }
     if (!checkRateLimit(req, 'confirm_sub', 15, 60000)) {
       return sendJson(res, 429, { error: 'rate_limit_exceeded' }, {}, req);
     }
@@ -3464,6 +3551,11 @@ self.addEventListener('fetch', e => {
         wifiRadarAddon: hasWifiRadar,
         status: 'active'
       });
+      const fallbackDays = metaPlan === 'monthly' ? 31 : metaPlan === 'six_month' ? 183 : 366;
+      acc.current_period_end = sub.current_period_end
+        ? sub.current_period_end * 1000
+        : Date.now() + fallbackDays * 86400 * 1000;
+      scheduleSaveRuntimeStateToDisk();
 
       await syncPayPalCustomerEmail(sub, acc, checkoutSessionObj);
 
@@ -4109,7 +4201,7 @@ self.addEventListener('fetch', e => {
     const pairUrl = `${baseOrigin}/pair?t=${encodeURIComponent(token)}`;
     const qrSvg = renderWireGuardQrSvg(pairUrl);
 
-    pairingTokens.set(token, {
+    setBoundedMap(pairingTokens, token, {
       token,
       accountId: acc.id,
       email: acc.email,
@@ -4281,7 +4373,7 @@ self.addEventListener('fetch', e => {
     const pairUrl = `${baseOrigin}/pair?c=${encodeURIComponent(challengeId)}`;
     const qrSvg = renderWireGuardQrSvg(pairUrl);
 
-    pairingChallenges.set(challengeId, {
+    setBoundedMap(pairingChallenges, challengeId, {
       challengeId,
       pollSecret,
       deviceId,
@@ -4577,6 +4669,14 @@ self.addEventListener('fetch', e => {
     const token = ${JSON.stringify(t)};
     const challengeId = ${JSON.stringify(c)};
     const hasSession = ${JSON.stringify(Boolean(sessAcc))};
+    function escHtml(s) {
+      return String(s ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
     function detectOs() {
       const ua = navigator.userAgent || '';
       if (/iPhone|iPad|iPod/i.test(ua)) return { os: 'ios', name: 'iPhone / iPad' };
@@ -4608,7 +4708,7 @@ self.addEventListener('fetch', e => {
         });
         const d = await r.json();
         if (!r.ok || !d.ok) {
-          document.getElementById('pairBody').innerHTML = '<h1>Could Not Link Device</h1><p style="margin-top:8px;color:#dc2626;font-weight:700">' + (d.message || 'This QR code has expired.') + '</p><a href="/dashboard" class="btn btn-soft" style="margin-top:14px">Open Customer Portal</a>';
+          document.getElementById('pairBody').innerHTML = '<h1>Could Not Link Device</h1><p style="margin-top:8px;color:#dc2626;font-weight:700">' + escHtml(d.message || 'This QR code has expired.') + '</p><a href="/dashboard" class="btn btn-soft" style="margin-top:14px">Open Customer Portal</a>';
           return;
         }
         try {
@@ -4619,12 +4719,11 @@ self.addEventListener('fetch', e => {
           }
         } catch (e) {}
         const deepLink = 'sweeprvpn://activate?key=' + encodeURIComponent(d.licenseKey || '') + '&device_id=' + encodeURIComponent(devId);
-        const mobileConfigUrl = '/api/vpn/apple-mobileconfig?key=' + encodeURIComponent(d.licenseKey || '') + '&server_code=UK-LON-01';
         document.getElementById('pairBody').innerHTML =
           '<h1>✓ Account Activated on This Device!</h1>' +
-          '<p style="margin-top:6px">This ' + info.name + ' is now linked to <strong>' + (d.email || 'your account') + '</strong> (Slot ' + d.devices_used + ' of ' + d.max_devices + ').</p>' +
-          '<div class="box" style="margin-top:12px"><div style="font-size:11px;font-weight:800;color:#64748b">ACTIVE LICENSE KEY</div><div style="font-family:monospace;font-weight:800;font-size:14px">' + (d.licenseKey || '') + '</div></div>' +
-          '<a href="' + deepLink + '" class="btn btn-go" style="margin-top:14px">Open in SWEEPR VPN App</a>' +
+          '<p style="margin-top:6px">This ' + escHtml(info.name) + ' is now linked to <strong>' + escHtml(d.email || 'your account') + '</strong> (Slot ' + Number(d.devices_used || 1) + ' of ' + Number(d.max_devices || 3) + ').</p>' +
+          '<div class="box" style="margin-top:12px"><div style="font-size:11px;font-weight:800;color:#64748b">ACTIVE LICENSE KEY</div><div style="font-family:monospace;font-weight:800;font-size:14px">' + escHtml(d.licenseKey || '') + '</div></div>' +
+          '<a href="' + escHtml(deepLink) + '" class="btn btn-go" style="margin-top:14px">Open in SWEEPR VPN App</a>' +
           '<a href="/download" class="btn btn-soft" style="margin-top:8px">Download SWEEPR VPN App</a>';
       } catch (e) {
         document.getElementById('pairBody').innerHTML = '<h1>Connection Error</h1><p style="margin-top:8px">Please check your internet connection and scan the QR code again.</p>';
@@ -4921,6 +5020,8 @@ self.addEventListener('fetch', e => {
       }
     }
 
+    let verifiedPlayProductId = '';
+    let verifiedPlayExpiryMs = 0;
     // Fail-closed live Google Play Developer API verification when GOOGLE_PLAY_SERVICE_ACCOUNT_JSON is configured
     const serviceAccountRaw = (process.env.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON || '').trim();
     if (serviceAccountRaw) {
@@ -4964,8 +5065,19 @@ self.addEventListener('fetch', e => {
         }
         const playBody = await playRes.json().catch(() => ({}));
         const subState = String(playBody?.subscriptionState || '');
-        if (subState === 'SUBSCRIPTION_STATE_EXPIRED' || subState === 'SUBSCRIPTION_STATE_CANCELED') {
-          return sendJson(res, 403, { ok: false, valid: false, error: 'expired_play_purchase', message: 'This Google Play subscription is no longer active.' }, {}, req);
+        const ALLOWED_PLAY_STATES = new Set(['SUBSCRIPTION_STATE_ACTIVE', 'SUBSCRIPTION_STATE_IN_GRACE_PERIOD']);
+        if (!ALLOWED_PLAY_STATES.has(subState)) {
+          return sendJson(res, 403, { ok: false, valid: false, error: 'inactive_play_purchase', message: 'This Google Play subscription is not currently active.' }, {}, req);
+        }
+        const firstLineItem = Array.isArray(playBody?.lineItems) ? playBody.lineItems[0] : null;
+        if (firstLineItem?.productId) {
+          verifiedPlayProductId = String(firstLineItem.productId).trim().toLowerCase();
+        }
+        if (firstLineItem?.expiryTime) {
+          const parsedExp = new Date(firstLineItem.expiryTime).getTime();
+          if (Number.isFinite(parsedExp) && parsedExp > Date.now()) {
+            verifiedPlayExpiryMs = parsedExp;
+          }
         }
       } catch (err) {
         return sendJson(res, 502, { ok: false, valid: false, error: 'play_verification_unreachable', message: 'Could not verify Google Play purchase at this time. Please try again.' }, {}, req);
@@ -4974,10 +5086,11 @@ self.addEventListener('fetch', e => {
       return sendJson(res, 503, { ok: false, valid: false, error: 'play_verifier_not_configured', message: 'Google Play purchases cannot be verified at this time.' }, {}, req);
     }
 
+    const planSource = verifiedPlayProductId || rawPlan;
     const resolvedPlan =
-      rawPlan.includes('six') || rawPlan.includes('6m')
+      planSource.includes('six') || planSource.includes('6m')
         ? 'six_month'
-        : rawPlan.includes('month')
+        : planSource.includes('month')
         ? 'monthly'
         : 'annual';
 
@@ -4992,7 +5105,7 @@ self.addEventListener('fetch', e => {
     });
 
     const durationDays = resolvedPlan === 'monthly' ? 31 : resolvedPlan === 'six_month' ? 183 : 366;
-    const expiresAtMs = Date.now() + durationDays * 86400 * 1000;
+    const expiresAtMs = verifiedPlayExpiryMs || (Date.now() + durationDays * 86400 * 1000);
     acc.current_period_end = expiresAtMs;
     acc.google_play_purchase_token = purchaseToken;
     acc.google_play_order_id = orderId || null;
@@ -5282,6 +5395,9 @@ self.addEventListener('fetch', e => {
 
   // Customer Portal Login & OTP Verification
   if ((pathname === '/api/portal-login' || pathname === '/v1/account/send-otp' || pathname === '/api/vpn/otp/send') && req.method === 'POST') {
+    if (pathname === '/api/portal-login' && !isSameOriginOrTrusted(req)) {
+      return sendJson(res, 403, { otpSent: false, error: 'forbidden_cross_site' }, {}, req);
+    }
     if (!checkRateLimit(req, 'portal_login', 5, 60000)) {
       return sendJson(res, 429, { otpSent: false, error: 'Too many login attempts. Please wait a minute and try again.' }, {}, req);
     }
@@ -5322,11 +5438,9 @@ self.addEventListener('fetch', e => {
 
     // Request OTP from central sweepr_crm (which also verifies the email is signed up before sending a 6-digit OTP email)
     let crmOtpSent = false;
-    let crmReachable = false;
     try {
       const crmRes = await crm.sendOtp(email);
       if (crmRes && crmRes._httpStatus && crmRes._httpStatus < 500) {
-        crmReachable = true;
         if (crmRes.otpSent) {
           crmOtpSent = true;
         } else if (crmRes._httpStatus === 404 && isSignedUp && localAcc) {
@@ -5350,26 +5464,24 @@ self.addEventListener('fetch', e => {
     } catch {}
 
     if (isSignedUp && localAcc) {
-      const transientCode =
-        localAcc.activation_code && /^\d{6}$/.test(String(localAcc.activation_code))
-          ? String(localAcc.activation_code)
-          : String(crypto.randomInt(100000, 1000000));
-      portalOtpChallenges.set(email, {
+      const transientCode = String(crypto.randomInt(100000, 1000000));
+      setBoundedMap(portalOtpChallenges, email, {
         code: transientCode,
-        expiresAt: Date.now() + 15 * 60 * 1000
+        attempts: 0,
+        expiresAt: Date.now() + 10 * 60 * 1000
       });
     }
 
     if (!crmOtpSent && isSignedUp && localAcc) {
-      const otpToSend = portalOtpChallenges.get(email)?.code || localAcc.activation_code;
+      const otpToSend = portalOtpChallenges.get(email)?.code;
       const smtpUser = (process.env.SMTP_GMAIL_USER || '').trim().replace(/^["']|["']$/g, '') ||
         decryptServerVault(ENCRYPTED_SMTP_USER);
       const smtpPass = (process.env.SMTP_GMAIL_PASS || '').trim().replace(/\s+/g, '').replace(/^["']|["']$/g, '') ||
         decryptServerVault(ENCRYPTED_SMTP_PASS);
-      if (smtpUser && smtpPass) {
+      if (otpToSend && smtpUser && smtpPass) {
         try {
           const subject = 'Your SWEEPR VPN Login & Activation Code';
-          const textBody = `Hi ${localAcc.name || 'there'},\n\nYour 6-digit SWEEPR VPN login & activation code is: ${otpToSend}\nYour Full Product License Key is: ${localAcc.licenseKey}\n\nEnter ${otpToSend} on the login screen or paste ${localAcc.licenseKey} in the SWEEPR VPN app.`;
+          const textBody = `Hi ${localAcc.name || 'there'},\n\nYour 6-digit SWEEPR VPN one-time login code is: ${otpToSend} (valid for 10 minutes)\nYour Full Product License Key is: ${localAcc.licenseKey}\n\nEnter ${otpToSend} on the login screen or paste ${localAcc.licenseKey} in the SWEEPR VPN app.`;
           await new Promise((resolve, reject) => {
             const sock = tls.connect(465, 'smtp.gmail.com', { servername: 'smtp.gmail.com', timeout: 8000 });
             let step = 0, buf = '';
@@ -5414,24 +5526,24 @@ self.addEventListener('fetch', e => {
       }
     }
 
-    if (!crmOtpSent && (!isSignedUp || crmReachable)) {
-      return sendJson(
-        res,
-        404,
-        {
-          ok: false,
-          otpSent: false,
-          error: 'No account found for this email address. Please sign up first or check your email.'
-        },
-        {},
-        req
-      );
-    }
-
-    return sendJson(res, 200, { ok: true, otpSent: true }, {}, req);
+    // Uniform HTTP 200 response prevents customer email enumeration (WEB-NEW-03)
+    return sendJson(
+      res,
+      200,
+      {
+        ok: true,
+        otpSent: true,
+        message: 'If an active subscription exists for this email address, a 6-digit login code has been sent.'
+      },
+      {},
+      req
+    );
   }
 
   if ((pathname === '/api/verify-otp' || pathname === '/v1/account/verify-otp' || pathname === '/api/vpn/otp/verify') && req.method === 'POST') {
+    if (pathname === '/api/verify-otp' && !isSameOriginOrTrusted(req)) {
+      return sendJson(res, 403, { ok: false, error: 'forbidden_cross_site' }, {}, req);
+    }
     if (!checkRateLimit(req, 'verify_otp', 5, 60000)) {
       return sendJson(res, 429, { ok: false, error: 'Too many verification attempts. Please wait a minute and try again.' }, {}, req);
     }
@@ -5444,7 +5556,6 @@ self.addEventListener('fetch', e => {
     }
 
     let acc = accountsByEmail.get(email);
-    let crmReachable = false;
     let crmVerified = false;
     const portalDeviceId = String(body.deviceId || `portal_${crypto.createHash('sha256').update(email).digest('hex').slice(0, 12)}`);
     try {
@@ -5455,55 +5566,36 @@ self.addEventListener('fetch', e => {
         platform: String(body.platform || 'web'),
         deviceLabel: String(body.deviceLabel || 'SWEEPR Customer Portal')
       });
-      if (otpRes && otpRes._httpStatus && otpRes._httpStatus < 500) {
-        crmReachable = true;
-        if (otpRes.ok) {
-          acc = upsertLocalAccount({
-            email,
-            plan: otpRes.plan || acc?.plan || 'annual',
-            wifiRadarAddon: Array.isArray(otpRes.addons) ? otpRes.addons.includes('wifi_radar') : Boolean(acc?.wifiRadarAddon),
-            status: 'active',
-            licenseKey: otpRes.license_key || acc?.licenseKey,
-            activationCode: code
-          });
-          crmVerified = true;
-        }
-      }
-      if (!crmVerified) {
-        const crmRes = await crm.activateDevice({
+      if (otpRes && otpRes._httpStatus && otpRes._httpStatus < 500 && otpRes.ok) {
+        acc = upsertLocalAccount({
           email,
-          otp: code,
-          deviceId: portalDeviceId,
-          deviceName: 'SWEEPR Customer Portal',
-          os: 'web',
-          appVersion: '2.5.0'
+          plan: otpRes.plan || acc?.plan || 'annual',
+          wifiRadarAddon: Array.isArray(otpRes.addons) ? otpRes.addons.includes('wifi_radar') : Boolean(acc?.wifiRadarAddon),
+          status: 'active',
+          licenseKey: otpRes.license_key || acc?.licenseKey,
+          activationCode: code
         });
-        if (crmRes && crmRes._httpStatus && crmRes._httpStatus < 500) {
-          crmReachable = true;
-          const synced = syncLocalCacheFromCrm(crmRes, email, code);
-          if (crmRes.valid && synced) {
-            acc = synced;
-            crmVerified = true;
-          }
-        }
+        crmVerified = true;
       }
     } catch {}
 
     const challenge = portalOtpChallenges.get(email);
-    const validTransientOtp = Boolean(
-      challenge &&
-      Date.now() <= challenge.expiresAt &&
-      safeCompareStrings(code, String(challenge.code || ''))
-    );
-    if (validTransientOtp) {
-      portalOtpChallenges.delete(email);
+    let validTransientOtp = false;
+    if (challenge) {
+      if (Date.now() > challenge.expiresAt) {
+        portalOtpChallenges.delete(email);
+      } else {
+        challenge.attempts = (challenge.attempts || 0) + 1;
+        if (safeCompareStrings(code, String(challenge.code || ''))) {
+          validTransientOtp = true;
+          portalOtpChallenges.delete(email);
+        } else if (challenge.attempts >= 5) {
+          portalOtpChallenges.delete(email);
+        }
+      }
     }
 
-    const validActivationKey =
-      crmVerified ||
-      validTransientOtp ||
-      (Boolean(acc && acc.status === 'active') &&
-        safeCompareStrings(code, String(acc.activation_code || '')));
+    const validActivationKey = crmVerified || validTransientOtp;
 
     if (validActivationKey && acc) {
       const sessionToken = signSessionCookie(acc.id, acc.email);
@@ -5753,6 +5845,17 @@ self.addEventListener('fetch', e => {
       } catch (err) {
         return sendJson(res, 402, { error: err.message || 'Payment failed for add-on upgrade.' }, {}, req);
       }
+    } else if (STRIPE_SECRET_KEY) {
+      return sendJson(
+        res,
+        402,
+        {
+          error: 'addon_requires_recurring_subscription',
+          message: '1-click add-on billing requires an active recurring card subscription. Please use the checkout page to add Wi-Fi Radar.'
+        },
+        {},
+        req
+      );
     }
 
     acc.wifiRadarAddon = true;
@@ -6134,15 +6237,15 @@ self.addEventListener('fetch', e => {
     }
   }
 
-  // Apple iOS / macOS Configuration Profile Generator (.mobileconfig) (Item 7)
-  if (pathname === '/api/vpn/apple-mobileconfig' && (req.method === 'GET' || req.method === 'POST')) {
-    if (!checkRateLimit(req, 'vpn_mobileconfig', 15, 60000)) {
+  // Short-lived single-use ticket for Apple .mobileconfig download (avoids passing license_key in GET URL query string)
+  if (pathname === '/api/vpn/apple-mobileconfig-ticket' && req.method === 'POST') {
+    if (!checkRateLimit(req, 'vpn_mobileconfig_ticket', 20, 60000)) {
       return sendJson(res, 429, { ok: false, error: 'rate_limit_exceeded' }, {}, req);
     }
-    const body = req.method === 'POST' ? await readJsonBody(req) : {};
+    const body = await readJsonBody(req);
     if (body && body.__tooLarge) return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, {}, req);
-    let rawKey = String(body?.activation_code || body?.license_key || urlObj.searchParams.get('key') || urlObj.searchParams.get('code') || '').trim();
-    let emailHint = String(body?.email || urlObj.searchParams.get('email') || '').trim();
+    let rawKey = String(body?.activation_code || body?.license_key || body?.key || '').trim();
+    let emailHint = String(body?.email || '').trim();
     if (!rawKey) {
       const sess = verifySessionCookie(req);
       if (sess) {
@@ -6153,11 +6256,64 @@ self.addEventListener('fetch', e => {
         }
       }
     }
-    const rawCode = String(body?.server_code || urlObj.searchParams.get('server_code') || 'UK-LON-01').trim().toUpperCase();
+    const licence = await resolveVpnLicence(rawKey, emailHint, body?.device_id);
+    if (!licence || licence.valid === false) {
+      return sendJson(res, 401, { ok: false, error: 'licence_required', message: 'Please enter a valid active SWEEPR Pro license key.' }, {}, req);
+    }
+    const ticket = `mcfg_${crypto.randomBytes(18).toString('base64url')}`;
+    setBoundedMap(appleMobileconfigTickets, ticket, {
+      key: rawKey,
+      email: emailHint,
+      deviceId: String(body?.device_id || '').trim(),
+      serverCode: String(body?.server_code || 'UK-LON-01').trim().toUpperCase(),
+      dnsShield: body?.dns_shield,
+      expiresAt: Date.now() + 60 * 1000
+    });
+    return sendJson(
+      res,
+      200,
+      {
+        ok: true,
+        ticket,
+        url: `/api/vpn/apple-mobileconfig?ticket=${encodeURIComponent(ticket)}`
+      },
+      { 'Cache-Control': 'no-store' },
+      req
+    );
+  }
+
+  // Apple iOS / macOS Configuration Profile Generator (.mobileconfig) (Item 7)
+  if (pathname === '/api/vpn/apple-mobileconfig' && (req.method === 'GET' || req.method === 'POST')) {
+    if (!checkRateLimit(req, 'vpn_mobileconfig', 15, 60000)) {
+      return sendJson(res, 429, { ok: false, error: 'rate_limit_exceeded' }, {}, req);
+    }
+    const body = req.method === 'POST' ? await readJsonBody(req) : {};
+    if (body && body.__tooLarge) return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, {}, req);
+    const ticketParam = String(urlObj.searchParams.get('ticket') || body?.ticket || '').trim();
+    const ticketEntry = ticketParam ? appleMobileconfigTickets.get(ticketParam) : null;
+    if (ticketParam) {
+      appleMobileconfigTickets.delete(ticketParam);
+      if (!ticketEntry || Date.now() > ticketEntry.expiresAt) {
+        return sendJson(res, 401, { ok: false, error: 'expired_ticket', message: 'This download link has expired. Please try again.' }, {}, req);
+      }
+    }
+    let rawKey = String(ticketEntry?.key || body?.activation_code || body?.license_key || urlObj.searchParams.get('key') || urlObj.searchParams.get('code') || '').trim();
+    let emailHint = String(ticketEntry?.email || body?.email || urlObj.searchParams.get('email') || '').trim();
+    if (!rawKey) {
+      const sess = verifySessionCookie(req);
+      if (sess) {
+        const sessAcc = accountsById.get(sess.accountId) || (sess.email ? accountsByEmail.get(sess.email) : null);
+        if (sessAcc && (sessAcc.status === 'active' || sessAcc.status === 'trialing')) {
+          rawKey = String(sessAcc.licenseKey || sessAcc.activation_code || '').trim();
+          if (!emailHint) emailHint = String(sessAcc.email || '');
+        }
+      }
+    }
+    const rawCode = String(ticketEntry?.serverCode || body?.server_code || urlObj.searchParams.get('server_code') || 'UK-LON-01').trim().toUpperCase();
     const serverCode = rawCode === 'CH-ZRH-01' ? 'SE-STO-01' : rawCode;
-    const rawDnsShield = String(body?.dns_shield ?? urlObj.searchParams.get('dns_shield') ?? '1').trim().toLowerCase();
+    const rawDnsShield = String(ticketEntry?.dnsShield ?? body?.dns_shield ?? urlObj.searchParams.get('dns_shield') ?? '1').trim().toLowerCase();
     const dnsShieldEnabled = rawDnsShield !== '0' && rawDnsShield !== 'false';
-    const licence = await resolveVpnLicence(rawKey, emailHint, body?.device_id || urlObj.searchParams.get('device_id'));
+    const licence = await resolveVpnLicence(rawKey, emailHint, ticketEntry?.deviceId || body?.device_id || urlObj.searchParams.get('device_id'));
     if (licence && licence.valid === false && licence.reason === 'device_limit_reached') {
       return sendJson(res, 403, { ok: false, error: 'device_limit_reached', message: `You have reached the ${MAX_DEVICES_PER_ACCOUNT}-device limit on your SWEEPR VPN Pro subscription. Please remove a device from your Customer Portal first.` }, {}, req);
     }

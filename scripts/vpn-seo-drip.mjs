@@ -647,7 +647,7 @@ async function runVpnDrip(targetCount = 300) {
 
   // If more than unpostedQueue.length are requested, fill remaining slots with next cycle
   let fallbackCursor = 0;
-  while (unpostedQueue.length < targetCount) {
+  while (unpostedQueue.length < targetCount + 80) {
     const item = items[fallbackCursor % items.length];
     const lang = LANGUAGES[Math.floor(fallbackCursor / items.length) % LANGUAGES.length];
     const platform = platforms[fallbackCursor % platforms.length];
