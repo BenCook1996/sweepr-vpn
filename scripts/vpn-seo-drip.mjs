@@ -35,14 +35,18 @@ import { execFileSync } from 'node:child_process';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const VPN_ROOT = path.resolve(__dirname, '..');
 const WEBSITE_DIR = path.join(VPN_ROOT, 'website');
+const rootEnvPath = path.join(VPN_ROOT, '.env');
+if (typeof process.loadEnvFile === 'function' && fs.existsSync(rootEnvPath)) {
+  try { process.loadEnvFile(rootEnvPath); } catch {}
+}
 
 const RAILWAY_CRM_BASE = process.env.SWEEPR_RAILWAY_CRM || 'https://sweepr-crm-production.up.railway.app';
 const CLEANER_CRM_BASE = process.env.SWEEPR_CRM_BASE || 'https://sweeprcleaner.com';
 const LOCAL_CRM_BASE = process.env.SWEEPR_LOCAL_CRM || 'http://localhost:8787';
 
 const CRM_USER = process.env.CRM_ADMIN_USER || 'admin';
-const CRM_PASS = process.env.CRM_ADMIN_PASSWORD || 'B3njamin123!';
-const AUTH_HEADER = 'Basic ' + Buffer.from(`${CRM_USER}:${CRM_PASS}`).toString('base64');
+const CRM_PASS = (process.env.CRM_ADMIN_PASSWORD || '').trim();
+const AUTH_HEADER = CRM_PASS ? ('Basic ' + Buffer.from(`${CRM_USER}:${CRM_PASS}`).toString('base64')) : '';
 
 const VPN_SEED_PATH = path.join(WEBSITE_DIR, 'outreach-seed.json');
 const SHARED_CRM_SEED_PATH = 'c:/Users/Benjamin/Downloads/desktop_cleaner/server/src/outreach-seed.json';

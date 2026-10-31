@@ -1391,9 +1391,13 @@ async function resolveVpnLicence(code, email, deviceId) {
   if (!cleanCode || cleanCode.length < 6) return null;
   const local = licenses.get(cleanCode) || licenses.get(cleanCode.toUpperCase());
   const isLocalActive = Boolean(local && (local.status === 'active' || local.status === 'trialing'));
-  const normEmail = (email ? String(email).trim().toLowerCase() : '') || (isLocalActive ? local.email : '');
-  const isShortSixDigit = /^\d{6}$/.test(cleanCode);
-  if (isShortSixDigit && !isValidEmail(normEmail) && !isLocalActive) {
+  const clientProvidedEmail = email ? String(email).trim().toLowerCase() : '';
+  const isShortSixDigit = /^\d{6}$/.test(cleanCode) || (!HIGH_ENTROPY_LICENSE_KEY_RE.test(cleanCode) && cleanCode.length < 16);
+  if (isShortSixDigit && !isValidEmail(clientProvidedEmail)) {
+    return null;
+  }
+  const normEmail = clientProvidedEmail || (isLocalActive ? local.email : '');
+  if (isShortSixDigit && isLocalActive && clientProvidedEmail && local.email.toLowerCase() !== clientProvidedEmail) {
     return null;
   }
 
@@ -1438,7 +1442,10 @@ async function resolveVpnLicence(code, email, deviceId) {
   const localAfter = licenses.get(cleanCode) || licenses.get(cleanCode.toUpperCase()) || resolvedAcc || local || (normEmail ? accountsByEmail.get(normEmail) : null);
   const isLocalAfterActive = Boolean(localAfter && (localAfter.status === 'active' || localAfter.status === 'trialing'));
   if (!key) {
-    if (isLocalAfterActive && (!normEmail || localAfter.email === normEmail)) {
+    const emailMatches = isShortSixDigit
+      ? (Boolean(clientProvidedEmail) && localAfter.email.toLowerCase() === clientProvidedEmail)
+      : (!normEmail || localAfter.email.toLowerCase() === normEmail);
+    if (isLocalAfterActive && emailMatches) {
       key = localAfter.licenseKey || localAfter.id;
       resolvedAcc = localAfter;
     }
@@ -1529,7 +1536,8 @@ async function sendWelcomeLicenseEmail(acc) {
   }
   acc.welcomeEmailSent = true;
   const licenseKey = acc.licenseKey || 'SWEEPR-VPN-PRO';
-  const activationCode = acc.activation_code || '849201';
+  const activationCode = acc.activation_code || generateUniqueActivationCode();
+  if (!acc.activation_code) acc.activation_code = activationCode;
   const subject = 'Welcome to SWEEPR VPN Pro — Your License Key & Setup Guide';
   const textBody = `Hi ${acc.name || 'there'},\n\nThank you for subscribing to SWEEPR VPN Pro! Your subscription is active for up to 3 devices (any combination of desktop or mobile).\n\nFull Product License Key (Paste in App): ${licenseKey}\n6-Digit Quick Activation Code: ${activationCode}\nRegistered Email: ${email}\n\n1. Open SWEEPR VPN (or download at https://sweeprvpn.com/download?key=${encodeURIComponent(licenseKey)}&autoconf=1)\n2. Paste ${licenseKey} into the license key box to unlock all 8 global locations and Smart-TV shields.\n\nBest regards,\nThe SWEEPR VPN Team`;
   const htmlBody = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:520px;margin:0 auto;padding:28px 24px;color:#0f172a;background:#ffffff;border:1px solid #e2e8f0;border-radius:16px">
@@ -3817,12 +3825,13 @@ self.addEventListener('fetch', e => {
     const code = pathname === '/v1/license/refresh'
       ? rawCodeInput
       : (extractedKeyMatch ? extractedKeyMatch[0].replace(/\s+/g, '').toUpperCase() : rawCodeInput.replace(/\s+/g, '').toUpperCase());
-    const normEmail = body.email ? String(body.email).trim().toLowerCase() : '';
+    const clientProvidedEmail = body.email ? String(body.email).trim().toLowerCase() : '';
+    const isShortCode = /^\d{6}$/.test(code) || (!HIGH_ENTROPY_LICENSE_KEY_RE.test(code) && code.length < 16);
     const preMatchedLocalAcc =
       licenses.get(code) ||
       licenses.get(code.toUpperCase()) ||
-      (normEmail ? accountsByEmail.get(normEmail) : null);
-    const effectiveEmail = normEmail || (preMatchedLocalAcc && preMatchedLocalAcc.status === 'active' ? preMatchedLocalAcc.email : '');
+      (clientProvidedEmail ? accountsByEmail.get(clientProvidedEmail) : null);
+    const effectiveEmail = clientProvidedEmail || (isShortCode ? '' : (preMatchedLocalAcc && preMatchedLocalAcc.status === 'active' ? preMatchedLocalAcc.email : ''));
 
     if (pathname === '/v1/license/refresh') {
       if (!body.account_id || !body.device_id || (!code && !hasValidCrmServiceKey(req))) {
@@ -3832,7 +3841,7 @@ self.addEventListener('fetch', e => {
       if (!code || code.length < 6) {
         return sendJson(res, 400, { ok: false, valid: false, error: 'missing_or_invalid_activation_code', message: 'Please enter the license key from your order.' }, {}, req);
       }
-      if (/^\d{6}$/.test(code) && !isValidEmail(effectiveEmail) && !hasValidCrmServiceKey(req)) {
+      if (isShortCode && !isValidEmail(clientProvidedEmail) && !hasValidCrmServiceKey(req)) {
         return sendJson(res, 400, { ok: false, valid: false, error: 'email_required_for_short_code', message: 'Please enter your full SWEEPR-VPN-XXXX-XXXX-XXXX license key, or enter your account email address along with your 6-digit code.' }, {}, req);
       }
     }
@@ -3978,7 +3987,9 @@ self.addEventListener('fetch', e => {
         safeCompareStrings(code.toUpperCase(), localAcc.licenseKey) ||
         licenses.get(code) === localAcc ||
         licenses.get(code.toUpperCase()) === localAcc;
-      const emailMatches = !normEmail || localAcc.email === normEmail || licenses.get(code) === localAcc || licenses.get(code.toUpperCase()) === localAcc;
+      const emailMatches = isShortCode
+        ? (Boolean(clientProvidedEmail) && localAcc.email.toLowerCase() === clientProvidedEmail)
+        : (!clientProvidedEmail || localAcc.email.toLowerCase() === clientProvidedEmail || licenses.get(code) === localAcc || licenses.get(code.toUpperCase()) === localAcc);
       if (localAcc.status === 'active' && codeMatches && emailMatches) {
         let devReg = null;
         if (body.device_id || body.device_name) {
@@ -4041,6 +4052,9 @@ self.addEventListener('fetch', e => {
     if (!checkRateLimit(req, 'vpn_pair_create', 20, 60000)) {
       return sendJson(res, 429, { ok: false, error: 'rate_limit_exceeded', message: 'Too many requests. Please wait a minute.' }, {}, req);
     }
+    if (req.headers.cookie && !isSameOriginOrTrusted(req)) {
+      return sendJson(res, 403, { ok: false, error: 'forbidden_cross_site' }, {}, req);
+    }
     pruneExpiredPairingEntries();
     const body = await readJsonBody(req);
     if (body && body.__tooLarge) return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, {}, req);
@@ -4057,12 +4071,10 @@ self.addEventListener('fetch', e => {
       if (rawKey) {
         const resolved = await resolveVpnLicence(rawKey, normEmail, body?.device_id);
         const cleanKey = rawKey.replace(/\s+/g, '').toUpperCase();
-        acc =
-          resolved?.account ||
-          licenses.get(cleanKey) ||
-          licenses.get(rawKey) ||
-          (normEmail ? accountsByEmail.get(normEmail) : null) ||
-          null;
+        const isShort = /^\d{6}$/.test(cleanKey) || (!HIGH_ENTROPY_LICENSE_KEY_RE.test(cleanKey) && cleanKey.length < 16);
+        const candidate = licenses.get(cleanKey) || licenses.get(rawKey) || (normEmail ? accountsByEmail.get(normEmail) : null);
+        const emailMatches = isShort ? (Boolean(normEmail) && candidate?.email?.toLowerCase() === normEmail) : true;
+        acc = resolved?.account || (emailMatches ? candidate : null) || null;
       }
     }
 
@@ -4336,6 +4348,9 @@ self.addEventListener('fetch', e => {
     if (!checkRateLimit(req, 'vpn_pair_approve', 15, 60000)) {
       return sendJson(res, 429, { ok: false, error: 'rate_limit_exceeded', message: 'Too many attempts. Please wait a minute.' }, {}, req);
     }
+    if (req.headers.cookie && !isSameOriginOrTrusted(req)) {
+      return sendJson(res, 403, { ok: false, error: 'forbidden_cross_site' }, {}, req);
+    }
     pruneExpiredPairingEntries();
     const body = await readJsonBody(req);
     if (body && body.__tooLarge) return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, {}, req);
@@ -4358,12 +4373,10 @@ self.addEventListener('fetch', e => {
       if (rawKey) {
         const resolved = await resolveVpnLicence(rawKey, normEmail, body?.device_id);
         const cleanKey = rawKey.replace(/\s+/g, '').toUpperCase();
-        acc =
-          resolved?.account ||
-          licenses.get(cleanKey) ||
-          licenses.get(rawKey) ||
-          (normEmail ? accountsByEmail.get(normEmail) : null) ||
-          null;
+        const isShort = /^\d{6}$/.test(cleanKey) || (!HIGH_ENTROPY_LICENSE_KEY_RE.test(cleanKey) && cleanKey.length < 16);
+        const candidate = licenses.get(cleanKey) || licenses.get(rawKey) || (normEmail ? accountsByEmail.get(normEmail) : null);
+        const emailMatches = isShort ? (Boolean(normEmail) && candidate?.email?.toLowerCase() === normEmail) : true;
+        acc = resolved?.account || (emailMatches ? candidate : null) || null;
       }
     }
 
@@ -4454,12 +4467,10 @@ self.addEventListener('fetch', e => {
       if (rawKey) {
         const resolved = await resolveVpnLicence(rawKey, normEmail, body?.device_id);
         const cleanKey = rawKey.replace(/\s+/g, '').toUpperCase();
-        acc =
-          resolved?.account ||
-          licenses.get(cleanKey) ||
-          licenses.get(rawKey) ||
-          (normEmail ? accountsByEmail.get(normEmail) : null) ||
-          null;
+        const isShort = /^\d{6}$/.test(cleanKey) || (!HIGH_ENTROPY_LICENSE_KEY_RE.test(cleanKey) && cleanKey.length < 16);
+        const candidate = licenses.get(cleanKey) || licenses.get(rawKey) || (normEmail ? accountsByEmail.get(normEmail) : null);
+        const emailMatches = isShort ? (Boolean(normEmail) && candidate?.email?.toLowerCase() === normEmail) : true;
+        acc = resolved?.account || (emailMatches ? candidate : null) || null;
       }
     }
     if (!acc) {
@@ -4679,14 +4690,15 @@ self.addEventListener('fetch', e => {
     if (body && body.__tooLarge) return sendJson(res, 413, { valid: false, error: 'payload_too_large' }, {}, req);
     const rawKey = String(body.key || urlObj.searchParams.get('key') || '').trim();
     const key = rawKey.replace(/\s+/g, '').toUpperCase();
-    const normEmail = String(body.email || urlObj.searchParams.get('email') || '').trim().toLowerCase();
+    const clientProvidedEmail = String(body.email || urlObj.searchParams.get('email') || '').trim().toLowerCase();
     const localRecord = licenses.get(key) || licenses.get(key.toUpperCase());
-    const effectiveEmail = normEmail || (localRecord && localRecord.status === 'active' ? localRecord.email : '');
+    const isShortKey = !HIGH_ENTROPY_LICENSE_KEY_RE.test(key);
+    const effectiveEmail = clientProvidedEmail || (isShortKey ? '' : (localRecord && localRecord.status === 'active' ? localRecord.email : ''));
     const isServiceCall = hasValidCrmServiceKey(req);
     if (!key || key.length < 6) {
       return sendJson(res, 400, { valid: false, error: 'invalid_key' }, {}, req);
     }
-    if (!HIGH_ENTROPY_LICENSE_KEY_RE.test(key) && !isValidEmail(effectiveEmail) && !isServiceCall) {
+    if (isShortKey && !isValidEmail(clientProvidedEmail) && !isServiceCall) {
       return sendJson(
         res,
         401,
@@ -4714,7 +4726,10 @@ self.addEventListener('fetch', e => {
       }
     } catch {}
 
-    if (localRecord && localRecord.status === 'active' && (!normEmail || localRecord.email === normEmail)) {
+    const emailMatches = isShortKey
+      ? (Boolean(clientProvidedEmail) && localRecord?.email.toLowerCase() === clientProvidedEmail)
+      : (!clientProvidedEmail || localRecord?.email === clientProvidedEmail);
+    if (localRecord && localRecord.status === 'active' && emailMatches) {
       return sendJson(
         res,
         200,
@@ -4955,6 +4970,8 @@ self.addEventListener('fetch', e => {
       } catch (err) {
         return sendJson(res, 502, { ok: false, valid: false, error: 'play_verification_unreachable', message: 'Could not verify Google Play purchase at this time. Please try again.' }, {}, req);
       }
+    } else if (process.env.NODE_ENV === 'production' || process.env.RAILWAY_ENVIRONMENT) {
+      return sendJson(res, 503, { ok: false, valid: false, error: 'play_verifier_not_configured', message: 'Google Play purchases cannot be verified at this time.' }, {}, req);
     }
 
     const resolvedPlan =
@@ -5074,6 +5091,7 @@ self.addEventListener('fetch', e => {
     if (!acc && rawKey) {
       const resolved = await resolveVpnLicence(rawKey, normEmail, body?.device_id);
       const cleanKey = rawKey.replace(/\s+/g, '').toUpperCase();
+      const isShort = /^\d{6}$/.test(cleanKey) || (!HIGH_ENTROPY_LICENSE_KEY_RE.test(cleanKey) && cleanKey.length < 16);
       const candidate =
         resolved?.account ||
         licenses.get(cleanKey) ||
@@ -5084,7 +5102,10 @@ self.addEventListener('fetch', e => {
           Boolean(resolved) ||
           safeCompareStrings(cleanKey, String(candidate.licenseKey || '').toUpperCase()) ||
           safeCompareStrings(cleanKey, String(candidate.activation_code || ''));
-        if (keyMatches && (!normEmail || candidate.email === normEmail)) {
+        const emailMatches = isShort
+          ? (Boolean(normEmail) && candidate.email.toLowerCase() === normEmail)
+          : (!normEmail || candidate.email.toLowerCase() === normEmail);
+        if (keyMatches && emailMatches) {
           acc = candidate;
         }
       }
@@ -6063,7 +6084,7 @@ self.addEventListener('fetch', e => {
       const endpoint = `${node.ip}:${node.port || 51820}`;
       const lanBypass = Boolean(body?.lan_bypass);
       const allowedIps = lanBypass
-        ? '1.0.0.0/8, 2.0.0.0/7, 4.0.0.0/6, 8.0.0.0/7, 10.64.0.0/16, 11.0.0.0/8, 12.0.0.0/6, 16.0.0.0/4, 32.0.0.0/3, 64.0.0.0/2, 128.0.0.0/3, 160.0.0.0/5, 168.0.0.0/6, 172.0.0.0/12, 172.32.0.0/11, 172.64.0.0/10, 172.128.0.0/9, 173.0.0.0/8, 174.0.0.0/7, 176.0.0.0/4, 192.0.0.0/9, 192.128.0.0/11, 192.160.0.0/13, 192.169.0.0/16, 192.170.0.0/15, 192.172.0.0/14, 192.176.0.0/12, 192.192.0.0/10, 193.0.0.0/8, 194.0.0.0/7, 196.0.0.0/6, 200.0.0.0/5, 208.0.0.0/4'
+        ? '1.0.0.0/8, 2.0.0.0/7, 4.0.0.0/6, 8.0.0.0/7, 10.64.0.0/16, 11.0.0.0/8, 12.0.0.0/6, 16.0.0.0/4, 32.0.0.0/3, 64.0.0.0/2, 128.0.0.0/3, 160.0.0.0/5, 168.0.0.0/6, 172.0.0.0/12, 172.32.0.0/11, 172.64.0.0/10, 172.128.0.0/9, 173.0.0.0/8, 174.0.0.0/7, 176.0.0.0/4, 192.0.0.0/9, 192.128.0.0/11, 192.160.0.0/13, 192.169.0.0/16, 192.170.0.0/15, 192.172.0.0/14, 192.176.0.0/12, 192.192.0.0/10, 193.0.0.0/8, 194.0.0.0/7, 196.0.0.0/6, 200.0.0.0/5, 208.0.0.0/4, 2000::/3'
         : '0.0.0.0/0, ::/0';
 
       const configText = [
@@ -6425,8 +6446,7 @@ self.addEventListener('fetch', e => {
     return sendJson(res, 200, {
       ok: true,
       sent: true,
-      emailed,
-      message: `Sent! Check ${email} (and spam folder) for your SWEEPR VPN Pro license key.`
+      message: `If an active SWEEPR VPN Pro subscription is registered to ${email}, we have sent your activation code & license details.`
     }, {}, req);
   }
 
