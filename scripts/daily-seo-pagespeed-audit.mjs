@@ -84,13 +84,100 @@ const CORE_STATIC_ROUTES = [
   { urlPath: '/terms', file: 'terms.html', priority: '0.5', changefreq: 'monthly' }
 ];
 
-// Auto-optimize core static pages with theme-color
+// High-CTR Title & Meta Description Overrides for Top 14 Google Search Console "Striking Distance" Pages
+const GSC_STRIKING_DISTANCE_OVERRIDES = {
+  '/solutions/talktalk-p2p-port-forwarding': {
+    title: 'TalkTalk P2P Throttling & Port Forwarding Fix (2026 AS13285 Guide) | SWEEPR VPN',
+    description: 'Fix TalkTalk (AS13285) P2P bandwidth throttling, CGNAT port blocking & slow bulk transfers in 30 seconds. Copy-paste 1420 MTU WireGuard config + 4ms UK-LON-01 server.'
+  },
+  '/setup/gl-inet-travel-router': {
+    title: 'GL.iNet Beryl AX (GL-MT3000), Slate AX & Flint 2 WireGuard VPN Setup Guide (2026) | SWEEPR VPN',
+    description: '45-second GL.iNet Travel Router (Beryl AX, Slate AX, Flint 2) WireGuard .conf setup guide. Includes MTU 1420/1380 hotel captive-portal settings & 10Gbps endpoints.'
+  },
+  '/guides/stop-samsung-smart-tv-acr-tracking': {
+    title: 'Block Samsung Smart TV ACR Tracking (gpm.samsungqbe.com & samsungacr.com) — 2026 Guide | SWEEPR VPN',
+    description: 'Stop Samsung Tizen Smart TVs from sending ACR screenshots & viewing logs to gpm.samsungqbe.com, samsungacr.com & samsungads.com without breaking 4K Netflix or iPlayer.'
+  },
+  '/tools/leak-test': {
+    title: 'Free WebRTC, IP & DNS Leak Check Online (Instant 5-Second VPN Leak Test) | SWEEPR VPN',
+    description: 'Check WebRTC leak online, public IPv4/IPv6 exposure, and ISP DNS hijacking in 5 seconds. Free browser VPN leak test with zero signup required.'
+  },
+  '/solutions/eduroam-campus-wifi-gaming-packet-loss': {
+    title: 'Eduroam WireGuard VPN & Gaming Fix: Bypass Campus UDP Port Blocks (Stealth 443) | SWEEPR VPN',
+    description: 'Fix Eduroam campus Wi-Fi gaming packet loss, blocked Steam/Discord UDP ports & high ping (AS786 Jisc Janet) using SWEEPR VPN WireGuard Stealth UDP 443 (MTU 1400).'
+  },
+  '/alternatives/totalvpn': {
+    title: '5 Best TotalVPN Alternatives in 2026 (No Renewal Price Hikes or Bloatware) | SWEEPR VPN',
+    description: 'Cancelled TotalVPN over surprise renewal price hikes or slow evening speeds? Compare the 5 best lightweight WireGuard VPN alternatives in 2026 (starting at £1.99).'
+  },
+  '/setup/nvidia-shield-tv-pro-wireguard': {
+    title: 'NVIDIA Shield TV Pro 4K & GeForce NOW WireGuard VPN Setup Guide (2026) | SWEEPR VPN',
+    description: 'Step-by-step NVIDIA Shield TV Pro 4K & Android TV WireGuard VPN setup guide. Configure 10Gbps RAM-only UK/EU endpoints, MTU 1420, and Smart-TV ACR ad blocking.'
+  },
+  '/solutions/gigaclear-rural-fibre-gaming-packet-loss': {
+    title: 'Gigaclear Rural Fibre UK: Fix Gaming Packet Loss, CGNAT & Ping Spikes (AS51048) | SWEEPR VPN',
+    description: 'Eliminate Gigaclear Rural Full Fibre UK (AS51048) CGNAT gaming packet loss, rubber-banding & evening jitter via 4ms London Docklands 10Gbps WireGuard routing (MTU 1420).'
+  },
+  '/setup/synology-nas-docker-vpn': {
+    title: 'Synology NAS & Docker Gluetun WireGuard VPN Setup Guide (DSM 7.2 • 2026) | SWEEPR VPN',
+    description: '90-second Synology NAS (DSM 7.2) & Docker Gluetun WireGuard container setup guide. Includes docker-compose.yml, kill-switch firewall rules, and 10Gbps .conf profile.'
+  },
+  '/guides/stop-lg-smart-tv-acr-spying': {
+    title: 'Block LG webOS Smart TV ACR Spying (Live Plus & lgtvcommon.com) — 2026 Guide | SWEEPR VPN',
+    description: 'Stop LG webOS Smart TVs ("Live Plus" ACR) from capturing HDMI screenshots and calling lgtvcommon.com, ibs.lgappstv.com & ad.lgappstv.com at the DNS/tunnel layer.'
+  },
+  '/solutions/hotel-captive-portal-wifi-p2p-port-forwarding': {
+    title: 'Hotel Wi-Fi VPN Fix (Premier Inn, Travelodge, Hilton): Bypass Captive Portal & Port Blocks | SWEEPR VPN',
+    description: 'Bypass hotel captive-portal Wi-Fi throttling, blocked UDP ports & CGNAT at Premier Inn, Travelodge & Hilton using SWEEPR VPN WireGuard UDP 443 (MTU 1380).'
+  },
+  '/tools/isp-throttling-test': {
+    title: 'Free Internet Throttling Test & ISP Speed Slowdown Checker (10-Second Diagnostic) | SWEEPR VPN',
+    description: 'Run a free 10-second internet throttling test in your browser. Detect if Virgin Media, BT, Sky, TalkTalk, Rogers, or Comcast is throttling your streaming & gaming.'
+  },
+  '/solutions/rogers-ignite-canada-isp-throttling': {
+    title: 'Rogers Ignite Canada ISP Throttling Fix: Stop Evening Speed Drops & Buffering (AS812) | SWEEPR VPN',
+    description: 'Stop Rogers Ignite Broadband Canada (AS812) evening speed throttling, DOCSIS 3.1 bufferbloat & IPTV/4K streaming slowdowns with 10Gbps WireGuard (MTU 1420).'
+  },
+  '/setup/steam-deck-vpn': {
+    title: 'SteamOS & Steam Deck OLED WireGuard VPN Setup Guide (Desktop & Gaming Mode • 2026) | SWEEPR VPN',
+    description: '60-second SteamOS & Steam Deck WireGuard VPN setup guide. Import a native .conf profile into NetworkManager for low-ping handheld gaming on campus & hotel Wi-Fi.'
+  }
+};
+
+const GA4_MEASUREMENT_ID = 'G-7D28EEMNXX';
+const GA4_HEAD_SNIPPET = `  <link rel="preconnect" href="https://www.googletagmanager.com" />
+  <!-- Google tag (gtag.js) - Sweepr VPN -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=${GA4_MEASUREMENT_ID}"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', '${GA4_MEASUREMENT_ID}');
+  </script>`;
+
+function applyHeadMetaOverride(html, newTitle, newDesc) {
+  let out = html;
+  const escTitle = newTitle.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+  const escDesc = newDesc.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+  out = out.replace(/<title[^>]*>[\s\S]*?<\/title>/i, `<title>${escTitle}</title>`);
+  out = out.replace(/<meta\s+name=["']description["']\s+content="[^"]*"\s*\/?>/i, `<meta name="description" content="${escDesc}" />`);
+  out = out.replace(/<meta\s+property=["']og:title["']\s+content="[^"]*"\s*\/?>/i, `<meta property="og:title" content="${escTitle}" />`);
+  out = out.replace(/<meta\s+property=["']og:description["']\s+content="[^"]*"\s*\/?>/i, `<meta property="og:description" content="${escDesc}" />`);
+  out = out.replace(/<meta\s+name=["']twitter:title["']\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:title" content="${escTitle}" />`);
+  out = out.replace(/<meta\s+name=["']twitter:description["']\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:description" content="${escDesc}" />`);
+  return out;
+}
+
+// Auto-optimize core static pages with theme-color, GSC CTR overrides & GA4
 let autoOptimizedCoreCount = 0;
+let autoBackfilledGa4Count = 0;
+let autoUpgradedGscCtrCount = 0;
 if (shouldFix) {
   for (const r of CORE_STATIC_ROUTES) {
     const p = path.join(WEBSITE_DIR, r.file);
     if (!fs.existsSync(p)) continue;
     let content = fs.readFileSync(p, 'utf8');
+    let modified = false;
     if (!content.includes('theme-color')) {
       const canonicalMatch = content.match(/<link\s+rel=["']canonical["'][^>]*>/i);
       if (canonicalMatch) {
@@ -101,6 +188,58 @@ if (shouldFix) {
       } else {
         content = content.replace(/(<head[^>]*>)/i, `$1\n  <meta name="theme-color" content="#10b981" />`);
       }
+      modified = true;
+    }
+    const gscOverride = GSC_STRIKING_DISTANCE_OVERRIDES[r.urlPath];
+    if (gscOverride) {
+      const updated = applyHeadMetaOverride(content, gscOverride.title, gscOverride.description);
+      if (updated !== content) {
+        content = updated;
+        modified = true;
+        autoUpgradedGscCtrCount++;
+      }
+    }
+    if (!content.includes(GA4_MEASUREMENT_ID)) {
+      content = content.replace(/<\/head>/i, `${GA4_HEAD_SNIPPET}\n</head>`);
+      modified = true;
+      autoBackfilledGa4Count++;
+    }
+    if (
+      content.includes('<p>&copy; 2026 SWEEPR VPN Inc. All rights reserved.</p>') &&
+      !content.includes('/setup/gl-inet-travel-router')
+    ) {
+      const footerHubRow = `    <div class="flex flex-wrap justify-center gap-x-4 gap-y-1.5 mb-4 px-4 text-xs text-gray-400 max-w-5xl mx-auto">
+      <a href="/setup/gl-inet-travel-router" class="hover:text-emerald-600 transition-colors">GL.iNet Router WireGuard</a>
+      <span>&bull;</span>
+      <a href="/guides/stop-samsung-smart-tv-acr-tracking" class="hover:text-emerald-600 transition-colors">Block Samsung TV ACR Tracking</a>
+      <span>&bull;</span>
+      <a href="/guides/stop-lg-smart-tv-acr-spying" class="hover:text-emerald-600 transition-colors">Stop LG TV ACR Spying</a>
+      <span>&bull;</span>
+      <a href="/solutions/eduroam-campus-wifi-gaming-packet-loss" class="hover:text-emerald-600 transition-colors">Eduroam Gaming &amp; WireGuard</a>
+      <span>&bull;</span>
+      <a href="/setup/nvidia-shield-tv-pro-wireguard" class="hover:text-emerald-600 transition-colors">Nvidia Shield TV WireGuard</a>
+      <span>&bull;</span>
+      <a href="/setup/steam-deck-vpn" class="hover:text-emerald-600 transition-colors">SteamOS &amp; Steam Deck VPN</a>
+      <span>&bull;</span>
+      <a href="/setup/synology-nas-docker-vpn" class="hover:text-emerald-600 transition-colors">Synology NAS Docker VPN</a>
+      <span>&bull;</span>
+      <a href="/solutions/gigaclear-rural-fibre-gaming-packet-loss" class="hover:text-emerald-600 transition-colors">Gigaclear Packet Loss Fix</a>
+      <span>&bull;</span>
+      <a href="/solutions/talktalk-p2p-port-forwarding" class="hover:text-emerald-600 transition-colors">TalkTalk Throttling Fix</a>
+      <span>&bull;</span>
+      <a href="/solutions/hotel-captive-portal-wifi-p2p-port-forwarding" class="hover:text-emerald-600 transition-colors">Hotel Wi-Fi Captive Portal VPN</a>
+      <span>&bull;</span>
+      <a href="/solutions/rogers-ignite-canada-isp-throttling" class="hover:text-emerald-600 transition-colors">Rogers Ignite Throttling Fix</a>
+      <span>&bull;</span>
+      <a href="/alternatives/totalvpn" class="hover:text-emerald-600 transition-colors">Best TotalVPN Alternatives</a>
+    </div>\n`;
+      content = content.replace(
+        /<p>&copy; 2026 SWEEPR VPN Inc\. All rights reserved\.<\/p>/i,
+        `${footerHubRow}    <p>&copy; 2026 SWEEPR VPN Inc. All rights reserved.</p>`
+      );
+      modified = true;
+    }
+    if (modified) {
       fs.writeFileSync(p, content, 'utf8');
       autoOptimizedCoreCount++;
     }
@@ -127,11 +266,69 @@ for (const dir of ['solutions', 'setup', 'vs', 'guides']) {
     const absPath = path.join(dirAbs, file);
     let content = fs.readFileSync(absPath, 'utf8');
 
-    // Auto-optimize pSEO page metadata (non-visual)
+    // Auto-optimize pSEO page metadata, GSC CTR overrides, internal hub links & GA4 tag (non-visual)
     if (shouldFix) {
       let modified = false;
 
-      // Ensure robots meta with max-image-preview:large
+      // 1. Apply GSC Striking Distance high-CTR Title & Description overrides
+      const gscOverride = GSC_STRIKING_DISTANCE_OVERRIDES[urlPath];
+      if (gscOverride) {
+        const updated = applyHeadMetaOverride(content, gscOverride.title, gscOverride.description);
+        if (updated !== content) {
+          content = updated;
+          modified = true;
+          autoUpgradedGscCtrCount++;
+        }
+      } else {
+        // Clean duplicate "WireGuard ... WireGuard" or "Setup ... Setup" in setup page titles & truncated/backtick meta descriptions
+        const tMatch = content.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
+        const dMatch = content.match(/<meta\s+name=["']description["']\s+content="([^"]*)"/i);
+        let curTitle = tMatch ? tMatch[1].trim() : '';
+        let curDesc = dMatch ? dMatch[1].trim() : '';
+        let cleanedTitle = curTitle
+          .replace(/\b(WireGuard|Setup|Container)\b(?=[\s\S]*\b\1\b)/gi, '')
+          .replace(/\s{2,}/g, ' ')
+          .trim();
+        let cleanedDesc = curDesc
+          .replace(/`/g, '')
+          .replace(/\b(WireGuard|Setup|Container)\b(?=[\s\S]*\b\1\b)/gi, '')
+          .replace(/\s*\.\.\.$/, ' with SWEEPR VPN 10Gbps WireGuard & Smart-TV Shield.')
+          .replace(/\s{2,}/g, ' ')
+          .trim();
+        if (cleanedTitle && cleanedDesc && (cleanedTitle !== curTitle || cleanedDesc !== curDesc)) {
+          content = applyHeadMetaOverride(content, cleanedTitle, cleanedDesc);
+          modified = true;
+        }
+      }
+
+      // 2. Ensure Google Analytics 4 (G-7D28EEMNXX) tag is present on every pSEO page
+      if (!content.includes(GA4_MEASUREMENT_ID)) {
+        content = content.replace(/<\/head>/i, `${GA4_HEAD_SNIPPET}\n</head>`);
+        modified = true;
+        autoBackfilledGa4Count++;
+      }
+
+      // 3. Ensure internal links to top GSC Striking Distance pages in Related Guides list
+      if (
+        content.includes('<li><a href="/tools/leak-test"') &&
+        !content.includes('href="/setup/gl-inet-travel-router"')
+      ) {
+        const gscHubLinks = [
+          '<li><a href="/setup/gl-inet-travel-router" style="color:var(--accent2);">GL.iNet Beryl AX &amp; Travel Router WireGuard Setup Guide (MTU 1420/1380)</a></li>',
+          '<li><a href="/guides/stop-samsung-smart-tv-acr-tracking" style="color:var(--accent2);">How to Block Samsung Smart-TV ACR Tracking (gpm.samsungqbe.com &amp; samsungacr.com)</a></li>',
+          '<li><a href="/solutions/eduroam-campus-wifi-gaming-packet-loss" style="color:var(--accent2);">Fix Eduroam Campus Wi-Fi Gaming Packet Loss &amp; UDP Port Blocks (Stealth 443)</a></li>',
+          '<li><a href="/setup/nvidia-shield-tv-pro-wireguard" style="color:var(--accent2);">NVIDIA Shield TV Pro 4K &amp; GeForce NOW WireGuard VPN Setup Guide</a></li>',
+          '<li><a href="/solutions/gigaclear-rural-fibre-gaming-packet-loss" style="color:var(--accent2);">Fix Gigaclear Rural Full Fibre UK Gaming Ping Spikes, CGNAT &amp; Packet Loss</a></li>',
+          '<li><a href="/setup/steam-deck-vpn" style="color:var(--accent2);">SteamOS &amp; Steam Deck OLED Native WireGuard VPN Setup Guide</a></li>'
+        ].join('\n        ');
+        content = content.replace(
+          '<li><a href="/tools/leak-test"',
+          `${gscHubLinks}\n        <li><a href="/tools/leak-test"`
+        );
+        modified = true;
+      }
+
+      // 4. Ensure robots meta with max-image-preview:large
       if (!content.includes('name="robots"')) {
         const canonicalMatch = content.match(/<link\s+rel=["']canonical["'][^>]*>/i);
         if (canonicalMatch) {
@@ -143,7 +340,7 @@ for (const dir of ['solutions', 'setup', 'vs', 'guides']) {
         }
       }
 
-      // Ensure OpenGraph image, Twitter Cards, and Theme-Color
+      // 5. Ensure OpenGraph image, Twitter Cards, and Theme-Color
       if (!content.includes('og:image') || !content.includes('twitter:card') || !content.includes('theme-color')) {
         const titleMatch = content.match(/<title[^>]*>(.*?)<\/title>/is);
         const title = titleMatch ? titleMatch[1].trim().replace(/"/g, '&quot;') : 'SWEEPR VPN';
@@ -209,7 +406,17 @@ for (const dir of ['solutions', 'setup', 'vs', 'guides']) {
 
 if (autoOptimizedPseoCount > 0) {
   auditResults.autoOptimizations.push(
-    `Auto-optimized ${autoOptimizedPseoCount} pSEO pages with max-image-preview:large, og:image, Twitter cards & theme-color`
+    `Auto-optimized ${autoOptimizedPseoCount} pSEO pages with max-image-preview:large, og:image, Twitter cards, GA4 (${GA4_MEASUREMENT_ID}) & GSC hub links`
+  );
+}
+if (autoBackfilledGa4Count > 0) {
+  auditResults.autoOptimizations.push(
+    `Backfilled Google Analytics 4 tag (${GA4_MEASUREMENT_ID}) across ${autoBackfilledGa4Count} HTML pages`
+  );
+}
+if (autoUpgradedGscCtrCount > 0) {
+  auditResults.autoOptimizations.push(
+    `Upgraded high-CTR <title> & <meta name="description"> snippets across ${autoUpgradedGscCtrCount} Google Search Console Striking-Distance pages`
   );
 }
 
@@ -336,43 +543,80 @@ fs.writeFileSync(LLMS_PATH, llmsContent, 'utf8');
 auditResults.autoOptimizations.push(`Synchronized llms.txt with all ${pseoFilesOnDisk.length} pSEO guides for GEO AI citations`);
 pass('crawlability', 'GEO / LLM Discovery Manifest (llms.txt)', `Updated with ${allCanonicalPages.length} structured entry points`);
 
-// Sync indexing queue
-let indexingQueue = { indexnow_key: INDEXNOW_KEY, pending_urls: [] };
+// Sync indexing queue with delta-only IndexNow tracking (prevents Bing full-sitemap anti-spam throttling)
+let indexingQueue = { indexnow_key: INDEXNOW_KEY, pending_urls: [], indexnow_submitted_at: {} };
 if (fs.existsSync(INDEXING_QUEUE_PATH)) {
   try { indexingQueue = { ...indexingQueue, ...JSON.parse(fs.readFileSync(INDEXING_QUEUE_PATH, 'utf8')) }; } catch {}
 }
-const queueSet = new Set([...(indexingQueue.pending_urls || []), ...allCanonicalPages.map((p) => p.canonicalLoc)]);
-indexingQueue.pending_urls = [...queueSet];
-indexingQueue.last_audit = { date: todayStr, totalUrls: allCanonicalPages.length };
-fs.writeFileSync(INDEXING_QUEUE_PATH, JSON.stringify(indexingQueue, null, 2), 'utf8');
-pass('crawlability', 'Search Engine Indexing Queue', `${indexingQueue.pending_urls.length} URLs queued for IndexNow / Search Console`);
+if (!indexingQueue.indexnow_submitted_at || typeof indexingQueue.indexnow_submitted_at !== 'object') {
+  indexingQueue.indexnow_submitted_at = {};
+}
+const allCanonicalLocs = allCanonicalPages.map((p) => p.canonicalLoc);
+const nowMs = Date.now();
+const FOURTEEN_DAYS_MS = 14 * 24 * 60 * 60 * 1000;
 
-// Optional Bing & IndexNow live ping dispatch
+// Priority order: 14 GSC Striking Distance pages -> Core pages -> Newest un-pinged pSEO pages
+const gscPriorityLocs = Object.keys(GSC_STRIKING_DISTANCE_OVERRIDES).map((u) => `https://sweeprvpn.com${u}`);
+const orderedCandidates = [
+  ...gscPriorityLocs.filter((u) => allCanonicalLocs.includes(u)),
+  ...allCanonicalPages.filter((p) => p.isCore).map((p) => p.canonicalLoc),
+  ...allCanonicalLocs.slice().reverse()
+];
+const seenCandidates = new Set();
+const unpingedOrStaleUrls = [];
+for (const url of orderedCandidates) {
+  if (seenCandidates.has(url)) continue;
+  seenCandidates.add(url);
+  const lastPingIso = indexingQueue.indexnow_submitted_at[url];
+  const lastPingMs = lastPingIso ? Date.parse(lastPingIso) : 0;
+  if (!lastPingMs || (nowMs - lastPingMs) > FOURTEEN_DAYS_MS) {
+    unpingedOrStaleUrls.push(url);
+  }
+}
+
+indexingQueue.pending_urls = unpingedOrStaleUrls;
+indexingQueue.last_audit = { date: todayStr, totalUrls: allCanonicalPages.length, pendingDeltaUrls: unpingedOrStaleUrls.length };
+fs.writeFileSync(INDEXING_QUEUE_PATH, JSON.stringify(indexingQueue, null, 2), 'utf8');
+pass('crawlability', 'Search Engine Indexing Queue (Delta-Only)', `${unpingedOrStaleUrls.length} un-pinged/modified delta URLs queued (out of ${allCanonicalPages.length} total canonical URLs)`);
+
+// Optional Bing & IndexNow live ping dispatch (strictly capped to max 25 delta URLs per run to prevent Bing IndexNow throttling)
 if (shouldPing) {
   try {
-    const indexNowPayload = {
-      host: 'sweeprvpn.com',
-      key: INDEXNOW_KEY,
-      keyLocation: `https://sweeprvpn.com/${INDEXNOW_KEY}.txt`,
-      urlList: allCanonicalPages.map((p) => p.canonicalLoc)
-    };
-    await Promise.allSettled([
-      fetch('https://www.bing.com/indexnow', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json; charset=utf-8' },
-        body: JSON.stringify(indexNowPayload),
-        signal: AbortSignal.timeout(8000)
-      }),
-      fetch('https://api.indexnow.org/indexnow', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json; charset=utf-8' },
-        body: JSON.stringify(indexNowPayload),
-        signal: AbortSignal.timeout(8000)
-      })
-    ]);
-    pass('crawlability', 'IndexNow Ping Broadcast', `${allCanonicalPages.length} canonical URLs pinged to Bing & IndexNow`);
+    const deltaBatch = unpingedOrStaleUrls.slice(0, 25);
+    if (deltaBatch.length > 0) {
+      const indexNowPayload = {
+        host: 'sweeprvpn.com',
+        key: INDEXNOW_KEY,
+        keyLocation: `https://sweeprvpn.com/${INDEXNOW_KEY}.txt`,
+        urlList: deltaBatch
+      };
+      await Promise.allSettled([
+        fetch('https://www.bing.com/indexnow', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json; charset=utf-8' },
+          body: JSON.stringify(indexNowPayload),
+          signal: AbortSignal.timeout(8000)
+        }),
+        fetch('https://api.indexnow.org/indexnow', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json; charset=utf-8' },
+          body: JSON.stringify(indexNowPayload),
+          signal: AbortSignal.timeout(8000)
+        })
+      ]);
+      const pingIso = new Date().toISOString();
+      for (const u of deltaBatch) {
+        indexingQueue.indexnow_submitted_at[u] = pingIso;
+      }
+      indexingQueue.pending_urls = unpingedOrStaleUrls.slice(deltaBatch.length);
+      indexingQueue.last_indexnow_ping = pingIso;
+      fs.writeFileSync(INDEXING_QUEUE_PATH, JSON.stringify(indexingQueue, null, 2), 'utf8');
+      pass('crawlability', 'IndexNow Delta Ping Broadcast', `Pinged ${deltaBatch.length} delta URLs to Bing & IndexNow (${indexingQueue.pending_urls.length} remaining in rolling queue)`);
+    } else {
+      pass('crawlability', 'IndexNow Delta Ping Broadcast', '0 new/modified URLs needed pinging (14-day anti-throttle window active)');
+    }
   } catch (err) {
-    warn('crawlability', 'IndexNow Ping Broadcast', `Network notice: ${err.message}`);
+    warn('crawlability', 'IndexNow Delta Ping Broadcast', `Network notice: ${err.message}`);
   }
 }
 
@@ -447,6 +691,7 @@ let ogIssues = 0;
 let twitterIssues = 0;
 let robotsDirectiveIssues = 0;
 let themeColorIssues = 0;
+let ga4Issues = 0;
 
 const failingPages = {
   title: [],
@@ -457,7 +702,8 @@ const failingPages = {
   og: [],
   twitter: [],
   robots: [],
-  themeColor: []
+  themeColor: [],
+  ga4: []
 };
 
 const seenTitles = new Map();
@@ -593,7 +839,13 @@ for (const page of allCanonicalPages) {
     failingPages.themeColor.push(page.file);
   }
 
-  // 10. Internal Link Integrity check
+  // 10. Google Analytics 4 (G-7D28EEMNXX) Telemetry check
+  if (!content.includes(GA4_MEASUREMENT_ID)) {
+    ga4Issues++;
+    failingPages.ga4.push(page.file);
+  }
+
+  // 11. Internal Link Integrity check
   const hrefMatches = content.matchAll(/href=["'](\/[^"'#?]*)/g);
   for (const m of hrefMatches) {
     const target = m[1];
@@ -657,6 +909,12 @@ if (themeColorIssues === 0) {
   pass('technicalSeo', 'Mobile Theme-Color Support', `All ${allCanonicalPages.length} pages declare theme-color for mobile chrome styling`);
 } else {
   warn('technicalSeo', 'Mobile Theme-Color Support', `${themeColorIssues} pages missing theme-color: ${failingPages.themeColor.slice(0, 3).join(', ')}`);
+}
+
+if (ga4Issues === 0) {
+  pass('technicalSeo', `Google Analytics 4 (${GA4_MEASUREMENT_ID}) Coverage`, `All ${allCanonicalPages.length} canonical pages include active GA4 telemetry`);
+} else {
+  fail('technicalSeo', `Google Analytics 4 (${GA4_MEASUREMENT_ID}) Coverage`, `${ga4Issues} pages missing ${GA4_MEASUREMENT_ID}: ${failingPages.ga4.slice(0, 5).join(', ')}`);
 }
 
 if (brokenInternalLinks.length === 0) {

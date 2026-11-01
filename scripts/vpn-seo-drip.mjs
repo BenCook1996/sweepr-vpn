@@ -764,68 +764,98 @@ async function runVpnDrip(targetCount = 300) {
 
   console.log(`[SWEEPR VPN Drip ${runTag}] Published, logged & verified ${completed} new dofollow backlinks. Total VPN CRM outreach entries: ${vpnSeed.length}`);
 
-  // Submit all canonical sitemap URLs + pad.xml + pending URLs to Bing IndexNow API & ping search engines
-  let indexStatus = { sitemapUrls: 0, bingRes: 'N/A', indexNowRes: 'N/A', googlePing: 'N/A', bingPing: 'N/A' };
+  // Submit delta-only newly created/modified URLs (max 25 per 6h run, 14-day cooldown) to Bing IndexNow API
+  // Prevents Bing Webmaster Tools full-sitemap anti-spam throttling while steadily indexing all 1,100+ URLs
+  let indexStatus = { sitemapUrls: 0, deltaSubmitted: 0, bingRes: 'N/A', indexNowRes: 'N/A' };
   try {
-    let queue = { indexnow_key: INDEXNOW_KEY, gsc_requested: [], bing_requested: [], directory_forms_submitted: ['https://www.saashub.com/sweepr-vpn/added', 'https://www.launchingnext.com/submit/'], last_indexnow_ping: null, last_sitemap_ping: null, pending_urls: [] };
+    let queue = {
+      indexnow_key: INDEXNOW_KEY,
+      gsc_requested: [],
+      bing_requested: [],
+      directory_forms_submitted: ['https://www.saashub.com/sweepr-vpn/added', 'https://www.launchingnext.com/submit/'],
+      last_indexnow_ping: null,
+      last_sitemap_ping: null,
+      pending_urls: [],
+      indexnow_submitted_at: {}
+    };
     if (fs.existsSync(INDEXING_QUEUE_PATH)) {
       try {
         queue = { ...queue, ...JSON.parse(fs.readFileSync(INDEXING_QUEUE_PATH, 'utf8')) };
       } catch {}
+    }
+    if (!queue.indexnow_submitted_at || typeof queue.indexnow_submitted_at !== 'object') {
+      queue.indexnow_submitted_at = {};
     }
 
     const sitemapUrls = items.map((it) => it.url);
     if (!sitemapUrls.includes('https://sweeprvpn.com/pad.xml')) {
       sitemapUrls.push('https://sweeprvpn.com/pad.xml');
     }
-    if (Array.isArray(queue.pending_urls)) {
-      for (const u of queue.pending_urls) {
-        if (!sitemapUrls.includes(u)) {
-          sitemapUrls.push(u);
-        }
-      }
-    }
     indexStatus.sitemapUrls = sitemapUrls.length;
 
-    const indexNowPayload = {
-      host: 'sweeprvpn.com',
-      key: queue.indexnow_key || INDEXNOW_KEY,
-      keyLocation: `https://sweeprvpn.com/${queue.indexnow_key || INDEXNOW_KEY}.txt`,
-      urlList: sitemapUrls
-    };
+    const nowMs = Date.now();
+    const FOURTEEN_DAYS_MS = 14 * 24 * 60 * 60 * 1000;
+    const candidatePool = [
+      ...(Array.isArray(queue.pending_urls) ? queue.pending_urls : []),
+      ...sitemapUrls.slice().reverse()
+    ];
+    const seen = new Set();
+    const unpingedUrls = [];
+    for (const u of candidatePool) {
+      if (!u || seen.has(u)) continue;
+      seen.add(u);
+      const lastPingIso = queue.indexnow_submitted_at[u];
+      const lastPingMs = lastPingIso ? Date.parse(lastPingIso) : 0;
+      if (!lastPingMs || (nowMs - lastPingMs) > FOURTEEN_DAYS_MS) {
+        unpingedUrls.push(u);
+      }
+    }
 
-    const [bingRes, indexNowRes, googlePing, bingPing] = await Promise.all([
-      fetch('https://www.bing.com/indexnow', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json; charset=utf-8' },
-        body: JSON.stringify(indexNowPayload),
-        signal: AbortSignal.timeout(15000)
-      }).then((r) => `HTTP ${r.status}`).catch((e) => `Err: ${e.message}`),
-      fetch('https://api.indexnow.org/indexnow', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json; charset=utf-8' },
-        body: JSON.stringify(indexNowPayload),
-        signal: AbortSignal.timeout(15000)
-      }).then((r) => `HTTP ${r.status}`).catch((e) => `Err: ${e.message}`),
-      fetch('https://www.google.com/ping?sitemap=https://sweeprvpn.com/sitemap.xml', {
-        signal: AbortSignal.timeout(10000)
-      }).then((r) => `HTTP ${r.status}`).catch((e) => `Err: ${e.message}`),
-      fetch('https://www.bing.com/ping?sitemap=https://sweeprvpn.com/sitemap.xml', {
-        signal: AbortSignal.timeout(10000)
-      }).then((r) => `HTTP ${r.status}`).catch((e) => `Err: ${e.message}`)
-    ]);
+    const deltaBatch = unpingedUrls.slice(0, 25);
+    indexStatus.deltaSubmitted = deltaBatch.length;
 
-    indexStatus = { sitemapUrls: sitemapUrls.length, bingRes, indexNowRes, googlePing, bingPing };
-    queue.last_indexnow_ping = new Date().toISOString();
+    let bingRes = 'SKIPPED (0 delta URLs due)';
+    let indexNowRes = 'SKIPPED (0 delta URLs due)';
+
+    if (deltaBatch.length > 0) {
+      const indexNowPayload = {
+        host: 'sweeprvpn.com',
+        key: queue.indexnow_key || INDEXNOW_KEY,
+        keyLocation: `https://sweeprvpn.com/${queue.indexnow_key || INDEXNOW_KEY}.txt`,
+        urlList: deltaBatch
+      };
+
+      [bingRes, indexNowRes] = await Promise.all([
+        fetch('https://www.bing.com/indexnow', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json; charset=utf-8' },
+          body: JSON.stringify(indexNowPayload),
+          signal: AbortSignal.timeout(15000)
+        }).then((r) => `HTTP ${r.status}`).catch((e) => `Err: ${e.message}`),
+        fetch('https://api.indexnow.org/indexnow', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json; charset=utf-8' },
+          body: JSON.stringify(indexNowPayload),
+          signal: AbortSignal.timeout(15000)
+        }).then((r) => `HTTP ${r.status}`).catch((e) => `Err: ${e.message}`)
+      ]);
+
+      const pingIso = new Date().toISOString();
+      for (const u of deltaBatch) {
+        queue.indexnow_submitted_at[u] = pingIso;
+      }
+      queue.last_indexnow_ping = pingIso;
+    }
+
+    queue.pending_urls = unpingedUrls.slice(deltaBatch.length);
     queue.last_sitemap_ping = new Date().toISOString();
     fs.writeFileSync(INDEXING_QUEUE_PATH, JSON.stringify(queue, null, 2), 'utf8');
 
-    console.log(`[Bing IndexNow (sweeprvpn.com)] Submitted ${sitemapUrls.length} URLs:`);
+    indexStatus = { sitemapUrls: sitemapUrls.length, deltaSubmitted: deltaBatch.length, bingRes, indexNowRes };
+
+    console.log(`[Bing IndexNow Delta (sweeprvpn.com)] Submitted ${deltaBatch.length} delta URLs (of ${sitemapUrls.length} total in sitemap, ${queue.pending_urls.length} remaining in rolling queue):`);
     console.log(`  - www.bing.com/indexnow: ${bingRes}`);
     console.log(`  - api.indexnow.org/indexnow: ${indexNowRes}`);
-    console.log(`[Search Engine Sitemap Pings]:`);
-    console.log(`  - Google Sitemap Ping: ${googlePing}`);
-    console.log(`  - Bing Sitemap Ping: ${bingPing}`);
   } catch (err) {
     console.error('[IndexNow Queue Error]', err.message);
   }
@@ -835,7 +865,7 @@ async function runVpnDrip(targetCount = 300) {
   console.log('==========================================================================');
   console.log(`✓ PAD XML Specification: v${padInfo?.version || '1.0.0'} (${padInfo?.sizeBytes || '3872256'} bytes, HTTPS live probe checked)`);
   console.log(`✓ High-DR Backlinks Generated: ${completed} new dofollow backlinks across Telegraph (DR 89) and DPaste (DR 74)`);
-  console.log(`✓ Search Indexing: ${indexStatus.sitemapUrls} sitemap URLs submitted via IndexNow (Bing & api.indexnow.org) & sitemap pings`);
+  console.log(`✓ Search Indexing (Delta-Only): ${indexStatus.deltaSubmitted} delta URLs submitted via IndexNow (out of ${indexStatus.sitemapUrls} canonical URLs)`);
   console.log(`✓ CRM Database Sync: Upserted to Railway Multi-Project CRM, Cleaner CRM, and local SQLite (Total VPN entries: ${vpnSeed.length})`);
   console.log(`✓ Live Backlink Verification: Triggered /api/crm/seo/backlinks/verify?project=vpn`);
   console.log(`✓ STRICT RULE AUDIT: 0 emails sent. No SMTP / no email outreach.`);

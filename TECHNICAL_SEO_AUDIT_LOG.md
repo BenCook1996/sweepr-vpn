@@ -310,6 +310,10 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 ### Executive Summary
 - **Overall Scores**: Crawlability **100/100**, Technical SEO **100/100**, PageSpeed & CWV **100/100** across **1103 Canonical Pages**.
 - **Auto-Optimizations Executed**:
+  - Auto-optimized 10 core static pages with brand mobile theme-color (#10b981)
+  - Auto-optimized 1063 pSEO pages with max-image-preview:large, og:image, Twitter cards, GA4 (G-7D28EEMNXX) & GSC hub links
+  - Backfilled Google Analytics 4 tag (G-7D28EEMNXX) across 1043 HTML pages
+  - Upgraded high-CTR <title> & <meta name="description"> snippets across 14 Google Search Console Striking-Distance pages
   - Synchronized sitemap.xml with 1103 canonical URLs and lastmod 2026-11-01
   - Synchronized llms.txt with all 1093 pSEO guides for GEO AI citations
 
@@ -318,7 +322,8 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 #### 1. Crawlability & Indexability (100/100)
 - **Sitemap Completeness & Freshness**: PASS — 1103 canonical URLs registered with 0 missing
 - **GEO / LLM Discovery Manifest (llms.txt)**: PASS — Updated with 1103 structured entry points
-- **Search Engine Indexing Queue**: PASS — 1104 URLs queued for IndexNow / Search Console
+- **Search Engine Indexing Queue (Delta-Only)**: PASS — 1103 un-pinged/modified delta URLs queued (out of 1103 total canonical URLs)
+- **IndexNow Delta Ping Broadcast**: PASS — Pinged 25 delta URLs to Bing & IndexNow (1078 remaining in rolling queue)
 - **robots.txt Sitemap Directive**: PASS — Valid sitemap directive points to https://sweeprvpn.com/sitemap.xml
 - **robots.txt AI Crawler Allowances (GEO)**: PASS — All 7 major AI search bots explicitly permitted
 - **robots.txt Crawl-Budget Protections**: PASS — Internal APIs, user portals, qr-setup and CRO studios disallowed
@@ -335,6 +340,7 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 - **OpenGraph Social Metadata**: PASS — All 1103 pages include complete OpenGraph tags (title, desc, url, og:image)
 - **Twitter Card Metadata**: PASS — All 1103 pages include complete summary_large_image Twitter card tags
 - **Mobile Theme-Color Support**: PASS — All 1103 pages declare theme-color for mobile chrome styling
+- **Google Analytics 4 (G-7D28EEMNXX) Coverage**: PASS — All 1103 canonical pages include active GA4 telemetry
 - **Internal Link Integrity**: PASS — All internal links across 1103 pages resolve to valid routes (0 broken links)
 - **Server Canonical 301 Architecture**: PASS — Legacy .html and alias routes seamlessly 301 redirected to clean URLs
 
@@ -352,6 +358,6 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 
 ### Compression Benchmark Results
 - **order.html** (123.5 KB raw) &rarr; Gzip: **28.3 KB** (77% reduction) | Brotli: **26.1 KB** (79% reduction)
-- **index.html** (41.2 KB raw) &rarr; Gzip: **9.3 KB** (77% reduction) | Brotli: **8.7 KB** (79% reduction)
+- **index.html** (43.2 KB raw) &rarr; Gzip: **9.7 KB** (77% reduction) | Brotli: **9.1 KB** (79% reduction)
 - **sitemap.xml** (216.4 KB raw) &rarr; Gzip: **6.8 KB** (97% reduction) | Brotli: **6.2 KB** (97% reduction)
 

@@ -1320,6 +1320,19 @@ function renderLayout({ title, description, canonicalUrl, badge, h1, lead, bodyH
   <meta name="twitter:description" content="${description}" />
   <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png" />
   <meta name="theme-color" content="#070b14" />
+  <link rel="preconnect" href="https://www.googletagmanager.com" />
+  <link rel="icon" type="image/svg+xml" href="/logo-emerald.svg?v=5" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5" />
+  <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png?v=5" />
+  <link rel="shortcut icon" href="/favicon.ico?v=5" />
+  <!-- Google tag (gtag.js) - Sweepr VPN -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-7D28EEMNXX');
+  </script>
   <script type="application/ld+json">${JSON.stringify(faqSchema)}</script>
   <script type="application/ld+json">${JSON.stringify(appSchema)}</script>
   <style>
@@ -1403,7 +1416,7 @@ function renderLayout({ title, description, canonicalUrl, badge, h1, lead, bodyH
           <td><strong>Yearly Plan (Core Cash Cow — Save 50%)</strong></td>
           <td>£74.99 / year ($95.99 USD | €89.99 EUR)</td>
           <td><strong>£6.25 / mo</strong></td>
-          <td>10Gbps RAM-Only WireGuard (UK, NL, DE, SE, CH, US), 10 Devices, Kernel Kill-Switch, 30-Day Guarantee</td>
+          <td>10Gbps RAM-Only WireGuard (UK, NL, DE, SE, CH, US), 3 Devices, Kernel Kill-Switch, 30-Day Guarantee</td>
         </tr>
         <tr>
           <td><strong>6-Monthly Plan (Mid-Tier Anchor — Save 35%)</strong></td>
@@ -1433,6 +1446,12 @@ function renderLayout({ title, description, canonicalUrl, badge, h1, lead, bodyH
     <div class="card">
       <ul>
         ${relatedLinks.map((l) => `<li><a href="${l.href}" style="color:var(--accent2);">${l.label}</a></li>`).join('\n        ')}
+        <li><a href="/setup/gl-inet-travel-router" style="color:var(--accent2);">GL.iNet Beryl AX &amp; Travel Router WireGuard Setup Guide (MTU 1420/1380)</a></li>
+        <li><a href="/guides/stop-samsung-smart-tv-acr-tracking" style="color:var(--accent2);">How to Block Samsung Smart-TV ACR Tracking (gpm.samsungqbe.com &amp; samsungacr.com)</a></li>
+        <li><a href="/solutions/eduroam-campus-wifi-gaming-packet-loss" style="color:var(--accent2);">Fix Eduroam Campus Wi-Fi Gaming Packet Loss &amp; UDP Port Blocks (Stealth 443)</a></li>
+        <li><a href="/setup/nvidia-shield-tv-pro-wireguard" style="color:var(--accent2);">NVIDIA Shield TV Pro 4K &amp; GeForce NOW WireGuard VPN Setup Guide</a></li>
+        <li><a href="/solutions/gigaclear-rural-fibre-gaming-packet-loss" style="color:var(--accent2);">Fix Gigaclear Rural Full Fibre UK Gaming Ping Spikes, CGNAT &amp; Packet Loss</a></li>
+        <li><a href="/setup/steam-deck-vpn" style="color:var(--accent2);">Steam Deck &amp; SteamOS Native WireGuard VPN Setup Guide</a></li>
         <li><a href="/tools/leak-test" style="color:var(--accent2);">Free Browser IP, DNS &amp; WebRTC Leak Test</a></li>
         <li><a href="/tools/isp-throttling-test" style="color:var(--accent2);">Free ISP Evening Throttling &amp; Latency Checker</a></li>
         <li><a href="/download" style="color:var(--accent2);">Download SWEEPR VPN &amp; Free 30-Second Home Wi-Fi Scanner (~3.7 MB)</a></li>
@@ -1535,8 +1554,12 @@ PersistentKeepalive = 25</code></pre>`;
 
   if (candidate.cluster === 'setup') {
     const { guide } = candidate;
-    const title = `${guide.name} WireGuard VPN Setup Guide (2026) | SWEEPR VPN`;
-    const description = `Step-by-step ${guide.name} WireGuard VPN setup guide. Configure 10Gbps RAM-only endpoints, optimal MTU, in-tunnel DNS (10.66.0.1), and kill-switch routing.`;
+    const cleanGuideName = guide.name
+      .replace(/\s+(WireGuard|VPN|Setup|Container|Guide)+\s*$/gi, '')
+      .replace(/\s+WireGuard\s+/gi, ' ')
+      .trim();
+    const title = `${cleanGuideName} WireGuard VPN Setup Guide (2026) | SWEEPR VPN`;
+    const description = `Step-by-step ${cleanGuideName} WireGuard VPN setup guide. Configure 10Gbps RAM-only endpoints, optimal MTU, in-tunnel DNS (10.66.0.1), and kill-switch routing.`;
     const h1 = `${guide.name}: High-Speed 10Gbps WireGuard VPN Setup Guide`;
     const lead = guide.summary;
 

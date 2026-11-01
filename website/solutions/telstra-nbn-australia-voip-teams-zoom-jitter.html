@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Telstra NBN Australia: Fix Microsoft Teams, Zoom & VoIP Call Dropouts | SWEEPR VPN</title>
-  <meta name="description" content="How to Fix Microsoft Teams, Zoom & VoIP Jitter on Telstra NBN Australia (AS1221) using low-latency wireguard. Tested 1412 MTU WireGuard config, 4ms London 10Gbps RAM-only routing & free 30s Wi-Fi scanner." />
+  <title>Telstra NBN Australia: Fix Microsoft Teams, Zoom &amp; VoIP Call Dropouts | SWEEPR VPN</title>
+  <meta name="description" content="How to Fix Microsoft Teams, Zoom &amp; VoIP Jitter on Telstra NBN Australia (AS1221) using low-latency . Tested 1412 MTU WireGuard config, 4ms London 10Gbps RAM-only routing &amp; free 30s Wi-Fi scanner." />
   <link rel="canonical" href="https://sweeprvpn.com/solutions/telstra-nbn-australia-voip-teams-zoom-jitter" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta property="og:type" content="article" />
-  <meta property="og:title" content="Telstra NBN Australia: Fix Microsoft Teams, Zoom & VoIP Call Dropouts | SWEEPR VPN" />
-  <meta property="og:description" content="How to Fix Microsoft Teams, Zoom & VoIP Jitter on Telstra NBN Australia (AS1221) using low-latency wireguard. Tested 1412 MTU WireGuard config, 4ms London 10Gbps RAM-only routing & free 30s Wi-Fi scanner." />
+  <meta property="og:title" content="Telstra NBN Australia: Fix Microsoft Teams, Zoom &amp; VoIP Call Dropouts | SWEEPR VPN" />
+  <meta property="og:description" content="How to Fix Microsoft Teams, Zoom &amp; VoIP Jitter on Telstra NBN Australia (AS1221) using low-latency . Tested 1412 MTU WireGuard config, 4ms London 10Gbps RAM-only routing &amp; free 30s Wi-Fi scanner." />
   <meta property="og:url" content="https://sweeprvpn.com/solutions/telstra-nbn-australia-voip-teams-zoom-jitter" />
   <meta property="og:site_name" content="SWEEPR VPN" />
   <meta property="og:image" content="https://sweeprvpn.com/og-image.png" />
   <meta property="og:image:alt" content="SWEEPR VPN 10Gbps WireGuard &amp; Home Wi-Fi Radar" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:url" content="https://sweeprvpn.com/solutions/telstra-nbn-australia-voip-teams-zoom-jitter" />
-  <meta name="twitter:title" content="Telstra NBN Australia: Fix Microsoft Teams, Zoom & VoIP Call Dropouts | SWEEPR VPN" />
-  <meta name="twitter:description" content="How to Fix Microsoft Teams, Zoom & VoIP Jitter on Telstra NBN Australia (AS1221) using low-latency wireguard. Tested 1412 MTU WireGuard config, 4ms London 10Gbps RAM-only routing & free 30s Wi-Fi scanner." />
+  <meta name="twitter:title" content="Telstra NBN Australia: Fix Microsoft Teams, Zoom &amp; VoIP Call Dropouts | SWEEPR VPN" />
+  <meta name="twitter:description" content="How to Fix Microsoft Teams, Zoom &amp; VoIP Jitter on Telstra NBN Australia (AS1221) using low-latency . Tested 1412 MTU WireGuard config, 4ms London 10Gbps RAM-only routing &amp; free 30s Wi-Fi scanner." />
   <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png" />
   <meta name="theme-color" content="#070b14" />
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is the best WireGuard MTU setting for Telstra NBN Australia?","acceptedAnswer":{"@type":"Answer","text":"For Telstra NBN Australia (NBN FTTP / HFC / FTTN), setting your WireGuard interface to MTU 1412 prevents IP packet fragmentation and PMTUD blackholes while maximizing 10Gbps throughput."}},{"@type":"Question","name":"Does SWEEPR VPN work with Telstra NBN Australia routers and Wi-Fi mesh systems?","acceptedAnswer":{"@type":"Answer","text":"Yes. You can run the ~3.7 MB SWEEPR VPN native app on Windows 10/11, macOS, Linux, iOS, and Android, or export a standard WireGuard .conf file for OpenWrt, GL.iNet, Asuswrt-Merlin, MikroTik, and UniFi gateways connected to Telstra NBN Australia."}},{"@type":"Question","name":"Is the 30-second Home Wi-Fi Scanner really free on Telstra NBN Australia?","acceptedAnswer":{"@type":"Answer","text":"Yes. Downloading SWEEPR VPN includes our instant 30-second LAN ARP/mDNS device scanner at zero cost (no credit card required), showing every device and Smart TV on your Telstra NBN Australia Wi-Fi."}}]}</script>
@@ -59,6 +59,15 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5">
   <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png?v=5">
   <link rel="shortcut icon" href="/favicon.ico?v=5">
+  <link rel="preconnect" href="https://www.googletagmanager.com" />
+  <!-- Google tag (gtag.js) - Sweepr VPN -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-7D28EEMNXX');
+  </script>
 </head>
 <body>
   <header>
@@ -173,6 +182,12 @@ PersistentKeepalive = 25</code></pre>
         <li><a href="/guides/fix-wireguard-mtu-fragmentation-pppoe" style="color:var(--accent2);">WireGuard MTU Calculator for PPPoE Fibre (1412) & 5G (1380)</a></li>
         <li><a href="/guides/bypass-cgnat-for-self-hosted-home-lab" style="color:var(--accent2);">How to Detect & Bypass Carrier-Grade NAT (CGNAT 100.64.x.x)</a></li>
         <li><a href="/vs/nordvpn" style="color:var(--accent2);">SWEEPR VPN (~3.7 MB) vs NordVPN Technical Comparison</a></li>
+        <li><a href="/setup/gl-inet-travel-router" style="color:var(--accent2);">GL.iNet Beryl AX &amp; Travel Router WireGuard Setup Guide (MTU 1420/1380)</a></li>
+        <li><a href="/guides/stop-samsung-smart-tv-acr-tracking" style="color:var(--accent2);">How to Block Samsung Smart-TV ACR Tracking (gpm.samsungqbe.com &amp; samsungacr.com)</a></li>
+        <li><a href="/solutions/eduroam-campus-wifi-gaming-packet-loss" style="color:var(--accent2);">Fix Eduroam Campus Wi-Fi Gaming Packet Loss &amp; UDP Port Blocks (Stealth 443)</a></li>
+        <li><a href="/setup/nvidia-shield-tv-pro-wireguard" style="color:var(--accent2);">NVIDIA Shield TV Pro 4K &amp; GeForce NOW WireGuard VPN Setup Guide</a></li>
+        <li><a href="/solutions/gigaclear-rural-fibre-gaming-packet-loss" style="color:var(--accent2);">Fix Gigaclear Rural Full Fibre UK Gaming Ping Spikes, CGNAT &amp; Packet Loss</a></li>
+        <li><a href="/setup/steam-deck-vpn" style="color:var(--accent2);">SteamOS &amp; Steam Deck OLED Native WireGuard VPN Setup Guide</a></li>
         <li><a href="/tools/leak-test" style="color:var(--accent2);">Free Browser IP, DNS &amp; WebRTC Leak Test</a></li>
         <li><a href="/tools/isp-throttling-test" style="color:var(--accent2);">Free ISP Evening Throttling &amp; Latency Checker</a></li>
         <li><a href="/download" style="color:var(--accent2);">Download SWEEPR VPN &amp; Free 30-Second Home Wi-Fi Scanner (~3.7 MB)</a></li>

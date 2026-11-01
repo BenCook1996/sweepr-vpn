@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>How to Stop 5G Hotspot & Mobile Tethering Throttling (2026 MTU Guide) | SWEEPR VPN</title>
-  <meta name="description" content="Mobile operators inspect packet Time-To-Live (TTL) and TCP headers to detect tethering and throttle laptops to 3G speeds. SWEEPR VPN encapsulates all tethered traffic into a single encrypted WireGuard UDP stream. Free 30-second Home Wi-Fi scanner and 10Gbps WireGuard telemetry blocklist guide." />
+  <title>How to Stop 5G Hotspot &amp; Mobile Tethering Throttling (2026 MTU Guide) | SWEEPR VPN</title>
+  <meta name="description" content="Mobile operators inspect packet Time-To-Live (TTL) and TCP headers to detect tethering and throttle laptops to 3G speeds. SWEEPR VPN encapsulates all tethered traffic into a single encrypted UDP stream. Free 30-second Home Wi-Fi scanner and 10Gbps WireGuard telemetry blocklist guide." />
   <link rel="canonical" href="https://sweeprvpn.com/guides/stop-5g-hotspot-carrier-throttling" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta property="og:type" content="article" />
-  <meta property="og:title" content="How to Stop 5G Hotspot & Mobile Tethering Throttling (2026 MTU Guide) | SWEEPR VPN" />
-  <meta property="og:description" content="Mobile operators inspect packet Time-To-Live (TTL) and TCP headers to detect tethering and throttle laptops to 3G speeds. SWEEPR VPN encapsulates all tethered traffic into a single encrypted WireGuard UDP stream. Free 30-second Home Wi-Fi scanner and 10Gbps WireGuard telemetry blocklist guide." />
+  <meta property="og:title" content="How to Stop 5G Hotspot &amp; Mobile Tethering Throttling (2026 MTU Guide) | SWEEPR VPN" />
+  <meta property="og:description" content="Mobile operators inspect packet Time-To-Live (TTL) and TCP headers to detect tethering and throttle laptops to 3G speeds. SWEEPR VPN encapsulates all tethered traffic into a single encrypted UDP stream. Free 30-second Home Wi-Fi scanner and 10Gbps WireGuard telemetry blocklist guide." />
   <meta property="og:url" content="https://sweeprvpn.com/guides/stop-5g-hotspot-carrier-throttling" />
   <meta property="og:site_name" content="SWEEPR VPN" />
   <meta property="og:image" content="https://sweeprvpn.com/og-image.png" />
   <meta property="og:image:alt" content="SWEEPR VPN 10Gbps WireGuard &amp; Home Wi-Fi Radar" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:url" content="https://sweeprvpn.com/guides/stop-5g-hotspot-carrier-throttling" />
-  <meta name="twitter:title" content="How to Stop 5G Hotspot & Mobile Tethering Throttling (2026 MTU Guide) | SWEEPR VPN" />
-  <meta name="twitter:description" content="Mobile operators inspect packet Time-To-Live (TTL) and TCP headers to detect tethering and throttle laptops to 3G speeds. SWEEPR VPN encapsulates all tethered traffic into a single encrypted WireGuard UDP stream. Free 30-second Home Wi-Fi scanner and 10Gbps WireGuard telemetry blocklist guide." />
+  <meta name="twitter:title" content="How to Stop 5G Hotspot &amp; Mobile Tethering Throttling (2026 MTU Guide) | SWEEPR VPN" />
+  <meta name="twitter:description" content="Mobile operators inspect packet Time-To-Live (TTL) and TCP headers to detect tethering and throttle laptops to 3G speeds. SWEEPR VPN encapsulates all tethered traffic into a single encrypted UDP stream. Free 30-second Home Wi-Fi scanner and 10Gbps WireGuard telemetry blocklist guide." />
   <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png" />
   <meta name="theme-color" content="#070b14" />
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Will blocking Smart-TV ACR telemetry break Netflix, BBC iPlayer, or YouTube?","acceptedAnswer":{"@type":"Answer","text":"No. SWEEPR Smart-TV Shield only sinks Automatic Content Recognition (ACR) screenshot and ad-tracking endpoints while leaving CDN video delivery streams untouched."}},{"@type":"Question","name":"Does the SWEEPR 30-Second Wi-Fi Scanner work on Windows, macOS, and Linux?","acceptedAnswer":{"@type":"Answer","text":"Yes. The SWEEPR desktop scanner is built in Rust + Tauri v2 (~3.7 MB) and runs natively on Windows 10/11, macOS (Apple Silicon & Intel), and Linux."}},{"@type":"Question","name":"How can I test if my ISP is still intercepting my DNS requests?","acceptedAnswer":{"@type":"Answer","text":"Open our free browser IP, DNS & WebRTC Leak Test at https://sweeprvpn.com/tools/leak-test to verify that your resolver matches SWEEPR VPN's encrypted in-tunnel DNS."}}]}</script>
@@ -55,6 +55,15 @@
     footer { border-top:1px solid var(--border); padding:32px 20px; text-align:center; color:var(--muted); font-size:0.88rem; }
     footer a { color:var(--accent2); text-decoration:none; margin:0 8px; }
   </style>
+  <link rel="preconnect" href="https://www.googletagmanager.com" />
+  <!-- Google tag (gtag.js) - Sweepr VPN -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-7D28EEMNXX');
+  </script>
 </head>
 <body>
   <header>
@@ -158,6 +167,12 @@ WireGuard MTU Clamping (MTU 1380 for 5G)
         <li><a href="/guides/stop-samsung-smart-tv-acr-tracking" style="color:var(--accent2);">How to Block Samsung Smart-TV ACR Spying</a></li>
         <li><a href="/guides/stop-lg-smart-tv-acr-spying" style="color:var(--accent2);">How to Block LG webOS ACR Tracking</a></li>
         <li><a href="/guides/detect-unknown-devices-on-home-wifi" style="color:var(--accent2);">How to Detect Unknown Devices on Your Home Wi-Fi in 30 Seconds</a></li>
+        <li><a href="/setup/gl-inet-travel-router" style="color:var(--accent2);">GL.iNet Beryl AX &amp; Travel Router WireGuard Setup Guide (MTU 1420/1380)</a></li>
+        <li><a href="/guides/stop-samsung-smart-tv-acr-tracking" style="color:var(--accent2);">How to Block Samsung Smart-TV ACR Tracking (gpm.samsungqbe.com &amp; samsungacr.com)</a></li>
+        <li><a href="/solutions/eduroam-campus-wifi-gaming-packet-loss" style="color:var(--accent2);">Fix Eduroam Campus Wi-Fi Gaming Packet Loss &amp; UDP Port Blocks (Stealth 443)</a></li>
+        <li><a href="/setup/nvidia-shield-tv-pro-wireguard" style="color:var(--accent2);">NVIDIA Shield TV Pro 4K &amp; GeForce NOW WireGuard VPN Setup Guide</a></li>
+        <li><a href="/solutions/gigaclear-rural-fibre-gaming-packet-loss" style="color:var(--accent2);">Fix Gigaclear Rural Full Fibre UK Gaming Ping Spikes, CGNAT &amp; Packet Loss</a></li>
+        <li><a href="/setup/steam-deck-vpn" style="color:var(--accent2);">SteamOS &amp; Steam Deck OLED Native WireGuard VPN Setup Guide</a></li>
         <li><a href="/tools/leak-test" style="color:var(--accent2);">Free Browser IP, DNS &amp; WebRTC Leak Test</a></li>
         <li><a href="/tools/isp-throttling-test" style="color:var(--accent2);">Free ISP Evening Throttling &amp; Latency Checker</a></li>
         <li><a href="/download" style="color:var(--accent2);">Download SWEEPR VPN &amp; Free 30-Second Home Wi-Fi Scanner (~3.7 MB)</a></li>

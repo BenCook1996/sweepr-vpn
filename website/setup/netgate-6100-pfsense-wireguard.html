@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Netgate 6100 pfSense Plus 10Gbps WireGuard Gateway Guide WireGuard VPN Setup Guide (2026) | SWEEPR VPN</title>
-  <meta name="description" content="Step-by-step Netgate 6100 pfSense Plus 10Gbps WireGuard Gateway Guide WireGuard VPN setup guide. Configure 10Gbps RAM-only endpoints, optimal MTU, in-tunnel DNS (10.66.0.1), and kill-switch routing." />
+  <title>Netgate 6100 pfSense Plus 10Gbps Gateway Guide WireGuard VPN Setup Guide (2026) | SWEEPR VPN</title>
+  <meta name="description" content="Step-by-step Netgate 6100 pfSense Plus 10Gbps Gateway Guide WireGuard VPN setup guide. Configure 10Gbps RAM-only endpoints, optimal MTU, in-tunnel DNS (10.66.0.1), and kill-switch routing." />
   <link rel="canonical" href="https://sweeprvpn.com/setup/netgate-6100-pfsense-wireguard" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta property="og:type" content="article" />
-  <meta property="og:title" content="Netgate 6100 pfSense Plus 10Gbps WireGuard Gateway Guide WireGuard VPN Setup Guide (2026) | SWEEPR VPN" />
-  <meta property="og:description" content="Step-by-step Netgate 6100 pfSense Plus 10Gbps WireGuard Gateway Guide WireGuard VPN setup guide. Configure 10Gbps RAM-only endpoints, optimal MTU, in-tunnel DNS (10.66.0.1), and kill-switch routing." />
+  <meta property="og:title" content="Netgate 6100 pfSense Plus 10Gbps Gateway Guide WireGuard VPN Setup Guide (2026) | SWEEPR VPN" />
+  <meta property="og:description" content="Step-by-step Netgate 6100 pfSense Plus 10Gbps Gateway Guide WireGuard VPN setup guide. Configure 10Gbps RAM-only endpoints, optimal MTU, in-tunnel DNS (10.66.0.1), and kill-switch routing." />
   <meta property="og:url" content="https://sweeprvpn.com/setup/netgate-6100-pfsense-wireguard" />
   <meta property="og:site_name" content="SWEEPR VPN" />
   <meta property="og:image" content="https://sweeprvpn.com/og-image.png" />
   <meta property="og:image:alt" content="SWEEPR VPN 10Gbps WireGuard &amp; Home Wi-Fi Radar" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:url" content="https://sweeprvpn.com/setup/netgate-6100-pfsense-wireguard" />
-  <meta name="twitter:title" content="Netgate 6100 pfSense Plus 10Gbps WireGuard Gateway Guide WireGuard VPN Setup Guide (2026) | SWEEPR VPN" />
-  <meta name="twitter:description" content="Step-by-step Netgate 6100 pfSense Plus 10Gbps WireGuard Gateway Guide WireGuard VPN setup guide. Configure 10Gbps RAM-only endpoints, optimal MTU, in-tunnel DNS (10.66.0.1), and kill-switch routing." />
+  <meta name="twitter:title" content="Netgate 6100 pfSense Plus 10Gbps Gateway Guide WireGuard VPN Setup Guide (2026) | SWEEPR VPN" />
+  <meta name="twitter:description" content="Step-by-step Netgate 6100 pfSense Plus 10Gbps Gateway Guide WireGuard VPN setup guide. Configure 10Gbps RAM-only endpoints, optimal MTU, in-tunnel DNS (10.66.0.1), and kill-switch routing." />
   <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png" />
   <meta name="theme-color" content="#070b14" />
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Can I run Netgate 6100 pfSense Plus 10Gbps WireGuard Gateway Guide alongside the SWEEPR VPN desktop app?","acceptedAnswer":{"@type":"Answer","text":"Yes. Every SWEEPR VPN plan supports up to 10 simultaneous WireGuard peers across routers, NAS appliances, Linux servers, Windows, macOS, iOS, and Android."}},{"@type":"Question","name":"What DNS server should I use on Netgate 6100 pfSense Plus 10Gbps WireGuard Gateway Guide?","acceptedAnswer":{"@type":"Answer","text":"Always set your WireGuard interface DNS to 10.66.0.1 so DNS queries travel inside the encrypted WireGuard tunnel and cannot be intercepted by your ISP."}},{"@type":"Question","name":"Why are my HTTPS pages stalling after enabling WireGuard on Netgate 6100 pfSense Plus 10Gbps WireGuard Gateway Guide?","acceptedAnswer":{"@type":"Answer","text":"If your ISP uses PPPoE (such as BT, Sky, TalkTalk, Plusnet, or Vodafone FTTP), lower the WireGuard interface MTU from 1420 to 1412 and enable TCP MSS clamping to 1352–1360."}}]}</script>
@@ -55,6 +55,15 @@
     footer { border-top:1px solid var(--border); padding:32px 20px; text-align:center; color:var(--muted); font-size:0.88rem; }
     footer a { color:var(--accent2); text-decoration:none; margin:0 8px; }
   </style>
+  <link rel="preconnect" href="https://www.googletagmanager.com" />
+  <!-- Google tag (gtag.js) - Sweepr VPN -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-7D28EEMNXX');
+  </script>
 </head>
 <body>
   <header>
@@ -168,6 +177,12 @@
         <li><a href="/setup/openwrt-wireguard-router" style="color:var(--accent2);">OpenWrt 23.05 WireGuard Router Setup Guide</a></li>
         <li><a href="/setup/asuswrt-merlin-vpn-router" style="color:var(--accent2);">Asuswrt-Merlin WireGuard VPN Director Guide</a></li>
         <li><a href="/guides/fix-wireguard-mtu-fragmentation-pppoe" style="color:var(--accent2);">Optimal WireGuard MTU Calculator for Fibre & 5G</a></li>
+        <li><a href="/setup/gl-inet-travel-router" style="color:var(--accent2);">GL.iNet Beryl AX &amp; Travel Router WireGuard Setup Guide (MTU 1420/1380)</a></li>
+        <li><a href="/guides/stop-samsung-smart-tv-acr-tracking" style="color:var(--accent2);">How to Block Samsung Smart-TV ACR Tracking (gpm.samsungqbe.com &amp; samsungacr.com)</a></li>
+        <li><a href="/solutions/eduroam-campus-wifi-gaming-packet-loss" style="color:var(--accent2);">Fix Eduroam Campus Wi-Fi Gaming Packet Loss &amp; UDP Port Blocks (Stealth 443)</a></li>
+        <li><a href="/setup/nvidia-shield-tv-pro-wireguard" style="color:var(--accent2);">NVIDIA Shield TV Pro 4K &amp; GeForce NOW WireGuard VPN Setup Guide</a></li>
+        <li><a href="/solutions/gigaclear-rural-fibre-gaming-packet-loss" style="color:var(--accent2);">Fix Gigaclear Rural Full Fibre UK Gaming Ping Spikes, CGNAT &amp; Packet Loss</a></li>
+        <li><a href="/setup/steam-deck-vpn" style="color:var(--accent2);">SteamOS &amp; Steam Deck OLED Native WireGuard VPN Setup Guide</a></li>
         <li><a href="/tools/leak-test" style="color:var(--accent2);">Free Browser IP, DNS &amp; WebRTC Leak Test</a></li>
         <li><a href="/tools/isp-throttling-test" style="color:var(--accent2);">Free ISP Evening Throttling &amp; Latency Checker</a></li>
         <li><a href="/download" style="color:var(--accent2);">Download SWEEPR VPN &amp; Free 30-Second Home Wi-Fi Scanner (~3.7 MB)</a></li>

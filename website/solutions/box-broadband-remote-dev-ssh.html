@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Box Broadband Surrey & Sussex FTTP: Fix Dropping SSH, Docker, Git & Corporate VPN Sessions | SWEEPR VPN</title>
-  <meta name="description" content="Fix Dropping SSH, Kubernetes & Git Sessions on Box Broadband Surrey & Sussex FTTP (AS207399) with persistent wireguard. Tested 1420 MTU WireGuard config, 4ms London 10Gbps RAM-only routing & free 30s Wi-Fi scanner." />
+  <title>Box Broadband Surrey &amp; Sussex FTTP: Fix Dropping SSH, Docker, Git &amp; Corporate VPN Sessions | SWEEPR VPN</title>
+  <meta name="description" content="Fix Dropping SSH, Kubernetes &amp; Git Sessions on Box Broadband Surrey &amp; Sussex FTTP (AS207399) with persistent . Tested 1420 MTU WireGuard config, 4ms London 10Gbps RAM-only routing &amp; free 30s Wi-Fi scanner." />
   <link rel="canonical" href="https://sweeprvpn.com/solutions/box-broadband-remote-dev-ssh" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta property="og:type" content="article" />
-  <meta property="og:title" content="Box Broadband Surrey & Sussex FTTP: Fix Dropping SSH, Docker, Git & Corporate VPN Sessions | SWEEPR VPN" />
-  <meta property="og:description" content="Fix Dropping SSH, Kubernetes & Git Sessions on Box Broadband Surrey & Sussex FTTP (AS207399) with persistent wireguard. Tested 1420 MTU WireGuard config, 4ms London 10Gbps RAM-only routing & free 30s Wi-Fi scanner." />
+  <meta property="og:title" content="Box Broadband Surrey &amp; Sussex FTTP: Fix Dropping SSH, Docker, Git &amp; Corporate VPN Sessions | SWEEPR VPN" />
+  <meta property="og:description" content="Fix Dropping SSH, Kubernetes &amp; Git Sessions on Box Broadband Surrey &amp; Sussex FTTP (AS207399) with persistent . Tested 1420 MTU WireGuard config, 4ms London 10Gbps RAM-only routing &amp; free 30s Wi-Fi scanner." />
   <meta property="og:url" content="https://sweeprvpn.com/solutions/box-broadband-remote-dev-ssh" />
   <meta property="og:site_name" content="SWEEPR VPN" />
   <meta property="og:image" content="https://sweeprvpn.com/og-image.png" />
   <meta property="og:image:alt" content="SWEEPR VPN 10Gbps WireGuard &amp; Home Wi-Fi Radar" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:url" content="https://sweeprvpn.com/solutions/box-broadband-remote-dev-ssh" />
-  <meta name="twitter:title" content="Box Broadband Surrey & Sussex FTTP: Fix Dropping SSH, Docker, Git & Corporate VPN Sessions | SWEEPR VPN" />
-  <meta name="twitter:description" content="Fix Dropping SSH, Kubernetes & Git Sessions on Box Broadband Surrey & Sussex FTTP (AS207399) with persistent wireguard. Tested 1420 MTU WireGuard config, 4ms London 10Gbps RAM-only routing & free 30s Wi-Fi scanner." />
+  <meta name="twitter:title" content="Box Broadband Surrey &amp; Sussex FTTP: Fix Dropping SSH, Docker, Git &amp; Corporate VPN Sessions | SWEEPR VPN" />
+  <meta name="twitter:description" content="Fix Dropping SSH, Kubernetes &amp; Git Sessions on Box Broadband Surrey &amp; Sussex FTTP (AS207399) with persistent . Tested 1420 MTU WireGuard config, 4ms London 10Gbps RAM-only routing &amp; free 30s Wi-Fi scanner." />
   <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png" />
   <meta name="theme-color" content="#070b14" />
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is the best WireGuard MTU setting for Box Broadband Surrey & Sussex FTTP?","acceptedAnswer":{"@type":"Answer","text":"For Box Broadband Surrey & Sussex FTTP (FTTP / CGNAT (Community Fibre Core)), setting your WireGuard interface to MTU 1420 prevents IP packet fragmentation and PMTUD blackholes while maximizing 10Gbps throughput."}},{"@type":"Question","name":"Does SWEEPR VPN work with Box Broadband Surrey & Sussex FTTP routers and Wi-Fi mesh systems?","acceptedAnswer":{"@type":"Answer","text":"Yes. You can run the ~3.7 MB SWEEPR VPN native app on Windows 10/11, macOS, Linux, iOS, and Android, or export a standard WireGuard .conf file for OpenWrt, GL.iNet, Asuswrt-Merlin, MikroTik, and UniFi gateways connected to Box Broadband Surrey & Sussex FTTP."}},{"@type":"Question","name":"Is the 30-second Home Wi-Fi Scanner really free on Box Broadband Surrey & Sussex FTTP?","acceptedAnswer":{"@type":"Answer","text":"Yes. Downloading SWEEPR VPN includes our instant 30-second LAN ARP/mDNS device scanner at zero cost (no credit card required), showing every device and Smart TV on your Box Broadband Surrey & Sussex FTTP Wi-Fi."}}]}</script>
@@ -55,6 +55,15 @@
     footer { border-top:1px solid var(--border); padding:32px 20px; text-align:center; color:var(--muted); font-size:0.88rem; }
     footer a { color:var(--accent2); text-decoration:none; margin:0 8px; }
   </style>
+  <link rel="preconnect" href="https://www.googletagmanager.com" />
+  <!-- Google tag (gtag.js) - Sweepr VPN -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-7D28EEMNXX');
+  </script>
 </head>
 <body>
   <header>
@@ -169,6 +178,12 @@ PersistentKeepalive = 25</code></pre>
         <li><a href="/guides/fix-wireguard-mtu-fragmentation-pppoe" style="color:var(--accent2);">WireGuard MTU Calculator for PPPoE Fibre (1412) & 5G (1380)</a></li>
         <li><a href="/guides/bypass-cgnat-for-self-hosted-home-lab" style="color:var(--accent2);">How to Detect & Bypass Carrier-Grade NAT (CGNAT 100.64.x.x)</a></li>
         <li><a href="/vs/nordvpn" style="color:var(--accent2);">SWEEPR VPN (~3.7 MB) vs NordVPN Technical Comparison</a></li>
+        <li><a href="/setup/gl-inet-travel-router" style="color:var(--accent2);">GL.iNet Beryl AX &amp; Travel Router WireGuard Setup Guide (MTU 1420/1380)</a></li>
+        <li><a href="/guides/stop-samsung-smart-tv-acr-tracking" style="color:var(--accent2);">How to Block Samsung Smart-TV ACR Tracking (gpm.samsungqbe.com &amp; samsungacr.com)</a></li>
+        <li><a href="/solutions/eduroam-campus-wifi-gaming-packet-loss" style="color:var(--accent2);">Fix Eduroam Campus Wi-Fi Gaming Packet Loss &amp; UDP Port Blocks (Stealth 443)</a></li>
+        <li><a href="/setup/nvidia-shield-tv-pro-wireguard" style="color:var(--accent2);">NVIDIA Shield TV Pro 4K &amp; GeForce NOW WireGuard VPN Setup Guide</a></li>
+        <li><a href="/solutions/gigaclear-rural-fibre-gaming-packet-loss" style="color:var(--accent2);">Fix Gigaclear Rural Full Fibre UK Gaming Ping Spikes, CGNAT &amp; Packet Loss</a></li>
+        <li><a href="/setup/steam-deck-vpn" style="color:var(--accent2);">SteamOS &amp; Steam Deck OLED Native WireGuard VPN Setup Guide</a></li>
         <li><a href="/tools/leak-test" style="color:var(--accent2);">Free Browser IP, DNS &amp; WebRTC Leak Test</a></li>
         <li><a href="/tools/isp-throttling-test" style="color:var(--accent2);">Free ISP Evening Throttling &amp; Latency Checker</a></li>
         <li><a href="/download" style="color:var(--accent2);">Download SWEEPR VPN &amp; Free 30-Second Home Wi-Fi Scanner (~3.7 MB)</a></li>

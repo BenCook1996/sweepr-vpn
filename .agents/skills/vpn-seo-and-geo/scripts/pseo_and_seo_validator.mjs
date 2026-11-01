@@ -588,16 +588,18 @@ function buildAll50Specs() {
   // Cluster 2: 10 Device & OS Setup Pages (/setup/...)
   for (const dev of SETUP_DEVICES) {
     const urlPath = `/setup/${dev.slug}`;
+    const cleanDevName = dev.name.replace(/\s+(WireGuard|VPN|Setup|Container)+\s*$/gi, '').replace(/\s+WireGuard\s+/gi, ' ').trim();
+    const cleanMtu = dev.recommendedMtu.replace(/\s*\(.*?\)/g, '').trim();
     pages.push({
       cluster: 'setup',
       slug: dev.slug,
       urlPath,
       fileRelPath: `setup/${dev.slug}.html`,
       badge: `2026 WireGuard Setup Guide • ${dev.installTime}`,
-      title: `${dev.name} WireGuard VPN Setup Guide (2026) | SWEEPR VPN`,
+      title: `${cleanDevName} WireGuard VPN Setup Guide (2026) | SWEEPR VPN`,
       h1: `WireGuard VPN Setup for ${dev.name}`,
       subtitle: `${dev.summary}`,
-      metaDesc: `Step-by-step ${dev.name} WireGuard VPN setup guide (${dev.installTime}). Recommended MTU (${dev.recommendedMtu}), 10Gbps servers, and sample config.`,
+      metaDesc: `Step-by-step ${cleanDevName} WireGuard VPN setup guide (${dev.installTime}). Copy-paste .conf config, MTU ${cleanMtu} settings, and 4ms 10Gbps RAM-only servers.`,
       targetKeyword: `best wireguard vpn for ${dev.shortName.toLowerCase()}`,
       verdictTitle: `Quick Setup Summary (${dev.shortName})`,
       verdictHtml: `${escapeHtml(dev.summary)} Engineered for <strong>${escapeHtml(dev.osCategory)}</strong> with recommended MTU <strong>${escapeHtml(dev.recommendedMtu)}</strong> and direct 10Gbps peering via <strong>${escapeHtml(dev.recommendedServer)}</strong>.`,
@@ -713,6 +715,10 @@ function buildAll50Specs() {
   // Cluster 4: 6 Smart-TV Privacy & Home Wi-Fi Security Guides (/guides/...)
   for (const g of PRIVACY_GUIDES) {
     const urlPath = `/guides/${g.slug}`;
+    const cleanVerdict = g.verdictSummary.replace(/`/g, '');
+    const cleanMetaDesc = cleanVerdict.length <= 158
+      ? cleanVerdict
+      : cleanVerdict.slice(0, 155).replace(/\s+\S*$/, '') + '.';
     pages.push({
       cluster: 'guides',
       slug: g.slug,
@@ -721,8 +727,8 @@ function buildAll50Specs() {
       badge: g.badge,
       title: `${g.name} | SWEEPR VPN`,
       h1: g.name,
-      subtitle: `Protect your home Wi-Fi, block hidden telemetry endpoints (${g.blockedDomains}), and encrypt up to 10 devices in one click.`,
-      metaDesc: `${g.verdictSummary.slice(0, 155)}...`,
+      subtitle: `Protect your home Wi-Fi, block hidden telemetry endpoints (${g.blockedDomains}), and encrypt up to 3 devices in one click.`,
+      metaDesc: cleanMetaDesc,
       targetKeyword: g.targetKeyword,
       verdictTitle: 'Quick Technical Summary (GEO Answer Block)',
       verdictHtml: `${escapeHtml(g.verdictSummary)}`,
@@ -1179,7 +1185,29 @@ if (action === 'matrix') {
     written++;
   }
 
-  // Update website/sitemap.xml with core routes + all 50 pSEO URLs
+  // Collect all existing pSEO pages on disk to prevent sitemap truncation
+  const allPseoPagesOnDisk = [];
+  for (const dir of ['solutions', 'setup', 'vs', 'guides']) {
+    const dirAbs = path.join(WEBSITE_DIR, dir);
+    if (!fs.existsSync(dirAbs)) continue;
+    for (const file of fs.readdirSync(dirAbs).sort()) {
+      if (!file.endsWith('.html')) continue;
+      const slug = file.replace(/\.html$/, '');
+      if (dir === 'vs' && slug === 'totalvpn') continue;
+      const urlPath = `/${dir}/${slug}`;
+      const absPath = path.join(dirAbs, file);
+      const htmlContent = fs.readFileSync(absPath, 'utf8');
+      const h1Match = htmlContent.match(/<h1[^>]*>(.*?)<\/h1>/is);
+      const h1Text = h1Match ? h1Match[1].replace(/<[^>]+>/g, '').trim() : urlPath;
+      allPseoPagesOnDisk.push({
+        urlPath,
+        loc: `https://sweeprvpn.com${urlPath}`,
+        h1: h1Text
+      });
+    }
+  }
+
+  // Update website/sitemap.xml with core routes + all pSEO URLs on disk
   const baseUrls = [
     { loc: 'https://sweeprvpn.com/', priority: '1.0', changefreq: 'weekly' },
     { loc: 'https://sweeprvpn.com/pricing', priority: '0.9', changefreq: 'weekly' },
@@ -1194,20 +1222,23 @@ if (action === 'matrix') {
     { loc: 'https://sweeprvpn.com/terms', priority: '0.5', changefreq: 'monthly' }
   ];
 
-  const pseoUrls = all50Pages.map((p) => ({
-    loc: `https://sweeprvpn.com${p.urlPath}`,
-    priority: '0.8',
-    changefreq: 'monthly'
-  }));
+  const allSitemapEntries = [
+    ...baseUrls,
+    ...allPseoPagesOnDisk.map((p) => ({
+      loc: p.loc,
+      priority: '0.8',
+      changefreq: 'monthly'
+    }))
+  ];
 
-  const allSitemapEntries = [...baseUrls, ...pseoUrls];
+  const todayStr = new Date().toISOString().slice(0, 10);
   const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${allSitemapEntries
   .map(
     (u) => `  <url>
     <loc>${u.loc}</loc>
-    <lastmod>2026-10-21</lastmod>
+    <lastmod>${todayStr}</lastmod>
     <changefreq>${u.changefreq}</changefreq>
     <priority>${u.priority}</priority>
   </url>`
@@ -1217,7 +1248,7 @@ ${allSitemapEntries
 `;
   fs.writeFileSync(path.join(WEBSITE_DIR, 'sitemap.xml'), sitemapXml, 'utf8');
 
-  // Update website/llms.txt with all 50 pSEO hubs for AI search engines (GEO)
+  // Update website/llms.txt with all pSEO hubs for AI search engines (GEO)
   const llmsTxt = `# SWEEPR VPN & SWEEPR Wi-Fi Radar (sweeprvpn.com)
 
 > SWEEPR VPN is an ultra-lightweight (~14 MB), fast, and easy-to-use WireGuard VPN and Home Wi-Fi Scanner for Windows 10/11, macOS, Linux, and routers. Built by the team behind SWEEPR Cleaner, it combines 1-click 10Gbps private browsing with a free 30-second Home Wi-Fi & Speed Scanner and a Smart-TV ACR spy blocker.
@@ -1242,8 +1273,8 @@ ${allSitemapEntries
 - Free Instant IP, DNS & WebRTC Leak Test: https://sweeprvpn.com/tools/leak-test
 - Free ISP Speed Slowdown & Streaming Throttling Checker: https://sweeprvpn.com/tools/isp-throttling-test
 
-## Programmatic SEO Technical Library (50 Indexed Guides & Comparisons)
-${all50Pages.map((p) => `- [${p.h1}](https://sweeprvpn.com${p.urlPath})`).join('\n')}
+## Programmatic SEO Technical Library (${allPseoPagesOnDisk.length} Indexed Guides & Comparisons)
+${allPseoPagesOnDisk.map((p) => `- [${p.h1}](${p.loc})`).join('\n')}
 `;
   fs.writeFileSync(path.join(WEBSITE_DIR, 'llms.txt'), llmsTxt, 'utf8');
 
