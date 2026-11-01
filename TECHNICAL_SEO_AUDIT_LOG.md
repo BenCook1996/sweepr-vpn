@@ -310,7 +310,6 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 ### Executive Summary
 - **Overall Scores**: Crawlability **100/100**, Technical SEO **100/100**, PageSpeed & CWV **100/100** across **1103 Canonical Pages**.
 - **Auto-Optimizations Executed**:
-  - Auto-optimized 50 pSEO pages with max-image-preview:large, og:image, Twitter cards & theme-color
   - Synchronized sitemap.xml with 1103 canonical URLs and lastmod 2026-11-01
   - Synchronized llms.txt with all 1093 pSEO guides for GEO AI citations
 
@@ -320,7 +319,6 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 - **Sitemap Completeness & Freshness**: PASS — 1103 canonical URLs registered with 0 missing
 - **GEO / LLM Discovery Manifest (llms.txt)**: PASS — Updated with 1103 structured entry points
 - **Search Engine Indexing Queue**: PASS — 1104 URLs queued for IndexNow / Search Console
-- **IndexNow Ping Broadcast**: PASS — 1103 canonical URLs pinged to Bing & IndexNow
 - **robots.txt Sitemap Directive**: PASS — Valid sitemap directive points to https://sweeprvpn.com/sitemap.xml
 - **robots.txt AI Crawler Allowances (GEO)**: PASS — All 7 major AI search bots explicitly permitted
 - **robots.txt Crawl-Budget Protections**: PASS — Internal APIs, user portals, qr-setup and CRO studios disallowed
