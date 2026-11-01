@@ -1,6 +1,6 @@
 {
-  "lastRunDate": "2026-10-31",
-  "totalGenerated": 1043,
+  "lastRunDate": "2026-11-01",
+  "totalGenerated": 1093,
   "batches": [
     {
       "date": "2026-10-21",
@@ -100,6 +100,11 @@
       "date": "2026-10-31",
       "newGenerated": 50,
       "totalPseoPages": 1043
+    },
+    {
+      "date": "2026-11-01",
+      "newGenerated": 50,
+      "totalPseoPages": 1093
     }
   ]
 }
