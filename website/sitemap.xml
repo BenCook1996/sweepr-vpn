@@ -13,6 +13,12 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://sweeprvpn.com/app</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://sweeprvpn.com/tools/leak-test</loc>
     <lastmod>2026-11-02</lastmod>
     <changefreq>weekly</changefreq>
@@ -56,6 +62,12 @@
   </url>
   <url>
     <loc>https://sweeprvpn.com/terms</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/pad.xml</loc>
     <lastmod>2026-11-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -152,6 +164,54 @@
   </url>
   <url>
     <loc>https://sweeprvpn.com/solutions/airport-lounge-public-wifi-wifi-arp-spoofing-protection</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/altafiber-cincinnati-bell-gaming-packet-loss</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/altafiber-cincinnati-bell-isp-throttling</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/altafiber-cincinnati-bell-p2p-port-forwarding</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/altafiber-cincinnati-bell-remote-dev-ssh</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/altafiber-cincinnati-bell-smart-tv-acr-blocking</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/altafiber-cincinnati-bell-uhd-streaming-buffering</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/altafiber-cincinnati-bell-voip-teams-zoom-jitter</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/altafiber-cincinnati-bell-wifi-arp-spoofing-protection</loc>
     <lastmod>2026-11-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -440,6 +500,24 @@
   </url>
   <url>
     <loc>https://sweeprvpn.com/solutions/bell-pure-fibre-canada-wifi-arp-spoofing-protection</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/belong-nbn-australia-gaming-packet-loss</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/belong-nbn-australia-isp-throttling</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/belong-nbn-australia-uhd-streaming-buffering</loc>
     <lastmod>2026-11-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -853,6 +931,54 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://sweeprvpn.com/solutions/cogeco-connexion-canada-gaming-packet-loss</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/cogeco-connexion-canada-isp-throttling</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/cogeco-connexion-canada-p2p-port-forwarding</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/cogeco-connexion-canada-remote-dev-ssh</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/cogeco-connexion-canada-smart-tv-acr-blocking</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/cogeco-connexion-canada-uhd-streaming-buffering</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/cogeco-connexion-canada-voip-teams-zoom-jitter</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/cogeco-connexion-canada-wifi-arp-spoofing-protection</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://sweeprvpn.com/solutions/comcast-xfinity-broadband-gaming-packet-loss</loc>
     <lastmod>2026-11-02</lastmod>
     <changefreq>weekly</changefreq>
@@ -1045,7 +1171,49 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://sweeprvpn.com/solutions/consolidated-communications-us-gaming-packet-loss</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://sweeprvpn.com/solutions/consolidated-communications-us-isp-throttling</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/consolidated-communications-us-p2p-port-forwarding</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/consolidated-communications-us-remote-dev-ssh</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/consolidated-communications-us-smart-tv-acr-blocking</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/consolidated-communications-us-uhd-streaming-buffering</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/consolidated-communications-us-voip-teams-zoom-jitter</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/consolidated-communications-us-wifi-arp-spoofing-protection</loc>
     <lastmod>2026-11-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -1334,6 +1502,54 @@
   </url>
   <url>
     <loc>https://sweeprvpn.com/solutions/digi-mobil-fibra-spain-wifi-arp-spoofing-protection</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/eastlink-canada-gaming-packet-loss</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/eastlink-canada-isp-throttling</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/eastlink-canada-p2p-port-forwarding</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/eastlink-canada-remote-dev-ssh</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/eastlink-canada-smart-tv-acr-blocking</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/eastlink-canada-uhd-streaming-buffering</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/eastlink-canada-voip-teams-zoom-jitter</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/eastlink-canada-wifi-arp-spoofing-protection</loc>
     <lastmod>2026-11-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -3715,6 +3931,54 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://sweeprvpn.com/solutions/sasktel-infinet-canada-gaming-packet-loss</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/sasktel-infinet-canada-isp-throttling</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/sasktel-infinet-canada-p2p-port-forwarding</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/sasktel-infinet-canada-remote-dev-ssh</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/sasktel-infinet-canada-smart-tv-acr-blocking</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/sasktel-infinet-canada-uhd-streaming-buffering</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/sasktel-infinet-canada-voip-teams-zoom-jitter</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/sasktel-infinet-canada-wifi-arp-spoofing-protection</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://sweeprvpn.com/solutions/sfr-fibre-box-fr-gaming-packet-loss</loc>
     <lastmod>2026-11-02</lastmod>
     <changefreq>weekly</changefreq>
@@ -4526,6 +4790,54 @@
   </url>
   <url>
     <loc>https://sweeprvpn.com/solutions/talktalk-uhd-streaming-buffering</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/tds-telecom-fiber-us-gaming-packet-loss</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/tds-telecom-fiber-us-isp-throttling</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/tds-telecom-fiber-us-p2p-port-forwarding</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/tds-telecom-fiber-us-remote-dev-ssh</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/tds-telecom-fiber-us-smart-tv-acr-blocking</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/tds-telecom-fiber-us-uhd-streaming-buffering</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/tds-telecom-fiber-us-voip-teams-zoom-jitter</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/tds-telecom-fiber-us-wifi-arp-spoofing-protection</loc>
     <lastmod>2026-11-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -6617,11 +6929,5 @@
     <lastmod>2026-11-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://sweeprvpn.com/pad.xml</loc>
-    <lastmod>2026-11-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
   </url>
 </urlset>
