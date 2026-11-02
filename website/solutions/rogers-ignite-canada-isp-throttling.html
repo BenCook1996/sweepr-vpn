@@ -21,7 +21,7 @@
   <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png" />
   <meta name="theme-color" content="#070b14" />
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is the best WireGuard MTU setting for Rogers Ignite Broadband Canada?","acceptedAnswer":{"@type":"Answer","text":"For Rogers Ignite Broadband Canada (DOCSIS 3.1 / GPON), setting your WireGuard interface to MTU 1420 prevents IP packet fragmentation and PMTUD blackholes while maximizing 10Gbps throughput."}},{"@type":"Question","name":"Does SWEEPR VPN work with Rogers Ignite Broadband Canada routers and Wi-Fi mesh systems?","acceptedAnswer":{"@type":"Answer","text":"Yes. You can run the ~3.7 MB SWEEPR VPN native app on Windows 10/11, macOS, Linux, iOS, and Android, or export a standard WireGuard .conf file for OpenWrt, GL.iNet, Asuswrt-Merlin, MikroTik, and UniFi gateways connected to Rogers Ignite Broadband Canada."}},{"@type":"Question","name":"Is the 30-second Home Wi-Fi Scanner really free on Rogers Ignite Broadband Canada?","acceptedAnswer":{"@type":"Answer","text":"Yes. Downloading SWEEPR VPN includes our instant 30-second LAN ARP/mDNS device scanner at zero cost (no credit card required), showing every device and Smart TV on your Rogers Ignite Broadband Canada Wi-Fi."}}]}</script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"SWEEPR VPN","operatingSystem":"Windows 10, Windows 11, macOS, Linux, iOS, Android, OpenWrt","applicationCategory":"SecurityApplication","downloadUrl":"https://sweeprvpn.com/SWEEPRVPN.exe","fileSize":"3.7MB","offers":{"@type":"AggregateOffer","priceCurrency":"GBP","lowPrice":"1.99","highPrice":"74.99","offerCount":"3"}}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"SWEEPR VPN","operatingSystem":"Windows 10, Windows 11, macOS, Linux, iOS, Android, OpenWrt","applicationCategory":"SecurityApplication","downloadUrl":"https://sweeprvpn.com/SWEEPRVPN.exe","fileSize":"3.7MB","offers":{"@type":"AggregateOffer","priceCurrency":"GBP","lowPrice":"1.99","highPrice":"74.99","offerCount":"3"},"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","ratingCount":"8420","bestRating":"5","worstRating":"1"}}</script>
   <style>
     :root { --bg:#070b14; --card:#0f172a; --border:#1e293b; --text:#f8fafc; --muted:#94a3b8; --accent:#10b981; --accent2:#38bdf8; }
     * { box-sizing:border-box; }
@@ -68,6 +68,7 @@
     gtag('js', new Date());
     gtag('config', 'G-7D28EEMNXX');
   </script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://sweeprvpn.com/"},{"@type":"ListItem","position":2,"name":"ISP Throttling & Network Fixes","item":"https://sweeprvpn.com/solutions/rogers-ignite-canada-isp-throttling"},{"@type":"ListItem","position":3,"name":"How to Stop Rogers Ignite Broadband Canada Speed Throttling & DPI Traffic Shaping","item":"https://sweeprvpn.com/solutions/rogers-ignite-canada-isp-throttling"}]}</script>
 </head>
 <body>
   <header>
@@ -188,6 +189,12 @@ PersistentKeepalive = 25</code></pre>
         <li><a href="/setup/nvidia-shield-tv-pro-wireguard" style="color:var(--accent2);">NVIDIA Shield TV Pro 4K &amp; GeForce NOW WireGuard VPN Setup Guide</a></li>
         <li><a href="/solutions/gigaclear-rural-fibre-gaming-packet-loss" style="color:var(--accent2);">Fix Gigaclear Rural Full Fibre UK Gaming Ping Spikes, CGNAT &amp; Packet Loss</a></li>
         <li><a href="/setup/steam-deck-vpn" style="color:var(--accent2);">SteamOS &amp; Steam Deck OLED Native WireGuard VPN Setup Guide</a></li>
+        <li class="sweepr-mesh-link"><a href="/solutions/rogers-ignite-canada-p2p-port-forwarding" style="color:var(--accent2);">How to Bypass Rogers Ignite Broadband Canada CGNAT & P2P Bandwidth Throttling</a></li>
+        <li class="sweepr-mesh-link"><a href="/solutions/rogers-ignite-canada-remote-dev-ssh" style="color:var(--accent2);">Fix Dropping SSH, Kubernetes & Git Sessions on Rogers Ignite Broadband Canada With Persistent WireGuard</a></li>
+        <li class="sweepr-mesh-link"><a href="/solutions/rogers-ignite-canada-voip-teams-zoom-jitter" style="color:var(--accent2);">How to Fix Microsoft Teams, Zoom & VoIP Jitter on Rogers Ignite Broadband Canada Using Low-Latency WireGuard</a></li>
+        <li class="sweepr-mesh-link"><a href="/solutions/salt-home-10gbps-ch-voip-teams-zoom-jitter" style="color:var(--accent2);">How to Fix Microsoft Teams, Zoom & VoIP Jitter on Salt Home 10Gbps XGS-PON Switzerland Using Low-Latency WireGuard</a></li>
+        <li class="sweepr-mesh-link"><a href="/setup/proxmox-ve-8-sdn-wireguard" style="color:var(--accent2);">Proxmox VE 8.2 SDN VNet WireGuard Gateway Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a></li>
+        <li class="sweepr-mesh-link"><a href="/guides/detect-rogue-dhcp-server-guest-wifi" style="color:var(--accent2);">How to Detect Rogue DHCP Servers & DNS Poisoning on Coworking & Guest Wi-Fi</a></li>
         <li><a href="/tools/leak-test" style="color:var(--accent2);">Free Browser IP, DNS &amp; WebRTC Leak Test</a></li>
         <li><a href="/tools/isp-throttling-test" style="color:var(--accent2);">Free ISP Evening Throttling &amp; Latency Checker</a></li>
         <li><a href="/download" style="color:var(--accent2);">Download SWEEPR VPN &amp; Free 30-Second Home Wi-Fi Scanner (~3.7 MB)</a></li>
@@ -202,7 +209,7 @@ PersistentKeepalive = 25</code></pre>
       <a href="/download">Download</a> |
       <a href="/tools/leak-test">Leak Test</a> |
       <a href="/tools/isp-throttling-test">ISP Speed Test</a> |
-      <a href="/pad.xml">PAD 4.0 XML</a> |
+      <a href="/support">Support</a> |
       <a href="/privacy">Privacy Policy</a>
     </p>
   </footer>

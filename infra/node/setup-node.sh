@@ -151,4 +151,10 @@ mkdir -p /etc/systemd/journald.conf.d
 printf '[Journal]\nStorage=volatile\nRuntimeMaxUse=16M\n' > /etc/systemd/journald.conf.d/sweepr.conf
 systemctl restart systemd-journald || true
 
+# NODE-NEW-03: Block non-root processes & forwarded VPN peers from querying cloud metadata (169.254.169.254)
+iptables -C OUTPUT -d 169.254.169.254/32 -m owner ! --uid-owner 0 -j DROP 2>/dev/null || iptables -I OUTPUT 1 -d 169.254.169.254/32 -m owner ! --uid-owner 0 -j DROP
+iptables -C FORWARD -d 169.254.169.254/32 -j DROP 2>/dev/null || iptables -I FORWARD 1 -d 169.254.169.254/32 -j DROP
+# Purge cloud-init user-data cache containing bootstrap secrets after setup completes
+rm -f /var/lib/cloud/instance/user-data.txt /var/lib/cloud/instance/user-data.txt.i /var/lib/cloud/seed/nocloud-net/user-data 2>/dev/null || true
+
 echo "SWEEPR node ready"

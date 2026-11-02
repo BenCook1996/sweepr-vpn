@@ -4,8 +4,9 @@ RUN apt-get update && apt-get upgrade -y --no-install-recommends && rm -rf /var/
 
 WORKDIR /app
 
-COPY package.json ./
-COPY website ./website
+COPY --chown=node:node package.json ./
+COPY --chown=node:node website ./website
+RUN mkdir -p /app/website/data && chown -R node:node /app/website/data && chmod 700 /app/website/data
 
 ENV NODE_ENV=production
 ENV PORT=8080

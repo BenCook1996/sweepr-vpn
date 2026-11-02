@@ -6,4 +6,6 @@
 -->
 <full-backup-content>
     <exclude domain="sharedpref" path="sweepr_vpn_prefs.xml" />
+    <exclude domain="file" path="sweepr0.conf" />
+    <exclude domain="file" path="." />
 </full-backup-content>

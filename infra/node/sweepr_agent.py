@@ -151,7 +151,7 @@ def revoke_licence(licence):
 
 class Handler(BaseHTTPRequestHandler):
     server_version = "sweepr-agent"
-    timeout = 5
+    timeout = 2
 
     def log_message(self, *args):  # no request logs, by design
         pass
@@ -241,18 +241,34 @@ def peer_reaper_loop():
 class BoundedHTTPServer(ThreadingHTTPServer):
     request_queue_size = 64
     allow_reuse_address = True
-    _sem = threading.BoundedSemaphore(32)
+    _sem = threading.BoundedSemaphore(64)
+    _ip_lock = threading.Lock()
+    _ip_counts = {}
+    _max_per_ip = 8
 
     def process_request(self, request, client_address):
-        if not self._sem.acquire(blocking=False):
-            self.close_request(request)
-            return
+        ip = client_address[0] if client_address else "unknown"
+        with self._ip_lock:
+            if self._ip_counts.get(ip, 0) >= self._max_per_ip:
+                self.close_request(request)
+                return
+            if not self._sem.acquire(blocking=False):
+                self.close_request(request)
+                return
+            self._ip_counts[ip] = self._ip_counts.get(ip, 0) + 1
         super().process_request(request, client_address)
 
     def process_request_thread(self, request, client_address):
         try:
             super().process_request_thread(request, client_address)
         finally:
+            ip = client_address[0] if client_address else "unknown"
+            with self._ip_lock:
+                cnt = self._ip_counts.get(ip, 1) - 1
+                if cnt <= 0:
+                    self._ip_counts.pop(ip, None)
+                else:
+                    self._ip_counts[ip] = cnt
             self._sem.release()
 
 

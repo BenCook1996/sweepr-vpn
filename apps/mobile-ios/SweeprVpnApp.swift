@@ -2,6 +2,68 @@ import SwiftUI
 import NetworkExtension
 import AVFoundation
 import UIKit
+import Security
+import CryptoKit
+
+enum SweeprKeychain {
+    private static let service = "com.sweepr.vpn"
+
+    static func save(_ value: String, for account: String) {
+        let data = Data(value.utf8)
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: account
+        ]
+        SecItemDelete(query as CFDictionary)
+        var addQuery = query
+        addQuery[kSecValueData as String] = data
+        addQuery[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
+        SecItemAdd(addQuery as CFDictionary, nil)
+    }
+
+    static func load(_ account: String) -> String? {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: account,
+            kSecReturnData as String: true,
+            kSecMatchLimit as String: kSecMatchLimitOne
+        ]
+        var result: AnyObject?
+        let status = SecItemCopyMatching(query as CFDictionary, &result)
+        guard status == errSecSuccess, let data = result as? Data else { return nil }
+        return String(data: data, encoding: .utf8)
+    }
+}
+
+enum SweeprEd25519Verifier {
+    // Master Ed25519 public key (matches Rust SWEEPR_LICENSE_PUBLIC_KEY_B64URL)
+    private static let pubKeyHex = "f25ef871bd7d3ec2fc44b1972409fb3c4076cd334d397eb9e0d3d48543d09f74"
+
+    private static func b64UrlDecode(_ str: String) -> Data? {
+        var b64 = str.replacingOccurrences(of: "-", with: "+").replacingOccurrences(of: "_", with: "/")
+        let rem = b64.count % 4
+        if rem > 0 { b64 += String(repeating: "=", count: 4 - rem) }
+        return Data(base64Encoded: b64)
+    }
+
+    static func verifyToken(_ token: String) -> Bool {
+        let parts = token.split(separator: ".")
+        guard parts.count == 3 else { return false }
+        let signingInput = Data("\(parts[0]).\(parts[1])".utf8)
+        guard let sigData = b64UrlDecode(String(parts[2])), sigData.count == 64 else { return false }
+        var keyBytes = [UInt8]()
+        var idx = pubKeyHex.startIndex
+        while idx < pubKeyHex.endIndex {
+            let next = pubKeyHex.index(idx, offsetBy: 2)
+            if let b = UInt8(pubKeyHex[idx..<next], radix: 16) { keyBytes.append(b) }
+            idx = next
+        }
+        guard let pubKey = try? Curve25519.Signing.PublicKey(rawRepresentation: Data(keyBytes)) else { return false }
+        return pubKey.isValidSignature(sigData, for: signingInput)
+    }
+}
 
 struct VpnServerNode: Identifiable, Decodable, Equatable {
     var id: String { code }
@@ -100,6 +162,7 @@ final class SweeprVpnViewModel: ObservableObject {
     @Published var showActivationSheet: Bool = false
     @Published var showQrScannerSheet: Bool = false
     @Published var showProfileExportSheet: Bool = false
+    @Published var pendingDesktopChallengeId: String? = nil
     @Published var manualQrTokenInput: String = ""
     @Published var licenseInputKey: String = ""
     @Published var licenseInputEmail: String = ""
@@ -122,8 +185,20 @@ final class SweeprVpnViewModel: ObservableObject {
 
     init() {
         self.userEmail = UserDefaults.standard.string(forKey: "sweepr_email") ?? ""
-        self.licenseKey = UserDefaults.standard.string(forKey: "sweepr_license_key") ?? ""
-        self.authToken = UserDefaults.standard.string(forKey: "sweepr_token") ?? ""
+        if let kcKey = SweeprKeychain.load("sweepr_license_key"), !kcKey.isEmpty {
+            self.licenseKey = kcKey
+        } else if let legacyKey = UserDefaults.standard.string(forKey: "sweepr_license_key"), !legacyKey.isEmpty {
+            self.licenseKey = legacyKey
+            SweeprKeychain.save(legacyKey, for: "sweepr_license_key")
+            UserDefaults.standard.removeObject(forKey: "sweepr_license_key")
+        }
+        if let kcTok = SweeprKeychain.load("sweepr_token"), !kcTok.isEmpty {
+            self.authToken = kcTok
+        } else if let legacyTok = UserDefaults.standard.string(forKey: "sweepr_token"), !legacyTok.isEmpty {
+            self.authToken = legacyTok
+            SweeprKeychain.save(legacyTok, for: "sweepr_token")
+            UserDefaults.standard.removeObject(forKey: "sweepr_token")
+        }
         self.selectedServerCode = UserDefaults.standard.string(forKey: "sweepr_server_code") ?? "UK-LON-01"
         self.lanBypass = UserDefaults.standard.object(forKey: "sweepr_lan_bypass") as? Bool ?? false
         self.isPro = !self.licenseKey.isEmpty
@@ -245,6 +320,10 @@ final class SweeprVpnViewModel: ObservableObject {
             let (data, _) = try await URLSession.shared.data(for: req)
             let decoded = try JSONDecoder().decode(VpnActivateResponse.self, from: data)
             if decoded.ok && (decoded.valid ?? false) {
+                if let tok = decoded.token, !tok.isEmpty, !SweeprEd25519Verifier.verifyToken(tok) {
+                    self.statusBanner = "License signature verification failed."
+                    return
+                }
                 let resolvedKey = decoded.licenseKey ?? decoded.license_key ?? cleanKey
                 self.licenseKey = resolvedKey
                 self.userEmail = decoded.email ?? cleanEmail
@@ -253,8 +332,10 @@ final class SweeprVpnViewModel: ObservableObject {
                 self.deviceLimit = decoded.max_devices ?? 3
                 self.isPro = true
                 UserDefaults.standard.set(self.userEmail, forKey: "sweepr_email")
-                UserDefaults.standard.set(self.licenseKey, forKey: "sweepr_license_key")
-                UserDefaults.standard.set(self.authToken, forKey: "sweepr_token")
+                SweeprKeychain.save(self.licenseKey, for: "sweepr_license_key")
+                SweeprKeychain.save(self.authToken, for: "sweepr_token")
+                UserDefaults.standard.removeObject(forKey: "sweepr_license_key")
+                UserDefaults.standard.removeObject(forKey: "sweepr_token")
                 self.showActivationSheet = false
                 self.statusBanner = "SWEEPR Pro unlocked (\(self.deviceCount)/\(self.deviceLimit) devices active)"
             } else {
@@ -365,17 +446,30 @@ final class SweeprVpnViewModel: ObservableObject {
         await refreshEgressIp()
     }
 
-    func appleMobileConfigUrl() -> URL? {
-        var comps = URLComponents(string: "\(apiBase)/api/vpn/apple-mobileconfig")
-        comps?.queryItems = [
-            URLQueryItem(name: "key", value: licenseKey),
-            URLQueryItem(name: "server_code", value: selectedServerCode)
+    func requestAppleMobileConfigUrl() async -> URL? {
+        guard let url = URL(string: "\(apiBase)/api/vpn/apple-mobileconfig-ticket") else { return nil }
+        var req = URLRequest(url: url)
+        req.httpMethod = "POST"
+        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let body: [String: Any] = [
+            "key": licenseKey,
+            "email": userEmail,
+            "server_code": selectedServerCode,
+            "device_id": deviceId
         ]
-        return comps?.url
+        req.httpBody = try? JSONSerialization.data(withJSONObject: body)
+        do {
+            let (data, _) = try await URLSession.shared.data(for: req)
+            if let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+               let relPath = obj["url"] as? String {
+                return URL(string: "\(apiBase)\(relPath)")
+            }
+        } catch {}
+        return nil
     }
 
     /// Handles scanned QR URLs (`https://sweeprvpn.com/pair?t=ptk_...` or `?c=chk_...` or `sweeprvpn://pair?...`)
-    func handleScannedQrPayload(_ raw: String) async {
+    func handleScannedQrPayload(_ raw: String, requireConfirmForChallenge: Bool = false) async {
         let trimmed = raw.trimmingCharacters(in: .whitespacesAndNewlines)
         if let url = URL(string: trimmed),
            let comps = URLComponents(url: url, resolvingAgainstBaseURL: false) {
@@ -384,14 +478,22 @@ final class SweeprVpnViewModel: ObservableObject {
                 return
             }
             if let c = comps.queryItems?.first(where: { $0.name == "c" })?.value, c.hasPrefix("chk_") {
-                await approveDesktopChallenge(c)
+                if requireConfirmForChallenge {
+                    self.pendingDesktopChallengeId = c
+                } else {
+                    await approveDesktopChallenge(c)
+                }
                 return
             }
         }
         if trimmed.hasPrefix("ptk_") {
             await redeemPairingToken(trimmed)
         } else if trimmed.hasPrefix("chk_") {
-            await approveDesktopChallenge(trimmed)
+            if requireConfirmForChallenge {
+                self.pendingDesktopChallengeId = trimmed
+            } else {
+                await approveDesktopChallenge(trimmed)
+            }
         } else {
             statusBanner = "Unrecognised QR code. Scan the QR code on your SWEEPR Portal or Desktop App."
         }
@@ -423,8 +525,10 @@ final class SweeprVpnViewModel: ObservableObject {
                 self.deviceLimit = decoded.device_limit ?? 3
                 self.isPro = true
                 UserDefaults.standard.set(self.userEmail, forKey: "sweepr_email")
-                UserDefaults.standard.set(self.licenseKey, forKey: "sweepr_license_key")
-                UserDefaults.standard.set(self.authToken, forKey: "sweepr_token")
+                SweeprKeychain.save(self.licenseKey, for: "sweepr_license_key")
+                SweeprKeychain.save(self.authToken, for: "sweepr_token")
+                UserDefaults.standard.removeObject(forKey: "sweepr_license_key")
+                UserDefaults.standard.removeObject(forKey: "sweepr_token")
                 self.showQrScannerSheet = false
                 self.showActivationSheet = false
                 self.statusBanner = "Linked via QR (\(self.deviceCount)/\(self.deviceLimit) devices active)"
@@ -671,17 +775,19 @@ struct SweeprVpnRootView: View {
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
-                    if let mobileConfigUrl = vm.appleMobileConfigUrl() {
-                        Button {
-                            openURL(mobileConfigUrl)
-                        } label: {
-                            Text("Install Apple iOS .mobileconfig Profile")
-                                .font(.headline)
-                                .frame(maxWidth: .infinity)
-                                .padding(.vertical, 10)
+                    Button {
+                        Task {
+                            if let mobileConfigUrl = await vm.requestAppleMobileConfigUrl() {
+                                openURL(mobileConfigUrl)
+                            }
                         }
-                        .buttonStyle(.borderedProminent)
+                    } label: {
+                        Text("Install Apple iOS .mobileconfig Profile")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 10)
                     }
+                    .buttonStyle(.borderedProminent)
                     Button {
                         UIPasteboard.general.string = vm.provisionedWgConf
                         vm.statusBanner = "Copied \(vm.selectedServerCode) WireGuard config to clipboard"
@@ -724,8 +830,27 @@ struct SweeprVpnRootView: View {
             }
             .onOpenURL { url in
                 Task {
-                    await vm.handleScannedQrPayload(url.absoluteString)
+                    await vm.handleScannedQrPayload(url.absoluteString, requireConfirmForChallenge: true)
                 }
+            }
+            .alert(
+                "Approve Desktop Device Linking?",
+                isPresented: Binding(
+                    get: { vm.pendingDesktopChallengeId != nil },
+                    set: { if !$0 { vm.pendingDesktopChallengeId = nil } }
+                )
+            ) {
+                Button("Approve Device") {
+                    if let chId = vm.pendingDesktopChallengeId {
+                        vm.pendingDesktopChallengeId = nil
+                        Task { await vm.approveDesktopChallenge(chId) }
+                    }
+                }
+                Button("Cancel", role: .cancel) {
+                    vm.pendingDesktopChallengeId = nil
+                }
+            } message: {
+                Text("Only approve this request if you just scanned a QR code displayed on your own computer. Approving links a desktop device to your active SWEEPR VPN subscription.")
             }
         }
     }

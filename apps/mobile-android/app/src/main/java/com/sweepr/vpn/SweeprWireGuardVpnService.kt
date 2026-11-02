@@ -300,7 +300,7 @@ class SweeprWireGuardVpnService : VpnService() {
         val dstPort = ((pkt[ihl + 2].toInt() and 0xFF) shl 8) or (pkt[ihl + 3].toInt() and 0xFF)
         val payloadOffset = ihl + 8
         val payloadLen = pkt.size - payloadOffset
-        if (payloadLen <= 0 || dstPort <= 0) return
+        if (payloadLen <= 0 || payloadLen > 1472 || dstPort <= 0) return
 
         var udpSocket: DatagramSocket? = null
         try {
@@ -315,7 +315,7 @@ class SweeprWireGuardVpnService : VpnService() {
             val inDatagram = DatagramPacket(recvBuf, recvBuf.size)
             udpSocket.receive(inDatagram)
             val respLen = inDatagram.length
-            if (respLen > 0) {
+            if (respLen > 0 && inDatagram.address == dstAddr && inDatagram.port == dstPort) {
                 val totalLen = 20 + 8 + respLen
                 val respPkt = ByteArray(totalLen)
                 respPkt[0] = 0x45.toByte()

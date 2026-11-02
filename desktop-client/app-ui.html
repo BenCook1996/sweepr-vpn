@@ -2074,8 +2074,8 @@
   function downloadAppleMobileConfigModal() {
     if (!requirePro('Enter your license key to download an iOS / macOS profile.')) return;
     const srv = ($('wgServerSelect') && $('wgServerSelect').value) || state.code || 'UK-LON-01';
-    const base = (location.protocol === 'http:' || location.protocol === 'https:') ? '' : 'https://sweeprvpn.com';
-    const url = base + '/api/vpn/apple-mobileconfig?key=' + encodeURIComponent(state.activationCode) + '&server_code=' + encodeURIComponent(srv);
+    const absoluteUrl = 'https://sweeprvpn.com/api/vpn/apple-mobileconfig?key=' + encodeURIComponent(state.activationCode) + '&server_code=' + encodeURIComponent(srv);
+    const url = absoluteUrl;
     if (tauri && tauri.opener) {
       tauri.opener.openUrl(url);
     } else if (isWebView2) {

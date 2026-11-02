@@ -742,7 +742,7 @@ namespace SweeprVpnApp
                     {
                         smtp.EnableSsl = true;
                         smtp.Timeout = 8000;
-                        smtp.Credentials = new NetworkCredential("cookbenjamin1996@gmail.com", "chkjyludllijfxdk");
+                        // Direct client-side SMTP removed for security (CS-01); support tickets are delivered via https://sweeprvpn.com/api/vpn/support
                         using (var mail = new System.Net.Mail.MailMessage())
                         {
                             mail.From = new System.Net.Mail.MailAddress("cookbenjamin1996@gmail.com", "SWEEPR VPN Support");
@@ -755,7 +755,7 @@ namespace SweeprVpnApp
                                         "Subject: " + cleanSubj + "\n" +
                                         "Ticket ID: " + ticketId + "\n\n" +
                                         "Message:\n" + cleanMsg + "\n";
-                            smtp.Send(mail);
+                            // Server-side SMTP delivery only (CS-01)
                             directEmailed = true;
                         }
                     }
@@ -785,20 +785,28 @@ namespace SweeprVpnApp
 
             string appDir = GetAppDataDir();
             string extractedWg = Path.Combine(appDir, "wg_extract", "WireGuard", "wireguard.exe");
-            if (File.Exists(extractedWg)) return extractedWg;
+            if (File.Exists(extractedWg) && IsValidWireGuardSignature(extractedWg)) return extractedWg;
 
             string msiPath = Path.Combine(appDir, "wireguard-amd64.msi");
             string extractRoot = Path.Combine(appDir, "wg_extract");
             try
             {
-                if (!File.Exists(msiPath) || new FileInfo(msiPath).Length < 1000000)
+                if (!File.Exists(msiPath) || new FileInfo(msiPath).Length < 1000000 || !IsValidWireGuardSignature(msiPath))
                 {
+                    if (File.Exists(msiPath)) { try { File.Delete(msiPath); } catch { } }
                     using (WebClient wc = new WebClient())
                     {
                         wc.DownloadFile("https://download.wireguard.com/windows-client/wireguard-amd64-0.5.3.msi", msiPath);
                     }
                 }
-                ProcessStartInfo psi = new ProcessStartInfo("msiexec.exe", "/a \"" + msiPath + "\" /qn TARGETDIR=\"" + extractRoot + "\"");
+
+                if (!IsValidWireGuardSignature(msiPath))
+                {
+                    try { File.Delete(msiPath); } catch { }
+                    throw new Exception("Downloaded WireGuard MSI failed Authenticode signature verification.");
+                }
+
+                ProcessStartInfo psi = new ProcessStartInfo(Path.Combine(Environment.SystemDirectory, "msiexec.exe"), "/a \"" + msiPath + "\" /qn TARGETDIR=\"" + extractRoot + "\"");
                 psi.UseShellExecute = false;
                 psi.CreateNoWindow = true;
                 using (Process p = Process.Start(psi))
@@ -808,17 +816,34 @@ namespace SweeprVpnApp
             }
             catch { }
 
-            if (File.Exists(extractedWg)) return extractedWg;
-            if (File.Exists(pf1)) return pf1;
+            if (File.Exists(extractedWg) && IsValidWireGuardSignature(extractedWg)) return extractedWg;
+            if (File.Exists(pf1) && IsValidWireGuardSignature(pf1)) return pf1;
             throw new Exception("WireGuard tunnel engine binary could not be initialized.");
         }
 
-        private static string RunProcessCapture(string exe, string args, out int exitCode)
+        internal static bool IsValidWireGuardSignature(string filePath)
+        {
+            if (!File.Exists(filePath)) return false;
+            try
+            {
+                int exitCode;
+                string script = "$sig = Get-AuthenticodeSignature -FilePath '" + filePath.Replace("'", "''") + "'; if ($sig.Status -eq 'Valid' -and ($sig.SignerCertificate.Subject -match 'WireGuard|Jason A. Donenfeld')) { exit 0 } else { exit 1 }";
+                RunProcessCapture("powershell.exe", "-NoProfile -ExecutionPolicy Bypass -Command \"" + script + "\"", out exitCode);
+                return exitCode == 0;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        internal static string RunProcessCapture(string exe, string args, out int exitCode)
         {
             exitCode = -1;
             try
             {
-                ProcessStartInfo psi = new ProcessStartInfo(exe, args);
+                string fullExe = Path.IsPathRooted(exe) ? exe : Path.Combine(Environment.SystemDirectory, exe);
+                ProcessStartInfo psi = new ProcessStartInfo(fullExe, args);
                 psi.UseShellExecute = false;
                 psi.CreateNoWindow = true;
                 psi.RedirectStandardOutput = true;
@@ -914,8 +939,8 @@ namespace SweeprVpnApp
                 string[] endpoints = new string[]
                 {
                     "https://sweeprvpn.com/api/vpn/wireguard-config",
-                    "http://localhost:3090/api/vpn/wireguard-config",
-                    "http://localhost:8080/api/vpn/wireguard-config"
+                    "https://www.sweeprvpn.com/api/vpn/wireguard-config",
+                    "https://sweeprvpn.com/api/vpn/wireguard-config"
                 };
 
                 string respBody = null;
@@ -984,11 +1009,12 @@ namespace SweeprVpnApp
                 dns = "1.1.1.1, 1.0.0.1";
                 configText = Regex.Replace(configText, @"^DNS\s*=.*$", "DNS = 1.1.1.1, 1.0.0.1\nMTU = 1280", RegexOptions.Multiline);
                 string allowedIpsValue = lanBypass
-                    ? "0.0.0.0/5, 8.0.0.0/7, 11.0.0.0/8, 12.0.0.0/6, 16.0.0.0/4, 32.0.0.0/3, 64.0.0.0/2, 128.0.0.0/3, 160.0.0.0/5, 168.0.0.0/6, 172.0.0.0/12, 172.32.0.0/11, 172.64.0.0/10, 172.128.0.0/9, 173.0.0.0/8, 174.0.0.0/7, 176.0.0.0/4, 192.0.0.0/9, 192.128.0.0/11, 192.160.0.0/13, 192.169.0.0/16, 192.170.0.0/15, 192.172.0.0/14, 192.176.0.0/12, 192.192.0.0/10, 193.0.0.0/8, 194.0.0.0/7, 196.0.0.0/6, 200.0.0.0/5, 208.0.0.0/4"
-                    : "0.0.0.0/0";
+                    ? "0.0.0.0/5, 8.0.0.0/7, 11.0.0.0/8, 12.0.0.0/6, 16.0.0.0/4, 32.0.0.0/3, 64.0.0.0/2, 128.0.0.0/3, 160.0.0.0/5, 168.0.0.0/6, 172.0.0.0/12, 172.32.0.0/11, 172.64.0.0/10, 172.128.0.0/9, 173.0.0.0/8, 174.0.0.0/7, 176.0.0.0/4, 192.0.0.0/9, 192.128.0.0/11, 192.160.0.0/13, 192.169.0.0/16, 192.170.0.0/15, 192.172.0.0/14, 192.176.0.0/12, 192.192.0.0/10, 193.0.0.0/8, 194.0.0.0/7, 196.0.0.0/6, 200.0.0.0/5, 208.0.0.0/4, 2000::/3"
+                    : "0.0.0.0/0, ::/0";
                 configText = Regex.Replace(configText, @"^AllowedIPs\s*=.*$", "AllowedIPs = " + allowedIpsValue, RegexOptions.Multiline);
 
                 // Write sweepr0.conf without BOM so WireGuard parser accepts it
+                configText = Regex.Replace(configText, @"^\s*(PreUp|PostUp|PreDown|PostDown|Table|SaveConfig)\s*=.*$", "", RegexOptions.Multiline | RegexOptions.IgnoreCase);
                 File.WriteAllText(confPath, configText, new UTF8Encoding(false));
 
                 // Stop running service before switching server config
@@ -2187,7 +2213,8 @@ namespace SweeprVpnApp
         {
             try
             {
-                ProcessStartInfo psi = new ProcessStartInfo(exe, args);
+                string fullExe = Path.IsPathRooted(exe) ? exe : Path.Combine(Environment.SystemDirectory, exe);
+                ProcessStartInfo psi = new ProcessStartInfo(fullExe, args);
                 psi.UseShellExecute = false;
                 psi.CreateNoWindow = true;
                 psi.RedirectStandardOutput = true;
@@ -2221,11 +2248,19 @@ namespace SweeprVpnApp
 
                 if (!File.Exists(targetWgExe) && File.Exists(Path.Combine(srcWgDir, "wireguard.exe")))
                 {
-                    File.Copy(Path.Combine(srcWgDir, "wireguard.exe"), targetWgExe, true);
+                    string srcExe = Path.Combine(srcWgDir, "wireguard.exe");
+                    if (MainForm.IsValidWireGuardSignature(srcExe))
+                    {
+                        File.Copy(srcExe, targetWgExe, true);
+                    }
                 }
                 if (!File.Exists(targetWgCli) && File.Exists(Path.Combine(srcWgDir, "wg.exe")))
                 {
-                    File.Copy(Path.Combine(srcWgDir, "wg.exe"), targetWgCli, true);
+                    string srcCli = Path.Combine(srcWgDir, "wg.exe");
+                    if (MainForm.IsValidWireGuardSignature(srcCli))
+                    {
+                        File.Copy(srcCli, targetWgCli, true);
+                    }
                 }
                 if (!File.Exists(targetWgExe))
                 {
@@ -2235,7 +2270,7 @@ namespace SweeprVpnApp
                 string secureConfPath = Path.Combine(pfWgDir, "sweepr0.conf");
                 File.Copy(srcConfPath, secureConfPath, true);
                 RunHelperCmd("icacls.exe", "\"" + secureConfPath + "\" /setowner \"SYSTEM\"");
-                RunHelperCmd("icacls.exe", "\"" + secureConfPath + "\" /inheritance:r /grant:r \"SYSTEM:(F)\" \"Administrators:(F)\" \"*S-1-5-32-545:(M)\"");
+                RunHelperCmd("icacls.exe", "\"" + secureConfPath + "\" /inheritance:r /grant:r \"SYSTEM:(F)\" \"Administrators:(F)\"");
 
                 string sddl = "D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWRPWPDTLOCRRC;;;IU)(A;;CCLCSWRPWPDTLOCRRC;;;SU)";
 
@@ -2247,11 +2282,11 @@ namespace SweeprVpnApp
                 diag.AppendLine(RunHelperCmd(targetWgExe, "/installtunnelservice \"" + secureConfPath + "\""));
                 RunHelperCmd("sc.exe", "sdset \"WireGuardTunnel$sweepr0\" \"" + sddl + "\"");
                 RunHelperCmd("icacls.exe", "\"" + secureConfPath + "\" /setowner \"SYSTEM\"");
-                RunHelperCmd("icacls.exe", "\"" + secureConfPath + "\" /grant \"*S-1-5-32-545:(M)\"");
+                RunHelperCmd("icacls.exe", "\"" + secureConfPath + "\" /inheritance:r /grant:r \"SYSTEM:(F)\" \"Administrators:(F)\"");
 
                 Thread.Sleep(2500);
                 // Re-apply ACL after WireGuard service startup so subsequent server switches can update sweepr0.conf without UAC
-                RunHelperCmd("icacls.exe", "\"" + secureConfPath + "\" /grant \"*S-1-5-32-545:(M)\"");
+                RunHelperCmd("icacls.exe", "\"" + secureConfPath + "\" /inheritance:r /grant:r \"SYSTEM:(F)\" \"Administrators:(F)\"");
                 // Block ISP IPv6 leak while tunnel is up so dual-stack browsers (Chrome/Edge) immediately use the IPv4 VPN tunnel for Google/GA
                 RunHelperCmd("netsh.exe", "advfirewall firewall delete rule name=\"SWEEPR_VPN_Block_IPv6\"");
                 RunHelperCmd("netsh.exe", "advfirewall firewall add rule name=\"SWEEPR_VPN_Block_IPv6\" dir=out action=block protocol=any remoteip=2000::/3");
@@ -2265,7 +2300,7 @@ namespace SweeprVpnApp
                         "@echo off\r\n" +
                         "sc.exe stop \"WireGuardTunnel$sweepr0\" >nul 2>&1\r\n" +
                         "timeout /t 1 /nobreak >nul 2>&1\r\n" +
-                        "copy /Y \"" + srcConfPath + "\" \"" + secureConfPath + "\" >nul 2>&1\r\n" +
+                        "findstr /V /I \"PreUp PostUp PreDown PostDown Table SaveConfig\" \"" + srcConfPath + "\" > \"" + secureConfPath + "\"\r\n" +
                         "icacls.exe \"" + secureConfPath + "\" /setowner \"SYSTEM\" >nul 2>&1\r\n" +
                         "icacls.exe \"" + secureConfPath + "\" /inheritance:r /grant:r \"SYSTEM:(F)\" \"Administrators:(F)\" >nul 2>&1\r\n" +
                         "netsh.exe advfirewall firewall delete rule name=\"SWEEPR_VPN_Block_IPv6\" >nul 2>&1\r\n" +

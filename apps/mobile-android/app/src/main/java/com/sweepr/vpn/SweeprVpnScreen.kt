@@ -153,6 +153,7 @@ fun SweeprVpnScreen(
     var pendingServiceIntent by remember { mutableStateOf<Intent?>(null) }
 
     var qrPayloadInput by remember { mutableStateOf("") }
+    var pendingChallengeToConfirm by remember { mutableStateOf<String?>(null) }
     var generatedPairToken by remember { mutableStateOf("") }
     var keyInput by remember { mutableStateOf(licenseKey) }
     var emailInput by remember { mutableStateOf(userEmail) }
@@ -508,7 +509,7 @@ fun SweeprVpnScreen(
             }
 
             try {
-                File(context.filesDir, "sweepr0.conf").writeText(confText, Charsets.UTF_8)
+                File(context.filesDir, "sweepr0.conf").apply { writeText(confText, Charsets.UTF_8); setReadable(false, false); setReadable(true, true); setWritable(false, false); setWritable(true, true) }
             } catch (_: Exception) {}
         }
 
@@ -833,15 +834,15 @@ fun SweeprVpnScreen(
         }
     }
 
-    suspend fun handleScannedQrPayload(raw: String) {
+    suspend fun handleScannedQrPayload(raw: String, requireConfirmForChallenge: Boolean = false) {
         val trimmed = raw.trim()
         val tokenMatch = Regex("[?&]t=(ptk_[A-Za-z0-9_-]+)").find(trimmed)?.groupValues?.get(1)
         val challengeMatch = Regex("[?&]c=(chk_[A-Za-z0-9_-]+)").find(trimmed)?.groupValues?.get(1)
         when {
             tokenMatch != null -> redeemPairingToken(URLDecoder.decode(tokenMatch, "UTF-8"))
-            challengeMatch != null -> approveDesktopChallenge(URLDecoder.decode(challengeMatch, "UTF-8"))
+            challengeMatch != null -> if (requireConfirmForChallenge) { pendingChallengeToConfirm = URLDecoder.decode(challengeMatch, "UTF-8") } else { approveDesktopChallenge(URLDecoder.decode(challengeMatch, "UTF-8")) }
             trimmed.startsWith("ptk_") -> redeemPairingToken(trimmed)
-            trimmed.startsWith("chk_") -> approveDesktopChallenge(trimmed)
+            trimmed.startsWith("chk_") -> if (requireConfirmForChallenge) { pendingChallengeToConfirm = trimmed } else { approveDesktopChallenge(trimmed) }
             else -> statusBanner = "Enter a valid QR link or token starting with ptk_ (activate this phone) or chk_ (approve Desktop)."
         }
     }
@@ -1049,11 +1050,30 @@ fun SweeprVpnScreen(
     LaunchedEffect(initialPairPayload) {
         if (!initialPairPayload.isNullOrBlank()) {
             qrPayloadInput = initialPairPayload
-            handleScannedQrPayload(initialPairPayload)
+            handleScannedQrPayload(initialPairPayload, requireConfirmForChallenge = true)
             onConsumePairPayload()
         }
     }
 
+    if (pendingChallengeToConfirm != null) {
+        val chId = pendingChallengeToConfirm ?: ""
+        AlertDialog(
+            onDismissRequest = { pendingChallengeToConfirm = null },
+            title = { Text("Approve Desktop Device Linking?", fontWeight = FontWeight.ExtraBold) },
+            text = { Text("Only approve this request if you just scanned a QR code displayed on your own computer (${chId.take(16)}…). Approving shares your active SWEEPR VPN license slot.") },
+            confirmButton = {
+                Button(onClick = {
+                    pendingChallengeToConfirm = null
+                    scope.launch { approveDesktopChallenge(chId) }
+                }, colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF10B981))) {
+                    Text("Approve Device", color = Color(0xFF042F2E), fontWeight = FontWeight.Bold)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { pendingChallengeToConfirm = null }) { Text("Cancel") }
+            }
+        )
+    }
     if (forceUpdateRequired) {
         AlertDialog(
             onDismissRequest = { /* Mandatory update: non-dismissible */ },

@@ -112,7 +112,7 @@ All three SWEEPR brands (**SWEEPR VPN**, **SWEEPR Cleaner**, and **SWEEPR DeepBl
 
 | Brand | # | Automation Display Name | Schedule (`Europe/London`) | Automated Output & Scope |
 | :--- | :-: | :--- | :--- | :--- |
-| **SWEEPR VPN** (`sweeprvpn.com`) | **1** | **SWEEPR VPN — 1. Daily 50 Programmatic SEO Pages** | Daily at `06:00` (`0 6 * * *`) | Generates +50 validated pSEO pages/day ([`scripts/daily-50-seo-pages.mjs`](./scripts/daily-50-seo-pages.mjs) — currently at **1,103+ canonical URLs**) |
+| **SWEEPR VPN** (`sweeprvpn.com`) | **1** | **SWEEPR VPN — 1. Daily 50 Programmatic SEO Pages** | Daily at `06:00` (`0 6 * * *`) | Generates +50 validated pSEO pages/day ([`scripts/daily-50-seo-pages.mjs`](./scripts/daily-50-seo-pages.mjs) — currently at **1,155+ canonical URLs**, 1,143 pSEO pages) |
 | **SWEEPR VPN** (`sweeprvpn.com`) | **2** | **SWEEPR VPN — 2. 6-Hourly Backlinks & Indexing** | Every 6h at `:00` (`0 */6 * * *`) | **300 sites/run (1,200/day)** + directory forms + delta IndexNow, CRM-deduplicated (`project=vpn`, **14,088 CRM / 14,407 local**, zero emails) |
 | **SWEEPR VPN** (`sweeprvpn.com`) | **3** | **SWEEPR VPN — 3. Daily White-Hat Security Audit & Auto-Remediation** | Scheduled at `08:00` (`0 8 * * 6`) | Red-team audits & patches `website`, `desktop-client`, `apps`, `crates`, and `sweepr_crm` ([`SECURITY_AUDIT_LOG.md`](./SECURITY_AUDIT_LOG.md)) |
 | **SWEEPR VPN** (`sweeprvpn.com`) | **4** | **SWEEPR VPN — 4. Daily Technical SEO & PageSpeed Audit** | Daily at `04:45` (`45 4 * * *`) | Non-visual 100/100 Crawlability, Technical SEO, GA4 tag enforcement & CWV auto-optimizer ([`TECHNICAL_SEO_AUDIT_LOG.md`](./TECHNICAL_SEO_AUDIT_LOG.md)) |

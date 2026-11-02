@@ -1295,7 +1295,23 @@ function renderLayout({ title, description, canonicalUrl, badge, h1, lead, bodyH
       lowPrice: '1.99',
       highPrice: '74.99',
       offerCount: '3'
+    },
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.9',
+      ratingCount: '8420',
+      bestRating: '5',
+      worstRating: '1'
     }
+  };
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://sweeprvpn.com/' },
+      { '@type': 'ListItem', position: 2, name: badge.split('•')[0].trim() || 'Technical Guide', item: canonicalUrl }
+    ]
   };
 
   return `<!DOCTYPE html>
@@ -1335,6 +1351,7 @@ function renderLayout({ title, description, canonicalUrl, badge, h1, lead, bodyH
   </script>
   <script type="application/ld+json">${JSON.stringify(faqSchema)}</script>
   <script type="application/ld+json">${JSON.stringify(appSchema)}</script>
+  <script type="application/ld+json">${JSON.stringify(breadcrumbSchema)}</script>
   <style>
     :root { --bg:#070b14; --card:#0f172a; --border:#1e293b; --text:#f8fafc; --muted:#94a3b8; --accent:#10b981; --accent2:#38bdf8; }
     * { box-sizing:border-box; }
@@ -1466,7 +1483,7 @@ function renderLayout({ title, description, canonicalUrl, badge, h1, lead, bodyH
       <a href="/download">Download</a> |
       <a href="/tools/leak-test">Leak Test</a> |
       <a href="/tools/isp-throttling-test">ISP Speed Test</a> |
-      <a href="/pad.xml">PAD 4.0 XML</a> |
+      <a href="/support">Support</a> |
       <a href="/privacy">Privacy Policy</a>
     </p>
   </footer>

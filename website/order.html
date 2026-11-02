@@ -275,7 +275,7 @@
   <header class="bg-[#232931] text-white py-5 px-6 sm:px-8 border-b border-gray-800/80 shadow-md">
     <div class="max-w-6xl mx-auto flex items-center justify-between">
       <!-- Left Logo: The Sweepr Wave Shield Mint Glass version for dark background -->
-      <a href="/?home=1" class="inline-flex items-center gap-2.5 text-inherit no-underline group">
+      <a href="/" onclick="try{localStorage.removeItem('sweepr_order_draft');document.cookie='sweepr_order_draft=; Path=/; Max-Age=0; SameSite=Lax';}catch(e){}" class="inline-flex items-center gap-2.5 text-inherit no-underline group">
         <img src="/logo-mint-glass.svg" alt="SWEEPR VPN" width="32" height="32" fetchpriority="high" class="w-8 h-8 rounded-lg drop-shadow transition-transform group-hover:scale-105" />
         <div class="flex items-baseline gap-1.5">
           <span class="font-black text-xl tracking-tight text-white">SWEEPR <span class="text-emerald-400">VPN</span></span>

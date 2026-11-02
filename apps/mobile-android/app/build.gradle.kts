@@ -67,10 +67,7 @@ android {
             )
         }
         debug {
-            val relSigning = signingConfigs.getByName("release")
-            if (relSigning.storeFile?.exists() == true && !relSigning.storePassword.isNullOrBlank()) {
-                signingConfig = relSigning
-            }
+            isDebuggable = true
         }
     }
 

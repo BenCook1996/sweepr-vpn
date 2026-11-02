@@ -390,6 +390,27 @@ fn sc_bin() -> PathBuf {
     if p.exists() { p } else { PathBuf::from("sc.exe") }
 }
 
+#[cfg(target_os = "windows")]
+fn cmd_bin() -> PathBuf {
+    let sys_root = std::env::var("SystemRoot").unwrap_or_else(|_| "C:\\Windows".to_string());
+    let p = Path::new(&sys_root).join("System32\\cmd.exe");
+    if p.exists() { p } else { PathBuf::from("cmd.exe") }
+}
+
+#[cfg(target_os = "windows")]
+fn netsh_bin() -> PathBuf {
+    let sys_root = std::env::var("SystemRoot").unwrap_or_else(|_| "C:\\Windows".to_string());
+    let p = Path::new(&sys_root).join("System32\\netsh.exe");
+    if p.exists() { p } else { PathBuf::from("netsh.exe") }
+}
+
+#[cfg(target_os = "windows")]
+fn ipconfig_bin() -> PathBuf {
+    let sys_root = std::env::var("SystemRoot").unwrap_or_else(|_| "C:\\Windows".to_string());
+    let p = Path::new(&sys_root).join("System32\\ipconfig.exe");
+    if p.exists() { p } else { PathBuf::from("ipconfig.exe") }
+}
+
 fn curl_bin() -> PathBuf {
     #[cfg(target_os = "windows")]
     {
@@ -564,7 +585,7 @@ pub fn verify_ed25519_license_token(token: &str) -> Result<(), String> {
         .map_err(|_| "Invalid license token header JSON.".to_string())?;
     let kid = header.get("kid").and_then(|v| v.as_str()).unwrap_or("ed25519-2026-01");
     let pub_key_b64 = match kid {
-        "ed25519-2026-01" | _ => SWEEPR_LICENSE_PUBLIC_KEY_B64URL,
+        "ed25519-2026-01" => SWEEPR_LICENSE_PUBLIC_KEY_B64URL, _ => return Err("Unknown signing key ID (kid).".into()),
     };
 
     let signing_input = format!("{}.{}", parts[0], parts[1]);
@@ -595,6 +616,7 @@ pub fn verify_ed25519_license_token(token: &str) -> Result<(), String> {
     let claims: serde_json::Value = serde_json::from_slice(&payload_bytes)
         .map_err(|_| "Invalid license token claims.".to_string())?;
 
+    if claims.get("project_id").and_then(|v| v.as_str()).map(|p| p != "vpn").unwrap_or(false) { return Err("License token was not issued for SWEEPR VPN.".into()); }
     let status = claims.get("status").and_then(|v| v.as_str()).unwrap_or("");
     if status != "active" && status != "trialing" {
         return Err("Subscription in signed license token is not active.".into());
@@ -968,9 +990,13 @@ fn bring_tunnel_up(conf: &Path) -> Result<(), String> {
         let wg_exe = ensure_wireguard_windows()?;
         let _ = bring_tunnel_down();
         let ps = format!(
-            "Start-Process -FilePath 'cmd.exe' -ArgumentList '/c','\"\"{}\" /installtunnelservice \"{}\" & netsh advfirewall firewall delete rule name=SWEEPR_VPN_Block_IPv6 >nul 2>&1 & netsh advfirewall firewall add rule name=SWEEPR_VPN_Block_IPv6 dir=out action=block protocol=any remoteip=2000::/3 >nul 2>&1 & ipconfig /flushdns >nul 2>&1\"' -Verb RunAs -WindowStyle Hidden -Wait",
+            "Start-Process -FilePath '{}' -ArgumentList '/c','\"\"{}\" /installtunnelservice \"{}\" & \"{}\" advfirewall firewall delete rule name=SWEEPR_VPN_Block_IPv6 >nul 2>&1 & \"{}\" advfirewall firewall add rule name=SWEEPR_VPN_Block_IPv6 dir=out action=block protocol=any remoteip=2000::/3 >nul 2>&1 & \"{}\" /flushdns >nul 2>&1\"' -Verb RunAs -WindowStyle Hidden -Wait",
+            cmd_bin().display(),
             wg_exe.display(),
-            conf.display()
+            conf.to_string_lossy().replace('\'', "").replace('"', "").replace('\\', "").replace('`', "").replace('$', ""),
+            netsh_bin().display(),
+            netsh_bin().display(),
+            ipconfig_bin().display()
         );
         let status = Command::new(powershell_bin())
             .args(["-NoProfile", "-WindowStyle", "Hidden", "-Command", &ps])
@@ -992,8 +1018,8 @@ fn bring_tunnel_up(conf: &Path) -> Result<(), String> {
     {
         let script = format!(
             "do shell script \"export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH; wg-quick down '{}' >/dev/null 2>&1 || true; wg-quick up '{}'; networksetup -setv6off Wi-Fi >/dev/null 2>&1 || true; dscacheutil -flushcache >/dev/null 2>&1 || true; killall -HUP mDNSResponder >/dev/null 2>&1 || true\" with administrator privileges",
-            conf.display(),
-            conf.display()
+            conf.to_string_lossy().replace('\'', "").replace('"', "").replace('\\', "").replace('`', "").replace('$', ""),
+            conf.to_string_lossy().replace('\'', "").replace('"', "").replace('\\', "").replace('`', "").replace('$', "")
         );
         let status = Command::new("osascript")
             .args(["-e", &script])
@@ -1009,8 +1035,8 @@ fn bring_tunnel_up(conf: &Path) -> Result<(), String> {
     {
         let cmd = format!(
             "wg-quick down '{}' >/dev/null 2>&1 || true; wg-quick up '{}' && (sysctl -w net.ipv6.conf.all.disable_ipv6=1 >/dev/null 2>&1 || true) && (resolvectl flush-caches >/dev/null 2>&1 || true)",
-            conf.display(),
-            conf.display()
+            conf.to_string_lossy().replace('\'', "").replace('"', "").replace('\\', "").replace('`', "").replace('$', ""),
+            conf.to_string_lossy().replace('\'', "").replace('"', "").replace('\\', "").replace('`', "").replace('$', "")
         );
         let status = Command::new("pkexec")
             .args(["sh", "-c", &cmd])
@@ -1044,15 +1070,17 @@ pub fn bring_tunnel_down() -> Result<(), String> {
         }
         if let Some(wg_exe) = find_wireguard_exe() {
             let ipv6_cleanup = if ks_active {
-                ""
+                "".to_string()
             } else {
-                " & netsh advfirewall firewall delete rule name=SWEEPR_VPN_Block_IPv6 >nul 2>&1"
+                format!(" & \"{}\" advfirewall firewall delete rule name=SWEEPR_VPN_Block_IPv6 >nul 2>&1", netsh_bin().display())
             };
             let ps = format!(
-                "Start-Process -FilePath 'cmd.exe' -ArgumentList '/c','\"\"{}\" /uninstalltunnelservice {}{} & ipconfig /flushdns >nul 2>&1\"' -Verb RunAs -WindowStyle Hidden -Wait",
+                "Start-Process -FilePath '{}' -ArgumentList '/c','\"\"{}\" /uninstalltunnelservice {}{} & \"{}\" /flushdns >nul 2>&1\"' -Verb RunAs -WindowStyle Hidden -Wait",
+                cmd_bin().display(),
                 wg_exe.display(),
                 TUNNEL_NAME,
-                ipv6_cleanup
+                ipv6_cleanup,
+                ipconfig_bin().display()
             );
             let _ = Command::new(powershell_bin())
                 .args(["-NoProfile", "-WindowStyle", "Hidden", "-Command", &ps])
@@ -1072,7 +1100,7 @@ pub fn bring_tunnel_down() -> Result<(), String> {
             };
             let script = format!(
                 "do shell script \"export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH; wg-quick down '{}' >/dev/null 2>&1 || true;{} dscacheutil -flushcache >/dev/null 2>&1 || true; killall -HUP mDNSResponder >/dev/null 2>&1 || true\" with administrator privileges",
-                c.display(),
+                c.to_string_lossy().replace('\'', "").replace('"', "").replace('\\', "").replace('`', "").replace('$', ""),
                 ipv6_restore
             );
             let _ = Command::new("osascript").args(["-e", &script]).status();
@@ -1090,7 +1118,7 @@ pub fn bring_tunnel_down() -> Result<(), String> {
             };
             let cmd = format!(
                 "wg-quick down '{}' >/dev/null 2>&1 || true;{} resolvectl flush-caches >/dev/null 2>&1 || true",
-                c.display(),
+                c.to_string_lossy().replace('\'', "").replace('"', "").replace('\\', "").replace('`', "").replace('$', ""),
                 ipv6_restore
             );
             let _ = Command::new("pkexec")
@@ -1246,9 +1274,9 @@ pub fn connect(req: ConnectRequest) -> Result<TunnelStatus, String> {
     });
     let lan_bypass = req.lan_bypass.unwrap_or(false);
     let allowed_ips = if lan_bypass {
-        "1.0.0.0/8, 2.0.0.0/7, 4.0.0.0/6, 8.0.0.0/7, 10.64.0.0/16, 11.0.0.0/8, 12.0.0.0/6, 16.0.0.0/4, 32.0.0.0/3, 64.0.0.0/2, 128.0.0.0/3, 160.0.0.0/5, 168.0.0.0/6, 172.0.0.0/12, 172.32.0.0/11, 172.64.0.0/10, 172.128.0.0/9, 173.0.0.0/8, 174.0.0.0/7, 176.0.0.0/4, 192.0.0.0/9, 192.128.0.0/11, 192.160.0.0/13, 192.169.0.0/16, 192.170.0.0/15, 192.172.0.0/14, 192.176.0.0/12, 192.192.0.0/10, 193.0.0.0/8, 194.0.0.0/7, 196.0.0.0/6, 200.0.0.0/5, 208.0.0.0/4".to_string()
+        "1.0.0.0/8, 2.0.0.0/7, 4.0.0.0/6, 8.0.0.0/7, 10.64.0.0/16, 11.0.0.0/8, 12.0.0.0/6, 16.0.0.0/4, 32.0.0.0/3, 64.0.0.0/2, 128.0.0.0/3, 160.0.0.0/5, 168.0.0.0/6, 172.0.0.0/12, 172.32.0.0/11, 172.64.0.0/10, 172.128.0.0/9, 173.0.0.0/8, 174.0.0.0/7, 176.0.0.0/4, 192.0.0.0/9, 192.128.0.0/11, 192.160.0.0/13, 192.169.0.0/16, 192.170.0.0/15, 192.172.0.0/14, 192.176.0.0/12, 192.192.0.0/10, 193.0.0.0/8, 194.0.0.0/7, 196.0.0.0/6, 200.0.0.0/5, 208.0.0.0/4, 2000::/3".to_string()
     } else {
-        "0.0.0.0/0".to_string()
+        "0.0.0.0/0, ::/0".to_string()
     };
 
     validate_wg_conf_fields(&server_pub, &endpoint, &address, &dns, &allowed_ips)?;

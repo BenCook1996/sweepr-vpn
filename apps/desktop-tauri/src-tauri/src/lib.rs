@@ -122,6 +122,12 @@ fn set_startup(enabled: bool) -> Result<(), String> {
             let _ = std::fs::create_dir_all(&plist_dir);
             let plist_path = plist_dir.join("com.sweepr.vpn.plist");
             if enabled {
+                let escaped_exe = exe_str
+                    .replace('&', "&amp;")
+                    .replace('<', "&lt;")
+                    .replace('>', "&gt;")
+                    .replace('"', "&quot;")
+                    .replace('\'', "&apos;");
                 let content = format!(
                     r#"<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -130,7 +136,7 @@ fn set_startup(enabled: bool) -> Result<(), String> {
 <key>ProgramArguments</key><array><string>{}</string></array>
 <key>RunAtLoad</key><true/>
 </dict></plist>"#,
-                    exe_str
+                    escaped_exe
                 );
                 let _ = std::fs::write(plist_path, content);
             } else {
@@ -207,24 +213,33 @@ fn set_kill_switch(enabled: bool) -> Result<serde_json::Value, String> {
     #[cfg(target_os = "windows")]
     {
         use std::os::windows::process::CommandExt;
-        let del_cmd = "netsh advfirewall firewall delete rule name=SWEEPR_VPN_KillSwitch_IPv6 >nul 2>&1 & netsh advfirewall firewall delete rule name=SweeprVPN_KillSwitch_Block_IPv6 >nul 2>&1 & netsh advfirewall firewall delete rule name=SWEEPR_VPN_KillSwitch_DNS >nul 2>&1 & netsh advfirewall firewall delete rule name=SWEEPR_VPN_KillSwitch_Clearnet >nul 2>&1";
+        let sys_root = std::env::var("SystemRoot").unwrap_or_else(|_| "C:\\Windows".to_string());
+        let netsh_bin = std::path::Path::new(&sys_root).join("System32\\netsh.exe");
+        let netsh_cmd = if netsh_bin.exists() { netsh_bin.to_string_lossy().to_string() } else { "netsh.exe".to_string() };
+        let cmd_bin = std::path::Path::new(&sys_root).join("System32\\cmd.exe");
+        let cmd_path = if cmd_bin.exists() { cmd_bin.to_string_lossy().to_string() } else { "cmd.exe".to_string() };
+        let ps_bin = std::path::Path::new(&sys_root).join("System32\\WindowsPowerShell\\v1.0\\powershell.exe");
+        let ps_path = if ps_bin.exists() { ps_bin.to_string_lossy().to_string() } else { "powershell.exe".to_string() };
+
+        let del_cmd = format!("\"{netsh_cmd}\" advfirewall firewall delete rule name=SWEEPR_VPN_KillSwitch_IPv6 >nul 2>&1 & \"{netsh_cmd}\" advfirewall firewall delete rule name=SweeprVPN_KillSwitch_Block_IPv6 >nul 2>&1 & \"{netsh_cmd}\" advfirewall firewall delete rule name=SWEEPR_VPN_KillSwitch_DNS >nul 2>&1 & \"{netsh_cmd}\" advfirewall firewall delete rule name=SWEEPR_VPN_KillSwitch_Clearnet >nul 2>&1 & \"{netsh_cmd}\" advfirewall firewall delete rule name=SWEEPR_VPN_KillSwitch_Clearnet_TCP53 >nul 2>&1");
         let full_cmd = if enabled {
             format!(
-                "{del_cmd} & netsh advfirewall firewall add rule name=SWEEPR_VPN_KillSwitch_IPv6 dir=out action=block protocol=IPV6 >nul 2>&1 & netsh advfirewall firewall add rule name=SWEEPR_VPN_KillSwitch_DNS dir=out action=allow protocol=UDP remoteport=53 remoteip=1.1.1.1,1.0.0.1,1.1.1.2,1.0.0.2,9.9.9.9 >nul 2>&1 & netsh advfirewall firewall add rule name=SWEEPR_VPN_KillSwitch_Clearnet dir=out action=block protocol=UDP remoteport=53 remoteip=0.0.0.0-1.0.0.0,1.0.0.3-1.1.1.0,1.1.1.3-9.9.9.8,9.9.9.10-10.63.255.255,10.65.0.0-255.255.255.255 >nul 2>&1"
+                "{del_cmd} & \"{netsh_cmd}\" advfirewall firewall add rule name=SWEEPR_VPN_KillSwitch_IPv6 dir=out action=block protocol=IPV6 >nul 2>&1 & \"{netsh_cmd}\" advfirewall firewall add rule name=SWEEPR_VPN_KillSwitch_DNS dir=out action=allow protocol=UDP remoteport=53 remoteip=1.1.1.1,1.0.0.1,1.1.1.2,1.0.0.2,9.9.9.9 >nul 2>&1 & \"{netsh_cmd}\" advfirewall firewall add rule name=SWEEPR_VPN_KillSwitch_Clearnet dir=out action=block protocol=UDP remoteport=53 remoteip=0.0.0.0-1.0.0.0,1.0.0.3-1.1.1.0,1.1.1.3-9.9.9.8,9.9.9.10-10.63.255.255,10.65.0.0-255.255.255.255 >nul 2>&1 & \"{netsh_cmd}\" advfirewall firewall add rule name=SWEEPR_VPN_KillSwitch_Clearnet_TCP53 dir=out action=block protocol=TCP remoteport=53 remoteip=0.0.0.0-1.0.0.0,1.0.0.3-1.1.1.0,1.1.1.3-9.9.9.8,9.9.9.10-10.63.255.255,10.65.0.0-255.255.255.255 >nul 2>&1"
             )
         } else {
-            del_cmd.to_string()
+            del_cmd
         };
-        let direct = std::process::Command::new("cmd")
+        let direct = std::process::Command::new(&cmd_path)
             .args(["/C", &full_cmd])
             .creation_flags(0x08000000)
             .status();
         if !direct.map(|s| s.success()).unwrap_or(false) {
             let ps = format!(
-                "Start-Process -FilePath 'cmd.exe' -ArgumentList '/c','\"{}\"' -Verb RunAs -WindowStyle Hidden -Wait",
-                full_cmd
+                "Start-Process -FilePath '{}' -ArgumentList '/c','\"{}\"' -Verb RunAs -WindowStyle Hidden -Wait",
+                cmd_path.replace("'", "''"),
+                full_cmd.replace("\"", "`\"")
             );
-            let _ = std::process::Command::new("powershell")
+            let _ = std::process::Command::new(&ps_path)
                 .args(["-NoProfile", "-WindowStyle", "Hidden", "-Command", &ps])
                 .creation_flags(0x08000000)
                 .status();
@@ -383,31 +398,42 @@ fn set_smart_tv_shields(
     #[cfg(target_os = "windows")]
     {
         use std::os::windows::process::CommandExt;
+        let sys_root = std::env::var("SystemRoot").unwrap_or_else(|_| "C:\\Windows".to_string());
+        let netsh_bin = std::path::Path::new(&sys_root).join("System32\\netsh.exe");
+        let netsh_cmd = if netsh_bin.exists() { netsh_bin.to_string_lossy().to_string() } else { "netsh.exe".to_string() };
+        let ipconfig_bin = std::path::Path::new(&sys_root).join("System32\\ipconfig.exe");
+        let ipconfig_cmd = if ipconfig_bin.exists() { ipconfig_bin.to_string_lossy().to_string() } else { "ipconfig.exe".to_string() };
+        let cmd_bin = std::path::Path::new(&sys_root).join("System32\\cmd.exe");
+        let cmd_path = if cmd_bin.exists() { cmd_bin.to_string_lossy().to_string() } else { "cmd.exe".to_string() };
+        let ps_bin = std::path::Path::new(&sys_root).join("System32\\WindowsPowerShell\\v1.0\\powershell.exe");
+        let ps_path = if ps_bin.exists() { ps_bin.to_string_lossy().to_string() } else { "powershell.exe".to_string() };
+
         if tunnel_active {
-            let st1 = std::process::Command::new("netsh")
+            let st1 = std::process::Command::new(&netsh_cmd)
                 .args(["interface", "ip", "set", "dns", "name=sweepr0", "static", primary_dns, "primary"])
                 .creation_flags(0x08000000)
                 .status();
-            let _ = std::process::Command::new("netsh")
+            let _ = std::process::Command::new(&netsh_cmd)
                 .args(["interface", "ip", "add", "dns", "name=sweepr0", secondary_dns, "index=2"])
                 .creation_flags(0x08000000)
                 .status();
             if !st1.map(|s| s.success()).unwrap_or(false) {
                 let dns_cmd = format!(
-                    "netsh interface ip set dns name=sweepr0 static {} primary >nul 2>&1 & netsh interface ip add dns name=sweepr0 {} index=2 >nul 2>&1 & ipconfig /flushdns >nul 2>&1",
+                    "\"{netsh_cmd}\" interface ip set dns name=sweepr0 static {} primary >nul 2>&1 & \"{netsh_cmd}\" interface ip add dns name=sweepr0 {} index=2 >nul 2>&1 & \"{ipconfig_cmd}\" /flushdns >nul 2>&1",
                     primary_dns, secondary_dns
                 );
                 let ps = format!(
-                    "Start-Process -FilePath 'cmd.exe' -ArgumentList '/c','\"{}\"' -Verb RunAs -WindowStyle Hidden -Wait",
-                    dns_cmd
+                    "Start-Process -FilePath '{}' -ArgumentList '/c','\"{}\"' -Verb RunAs -WindowStyle Hidden -Wait",
+                    cmd_path.replace("'", "''"),
+                    dns_cmd.replace("\"", "`\"")
                 );
-                let _ = std::process::Command::new("powershell")
+                let _ = std::process::Command::new(&ps_path)
                     .args(["-NoProfile", "-WindowStyle", "Hidden", "-Command", &ps])
                     .creation_flags(0x08000000)
                     .status();
             }
         }
-        let _ = std::process::Command::new("ipconfig")
+        let _ = std::process::Command::new(&ipconfig_cmd)
             .args(["/flushdns"])
             .creation_flags(0x08000000)
             .status();

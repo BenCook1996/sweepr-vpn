@@ -2039,6 +2039,7 @@ function sendJson(res, status, payload, extraHeaders = {}, req = null) {
   res.writeHead(status, {
     'Content-Type': 'application/json; charset=utf-8',
     'Access-Control-Allow-Origin': allowedOrigin,
+    'X-Robots-Tag': 'noindex, nofollow',
     Vary: 'Origin',
     ...COMMON_SECURITY_HEADERS,
     ...extraHeaders
@@ -2181,27 +2182,53 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Download SWEEPR VPN</title>
-  <meta name="robots" content="noindex, follow">
+  <title>Download SWEEPR VPN for Windows, macOS, Android &amp; iOS (Free 30s Wi-Fi Scanner) | SWEEPR VPN</title>
+  <meta name="description" content="Download SWEEPR VPN (~3.7 MB native Rust + Tauri v2 installer) for Windows 10/11, macOS, Android (.apk), and iOS. Includes a free 30-second Home Wi-Fi Device Scanner and 10Gbps WireGuard.">
+  <link rel="canonical" href="https://sweeprvpn.com/download">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="theme-color" content="#10b981">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="SWEEPR VPN">
+  <meta property="og:title" content="Download SWEEPR VPN for Windows, macOS, Android &amp; iOS (Free 30s Wi-Fi Scanner) | SWEEPR VPN">
+  <meta property="og:description" content="Download SWEEPR VPN (~3.7 MB native installer) for Windows 10/11, macOS, Android (.apk), and iOS. Includes a free 30-second Home Wi-Fi Device Scanner and 10Gbps WireGuard.">
+  <meta property="og:url" content="https://sweeprvpn.com/download">
+  <meta property="og:image" content="https://sweeprvpn.com/og-image.png">
+  <meta property="og:image:alt" content="SWEEPR VPN 10Gbps WireGuard &amp; Home Wi-Fi Radar">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://sweeprvpn.com/download">
+  <meta name="twitter:title" content="Download SWEEPR VPN for Windows, macOS, Android &amp; iOS | SWEEPR VPN">
+  <meta name="twitter:description" content="Download SWEEPR VPN (~3.7 MB native installer) for Windows 10/11, macOS, Android (.apk), and iOS.">
+  <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png">
   <link rel="icon" type="image/svg+xml" href="/logo-emerald.svg?v=5">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5">
   <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png?v=5">
   <link rel="shortcut icon" href="/favicon.ico?v=5">
+  <link rel="preconnect" href="https://www.googletagmanager.com">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-7D28EEMNXX');
+  </script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://sweeprvpn.com/"},{"@type":"ListItem","position":2,"name":"Download SWEEPR VPN","item":"https://sweeprvpn.com/download"}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"SWEEPR VPN","operatingSystem":"Windows 10, Windows 11, macOS, Linux, iOS, Android, OpenWrt","applicationCategory":"SecurityApplication","downloadUrl":"https://sweeprvpn.com/SWEEPRVPN.exe","fileSize":"3.7MB","offers":{"@type":"AggregateOffer","priceCurrency":"GBP","lowPrice":"1.99","highPrice":"74.99","offerCount":"3"},"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","ratingCount":"8420","bestRating":"5","worstRating":"1"}}</script>
   <script src="https://cdn.tailwindcss.com/3.4.5"></script>
   <link rel="stylesheet" href="/style.css">
 </head>
 <body class="text-gray-800 flex flex-col items-center justify-center min-h-screen p-4 overflow-x-hidden">
   <div class="glass-card p-6 sm:p-10 w-full max-w-lg text-center">
-    <a href="/?home=1" class="inline-flex items-center gap-2 text-inherit no-underline mb-4">
+    <a href="/" class="inline-flex items-center gap-2 text-inherit no-underline mb-4">
       <div class="logo-box">S</div>
       <span class="font-extrabold text-xl tracking-tight text-gray-900">SWEEPR <span class="text-emerald-600">VPN</span></span>
     </a>
     <h1 class="text-2xl font-black text-gray-900 mb-2">Download SWEEPR VPN</h1>
-    <p class="text-sm text-gray-600 mb-5 leading-relaxed">Select your device below to download and install SWEEPR VPN. Purchased on another device? Log in to your Customer Portal to activate this device via QR code.</p>
+    <p class="text-sm text-gray-600 mb-5 leading-relaxed">Select your device below to download and install SWEEPR VPN (~3.7 MB native Rust + Tauri v2 client with Free 30-Second Home Wi-Fi Device Scanner). Purchased on another device? Log in to your Customer Portal to activate via QR code.</p>
 
     ${browserAssistBanner}
 
     <div class="space-y-3 text-left mb-6">
-      <a href="/download/SWEEPRVPN.apk" download="SWEEPRVPN.apk" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'android' ? 'border-2 border-emerald-500 bg-emerald-50/40' : 'border-gray-200 bg-white'} hover:border-emerald-400 transition-all no-underline text-gray-900">
+      <a href="/download/SWEEPRVPN.apk" download="SWEEPRVPN.apk" rel="nofollow" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'android' ? 'border-2 border-emerald-500 bg-emerald-50/40' : 'border-gray-200 bg-white'} hover:border-emerald-400 transition-all no-underline text-gray-900">
         <div>
           <div class="font-bold text-sm text-gray-900">📱 Android Phone &amp; Tablet Installer (.apk)</div>
           <div class="text-xs text-gray-500">Direct 1-Tap APK Install &bull; SWEEPRVPN.apk</div>
@@ -2215,35 +2242,35 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
         </div>
         <span class="btn btn-go text-xs py-2 px-3 shrink-0">Join on Play Store &rarr;</span>
       </a>
-      <a href="/download/SWEEPRVPN.mobileconfig" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'ios' ? 'border-2 border-emerald-500 bg-emerald-50/40' : 'border-gray-200 bg-white'} hover:border-emerald-400 transition-all no-underline text-gray-900">
+      <a href="/download/SWEEPRVPN.mobileconfig" rel="nofollow" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'ios' ? 'border-2 border-emerald-500 bg-emerald-50/40' : 'border-gray-200 bg-white'} hover:border-emerald-400 transition-all no-underline text-gray-900">
         <div>
           <div class="font-bold text-sm text-gray-900">🍎 iPhone &amp; iPad Installer (iOS / iPadOS)</div>
           <div class="text-xs text-gray-500">Installs SWEEPR VPN App &amp; Privacy Profile &bull; 1-Tap Setup</div>
         </div>
         <span class="btn btn-go text-xs py-2 px-3 shrink-0">Install on iOS</span>
       </a>
-      <a href="/download?platform=win" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'windows' ? 'border-2 border-emerald-500 bg-emerald-50/40' : 'border-gray-200 bg-white'} hover:border-emerald-400 transition-all no-underline text-gray-900">
+      <a href="/download?platform=win" rel="nofollow" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'windows' ? 'border-2 border-emerald-500 bg-emerald-50/40' : 'border-gray-200 bg-white'} hover:border-emerald-400 transition-all no-underline text-gray-900">
         <div>
           <div class="font-bold text-sm text-gray-900">💻 Windows 10 &amp; 11 Desktop Installer (.exe)</div>
           <div class="text-xs text-gray-500">Direct download &bull; SWEEPRVPN.exe</div>
         </div>
         <span class="btn btn-go text-xs py-2 px-3 shrink-0">Download .exe</span>
       </a>
-      <a href="/download?platform=mac" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'mac' ? 'border-2 border-emerald-500 bg-emerald-50/40' : 'border-gray-200 bg-white'} hover:border-emerald-400 transition-all no-underline text-gray-900">
+      <a href="/download?platform=mac" rel="nofollow" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'mac' ? 'border-2 border-emerald-500 bg-emerald-50/40' : 'border-gray-200 bg-white'} hover:border-emerald-400 transition-all no-underline text-gray-900">
         <div>
           <div class="font-bold text-sm text-gray-900">🍏 macOS 11+ Universal Desktop Installer (.dmg)</div>
           <div class="text-xs text-gray-500">Apple Silicon &amp; Intel &bull; SWEEPRVPN.dmg</div>
         </div>
         <span class="btn btn-go text-xs py-2 px-3 shrink-0">Download .dmg</span>
       </a>
-      <a href="/login" class="flex items-center justify-between gap-3 p-4 rounded-xl border border-emerald-200 bg-emerald-50/50 hover:border-emerald-400 transition-all no-underline text-gray-900">
+      <a href="/login" rel="nofollow" class="flex items-center justify-between gap-3 p-4 rounded-xl border border-emerald-200 bg-emerald-50/50 hover:border-emerald-400 transition-all no-underline text-gray-900">
         <div>
           <div class="font-extrabold text-sm text-gray-900">Already Purchased? Activate via QR Code</div>
           <div class="text-xs text-gray-500">Log in to your Customer Portal to scan or use your QR code to activate a separate device</div>
         </div>
         <span class="text-xs font-extrabold text-emerald-700 bg-white border border-emerald-200 px-3 py-1.5 rounded-full shrink-0">Customer Login &rarr;</span>
       </a>
-      <a href="/order?plan=annual" class="flex items-center justify-between gap-3 p-4 rounded-xl border border-gray-200 bg-gray-50/80 hover:bg-white transition-all no-underline text-gray-900">
+      <a href="/order?plan=annual" rel="nofollow" class="flex items-center justify-between gap-3 p-4 rounded-xl border border-gray-200 bg-gray-50/80 hover:bg-white transition-all no-underline text-gray-900">
         <div>
           <div class="font-extrabold text-sm text-gray-900">Need a License Key? Get SWEEPR VPN Pro</div>
           <div class="text-xs text-gray-500">Protects up to 3 devices (any combination of desktop or mobile) &bull; Save 50%</div>
@@ -2252,7 +2279,29 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
       </a>
     </div>
     <div class="flex justify-center pt-4 border-t border-gray-100">
-      <a href="/?home=1" class="btn btn-ghost w-full justify-center">Back to Home</a>
+      <a href="/" class="btn btn-ghost w-full justify-center">Back to Home</a>
+    </div>
+    <div class="mt-6 pt-4 border-t border-gray-100 text-xs text-gray-500 space-y-2">
+      <div class="flex flex-wrap justify-center gap-3 font-medium">
+        <a href="/pricing" class="hover:text-emerald-600">Pricing &amp; Plans</a>
+        <span>&bull;</span>
+        <a href="/tools/leak-test" class="hover:text-emerald-600">Free IP &amp; DNS Leak Test</a>
+        <span>&bull;</span>
+        <a href="/tools/isp-throttling-test" class="hover:text-emerald-600">Free ISP Speed Checker</a>
+        <span>&bull;</span>
+        <a href="/support" class="hover:text-emerald-600">Support</a>
+      </div>
+      <div class="flex flex-wrap justify-center gap-x-3 gap-y-1 text-[11px] text-gray-400">
+        <a href="/setup/gl-inet-travel-router" class="hover:text-emerald-600">GL.iNet Router Setup</a>
+        <a href="/guides/stop-samsung-smart-tv-acr-tracking" class="hover:text-emerald-600">Block Samsung TV ACR</a>
+        <a href="/guides/stop-lg-smart-tv-acr-spying" class="hover:text-emerald-600">Stop LG TV Spying</a>
+        <a href="/setup/nvidia-shield-tv-pro-wireguard" class="hover:text-emerald-600">Nvidia Shield TV VPN</a>
+        <a href="/setup/steam-deck-vpn" class="hover:text-emerald-600">Steam Deck VPN</a>
+        <a href="/setup/synology-nas-docker-vpn" class="hover:text-emerald-600">Synology Docker VPN</a>
+        <a href="/solutions/eduroam-campus-wifi-gaming-packet-loss" class="hover:text-emerald-600">Eduroam Gaming Fix</a>
+        <a href="/solutions/talktalk-p2p-port-forwarding" class="hover:text-emerald-600">TalkTalk Throttling Fix</a>
+        <a href="/alternatives/totalvpn" class="hover:text-emerald-600">TotalVPN Alternatives</a>
+      </div>
     </div>
   </div>
 </body>
@@ -2454,6 +2503,10 @@ const server = http.createServer(async (req, res) => {
       return res.end();
     }
   }
+  if ((req.method === 'GET' || req.method === 'HEAD') && pathname === '/order' && urlObj.search && BOT_UA_RE.test(ua)) {
+    res.writeHead(301, { Location: '/order', 'X-Robots-Tag': 'noindex, follow', ...COMMON_SECURITY_HEADERS });
+    return res.end();
+  }
   if (req.method === 'GET' && BOT_UA_RE.test(ua) && !pathname.startsWith('/api/')) {
     crm.reportBotHit({ userAgent: ua, path: pathname, status: 200 });
   }
@@ -2542,6 +2595,35 @@ const server = http.createServer(async (req, res) => {
       ...COMMON_SECURITY_HEADERS
     });
     return res.end(req.method === 'HEAD' ? undefined : payload);
+  }
+
+  // Apple Universal Links Verification (/.well-known/apple-app-site-association & /apple-app-site-association)
+  if ((pathname === '/.well-known/apple-app-site-association' || pathname === '/apple-app-site-association') && (req.method === 'GET' || req.method === 'HEAD')) {
+    const aasaPayload = JSON.stringify(
+      {
+        applinks: {
+          apps: [],
+          details: [
+            {
+              appID: 'SWEEPRVPN.com.sweepr.vpn',
+              paths: ['/app', '/ios-app', '/dashboard']
+            }
+          ]
+        },
+        webcredentials: {
+          apps: ['SWEEPRVPN.com.sweepr.vpn']
+        }
+      },
+      null,
+      2
+    );
+    res.writeHead(200, {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Cache-Control': 'public, max-age=3600',
+      'X-Robots-Tag': 'noindex, nofollow',
+      ...COMMON_SECURITY_HEADERS
+    });
+    return res.end(req.method === 'HEAD' ? undefined : aasaPayload);
   }
 
   // Installable PWA Web App Manifest & Service Worker (Item 5)
@@ -2710,9 +2792,20 @@ self.addEventListener('fetch', e => {
       ? `${req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http'}://${req.headers.host}`
       : PUBLIC_URL;
 
+    // Search & AI crawlers: 301 redirect query-param variants to canonical /download, and serve indexable HTML download page
+    if (BOT_UA_RE.test(ua)) {
+      if (urlObj.search) {
+        res.writeHead(301, { Location: '/download', ...COMMON_SECURITY_HEADERS });
+        return res.end();
+      }
+      return sendHtml(res, 200, renderPlatformDownloadPicker('windows', ua, hostOrigin), {
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=3600'
+      });
+    }
+
     if (requestedPlatform === 'picker') {
       return sendHtml(res, 200, renderPlatformDownloadPicker(osType, ua, hostOrigin), {
-        'X-Robots-Tag': 'noindex, follow'
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=3600'
       });
     }
 
@@ -2727,6 +2820,7 @@ self.addEventListener('fetch', e => {
           'Content-Length': stat.size,
           'Cache-Control': 'no-store, no-cache, must-revalidate',
           'Pragma': 'no-cache',
+          'Link': '<https://sweeprvpn.com/download>; rel="canonical"',
           'X-Robots-Tag': 'noindex, nofollow',
           ...COMMON_SECURITY_HEADERS
         });
@@ -2745,6 +2839,7 @@ self.addEventListener('fetch', e => {
         'Content-Type': 'application/x-apple-aspen-config; charset=utf-8',
         'Content-Disposition': 'attachment; filename="SWEEPRVPN.mobileconfig"',
         'Cache-Control': 'no-store',
+        'Link': '<https://sweeprvpn.com/download>; rel="canonical"',
         'X-Robots-Tag': 'noindex, nofollow',
         ...COMMON_SECURITY_HEADERS
       });
@@ -2763,6 +2858,7 @@ self.addEventListener('fetch', e => {
         'Content-Length': stat.size,
         'Cache-Control': 'no-store, no-cache, must-revalidate',
         'Pragma': 'no-cache',
+        'Link': '<https://sweeprvpn.com/download>; rel="canonical"',
         'X-Robots-Tag': 'noindex, nofollow',
         ...COMMON_SECURITY_HEADERS
       });
@@ -2775,7 +2871,7 @@ self.addEventListener('fetch', e => {
 
     if (!forceWinExe && osType !== 'windows') {
       return sendHtml(res, 200, renderPlatformDownloadPicker(osType, ua, hostOrigin), {
-        'X-Robots-Tag': 'noindex, follow'
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=3600'
       });
     }
 
@@ -2788,6 +2884,7 @@ self.addEventListener('fetch', e => {
         'Content-Length': stat.size,
         'Cache-Control': 'no-store, no-cache, must-revalidate',
         'Pragma': 'no-cache',
+        'Link': '<https://sweeprvpn.com/download>; rel="canonical"',
         'X-Robots-Tag': 'noindex, nofollow',
         ...COMMON_SECURITY_HEADERS
       });
@@ -5349,7 +5446,7 @@ self.addEventListener('fetch', e => {
       <div id="delStatus" class="msg"></div>
       <button id="delBtn" class="btn btn-danger" onclick="submitAccountDelete()">Permanently Delete My Account &amp; Data</button>
     </div>
-    <a href="/?home=1" class="btn btn-soft">Return to SWEEPR VPN</a>
+    <a href="/" class="btn btn-soft">Return to SWEEPR VPN</a>
   </div>
   <script>
     async function submitAccountDelete() {
@@ -6622,6 +6719,17 @@ self.addEventListener('fetch', e => {
     return sendJson(res, 200, data, {}, req);
   }
 
+  // Catch-all for unmatched /api/* or /v1/* requests (e.g. GET probes to POST-only API routes)
+  if (pathname.startsWith('/api/') || pathname.startsWith('/v1/')) {
+    return sendJson(
+      res,
+      405,
+      { ok: false, error: 'method_not_allowed' },
+      { Allow: 'GET, POST, OPTIONS', 'X-Robots-Tag': 'noindex, nofollow' },
+      req
+    );
+  }
+
   const isOrderRoute = pathname === '/order' || pathname === '/checkout';
   const isLoginRoute = pathname === '/login' || pathname === '/dashboard';
 
@@ -6646,16 +6754,16 @@ self.addEventListener('fetch', e => {
     BLOCKED_STATIC_FILES.has(baseName) ||
     !ALLOWED_STATIC_EXTENSIONS.has(ext)
   ) {
-    res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8', ...COMMON_SECURITY_HEADERS });
-    res.end('<h1>404 - Page Not Found</h1><p><a href="/?home=1">Return to SWEEPR VPN Home</a></p>');
+    res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8', 'X-Robots-Tag': 'noindex, nofollow', ...COMMON_SECURITY_HEADERS });
+    res.end('<h1>404 - Page Not Found</h1><p><a href="/">Return to SWEEPR VPN Home</a></p>');
     return;
   }
 
   if (ext === '.exe') {
     fs.stat(filePath, (statErr, stats) => {
       if (statErr || !stats.isFile()) {
-        res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8', ...COMMON_SECURITY_HEADERS });
-        res.end('<h1>404 - Page Not Found</h1><p><a href="/?home=1">Return to SWEEPR VPN Home</a></p>');
+        res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8', 'X-Robots-Tag': 'noindex, nofollow', ...COMMON_SECURITY_HEADERS });
+        res.end('<h1>404 - Page Not Found</h1><p><a href="/">Return to SWEEPR VPN Home</a></p>');
         return;
       }
       res.writeHead(200, {
@@ -6676,8 +6784,8 @@ self.addEventListener('fetch', e => {
 
   fs.readFile(filePath, (err, rawContent) => {
     if (err) {
-      res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8', ...COMMON_SECURITY_HEADERS });
-      res.end('<h1>404 - Page Not Found</h1><p><a href="/?home=1">Return to SWEEPR VPN Home</a></p>');
+      res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8', 'X-Robots-Tag': 'noindex, nofollow', ...COMMON_SECURITY_HEADERS });
+      res.end('<h1>404 - Page Not Found</h1><p><a href="/">Return to SWEEPR VPN Home</a></p>');
       return;
     }
     let content = rawContent;

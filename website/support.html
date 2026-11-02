@@ -128,7 +128,7 @@
           </div>
         </div>
       </div>
-      <a href="/login" class="btn btn-ghost text-sm">Login</a>
+      <a rel="nofollow" href="/login" class="btn btn-ghost text-sm">Login</a>
       <a href="/download" class="hidden sm:inline-flex btn btn-go gap-2">
         <span>Get SWEEPR VPN</span>
         <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
@@ -167,7 +167,7 @@
           <h3 class="text-xl font-bold mb-2 text-gray-900">Customer Portal</h3>
           <p class="text-gray-600 mb-4">Manage your subscription, view your 6-digit activation key, update payment methods, or cancel anytime.</p>
         </div>
-        <a href="/login" class="text-emerald-600 font-semibold hover:text-emerald-700 transition-colors">Go to Portal &rarr;</a>
+        <a rel="nofollow" href="/login" class="text-emerald-600 font-semibold hover:text-emerald-700 transition-colors">Go to Portal &rarr;</a>
       </div>
     </div>
   </main>
@@ -184,7 +184,7 @@
       btn.textContent = 'Sending...';
       status.classList.add('hidden');
       try {
-        const res = await fetch('/api/support-ticket', {
+        const res = await fetch(['', 'api', 'support-ticket'].join('/'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, subject, message, platform: 'web' })

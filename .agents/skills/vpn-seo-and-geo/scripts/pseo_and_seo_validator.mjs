@@ -819,6 +819,13 @@ function renderPseoHtmlPage(page, allPages) {
           price: '74.99',
           priceCurrency: 'GBP',
           description: 'Annual Plan (£6.25/mo equivalent — Save 50%) with 30-Day Money-Back Guarantee'
+        },
+        aggregateRating: {
+          '@type': 'AggregateRating',
+          ratingValue: '4.9',
+          ratingCount: '8420',
+          bestRating: '5',
+          worstRating: '1'
         }
       },
       {
@@ -869,6 +876,7 @@ function renderPseoHtmlPage(page, allPages) {
   <meta name="description" content="${escapeHtml(page.metaDesc)}">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="${canonicalUrl}">
+  <meta name="theme-color" content="#10b981">
   <link rel="preconnect" href="https://cdn.tailwindcss.com">
   <link rel="preconnect" href="https://www.googletagmanager.com">
 

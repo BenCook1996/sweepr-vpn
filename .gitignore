@@ -16,3 +16,13 @@ infra/userdata-*.sh
 # Runtime state & Android local properties
 website/data/
 apps/mobile-android/local.properties
+
+# Temporary inspection scripts & screenshots
+scripts/*.png
+scripts/check_*.mjs
+scripts/inspect_*.mjs
+scripts/cdp_*.mjs
+scripts/raw_ws.mjs
+scripts/read_*.mjs
+scripts/search_*.mjs
+scripts/test_*.mjs

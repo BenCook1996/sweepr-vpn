@@ -4,13 +4,30 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
+    <!-- Shield Outline -->
+    <path
+        android:pathData="M54.0,29.52 L74.88,37.44 V53.28 C74.88,66.6 65.88,75.96 54.0,79.92 C42.12,75.96 33.12,66.6 33.12,53.28 V37.44 Z"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="3.6"
+        android:strokeLineJoin="round" />
+    <!-- Outer Wi-Fi Wave -->
+    <path
+        android:pathData="M42.48,51.12 A15.84,15.84 0 0,1 65.52,51.12"
+        android:strokeColor="#A7F3D0"
+        android:strokeWidth="3.24"
+        android:strokeLineCap="round" />
+    <!-- Inner Wi-Fi Wave -->
+    <path
+        android:pathData="M46.8,57.6 A10.08,10.08 0 0,1 61.2,57.6"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="3.24"
+        android:strokeLineCap="round" />
+    <!-- Center Radar Dot -->
     <path
         android:fillColor="#FFFFFF"
-        android:pathData="M54,24L80,34v20c0,16.5 -11,28 -26,33c-15,-5 -26,-16.5 -26,-33V34L54,24z" />
+        android:pathData="M54.0,60.84 A3.24,3.24 0 1,1 53.99,60.84 Z" />
+    <!-- Signature 4-Point Sparkle -->
     <path
-        android:fillColor="#059669"
-        android:pathData="M54,32L73,39.5V54c0,12 -8,20.5 -19,24.5C43,74.5 35,66 35,54V39.5L54,32z" />
-    <path
-        android:fillColor="#A7F3D0"
-        android:pathData="M48,54l-5,-5l-3.5,3.5L48,61l18,-18l-3.5,-3.5z" />
+        android:fillColor="#FFFFFF"
+        android:pathData="M70.56,31.68 Q70.56,37.44 76.32,37.44 Q70.56,37.44 70.56,43.2 Q70.56,37.44 64.8,37.44 Q70.56,37.44 70.56,31.68 Z" />
 </vector>

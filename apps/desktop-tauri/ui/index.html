@@ -1544,8 +1544,8 @@
       list.push(path);
     }
     list.push(
-      'http://localhost:3090' + path,
-      'http://localhost:8080' + path,
+      ...(location.hostname === 'localhost' || location.hostname === '127.0.0.1' ? ['http://localhost:3090' + path, 'http://localhost:8080' + path] : []),
+
       'https://sweeprvpn.com' + path
     );
     return list;
@@ -1590,7 +1590,7 @@
       $('mReverseQrSvg').innerHTML = '<span class="s" style="color:#ef4444;padding:12px;display:inline-block">Could not reach pairing server.</span>';
       return;
     }
-    $('mReverseQrSvg').innerHTML = data.qr_svg || '';
+    $('mReverseQrSvg').innerHTML = (String(data.qr_svg || '').startsWith('<svg') && !/<script|onload|onerror|javascript:/i.test(String(data.qr_svg || ''))) ? data.qr_svg : '';
     let rem = Number(data.expires_in || 120);
     const tick = () => {
       const m = String(Math.floor(rem / 60)).padStart(2, '0');
@@ -1675,7 +1675,7 @@
       state.maxDevices = data.max_devices || 3;
       renderLinkedAccountDevices();
     }
-    $('accPairQrBox').innerHTML = data.qr_svg + '<div class="s" style="color:#0f172a;font-weight:800">Scan with phone camera or SWEEPR app (' + (data.devices_used || 1) + ' / ' + (data.max_devices || 3) + ' slots used)</div>';
+    $('accPairQrBox').innerHTML = ((String(data.qr_svg || '').startsWith('<svg') && !/<script|onload|onerror|javascript:/i.test(String(data.qr_svg || ''))) ? data.qr_svg : '') + '<div class="s" style="color:#0f172a;font-weight:800">Scan with phone camera or SWEEPR app (' + Number(data.devices_used || 1) + ' / ' + Number(data.max_devices || 3) + ' slots used)</div>';
     let rem = Number(data.expires_in || 120);
     const tick = () => {
       const m = String(Math.floor(rem / 60)).padStart(2, '0');
@@ -1896,6 +1896,7 @@
     try {
       const claims = JSON.parse(new TextDecoder().decode(b64UrlToBytes(parts[1])));
       if (claims.status !== 'active' && claims.status !== 'trialing') return false;
+      if (claims.project_id && claims.project_id !== 'vpn') return false;
       if (claims.exp && Math.floor(Date.now() / 1000) > Number(claims.exp) + 300) return false;
       if (window.crypto && window.crypto.subtle) {
         try {
@@ -1904,10 +1905,10 @@
           const sig = b64UrlToBytes(parts[2]);
           return await window.crypto.subtle.verify({ name: 'Ed25519' }, pubKey, sig, data);
         } catch (cryptoErr) {
-          return Boolean(claims.sub && b64UrlToBytes(parts[2]).length === 64);
+          return false;
         }
       }
-      return Boolean(claims.sub && b64UrlToBytes(parts[2]).length === 64);
+      return false;
     } catch (e) {
       return false;
     }
@@ -2150,11 +2151,16 @@
     }).catch(() => {});
   }
 
-  function downloadAppleMobileConfigModal() {
+  async function downloadAppleMobileConfigModal() {
     if (!requirePro('Enter your license key to download an iOS / macOS profile.')) return;
     const srv = ($('wgServerSelect') && $('wgServerSelect').value) || state.code || 'UK-LON-01';
-    const base = (location.protocol === 'http:' || location.protocol === 'https:') ? '' : 'https://sweeprvpn.com';
-    const url = base + '/api/vpn/apple-mobileconfig?key=' + encodeURIComponent(state.activationCode) + '&server_code=' + encodeURIComponent(srv);
+    let absoluteUrl = 'https://sweeprvpn.com/api/vpn/apple-mobileconfig?server_code=' + encodeURIComponent(srv);
+    try {
+      const resp = await fetch('https://sweeprvpn.com/api/vpn/apple-mobileconfig-ticket', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key: state.activationCode, server_code: srv }) });
+      const data = await resp.json();
+      if (data && data.ok && data.ticket) absoluteUrl = 'https://sweeprvpn.com/api/vpn/apple-mobileconfig?ticket=' + encodeURIComponent(data.ticket);
+    } catch (_) {}
+    const url = absoluteUrl;
     if (tauri && tauri.opener) {
       tauri.opener.openUrl(url);
     } else if (isWebView2) {
