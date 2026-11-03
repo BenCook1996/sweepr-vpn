@@ -419,9 +419,6 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 ### Executive Summary
 - **Overall Scores**: Crawlability **100/100**, Technical SEO **100/100**, PageSpeed & CWV **100/100** across **308 Canonical Pages**.
 - **Auto-Optimizations Executed**:
-  - Injected deterministic 6-link internal cluster mesh across 9 pSEO pages (0 orphan pages remaining)
-  - Auto-optimized 294 pSEO pages with BreadcrumbList + AggregateRating JSON-LD, GA4 (G-7D28EEMNXX) & GSC hub links
-  - Upgraded high-CTR <title> & <meta name="description"> snippets across 5 Google Search Console Striking-Distance pages
   - Synchronized sitemap.xml with 309 canonical URLs (content-hash <lastmod>: 298 modified today)
   - Synchronized llms.txt with all 294 pSEO guides for GEO AI citations
 
