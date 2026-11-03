@@ -1921,6 +1921,7 @@ async function runDaily50Pages(targetCount = 50, force = false) {
   const baseUrls = [
     { loc: 'https://sweeprvpn.com/', priority: '1.0', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'index.html') },
     { loc: 'https://sweeprvpn.com/pricing', priority: '0.9', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'pricing.html') },
+    { loc: 'https://sweeprvpn.com/download', priority: '0.9', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'server.mjs') },
     { loc: 'https://sweeprvpn.com/solutions', priority: '0.9', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'solutions.html') },
     { loc: 'https://sweeprvpn.com/setup', priority: '0.9', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'setup.html') },
     { loc: 'https://sweeprvpn.com/guides', priority: '0.9', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'guides.html') },

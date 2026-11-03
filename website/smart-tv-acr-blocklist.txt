@@ -1,0 +1,62 @@
+# Title: SWEEPR VPN & Wi-Fi Radar — Smart-TV ACR Telemetry & Ad-Beacon Blocklist
+# Description: Blocks Automatic Content Recognition (ACR) frame fingerprinting and ad telemetry across Samsung Tizen, LG webOS LivePlus, Roku OS, Vizio SmartCast (Inscape), Sony Bravia (Samba TV), Hisense VIDAA, and Amazon Fire TV.
+# Homepage: https://sweeprvpn.com/guides/stop-samsung-smart-tv-acr-tracking
+# Companion LG Guide: https://sweeprvpn.com/guides/stop-lg-smart-tv-acr-spying
+# Free WebRTC & DNS Leak Test: https://sweeprvpn.com/tools/leak-test
+# Free ISP Throttling Test: https://sweeprvpn.com/tools/isp-throttling-test
+# License: CC-BY-SA-4.0 (Free for Pi-hole, AdGuard Home, pfSense pfBlockerNG, OPNsense Unbound & Router DNS Sinkholes)
+# Version: 2026.11.03
+
+# --- Samsung Smart Hub / Tizen OS ACR & Ad Telemetry ---
+0.0.0.0 gpm.samsungqbe.com
+0.0.0.0 samsungacr.com
+0.0.0.0 log-config.samsungacr.com
+0.0.0.0 ACR0.samsungcloudsolution.com
+0.0.0.0 otn.samsungcloudsolution.com
+0.0.0.0 ads.samsungads.com
+0.0.0.0 config.samsungads.com
+0.0.0.0 events.samsungads.com
+0.0.0.0 samsungotn.net
+0.0.0.0 lcprd1.samsungcloudsolution.net
+
+# --- LG webOS LivePlus ACR & Home Screen Ad Injection ---
+0.0.0.0 ibs.lgappstv.com
+0.0.0.0 ad.lgappstv.com
+0.0.0.0 yumenetworks.com
+0.0.0.0 ngfts.lge.com
+0.0.0.0 aic.ngfts.lge.com
+0.0.0.0 cdpbeacon.lgtvcommon.com
+0.0.0.0 homeprv.lgtvcommon.com
+0.0.0.0 nudge.lgtvcommon.com
+0.0.0.0 rudge.lgtvcommon.com
+0.0.0.0 us.ibs.lgappstv.com
+0.0.0.0 eu.ibs.lgappstv.com
+
+# --- Roku OS Cooper / Scribe ACR & Viewing Logs ---
+0.0.0.0 cooper.logs.roku.com
+0.0.0.0 scribe.logs.roku.com
+0.0.0.0amoeba.roku.com
+0.0.0.0 p.ads.roku.com
+0.0.0.0 display.ravm.tv
+0.0.0.0 logs.roku.com
+0.0.0.0 liberty.logs.roku.com
+
+# --- Vizio SmartCast / Inscape ACR Pixel Hashing ---
+0.0.0.0 tvinteractive.tv
+0.0.0.0 insights.vizio.com
+0.0.0.0 api.tvinteractive.tv
+0.0.0.0 images.tvinteractive.tv
+
+# --- Sony Bravia / Google TV / Samba TV Cross-Device Tracking ---
+0.0.0.0 samba.tv
+0.0.0.0 preferences.samba.tv
+0.0.0.0 api.samba.tv
+0.0.0.0 prod.arse.samba.tv
+0.0.0.0 bravia.dl.playstation.net
+
+# --- Hisense VIDAA OS / Flingo / Panasonic HbbTV ---
+0.0.0.0 vidaa.tv
+0.0.0.0 ads.vidaahub.com
+0.0.0.0 flingo.tv
+0.0.0.0 hbbtv.panasonic.com
+0.0.0.0 collect.mysmarttv.net

@@ -1989,14 +1989,19 @@ const CANONICAL_REDIRECTS = {
   '/vs/pia-private-internet-access': '/vs/private-internet-access',
   '/vs/surfshark-one': '/vs/surfshark',
   '/vs/warp-plus-team': '/vs/cloudflare-warp-plus',
-  // Non-residential / public hotspot Smart-TV ACR permutations consolidated to authoritative Smart-TV ACR guide
+  // Non-residential / public hotspot & straggler Smart-TV ACR permutations consolidated to authoritative Smart-TV ACR guide
   '/solutions/airport-lounge-public-wifi-smart-tv-acr-blocking': '/guides/stop-samsung-smart-tv-acr-tracking',
   '/solutions/nhs-guest-wifi-smart-tv-acr-blocking': '/guides/stop-samsung-smart-tv-acr-tracking',
   '/solutions/national-rail-train-wifi-smart-tv-acr-blocking': '/guides/stop-samsung-smart-tv-acr-tracking',
   '/solutions/hotel-captive-portal-wifi-smart-tv-acr-blocking': '/guides/stop-samsung-smart-tv-acr-tracking',
   '/solutions/eduroam-campus-wifi-smart-tv-acr-blocking': '/guides/stop-samsung-smart-tv-acr-tracking',
   '/solutions/o2-uk-mobile-tethering-smart-tv-acr-blocking': '/guides/stop-samsung-smart-tv-acr-tracking',
-  '/solutions/ee-5g-mobile-hotspot-smart-tv-acr-blocking': '/guides/stop-samsung-smart-tv-acr-tracking'
+  '/solutions/ee-5g-mobile-hotspot-smart-tv-acr-blocking': '/guides/stop-samsung-smart-tv-acr-tracking',
+  // Unified Eduroam WireGuard UDP 443 / MTU 1380 Hub consolidation (Phase 3 Item 4)
+  '/solutions/eduroam-campus-wifi-p2p-port-forwarding': '/solutions/eduroam-campus-wifi-gaming-packet-loss',
+  '/solutions/eduroam-campus-wifi-remote-dev-ssh': '/solutions/eduroam-campus-wifi-gaming-packet-loss',
+  '/solutions/eduroam-campus-wifi-uhd-streaming-buffering': '/solutions/eduroam-campus-wifi-gaming-packet-loss',
+  '/solutions/eduroam-campus-wifi-isp-throttling': '/solutions/eduroam-campus-wifi-gaming-packet-loss'
 };
 
 const ROUTE_ALIASES = {

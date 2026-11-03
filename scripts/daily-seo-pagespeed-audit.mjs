@@ -1516,6 +1516,7 @@ const validInternalUrls = new Set([
   '/SWEEPRVPN.exe',
   `/${INDEXNOW_KEY}.txt`,
   '/pad.xml',
+  '/smart-tv-acr-blocklist.txt',
   '/sitemap.xml',
   '/robots.txt',
   '/llms.txt'
