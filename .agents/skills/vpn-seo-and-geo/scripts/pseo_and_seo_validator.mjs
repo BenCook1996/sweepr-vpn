@@ -27,7 +27,7 @@ const WEBSITE_DIR = path.join(WORKSPACE_ROOT, 'website');
 
 const args = process.argv.slice(2);
 const actionIdx = args.indexOf('--action');
-const action = actionIdx !== -1 && args[actionIdx + 1] ? args[actionIdx + 1] : 'generate';
+const action = actionIdx !== -1 && args[actionIdx + 1] ? args[actionIdx + 1] : 'validate';
 
 // ============================================================================
 // 1. Structured Data Matrices for All 50 Programmatic SEO Pages
@@ -1205,6 +1205,7 @@ if (action === 'matrix') {
       const urlPath = `/${dir}/${slug}`;
       const absPath = path.join(dirAbs, file);
       const htmlContent = fs.readFileSync(absPath, 'utf8');
+      if (/<meta\s+name=["']robots["']\s+content=["'][^"']*noindex/i.test(htmlContent)) continue;
       const h1Match = htmlContent.match(/<h1[^>]*>(.*?)<\/h1>/is);
       const h1Text = h1Match ? h1Match[1].replace(/<[^>]+>/g, '').trim() : urlPath;
       allPseoPagesOnDisk.push({

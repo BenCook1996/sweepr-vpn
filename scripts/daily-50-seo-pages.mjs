@@ -1783,15 +1783,27 @@ async function runDaily50Pages(targetCount = 50, force = false) {
 
   const sitemapXml = fs.readFileSync(SITEMAP_PATH, 'utf8');
   const existingUrls = new Set([...sitemapXml.matchAll(/<loc>(.*?)<\/loc>/g)].map((m) => m[1].trim()));
+  const allowCartesian = process.argv.includes('--allow-cartesian');
+
+  // Guardrail (GSC Crawl-Budget Protection): Only allow generating new pillar pages (setup, vs, guides,
+  // or primary ISP flagship '-isp-throttling' solutions) unless --allow-cartesian is explicitly set.
+  const isPillarCandidate = (cand) => {
+    if (cand.cluster === 'setup' || cand.cluster === 'vs' || cand.cluster === 'guides') return true;
+    if (cand.urlPath && cand.urlPath.endsWith('-isp-throttling')) return true;
+    return allowCartesian;
+  };
 
   const pool = buildCandidatePool();
   const selected = [];
-  for (const cand of pool) {
-    const fullUrl = `https://sweeprvpn.com${cand.urlPath}`;
-    const absFile = path.join(WEBSITE_DIR, cand.relPath);
-    if (!fs.existsSync(absFile)) {
-      selected.push(cand);
-      if (selected.length >= targetCount) break;
+  if (targetCount > 0) {
+    for (const cand of pool) {
+      if (!isPillarCandidate(cand)) continue;
+      const fullUrl = `https://sweeprvpn.com${cand.urlPath}`;
+      const absFile = path.join(WEBSITE_DIR, cand.relPath);
+      if (!fs.existsSync(absFile)) {
+        selected.push(cand);
+        if (selected.length >= targetCount) break;
+      }
     }
   }
 
@@ -1808,11 +1820,10 @@ async function runDaily50Pages(targetCount = 50, force = false) {
     newUrls.push(fullUrl);
   }
 
-  // Rebuild website/sitemap.xml & website/llms.txt from ALL existing pSEO HTML files on disk
+  // Rebuild website/sitemap.xml & website/llms.txt strictly from indexable (non-noindex) pSEO HTML pillar files on disk
   const baseUrls = [
     { loc: 'https://sweeprvpn.com/', priority: '1.0', changefreq: 'weekly' },
     { loc: 'https://sweeprvpn.com/pricing', priority: '0.9', changefreq: 'weekly' },
-    { loc: 'https://sweeprvpn.com/app', priority: '0.8', changefreq: 'weekly' },
     { loc: 'https://sweeprvpn.com/tools/leak-test', priority: '0.8', changefreq: 'weekly' },
     { loc: 'https://sweeprvpn.com/tools/isp-throttling-test', priority: '0.8', changefreq: 'weekly' },
     { loc: 'https://sweeprvpn.com/vs/totalvpn', priority: '0.8', changefreq: 'monthly' },
@@ -1820,11 +1831,11 @@ async function runDaily50Pages(targetCount = 50, force = false) {
     { loc: 'https://sweeprvpn.com/support', priority: '0.6', changefreq: 'monthly' },
     { loc: 'https://sweeprvpn.com/refund', priority: '0.5', changefreq: 'monthly' },
     { loc: 'https://sweeprvpn.com/privacy', priority: '0.5', changefreq: 'monthly' },
-    { loc: 'https://sweeprvpn.com/terms', priority: '0.5', changefreq: 'monthly' },
-    { loc: 'https://sweeprvpn.com/pad.xml', priority: '0.5', changefreq: 'monthly' }
+    { loc: 'https://sweeprvpn.com/terms', priority: '0.5', changefreq: 'monthly' }
   ];
 
   const allPseoPagesOnDisk = [];
+  let consolidatedNoIndexCount = 0;
   for (const dir of ['solutions', 'setup', 'vs', 'guides']) {
     const dirAbs = path.join(WEBSITE_DIR, dir);
     if (!fs.existsSync(dirAbs)) continue;
@@ -1835,6 +1846,10 @@ async function runDaily50Pages(targetCount = 50, force = false) {
       const urlPath = `/${dir}/${slug}`;
       const absPath = path.join(dirAbs, file);
       const htmlContent = fs.readFileSync(absPath, 'utf8');
+      if (/<meta\s+name=["']robots["']\s+content=["'][^"']*noindex/i.test(htmlContent)) {
+        consolidatedNoIndexCount++;
+        continue;
+      }
       const h1Match = htmlContent.match(/<h1[^>]*>(.*?)<\/h1>/is);
       const h1Text = h1Match ? h1Match[1].replace(/<[^>]+>/g, '').trim() : urlPath;
       allPseoPagesOnDisk.push({
@@ -1855,7 +1870,8 @@ async function runDaily50Pages(targetCount = 50, force = false) {
       loc: p.loc,
       priority: '0.8',
       changefreq: 'weekly'
-    }))
+    })),
+    { loc: 'https://sweeprvpn.com/download', priority: '0.9', changefreq: 'weekly' }
   ];
 
   const rebuiltSitemap = `<?xml version="1.0" encoding="UTF-8"?>
@@ -1898,12 +1914,13 @@ ${allPseoPagesOnDisk.map((p) => `- [${p.h1}](${p.loc})`).join('\n')}
       queue = { ...queue, ...JSON.parse(fs.readFileSync(INDEXING_QUEUE_PATH, 'utf8')) };
     } catch {}
   }
-  const pendingSet = new Set([...(queue.pending_urls || []), ...allPseoPagesOnDisk.map((p) => p.loc)]);
+  const indexableLocSet = new Set(allSitemapEntries.map((e) => e.loc));
+  const pendingSet = new Set([...(queue.pending_urls || []).filter((u) => indexableLocSet.has(u)), ...newUrls]);
   queue.pending_urls = [...pendingSet];
-  queue.last_daily_50_batch = { date: todayStr, newCount: newUrls.length, totalPseoPages: allPseoPagesOnDisk.length, totalSitemapUrls: allSitemapEntries.length };
+  queue.last_daily_50_batch = { date: todayStr, newCount: newUrls.length, totalPseoPages: allPseoPagesOnDisk.length, consolidatedNoIndexExcluded: consolidatedNoIndexCount, totalSitemapUrls: allSitemapEntries.length };
   fs.writeFileSync(INDEXING_QUEUE_PATH, JSON.stringify(queue, null, 2), 'utf8');
 
-  // Validate all pSEO pages on disk
+  // Validate all indexable pSEO pillar pages on disk
   let validCount = 0;
   let invalidCount = 0;
   for (const p of allPseoPagesOnDisk) {
@@ -1923,37 +1940,39 @@ ${allPseoPagesOnDisk.map((p) => `- [${p.h1}](${p.loc})`).join('\n')}
   // Save state
   state.lastRunDate = todayStr;
   state.totalGenerated = allPseoPagesOnDisk.length;
-  state.batches.push({ date: todayStr, newGenerated: newUrls.length, totalPseoPages: allPseoPagesOnDisk.length });
+  state.batches.push({ date: todayStr, newGenerated: newUrls.length, totalPseoPages: allPseoPagesOnDisk.length, consolidatedNoIndexExcluded: consolidatedNoIndexCount });
   fs.writeFileSync(DAILY_STATE_PATH, JSON.stringify(state, null, 2), 'utf8');
 
-  console.log(`[SWEEPR Daily 50 SEO Pages] Newly generated: ${newUrls.length} pages | Total pSEO Pages on Disk: ${allPseoPagesOnDisk.length} | Total Sitemap URLs: ${allSitemapEntries.length}`);
+  console.log(`[SWEEPR VPN Pillar SEO Sync] Newly generated: ${newUrls.length} pages | Indexable pSEO Pillars: ${allPseoPagesOnDisk.length} (Consolidated NoIndex Excluded: ${consolidatedNoIndexCount}) | Total Sitemap URLs: ${allSitemapEntries.length}`);
   console.log(`[SEO Schema & Canonical Validation] Passed: ${validCount}/${allPseoPagesOnDisk.length} (Failed: ${invalidCount})`);
 
-  // Ping Bing IndexNow with the newly generated 50 URLs
-  try {
-    const indexNowPayload = {
-      host: 'sweeprvpn.com',
-      key: INDEXNOW_KEY,
-      keyLocation: `https://sweeprvpn.com/${INDEXNOW_KEY}.txt`,
-      urlList: newUrls
-    };
-    await Promise.all([
-      fetch('https://www.bing.com/indexnow', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json; charset=utf-8' },
-        body: JSON.stringify(indexNowPayload),
-        signal: AbortSignal.timeout(10000)
-      }).catch(() => {}),
-      fetch('https://api.indexnow.org/indexnow', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json; charset=utf-8' },
-        body: JSON.stringify(indexNowPayload),
-        signal: AbortSignal.timeout(10000)
-      }).catch(() => {})
-    ]);
-  } catch {}
+  // Ping Bing IndexNow ONLY if newUrls.length > 0
+  if (newUrls.length > 0) {
+    try {
+      const indexNowPayload = {
+        host: 'sweeprvpn.com',
+        key: INDEXNOW_KEY,
+        keyLocation: `https://sweeprvpn.com/${INDEXNOW_KEY}.txt`,
+        urlList: newUrls
+      };
+      await Promise.all([
+        fetch('https://www.bing.com/indexnow', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json; charset=utf-8' },
+          body: JSON.stringify(indexNowPayload),
+          signal: AbortSignal.timeout(10000)
+        }).catch(() => {}),
+        fetch('https://api.indexnow.org/indexnow', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json; charset=utf-8' },
+          body: JSON.stringify(indexNowPayload),
+          signal: AbortSignal.timeout(10000)
+        }).catch(() => {})
+      ]);
+    } catch {}
+  }
 }
 
-const countArg = process.argv[2] !== undefined && !process.argv[2].startsWith('--') ? Number(process.argv[2]) : 50;
+const countArg = process.argv[2] !== undefined && !process.argv[2].startsWith('--') ? Number(process.argv[2]) : 0;
 const forceFlag = process.argv.includes('--force');
 runDaily50Pages(countArg, forceFlag).catch(console.error);

@@ -171,9 +171,35 @@ async function verifyAndProbePadXml() {
   return { version, sizeBytes, sizeMb, specUrl, primaryDl };
 }
 
+const GSC_PRIORITY_URLS = new Set([
+  'https://sweeprvpn.com/',
+  'https://sweeprvpn.com/pricing',
+  'https://sweeprvpn.com/download',
+  'https://sweeprvpn.com/tools/leak-test',
+  'https://sweeprvpn.com/tools/isp-throttling-test',
+  'https://sweeprvpn.com/vs/totalvpn',
+  'https://sweeprvpn.com/alternatives/totalvpn',
+  'https://sweeprvpn.com/solutions/talktalk-p2p-port-forwarding',
+  'https://sweeprvpn.com/setup/gl-inet-travel-router',
+  'https://sweeprvpn.com/guides/stop-samsung-smart-tv-acr-tracking',
+  'https://sweeprvpn.com/solutions/eduroam-campus-wifi-gaming-packet-loss',
+  'https://sweeprvpn.com/setup/nvidia-shield-tv-pro-wireguard',
+  'https://sweeprvpn.com/solutions/gigaclear-rural-fibre-gaming-packet-loss',
+  'https://sweeprvpn.com/setup/synology-nas-docker-vpn',
+  'https://sweeprvpn.com/guides/stop-lg-smart-tv-acr-spying',
+  'https://sweeprvpn.com/solutions/hotel-captive-portal-wifi-p2p-port-forwarding',
+  'https://sweeprvpn.com/solutions/rogers-ignite-canada-isp-throttling',
+  'https://sweeprvpn.com/setup/steam-deck-vpn'
+]);
+
 function loadTargetItemsFromSitemap() {
   const xml = fs.readFileSync(SITEMAP_PATH, 'utf8');
-  const urls = [...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map((m) => m[1].trim());
+  const rawUrls = [...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map((m) => m[1].trim());
+  // Prioritize Tier 1 Core/Tool Hubs & Tier 2 GSC Striking-Distance Winners before general pillar pages
+  const urls = [
+    ...rawUrls.filter((u) => GSC_PRIORITY_URLS.has(u)),
+    ...rawUrls.filter((u) => !GSC_PRIORITY_URLS.has(u))
+  ];
   return urls.map((url) => {
     const pathname = new URL(url).pathname;
     const slug = pathname === '/' ? 'sweepr-vpn-home-wifi-scanner' : pathname.replace(/^\/+/, '').replace(/\//g, '-');

@@ -268,8 +268,9 @@ if (autoOptimizedCoreCount > 0) {
   );
 }
 
-// Scan all programmatic SEO files on disk
+// Scan all programmatic SEO files on disk (excluding consolidated noindex sub-variants from sitemap & canonical index)
 const pseoFilesOnDisk = [];
+let consolidatedNoIndexPseoCount = 0;
 let autoOptimizedPseoCount = 0;
 
 for (const dir of ['solutions', 'setup', 'vs', 'guides']) {
@@ -282,6 +283,13 @@ for (const dir of ['solutions', 'setup', 'vs', 'guides']) {
     const urlPath = `/${dir}/${slug}`;
     const absPath = path.join(dirAbs, file);
     let content = fs.readFileSync(absPath, 'utf8');
+
+    // Guardrail: Intentionally consolidated thin Cartesian sub-variants marked <meta name="robots" content="noindex, follow">
+    // must NOT be added to pseoFilesOnDisk, sitemap.xml, llms.txt, or indexing-queue.json.
+    if (/<meta\s+name=["']robots["']\s+content=["'][^"']*noindex/i.test(content)) {
+      consolidatedNoIndexPseoCount++;
+      continue;
+    }
 
     // Auto-optimize pSEO page metadata, GSC CTR overrides, internal hub links, Rich Schemas & GA4 tag (non-visual)
     if (shouldFix) {
@@ -459,9 +467,10 @@ for (const dir of ['solutions', 'setup', 'vs', 'guides']) {
   }
 }
 
-// Deterministic Cross-Cluster & Ring Internal Link Mesh across all 1,093 pSEO pages (Eliminates 100% of Orphan Pages)
+// Deterministic Cross-Cluster & Ring Internal Link Mesh across all indexable pSEO pillar pages (Eliminates 100% of Orphan Pages)
 let meshUpdatedCount = 0;
 if (shouldFix && pseoFilesOnDisk.length > 0) {
+  const indexableUrlSet = new Set(pseoFilesOnDisk.map((p) => p.urlPath));
   const byCluster = {
     solutions: pseoFilesOnDisk.filter((p) => p.dir === 'solutions'),
     setup: pseoFilesOnDisk.filter((p) => p.dir === 'setup'),
@@ -471,7 +480,13 @@ if (shouldFix && pseoFilesOnDisk.length > 0) {
 
   for (let i = 0; i < pseoFilesOnDisk.length; i++) {
     const page = pseoFilesOnDisk[i];
-    if (page.content.includes('class="sweepr-mesh-link"')) continue;
+    if (page.content.includes('class="sweepr-mesh-link"')) {
+      const existingMeshLinks = [...page.content.matchAll(/<li class="sweepr-mesh-link"><a href="([^"]+)"/g)].map((m) => m[1]);
+      if (existingMeshLinks.length > 0 && existingMeshLinks.every((u) => indexableUrlSet.has(u))) {
+        continue;
+      }
+      page.content = page.content.replace(/\s*<li class="sweepr-mesh-link">[\s\S]*?<\/li>/g, '');
+    }
     const clusterArr = byCluster[page.dir] || pseoFilesOnDisk;
     const cIdx = clusterArr.findIndex((x) => x.urlPath === page.urlPath);
     const cLen = clusterArr.length;
