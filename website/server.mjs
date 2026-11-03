@@ -1955,6 +1955,10 @@ const CANONICAL_REDIRECTS = {
   '/terms.html': '/terms',
   '/privacy.html': '/privacy',
   '/support.html': '/support',
+  '/guides.html': '/guides',
+  '/setup.html': '/setup',
+  '/solutions.html': '/solutions',
+  '/vs.html': '/vs',
   '/app': '/download',
   '/app-preview.html': '/download',
   '/app-preview': '/download',
@@ -1966,7 +1970,33 @@ const CANONICAL_REDIRECTS = {
   '/isp-throttling-test.html': '/tools/isp-throttling-test',
   '/setup/asuswrt-merlin-vpn-client': '/setup/asuswrt-merlin-vpn-router',
   '/guides/block-samsung-tv-acr-tracking': '/guides/stop-samsung-smart-tv-acr-tracking',
-  '/guides/block-lg-webos-acr-tracking': '/guides/stop-lg-smart-tv-acr-spying'
+  '/guides/block-lg-webos-acr-tracking': '/guides/stop-lg-smart-tv-acr-spying',
+  // Cannibalization Consolidation Redirects (301 to GSC-Winning Canonical Pillar)
+  '/guides/block-samsung-tizen-smart-hub-acr': '/guides/stop-samsung-smart-tv-acr-tracking',
+  '/guides/block-lg-webos-liveplus-acr': '/guides/stop-lg-smart-tv-acr-spying',
+  '/guides/block-roku-os-smart-tv-telemetry': '/guides/stop-roku-vizio-firetv-spying',
+  '/guides/block-vizio-smartcast-inscape-acr': '/guides/stop-roku-vizio-firetv-spying',
+  '/guides/stop-isp-dns-hijacking-nxdomain': '/guides/fix-isp-dns-hijacking-and-throttling',
+  '/setup/steamos-steam-deck-wireguard': '/setup/steam-deck-vpn',
+  '/setup/synology-dsm-7-wireguard': '/setup/synology-nas-docker-vpn',
+  '/setup/openwrt-luci-wireguard-interface': '/setup/openwrt-wireguard-router',
+  '/setup/openwrt-travel-glinet-dropin': '/setup/gl-inet-travel-router',
+  '/setup/opnsense-24-kernel-wireguard': '/setup/pfsense-opnsense-router',
+  '/setup/pfsense-plus-wireguard-client': '/setup/pfsense-opnsense-router',
+  '/setup/firewalla-gold-plus-wireguard': '/setup/firewalla-gold-wireguard-vpn',
+  '/setup/draytek-vigor-2962-wireguard': '/setup/draytek-vigor-wireguard-client',
+  '/setup/raspberry-pi-5-wireguard-gateway': '/setup/raspberry-pi-home-gateway',
+  '/vs/pia-private-internet-access': '/vs/private-internet-access',
+  '/vs/surfshark-one': '/vs/surfshark',
+  '/vs/warp-plus-team': '/vs/cloudflare-warp-plus',
+  // Non-residential / public hotspot Smart-TV ACR permutations consolidated to authoritative Smart-TV ACR guide
+  '/solutions/airport-lounge-public-wifi-smart-tv-acr-blocking': '/guides/stop-samsung-smart-tv-acr-tracking',
+  '/solutions/nhs-guest-wifi-smart-tv-acr-blocking': '/guides/stop-samsung-smart-tv-acr-tracking',
+  '/solutions/national-rail-train-wifi-smart-tv-acr-blocking': '/guides/stop-samsung-smart-tv-acr-tracking',
+  '/solutions/hotel-captive-portal-wifi-smart-tv-acr-blocking': '/guides/stop-samsung-smart-tv-acr-tracking',
+  '/solutions/eduroam-campus-wifi-smart-tv-acr-blocking': '/guides/stop-samsung-smart-tv-acr-tracking',
+  '/solutions/o2-uk-mobile-tethering-smart-tv-acr-blocking': '/guides/stop-samsung-smart-tv-acr-tracking',
+  '/solutions/ee-5g-mobile-hotspot-smart-tv-acr-blocking': '/guides/stop-samsung-smart-tv-acr-tracking'
 };
 
 const ROUTE_ALIASES = {
@@ -1980,6 +2010,10 @@ const ROUTE_ALIASES = {
   '/terms': 'terms.html',
   '/privacy': 'privacy.html',
   '/support': 'support.html',
+  '/guides': 'guides.html',
+  '/setup': 'setup.html',
+  '/solutions': 'solutions.html',
+  '/vs': 'vs.html',
   '/vs/totalvpn': 'vs-totalvpn.html',
   '/alternatives/totalvpn': 'alternatives-totalvpn.html',
   '/tools/leak-test': 'leak-test.html',
@@ -2278,6 +2312,11 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
         <span class="text-xs font-bold text-emerald-700 underline shrink-0">Get Pro &rarr;</span>
       </a>
     </div>
+    <div class="mt-4 mb-5 p-3.5 rounded-xl border border-emerald-200 bg-emerald-50/50 text-left text-xs text-gray-600 space-y-1">
+      <div class="font-extrabold text-emerald-900 flex items-center gap-1.5">🛡️ Authenticode Signed &amp; Verified Windows Binary</div>
+      <div><strong>Publisher:</strong> CN=Benjamin Cook (SSL.com Code Signing Intermediate CA RSA R1)</div>
+      <div class="break-all"><strong>SHA-256 (SWEEPRVPN.exe):</strong> <code class="text-[11px] bg-white px-1 py-0.5 rounded border border-emerald-100">5BC593BA86C9E39BDD00F1813326314A3D0489C1763706F9D6EA9548AFA83E0A</code></div>
+    </div>
     <div class="flex justify-center pt-4 border-t border-gray-100">
       <a href="/" class="btn btn-ghost w-full justify-center">Back to Home</a>
     </div>
@@ -2288,6 +2327,14 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
         <a href="/tools/leak-test" class="hover:text-emerald-600">Free IP &amp; DNS Leak Test</a>
         <span>&bull;</span>
         <a href="/tools/isp-throttling-test" class="hover:text-emerald-600">Free ISP Speed Checker</a>
+        <span>&bull;</span>
+        <a href="/setup" class="hover:text-emerald-600">Router &amp; Device Setup</a>
+        <span>&bull;</span>
+        <a href="/guides" class="hover:text-emerald-600">Privacy Guides</a>
+        <span>&bull;</span>
+        <a href="/solutions" class="hover:text-emerald-600">ISP Throttling Fixes</a>
+        <span>&bull;</span>
+        <a href="/vs" class="hover:text-emerald-600">VPN Comparisons</a>
         <span>&bull;</span>
         <a href="/support" class="hover:text-emerald-600">Support</a>
       </div>
@@ -2304,6 +2351,25 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
       </div>
     </div>
   </div>
+  <script>
+    (function(){
+      try {
+        var ua = navigator.userAgent || '';
+        if (/bot|crawl|spider|slurp|google|bing|gpt|claude|perplexity|applebot|duckduck|yandex|lighthouse|pagespeed/i.test(ua)) return;
+        var q = new URLSearchParams(window.location.search);
+        if (q.get('picker') === '1' || q.get('noredirect') === '1' || q.get('platform')) return;
+        var os = ${JSON.stringify(osType)};
+        var target = os === 'windows' ? '/download?platform=win'
+          : os === 'mac' ? '/download?platform=mac'
+          : os === 'android' ? '/download/SWEEPRVPN.apk'
+          : os === 'ios' ? '/download/SWEEPRVPN.mobileconfig'
+          : '';
+        if (target) {
+          setTimeout(function(){ window.location.href = target; }, 350);
+        }
+      } catch (e) {}
+    })();
+  </script>
 </body>
 </html>`;
 }
@@ -2803,7 +2869,10 @@ self.addEventListener('fetch', e => {
       });
     }
 
-    if (requestedPlatform === 'picker') {
+    // Canonical /download (without ?platform=... query parameter) ALWAYS serves the indexable 200 OK HTML
+    // Download Hub page to ALL visitors (zero user-agent cloaking, zero noindex on /download).
+    // The HTML page automatically initiates the OS-appropriate installer download on load.
+    if (!requestedPlatform || requestedPlatform === 'picker') {
       return sendHtml(res, 200, renderPlatformDownloadPicker(osType, ua, hostOrigin), {
         'Cache-Control': 'public, max-age=300, stale-while-revalidate=3600'
       });
@@ -6791,6 +6860,26 @@ self.addEventListener('fetch', e => {
     let content = rawContent;
     if (ext === '.html' && !isOrderRoute && !isLoginRoute) {
       const htmlStr = rawContent.toString('utf8');
+      // If a pSEO sub-variant on disk is consolidated (marked noindex, follow with a canonical pointing
+      // to a different parent pillar URL), serve a clean HTTP 301 Moved Permanently redirect to the parent
+      // pillar URL so Google consolidates link/crawl equity without 'Crawled - currently not indexed' or
+      // conflicting noindex + rel="canonical" signals.
+      if (
+        /^\/(solutions|setup|vs|guides)\//i.test(pathname) &&
+        /<meta\s+name=["']robots["']\s+content=["'][^"']*noindex/i.test(htmlStr)
+      ) {
+        const canonMatch = htmlStr.match(/<link\s+rel=["']canonical["']\s+href=["']https?:\/\/sweeprvpn\.com(\/[^"']*)["']/i);
+        const reqClean = pathname.replace(/\.html$/i, '');
+        if (canonMatch && canonMatch[1] && canonMatch[1] !== reqClean) {
+          res.writeHead(301, {
+            Location: canonMatch[1],
+            'Cache-Control': 'public, max-age=3600',
+            ...COMMON_SECURITY_HEADERS
+          });
+          res.end();
+          return;
+        }
+      }
       if (!htmlStr.includes('sweepr-order-draft-redirect') && /<head[^>]*>/i.test(htmlStr)) {
         const draftRedirectSnippet = `<script id="sweepr-order-draft-redirect">(function(){function c(){try{if(/bot|crawl|spider|slurp|google|bing|gpt|claude|perplexity|applebot|duckduck|yandex/i.test(navigator.userAgent||''))return;var p=window.location.pathname.replace(/\\/+$/,'')||'/';if(/^\\/(order|checkout|login|dashboard|app)(\\b|\\/|\\$)/i.test(p))return;var q=new URLSearchParams(window.location.search);if(q.get('noredirect')==='1')return;var r=document.referrer||'';try{if(/^\\/(terms|privacy|refund)(\\b|\\/|\\$)/i.test(p)&&r&&/^\\/(order|checkout)(\\b|\\/|\\$)/i.test(new URL(r).pathname))return;}catch(e){}var raw=localStorage.getItem('sweepr_order_draft');if(raw){var d=JSON.parse(raw);var age=Date.now()-(Number(d&&d.updatedAt)||0);if(d&&d.hasFilledDetails&&age>=0&&age<=1800000){window.location.replace('/order');return;}else if(age>1800000){localStorage.removeItem('sweepr_order_draft');document.cookie='sweepr_order_draft=; Path=/; Max-Age=0; SameSite=Lax';}}if(/(?:^|;\\s*)sweepr_order_draft=1(?:;|$)/.test(document.cookie)){window.location.replace('/order');}}catch(e){}}c();window.addEventListener('pageshow',c);})();</script>`;
         content = Buffer.from(htmlStr.replace(/<head[^>]*>/i, (m) => `${m}\n  ${draftRedirectSnippet}`), 'utf8');

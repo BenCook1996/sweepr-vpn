@@ -2,29 +2,14 @@
 
 > SWEEPR VPN is an ultra-lightweight (~3.7 MB), fast, and easy-to-use 10Gbps WireGuard VPN and Free 30-Second Home Wi-Fi Scanner for Windows 10/11, macOS, Linux, and routers. Built by the team behind SWEEPR Cleaner, it combines 1-click 10Gbps private browsing with a free 30-second Home Wi-Fi & Speed Scanner and a Smart-TV ACR spy blocker.
 
-## Core Capabilities & Technical Differentiators
-- **1-Click Private Browsing & Streaming Speed Booster**: Eliminates ISP evening traffic shaping (Virgin Media, BT, Sky, TalkTalk, Vodafone, Eduroam) on 4K streaming, gaming, and remote SSH/Docker workflows. Strict zero-logs policy on diskless RAM-only 10Gbps servers.
-- **Free 30-Second Home Wi-Fi & Speed Scanner**: Scans your local subnet in 30 seconds to discover all 15–30+ connected household devices, flag unknown intruders, audit router security vulnerabilities, and detect ISP DNS hijacking.
-- **SWEEPR Wi-Fi Radar & Smart-TV Shield (Add-On)**:
-  - Instant on-screen alerts whenever an unknown device joins your home Wi-Fi network.
-  - 1-click speed booster to stop peak-hour streaming buffering.
-  - Automatic Smart-TV spy blocker sinking ACR (Automatic Content Recognition) telemetry domains from Samsung Tizen, LG webOS, Roku, Vizio Inscape, and Amazon Fire TV.
-- **Transparent Price-Lock Subscription Plans (Covers up to 10 Devices)**:
-  - **Yearly Plan (Most Popular — Save 50%)**: £74.99/year (£6.25/mo) | $95.99 USD ($8.00/mo) | €89.99 EUR (€7.50/mo) | CA$131.99 CAD | A$149.99 AUD | CHF 83.99 | ¥14,999 JPY
-  - **6-Monthly Plan (Save 35%)**: £48.99/6 months (£8.17/mo) | $61.99 USD | €58.99 EUR | CA$85.99 CAD | A$97.99 AUD | CHF 54.99 | ¥9,799 JPY
-  - **Monthly Plan**: £12.49/month (or £1.99 1st-Month Introductory Offer) | $15.99 USD | €14.99 EUR | CA$21.99 CAD | A$24.99 AUD | CHF 13.99 | ¥2,499 JPY
-  - **SWEEPR Wi-Fi Radar & Smart-TV Shield Add-On**: +£14.99/yr | +£9.99/6mo | +£1.99/mo
-  - **Refund Policy**: 30-day 100% money-back guarantee and 1-click self-service portal cancellation.
-
 ## Core Storefront & Free Diagnostic Tools
 - Homepage & Free Home Wi-Fi Scanner: https://sweeprvpn.com/
 - Pricing & Plan Comparison: https://sweeprvpn.com/pricing
-- Interactive Live Desktop App Preview: https://sweeprvpn.com/app
 - Free Instant IP, DNS & WebRTC Leak Test: https://sweeprvpn.com/tools/leak-test
 - Free ISP Speed Slowdown & Streaming Throttling Checker: https://sweeprvpn.com/tools/isp-throttling-test
 - Official PAD 4.0 XML Feed: https://sweeprvpn.com/pad.xml
 
-## Programmatic SEO Technical Library (302 Indexed Guides & Comparisons)
+## Programmatic SEO Technical Library (294 Indexed Guides & Comparisons)
 - [How to Stop 1&1 DSL & Glasfaser Germany Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/1und1-dsl-glasfaser-de-isp-throttling)
 - [How to Stop 2degrees Broadband New Zealand Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/2degrees-broadband-nz-isp-throttling)
 - [How to Stop UK Airport & Lounge Public Wi-Fi Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/airport-lounge-public-wifi-isp-throttling)
@@ -50,6 +35,7 @@
 - [How to Stop CityFibre UK FTTP Providers Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/cityfibre-uk-isp-throttling)
 - [How to Stop Cogeco Connexion Ultra-High Speed Canada Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/cogeco-connexion-canada-isp-throttling)
 - [How to Stop Comcast Xfinity Cable Broadband Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/comcast-xfinity-broadband-isp-throttling)
+- [Block Smart-TV ACR Spying on Comcast Xfinity Cable Broadband & Scan Your Home Wi-Fi in 30 Seconds](https://sweeprvpn.com/solutions/comcast-xfinity-broadband-smart-tv-acr-blocking)
 - [How to Stop Community Fibre London Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/community-fibre-london-isp-throttling)
 - [How to Stop Connect Fibre Hyperfast Community FTTP Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/connect-fibre-uk-isp-throttling)
 - [How to Stop Connexin 2.5Gbps Full Fibre Hull & Yorkshire Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/connexin-full-fibre-isp-throttling)
@@ -67,11 +53,14 @@
 - [How to Fix Eduroam Campus Wi-Fi Remote SSH, Git &amp; Docker Workflows (AS786 (Jisc Janet))](https://sweeprvpn.com/solutions/eduroam-campus-wifi-remote-dev-ssh)
 - [How to Fix Eduroam Campus Wi-Fi 4K Live Sports &amp; High-Bitrate Streaming (AS786 (Jisc Janet))](https://sweeprvpn.com/solutions/eduroam-campus-wifi-uhd-streaming-buffering)
 - [How to Stop EE 5G & Home Router UK Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/ee-5g-mobile-hotspot-isp-throttling)
+- [How to Fix Microsoft Teams, Zoom & VoIP Jitter on EE 5G & Home Router UK Using Low-Latency WireGuard](https://sweeprvpn.com/solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter)
+- [Protect Your Devices on EE 5G & Home Router UK From ARP Spoofing, Sniffing & Unknown Intruders](https://sweeprvpn.com/solutions/ee-5g-mobile-hotspot-wifi-arp-spoofing-protection)
 - [How to Stop Eir Fibre Gigabit Ireland FTTH Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/eir-fibre-ireland-isp-throttling)
 - [How to Stop FACTCO Community Full Fibre North UK Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/factco-community-fibre-isp-throttling)
 - [How to Stop Fastnet Brighton & Sussex Broadband Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/fastnet-uk-isp-throttling)
 - [How to Stop Fastweb Nexxt Casa FTTH GPON Italy Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/fastweb-fibra-italy-isp-throttling)
 - [How to Stop Fibrus Full Fibre Broadband Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/fibrus-full-fibre-isp-throttling)
+- [Block Smart-TV ACR Spying on Fibrus Full Fibre Broadband & Scan Your Home Wi-Fi in 30 Seconds](https://sweeprvpn.com/solutions/fibrus-full-fibre-smart-tv-acr-blocking)
 - [How to Stop Fidium Fiber by Consolidated Communications Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/fidium-fiber-us-isp-throttling)
 - [How to Stop Freebox Pop & Ultra Fibre France Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/free-freebox-pop-ultra-fr-isp-throttling)
 - [How to Stop Freedom Fibre Wholesale FTTP UK Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/freedom-fibre-uk-isp-throttling)
@@ -103,9 +92,12 @@
 - [How to Stop NetCologne Gigabit Glasfaser Cologne Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/netcologne-fibre-germany-isp-throttling)
 - [How to Stop Netomnia Wholesale 10Gbps XGS-PON UK Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/netomnia-broadband-isp-throttling)
 - [How to Stop NHS & Hospital Guest Wi-Fi Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/nhs-guest-wifi-isp-throttling)
+- [Eliminate NHS & Hospital Guest Wi-Fi 4K UHD Streaming Buffering & CDN Throttling](https://sweeprvpn.com/solutions/nhs-guest-wifi-uhd-streaming-buffering)
+- [How to Fix Microsoft Teams, Zoom & VoIP Jitter on NHS & Hospital Guest Wi-Fi Using Low-Latency WireGuard](https://sweeprvpn.com/solutions/nhs-guest-wifi-voip-teams-zoom-jitter)
 - [How to Stop NOW Broadband Super Fibre UK Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/now-broadband-uk-isp-throttling)
 - [How to Stop O2 Telefónica HomeSpot 5G & DSL Germany Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/o2-telefonica-germany-isp-throttling)
 - [How to Stop O2 UK 5G & Mobile Tethering Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/o2-uk-mobile-tethering-isp-throttling)
+- [Eliminate O2 UK 5G & Mobile Tethering 4K UHD Streaming Buffering & CDN Throttling](https://sweeprvpn.com/solutions/o2-uk-mobile-tethering-uhd-streaming-buffering)
 - [How to Stop Octaplus 1Gbps–2.5Gbps Fibre UK Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/octaplus-uk-isp-throttling)
 - [How to Stop Odido / T-Mobile Glasvezel Netherlands Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/odido-glasvezel-nl-isp-throttling)
 - [How to Stop Ogi Full Fibre Wales Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/ogi-full-fibre-wales-isp-throttling)
@@ -151,6 +143,8 @@
 - [How to Stop Telstra NBN Australia Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/telstra-nbn-australia-isp-throttling)
 - [How to Stop Telus PureFibre 1Gbps–2.5Gbps Canada Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/telus-purefibre-canada-isp-throttling)
 - [How to Stop Three 5G Home Broadband UK Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/three-5g-home-broadband-isp-throttling)
+- [Eliminate Three 5G Home Broadband UK 4K UHD Streaming Buffering & CDN Throttling](https://sweeprvpn.com/solutions/three-5g-home-broadband-uhd-streaming-buffering)
+- [How to Fix Microsoft Teams, Zoom & VoIP Jitter on Three 5G Home Broadband UK Using Low-Latency WireGuard](https://sweeprvpn.com/solutions/three-5g-home-broadband-voip-teams-zoom-jitter)
 - [How to Stop TIM Telecom Italia Fibra Ultraveloce Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/tim-telecom-italia-fibra-isp-throttling)
 - [How to Stop toob 900Mbps Full Fibre UK Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/toob-full-fibre-uk-isp-throttling)
 - [How to Stop TPG Telecom & Vodafone Australia NBN Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/tpg-telecom-australia-isp-throttling)
@@ -189,10 +183,8 @@
 - [CasaOS & ZimaBoard Homelab WireGuard VPN Client Stack: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/casaos-docker-wireguard)
 - [Debian 12 / Ubuntu 24.04 Headless WireGuard nftables Gateway: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/debian-12-headless-wireguard-gateway)
 - [Docker Compose + Gluetun WireGuard Sidecar Stack: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/docker-gluetun-wireguard-compose)
-- [DrayTek Vigor 2962 2.5Gbps Dual-WAN WireGuard Router: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/draytek-vigor-2962-wireguard)
 - [DrayTek Vigor 2865 & 2927 WireGuard VPN Tunnel Guide: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/draytek-vigor-wireguard-client)
 - [Fedora Silverblue 40 Immutable WireGuard VPN Guide: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/fedora-silverblue-immutable-wireguard)
-- [Firewalla Gold Plus 2.5Gbps WireGuard & Cyber-Security Gateway: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/firewalla-gold-plus-wireguard)
 - [Firewalla Gold & Purple WireGuard VPN Client Configuration: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/firewalla-gold-wireguard-vpn)
 - [FreeBSD 14.1 Kernel WireGuard (if_wg) & pf Firewall Setup: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/freebsd-14-wireguard-kmod)
 - [GL.iNet Marble (GL-B3000) Wi-Fi 6 WireGuard Home Router: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/gl-inet-b3000-marble-wireguard)
@@ -208,23 +200,16 @@
 - [Nintendo Switch OLED Low-NAT WireGuard Gaming Router Setup: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/nintendo-switch-wireguard-proxy)
 - [NixOS Declarative WireGuard Interface Configuration Guide: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/nixos-declarative-wireguard)
 - [NVIDIA Shield TV Pro 4K WireGuard & GeForce NOW Setup: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/nvidia-shield-tv-pro-wireguard)
-- [OpenWrt 23.05 LuCI WireGuard Client & Firewall Zone Setup: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/openwrt-luci-wireguard-interface)
-- [OpenWrt 23.05 Drop-In Gateway & Transparent WireGuard Proxy: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/openwrt-travel-glinet-dropin)
 - [WireGuard VPN Setup for OpenWrt 23.05+ Router WireGuard &amp; Policy Routing](https://sweeprvpn.com/setup/openwrt-wireguard-router)
-- [OPNsense 24.x Kernel WireGuard & Multi-WAN Gateway: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/opnsense-24-kernel-wireguard)
 - [WireGuard VPN Setup for pfSense &amp; OPNsense Home Firewall](https://sweeprvpn.com/setup/pfsense-opnsense-router)
-- [pfSense Plus / CE 2.7+ WireGuard Client & Policy Gateway: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/pfsense-plus-wireguard-client)
 - [PlayStation 5 (PS5) Low-Ping WireGuard & NAT Type 2 Setup: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/playstation-5-wireguard-router)
 - [Protectli Vault 6-Port Core i5 OPNsense WireGuard Gateway: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/protectli-vault-opnsense)
 - [Proxmox VE 8.x Unprivileged LXC WireGuard Gateway: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/proxmox-lxc-wireguard-gateway)
 - [Proxmox VE 8.2 SDN VNet WireGuard Gateway Setup: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/proxmox-ve-8-sdn-wireguard)
 - [QNAP QTS 5.x & QuTS hero (QVPN Service 3): High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/qnap-qts-wireguard-client)
-- [Raspberry Pi 5 Whole-Home WireGuard & Smart-TV ACR Blocker: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/raspberry-pi-5-wireguard-gateway)
 - [WireGuard VPN Setup for Raspberry Pi 5 Whole-Home WireGuard Gateway &amp; TV Shield](https://sweeprvpn.com/setup/raspberry-pi-home-gateway)
 - [ASUS ROG Ally & ROG Ally X Low-Latency WireGuard Gaming Setup: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/rog-ally-windows-11-wireguard)
 - [WireGuard VPN Setup for Steam Deck &amp; Handheld Gaming OS (SteamOS)](https://sweeprvpn.com/setup/steam-deck-vpn)
-- [Steam Deck (SteamOS 3.5+) Low-Ping WireGuard Gaming Guide: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/steamos-steam-deck-wireguard)
-- [Synology NAS DSM 7.2 (Kernel WireGuard & Gluetun): High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/synology-dsm-7-wireguard)
 - [WireGuard VPN Setup for Synology NAS &amp; Docker Gluetun WireGuard Container](https://sweeprvpn.com/setup/synology-nas-docker-vpn)
 - [Tailscale Subnet Router to SWEEPR WireGuard Exit Bridge: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/tailscale-wireguard-exit-node)
 - [TP-Link Omada ER605 / ER7206 WireGuard Gateway Setup: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/tp-link-omada-er605-wireguard)
@@ -274,13 +259,11 @@
 - [SWEEPR VPN vs Panda Dome VPN: 2026 Speed, Footprint & Privacy Comparison](https://sweeprvpn.com/vs/panda-dome-vpn)
 - [SWEEPR VPN vs Perfect Privacy VPN: 2026 Speed, Footprint & Privacy Comparison](https://sweeprvpn.com/vs/perfect-privacy)
 - [SWEEPR VPN vs Perimeter 81 (Check Point Harmony): 2026 Speed, Footprint & Privacy Comparison](https://sweeprvpn.com/vs/perimeter-81)
-- [SWEEPR VPN vs Private Internet Access (PIA) (2026 Comparison)](https://sweeprvpn.com/vs/pia-private-internet-access)
 - [SWEEPR VPN vs PrivadoVPN: 2026 Speed, Footprint & Privacy Comparison](https://sweeprvpn.com/vs/privadovpn)
 - [SWEEPR VPN vs Private Internet Access (PIA): 2026 Speed, Footprint & Privacy Comparison](https://sweeprvpn.com/vs/private-internet-access)
 - [SWEEPR VPN vs PrivateVPN: 2026 Speed, Footprint & Privacy Comparison](https://sweeprvpn.com/vs/privatevpn)
 - [SWEEPR VPN vs Proton VPN (2026 Comparison)](https://sweeprvpn.com/vs/protonvpn)
 - [SWEEPR VPN vs PureVPN: 2026 Speed, Footprint & Privacy Comparison](https://sweeprvpn.com/vs/purevpn)
-- [SWEEPR VPN vs Surfshark One Suite: 2026 Speed, Footprint & Privacy Comparison](https://sweeprvpn.com/vs/surfshark-one)
 - [SWEEPR VPN vs Surfshark (2026 Comparison)](https://sweeprvpn.com/vs/surfshark)
 - [SWEEPR VPN vs Tailscale Commercial SaaS: 2026 Speed, Footprint & Privacy Comparison](https://sweeprvpn.com/vs/tailscale-saas)
 - [SWEEPR VPN vs TorGuard Anonymous VPN: 2026 Speed, Footprint & Privacy Comparison](https://sweeprvpn.com/vs/torguard-vpn)
@@ -290,21 +273,16 @@
 - [SWEEPR VPN vs Urban VPN Free: 2026 Speed, Footprint & Privacy Comparison](https://sweeprvpn.com/vs/urban-vpn)
 - [SWEEPR VPN vs VPN.ac: 2026 Speed, Footprint & Privacy Comparison](https://sweeprvpn.com/vs/vpn-ac)
 - [SWEEPR VPN vs VyprVPN: 2026 Speed, Footprint & Privacy Comparison](https://sweeprvpn.com/vs/vyprvpn)
-- [SWEEPR VPN vs Cloudflare Zero Trust WARP: 2026 Speed, Footprint & Privacy Comparison](https://sweeprvpn.com/vs/warp-plus-team)
 - [SWEEPR VPN vs Windscribe Pro: 2026 Speed, Footprint & Privacy Comparison](https://sweeprvpn.com/vs/windscribe)
 - [SWEEPR VPN vs ZoogVPN: 2026 Speed, Footprint & Privacy Comparison](https://sweeprvpn.com/vs/zoogvpn)
 - [Audit Smart Home Plugs, IP Cameras & IoT Devices for Botnets in 30 Seconds](https://sweeprvpn.com/guides/audit-home-iot-botnet-vulnerabilities)
 - [How to Audit Your Synology & QNAP NAS for Open WAN Ports and UPnP Leakage](https://sweeprvpn.com/guides/audit-home-nas-ransomware-wan-exposure)
 - [Stop Hisense VIDAA OS & Amazon Fire TV ACR Tracking at the Network Layer](https://sweeprvpn.com/guides/block-hisense-vidaa-fire-tv-acr)
-- [How to Stop LG webOS LivePlus ACR Telemetry & Advertising Beacons at Router](https://sweeprvpn.com/guides/block-lg-webos-liveplus-acr)
 - [Stop Panasonic Smart TV ACR Tracking & Home Screen Telemetry Beacons](https://sweeprvpn.com/guides/block-panasonic-smart-tv-telemetry)
 - [How to Block Philips Titan OS & Ambilight ACR Screenshot Telemetry](https://sweeprvpn.com/guides/block-philips-titan-os-acr)
-- [How to Block Roku OS ACR Viewing Telemetry & Automated Screenshots on Home Wi-Fi](https://sweeprvpn.com/guides/block-roku-os-smart-tv-telemetry)
-- [How to Block Samsung Tizen Smart Hub ACR & Automatic Content Recognition](https://sweeprvpn.com/guides/block-samsung-tizen-smart-hub-acr)
 - [Stop Sharp Aquos Google TV ACR Content Recognition at the Router Level](https://sweeprvpn.com/guides/block-sharp-aquos-google-tv-acr)
 - [How to Block Sony Bravia & Samba TV ACR Screenshot Spying on Your Home Wi-Fi](https://sweeprvpn.com/guides/block-sony-bravia-samba-tv-acr)
 - [How to Block TCL Google TV ACR Tracking & Ad Spyware at Router Level](https://sweeprvpn.com/guides/block-tcl-google-tv-acr-telemetry)
-- [Stop Vizio SmartCast Inscape ACR Data Harvesting & Viewing Tracking](https://sweeprvpn.com/guides/block-vizio-smartcast-inscape-acr)
 - [Understanding Carrier-Grade NAT (CGNAT) on Hyperoptic, Community Fibre & 5G](https://sweeprvpn.com/guides/bypass-cgnat-for-self-hosted-home-lab)
 - [How to Audit Airbnb & Hotel Wi-Fi Subnets for Hidden IP Cameras & Rogue Devices](https://sweeprvpn.com/guides/detect-hidden-wifi-cameras-airbnb)
 - [How to Audit Hotel & Airbnb Wi-Fi for Rogue Cast Devices & Screen Hijackers](https://sweeprvpn.com/guides/detect-hotel-chromecast-spoofing)
@@ -322,7 +300,6 @@
 - [How to Isolate Smart Speakers & IoT Gadgets From Your Primary Work Network](https://sweeprvpn.com/guides/secure-smart-speaker-iot-isolation)
 - [How to Stop Mobile Carrier 5G Hotspot Throttling & DPI Tethering Caps](https://sweeprvpn.com/guides/stop-5g-hotspot-carrier-throttling)
 - [How to Defeat ISP Deep Packet Inspection (DPI) & SNI Censorship with WireGuard](https://sweeprvpn.com/guides/stop-isp-deep-packet-inspection-dpi)
-- [How to Bypass ISP Transparent DNS Proxies & NXDOMAIN Hijacking with WireGuard](https://sweeprvpn.com/guides/stop-isp-dns-hijacking-nxdomain)
 - [How to Bypass ISP TCP RST Packet Injection & Deep Packet Inspection with WireGuard](https://sweeprvpn.com/guides/stop-isp-tcp-reset-attacks)
 - [How to Stop LG webOS Smart TVs From Taking Screenshots of What You Watch (2026 Guide)](https://sweeprvpn.com/guides/stop-lg-smart-tv-acr-spying)
 - [How to Block Roku, Vizio Inscape &amp; Fire TV ACR Spying on Your Home Wi-Fi](https://sweeprvpn.com/guides/stop-roku-vizio-firetv-spying)

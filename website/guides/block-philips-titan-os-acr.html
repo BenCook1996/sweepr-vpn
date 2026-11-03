@@ -21,7 +21,7 @@
   <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png" />
   <meta name="theme-color" content="#070b14" />
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Will blocking Smart-TV ACR telemetry break Netflix, BBC iPlayer, or YouTube?","acceptedAnswer":{"@type":"Answer","text":"No. SWEEPR Smart-TV Shield only sinks Automatic Content Recognition (ACR) screenshot and ad-tracking endpoints while leaving CDN video delivery streams untouched."}},{"@type":"Question","name":"Does the SWEEPR 30-Second Wi-Fi Scanner work on Windows, macOS, and Linux?","acceptedAnswer":{"@type":"Answer","text":"Yes. The SWEEPR desktop scanner is built in Rust + Tauri v2 (~3.7 MB) and runs natively on Windows 10/11, macOS (Apple Silicon & Intel), and Linux."}},{"@type":"Question","name":"How can I test if my ISP is still intercepting my DNS requests?","acceptedAnswer":{"@type":"Answer","text":"Open our free browser IP, DNS & WebRTC Leak Test at https://sweeprvpn.com/tools/leak-test to verify that your resolver matches SWEEPR VPN's encrypted in-tunnel DNS."}}]}</script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"SWEEPR VPN","operatingSystem":"Windows 10, Windows 11, macOS, Linux, iOS, Android, OpenWrt","applicationCategory":"SecurityApplication","downloadUrl":"https://sweeprvpn.com/SWEEPRVPN.exe","fileSize":"3.7MB","offers":{"@type":"AggregateOffer","priceCurrency":"GBP","lowPrice":"1.99","highPrice":"74.99","offerCount":"3"},"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","ratingCount":"8420","bestRating":"5","worstRating":"1"}}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"SWEEPR VPN","operatingSystem":"Windows 10, Windows 11, macOS, Linux, iOS, Android, OpenWrt","applicationCategory":"SecurityApplication","downloadUrl":"https://sweeprvpn.com/SWEEPRVPN.exe","fileSize":"3.7MB","offers":{"@type":"AggregateOffer","priceCurrency":"GBP","lowPrice":"1.99","highPrice":"74.99","offerCount":"3"}}</script>
   <style>
     :root { --bg:#070b14; --card:#0f172a; --border:#1e293b; --text:#f8fafc; --muted:#94a3b8; --accent:#10b981; --accent2:#38bdf8; }
     * { box-sizing:border-box; }
@@ -64,7 +64,8 @@
     gtag('js', new Date());
     gtag('config', 'G-7D28EEMNXX');
   </script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://sweeprvpn.com/"},{"@type":"ListItem","position":2,"name":"Smart-TV & Wi-Fi Privacy Guides","item":"https://sweeprvpn.com/guides/block-philips-titan-os-acr"},{"@type":"ListItem","position":3,"name":"How to Block Philips Titan OS & Ambilight ACR Screenshot Telemetry","item":"https://sweeprvpn.com/guides/block-philips-titan-os-acr"}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://sweeprvpn.com/"},{"@type":"ListItem","position":2,"name":"Smart-TV & Wi-Fi Privacy Guides","item":"https://sweeprvpn.com/guides"},{"@type":"ListItem","position":3,"name":"How to Block Philips Titan OS & Ambilight ACR Screenshot Telemetry","item":"https://sweeprvpn.com/guides/block-philips-titan-os-acr"}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"How to Block Philips Titan OS & Ambilight ACR Screenshot Telemetry","description":"Philips Titan OS smart TVs capture on-screen video frames to sync Ambilight data and upload viewing statistics to advertising partners. Free 30-second Home Wi-Fi scanner and 10Gbps WireGuard telemetry blocklist guide.","proficiencyLevel":"Beginner to Expert","author":{"@type":"Organization","name":"SWEEPR VPN Security & Network Engineering Lab","url":"https://sweeprvpn.com/"},"publisher":{"@type":"Organization","name":"SWEEPR VPN","logo":{"@type":"ImageObject","url":"https://sweeprvpn.com/logo-emerald.svg"}},"mainEntityOfPage":"https://sweeprvpn.com/guides/block-philips-titan-os-acr"}</script>
 </head>
 <body>
   <header>
@@ -177,8 +178,8 @@ tracking.philips.eu</code></pre>
         <li><a href="/setup/nvidia-shield-tv-pro-wireguard" style="color:var(--accent2);">NVIDIA Shield TV Pro 4K &amp; GeForce NOW WireGuard VPN Setup Guide</a></li>
         <li><a href="/solutions/gigaclear-rural-fibre-gaming-packet-loss" style="color:var(--accent2);">Fix Gigaclear Rural Full Fibre UK Gaming Ping Spikes, CGNAT &amp; Packet Loss</a></li>
         <li><a href="/setup/steam-deck-vpn" style="color:var(--accent2);">SteamOS &amp; Steam Deck OLED Native WireGuard VPN Setup Guide</a></li>
-        <li class="sweepr-mesh-link"><a href="/guides/block-roku-os-smart-tv-telemetry" style="color:var(--accent2);">How to Block Roku OS ACR Viewing Telemetry & Automated Screenshots on Home Wi-Fi</a></li>
-        <li class="sweepr-mesh-link"><a href="/guides/block-samsung-tizen-smart-hub-acr" style="color:var(--accent2);">How to Block Samsung Tizen Smart Hub ACR & Automatic Content Recognition</a></li>
+        <li class="sweepr-mesh-link"><a href="/guides/stop-roku-vizio-firetv-spying" style="color:var(--accent2);">How to Block Roku OS ACR Viewing Telemetry & Automated Screenshots on Home Wi-Fi</a></li>
+        <li class="sweepr-mesh-link"><a href="/guides/stop-samsung-smart-tv-acr-tracking" style="color:var(--accent2);">How to Block Samsung Tizen Smart Hub ACR & Automatic Content Recognition</a></li>
         <li class="sweepr-mesh-link"><a href="/guides/block-tcl-google-tv-acr-telemetry" style="color:var(--accent2);">How to Block TCL Google TV ACR Tracking & Ad Spyware at Router Level</a></li>
         <li class="sweepr-mesh-link"><a href="/guides/detect-unknown-devices-on-home-wifi" style="color:var(--accent2);">How to Find Unknown Devices &amp; Strangers on Your Home Wi-Fi in 30 Seconds</a></li>
         <li class="sweepr-mesh-link"><a href="/setup/ubiquiti-unifi-dream-machine-wireguard" style="color:var(--accent2);">Ubiquiti UniFi Dream Machine (UDM-Pro / UDM-SE / UDR): High-Speed 10Gbps WireGuard VPN Setup Guide</a></li>
@@ -193,6 +194,10 @@ tracking.philips.eu</code></pre>
     <p>&copy; 2026 SWEEPR VPN Security Lab. Built in Rust + Tauri v2 with Audited Kernel WireGuard &amp; RAM-Only Servers.</p>
     <p>
       <a href="/">Home</a> |
+      <a href="/solutions">ISP Solutions</a> |
+      <a href="/setup">Router Setup</a> |
+      <a href="/guides">Privacy Guides</a> |
+      <a href="/vs">VPN Comparisons</a> |
       <a href="/pricing">Pricing</a> |
       <a href="/download">Download</a> |
       <a href="/tools/leak-test">Leak Test</a> |

@@ -102,7 +102,7 @@
       <div class="stat-box"><div class="stat-label">Recommended WireGuard MTU</div><div class="stat-val">1420 Bytes (4ms UK-LON-01)</div></div>
     </div>
 
-    <h2>Why Cuckoo Full Fibre Broadband UK (AS212460) Suffers From Using Low-Latency WireGuard</h2>
+    <h2>Why Cuckoo Full Fibre Broadband UK (AS212460) Suffers From Microsoft Teams, Zoom &amp; VoIP UDP Jitter</h2>
     <p>On <strong>Cuckoo Full Fibre Broadband UK</strong> (FTTP / AllPoints Fibre CGNAT), residential and mobile gateways frequently encounter <strong>Carrier CGNAT UDP state timeouts and regional backhaul queuing</strong> between <strong>18:30–23:00 UK</strong>. Standard unencrypted TCP/UDP flows expose plaintext Server Name Indication (SNI) headers, destination ASNs, and packet timing signatures that automated network queues classify and deprioritize.</p>
     <p>Furthermore, using a default 1500-byte or uncalibrated VPN tunnel on Cuckoo Full Fibre Broadband UK triggers IP packet fragmentation unless your WireGuard interface is pinned to <code>MTU = 1420</code>.</p>
 

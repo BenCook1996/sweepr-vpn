@@ -1,7 +1,19 @@
 {
   "indexnow_key": "8f9a2b4c6d1e3f5a7b9c0d2e4f6a8b0c",
+  "gsc_requested": [],
+  "bing_requested": [],
   "pending_urls": [
+    "https://sweeprvpn.com/solutions/comcast-xfinity-broadband-smart-tv-acr-blocking",
+    "https://sweeprvpn.com/solutions/ee-5g-mobile-hotspot-wifi-arp-spoofing-protection",
+    "https://sweeprvpn.com/solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter",
+    "https://sweeprvpn.com/solutions/three-5g-home-broadband-uhd-streaming-buffering",
+    "https://sweeprvpn.com/solutions/fibrus-full-fibre-smart-tv-acr-blocking",
+    "https://sweeprvpn.com/solutions",
+    "https://sweeprvpn.com/setup",
+    "https://sweeprvpn.com/guides",
+    "https://sweeprvpn.com/vs",
     "https://sweeprvpn.com/solutions/tim-telecom-italia-fibra-isp-throttling",
+    "https://sweeprvpn.com/solutions/three-5g-home-broadband-voip-teams-zoom-jitter",
     "https://sweeprvpn.com/solutions/three-5g-home-broadband-isp-throttling",
     "https://sweeprvpn.com/solutions/telus-purefibre-canada-isp-throttling",
     "https://sweeprvpn.com/solutions/telstra-nbn-australia-isp-throttling",
@@ -45,9 +57,12 @@
     "https://sweeprvpn.com/solutions/ogi-full-fibre-wales-isp-throttling",
     "https://sweeprvpn.com/solutions/odido-glasvezel-nl-isp-throttling",
     "https://sweeprvpn.com/solutions/octaplus-uk-isp-throttling",
+    "https://sweeprvpn.com/solutions/o2-uk-mobile-tethering-uhd-streaming-buffering",
     "https://sweeprvpn.com/solutions/o2-uk-mobile-tethering-isp-throttling",
     "https://sweeprvpn.com/solutions/o2-telefonica-germany-isp-throttling",
     "https://sweeprvpn.com/solutions/now-broadband-uk-isp-throttling",
+    "https://sweeprvpn.com/solutions/nhs-guest-wifi-voip-teams-zoom-jitter",
+    "https://sweeprvpn.com/solutions/nhs-guest-wifi-uhd-streaming-buffering",
     "https://sweeprvpn.com/solutions/nhs-guest-wifi-isp-throttling",
     "https://sweeprvpn.com/solutions/netomnia-broadband-isp-throttling",
     "https://sweeprvpn.com/solutions/netcologne-fibre-germany-isp-throttling",
@@ -451,20 +466,19 @@
     "https://sweeprvpn.com/solutions/tim-telecom-italia-fibra-wifi-arp-spoofing-protection": "2026-11-03T18:02:27.276Z",
     "https://sweeprvpn.com/solutions/tim-telecom-italia-fibra-voip-teams-zoom-jitter": "2026-11-03T18:02:27.276Z"
   },
-  "gsc_requested": [],
-  "bing_requested": [],
   "directory_forms_submitted": [],
   "last_indexnow_ping": "2026-11-03T18:02:27.276Z",
   "last_sitemap_ping": "2026-11-03T18:02:27.276Z",
   "last_daily_50_batch": {
     "date": "2026-11-03",
-    "newCount": 50,
-    "totalPseoPages": 1193,
-    "totalSitemapUrls": 1205
+    "newCount": 0,
+    "totalPseoPages": 294,
+    "consolidatedNoIndexExcluded": 899,
+    "totalSitemapUrls": 309
   },
   "last_audit": {
     "date": "2026-11-03",
-    "totalUrls": 312,
-    "pendingDeltaUrls": 122
+    "totalUrls": 308,
+    "pendingDeltaUrls": 135
   }
 }

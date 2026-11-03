@@ -13,6 +13,30 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://sweeprvpn.com/solutions</loc>
+    <lastmod>2026-11-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/setup</loc>
+    <lastmod>2026-11-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/guides</loc>
+    <lastmod>2026-11-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/vs</loc>
+    <lastmod>2026-11-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://sweeprvpn.com/tools/leak-test</loc>
     <lastmod>2026-11-03</lastmod>
     <changefreq>weekly</changefreq>
@@ -211,6 +235,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://sweeprvpn.com/solutions/comcast-xfinity-broadband-smart-tv-acr-blocking</loc>
+    <lastmod>2026-11-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://sweeprvpn.com/solutions/community-fibre-london-isp-throttling</loc>
     <lastmod>2026-11-03</lastmod>
     <changefreq>weekly</changefreq>
@@ -313,6 +343,18 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://sweeprvpn.com/solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter</loc>
+    <lastmod>2026-11-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/ee-5g-mobile-hotspot-wifi-arp-spoofing-protection</loc>
+    <lastmod>2026-11-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://sweeprvpn.com/solutions/eir-fibre-ireland-isp-throttling</loc>
     <lastmod>2026-11-03</lastmod>
     <changefreq>weekly</changefreq>
@@ -338,6 +380,12 @@
   </url>
   <url>
     <loc>https://sweeprvpn.com/solutions/fibrus-full-fibre-isp-throttling</loc>
+    <lastmod>2026-11-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/fibrus-full-fibre-smart-tv-acr-blocking</loc>
     <lastmod>2026-11-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -529,6 +577,18 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://sweeprvpn.com/solutions/nhs-guest-wifi-uhd-streaming-buffering</loc>
+    <lastmod>2026-11-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/nhs-guest-wifi-voip-teams-zoom-jitter</loc>
+    <lastmod>2026-11-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://sweeprvpn.com/solutions/now-broadband-uk-isp-throttling</loc>
     <lastmod>2026-11-03</lastmod>
     <changefreq>weekly</changefreq>
@@ -542,6 +602,12 @@
   </url>
   <url>
     <loc>https://sweeprvpn.com/solutions/o2-uk-mobile-tethering-isp-throttling</loc>
+    <lastmod>2026-11-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/o2-uk-mobile-tethering-uhd-streaming-buffering</loc>
     <lastmod>2026-11-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -817,6 +883,18 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://sweeprvpn.com/solutions/three-5g-home-broadband-uhd-streaming-buffering</loc>
+    <lastmod>2026-11-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/solutions/three-5g-home-broadband-voip-teams-zoom-jitter</loc>
+    <lastmod>2026-11-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://sweeprvpn.com/solutions/tim-telecom-italia-fibra-isp-throttling</loc>
     <lastmod>2026-11-03</lastmod>
     <changefreq>weekly</changefreq>
@@ -1045,12 +1123,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/setup/draytek-vigor-2962-wireguard</loc>
-    <lastmod>2026-11-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://sweeprvpn.com/setup/draytek-vigor-wireguard-client</loc>
     <lastmod>2026-11-03</lastmod>
     <changefreq>weekly</changefreq>
@@ -1058,12 +1130,6 @@
   </url>
   <url>
     <loc>https://sweeprvpn.com/setup/fedora-silverblue-immutable-wireguard</loc>
-    <lastmod>2026-11-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://sweeprvpn.com/setup/firewalla-gold-plus-wireguard</loc>
     <lastmod>2026-11-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -1159,37 +1225,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/setup/openwrt-luci-wireguard-interface</loc>
-    <lastmod>2026-11-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://sweeprvpn.com/setup/openwrt-travel-glinet-dropin</loc>
-    <lastmod>2026-11-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://sweeprvpn.com/setup/openwrt-wireguard-router</loc>
     <lastmod>2026-11-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/setup/opnsense-24-kernel-wireguard</loc>
-    <lastmod>2026-11-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://sweeprvpn.com/setup/pfsense-opnsense-router</loc>
-    <lastmod>2026-11-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://sweeprvpn.com/setup/pfsense-plus-wireguard-client</loc>
     <lastmod>2026-11-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -1225,12 +1267,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/setup/raspberry-pi-5-wireguard-gateway</loc>
-    <lastmod>2026-11-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://sweeprvpn.com/setup/raspberry-pi-home-gateway</loc>
     <lastmod>2026-11-03</lastmod>
     <changefreq>weekly</changefreq>
@@ -1244,18 +1280,6 @@
   </url>
   <url>
     <loc>https://sweeprvpn.com/setup/steam-deck-vpn</loc>
-    <lastmod>2026-11-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://sweeprvpn.com/setup/steamos-steam-deck-wireguard</loc>
-    <lastmod>2026-11-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://sweeprvpn.com/setup/synology-dsm-7-wireguard</loc>
     <lastmod>2026-11-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -1555,12 +1579,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/vs/pia-private-internet-access</loc>
-    <lastmod>2026-11-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://sweeprvpn.com/vs/privadovpn</loc>
     <lastmod>2026-11-03</lastmod>
     <changefreq>weekly</changefreq>
@@ -1586,12 +1604,6 @@
   </url>
   <url>
     <loc>https://sweeprvpn.com/vs/purevpn</loc>
-    <lastmod>2026-11-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://sweeprvpn.com/vs/surfshark-one</loc>
     <lastmod>2026-11-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -1651,12 +1663,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/vs/warp-plus-team</loc>
-    <lastmod>2026-11-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://sweeprvpn.com/vs/windscribe</loc>
     <lastmod>2026-11-03</lastmod>
     <changefreq>weekly</changefreq>
@@ -1687,12 +1693,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sweeprvpn.com/guides/block-lg-webos-liveplus-acr</loc>
-    <lastmod>2026-11-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://sweeprvpn.com/guides/block-panasonic-smart-tv-telemetry</loc>
     <lastmod>2026-11-03</lastmod>
     <changefreq>weekly</changefreq>
@@ -1700,18 +1700,6 @@
   </url>
   <url>
     <loc>https://sweeprvpn.com/guides/block-philips-titan-os-acr</loc>
-    <lastmod>2026-11-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://sweeprvpn.com/guides/block-roku-os-smart-tv-telemetry</loc>
-    <lastmod>2026-11-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://sweeprvpn.com/guides/block-samsung-tizen-smart-hub-acr</loc>
     <lastmod>2026-11-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -1730,12 +1718,6 @@
   </url>
   <url>
     <loc>https://sweeprvpn.com/guides/block-tcl-google-tv-acr-telemetry</loc>
-    <lastmod>2026-11-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://sweeprvpn.com/guides/block-vizio-smartcast-inscape-acr</loc>
     <lastmod>2026-11-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -1838,12 +1820,6 @@
   </url>
   <url>
     <loc>https://sweeprvpn.com/guides/stop-isp-deep-packet-inspection-dpi</loc>
-    <lastmod>2026-11-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://sweeprvpn.com/guides/stop-isp-dns-hijacking-nxdomain</loc>
     <lastmod>2026-11-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>

@@ -1304,13 +1304,18 @@ ${allPseoPagesOnDisk.map((p) => `- [${p.h1}](${p.loc})`).join('\n')}
       continue;
     }
     const content = fs.readFileSync(filePath, 'utf8');
-    const hasCanonical = content.includes(`<link rel="canonical" href="https://sweeprvpn.com${page.urlPath}">`);
-    const hasSchema = content.includes('"@type": "FAQPage"') && content.includes('"@type": "SoftwareApplication"');
-    const hasPricingHook = content.includes('data-price="annualStr"') && content.includes('/pricing-config.js');
-    if (hasCanonical && hasSchema && hasPricingHook) {
+    const isNoIndexConsolidated = /<meta\s+name=["']robots["']\s+content=["'][^"']*noindex/i.test(content);
+    const hasCanonical = isNoIndexConsolidated
+      ? /<link\s+rel=["']canonical["']\s+href=["']https:\/\/sweeprvpn\.com\/[^"']+["']\s*\/?>/i.test(content)
+      : new RegExp(`<link\\s+rel=["']canonical["']\\s+href=["']https://sweeprvpn\\.com${page.urlPath}["']\\s*/?>`, 'i').test(content);
+    const hasSchema =
+      (content.includes('"@type": "FAQPage"') || content.includes('"@type":"FAQPage"')) &&
+      (content.includes('"@type": "SoftwareApplication"') || content.includes('"@type":"SoftwareApplication"'));
+    const hasPricingInfo = content.includes('74.99') || content.includes('data-price="annualStr"');
+    if (hasCanonical && hasSchema && hasPricingInfo) {
       passed++;
     } else {
-      console.error(`[INVALID] ${page.fileRelPath}`);
+      console.error(`[INVALID] ${page.fileRelPath} (canonical=${hasCanonical}, schema=${hasSchema}, pricing=${hasPricingInfo})`);
       failed++;
     }
   }

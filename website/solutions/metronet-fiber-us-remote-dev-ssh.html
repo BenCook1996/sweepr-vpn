@@ -102,7 +102,7 @@
       <div class="stat-box"><div class="stat-label">Recommended WireGuard MTU</div><div class="stat-val">1420 Bytes (25s Keepalive / 0 Drops)</div></div>
     </div>
 
-    <h2>Why MetroNet 100% Fiber Internet US (AS53775) Suffers From With Persistent WireGuard</h2>
+    <h2>Why MetroNet 100% Fiber Internet US (AS53775) Suffers From Dropping SSH, Kubernetes &amp; Git Sessions</h2>
     <p>On <strong>MetroNet 100% Fiber Internet US</strong> (GPON / CGNAT (100.64.0.0/10)), residential and mobile gateways frequently encounter <strong>Strict CGNAT shared IPv4 blocks and Midwest regional transit hops</strong> between <strong>19:00–23:00 EST/CST</strong>. Standard unencrypted TCP/UDP flows expose plaintext Server Name Indication (SNI) headers, destination ASNs, and packet timing signatures that automated network queues classify and deprioritize.</p>
     <p>Furthermore, using a default 1500-byte or uncalibrated VPN tunnel on MetroNet 100% Fiber Internet US triggers IP packet fragmentation unless your WireGuard interface is pinned to <code>MTU = 1420</code>.</p>
 

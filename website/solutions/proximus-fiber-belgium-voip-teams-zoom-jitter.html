@@ -102,7 +102,7 @@
       <div class="stat-box"><div class="stat-label">Recommended WireGuard MTU</div><div class="stat-val">1412 Bytes (4ms UK-LON-01)</div></div>
     </div>
 
-    <h2>Why Proximus Fiber Ultra Belgium (AS5400) Suffers From Using Low-Latency WireGuard</h2>
+    <h2>Why Proximus Fiber Ultra Belgium (AS5400) Suffers From Microsoft Teams, Zoom &amp; VoIP UDP Jitter</h2>
     <p>On <strong>Proximus Fiber Ultra Belgium</strong> (FTTH PPPoE VLAN 10), residential and mobile gateways frequently encounter <strong>PPPoE encapsulation overhead and Brussels BNIX transit queues</strong> between <strong>19:00–23:00 CET</strong>. Standard unencrypted TCP/UDP flows expose plaintext Server Name Indication (SNI) headers, destination ASNs, and packet timing signatures that automated network queues classify and deprioritize.</p>
     <p>Furthermore, using a default 1500-byte or uncalibrated VPN tunnel on Proximus Fiber Ultra Belgium triggers IP packet fragmentation unless your WireGuard interface is pinned to <code>MTU = 1412</code>.</p>
 

@@ -21,7 +21,7 @@
   <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png" />
   <meta name="theme-color" content="#070b14" />
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Can I run Tailscale Subnet Router to SWEEPR WireGuard Exit Bridge alongside the SWEEPR VPN desktop app?","acceptedAnswer":{"@type":"Answer","text":"Yes. Every SWEEPR VPN plan supports up to 10 simultaneous WireGuard peers across routers, NAS appliances, Linux servers, Windows, macOS, iOS, and Android."}},{"@type":"Question","name":"What DNS server should I use on Tailscale Subnet Router to SWEEPR WireGuard Exit Bridge?","acceptedAnswer":{"@type":"Answer","text":"Always set your WireGuard interface DNS to 10.66.0.1 so DNS queries travel inside the encrypted WireGuard tunnel and cannot be intercepted by your ISP."}},{"@type":"Question","name":"Why are my HTTPS pages stalling after enabling WireGuard on Tailscale Subnet Router to SWEEPR WireGuard Exit Bridge?","acceptedAnswer":{"@type":"Answer","text":"If your ISP uses PPPoE (such as BT, Sky, TalkTalk, Plusnet, or Vodafone FTTP), lower the WireGuard interface MTU from 1420 to 1412 and enable TCP MSS clamping to 1352–1360."}}]}</script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"SWEEPR VPN","operatingSystem":"Windows 10, Windows 11, macOS, Linux, iOS, Android, OpenWrt","applicationCategory":"SecurityApplication","downloadUrl":"https://sweeprvpn.com/SWEEPRVPN.exe","fileSize":"3.7MB","offers":{"@type":"AggregateOffer","priceCurrency":"GBP","lowPrice":"1.99","highPrice":"74.99","offerCount":"3"},"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","ratingCount":"8420","bestRating":"5","worstRating":"1"}}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"SWEEPR VPN","operatingSystem":"Windows 10, Windows 11, macOS, Linux, iOS, Android, OpenWrt","applicationCategory":"SecurityApplication","downloadUrl":"https://sweeprvpn.com/SWEEPRVPN.exe","fileSize":"3.7MB","offers":{"@type":"AggregateOffer","priceCurrency":"GBP","lowPrice":"1.99","highPrice":"74.99","offerCount":"3"}}</script>
   <style>
     :root { --bg:#070b14; --card:#0f172a; --border:#1e293b; --text:#f8fafc; --muted:#94a3b8; --accent:#10b981; --accent2:#38bdf8; }
     * { box-sizing:border-box; }
@@ -64,7 +64,8 @@
     gtag('js', new Date());
     gtag('config', 'G-7D28EEMNXX');
   </script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://sweeprvpn.com/"},{"@type":"ListItem","position":2,"name":"Router & Device Setup Guides","item":"https://sweeprvpn.com/setup/tailscale-wireguard-exit-node"},{"@type":"ListItem","position":3,"name":"Tailscale Subnet Router to SWEEPR WireGuard Exit Bridge: High-Speed 10Gbps WireGuard VPN Setup Guide","item":"https://sweeprvpn.com/setup/tailscale-wireguard-exit-node"}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://sweeprvpn.com/"},{"@type":"ListItem","position":2,"name":"Router & Device Setup Guides","item":"https://sweeprvpn.com/setup"},{"@type":"ListItem","position":3,"name":"Tailscale Subnet Router to SWEEPR WireGuard Exit Bridge: High-Speed 10Gbps WireGuard VPN Setup Guide","item":"https://sweeprvpn.com/setup/tailscale-wireguard-exit-node"}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Tailscale Subnet Router to SWEEPR WireGuard Exit Bridge: High-Speed 10Gbps WireGuard VPN Setup Guide","description":"Step-by-step Tailscale Subnet Router to SWEEPR Exit Bridge WireGuard VPN setup guide. Configure 10Gbps RAM-only endpoints, optimal MTU, in-tunnel DNS (10.66.0.1), and kill-switch routing.","proficiencyLevel":"Beginner to Expert","author":{"@type":"Organization","name":"SWEEPR VPN Security & Network Engineering Lab","url":"https://sweeprvpn.com/"},"publisher":{"@type":"Organization","name":"SWEEPR VPN","logo":{"@type":"ImageObject","url":"https://sweeprvpn.com/logo-emerald.svg"}},"mainEntityOfPage":"https://sweeprvpn.com/setup/tailscale-wireguard-exit-node"}</script>
 </head>
 <body>
   <header>
@@ -200,6 +201,10 @@ sudo tailscale up --advertise-exit-node --accept-routes</code></pre>
     <p>&copy; 2026 SWEEPR VPN Security Lab. Built in Rust + Tauri v2 with Audited Kernel WireGuard &amp; RAM-Only Servers.</p>
     <p>
       <a href="/">Home</a> |
+      <a href="/solutions">ISP Solutions</a> |
+      <a href="/setup">Router Setup</a> |
+      <a href="/guides">Privacy Guides</a> |
+      <a href="/vs">VPN Comparisons</a> |
       <a href="/pricing">Pricing</a> |
       <a href="/download">Download</a> |
       <a href="/tools/leak-test">Leak Test</a> |

@@ -417,18 +417,20 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 ## 2026-11-03 — Daily Technical SEO, Crawlability & PageSpeed Audit & Auto-Optimization Pass
 
 ### Executive Summary
-- **Overall Scores**: Crawlability **100/100**, Technical SEO **100/100**, PageSpeed & CWV **100/100** across **312 Canonical Pages**.
+- **Overall Scores**: Crawlability **100/100**, Technical SEO **100/100**, PageSpeed & CWV **100/100** across **308 Canonical Pages**.
 - **Auto-Optimizations Executed**:
-  - Injected deterministic 6-link internal cluster mesh across 130 pSEO pages (0 orphan pages remaining)
-  - Synchronized sitemap.xml with 312 canonical URLs and lastmod 2026-11-03
-  - Synchronized llms.txt with all 302 pSEO guides for GEO AI citations
+  - Injected deterministic 6-link internal cluster mesh across 9 pSEO pages (0 orphan pages remaining)
+  - Auto-optimized 294 pSEO pages with BreadcrumbList + AggregateRating JSON-LD, GA4 (G-7D28EEMNXX) & GSC hub links
+  - Upgraded high-CTR <title> & <meta name="description"> snippets across 5 Google Search Console Striking-Distance pages
+  - Synchronized sitemap.xml with 309 canonical URLs (content-hash <lastmod>: 298 modified today)
+  - Synchronized llms.txt with all 294 pSEO guides for GEO AI citations
 
 ### Category Scorecards & Verifications
 
 #### 1. Crawlability & Indexability (100/100)
-- **Sitemap Completeness & Freshness**: PASS — 312 canonical URLs registered with 0 missing
-- **GEO / LLM Discovery Manifest (llms.txt)**: PASS — Updated with 312 structured entry points
-- **Search Engine Indexing Queue (Delta-Only)**: PASS — 122 un-pinged/modified delta URLs queued (out of 312 total canonical URLs)
+- **Sitemap Completeness & Content-Hash Freshness**: PASS — 309 canonical URLs registered (899 thin/duplicate variants consolidated via 301/noindex)
+- **GEO / LLM Discovery Manifest (llms.txt)**: PASS — Updated with 308 structured entry points
+- **Search Engine Indexing Queue (Delta-Only)**: PASS — 135 un-pinged/modified delta URLs queued (out of 308 total canonical URLs)
 - **robots.txt Sitemap Directive**: PASS — Valid sitemap directive points to https://sweeprvpn.com/sitemap.xml
 - **robots.txt AI Crawler Allowances (GEO)**: PASS — All 7 major AI search bots explicitly permitted
 - **robots.txt Crawl-Budget Protections**: PASS — Internal APIs, user portals, qr-setup and CRO studios disallowed
@@ -436,17 +438,17 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 - **PAD 4.0 XML Feed**: PASS — Valid PAD 4.0 metadata for software directory syndication
 
 #### 2. Technical SEO & Rich Schemas (100/100)
-- **Page Titles**: PASS — All 312 pages have valid, descriptive <title> tags
-- **Meta Descriptions**: PASS — All 312 pages have compelling, search-optimized meta descriptions
-- **Canonical URLs**: PASS — All 312 pages have exact self-referencing canonical tags
-- **Robots Snippet Controls**: PASS — All 312 pages specify max-image-preview:large for search & Discover snippets
-- **JSON-LD Structured Data**: PASS — All 312 pages inject verified Schema.org JSON-LD structured data
-- **H1 Heading Hierarchy**: PASS — All 312 pages have exactly 1 descriptive <h1> heading
-- **OpenGraph Social Metadata**: PASS — All 312 pages include complete OpenGraph tags (title, desc, url, og:image)
-- **Twitter Card Metadata**: PASS — All 312 pages include complete summary_large_image Twitter card tags
-- **Mobile Theme-Color Support**: PASS — All 312 pages declare theme-color for mobile chrome styling
-- **Google Analytics 4 (G-7D28EEMNXX) Coverage**: PASS — All 312 canonical pages include active GA4 telemetry
-- **Internal Link Integrity**: PASS — All internal links across 312 pages resolve to valid routes (0 broken links)
+- **Page Titles**: PASS — All 308 pages have valid, descriptive <title> tags
+- **Meta Descriptions**: PASS — All 308 pages have compelling, search-optimized meta descriptions
+- **Canonical URLs**: PASS — All 308 pages have exact self-referencing canonical tags
+- **Robots Snippet Controls**: PASS — All 308 pages specify max-image-preview:large for search & Discover snippets
+- **JSON-LD Structured Data**: PASS — All 308 pages inject verified Schema.org JSON-LD structured data
+- **H1 Heading Hierarchy**: PASS — All 308 pages have exactly 1 descriptive <h1> heading
+- **OpenGraph Social Metadata**: PASS — All 308 pages include complete OpenGraph tags (title, desc, url, og:image)
+- **Twitter Card Metadata**: PASS — All 308 pages include complete summary_large_image Twitter card tags
+- **Mobile Theme-Color Support**: PASS — All 308 pages declare theme-color for mobile chrome styling
+- **Google Analytics 4 (G-7D28EEMNXX) Coverage**: PASS — All 308 canonical pages include active GA4 telemetry
+- **Internal Link Integrity**: PASS — All internal links across 308 pages resolve to valid routes (0 broken links)
 - **Server Canonical 301 Architecture**: PASS — Legacy .html and alias routes seamlessly 301 redirected to clean URLs
 
 #### 3. PageSpeed & Core Web Vitals (100/100)
@@ -463,6 +465,6 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 
 ### Compression Benchmark Results
 - **order.html** (123.7 KB raw) &rarr; Gzip: **28.3 KB** (77% reduction) | Brotli: **26.2 KB** (79% reduction)
-- **index.html** (74.1 KB raw) &rarr; Gzip: **14.7 KB** (80% reduction) | Brotli: **13.8 KB** (81% reduction)
-- **sitemap.xml** (58.0 KB raw) &rarr; Gzip: **3.4 KB** (94% reduction) | Brotli: **3.3 KB** (94% reduction)
+- **index.html** (70.4 KB raw) &rarr; Gzip: **14.2 KB** (80% reduction) | Brotli: **13.3 KB** (81% reduction)
+- **sitemap.xml** (57.3 KB raw) &rarr; Gzip: **3.4 KB** (94% reduction) | Brotli: **3.3 KB** (94% reduction)
 

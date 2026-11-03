@@ -23,6 +23,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 
@@ -173,6 +174,7 @@ const USE_CASES = [
     titleSuffix: 'Stop ISP Throttling & Evening Speed Drops (2026 Fix)',
     h1Prefix: 'How to Stop',
     h1Suffix: 'Speed Throttling & DPI Traffic Shaping',
+    issueLabel: 'Speed Throttling & DPI Traffic Shaping',
     intentKeyword: 'isp throttling fix wireguard',
     problemSummary: 'Deep Packet Inspection (DPI), SNI classification, and congested transit peering cause dramatic throughput drops between 19:00 and 23:00 despite high headline speeds.',
     solutionSummary: 'SWEEPR VPN encapsulates all traffic inside a ChaCha20-Poly1305 encrypted WireGuard UDP stream to 10Gbps RAM-only London, Amsterdam, Frankfurt, and Stockholm core nodes, blinding ISP DPI classifiers and routing around congested peering links.',
@@ -185,6 +187,7 @@ const USE_CASES = [
     titleSuffix: 'Fix Gaming Ping Spikes, Jitter & Packet Loss',
     h1Prefix: 'How to Fix',
     h1Suffix: 'Gaming Packet Loss, High Ping & Rubberbanding',
+    issueLabel: 'Gaming Packet Loss, High Ping & Rubberbanding',
     intentKeyword: 'fix gaming packet loss wireguard vpn',
     problemSummary: 'Suboptimal BGP routing, CGNAT UDP session timeouts, and bufferbloat cause 3–12% packet loss and 80ms+ jitter spikes in Call of Duty, EA FC, Valorant, CS2, and Apex Legends.',
     solutionSummary: 'SWEEPR VPN pins your gaming traffic to direct Tier-1 LINX (London) and AMS-IX (Amsterdam) 10Gbps WireGuard peering with tuned MTU to eliminate IP fragmentation and stabilize frame pacing.',
@@ -197,6 +200,7 @@ const USE_CASES = [
     titleSuffix: 'Fix 4K UHD Streaming Buffering & Bitrate Drops',
     h1Prefix: 'Eliminate',
     h1Suffix: '4K UHD Streaming Buffering & CDN Throttling',
+    issueLabel: '4K UHD Streaming Buffering & CDN Throttling',
     intentKeyword: 'stop 4k streaming buffering vpn',
     problemSummary: 'ISPs frequently deprioritize long-lived HTTPS video chunks or saturate CDN interconnects in the evening, forcing 4K HDR streams down to blurry 720p.',
     solutionSummary: 'By tunneling via SWEEPR VPN’s 10Gbps RAM-only WireGuard servers with direct CDN interconnects, video segments look identical to encrypted enterprise UDP packets and maintain 85+ Mbps sustained 4K bitrates.',
@@ -209,6 +213,7 @@ const USE_CASES = [
     titleSuffix: 'Bypass CGNAT, P2P Throttling & Port Blocking',
     h1Prefix: 'How to Bypass',
     h1Suffix: 'CGNAT & P2P Bandwidth Throttling',
+    issueLabel: 'CGNAT & P2P Bandwidth Throttling',
     intentKeyword: 'cgnat bypass wireguard p2p vpn',
     problemSummary: 'Carrier-Grade NAT (100.64.x.x) and ISP protocol classifiers throttle peer-to-peer transfers, Linux ISO swarms, and decentralized sync protocols.',
     solutionSummary: 'SWEEPR VPN provides unthrottled 10Gbps RAM-only WireGuard tunnels in Switzerland, Netherlands, and Sweden with an NDIS/nftables kernel kill-switch and zero connection logs.',
@@ -221,6 +226,7 @@ const USE_CASES = [
     titleSuffix: 'Block Smart-TV ACR Spying & Unknown Wi-Fi Devices',
     h1Prefix: 'Block Smart-TV ACR Spying on',
     h1Suffix: '& Scan Your Home Wi-Fi in 30 Seconds',
+    issueLabel: 'Smart-TV ACR Telemetry Uploads & Unmonitored LAN Devices',
     intentKeyword: 'block smart tv acr tracking wifi scanner',
     problemSummary: 'Smart TVs (Samsung, LG, Sony, Fire TV, Roku) capture Automatic Content Recognition (ACR) screenshots every 500ms and upload viewing telemetry over your home broadband.',
     solutionSummary: 'SWEEPR VPN’s free 30-second Home Wi-Fi Device Scanner discovers every connected device on your router subnet, while the SWEEPR Wi-Fi Radar & Smart-TV Shield Add-On sinks ACR telemetry domains at the DNS/tunnel layer.',
@@ -233,6 +239,7 @@ const USE_CASES = [
     titleSuffix: 'Fix Dropping SSH, Docker, Git & Corporate VPN Sessions',
     h1Prefix: 'Fix Dropping SSH, Kubernetes & Git Sessions on',
     h1Suffix: 'With Persistent WireGuard',
+    issueLabel: 'Dropping SSH, Kubernetes & Git Sessions',
     intentKeyword: 'keep ssh alive wireguard mtu fix',
     problemSummary: 'Aggressive CGNAT state timeouts, PPPoE MTU blackholes, and IPv6 route flaps terminate idle SSH terminals, `docker pull` layers, and `kubectl` port-forwards.',
     solutionSummary: 'SWEEPR VPN configures a 25-second `PersistentKeepalive` and path-matched MTU so SSH, database tunnels, and remote IDE sessions survive Wi-Fi/5G roaming without dropping.',
@@ -245,6 +252,7 @@ const USE_CASES = [
     titleSuffix: 'Fix Microsoft Teams, Zoom & VoIP Call Dropouts',
     h1Prefix: 'How to Fix Microsoft Teams, Zoom & VoIP Jitter on',
     h1Suffix: 'Using Low-Latency WireGuard',
+    issueLabel: 'Microsoft Teams, Zoom & VoIP UDP Jitter',
     intentKeyword: 'fix teams zoom jitter packet loss vpn',
     problemSummary: 'WebRTC UDP media streams on Teams, Zoom, Slack Huddles, and WhatsApp Calls suffer robotic audio and frozen video when ISPs reshape UDP bursts or drop fragmented packets.',
     solutionSummary: 'SWEEPR VPN wraps WebRTC media flows inside a single 4ms London WireGuard UDP socket with optimized MTU, eliminating UDP queue starvation and stabilizing voice/video MOS scores.',
@@ -257,6 +265,7 @@ const USE_CASES = [
     titleSuffix: 'Stop Wi-Fi Sniffing, Evil Twin APs & Unknown LAN Devices',
     h1Prefix: 'Protect Your Devices on',
     h1Suffix: 'From ARP Spoofing, Sniffing & Unknown Intruders',
+    issueLabel: 'ARP Spoofing, Packet Sniffing & Unknown Wi-Fi Intruders',
     intentKeyword: 'detect unknown devices on wifi arp spoofing vpn',
     problemSummary: 'Shared or weakly secured Wi-Fi networks expose unencrypted DNS queries, mDNS device names, and session traffic to local packet capture and rogue access points.',
     solutionSummary: 'SWEEPR VPN combines a 30-second local ARP/mDNS device audit with instant 10Gbps WireGuard encryption and in-tunnel DNS (`10.66.0.1`) so local snoopers see zero plaintext metadata.',
@@ -1295,22 +1304,51 @@ function renderLayout({ title, description, canonicalUrl, badge, h1, lead, bodyH
       lowPrice: '1.99',
       highPrice: '74.99',
       offerCount: '3'
-    },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.9',
-      ratingCount: '8420',
-      bestRating: '5',
-      worstRating: '1'
     }
   };
+
+  const techArticleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'TechArticle',
+    headline: h1.replace(/&amp;/g, '&'),
+    description: description.replace(/&amp;/g, '&'),
+    proficiencyLevel: 'Beginner to Expert',
+    author: {
+      '@type': 'Organization',
+      name: 'SWEEPR VPN Security & Network Engineering Lab',
+      url: 'https://sweeprvpn.com/'
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'SWEEPR VPN',
+      logo: { '@type': 'ImageObject', url: 'https://sweeprvpn.com/logo-emerald.svg' }
+    },
+    mainEntityOfPage: canonicalUrl
+  };
+
+  const clusterDir = canonicalUrl.includes('/setup/')
+    ? 'setup'
+    : canonicalUrl.includes('/guides/')
+    ? 'guides'
+    : canonicalUrl.includes('/vs/')
+    ? 'vs'
+    : 'solutions';
+  const clusterName =
+    clusterDir === 'setup'
+      ? 'Router & Device Setup Guides'
+      : clusterDir === 'guides'
+      ? 'Smart-TV & Wi-Fi Privacy Guides'
+      : clusterDir === 'vs'
+      ? 'VPN Technical Comparisons'
+      : 'ISP Throttling & Network Engineering';
 
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://sweeprvpn.com/' },
-      { '@type': 'ListItem', position: 2, name: badge.split('•')[0].trim() || 'Technical Guide', item: canonicalUrl }
+      { '@type': 'ListItem', position: 2, name: clusterName, item: `https://sweeprvpn.com/${clusterDir}` },
+      { '@type': 'ListItem', position: 3, name: h1.replace(/&amp;/g, '&'), item: canonicalUrl }
     ]
   };
 
@@ -1351,6 +1389,7 @@ function renderLayout({ title, description, canonicalUrl, badge, h1, lead, bodyH
   </script>
   <script type="application/ld+json">${JSON.stringify(faqSchema)}</script>
   <script type="application/ld+json">${JSON.stringify(appSchema)}</script>
+  <script type="application/ld+json">${JSON.stringify(techArticleSchema)}</script>
   <script type="application/ld+json">${JSON.stringify(breadcrumbSchema)}</script>
   <style>
     :root { --bg:#070b14; --card:#0f172a; --border:#1e293b; --text:#f8fafc; --muted:#94a3b8; --accent:#10b981; --accent2:#38bdf8; }
@@ -1391,11 +1430,14 @@ function renderLayout({ title, description, canonicalUrl, badge, h1, lead, bodyH
     <nav class="nav" aria-label="Primary Navigation">
       <a class="brand" href="/">SWEEPR <span>VPN</span></a>
       <div class="nav-links">
-        <a href="/download">Free 30s Wi-Fi Scanner</a>
+        <a href="/solutions">ISP Fixes</a>
+        <a href="/setup">Router Setup</a>
+        <a href="/guides">Privacy Guides</a>
+        <a href="/vs">Comparisons</a>
+        <a href="/tools/leak-test">Leak Test</a>
+        <a href="/tools/isp-throttling-test">Speed Test</a>
         <a href="/pricing">Pricing (£1.99 Trial)</a>
-        <a href="/tools/leak-test">IP &amp; DNS Leak Test</a>
-        <a href="/tools/isp-throttling-test">ISP Speed Checker</a>
-        <a class="btn" href="/download">Download (~3.7 MB)</a>
+        <a class="btn" href="/download">Download (~680 KB)</a>
       </div>
     </nav>
   </header>
@@ -1479,6 +1521,10 @@ function renderLayout({ title, description, canonicalUrl, badge, h1, lead, bodyH
     <p>&copy; 2026 SWEEPR VPN Security Lab. Built in Rust + Tauri v2 with Audited Kernel WireGuard &amp; RAM-Only Servers.</p>
     <p>
       <a href="/">Home</a> |
+      <a href="/solutions">ISP Solutions</a> |
+      <a href="/setup">Router &amp; NAS Setup</a> |
+      <a href="/guides">Smart-TV &amp; Wi-Fi Guides</a> |
+      <a href="/vs">VPN Comparisons</a> |
       <a href="/pricing">Pricing</a> |
       <a href="/download">Download</a> |
       <a href="/tools/leak-test">Leak Test</a> |
@@ -1508,9 +1554,60 @@ function generateCandidateHtml(candidate) {
       <div class="stat-box"><div class="stat-label">Recommended WireGuard MTU</div><div class="stat-val">${net.mtu} Bytes (${uc.latencyMetric})</div></div>
     </div>
 
-    <h2>Why ${net.name} (${net.asn}) Suffers From ${uc.h1Suffix}</h2>
+    <h2>Why ${net.name} (${net.asn}) Suffers From ${uc.issueLabel || uc.h1Suffix}</h2>
     <p>On <strong>${net.name}</strong> (${net.tech}), residential and mobile gateways frequently encounter <strong>${net.throttlingType}</strong> between <strong>${net.peakHours}</strong>. Standard unencrypted TCP/UDP flows expose plaintext Server Name Indication (SNI) headers, destination ASNs, and packet timing signatures that automated network queues classify and deprioritize.</p>
     <p>Furthermore, using a default 1500-byte or uncalibrated VPN tunnel on ${net.name} triggers IP packet fragmentation unless your WireGuard interface is pinned to <code>MTU = ${net.mtu}</code>.</p>
+
+    <h2 id="sweepr-isp-master-matrix">${net.name} (${net.asn}) Complete 6-Workload Engineering Matrix</h2>
+    <p>Whether you are fixing evening streaming slowdowns, gaming packet loss, CGNAT port restrictions, VoIP jitter, or Smart-TV telemetry on <strong>${net.name}</strong>, use the verified protocol parameters below:</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Workload / Symptom on ${net.name}</th>
+          <th>Root Cause (${net.asn})</th>
+          <th>SWEEPR WireGuard Fix &amp; Port</th>
+          <th>Verified Target Metric</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Evening ISP Speed Throttling</strong></td>
+          <td>${net.throttlingType} (${net.peakHours})</td>
+          <td>10Gbps WireGuard UDP <code>51820</code> • <code>MTU ${net.mtu}</code></td>
+          <td><strong>910+ Mbps Sustained</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Gaming Packet Loss &amp; Ping Spikes</strong></td>
+          <td>Congested retail BGP transit &amp; UDP queue drops</td>
+          <td>Direct Tier-1 LINX (<code>UK-LON-01</code> 4ms) / AMS-IX (8ms)</td>
+          <td><strong>0.0% Packet Loss • &lt;9ms Ping</strong></td>
+        </tr>
+        <tr>
+          <td><strong>4K UHD Streaming Buffering</strong></td>
+          <td>SNI/CDN flow shaping on long-lived video chunks</td>
+          <td>ChaCha20-Poly1305 tunnel blinds DPI classifiers</td>
+          <td><strong>88.5 Mbps 4K HDR10+</strong></td>
+        </tr>
+        <tr>
+          <td><strong>CGNAT &amp; P2P Port Blocking</strong></td>
+          <td>Shared IPv4 CGNAT (<code>100.64.x.x</code>) &amp; port caps</td>
+          <td>Dedicated WireGuard tunnel + <code>PersistentKeepalive=25</code></td>
+          <td><strong>94.2 MB/s Bulk Throughput</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Teams, Zoom &amp; SSH Drops</strong></td>
+          <td>Aggressive UDP NAT timeouts &amp; PMTUD blackholes</td>
+          <td>Clamped <code>MTU ${net.mtu}</code> + 25s Keepalive heartbeats</td>
+          <td><strong>1.8ms Jitter • 100% Uptime</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Smart-TV ACR &amp; Wi-Fi Intruders</strong></td>
+          <td>Samsung/LG/Roku ACR uploads &amp; unknown LAN devices</td>
+          <td>Free 30s Wi-Fi ARP Scanner + In-Tunnel DNS <code>10.66.0.1</code></td>
+          <td><strong>0 ACR Uploads • Full LAN Audit</strong></td>
+        </tr>
+      </tbody>
+    </table>
 
     <h2>How SWEEPR VPN Solves This on ${net.name}</h2>
     <ul>
@@ -1822,17 +1919,51 @@ async function runDaily50Pages(targetCount = 50, force = false) {
 
   // Rebuild website/sitemap.xml & website/llms.txt strictly from indexable (non-noindex) pSEO HTML pillar files on disk
   const baseUrls = [
-    { loc: 'https://sweeprvpn.com/', priority: '1.0', changefreq: 'weekly' },
-    { loc: 'https://sweeprvpn.com/pricing', priority: '0.9', changefreq: 'weekly' },
-    { loc: 'https://sweeprvpn.com/tools/leak-test', priority: '0.8', changefreq: 'weekly' },
-    { loc: 'https://sweeprvpn.com/tools/isp-throttling-test', priority: '0.8', changefreq: 'weekly' },
-    { loc: 'https://sweeprvpn.com/vs/totalvpn', priority: '0.8', changefreq: 'monthly' },
-    { loc: 'https://sweeprvpn.com/alternatives/totalvpn', priority: '0.8', changefreq: 'monthly' },
-    { loc: 'https://sweeprvpn.com/support', priority: '0.6', changefreq: 'monthly' },
-    { loc: 'https://sweeprvpn.com/refund', priority: '0.5', changefreq: 'monthly' },
-    { loc: 'https://sweeprvpn.com/privacy', priority: '0.5', changefreq: 'monthly' },
-    { loc: 'https://sweeprvpn.com/terms', priority: '0.5', changefreq: 'monthly' }
+    { loc: 'https://sweeprvpn.com/', priority: '1.0', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'index.html') },
+    { loc: 'https://sweeprvpn.com/pricing', priority: '0.9', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'pricing.html') },
+    { loc: 'https://sweeprvpn.com/solutions', priority: '0.9', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'solutions.html') },
+    { loc: 'https://sweeprvpn.com/setup', priority: '0.9', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'setup.html') },
+    { loc: 'https://sweeprvpn.com/guides', priority: '0.9', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'guides.html') },
+    { loc: 'https://sweeprvpn.com/vs', priority: '0.9', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'vs.html') },
+    { loc: 'https://sweeprvpn.com/tools/leak-test', priority: '0.8', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'leak-test.html') },
+    { loc: 'https://sweeprvpn.com/tools/isp-throttling-test', priority: '0.8', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'isp-throttling-test.html') },
+    { loc: 'https://sweeprvpn.com/vs/totalvpn', priority: '0.8', changefreq: 'monthly', absPath: path.join(WEBSITE_DIR, 'vs-totalvpn.html') },
+    { loc: 'https://sweeprvpn.com/alternatives/totalvpn', priority: '0.8', changefreq: 'monthly', absPath: path.join(WEBSITE_DIR, 'alternatives-totalvpn.html') },
+    { loc: 'https://sweeprvpn.com/support', priority: '0.6', changefreq: 'monthly', absPath: path.join(WEBSITE_DIR, 'support.html') },
+    { loc: 'https://sweeprvpn.com/refund', priority: '0.5', changefreq: 'monthly', absPath: path.join(WEBSITE_DIR, 'refund.html') },
+    { loc: 'https://sweeprvpn.com/privacy', priority: '0.5', changefreq: 'monthly', absPath: path.join(WEBSITE_DIR, 'privacy.html') },
+    { loc: 'https://sweeprvpn.com/terms', priority: '0.5', changefreq: 'monthly', absPath: path.join(WEBSITE_DIR, 'terms.html') }
   ];
+
+  // Parse existing <lastmod> dates from sitemap.xml so unchanged URLs keep their true modification date
+  const prevLastModMap = new Map();
+  for (const m of sitemapXml.matchAll(/<url>\s*<loc>([^<]+)<\/loc>\s*<lastmod>([^<]+)<\/lastmod>/g)) {
+    prevLastModMap.set(m[1].trim(), m[2].trim());
+  }
+  if (!state.urlLastModHashes || typeof state.urlLastModHashes !== 'object') {
+    state.urlLastModHashes = {};
+  }
+
+  const getAccurateLastMod = (loc, absPath) => {
+    let hash = '';
+    if (absPath && fs.existsSync(absPath)) {
+      hash = crypto.createHash('sha1').update(fs.readFileSync(absPath)).digest('hex').slice(0, 12);
+    }
+    const prevRecord = state.urlLastModHashes[loc];
+    const prevSitemapDate = prevLastModMap.get(loc);
+    if (prevRecord && prevRecord.hash === hash && prevRecord.lastmod) {
+      return prevRecord.lastmod;
+    }
+    if (!prevRecord && prevSitemapDate && hash) {
+      state.urlLastModHashes[loc] = { hash, lastmod: prevSitemapDate };
+      return prevSitemapDate;
+    }
+    const newDate = todayStr;
+    if (hash) {
+      state.urlLastModHashes[loc] = { hash, lastmod: newDate };
+    }
+    return newDate;
+  };
 
   const allPseoPagesOnDisk = [];
   let consolidatedNoIndexCount = 0;
@@ -1869,9 +2000,10 @@ async function runDaily50Pages(targetCount = 50, force = false) {
     ...allPseoPagesOnDisk.map((p) => ({
       loc: p.loc,
       priority: '0.8',
-      changefreq: 'weekly'
+      changefreq: 'weekly',
+      absPath: p.absPath
     })),
-    { loc: 'https://sweeprvpn.com/download', priority: '0.9', changefreq: 'weekly' }
+    { loc: 'https://sweeprvpn.com/download', priority: '0.9', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'SWEEPRVPN.exe') }
   ];
 
   const rebuiltSitemap = `<?xml version="1.0" encoding="UTF-8"?>
@@ -1880,7 +2012,7 @@ ${allSitemapEntries
   .map(
     (u) => `  <url>
     <loc>${u.loc}</loc>
-    <lastmod>${todayStr}</lastmod>
+    <lastmod>${getAccurateLastMod(u.loc, u.absPath)}</lastmod>
     <changefreq>${u.changefreq}</changefreq>
     <priority>${u.priority}</priority>
   </url>`

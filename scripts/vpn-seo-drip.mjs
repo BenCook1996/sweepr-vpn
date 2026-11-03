@@ -137,6 +137,17 @@ const VERIFIED_DIRECTORY_SUBMISSIONS = [
     status: 'submitted',
     message_id: 'portal-vpn-launchingnext-com',
     reached_out_at: Math.floor(Date.now() / 1000)
+  },
+  {
+    project_id: 'vpn',
+    who: 'SitePatent AI & Tech Directory',
+    website: 'sitepatent.com',
+    url: 'https://sitepatent.com/site/sweeprvpn.com',
+    how: 'Web Submit Portal (Verified Listing)',
+    category: '[SWEEPR VPN] Verified Cybersecurity & Smart-TV ACR Blocker Listing -> https://sweeprvpn.com',
+    status: 'listed',
+    message_id: 'portal-vpn-sitepatent-com',
+    reached_out_at: Math.floor(Date.now() / 1000)
   }
 ];
 
@@ -175,6 +186,10 @@ const GSC_PRIORITY_URLS = new Set([
   'https://sweeprvpn.com/',
   'https://sweeprvpn.com/pricing',
   'https://sweeprvpn.com/download',
+  'https://sweeprvpn.com/solutions',
+  'https://sweeprvpn.com/setup',
+  'https://sweeprvpn.com/guides',
+  'https://sweeprvpn.com/vs',
   'https://sweeprvpn.com/tools/leak-test',
   'https://sweeprvpn.com/tools/isp-throttling-test',
   'https://sweeprvpn.com/vs/totalvpn',
@@ -189,7 +204,12 @@ const GSC_PRIORITY_URLS = new Set([
   'https://sweeprvpn.com/guides/stop-lg-smart-tv-acr-spying',
   'https://sweeprvpn.com/solutions/hotel-captive-portal-wifi-p2p-port-forwarding',
   'https://sweeprvpn.com/solutions/rogers-ignite-canada-isp-throttling',
-  'https://sweeprvpn.com/setup/steam-deck-vpn'
+  'https://sweeprvpn.com/setup/steam-deck-vpn',
+  'https://sweeprvpn.com/solutions/comcast-xfinity-broadband-smart-tv-acr-blocking',
+  'https://sweeprvpn.com/solutions/ee-5g-mobile-hotspot-wifi-arp-spoofing-protection',
+  'https://sweeprvpn.com/solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter',
+  'https://sweeprvpn.com/solutions/three-5g-home-broadband-uhd-streaming-buffering',
+  'https://sweeprvpn.com/solutions/fibrus-full-fibre-smart-tv-acr-blocking'
 ]);
 
 function loadTargetItemsFromSitemap() {
@@ -814,9 +834,6 @@ async function runVpnDrip(targetCount = 300) {
     }
 
     const sitemapUrls = items.map((it) => it.url);
-    if (!sitemapUrls.includes('https://sweeprvpn.com/pad.xml')) {
-      sitemapUrls.push('https://sweeprvpn.com/pad.xml');
-    }
     indexStatus.sitemapUrls = sitemapUrls.length;
 
     const nowMs = Date.now();
@@ -946,5 +963,9 @@ async function runVpnDrip(targetCount = 300) {
   }
 }
 
-const countArg = Number(process.argv[2]) || 300;
+// Guardrail: Pastebin syndication (telegra.ph / dpaste.org / catbox.moe) defaults to 0 to prevent repository bloat
+// and unindexed pastebin churn unless --enable-pastebins is explicitly passed.
+const enablePastebins = process.argv.includes('--enable-pastebins');
+const rawCountArg = process.argv[2] !== undefined && !process.argv[2].startsWith('--') ? Number(process.argv[2]) : 0;
+const countArg = enablePastebins ? (rawCountArg || 25) : 0;
 runVpnDrip(countArg).catch(console.error);
