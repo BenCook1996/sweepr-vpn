@@ -2314,8 +2314,8 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
     </div>
     <div class="mt-4 mb-5 p-3.5 rounded-xl border border-emerald-200 bg-emerald-50/50 text-left text-xs text-gray-600 space-y-1">
       <div class="font-extrabold text-emerald-900 flex items-center gap-1.5">🛡️ Authenticode Signed &amp; Verified Windows Binary</div>
-      <div><strong>Publisher:</strong> CN=Benjamin Cook (SSL.com Code Signing Intermediate CA RSA R1)</div>
-      <div class="break-all"><strong>SHA-256 (SWEEPRVPN.exe):</strong> <code class="text-[11px] bg-white px-1 py-0.5 rounded border border-emerald-100">5BC593BA86C9E39BDD00F1813326314A3D0489C1763706F9D6EA9548AFA83E0A</code></div>
+      <div><strong>Publisher:</strong> CN=Benjamin Cook, O=Benjamin Cook, L=Worthing, C=GB (SSL.com OV Code Signing)</div>
+      <div class="break-all"><strong>SHA-256 (SWEEPRVPN.exe):</strong> <code class="text-[11px] bg-white px-1 py-0.5 rounded border border-emerald-100">1456763B865C858D60465A9D6F4341188952E1F9FD6BC2B19AC7B3778AC3134F</code></div>
     </div>
     <div class="flex justify-center pt-4 border-t border-gray-100">
       <a href="/" class="btn btn-ghost w-full justify-center">Back to Home</a>
