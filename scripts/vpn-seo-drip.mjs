@@ -904,61 +904,55 @@ async function runVpnDrip(targetCount = 300) {
   }
 
   console.log('\n==========================================================================');
-  console.log('  6-HOURLY SWEEPR VPN WORKFLOW SUMMARY');
+  console.log('  DAILY SWEEPR VPN DIRECTORY, PAD XML & DELTA INDEXING SUMMARY');
   console.log('==========================================================================');
-  console.log(`✓ PAD XML Specification: v${padInfo?.version || '1.0.0'} (${padInfo?.sizeBytes || '3872256'} bytes, HTTPS live probe checked)`);
-  console.log(`✓ High-DR Backlinks Generated: ${completed} new dofollow backlinks across Telegraph (DR 89) and DPaste (DR 74)`);
+  console.log(`✓ PAD XML Specification: v${padInfo?.version || '1.4.0'} (${padInfo?.sizeBytes || '695568'} bytes, HTTPS live probe checked)`);
+  console.log(`✓ Verified Directory Submissions Synced: ${VERIFIED_DIRECTORY_SUBMISSIONS.length} authority listings (Pastebin spam disabled: ${completed})`);
   console.log(`✓ Search Indexing (Delta-Only): ${indexStatus.deltaSubmitted} delta URLs submitted via IndexNow (out of ${indexStatus.sitemapUrls} canonical URLs)`);
   console.log(`✓ CRM Database Sync: Upserted to Railway Multi-Project CRM, Cleaner CRM, and local SQLite (Total VPN entries: ${vpnSeed.length})`);
   console.log(`✓ Live Backlink Verification: Triggered /api/crm/seo/backlinks/verify?project=vpn`);
   console.log(`✓ STRICT RULE AUDIT: 0 emails sent. No SMTP / no email outreach.`);
   console.log('==========================================================================\n');
 
-  if (!process.argv.includes('--no-push') && completed > 0) {
+  if (!process.argv.includes('--no-push')) {
     try {
-      execFileSync(
+      const statusOut = execFileSync(
         'git',
         [
-          'add',
-          'website',
-          'scripts/vpn-seo-drip.mjs',
-          'scripts/daily-seo-pagespeed-audit.mjs',
-          'scripts/daily-50-seo-pages.mjs',
-          'TECHNICAL_SEO_AUDIT_LOG.md',
-          'SECURITY_AUDIT_LOG.md',
-          'sweepr-vpn-scorecard.html'
+          'status',
+          '--porcelain',
+          'website/indexing-queue.json',
+          'website/outreach-seed.json',
+          'website/pad.xml',
+          'website/sitemap.xml',
+          'website/llms.txt'
         ],
-        { cwd: VPN_ROOT, stdio: 'inherit' }
-      );
-      execFileSync(
-        'git',
-        ['commit', '-m', `chore(seo): sync ${completed} syndication backlinks & indexing queue [6-hourly workflow]`],
-        { cwd: VPN_ROOT, stdio: 'inherit' }
-      );
-      execFileSync('git', ['push', 'origin', 'main'], { cwd: VPN_ROOT, stdio: 'inherit' });
-      console.log('[6-Hourly Workflow] Committed and pushed to GitHub (origin/main) -> Railway auto-deploy triggered.');
+        { cwd: VPN_ROOT, encoding: 'utf8' }
+      ).trim();
 
-      try {
-        const cleanerRoot = 'c:/Users/Benjamin/Downloads/desktop_cleaner';
-        execFileSync('git', ['add', 'server/src/outreach-seed.json'], { cwd: cleanerRoot, stdio: 'inherit' });
-        execFileSync('git', ['commit', '-m', `chore(seo): sync ${completed} syndication links & indexing queue`], { cwd: cleanerRoot, stdio: 'inherit' });
-        execFileSync('git', ['push', 'origin', 'main'], { cwd: cleanerRoot, stdio: 'inherit' });
-        console.log('[6-Hourly Workflow] desktop_cleaner seed committed and pushed to GitHub.');
-      } catch (cleanerErr) {
-        // skipped if clean
-      }
-
-      try {
-        const crmRoot = 'C:/Users/Benjamin/Downloads/sweepr_crm';
-        execFileSync('git', ['add', 'src/outreach-seed.json'], { cwd: crmRoot, stdio: 'inherit' });
-        execFileSync('git', ['commit', '-m', `chore(seo): sync ${completed} syndication links & indexing queue [project=vpn]`], { cwd: crmRoot, stdio: 'inherit' });
-        execFileSync('git', ['push', 'origin', 'main'], { cwd: crmRoot, stdio: 'inherit' });
-        console.log('[6-Hourly Workflow] sweepr_crm seed committed and pushed to GitHub.');
-      } catch (crmErr) {
-        // skipped if clean
+      if (statusOut.length > 0 || completed > 0) {
+        execFileSync(
+          'git',
+          [
+            'add',
+            'website/indexing-queue.json',
+            'website/outreach-seed.json',
+            'website/pad.xml',
+            'website/sitemap.xml',
+            'website/llms.txt'
+          ],
+          { cwd: VPN_ROOT, stdio: 'inherit' }
+        );
+        execFileSync(
+          'git',
+          ['commit', '-m', `chore(seo): sync verified directory seed & delta indexing queue (${indexStatus.deltaSubmitted} URLs)`],
+          { cwd: VPN_ROOT, stdio: 'inherit' }
+        );
+        execFileSync('git', ['push', 'origin', 'main'], { cwd: VPN_ROOT, stdio: 'inherit' });
+        console.log('[Daily SEO Indexing] Committed and pushed updated indexing queue / seed to GitHub (origin/main).');
       }
     } catch (gitErr) {
-      console.warn('[6-Hourly Workflow] Git auto-push skipped or failed:', gitErr?.message || gitErr);
+      console.warn('[Daily SEO Indexing] Git auto-push skipped or clean:', gitErr?.message || gitErr);
     }
   }
 }
