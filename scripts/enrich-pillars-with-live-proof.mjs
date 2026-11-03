@@ -325,11 +325,11 @@ function runLiveProofEnrichment() {
         state.proofUpdatedAt[urlPath] = nowIso;
         const sha1 = crypto
           .createHash('sha1')
-          .update(updatedHtml.replace(/\s+/g, ' ').trim())
+          .update(fs.readFileSync(absPath))
           .digest('hex')
-          .slice(0, 16);
+          .slice(0, 12);
         state.contentHashes[urlPath] = sha1;
-        seoState.urlLastModHashes[loc] = { hash: sha1, date: todayStr };
+        seoState.urlLastModHashes[loc] = { hash: sha1, lastmod: todayStr };
         modifiedLocs.add(loc);
         enrichedCount++;
       }

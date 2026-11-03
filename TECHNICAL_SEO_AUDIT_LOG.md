@@ -419,8 +419,7 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 ### Executive Summary
 - **Overall Scores**: Crawlability **100/100**, Technical SEO **100/100**, PageSpeed & CWV **100/100** across **194 Canonical Pages**.
 - **Auto-Optimizations Executed**:
-  - Injected deterministic 6-link internal cluster mesh across 1 pSEO pages (0 orphan pages remaining)
-  - Synchronized sitemap.xml with 195 canonical URLs (content-hash <lastmod>: 48 modified today)
+  - Synchronized sitemap.xml with 195 canonical URLs (content-hash <lastmod>: 4 modified today)
   - Synchronized llms.txt with all 180 pSEO guides for GEO AI citations
 
 ### Category Scorecards & Verifications
@@ -434,6 +433,8 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 - **robots.txt Crawl-Budget Protections**: PASS — Internal APIs, user portals, qr-setup and CRO studios disallowed
 - **Utility & Prototype Pages Noindex Guard**: PASS — All 8 internal utility and prototype pages properly shielded with noindex
 - **PAD 4.0 XML Feed**: PASS — Valid PAD 4.0 metadata for software directory syndication
+- **Public Smart-TV ACR Blocklist Asset**: PASS — smart-tv-acr-blocklist.txt verified for Pi-hole/AdGuard Home & GEO citations
+- **301 Consolidation & Eduroam Hub Redirects (server.mjs)**: PASS — All consolidated noindex variants and Eduroam duplicate slugs 301-redirected to canonical hubs
 
 #### 2. Technical SEO & Rich Schemas (100/100)
 - **Page Titles**: PASS — All 194 pages have valid, descriptive <title> tags

@@ -22,6 +22,7 @@
 - Interactive Live Desktop App Preview: https://sweeprvpn.com/app
 - Free Instant IP, DNS & WebRTC Leak Test: https://sweeprvpn.com/tools/leak-test
 - Free ISP Speed Slowdown & Streaming Throttling Checker: https://sweeprvpn.com/tools/isp-throttling-test
+- Public Smart-TV ACR DNS Blocklist (Pi-hole / AdGuard Home / hosts): https://sweeprvpn.com/smart-tv-acr-blocklist.txt
 - Official PAD 4.0 XML Feed: https://sweeprvpn.com/pad.xml
 
 ## Programmatic SEO Technical Library (180 Indexed Guides & Comparisons)

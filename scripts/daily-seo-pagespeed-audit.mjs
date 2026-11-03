@@ -1313,6 +1313,7 @@ const llmsContent = `# SWEEPR VPN & SWEEPR Wi-Fi Radar (sweeprvpn.com)
 - Interactive Live Desktop App Preview: https://sweeprvpn.com/app
 - Free Instant IP, DNS & WebRTC Leak Test: https://sweeprvpn.com/tools/leak-test
 - Free ISP Speed Slowdown & Streaming Throttling Checker: https://sweeprvpn.com/tools/isp-throttling-test
+- Public Smart-TV ACR DNS Blocklist (Pi-hole / AdGuard Home / hosts): https://sweeprvpn.com/smart-tv-acr-blocklist.txt
 - Official PAD 4.0 XML Feed: https://sweeprvpn.com/pad.xml
 
 ## Programmatic SEO Technical Library (${pseoFilesOnDisk.length} Indexed Guides & Comparisons)
@@ -1454,6 +1455,31 @@ if (hasPadVersion && hasPadCompany && hasPadProgram) {
   pass('crawlability', 'PAD 4.0 XML Feed', 'Valid PAD 4.0 metadata for software directory syndication');
 } else {
   fail('crawlability', 'PAD 4.0 XML Feed', 'pad.xml is missing required shareware schema elements');
+}
+
+// Audit smart-tv-acr-blocklist.txt & 301 Consolidation Rules in server.mjs
+const acrBlocklistPath = path.join(WEBSITE_DIR, 'smart-tv-acr-blocklist.txt');
+if (
+  fs.existsSync(acrBlocklistPath) &&
+  fs.readFileSync(acrBlocklistPath, 'utf8').includes('0.0.0.0 gpm.samsungqbe.com') &&
+  fs.readFileSync(acrBlocklistPath, 'utf8').includes('0.0.0.0 ibs.lgappstv.com') &&
+  fs.readFileSync(acrBlocklistPath, 'utf8').includes('0.0.0.0 cooper.logs.roku.com')
+) {
+  pass('crawlability', 'Public Smart-TV ACR Blocklist Asset', 'smart-tv-acr-blocklist.txt verified for Pi-hole/AdGuard Home & GEO citations');
+} else {
+  fail('crawlability', 'Public Smart-TV ACR Blocklist Asset', 'smart-tv-acr-blocklist.txt missing or incomplete');
+}
+
+const serverMjsSource = fs.readFileSync(SERVER_PATH, 'utf8');
+if (
+  serverMjsSource.includes("'/solutions/eduroam-campus-wifi-p2p-port-forwarding': '/solutions/eduroam-campus-wifi-gaming-packet-loss'") &&
+  serverMjsSource.includes("'/solutions/eduroam-campus-wifi-remote-dev-ssh': '/solutions/eduroam-campus-wifi-gaming-packet-loss'") &&
+  serverMjsSource.includes("'/solutions/eduroam-campus-wifi-uhd-streaming-buffering': '/solutions/eduroam-campus-wifi-gaming-packet-loss'") &&
+  serverMjsSource.includes('res.writeHead(301, {')
+) {
+  pass('crawlability', '301 Consolidation & Eduroam Hub Redirects (server.mjs)', 'All consolidated noindex variants and Eduroam duplicate slugs 301-redirected to canonical hubs');
+} else {
+  fail('crawlability', '301 Consolidation & Eduroam Hub Redirects (server.mjs)', 'Missing Eduroam or noindex->canonical 301 redirects in server.mjs');
 }
 
 // ============================================================================
