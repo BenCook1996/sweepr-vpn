@@ -3,7 +3,8 @@ Add-Type -AssemblyName System.Drawing
 function New-VpnShieldBitmap {
     param(
         [int]$Size = 256,
-        [string]$Theme = "emerald"
+        [string]$Theme = "emerald",
+        [switch]$FullBleedOpaque
     )
 
     $bmp = New-Object System.Drawing.Bitmap $Size, $Size, ([System.Drawing.Imaging.PixelFormat]::Format32bppArgb)
@@ -21,26 +22,31 @@ function New-VpnShieldBitmap {
     $fgSec   = [System.Drawing.ColorTranslator]::FromHtml("#a7f3d0")
     $borderCol = [System.Drawing.Color]::FromArgb(72, 255, 255, 255)
 
-    # 1. Rounded Squircle Background (x=4, y=4, w=92, h=92, rx=22)
     $p1 = New-Object System.Drawing.PointF 0, 0
     $p2 = New-Object System.Drawing.PointF $Size, $Size
     $bgBrush = New-Object System.Drawing.Drawing2D.LinearGradientBrush $p1, $p2, $bgStart, $bgEnd
 
-    $m = [float](4.0 * $s)
-    $w = [float](92.0 * $s)
-    $r = [float](44.0 * $s)
-    $bgPath = New-Object System.Drawing.Drawing2D.GraphicsPath
-    $bgPath.AddArc($m, $m, $r, $r, 180, 90)
-    $bgPath.AddArc($m + $w - $r, $m, $r, $r, 270, 90)
-    $bgPath.AddArc($m + $w - $r, $m + $w - $r, $r, $r, 0, 90)
-    $bgPath.AddArc($m, $m + $w - $r, $r, $r, 90, 90)
-    $bgPath.CloseFigure()
-    $g.FillPath($bgBrush, $bgPath)
-    $borderPen = New-Object System.Drawing.Pen $borderCol, ([float]([Math]::Max(1.0, 2.0 * $s)))
-    $g.DrawPath($borderPen, $bgPath)
-    $borderPen.Dispose()
-    $bgPath.Dispose()
-    $bgBrush.Dispose()
+    if ($FullBleedOpaque) {
+        $g.FillRectangle($bgBrush, 0, 0, $Size, $Size)
+        $bgBrush.Dispose()
+    } else {
+        # 1. Rounded Squircle Background (x=4, y=4, w=92, h=92, rx=22)
+        $m = [float](4.0 * $s)
+        $w = [float](92.0 * $s)
+        $r = [float](44.0 * $s)
+        $bgPath = New-Object System.Drawing.Drawing2D.GraphicsPath
+        $bgPath.AddArc($m, $m, $r, $r, 180, 90)
+        $bgPath.AddArc($m + $w - $r, $m, $r, $r, 270, 90)
+        $bgPath.AddArc($m + $w - $r, $m + $w - $r, $r, $r, 0, 90)
+        $bgPath.AddArc($m, $m + $w - $r, $r, $r, 90, 90)
+        $bgPath.CloseFigure()
+        $g.FillPath($bgBrush, $bgPath)
+        $borderPen = New-Object System.Drawing.Pen $borderCol, ([float]([Math]::Max(1.0, 2.0 * $s)))
+        $g.DrawPath($borderPen, $bgPath)
+        $borderPen.Dispose()
+        $bgPath.Dispose()
+        $bgBrush.Dispose()
+    }
 
     # 2. Shield Outline: M50 16 L79 27 V49 C79 67.5 66.5 80.5 50 86 C33.5 80.5 21 67.5 21 49 V27 Z
     $shieldPen = New-Object System.Drawing.Pen $fgPrim, ([float]([Math]::Max(1.5, 5.5 * $s)))
@@ -149,20 +155,95 @@ function Save-MultiSizeVpnIco {
     $fs.Close()
 }
 
+function Save-VpnPng {
+    param([int]$Size, [string]$Path, [switch]$FullBleedOpaque)
+    $dir = [System.IO.Path]::GetDirectoryName($Path)
+    if ($dir -and -not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
+    $bmp = New-VpnShieldBitmap -Size $Size -FullBleedOpaque:$FullBleedOpaque
+    $bmp.Save($Path, [System.Drawing.Imaging.ImageFormat]::Png)
+    $bmp.Dispose()
+}
+
 $root = "c:\Users\Benjamin\Downloads\vpn"
+
+# 1. Windows C# Desktop App & Website Favicons
 Save-MultiSizeVpnIco -Path "$root\desktop-client\app-icon.ico"
 Save-MultiSizeVpnIco -Path "$root\website\favicon.ico"
-$bmp256 = New-VpnShieldBitmap -Size 256
-$bmp256.Save("$root\desktop-client\app-icon.png", [System.Drawing.Imaging.ImageFormat]::Png)
-$bmp256.Dispose()
-$bmp180 = New-VpnShieldBitmap -Size 180
-$bmp180.Save("$root\website\apple-touch-icon.png", [System.Drawing.Imaging.ImageFormat]::Png)
-$bmp180.Dispose()
-$bmp64 = New-VpnShieldBitmap -Size 64
-$bmp64.Save("$root\website\favicon.png", [System.Drawing.Imaging.ImageFormat]::Png)
-$bmp64.Save("$root\website\favicon-dark.png", [System.Drawing.Imaging.ImageFormat]::Png)
-$bmp64.Dispose()
-$bmp32 = New-VpnShieldBitmap -Size 32
-$bmp32.Save("$root\website\icon-32x32.png", [System.Drawing.Imaging.ImageFormat]::Png)
-$bmp32.Dispose()
-Write-Output "Generated multi-size SWEEPR VPN Emerald Shield .ico and .png successfully!"
+Save-VpnPng -Size 256 -Path "$root\desktop-client\app-icon.png"
+Save-VpnPng -Size 180 -Path "$root\website\apple-touch-icon.png"
+Save-VpnPng -Size 64  -Path "$root\website\favicon.png"
+Save-VpnPng -Size 64  -Path "$root\website\favicon-dark.png"
+Save-VpnPng -Size 32  -Path "$root\website\icon-32x32.png"
+Save-VpnPng -Size 192 -Path "$root\website\icon-192.png"
+Save-VpnPng -Size 512 -Path "$root\website\icon-512.png"
+
+# 2. Desktop Tauri App (Windows NSIS/MSI, macOS, Linux)
+$tauriIcons = "$root\apps\desktop-tauri\src-tauri\icons"
+Save-MultiSizeVpnIco -Path "$tauriIcons\icon.ico"
+Save-VpnPng -Size 512 -Path "$root\apps\desktop-tauri\app-icon.png"
+Save-VpnPng -Size 512 -Path "$tauriIcons\icon.png"
+Save-VpnPng -Size 32  -Path "$tauriIcons\32x32.png"
+Save-VpnPng -Size 64  -Path "$tauriIcons\64x64.png"
+Save-VpnPng -Size 128 -Path "$tauriIcons\128x128.png"
+Save-VpnPng -Size 256 -Path "$tauriIcons\128x128@2x.png"
+Save-VpnPng -Size 50  -Path "$tauriIcons\StoreLogo.png"
+Save-VpnPng -Size 30  -Path "$tauriIcons\Square30x30Logo.png"
+Save-VpnPng -Size 44  -Path "$tauriIcons\Square44x44Logo.png"
+Save-VpnPng -Size 71  -Path "$tauriIcons\Square71x71Logo.png"
+Save-VpnPng -Size 89  -Path "$tauriIcons\Square89x89Logo.png"
+Save-VpnPng -Size 107 -Path "$tauriIcons\Square107x107Logo.png"
+Save-VpnPng -Size 142 -Path "$tauriIcons\Square142x142Logo.png"
+Save-VpnPng -Size 150 -Path "$tauriIcons\Square150x150Logo.png"
+Save-VpnPng -Size 284 -Path "$tauriIcons\Square284x284Logo.png"
+Save-VpnPng -Size 310 -Path "$tauriIcons\Square310x310Logo.png"
+
+# 3. Android App Mipmap Icons
+$androidRes = "$root\apps\mobile-android\app\src\main\res"
+$mipmaps = @{
+    "mipmap-mdpi"    = 48
+    "mipmap-hdpi"    = 72
+    "mipmap-xhdpi"   = 96
+    "mipmap-xxhdpi"  = 144
+    "mipmap-xxxhdpi" = 192
+}
+foreach ($kv in $mipmaps.GetEnumerator()) {
+    Save-VpnPng -Size $kv.Value -Path "$androidRes\$($kv.Key)\ic_launcher.png"
+    Save-VpnPng -Size $kv.Value -Path "$androidRes\$($kv.Key)\ic_launcher_round.png"
+}
+
+# 4. iOS App Icon Asset Catalog (Full-bleed opaque per Apple App Store guidelines)
+$iosIconSet = "$root\apps\mobile-ios\Assets.xcassets\AppIcon.appiconset"
+New-Item -ItemType Directory -Path $iosIconSet -Force | Out-Null
+Save-VpnPng -Size 40   -Path "$iosIconSet\AppIcon-20@2x.png" -FullBleedOpaque
+Save-VpnPng -Size 60   -Path "$iosIconSet\AppIcon-20@3x.png" -FullBleedOpaque
+Save-VpnPng -Size 58   -Path "$iosIconSet\AppIcon-29@2x.png" -FullBleedOpaque
+Save-VpnPng -Size 87   -Path "$iosIconSet\AppIcon-29@3x.png" -FullBleedOpaque
+Save-VpnPng -Size 80   -Path "$iosIconSet\AppIcon-40@2x.png" -FullBleedOpaque
+Save-VpnPng -Size 120  -Path "$iosIconSet\AppIcon-40@3x.png" -FullBleedOpaque
+Save-VpnPng -Size 120  -Path "$iosIconSet\AppIcon-60@2x.png" -FullBleedOpaque
+Save-VpnPng -Size 180  -Path "$iosIconSet\AppIcon-60@3x.png" -FullBleedOpaque
+Save-VpnPng -Size 152  -Path "$iosIconSet\AppIcon-76@2x.png" -FullBleedOpaque
+Save-VpnPng -Size 167  -Path "$iosIconSet\AppIcon-83.5@2x.png" -FullBleedOpaque
+Save-VpnPng -Size 1024 -Path "$iosIconSet\AppIcon-1024.png" -FullBleedOpaque
+
+$iosContentsJson = @'
+{
+  "images": [
+    { "size": "20x20", "idiom": "iphone", "filename": "AppIcon-20@2x.png", "scale": "2x" },
+    { "size": "20x20", "idiom": "iphone", "filename": "AppIcon-20@3x.png", "scale": "3x" },
+    { "size": "29x29", "idiom": "iphone", "filename": "AppIcon-29@2x.png", "scale": "2x" },
+    { "size": "29x29", "idiom": "iphone", "filename": "AppIcon-29@3x.png", "scale": "3x" },
+    { "size": "40x40", "idiom": "iphone", "filename": "AppIcon-40@2x.png", "scale": "2x" },
+    { "size": "40x40", "idiom": "iphone", "filename": "AppIcon-40@3x.png", "scale": "3x" },
+    { "size": "60x60", "idiom": "iphone", "filename": "AppIcon-60@2x.png", "scale": "2x" },
+    { "size": "60x60", "idiom": "iphone", "filename": "AppIcon-60@3x.png", "scale": "3x" },
+    { "size": "76x76", "idiom": "ipad", "filename": "AppIcon-76@2x.png", "scale": "2x" },
+    { "size": "83.5x83.5", "idiom": "ipad", "filename": "AppIcon-83.5@2x.png", "scale": "2x" },
+    { "size": "1024x1024", "idiom": "ios-marketing", "filename": "AppIcon-1024.png", "scale": "1x" }
+  ],
+  "info": { "version": 1, "author": "xcode" }
+}
+'@
+Set-Content -Path "$iosIconSet\Contents.json" -Value $iosContentsJson -Encoding UTF8
+
+Write-Output "Generated multi-size SWEEPR VPN Emerald Shield icons across Windows, Tauri, macOS, Linux, Android, iOS, and Web!"

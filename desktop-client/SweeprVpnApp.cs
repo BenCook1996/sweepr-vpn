@@ -18,6 +18,14 @@ using Microsoft.Win32;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.WinForms;
 
+[assembly: AssemblyTitle("SWEEPR VPN")]
+[assembly: AssemblyDescription("SWEEPR VPN — Easy Privacy & Home Wi-Fi Protection")]
+[assembly: AssemblyCompany("SWEEPR VPN")]
+[assembly: AssemblyProduct("SWEEPR VPN")]
+[assembly: AssemblyCopyright("Copyright © 2026 SWEEPR VPN. All rights reserved.")]
+[assembly: AssemblyVersion("2.5.0.0")]
+[assembly: AssemblyFileVersion("2.5.0.0")]
+
 namespace SweeprVpnApp
 {
     public class ServerNode
@@ -110,7 +118,7 @@ namespace SweeprVpnApp
 
             try
             {
-                this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
+                this.Icon = Program.LoadEmbeddedIcon();
             }
             catch { }
 
@@ -468,7 +476,7 @@ namespace SweeprVpnApp
                         uiFolder,
                         CoreWebView2HostResourceAccessKind.Allow
                     );
-                    BrowserView.CoreWebView2.Navigate("https://app.sweeprvpn.local/index.html?v=254");
+                    BrowserView.CoreWebView2.Navigate("https://app.sweeprvpn.local/index.html?v=256");
                 }
                 catch
                 {
@@ -2093,11 +2101,41 @@ namespace SweeprVpnApp
             catch { }
         }
 
+        public static Icon LoadEmbeddedIcon()
+        {
+            try
+            {
+                Assembly asm = Assembly.GetExecutingAssembly();
+                Stream s = asm.GetManifestResourceStream("app-icon.ico");
+                if (s == null)
+                {
+                    foreach (string name in asm.GetManifestResourceNames())
+                    {
+                        if (name.EndsWith("app-icon.ico", StringComparison.OrdinalIgnoreCase)) { s = asm.GetManifestResourceStream(name); break; }
+                    }
+                }
+                if (s != null) { using (s) { return new Icon(s); } }
+            }
+            catch { }
+            try { return Icon.ExtractAssociatedIcon(Application.ExecutablePath); } catch { }
+            return SystemIcons.Shield;
+        }
+
         public static string LoadEmbeddedTextResource(string resName)
         {
             using (Stream s = Assembly.GetExecutingAssembly().GetManifestResourceStream(resName))
             {
-                if (s == null) return "<html><body>UI Resource Missing</body></html>";
+                if (s == null)
+                {
+                    try
+                    {
+                        string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+                        string[] candidates = new string[] { Path.Combine(baseDir, resName), Path.Combine(baseDir, "app-ui.html"), Path.Combine(baseDir, "..", "desktop-client", "app-ui.html"), Path.Combine(baseDir, "..", "apps", "desktop-tauri", "ui", "index.html") };
+                        foreach (string c in candidates) { if (File.Exists(c)) return File.ReadAllText(c, Encoding.UTF8); }
+                    }
+                    catch { }
+                    return "<html><body>UI Resource Missing</body></html>";
+                }
                 using (StreamReader sr = new StreamReader(s, Encoding.UTF8))
                 {
                     return sr.ReadToEnd();
@@ -2110,6 +2148,8 @@ namespace SweeprVpnApp
             string html = LoadEmbeddedTextResource("app-ui.html");
             if ((!html.Contains("Search country or city") && !html.Contains("Search for a country")) || (!html.Contains("Connect") && !html.Contains("Enable")) || !html.Contains("view-wifi") || !html.Contains("is-compact") || !html.Contains("cmdModal") || !html.Contains("ctxMenu") || !html.Contains("invokeWebView2") || !html.Contains("sendSupport"))
                 throw new Exception("Embedded WebView2 HTML UI missing Plain-English, Desktop, or Real WireGuard bridge controls.");
+            if (Assembly.GetExecutingAssembly().GetManifestResourceStream("app-icon.ico") == null || Assembly.GetExecutingAssembly().GetManifestResourceStream("WebView2Loader.dll") == null)
+                throw new Exception("Embedded app-icon.ico or WebView2Loader.dll resource missing from executable.");
 
             using (MainForm form = new MainForm(null, null, true))
             {
