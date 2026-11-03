@@ -2254,6 +2254,8 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"SWEEPR VPN","operatingSystem":"Windows 10, Windows 11, macOS, Linux, iOS, Android, OpenWrt","applicationCategory":"SecurityApplication","downloadUrl":"https://sweeprvpn.com/SWEEPRVPN.exe","fileSize":"3.7MB","offers":{"@type":"AggregateOffer","priceCurrency":"GBP","lowPrice":"1.99","highPrice":"74.99","offerCount":"3"},"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","ratingCount":"8420","bestRating":"5","worstRating":"1"}}</script>
   <script src="https://cdn.tailwindcss.com/3.4.5"></script>
   <link rel="stylesheet" href="/style.css">
+  <script src="/pricing-config.js?v=3" defer></script>
+  <script src="/nav.js" defer></script>
 </head>
 <body class="text-gray-800 flex flex-col items-center justify-center min-h-screen p-4 overflow-x-hidden">
   <div class="glass-card p-6 sm:p-10 w-full max-w-lg text-center">
@@ -2429,6 +2431,9 @@ function renderCheckoutSuccessPage(acc, isCancelled = false, isPopup = false) {
   const planLabel = escapeHtml(
     acc?.plan === 'annual' ? 'Annual Plan' : acc?.plan === 'six_month' ? '6-Month Plan' : 'Monthly Plan'
   );
+  const purchaseValue =
+    (acc?.plan === 'annual' ? 74.99 : acc?.plan === 'six_month' ? 48.99 : 12.49) +
+    (acc?.wifiRadarAddon ? (acc?.plan === 'annual' ? 14.99 : acc?.plan === 'six_month' ? 9.99 : 1.99) : 0);
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -2441,7 +2446,17 @@ function renderCheckoutSuccessPage(acc, isCancelled = false, isPopup = false) {
   <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png?v=5">
   <link rel="shortcut icon" href="/favicon.ico?v=5">
   <script src="https://cdn.tailwindcss.com/3.4.5"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    if (localStorage.getItem('sweepr_internal_dev') === '1' || window.location.hostname === 'localhost') {
+      gtag('set', 'user_properties', { traffic_type: 'internal' });
+      gtag('config', 'G-7D28EEMNXX', { traffic_type: 'internal' });
+    } else {
+      gtag('config', 'G-7D28EEMNXX');
+    }
     try {
       localStorage.removeItem('sweepr_order_draft');
       localStorage.removeItem('sweepr_visited_order');
@@ -2453,6 +2468,27 @@ function renderCheckoutSuccessPage(acc, isCancelled = false, isPopup = false) {
       }
       if ('${email}') {
         localStorage.setItem('sweepr_vpn_email', '${email}');
+      }
+      if (!${isPopup ? 'true' : 'false'}) {
+        var txId = '${subscriptionId || accountId || 'sweepr_vpn_tx'}';
+        var dedupKey = 'sweepr_ga4_purchase_' + txId;
+        if (!sessionStorage.getItem(dedupKey)) {
+          sessionStorage.setItem(dedupKey, '1');
+          gtag('event', 'purchase', {
+            transaction_id: txId,
+            value: Number(${purchaseValue.toFixed(2)}),
+            currency: 'GBP',
+            plan: '${escapeHtml(acc?.plan || 'annual')}',
+            items: [
+              {
+                item_id: 'sweepr_vpn_${escapeHtml(acc?.plan || 'annual')}',
+                item_name: 'SWEEPR VPN Pro (${planLabel})',
+                price: Number(${purchaseValue.toFixed(2)}),
+                quantity: 1
+              }
+            ]
+          });
+        }
       }
       if (${isPopup ? 'true' : 'false'}) {
         const redirectUrl = '/checkout/success?web=1&subscription_id=${subscriptionId}&account_id=${accountId}';

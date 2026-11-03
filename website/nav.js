@@ -1,8 +1,185 @@
 /**
- * Sweepr VPN Navigation Interactions (modeled on sweeprcleaner.com/nav.js)
+ * Sweepr VPN Navigation & GA4 Funnel Telemetry Engine (modeled on sweeprcleaner.com/nav.js & analytics.js)
  * Handles desktop dropdown flyout menus, mobile hamburger drawer navigation,
- * click-outside / Escape dismissal, and mobile direct-install feedback across all pages.
+ * click-outside / Escape dismissal, mobile direct-install feedback, and GA4 funnel/bot/internal telemetry across all pages.
  */
+(function initSweeprVpnTelemetry() {
+  if (window.__SWEEPR_GA4_TELEMETRY_READY__) return;
+  window.__SWEEPR_GA4_TELEMETRY_READY__ = true;
+
+  const GA_ID = 'G-7D28EEMNXX';
+  window.dataLayer = window.dataLayer || [];
+  window.gtag =
+    window.gtag ||
+    function () {
+      window.dataLayer.push(arguments);
+    };
+
+  // 1. Headless Bot & Cloud Crawler Suppression (AWS Ashburn / GCP Council Bluffs / 800x600 HeadlessChrome)
+  try {
+    const ua = navigator.userAgent || '';
+    const isHeadlessBot =
+      navigator.webdriver === true ||
+      /HeadlessChrome|PhantomJS|Playwright|Puppeteer|Selenium|Googlebot|bingbot|AhrefsBot|SemrushBot/i.test(ua) ||
+      (window.outerWidth === 800 && window.outerHeight === 600 && /Linux/i.test(navigator.platform || ''));
+    if (isHeadlessBot) {
+      window['ga-disable-' + GA_ID] = true;
+      window.sweeprTrack = function () {};
+      return;
+    }
+  } catch (e) {}
+
+  // 2. Internal / Developer Traffic Tagging (traffic_type = 'internal')
+  try {
+    const sp = new URLSearchParams(window.location.search || '');
+    if (sp.get('internal') === '1' || sp.get('traffic_type') === 'internal') {
+      localStorage.setItem('sweepr_internal_dev', '1');
+    } else if (sp.get('internal') === '0') {
+      localStorage.removeItem('sweepr_internal_dev');
+    }
+    const isInternalDev =
+      window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1' ||
+      localStorage.getItem('sweepr_internal_dev') === '1';
+    if (isInternalDev) {
+      window.gtag('set', 'user_properties', { traffic_type: 'internal' });
+      window.gtag('config', GA_ID, { traffic_type: 'internal', send_page_view: false });
+    }
+  } catch (e) {}
+
+  // 3. Persist first-touch / session UTM & cross-promo attribution
+  function getAttributionParams() {
+    try {
+      const sp = new URLSearchParams(window.location.search || '');
+      const utmSource = sp.get('utm_source');
+      const utmMedium = sp.get('utm_medium');
+      const utmCampaign = sp.get('utm_campaign');
+      const ref = sp.get('ref');
+      if (utmSource || utmMedium || utmCampaign || ref) {
+        const stored = {
+          utm_source: utmSource || '',
+          utm_medium: utmMedium || '',
+          utm_campaign: utmCampaign || '',
+          ref: ref || ''
+        };
+        sessionStorage.setItem('sweepr_vpn_attribution', JSON.stringify(stored));
+        return stored;
+      }
+      const raw = sessionStorage.getItem('sweepr_vpn_attribution');
+      if (raw) return JSON.parse(raw);
+    } catch (e) {}
+    return {};
+  }
+
+  function detectClientPlatform(href) {
+    const h = String(href || '').toLowerCase();
+    if (h.includes('platform=macos') || h.includes('.dmg')) return 'macos';
+    if (h.includes('platform=android') || h.includes('.apk')) return 'android';
+    if (h.includes('platform=ios') || h.includes('.mobileconfig') || h.includes('/ios-app')) return 'ios';
+    if (h.includes('platform=linux')) return 'linux';
+    if (h.includes('platform=windows') || h.includes('.exe')) return 'windows';
+    const ua = (navigator.userAgent || '').toLowerCase();
+    if (/iphone|ipad|ipod/.test(ua)) return 'ios';
+    if (ua.includes('android')) return 'android';
+    if (ua.includes('mac os') || ua.includes('macintosh')) return 'macos';
+    if (ua.includes('linux')) return 'linux';
+    return 'windows';
+  }
+
+  window.sweeprTrack = function (eventName, params) {
+    try {
+      if (window['ga-disable-' + GA_ID]) return;
+      const attr = getAttributionParams();
+      const payload = Object.assign(
+        {
+          page_path: window.location.pathname,
+          page_title: document.title
+        },
+        attr.utm_source ? { campaign_source: attr.utm_source } : {},
+        attr.utm_medium ? { campaign_medium: attr.utm_medium } : {},
+        attr.utm_campaign ? { campaign_name: attr.utm_campaign } : {},
+        params || {}
+      );
+      window.gtag('event', eventName, payload);
+    } catch (e) {}
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const path = window.location.pathname;
+    if (path === '/pricing') {
+      window.sweeprTrack('view_pricing', { source_page: document.referrer || 'direct' });
+    }
+
+    // Delegated Funnel Click Listener (Downloads, Checkout CTAs, Pricing Navigation)
+    document.addEventListener(
+      'click',
+      (e) => {
+        const target = e.target && e.target.closest ? e.target.closest('a, button') : null;
+        if (!target) return;
+        const href = target.getAttribute('href') || '';
+        const text = (target.innerText || target.textContent || '').trim().slice(0, 60);
+
+        // A. Installer / Download Clicks -> Fire standard GA4 `file_download` + `installer_download`
+        if (
+          href === '/download' ||
+          href.startsWith('/download?') ||
+          href.startsWith('/download/') ||
+          href.includes('SWEEPRVPN.exe') ||
+          href.includes('SWEEPRVPN.dmg') ||
+          href.includes('SWEEPRVPN.apk') ||
+          href.includes('SWEEPRVPN.mobileconfig') ||
+          target.id === 'downloadBtn'
+        ) {
+          const platform = detectClientPlatform(href);
+          const extMap = { windows: 'exe', macos: 'dmg', android: 'apk', ios: 'mobileconfig', linux: 'conf' };
+          const fileMap = {
+            windows: 'SWEEPRVPN.exe',
+            macos: 'SWEEPRVPN.dmg',
+            android: 'SWEEPRVPN.apk',
+            ios: 'SWEEPRVPN.mobileconfig',
+            linux: 'sweepr-wg0.conf'
+          };
+          window.sweeprTrack('file_download', {
+            file_name: fileMap[platform] || 'SWEEPRVPN.exe',
+            file_extension: extMap[platform] || 'exe',
+            link_url: href || '/download',
+            link_text: text,
+            platform: platform,
+            source_page: window.location.pathname
+          });
+          window.sweeprTrack('installer_download', {
+            platform: platform,
+            button_text: text,
+            link_url: href || '/download',
+            source_page: window.location.pathname
+          });
+        }
+        // B. Order / Checkout CTA Clicks
+        else if (href.startsWith('/order') || href.startsWith('/checkout')) {
+          let plan = 'annual';
+          if (href.includes('offer=intro') || href.includes('plan=intro')) plan = 'monthly_intro';
+          else if (href.includes('plan=monthly')) plan = 'monthly';
+          else if (href.includes('plan=six_month') || href.includes('plan=6month')) plan = 'six_month';
+          window.sweeprTrack('checkout_cta_click', {
+            plan: plan,
+            button_text: text,
+            link_url: href,
+            source_page: window.location.pathname
+          });
+        }
+        // C. Pricing Navigation Clicks
+        else if (href === '/pricing' || href.startsWith('/pricing?')) {
+          window.sweeprTrack('view_pricing_click', {
+            button_text: text,
+            source_page: window.location.pathname
+          });
+        }
+      },
+      { capture: true }
+    );
+  });
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
   const btn = document.getElementById('navDropdownBtn');
   const menu = document.getElementById('navDropdownMenu');

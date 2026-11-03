@@ -332,5 +332,222 @@
     }
 
     applyCurrencyToDOM(activeCode);
+
+    // Unified GA4 Funnel, Ecommerce, Lead & Bot/Internal Filter Engine (Covers /order, /, /pricing, /tools/*, and all pSEO pages)
+    try {
+      const GA_ID = 'G-7D28EEMNXX';
+      window.dataLayer = window.dataLayer || [];
+      window.gtag =
+        window.gtag ||
+        function () {
+          window.dataLayer.push(arguments);
+        };
+
+      const ua = navigator.userAgent || '';
+      const isHeadlessBot =
+        navigator.webdriver === true ||
+        /HeadlessChrome|PhantomJS|Playwright|Puppeteer|Selenium|Googlebot|bingbot|AhrefsBot|SemrushBot/i.test(ua) ||
+        (window.outerWidth === 800 && window.outerHeight === 600 && /Linux/i.test(navigator.platform || ''));
+      if (isHeadlessBot) {
+        window['ga-disable-' + GA_ID] = true;
+        window.sweeprTrack = function () {};
+        return;
+      }
+
+      const sp = new URLSearchParams(window.location.search || '');
+      if (sp.get('internal') === '1' || sp.get('traffic_type') === 'internal') {
+        localStorage.setItem('sweepr_internal_dev', '1');
+      } else if (sp.get('internal') === '0') {
+        localStorage.removeItem('sweepr_internal_dev');
+      }
+      const isInternalDev =
+        window.location.hostname === 'localhost' ||
+        window.location.hostname === '127.0.0.1' ||
+        localStorage.getItem('sweepr_internal_dev') === '1';
+      if (isInternalDev) {
+        window.gtag('set', 'user_properties', { traffic_type: 'internal' });
+        window.gtag('config', GA_ID, { traffic_type: 'internal', send_page_view: false });
+      }
+
+      if (typeof window.sweeprTrack !== 'function') {
+        window.sweeprTrack = function (eventName, params) {
+          try {
+            if (window['ga-disable-' + GA_ID]) return;
+            window.gtag(
+              'event',
+              eventName,
+              Object.assign(
+                {
+                  page_path: window.location.pathname,
+                  page_title: document.title
+                },
+                params || {}
+              )
+            );
+          } catch (e) {}
+        };
+      }
+
+      const path = window.location.pathname;
+
+      // 1. Checkout Page (/order) Funnel & Ecommerce Instrumentation
+      if (path === '/order' || path === '/checkout') {
+        const activePricing = window.SWEEPR_ACTIVE_PRICING || getComputedPricing(activeCode);
+        const resolveOrderPlanAndValue = () => {
+          const currPlan = typeof selectedPlan === 'string' ? selectedPlan : sp.get('plan') || 'annual';
+          const introActive =
+            (typeof isDiscountApplied === 'boolean' && isDiscountApplied) ||
+            sp.get('offer') === 'intro' ||
+            sp.get('discount') === '1';
+          const addonActive =
+            typeof isWifiRadarAddonSelected === 'boolean'
+              ? isWifiRadarAddonSelected
+              : Boolean(document.getElementById('wifiRadarCheckbox')?.checked);
+          const baseVal =
+            currPlan === 'annual'
+              ? activePricing.annual
+              : currPlan === 'six_month'
+              ? activePricing.sixMonth
+              : introActive
+              ? activePricing.introFirstMonth
+              : activePricing.monthly;
+          const addonVal = addonActive
+            ? currPlan === 'annual'
+              ? activePricing.addonAnnual
+              : currPlan === 'six_month'
+              ? activePricing.addonSixMonth
+              : activePricing.addonMonthly
+            : 0;
+          const totalVal = Number((baseVal + addonVal).toFixed(2));
+          const items = [
+            {
+              item_id: `sweepr_vpn_${currPlan}${introActive && currPlan === 'monthly' ? '_intro' : ''}`,
+              item_name: `SWEEPR VPN Pro (${currPlan})`,
+              price: baseVal,
+              quantity: 1
+            }
+          ];
+          if (addonActive) {
+            items.push({
+              item_id: `sweepr_wifi_radar_${currPlan}`,
+              item_name: 'SWEEPR Wi-Fi Radar & Smart-TV Shield',
+              price: addonVal,
+              quantity: 1
+            });
+          }
+          return { plan: currPlan, value: totalVal, currency: activePricing.code || 'GBP', addonActive, items };
+        };
+
+        // Fire `begin_checkout` once initial plan state is settled
+        setTimeout(() => {
+          const state = resolveOrderPlanAndValue();
+          window.sweeprTrack('begin_checkout', {
+            currency: state.currency,
+            value: state.value,
+            plan: state.plan,
+            wifi_radar_addon: state.addonActive,
+            items: state.items
+          });
+        }, 250);
+
+        // Plan Tab Selection -> `select_item`
+        ['planTabAnnual', 'planTabSixMonth', 'planTabMonthly'].forEach((tabId) => {
+          const tabEl = document.getElementById(tabId);
+          if (tabEl) {
+            tabEl.addEventListener('click', () => {
+              setTimeout(() => {
+                const state = resolveOrderPlanAndValue();
+                window.sweeprTrack('select_item', {
+                  currency: state.currency,
+                  value: state.value,
+                  plan: state.plan,
+                  items: state.items
+                });
+              }, 50);
+            });
+          }
+        });
+
+        // Add-on Toggle -> `addon_toggled`
+        const bumpCard = document.getElementById('wifiRadarBumpCard');
+        if (bumpCard) {
+          bumpCard.addEventListener('click', () => {
+            setTimeout(() => {
+              const state = resolveOrderPlanAndValue();
+              window.sweeprTrack('addon_toggled', {
+                addon_id: 'wifi_radar',
+                enabled: state.addonActive,
+                plan: state.plan,
+                value: state.value,
+                currency: state.currency
+              });
+            }, 50);
+          });
+        }
+
+        // Email Lead Capture -> `generate_lead`
+        const emailEl = document.getElementById('email');
+        if (emailEl) {
+          let leadTracked = false;
+          const onLeadCheck = () => {
+            const val = (emailEl.value || '').trim();
+            if (!leadTracked && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
+              leadTracked = true;
+              const state = resolveOrderPlanAndValue();
+              window.sweeprTrack('generate_lead', {
+                currency: state.currency,
+                value: state.value,
+                plan: state.plan,
+                lead_source: 'order_checkout_email'
+              });
+            }
+          };
+          emailEl.addEventListener('blur', onLeadCheck);
+          emailEl.addEventListener('change', onLeadCheck);
+        }
+
+        // Payment Initiation -> `add_payment_info`
+        const trackPaymentAttempt = (paymentType) => {
+          const state = resolveOrderPlanAndValue();
+          window.sweeprTrack('add_payment_info', {
+            currency: state.currency,
+            value: state.value,
+            payment_type: paymentType,
+            plan: state.plan,
+            items: state.items
+          });
+        };
+
+        document.getElementById('orderForm')?.addEventListener('submit', () => trackPaymentAttempt('card'));
+        document.getElementById('paypalBtn')?.addEventListener('click', () => trackPaymentAttempt('paypal'));
+        document.getElementById('expressGPayBtn')?.addEventListener('click', () => trackPaymentAttempt('google_pay'));
+        document.getElementById('expressApplePayBtn')?.addEventListener('click', () => trackPaymentAttempt('apple_pay'));
+      }
+
+      // 2. Interactive Diagnostic Tools (/tools/leak-test & /tools/isp-throttling-test)
+      if (path === '/tools/leak-test' || path === '/leak-test.html') {
+        setTimeout(() => {
+          window.sweeprTrack('leak_test_completed', {
+            tool: 'ip_dns_webrtc_leak_test'
+          });
+        }, 3500);
+      } else if (path === '/tools/isp-throttling-test' || path === '/isp-throttling-test.html') {
+        setTimeout(() => {
+          window.sweeprTrack('throttling_test_completed', {
+            tool: 'isp_throttling_test'
+          });
+        }, 4500);
+      }
+
+      // 3. Diagnostic Embed Badge Copy Button Tracking
+      const copyBadgeBtn = document.getElementById('sweepr-copy-badge-btn');
+      if (copyBadgeBtn) {
+        copyBadgeBtn.addEventListener('click', () => {
+          window.sweeprTrack('diagnostic_badge_copied', {
+            source_page: path
+          });
+        });
+      }
+    } catch (e) {}
   });
 })();
