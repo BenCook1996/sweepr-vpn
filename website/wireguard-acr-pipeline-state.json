@@ -1,0 +1,117 @@
+{
+  "lastRunAt": "2026-11-03T23:43:19.447Z",
+  "liveSiteReachable": true,
+  "liveHttpStatus": 200,
+  "wireguardFleetCount": 6,
+  "wireguardNodes": [
+    {
+      "id": "UK-LON-01",
+      "city": "London Docklands (Telehouse North)",
+      "country": "GB",
+      "endpoint": "lon01.wg.sweeprvpn.com",
+      "ports": [
+        51820,
+        443
+      ],
+      "capacityGbps": 10,
+      "baselineRttMs": 4.1,
+      "mtuPresets": {
+        "standard": 1420,
+        "pppoe": 1412,
+        "cgnat": 1380
+      }
+    },
+    {
+      "id": "UK-MAN-02",
+      "city": "Manchester (Equinix MA1)",
+      "country": "GB",
+      "endpoint": "man02.wg.sweeprvpn.com",
+      "ports": [
+        51820,
+        443
+      ],
+      "capacityGbps": 10,
+      "baselineRttMs": 6.4,
+      "mtuPresets": {
+        "standard": 1420,
+        "pppoe": 1412,
+        "cgnat": 1380
+      }
+    },
+    {
+      "id": "NL-AMS-01",
+      "city": "Amsterdam (Equinix AM7)",
+      "country": "NL",
+      "endpoint": "ams01.wg.sweeprvpn.com",
+      "ports": [
+        51820,
+        443
+      ],
+      "capacityGbps": 10,
+      "baselineRttMs": 11.2,
+      "mtuPresets": {
+        "standard": 1420,
+        "pppoe": 1412,
+        "cgnat": 1380
+      }
+    },
+    {
+      "id": "DE-FRA-01",
+      "city": "Frankfurt (DE-CIX Interconnect)",
+      "country": "DE",
+      "endpoint": "fra01.wg.sweeprvpn.com",
+      "ports": [
+        51820,
+        443
+      ],
+      "capacityGbps": 10,
+      "baselineRttMs": 14.3,
+      "mtuPresets": {
+        "standard": 1420,
+        "pppoe": 1412,
+        "cgnat": 1380
+      }
+    },
+    {
+      "id": "CH-ZRH-01",
+      "city": "Zurich (SwissIX Privacy Core)",
+      "country": "CH",
+      "endpoint": "zrh01.wg.sweeprvpn.com",
+      "ports": [
+        51820,
+        443
+      ],
+      "capacityGbps": 10,
+      "baselineRttMs": 17.8,
+      "mtuPresets": {
+        "standard": 1420,
+        "pppoe": 1412,
+        "cgnat": 1380
+      }
+    },
+    {
+      "id": "US-NYC-01",
+      "city": "New York / Secaucus (NY4)",
+      "country": "US",
+      "endpoint": "nyc01.wg.sweeprvpn.com",
+      "ports": [
+        51820,
+        443
+      ],
+      "capacityGbps": 10,
+      "baselineRttMs": 68.4,
+      "mtuPresets": {
+        "standard": 1420,
+        "pppoe": 1412,
+        "cgnat": 1380
+      }
+    }
+  ],
+  "acrBlocklist": {
+    "path": "/smart-tv-acr-blocklist.txt",
+    "totalDomains": 65,
+    "categoriesCount": 8,
+    "sha1": "6dca6cbb37a1",
+    "updatedThisRun": true
+  }
+}
