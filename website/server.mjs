@@ -2679,6 +2679,9 @@ const server = http.createServer(async (req, res) => {
     const fingerprints = Array.from(
       new Set([
         '98:36:22:82:8F:83:79:AA:32:A2:9B:C6:72:69:1F:B5:07:9E:04:1F:48:86:FB:84:DA:D3:B2:A1:BA:94:A8:D0',
+        '77:17:C8:46:E5:11:74:0C:FD:2E:80:73:2C:54:83:4D:BE:94:9E:93:AA:9E:F8:D3:51:11:22:ED:58:EA:DD:5D',
+        'CE:8C:66:17:FC:95:4F:69:60:BB:9C:E0:16:35:C8:32:9A:02:80:49:22:EA:6E:8B:64:F5:55:03:61:DF:AF:EB',
+        '9B:EF:6F:A4:18:5D:9D:8E:DB:75:FA:F2:3B:E1:56:3A:38:0E:E5:7E:FE:3F:B6:87:B9:4F:E2:D7:C8:8C:76:57',
         ...extraFingerprints
       ])
     );
