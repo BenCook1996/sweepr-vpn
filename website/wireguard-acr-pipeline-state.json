@@ -1,7 +1,97 @@
 {
-  "lastRunAt": "2026-11-03T23:43:19.447Z",
+  "lastRunAt": "2026-11-04T10:07:06.681Z",
   "liveSiteReachable": true,
   "liveHttpStatus": 200,
+  "liveSiteRttMs": 453,
+  "liveVpnServersEndpointReachable": true,
+  "liveVpnFleetSummary": {
+    "totalServers": 8,
+    "onlineServers": 8,
+    "totalConnectedDevices": 17,
+    "apiLatencyMs": 770
+  },
+  "liveVpnServers": [
+    {
+      "code": "SE-STO-01",
+      "country": "Sweden",
+      "city": "Stockholm",
+      "flag": "SE",
+      "online": true,
+      "devices": 1,
+      "probe_ms": 226,
+      "p99_ms": 241
+    },
+    {
+      "code": "UK-LON-01",
+      "country": "United Kingdom",
+      "city": "London",
+      "flag": "GB",
+      "online": true,
+      "devices": 5,
+      "probe_ms": 159,
+      "p99_ms": 183
+    },
+    {
+      "code": "DE-FRA-01",
+      "country": "Germany",
+      "city": "Frankfurt",
+      "flag": "DE",
+      "online": true,
+      "devices": 1,
+      "probe_ms": 173,
+      "p99_ms": 187
+    },
+    {
+      "code": "US-LAX-01",
+      "country": "United States",
+      "city": "Los Angeles",
+      "flag": "US",
+      "online": true,
+      "devices": 1,
+      "probe_ms": 109,
+      "p99_ms": 113
+    },
+    {
+      "code": "NL-AMS-01",
+      "country": "Netherlands",
+      "city": "Amsterdam",
+      "flag": "NL",
+      "online": true,
+      "devices": 1,
+      "probe_ms": 178,
+      "p99_ms": 182
+    },
+    {
+      "code": "US-NYC-01",
+      "country": "United States",
+      "city": "New York",
+      "flag": "US",
+      "online": true,
+      "devices": 4,
+      "probe_ms": 16,
+      "p99_ms": 20
+    },
+    {
+      "code": "JP-TYO-01",
+      "country": "Japan",
+      "city": "Tokyo",
+      "flag": "JP",
+      "online": true,
+      "devices": 1,
+      "probe_ms": 321,
+      "p99_ms": 355
+    },
+    {
+      "code": "SG-SIN-01",
+      "country": "Singapore",
+      "city": "Singapore",
+      "flag": "SG",
+      "online": true,
+      "devices": 3,
+      "probe_ms": 479,
+      "p99_ms": 486
+    }
+  ],
   "wireguardFleetCount": 6,
   "wireguardNodes": [
     {
@@ -111,7 +201,21 @@
     "path": "/smart-tv-acr-blocklist.txt",
     "totalDomains": 65,
     "categoriesCount": 8,
-    "sha1": "6dca6cbb37a1",
-    "updatedThisRun": true
+    "sha1": "9526d5e56139",
+    "updatedThisRun": true,
+    "streamingSafelistEnforced": true,
+    "streamingSafelistDomainsCount": 43,
+    "falsePositivesDetected": 0
+  },
+  "compliance": {
+    "doNotSendEmailsRule": {
+      "enforced": true,
+      "emailsSent": 0
+    },
+    "neverBlockStreamingRule": {
+      "enforced": true,
+      "violationsDetected": 0,
+      "streamingCdnsBlocked": 0
+    }
   }
 }

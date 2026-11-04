@@ -88,7 +88,7 @@
 0.0.0.0 hw-launcher.hismarttv.com
 0.0.0.0 ad.hismarttv.com
 0.0.0.0 tcllauncher.tclclouds.com
-0.0.0.0 .tclclouds.com
+0.0.0.0 log.tclclouds.com
 
 # ======================================================================
 # 8. Cross-Vendor Samba TV, Alphonso & Gracenote ACR SDKs
