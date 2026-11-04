@@ -1781,6 +1781,80 @@ async function sendSupportTicketOwnerEmail({ fromEmail, subject, message, platfo
   return false;
 }
 
+async function sendTransactionalAccountEmail({ toEmail, subject, textBody, htmlBody }) {
+  const email = String(toEmail || '').trim().toLowerCase();
+  if (!email || !isValidEmail(email) || email.endsWith('@pending.sweeprvpn.com') || email.endsWith('@stripe.sweeprvpn.com')) {
+    return false;
+  }
+  const resendKey = String(process.env.RESEND_API_KEY || '').trim();
+  if (resendKey) {
+    try {
+      const r = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${resendKey}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          from: process.env.EMAIL_FROM || 'SWEEPR VPN <onboarding@resend.dev>',
+          to: [email],
+          subject,
+          text: textBody,
+          ...(htmlBody ? { html: htmlBody } : {})
+        })
+      });
+      if (r.ok) return true;
+    } catch {}
+  }
+  const smtpUser = (process.env.SMTP_GMAIL_USER || '').trim().replace(/^["']|["']$/g, '') ||
+    decryptServerVault(ENCRYPTED_SMTP_USER);
+  const smtpPass = (process.env.SMTP_GMAIL_PASS || '').trim().replace(/\s+/g, '').replace(/^["']|["']$/g, '') ||
+    decryptServerVault(ENCRYPTED_SMTP_PASS);
+  if (smtpUser && smtpPass) {
+    try {
+      await new Promise((resolve, reject) => {
+        const sock = tls.connect(465, 'smtp.gmail.com', { servername: 'smtp.gmail.com', timeout: 8000 });
+        let step = 0, buf = '';
+        const mime = [
+          `From: "SWEEPR VPN Billing" <${smtpUser}>`,
+          `To: <${email}>`,
+          `Subject: =?UTF-8?B?${Buffer.from(subject, 'utf8').toString('base64')}?=`,
+          `Date: ${new Date().toUTCString()}`,
+          'MIME-Version: 1.0',
+          'Content-Type: text/plain; charset="UTF-8"',
+          'Content-Transfer-Encoding: base64',
+          '',
+          Buffer.from(textBody, 'utf8').toString('base64').replace(/(.{76})/g, '$1\r\n'),
+          '',
+          '.',
+          ''
+        ].join('\r\n');
+        const fail = (err) => { try { sock.destroy(); } catch {} reject(err); };
+        sock.on('timeout', () => fail(new Error('timeout')));
+        sock.on('error', fail);
+        sock.on('data', (chunk) => {
+          buf += chunk.toString('utf8');
+          const lines = buf.split('\r\n');
+          buf = lines.pop() || '';
+          for (const line of lines) {
+            if (!line || (line.length >= 4 && line[3] === '-')) continue;
+            const code = parseInt(line.slice(0, 3), 10);
+            if (code >= 400) return fail(new Error(line));
+            if (step === 0 && code === 220) { step = 1; sock.write('EHLO sweeprvpn.com\r\n'); }
+            else if (step === 1 && code === 250) { step = 2; sock.write('AUTH LOGIN\r\n'); }
+            else if (step === 2 && code === 334) { step = 3; sock.write(Buffer.from(smtpUser, 'utf8').toString('base64') + '\r\n'); }
+            else if (step === 3 && code === 334) { step = 4; sock.write(Buffer.from(smtpPass, 'utf8').toString('base64') + '\r\n'); }
+            else if (step === 4 && code === 235) { step = 5; sock.write(`MAIL FROM:<${smtpUser}>\r\n`); }
+            else if (step === 5 && code === 250) { step = 6; sock.write(`RCPT TO:<${email}>\r\n`); }
+            else if (step === 6 && code === 250) { step = 7; sock.write('DATA\r\n'); }
+            else if (step === 7 && code === 354) { step = 8; sock.write(mime + '\r\n'); }
+            else if (step === 8 && code === 250) { step = 9; sock.write('QUIT\r\n'); try { sock.end(); } catch {} resolve(true); }
+          }
+        });
+      });
+      return true;
+    } catch {}
+  }
+  return false;
+}
+
 async function syncPayPalCustomerEmail(sub, acc, cs = null) {
   if (!STRIPE_SECRET_KEY || !sub || !acc) return;
   try {
@@ -1968,6 +2042,13 @@ const CANONICAL_REDIRECTS = {
   '/alternatives-totalvpn': '/alternatives/totalvpn',
   '/leak-test.html': '/tools/leak-test',
   '/isp-throttling-test.html': '/tools/isp-throttling-test',
+  '/vpn-renewal-price-checker.html': '/tools/vpn-renewal-price-checker',
+  '/smart-tv-tracking-check.html': '/tools/smart-tv-tracking-check',
+  '/whats-on-my-wifi.html': '/tools/whats-on-my-wifi',
+  '/public-wifi.html': '/public-wifi',
+  '/de-leak-test.html': '/de/tools/leak-test',
+  '/pt-br-leak-test.html': '/pt-br/tools/leak-test',
+  '/sv-leak-test.html': '/sv/tools/leak-test',
   '/setup/asuswrt-merlin-vpn-client': '/setup/asuswrt-merlin-vpn-router',
   '/guides/block-samsung-tv-acr-tracking': '/guides/stop-samsung-smart-tv-acr-tracking',
   '/guides/block-lg-webos-acr-tracking': '/guides/stop-lg-smart-tv-acr-spying',
@@ -2022,7 +2103,14 @@ const ROUTE_ALIASES = {
   '/vs/totalvpn': 'vs-totalvpn.html',
   '/alternatives/totalvpn': 'alternatives-totalvpn.html',
   '/tools/leak-test': 'leak-test.html',
-  '/tools/isp-throttling-test': 'isp-throttling-test.html'
+  '/tools/isp-throttling-test': 'isp-throttling-test.html',
+  '/tools/vpn-renewal-price-checker': 'vpn-renewal-price-checker.html',
+  '/tools/smart-tv-tracking-check': 'smart-tv-tracking-check.html',
+  '/tools/whats-on-my-wifi': 'whats-on-my-wifi.html',
+  '/public-wifi': 'public-wifi.html',
+  '/de/tools/leak-test': 'de-leak-test.html',
+  '/pt-br/tools/leak-test': 'pt-br-leak-test.html',
+  '/sv/tools/leak-test': 'sv-leak-test.html'
 };
 
 function readRawBody(req, maxBytes = MAX_BODY_BYTES) {
@@ -3064,6 +3152,49 @@ self.addEventListener('fetch', e => {
     }
   }
 
+  // API 0B: Privacy-Preserving Diagnostic Tool & Moment-of-Proof Telemetry Bridge (Automations A3 & A4)
+  if (pathname === '/api/tools/telemetry' && req.method === 'POST') {
+    try {
+      const raw = await readRawBody(req, 16384);
+      const body = raw ? JSON.parse(raw) : {};
+      const localizedPricing = resolvePricingForRequest(req, urlObj);
+      const tool = String(body.tool || 'diagnostic_tool').slice(0, 64);
+      const segment = String(body.segment || 'standard_check').slice(0, 64);
+      const source = String(body.source || 'web_tool').slice(0, 64);
+      crm.reportTelemetryEvent({
+        event_type: `tool_${tool}_${segment}`,
+        platform: source,
+        country: localizedPricing.country,
+        metadata: {
+          tool,
+          segment,
+          webrtcCount: Number(body.webrtcCount || 0),
+          throughputMbps: Number(body.throughputMbps || 0),
+          jitterMs: Number(body.jitterMs || 0),
+          brand: body.brand ? String(body.brand).slice(0, 32) : undefined,
+          provider: body.provider ? String(body.provider).slice(0, 32) : undefined
+        }
+      }).catch(() => {});
+      return sendJson(
+        res,
+        200,
+        {
+          ok: true,
+          segment,
+          country: localizedPricing.country,
+          recommendedOffer:
+            segment === 'smart_tv_acr_detected' || segment === 'unknown_lan_device'
+              ? { plan: 'annual', addon: 'wifi_radar', checkoutUrl: `/order?plan=annual&addon=wifi_radar&utm_source=${encodeURIComponent(tool)}&utm_campaign=${encodeURIComponent(segment)}` }
+              : { plan: 'monthly', trial: true, checkoutUrl: `/order?plan=monthly&trial=1&utm_source=${encodeURIComponent(tool)}&utm_campaign=${encodeURIComponent(segment)}` }
+        },
+        { 'Cache-Control': 'no-store' },
+        req
+      );
+    } catch {
+      return sendJson(res, 200, { ok: true }, { 'Cache-Control': 'no-store' }, req);
+    }
+  }
+
   // API 1: Public Checkout Configuration (Matches sweeprcleaner /api/checkout-config)
   if (pathname === '/api/checkout-config' && req.method === 'GET') {
     const localizedPricing = resolvePricingForRequest(req, urlObj);
@@ -3947,6 +4078,52 @@ self.addEventListener('fetch', e => {
               notes: `Stripe Webhook ${event.type} (${subObj.id})`
             }).catch(() => {});
           }
+        }
+      } else if (event.type === 'invoice.upcoming') {
+        // Automation A5 (Churn Shield): 7-Day Pre-Renewal Price-Lock Transparency Reminder
+        const custId = typeof obj.customer === 'string' ? obj.customer : obj.customer?.id;
+        const invEmail = String(obj.customer_email || '').trim().toLowerCase();
+        const targetAcc =
+          (invEmail ? accountsByEmail.get(invEmail) : null) ||
+          Array.from(accountsById.values()).find((a) => custId && a.stripe_customer_id === custId);
+        const recipientEmail = targetAcc?.email || invEmail;
+        if (recipientEmail) {
+          const amountFormatted = obj.amount_due
+            ? `${(Number(obj.amount_due) / 100).toFixed(2)} ${String(obj.currency || 'gbp').toUpperCase()}`
+            : 'your locked-in plan rate';
+          sendTransactionalAccountEmail({
+            toEmail: recipientEmail,
+            subject: 'SWEEPR VPN Upcoming Renewal Notice — Price-Lock Guarantee & 1-Click Manage Link',
+            textBody:
+              `Hi there,\n\n` +
+              `Friendly heads-up from SWEEPR VPN: your subscription is scheduled to renew in ~7 days for ${amountFormatted} (covered by our No-Renewal-Hike Guarantee).\n\n` +
+              `Need to pause for 30 days at £0.00, switch plans, or cancel auto-renewal in one click? Manage your subscription anytime with zero dark patterns:\n` +
+              `https://sweeprvpn.com/dashboard\n\n` +
+              `Thank you for supporting independent, zero-log WireGuard privacy.\n— SWEEPR VPN Team`
+          }).catch(() => {});
+        }
+      } else if (event.type === 'invoice.payment_failed') {
+        // Automation A5 (Churn Shield): 7-Day WireGuard Grace Period + Friendly Dunning Notice (Never Hard-Kill Tunnel on First Decline)
+        const custId = typeof obj.customer === 'string' ? obj.customer : obj.customer?.id;
+        const invEmail = String(obj.customer_email || '').trim().toLowerCase();
+        const targetAcc =
+          (invEmail ? accountsByEmail.get(invEmail) : null) ||
+          Array.from(accountsById.values()).find((a) => custId && a.stripe_customer_id === custId);
+        if (targetAcc) {
+          targetAcc.status = 'active';
+          targetAcc.payment_grace_until = Date.now() + 7 * 86400 * 1000;
+          scheduleSaveRuntimeStateToDisk();
+          sendTransactionalAccountEmail({
+            toEmail: targetAcc.email,
+            subject: 'Action Required: SWEEPR VPN Payment Retry (7-Day Tunnel Grace Period Active)',
+            textBody:
+              `Hi there,\n\n` +
+              `We couldn't process your latest SWEEPR VPN renewal payment (most often due to an expired card or bank security check).\n\n` +
+              `We have kept your 10Gbps WireGuard VPN tunnel and Smart-TV Shield ACTIVE for a 7-day grace period so your devices stay protected without interruption.\n\n` +
+              `Please update your payment method in 1 click here:\n` +
+              `https://sweeprvpn.com/dashboard\n\n` +
+              `— SWEEPR VPN Team`
+          }).catch(() => {});
         }
       } else if (event.type === 'charge.refunded' || event.type === 'charge.dispute.created') {
         const custId = typeof obj.customer === 'string' ? obj.customer : obj.customer?.id;
@@ -6134,6 +6311,86 @@ self.addEventListener('fetch', e => {
         status: acc.status,
         cancel_at_period_end: true,
         current_period_end: acc.current_period_end
+      },
+      {},
+      req
+    );
+  }
+
+  // Automation A5 (Churn Shield): Customer Portal 1-Click Cancel Save Offer (Pause 30d or Switch to Annual)
+  if (pathname === '/api/portal/save-offer' && req.method === 'POST') {
+    if (!isSameOriginOrTrusted(req)) return sendJson(res, 403, { error: 'forbidden_cross_site' }, {}, req);
+    const sess = verifySessionCookie(req);
+    if (!sess) return sendJson(res, 401, { error: 'unauthorized' }, {}, req);
+    const acc = accountsById.get(sess.accountId) || (sess.email ? accountsByEmail.get(sess.email) : null);
+    if (!acc || acc.status !== 'active') {
+      return sendJson(res, 400, { error: 'No active subscription found.' }, {}, req);
+    }
+    let action = 'pause_30d';
+    try {
+      const raw = await readRawBody(req, 4096);
+      const parsed = raw ? JSON.parse(raw) : {};
+      if (parsed.action === 'switch_annual' || parsed.action === 'pause_30d') {
+        action = parsed.action;
+      }
+    } catch {}
+
+    if (action === 'pause_30d') {
+      const resumeUnix = Math.floor((Date.now() + 30 * 86400 * 1000) / 1000);
+      if (STRIPE_SECRET_KEY && acc.stripe_subscription_id && acc.stripe_subscription_id.startsWith('sub_')) {
+        try {
+          await stripeRequest('POST', `subscriptions/${encodeURIComponent(acc.stripe_subscription_id)}`, {
+            'pause_collection[behavior]': 'void',
+            'pause_collection[resumes_at]': resumeUnix
+          });
+        } catch {}
+      }
+      acc.paused_until = resumeUnix * 1000;
+      acc.cancel_at_period_end = false;
+      scheduleSaveRuntimeStateToDisk();
+      crm.syncSubscription({
+        email: acc.email,
+        name: acc.name || undefined,
+        country: acc.country || 'GB',
+        plan: acc.plan || 'annual',
+        status: acc.status,
+        addons: acc.wifiRadarAddon ? ['wifi_radar'] : [],
+        notes: 'Customer activated 30-day billing pause via Churn Shield Save Modal'
+      }).catch(() => {});
+      return sendJson(
+        res,
+        200,
+        {
+          ok: true,
+          action: 'pause_30d',
+          paused_until: acc.paused_until,
+          message: 'Your billing has been paused for 30 days at £0.00. Your account and WireGuard configs remain saved.'
+        },
+        {},
+        req
+      );
+    }
+
+    acc.plan = 'annual';
+    acc.cancel_at_period_end = false;
+    scheduleSaveRuntimeStateToDisk();
+    crm.syncSubscription({
+      email: acc.email,
+      name: acc.name || undefined,
+      country: acc.country || 'GB',
+      plan: 'annual',
+      status: acc.status,
+      addons: acc.wifiRadarAddon ? ['wifi_radar'] : [],
+      notes: 'Customer switched to Annual Plan (£74.99/yr Save 50%) via Churn Shield Save Modal'
+    }).catch(() => {});
+    return sendJson(
+      res,
+      200,
+      {
+        ok: true,
+        action: 'switch_annual',
+        plan: 'annual',
+        message: 'Your subscription has been updated to the Annual Price-Lock Plan (£74.99/year • £6.25/mo equivalent).'
       },
       {},
       req

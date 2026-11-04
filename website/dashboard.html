@@ -464,10 +464,72 @@
       }
     }
 
-    async function cancelSubscription() {
-      if (!confirm('Are you sure you want to cancel automatic renewal at the end of your current billing period?')) return;
+    function cancelSubscription() {
+      let modal = document.getElementById('cancelSaveModal');
+      if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'cancelSaveModal';
+        modal.className = 'fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4';
+        modal.innerHTML = `
+          <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-gray-200">
+            <div class="flex items-center justify-between mb-3">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-extrabold uppercase tracking-wider">1-Click Transparent Billing</span>
+              <button onclick="document.getElementById('cancelSaveModal').remove()" class="text-gray-400 hover:text-gray-600 text-lg font-bold">&times;</button>
+            </div>
+            <h3 class="text-xl font-black text-gray-900 mb-2">Before you cancel auto-renewal, how can we help?</h3>
+            <p class="text-sm text-gray-600 mb-5">You can cancel immediately in one click below—or choose a tailored option to keep your devices protected:</p>
+            <div class="space-y-3 mb-6">
+              <button onclick="applySaveOffer('pause_30d')" class="w-full text-left p-4 rounded-2xl border-2 border-emerald-500/30 hover:border-emerald-600 bg-emerald-50/50 transition-all">
+                <div class="font-extrabold text-sm text-gray-900">⏸️ "I'm not using it right now" — Pause for 30 Days (£0.00)</div>
+                <div class="text-xs text-gray-600 mt-0.5">Pause billing for 30 days at £0.00 while keeping your account &amp; router configs saved.</div>
+              </button>
+              <button onclick="applySaveOffer('switch_annual')" class="w-full text-left p-4 rounded-2xl border-2 border-gray-200 hover:border-emerald-600 bg-gray-50 transition-all">
+                <div class="font-extrabold text-sm text-gray-900">💷 "Monthly price is too high" — Switch to Annual (£6.25/mo • Save 50%)</div>
+                <div class="text-xs text-gray-600 mt-0.5">Lock in £74.99/year (£6.25/mo equivalent) with our permanent No-Renewal-Hike Guarantee.</div>
+              </button>
+              <a href="/support" class="block w-full text-left p-4 rounded-2xl border-2 border-gray-200 hover:border-emerald-600 bg-gray-50 transition-all">
+                <div class="font-extrabold text-sm text-gray-900">🛠️ "I'm having a technical or router setup issue"</div>
+                <div class="text-xs text-gray-600 mt-0.5">Get priority engineering help for WireGuard MTU, GL.iNet routers, or Smart-TV ACR blocking.</div>
+              </a>
+            </div>
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-gray-100">
+              <button onclick="document.getElementById('cancelSaveModal').remove()" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gray-900 hover:bg-gray-800 text-white text-xs font-extrabold">Keep My Protection</button>
+              <button onclick="confirmCancelImmediately('user_confirmed_modal')" class="w-full sm:w-auto px-4 py-2.5 rounded-xl text-red-600 hover:bg-red-50 text-xs font-bold">No thanks, cancel auto-renewal immediately</button>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(modal);
+      }
+    }
+
+    async function applySaveOffer(action) {
       try {
-        const res = await fetch('/api/portal/cancel-subscription', { method: 'POST' });
+        const res = await fetch('/api/portal/save-offer', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action })
+        });
+        const data = await res.json();
+        const modal = document.getElementById('cancelSaveModal');
+        if (modal) modal.remove();
+        if (res.ok && data.ok) {
+          alert(data.message || 'Your subscription preference has been updated.');
+          await load();
+        } else {
+          alert(data.error || 'Unable to apply offer right now.');
+        }
+      } catch (e) {}
+    }
+
+    async function confirmCancelImmediately(reason) {
+      const modal = document.getElementById('cancelSaveModal');
+      if (modal) modal.remove();
+      try {
+        const res = await fetch('/api/portal/cancel-subscription', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ reason: reason || 'portal_cancel' })
+        });
         const data = await res.json();
         if (res.ok && data.ok) {
           await load();

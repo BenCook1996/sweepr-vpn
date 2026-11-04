@@ -54,15 +54,7 @@
                     android:pathPrefix="/pair" />
                 <data
                     android:scheme="https"
-                    android:host="www.sweeprvpn.com"
-                    android:pathPrefix="/pair" />
-                <data
-                    android:scheme="https"
                     android:host="sweeprvpn.com"
-                    android:pathPrefix="/activate" />
-                <data
-                    android:scheme="https"
-                    android:host="www.sweeprvpn.com"
                     android:pathPrefix="/activate" />
             </intent-filter>
         </activity>

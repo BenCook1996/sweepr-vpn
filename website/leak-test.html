@@ -8,6 +8,11 @@
   <meta name="description" content="Check WebRTC leak online, public IPv4/IPv6 exposure, and ISP DNS hijacking in 5 seconds. Free browser VPN leak test with zero signup required." />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="https://sweeprvpn.com/tools/leak-test">
+  <link rel="alternate" hreflang="en" href="https://sweeprvpn.com/tools/leak-test">
+  <link rel="alternate" hreflang="de" href="https://sweeprvpn.com/de/tools/leak-test">
+  <link rel="alternate" hreflang="pt-BR" href="https://sweeprvpn.com/pt-br/tools/leak-test">
+  <link rel="alternate" hreflang="sv" href="https://sweeprvpn.com/sv/tools/leak-test">
+  <link rel="alternate" hreflang="x-default" href="https://sweeprvpn.com/tools/leak-test">
   <meta name="theme-color" content="#10b981" />
   <link rel="preconnect" href="https://cdn.tailwindcss.com">
   <link rel="preconnect" href="https://www.googletagmanager.com">
@@ -278,23 +283,23 @@
         </div>
       </div>
 
-      <!-- Conversion Bridge Banner -->
+      <!-- Conversion Bridge Banner (Automation A3 Dynamic Tool-Result Offer Bridge) -->
       <div id="conversionBanner" class="rounded-2xl bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-950 text-white p-6 flex flex-col md:flex-row items-center justify-between gap-6">
         <div class="text-left space-y-1.5">
-          <div class="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-emerald-300">
+          <div id="bridgePill" class="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-emerald-300">
             <span>🛡️ Instant 1-Click Fix</span>
           </div>
-          <h3 class="text-lg sm:text-xl font-black">Hide your IP address and lock down your Wi-Fi in 30 seconds</h3>
-          <p class="text-xs sm:text-sm text-slate-300 max-w-xl">
+          <h3 id="bridgeTitle" class="text-lg sm:text-xl font-black">Hide your IP address and lock down your Wi-Fi in 30 seconds</h3>
+          <p id="bridgeDesc" class="text-xs sm:text-sm text-slate-300 max-w-xl">
             Stop your internet provider and public Wi-Fi networks from seeing what you browse. Try SWEEPR VPN Pro for <strong class="text-white" data-price="introStr">£1.99</strong> your first month (or save 50% annually) — backed by our 14-day money-back guarantee.
           </p>
         </div>
         <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto shrink-0">
-          <a rel="nofollow" href="/order?plan=annual" class="btn btn-go px-6 py-3 text-sm gap-2 justify-center">
-            <span>Enable Now</span>
+          <a id="bridgePrimaryCta" rel="nofollow" href="/order?plan=annual&amp;utm_source=leak_test&amp;utm_medium=tool_bridge&amp;utm_content=ip_exposed" class="btn btn-go px-6 py-3 text-sm gap-2 justify-center">
+            <span id="bridgeCtaLabel">Enable Now</span>
             <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
           </a>
-          <a href="/download" class="btn bg-white/10 hover:bg-white/20 text-white border border-white/20 text-sm justify-center">
+          <a href="/download?utm_source=leak_test&amp;utm_medium=tool_bridge" class="btn bg-white/10 hover:bg-white/20 text-white border border-white/20 text-sm justify-center">
             Free App Download
           </a>
         </div>
@@ -417,7 +422,7 @@
       <span>&bull;</span>
       <a href="/solutions/talktalk-p2p-port-forwarding" class="hover:text-emerald-600 transition-colors">TalkTalk Throttling Fix</a>
     </div>
-                                                            <details id="sweepr-seo-directory" class="max-w-5xl mx-auto mb-4 px-4 text-xs text-gray-400">
+                                                                    <details id="sweepr-seo-directory" class="max-w-5xl mx-auto mb-4 px-4 text-xs text-gray-400">
       <summary class="cursor-pointer hover:text-emerald-600 font-semibold select-none">Browse All 114 WireGuard Router Setup Guides, Smart-TV Privacy Guides &amp; VPN Comparisons</summary>
       <div class="flex flex-wrap justify-center gap-x-3 gap-y-1.5 mt-3 pt-3 border-t border-gray-100 text-[11px]">
         <a href="/setup/almalinux-9-wireguard-gateway" class="hover:text-emerald-600 transition-colors">AlmaLinux 9 & Rocky Linux 9 Enterprise WireGuard Gateway: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
@@ -733,6 +738,35 @@
         statusBadge.textContent = 'Unprotected IP';
         statusBadge.className = 'text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800';
         statusSubtext.textContent = `Websites can see your IP (${clientIp}) and region (${country}). Turn on SWEEPR VPN to hide your IP in 1 click.`;
+
+        // Automation A3: Dynamic Tool-Result -> Offer Bridge
+        const hasWebrtcLeak = Boolean(rtcRes.leakedIps && rtcRes.leakedIps.length > 0);
+        const segment = hasWebrtcLeak ? 'webrtc_leak_exposed' : 'public_ip_exposed';
+        const bridgePill = document.getElementById('bridgePill');
+        const bridgeTitle = document.getElementById('bridgeTitle');
+        const bridgePrimaryCta = document.getElementById('bridgePrimaryCta');
+        const bridgeCtaLabel = document.getElementById('bridgeCtaLabel');
+        if (bridgePill) {
+          bridgePill.innerHTML = hasWebrtcLeak
+            ? '<span>⚠️ WebRTC &amp; Public IP Exposed — 1-Click Kernel Fix</span>'
+            : `<span>🛡️ Detected ${flag} ${country} Unencrypted Connection — 1-Click Fix</span>`;
+        }
+        if (bridgeTitle) {
+          bridgeTitle.textContent = hasWebrtcLeak
+            ? `Mask ${clientIp} and lock WebRTC STUN ports in 30 seconds`
+            : `Mask ${clientIp} (${country}) behind a 10Gbps RAM-only WireGuard node`;
+        }
+        if (bridgePrimaryCta) {
+          bridgePrimaryCta.href = `/order?plan=annual&utm_source=leak_test&utm_medium=tool_bridge&utm_content=${segment}`;
+        }
+        if (bridgeCtaLabel) {
+          bridgeCtaLabel.textContent = 'Fix Leak Now (£1.99 Trial)';
+        }
+        fetch('/api/tools/telemetry', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ tool: 'leak_test', segment, country, webrtc_leak: hasWebrtcLeak })
+        }).catch(() => {});
       } catch {
         resIp.textContent = 'Public IP Visible';
         resCountry.textContent = '🇬🇧 GB';

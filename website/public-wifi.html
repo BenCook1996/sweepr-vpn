@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="color-scheme" content="light">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Public, Hotel, Airport &amp; Campus Wi-Fi Security Hub (WireGuard Stealth UDP 443) | SWEEPR VPN</title>
+  <meta name="description" content="Complete 2026 guide to encrypting untrusted hotel captive portals, Eduroam campus Wi-Fi, airport hotspots, and GL.iNet travel routers with SWEEPR VPN WireGuard Stealth 443." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://sweeprvpn.com/public-wifi">
+  <meta name="theme-color" content="#10b981" />
+  <link rel="preconnect" href="https://cdn.tailwindcss.com">
+  <link rel="preconnect" href="https://www.googletagmanager.com">
+
+  <!-- Open Graph / Social Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="SWEEPR VPN">
+  <meta property="og:locale" content="en_GB">
+  <meta property="og:url" content="https://sweeprvpn.com/public-wifi">
+  <meta property="og:title" content="Public, Hotel, Airport &amp; Campus Wi-Fi Security Hub (WireGuard Stealth UDP 443) | SWEEPR VPN" />
+  <meta property="og:description" content="Complete 2026 guide to encrypting untrusted hotel captive portals, Eduroam campus Wi-Fi, airport hotspots, and GL.iNet travel routers with SWEEPR VPN." />
+  <meta property="og:image" content="https://sweeprvpn.com/og-image.png">
+  <meta property="og:image:alt" content="SWEEPR VPN Public, Hotel & Campus Wi-Fi Security Hub">
+
+  <!-- Twitter Meta -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://sweeprvpn.com/public-wifi">
+  <meta name="twitter:title" content="Public, Hotel, Airport &amp; Campus Wi-Fi Security Hub | SWEEPR VPN" />
+  <meta name="twitter:description" content="Encrypt untrusted hotel captive portals, Eduroam campus Wi-Fi, airport hotspots, and GL.iNet travel routers." />
+  <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        "@id": "https://sweeprvpn.com/public-wifi#hub",
+        "name": "SWEEPR VPN Public, Hotel, Airport & Campus Wi-Fi Security Hub",
+        "url": "https://sweeprvpn.com/public-wifi",
+        "description": "Technical guides and WireGuard Stealth UDP/443 configurations for hotel captive portals, Eduroam university networks, 5G mobile hotspots, and GL.iNet travel routers."
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Why do standard WireGuard VPNs fail on Eduroam or hotel captive-portal Wi-Fi?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Many campus and hospitality firewalls block default UDP port 51820 and use 802.1X or VLAN encapsulation that drops standard 1420-byte packets. SWEEPR VPN provides Stealth UDP/443 endpoints and pre-tuned MTU 1380 profiles that establish a stable tunnel after captive-portal sign-in."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I run SWEEPR VPN on a GL.iNet Beryl AX or Slate AX travel router?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Every SWEEPR VPN subscription includes 1-click native WireGuard .conf exports for GL.iNet (Beryl AX GL-MT3000, Slate AX GL-AXT1800, Flint 2) plus 3 direct device slots for your phone and laptop."
+            }
+          }
+        ]
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://sweeprvpn.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Public & Travel Wi-Fi Security Hub",
+            "item": "https://sweeprvpn.com/public-wifi"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <script src="https://cdn.tailwindcss.com/3.4.5"></script>
+  <link rel="icon" type="image/svg+xml" href="/logo-emerald.svg?v=5">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5">
+  <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png?v=5">
+  <link rel="shortcut icon" href="/favicon.ico?v=5">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/pricing-config.js?v=3" defer></script>
+  <script src="/nav.js" defer></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-7D28EEMNXX');
+  </script>
+  <script src="/analytics-funnel.js" defer></script>
+</head>
+<body class="text-gray-800 bg-[#fafafa] overflow-x-hidden">
+
+  <nav class="glass-nav px-4 md:px-6 py-4 flex items-center justify-between sticky top-0 z-50">
+    <div class="flex items-center gap-3 md:gap-8">
+      <a href="/" class="flex items-center gap-3 text-inherit no-underline">
+        <div class="logo-box">S</div>
+        <span class="font-extrabold text-xl tracking-tight text-gray-900">SWEEPR <span class="text-emerald-600">VPN</span></span>
+      </a>
+      <div class="hidden md:flex items-center gap-2">
+        <a href="/setup" class="btn btn-ghost text-sm">Router Setup</a>
+        <a href="/solutions" class="btn btn-ghost text-sm">ISP Solutions</a>
+        <a href="/tools/leak-test" class="btn btn-ghost text-sm">Free Leak Test</a>
+        <a href="/pricing" class="btn btn-ghost text-sm">Pricing</a>
+      </div>
+    </div>
+    <div class="flex gap-2 md:gap-3 items-center">
+      <a rel="nofollow" href="/login" class="btn btn-ghost text-sm">Login</a>
+      <a href="/download" class="btn btn-go gap-2 text-sm">
+        <span>Get Travel Kit</span>
+      </a>
+    </div>
+  </nav>
+
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 py-12 md:py-16">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 mb-3">
+        Safe on Any Network &bull; Stealth UDP 443 + MTU 1380
+      </span>
+      <h1 class="text-3xl sm:text-5xl font-black tracking-tight text-gray-900 mb-4">
+        Public, Hotel, Airport &amp; Campus Wi-Fi Security Hub
+      </h1>
+      <p class="text-base sm:text-lg text-gray-600 leading-relaxed">
+        Shared hotel VLANs, airport hotspots, and campus networks expose your traffic to ARP spoofing, Evil Twin access points, and strict UDP port blocks. Explore our verified WireGuard Stealth 443 and travel router guides below.
+      </p>
+    </div>
+
+    <!-- Top Proven Spokes Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+      <a href="/setup/gl-inet-travel-router" class="bg-white border-2 border-emerald-500/70 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all no-underline text-inherit block">
+        <div class="text-xs font-extrabold uppercase tracking-wider text-emerald-700 mb-1">Travel Router Flagship &bull; 45s Setup</div>
+        <h2 class="text-xl font-black text-gray-900 mb-2">GL.iNet Beryl AX (GL-MT3000) &amp; Slate AX WireGuard Guide</h2>
+        <p class="text-sm text-gray-600 mb-3">Export a pre-tuned WireGuard <code>.conf</code> file (MTU 1380 + DNS 10.66.0.1) to protect every phone, laptop, and handheld connected to your hotel travel router.</p>
+        <span class="text-xs font-extrabold text-emerald-700">Open GL.iNet Setup Guide &rarr;</span>
+      </a>
+
+      <a href="/solutions/eduroam-campus-wifi-gaming-packet-loss" class="bg-white border border-gray-200 hover:border-emerald-400 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all no-underline text-inherit block">
+        <div class="text-xs font-extrabold uppercase tracking-wider text-emerald-700 mb-1">Campus &amp; University Wi-Fi &bull; Stealth UDP 443</div>
+        <h2 class="text-xl font-black text-gray-900 mb-2">Eduroam Campus Wi-Fi WireGuard, SSH &amp; Low-Jitter Guide</h2>
+        <p class="text-sm text-gray-600 mb-3">Fix blocked UDP ports, 802.1X packet fragmentation, and remote SSH/Git drops on university networks using Stealth Port 443 and MTU 1380.</p>
+        <span class="text-xs font-extrabold text-emerald-700">Open Eduroam Guide &rarr;</span>
+      </a>
+
+      <a href="/solutions/hotel-captive-portal-wifi-p2p-port-forwarding" class="bg-white border border-gray-200 hover:border-emerald-400 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all no-underline text-inherit block">
+        <div class="text-xs font-extrabold uppercase tracking-wider text-emerald-700 mb-1">Hospitality Wi-Fi &bull; Captive Portal Bypass</div>
+        <h2 class="text-xl font-black text-gray-900 mb-2">Hotel Captive Portal Wi-Fi Encryption &amp; Port Guide</h2>
+        <p class="text-sm text-gray-600 mb-3">Authenticate cleanly on Premier Inn, Travelodge, Hilton, and Marriott captive portals, then lock Layer-2 room VLAN traffic with ChaCha20-Poly1305.</p>
+        <span class="text-xs font-extrabold text-emerald-700">Open Hotel Wi-Fi Guide &rarr;</span>
+      </a>
+
+      <a href="/solutions/ee-5g-mobile-hotspot-wifi-arp-spoofing-protection" class="bg-white border border-gray-200 hover:border-emerald-400 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all no-underline text-inherit block">
+        <div class="text-xs font-extrabold uppercase tracking-wider text-emerald-700 mb-1">5G Tethering &amp; Hotspots &bull; NAT64 / 464XLAT</div>
+        <h2 class="text-xl font-black text-gray-900 mb-2">5G Mobile Hotspot &amp; Public Wi-Fi ARP Spoofing Protection</h2>
+        <p class="text-sm text-gray-600 mb-3">Eliminate carrier CGNAT jitter and protect tethered laptops on EE, O2, Three, and airport lounges with calibrated 1380-byte MTU frames.</p>
+        <span class="text-xs font-extrabold text-emerald-700">Open 5G Hotspot Guide &rarr;</span>
+      </a>
+    </div>
+
+    <!-- Additional Public Wi-Fi Security Guides -->
+    <div class="bg-white border border-gray-200 rounded-2xl p-6 sm:p-8 shadow-sm mb-10">
+      <h2 class="text-xl font-black text-gray-900 mb-4">More Public Wi-Fi &amp; Travel Security Checklists</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+        <a href="/guides/public-hotel-airport-wifi-security" class="p-3 rounded-xl bg-gray-50 hover:bg-emerald-50 text-gray-800 font-semibold no-underline">🛡️ Public, Hotel &amp; Airport Evil-Twin Protection Guide</a>
+        <a href="/guides/detect-hotel-wifi-evil-twin-ap" class="p-3 rounded-xl bg-gray-50 hover:bg-emerald-50 text-gray-800 font-semibold no-underline">📡 How to Detect Evil Twin Hotspots &amp; ARP Poisoning</a>
+        <a href="/guides/detect-hidden-wifi-cameras-airbnb" class="p-3 rounded-xl bg-gray-50 hover:bg-emerald-50 text-gray-800 font-semibold no-underline">🔍 Audit Airbnb &amp; Hotel Subnets for Hidden IP Cameras</a>
+        <a href="/guides/detect-rogue-dhcp-server-guest-wifi" class="p-3 rounded-xl bg-gray-50 hover:bg-emerald-50 text-gray-800 font-semibold no-underline">🔒 Detect Rogue DHCP &amp; DNS Poisoning on Coworking Wi-Fi</a>
+        <a href="/setup/steam-deck-vpn" class="p-3 rounded-xl bg-gray-50 hover:bg-emerald-50 text-gray-800 font-semibold no-underline">🎮 SteamOS &amp; Steam Deck Travel WireGuard Setup</a>
+        <a href="/tools/whats-on-my-wifi" class="p-3 rounded-xl bg-gray-50 hover:bg-emerald-50 text-gray-800 font-semibold no-underline">🧰 Free Tool: What's on My Wi-Fi? MAC Vendor Lookup</a>
+      </div>
+    </div>
+
+    <!-- Travel Kit Bundle CTA -->
+    <div class="rounded-2xl bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-950 text-white p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="text-left space-y-2">
+        <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-300">✈️ The SWEEPR 3-Device Travel Kit</span>
+        <h2 class="text-2xl font-black">Protect your Laptop, Phone &amp; GL.iNet Travel Router on 1 Plan</h2>
+        <p class="text-sm text-slate-300 max-w-xl">
+          Try SWEEPR VPN Pro for <strong class="text-white" data-price="introStr">£1.99</strong> your first month or lock in our flat <strong class="text-white" data-price="annualStr">£74.99</strong>/yr rate (Save 50%, zero Year-2 renewal price hikes).
+        </p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-3 shrink-0">
+        <a rel="nofollow" href="/order?plan=annual&amp;utm_source=public_wifi_hub&amp;utm_medium=organic_hub&amp;utm_campaign=safe_on_any_network" class="btn btn-go px-6 py-3 text-sm">Get Travel Kit (£1.99 Trial)</a>
+        <a href="/download" class="btn bg-white/10 hover:bg-white/20 text-white border border-white/20 text-sm">Free App Download</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="border-t border-gray-200 py-8 text-center text-sm text-gray-500">
+    <div class="max-w-4xl mx-auto px-6 flex flex-wrap justify-center gap-6 mb-4">
+      <a href="/tools/leak-test" class="hover:text-emerald-600">EN: IP Leak Test</a>
+      <a href="/de/tools/leak-test" class="hover:text-emerald-600">DE: WebRTC &amp; DNS Leak-Test</a>
+      <a href="/pt-br/tools/leak-test" class="hover:text-emerald-600">PT-BR: Teste de Vazamento IP</a>
+      <a href="/sv/tools/leak-test" class="hover:text-emerald-600">SV: IP &amp; WebRTC Läckagetest</a>
+    </div>
+    <p>&copy; 2026 SWEEPR VPN Inc. All rights reserved.</p>
+  </footer>
+</body>
+</html>

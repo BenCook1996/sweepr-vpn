@@ -81,6 +81,13 @@ const CORE_STATIC_ROUTES = [
   { urlPath: '/vs', file: 'vs.html', priority: '0.9', changefreq: 'weekly' },
   { urlPath: '/tools/leak-test', file: 'leak-test.html', priority: '0.8', changefreq: 'weekly' },
   { urlPath: '/tools/isp-throttling-test', file: 'isp-throttling-test.html', priority: '0.8', changefreq: 'weekly' },
+  { urlPath: '/tools/vpn-renewal-price-checker', file: 'vpn-renewal-price-checker.html', priority: '0.8', changefreq: 'weekly' },
+  { urlPath: '/tools/smart-tv-tracking-check', file: 'smart-tv-tracking-check.html', priority: '0.8', changefreq: 'weekly' },
+  { urlPath: '/tools/whats-on-my-wifi', file: 'whats-on-my-wifi.html', priority: '0.8', changefreq: 'weekly' },
+  { urlPath: '/public-wifi', file: 'public-wifi.html', priority: '0.8', changefreq: 'weekly' },
+  { urlPath: '/de/tools/leak-test', file: 'de-leak-test.html', priority: '0.8', changefreq: 'weekly' },
+  { urlPath: '/pt-br/tools/leak-test', file: 'pt-br-leak-test.html', priority: '0.8', changefreq: 'weekly' },
+  { urlPath: '/sv/tools/leak-test', file: 'sv-leak-test.html', priority: '0.8', changefreq: 'weekly' },
   { urlPath: '/vs/totalvpn', file: 'vs-totalvpn.html', priority: '0.8', changefreq: 'monthly' },
   { urlPath: '/alternatives/totalvpn', file: 'alternatives-totalvpn.html', priority: '0.8', changefreq: 'monthly' },
   { urlPath: '/support', file: 'support.html', priority: '0.6', changefreq: 'monthly' },
@@ -207,6 +214,10 @@ const GSC_STRIKING_DISTANCE_OVERRIDES = {
   '/solutions/fibrus-full-fibre-smart-tv-acr-blocking': {
     title: 'Fibrus Full Fibre Broadband: Block Smart-TV ACR Spying & Scan Your Home Wi-Fi (AS208294) | SWEEPR VPN',
     description: 'Audit every connected device on your Fibrus Full Fibre router (NI & Cumbria AS208294) in 30 seconds and block Smart-TV ACR telemetry with 10Gbps WireGuard.'
+  },
+  '/guides/stop-roku-vizio-firetv-spying': {
+    title: 'Block Roku, Vizio Inscape & Fire TV ACR Spying (2026 Router & DNS Guide) | SWEEPR VPN',
+    description: 'Stop Roku OS, Vizio SmartCast (Inscape) & Amazon Fire TV from capturing ACR screenshots and uploading viewing telemetry over your home Wi-Fi.'
   }
 };
 
@@ -1313,6 +1324,10 @@ const llmsContent = `# SWEEPR VPN & SWEEPR Wi-Fi Radar (sweeprvpn.com)
 - Interactive Live Desktop App Preview: https://sweeprvpn.com/app
 - Free Instant IP, DNS & WebRTC Leak Test: https://sweeprvpn.com/tools/leak-test
 - Free ISP Speed Slowdown & Streaming Throttling Checker: https://sweeprvpn.com/tools/isp-throttling-test
+- Free 2026 VPN Renewal Price-Hike Calculator: https://sweeprvpn.com/tools/vpn-renewal-price-checker
+- Free Smart-TV ACR Telemetry & Ad-Domain Exposure Checker: https://sweeprvpn.com/tools/smart-tv-tracking-check
+- Free Home Wi-Fi Device & Hidden Camera Exposure Checker: https://sweeprvpn.com/tools/whats-on-my-wifi
+- Public Wi-Fi, Airport, Hotel & Eduroam Security Hub: https://sweeprvpn.com/public-wifi
 - Public Smart-TV ACR DNS Blocklist (Pi-hole / AdGuard Home / hosts): https://sweeprvpn.com/smart-tv-acr-blocklist.txt
 - Official PAD 4.0 XML Feed: https://sweeprvpn.com/pad.xml
 

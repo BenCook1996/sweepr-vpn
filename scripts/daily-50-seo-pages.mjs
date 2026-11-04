@@ -1267,14 +1267,14 @@ function buildCandidatePool() {
     guide: g
   }));
 
-  // First add setup, vs, and guides + top solutions so every 50-page batch has a rich mix
+  // Automation A1 (Intent-Gap Content Router): Prioritize Commercial (/vs/*), Hardware Setup (/setup/*), and Privacy Guides (/guides/*)
+  // ahead of /solutions/* so crawl budget goes first to high-converting commercial & setup queries.
   let si = 0, st = 0, vi = 0, gi = 0;
   while (si < solutionItems.length || st < setupItems.length || vi < vsItems.length || gi < guideItems.length) {
-    if (si < solutionItems.length) pool.push(solutionItems[si++]);
-    if (si < solutionItems.length) pool.push(solutionItems[si++]);
-    if (st < setupItems.length) pool.push(setupItems[st++]);
     if (vi < vsItems.length) pool.push(vsItems[vi++]);
+    if (st < setupItems.length) pool.push(setupItems[st++]);
     if (gi < guideItems.length) pool.push(guideItems[gi++]);
+    if (si < solutionItems.length) pool.push(solutionItems[si++]);
   }
   return pool;
 }
@@ -1892,14 +1892,15 @@ async function runDaily50Pages(targetCount = 50, force = false) {
 
   const pool = buildCandidatePool();
   const selected = [];
-  if (targetCount > 0) {
+  const effectiveMaxCount = allowCartesian ? targetCount : Math.min(targetCount, 10);
+  if (effectiveMaxCount > 0) {
     for (const cand of pool) {
       if (!isPillarCandidate(cand)) continue;
       const fullUrl = `https://sweeprvpn.com${cand.urlPath}`;
       const absFile = path.join(WEBSITE_DIR, cand.relPath);
       if (!fs.existsSync(absFile)) {
         selected.push(cand);
-        if (selected.length >= targetCount) break;
+        if (selected.length >= effectiveMaxCount) break;
       }
     }
   }
@@ -1928,6 +1929,13 @@ async function runDaily50Pages(targetCount = 50, force = false) {
     { loc: 'https://sweeprvpn.com/vs', priority: '0.9', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'vs.html') },
     { loc: 'https://sweeprvpn.com/tools/leak-test', priority: '0.8', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'leak-test.html') },
     { loc: 'https://sweeprvpn.com/tools/isp-throttling-test', priority: '0.8', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'isp-throttling-test.html') },
+    { loc: 'https://sweeprvpn.com/tools/vpn-renewal-price-checker', priority: '0.8', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'vpn-renewal-price-checker.html') },
+    { loc: 'https://sweeprvpn.com/tools/smart-tv-tracking-check', priority: '0.8', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'smart-tv-tracking-check.html') },
+    { loc: 'https://sweeprvpn.com/tools/whats-on-my-wifi', priority: '0.8', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'whats-on-my-wifi.html') },
+    { loc: 'https://sweeprvpn.com/public-wifi', priority: '0.8', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'public-wifi.html') },
+    { loc: 'https://sweeprvpn.com/de/tools/leak-test', priority: '0.8', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'de-leak-test.html') },
+    { loc: 'https://sweeprvpn.com/pt-br/tools/leak-test', priority: '0.8', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'pt-br-leak-test.html') },
+    { loc: 'https://sweeprvpn.com/sv/tools/leak-test', priority: '0.8', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'sv-leak-test.html') },
     { loc: 'https://sweeprvpn.com/vs/totalvpn', priority: '0.8', changefreq: 'monthly', absPath: path.join(WEBSITE_DIR, 'vs-totalvpn.html') },
     { loc: 'https://sweeprvpn.com/alternatives/totalvpn', priority: '0.8', changefreq: 'monthly', absPath: path.join(WEBSITE_DIR, 'alternatives-totalvpn.html') },
     { loc: 'https://sweeprvpn.com/support', priority: '0.6', changefreq: 'monthly', absPath: path.join(WEBSITE_DIR, 'support.html') },
@@ -2070,10 +2078,18 @@ ${allPseoPagesOnDisk.map((p) => `- [${p.h1}](${p.loc})`).join('\n')}
     }
   }
 
-  // Save state
+  // Save state + Automation A1 Intent-Mix Audit
+  const intentMixSummary = {
+    commercial_vs: allPseoPagesOnDisk.filter((p) => p.dir === 'vs').length + 2,
+    informational_setup: allPseoPagesOnDisk.filter((p) => p.dir === 'setup').length,
+    informational_guides: allPseoPagesOnDisk.filter((p) => p.dir === 'guides').length,
+    problem_solutions: allPseoPagesOnDisk.filter((p) => p.dir === 'solutions').length,
+    interactive_tools_and_hubs: 7
+  };
   state.lastRunDate = todayStr;
   state.totalGenerated = allPseoPagesOnDisk.length;
-  state.batches.push({ date: todayStr, newGenerated: newUrls.length, totalPseoPages: allPseoPagesOnDisk.length, consolidatedNoIndexExcluded: consolidatedNoIndexCount });
+  state.intentMixSummary = intentMixSummary;
+  state.batches.push({ date: todayStr, newGenerated: newUrls.length, totalPseoPages: allPseoPagesOnDisk.length, consolidatedNoIndexExcluded: consolidatedNoIndexCount, intentMixSummary });
   fs.writeFileSync(DAILY_STATE_PATH, JSON.stringify(state, null, 2), 'utf8');
 
   console.log(`[SWEEPR VPN Pillar SEO Sync] Newly generated: ${newUrls.length} pages | Indexable pSEO Pillars: ${allPseoPagesOnDisk.length} (Consolidated NoIndex Excluded: ${consolidatedNoIndexCount}) | Total Sitemap URLs: ${allSitemapEntries.length}`);

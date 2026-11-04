@@ -277,23 +277,23 @@
         </div>
       </div>
 
-      <!-- Conversion Bridge Banner -->
+      <!-- Conversion Bridge Banner (Automation A3 Dynamic Tool-Result Offer Bridge) -->
       <div class="rounded-2xl bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-950 text-white p-6 flex flex-col md:flex-row items-center justify-between gap-6">
         <div class="text-left space-y-1.5">
-          <div class="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-emerald-300">
+          <div id="thrBridgePill" class="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-emerald-300">
             <span>⚡ Stop Evening Buffering &amp; Slowdowns</span>
           </div>
-          <h3 class="text-lg sm:text-xl font-black">Lock your connection so your provider cannot slow down streaming</h3>
+          <h3 id="thrBridgeTitle" class="text-lg sm:text-xl font-black">Lock your connection so your provider cannot slow down streaming</h3>
           <p class="text-xs sm:text-sm text-slate-300 max-w-xl">
             When SWEEPR VPN is on, your internet provider cannot tell whether you are streaming 4K video, gaming, or reading a webpage—stopping selective speed throttling in 1 click. Try it from <strong class="text-white" data-price="introStr">£1.99</strong> (14-Day Money-Back Guarantee).
           </p>
         </div>
         <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto shrink-0">
-          <a rel="nofollow" href="/order?plan=annual" class="btn btn-go px-6 py-3 text-sm gap-2 justify-center">
+          <a id="thrBridgeCta" rel="nofollow" href="/order?plan=annual&amp;utm_source=throttling_test&amp;utm_medium=tool_bridge&amp;utm_content=sni_exposed" class="btn btn-go px-6 py-3 text-sm gap-2 justify-center">
             <span>Enable Now</span>
             <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
           </a>
-          <a href="/download" class="btn bg-white/10 hover:bg-white/20 text-white border border-white/20 text-sm justify-center">
+          <a href="/download?utm_source=throttling_test&amp;utm_medium=tool_bridge" class="btn bg-white/10 hover:bg-white/20 text-white border border-white/20 text-sm justify-center">
             Free App Download
           </a>
         </div>
@@ -422,7 +422,7 @@
       <span>&bull;</span>
       <a href="/solutions/rogers-ignite-canada-isp-throttling" class="hover:text-emerald-600 transition-colors">Rogers Ignite Throttling Fix</a>
     </div>
-                                                            <details id="sweepr-seo-directory" class="max-w-5xl mx-auto mb-4 px-4 text-xs text-gray-400">
+                                                                    <details id="sweepr-seo-directory" class="max-w-5xl mx-auto mb-4 px-4 text-xs text-gray-400">
       <summary class="cursor-pointer hover:text-emerald-600 font-semibold select-none">Browse All 114 WireGuard Router Setup Guides, Smart-TV Privacy Guides &amp; VPN Comparisons</summary>
       <div class="flex flex-wrap justify-center gap-x-3 gap-y-1.5 mt-3 pt-3 border-t border-gray-100 text-[11px]">
         <a href="/setup/almalinux-9-wireguard-gateway" class="hover:text-emerald-600 transition-colors">AlmaLinux 9 & Rocky Linux 9 Enterprise WireGuard Gateway: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
@@ -707,6 +707,28 @@
       badge.textContent = 'Throttling Risk';
       badge.className = 'text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800';
       subtext.textContent = `Measured ${avg} ms ping (${jitter} ms jitter). Because your connection is unencrypted, your internet provider can inspect and slow down 4K video streams during peak evening hours.`;
+
+      // Automation A3: Dynamic Tool-Result -> Offer Bridge
+      const thrSegment = jitter >= 15 || avg >= 60 ? 'high_jitter_throttled' : 'unencrypted_sni_throttling';
+      const thrPill = document.getElementById('thrBridgePill');
+      const thrTitle = document.getElementById('thrBridgeTitle');
+      const thrCta = document.getElementById('thrBridgeCta');
+      if (thrPill) {
+        thrPill.innerHTML = jitter >= 15
+          ? `<span>⚡ Detected ${jitter} ms Jitter Spike — Bypass ISP Shaping</span>`
+          : `<span>⚡ Measured ${avg} ms Unencrypted Transit — Stop SNI Throttling</span>`;
+      }
+      if (thrTitle) {
+        thrTitle.textContent = `Encrypt your ${avg} ms connection with 10Gbps WireGuard to stop evening throttling`;
+      }
+      if (thrCta) {
+        thrCta.href = `/order?plan=annual&utm_source=throttling_test&utm_medium=tool_bridge&utm_content=${thrSegment}`;
+      }
+      fetch('/api/tools/telemetry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tool: 'isp_throttling_test', segment: thrSegment, ping_ms: avg, jitter_ms: jitter })
+      }).catch(() => {});
     }
 
     document.addEventListener('DOMContentLoaded', runThrottlingProbe);

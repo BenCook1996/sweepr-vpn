@@ -1,5 +1,5 @@
 {
-  "lastRunDate": "2026-11-03",
+  "lastRunDate": "2026-11-04",
   "totalGenerated": 180,
   "batches": [
     {
@@ -127,15 +127,28 @@
       "newGenerated": 0,
       "totalPseoPages": 294,
       "consolidatedNoIndexExcluded": 899
+    },
+    {
+      "date": "2026-11-04",
+      "newGenerated": 0,
+      "totalPseoPages": 180,
+      "consolidatedNoIndexExcluded": 1013,
+      "intentMixSummary": {
+        "commercial_vs": 37,
+        "informational_setup": 50,
+        "informational_guides": 29,
+        "problem_solutions": 66,
+        "interactive_tools_and_hubs": 7
+      }
     }
   ],
   "urlLastModHashes": {
     "https://sweeprvpn.com/": {
-      "hash": "89e1c8ae3931",
+      "hash": "de15202c7f58",
       "lastmod": "2026-11-04"
     },
     "https://sweeprvpn.com/pricing": {
-      "hash": "c57f3b434991",
+      "hash": "0443426ddc99",
       "lastmod": "2026-11-04"
     },
     "https://sweeprvpn.com/solutions": {
@@ -155,11 +168,11 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/tools/leak-test": {
-      "hash": "5063933ee8da",
+      "hash": "35b30dd33acc",
       "lastmod": "2026-11-04"
     },
     "https://sweeprvpn.com/tools/isp-throttling-test": {
-      "hash": "a4c294351cde",
+      "hash": "10ffff1f8043",
       "lastmod": "2026-11-04"
     },
     "https://sweeprvpn.com/vs/totalvpn": {
@@ -167,8 +180,8 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/alternatives/totalvpn": {
-      "hash": "8b83307f5ccb",
-      "lastmod": "2026-11-03"
+      "hash": "7d3fcc73afea",
+      "lastmod": "2026-11-04"
     },
     "https://sweeprvpn.com/support": {
       "hash": "43ad5dac9d7f",
@@ -1391,8 +1404,8 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/guides/stop-roku-vizio-firetv-spying": {
-      "hash": "d7b7afd0807b",
-      "lastmod": "2026-11-03"
+      "hash": "fa54d660f141",
+      "lastmod": "2026-11-04"
     },
     "https://sweeprvpn.com/guides/stop-samsung-smart-tv-acr-tracking": {
       "hash": "8fa02786b9b3",
@@ -1400,7 +1413,7 @@
     },
     "https://sweeprvpn.com/download": {
       "hash": "61519a83d30e",
-      "lastmod": "2026-11-03"
+      "lastmod": "2026-11-04"
     },
     "https://sweeprvpn.com/setup/docker-gluetun-wireguard-compose": {
       "hash": "d21b569a51a4",
@@ -1409,6 +1422,41 @@
     "https://sweeprvpn.com/guides/fix-wireguard-mtu-fragmentation-pppoe": {
       "hash": "3a8fb2314df0",
       "lastmod": "2026-11-03"
+    },
+    "https://sweeprvpn.com/tools/vpn-renewal-price-checker": {
+      "hash": "156e955aa2b1",
+      "lastmod": "2026-11-04"
+    },
+    "https://sweeprvpn.com/tools/smart-tv-tracking-check": {
+      "hash": "30f27e6f87da",
+      "lastmod": "2026-11-04"
+    },
+    "https://sweeprvpn.com/tools/whats-on-my-wifi": {
+      "hash": "10b4b5eb2e95",
+      "lastmod": "2026-11-04"
+    },
+    "https://sweeprvpn.com/public-wifi": {
+      "hash": "46a5915a92b8",
+      "lastmod": "2026-11-04"
+    },
+    "https://sweeprvpn.com/de/tools/leak-test": {
+      "hash": "6381cdf6cddb",
+      "lastmod": "2026-11-04"
+    },
+    "https://sweeprvpn.com/pt-br/tools/leak-test": {
+      "hash": "b2aa4c4c19d2",
+      "lastmod": "2026-11-04"
+    },
+    "https://sweeprvpn.com/sv/tools/leak-test": {
+      "hash": "1d4f50dc0b24",
+      "lastmod": "2026-11-04"
     }
+  },
+  "intentMixSummary": {
+    "commercial_vs": 37,
+    "informational_setup": 50,
+    "informational_guides": 29,
+    "problem_solutions": 66,
+    "interactive_tools_and_hubs": 7
   }
 }

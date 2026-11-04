@@ -104,6 +104,27 @@
             "item": "https://sweeprvpn.com/alternatives/totalvpn"
           }
         ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Why does TotalVPN cost more at renewal and what is the best flat-price alternative?",
+            "acceptedAnswer": {
+              "@type":"Answer",
+              "text": "Many legacy consumer VPNs advertise a low introductory first-year deal ($19–$39) that automatically renews at $99–$139+ in Year 2, often with extra charges for antivirus or ad-block add-ons. SWEEPR VPN charges a transparent flat £74.99/year (£6.25/mo equivalent) with zero Year-2 renewal price increases, a £1.99 1st-Month Trial, and a 7-day pre-renewal reminder email."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I export native WireGuard .conf files for GL.iNet, Steam Deck, or Synology NAS?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Unlike TotalVPN's closed client, SWEEPR VPN (~3.7MB native app) lets you export standard WireGuard .conf files (with MTU 1420/1380 and Smart-TV ACR DNS blocking) for GL.iNet travel routers, OpenWrt, SteamOS, NVIDIA Shield TV, and Synology Docker in one click."
+            }
+          }
+        ]
       }
     ]
   }
@@ -270,15 +291,94 @@
     </div>
 
     <!-- Quick Takeaways -->
-    <div class="bg-white border border-gray-200 rounded-2xl p-6 md:p-8 shadow-sm mb-12">
+    <div class="bg-white border border-gray-200 rounded-2xl p-6 md:p-8 shadow-sm mb-8">
       <h2 class="text-xl font-bold text-gray-900 mb-4">Quick Summary: Top Picks at a Glance</h2>
       <ul class="space-y-3 text-gray-700">
-        <li><strong>1. SWEEPR VPN (4.9/5 ★★★★★):</strong> Best overall for fast streaming, simple 1-click privacy, and home Wi-Fi protection. Tiny download (~14MB), strict zero-logs policy, free 30-second Wi-Fi device scanner, Smart-TV spy blocker, and honest pricing for up to 10 devices.</li>
-        <li><strong>2. Mullvad VPN (4.5/5 ★★★★☆):</strong> Strong privacy reputation, but has a technical interface and no home Wi-Fi device scanner or Smart-TV tracker blocker.</li>
-        <li><strong>3. Proton VPN (4.4/5 ★★★★☆):</strong> Reliable Swiss privacy app with a free tier, though its full plans cost more per month and the app is heavier on older laptops.</li>
-        <li><strong>4. Surfshark (4.1/5 ★★★★☆):</strong> Unlimited device connections, but renewal prices jump sharply after your introductory term and the app includes extra upsell popups.</li>
+        <li><strong>1. SWEEPR VPN (4.9/5 ★★★★★):</strong> Best overall for fast 10Gbps WireGuard streaming, simple 1-click privacy, and home Wi-Fi protection. Featherlight native app (~3.7MB), strict zero-logs policy, free 30-second Wi-Fi device scanner, Smart-TV ACR spy blocker, native <code>.conf</code> router export, and flat pricing with zero Year-2 renewal price hikes (covers 3 devices + whole-router configs).</li>
+        <li><strong>2. Mullvad VPN (4.5/5 ★★★★☆):</strong> Strong privacy reputation and flat monthly rate, but has a technical interface and no home Wi-Fi device scanner or Smart-TV ACR tracker blocker.</li>
+        <li><strong>3. Proton VPN (4.4/5 ★★★★☆):</strong> Reliable Swiss privacy app with a free tier, though its full plans cost more per month at renewal and the app is heavier on older laptops.</li>
+        <li><strong>4. Surfshark (4.1/5 ★★★★☆):</strong> Unlimited device connections, but renewal prices jump 200%+ after your introductory term and the app includes extra upsell popups.</li>
         <li><strong>5. NordVPN (4.0/5 ★★★★☆):</strong> Large server list, but features a busy map interface and steep second-year renewal price increases.</li>
       </ul>
+    </div>
+
+    <!-- Campaign 1: Sourced Renewal Price Truth Table (S4 + S1 Commercial Proof) -->
+    <div class="bg-white border-2 border-emerald-500/80 rounded-2xl p-6 md:p-8 shadow-md mb-12">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+        <div>
+          <span class="inline-block text-[11px] font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full mb-1.5">
+            2026 Verified Billing Audit &bull; No Renewal Traps
+          </span>
+          <h2 class="text-xl md:text-2xl font-black text-gray-900">Renewal Price Truth: Year-1 Intro vs. Year-2 Auto-Renewal</h2>
+        </div>
+        <a href="/tools/vpn-renewal-price-checker" class="inline-flex items-center gap-1.5 text-xs font-extrabold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-3.5 py-2 rounded-xl no-underline shrink-0">
+          <span>🧮 Open 3-Year Cost Calculator</span>
+          <span>&rarr;</span>
+        </a>
+      </div>
+      <p class="text-sm text-gray-600 mb-5">
+        Most big-name VPNs hook you with a cheap introductory price, then silently bill <strong>2× to 3.5× more</strong> on automatic renewal in Year 2. Here is how standard renewal pricing compares as of November 2026:
+      </p>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-xs sm:text-sm">
+          <thead>
+            <tr class="border-b-2 border-gray-200 text-[11px] uppercase tracking-wider text-gray-500 bg-gray-50">
+              <th class="py-3 px-3 font-extrabold">VPN Provider</th>
+              <th class="py-3 px-3 font-extrabold">Advertised Intro</th>
+              <th class="py-3 px-3 font-extrabold text-red-600">Year-2 Renewal Bill</th>
+              <th class="py-3 px-3 font-extrabold">Renewal Hike</th>
+              <th class="py-3 px-3 font-extrabold">Raw WireGuard .conf</th>
+              <th class="py-3 px-3 font-extrabold">Smart-TV ACR Shield</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 text-gray-700">
+            <tr class="bg-emerald-50/70 font-semibold">
+              <td class="py-3.5 px-3 font-black text-emerald-900">SWEEPR VPN <span class="text-[10px] bg-emerald-600 text-white px-1.5 py-0.5 rounded ml-1">FLAT RATE</span></td>
+              <td class="py-3.5 px-3 text-emerald-800"><span data-price="introStr">£1.99</span> 1st mo / <span data-price="annualStr">£74.99</span>/yr</td>
+              <td class="py-3.5 px-3 font-black text-emerald-700"><span data-price="annualStr">£74.99</span>/yr (£6.25/mo)</td>
+              <td class="py-3.5 px-3 font-black text-emerald-700">0% Hike (7-Day Email Notice)</td>
+              <td class="py-3.5 px-3 text-emerald-800">✓ 1-Click Export</td>
+              <td class="py-3.5 px-3 text-emerald-800">✓ Built-In + Wi-Fi Scanner</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-3 font-bold text-gray-900">TotalVPN</td>
+              <td class="py-3 px-3">~£19.00 – £29.00 (Yr 1)</td>
+              <td class="py-3 px-3 font-bold text-red-600">~£99.00 – £119.00/yr</td>
+              <td class="py-3 px-3 text-red-600 font-semibold">+240% to +310%</td>
+              <td class="py-3 px-3 text-gray-400">✗ Closed App Only</td>
+              <td class="py-3 px-3 text-gray-400">✗ None</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-3 font-bold text-gray-900">NordVPN (Standard)</td>
+              <td class="py-3 px-3">~£36.00 – £42.00 (Yr 1)</td>
+              <td class="py-3 px-3 font-bold text-red-600">~£99.00 – £115.00/yr</td>
+              <td class="py-3 px-3 text-red-600 font-semibold">+135% to +175%</td>
+              <td class="py-3 px-3 text-gray-500">Manual Linux Extraction</td>
+              <td class="py-3 px-3 text-gray-400">✗ None</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-3 font-bold text-gray-900">Surfshark (Starter)</td>
+              <td class="py-3 px-3">~£28.00 – £35.00 (Intro)</td>
+              <td class="py-3 px-3 font-bold text-red-600">~£89.00 – £108.00/yr</td>
+              <td class="py-3 px-3 text-red-600 font-semibold">+180% to +210%</td>
+              <td class="py-3 px-3 text-gray-700">✓ Supported</td>
+              <td class="py-3 px-3 text-gray-400">✗ None</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-3 font-bold text-gray-900">ExpressVPN</td>
+              <td class="py-3 px-3">~£65.00 – £78.00 (Intro)</td>
+              <td class="py-3 px-3 font-bold text-red-600">~£99.95 – £116.00/yr</td>
+              <td class="py-3 px-3 text-amber-700 font-semibold">+35% to +50%</td>
+              <td class="py-3 px-3 text-gray-400">✗ Proprietary Lightway</td>
+              <td class="py-3 px-3 text-gray-400">✗ None</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="mt-4 flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-gray-100 text-xs text-gray-500">
+        <span>*Source: Published checkout &amp; renewal terms disclosures verified Q4 2026. SWEEPR sends a mandatory 7-day email notice before every annual renewal.</span>
+        <a rel="nofollow" href="/order?plan=annual&amp;utm_source=alternatives_totalvpn&amp;utm_medium=organic_table&amp;utm_campaign=renewal_truth" class="font-extrabold text-emerald-700 hover:underline">Switch to SWEEPR VPN (<span data-price="introStr">£1.99</span> 1st Month Trial) &rarr;</a>
+      </div>
     </div>
 
     <!-- Detailed Reviews -->
@@ -307,7 +407,7 @@
               <li>✓ Strict Zero-Logs: we never track or save what you browse</li>
               <li>✓ Free 30-second Home Wi-Fi Device &amp; Speed Scanner</li>
               <li>✓ Stops Smart TVs from secretly taking screenshots of what you watch</li>
-              <li>✓ Protects up to 10 computers and devices per license</li>
+              <li>✓ Protects 3 devices directly + whole-router WireGuard <code>.conf</code> export</li>
             </ul>
           </div>
           <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">

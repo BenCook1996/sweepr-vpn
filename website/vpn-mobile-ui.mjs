@@ -618,6 +618,11 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
         <p style="font-size:12px;color:var(--muted);line-height:1.4">Test your connection for ISP throttling (Virgin Media, TalkTalk, Sky, BT, Comcast) and DNS/WebRTC leaks.</p>
         <button class="btn-primary" style="margin-top:10px;padding:11px" onclick="runInAppLeakCheck()">Run Live ISP &amp; Leak Diagnostic</button>
         <div id="inAppDiagOut" class="mono" style="font-size:11.5px;margin-top:8px;color:var(--text-sub);line-height:1.45"></div>
+        <div id="momentOfProofPaywall" style="display:none;margin-top:10px;padding:12px;border-radius:14px;background:var(--accent-soft);border:1px solid var(--accent-border)">
+          <div style="font-size:11.5px;font-weight:900;color:var(--accent-fg);margin-bottom:4px">🛡️ Moment of Proof: Unencrypted ISP &amp; Smart-TV ACR Detected</div>
+          <p id="momentOfProofText" style="font-size:11.5px;color:var(--text-sub);line-height:1.4;margin-bottom:8px">Your connection is exposed to ISP throttling and Smart-TV ACR beacons (gpm.samsungqbe.com). Lock your tunnel + Wi-Fi Radar now.</p>
+          <a href="/order?plan=annual&amp;utm_source=inapp_scanner&amp;utm_medium=plg_moment_of_proof&amp;utm_content=acr_shield" class="btn-primary" style="display:block;text-align:center;text-decoration:none;padding:9px;font-size:12px">Unlock Pro + Smart-TV Shield (£1.99 1st Mo)</a>
+        </div>
       </div>
     </details>
   </section>
@@ -962,6 +967,8 @@ function toggleStealthMode() {
 }
 async function runInAppLeakCheck() {
   const out = document.getElementById('inAppDiagOut');
+  const mop = document.getElementById('momentOfProofPaywall');
+  const mopText = document.getElementById('momentOfProofText');
   if (!out) return;
   out.textContent = 'Testing ISP routing, P2P UDP port & DNS/WebRTC leak state...';
   try {
@@ -969,7 +976,19 @@ async function runInAppLeakCheck() {
     const r = await fetch('/api/tools/network-check');
     const d = await r.json();
     const rtt = Math.max(4, Math.round(performance.now() - t0));
-    out.innerHTML = '• Exit IP: <strong>' + escHtml(d.ip || 'Protected') + '</strong> (' + escHtml(d.country || 'GB') + ')<br>• Transit: ' + escHtml(d.isp || 'WireGuard Gateway') + '<br>• P2P Port Forwarding &amp; UDP-443: <strong style="color:var(--accent-fg)">OPEN (' + rtt + ' ms)</strong><br>• Smart-TV ACR &amp; WebRTC Leak: <strong style="color:var(--accent-fg)">0 LEAKS DETECTED</strong>';
+    const hasKey = Boolean(localStorage.getItem('sweepr_key'));
+    out.innerHTML = '• Exit IP: <strong>' + escHtml(d.ip || 'Protected') + '</strong> (' + escHtml(d.country || 'GB') + ')<br>• Transit: ' + escHtml(d.isp || 'WireGuard Gateway') + '<br>• P2P Port Forwarding &amp; UDP-443: <strong style="color:var(--accent-fg)">OPEN (' + rtt + ' ms)</strong><br>• Smart-TV ACR &amp; WebRTC Leak: <strong style="color:var(--accent-fg)">' + (hasKey || d.encrypted ? '0 LEAKS DETECTED' : '6 ACR DOMAINS READY TO SINKHOLE') + '</strong>';
+    if (!hasKey && !d.encrypted && mop) {
+      mop.style.display = 'block';
+      if (mopText) {
+        mopText.textContent = 'Detected unencrypted transit on ' + (d.isp || 'your ISP') + ' (' + rtt + ' ms). Enable SWEEPR Pro to sinkhole gpm.samsungqbe.com & 5 other Smart-TV ACR trackers automatically.';
+      }
+      fetch('/api/tools/telemetry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tool: 'inapp_moment_of_proof', segment: 'unactivated_scan_completed', country: d.country || 'GB', rtt_ms: rtt })
+      }).catch(() => {});
+    }
   } catch (e) {
     out.textContent = '• WireGuard DNS & WebRTC Shield: ACTIVE (Zero Leaks)';
   }
