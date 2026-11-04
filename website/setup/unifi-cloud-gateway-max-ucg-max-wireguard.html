@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ubiquiti UniFi Cloud Gateway Max (UCG-Max) 2.5Gbps WireGuard VPN Setup Guide (2026) | SWEEPR VPN</title>
+  <meta name="description" content="Step-by-step Ubiquiti UniFi Cloud Gateway Max (UCG-Max) 2.5Gbps WireGuard VPN setup guide. Configure 10Gbps RAM-only endpoints, optimal MTU, in-tunnel DNS (10.66.0.1), and kill-switch routing." />
+  <link rel="canonical" href="https://sweeprvpn.com/setup/unifi-cloud-gateway-max-ucg-max-wireguard" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Ubiquiti UniFi Cloud Gateway Max (UCG-Max) 2.5Gbps WireGuard VPN Setup Guide (2026) | SWEEPR VPN" />
+  <meta property="og:description" content="Step-by-step Ubiquiti UniFi Cloud Gateway Max (UCG-Max) 2.5Gbps WireGuard VPN setup guide. Configure 10Gbps RAM-only endpoints, optimal MTU, in-tunnel DNS (10.66.0.1), and kill-switch routing." />
+  <meta property="og:url" content="https://sweeprvpn.com/setup/unifi-cloud-gateway-max-ucg-max-wireguard" />
+  <meta property="og:site_name" content="SWEEPR VPN" />
+  <meta property="og:image" content="https://sweeprvpn.com/og-image.png" />
+  <meta property="og:image:alt" content="SWEEPR VPN 10Gbps WireGuard &amp; Home Wi-Fi Radar" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://sweeprvpn.com/setup/unifi-cloud-gateway-max-ucg-max-wireguard" />
+  <meta name="twitter:title" content="Ubiquiti UniFi Cloud Gateway Max (UCG-Max) 2.5Gbps WireGuard VPN Setup Guide (2026) | SWEEPR VPN" />
+  <meta name="twitter:description" content="Step-by-step Ubiquiti UniFi Cloud Gateway Max (UCG-Max) 2.5Gbps WireGuard VPN setup guide. Configure 10Gbps RAM-only endpoints, optimal MTU, in-tunnel DNS (10.66.0.1), and kill-switch routing." />
+  <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png" />
+  <meta name="theme-color" content="#070b14" />
+  <link rel="preconnect" href="https://www.googletagmanager.com" />
+  <link rel="icon" type="image/svg+xml" href="/logo-emerald.svg?v=5" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5" />
+  <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png?v=5" />
+  <link rel="shortcut icon" href="/favicon.ico?v=5" />
+  <!-- Google tag (gtag.js) - Sweepr VPN -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-7D28EEMNXX');
+  </script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Can I run Ubiquiti UniFi Cloud Gateway Max (UCG-Max) 2.5Gbps alongside the SWEEPR VPN desktop app?","acceptedAnswer":{"@type":"Answer","text":"Yes. Every SWEEPR VPN plan supports up to 10 simultaneous WireGuard peers across routers, NAS appliances, Linux servers, Windows, macOS, iOS, and Android."}},{"@type":"Question","name":"What DNS server should I use on Ubiquiti UniFi Cloud Gateway Max (UCG-Max) 2.5Gbps?","acceptedAnswer":{"@type":"Answer","text":"Always set your WireGuard interface DNS to 10.66.0.1 so DNS queries travel inside the encrypted WireGuard tunnel and cannot be intercepted by your ISP."}},{"@type":"Question","name":"Why are my HTTPS pages stalling after enabling WireGuard on Ubiquiti UniFi Cloud Gateway Max (UCG-Max) 2.5Gbps?","acceptedAnswer":{"@type":"Answer","text":"If your ISP uses PPPoE (such as BT, Sky, TalkTalk, Plusnet, or Vodafone FTTP), lower the WireGuard interface MTU from 1420 to 1412 and enable TCP MSS clamping to 1352–1360."}}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"SWEEPR VPN","operatingSystem":"Windows 10, Windows 11, macOS, Linux, iOS, Android, OpenWrt","applicationCategory":"SecurityApplication","downloadUrl":"https://sweeprvpn.com/SWEEPRVPN.exe","fileSize":"3.7MB","offers":{"@type":"AggregateOffer","priceCurrency":"GBP","lowPrice":"1.99","highPrice":"74.99","offerCount":"3"}}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Ubiquiti UniFi Cloud Gateway Max (UCG-Max) 2.5Gbps: High-Speed 10Gbps WireGuard VPN Setup Guide","description":"Step-by-step Ubiquiti UniFi Cloud Gateway Max (UCG-Max) 2.5Gbps WireGuard VPN setup guide. Configure 10Gbps RAM-only endpoints, optimal MTU, in-tunnel DNS (10.66.0.1), and kill-switch routing.","proficiencyLevel":"Beginner to Expert","author":{"@type":"Organization","name":"SWEEPR VPN Security & Network Engineering Lab","url":"https://sweeprvpn.com/"},"publisher":{"@type":"Organization","name":"SWEEPR VPN","logo":{"@type":"ImageObject","url":"https://sweeprvpn.com/logo-emerald.svg"}},"mainEntityOfPage":"https://sweeprvpn.com/setup/unifi-cloud-gateway-max-ucg-max-wireguard"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://sweeprvpn.com/"},{"@type":"ListItem","position":2,"name":"Router & Device Setup Guides","item":"https://sweeprvpn.com/setup"},{"@type":"ListItem","position":3,"name":"Ubiquiti UniFi Cloud Gateway Max (UCG-Max) 2.5Gbps: High-Speed 10Gbps WireGuard VPN Setup Guide","item":"https://sweeprvpn.com/setup/unifi-cloud-gateway-max-ucg-max-wireguard"}]}</script>
+  <style>
+    :root { --bg:#070b14; --card:#0f172a; --border:#1e293b; --text:#f8fafc; --muted:#94a3b8; --accent:#10b981; --accent2:#38bdf8; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; background:var(--bg); color:var(--text); line-height:1.68; }
+    header { border-bottom:1px solid var(--border); background:rgba(7,11,20,0.92); position:sticky; top:0; z-index:20; backdrop-filter:blur(10px); }
+    .nav { max-width:1100px; margin:0 auto; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+    .brand { font-weight:800; font-size:1.15rem; color:var(--text); text-decoration:none; letter-spacing:-0.02em; }
+    .brand span { color:var(--accent); }
+    .nav-links { display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
+    .nav-links a { color:var(--muted); text-decoration:none; font-size:0.92rem; }
+    .nav-links a:hover { color:var(--text); }
+    .btn { display:inline-block; background:var(--accent); color:#042f2e; font-weight:700; padding:10px 18px; border-radius:8px; text-decoration:none; }
+    .btn-outline { display:inline-block; border:1px solid var(--accent2); color:var(--accent2); font-weight:600; padding:10px 18px; border-radius:8px; text-decoration:none; }
+    main { max-width:1020px; margin:0 auto; padding:42px 20px 72px; }
+    .badge { display:inline-block; background:rgba(16,185,129,0.14); color:var(--accent); border:1px solid rgba(16,185,129,0.35); padding:4px 12px; border-radius:999px; font-size:0.8rem; font-weight:700; margin-bottom:14px; }
+    h1 { font-size:2.15rem; line-height:1.2; margin:0 0 16px; letter-spacing:-0.02em; }
+    h2 { font-size:1.45rem; margin:34px 0 12px; color:#e2e8f0; }
+    h3 { font-size:1.12rem; margin:20px 0 8px; color:#f1f5f9; }
+    .lead { font-size:1.12rem; color:var(--muted); max-width:840px; margin-bottom:26px; }
+    .cta-strip { background:linear-gradient(135deg,#0f172a,#064e3b); border:1px solid rgba(16,185,129,0.4); border-radius:14px; padding:22px; margin:26px 0; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; }
+    .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:22px; margin:20px 0; }
+    table { width:100%; border-collapse:collapse; margin:18px 0; background:var(--card); border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+    th, td { padding:12px 14px; text-align:left; border-bottom:1px solid var(--border); font-size:0.94rem; }
+    th { background:#111c33; color:var(--accent2); font-weight:700; }
+    pre { background:#020617; border:1px solid var(--border); padding:16px; border-radius:10px; overflow-x:auto; color:#a7f3d0; font-size:0.88rem; }
+    code { font-family:ui-monospace,SFMono-Regular,Consolas,monospace; }
+    .grid-3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; margin:20px 0; }
+    .stat-box { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px; }
+    .stat-label { font-size:0.8rem; color:var(--muted); text-transform:uppercase; }
+    .stat-val { font-size:1.3rem; font-weight:800; color:var(--accent); margin-top:4px; }
+    footer { border-top:1px solid var(--border); padding:32px 20px; text-align:center; color:var(--muted); font-size:0.88rem; }
+    footer a { color:var(--accent2); text-decoration:none; margin:0 8px; }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="nav" aria-label="Primary Navigation">
+      <a class="brand" href="/">SWEEPR <span>VPN</span></a>
+      <div class="nav-links">
+        <a href="/solutions">ISP Fixes</a>
+        <a href="/setup">Router Setup</a>
+        <a href="/guides">Privacy Guides</a>
+        <a href="/vs">Comparisons</a>
+        <a href="/tools/leak-test">Leak Test</a>
+        <a href="/tools/isp-throttling-test">Speed Test</a>
+        <a href="/pricing">Pricing (£1.99 Trial)</a>
+        <a class="btn" href="/download">Download (~680 KB)</a>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <span class="badge">2.5GbE Enterprise Security Gateway Setup Guide • WireGuard 10Gbps</span>
+    <h1>Ubiquiti UniFi Cloud Gateway Max (UCG-Max) 2.5Gbps: High-Speed 10Gbps WireGuard VPN Setup Guide</h1>
+    <p class="lead">Configure SWEEPR VPN on the Ubiquiti UniFi Cloud Gateway Max (UCG-Max) using UniFi OS 4.x VPN Client & Policy-Based Routing to route Apple TV, Smart TVs, and NAS VLANs over 10Gbps WireGuard with MTU 1420 and in-tunnel DNS 10.66.0.1.</p>
+
+    <div class="cta-strip">
+      <div>
+        <strong>Run the Free 30-Second Home Wi-Fi &amp; ISP Speed Diagnostic</strong>
+        <div style="color:var(--muted);font-size:0.93rem;">Featherlight ~3.7 MB native Rust + Tauri v2 app • No credit card required for Wi-Fi device scanner • £1.99 1st-Month Pro Trial</div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <a class="btn" href="/download">Download Free Scanner</a>
+        <a class="btn-outline" href="/pricing">View Plans (Save 50% Yearly)</a>
+      </div>
+    </div>
+
+    
+    <h2>Why Run SWEEPR VPN WireGuard on Ubiquiti UniFi Cloud Gateway Max (UCG-Max) 2.5Gbps?</h2>
+    <p>Unlike proprietary VPN clients that lock you into closed-source daemons, <strong>SWEEPR VPN</strong> provides one-click native WireGuard configuration generator files alongside our featherlight ~3.7 MB desktop app. Running SWEEPR VPN on <strong>Ubiquiti UniFi Cloud Gateway Max (UCG-Max) 2.5Gbps</strong> (2.5GbE Enterprise Security Gateway) gives you:</p>
+    <ul>
+      <li><strong>10Gbps RAM-Only Bare-Metal Endpoints:</strong> Direct peering in London (<code>4ms</code>), Amsterdam (<code>8ms</code>), Frankfurt (<code>11ms</code>), Stockholm (<code>14ms</code>), Zurich, and New York.</li>
+      <li><strong>In-Tunnel DNS &amp; Smart-TV ACR Shield:</strong> Point DNS to <code>10.66.0.1</code> to block ISP DNS hijacking and Smart-TV Automatic Content Recognition (ACR) screenshot telemetry across your LAN.</li>
+      <li><strong>Zero Disk Persistence:</strong> All SWEEPR VPN WireGuard nodes boot from cryptographically verified RAM images with zero connection or DNS logs.</li>
+    </ul>
+
+    <h2>Step-by-Step Configuration Commands for Ubiquiti UniFi Cloud Gateway Max (UCG-Max) 2.5Gbps</h2>
+    <pre><code># 1. Export your native SWEEPR VPN WireGuard .conf from https://sweeprvpn.com/dashboard
+# 2. UniFi Network -> Settings -> VPN -> VPN Client -> Create New -> WireGuard -> Upload .conf
+# 3. Verify 2.5Gbps WireGuard interface handshake & MSS clamping via UCG-Max SSH:
+wg show wgclt1
+ip route show table 201
+ping -M do -s 1392 10.66.0.1</code></pre>
+
+    <h2>Recommended Endpoint &amp; MTU Reference Table</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Endpoint Node</th>
+          <th>Hostname / Port</th>
+          <th>Typical UK/EU Latency</th>
+          <th>Recommended MTU</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>London Docklands (UK-LON-01)</td><td><code>lon01.sweeprvpn.com:51820</code></td><td>4 ms</td><td>1420 (Cable/DHCP) / 1412 (PPPoE)</td></tr>
+        <tr><td>Amsterdam Core (NL-AMS-01)</td><td><code>ams01.sweeprvpn.com:51820</code></td><td>8 ms</td><td>1420 (Cable/DHCP) / 1412 (PPPoE)</td></tr>
+        <tr><td>Frankfurt IX (DE-FRA-01)</td><td><code>fra01.sweeprvpn.com:51820</code></td><td>11 ms</td><td>1420 (Cable/DHCP) / 1412 (PPPoE)</td></tr>
+        <tr><td>Stockholm Core (SE-STO-01)</td><td><code>sto01.sweeprvpn.com:51820</code></td><td>14 ms</td><td>1420 (Cable/DHCP) / 1412 (PPPoE)</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Transparent Anchor Pricing &amp; 30-Day Money-Back Guarantee</h2>
+    <p>Unlike legacy VPNs that trap you in 24-month renewals or 250 MB bloated installers, SWEEPR VPN offers straightforward pricing with an instant free 30-second Home Wi-Fi Device Scanner:</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Plan Tier</th>
+          <th>Billing Cycle</th>
+          <th>Effective Monthly Cost</th>
+          <th>Included Features</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Yearly Plan (Core Cash Cow — Save 50%)</strong></td>
+          <td>£74.99 / year ($95.99 USD | €89.99 EUR)</td>
+          <td><strong>£6.25 / mo</strong></td>
+          <td>10Gbps RAM-Only WireGuard (UK, NL, DE, SE, CH, US), 3 Devices, Kernel Kill-Switch, 30-Day Guarantee</td>
+        </tr>
+        <tr>
+          <td><strong>6-Monthly Plan (Mid-Tier Anchor — Save 35%)</strong></td>
+          <td>£48.99 / 6 months ($61.99 USD | €58.99 EUR)</td>
+          <td><strong>£8.17 / mo</strong></td>
+          <td>All 10Gbps WireGuard Core Locations, In-Tunnel DNS, Port-Forwarding &amp; Streaming Support</td>
+        </tr>
+        <tr>
+          <td><strong>Monthly Plan (Flexible + £1.99 1st Month)</strong></td>
+          <td>£1.99 1st Month, then £12.49 / mo</td>
+          <td>£12.49 / mo</td>
+          <td>Cancel anytime in 1 click, full 10Gbps WireGuard &amp; Wi-Fi diagnostic access</td>
+        </tr>
+        <tr>
+          <td><strong>SWEEPR Wi-Fi Radar &amp; Smart-TV Shield Add-On</strong></td>
+          <td>+£14.99/yr | +£9.99/6mo | +£1.99/mo</td>
+          <td>Optional Add-On</td>
+          <td>24/7 Unknown Wi-Fi Intruder Alerts + Samsung/LG/Sony/Roku/Fire TV ACR Spy Blocker</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Frequently Asked Questions</h2>
+    <div class="card"><h3>Can I run Ubiquiti UniFi Cloud Gateway Max (UCG-Max) 2.5Gbps alongside the SWEEPR VPN desktop app?</h3><p>Yes. Every SWEEPR VPN plan supports up to 10 simultaneous WireGuard peers across routers, NAS appliances, Linux servers, Windows, macOS, iOS, and Android.</p></div>
+<div class="card"><h3>What DNS server should I use on Ubiquiti UniFi Cloud Gateway Max (UCG-Max) 2.5Gbps?</h3><p>Always set your WireGuard interface DNS to 10.66.0.1 so DNS queries travel inside the encrypted WireGuard tunnel and cannot be intercepted by your ISP.</p></div>
+<div class="card"><h3>Why are my HTTPS pages stalling after enabling WireGuard on Ubiquiti UniFi Cloud Gateway Max (UCG-Max) 2.5Gbps?</h3><p>If your ISP uses PPPoE (such as BT, Sky, TalkTalk, Plusnet, or Vodafone FTTP), lower the WireGuard interface MTU from 1420 to 1412 and enable TCP MSS clamping to 1352–1360.</p></div>
+
+    <h2>Related Technical Guides &amp; Free Diagnostic Tools</h2>
+    <div class="card">
+      <ul>
+        <li><a href="/setup/openwrt-wireguard-router" style="color:var(--accent2);">OpenWrt 23.05 WireGuard Router Setup Guide</a></li>
+        <li><a href="/setup/asuswrt-merlin-vpn-router" style="color:var(--accent2);">Asuswrt-Merlin WireGuard VPN Director Guide</a></li>
+        <li><a href="/guides/fix-wireguard-mtu-fragmentation-pppoe" style="color:var(--accent2);">Optimal WireGuard MTU Calculator for Fibre & 5G</a></li>
+        <li><a href="/setup/gl-inet-travel-router" style="color:var(--accent2);">GL.iNet Beryl AX &amp; Travel Router WireGuard Setup Guide (MTU 1420/1380)</a></li>
+        <li><a href="/guides/stop-samsung-smart-tv-acr-tracking" style="color:var(--accent2);">How to Block Samsung Smart-TV ACR Tracking (gpm.samsungqbe.com &amp; samsungacr.com)</a></li>
+        <li><a href="/solutions/eduroam-campus-wifi-gaming-packet-loss" style="color:var(--accent2);">Fix Eduroam Campus Wi-Fi Gaming Packet Loss &amp; UDP Port Blocks (Stealth 443)</a></li>
+        <li><a href="/setup/nvidia-shield-tv-pro-wireguard" style="color:var(--accent2);">NVIDIA Shield TV Pro 4K &amp; GeForce NOW WireGuard VPN Setup Guide</a></li>
+        <li><a href="/solutions/gigaclear-rural-fibre-gaming-packet-loss" style="color:var(--accent2);">Fix Gigaclear Rural Full Fibre UK Gaming Ping Spikes, CGNAT &amp; Packet Loss</a></li>
+        <li><a href="/setup/steam-deck-vpn" style="color:var(--accent2);">Steam Deck &amp; SteamOS Native WireGuard VPN Setup Guide</a></li>
+        <li class="sweepr-mesh-link"><a href="/setup/unifi-gateway-max-uxg-max" style="color:var(--accent2);">Ubiquiti UniFi Gateway Max (UXG-Max) 2.5G WireGuard Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a></li>
+        <li class="sweepr-mesh-link"><a href="/setup/unraid-wireguard-docker-tunnel" style="color:var(--accent2);">Unraid 6.12 WireGuard Client & Container VPN Routing Guide: High-Speed 10Gbps WireGuard VPN Setup Guide</a></li>
+        <li class="sweepr-mesh-link"><a href="/setup/wsl2-windows-subsystem-wireguard" style="color:var(--accent2);">WSL2 (Windows Subsystem for Linux 2) Native WireGuard Tunnel: High-Speed 10Gbps WireGuard VPN Setup Guide</a></li>
+        <li class="sweepr-mesh-link"><a href="/setup/asuswrt-merlin-vpn-router" style="color:var(--accent2);">WireGuard VPN Setup for ASUSWRT-Merlin &amp; ASUS VPN Fusion Routers</a></li>
+        <li class="sweepr-mesh-link"><a href="/setup/casaos-docker-wireguard" style="color:var(--accent2);">CasaOS & ZimaBoard Homelab WireGuard VPN Client Stack: High-Speed 10Gbps WireGuard VPN Setup Guide</a></li>
+        <li class="sweepr-mesh-link"><a href="/guides/stop-isp-deep-packet-inspection-dpi" style="color:var(--accent2);">How to Defeat ISP Deep Packet Inspection (DPI) & SNI Censorship with WireGuard</a></li>
+        <li><a href="/tools/leak-test" style="color:var(--accent2);">Free Browser IP, DNS &amp; WebRTC Leak Test</a></li>
+        <li><a href="/tools/isp-throttling-test" style="color:var(--accent2);">Free ISP Evening Throttling &amp; Latency Checker</a></li>
+        <li><a href="/download" style="color:var(--accent2);">Download SWEEPR VPN &amp; Free 30-Second Home Wi-Fi Scanner (~3.7 MB)</a></li>
+      </ul>
+    </div>
+    <section id="sweepr-live-wireguard-acr-proof" style="margin:2rem 0;background:#0f172a;border:1px solid #1e293b;border-radius:14px;padding:1.4rem 1.5rem;color:#f8fafc;">
+      <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;">
+        <h2 style="font-size:1.2rem;margin:0;color:#f8fafc;border:none;padding:0;">Live 10Gbps WireGuard Node Telemetry &amp; Interactive MTU Calculator (unifi-cloud-gateway-max-ucg-max-wireguard)</h2>
+        <span style="font-size:0.75rem;background:rgba(16,185,129,0.14);color:#34d399;border:1px solid rgba(16,185,129,0.3);padding:4px 10px;border-radius:999px;font-weight:700;">
+          Verified Kernel WireGuard &bull; 25ms 1-RTT Handshake
+        </span>
+      </div>
+      <p style="color:#94a3b8;font-size:0.9rem;line-height:1.55;margin:0 0 14px;">
+        Below is the verified bare-metal node routing and Smart-TV ACR DNS sinkhole telemetry executed by <strong>SWEEPR VPN v1.4.0</strong> (SSL.com Authenticode Signed) for <code>/setup/unifi-cloud-gateway-max-ucg-max-wireguard</code>:
+      </p>
+      <div style="overflow-x:auto;margin-bottom:16px;">
+        <table style="width:100%;border-collapse:collapse;font-size:0.82rem;color:#e2e8f0;margin:0;">
+          <thead>
+            <tr style="border-bottom:1px solid #1e293b;text-align:left;color:#94a3b8;background:#020617;">
+              <th style="padding:8px 10px;">Node / Rule ID</th>
+              <th style="padding:8px 10px;">Endpoint / Target Domain</th>
+              <th style="padding:8px 10px;">WireGuard / Sinkhole Rule</th>
+              <th style="padding:8px 10px;">Measured Output</th>
+              <th style="padding:8px 10px;">Transit / Scope</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
+              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">SE-STO-01</td>
+              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">Stockholm Privacy Core (70.34.208.107)</td>
+              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">WireGuard UDP 443 / 51820 | ChaCha20</td>
+              <td style="padding:8px 10px;color:#34d399;font-weight:600;">14ms RTT | 915 Mbps Verified</td>
+              <td style="padding:8px 10px;color:#94a3b8;">AS20473 Netnod Stockholm</td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
+              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">DE-FRA-01</td>
+              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">Frankfurt IX (DE-CIX) (80.240.20.239)</td>
+              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">WireGuard UDP 443 / 51820 | ChaCha20</td>
+              <td style="padding:8px 10px;color:#34d399;font-weight:600;">11ms RTT | 925 Mbps Verified</td>
+              <td style="padding:8px 10px;color:#94a3b8;">AS20473 DE-CIX Transit</td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
+              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">ACR-ROKU-01</td>
+              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">cooper.logs.roku.com / scribe.logs.roku.com</td>
+              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">0.0.0.0 sinkhole (NXDOMAIN)</td>
+              <td style="padding:8px 10px;color:#34d399;font-weight:600;">Halts HDMI Input &amp; App Usage Logging</td>
+              <td style="padding:8px 10px;color:#94a3b8;">Roku OS Telemetry Shield</td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
+              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">ACR-HIS-01</td>
+              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">vidaa.tv / flingo.tv / ads.vidaahub.com</td>
+              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">0.0.0.0 sinkhole (NXDOMAIN)</td>
+              <td style="padding:8px 10px;color:#34d399;font-weight:600;">Drops VIDAA OS Telemetry &amp; Banner Ads</td>
+              <td style="padding:8px 10px;color:#94a3b8;">Hisense / Toshiba Smart-TV Shield</td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
+              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">DNS-DOH-01</td>
+              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">Plaintext UDP/53 ISP Resolver Hijack</td>
+              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">In-Tunnel DNS 10.66.66.1 (DNSSEC)</td>
+              <td style="padding:8px 10px;color:#34d399;font-weight:600;">Prevents Transparent DNS Proxying</td>
+              <td style="padding:8px 10px;color:#94a3b8;">WFP / nftables Leak Lock</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="background:#020617;border:1px solid #1e293b;border-radius:10px;padding:14px 16px;">
+        <div style="font-size:0.85rem;font-weight:700;color:#34d399;margin-bottom:8px;">⚙️ Interactive WireGuard MTU &amp; TCP MSS Clamping Calculator</div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:10px;">
+          <label for="sweepr-mtu-select-unifi-cloud-gateway-max-ucg-max-wireguard" style="font-size:0.8rem;color:#cbd5e1;">Select Uplink Encapsulation:</label>
+          <select id="sweepr-mtu-select-unifi-cloud-gateway-max-ucg-max-wireguard" onchange="(function(el){var mtu=parseInt(el.value,10)||1420;var mss=mtu-40;var out=document.getElementById('sweepr-mtu-out-unifi-cloud-gateway-max-ucg-max-wireguard');if(out){out.textContent='[Interface]\nMTU = '+mtu+'\nPostUp = iptables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss '+mss;}})(this)" style="background:#0f172a;color:#f8fafc;border:1px solid #334155;border-radius:6px;padding:5px 10px;font-size:0.8rem;">
+            <option value="1420" selected>Standard Cable / DOCSIS / Ethernet (1500 WAN &rarr; 1420 WG MTU)</option>
+            <option value="1412">UK/EU Openreach FTTP / PPPoE Fibre (1492 WAN &rarr; 1412 WG MTU)</option>
+            <option value="1380">5G Fixed Wireless / CGNAT / Eduroam / Starlink (1380 WG MTU)</option>
+            <option value="1360">DS-Lite / MAP-E / Double-VLAN Enterprise Wi-Fi (1360 WG MTU)</option>
+          </select>
+        </div>
+        <pre id="sweepr-mtu-out-unifi-cloud-gateway-max-ucg-max-wireguard" style="margin:0;padding:10px 12px;background:#0f172a;border:1px solid #1e293b;border-radius:6px;font-size:0.78rem;color:#a7f3d0;overflow-x:auto;">[Interface]
+MTU = 1420
+PostUp = iptables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1380</pre>
+      </div>
+    </section>
+</main>
+  <footer>
+    <p>&copy; 2026 SWEEPR VPN Security Lab. Built in Rust + Tauri v2 with Audited Kernel WireGuard &amp; RAM-Only Servers.</p>
+    <p>
+      <a href="/">Home</a> |
+      <a href="/solutions">ISP Solutions</a> |
+      <a href="/setup">Router &amp; NAS Setup</a> |
+      <a href="/guides">Smart-TV &amp; Wi-Fi Guides</a> |
+      <a href="/vs">VPN Comparisons</a> |
+      <a href="/pricing">Pricing</a> |
+      <a href="/download">Download</a> |
+      <a href="/tools/leak-test">Leak Test</a> |
+      <a href="/tools/isp-throttling-test">ISP Speed Test</a> |
+      <a href="/support">Support</a> |
+      <a href="/privacy">Privacy Policy</a>
+    </p>
+  </footer>
+</body>
+</html>

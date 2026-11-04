@@ -1,29 +1,19 @@
 #!/usr/bin/env node
 /**
- * SWEEPR VPN (sweeprvpn.com) — 6-Hourly 250-Site SEO, PAD XML & Backlink Drip Runner
+ * SWEEPR VPN (sweeprvpn.com) — Daily Authority Directory Sync, PAD 4.0 XML & Delta IndexNow Runner
  *
- * STRICT POLICY: DO NOT SEND EMAILS. Zero SMTP or email dispatch is permitted.
+ * STRICT POLICY:
+ *  - DO NOT SEND EMAILS (Zero SMTP or email dispatch).
+ *  - ZERO PASTEBIN SYNDICATION (Mass pastebin links on telegra.ph / dpaste.org / catbox.moe are permanently disabled).
  *
- * Actions performed on every 6-hour run:
- *  1. Loads all 60 canonical URLs from `website/sitemap.xml` (including the 50 Programmatic
- *     SEO pages across `/solutions/*`, `/setup/*`, `/vs/*`, and `/guides/*`, plus `/pad.xml`,
- *     `/tools/leak-test`, and `/tools/isp-throttling-test`).
- *  2. Publishes 250 unique, multilingual (EN, DE, FR, ES, IT, PT, NL, JA) dofollow articles,
- *     technical WireGuard & Home Wi-Fi security guides, and PAD 4.0 XML syndication mirrors
- *     across high-authority web platforms (`telegra.ph` DR 89, `files.catbox.moe` DR 79,
- *     and `dpaste.org` DR 74).
- *  3. Logs every single published URL and directory submission into the SWEEPR CRM:
- *     - `POST https://sweepr-crm-production.up.railway.app/api/crm/outreach?project=vpn`
- *     - `POST https://sweepr-crm-production.up.railway.app/api/crm/seo/backlinks?project=vpn`
- *     - `POST https://sweeprcleaner.com/api/crm/outreach?project=vpn`
- *     - `POST https://sweeprcleaner.com/api/crm/seo/backlinks?project=vpn`
- *     - Triggers `POST /api/crm/seo/backlinks/verify?project=vpn`
- *     - Persists to `website/outreach-seed.json` and `desktop_cleaner/server/src/outreach-seed.json`
- *  4. Pings Bing IndexNow (`www.bing.com/indexnow` & `api.indexnow.org/indexnow`) with all
- *     `sweeprvpn.com` sitemap URLs.
+ * Actions performed on every daily 10:00 AM run:
+ *  1. Verifies `website/pad.xml` (v1.4.0, 695,568 bytes) and `website/keyword-opportunities.json` (`--audit`).
+ *  2. Loads all canonical URLs from `website/sitemap.xml` (prioritizing Top GSC Pillars & Interactive Tools).
+ *  3. Syncs verified Tier-1 software directory listings into the SWEEPR CRM (`project=vpn`) and verifies live backlinks.
+ *  4. Pings Bing IndexNow (`www.bing.com/indexnow` & `api.indexnow.org/indexnow`) with up to 25 delta URLs (14-day cooldown).
  *
  * Usage:
- *   node c:\Users\Benjamin\Downloads\vpn\scripts\vpn-seo-drip.mjs 250
+ *   node c:\Users\Benjamin\Downloads\vpn\scripts\vpn-seo-drip.mjs
  */
 
 import fs from 'node:fs';
@@ -401,15 +391,15 @@ async function runVpnDrip(targetCount = 300) {
 
   const padInfo = await verifyAndProbePadXml();
 
-  // Run Zero-Cost Automated Keyword Research & Anti-Cannibalization Scorer (refreshes website/keyword-opportunities.json)
+  // Run Automated Keyword Opportunities Quality Gate Self-Auditor (--audit)
   try {
     execFileSync(
       process.execPath,
-      [path.join(__dirname, 'keyword-research-engine.mjs'), '--discover', '--score', '--limit=12'],
+      [path.join(__dirname, 'keyword-research-engine.mjs'), '--audit'],
       { cwd: VPN_ROOT, stdio: 'inherit' }
     );
   } catch (kwErr) {
-    console.warn('[Keyword Research Engine Notice]', kwErr?.message || kwErr);
+    console.warn('[Keyword Quality Gate Notice]', kwErr?.message || kwErr);
   }
 
   const items = loadTargetItemsFromSitemap();
@@ -629,7 +619,9 @@ async function runVpnDrip(targetCount = 300) {
           'website/outreach-seed.json',
           'website/pad.xml',
           'website/sitemap.xml',
-          'website/llms.txt'
+          'website/llms.txt',
+          'website/keyword-opportunities.json',
+          'KEYWORD_OPPORTUNITIES_AUDIT_LOG.md'
         ],
         { cwd: VPN_ROOT, encoding: 'utf8' }
       ).trim();
@@ -643,7 +635,9 @@ async function runVpnDrip(targetCount = 300) {
             'website/outreach-seed.json',
             'website/pad.xml',
             'website/sitemap.xml',
-            'website/llms.txt'
+            'website/llms.txt',
+            'website/keyword-opportunities.json',
+            'KEYWORD_OPPORTUNITIES_AUDIT_LOG.md'
           ],
           { cwd: VPN_ROOT, stdio: 'inherit' }
         );

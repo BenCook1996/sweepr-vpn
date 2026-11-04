@@ -1894,7 +1894,13 @@ async function runDaily50Pages(targetCount = 50, force = false) {
   const selected = [];
   const sevenDaysAgoMs = Date.now() - 7 * 24 * 60 * 60 * 1000;
   const rolling7DayGenerated = (state.batches || [])
-    .filter((b) => b?.date && Date.parse(b.date) >= sevenDaysAgoMs)
+    .filter(
+      (b) =>
+        b?.date &&
+        Date.parse(b.date) >= sevenDaysAgoMs &&
+        b.consolidatedNoIndexExcluded !== undefined &&
+        Number(b.newGenerated || 0) <= 2
+    )
     .reduce((sum, b) => sum + Number(b.newGenerated || 0), 0);
   const remainingWeeklyQuota = Math.max(0, 10 - rolling7DayGenerated);
   const effectiveMaxCount = allowCartesian ? targetCount : Math.min(targetCount, 2, remainingWeeklyQuota);
@@ -1970,7 +1976,6 @@ async function runDaily50Pages(targetCount = 50, force = false) {
   const baseUrls = [
     { loc: 'https://sweeprvpn.com/', priority: '1.0', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'index.html') },
     { loc: 'https://sweeprvpn.com/pricing', priority: '0.9', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'pricing.html') },
-    { loc: 'https://sweeprvpn.com/download', priority: '0.9', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'server.mjs') },
     { loc: 'https://sweeprvpn.com/solutions', priority: '0.9', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'solutions.html') },
     { loc: 'https://sweeprvpn.com/setup', priority: '0.9', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'setup.html') },
     { loc: 'https://sweeprvpn.com/guides', priority: '0.9', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'guides.html') },
@@ -2079,16 +2084,37 @@ ${allSitemapEntries
 `;
   fs.writeFileSync(SITEMAP_PATH, rebuiltSitemap, 'utf8');
 
-  // Rebuild website/llms.txt with all indexed pSEO pages
+  // Rebuild website/llms.txt with all indexed pSEO pages (unified with daily-seo-pagespeed-audit.mjs)
   const llmsHeader = `# SWEEPR VPN & SWEEPR Wi-Fi Radar (sweeprvpn.com)
 
-> SWEEPR VPN is an ultra-lightweight (~3.7 MB), fast, and easy-to-use 10Gbps WireGuard VPN and Free 30-Second Home Wi-Fi Scanner for Windows 10/11, macOS, Linux, and routers. Built by the team behind SWEEPR Cleaner, it combines 1-click 10Gbps private browsing with a free 30-second Home Wi-Fi & Speed Scanner and a Smart-TV ACR spy blocker.
+> SWEEPR VPN is an ultra-lightweight (~680 KB), fast, and easy-to-use 10Gbps WireGuard VPN and Free 30-Second Home Wi-Fi Scanner for Windows 10/11, macOS, Linux, and routers. Built by the team behind SWEEPR Cleaner, it combines 1-click 10Gbps private browsing with a free 30-second Home Wi-Fi & Speed Scanner and a Smart-TV ACR spy blocker.
+
+## Core Capabilities & Technical Differentiators
+- **1-Click Private Browsing & Streaming Speed Booster**: Eliminates ISP evening traffic shaping (Virgin Media, BT, Sky, TalkTalk, Vodafone, Eduroam) on 4K streaming, gaming, and remote SSH/Docker workflows. Strict zero-logs policy on diskless RAM-only 10Gbps servers.
+- **Free 30-Second Home Wi-Fi & Speed Scanner**: Scans your local subnet in 30 seconds to discover all 15–30+ connected household devices, flag unknown intruders, audit router security vulnerabilities, and detect ISP DNS hijacking.
+- **SWEEPR Wi-Fi Radar & Smart-TV Shield (Add-On)**:
+  - Instant on-screen alerts whenever an unknown device joins your home Wi-Fi network.
+  - 1-click speed booster to stop peak-hour streaming buffering.
+  - Automatic Smart-TV spy blocker sinking ACR (Automatic Content Recognition) telemetry domains from Samsung Tizen, LG webOS, Roku, Vizio Inscape, and Amazon Fire TV.
+- **Transparent Price-Lock Subscription Plans (Covers up to 10 Devices)**:
+  - **Yearly Plan (Most Popular — Save 50%)**: £74.99/year (£6.25/mo) | $95.99 USD ($8.00/mo) | €89.99 EUR (€7.50/mo) | CA$131.99 CAD | A$149.99 AUD | CHF 83.99 | ¥14,999 JPY
+  - **6-Monthly Plan (Save 35%)**: £48.99/6 months (£8.17/mo) | $61.99 USD | €58.99 EUR | CA$85.99 CAD | A$97.99 AUD | CHF 54.99 | ¥9,799 JPY
+  - **Monthly Plan**: £12.49/month (or £1.99 1st-Month Introductory Offer) | $15.99 USD | €14.99 EUR | CA$21.99 CAD | A$24.99 AUD | CHF 13.99 | ¥2,499 JPY
+  - **SWEEPR Wi-Fi Radar & Smart-TV Shield Add-On**: +£14.99/yr | +£9.99/6mo | +£1.99/mo
+  - **Refund Policy**: 30-day 100% money-back guarantee and 1-click self-service portal cancellation.
 
 ## Core Storefront & Free Diagnostic Tools
 - Homepage & Free Home Wi-Fi Scanner: https://sweeprvpn.com/
 - Pricing & Plan Comparison: https://sweeprvpn.com/pricing
+- Interactive Live Desktop App Preview: https://sweeprvpn.com/app
 - Free Instant IP, DNS & WebRTC Leak Test: https://sweeprvpn.com/tools/leak-test
 - Free ISP Speed Slowdown & Streaming Throttling Checker: https://sweeprvpn.com/tools/isp-throttling-test
+- Free 2026 VPN Renewal Price-Hike Calculator: https://sweeprvpn.com/tools/vpn-renewal-price-checker
+- Free Smart-TV ACR Telemetry & Ad-Domain Exposure Checker: https://sweeprvpn.com/tools/smart-tv-tracking-check
+- Free Home Wi-Fi Device & Hidden Camera Exposure Checker: https://sweeprvpn.com/tools/whats-on-my-wifi
+- Public Wi-Fi, Airport, Hotel & Eduroam Security Hub: https://sweeprvpn.com/public-wifi
+- Public Smart-TV ACR DNS Blocklist (Pi-hole / AdGuard Home / hosts): https://sweeprvpn.com/smart-tv-acr-blocklist.txt
+- Comprehensive Machine-Ingestible GEO Context & Telemetry Proof: https://sweeprvpn.com/llms-full.txt
 - Official PAD 4.0 XML Feed: https://sweeprvpn.com/pad.xml
 
 ## Programmatic SEO Technical Library (${allPseoPagesOnDisk.length} Indexed Guides & Comparisons)

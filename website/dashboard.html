@@ -40,6 +40,48 @@
 
     <div id="dashboardContent" class="hidden space-y-6">
 
+      <!-- CMO Automation 2A: Zero-Handshake Activation Rescue Banner -->
+      <div id="zeroHandshakeRescueCard" class="hidden glass-card p-5 sm:p-6 bg-gradient-to-r from-emerald-900 to-slate-900 text-white shadow-md rounded-2xl border border-emerald-500/40">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 mb-1.5">
+              ⚡ Instant 15-Second Setup Rescue
+            </span>
+            <h3 id="rescueHeadline" class="text-lg sm:text-xl font-black text-white">0 Devices Linked Yet — Activate Your 10Gbps WireGuard Tunnel</h3>
+            <p id="rescueSubheadline" class="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl">Scan an instant QR code on iPhone/Android, install a 1-click Apple .mobileconfig profile, or generate a native .conf for GL.iNet &amp; routers.</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2 shrink-0 w-full sm:w-auto">
+            <button type="button" onclick="generatePortalPairingQr()" class="px-4 py-2.5 rounded-xl font-extrabold text-xs bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition-all cursor-pointer">
+              📱 Scan Mobile QR
+            </button>
+            <a href="/api/vpn/apple-mobileconfig" class="px-3.5 py-2.5 rounded-xl font-bold text-xs bg-white/10 hover:bg-white/20 text-white border border-white/20 no-underline">
+              🍎 iOS .mobileconfig
+            </a>
+            <a href="/tools/wireguard-config-generator" class="px-3.5 py-2.5 rounded-xl font-bold text-xs bg-white/10 hover:bg-white/20 text-white border border-white/20 no-underline">
+              ⚙️ Router .conf
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- CMO Automation 2B: Day-21 Intro-Monthly-to-Annual Price-Lock Upgrade Bridge -->
+      <div id="annualUpgradeBridgeCard" class="hidden glass-card p-5 sm:p-6 bg-gradient-to-r from-emerald-50 via-teal-50/70 to-amber-50/60 shadow-sm rounded-2xl border-2 border-emerald-400/70">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-emerald-700 text-white mb-1.5">
+              🔒 Permanent Price-Lock Upgrade + Free Smart-TV Shield
+            </span>
+            <h3 id="annualBridgeHeadline" class="text-lg sm:text-xl font-black text-gray-900">Lock In £6.25/mo Forever + Free Smart-TV ACR Shield</h3>
+            <p id="annualBridgeSubheadline" class="text-xs sm:text-sm text-gray-700 mt-1 max-w-2xl">Upgrade from Monthly (£12.49/mo) to the Annual Price-Lock Plan (£74.99/yr — Save 50%) in 1 click and receive SWEEPR Wi-Fi Radar &amp; Smart-TV Shield (£14.99/yr value) free for Year 1.</p>
+          </div>
+          <div class="shrink-0 w-full sm:w-auto">
+            <button type="button" id="annualBridgeCtaBtn" onclick="applySaveOffer('upgrade_annual_lock')" class="w-full sm:w-auto px-5 py-3 rounded-xl font-extrabold text-xs sm:text-sm bg-emerald-700 hover:bg-emerald-800 text-white shadow-sm transition-all cursor-pointer">
+              Upgrade to Annual (£74.99/yr) + Free Smart-TV Shield
+            </button>
+          </div>
+        </div>
+      </div>
+
       <!-- Subscription Overview Card -->
       <div class="glass-card p-5 sm:p-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white shadow-sm rounded-2xl border border-gray-100">
         <div>
@@ -221,6 +263,34 @@
 
         document.getElementById('userEmail').textContent = data.email || 'User';
         document.getElementById('planName').textContent = String(data.plan || 'annual').replace('_', '-').toUpperCase();
+
+        const rescueCard = document.getElementById('zeroHandshakeRescueCard');
+        if (rescueCard) {
+          if (data.lifecycle_rescue && data.lifecycle_rescue.active) {
+            rescueCard.classList.remove('hidden');
+            const hEl = document.getElementById('rescueHeadline');
+            const sEl = document.getElementById('rescueSubheadline');
+            if (hEl && data.lifecycle_rescue.headline) hEl.textContent = data.lifecycle_rescue.headline;
+            if (sEl && data.lifecycle_rescue.subheadline) sEl.textContent = data.lifecycle_rescue.subheadline;
+          } else {
+            rescueCard.classList.add('hidden');
+          }
+        }
+
+        const bridgeCard = document.getElementById('annualUpgradeBridgeCard');
+        if (bridgeCard) {
+          if (data.annual_upgrade_bridge && data.annual_upgrade_bridge.active) {
+            bridgeCard.classList.remove('hidden');
+            const bhEl = document.getElementById('annualBridgeHeadline');
+            const bsEl = document.getElementById('annualBridgeSubheadline');
+            const bcBtn = document.getElementById('annualBridgeCtaBtn');
+            if (bhEl && data.annual_upgrade_bridge.headline) bhEl.textContent = data.annual_upgrade_bridge.headline;
+            if (bsEl && data.annual_upgrade_bridge.subheadline) bsEl.textContent = data.annual_upgrade_bridge.subheadline;
+            if (bcBtn && data.annual_upgrade_bridge.ctaLabel) bcBtn.textContent = data.annual_upgrade_bridge.ctaLabel;
+          } else {
+            bridgeCard.classList.add('hidden');
+          }
+        }
 
         const codeEl = document.getElementById('activationCodeText');
         const keyEl = document.getElementById('licenseKeyText');

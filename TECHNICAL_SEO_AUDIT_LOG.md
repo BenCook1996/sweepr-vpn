@@ -470,17 +470,17 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 ## 2026-11-04 — Daily Technical SEO, Crawlability & PageSpeed Audit & Auto-Optimization Pass
 
 ### Executive Summary
-- **Overall Scores**: Crawlability **100/100**, Technical SEO **100/100**, PageSpeed & CWV **100/100** across **201 Canonical Pages**.
+- **Overall Scores**: Crawlability **100/100**, Technical SEO **100/100**, PageSpeed & CWV **100/100** across **203 Canonical Pages**.
 - **Auto-Optimizations Executed**:
-  - Synchronized sitemap.xml with 202 canonical URLs (content-hash <lastmod>: 4 modified today)
-  - Synchronized llms.txt with all 180 pSEO guides for GEO AI citations
+  - Synchronized sitemap.xml with 204 canonical URLs (content-hash <lastmod>: 4 modified today)
+  - Synchronized llms.txt & llms-full.txt with all 182 pSEO guides and live 04:00 AM WireGuard/ACR telemetry for GEO AI citations
 
 ### Category Scorecards & Verifications
 
 #### 1. Crawlability & Indexability (100/100)
-- **Sitemap Completeness & Content-Hash Freshness**: PASS — 202 canonical URLs registered (1013 thin/duplicate variants consolidated via 301/noindex)
-- **GEO / LLM Discovery Manifest (llms.txt)**: PASS — Updated with 201 structured entry points
-- **Search Engine Indexing Queue (Delta-Only)**: PASS — 7 un-pinged/modified delta URLs queued (out of 201 total canonical URLs)
+- **Sitemap Completeness & Content-Hash Freshness**: PASS — 204 canonical URLs registered (1013 thin/duplicate variants consolidated via 301/noindex)
+- **GEO / LLM Discovery Manifests (llms.txt & llms-full.txt)**: PASS — Updated both manifests with 203 canonical URLs and live WireGuard/ACR proof
+- **Search Engine Indexing Queue (Delta-Only)**: PASS — 9 un-pinged/modified delta URLs queued (out of 203 total canonical URLs)
 - **robots.txt Sitemap Directive**: PASS — Valid sitemap directive points to https://sweeprvpn.com/sitemap.xml
 - **robots.txt AI Crawler Allowances (GEO)**: PASS — All 7 major AI search bots explicitly permitted
 - **robots.txt Crawl-Budget Protections**: PASS — Internal APIs, user portals, qr-setup and CRO studios disallowed
@@ -490,19 +490,20 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 - **301 Consolidation & Eduroam Hub Redirects (server.mjs)**: PASS — All consolidated noindex variants and Eduroam duplicate slugs 301-redirected to canonical hubs
 
 #### 2. Technical SEO & Rich Schemas (100/100)
-- **Page Titles**: PASS — All 201 pages have valid, descriptive <title> tags
-- **Meta Descriptions**: PASS — All 201 pages have compelling, search-optimized meta descriptions
-- **Canonical URLs**: PASS — All 201 pages have exact self-referencing canonical tags
-- **Robots Snippet Controls**: PASS — All 201 pages specify max-image-preview:large for search & Discover snippets
-- **JSON-LD Structured Data**: PASS — All 201 pages inject verified Schema.org JSON-LD structured data
-- **H1 Heading Hierarchy**: PASS — All 201 pages have exactly 1 descriptive <h1> heading
-- **OpenGraph Social Metadata**: PASS — All 201 pages include complete OpenGraph tags (title, desc, url, og:image)
-- **Twitter Card Metadata**: PASS — All 201 pages include complete summary_large_image Twitter card tags
-- **Mobile Theme-Color Support**: PASS — All 201 pages declare theme-color for mobile chrome styling
-- **Google Analytics 4 (G-7D28EEMNXX) Coverage**: PASS — All 201 canonical pages include active GA4 telemetry
-- **Internal Link Integrity**: PASS — All internal links across 201 pages resolve to valid routes (0 broken links)
+- **Page Titles**: PASS — All 203 pages have valid, descriptive <title> tags
+- **Meta Descriptions**: PASS — All 203 pages have compelling, search-optimized meta descriptions
+- **Canonical URLs**: PASS — All 203 pages have exact self-referencing canonical tags
+- **Robots Snippet Controls**: PASS — All 203 pages specify max-image-preview:large for search & Discover snippets
+- **JSON-LD Structured Data**: PASS — All 203 pages inject verified Schema.org JSON-LD structured data
+- **H1 Heading Hierarchy**: PASS — All 203 pages have exactly 1 descriptive <h1> heading
+- **OpenGraph Social Metadata**: PASS — All 203 pages include complete OpenGraph tags (title, desc, url, og:image)
+- **Twitter Card Metadata**: PASS — All 203 pages include complete summary_large_image Twitter card tags
+- **Mobile Theme-Color Support**: PASS — All 203 pages declare theme-color for mobile chrome styling
+- **Google Analytics 4 (G-7D28EEMNXX) Coverage**: PASS — All 203 canonical pages include active GA4 telemetry
+- **Internal Link Integrity**: PASS — All internal links across 203 pages resolve to valid routes (0 broken links)
 - **Server Canonical 301 Architecture**: PASS — Legacy .html and alias routes seamlessly 301 redirected to clean URLs
 - **Anti-Cannibalization & Title Cooldown Guard**: PASS — 0 consolidated cannibal slugs in sitemap.xml; all 20 GSC Top-20 pillars protected by 14-day title lock
+- **Ad-Platform Policy Compliance Guard (AGENTS.md Principle 2)**: PASS — 0 geo-unblocking, copyright circumvention, or piracy phrases across all 203 indexable pages
 
 #### 3. PageSpeed & Core Web Vitals (100/100)
 - **Image Optimization (<100KB)**: PASS — All 12 website image assets are under 100 KB
@@ -518,6 +519,6 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 
 ### Compression Benchmark Results
 - **order.html** (123.7 KB raw) &rarr; Gzip: **28.3 KB** (77% reduction) | Brotli: **26.2 KB** (79% reduction)
-- **index.html** (68.5 KB raw) &rarr; Gzip: **14.3 KB** (79% reduction) | Brotli: **13.4 KB** (80% reduction)
-- **sitemap.xml** (37.0 KB raw) &rarr; Gzip: **2.5 KB** (93% reduction) | Brotli: **2.4 KB** (94% reduction)
+- **index.html** (69.0 KB raw) &rarr; Gzip: **14.4 KB** (79% reduction) | Brotli: **13.5 KB** (80% reduction)
+- **sitemap.xml** (37.4 KB raw) &rarr; Gzip: **2.5 KB** (93% reduction) | Brotli: **2.4 KB** (94% reduction)
 

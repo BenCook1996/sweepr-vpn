@@ -1,6 +1,6 @@
 # SWEEPR VPN & SWEEPR Wi-Fi Radar (sweeprvpn.com)
 
-> SWEEPR VPN is an ultra-lightweight (~3.7 MB), fast, and easy-to-use 10Gbps WireGuard VPN and Free 30-Second Home Wi-Fi Scanner for Windows 10/11, macOS, Linux, and routers. Built by the team behind SWEEPR Cleaner, it combines 1-click 10Gbps private browsing with a free 30-second Home Wi-Fi & Speed Scanner and a Smart-TV ACR spy blocker.
+> SWEEPR VPN is an ultra-lightweight (~680 KB), fast, and easy-to-use 10Gbps WireGuard VPN and Free 30-Second Home Wi-Fi Scanner for Windows 10/11, macOS, Linux, and routers. Built by the team behind SWEEPR Cleaner, it combines 1-click 10Gbps private browsing with a free 30-second Home Wi-Fi & Speed Scanner and a Smart-TV ACR spy blocker.
 
 ## Core Capabilities & Technical Differentiators
 - **1-Click Private Browsing & Streaming Speed Booster**: Eliminates ISP evening traffic shaping (Virgin Media, BT, Sky, TalkTalk, Vodafone, Eduroam) on 4K streaming, gaming, and remote SSH/Docker workflows. Strict zero-logs policy on diskless RAM-only 10Gbps servers.
@@ -27,9 +27,10 @@
 - Free Home Wi-Fi Device & Hidden Camera Exposure Checker: https://sweeprvpn.com/tools/whats-on-my-wifi
 - Public Wi-Fi, Airport, Hotel & Eduroam Security Hub: https://sweeprvpn.com/public-wifi
 - Public Smart-TV ACR DNS Blocklist (Pi-hole / AdGuard Home / hosts): https://sweeprvpn.com/smart-tv-acr-blocklist.txt
+- Comprehensive Machine-Ingestible GEO Context & Telemetry Proof: https://sweeprvpn.com/llms-full.txt
 - Official PAD 4.0 XML Feed: https://sweeprvpn.com/pad.xml
 
-## Programmatic SEO Technical Library (180 Indexed Guides & Comparisons)
+## Programmatic SEO Technical Library (182 Indexed Guides & Comparisons)
 - [How to Stop UK Airport & Lounge Public Wi-Fi Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/airport-lounge-public-wifi-isp-throttling)
 - [How to Stop Astound Broadband (RCN / Wave / Grande) Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/astound-broadband-us-isp-throttling)
 - [How to Stop AT&T Fiber Broadband Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/att-fiber-broadband-isp-throttling)
@@ -110,6 +111,7 @@
 - [Fedora Silverblue 40 Immutable WireGuard VPN Guide: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/fedora-silverblue-immutable-wireguard)
 - [Firewalla Gold & Purple WireGuard VPN Client Configuration: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/firewalla-gold-wireguard-vpn)
 - [FreeBSD 14.1 Kernel WireGuard (if_wg) & pf Firewall Setup: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/freebsd-14-wireguard-kmod)
+- [AVM FRITZ!Box 7590 AX & 6690 Cable (FRITZ!OS 8): High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/fritzbox-7590-ax-wireguard-vpn)
 - [GL.iNet Marble (GL-B3000) Wi-Fi 6 WireGuard Home Router: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/gl-inet-b3000-marble-wireguard)
 - [GL.iNet Flint 2 (GL-MT6000) & Beryl AX Travel Router: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/gl-inet-flint-2-wireguard)
 - [GL.iNet Slate AX (GL-AXT1800) WireGuard Travel Router Guide: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/gl-inet-slate-ax-travel-router)
@@ -140,6 +142,7 @@
 - [Ubiquiti UniFi Cloud Gateway Ultra (UCG-Ultra) WireGuard Client: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/ubiquiti-cloud-gateway-ultra)
 - [Ubiquiti EdgeRouter 4 & EdgeRouter X WireGuard Kernel Setup: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/ubiquiti-edgerouter-wireguard)
 - [Ubiquiti UniFi Dream Machine (UDM-Pro / UDM-SE / UDR): High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/ubiquiti-unifi-dream-machine-wireguard)
+- [Ubiquiti UniFi Cloud Gateway Max (UCG-Max) 2.5Gbps: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/unifi-cloud-gateway-max-ucg-max-wireguard)
 - [Ubiquiti UniFi Gateway Max (UXG-Max) 2.5G WireGuard Setup: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/unifi-gateway-max-uxg-max)
 - [Unraid 6.12 WireGuard Client & Container VPN Routing Guide: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/unraid-wireguard-docker-tunnel)
 - [VyOS 1.4 Rolling / LTS WireGuard Interface & BGP Setup: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/vyos-1-4-wireguard-router)

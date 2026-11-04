@@ -28,6 +28,7 @@ const WEBSITE_DIR = path.join(ROOT_DIR, 'website');
 const SITEMAP_PATH = path.join(WEBSITE_DIR, 'sitemap.xml');
 const STATE_PATH = path.join(WEBSITE_DIR, 'pillar-enrichment-state.json');
 const SEO_STATE_PATH = path.join(WEBSITE_DIR, 'daily-seo-pages-state.json');
+const WG_ACR_STATE_PATH = path.join(WEBSITE_DIR, 'wireguard-acr-pipeline-state.json');
 
 const FOURTEEN_DAYS_MS = 14 * 24 * 60 * 60 * 1000;
 const todayStr = new Date().toISOString().slice(0, 10);
@@ -76,13 +77,23 @@ const INITIAL_GSC_TITLE_SURGERY_PATHS = [
   '/guides/fix-isp-dns-hijacking-and-throttling'
 ];
 
-// Live 10Gbps Bare-Metal WireGuard Core Nodes (from website/server.mjs VPN_SERVER_LOCATIONS)
+// Live 10Gbps Bare-Metal WireGuard Core Nodes (hydrated from website/wireguard-acr-pipeline-state.json when available)
+let wgAcrPipelineState = {};
+if (fs.existsSync(WG_ACR_STATE_PATH)) {
+  try {
+    wgAcrPipelineState = JSON.parse(fs.readFileSync(WG_ACR_STATE_PATH, 'utf8'));
+  } catch {}
+}
+const liveProbeMap = new Map(
+  (wgAcrPipelineState.liveVpnServers || []).map((s) => [s.id, s])
+);
+
 const LIVE_WIREGUARD_NODES = [
-  { code: 'UK-LON-01', city: 'London Docklands (LINX)', ip: '78.141.205.68', port: '443 / 51820', pingMs: 4, speedMbps: 940, asn: 'AS20473 Choopa / LINX Peering' },
-  { code: 'NL-AMS-01', city: 'Amsterdam Core (AMS-IX)', ip: '95.179.181.53', port: '443 / 51820', pingMs: 8, speedMbps: 930, asn: 'AS20473 AMS-IX Direct' },
-  { code: 'DE-FRA-01', city: 'Frankfurt IX (DE-CIX)', ip: '80.240.20.239', port: '443 / 51820', pingMs: 11, speedMbps: 925, asn: 'AS20473 DE-CIX Transit' },
+  { code: 'UK-LON-01', city: 'London Docklands (LINX)', ip: '78.141.205.68', port: '443 / 51820', pingMs: liveProbeMap.get('UK-LON-01')?.p99_ms || 4, speedMbps: 940, asn: 'AS20473 Choopa / LINX Peering' },
+  { code: 'NL-AMS-01', city: 'Amsterdam Core (AMS-IX)', ip: '95.179.181.53', port: '443 / 51820', pingMs: liveProbeMap.get('NL-AMS-01')?.p99_ms || 8, speedMbps: 930, asn: 'AS20473 AMS-IX Direct' },
+  { code: 'DE-FRA-01', city: 'Frankfurt IX (DE-CIX)', ip: '80.240.20.239', port: '443 / 51820', pingMs: liveProbeMap.get('DE-FRA-01')?.p99_ms || 11, speedMbps: 925, asn: 'AS20473 DE-CIX Transit' },
   { code: 'SE-STO-01', city: 'Stockholm Privacy Core', ip: '70.34.208.107', port: '443 / 51820', pingMs: 14, speedMbps: 915, asn: 'AS20473 Netnod Stockholm' },
-  { code: 'US-NYC-01', city: 'New York Core (NYIIX)', ip: '45.77.109.112', port: '443 / 51820', pingMs: 68, speedMbps: 860, asn: 'AS20473 NYIIX Peering' },
+  { code: 'US-NYC-01', city: 'New York Core (NYIIX)', ip: '45.77.109.112', port: '443 / 51820', pingMs: liveProbeMap.get('US-NYC-01')?.p99_ms || 68, speedMbps: 860, asn: 'AS20473 NYIIX Peering' },
   { code: 'US-LAX-01', city: 'Los Angeles Core (Any2)', ip: '45.32.85.162', port: '443 / 51820', pingMs: 118, speedMbps: 810, asn: 'AS20473 West Coast Core' },
   { code: 'SG-SIN-01', city: 'Singapore Marina (SGIX)', ip: '149.28.157.142', port: '443 / 51820', pingMs: 154, speedMbps: 785, asn: 'AS20473 SGIX APAC' },
   { code: 'JP-TYO-01', city: 'Tokyo Shinagawa (JPIX)', ip: '104.156.239.162', port: '443 / 51820', pingMs: 162, speedMbps: 770, asn: 'AS20473 JPIX Backbone' }

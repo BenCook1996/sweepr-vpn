@@ -7,7 +7,9 @@
     "https://sweeprvpn.com/public-wifi",
     "https://sweeprvpn.com/de/tools/leak-test",
     "https://sweeprvpn.com/pt-br/tools/leak-test",
-    "https://sweeprvpn.com/sv/tools/leak-test"
+    "https://sweeprvpn.com/sv/tools/leak-test",
+    "https://sweeprvpn.com/setup/unifi-cloud-gateway-max-ucg-max-wireguard",
+    "https://sweeprvpn.com/setup/fritzbox-7590-ax-wireguard-vpn"
   ],
   "indexnow_submitted_at": {
     "https://sweeprvpn.com/solutions/talktalk-p2p-port-forwarding": "2026-11-01T23:05:54.478Z",
@@ -398,14 +400,14 @@
   "last_sitemap_ping": "2026-11-04T10:07:51.734Z",
   "last_daily_50_batch": {
     "date": "2026-11-04",
-    "newCount": 0,
-    "totalPseoPages": 180,
+    "newCount": 2,
+    "totalPseoPages": 182,
     "consolidatedNoIndexExcluded": 1013,
-    "totalSitemapUrls": 203
+    "totalSitemapUrls": 204
   },
   "last_audit": {
     "date": "2026-11-04",
-    "totalUrls": 201,
-    "pendingDeltaUrls": 7
+    "totalUrls": 203,
+    "pendingDeltaUrls": 9
   }
 }

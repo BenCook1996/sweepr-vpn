@@ -1,6 +1,6 @@
 {
   "lastRunDate": "2026-11-04",
-  "totalGenerated": 180,
+  "totalGenerated": 182,
   "batches": [
     {
       "date": "2026-10-21",
@@ -166,39 +166,52 @@
         "problem_solutions": 66,
         "interactive_tools_and_hubs": 7
       }
+    },
+    {
+      "date": "2026-11-04",
+      "newGenerated": 2,
+      "totalPseoPages": 182,
+      "consolidatedNoIndexExcluded": 1013,
+      "intentMixSummary": {
+        "commercial_vs": 37,
+        "informational_setup": 52,
+        "informational_guides": 29,
+        "problem_solutions": 66,
+        "interactive_tools_and_hubs": 7
+      }
     }
   ],
   "urlLastModHashes": {
     "https://sweeprvpn.com/": {
-      "hash": "ea916f334d74",
+      "hash": "491ff9015796",
       "lastmod": "2026-11-04"
     },
     "https://sweeprvpn.com/pricing": {
-      "hash": "11ff7aee8c67",
+      "hash": "db226a2ab41e",
       "lastmod": "2026-11-04"
     },
     "https://sweeprvpn.com/solutions": {
-      "hash": "8fbde23ab242",
-      "lastmod": "2026-11-03"
+      "hash": "a3458b20d53c",
+      "lastmod": "2026-11-04"
     },
     "https://sweeprvpn.com/setup": {
-      "hash": "a3c0af293746",
-      "lastmod": "2026-11-03"
+      "hash": "b6465ab9a451",
+      "lastmod": "2026-11-04"
     },
     "https://sweeprvpn.com/guides": {
-      "hash": "7d162a0a671a",
-      "lastmod": "2026-11-03"
+      "hash": "5549aafb6bee",
+      "lastmod": "2026-11-04"
     },
     "https://sweeprvpn.com/vs": {
-      "hash": "8d3f8a40b445",
-      "lastmod": "2026-11-03"
+      "hash": "da22dfbc2773",
+      "lastmod": "2026-11-04"
     },
     "https://sweeprvpn.com/tools/leak-test": {
-      "hash": "559805fd366e",
+      "hash": "94db7755297e",
       "lastmod": "2026-11-04"
     },
     "https://sweeprvpn.com/tools/isp-throttling-test": {
-      "hash": "47a3feff6891",
+      "hash": "c724c56c9fbe",
       "lastmod": "2026-11-04"
     },
     "https://sweeprvpn.com/vs/totalvpn": {
@@ -206,7 +219,7 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/alternatives/totalvpn": {
-      "hash": "792d7da6670b",
+      "hash": "3d8564fcf941",
       "lastmod": "2026-11-04"
     },
     "https://sweeprvpn.com/support": {
@@ -954,7 +967,7 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/setup/gl-inet-travel-router": {
-      "hash": "04871e747257",
+      "hash": "5907eb73be70",
       "lastmod": "2026-11-04"
     },
     "https://sweeprvpn.com/setup/keenetic-titan-wireguard-router": {
@@ -1042,11 +1055,11 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/setup/steam-deck-vpn": {
-      "hash": "e8f53bc57961",
+      "hash": "0085e5b2c310",
       "lastmod": "2026-11-04"
     },
     "https://sweeprvpn.com/setup/synology-nas-docker-vpn": {
-      "hash": "a2df9d00a043",
+      "hash": "4915c29cb8b7",
       "lastmod": "2026-11-04"
     },
     "https://sweeprvpn.com/setup/tailscale-wireguard-exit-node": {
@@ -1476,6 +1489,14 @@
     "https://sweeprvpn.com/sv/tools/leak-test": {
       "hash": "1d4f50dc0b24",
       "lastmod": "2026-11-04"
+    },
+    "https://sweeprvpn.com/setup/fritzbox-7590-ax-wireguard-vpn": {
+      "hash": "a7a8e6fd99a8",
+      "lastmod": "2026-11-04"
+    },
+    "https://sweeprvpn.com/setup/unifi-cloud-gateway-max-ucg-max-wireguard": {
+      "hash": "98150a02b58e",
+      "lastmod": "2026-11-04"
     }
   },
   "titleLastModifiedAt": {
@@ -1502,7 +1523,7 @@
   },
   "intentMixSummary": {
     "commercial_vs": 37,
-    "informational_setup": 50,
+    "informational_setup": 52,
     "informational_guides": 29,
     "problem_solutions": 66,
     "interactive_tools_and_hubs": 7

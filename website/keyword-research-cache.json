@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-11-04T22:37:02.566Z",
+  "updatedAt": "2026-11-04T23:13:08.446Z",
   "entries": {
     "ddg:en-GB:gl inet slate 7 wireguard": {
       "fetchedAt": 1793831679286,
@@ -975,6 +975,340 @@
         "setting up wireguard vpn client",
         "how to configure wireguard vpn",
         "setting up wireguard vpn"
+      ]
+    },
+    "ddg:en-GB:unifi cloud gateway max wireguard": {
+      "fetchedAt": 1793833983150,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "unifi cloud gateway max",
+        "unifi cloud gateway max controller",
+        "unifi cloud gateway max ucg-max",
+        "ubiquiti unifi cloud gateway max",
+        "ubiquiti unifi cloud gateway max ucg-max",
+        "unifi cloud gateway ultra",
+        "unifi cloud gateway ultra uk plug",
+        "unifi wireguard client download"
+      ]
+    },
+    "bing:en-GB:unifi cloud gateway max wireguard": {
+      "fetchedAt": 1793833983150,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "unifi cloud gateway max",
+        "unifi cloud gateway max controller",
+        "unifi cloud gateway max ucg-max",
+        "ubiquiti unifi cloud gateway max",
+        "ubiquiti unifi cloud gateway max ucg-max",
+        "unifi cloud gateway ultra",
+        "unifi cloud gateway ultra uk plug",
+        "unifi wireguard client download",
+        "unifi cloud gateway max setup",
+        "unifi gateway max vs cloud gateway max"
+      ]
+    },
+    "google:en-GB:unifi cloud gateway max wireguard": {
+      "fetchedAt": 1793833983150,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": [
+        "unifi cloud gateway max wireguard",
+        "unifi cloud gateway max wireguard speed",
+        "ubiquiti cloud gateway max wireguard",
+        "unifi security gateway release date",
+        "unifi limit wifi speed",
+        "unifi cloud gateway max wireguard setup",
+        "unifi cloud gateway max wireguard vpn",
+        "unifi cloud gateway max wireguard client",
+        "unifi cloud gateway max wireguard tunnel"
+      ]
+    },
+    "google:en-GB:ucg max wireguard vpn client": {
+      "fetchedAt": 1793833984222,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "ddg:en-GB:ucg max wireguard vpn client": {
+      "fetchedAt": 1793833984222,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "wireguard vpn client unifi",
+        "wireguard vpn client windows",
+        "how to setup wireguard vpn",
+        "ucg ultra site to site vpn",
+        "setting up wireguard vpn client",
+        "wireguard vpn client for linux",
+        "wireguard vpn on unifi",
+        "how to configure wireguard vpn"
+      ]
+    },
+    "bing:en-GB:ucg max wireguard vpn client": {
+      "fetchedAt": 1793833984222,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "wireguard vpn client unifi",
+        "wireguard vpn client windows",
+        "how to setup wireguard vpn",
+        "ucg ultra site to site vpn",
+        "setting up wireguard vpn client",
+        "wireguard vpn client for linux",
+        "wireguard vpn on unifi",
+        "how to configure wireguard vpn",
+        "wireguard always on vpn",
+        "how to connect to wireguard vpn"
+      ]
+    },
+    "bing:en-GB:legion go wireguard vpn": {
+      "fetchedAt": 1793833984752,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "legion go wlan driver",
+        "how to setup wireguard vpn",
+        "wireguard site to site vpn",
+        "is wireguard a vpn",
+        "download wireguard vpn client",
+        "connect to a wireguard vpn",
+        "wireguard vpn set up",
+        "how to configure wireguard vpn",
+        "wireguard vpn client for android",
+        "wireguard vpn not working"
+      ]
+    },
+    "google:en-GB:legion go wireguard vpn": {
+      "fetchedAt": 1793833984752,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "ddg:en-GB:legion go wireguard vpn": {
+      "fetchedAt": 1793833984752,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "legion go wlan driver",
+        "how to setup wireguard vpn",
+        "wireguard site to site vpn",
+        "is wireguard a vpn",
+        "download wireguard vpn client",
+        "connect to a wireguard vpn",
+        "wireguard vpn set up",
+        "how to configure wireguard vpn"
+      ]
+    },
+    "bing:en-GB:lenovo legion go steamos vpn": {
+      "fetchedAt": 1793833985316,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "lenovo legion go s steamos",
+        "steam os lenovo legion go",
+        "lenovo legion go steam",
+        "lenovo legion go 2 steam os",
+        "lenovo legion go s steamos download",
+        "lenovo legion go s powered by steamos",
+        "lenovo legion go s steamos reddit",
+        "lenovo legion go s steamos install",
+        "install steamos on lenovo legion go",
+        "steam download lenovo legion go"
+      ]
+    },
+    "ddg:en-GB:lenovo legion go steamos vpn": {
+      "fetchedAt": 1793833985316,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "lenovo legion go s steamos",
+        "steam os lenovo legion go",
+        "lenovo legion go steam",
+        "lenovo legion go 2 steam os",
+        "lenovo legion go s steamos download",
+        "lenovo legion go s powered by steamos",
+        "lenovo legion go s steamos reddit",
+        "lenovo legion go s steamos install"
+      ]
+    },
+    "google:en-GB:lenovo legion go steamos vpn": {
+      "fetchedAt": 1793833985316,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "ddg:en-GB:fritzbox wireguard vpn setup": {
+      "fetchedAt": 1793833985953,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "wireguard vpn einrichten fritzbox",
+        "wireguard vpn zu fritzbox",
+        "vpn wireguard fritzbox kosten",
+        "windows 11 wireguard vpn fritzbox",
+        "fritzbox wireguard vpn kein internet",
+        "fritzbox vpn wireguard funktioniert nicht",
+        "fritzbox vpn ipsec oder wireguard",
+        "fritz vpn wireguard einrichten"
+      ]
+    },
+    "google:en-GB:fritzbox wireguard vpn setup": {
+      "fetchedAt": 1793833985953,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": [
+        "fritzbox wireguard vpn setup",
+        "nordvpn wireguard setup",
+        "fritzbox vpn setup",
+        "wireguard vpn setup"
+      ]
+    },
+    "bing:en-GB:fritzbox wireguard vpn setup": {
+      "fetchedAt": 1793833985953,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "wireguard vpn einrichten fritzbox",
+        "wireguard vpn zu fritzbox",
+        "vpn wireguard fritzbox kosten",
+        "windows 11 wireguard vpn fritzbox",
+        "fritzbox wireguard vpn kein internet",
+        "fritzbox vpn wireguard funktioniert nicht",
+        "fritzbox vpn ipsec oder wireguard",
+        "fritz vpn wireguard einrichten",
+        "fritzbox 7590 wireguard vpn",
+        "zwei fritzboxen verbinden vpn wireguard"
+      ]
+    },
+    "google:en-GB:fritzbox 7590 wireguard config": {
+      "fetchedAt": 1793833986533,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "ddg:en-GB:fritzbox 7590 wireguard config": {
+      "fetchedAt": 1793833986533,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "fritz box 7590 setup",
+        "fritzbox 7590 wireguard vpn",
+        "fritzbox 7590 wifi standard",
+        "fritzbox 7590 wifi version",
+        "fritzbox 7590 firewall konfigurieren",
+        "fritzbox 7590 wifi 7",
+        "fritzbox 7590 wifi 6",
+        "fritzbox 7590 wlan standards"
+      ]
+    },
+    "bing:en-GB:fritzbox 7590 wireguard config": {
+      "fetchedAt": 1793833986533,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "fritz box 7590 setup",
+        "fritzbox 7590 wireguard vpn",
+        "fritzbox 7590 wifi standard",
+        "fritzbox 7590 wifi version",
+        "fritzbox 7590 firewall konfigurieren",
+        "fritzbox 7590 wifi 7",
+        "fritzbox 7590 wifi 6",
+        "fritzbox 7590 wlan standards",
+        "fritzbox 7490 wireguard einrichten",
+        "fritzbox login 7590 wlan"
+      ]
+    },
+    "bing:en-GB:mikrotik hap ax3 wireguard": {
+      "fetchedAt": 1793833987168,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "mikrotik hap ax s",
+        "mikrotik hap ax2 configuration",
+        "mikrotik hap ax3 router",
+        "mikrotik hap ax3 manual",
+        "mikrotik hap ax 3",
+        "mikrotik hap ax3 review",
+        "mikrotik hap ax3 us version",
+        "install adguard home mikrotik hap ax2",
+        "mikrotik hap ax 2",
+        "mikrotik hap ax3 pret"
+      ]
+    },
+    "google:en-GB:mikrotik hap ax3 wireguard": {
+      "fetchedAt": 1793833987168,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": [
+        "mikrotik hap ax3 wireguard",
+        "mikrotik hap ax3 wireguard speed",
+        "wireguard mikrotik setup"
+      ]
+    },
+    "ddg:en-GB:mikrotik hap ax3 wireguard": {
+      "fetchedAt": 1793833987168,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "mikrotik hap ax s",
+        "mikrotik hap ax2 configuration",
+        "mikrotik hap ax3 router",
+        "mikrotik hap ax3 manual",
+        "mikrotik hap ax 3",
+        "mikrotik hap ax3 review",
+        "mikrotik hap ax3 us version",
+        "install adguard home mikrotik hap ax2"
+      ]
+    },
+    "ddg:en-GB:mikrotik wireguard client config": {
+      "fetchedAt": 1793833987797,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "mikrotik wireguard export client config",
+        "mikrotik wireguard config generator",
+        "mikrotik wireguard server setup",
+        "how to setup wireguard on mikrotik router",
+        "mikrotik wireguard site to site setup",
+        "wireguard mikrotik site to site",
+        "wireguard between two mikrotik",
+        "port forwarding wireguard mikrotik"
+      ]
+    },
+    "bing:en-GB:mikrotik wireguard client config": {
+      "fetchedAt": 1793833987797,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "mikrotik wireguard export client config",
+        "mikrotik wireguard config generator",
+        "mikrotik wireguard server setup",
+        "how to setup wireguard on mikrotik router",
+        "mikrotik wireguard site to site setup",
+        "wireguard mikrotik site to site",
+        "wireguard between two mikrotik",
+        "port forwarding wireguard mikrotik",
+        "mikrotik vpn server wireguard",
+        "wireguard vpn site to site mikrotik"
+      ]
+    },
+    "google:en-GB:mikrotik wireguard client config": {
+      "fetchedAt": 1793833987797,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": [
+        "mikrotik wireguard client configuration",
+        "mikrotik wireguard client config export",
+        "mikrotik wireguard client config generator",
+        "mikrotik wireguard client config",
+        "mikrotik wireguard client setup",
+        "mikrotik wireguard show client config",
+        "mikrotik wireguard windows client setup",
+        "mikrotik wireguard server client setup",
+        "mikrotik wireguard client import config",
+        "routeros wireguard client setup"
       ]
     }
   }

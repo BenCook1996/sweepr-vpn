@@ -1,6 +1,6 @@
 {
   "cooldownDays": 14,
-  "lastRunAt": "2026-11-04T10:06:40.608Z",
+  "lastRunAt": "2026-11-04T23:14:20.952Z",
   "titleUpdatedAt": {
     "/setup/gl-inet-travel-router": "2026-11-03T21:30:00.000Z",
     "/tools/leak-test": "2026-11-03T21:30:00.000Z",
@@ -323,7 +323,9 @@
     "/guides/stop-isp-tcp-reset-attacks": "2026-11-03T22:43:47.909Z",
     "/guides/stop-lg-smart-tv-acr-spying": "2026-11-03T22:43:47.909Z",
     "/guides/stop-roku-vizio-firetv-spying": "2026-11-03T22:43:47.909Z",
-    "/guides/stop-samsung-smart-tv-acr-tracking": "2026-11-03T22:43:47.909Z"
+    "/guides/stop-samsung-smart-tv-acr-tracking": "2026-11-03T22:43:47.909Z",
+    "/setup/fritzbox-7590-ax-wireguard-vpn": "2026-11-04T23:14:20.952Z",
+    "/setup/unifi-cloud-gateway-max-ucg-max-wireguard": "2026-11-04T23:14:20.952Z"
   },
   "contentHashes": {
     "/setup/almalinux-9-wireguard-gateway": "7f0bfa1d96720e4b",
@@ -619,6 +621,8 @@
     "/guides/stop-isp-tcp-reset-attacks": "e19219b0d4884022",
     "/guides/stop-lg-smart-tv-acr-spying": "45ba0dd78232461f",
     "/guides/stop-roku-vizio-firetv-spying": "852250a566a7ad78",
-    "/guides/stop-samsung-smart-tv-acr-tracking": "9dda26858bb1b672"
+    "/guides/stop-samsung-smart-tv-acr-tracking": "9dda26858bb1b672",
+    "/setup/fritzbox-7590-ax-wireguard-vpn": "a7a8e6fd99a8",
+    "/setup/unifi-cloud-gateway-max-ucg-max-wireguard": "98150a02b58e"
   }
 }

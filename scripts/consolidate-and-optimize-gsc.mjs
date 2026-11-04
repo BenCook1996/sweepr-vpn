@@ -97,6 +97,10 @@ const AUTHORITATIVE_SOLUTIONS_PILLARS = new Set([
   'ee-5g-mobile-hotspot-wifi-arp-spoofing-protection',
   'ee-5g-mobile-hotspot-voip-teams-zoom-jitter',
   'three-5g-home-broadband-uhd-streaming-buffering',
+  'three-5g-home-broadband-voip-teams-zoom-jitter',
+  'o2-uk-mobile-tethering-uhd-streaming-buffering',
+  'nhs-guest-wifi-uhd-streaming-buffering',
+  'nhs-guest-wifi-voip-teams-zoom-jitter',
   'fibrus-full-fibre-smart-tv-acr-blocking',
   'airport-lounge-public-wifi-isp-throttling',
   'national-rail-train-wifi-isp-throttling'
@@ -128,12 +132,7 @@ const SPECIFIC_SOLUTIONS_CANONICAL_MAP = {
   // Vodafone UK sub-pages -> Vodafone UK Pillar
   'vodafone-uk-p2p-port-forwarding': '/solutions/vodafone-uk-gaming-packet-loss',
   'vodafone-uk-remote-dev-ssh': '/solutions/vodafone-uk-gaming-packet-loss',
-  'vodafone-uk-uhd-streaming-buffering': '/solutions/vodafone-uk-gaming-packet-loss',
-  // NHS, Three, O2 sub-pages -> Single Network Pillar
-  'nhs-guest-wifi-uhd-streaming-buffering': '/solutions/nhs-guest-wifi-isp-throttling',
-  'nhs-guest-wifi-voip-teams-zoom-jitter': '/solutions/nhs-guest-wifi-isp-throttling',
-  'three-5g-home-broadband-voip-teams-zoom-jitter': '/solutions/three-5g-home-broadband-isp-throttling',
-  'o2-uk-mobile-tethering-uhd-streaming-buffering': '/solutions/o2-uk-mobile-tethering-isp-throttling'
+  'vodafone-uk-uhd-streaming-buffering': '/solutions/vodafone-uk-gaming-packet-loss'
 };
 
 // 18 Low-Search-Volume / Legacy Antivirus-Bundled `/vs/` Pages Consolidated to `/vs`
@@ -360,73 +359,13 @@ injectShareDiagnosticWidget(
 );
 
 // ============================================================================
-// 5. Phase 4 Item 2: Generate Public Crawlable Smart-TV ACR Telemetry Blocklist
-//    (`website/smart-tv-acr-blocklist.txt`)
+// 5. Phase 4 Item 2: Verify Public Crawlable Smart-TV ACR Telemetry Blocklist
+//    (`website/smart-tv-acr-blocklist.txt` — owned by `daily-wireguard-and-acr-pipeline.mjs`)
 // ============================================================================
-const acrBlocklistContent = `# Title: SWEEPR VPN & Wi-Fi Radar — Smart-TV ACR Telemetry & Ad-Beacon Blocklist
-# Description: Blocks Automatic Content Recognition (ACR) frame fingerprinting and ad telemetry across Samsung Tizen, LG webOS LivePlus, Roku OS, Vizio SmartCast (Inscape), Sony Bravia (Samba TV), Hisense VIDAA, and Amazon Fire TV.
-# Homepage: https://sweeprvpn.com/guides/stop-samsung-smart-tv-acr-tracking
-# Companion LG Guide: https://sweeprvpn.com/guides/stop-lg-smart-tv-acr-spying
-# Free WebRTC & DNS Leak Test: https://sweeprvpn.com/tools/leak-test
-# Free ISP Throttling Test: https://sweeprvpn.com/tools/isp-throttling-test
-# License: CC-BY-SA-4.0 (Free for Pi-hole, AdGuard Home, pfSense pfBlockerNG, OPNsense Unbound & Router DNS Sinkholes)
-# Version: 2026.11.03
-
-# --- Samsung Smart Hub / Tizen OS ACR & Ad Telemetry ---
-0.0.0.0 gpm.samsungqbe.com
-0.0.0.0 samsungacr.com
-0.0.0.0 log-config.samsungacr.com
-0.0.0.0 ACR0.samsungcloudsolution.com
-0.0.0.0 otn.samsungcloudsolution.com
-0.0.0.0 ads.samsungads.com
-0.0.0.0 config.samsungads.com
-0.0.0.0 events.samsungads.com
-0.0.0.0 samsungotn.net
-0.0.0.0 lcprd1.samsungcloudsolution.net
-
-# --- LG webOS LivePlus ACR & Home Screen Ad Injection ---
-0.0.0.0 ibs.lgappstv.com
-0.0.0.0 ad.lgappstv.com
-0.0.0.0 yumenetworks.com
-0.0.0.0 ngfts.lge.com
-0.0.0.0 aic.ngfts.lge.com
-0.0.0.0 cdpbeacon.lgtvcommon.com
-0.0.0.0 homeprv.lgtvcommon.com
-0.0.0.0 nudge.lgtvcommon.com
-0.0.0.0 rudge.lgtvcommon.com
-0.0.0.0 us.ibs.lgappstv.com
-0.0.0.0 eu.ibs.lgappstv.com
-
-# --- Roku OS Cooper / Scribe ACR & Viewing Logs ---
-0.0.0.0 cooper.logs.roku.com
-0.0.0.0 scribe.logs.roku.com
-0.0.0.0amoeba.roku.com
-0.0.0.0 p.ads.roku.com
-0.0.0.0 display.ravm.tv
-0.0.0.0 logs.roku.com
-0.0.0.0 liberty.logs.roku.com
-
-# --- Vizio SmartCast / Inscape ACR Pixel Hashing ---
-0.0.0.0 tvinteractive.tv
-0.0.0.0 insights.vizio.com
-0.0.0.0 api.tvinteractive.tv
-0.0.0.0 images.tvinteractive.tv
-
-# --- Sony Bravia / Google TV / Samba TV Cross-Device Tracking ---
-0.0.0.0 samba.tv
-0.0.0.0 preferences.samba.tv
-0.0.0.0 api.samba.tv
-0.0.0.0 prod.arse.samba.tv
-0.0.0.0 bravia.dl.playstation.net
-
-# --- Hisense VIDAA OS / Flingo / Panasonic HbbTV ---
-0.0.0.0 vidaa.tv
-0.0.0.0 ads.vidaahub.com
-0.0.0.0 flingo.tv
-0.0.0.0 hbbtv.panasonic.com
-0.0.0.0 collect.mysmarttv.net
-`;
-fs.writeFileSync(path.join(WEBSITE_DIR, 'smart-tv-acr-blocklist.txt'), acrBlocklistContent, 'utf8');
+const acrBlocklistPath = path.join(WEBSITE_DIR, 'smart-tv-acr-blocklist.txt');
+if (!fs.existsSync(acrBlocklistPath)) {
+  console.warn('[GSC Consolidation] smart-tv-acr-blocklist.txt missing; run daily-wireguard-and-acr-pipeline.mjs.');
+}
 
 console.log(
   `[GSC Consolidation & Optimization Complete]\n` +
@@ -434,5 +373,5 @@ console.log(
   `  - /vs/ Indexable Competitors:    ${indexableVsCount} (Consolidated via 301/noindex: ${consolidatedVsCount})\n` +
   `  - Unified Eduroam Hub updated:   /solutions/eduroam-campus-wifi-gaming-packet-loss\n` +
   `  - 1-Click Share/Embed Badges:    /tools/leak-test & /tools/isp-throttling-test\n` +
-  `  - Open-Source ACR Blocklist:     /smart-tv-acr-blocklist.txt`
+  `  - Open-Source ACR Blocklist:     /smart-tv-acr-blocklist.txt (Preserved 65-domain 8-OS list)`
 );

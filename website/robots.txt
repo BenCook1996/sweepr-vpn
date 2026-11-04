@@ -29,5 +29,10 @@ User-agent: Google-Extended
 Allow: /
 User-agent: Applebot-Extended
 Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
 
+# GEO / LLM Discovery Manifests:
+# - https://sweeprvpn.com/llms.txt
+# - https://sweeprvpn.com/llms-full.txt
 Sitemap: https://sweeprvpn.com/sitemap.xml
