@@ -2706,19 +2706,17 @@ const server = http.createServer(async (req, res) => {
 
   // Apple Universal Links Verification (/.well-known/apple-app-site-association & /apple-app-site-association)
   if ((pathname === '/.well-known/apple-app-site-association' || pathname === '/apple-app-site-association') && (req.method === 'GET' || req.method === 'HEAD')) {
+    // Only advertise an iOS app association when a real 10-character Apple Team ID is configured.
+    const appleTeamId = String(process.env.APPLE_TEAM_ID || '').trim();
+    const iosAppId = /^[A-Z0-9]{10}$/.test(appleTeamId) ? `${appleTeamId}.com.sweepr.vpn` : '';
     const aasaPayload = JSON.stringify(
       {
         applinks: {
           apps: [],
-          details: [
-            {
-              appID: 'SWEEPRVPN.com.sweepr.vpn',
-              paths: ['/app', '/ios-app', '/dashboard']
-            }
-          ]
+          details: iosAppId ? [{ appID: iosAppId, paths: ['/app', '/ios-app', '/dashboard'] }] : []
         },
         webcredentials: {
-          apps: ['SWEEPRVPN.com.sweepr.vpn']
+          apps: iosAppId ? [iosAppId] : []
         }
       },
       null,
