@@ -1892,13 +1892,61 @@ async function runDaily50Pages(targetCount = 50, force = false) {
 
   const pool = buildCandidatePool();
   const selected = [];
-  const effectiveMaxCount = allowCartesian ? targetCount : Math.min(targetCount, 10);
-  if (effectiveMaxCount > 0) {
+  const sevenDaysAgoMs = Date.now() - 7 * 24 * 60 * 60 * 1000;
+  const rolling7DayGenerated = (state.batches || [])
+    .filter((b) => b?.date && Date.parse(b.date) >= sevenDaysAgoMs)
+    .reduce((sum, b) => sum + Number(b.newGenerated || 0), 0);
+  const remainingWeeklyQuota = Math.max(0, 10 - rolling7DayGenerated);
+  const effectiveMaxCount = allowCartesian ? targetCount : Math.min(targetCount, 2, remainingWeeklyQuota);
+
+  // Consume approved CREATE_NEW_PILLAR briefs from website/keyword-opportunities.json first
+  const opportunitiesPath = path.join(WEBSITE_DIR, 'keyword-opportunities.json');
+  let opportunitiesDoc = null;
+  if (fs.existsSync(opportunitiesPath)) {
+    try {
+      opportunitiesDoc = JSON.parse(fs.readFileSync(opportunitiesPath, 'utf8'));
+    } catch {}
+  }
+
+  if (effectiveMaxCount > 0 && opportunitiesDoc && Array.isArray(opportunitiesDoc.opportunities)) {
+    for (const opp of opportunitiesDoc.opportunities) {
+      if (selected.length >= effectiveMaxCount) break;
+      if (
+        opp.action === 'CREATE_NEW_PILLAR' &&
+        opp.status === 'APPROVED' &&
+        opp.pillarBrief &&
+        (opp.scores?.opportunityScore || 0) >= 72 &&
+        (opp.scores?.volumeScore || 0) >= 30 &&
+        (opp.uniquenessCheck?.uniqueStructuredDataRatio || 0) >= 0.4
+      ) {
+        const cluster = opp.cluster || 'setup';
+        const relPath = `${cluster}/${opp.pillarBrief.slug}.html`;
+        const urlPath = `/${cluster}/${opp.pillarBrief.slug}`;
+        const absFile = path.join(WEBSITE_DIR, relPath);
+        if (!fs.existsSync(absFile)) {
+          selected.push({
+            cluster,
+            relPath,
+            urlPath,
+            guide: opp.pillarBrief,
+            _fromKeywordOpportunityId: opp.id
+          });
+          opp.status = 'GENERATED';
+          opp.appliedAt = new Date().toISOString();
+        }
+      }
+    }
+    if (selected.length > 0) {
+      fs.writeFileSync(opportunitiesPath, JSON.stringify(opportunitiesDoc, null, 2), 'utf8');
+    }
+  }
+
+  if (effectiveMaxCount > 0 && selected.length < effectiveMaxCount) {
     for (const cand of pool) {
       if (!isPillarCandidate(cand)) continue;
       const fullUrl = `https://sweeprvpn.com${cand.urlPath}`;
       const absFile = path.join(WEBSITE_DIR, cand.relPath);
-      if (!fs.existsSync(absFile)) {
+      if (!fs.existsSync(absFile) && !selected.some((s) => s.urlPath === cand.urlPath)) {
         selected.push(cand);
         if (selected.length >= effectiveMaxCount) break;
       }

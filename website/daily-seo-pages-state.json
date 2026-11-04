@@ -140,15 +140,41 @@
         "problem_solutions": 66,
         "interactive_tools_and_hubs": 7
       }
+    },
+    {
+      "date": "2026-11-04",
+      "newGenerated": 0,
+      "totalPseoPages": 180,
+      "consolidatedNoIndexExcluded": 1013,
+      "intentMixSummary": {
+        "commercial_vs": 37,
+        "informational_setup": 50,
+        "informational_guides": 29,
+        "problem_solutions": 66,
+        "interactive_tools_and_hubs": 7
+      }
+    },
+    {
+      "date": "2026-11-04",
+      "newGenerated": 0,
+      "totalPseoPages": 180,
+      "consolidatedNoIndexExcluded": 1013,
+      "intentMixSummary": {
+        "commercial_vs": 37,
+        "informational_setup": 50,
+        "informational_guides": 29,
+        "problem_solutions": 66,
+        "interactive_tools_and_hubs": 7
+      }
     }
   ],
   "urlLastModHashes": {
     "https://sweeprvpn.com/": {
-      "hash": "de15202c7f58",
+      "hash": "ea916f334d74",
       "lastmod": "2026-11-04"
     },
     "https://sweeprvpn.com/pricing": {
-      "hash": "0443426ddc99",
+      "hash": "11ff7aee8c67",
       "lastmod": "2026-11-04"
     },
     "https://sweeprvpn.com/solutions": {
@@ -168,11 +194,11 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/tools/leak-test": {
-      "hash": "35b30dd33acc",
+      "hash": "559805fd366e",
       "lastmod": "2026-11-04"
     },
     "https://sweeprvpn.com/tools/isp-throttling-test": {
-      "hash": "10ffff1f8043",
+      "hash": "47a3feff6891",
       "lastmod": "2026-11-04"
     },
     "https://sweeprvpn.com/vs/totalvpn": {
@@ -180,7 +206,7 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/alternatives/totalvpn": {
-      "hash": "7d3fcc73afea",
+      "hash": "792d7da6670b",
       "lastmod": "2026-11-04"
     },
     "https://sweeprvpn.com/support": {
@@ -928,8 +954,8 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/setup/gl-inet-travel-router": {
-      "hash": "8942523f4456",
-      "lastmod": "2026-11-03"
+      "hash": "04871e747257",
+      "lastmod": "2026-11-04"
     },
     "https://sweeprvpn.com/setup/keenetic-titan-wireguard-router": {
       "hash": "f1a3f96956bc",
@@ -1016,12 +1042,12 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/setup/steam-deck-vpn": {
-      "hash": "1b3e48098512",
-      "lastmod": "2026-11-03"
+      "hash": "e8f53bc57961",
+      "lastmod": "2026-11-04"
     },
     "https://sweeprvpn.com/setup/synology-nas-docker-vpn": {
-      "hash": "e95a2d4a78ad",
-      "lastmod": "2026-11-03"
+      "hash": "a2df9d00a043",
+      "lastmod": "2026-11-04"
     },
     "https://sweeprvpn.com/setup/tailscale-wireguard-exit-node": {
       "hash": "c5e5d5fcf399",
@@ -1408,8 +1434,8 @@
       "lastmod": "2026-11-04"
     },
     "https://sweeprvpn.com/guides/stop-samsung-smart-tv-acr-tracking": {
-      "hash": "8fa02786b9b3",
-      "lastmod": "2026-11-03"
+      "hash": "cab70c70e675",
+      "lastmod": "2026-11-04"
     },
     "https://sweeprvpn.com/download": {
       "hash": "61519a83d30e",
@@ -1451,6 +1477,28 @@
       "hash": "1d4f50dc0b24",
       "lastmod": "2026-11-04"
     }
+  },
+  "titleLastModifiedAt": {
+    "/solutions/talktalk-p2p-port-forwarding": "2026-11-04T00:00:00.000Z",
+    "/setup/gl-inet-travel-router": "2026-11-04T00:00:00.000Z",
+    "/guides/stop-samsung-smart-tv-acr-tracking": "2026-11-04T00:00:00.000Z",
+    "/tools/leak-test": "2026-11-04T00:00:00.000Z",
+    "/solutions/eduroam-campus-wifi-gaming-packet-loss": "2026-11-04T00:00:00.000Z",
+    "/alternatives/totalvpn": "2026-11-04T00:00:00.000Z",
+    "/setup/nvidia-shield-tv-pro-wireguard": "2026-11-04T00:00:00.000Z",
+    "/solutions/gigaclear-rural-fibre-gaming-packet-loss": "2026-11-04T00:00:00.000Z",
+    "/setup/synology-nas-docker-vpn": "2026-11-04T00:00:00.000Z",
+    "/guides/stop-lg-smart-tv-acr-spying": "2026-11-04T00:00:00.000Z",
+    "/solutions/hotel-captive-portal-wifi-p2p-port-forwarding": "2026-11-04T00:00:00.000Z",
+    "/tools/isp-throttling-test": "2026-11-04T00:00:00.000Z",
+    "/solutions/rogers-ignite-canada-isp-throttling": "2026-11-04T00:00:00.000Z",
+    "/setup/steam-deck-vpn": "2026-11-04T00:00:00.000Z",
+    "/solutions/comcast-xfinity-broadband-smart-tv-acr-blocking": "2026-11-04T00:00:00.000Z",
+    "/solutions/ee-5g-mobile-hotspot-wifi-arp-spoofing-protection": "2026-11-04T00:00:00.000Z",
+    "/solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter": "2026-11-04T00:00:00.000Z",
+    "/solutions/three-5g-home-broadband-uhd-streaming-buffering": "2026-11-04T00:00:00.000Z",
+    "/solutions/fibrus-full-fibre-smart-tv-acr-blocking": "2026-11-04T00:00:00.000Z",
+    "/guides/stop-roku-vizio-firetv-spying": "2026-11-04T00:00:00.000Z"
   },
   "intentMixSummary": {
     "commercial_vs": 37,

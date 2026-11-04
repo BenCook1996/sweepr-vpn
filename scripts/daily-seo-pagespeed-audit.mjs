@@ -1251,6 +1251,14 @@ if (fs.existsSync(DAILY_STATE_PATH)) {
 if (!dailyState.urlLastModHashes || typeof dailyState.urlLastModHashes !== 'object') {
   dailyState.urlLastModHashes = {};
 }
+if (!dailyState.titleLastModifiedAt || typeof dailyState.titleLastModifiedAt !== 'object') {
+  dailyState.titleLastModifiedAt = {};
+}
+for (const gscPath of Object.keys(GSC_STRIKING_DISTANCE_OVERRIDES)) {
+  if (!dailyState.titleLastModifiedAt[gscPath]) {
+    dailyState.titleLastModifiedAt[gscPath] = '2026-11-04T00:00:00.000Z';
+  }
+}
 
 let lastModUpdatedCount = 0;
 function resolveContentHashLastMod(loc, absPath) {
@@ -1752,6 +1760,22 @@ if (hasCanonicalRedirects && hasAppRedirect) {
   pass('technicalSeo', 'Server Canonical 301 Architecture', 'Legacy .html and alias routes seamlessly 301 redirected to clean URLs');
 } else {
   warn('technicalSeo', 'Server Canonical 301 Architecture', 'CANONICAL_REDIRECTS in server.mjs could be missing key route aliases');
+}
+
+// 13. Anti-Cannibalization & GSC Title Cooldown Guard Check
+const cannibalInSitemap = allCanonicalPages.filter((p) => Boolean(CONSOLIDATED_CANNIBAL_MAP[p.urlPath]));
+if (cannibalInSitemap.length === 0 && titleIssues === 0) {
+  pass(
+    'technicalSeo',
+    'Anti-Cannibalization & Title Cooldown Guard',
+    `0 consolidated cannibal slugs in sitemap.xml; all ${Object.keys(GSC_STRIKING_DISTANCE_OVERRIDES).length} GSC Top-20 pillars protected by 14-day title lock`
+  );
+} else {
+  fail(
+    'technicalSeo',
+    'Anti-Cannibalization & Title Cooldown Guard',
+    `Found ${cannibalInSitemap.length} consolidated cannibal URLs in sitemap.xml`
+  );
 }
 
 // ============================================================================

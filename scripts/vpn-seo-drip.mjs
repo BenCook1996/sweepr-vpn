@@ -400,6 +400,18 @@ async function runVpnDrip(targetCount = 300) {
   console.log('==========================================================================');
 
   const padInfo = await verifyAndProbePadXml();
+
+  // Run Zero-Cost Automated Keyword Research & Anti-Cannibalization Scorer (refreshes website/keyword-opportunities.json)
+  try {
+    execFileSync(
+      process.execPath,
+      [path.join(__dirname, 'keyword-research-engine.mjs'), '--discover', '--score', '--limit=12'],
+      { cwd: VPN_ROOT, stdio: 'inherit' }
+    );
+  } catch (kwErr) {
+    console.warn('[Keyword Research Engine Notice]', kwErr?.message || kwErr);
+  }
+
   const items = loadTargetItemsFromSitemap();
   let vpnSeed = [];
   if (fs.existsSync(VPN_SEED_PATH)) {
