@@ -2058,6 +2058,21 @@ const CANONICAL_ACRONYM_MAP = {
   kaspersky: 'Kaspersky',
   fritzbox: 'FRITZ!Box',
   mikrotik: 'MikroTik',
+  hap: 'hAP',
+  ax3: 'ax3',
+  ax: 'AX',
+  rb5009: 'RB5009',
+  be3600: 'BE3600',
+  'gl-be3600': 'GL-BE3600',
+  'gl-mt3000': 'GL-MT3000',
+  'gl-mt6000': 'GL-MT6000',
+  rt6600ax: 'RT6600ax',
+  'rt-be96u': 'RT-BE96U',
+  'rt-ax86u': 'RT-AX86U',
+  dxp4800: 'DXP4800',
+  er605: 'ER605',
+  wr3000: 'WR3000',
+  tr3000: 'TR3000',
   draytek: 'DrayTek',
   ugreen: 'UGREEN',
   nasync: 'NASync',
@@ -2076,6 +2091,23 @@ const CANONICAL_ACRONYM_MAP = {
 };
 
 const LOWERCASE_MID_WORDS = new Set(['on', 'for', 'in', 'to', 'with', 'from', 'vs', 'and', 'or', 'of', 'by']);
+
+export function truncateMetaDescriptionClean(text, maxLen = 156) {
+  const clean = String(text || '').replace(/\s+/g, ' ').trim();
+  if (clean.length <= maxLen) return clean;
+  let cut = clean.slice(0, maxLen - 1);
+  // If we cut inside an open parenthesis, trim back before the '('
+  const lastOpenParen = cut.lastIndexOf('(');
+  const lastCloseParen = cut.lastIndexOf(')');
+  if (lastOpenParen > lastCloseParen && lastOpenParen > 60) {
+    cut = cut.slice(0, lastOpenParen).trim();
+  } else {
+    const lastSpace = cut.lastIndexOf(' ');
+    if (lastSpace > 80) cut = cut.slice(0, lastSpace).trim();
+  }
+  cut = cut.replace(/[,;:\-–—]+$/, '').trim();
+  return cut.endsWith('.') ? cut : `${cut}.`;
+}
 
 export function formatQueryForHeading(keyword) {
   let clean = String(keyword || '')
@@ -2496,7 +2528,22 @@ export function auditAndHealOpportunities(opportunitiesPayload, corpusPages, dai
         html = cleanedSubtitleSection;
         pageChanged = true;
       }
-      if (/\)\s*\(|\bsubtitles\b|compare for Cancel|Steamos Install/i.test(html)) {
+
+      // Normalize legacy 10 devices / 14 MB claims and heal any non-canonical acronym casing inside enriched H2/FAQ tags
+      const normalizedClaimsHtml = html
+        .replace(/\bUp to 10 Devices\b/g, 'Up to 3 Devices')
+        .replace(/\bup to 10 devices\b/g, 'up to 3 devices')
+        .replace(/\b10 device slots\b/g, '3 device slots')
+        .replace(/\b14 MB Lightweight App\b/g, '680KB Featherlight App')
+        .replace(/\bSynology Vpn Server Setup\b/g, 'Synology VPN Server Setup')
+        .replace(/\bMikroTik Hap Ax3\b/g, 'MikroTik hAP ax3')
+        .replace(/\bmangle TCP MSS clamping \(1380(?=["'])/g, 'mangle TCP MSS clamping (1380).');
+      if (normalizedClaimsHtml !== html) {
+        html = normalizedClaimsHtml;
+        pageChanged = true;
+      }
+
+      if (/\)\s*\(|\bsubtitles\b|compare for Cancel|Steamos Install|MikroTik Hap Ax3|Synology Vpn/i.test(html)) {
         const healedJsonLd = html.replace(
           /<script\s+type=["']application\/ld\+json["']>([\s\S]*?)<\/script>/gi,
           (full, inner) => {
@@ -2511,12 +2558,16 @@ export function auditAndHealOpportunities(opportunitiesPayload, corpusPages, dai
                       .replace(/Synology NAS \(DSM 7 & Gluetun Docker\)/g, 'Synology NAS')
                       .replace(/GL\.iNet Travel Routers \(Beryl AX \/ Slate AX\)/g, 'GL.iNet Travel Router')
                       .replace(/How does SWEEPR VPN compare for Cancel TotalVPN\?/g, "How do I cancel TotalVPN and switch to SWEEPR VPN's flat-rate price lock?")
-                      .replace(/Steamos Install WireGuard/g, 'SteamOS WireGuard'),
+                      .replace(/Steamos Install WireGuard/g, 'SteamOS WireGuard')
+                      .replace(/MikroTik Hap Ax3/g, 'MikroTik hAP ax3')
+                      .replace(/Synology Vpn/g, 'Synology VPN'),
                     acceptedAnswer: {
                       ...(q.acceptedAnswer || {}),
                       text: String(q.acceptedAnswer?.text || '')
                         .replace(/Synology NAS \(DSM 7 & Gluetun Docker\) \(including [^)]+\)/g, 'Synology NAS via DSM 7 & Gluetun Docker')
                         .replace(/GL\.iNet Travel Routers \(Beryl AX \/ Slate AX\) \(including [^)]+\)/g, 'GL.iNet Travel Router via GL.iNet Admin 4.x')
+                        .replace(/\b10 device slots\b/g, '3 device slots')
+                        .replace(/\bup to 10 devices\b/gi, 'up to 3 devices')
                     }
                   }));
                 return `<script type="application/ld+json">${JSON.stringify(parsed)}</script>`;
@@ -2825,12 +2876,19 @@ export async function runKeywordResearchPipeline(options = {}) {
           status = 'APPROVED';
           targetUrlPath = newPillarUrlPath;
           const tpl = cand.seed.pillarBriefTemplate;
+          const isVsCluster = cand.seed.cluster === 'vs';
           pillarBrief = {
             slug: tpl.slug,
             name: tpl.name,
             category: tpl.category,
-            title: `${tpl.name} WireGuard VPN Setup Guide (MTU 1420 .conf • 2026) | SWEEPR VPN`,
-            description: `${tpl.summary}`.slice(0, 158),
+            primaryKeyword: cand.keyword,
+            formattedKeyword: formatQueryForHeading(cand.keyword),
+            siblingKeywords: [],
+            serpWeakSpots: (serpRes.serpSignals?.weakSpotCitations || []).slice(0, 3),
+            title: isVsCluster
+              ? `${tpl.name}: 2026 WireGuard Speed & Price-Lock Comparison | SWEEPR VPN`
+              : `${tpl.name} WireGuard VPN Setup Guide (MTU 1420 .conf • 2026) | SWEEPR VPN`,
+            description: truncateMetaDescriptionClean(tpl.summary, 156),
             h1: tpl.h1,
             summary: tpl.summary,
             commands: tpl.commands
@@ -2896,16 +2954,22 @@ export async function runKeywordResearchPipeline(options = {}) {
 
     // Deduplicate CREATE_NEW_PILLAR and ENRICH_EXISTING by targetUrlPath so each target URL gets its #1 highest-scoring brief
     scoredOpportunities.sort((a, b) => b.scores.opportunityScore - a.scores.opportunityScore);
-    const seenNewPillarTargets = new Set();
+    const seenNewPillarTargets = new Map();
     const seenEnrichTargets = new Map();
 
     for (const opp of scoredOpportunities) {
       if (opp.action === 'CREATE_NEW_PILLAR' && opp.targetUrlPath) {
         if (seenNewPillarTargets.has(opp.targetUrlPath)) {
+          const primaryWinner = seenNewPillarTargets.get(opp.targetUrlPath);
+          if (primaryWinner?.pillarBrief && Array.isArray(primaryWinner.pillarBrief.siblingKeywords)) {
+            if (!primaryWinner.pillarBrief.siblingKeywords.includes(opp.query) && primaryWinner.pillarBrief.siblingKeywords.length < 5) {
+              primaryWinner.pillarBrief.siblingKeywords.push(opp.query);
+            }
+          }
           opp.action = 'ENRICH_EXISTING';
           opp.enrichmentBrief = buildEnrichmentBrief(opp.query, { pillar: opp.pillar, entitySlug: opp.targetUrlPath.split('/').pop() }, opp.targetUrlPath);
         } else {
-          seenNewPillarTargets.add(opp.targetUrlPath);
+          seenNewPillarTargets.set(opp.targetUrlPath, opp);
         }
       }
       if (opp.action === 'ENRICH_EXISTING' && opp.targetUrlPath) {

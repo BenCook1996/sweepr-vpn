@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-11-05T00:19:07.929Z",
+  "updatedAt": "2026-11-05T00:26:47.903Z",
   "entries": {
     "3f6375c2084e251e": {
       "fetchedAt": 1793831697933,
@@ -1001,27 +1001,6 @@
         }
       ]
     },
-    "f58bdccf813ff615": {
-      "fetchedAt": 1793837922417,
-      "keyword": "install nordvpn on synology nas",
-      "source": "community-api+serp-verified",
-      "topResults": [
-        {
-          "title": "macOS: ~15 s with no traffic to a peer after wake from sleep; WireGuard keeps using a session the peer discarded",
-          "url": "https://github.com/tailscale/tailscale/issues/21650",
-          "domain": "github.com",
-          "snippet": "macOS: ~15 s with no traffic to a peer after wake from sleep; WireGuard keeps using a session the peer discarded (2026)",
-          "year": "2026"
-        },
-        {
-          "title": "Alternate Approach",
-          "url": "https://github.com/twardakm/synology-ddns-vpn/issues/2",
-          "domain": "github.com",
-          "snippet": "Alternate Approach (2023)",
-          "year": "2023"
-        }
-      ]
-    },
     "14926dc16d9ad645": {
       "fetchedAt": 1793837923774,
       "keyword": "mikrotik wireguard config generator",
@@ -1097,27 +1076,6 @@
           "url": "https://en.wikipedia.org/wiki/MikroTik",
           "domain": "en.wikipedia.org",
           "snippet": "MikroTik (officially SIA \"Mikrotīkls\") is a Latvian network equipment manufacturing company. MikroTik develops and sells wired and wireless network routers, network switches, access points, as well as operating systems and auxiliary software."
-        }
-      ]
-    },
-    "1405bc7f0f6eb411": {
-      "fetchedAt": 1793837926411,
-      "keyword": "does bitdefender vpn use wireguard",
-      "source": "community-api+serp-verified",
-      "topResults": [
-        {
-          "title": "[Windows][Desktop 26.1007.2314.0] Repeated 0x3B BSOD in nt!CmpKeySecurityIncrementReferenceCount during local execution",
-          "url": "https://github.com/openai/codex/issues/52728",
-          "domain": "github.com",
-          "snippet": "[Windows][Desktop 26.1007.2314.0] Repeated 0x3B BSOD in nt!CmpKeySecurityIncrementReferenceCount during local execution (2026)",
-          "year": "2026"
-        },
-        {
-          "title": "Full VPN Support with WSL2",
-          "url": "https://github.com/microsoft/WSL/issues/10380",
-          "domain": "github.com",
-          "snippet": "Full VPN Support with WSL2 (2023)",
-          "year": "2023"
         }
       ]
     },

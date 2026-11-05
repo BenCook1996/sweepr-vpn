@@ -1,10 +1,10 @@
 # SWEEPR VPN — Automated Keyword Opportunities Quality Gate & Audit Log
 
-- **Last Audited**: `2026-11-05T00:19:25.131Z`
+- **Last Audited**: `2026-11-05T00:26:54.831Z`
 - **Canonical Sitemap Corpus**: `206` URLs (`28` consolidated cannibal slugs blocked)
 - **Total Candidate Queries Evaluated**: `366`
 - **Approved / Applied `CREATE_NEW_PILLAR`**: `19` (Caps: `2/day`, `10/week` | Rolling 7-Day Post-Consolidation Created: `2`)
-- **Approved / Applied `ENRICH_EXISTING`**: `45`
+- **Approved / Applied `ENRICH_EXISTING`**: `43`
 - **Filtered / Rejected (`REJECT_OR_DEFER`)**: `226`
 - **Quality Gate Status**: **`9/9 PASS`** (`0` automated self-healing repairs applied)
 
@@ -50,21 +50,21 @@
 
 | Rank | Query | Target Canonical Pillar | Framing Type | Audited H2 Heading | V / I / W / P | Score | Status |
 |---|---|---|---|---|---|---|---|
-| 1 | `install nordvpn on synology nas` | `/setup/synology-nas-docker-vpn` | `COMPETITOR_DISPLACEMENT_ON_HARDWARE` | Why Synology NAS Users Switch From NordVPN to SWEEPR VPN Native WireGuard (.conf) | 72/100/95/85 | **89** | `APPLIED` |
-| 2 | `mikrotik wireguard client config generator` | `/setup/mikrotik-hap-ax3-wireguard-setup` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: MikroTik WireGuard Client Config Generator | 54/100/95/85 | **85** | `APPLIED` |
-| 3 | `gl inet nordvpn wireguard setup` | `/setup/gl-inet-travel-router` | `COMPETITOR_DISPLACEMENT_ON_HARDWARE` | Why GL.iNet Travel Router Users Switch From NordVPN to SWEEPR VPN Native WireGuard (.conf) | 41/100/100/95 | **85** | `APPLIED` |
-| 4 | `does bitdefender vpn use wireguard` | `/vs/bitdefender-vpn-renewal-alternative` | `BOFU_COMPETITOR_SWITCHER` | 2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Does Bitdefender VPN Use WireGuard) | 52/85/100/100 | **84** | `APPROVED` |
-| 5 | `mullvad port forwarding alternative` | `/vs/mullvad` | `BOFU_COMPETITOR_SWITCHER` | 2026 Mullvad Renewal Price Hike & Cancellation Comparison (Mullvad Port Forwarding Alternative) | 49/100/100/80 | **84** | `APPLIED` |
-| 6 | `bitdefender vpn wireguard configuration` | `/vs/bitdefender-vpn-renewal-alternative` | `BOFU_COMPETITOR_SWITCHER` | 2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Bitdefender VPN WireGuard Configuration) | 50/85/100/100 | **83** | `APPROVED` |
-| 7 | `mikrotik hap ax3 wireguard` | `/setup/mikrotik-hap-ax3-wireguard-setup` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: MikroTik Hap Ax3 WireGuard | 63/80/100/85 | **83** | `APPLIED` |
-| 8 | `fritzbox wireguard vpn setup` | `/setup/fritzbox-7590-ax-wireguard-vpn` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: FRITZ!Box WireGuard VPN Setup | 63/80/100/85 | **83** | `APPLIED` |
-| 9 | `synology nas wireguard vpn` | `/setup/synology-nas-docker-vpn` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: Synology NAS WireGuard VPN | 63/80/100/85 | **83** | `APPROVED` |
-| 10 | `protonvpn wireguard router` | `/vs/protonvpn` | `BOFU_COMPETITOR_SWITCHER` | 2026 ProtonVPN Renewal Price Hike & Cancellation Comparison (ProtonVPN WireGuard Router) | 54/85/95/95 | **82** | `APPROVED` |
-| 11 | `windows 11 wireguard vpn fritzbox` | `/setup/fritzbox-7590-ax-wireguard-vpn` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: Windows 11 WireGuard VPN FRITZ!Box | 55/80/95/100 | **81** | `APPROVED` |
-| 12 | `gl.inet wireguard config file` | `/setup/gl-inet-travel-router` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: GL.iNet WireGuard Config File | 58/80/100/85 | **81** | `APPROVED` |
-| 13 | `cancel totalvpn` | `/alternatives/totalvpn` | `BOFU_COMPETITOR_SWITCHER` | 2026 TotalVPN Renewal Price Hike & Cancellation Comparison (Cancel TotalVPN) | 66/95/85/65 | **80** | `APPROVED` |
-| 14 | `steamos install wireguard` | `/setup/steam-deck-vpn` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: SteamOS WireGuard | 68/80/80/85 | **78** | `APPROVED` |
-| 15 | `steam deck wireguard vpn` | `/setup/steam-deck-vpn` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: Steam Deck WireGuard VPN | 63/80/83/85 | **77** | `APPROVED` |
+| 1 | `mikrotik wireguard client config generator` | `/setup/mikrotik-hap-ax3-wireguard-setup` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: MikroTik WireGuard Client Config Generator | 54/100/95/85 | **85** | `APPLIED` |
+| 2 | `mullvad port forwarding alternative` | `/vs/mullvad` | `BOFU_COMPETITOR_SWITCHER` | 2026 Mullvad Renewal Price Hike & Cancellation Comparison (Mullvad Port Forwarding Alternative) | 49/100/100/80 | **84** | `APPLIED` |
+| 3 | `bitdefender vpn wireguard configuration` | `/vs/bitdefender-vpn-renewal-alternative` | `BOFU_COMPETITOR_SWITCHER` | 2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Bitdefender VPN WireGuard Configuration) | 50/85/100/100 | **83** | `APPROVED` |
+| 4 | `mikrotik hap ax3 wireguard` | `/setup/mikrotik-hap-ax3-wireguard-setup` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: MikroTik hAP ax3 WireGuard | 63/80/100/85 | **83** | `APPLIED` |
+| 5 | `fritzbox wireguard vpn setup` | `/setup/fritzbox-7590-ax-wireguard-vpn` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: FRITZ!Box WireGuard VPN Setup | 63/80/100/85 | **83** | `APPLIED` |
+| 6 | `synology nas wireguard vpn` | `/setup/synology-nas-docker-vpn` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: Synology NAS WireGuard VPN | 63/80/100/85 | **83** | `APPLIED` |
+| 7 | `protonvpn wireguard router` | `/vs/protonvpn` | `BOFU_COMPETITOR_SWITCHER` | 2026 ProtonVPN Renewal Price Hike & Cancellation Comparison (ProtonVPN WireGuard Router) | 54/85/95/95 | **82** | `APPROVED` |
+| 8 | `windows 11 wireguard vpn fritzbox` | `/setup/fritzbox-7590-ax-wireguard-vpn` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: Windows 11 WireGuard VPN FRITZ!Box | 55/80/95/100 | **81** | `APPROVED` |
+| 9 | `gl.inet wireguard config file` | `/setup/gl-inet-travel-router` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: GL.iNet WireGuard Config File | 58/80/100/85 | **81** | `APPROVED` |
+| 10 | `cancel totalvpn` | `/alternatives/totalvpn` | `BOFU_COMPETITOR_SWITCHER` | 2026 TotalVPN Renewal Price Hike & Cancellation Comparison (Cancel TotalVPN) | 66/95/85/65 | **80** | `APPROVED` |
+| 11 | `does bitdefender vpn use wireguard` | `/vs/bitdefender-vpn-renewal-alternative` | `BOFU_COMPETITOR_SWITCHER` | 2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Does Bitdefender VPN Use WireGuard) | 52/85/85/100 | **79** | `APPROVED` |
+| 12 | `steamos install wireguard` | `/setup/steam-deck-vpn` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: SteamOS WireGuard | 68/80/80/85 | **78** | `APPROVED` |
+| 13 | `steam deck wireguard vpn` | `/setup/steam-deck-vpn` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: Steam Deck WireGuard VPN | 63/80/83/85 | **77** | `APPROVED` |
+| 14 | `unifi cloud gateway ultra wireguard client` | `/setup/ubiquiti-cloud-gateway-ultra` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: UniFi Cloud Gateway Ultra WireGuard Client | 46/80/95/85 | **77** | `APPROVED` |
+| 15 | `truenas scale electric eel wireguard vpn client` | `/setup/truenas-scale-electric-eel-wireguard` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: TrueNAS Scale Electric Eel WireGuard VPN Client | 59/80/83/85 | **76** | `APPROVED` |
 
 ## 4. Automated Self-Healing Repair Log
 

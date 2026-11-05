@@ -62,21 +62,9 @@ PersistentKeepalive = 25
 ```
 
 ## 6. High-Intent Technical FAQ Knowledge Base
-### Q: Can I use a native SWEEPR VPN WireGuard .conf instead of NordVPN on Synology NAS?
-- **Canonical Guide**: https://sweeprvpn.com/setup/synology-nas-docker-vpn
-- **Answer**: Yes. Unlike NordVPN, SWEEPR VPN lets you export a standard WireGuard .conf profile in 1 click directly from your dashboard—ready for instant import into Synology NAS via DSM 7 & Gluetun Docker with zero renewal price hikes.
-
 ### Q: What are the optimal WireGuard MTU and DNS settings for MikroTik WireGuard Client Config Generator?
 - **Canonical Guide**: https://sweeprvpn.com/setup/mikrotik-hap-ax3-wireguard-setup
 - **Answer**: Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT.
-
-### Q: Can I use a native SWEEPR VPN WireGuard .conf instead of NordVPN on GL.iNet Travel Router?
-- **Canonical Guide**: https://sweeprvpn.com/setup/gl-inet-travel-router
-- **Answer**: Yes. Unlike NordVPN, SWEEPR VPN lets you export a standard WireGuard .conf profile in 1 click directly from your dashboard—ready for instant import into GL.iNet Travel Router via GL.iNet Admin 4.x on Beryl AX & Slate AX with zero renewal price hikes.
-
-### Q: How does SWEEPR VPN compare as a Bitdefender VPN Renewal Alternative alternative in 2026?
-- **Canonical Guide**: https://sweeprvpn.com/vs/bitdefender-vpn-renewal-alternative
-- **Answer**: SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner.
 
 ### Q: How does SWEEPR VPN compare as a Mullvad alternative in 2026?
 - **Canonical Guide**: https://sweeprvpn.com/vs/mullvad
@@ -86,7 +74,7 @@ PersistentKeepalive = 25
 - **Canonical Guide**: https://sweeprvpn.com/vs/bitdefender-vpn-renewal-alternative
 - **Answer**: SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner.
 
-### Q: What are the optimal WireGuard MTU and DNS settings for MikroTik Hap Ax3 WireGuard?
+### Q: What are the optimal WireGuard MTU and DNS settings for MikroTik hAP ax3 WireGuard?
 - **Canonical Guide**: https://sweeprvpn.com/setup/mikrotik-hap-ax3-wireguard-setup
 - **Answer**: Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT.
 
@@ -114,8 +102,20 @@ PersistentKeepalive = 25
 - **Canonical Guide**: https://sweeprvpn.com/alternatives/totalvpn
 - **Answer**: SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner.
 
+### Q: How does SWEEPR VPN compare as a Bitdefender VPN Renewal Alternative alternative in 2026?
+- **Canonical Guide**: https://sweeprvpn.com/vs/bitdefender-vpn-renewal-alternative
+- **Answer**: SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner.
+
 ### Q: What are the optimal WireGuard MTU and DNS settings for SteamOS WireGuard?
 - **Canonical Guide**: https://sweeprvpn.com/setup/steam-deck-vpn
+- **Answer**: Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT.
+
+### Q: What are the optimal WireGuard MTU and DNS settings for Steam Deck WireGuard VPN?
+- **Canonical Guide**: https://sweeprvpn.com/setup/steam-deck-vpn
+- **Answer**: Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT.
+
+### Q: What are the optimal WireGuard MTU and DNS settings for UniFi Cloud Gateway Ultra WireGuard Client?
+- **Canonical Guide**: https://sweeprvpn.com/setup/ubiquiti-cloud-gateway-ultra
 - **Answer**: Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT.
 
 ## 7. Complete Canonical Index (205 Pages)

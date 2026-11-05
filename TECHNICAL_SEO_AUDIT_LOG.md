@@ -528,8 +528,7 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 - **Overall Scores**: Crawlability **100/100**, Technical SEO **100/100**, PageSpeed & CWV **100/100** across **205 Canonical Pages**.
 - **Auto-Optimizations Executed**:
   - Injected deterministic 6-link internal cluster mesh across 2 pSEO pages (0 orphan pages remaining)
-  - Auto-optimized 152 pSEO pages with BreadcrumbList + AggregateRating JSON-LD, GA4 (G-7D28EEMNXX) & GSC hub links
-  - Synchronized sitemap.xml with 206 canonical URLs (content-hash <lastmod>: 165 modified today)
+  - Synchronized sitemap.xml with 206 canonical URLs (content-hash <lastmod>: 9 modified today)
   - Synchronized llms.txt & llms-full.txt with all 184 pSEO guides and live 04:00 AM WireGuard/ACR telemetry for GEO AI citations
 
 ### Category Scorecards & Verifications
@@ -577,5 +576,5 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 ### Compression Benchmark Results
 - **order.html** (124.3 KB raw) &rarr; Gzip: **29.2 KB** (77% reduction) | Brotli: **26.9 KB** (78% reduction)
 - **index.html** (69.6 KB raw) &rarr; Gzip: **14.5 KB** (79% reduction) | Brotli: **13.6 KB** (80% reduction)
-- **sitemap.xml** (37.7 KB raw) &rarr; Gzip: **2.6 KB** (93% reduction) | Brotli: **2.5 KB** (93% reduction)
+- **sitemap.xml** (37.7 KB raw) &rarr; Gzip: **2.6 KB** (93% reduction) | Brotli: **2.4 KB** (94% reduction)
 
