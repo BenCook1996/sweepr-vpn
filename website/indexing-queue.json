@@ -8,7 +8,9 @@
     "https://sweeprvpn.com/de/tools/leak-test",
     "https://sweeprvpn.com/pt-br/tools/leak-test",
     "https://sweeprvpn.com/sv/tools/leak-test",
+    "https://sweeprvpn.com/setup/zimaboard-casaos-gluetun-wireguard",
     "https://sweeprvpn.com/setup/unifi-cloud-gateway-max-ucg-max-wireguard",
+    "https://sweeprvpn.com/setup/mikrotik-hap-ax3-wireguard-setup",
     "https://sweeprvpn.com/setup/fritzbox-7590-ax-wireguard-vpn"
   ],
   "indexnow_submitted_at": {
@@ -399,15 +401,15 @@
   "last_indexnow_ping": "2026-11-04T10:06:05.851Z",
   "last_sitemap_ping": "2026-11-04T10:07:51.734Z",
   "last_daily_50_batch": {
-    "date": "2026-11-04",
+    "date": "2026-11-05",
     "newCount": 2,
-    "totalPseoPages": 182,
+    "totalPseoPages": 184,
     "consolidatedNoIndexExcluded": 1013,
-    "totalSitemapUrls": 204
+    "totalSitemapUrls": 206
   },
   "last_audit": {
-    "date": "2026-11-04",
-    "totalUrls": 203,
-    "pendingDeltaUrls": 9
+    "date": "2026-11-05",
+    "totalUrls": 205,
+    "pendingDeltaUrls": 11
   }
 }

@@ -33,7 +33,7 @@
     gtag('js', new Date());
     gtag('config', 'G-7D28EEMNXX');
   </script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Can I run AVM FRITZ!Box 7590 AX & 6690 Cable (FRITZ!OS 8) alongside the SWEEPR VPN desktop app?","acceptedAnswer":{"@type":"Answer","text":"Yes. Every SWEEPR VPN plan supports up to 10 simultaneous WireGuard peers across routers, NAS appliances, Linux servers, Windows, macOS, iOS, and Android."}},{"@type":"Question","name":"What DNS server should I use on AVM FRITZ!Box 7590 AX & 6690 Cable (FRITZ!OS 8)?","acceptedAnswer":{"@type":"Answer","text":"Always set your WireGuard interface DNS to 10.66.0.1 so DNS queries travel inside the encrypted WireGuard tunnel and cannot be intercepted by your ISP."}},{"@type":"Question","name":"Why are my HTTPS pages stalling after enabling WireGuard on AVM FRITZ!Box 7590 AX & 6690 Cable (FRITZ!OS 8)?","acceptedAnswer":{"@type":"Answer","text":"If your ISP uses PPPoE (such as BT, Sky, TalkTalk, Plusnet, or Vodafone FTTP), lower the WireGuard interface MTU from 1420 to 1412 and enable TCP MSS clamping to 1352–1360."}}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Can I run AVM FRITZ!Box 7590 AX & 6690 Cable (FRITZ!OS 8) alongside the SWEEPR VPN desktop app?","acceptedAnswer":{"@type":"Answer","text":"Yes. Every SWEEPR VPN plan supports up to 10 simultaneous WireGuard peers across routers, NAS appliances, Linux servers, Windows, macOS, iOS, and Android."}},{"@type":"Question","name":"What DNS server should I use on AVM FRITZ!Box 7590 AX & 6690 Cable (FRITZ!OS 8)?","acceptedAnswer":{"@type":"Answer","text":"Always set your WireGuard interface DNS to 10.66.0.1 so DNS queries travel inside the encrypted WireGuard tunnel and cannot be intercepted by your ISP."}},{"@type":"Question","name":"Why are my HTTPS pages stalling after enabling WireGuard on AVM FRITZ!Box 7590 AX & 6690 Cable (FRITZ!OS 8)?","acceptedAnswer":{"@type":"Answer","text":"If your ISP uses PPPoE (such as BT, Sky, TalkTalk, Plusnet, or Vodafone FTTP), lower the WireGuard interface MTU from 1420 to 1412 and enable TCP MSS clamping to 1352–1360."}},{"@type":"Question","name":"What are the optimal WireGuard MTU and DNS settings for FRITZ!Box WireGuard VPN Setup?","acceptedAnswer":{"@type":"Answer","text":"Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT."}}]}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"SWEEPR VPN","operatingSystem":"Windows 10, Windows 11, macOS, Linux, iOS, Android, OpenWrt","applicationCategory":"SecurityApplication","downloadUrl":"https://sweeprvpn.com/SWEEPRVPN.exe","fileSize":"3.7MB","offers":{"@type":"AggregateOffer","priceCurrency":"GBP","lowPrice":"1.99","highPrice":"74.99","offerCount":"3"}}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"AVM FRITZ!Box 7590 AX & 6690 Cable (FRITZ!OS 8): High-Speed 10Gbps WireGuard VPN Setup Guide","description":"Step-by-step AVM FRITZ!Box 7590 AX & 6690 Cable (FRITZ!OS 8) WireGuard VPN setup guide. Configure 10Gbps RAM-only endpoints, optimal MTU, in-tunnel DNS (10.66.0.1), and kill-switch routing.","proficiencyLevel":"Beginner to Expert","author":{"@type":"Organization","name":"SWEEPR VPN Security & Network Engineering Lab","url":"https://sweeprvpn.com/"},"publisher":{"@type":"Organization","name":"SWEEPR VPN","logo":{"@type":"ImageObject","url":"https://sweeprvpn.com/logo-emerald.svg"}},"mainEntityOfPage":"https://sweeprvpn.com/setup/fritzbox-7590-ax-wireguard-vpn"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://sweeprvpn.com/"},{"@type":"ListItem","position":2,"name":"Router & Device Setup Guides","item":"https://sweeprvpn.com/setup"},{"@type":"ListItem","position":3,"name":"AVM FRITZ!Box 7590 AX & 6690 Cable (FRITZ!OS 8): High-Speed 10Gbps WireGuard VPN Setup Guide","item":"https://sweeprvpn.com/setup/fritzbox-7590-ax-wireguard-vpn"}]}</script>
@@ -141,6 +141,21 @@ AllowedIPs = 0.0.0.0/0
         <tr><td>Stockholm Core (SE-STO-01)</td><td><code>sto01.sweeprvpn.com:51820</code></td><td>14 ms</td><td>1420 (Cable/DHCP) / 1412 (PPPoE)</td></tr>
       </tbody>
     </table>
+
+    
+    <section id="enriched-fritzbox-wireguard-vpn-setup" data-enriched-query="fritzbox-wireguard-vpn-setup" style="margin:28px 0;padding:20px;background:rgba(15,23,42,0.88);color:#f8fafc;border:1px solid rgba(16,185,129,0.35);border-radius:12px;">
+      <h2 style="margin-top:0;color:#f8fafc;">Verified WireGuard .conf & MTU Configuration: FRITZ!Box WireGuard VPN Setup</h2>
+      <p style="color:#cbd5e1;line-height:1.65;">To achieve 900+ Mbps sustained throughput and zero UDP packet fragmentation for "fritzbox wireguard vpn setup", import a native SWEEPR VPN 10Gbps WireGuard profile (.conf) with in-tunnel DNS set to 10.66.0.1 and PersistentKeepalive = 25.</p>
+      <pre style="background:#020617;color:#6ee7b7;padding:14px;border-radius:8px;overflow-x:auto;border:1px solid #1e293b;"><code>[Interface]
+Address = 10.66.0.2/32
+DNS = 10.66.0.1
+MTU = 1420 # Use 1412 on PPPoE Fibre or 1380 on Hotel/5G Wi-Fi
+
+[Peer]
+Endpoint = lon01.wg.sweeprvpn.com:51820
+AllowedIPs = 0.0.0.0/0, ::/0
+PersistentKeepalive = 25</code></pre>
+    </section>
 
     <h2>Transparent Anchor Pricing &amp; 30-Day Money-Back Guarantee</h2>
     <p>Unlike legacy VPNs that trap you in 24-month renewals or 250 MB bloated installers, SWEEPR VPN offers straightforward pricing with an instant free 30-second Home Wi-Fi Device Scanner:</p>
@@ -302,5 +317,6 @@ PostUp = iptables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS 
       <a href="/privacy">Privacy Policy</a>
     </p>
   </footer>
+  <script src="/nav.js" defer></script>
 </body>
 </html>

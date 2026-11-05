@@ -1,6 +1,6 @@
 {
   "cooldownDays": 14,
-  "lastRunAt": "2026-11-04T23:14:20.952Z",
+  "lastRunAt": "2026-11-05T00:19:21.248Z",
   "titleUpdatedAt": {
     "/setup/gl-inet-travel-router": "2026-11-03T21:30:00.000Z",
     "/tools/leak-test": "2026-11-03T21:30:00.000Z",
@@ -325,7 +325,9 @@
     "/guides/stop-roku-vizio-firetv-spying": "2026-11-03T22:43:47.909Z",
     "/guides/stop-samsung-smart-tv-acr-tracking": "2026-11-03T22:43:47.909Z",
     "/setup/fritzbox-7590-ax-wireguard-vpn": "2026-11-04T23:14:20.952Z",
-    "/setup/unifi-cloud-gateway-max-ucg-max-wireguard": "2026-11-04T23:14:20.952Z"
+    "/setup/unifi-cloud-gateway-max-ucg-max-wireguard": "2026-11-04T23:14:20.952Z",
+    "/setup/mikrotik-hap-ax3-wireguard-setup": "2026-11-05T00:19:21.248Z",
+    "/setup/zimaboard-casaos-gluetun-wireguard": "2026-11-05T00:19:21.248Z"
   },
   "contentHashes": {
     "/setup/almalinux-9-wireguard-gateway": "7f0bfa1d96720e4b",
@@ -623,6 +625,8 @@
     "/guides/stop-roku-vizio-firetv-spying": "852250a566a7ad78",
     "/guides/stop-samsung-smart-tv-acr-tracking": "9dda26858bb1b672",
     "/setup/fritzbox-7590-ax-wireguard-vpn": "a7a8e6fd99a8",
-    "/setup/unifi-cloud-gateway-max-ucg-max-wireguard": "98150a02b58e"
+    "/setup/unifi-cloud-gateway-max-ucg-max-wireguard": "98150a02b58e",
+    "/setup/mikrotik-hap-ax3-wireguard-setup": "c7f03e69b344",
+    "/setup/zimaboard-casaos-gluetun-wireguard": "a4308a819181"
   }
 }

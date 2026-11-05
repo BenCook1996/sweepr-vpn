@@ -1297,7 +1297,7 @@ function renderLayout({ title, description, canonicalUrl, badge, h1, lead, bodyH
     operatingSystem: 'Windows 10, Windows 11, macOS, Linux, iOS, Android, OpenWrt',
     applicationCategory: 'SecurityApplication',
     downloadUrl: 'https://sweeprvpn.com/SWEEPRVPN.exe',
-    fileSize: '3.7MB',
+    fileSize: '680KB',
     offers: {
       '@type': 'AggregateOffer',
       priceCurrency: 'GBP',
@@ -1449,11 +1449,11 @@ function renderLayout({ title, description, canonicalUrl, badge, h1, lead, bodyH
     <div class="cta-strip">
       <div>
         <strong>Run the Free 30-Second Home Wi-Fi &amp; ISP Speed Diagnostic</strong>
-        <div style="color:var(--muted);font-size:0.93rem;">Featherlight ~3.7 MB native Rust + Tauri v2 app • No credit card required for Wi-Fi device scanner • £1.99 1st-Month Pro Trial</div>
+        <div style="color:var(--muted);font-size:0.93rem;">Featherlight ~680 KB native Rust + Tauri v2 app • No credit card required for Wi-Fi device scanner • £1.99 ($2.99) 1st-Month Trial or £74.99/yr (Save 50%)</div>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <a class="btn" href="/download">Download Free Scanner</a>
-        <a class="btn-outline" href="/pricing">View Plans (Save 50% Yearly)</a>
+        <a class="btn" href="/download">Download Free Scanner (~680 KB)</a>
+        <a class="btn-outline" href="/order?plan=annual&amp;coupon=SWEEPR50">Start £1.99 Trial / Save 50% Yearly</a>
       </div>
     </div>
 
@@ -1513,7 +1513,7 @@ function renderLayout({ title, description, canonicalUrl, badge, h1, lead, bodyH
         <li><a href="/setup/steam-deck-vpn" style="color:var(--accent2);">Steam Deck &amp; SteamOS Native WireGuard VPN Setup Guide</a></li>
         <li><a href="/tools/leak-test" style="color:var(--accent2);">Free Browser IP, DNS &amp; WebRTC Leak Test</a></li>
         <li><a href="/tools/isp-throttling-test" style="color:var(--accent2);">Free ISP Evening Throttling &amp; Latency Checker</a></li>
-        <li><a href="/download" style="color:var(--accent2);">Download SWEEPR VPN &amp; Free 30-Second Home Wi-Fi Scanner (~3.7 MB)</a></li>
+        <li><a href="/download" style="color:var(--accent2);">Download SWEEPR VPN &amp; Free 30-Second Home Wi-Fi Scanner (~680 KB)</a></li>
       </ul>
     </div>
   </main>
@@ -1533,6 +1533,7 @@ function renderLayout({ title, description, canonicalUrl, badge, h1, lead, bodyH
       <a href="/privacy">Privacy Policy</a>
     </p>
   </footer>
+  <script src="/nav.js" defer></script>
 </body>
 </html>`;
 }
@@ -1579,7 +1580,7 @@ function generateCandidateHtml(candidate) {
         <tr>
           <td><strong>Gaming Packet Loss &amp; Ping Spikes</strong></td>
           <td>Congested retail BGP transit &amp; UDP queue drops</td>
-          <td>Direct Tier-1 LINX (<code>UK-LON-01</code> 4ms) / AMS-IX (8ms)</td>
+          <td>Direct Tier-1 LINX (<code>UK-LON-01</code> 4ms) / AMS-IX (11ms)</td>
           <td><strong>0.0% Packet Loss • &lt;9ms Ping</strong></td>
         </tr>
         <tr>
@@ -1611,7 +1612,7 @@ function generateCandidateHtml(candidate) {
 
     <h2>How SWEEPR VPN Solves This on ${net.name}</h2>
     <ul>
-      <li><strong>Direct 10Gbps LINX &amp; AMS-IX Peering:</strong> Instead of traversing congested retail transit links on ${net.asn}, SWEEPR VPN routes your encrypted UDP stream directly to our 10Gbps RAM-only bare-metal nodes in <code>UK-LON-01</code> (4ms), <code>NL-AMS-01</code> (8ms), <code>DE-FRA-01</code> (11ms), and <code>SE-STO-01</code> (14ms).</li>
+      <li><strong>Direct 10Gbps LINX &amp; AMS-IX Peering:</strong> Instead of traversing congested retail transit links on ${net.asn}, SWEEPR VPN routes your encrypted UDP stream directly to our 10Gbps RAM-only bare-metal nodes in <code>UK-LON-01</code> (4ms), <code>NL-AMS-01</code> (11ms), <code>DE-FRA-01</code> (14ms), and <code>SE-STO-01</code> (16ms).</li>
       <li><strong>Auto-Calibrated ${net.mtu} Byte MTU:</strong> SWEEPR VPN automatically detects ${net.tech} path overhead and clamps your WireGuard tunnel to <code>MTU = ${net.mtu}</code> with <code>PersistentKeepalive = 25</code>.</li>
       <li><strong>In-Tunnel Zero-Log DNS (<code>10.66.0.1</code>):</strong> Bypasses ${net.name} transparent DNS proxies and NXDOMAIN interception completely.</li>
       <li><strong>Free 30-Second Home Wi-Fi Device Scanner:</strong> Instantly audits every phone, laptop, IoT plug, and Smart TV connected to your ${net.name} router subnet.</li>
@@ -1639,7 +1640,7 @@ PersistentKeepalive = 25</code></pre>`;
       },
       {
         q: `Does SWEEPR VPN work with ${net.name} routers and Wi-Fi mesh systems?`,
-        a: `Yes. You can run the ~3.7 MB SWEEPR VPN native app on Windows 10/11, macOS, Linux, iOS, and Android, or export a standard WireGuard .conf file for OpenWrt, GL.iNet, Asuswrt-Merlin, MikroTik, and UniFi gateways connected to ${net.name}.`
+        a: `Yes. You can run the ~680 KB SWEEPR VPN native app on Windows 10/11, macOS, Linux, iOS, and Android, or export a standard WireGuard .conf file for OpenWrt, GL.iNet, Asuswrt-Merlin, MikroTik, and UniFi gateways connected to ${net.name}.`
       },
       {
         q: `Is the 30-second Home Wi-Fi Scanner really free on ${net.name}?`,
@@ -1650,7 +1651,7 @@ PersistentKeepalive = 25</code></pre>`;
     const relatedLinks = [
       { href: '/guides/fix-wireguard-mtu-fragmentation-pppoe', label: 'WireGuard MTU Calculator for PPPoE Fibre (1412) & 5G (1380)' },
       { href: '/guides/bypass-cgnat-for-self-hosted-home-lab', label: 'How to Detect & Bypass Carrier-Grade NAT (CGNAT 100.64.x.x)' },
-      { href: '/vs/nordvpn', label: 'SWEEPR VPN (~3.7 MB) vs NordVPN Technical Comparison' }
+      { href: '/vs/nordvpn', label: 'SWEEPR VPN (~680 KB) vs NordVPN Technical Comparison' }
     ];
 
     return renderLayout({
@@ -1666,28 +1667,28 @@ PersistentKeepalive = 25</code></pre>`;
     });
   }
 
-  if (candidate.cluster === 'setup') {
+  if (candidate.cluster === 'setup' || (candidate._fromKeywordOpportunityId && candidate.guide)) {
     const { guide } = candidate;
     const cleanGuideName = guide.name
       .replace(/\s+(WireGuard|VPN|Setup|Container|Guide)+\s*$/gi, '')
       .replace(/\s+WireGuard\s+/gi, ' ')
       .trim();
-    const title = `${cleanGuideName} WireGuard VPN Setup Guide (2026) | SWEEPR VPN`;
-    const description = `Step-by-step ${cleanGuideName} WireGuard VPN setup guide. Configure 10Gbps RAM-only endpoints, optimal MTU, in-tunnel DNS (10.66.0.1), and kill-switch routing.`;
-    const h1 = `${guide.name}: High-Speed 10Gbps WireGuard VPN Setup Guide`;
+    const title = guide.title || `${cleanGuideName} WireGuard VPN Setup Guide (2026) | SWEEPR VPN`;
+    const description = guide.description || `Step-by-step ${cleanGuideName} WireGuard VPN setup guide. Configure 10Gbps RAM-only endpoints, optimal MTU, in-tunnel DNS (10.66.0.1), and kill-switch routing.`;
+    const h1 = guide.h1 || `${guide.name}: High-Speed 10Gbps WireGuard VPN Setup Guide`;
     const lead = guide.summary;
 
     const bodyHtml = `
     <h2>Why Run SWEEPR VPN WireGuard on ${guide.name}?</h2>
-    <p>Unlike proprietary VPN clients that lock you into closed-source daemons, <strong>SWEEPR VPN</strong> provides one-click native WireGuard configuration generator files alongside our featherlight ~3.7 MB desktop app. Running SWEEPR VPN on <strong>${guide.name}</strong> (${guide.category}) gives you:</p>
+    <p>Unlike proprietary VPN clients that lock you into closed-source daemons, <strong>SWEEPR VPN</strong> provides one-click native WireGuard configuration generator files alongside our featherlight ~680 KB desktop app. Running SWEEPR VPN on <strong>${guide.name}</strong> (${guide.category}) gives you:</p>
     <ul>
-      <li><strong>10Gbps RAM-Only Bare-Metal Endpoints:</strong> Direct peering in London (<code>4ms</code>), Amsterdam (<code>8ms</code>), Frankfurt (<code>11ms</code>), Stockholm (<code>14ms</code>), Zurich, and New York.</li>
+      <li><strong>10Gbps RAM-Only Bare-Metal Endpoints:</strong> Direct peering in London (<code>4ms</code>), Amsterdam (<code>11ms</code>), Frankfurt (<code>14ms</code>), Stockholm (<code>16ms</code>), Zurich, and New York.</li>
       <li><strong>In-Tunnel DNS &amp; Smart-TV ACR Shield:</strong> Point DNS to <code>10.66.0.1</code> to block ISP DNS hijacking and Smart-TV Automatic Content Recognition (ACR) screenshot telemetry across your LAN.</li>
       <li><strong>Zero Disk Persistence:</strong> All SWEEPR VPN WireGuard nodes boot from cryptographically verified RAM images with zero connection or DNS logs.</li>
     </ul>
 
     <h2>Step-by-Step Configuration Commands for ${guide.name}</h2>
-    <pre><code>${guide.commands.join('\n')}</code></pre>
+    <pre><code>${(guide.commands || guide.domains || []).join('\n')}</code></pre>
 
     <h2>Recommended Endpoint &amp; MTU Reference Table</h2>
     <table>
@@ -1701,16 +1702,16 @@ PersistentKeepalive = 25</code></pre>`;
       </thead>
       <tbody>
         <tr><td>London Docklands (UK-LON-01)</td><td><code>lon01.sweeprvpn.com:51820</code></td><td>4 ms</td><td>1420 (Cable/DHCP) / 1412 (PPPoE)</td></tr>
-        <tr><td>Amsterdam Core (NL-AMS-01)</td><td><code>ams01.sweeprvpn.com:51820</code></td><td>8 ms</td><td>1420 (Cable/DHCP) / 1412 (PPPoE)</td></tr>
-        <tr><td>Frankfurt IX (DE-FRA-01)</td><td><code>fra01.sweeprvpn.com:51820</code></td><td>11 ms</td><td>1420 (Cable/DHCP) / 1412 (PPPoE)</td></tr>
-        <tr><td>Stockholm Core (SE-STO-01)</td><td><code>sto01.sweeprvpn.com:51820</code></td><td>14 ms</td><td>1420 (Cable/DHCP) / 1412 (PPPoE)</td></tr>
+        <tr><td>Amsterdam Core (NL-AMS-01)</td><td><code>ams01.sweeprvpn.com:51820</code></td><td>11 ms</td><td>1420 (Cable/DHCP) / 1412 (PPPoE)</td></tr>
+        <tr><td>Frankfurt IX (DE-FRA-01)</td><td><code>fra01.sweeprvpn.com:51820</code></td><td>14 ms</td><td>1420 (Cable/DHCP) / 1412 (PPPoE)</td></tr>
+        <tr><td>Stockholm Core (SE-STO-01)</td><td><code>sto01.sweeprvpn.com:51820</code></td><td>16 ms</td><td>1420 (Cable/DHCP) / 1412 (PPPoE)</td></tr>
       </tbody>
     </table>`;
 
     const faqs = [
       {
         q: `Can I run ${guide.name} alongside the SWEEPR VPN desktop app?`,
-        a: `Yes. Every SWEEPR VPN plan supports up to 10 simultaneous WireGuard peers across routers, NAS appliances, Linux servers, Windows, macOS, iOS, and Android.`
+        a: `Yes. Every SWEEPR VPN plan supports up to 3 simultaneous WireGuard peers across routers, NAS appliances, Linux servers, Windows, macOS, iOS, and Android.`
       },
       {
         q: `What DNS server should I use on ${guide.name}?`,
@@ -1744,9 +1745,9 @@ PersistentKeepalive = 25</code></pre>`;
   if (candidate.cluster === 'vs') {
     const { comp } = candidate;
     const title = `SWEEPR VPN vs ${comp.name} (2026 Technical Benchmark & Price Comparison)`;
-    const description = `Compare SWEEPR VPN (~3.7 MB Rust + Tauri v2, 10Gbps WireGuard, Free 30s Wi-Fi Scanner) vs ${comp.name} (${comp.installerSize}, ${comp.price}).`;
+    const description = `Compare SWEEPR VPN (~680 KB Rust + Tauri v2, 10Gbps WireGuard, Free 30s Wi-Fi Scanner) vs ${comp.name} (${comp.installerSize}, ${comp.price}).`;
     const h1 = `SWEEPR VPN vs ${comp.name}: 2026 Speed, Footprint & Privacy Comparison`;
-    const lead = `Comparing SWEEPR VPN against ${comp.name}? See how our featherlight ~3.7 MB native Rust + Tauri v2 client, 10Gbps RAM-only WireGuard infrastructure, and built-in 30-second Home Wi-Fi Device Scanner stack up against ${comp.name}.`;
+    const lead = `Comparing SWEEPR VPN against ${comp.name}? See how our featherlight ~680 KB native Rust + Tauri v2 client, 10Gbps RAM-only WireGuard infrastructure, and built-in 30-second Home Wi-Fi Device Scanner stack up against ${comp.name}.`;
 
     const bodyHtml = `
     <h2>Head-to-Head Technical Specification Table</h2>
@@ -1759,7 +1760,7 @@ PersistentKeepalive = 25</code></pre>`;
         </tr>
       </thead>
       <tbody>
-        <tr><td><strong>Desktop Installer Footprint</strong></td><td><strong>~3.7 MB (Native Rust + Tauri v2)</strong></td><td>${comp.installerSize}</td></tr>
+        <tr><td><strong>Desktop Installer Footprint</strong></td><td><strong>~680 KB (Native Rust + Tauri v2)</strong></td><td>${comp.installerSize}</td></tr>
         <tr><td><strong>Background RAM Consumption</strong></td><td><strong>~18 MB</strong></td><td>${comp.ramUsage}</td></tr>
         <tr><td><strong>WireGuard Server Uplinks</strong></td><td><strong>10Gbps RAM-Only (Diskless Boot)</strong></td><td>Mixed 1Gbps–10Gbps</td></tr>
         <tr><td><strong>Free 30-Second Home Wi-Fi Scanner</strong></td><td><strong>Included Free (ARP/mDNS/OUI Audit)</strong></td><td>${comp.hasWifiScanner}</td></tr>
@@ -1771,7 +1772,7 @@ PersistentKeepalive = 25</code></pre>`;
 
     <h2>3 Reasons Users Switch From ${comp.name} to SWEEPR VPN</h2>
     <ol>
-      <li><strong>No 200 MB Background Bloatware:</strong> ${comp.name} installs ${comp.installerSize} of background services consuming ${comp.ramUsage} of RAM. SWEEPR VPN is compiled in native Rust (~3.7 MB installer, ~18 MB RAM) with zero telemetry SDKs.</li>
+      <li><strong>No 200 MB Background Bloatware:</strong> ${comp.name} installs ${comp.installerSize} of background services consuming ${comp.ramUsage} of RAM. SWEEPR VPN is compiled in native Rust (~680 KB installer, ~18 MB RAM) with zero telemetry SDKs.</li>
       <li><strong>Built-In Home Wi-Fi Scanner &amp; Smart-TV ACR Blocker:</strong> Standard VPNs only encrypt a single laptop while leaving 15–30 Smart TVs, cameras, and IoT devices on your home Wi-Fi unmonitored. SWEEPR VPN scans your entire home Wi-Fi in 30 seconds for free.</li>
       <li><strong>Honest Pricing Without Renewal Traps:</strong> Try SWEEPR VPN for £1.99 in your first month, or lock in £48.99 / 6 months (Save 35%) or £74.99 / year (Save 50%) with a 30-day money-back guarantee.</li>
     </ol>`;
@@ -1783,7 +1784,7 @@ PersistentKeepalive = 25</code></pre>`;
       },
       {
         q: `Does SWEEPR VPN include a free tool if I am currently using ${comp.name}?`,
-        a: `Yes. You can download SWEEPR VPN (~3.7 MB) and run the Free 30-Second Home Wi-Fi Device Scanner immediately without entering a credit card.`
+        a: `Yes. You can download SWEEPR VPN (~680 KB) and run the Free 30-Second Home Wi-Fi Device Scanner immediately without entering a credit card.`
       },
       {
         q: `Can I export raw WireGuard .conf files from SWEEPR VPN?`,
@@ -1820,13 +1821,13 @@ PersistentKeepalive = 25</code></pre>`;
   const bodyHtml = `
   <h2>Technical Overview &amp; Network Indicators</h2>
   <p>${guide.summary}</p>
-  <p>When you run the <strong>SWEEPR VPN Free 30-Second Home Wi-Fi Scanner</strong> (~3.7 MB native Rust client), it inspects local ARP tables, IEEE OUI hardware vendor prefixes, and mDNS service broadcasts on your LAN, then cross-references outbound DNS queries against our Smart-TV ACR &amp; ISP diagnostic rulebase:</p>
+  <p>When you run the <strong>SWEEPR VPN Free 30-Second Home Wi-Fi Scanner</strong> (~680 KB native Rust client), it inspects local ARP tables, IEEE OUI hardware vendor prefixes, and mDNS service broadcasts on your LAN, then cross-references outbound DNS queries against our Smart-TV ACR &amp; ISP diagnostic rulebase:</p>
   <pre><code>${guide.domains.map((d) => `# Verified Indicator / Rule:\n${d}`).join('\n\n')}</code></pre>
 
   <h2>Step-by-Step Remediation With SWEEPR VPN</h2>
   <ol>
-    <li><strong>Step 1 — Run the Free 30-Second Home Wi-Fi Audit:</strong> Download <a href="/download" style="color:var(--accent2);">SWEEPR VPN (~3.7 MB)</a> and click <em>Scan My Home Wi-Fi</em> to identify every active IP, MAC vendor, and Smart TV on your local network.</li>
-    <li><strong>Step 2 — Enable 10Gbps RAM-Only WireGuard + In-Tunnel DNS (<code>10.66.0.1</code>):</strong> Route traffic through <code>UK-LON-01</code> (4ms) or <code>NL-AMS-01</code> (8ms) with calibrated MTU.</li>
+    <li><strong>Step 1 — Run the Free 30-Second Home Wi-Fi Audit:</strong> Download <a href="/download" style="color:var(--accent2);">SWEEPR VPN (~680 KB)</a> and click <em>Scan My Home Wi-Fi</em> to identify every active IP, MAC vendor, and Smart TV on your local network.</li>
+    <li><strong>Step 2 — Enable 10Gbps RAM-Only WireGuard + In-Tunnel DNS (<code>10.66.0.1</code>):</strong> Route traffic through <code>UK-LON-01</code> (4ms) or <code>NL-AMS-01</code> (11ms) with calibrated MTU.</li>
     <li><strong>Step 3 — Activate SWEEPR Wi-Fi Radar &amp; Smart-TV Shield:</strong> Block Automatic Content Recognition (ACR) telemetry domains and receive instant alerts whenever an unknown MAC address joins your Wi-Fi.</li>
   </ol>`;
 
@@ -1837,7 +1838,7 @@ PersistentKeepalive = 25</code></pre>`;
     },
     {
       q: `Does the SWEEPR 30-Second Wi-Fi Scanner work on Windows, macOS, and Linux?`,
-      a: `Yes. The SWEEPR desktop scanner is built in Rust + Tauri v2 (~3.7 MB) and runs natively on Windows 10/11, macOS (Apple Silicon & Intel), and Linux.`
+      a: `Yes. The SWEEPR desktop scanner is built in Rust + Tauri v2 (~680 KB) and runs natively on Windows 10/11, macOS (Apple Silicon & Intel), and Linux.`
     },
     {
       q: `How can I test if my ISP is still intercepting my DNS requests?`,
@@ -1874,23 +1875,13 @@ async function runDaily50Pages(targetCount = 50, force = false) {
   }
 
   if (!force && state.lastRunDate === todayStr) {
-    console.log(`[SWEEPR Daily 50 SEO Pages] Already generated today's 50 SEO pages on ${todayStr}. Use --force to generate another batch immediately.`);
+    console.log(`[SWEEPR Daily 50 SEO Pages] Already generated today's SEO pillar pages on ${todayStr}. Use --force to run another sync.`);
     return;
   }
 
   const sitemapXml = fs.readFileSync(SITEMAP_PATH, 'utf8');
-  const existingUrls = new Set([...sitemapXml.matchAll(/<loc>(.*?)<\/loc>/g)].map((m) => m[1].trim()));
   const allowCartesian = process.argv.includes('--allow-cartesian');
 
-  // Guardrail (GSC Crawl-Budget Protection): Only allow generating new pillar pages (setup, vs, guides,
-  // or primary ISP flagship '-isp-throttling' solutions) unless --allow-cartesian is explicitly set.
-  const isPillarCandidate = (cand) => {
-    if (cand.cluster === 'setup' || cand.cluster === 'vs' || cand.cluster === 'guides') return true;
-    if (cand.urlPath && cand.urlPath.endsWith('-isp-throttling')) return true;
-    return allowCartesian;
-  };
-
-  const pool = buildCandidatePool();
   const selected = [];
   const sevenDaysAgoMs = Date.now() - 7 * 24 * 60 * 60 * 1000;
   const rolling7DayGenerated = (state.batches || [])
@@ -1905,7 +1896,7 @@ async function runDaily50Pages(targetCount = 50, force = false) {
   const remainingWeeklyQuota = Math.max(0, 10 - rolling7DayGenerated);
   const effectiveMaxCount = allowCartesian ? targetCount : Math.min(targetCount, 2, remainingWeeklyQuota);
 
-  // Consume approved CREATE_NEW_PILLAR briefs from website/keyword-opportunities.json first
+  // Strictly consume approved CREATE_NEW_PILLAR briefs from website/keyword-opportunities.json (Zero Cartesian Fallback)
   const opportunitiesPath = path.join(WEBSITE_DIR, 'keyword-opportunities.json');
   let opportunitiesDoc = null;
   if (fs.existsSync(opportunitiesPath)) {
@@ -1937,25 +1928,15 @@ async function runDaily50Pages(targetCount = 50, force = false) {
             guide: opp.pillarBrief,
             _fromKeywordOpportunityId: opp.id
           });
-          opp.status = 'GENERATED';
+          opp.status = 'APPLIED';
           opp.appliedAt = new Date().toISOString();
+        } else {
+          opp.status = 'APPLIED';
         }
       }
     }
     if (selected.length > 0) {
       fs.writeFileSync(opportunitiesPath, JSON.stringify(opportunitiesDoc, null, 2), 'utf8');
-    }
-  }
-
-  if (effectiveMaxCount > 0 && selected.length < effectiveMaxCount) {
-    for (const cand of pool) {
-      if (!isPillarCandidate(cand)) continue;
-      const fullUrl = `https://sweeprvpn.com${cand.urlPath}`;
-      const absFile = path.join(WEBSITE_DIR, cand.relPath);
-      if (!fs.existsSync(absFile) && !selected.some((s) => s.urlPath === cand.urlPath)) {
-        selected.push(cand);
-        if (selected.length >= effectiveMaxCount) break;
-      }
     }
   }
 
@@ -2096,7 +2077,7 @@ ${allSitemapEntries
   - Instant on-screen alerts whenever an unknown device joins your home Wi-Fi network.
   - 1-click speed booster to stop peak-hour streaming buffering.
   - Automatic Smart-TV spy blocker sinking ACR (Automatic Content Recognition) telemetry domains from Samsung Tizen, LG webOS, Roku, Vizio Inscape, and Amazon Fire TV.
-- **Transparent Price-Lock Subscription Plans (Covers up to 10 Devices)**:
+- **Transparent Price-Lock Subscription Plans (Covers up to 3 Devices)**:
   - **Yearly Plan (Most Popular — Save 50%)**: £74.99/year (£6.25/mo) | $95.99 USD ($8.00/mo) | €89.99 EUR (€7.50/mo) | CA$131.99 CAD | A$149.99 AUD | CHF 83.99 | ¥14,999 JPY
   - **6-Monthly Plan (Save 35%)**: £48.99/6 months (£8.17/mo) | $61.99 USD | €58.99 EUR | CA$85.99 CAD | A$97.99 AUD | CHF 54.99 | ¥9,799 JPY
   - **Monthly Plan**: £12.49/month (or £1.99 1st-Month Introductory Offer) | $15.99 USD | €14.99 EUR | CA$21.99 CAD | A$24.99 AUD | CHF 13.99 | ¥2,499 JPY
@@ -2160,10 +2141,14 @@ ${allPseoPagesOnDisk.map((p) => `- [${p.h1}](${p.loc})`).join('\n')}
     problem_solutions: allPseoPagesOnDisk.filter((p) => p.dir === 'solutions').length,
     interactive_tools_and_hubs: 7
   };
-  state.lastRunDate = todayStr;
+  if (newUrls.length > 0 || !state.lastRunDate) {
+    state.lastRunDate = todayStr;
+  }
   state.totalGenerated = allPseoPagesOnDisk.length;
   state.intentMixSummary = intentMixSummary;
-  state.batches.push({ date: todayStr, newGenerated: newUrls.length, totalPseoPages: allPseoPagesOnDisk.length, consolidatedNoIndexExcluded: consolidatedNoIndexCount, intentMixSummary });
+  if (newUrls.length > 0) {
+    state.batches.push({ date: todayStr, newGenerated: newUrls.length, totalPseoPages: allPseoPagesOnDisk.length, consolidatedNoIndexExcluded: consolidatedNoIndexCount, intentMixSummary });
+  }
   fs.writeFileSync(DAILY_STATE_PATH, JSON.stringify(state, null, 2), 'utf8');
 
   console.log(`[SWEEPR VPN Pillar SEO Sync] Newly generated: ${newUrls.length} pages | Indexable pSEO Pillars: ${allPseoPagesOnDisk.length} (Consolidated NoIndex Excluded: ${consolidatedNoIndexCount}) | Total Sitemap URLs: ${allSitemapEntries.length}`);

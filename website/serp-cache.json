@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-11-04T23:13:35.264Z",
+  "updatedAt": "2026-11-05T00:19:07.929Z",
   "entries": {
     "3f6375c2084e251e": {
       "fetchedAt": 1793831697933,
@@ -398,27 +398,6 @@
         }
       ]
     },
-    "f58bdccf813ff615": {
-      "fetchedAt": 1793833988473,
-      "keyword": "install nordvpn on synology nas",
-      "source": "community-api+serp-verified",
-      "topResults": [
-        {
-          "title": "macOS: ~15 s with no traffic to a peer after wake from sleep; WireGuard keeps using a session the peer discarded",
-          "url": "https://github.com/tailscale/tailscale/issues/21650",
-          "domain": "github.com",
-          "snippet": "macOS: ~15 s with no traffic to a peer after wake from sleep; WireGuard keeps using a session the peer discarded (2026)",
-          "year": "2026"
-        },
-        {
-          "title": "Alternate Approach",
-          "url": "https://github.com/twardakm/synology-ddns-vpn/issues/2",
-          "domain": "github.com",
-          "snippet": "Alternate Approach (2023)",
-          "year": "2023"
-        }
-      ]
-    },
     "dbba980e606beb0a": {
       "fetchedAt": 1793833991104,
       "keyword": "gl inet nordvpn wireguard setup",
@@ -498,27 +477,6 @@
           "url": "https://fritz.com/",
           "domain": "fritz.com",
           "snippet": "Welche FRITZ!Box ist die richtige für dich? Nutze unseren praktischen FRITZ!Box-Finder und finde in wenigen Schritten das Modell, welches am besten zu dir passt."
-        }
-      ]
-    },
-    "1b060e6e9903eddf": {
-      "fetchedAt": 1793833994069,
-      "keyword": "cancel totalvpn",
-      "source": "community-api+serp-verified",
-      "topResults": [
-        {
-          "title": "Cursor switches pay-per-token when your plan limit end. Calls \"On-Demand usage\"",
-          "url": "https://news.ycombinator.com/item?id=46966879",
-          "domain": "news.ycombinator.com",
-          "snippet": "Cursor switches pay-per-token when your plan limit end. Calls \"On-Demand usage\" (2026)",
-          "year": "2026"
-        },
-        {
-          "title": "Ask HN: How are Markov chains so different from tiny LLMs?",
-          "url": "https://news.ycombinator.com/item?id=45958004",
-          "domain": "news.ycombinator.com",
-          "snippet": "Ask HN: How are Markov chains so different from tiny LLMs? (2025)",
-          "year": "2025"
         }
       ]
     },
@@ -1001,6 +959,622 @@
           "url": "http://finds.synology.com/",
           "domain": "finds.synology.com",
           "snippet": "No Synology Device Found in LAN Check the connectivity of your Synology devices and click Refresh. If you still cannot find any devices, download Synology Assistant to find your device. Learn more about Synology Assistant."
+        }
+      ]
+    },
+    "481dd5cff72946ab": {
+      "fetchedAt": 1793837920332,
+      "keyword": "bitdefender vpn wireguard config",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Full VPN Support with WSL2",
+          "url": "https://github.com/microsoft/WSL/issues/10380",
+          "domain": "github.com",
+          "snippet": "Full VPN Support with WSL2 (2023)",
+          "year": "2023"
+        },
+        {
+          "title": "[BUG] Claude Code + Cowork fail with ECONNRESET on every network and client — chat works fine",
+          "url": "https://github.com/anthropics/claude-code/issues/85232",
+          "domain": "github.com",
+          "snippet": "[BUG] Claude Code + Cowork fail with ECONNRESET on every network and client — chat works fine (2026)",
+          "year": "2026"
+        },
+        {
+          "title": "Bitdefender - Global Leader in Cybersecurity Software",
+          "url": "https://www.bitdefender.com/",
+          "domain": "bitdefender.com",
+          "snippet": "Bitdefender is a cybersecurity software leader delivering best-in-class threat prevention, detection, and response solutions worldwide."
+        },
+        {
+          "title": "Bitdefender Central",
+          "url": "https://central.bitdefender.com/home",
+          "domain": "central.bitdefender.com",
+          "snippet": "Bitdefender Central is your control panel for subscription management, product installation, device security monitoring, and 24/7 support."
+        },
+        {
+          "title": "Bitdefender Account",
+          "url": "https://account.bitdefender.com/",
+          "domain": "account.bitdefender.com",
+          "snippet": "Bitdefender Account"
+        }
+      ]
+    },
+    "f58bdccf813ff615": {
+      "fetchedAt": 1793837922417,
+      "keyword": "install nordvpn on synology nas",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "macOS: ~15 s with no traffic to a peer after wake from sleep; WireGuard keeps using a session the peer discarded",
+          "url": "https://github.com/tailscale/tailscale/issues/21650",
+          "domain": "github.com",
+          "snippet": "macOS: ~15 s with no traffic to a peer after wake from sleep; WireGuard keeps using a session the peer discarded (2026)",
+          "year": "2026"
+        },
+        {
+          "title": "Alternate Approach",
+          "url": "https://github.com/twardakm/synology-ddns-vpn/issues/2",
+          "domain": "github.com",
+          "snippet": "Alternate Approach (2023)",
+          "year": "2023"
+        }
+      ]
+    },
+    "14926dc16d9ad645": {
+      "fetchedAt": 1793837923774,
+      "keyword": "mikrotik wireguard config generator",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Home Devices: correct topology, USB grouping and truthful online status",
+          "url": "https://github.com/alanua/Skeleton/issues/4801",
+          "domain": "github.com",
+          "snippet": "Home Devices: correct topology, USB grouping and truthful online status (2026)",
+          "year": "2026"
+        },
+        {
+          "title": "[Bug]  AmneziaWG v3 handshake never completes — likely TUN routing loop in WireGuard outbound dial (no fwmark exemption)",
+          "url": "https://github.com/MetaCubeX/mihomo/issues/3224",
+          "domain": "github.com",
+          "snippet": "[Bug]  AmneziaWG v3 handshake never completes — likely TUN routing loop in WireGuard outbound dial (no fwmark exemption) (2026)",
+          "year": "2026"
+        },
+        {
+          "title": "MikroTik · Routers and Wireless",
+          "url": "https://mikrotik.com/",
+          "domain": "mikrotik.com",
+          "snippet": "MikroTik makes networking hardware and software, which is used in nearly all countries of the world. Our mission is to make existing Internet technologies faster, more powerful and affordable to wider range of users."
+        },
+        {
+          "title": "MikroTik · Downloads",
+          "url": "https://mikrotik.com/download",
+          "domain": "mikrotik.com",
+          "snippet": "Download latest version of MikroTik RouterOS and other MikroTik software products."
+        },
+        {
+          "title": "MikroTik - Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/MikroTik",
+          "domain": "en.wikipedia.org",
+          "snippet": "MikroTik (officially SIA \"Mikrotīkls\") is a Latvian network equipment manufacturing company. MikroTik develops and sells wired and wireless network routers, network switches, access points, as well as operating systems and auxiliary software."
+        }
+      ]
+    },
+    "1dd1913fc817cf15": {
+      "fetchedAt": 1793837925192,
+      "keyword": "mikrotik wireguard client config generator",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Home Devices: correct topology, USB grouping and truthful online status",
+          "url": "https://github.com/alanua/Skeleton/issues/4801",
+          "domain": "github.com",
+          "snippet": "Home Devices: correct topology, USB grouping and truthful online status (2026)",
+          "year": "2026"
+        },
+        {
+          "title": "[Bug]  AmneziaWG v3 handshake never completes — likely TUN routing loop in WireGuard outbound dial (no fwmark exemption)",
+          "url": "https://github.com/MetaCubeX/mihomo/issues/3224",
+          "domain": "github.com",
+          "snippet": "[Bug]  AmneziaWG v3 handshake never completes — likely TUN routing loop in WireGuard outbound dial (no fwmark exemption) (2026)",
+          "year": "2026"
+        },
+        {
+          "title": "MikroTik · Routers and Wireless",
+          "url": "https://mikrotik.com/",
+          "domain": "mikrotik.com",
+          "snippet": "MikroTik makes networking hardware and software, which is used in nearly all countries of the world. Our mission is to make existing Internet technologies faster, more powerful and affordable to wider range of users."
+        },
+        {
+          "title": "MikroTik · Downloads",
+          "url": "https://mikrotik.com/download",
+          "domain": "mikrotik.com",
+          "snippet": "Download latest version of MikroTik RouterOS and other MikroTik software products."
+        },
+        {
+          "title": "MikroTik - Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/MikroTik",
+          "domain": "en.wikipedia.org",
+          "snippet": "MikroTik (officially SIA \"Mikrotīkls\") is a Latvian network equipment manufacturing company. MikroTik develops and sells wired and wireless network routers, network switches, access points, as well as operating systems and auxiliary software."
+        }
+      ]
+    },
+    "1405bc7f0f6eb411": {
+      "fetchedAt": 1793837926411,
+      "keyword": "does bitdefender vpn use wireguard",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "[Windows][Desktop 26.1007.2314.0] Repeated 0x3B BSOD in nt!CmpKeySecurityIncrementReferenceCount during local execution",
+          "url": "https://github.com/openai/codex/issues/52728",
+          "domain": "github.com",
+          "snippet": "[Windows][Desktop 26.1007.2314.0] Repeated 0x3B BSOD in nt!CmpKeySecurityIncrementReferenceCount during local execution (2026)",
+          "year": "2026"
+        },
+        {
+          "title": "Full VPN Support with WSL2",
+          "url": "https://github.com/microsoft/WSL/issues/10380",
+          "domain": "github.com",
+          "snippet": "Full VPN Support with WSL2 (2023)",
+          "year": "2023"
+        }
+      ]
+    },
+    "dc2683fe8dc29433": {
+      "fetchedAt": 1793837927734,
+      "keyword": "bitdefender vpn wireguard configuration",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Full VPN Support with WSL2",
+          "url": "https://github.com/microsoft/WSL/issues/10380",
+          "domain": "github.com",
+          "snippet": "Full VPN Support with WSL2 (2023)",
+          "year": "2023"
+        },
+        {
+          "title": "fix: sync banners + catalog version after 1.8.1 color correction",
+          "url": "https://github.com/brevityA/CoreBuildsApps/pull/63",
+          "domain": "github.com",
+          "snippet": "fix: sync banners + catalog version after 1.8.1 color correction (2026)",
+          "year": "2026"
+        },
+        {
+          "title": "Bitdefender - Global Leader in Cybersecurity Software",
+          "url": "https://www.bitdefender.com/",
+          "domain": "bitdefender.com",
+          "snippet": "Bitdefender is a cybersecurity software leader delivering best-in-class threat prevention, detection, and response solutions worldwide."
+        },
+        {
+          "title": "Bitdefender Central",
+          "url": "https://central.bitdefender.com/home",
+          "domain": "central.bitdefender.com",
+          "snippet": "Bitdefender Central is your control panel for subscription management, product installation, device security monitoring, and 24/7 support."
+        },
+        {
+          "title": "Bitdefender Account",
+          "url": "https://account.bitdefender.com/",
+          "domain": "account.bitdefender.com",
+          "snippet": "Bitdefender Account"
+        }
+      ]
+    },
+    "d4e833ebda32f09a": {
+      "fetchedAt": 1793837929092,
+      "keyword": "protonvpn wireguard router",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Evaluate self-hosted VPS as a ProtonVPN alternative (M3 candidate)",
+          "url": "https://github.com/RetroGrid/commodity-cloud/issues/18",
+          "domain": "github.com",
+          "snippet": "Evaluate self-hosted VPS as a ProtonVPN alternative (M3 candidate) (2026)",
+          "year": "2026"
+        },
+        {
+          "title": "Steering a network leaves its old IPv6 addressing in place, and instances sharing a tunnel address collide",
+          "url": "https://github.com/Aladex/protonvpn-wg-luci/issues/3",
+          "domain": "github.com",
+          "snippet": "Steering a network leaves its old IPv6 addressing in place, and instances sharing a tunnel address collide (2026)",
+          "year": "2026"
+        },
+        {
+          "title": "Per-application split tunneling with self-hosted VPN or proxy",
+          "url": "https://superuser.com/questions/1729883/per-application-split-tunneling-with-self-hosted-vpn-or-proxy",
+          "domain": "superuser.com",
+          "snippet": "Per-application split tunneling with self-hosted VPN or proxy (2022)",
+          "year": "2022"
+        },
+        {
+          "title": "The best VPN for speed and security",
+          "url": "https://protonvpn.com/",
+          "domain": "protonvpn.com",
+          "snippet": "Proton VPN is part of a privacy ecosystem designed to protect your data end-to-end. Our mission is simple: keep your information safe, without slowing you down or selling you out."
+        },
+        {
+          "title": "Download VPN | Proton VPN",
+          "url": "https://protonvpn.com/download",
+          "domain": "protonvpn.com",
+          "snippet": "Proton VPN apps are easy to use, open source, and audited for security. Protect your internet from hackers and surveillance while accessing or streaming content anywhere in the world. Need Proton VPN for a different device? See all supported platforms here."
+        }
+      ]
+    },
+    "8523e1e5901d2755": {
+      "fetchedAt": 1793837930416,
+      "keyword": "mikrotik wireguard export client config",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Remove bench secret storage; accept localadmin login transiently (#167)",
+          "url": "https://github.com/isolson/equipment-provisioner/pull/173",
+          "domain": "github.com",
+          "snippet": "Remove bench secret storage; accept localadmin login transiently (#167) (2026)",
+          "year": "2026"
+        },
+        {
+          "title": "release(mktxp): update akpw/mktxp ( v1.2.19 → v1.2.20 )",
+          "url": "https://github.com/mglants/containers/pull/64",
+          "domain": "github.com",
+          "snippet": "release(mktxp): update akpw/mktxp ( v1.2.19 → v1.2.20 ) (2026)",
+          "year": "2026"
+        },
+        {
+          "title": "MikroTik · Routers and Wireless",
+          "url": "https://mikrotik.com/",
+          "domain": "mikrotik.com",
+          "snippet": "MikroTik makes networking hardware and software, which is used in nearly all countries of the world. Our mission is to make existing Internet technologies faster, more powerful and affordable to wider range of users."
+        },
+        {
+          "title": "MikroTik · Downloads",
+          "url": "https://mikrotik.com/download",
+          "domain": "mikrotik.com",
+          "snippet": "Download latest version of MikroTik RouterOS and other MikroTik software products."
+        },
+        {
+          "title": "MikroTik - Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/MikroTik",
+          "domain": "en.wikipedia.org",
+          "snippet": "MikroTik (officially SIA \"Mikrotīkls\") is a Latvian network equipment manufacturing company. MikroTik develops and sells wired and wireless network routers, network switches, access points, as well as operating systems and auxiliary software."
+        }
+      ]
+    },
+    "5a40c39aa6b03576": {
+      "fetchedAt": 1793837931652,
+      "keyword": "kaspersky vpn alternative options",
+      "source": "bing-rss-verified",
+      "topResults": [
+        {
+          "title": "Kaspersky Cyber Security Solutions for Home and Business | Kaspersky",
+          "url": "https://www.kaspersky.com/",
+          "domain": "kaspersky.com",
+          "snippet": "Official Site – A Global Leader in next-generation cybersecurity solutions and services, Kaspersky offers premium protection against all cyber threats for your home and business."
+        },
+        {
+          "title": "Download Kaspersky Antivirus | Kaspersky",
+          "url": "https://www.kaspersky.com/downloads/antivirus",
+          "domain": "kaspersky.com",
+          "snippet": "Kaspersky's plans from Plus upward include an unlimited, fast VPN alongside the antivirus, so browsing stays private and your location secure without a separate subscription. If online privacy is a priority as well as malware protection, that combination is worth having."
+        },
+        {
+          "title": "My Kaspersky | Welcome",
+          "url": "https://my.kaspersky.com/",
+          "domain": "my.kaspersky.com",
+          "snippet": "My Kaspersky is a one-stop point for protection of your digital life and those you care about. Monitor all your digital devices and those you have shared protection with, on one screen. Use a convenient online interface to manage your Kaspersky products."
+        },
+        {
+          "title": "Home Computer and Mobile Security Software | Kaspersky",
+          "url": "https://usa.kaspersky.com/home-security",
+          "domain": "usa.kaspersky.com",
+          "snippet": "Kaspersky Offers Multiple Levels of Protection for Your Home Computer &amp; Mobile Devices to Keep You Safe From All Malware, Viruses and Online Threats. Secure Your Devices With Our Award-Winning Security Products."
+        },
+        {
+          "title": "Kaspersky Cyber Security Solutions for Home and Business | Kaspersky",
+          "url": "https://me-en.kaspersky.com/",
+          "domain": "me-en.kaspersky.com",
+          "snippet": "A Global Leader in Next Generation Cybersecurity Solutions and Services, Kaspersky Offers Premium Protection Against All Cyber Threats for Your Home and Business."
+        }
+      ]
+    },
+    "27d669e4599f1cde": {
+      "fetchedAt": 1793837933246,
+      "keyword": "zimaboard wireguard vpn gateway not working",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Broken app connectors and subnets from disabled IP forwarding",
+          "url": "https://github.com/hassio-addons/app-tailscale/issues/661",
+          "domain": "github.com",
+          "snippet": "Broken app connectors and subnets from disabled IP forwarding (2026)",
+          "year": "2026"
+        },
+        {
+          "title": "feat(fastestvpn): support for Wireguard",
+          "url": "https://github.com/passteque/gluetun/pull/2383",
+          "domain": "github.com",
+          "snippet": "feat(fastestvpn): support for Wireguard (2024)",
+          "year": "2024"
+        },
+        {
+          "title": "ZimaBoard 2: Revolutionizing Single Board Servers",
+          "url": "https://www.zimaspace.com/products/single-board2-server",
+          "domain": "zimaspace.com",
+          "snippet": "ZimaBoard 2 is a hackable single board server. It is a hybrid of micro server and SBC (single board computer). It's designed for building a low-cost NAS, media server, and software router as your home automation and entertainment center."
+        },
+        {
+          "title": "Create Your Personal Cloud for Storage &amp; Media - ZimaBoard",
+          "url": "https://www.zimaboard.com/application/home_server",
+          "domain": "zimaboard.com",
+          "snippet": "ZimaBoard is world's first hackable single board server. It is a hybird of micro server and SBC (single board computer). It's designed for building a low cost NAS, media server, and software router as your home automation and entertainment center."
+        },
+        {
+          "title": "Zima: Elevating Your Computing Experience with ZimaBoard Servers ...",
+          "url": "https://www.zimaspace.com/",
+          "domain": "zimaspace.com",
+          "snippet": "Experience the future of computing with Zima. Discover innovative products including ZimaBoard single board servers, ZimaBlade Personal NAS, ZimaCube Personal Cloud, and more."
+        }
+      ]
+    },
+    "8d2c63af3c052b93": {
+      "fetchedAt": 1793837934690,
+      "keyword": "mullvad port forwarding alternative",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Any Mullvad Alternative?",
+          "url": "https://news.ycombinator.com/item?id=37500278",
+          "domain": "news.ycombinator.com",
+          "snippet": "Any Mullvad Alternative? (2023)",
+          "year": "2023"
+        },
+        {
+          "title": "Mullvad VPN - Privacy is for the people",
+          "url": "https://mullvad.net/",
+          "domain": "mullvad.net",
+          "snippet": "Free the internet from mass surveillance and censorship. Fight for privacy with Mullvad VPN and Mullvad Browser."
+        },
+        {
+          "title": "Mullvad VPN for Windows",
+          "url": "https://mullvad.net/en/download/vpn/windows",
+          "domain": "mullvad.net",
+          "snippet": "Download Mullvad VPN for Windows to ensure secure, private browsing with easy setup, traffic obfuscation, and a kill switch. Compatible with Windows 10+."
+        },
+        {
+          "title": "Mullvad - Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Mullvad",
+          "domain": "en.wikipedia.org",
+          "snippet": "Mullvad is a commercial VPN service based in Sweden. The name \"Mullvad\" is the word for \"mole\" in the Swedish language. Mullvad operates using the WireGuard protocol. It also supports Shadowsocks as a bridge protocol for censorship circumvention. Mullvad's VPN client software is publicly available under the GPLv3, a free and open-source software license. [5][6][7]"
+        },
+        {
+          "title": "Mullvad VPN - GitHub",
+          "url": "https://github.com/mullvad",
+          "domain": "github.com",
+          "snippet": "The Mullvad VPN client app for desktop and mobile Rust 7.7k 566"
+        }
+      ]
+    },
+    "3b7d01b9ed9087f8": {
+      "fetchedAt": 1793837936247,
+      "keyword": "mikrotik hap ax3 wireguard",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Upgrade and Professionalize MikroTik Platform",
+          "url": "https://github.com/uLibo-2/generatorMikrotik/pull/2",
+          "domain": "github.com",
+          "snippet": "Upgrade and Professionalize MikroTik Platform (2026)",
+          "year": "2026"
+        },
+        {
+          "title": "Как добавлять юзеров?",
+          "url": "https://github.com/yury-sannikov/amnezia-wg-docker/issues/7",
+          "domain": "github.com",
+          "snippet": "Как добавлять юзеров? (2024)",
+          "year": "2024"
+        },
+        {
+          "title": "MikroTik · Routers and Wireless",
+          "url": "https://mikrotik.com/",
+          "domain": "mikrotik.com",
+          "snippet": "MikroTik makes networking hardware and software, which is used in nearly all countries of the world. Our mission is to make existing Internet technologies faster, more powerful and affordable to wider range of users."
+        },
+        {
+          "title": "MikroTik · Downloads",
+          "url": "https://mikrotik.com/download",
+          "domain": "mikrotik.com",
+          "snippet": "Download latest version of MikroTik RouterOS and other MikroTik software products."
+        },
+        {
+          "title": "MikroTik - Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/MikroTik",
+          "domain": "en.wikipedia.org",
+          "snippet": "MikroTik (officially SIA \"Mikrotīkls\") is a Latvian network equipment manufacturing company. MikroTik develops and sells wired and wireless network routers, network switches, access points, as well as operating systems and auxiliary software."
+        }
+      ]
+    },
+    "38c5e1c9ca59a380": {
+      "fetchedAt": 1793837937626,
+      "keyword": "mikrotik wireguard client configuration",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Access home network using WireGuard VPN on public VPS (point-to-site)",
+          "url": "https://superuser.com/questions/1833855/access-home-network-using-wireguard-vpn-on-public-vps-point-to-site",
+          "domain": "superuser.com",
+          "snippet": "Access home network using WireGuard VPN on public VPS (point-to-site) (2024)",
+          "year": "2024"
+        },
+        {
+          "title": "MikroTik · Routers and Wireless",
+          "url": "https://mikrotik.com/",
+          "domain": "mikrotik.com",
+          "snippet": "MikroTik makes networking hardware and software, which is used in nearly all countries of the world. Our mission is to make existing Internet technologies faster, more powerful and affordable to wider range of users."
+        },
+        {
+          "title": "MikroTik · Downloads",
+          "url": "https://mikrotik.com/download",
+          "domain": "mikrotik.com",
+          "snippet": "Download latest version of MikroTik RouterOS and other MikroTik software products."
+        },
+        {
+          "title": "MikroTik - Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/MikroTik",
+          "domain": "en.wikipedia.org",
+          "snippet": "MikroTik (officially SIA \"Mikrotīkls\") is a Latvian network equipment manufacturing company. MikroTik develops and sells wired and wireless network routers, network switches, access points, as well as operating systems and auxiliary software."
+        },
+        {
+          "title": "First Time Configuration - RouterOS - MikroTik Documentation",
+          "url": "https://help.mikrotik.com/docs/spaces/ROS/pages/328151/First+Time+Configuration",
+          "domain": "help.mikrotik.com",
+          "snippet": "Almost all MikroTik routers come with a default configuration applied and you can use this section to connect to them. Only CCR series professional devices could be configured differently, for those, follow the next section instead."
+        }
+      ]
+    },
+    "43593ee6e89ba512": {
+      "fetchedAt": 1793837939279,
+      "keyword": "omada er605 wireguard client",
+      "source": "bing-rss-verified",
+      "topResults": [
+        {
+          "title": "Manage Chronic Conditions &amp; Embrace Your Health | Omada Health",
+          "url": "https://www.omadahealth.com/",
+          "domain": "omadahealth.com",
+          "snippet": "Omada is a virtual care program that pairs you with a care team and resources to help you achieve your health goals. By combining the power of human coaching, connected devices, and lessons, Omada can help you build healthy patterns for life."
+        },
+        {
+          "title": "Welcome to Omada - Virtual Care | Omada Health",
+          "url": "https://www.omadahealth.com/welcome-to-omada-complete",
+          "domain": "omadahealth.com",
+          "snippet": "Omada is a virtual care program that empowers you to achieve your health goals through sustainable lifestyle change. See how it works in this video!"
+        },
+        {
+          "title": "Omada Cloud Management Platform",
+          "url": "https://omada.tplinkcloud.com/login",
+          "domain": "omada.tplinkcloud.com",
+          "snippet": "We're sorry but Omada doesn't work properly without JavaScript enabled. Please enable it to continue."
+        },
+        {
+          "title": "Omada SDN | TP-Link",
+          "url": "https://www.omadanetworks.com/us/solution/omada-sdn/",
+          "domain": "omadanetworks.com",
+          "snippet": "TP-Link Omada is a smarter end-to-end cloud solution dedicated for business networking and integrating gateways, switches, access points, and more into a full Software Defined Networking (SDN) solution."
+        },
+        {
+          "title": "Omada - Networks Empower Business | TP-Link",
+          "url": "https://www.omadanetworks.com/",
+          "domain": "omadanetworks.com",
+          "snippet": "Omada delivers exceptional value through a comprehensive approach to business networking that leverages innovative technology, partner support, robust security, and reliability to meet the needs of modern businesses."
+        }
+      ]
+    },
+    "225c11de14f175c8": {
+      "fetchedAt": 1793837940580,
+      "keyword": "cudy tr3000 wireguard configuration",
+      "source": "bing-rss-verified",
+      "topResults": [
+        {
+          "title": "Cudy, Your Home and Business Networking Solutions Provider",
+          "url": "https://www.cudy.com/",
+          "domain": "cudy.com",
+          "snippet": "Cudy offers wide range of networking provides, including 5G 4G CPE Routers, Wi-Fi Router, Whole-Home Mesh System, Access Points, Industrial Routers"
+        },
+        {
+          "title": "Home page – Cudy",
+          "url": "https://www.cudy.com/en-us/collections/frontpage",
+          "domain": "cudy.com",
+          "snippet": "Cudy offers wide range of networking provides, including 5G 4G CPE Routers, Wi-Fi Router, Whole-Home Mesh System, Access Points, Industrial Routers"
+        },
+        {
+          "title": "Trying to configure your Cudy Router",
+          "url": "http://cudy.net/",
+          "domain": "cudy.net",
+          "snippet": "Many Cudy routers support configuration through the Cudy App (Check Supported Models). Download the app on your mobile device, connect to your router's WiFi, and follow the in-app setup instructions. The Cudy App is available on both Google Play and the Apple App Store."
+        },
+        {
+          "title": "Cudy",
+          "url": "https://cloud.cudy.com/login",
+          "domain": "cloud.cudy.com",
+          "snippet": "Cudy Cloud is the remote management platform for Cudy devices, allowing users to effortlessly monitor, configure, and optimize their network settings from anywhere at any time."
+        },
+        {
+          "title": "WR1200 - Cudy",
+          "url": "https://support.cudy.com/emulator/WR1200/",
+          "domain": "support.cudy.com",
+          "snippet": "Copyright © 2026 Shenzhen Cudy Technology Co., Ltd. | HW: WR1200 V3.0 | FW: 2.5.13-20260611-174800 | www.cudy.com | support@cudy.com"
+        }
+      ]
+    },
+    "6a9af1e6582e2b69": {
+      "fetchedAt": 1793837941874,
+      "keyword": "chromecast 4k wireguard setup server",
+      "source": "bing-rss-verified",
+      "topResults": [
+        {
+          "title": "Chromecast Home - Google",
+          "url": "https://www.google.com/cast/chromecast/home",
+          "domain": "google.com",
+          "snippet": "To watch on the big screen, tap the Cast button from any Cast-enabled app"
+        },
+        {
+          "title": "Chromecast Setup - Google",
+          "url": "https://www.google.com/cast/setup/",
+          "domain": "google.com",
+          "snippet": "Download the cast app on your phone or tablet to get set up!"
+        },
+        {
+          "title": "Amazon.com: Chromecast",
+          "url": "https://www.amazon.com/chromecast/s?k=chromecast",
+          "domain": "amazon.com",
+          "snippet": "Google Chromecast with Google TV - Streaming Entertainment with Voice Search - Watch Movies, Shows, and Live TV in 4K HDR Streaming Media Player - Includes Pouch and Cleaning Cloth - Snow 100+ bought in past month Add to cart"
+        },
+        {
+          "title": "Cast from Chrome to your TV",
+          "url": "https://support.google.com/chromecast/answer/3228332?hl=en",
+          "domain": "support.google.com",
+          "snippet": "To show Chrome on your TV, you need: A Chromecast, Chromecast with Google TV, Google TV Streamer (4K), Chromecast Ultra, or TV with Google Cast. Your Google streaming device must have a strong Wi-Fi connection. Learn how to Troubleshoot Chromecast and Google TV Streamer connection."
+        },
+        {
+          "title": "Chromecast - Best Buy",
+          "url": "https://www.bestbuy.com/site/searchpage.jsp?id=pcat17071&amp;st=Chromecast",
+          "domain": "bestbuy.com",
+          "snippet": "Shop for Chromecast at Best Buy. Find low everyday prices and buy online for delivery or in-store pick-up"
+        }
+      ]
+    },
+    "1088b00af0356173": {
+      "fetchedAt": 1793837946494,
+      "keyword": "truenas scale wireguard setup",
+      "source": "bing-rss-verified",
+      "topResults": [
+        {
+          "title": "TrueNAS | Mission-Critical Open Enterprise Storage",
+          "url": "https://www.truenas.com/",
+          "domain": "truenas.com",
+          "snippet": "Transform your data estate with TrueNAS Enterprise storage appliances. Secure, scalable, high-performance data platform for every workflow."
+        },
+        {
+          "title": "Download TrueNAS | TrueNAS - Open Enterprise Storage",
+          "url": "https://www.truenas.com/download/",
+          "domain": "truenas.com",
+          "snippet": "TrueNAS Community Edition The world’s most deployed data storage platform: free, open, and ready to run on any x86 hardware. Test drive the full TrueNAS platform with file, block, and object storage in one unified interface, zero vendor lock-in, and the backing of a million-strong community."
+        },
+        {
+          "title": "TrueNAS - Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/TrueNAS",
+          "domain": "en.wikipedia.org",
+          "snippet": "TrueNAS is a family of network-attached storage (NAS) products developed by iXsystems Inc. (doing business as TrueNAS as of 2025). The products consist of TrueNAS Enterprise and TrueNAS Community Edition."
+        },
+        {
+          "title": "TrueNAS Connect | Setup, Manage, Monitor",
+          "url": "https://connect.truenas.com/",
+          "domain": "connect.truenas.com",
+          "snippet": "TrueNAS Connect is an optional web-based control panel that simplifies day-to-day management of your TrueNAS software. From a single interface, you can conveniently manage multiple systems, monitor system health, configure alerts, visualize hardware, and perform web installations."
+        },
+        {
+          "title": "iX Homepage - iXsystems, Inc. - Enterprise Storage &amp; Servers",
+          "url": "https://www.ixsystems.com/",
+          "domain": "ixsystems.com",
+          "snippet": "Since 2002, iXsystems Inc. — now doing business as TrueNAS — has been working towards creating the worlds most trusted Open Enterprise Storage Platform to fix broken economics of Enterprise Storage. TrueNAS is the result of this vision. TrueNAS Enterprise storage hardware appliances are deployed in business and mission critical applications globally across every industry and vertical ..."
         }
       ]
     }

@@ -419,9 +419,9 @@ PostUp = iptables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS 
       </div>
     </section>
     <section id="enriched-gl-inet-nordvpn-wireguard-setup" data-enriched-query="gl-inet-nordvpn-wireguard-setup" style="margin:28px 0;padding:20px;background:rgba(15,23,42,0.88);color:#f8fafc;border:1px solid rgba(16,185,129,0.35);border-radius:12px;">
-      <h2 style="margin-top:0;color:#f8fafc;">Why GL.iNet Travel Routers (Beryl AX / Slate AX) Users Switch From NordVPN to SWEEPR VPN Native WireGuard (.conf)</h2>
-      <p style="color:#cbd5e1;line-height:1.65;">Searching for "gl inet nordvpn wireguard setup"? Many GL.iNet Travel Routers (Beryl AX / Slate AX) owners struggle with NordVPN due to its proprietary NordLynx daemon (which hides WireGuard private keys behind Linux token-extraction scripts). SWEEPR VPN provides instant 1-click standard WireGuard (.conf) export with pre-tuned MTU (1420/1412/1380), in-tunnel Smart-TV ACR & ad-blocking DNS (10.66.0.1), 10Gbps RAM-only bare-metal endpoints, and a flat price-lock guarantee (£1.99 1st-Month Trial, £74.99/yr — Save 50%).</p>
-      <pre style="background:#020617;color:#6ee7b7;padding:14px;border-radius:8px;overflow-x:auto;border:1px solid #1e293b;"><code># NordVPN vs SWEEPR VPN on GL.iNet Travel Routers (Beryl AX / Slate AX)
+      <h2 style="margin-top:0;color:#f8fafc;">Why GL.iNet Travel Router Users Switch From NordVPN to SWEEPR VPN Native WireGuard (.conf)</h2>
+      <p style="color:#cbd5e1;line-height:1.65;">Searching for "gl inet nordvpn wireguard setup"? Many GL.iNet Travel Router owners struggle with NordVPN due to its proprietary NordLynx daemon (which hides WireGuard private keys behind Linux token-extraction scripts). SWEEPR VPN provides instant 1-click standard WireGuard (.conf) export with pre-tuned MTU (1420/1412/1380), in-tunnel Smart-TV ACR & ad-blocking DNS (10.66.0.1), 10Gbps RAM-only bare-metal endpoints, and a flat price-lock guarantee (£1.99 1st-Month Trial, £74.99/yr — Save 50%).</p>
+      <pre style="background:#020617;color:#6ee7b7;padding:14px;border-radius:8px;overflow-x:auto;border:1px solid #1e293b;"><code># NordVPN vs SWEEPR VPN on GL.iNet Travel Router
 # - NordVPN: Requires proprietary NordLynx daemon (which hides WireGuard private keys behind Linux token-extraction scripts)
 # - SWEEPR VPN: Native 1-Click Standard WireGuard .conf Export (Zero Token Scripts)
 
@@ -435,8 +435,7 @@ Endpoint = lon01.wg.sweeprvpn.com:51820
 AllowedIPs = 0.0.0.0/0, ::/0
 PersistentKeepalive = 25</code></pre>
     </section>
-
-    <section id="enriched-gl-inet-wireguard-setup" data-enriched-query="gl-inet-wireguard-setup" style="margin:28px 0;padding:20px;background:rgba(15,23,42,0.88);color:#f8fafc;border:1px solid rgba(16,185,129,0.35);border-radius:12px;">
+<section id="enriched-gl-inet-wireguard-setup" data-enriched-query="gl-inet-wireguard-setup" style="margin:28px 0;padding:20px;background:rgba(15,23,42,0.88);color:#f8fafc;border:1px solid rgba(16,185,129,0.35);border-radius:12px;">
       <h2 style="margin-top:0;color:#f8fafc;">Verified WireGuard .conf & MTU Configuration: GL.iNet WireGuard Setup</h2>
       <p style="color:#cbd5e1;line-height:1.65;">To achieve 900+ Mbps sustained throughput and zero UDP packet fragmentation for "gl inet wireguard setup", import a native SWEEPR VPN 10Gbps WireGuard profile (.conf) with in-tunnel DNS set to 10.66.0.1 and PersistentKeepalive = 25.</p>
       <pre style="background:#020617;color:#6ee7b7;padding:14px;border-radius:8px;overflow-x:auto;border:1px solid #1e293b;"><code>[Interface]

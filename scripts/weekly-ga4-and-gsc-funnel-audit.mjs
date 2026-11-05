@@ -125,16 +125,64 @@ async function runWeeklyFunnelAndGscAudit() {
     `${sitemapUrlCount} canonical indexable URLs registered in sitemap.xml`
   );
 
-  // Verify Keyword Research Engine & 8-Assertion Quality Gate State
+  // Verify Keyword Research Engine & 9-Assertion Quality Gate State + 28 Pillar Templates
   const kwOppsPath = path.join(WEBSITE_DIR, 'keyword-opportunities.json');
+  const kwEngineSource = fs.readFileSync(path.join(VPN_ROOT, 'scripts', 'keyword-research-engine.mjs'), 'utf8');
+  const templateCount = (kwEngineSource.match(/pillarBriefTemplate:\s*\{/g) || []).length;
   const kwOppsExists = fs.existsSync(kwOppsPath);
   const kwOppsDoc = kwOppsExists ? JSON.parse(fs.readFileSync(kwOppsPath, 'utf8')) : {};
-  const kwGatePass = kwOppsDoc.auditSummary?.assertionsPassed === '8/8 PASS';
+  const kwGatePass = kwOppsDoc.auditSummary?.assertionsPassed === '9/9 PASS' && templateCount >= 25;
   record(
     'Keyword Opportunity Engine',
-    'Automated 8-Assertion Keyword Quality Gate (website/keyword-opportunities.json)',
+    'Automated 9-Assertion Keyword Quality Gate & Runway Templates (website/keyword-opportunities.json)',
     kwOppsExists && kwGatePass,
-    `Evaluated=${(kwOppsDoc.opportunities || []).length} | AuditGate=${kwOppsDoc.auditSummary?.assertionsPassed || 'N/A'} | Repairs=${kwOppsDoc.auditSummary?.autoRepairsApplied ?? 0}`
+    `Templates=${templateCount} | Evaluated=${(kwOppsDoc.opportunities || []).length} | AuditGate=${kwOppsDoc.auditSummary?.assertionsPassed || 'N/A'} | Repairs=${kwOppsDoc.auditSummary?.autoRepairsApplied ?? 0}`
+  );
+
+  // Verify Live Proof [data-live-proof] Badges across Funnel & Tool Pages
+  const liveProofPages = [
+    'index.html',
+    'pricing.html',
+    'order.html',
+    'leak-test.html',
+    'isp-throttling-test.html',
+    'smart-tv-tracking-check.html',
+    'vpn-renewal-price-checker.html',
+    'whats-on-my-wifi.html'
+  ];
+  const missingLiveProofPages = liveProofPages.filter((f) => {
+    const p = path.join(WEBSITE_DIR, f);
+    return !fs.existsSync(p) || !fs.readFileSync(p, 'utf8').includes('data-live-proof');
+  });
+  record(
+    'CMO Live Proof Telemetry',
+    'Live Proof [data-live-proof] Hydration Across Funnel & Diagnostic Tools',
+    missingLiveProofPages.length === 0,
+    missingLiveProofPages.length === 0
+      ? `All ${liveProofPages.length} core funnel & diagnostic tool pages contain [data-live-proof] telemetry badges`
+      : `Missing [data-live-proof] on: ${missingLiveProofPages.join(', ')}`
+  );
+
+  // Verify CMO Phase 2 PLG Automations (Automations 5-8)
+  const dashboardHtml = fs.readFileSync(path.join(WEBSITE_DIR, 'dashboard.html'), 'utf8');
+  const orderHtml = fs.readFileSync(path.join(WEBSITE_DIR, 'order.html'), 'utf8');
+  const hasPlgAutomations =
+    serverMjs.includes('applyCustomerReferralRewardIfEligible') &&
+    dashboardHtml.includes('portalReferralCard') &&
+    serverMjs.includes("pathname === '/api/order/resume'") &&
+    serverMjs.includes("pathname === '/api/lead/unsubscribe'") &&
+    orderHtml.includes("urlParams.get('trial') === '1'") &&
+    navJs.includes('sweepr_diagnostic_context') &&
+    navJs.includes('sweeprDiagnosticExportBar') &&
+    serverMjs.includes("pathname === '/api/portal/review-feedback'") &&
+    dashboardHtml.includes('momentOfDelightReviewCard');
+  record(
+    'CMO PLG Automations 5-8',
+    'Viral Referral Loop, Abandoned Checkout Recovery, Diagnostic Export & Review Velocity Engine',
+    hasPlgAutomations,
+    hasPlgAutomations
+      ? 'Automations 5 (30d Referral), 6 (Abandoned Cart Resume/Unsubscribe), 7 (Diagnostic Runbook/Banner), and 8 (5-Star Review +7d Bonus) active'
+      : 'One or more PLG Automation 5-8 hooks missing in server.mjs / dashboard.html / nav.js / order.html'
   );
 
   // Verify 5 Interactive Lead-Magnet Tools, 3 Localized Leak Tests, /public-wifi & /llms-full.txt

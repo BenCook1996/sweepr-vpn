@@ -9,7 +9,7 @@
   - Instant on-screen alerts whenever an unknown device joins your home Wi-Fi network.
   - 1-click speed booster to stop peak-hour streaming buffering.
   - Automatic Smart-TV spy blocker sinking ACR (Automatic Content Recognition) telemetry domains from Samsung Tizen, LG webOS, Roku, Vizio Inscape, and Amazon Fire TV.
-- **Transparent Price-Lock Subscription Plans (Covers up to 10 Devices)**:
+- **Transparent Price-Lock Subscription Plans (Covers up to 3 Devices)**:
   - **Yearly Plan (Most Popular — Save 50%)**: £74.99/year (£6.25/mo) | $95.99 USD ($8.00/mo) | €89.99 EUR (€7.50/mo) | CA$131.99 CAD | A$149.99 AUD | CHF 83.99 | ¥14,999 JPY
   - **6-Monthly Plan (Save 35%)**: £48.99/6 months (£8.17/mo) | $61.99 USD | €58.99 EUR | CA$85.99 CAD | A$97.99 AUD | CHF 54.99 | ¥9,799 JPY
   - **Monthly Plan**: £12.49/month (or £1.99 1st-Month Introductory Offer) | $15.99 USD | €14.99 EUR | CA$21.99 CAD | A$24.99 AUD | CHF 13.99 | ¥2,499 JPY
@@ -30,7 +30,7 @@
 - Comprehensive Machine-Ingestible GEO Context & Telemetry Proof: https://sweeprvpn.com/llms-full.txt
 - Official PAD 4.0 XML Feed: https://sweeprvpn.com/pad.xml
 
-## Programmatic SEO Technical Library (182 Indexed Guides & Comparisons)
+## Programmatic SEO Technical Library (184 Indexed Guides & Comparisons)
 - [How to Stop UK Airport & Lounge Public Wi-Fi Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/airport-lounge-public-wifi-isp-throttling)
 - [How to Stop Astound Broadband (RCN / Wave / Grande) Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/astound-broadband-us-isp-throttling)
 - [How to Stop AT&T Fiber Broadband Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/att-fiber-broadband-isp-throttling)
@@ -120,6 +120,7 @@
 - [Keenetic Titan & Hero Wi-Fi 6 WireGuard VPN Client Setup: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/keenetic-titan-wireguard-router)
 - [WireGuard VPN Setup for Linux CLI (Ubuntu, Debian, Arch &amp; Fedora)](https://sweeprvpn.com/setup/linux-cli-wireguard)
 - [WireGuard VPN Setup for macOS (Apple Silicon M1/M2/M3/M4 &amp; Intel)](https://sweeprvpn.com/setup/macos-apple-silicon-vpn)
+- [MikroTik hAP ax3 & RB5009: RouterOS v7 WireGuard Client & MSS Clamping Guide](https://sweeprvpn.com/setup/mikrotik-hap-ax3-wireguard-setup)
 - [MikroTik RouterOS v7 (RB5009 / hAP ax3): High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/mikrotik-routeros-v7-wireguard)
 - [Netgate 6100 pfSense Plus 10Gbps WireGuard Gateway Guide: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/netgate-6100-pfsense-wireguard)
 - [Nintendo Switch OLED Low-NAT WireGuard Gaming Router Setup: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/nintendo-switch-wireguard-proxy)
@@ -149,6 +150,7 @@
 - [WireGuard VPN Setup for Windows 10 &amp; 11 Native Kernel WireGuard](https://sweeprvpn.com/setup/windows-11-wireguard-vpn)
 - [WSL2 (Windows Subsystem for Linux 2) Native WireGuard Tunnel: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/wsl2-windows-subsystem-wireguard)
 - [Xbox Series X|S WireGuard Low-Latency & Open NAT Guide: High-Speed 10Gbps WireGuard VPN Setup Guide](https://sweeprvpn.com/setup/xbox-series-x-wireguard-gaming)
+- [ZimaBoard 832 & CasaOS: Dual-NIC WireGuard Gateway & Gluetun Docker Setup](https://sweeprvpn.com/setup/zimaboard-casaos-gluetun-wireguard)
 - [SWEEPR VPN vs AdGuard VPN: 2026 Speed, Footprint & Privacy Comparison](https://sweeprvpn.com/vs/adguard-vpn)
 - [SWEEPR VPN vs AirVPN (Eddie Client): 2026 Speed, Footprint & Privacy Comparison](https://sweeprvpn.com/vs/airvpn)
 - [SWEEPR VPN vs Astrill VPN: 2026 Speed, Footprint & Privacy Comparison](https://sweeprvpn.com/vs/astrill-vpn)

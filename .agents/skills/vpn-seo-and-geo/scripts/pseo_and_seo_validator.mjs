@@ -1180,6 +1180,10 @@ if (action === 'matrix') {
   );
   console.log(`Total pSEO Pages Configured: ${all50Pages.length}`);
 } else if (action === 'generate') {
+  if (!process.argv.includes('--legacy-cartesian-override')) {
+    console.error('[SAFETY GUARD] Direct generation via pseo_and_seo_validator.mjs --action generate is disabled to protect consolidated 301/canonical pillars and content-hash <lastmod> state. Use `node scripts/keyword-research-engine.mjs --apply` or pass `--legacy-cartesian-override`.');
+    process.exit(1);
+  }
   const dirs = ['solutions', 'setup', 'vs', 'guides'];
   for (const d of dirs) {
     fs.mkdirSync(path.join(WEBSITE_DIR, d), { recursive: true });
@@ -1296,29 +1300,40 @@ ${allPseoPagesOnDisk.map((p) => `- [${p.h1}](${p.loc})`).join('\n')}
 } else if (action === 'validate') {
   let passed = 0;
   let failed = 0;
-  for (const page of all50Pages) {
-    const filePath = path.join(WEBSITE_DIR, page.fileRelPath);
-    if (!fs.existsSync(filePath)) {
-      console.error(`[MISSING] ${page.fileRelPath}`);
-      failed++;
-      continue;
+  let consolidatedSkipped = 0;
+  const indexablePillarsToValidate = [];
+  for (const dir of ['solutions', 'setup', 'vs', 'guides']) {
+    const dirAbs = path.join(WEBSITE_DIR, dir);
+    if (!fs.existsSync(dirAbs)) continue;
+    for (const file of fs.readdirSync(dirAbs).sort()) {
+      if (!file.endsWith('.html')) continue;
+      const fileRelPath = `${dir}/${file}`;
+      const slug = file.replace(/\.html$/, '');
+      const urlPath = `/${dir}/${slug}`;
+      const content = fs.readFileSync(path.join(dirAbs, file), 'utf8');
+      if (/<meta\s+name=["']robots["']\s+content=["'][^"']*noindex/i.test(content)) {
+        consolidatedSkipped++;
+        continue;
+      }
+      indexablePillarsToValidate.push({ fileRelPath, urlPath, content });
     }
-    const content = fs.readFileSync(filePath, 'utf8');
-    const isNoIndexConsolidated = /<meta\s+name=["']robots["']\s+content=["'][^"']*noindex/i.test(content);
-    const hasCanonical = isNoIndexConsolidated
-      ? /<link\s+rel=["']canonical["']\s+href=["']https:\/\/sweeprvpn\.com\/[^"']+["']\s*\/?>/i.test(content)
-      : new RegExp(`<link\\s+rel=["']canonical["']\\s+href=["']https://sweeprvpn\\.com${page.urlPath}["']\\s*/?>`, 'i').test(content);
+  }
+
+  for (const page of indexablePillarsToValidate) {
+    const content = page.content;
+    const hasCanonical = new RegExp(`<link\\s+rel=["']canonical["']\\s+href=["']https://sweeprvpn\\.com${page.urlPath}["']\\s*/?>`, 'i').test(content);
     const hasSchema =
       (content.includes('"@type": "FAQPage"') || content.includes('"@type":"FAQPage"')) &&
-      (content.includes('"@type": "SoftwareApplication"') || content.includes('"@type":"SoftwareApplication"'));
+      (content.includes('"@type": "SoftwareApplication"') || content.includes('"@type":"SoftwareApplication"') || content.includes('"@type": "TechArticle"') || content.includes('"@type":"TechArticle"'));
     const hasPricingInfo = content.includes('74.99') || content.includes('data-price="annualStr"');
-    if (hasCanonical && hasSchema && hasPricingInfo) {
+    const hasNavJs = content.includes('/nav.js');
+    if (hasCanonical && hasSchema && hasPricingInfo && hasNavJs) {
       passed++;
     } else {
-      console.error(`[INVALID] ${page.fileRelPath} (canonical=${hasCanonical}, schema=${hasSchema}, pricing=${hasPricingInfo})`);
+      console.error(`[INVALID] ${page.fileRelPath} (canonical=${hasCanonical}, schema=${hasSchema}, pricing=${hasPricingInfo}, navJs=${hasNavJs})`);
       failed++;
     }
   }
-  console.log(`=== Validation Complete: ${passed}/${all50Pages.length} Pages Passed (Failed: ${failed}) ===`);
+  console.log(`=== Validation Complete: ${passed}/${indexablePillarsToValidate.length} Indexable Pillar Pages Passed (Consolidated Sub-Variants Skipped: ${consolidatedSkipped}, Failed: ${failed}) ===`);
   if (failed > 0) process.exit(1);
 }

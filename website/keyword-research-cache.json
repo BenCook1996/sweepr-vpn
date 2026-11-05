@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-11-04T23:13:08.446Z",
+  "updatedAt": "2026-11-05T00:18:40.298Z",
   "entries": {
     "ddg:en-GB:gl inet slate 7 wireguard": {
       "fetchedAt": 1793831679286,
@@ -1309,6 +1309,1444 @@
         "mikrotik wireguard server client setup",
         "mikrotik wireguard client import config",
         "routeros wireguard client setup"
+      ]
+    },
+    "ddg:en-GB:unifi express wireguard vpn client": {
+      "fetchedAt": 1793837893201,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "unifi wireguard client download",
+        "wireguard vpn on unifi",
+        "unifi vpn setup wireguard",
+        "wireguard vpn not working unifi",
+        "unifi network wireguard vpn setup",
+        "unifi wireguard vpn no internet",
+        "setup wireguard vpn server unifi",
+        "set up wireguard vpn unifi"
+      ]
+    },
+    "google:en-GB:unifi express wireguard vpn client": {
+      "fetchedAt": 1793837893201,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "bing:en-GB:unifi express wireguard vpn client": {
+      "fetchedAt": 1793837893201,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "unifi wireguard client download",
+        "wireguard vpn on unifi",
+        "unifi vpn setup wireguard",
+        "wireguard vpn not working unifi",
+        "unifi network wireguard vpn setup",
+        "unifi wireguard vpn no internet",
+        "setup wireguard vpn server unifi",
+        "set up wireguard vpn unifi",
+        "setting up wireguard vpn on unifi",
+        "unifi wireguard site to site vpn setup"
+      ]
+    },
+    "google:en-GB:unifi express wireguard setup": {
+      "fetchedAt": 1793837894397,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "ddg:en-GB:unifi express wireguard setup": {
+      "fetchedAt": 1793837894397,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "unifi wireguard client download",
+        "wireguard vpn client unifi",
+        "unifi dream machine wireguard",
+        "how to setup wireguard on unifi",
+        "unifi wireguard not working",
+        "unifi wireguard config file",
+        "unifi vpn setup wireguard",
+        "wireguard site to site unifi"
+      ]
+    },
+    "bing:en-GB:unifi express wireguard setup": {
+      "fetchedAt": 1793837894397,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "unifi wireguard client download",
+        "wireguard vpn client unifi",
+        "unifi dream machine wireguard",
+        "how to setup wireguard on unifi",
+        "unifi wireguard not working",
+        "unifi wireguard config file",
+        "unifi vpn setup wireguard",
+        "wireguard site to site unifi",
+        "unifi wireguard no traffic",
+        "how to setup unifi express"
+      ]
+    },
+    "ddg:en-GB:tp-link er605 wireguard vpn setup": {
+      "fetchedAt": 1793837895071,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "tp-link er605 gigabit vpn router",
+        "tp link er605 vpn setup",
+        "tp-link er605 ipsec vpn setup",
+        "tp-link vpn router er605",
+        "tp link er605 vpn router",
+        "tp link er605 vpn configuration",
+        "tp-link er605 v2 wired gigabit vpn router",
+        "setup firewall on tp-link er605 router"
+      ]
+    },
+    "google:en-GB:tp-link er605 wireguard vpn setup": {
+      "fetchedAt": 1793837895071,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": [
+        "tp link er605 wireguard vpn setup",
+        "wireguard vpn setup",
+        "is wireguard vpn safe"
+      ]
+    },
+    "bing:en-GB:tp-link er605 wireguard vpn setup": {
+      "fetchedAt": 1793837895071,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "tp-link er605 gigabit vpn router",
+        "tp link er605 vpn setup",
+        "tp-link er605 ipsec vpn setup",
+        "tp-link vpn router er605",
+        "tp link er605 vpn router",
+        "tp link er605 vpn configuration",
+        "tp-link er605 v2 wired gigabit vpn router",
+        "setup firewall on tp-link er605 router",
+        "how to use vpn in tplink er605",
+        "tp link er605 setup"
+      ]
+    },
+    "bing:en-GB:omada er605 wireguard client": {
+      "fetchedAt": 1793837895666,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "tp link omada er605",
+        "omada er605 firmware download",
+        "omada er605 firmware update",
+        "add er605 to omada controller",
+        "setup wireguard on omada",
+        "omada er605 v2.20 firmware",
+        "omada vpn router er605",
+        "omada controller create a vpn er605",
+        "port forwarding omada er605",
+        "omada er605v2 & psu"
+      ]
+    },
+    "google:en-GB:omada er605 wireguard client": {
+      "fetchedAt": 1793837895666,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": [
+        "omada er605 wireguard client",
+        "omada er605 wireguard client download",
+        "omada er605 wireguard client configuration",
+        "omada er605 wireguard client config"
+      ]
+    },
+    "ddg:en-GB:omada er605 wireguard client": {
+      "fetchedAt": 1793837895666,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "tp link omada er605",
+        "omada er605 firmware download",
+        "omada er605 firmware update",
+        "add er605 to omada controller",
+        "setup wireguard on omada",
+        "omada er605 v2.20 firmware",
+        "omada vpn router er605",
+        "omada controller create a vpn er605"
+      ]
+    },
+    "google:en-GB:cudy wr3000 wireguard vpn setup": {
+      "fetchedAt": 1793837896280,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": [
+        "cudy wr3000 wireguard vpn setup download",
+        "cudy wr3000 wireguard vpn setup guide",
+        "cudy wr3000 wireguard vpn setup server"
+      ]
+    },
+    "ddg:en-GB:cudy wr3000 wireguard vpn setup": {
+      "fetchedAt": 1793837896280,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "how to setup wireguard vpn",
+        "how to setup wireguard vpn server",
+        "download wireguard vpn client",
+        "cudy wr3000 user manual",
+        "cudy wr3000 v2 openwrt",
+        "wireguard vpn set up",
+        "wireguard vpn windows setup",
+        "how to configure wireguard vpn"
+      ]
+    },
+    "bing:en-GB:cudy wr3000 wireguard vpn setup": {
+      "fetchedAt": 1793837896280,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "how to setup wireguard vpn",
+        "how to setup wireguard vpn server",
+        "download wireguard vpn client",
+        "cudy wr3000 user manual",
+        "cudy wr3000 v2 openwrt",
+        "wireguard vpn set up",
+        "wireguard vpn windows setup",
+        "how to configure wireguard vpn",
+        "setting up wireguard vpn client",
+        "setting up wireguard vpn"
+      ]
+    },
+    "google:en-GB:cudy tr3000 wireguard config": {
+      "fetchedAt": 1793837896861,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": [
+        "cudy tr3000 wireguard configuration",
+        "cudy tr3000 wireguard config file"
+      ]
+    },
+    "ddg:en-GB:cudy tr3000 wireguard config": {
+      "fetchedAt": 1793837896861,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "cudy wr3000 user manual",
+        "how to configure cudy router",
+        "cudy tr3000 v1 112m",
+        "cudy tr3000 openwrt usb",
+        "cudy-tr3000",
+        "cudy tr3000 256 openwrt",
+        "cudy tr3000 256m openwrt",
+        "cudy tr3000 v2 256mb"
+      ]
+    },
+    "bing:en-GB:cudy tr3000 wireguard config": {
+      "fetchedAt": 1793837896861,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "cudy wr3000 user manual",
+        "how to configure cudy router",
+        "cudy tr3000 v1 112m",
+        "cudy tr3000 openwrt usb",
+        "cudy-tr3000",
+        "cudy tr3000 256 openwrt",
+        "cudy tr3000 256m openwrt",
+        "cudy tr3000 v2 256mb",
+        "cudy tr3000 256mb v1",
+        "cudy tr3000 256 uboot"
+      ]
+    },
+    "google:en-GB:synology rt6600ax wireguard vpn": {
+      "fetchedAt": 1793837897521,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "ddg:en-GB:synology rt6600ax wireguard vpn": {
+      "fetchedAt": 1793837897521,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "synology rt6600ax install instructions",
+        "synology rt6600ax tri-band wi-fi 6 router",
+        "how to factory reset synology rt6600ax"
+      ]
+    },
+    "bing:en-GB:synology rt6600ax wireguard vpn": {
+      "fetchedAt": 1793837897521,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "synology rt6600ax install instructions",
+        "synology rt6600ax tri-band wi-fi 6 router",
+        "how to factory reset synology rt6600ax"
+      ]
+    },
+    "google:en-GB:synology srm wireguard client setup": {
+      "fetchedAt": 1793837898135,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "ddg:en-GB:synology srm wireguard client setup": {
+      "fetchedAt": 1793837898135,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "synology manual router setup",
+        "synology surveillance station client",
+        "synology surveillance station client download",
+        "how to secure synology",
+        "synology secure sign in",
+        "synology setup secure app",
+        "synology surveillance client download",
+        "synology router setup guide"
+      ]
+    },
+    "bing:en-GB:synology srm wireguard client setup": {
+      "fetchedAt": 1793837898135,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "synology manual router setup",
+        "synology surveillance station client",
+        "synology surveillance station client download",
+        "how to secure synology",
+        "synology secure sign in",
+        "synology setup secure app",
+        "synology surveillance client download",
+        "synology router setup guide",
+        "how to setup synology secure sign in",
+        "synology surveillance station windows client"
+      ]
+    },
+    "bing:en-GB:draytek vigor 2865 wireguard vpn setup": {
+      "fetchedAt": 1793837898808,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "draytek vigor 2862 vpn setup",
+        "draytek vigor 2865 user guide",
+        "draytek vigor 2865 router",
+        "draytek vigor 2865 firmware",
+        "draytek vigor smart vpn download",
+        "draytek vigor 2865 manual",
+        "draytek vigor vpn client",
+        "draytek vigor 2865 ebay",
+        "draytek vigor 2865 ac",
+        "draytek vigor 2866 firmware"
+      ]
+    },
+    "google:en-GB:draytek vigor 2865 wireguard vpn setup": {
+      "fetchedAt": 1793837898808,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "ddg:en-GB:draytek vigor 2865 wireguard vpn setup": {
+      "fetchedAt": 1793837898808,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "draytek vigor 2862 vpn setup",
+        "draytek vigor 2865 user guide",
+        "draytek vigor 2865 router",
+        "draytek vigor 2865 firmware",
+        "draytek vigor smart vpn download",
+        "draytek vigor 2865 manual",
+        "draytek vigor vpn client",
+        "draytek vigor 2865 ebay"
+      ]
+    },
+    "google:en-GB:draytek 2865 wireguard client config": {
+      "fetchedAt": 1793837899518,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "ddg:en-GB:draytek 2865 wireguard client config": {
+      "fetchedAt": 1793837899518,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "draytek vigor 2865 user guide",
+        "draytek vigor 2865 firmware",
+        "draytek vigor 2865 router",
+        "draytek vigor 2865 manual",
+        "draytek 2865 firmware download",
+        "draytek 2865 latest firmware",
+        "draytek 2862 default ip",
+        "draytek smart vpn wireguard"
+      ]
+    },
+    "bing:en-GB:draytek 2865 wireguard client config": {
+      "fetchedAt": 1793837899518,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "draytek vigor 2865 user guide",
+        "draytek vigor 2865 firmware",
+        "draytek vigor 2865 router",
+        "draytek vigor 2865 manual",
+        "draytek 2865 firmware download",
+        "draytek 2865 latest firmware",
+        "draytek 2862 default ip",
+        "draytek smart vpn wireguard",
+        "draytek vigor 2865 ac",
+        "draytek vigor 2866 firmware"
+      ]
+    },
+    "bing:en-GB:asus rt-be96u wireguard vpn setup": {
+      "fetchedAt": 1793837900185,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "asus router vpn setup",
+        "asus rt be92u setup guide",
+        "asus rt-be96u wi-fi 7",
+        "asus rt be96u review",
+        "asus rt be92u firmware",
+        "asus rt-be96u tri-band wi-fi 7 router",
+        "asus rt be92u manual",
+        "asus rt be96u red light",
+        "asus rt-be92u wifi 7 router",
+        "how to install vpn on asus router"
+      ]
+    },
+    "ddg:en-GB:asus rt-be96u wireguard vpn setup": {
+      "fetchedAt": 1793837900185,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "asus router vpn setup",
+        "asus rt be92u setup guide",
+        "asus rt-be96u wi-fi 7",
+        "asus rt be96u review",
+        "asus rt be92u firmware",
+        "asus rt-be96u tri-band wi-fi 7 router",
+        "asus rt be92u manual",
+        "asus rt be96u red light"
+      ]
+    },
+    "google:en-GB:asus rt-be96u wireguard vpn setup": {
+      "fetchedAt": 1793837900185,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "bing:en-GB:asus vpn fusion wireguard config": {
+      "fetchedAt": 1793837900776,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "what is asus vpn fusion",
+        "how to setup wireguard vpn",
+        "how to setup wireguard vpn server",
+        "how to set up asus vpn fusion",
+        "vpn fusion asus router",
+        "asus vpn fusion nordvpn",
+        "asus vpn fusion openvpn nord help",
+        "asus vpn fusion apply to all devices",
+        "how to configure wireguard vpn",
+        "setup wireguard vpn server unifi"
+      ]
+    },
+    "google:en-GB:asus vpn fusion wireguard config": {
+      "fetchedAt": 1793837900776,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": [
+        "asus vpn fusion wireguard configuration",
+        "asus vpn fusion wireguard config file"
+      ]
+    },
+    "ddg:en-GB:asus vpn fusion wireguard config": {
+      "fetchedAt": 1793837900776,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "what is asus vpn fusion",
+        "how to setup wireguard vpn",
+        "how to setup wireguard vpn server",
+        "how to set up asus vpn fusion",
+        "vpn fusion asus router",
+        "asus vpn fusion nordvpn",
+        "asus vpn fusion openvpn nord help",
+        "asus vpn fusion apply to all devices"
+      ]
+    },
+    "ddg:en-GB:ugreen nasync docker wireguard vpn": {
+      "fetchedAt": 1793837901463,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "ugreen nas docker apps",
+        "docker for ugreen nas",
+        "install docker on ugreen nas",
+        "best docker apps ugreen nas",
+        "best docker containers for ugreen nas",
+        "wireguard vpn server windows",
+        "wireguard vpn docker compose",
+        "wireguard on ugreen nas"
+      ]
+    },
+    "bing:en-GB:ugreen nasync docker wireguard vpn": {
+      "fetchedAt": 1793837901463,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "ugreen nas docker apps",
+        "docker for ugreen nas",
+        "install docker on ugreen nas",
+        "best docker apps ugreen nas",
+        "best docker containers for ugreen nas",
+        "wireguard vpn server windows",
+        "wireguard vpn docker compose",
+        "wireguard on ugreen nas",
+        "wireguard always on vpn",
+        "wireguard vpn no dns"
+      ]
+    },
+    "google:en-GB:ugreen nasync docker wireguard vpn": {
+      "fetchedAt": 1793837901463,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "google:en-GB:ugreen dxp4800 gluetun wireguard": {
+      "fetchedAt": 1793837902170,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "bing:en-GB:ugreen dxp4800 gluetun wireguard": {
+      "fetchedAt": 1793837902170,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "ugreen dxp4800 plus review",
+        "ugreen dxp4800 plus nas",
+        "ugreen nas dxp4800 pro",
+        "ugreen dxp4800 vs dxp4800 plus",
+        "ugreen nas dxp4800 review",
+        "ugreen nas dxp4800 plus specs",
+        "ugreen dxp 4800 plus",
+        "ugreen nas dxp480t plus",
+        "ugreen dxp4800 plus manual",
+        "ugreen dxp4800 plus support"
+      ]
+    },
+    "ddg:en-GB:ugreen dxp4800 gluetun wireguard": {
+      "fetchedAt": 1793837902170,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "ugreen dxp4800 plus review",
+        "ugreen dxp4800 plus nas",
+        "ugreen nas dxp4800 pro",
+        "ugreen dxp4800 vs dxp4800 plus",
+        "ugreen nas dxp4800 review",
+        "ugreen nas dxp4800 plus specs",
+        "ugreen dxp 4800 plus",
+        "ugreen nas dxp480t plus"
+      ]
+    },
+    "bing:en-GB:terramaster tos 6 wireguard vpn": {
+      "fetchedAt": 1793837902843,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "terramaster tos 6 download"
+      ]
+    },
+    "google:en-GB:terramaster tos 6 wireguard vpn": {
+      "fetchedAt": 1793837902843,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "ddg:en-GB:terramaster tos 6 wireguard vpn": {
+      "fetchedAt": 1793837902843,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "terramaster tos 6 download"
+      ]
+    },
+    "ddg:en-GB:terramaster f4-424 docker wireguard": {
+      "fetchedAt": 1793837903392,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "terramaster f4 424 pro",
+        "terramaster f4-424 pro review",
+        "terramaster f4-424 pro nas",
+        "terramaster f4-424 max specs",
+        "terramaster f4-424 pro nas storage 4bay",
+        "terramaster f4 425 plus",
+        "terramaster f6-424 nas review",
+        "terramaster f4-424"
+      ]
+    },
+    "google:en-GB:terramaster f4-424 docker wireguard": {
+      "fetchedAt": 1793837903392,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "bing:en-GB:terramaster f4-424 docker wireguard": {
+      "fetchedAt": 1793837903392,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "terramaster f4 424 pro",
+        "terramaster f4-424 pro review",
+        "terramaster f4-424 pro nas",
+        "terramaster f4-424 max specs",
+        "terramaster f4-424 pro nas storage 4bay",
+        "terramaster f4 425 plus",
+        "terramaster f6-424 nas review",
+        "terramaster f4-424",
+        "terramaster f6-424",
+        "terramaster f4 424 max"
+      ]
+    },
+    "ddg:en-GB:zimaboard wireguard vpn gateway": {
+      "fetchedAt": 1793837904123,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "wireguard site to site vpn"
+      ]
+    },
+    "google:en-GB:zimaboard wireguard vpn gateway": {
+      "fetchedAt": 1793837904123,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": [
+        "zimaboard wireguard vpn gateway not working",
+        "zimaboard wireguard vpn gateway setup"
+      ]
+    },
+    "bing:en-GB:zimaboard wireguard vpn gateway": {
+      "fetchedAt": 1793837904123,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "wireguard site to site vpn"
+      ]
+    },
+    "google:en-GB:casaos gluetun wireguard setup": {
+      "fetchedAt": 1793837904788,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "bing:en-GB:casaos gluetun wireguard setup": {
+      "fetchedAt": 1793837904788,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "setup adguard home casaos"
+      ]
+    },
+    "ddg:en-GB:casaos gluetun wireguard setup": {
+      "fetchedAt": 1793837904788,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "setup adguard home casaos"
+      ]
+    },
+    "google:en-GB:proxmox lxc wireguard vpn gateway": {
+      "fetchedAt": 1793837905465,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "ddg:en-GB:proxmox lxc wireguard vpn gateway": {
+      "fetchedAt": 1793837905465,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "proxmox mail gateway free",
+        "proxmox lxc no network",
+        "install wireguard on proxmox",
+        "proxmox lxc network configuration",
+        "proxmox cannot access lxc from internet",
+        "proxmox helper scripts wireguard",
+        "adguard home proxmox lxc",
+        "proxmox lxc disable ipv6"
+      ]
+    },
+    "bing:en-GB:proxmox lxc wireguard vpn gateway": {
+      "fetchedAt": 1793837905465,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "proxmox mail gateway free",
+        "proxmox lxc no network",
+        "install wireguard on proxmox",
+        "proxmox lxc network configuration",
+        "proxmox cannot access lxc from internet",
+        "proxmox helper scripts wireguard",
+        "adguard home proxmox lxc",
+        "proxmox lxc disable ipv6",
+        "proxmox mail gateway documentation",
+        "proxmox lxc device passthrough"
+      ]
+    },
+    "google:en-GB:proxmox ve 8 wireguard client setup": {
+      "fetchedAt": 1793837906167,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": [
+        "proxmox ve 8 wireguard client setup guide",
+        "proxmox ve 8 wireguard client setup download"
+      ]
+    },
+    "bing:en-GB:proxmox ve 8 wireguard client setup": {
+      "fetchedAt": 1793837906167,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "proxmox ve installation guide",
+        "how to install proxmox ve",
+        "install wireguard on proxmox",
+        "how to setup proxmox ve",
+        "proxmox helper scripts wireguard",
+        "proxmox ve user guide",
+        "proxmox ve install guide",
+        "proxmox ve 8 to 9",
+        "proxmox ve installation and configuration",
+        "proxmox ve administration guide"
+      ]
+    },
+    "ddg:en-GB:proxmox ve 8 wireguard client setup": {
+      "fetchedAt": 1793837906167,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "proxmox ve installation guide",
+        "how to install proxmox ve",
+        "install wireguard on proxmox",
+        "how to setup proxmox ve",
+        "proxmox helper scripts wireguard",
+        "proxmox ve user guide",
+        "proxmox ve install guide",
+        "proxmox ve 8 to 9"
+      ]
+    },
+    "bing:en-GB:truenas scale electric eel wireguard vpn": {
+      "fetchedAt": 1793837906814,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "truenas scale wireguard setup",
+        "truenas scale app wireguard",
+        "vpn on truenas scale"
+      ]
+    },
+    "ddg:en-GB:truenas scale electric eel wireguard vpn": {
+      "fetchedAt": 1793837906814,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "truenas scale wireguard setup",
+        "truenas scale app wireguard",
+        "vpn on truenas scale"
+      ]
+    },
+    "google:en-GB:truenas scale electric eel wireguard vpn": {
+      "fetchedAt": 1793837906814,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": [
+        "truenas scale electric eel wireguard vpn client",
+        "truenas scale electric eel wireguard vpn setup",
+        "truenas scale electric eel wireguard vpn configuration",
+        "truenas scale electric eel wireguard vpn server"
+      ]
+    },
+    "ddg:en-GB:truenas scale gluetun wireguard setup": {
+      "fetchedAt": 1793837907547,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "truenas scale install guide",
+        "how to install truenas scale",
+        "truenas scale app wireguard",
+        "setting up wireguard on truenas",
+        "truenas scale setup guide",
+        "truenas scale network setup",
+        "truenas scale ups setup",
+        "how to setup truenas scale"
+      ]
+    },
+    "google:en-GB:truenas scale gluetun wireguard setup": {
+      "fetchedAt": 1793837907547,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "bing:en-GB:truenas scale gluetun wireguard setup": {
+      "fetchedAt": 1793837907547,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "truenas scale install guide",
+        "how to install truenas scale",
+        "truenas scale app wireguard",
+        "setting up wireguard on truenas",
+        "truenas scale setup guide",
+        "truenas scale network setup",
+        "truenas scale ups setup",
+        "how to setup truenas scale",
+        "truenas scale recommended hardware",
+        "truenas scale usb install"
+      ]
+    },
+    "google:en-GB:asustor adm 4 wireguard vpn setup": {
+      "fetchedAt": 1793837908244,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "ddg:en-GB:asustor adm 4 wireguard vpn setup": {
+      "fetchedAt": 1793837908244,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "how to setup wireguard vpn",
+        "adguard vpn download windows",
+        "adguard vpn android tv",
+        "asus wireguard enable nat ipv6",
+        "setup wireguard vpn server",
+        "adguard vpn for pc",
+        "adguard vpn server list",
+        "norton vpn wireguard adapter"
+      ]
+    },
+    "bing:en-GB:asustor adm 4 wireguard vpn setup": {
+      "fetchedAt": 1793837908244,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "how to setup wireguard vpn",
+        "adguard vpn download windows",
+        "adguard vpn android tv",
+        "asus wireguard enable nat ipv6",
+        "setup wireguard vpn server",
+        "adguard vpn for pc",
+        "adguard vpn server list",
+        "norton vpn wireguard adapter",
+        "wireguard vpn set up",
+        "adguard vpn download pc"
+      ]
+    },
+    "bing:en-GB:asustor nas wireguard client": {
+      "fetchedAt": 1793837909087,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "how to connect to asustor nas",
+        "asus router instant guard",
+        "asus router wireguard client",
+        "asustor nas control center download",
+        "asustor nas control center",
+        "asustor nas default login",
+        "how to access asustor nas",
+        "asustor nas phone app",
+        "asustor nas default port",
+        "asus wireguard enable nat ipv6"
+      ]
+    },
+    "ddg:en-GB:asustor nas wireguard client": {
+      "fetchedAt": 1793837909087,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "how to connect to asustor nas",
+        "asus router instant guard",
+        "asus router wireguard client",
+        "asustor nas control center download",
+        "asustor nas control center",
+        "asustor nas default login",
+        "how to access asustor nas",
+        "asustor nas phone app"
+      ]
+    },
+    "google:en-GB:asustor nas wireguard client": {
+      "fetchedAt": 1793837909087,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "ddg:en-GB:msi claw wireguard gaming vpn": {
+      "fetchedAt": 1793837909751,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "msi claw support page",
+        "msi claw controller firmware",
+        "msi claw 7 support",
+        "msi center for msi claw",
+        "msi claw 8 support",
+        "msi claw controller driver",
+        "msi claw software download",
+        "msi claw gamepad not working"
+      ]
+    },
+    "google:en-GB:msi claw wireguard gaming vpn": {
+      "fetchedAt": 1793837909751,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "bing:en-GB:msi claw wireguard gaming vpn": {
+      "fetchedAt": 1793837909751,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "msi claw support page",
+        "msi claw controller firmware",
+        "msi claw 7 support",
+        "msi center for msi claw",
+        "msi claw 8 support",
+        "msi claw controller driver",
+        "msi claw software download",
+        "msi claw gamepad not working",
+        "msi claw screen protector",
+        "msi claw game settings"
+      ]
+    },
+    "bing:en-GB:msi claw 8 ai vpn setup": {
+      "fetchedAt": 1793837910387,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "msi claw 8 ai support",
+        "msi claw 8 ai software",
+        "msi claw 8 ai +",
+        "msi claw 8 ai+ a2vm",
+        "msi claw 8 ai+ software download",
+        "msi claw 8 ai+ setup",
+        "msi claw 8 ai best settings",
+        "msi claw 8 ai wifi driver",
+        "msi claw 8 ai download",
+        "msi claw 8 ai+ support page"
+      ]
+    },
+    "google:en-GB:msi claw 8 ai vpn setup": {
+      "fetchedAt": 1793837910387,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "ddg:en-GB:msi claw 8 ai vpn setup": {
+      "fetchedAt": 1793837910387,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "msi claw 8 ai support",
+        "msi claw 8 ai software",
+        "msi claw 8 ai +",
+        "msi claw 8 ai+ a2vm",
+        "msi claw 8 ai+ software download",
+        "msi claw 8 ai+ setup",
+        "msi claw 8 ai best settings",
+        "msi claw 8 ai wifi driver"
+      ]
+    },
+    "google:en-GB:bazzite os wireguard vpn setup": {
+      "fetchedAt": 1793837910981,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "ddg:en-GB:bazzite os wireguard vpn setup": {
+      "fetchedAt": 1793837910981,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "how to setup wireguard vpn",
+        "how to setup wireguard vpn server",
+        "wireguard site to site vpn",
+        "wireguard vpn set up",
+        "wireguard vpn windows setup",
+        "unifi wireguard site to site vpn setup",
+        "setup wireguard vpn server unifi",
+        "setting up wireguard vpn"
+      ]
+    },
+    "bing:en-GB:bazzite os wireguard vpn setup": {
+      "fetchedAt": 1793837910981,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "how to setup wireguard vpn",
+        "how to setup wireguard vpn server",
+        "wireguard site to site vpn",
+        "wireguard vpn set up",
+        "wireguard vpn windows setup",
+        "unifi wireguard site to site vpn setup",
+        "setup wireguard vpn server unifi",
+        "setting up wireguard vpn",
+        "ubiquiti wireguard vpn setup",
+        "unifi wireguard vpn setup"
+      ]
+    },
+    "ddg:en-GB:bazzite handheld wireguard config": {
+      "fetchedAt": 1793837911566,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "bazzite xbox wireless adapter"
+      ]
+    },
+    "bing:en-GB:bazzite handheld wireguard config": {
+      "fetchedAt": 1793837911566,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "bazzite xbox wireless adapter"
+      ]
+    },
+    "google:en-GB:bazzite handheld wireguard config": {
+      "fetchedAt": 1793837911566,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": [
+        "bazzite handheld wireguard configuration",
+        "bazzite handheld wireguard config file"
+      ]
+    },
+    "google:en-GB:google tv streamer 4k wireguard vpn": {
+      "fetchedAt": 1793837912275,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "ddg:en-GB:google tv streamer 4k wireguard vpn": {
+      "fetchedAt": 1793837912275,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "google tv streamer 4k review",
+        "google tv streamer 4k wifi",
+        "google tv 4k streamer",
+        "google tv streamer 4k setup",
+        "google tv streamer 4k cpu",
+        "google tv streamer 4k white",
+        "google tv streamer 4k remote",
+        "google tv streamer 4k instructions"
+      ]
+    },
+    "bing:en-GB:google tv streamer 4k wireguard vpn": {
+      "fetchedAt": 1793837912275,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "google tv streamer 4k review",
+        "google tv streamer 4k wifi",
+        "google tv 4k streamer",
+        "google tv streamer 4k setup",
+        "google tv streamer 4k cpu",
+        "google tv streamer 4k white",
+        "google tv streamer 4k remote",
+        "google tv streamer 4k instructions",
+        "google - tv streamer 4k",
+        "google tv streamer 4k ethernet port speed"
+      ]
+    },
+    "bing:en-GB:chromecast 4k wireguard setup": {
+      "fetchedAt": 1793837912950,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "google chromecast 4k tv stick",
+        "google chromecast setup for tv",
+        "how to set up chromecast",
+        "chromecast 4k ethernet adapter",
+        "chromecast setup for tv guide",
+        "how to cast to chromecast 4k",
+        "google chromecast setup guide",
+        "built in chromecast smart tv setup",
+        "chromecast 4k google tv",
+        "google chromecast tv streamer 4k"
+      ]
+    },
+    "ddg:en-GB:chromecast 4k wireguard setup": {
+      "fetchedAt": 1793837912950,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "google chromecast 4k tv stick",
+        "google chromecast setup for tv",
+        "how to set up chromecast",
+        "chromecast 4k ethernet adapter",
+        "chromecast setup for tv guide",
+        "how to cast to chromecast 4k",
+        "google chromecast setup guide",
+        "built in chromecast smart tv setup"
+      ]
+    },
+    "google:en-GB:chromecast 4k wireguard setup": {
+      "fetchedAt": 1793837912950,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": [
+        "chromecast 4k wireguard setup server"
+      ]
+    },
+    "ddg:en-GB:kaspersky vpn alternative": {
+      "fetchedAt": 1793837913513,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "kaspersky vpn alternative options"
+      ]
+    },
+    "bing:en-GB:kaspersky vpn alternative": {
+      "fetchedAt": 1793837913513,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "kaspersky vpn alternative options"
+      ]
+    },
+    "google:en-GB:kaspersky vpn alternative": {
+      "fetchedAt": 1793837913513,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": [
+        "kaspersky vpn alternative",
+        "is kaspersky vpn free",
+        "is kaspersky vpn safe"
+      ]
+    },
+    "ddg:en-GB:replace kaspersky vpn wireguard": {
+      "fetchedAt": 1793837914232,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "how to setup wireguard vpn server",
+        "how to install kaspersky vpn on router",
+        "wireguard vpn server windows",
+        "how to setup wireguard vpn",
+        "kaspersky vpn wg nt adapter",
+        "setting up a wireguard vpn server",
+        "wireguard windows vpn provider",
+        "how to setup wireguard vpn on windows"
+      ]
+    },
+    "google:en-GB:replace kaspersky vpn wireguard": {
+      "fetchedAt": 1793837914232,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "bing:en-GB:replace kaspersky vpn wireguard": {
+      "fetchedAt": 1793837914232,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "how to setup wireguard vpn server",
+        "how to install kaspersky vpn on router",
+        "wireguard vpn server windows",
+        "how to setup wireguard vpn",
+        "kaspersky vpn wg nt adapter",
+        "setting up a wireguard vpn server",
+        "wireguard windows vpn provider",
+        "how to setup wireguard vpn on windows",
+        "set up a vpn with wireguard",
+        "how to set up wireguard vpn windows"
+      ]
+    },
+    "bing:en-GB:bitdefender vpn renewal price alternative": {
+      "fetchedAt": 1793837915130,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "cost of bitdefender vpn",
+        "how much is bitdefender vpn",
+        "how much does bitdefender vpn cost",
+        "is bitdefender vpn worth it",
+        "bitdefender premium vpn review",
+        "bitdefender vpn any good",
+        "is bitdefender vpn free",
+        "how good is bitdefender vpn",
+        "bitdefender premium vpn best price",
+        "bitdefender vpn premium cost"
+      ]
+    },
+    "ddg:en-GB:bitdefender vpn renewal price alternative": {
+      "fetchedAt": 1793837915130,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "cost of bitdefender vpn",
+        "how much is bitdefender vpn",
+        "how much does bitdefender vpn cost",
+        "is bitdefender vpn worth it",
+        "bitdefender premium vpn review",
+        "bitdefender vpn any good",
+        "is bitdefender vpn free",
+        "how good is bitdefender vpn"
+      ]
+    },
+    "google:en-GB:bitdefender vpn renewal price alternative": {
+      "fetchedAt": 1793837915130,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "ddg:en-GB:bitdefender vpn wireguard config": {
+      "fetchedAt": 1793837915866,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "wireguard vpn client windows",
+        "wireguard vpn server windows",
+        "how to setup wireguard vpn server",
+        "how to setup wireguard vpn",
+        "does bitdefender vpn use wireguard",
+        "setting up wireguard vpn client",
+        "how to configure wireguard vpn",
+        "wireguard vpn windows setup"
+      ]
+    },
+    "bing:en-GB:bitdefender vpn wireguard config": {
+      "fetchedAt": 1793837915866,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "wireguard vpn client windows",
+        "wireguard vpn server windows",
+        "how to setup wireguard vpn server",
+        "how to setup wireguard vpn",
+        "does bitdefender vpn use wireguard",
+        "setting up wireguard vpn client",
+        "how to configure wireguard vpn",
+        "wireguard vpn windows setup",
+        "wireguard vpn set up",
+        "setting up wireguard vpn"
+      ]
+    },
+    "google:en-GB:bitdefender vpn wireguard config": {
+      "fetchedAt": 1793837915866,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": [
+        "bitdefender vpn wireguard config",
+        "does nordvpn work with bitdefender",
+        "how to use wireguard vpn on windows",
+        "bitdefender vpn wireguard configuration"
+      ]
+    },
+    "bing:en-GB:cancel mcafee vpn auto renewal": {
+      "fetchedAt": 1793837916505,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "cancel mcafee auto renewal",
+        "how to cancel mcafee auto renewal program",
+        "cancelling mcafee auto renewal",
+        "how to cancel auto renew mcafee",
+        "cancel mcafee auto renewal uk",
+        "mcafee cancel automatic renewal",
+        "mcafee automatic renewal cancellation",
+        "mcafee auto renewal cancellation"
+      ]
+    },
+    "ddg:en-GB:cancel mcafee vpn auto renewal": {
+      "fetchedAt": 1793837916505,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "cancel mcafee auto renewal",
+        "how to cancel mcafee auto renewal program",
+        "cancelling mcafee auto renewal",
+        "how to cancel auto renew mcafee",
+        "cancel mcafee auto renewal uk",
+        "mcafee cancel automatic renewal",
+        "mcafee automatic renewal cancellation",
+        "mcafee auto renewal cancellation"
+      ]
+    },
+    "google:en-GB:cancel mcafee vpn auto renewal": {
+      "fetchedAt": 1793837916505,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "bing:en-GB:mcafee safe connect alternative": {
+      "fetchedAt": 1793837917197,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "what is mcafee safe connect",
+        "safe connect mcafee download",
+        "mcafee safe connect app",
+        "mcafee safe connect download free",
+        "mcafee safe connect vpn",
+        "alternatives to mcafee security",
+        "mcafee safe connect free",
+        "mcafee safe connect review",
+        "mcafee safe connect app download",
+        "mcafee safe connect download pc"
+      ]
+    },
+    "ddg:en-GB:mcafee safe connect alternative": {
+      "fetchedAt": 1793837917197,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "what is mcafee safe connect",
+        "safe connect mcafee download",
+        "mcafee safe connect app",
+        "mcafee safe connect download free",
+        "mcafee safe connect vpn",
+        "alternatives to mcafee security",
+        "mcafee safe connect free",
+        "mcafee safe connect review"
+      ]
+    },
+    "google:en-GB:mcafee safe connect alternative": {
+      "fetchedAt": 1793837917197,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "bing:en-GB:stop tcl smart tv tracking": {
+      "fetchedAt": 1793837917809,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "tcl smart tv settings",
+        "tcl non smart tv",
+        "control tcl smart tv",
+        "how to pause tcl smart tv",
+        "support tcl smart tv",
+        "tcl smart tv troubleshooting guide",
+        "how to setup my tcl smart tv",
+        "how to set up tcl smart tv",
+        "how to record on tcl smart tv",
+        "how to stop tcl tv from talking"
+      ]
+    },
+    "google:en-GB:stop tcl smart tv tracking": {
+      "fetchedAt": 1793837917809,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": [
+        "stop tcl smart tv trackinging"
+      ]
+    },
+    "ddg:en-GB:stop tcl smart tv tracking": {
+      "fetchedAt": 1793837917809,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "tcl smart tv settings",
+        "tcl non smart tv",
+        "control tcl smart tv",
+        "how to pause tcl smart tv",
+        "support tcl smart tv",
+        "tcl smart tv troubleshooting guide",
+        "how to setup my tcl smart tv",
+        "how to set up tcl smart tv"
+      ]
+    },
+    "google:en-GB:disable tcl google tv acr telemetry": {
+      "fetchedAt": 1793837918476,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "bing:en-GB:disable tcl google tv acr telemetry": {
+      "fetchedAt": 1793837918476,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "how to disable acr on tcl tv",
+        "how to reset tcl google tv",
+        "tcl google tv problems",
+        "google tv tcl remote",
+        "tcl google tv remote replacement",
+        "tcl google tv remote manual",
+        "tcl google tv remote code",
+        "how to hard reset tcl google tv",
+        "tcl google tv remote app",
+        "tcl google tv apps not working"
+      ]
+    },
+    "ddg:en-GB:disable tcl google tv acr telemetry": {
+      "fetchedAt": 1793837918476,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "how to disable acr on tcl tv",
+        "how to reset tcl google tv",
+        "tcl google tv problems",
+        "google tv tcl remote",
+        "tcl google tv remote replacement",
+        "tcl google tv remote manual",
+        "tcl google tv remote code",
+        "how to hard reset tcl google tv"
+      ]
+    },
+    "google:en-GB:stop philips smart tv tracking": {
+      "fetchedAt": 1793837919068,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "bing:en-GB:stop philips smart tv tracking": {
+      "fetchedAt": 1793837919068,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "philips smart tv app",
+        "philips smart tv support",
+        "philips smart tv app store",
+        "philips smart tv update",
+        "control philips smart tv",
+        "tv philips smart tv"
+      ]
+    },
+    "ddg:en-GB:stop philips smart tv tracking": {
+      "fetchedAt": 1793837919068,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "philips smart tv app",
+        "philips smart tv support",
+        "philips smart tv app store",
+        "philips smart tv update",
+        "control philips smart tv",
+        "tv philips smart tv"
+      ]
+    },
+    "google:en-GB:disable philips titan os acr ads": {
+      "fetchedAt": 1793837919616,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "ddg:en-GB:disable philips titan os acr ads": {
+      "fetchedAt": 1793837919616,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "philips titan os apps"
+      ]
+    },
+    "bing:en-GB:disable philips titan os acr ads": {
+      "fetchedAt": 1793837919616,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "philips titan os apps"
       ]
     }
   }
