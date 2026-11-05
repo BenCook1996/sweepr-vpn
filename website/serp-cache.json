@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-11-05T00:26:47.903Z",
+  "updatedAt": "2026-11-05T05:03:12.480Z",
   "entries": {
     "3f6375c2084e251e": {
       "fetchedAt": 1793831697933,
@@ -1533,6 +1533,108 @@
           "url": "https://www.ixsystems.com/",
           "domain": "ixsystems.com",
           "snippet": "Since 2002, iXsystems Inc. — now doing business as TrueNAS — has been working towards creating the worlds most trusted Open Enterprise Storage Platform to fix broken economics of Enterprise Storage. TrueNAS is the result of this vision. TrueNAS Enterprise storage hardware appliances are deployed in business and mission critical applications globally across every industry and vertical ..."
+        }
+      ]
+    },
+    "f58bdccf813ff615": {
+      "fetchedAt": 1793854986334,
+      "keyword": "install nordvpn on synology nas",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "macOS: ~15 s with no traffic to a peer after wake from sleep; WireGuard keeps using a session the peer discarded",
+          "url": "https://github.com/tailscale/tailscale/issues/21650",
+          "domain": "github.com",
+          "snippet": "macOS: ~15 s with no traffic to a peer after wake from sleep; WireGuard keeps using a session the peer discarded (2026)",
+          "year": "2026"
+        },
+        {
+          "title": "Alternate Approach",
+          "url": "https://github.com/twardakm/synology-ddns-vpn/issues/2",
+          "domain": "github.com",
+          "snippet": "Alternate Approach (2023)",
+          "year": "2023"
+        }
+      ]
+    },
+    "1405bc7f0f6eb411": {
+      "fetchedAt": 1793854988687,
+      "keyword": "does bitdefender vpn use wireguard",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "[Windows][Desktop 26.1007.2314.0] Repeated 0x3B BSOD in nt!CmpKeySecurityIncrementReferenceCount during local execution",
+          "url": "https://github.com/openai/codex/issues/52728",
+          "domain": "github.com",
+          "snippet": "[Windows][Desktop 26.1007.2314.0] Repeated 0x3B BSOD in nt!CmpKeySecurityIncrementReferenceCount during local execution (2026)",
+          "year": "2026"
+        },
+        {
+          "title": "Full VPN Support with WSL2",
+          "url": "https://github.com/microsoft/WSL/issues/10380",
+          "domain": "github.com",
+          "snippet": "Full VPN Support with WSL2 (2023)",
+          "year": "2023"
+        }
+      ]
+    },
+    "fa9fd4646560ebb5": {
+      "fetchedAt": 1793854989927,
+      "keyword": "steam deck wireguard vpn",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Guide: wake the PC from outside the home for Remote Play",
+          "url": "https://github.com/blackhat840/CouchLink/issues/27",
+          "domain": "github.com",
+          "snippet": "Guide: wake the PC from outside the home for Remote Play (2026)",
+          "year": "2026"
+        },
+        {
+          "title": "Misconfigured Wireshark VPN stalls boot",
+          "url": "https://github.com/ValveSoftware/SteamOS/issues/2373",
+          "domain": "github.com",
+          "snippet": "Misconfigured Wireshark VPN stalls boot (2026)",
+          "year": "2026"
+        },
+        {
+          "title": "Welcome to Steam",
+          "url": "https://store.steampowered.com/",
+          "domain": "store.steampowered.com",
+          "snippet": "Steam is the ultimate destination for playing, discussing, and creating games."
+        },
+        {
+          "title": "Steam, The Ultimate Online Game Platform",
+          "url": "https://store.steampowered.com/about",
+          "domain": "store.steampowered.com",
+          "snippet": "Steam Workshop Create, discover, and download player-created mods and cosmetics for nearly 1,000 supported games."
+        },
+        {
+          "title": "Steam Support",
+          "url": "https://help.steampowered.com/",
+          "domain": "help.steampowered.com",
+          "snippet": "Log in to your Steam account to get help with your Steam games, contact Steam Support, request refunds, and more. Help is also available if you can't log in, need to reset your password, or recover a hijacked account."
+        }
+      ]
+    },
+    "8e2609d286d590fa": {
+      "fetchedAt": 1793854991054,
+      "keyword": "gl-be3600 wireguard vpn",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Automated translation sync",
+          "url": "https://github.com/gl-inet/docs4.x/pull/127",
+          "domain": "github.com",
+          "snippet": "Automated translation sync (2026)",
+          "year": "2026"
+        },
+        {
+          "title": "fw4: masquerade incorrectly rewrites source port of router-originated traffic",
+          "url": "https://github.com/openwrt/openwrt/issues/22765",
+          "domain": "github.com",
+          "snippet": "fw4: masquerade incorrectly rewrites source port of router-originated traffic (2026)",
+          "year": "2026"
         }
       ]
     }

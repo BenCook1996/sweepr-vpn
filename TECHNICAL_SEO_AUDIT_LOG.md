@@ -527,8 +527,7 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 ### Executive Summary
 - **Overall Scores**: Crawlability **100/100**, Technical SEO **100/100**, PageSpeed & CWV **100/100** across **205 Canonical Pages**.
 - **Auto-Optimizations Executed**:
-  - Injected deterministic 6-link internal cluster mesh across 2 pSEO pages (0 orphan pages remaining)
-  - Synchronized sitemap.xml with 206 canonical URLs (content-hash <lastmod>: 9 modified today)
+  - Synchronized sitemap.xml with 206 canonical URLs (content-hash <lastmod>: 4 modified today)
   - Synchronized llms.txt & llms-full.txt with all 184 pSEO guides and live 04:00 AM WireGuard/ACR telemetry for GEO AI citations
 
 ### Category Scorecards & Verifications
@@ -537,6 +536,7 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 - **Sitemap Completeness & Content-Hash Freshness**: PASS — 206 canonical URLs registered (1013 thin/duplicate variants consolidated via 301/noindex)
 - **GEO / LLM Discovery Manifests (llms.txt & llms-full.txt)**: PASS — Updated both manifests with 205 canonical URLs and live WireGuard/ACR proof
 - **Search Engine Indexing Queue (Delta-Only)**: PASS — 11 un-pinged/modified delta URLs queued (out of 205 total canonical URLs)
+- **IndexNow Delta Ping Broadcast**: PASS — Pinged 11 delta URLs to Bing & IndexNow (0 remaining in rolling queue)
 - **robots.txt Sitemap Directive**: PASS — Valid sitemap directive points to https://sweeprvpn.com/sitemap.xml
 - **robots.txt AI Crawler Allowances (GEO)**: PASS — All 7 major AI search bots explicitly permitted
 - **robots.txt Crawl-Budget Protections**: PASS — Internal APIs, user portals, qr-setup and CRO studios disallowed

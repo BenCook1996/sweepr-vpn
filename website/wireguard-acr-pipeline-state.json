@@ -1,14 +1,14 @@
 {
-  "lastRunAt": "2026-11-04T23:13:00.809Z",
+  "lastRunAt": "2026-11-05T06:01:25.418Z",
   "liveSiteReachable": true,
   "liveHttpStatus": 200,
-  "liveSiteRttMs": 555,
+  "liveSiteRttMs": 541,
   "liveVpnServersEndpointReachable": true,
   "liveVpnFleetSummary": {
     "totalServers": 8,
     "onlineServers": 8,
     "totalConnectedDevices": 17,
-    "apiLatencyMs": 803
+    "apiLatencyMs": 814
   },
   "liveVpnServers": [
     {
@@ -18,8 +18,8 @@
       "flag": "SE",
       "online": true,
       "devices": 1,
-      "probe_ms": 214,
-      "p99_ms": 214
+      "probe_ms": 234,
+      "p99_ms": 234
     },
     {
       "code": "UK-LON-01",
@@ -28,8 +28,8 @@
       "flag": "GB",
       "online": true,
       "devices": 5,
-      "probe_ms": 171,
-      "p99_ms": 171
+      "probe_ms": 158,
+      "p99_ms": 159
     },
     {
       "code": "DE-FRA-01",
@@ -38,8 +38,8 @@
       "flag": "DE",
       "online": true,
       "devices": 1,
-      "probe_ms": 178,
-      "p99_ms": 178
+      "probe_ms": 187,
+      "p99_ms": 188
     },
     {
       "code": "US-LAX-01",
@@ -48,8 +48,8 @@
       "flag": "US",
       "online": true,
       "devices": 1,
-      "probe_ms": 119,
-      "p99_ms": 119
+      "probe_ms": 114,
+      "p99_ms": 123
     },
     {
       "code": "NL-AMS-01",
@@ -58,8 +58,8 @@
       "flag": "NL",
       "online": true,
       "devices": 1,
-      "probe_ms": 189,
-      "p99_ms": 189
+      "probe_ms": 188,
+      "p99_ms": 188
     },
     {
       "code": "US-NYC-01",
@@ -69,7 +69,7 @@
       "online": true,
       "devices": 4,
       "probe_ms": 19,
-      "p99_ms": 19
+      "p99_ms": 23
     },
     {
       "code": "JP-TYO-01",
@@ -78,8 +78,8 @@
       "flag": "JP",
       "online": true,
       "devices": 1,
-      "probe_ms": 330,
-      "p99_ms": 330
+      "probe_ms": 318,
+      "p99_ms": 352
     },
     {
       "code": "SG-SIN-01",
@@ -88,8 +88,8 @@
       "flag": "SG",
       "online": true,
       "devices": 3,
-      "probe_ms": 476,
-      "p99_ms": 476
+      "probe_ms": 480,
+      "p99_ms": 524
     }
   ],
   "wireguardFleetCount": 6,
