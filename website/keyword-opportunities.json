@@ -1,14 +1,5 @@
 {
   "schemaVersion": "1.0.0",
-  "lastUpdatedAt": "2026-11-06T10:03:04.596Z",
-  "corpusSummary": {
-    "canonicalSitemapUrls": 206,
-    "consolidatedCannibalUrlsBlocked": 28,
-    "gscTitleCooldownLockedUrls": 20,
-    "rolling7DayNewPillarsCreated": 4,
-    "weeklyNewPillarCap": 10,
-    "dailyNewPillarCap": 2
-  },
   "opportunities": [
     {
       "id": "kw_bitdefender_vpn_wireguard_config",
@@ -20705,26 +20696,19 @@
       "appliedAt": null
     }
   ],
+  "lastUpdatedAt": "2026-11-06T10:03:04.596Z",
+  "corpusSummary": {
+    "canonicalSitemapUrls": 206,
+    "consolidatedCannibalUrlsBlocked": 28,
+    "gscTitleCooldownLockedUrls": 20,
+    "rolling7DayNewPillarsCreated": 4,
+    "weeklyNewPillarCap": 10,
+    "dailyNewPillarCap": 2
+  },
   "auditSummary": {
-    "auditedAt": "2026-11-06T10:03:05.122Z",
+    "auditedAt": "2026-11-06T10:06:40.202Z",
     "assertionsPassed": "9/9 PASS",
-    "autoRepairsApplied": 15,
-    "repairLog": [
-      "Demoted CREATE_NEW_PILLAR \"bitdefender vpn wireguard config\" below 40% structured data / 72 score gate",
-      "Demoted CREATE_NEW_PILLAR \"ugreen dxp4800 vs dxp4800 plus\" below 40% structured data / 72 score gate",
-      "Populated weakSpotCitations on \"truenas scale wireguard setup\"",
-      "Populated weakSpotCitations on \"kaspersky vpn alternative options\"",
-      "Populated weakSpotCitations on \"kaspersky vpn alternative\"",
-      "Populated weakSpotCitations on \"totalvpn alternative free\"",
-      "Populated weakSpotCitations on \"totalvpn alternatives\"",
-      "Populated weakSpotCitations on \"unifi cloud gateway ultra wireguard setup\"",
-      "Healed enrichment H2/FAQ on \"fing alternative open source\" (/tools/whats-on-my-wifi): \"2026 Fing Network Scanner Alternative Plain English Renewal Price Hike & Cancellation Comparison (Fing Alternative Open Source)\" -> \"2026 Whats on My Wi-Fi Renewal Price Hike & Cancellation Comparison (Fing Alternative Open Source)\"",
-      "Populated weakSpotCitations on \"gl inet wireguard config\"",
-      "Healed enrichment H2/FAQ on \"best fing alternative no subscription\" (/tools/whats-on-my-wifi): \"2026 Fing Network Scanner Alternative Plain English Renewal Price Hike & Cancellation Comparison (Best Fing Alternative No Subscription)\" -> \"2026 Whats on My Wi-Fi Renewal Price Hike & Cancellation Comparison (Best Fing Alternative No Subscription)\"",
-      "Populated weakSpotCitations on \"unifi gateway max vs cloud gateway max\"",
-      "Populated weakSpotCitations on \"gl inet setup wireguard server\"",
-      "Populated weakSpotCitations on \"gl inet setup wireguard client\"",
-      "Populated weakSpotCitations on \"gl inet wireguard vpn setup\""
-    ]
+    "autoRepairsApplied": 0,
+    "repairLog": []
   }
 }

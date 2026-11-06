@@ -1,12 +1,12 @@
 # SWEEPR VPN — Automated Keyword Opportunities Quality Gate & Audit Log
 
-- **Last Audited**: `2026-11-06T10:03:05.122Z`
+- **Last Audited**: `2026-11-06T10:06:40.202Z`
 - **Canonical Sitemap Corpus**: `206` URLs (`28` consolidated cannibal slugs blocked)
 - **Total Candidate Queries Evaluated**: `328`
 - **Approved / Applied `CREATE_NEW_PILLAR`**: `17` (Caps: `2/day`, `10/week` | Rolling 7-Day Post-Consolidation Created: `4`)
 - **Approved / Applied `ENRICH_EXISTING`**: `44`
 - **Filtered / Rejected (`REJECT_OR_DEFER`)**: `207`
-- **Quality Gate Status**: **`9/9 PASS`** (`15` automated self-healing repairs applied)
+- **Quality Gate Status**: **`9/9 PASS`** (`0` automated self-healing repairs applied)
 
 ## 1. 9-Assertion Automated Quality Gate Scorecard
 
@@ -66,18 +66,4 @@
 
 ## 4. Automated Self-Healing Repair Log
 
-- Demoted CREATE_NEW_PILLAR "bitdefender vpn wireguard config" below 40% structured data / 72 score gate
-- Demoted CREATE_NEW_PILLAR "ugreen dxp4800 vs dxp4800 plus" below 40% structured data / 72 score gate
-- Populated weakSpotCitations on "truenas scale wireguard setup"
-- Populated weakSpotCitations on "kaspersky vpn alternative options"
-- Populated weakSpotCitations on "kaspersky vpn alternative"
-- Populated weakSpotCitations on "totalvpn alternative free"
-- Populated weakSpotCitations on "totalvpn alternatives"
-- Populated weakSpotCitations on "unifi cloud gateway ultra wireguard setup"
-- Healed enrichment H2/FAQ on "fing alternative open source" (/tools/whats-on-my-wifi): "2026 Fing Network Scanner Alternative Plain English Renewal Price Hike & Cancellation Comparison (Fing Alternative Open Source)" -> "2026 Whats on My Wi-Fi Renewal Price Hike & Cancellation Comparison (Fing Alternative Open Source)"
-- Populated weakSpotCitations on "gl inet wireguard config"
-- Healed enrichment H2/FAQ on "best fing alternative no subscription" (/tools/whats-on-my-wifi): "2026 Fing Network Scanner Alternative Plain English Renewal Price Hike & Cancellation Comparison (Best Fing Alternative No Subscription)" -> "2026 Whats on My Wi-Fi Renewal Price Hike & Cancellation Comparison (Best Fing Alternative No Subscription)"
-- Populated weakSpotCitations on "unifi gateway max vs cloud gateway max"
-- Populated weakSpotCitations on "gl inet setup wireguard server"
-- Populated weakSpotCitations on "gl inet setup wireguard client"
-- Populated weakSpotCitations on "gl inet wireguard vpn setup"
+- Zero repairs needed on this run (100% clean).
