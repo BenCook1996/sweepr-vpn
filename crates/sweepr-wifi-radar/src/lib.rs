@@ -60,6 +60,12 @@ pub struct Device {
     pub private_address: bool,
     /// The device is a TV brand that sends viewing data to advertisers by default.
     pub tracker_risk: bool,
+    /// Plain-English explanation if the OUI vendor is a cryptic Wi-Fi microchip (e.g. Espressif, Tuya, Murata).
+    pub chip_translation: Option<String>,
+    /// True if the device is a network camera or exposes RTSP/ONVIF video streaming ports (Airbnb camera check).
+    pub camera_risk: bool,
+    /// Open RTSP/ONVIF camera streaming ports found on this device (e.g. 554, 8554, 37777).
+    pub camera_ports: Vec<u16>,
     /// Which techniques identified this device (for support / debugging).
     pub sources: Vec<String>,
 }
@@ -96,6 +102,7 @@ pub(crate) struct Hints {
     pub ssdp_model: Option<String>,
     pub ssdp_server: Option<String>,
     pub rdns: Option<String>,
+    pub camera_ports: Vec<u16>,
 }
 
 pub(crate) struct LocalNet {
@@ -212,11 +219,13 @@ pub fn scan_network(opts: ScanOptions) -> Result<ScanReport, String> {
 
     let ips: Vec<Ipv4Addr> = table.iter().map(|(ip, _)| *ip).collect();
     let t_rptr = { let ips = ips.clone(); std::thread::spawn(move || probes::mdns_reverse(&ips, Duration::from_millis(1200))) };
+    let t_cam = { let ips = ips.clone(); std::thread::spawn(move || probes::camera_port_probe(&ips, Duration::from_millis(260))) };
     let rdns = probes::reverse_dns(&ips, Duration::from_millis(1200));
 
     let ssdp = t_ssdp.join().unwrap_or_default();
     let mdns = t_mdns.join().unwrap_or_default();
     let rptr = t_rptr.join().unwrap_or_default();
+    let cam_ports = t_cam.join().unwrap_or_default();
 
     // Merge every hint per IP.
     let mut hints: HashMap<Ipv4Addr, Hints> = HashMap::new();
@@ -225,6 +234,7 @@ pub fn scan_network(opts: ScanOptions) -> Result<ScanReport, String> {
     for (ip, names) in rptr { hints.entry(ip).or_default().mdns_names.extend(names); }
     for (ip, s) in ssdp { let e = hints.entry(ip).or_default(); e.ssdp_name = s.friendly_name; e.ssdp_vendor = s.manufacturer; e.ssdp_model = s.model; e.ssdp_server = s.server; }
     for (ip, n) in rdns { hints.entry(ip).or_default().rdns = Some(n); }
+    for (ip, ports) in cam_ports { hints.entry(ip).or_default().camera_ports = ports; }
 
     let mut devices: Vec<Device> = Vec::new();
 
@@ -249,6 +259,9 @@ pub fn scan_network(opts: ScanOptions) -> Result<ScanReport, String> {
         is_self: true,
         private_address: false,
         tracker_risk: false,
+        chip_translation: None,
+        camera_risk: false,
+        camera_ports: Vec::new(),
         sources: vec!["self".into()],
     });
 
@@ -318,31 +331,57 @@ fn build_device(ip: Ipv4Addr, mac: &str, h: &Hints, is_router: bool, shared_mac:
     )
     .to_lowercase();
 
-        let kind = if is_router { DeviceKind::Router }
+    let kind = if is_router { DeviceKind::Router }
+        else if !h.camera_ports.is_empty() { DeviceKind::Camera }
         else if EXTENDER_WORDS.iter().any(|w| haystack.contains(w)) || (shared_mac && name.as_deref().map(|n| n.to_lowercase().starts_with("re")).unwrap_or(false)) { DeviceKind::Extender }
         else { classify(&haystack, mac, h.netbios.is_some(), private_address && name.is_none()) };
     // Amazon speakers announce themselves only as "SpotifyConnect": call them what they are.
     let name = if name.is_none() && kind == DeviceKind::Speaker && vendor.as_deref() == Some("Amazon") { Some("Amazon Echo".to_string()) } else { name };
     let tracker_risk = kind == DeviceKind::Tv && ACR_BRANDS.iter().any(|b| haystack.contains(b));
+    let camera_risk = kind == DeviceKind::Camera
+        || !h.camera_ports.is_empty()
+        || haystack.contains("_rtsp")
+        || haystack.contains("_axis-video")
+        || haystack.contains("onvif")
+        || haystack.contains("ipcam");
+
+    let chip_info = translate_cryptic_chip(vendor.as_deref(), &kind);
+    let chip_translation = chip_info.as_ref().map(|(_, badge)| badge.clone());
 
     let display_name = match (&name, is_router) {
         (_, true) => "Home Wi-Fi Router".to_string(),
         (Some(n), _) => n.clone(),
-        (None, _) => match (&kind, &vendor) {
-            (DeviceKind::Windows, _) => "Windows Desktop".into(),
-            (DeviceKind::Macos, _) => "macOS Desktop".into(),
-            (DeviceKind::Linux, _) => "Linux Desktop".into(),
-            (DeviceKind::Iphone, _) => "iPhone".into(),
-            (DeviceKind::Android, _) => "Android Mobile Device".into(),
-            (DeviceKind::Private, _) => "iPhone".into(),
-            (k, Some(v)) => format!("{v} {}", kind_noun(k)),
-            (k, None) => kind_label(k).into(),
-        },
+        (None, _) => {
+            if let Some((friendly_chip_name, _)) = &chip_info {
+                friendly_chip_name.clone()
+            } else {
+                match (&kind, &vendor) {
+                    (DeviceKind::Windows, _) => "Windows Desktop".into(),
+                    (DeviceKind::Macos, _) => "macOS Desktop".into(),
+                    (DeviceKind::Linux, _) => "Linux Desktop".into(),
+                    (DeviceKind::Iphone, _) => "iPhone".into(),
+                    (DeviceKind::Android, _) => "Android Mobile Device".into(),
+                    (DeviceKind::Private, _) => "iPhone".into(),
+                    (k, Some(v)) => format!("{v} {}", kind_noun(k)),
+                    (k, None) => kind_label(k).into(),
+                }
+            }
+        }
     };
 
-    let made_by = vendor.as_ref().map(|v| format!("Made by {v}"));
+    let made_by = match (&chip_translation, &vendor) {
+        (Some(badge), _) => Some(badge.clone()),
+        (None, Some(v)) => Some(format!("Made by {v}")),
+        (None, None) => None,
+    };
     let detail = if is_router {
         match &vendor { Some(v) => format!("Your home internet box · Made by {v}"), None => "Your home internet box".into() }
+    } else if camera_risk {
+        if !h.camera_ports.is_empty() {
+            format!("Network Camera · video stream port {:?} open", h.camera_ports)
+        } else {
+            format!("{} Camera · check if recognized on your Wi-Fi", vendor.clone().unwrap_or_else(|| "Smart".into()))
+        }
     } else if tracker_risk {
         format!("{} TV · sends what you watch to advertisers", vendor.clone().unwrap_or_else(|| "Smart".into()))
     } else if kind == DeviceKind::Extender {
@@ -357,7 +396,71 @@ fn build_device(ip: Ipv4Addr, mac: &str, h: &Hints, is_router: bool, shared_mac:
         if parts.is_empty() { "Couldn't identify this device".into() } else { parts.join(" · ") }
     };
 
-    Device { ip: ip.to_string(), mac: mac.to_string(), name: display_name, vendor, model, kind, detail, is_router, is_self: false, private_address, tracker_risk, sources }
+    Device {
+        ip: ip.to_string(),
+        mac: mac.to_string(),
+        name: display_name,
+        vendor,
+        model,
+        kind,
+        detail,
+        is_router,
+        is_self: false,
+        private_address,
+        tracker_risk,
+        chip_translation,
+        camera_risk,
+        camera_ports: h.camera_ports.clone(),
+        sources,
+    }
+}
+
+/// Translates cryptic Wi-Fi microchip manufacturer names (Espressif, Tuya, Murata, etc.)
+/// into plain-English household device labels so homeowners never see raw chip codes.
+pub fn translate_cryptic_chip(vendor: Option<&str>, kind: &DeviceKind) -> Option<(String, String)> {
+    let v = vendor?.trim();
+    let l = v.to_lowercase();
+    if l.contains("espressif") {
+        let label = match kind {
+            DeviceKind::Camera => "Smart Wi-Fi Camera",
+            DeviceKind::Speaker => "Smart Speaker / Voice Assistant",
+            _ => "Smart Plug / Smart Home Device",
+        };
+        return Some((label.into(), "Translated from Espressif IoT Wi-Fi Chip".into()));
+    }
+    if l.contains("tuya") || l.contains("hangzhou tuya") {
+        let label = match kind {
+            DeviceKind::Camera => "Smart Indoor Camera",
+            _ => "Smart Plug / Light Switch",
+        };
+        return Some((label.into(), "Translated from Tuya Smart Home Chip".into()));
+    }
+    if l.contains("murata") {
+        let label = match kind {
+            DeviceKind::Tv => "Smart TV / Streaming Box",
+            DeviceKind::Console => "Games Console",
+            _ => "Smart Home Appliance / Thermostat",
+        };
+        return Some((label.into(), "Translated from Murata Wi-Fi Module".into()));
+    }
+    if l.contains("bilian") || l.contains("b-link") {
+        let label = match kind {
+            DeviceKind::Camera => "Wireless IP Camera",
+            _ => "Smart Wi-Fi Camera / IoT Gadget",
+        };
+        return Some((label.into(), "Translated from Shenzhen Bilian Camera/IoT Chip".into()));
+    }
+    if l.contains("beken") || l.contains("fn-link") || l.contains("azurewave") || l.contains("liteon") || l.contains("hon hai") || l.contains("foxconn") || l.contains("chongqing fugui") {
+        let label = match kind {
+            DeviceKind::Tv => "Smart TV / Streaming Stick",
+            DeviceKind::Console => "Games Console",
+            DeviceKind::Printer => "Wireless Printer",
+            DeviceKind::Camera => "Smart Camera",
+            _ => "Connected Home Device",
+        };
+        return Some((label.into(), format!("Translated from {v} Wi-Fi Module")));
+    }
+    None
 }
 
 const EXTENDER_WORDS: &[&str] = &["extender", "repeater", "re220", "re200", "re305", "re450", "re650", "deco", "eero", "orbi", "velop", "mesh", "powerline", "wifi booster", "super wifi"];
@@ -437,4 +540,42 @@ fn clean_friendly(n: &str) -> String {
     // "[TV] Samsung 7 Series (55)" -> "Samsung 7 Series (55)"
     let n = n.trim_start_matches("[TV]").trim_start_matches("[AV]").trim();
     n.chars().take(48).collect()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn translates_espressif_and_tuya_chips_into_plain_english() {
+        let mut h = Hints::default();
+        h.ssdp_vendor = Some("Espressif Inc.".into());
+        let dev = build_device(Ipv4Addr::new(192, 168, 1, 42), "24:6f:28:11:22:33", &h, false, false);
+        assert_eq!(dev.name, "Smart Plug / Smart Home Device");
+        assert_eq!(
+            dev.chip_translation.as_deref(),
+            Some("Translated from Espressif IoT Wi-Fi Chip")
+        );
+        assert!(dev.detail.contains("Translated from Espressif IoT Wi-Fi Chip"));
+
+        let mut h_tuya = Hints::default();
+        h_tuya.ssdp_vendor = Some("Hangzhou Tuya Information Technology".into());
+        let dev_tuya = build_device(Ipv4Addr::new(192, 168, 1, 43), "d8:1f:12:aa:bb:cc", &h_tuya, false, false);
+        assert_eq!(dev_tuya.name, "Smart Plug / Light Switch");
+        assert_eq!(
+            dev_tuya.chip_translation.as_deref(),
+            Some("Translated from Tuya Smart Home Chip")
+        );
+    }
+
+    #[test]
+    fn detects_hidden_camera_via_rtsp_ports_or_mdns() {
+        let mut h = Hints::default();
+        h.camera_ports = vec![554];
+        let dev = build_device(Ipv4Addr::new(192, 168, 1, 88), "a0:b1:c2:11:22:33", &h, false, false);
+        assert_eq!(dev.kind, DeviceKind::Camera);
+        assert!(dev.camera_risk);
+        assert_eq!(dev.camera_ports, vec![554]);
+        assert!(dev.detail.contains("554"));
+    }
 }

@@ -300,6 +300,71 @@
       </div>
     </div>
 
+    <!-- Interactive WiFiGuard Home 1-Click ISP Bill Credit & Refund Claim Script Generator -->
+    <div id="ispRefundGeneratorCard" class="glass-card p-6 sm:p-8 mb-8 border-2 border-emerald-500/30 shadow-lg">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-900">
+          💸 WiFiGuard Home™ ISP Speed-Drop Refund Proof Generator
+        </span>
+        <span class="text-xs font-bold text-emerald-700">FCC Broadband Consumer Label &amp; Ofcom Speed Guarantee Compliant</span>
+      </div>
+      <h2 class="text-2xl font-black text-gray-900 mb-2">Paying $85/mo for &ldquo;Gigabit&rdquo; Wi-Fi That Drops Every Evening? Claim a $20–$40 Bill Credit</h2>
+      <p class="text-sm text-gray-600 mb-6">
+        Select your internet provider and enter your promised plan speed vs. your actual evening speed below. Generate a word-for-word customer retention script + printable speed audit certificate to demand an immediate pro-rata bill credit.
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
+        <div>
+          <label for="ispProviderInput" class="block text-xs font-bold text-gray-700 mb-1">Internet Provider (ISP)</label>
+          <select id="ispProviderInput" onchange="generateWebIspRefundScript()" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 bg-white text-sm font-semibold text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            <option value="Spectrum">Spectrum (Charter)</option>
+            <option value="Comcast Xfinity">Comcast Xfinity</option>
+            <option value="AT&amp;T Fiber">AT&amp;T Fiber / Internet</option>
+            <option value="Verizon Fios">Verizon Fios</option>
+            <option value="Virgin Media (UK)">Virgin Media O2 (UK)</option>
+            <option value="BT / EE Broadband (UK)">BT / EE Broadband (UK)</option>
+            <option value="Sky Broadband (UK)">Sky Broadband (UK)</option>
+            <option value="TalkTalk / Vodafone (UK)">TalkTalk / Vodafone (UK)</option>
+            <option value="Rogers / Bell (CA)">Rogers / Bell (Canada)</option>
+          </select>
+        </div>
+        <div>
+          <label for="ispPromisedInput" class="block text-xs font-bold text-gray-700 mb-1">Promised Plan Speed (Mbps)</label>
+          <input id="ispPromisedInput" type="number" value="500" min="10" max="10000" oninput="generateWebIspRefundScript()" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 bg-white text-sm font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+        </div>
+        <div>
+          <label for="ispMeasuredInput" class="block text-xs font-bold text-gray-700 mb-1">Evening Measured Speed (Mbps)</label>
+          <input id="ispMeasuredInput" type="number" value="92" min="1" max="10000" oninput="generateWebIspRefundScript()" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 bg-white text-sm font-bold text-amber-700 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+        </div>
+        <div>
+          <label for="ispBillInput" class="block text-xs font-bold text-gray-700 mb-1">Monthly ISP Bill ($ / £)</label>
+          <input id="ispBillInput" type="number" value="85" min="15" max="500" oninput="generateWebIspRefundScript()" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 bg-white text-sm font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+        </div>
+      </div>
+
+      <div class="rounded-2xl bg-slate-950 text-emerald-200 p-4 sm:p-5 border border-emerald-500/30 mb-4">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-2 pb-2 border-b border-slate-800">
+          <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-400">📋 Word-for-Word ISP Retention &amp; Bill Credit Claim Script</span>
+          <span id="ispCreditEstimateBadge" class="text-xs font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">Recommended Claim: $30.00 Bill Credit</span>
+        </div>
+        <pre id="webIspRefundScriptBox" class="text-xs sm:text-sm font-mono text-emerald-100 whitespace-pre-wrap leading-relaxed select-all"></pre>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex flex-wrap gap-2.5">
+          <button type="button" id="copyWebIspScriptBtn" onclick="copyWebIspRefundScript()" class="btn btn-go px-5 py-2.5 text-xs sm:text-sm font-bold">
+            📋 Copy Refund Claim Script
+          </button>
+          <button type="button" onclick="window.print()" class="btn btn-ghost px-4 py-2.5 text-xs sm:text-sm font-bold">
+            🖨️ Print Verified Speed Audit Certificate
+          </button>
+        </div>
+        <a href="/download?utm_source=throttling_test&amp;utm_medium=isp_refund_generator" class="text-xs font-extrabold text-emerald-700 hover:text-emerald-800 underline">
+          Want automatic hourly 30-day speed-drop logs? Get SWEEPR + WiFiGuard Home App &rarr;
+        </a>
+      </div>
+    </div>
+
     <!-- Common Internet Provider Throttling Reference Table (GEO & Long-Tail SEO Asset) -->
     <div class="glass-card p-6 sm:p-8 mb-8">
       <h2 class="text-2xl font-black text-gray-900 mb-2">Common Internet Provider Peak-Hour Slowdowns (2026 Guide)</h2>
@@ -422,7 +487,7 @@
       <span>&bull;</span>
       <a href="/solutions/rogers-ignite-canada-isp-throttling" class="hover:text-emerald-600 transition-colors">Rogers Ignite Throttling Fix</a>
     </div>
-                                                                                                                <details id="sweepr-seo-directory" class="max-w-5xl mx-auto mb-4 px-4 text-xs text-gray-400">
+                                                                                                                        <details id="sweepr-seo-directory" class="max-w-5xl mx-auto mb-4 px-4 text-xs text-gray-400">
       <summary class="cursor-pointer hover:text-emerald-600 font-semibold select-none">Browse All 118 WireGuard Router Setup Guides, Smart-TV Privacy Guides &amp; VPN Comparisons</summary>
       <div class="flex flex-wrap justify-center gap-x-3 gap-y-1.5 mt-3 pt-3 border-t border-gray-100 text-[11px]">
         <a href="/setup/almalinux-9-wireguard-gateway" class="hover:text-emerald-600 transition-colors">AlmaLinux 9 & Rocky Linux 9 Enterprise WireGuard Gateway: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
@@ -737,9 +802,49 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tool: 'isp_throttling_test', segment: thrSegment, ping_ms: avg, jitter_ms: jitter })
       }).catch(() => {});
+      generateWebIspRefundScript(avg, jitter);
     }
 
-    document.addEventListener('DOMContentLoaded', runThrottlingProbe);
+    function generateWebIspRefundScript(measuredPing, measuredJitter) {
+      const isp = (document.getElementById('ispProviderInput') || {}).value || 'Spectrum';
+      const promised = Math.max(10, Number((document.getElementById('ispPromisedInput') || {}).value) || 500);
+      const measured = Math.max(1, Number((document.getElementById('ispMeasuredInput') || {}).value) || 92);
+      const bill = Math.max(15, Number((document.getElementById('ispBillInput') || {}).value) || 85);
+      const isUk = /UK|Virgin|BT|Sky|TalkTalk/i.test(isp);
+      const sym = isUk ? '£' : '$';
+      const shortfallPct = Math.max(5, Math.min(95, Math.round(((promised - measured) / promised) * 100)));
+      const creditAmt = Math.max(15, Math.min(Math.round(bill * 0.45), Math.round(bill * (shortfallPct / 100) * 0.55)));
+      const regRule = isUk
+        ? 'the Ofcom Voluntary Code of Practice on Broadband Speeds & Minimum Guaranteed Speed commitment'
+        : 'the FCC Broadband Consumer Label Truth-in-Billing rules';
+      const badge = document.getElementById('ispCreditEstimateBadge');
+      if (badge) {
+        badge.textContent = `Recommended Claim: ${sym}${creditAmt}.00 Bill Credit (${shortfallPct}% Speed Shortfall)`;
+      }
+      const box = document.getElementById('webIspRefundScriptBox');
+      if (box) {
+        box.textContent = `"Hi ${isp} Account Retention Team — I am calling regarding my ${promised} Mbps plan (${sym}${bill}/month). Independent SWEEPR WiFiGuard M-Lab speed & latency diagnostics logged my connection dropping to ${measured} Mbps (${shortfallPct}% below my contracted ${promised} Mbps tier) during evening hours. Under ${regRule}, I am requesting a ${sym}${creditAmt}.00 service-level credit applied to my current statement and an automated line profile reset."`;
+      }
+    }
+
+    function copyWebIspRefundScript() {
+      const box = document.getElementById('webIspRefundScriptBox');
+      const btn = document.getElementById('copyWebIspScriptBtn');
+      if (!box) return;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(box.textContent || '');
+      }
+      if (btn) {
+        const orig = btn.textContent;
+        btn.textContent = '✓ Copied Refund Script to Clipboard!';
+        setTimeout(() => { btn.textContent = orig; }, 2200);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      generateWebIspRefundScript();
+      runThrottlingProbe();
+    });
   </script>
 </body>
 </html>

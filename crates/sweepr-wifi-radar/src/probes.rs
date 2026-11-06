@@ -164,6 +164,7 @@ const SERVICES: &[&str] = &[
     "_sonos._tcp.local", "_amzn-wplay._tcp.local", "_androidtvremote2._tcp.local", "_viziocast._tcp.local",
     "_device-info._tcp.local", "_companion-link._tcp.local", "_smb._tcp.local", "_workstation._tcp.local",
     "_hue._tcp.local", "_matter._tcp.local", "_nvstream._tcp.local", "_xbox._tcp.local",
+    "_rtsp._tcp.local", "_axis-video._tcp.local",
 ];
 
 fn mdns_socket() -> Option<UdpSocket> {
@@ -270,6 +271,38 @@ pub fn reverse_dns(ips: &[Ipv4Addr], wait: Duration) -> Vec<(Ipv4Addr, String)> 
     let deadline = Instant::now() + wait;
     let mut out = Vec::new();
     while let Ok(item) = rx.recv_timeout(deadline.saturating_duration_since(Instant::now())) { out.push(item); }
+    out
+}
+
+// ---------------------------------------------------------------- Airbnb / Hidden Camera Port Check
+/// Non-intrusive check for open RTSP / IP-camera streaming ports (554, 8554, 37777) on discovered LAN hosts.
+pub fn camera_port_probe(ips: &[Ipv4Addr], timeout: Duration) -> Vec<(Ipv4Addr, Vec<u16>)> {
+    const CAM_PORTS: &[u16] = &[554, 8554, 37777];
+    let (tx, rx) = mpsc::channel();
+    for ip in ips.iter().copied() {
+        if !(ip.is_private() || ip.is_link_local()) || ip.is_loopback() {
+            continue;
+        }
+        let tx = tx.clone();
+        std::thread::spawn(move || {
+            let mut open = Vec::new();
+            for &port in CAM_PORTS {
+                let addr = SocketAddr::new(IpAddr::V4(ip), port);
+                if TcpStream::connect_timeout(&addr, timeout).is_ok() {
+                    open.push(port);
+                }
+            }
+            if !open.is_empty() {
+                let _ = tx.send((ip, open));
+            }
+        });
+    }
+    drop(tx);
+    let deadline = Instant::now() + timeout + Duration::from_millis(120);
+    let mut out = Vec::new();
+    while let Ok(item) = rx.recv_timeout(deadline.saturating_duration_since(Instant::now())) {
+        out.push(item);
+    }
     out
 }
 

@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-11-05T05:03:12.480Z",
+  "updatedAt": "2026-11-06T10:03:04.591Z",
   "entries": {
     "3f6375c2084e251e": {
       "fetchedAt": 1793831697933,
@@ -1536,48 +1536,6 @@
         }
       ]
     },
-    "f58bdccf813ff615": {
-      "fetchedAt": 1793854986334,
-      "keyword": "install nordvpn on synology nas",
-      "source": "community-api+serp-verified",
-      "topResults": [
-        {
-          "title": "macOS: ~15 s with no traffic to a peer after wake from sleep; WireGuard keeps using a session the peer discarded",
-          "url": "https://github.com/tailscale/tailscale/issues/21650",
-          "domain": "github.com",
-          "snippet": "macOS: ~15 s with no traffic to a peer after wake from sleep; WireGuard keeps using a session the peer discarded (2026)",
-          "year": "2026"
-        },
-        {
-          "title": "Alternate Approach",
-          "url": "https://github.com/twardakm/synology-ddns-vpn/issues/2",
-          "domain": "github.com",
-          "snippet": "Alternate Approach (2023)",
-          "year": "2023"
-        }
-      ]
-    },
-    "1405bc7f0f6eb411": {
-      "fetchedAt": 1793854988687,
-      "keyword": "does bitdefender vpn use wireguard",
-      "source": "community-api+serp-verified",
-      "topResults": [
-        {
-          "title": "[Windows][Desktop 26.1007.2314.0] Repeated 0x3B BSOD in nt!CmpKeySecurityIncrementReferenceCount during local execution",
-          "url": "https://github.com/openai/codex/issues/52728",
-          "domain": "github.com",
-          "snippet": "[Windows][Desktop 26.1007.2314.0] Repeated 0x3B BSOD in nt!CmpKeySecurityIncrementReferenceCount during local execution (2026)",
-          "year": "2026"
-        },
-        {
-          "title": "Full VPN Support with WSL2",
-          "url": "https://github.com/microsoft/WSL/issues/10380",
-          "domain": "github.com",
-          "snippet": "Full VPN Support with WSL2 (2023)",
-          "year": "2023"
-        }
-      ]
-    },
     "fa9fd4646560ebb5": {
       "fetchedAt": 1793854989927,
       "keyword": "steam deck wireguard vpn",
@@ -1617,8 +1575,50 @@
         }
       ]
     },
+    "f58bdccf813ff615": {
+      "fetchedAt": 1793941358780,
+      "keyword": "install nordvpn on synology nas",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "macOS: ~15 s with no traffic to a peer after wake from sleep; WireGuard keeps using a session the peer discarded",
+          "url": "https://github.com/tailscale/tailscale/issues/21650",
+          "domain": "github.com",
+          "snippet": "macOS: ~15 s with no traffic to a peer after wake from sleep; WireGuard keeps using a session the peer discarded (2026)",
+          "year": "2026"
+        },
+        {
+          "title": "Alternate Approach",
+          "url": "https://github.com/twardakm/synology-ddns-vpn/issues/2",
+          "domain": "github.com",
+          "snippet": "Alternate Approach (2023)",
+          "year": "2023"
+        }
+      ]
+    },
+    "1405bc7f0f6eb411": {
+      "fetchedAt": 1793959376850,
+      "keyword": "does bitdefender vpn use wireguard",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "[Windows][Desktop 26.1007.2314.0] Repeated 0x3B BSOD in nt!CmpKeySecurityIncrementReferenceCount during local execution",
+          "url": "https://github.com/openai/codex/issues/52728",
+          "domain": "github.com",
+          "snippet": "[Windows][Desktop 26.1007.2314.0] Repeated 0x3B BSOD in nt!CmpKeySecurityIncrementReferenceCount during local execution (2026)",
+          "year": "2026"
+        },
+        {
+          "title": "Full VPN Support with WSL2",
+          "url": "https://github.com/microsoft/WSL/issues/10380",
+          "domain": "github.com",
+          "snippet": "Full VPN Support with WSL2 (2023)",
+          "year": "2023"
+        }
+      ]
+    },
     "8e2609d286d590fa": {
-      "fetchedAt": 1793854991054,
+      "fetchedAt": 1793959379164,
       "keyword": "gl-be3600 wireguard vpn",
       "source": "community-api+serp-verified",
       "topResults": [
@@ -1635,6 +1635,110 @@
           "domain": "github.com",
           "snippet": "fw4: masquerade incorrectly rewrites source port of router-originated traffic (2026)",
           "year": "2026"
+        }
+      ]
+    },
+    "bdca6abe7a18d6fb": {
+      "fetchedAt": 1793959380308,
+      "keyword": "kaspersky vpn alternative",
+      "source": "bing-rss-verified",
+      "topResults": [
+        {
+          "title": "Kaspersky Cyber Security Solutions for Home and Business | Kaspersky",
+          "url": "https://www.kaspersky.com/",
+          "domain": "kaspersky.com",
+          "snippet": "Official Site – A Global Leader in next-generation cybersecurity solutions and services, Kaspersky offers premium protection against all cyber threats for your home and business."
+        },
+        {
+          "title": "Download Kaspersky Antivirus | Kaspersky",
+          "url": "https://www.kaspersky.com/downloads/antivirus",
+          "domain": "kaspersky.com",
+          "snippet": "Get Kaspersky Standard with your Kaspersky Anti-Virus activation code — at no extra cost until your license expires. Keep the trusted protection and unlock new privacy, performance and crypto security features."
+        },
+        {
+          "title": "My Kaspersky | Welcome",
+          "url": "https://my.kaspersky.com/",
+          "domain": "my.kaspersky.com",
+          "snippet": "My Kaspersky is a one-stop point for protection of your digital life and those you care about. Monitor all your digital devices and those you have shared protection with, on one screen. Use a convenient online interface to manage your Kaspersky products."
+        },
+        {
+          "title": "Home Computer and Mobile Security Software | Kaspersky",
+          "url": "https://usa.kaspersky.com/home-security",
+          "domain": "usa.kaspersky.com",
+          "snippet": "Kaspersky Offers Multiple Levels of Protection for Your Home Computer &amp; Mobile Devices to Keep You Safe From All Malware, Viruses and Online Threats. Secure Your Devices With Our Award-Winning Security Products."
+        },
+        {
+          "title": "Kaspersky Lab - Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Kaspersky_Lab",
+          "domain": "en.wikipedia.org",
+          "snippet": "Its cloud and infrastructure products include Kaspersky Hybrid Cloud Security for cloud workloads and Kaspersky Container Security for containerized environments, while Kaspersky SD-WAN is used for distributed corporate networks."
+        }
+      ]
+    },
+    "8bff0433a2bd1638": {
+      "fetchedAt": 1793959381918,
+      "keyword": "wireguard vpn zu fritzbox",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Serve the stacks' domains in the LAN as *.local.welles.app",
+          "url": "https://github.com/welles/nixos-config/pull/176",
+          "domain": "github.com",
+          "snippet": "Serve the stacks' domains in the LAN as *.local.welles.app (2026)",
+          "year": "2026"
+        },
+        {
+          "title": "External Shelly with LTE Router / Shelly connected using NAT",
+          "url": "https://github.com/iobroker-community-adapters/ioBroker.shelly/issues/1212",
+          "domain": "github.com",
+          "snippet": "External Shelly with LTE Router / Shelly connected using NAT (2025)",
+          "year": "2025"
+        },
+        {
+          "title": "WireGuard: fast, modern, secure VPN tunnel",
+          "url": "https://www.wireguard.com/",
+          "domain": "wireguard.com",
+          "snippet": "WireGuard ® is an extremely simple yet fast and modern VPN that utilizes state-of-the-art cryptography. It aims to be faster, simpler, leaner, and more useful than IPsec, while avoiding the massive headache."
+        },
+        {
+          "title": "Installation - WireGuard",
+          "url": "https://www.wireguard.com/install/",
+          "domain": "wireguard.com",
+          "snippet": "Users with Debian releases older than Bullseye should enable backports. Users of kernels &lt; 5.6 may also choose wireguard-lts or wireguard-dkms + linux-headers, depending on which kernel is used. The wireguard-modules ebuild also exists for compatibility with older kernels."
+        },
+        {
+          "title": "WireGuard for Windows Downloads",
+          "url": "https://download.wireguard.com/windows-client/",
+          "domain": "download.wireguard.com",
+          "snippet": "WireGuard Installer This utility simply downloads, verifies, and executes one of the below MSIs: wireguard-installer.exe WireGuard MSIs wireguard-amd64-1.1.1.msi wireguard-arm64-1.1.1.msi wireguard-x86-1.1.1.msi"
+        }
+      ]
+    },
+    "3883d36b3a08fda0": {
+      "fetchedAt": 1793959383255,
+      "keyword": "fritzbox 7590 wireguard vpn",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Support search for addresses",
+          "url": "https://github.com/mapsme/omim/issues/7590",
+          "domain": "github.com",
+          "snippet": "Support search for addresses (2017)",
+          "year": "2017"
+        },
+        {
+          "title": "_configure_database.php no longer works",
+          "url": "https://github.com/silverstripe/silverstripe-framework/issues/7590",
+          "domain": "github.com",
+          "snippet": "_configure_database.php no longer works (2017)",
+          "year": "2017"
+        },
+        {
+          "title": "Setting up a FritzBox VPN via IPSec",
+          "url": "https://superuser.com/questions/1810797/setting-up-a-fritzbox-vpn-via-ipsec",
+          "domain": "superuser.com",
+          "snippet": "Setting up a FritzBox VPN via IPSec (2023)",
+          "year": "2023"
         }
       ]
     }

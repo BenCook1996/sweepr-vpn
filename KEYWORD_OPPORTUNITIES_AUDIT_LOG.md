@@ -1,12 +1,12 @@
 # SWEEPR VPN — Automated Keyword Opportunities Quality Gate & Audit Log
 
-- **Last Audited**: `2026-11-05T10:05:16.687Z`
+- **Last Audited**: `2026-11-06T10:03:05.122Z`
 - **Canonical Sitemap Corpus**: `206` URLs (`28` consolidated cannibal slugs blocked)
-- **Total Candidate Queries Evaluated**: `366`
+- **Total Candidate Queries Evaluated**: `328`
 - **Approved / Applied `CREATE_NEW_PILLAR`**: `17` (Caps: `2/day`, `10/week` | Rolling 7-Day Post-Consolidation Created: `4`)
-- **Approved / Applied `ENRICH_EXISTING`**: `45`
-- **Filtered / Rejected (`REJECT_OR_DEFER`)**: `226`
-- **Quality Gate Status**: **`9/9 PASS`** (`0` automated self-healing repairs applied)
+- **Approved / Applied `ENRICH_EXISTING`**: `44`
+- **Filtered / Rejected (`REJECT_OR_DEFER`)**: `207`
+- **Quality Gate Status**: **`9/9 PASS`** (`15` automated self-healing repairs applied)
 
 ## 1. 9-Assertion Automated Quality Gate Scorecard
 
@@ -27,13 +27,13 @@
 | Rank | Query | Target Canonical URL | V | I | W | P | Score | Status | Weak-Spot Citations |
 |---|---|---|---|---|---|---|---|---|---|
 | 1 | `gl-be3600 wireguard vpn` | `/setup/gl-inet-slate-7-be3600-wireguard` | 62 | 80 | 95 | 85 | **81** | `APPROVED` | github.com (2026), github.com (2026) |
-| 2 | `kaspersky vpn alternative` | `/vs/kaspersky-vpn-alternative-wireguard` | 67 | 95 | 85 | 65 | **81** | `APPROVED` | reddit.com (2024) |
-| 3 | `cancel mcafee vpn auto renewal` | `/vs/mcafee-safe-connect-auto-renewal-alternative` | 53 | 95 | 85 | 65 | **77** | `APPROVED` | reddit.com (2024) |
-| 4 | `truenas scale wireguard setup` | `/setup/truenas-scale-electric-eel-wireguard` | 62 | 80 | 80 | 85 | **76** | `APPROVED` | reddit.com (2025) |
-| 5 | `cudy wr3000 wireguard vpn setup download` | `/setup/cudy-wr3000-openwrt-wireguard-setup` | 59 | 80 | 83 | 85 | **76** | `APPROVED` | forum.gl-inet.com (2024) |
-| 6 | `tp link er605 wireguard vpn setup` | `/setup/tp-link-omada-er605-wireguard-vpn` | 58 | 80 | 83 | 85 | **76** | `APPROVED` | forum.gl-inet.com (2024) |
-| 7 | `legion go wireguard vpn` | `/setup/lenovo-legion-go-steamos-wireguard` | 57 | 80 | 83 | 85 | **76** | `APPROVED` | forum.gl-inet.com (2024) |
-| 8 | `synology rt6600ax wireguard vpn` | `/setup/synology-rt6600ax-srm-wireguard-vpn` | 57 | 80 | 83 | 85 | **76** | `APPROVED` | forum.gl-inet.com (2024) |
+| 2 | `cancel mcafee vpn auto renewal` | `/vs/mcafee-safe-connect-auto-renewal-alternative` | 53 | 95 | 85 | 65 | **77** | `APPROVED` | reddit.com (2024) |
+| 3 | `truenas scale wireguard setup` | `/setup/truenas-scale-electric-eel-wireguard` | 62 | 80 | 80 | 85 | **76** | `APPROVED` | reddit.com (2025) |
+| 4 | `cudy wr3000 wireguard vpn setup download` | `/setup/cudy-wr3000-openwrt-wireguard-setup` | 59 | 80 | 83 | 85 | **76** | `APPROVED` | forum.gl-inet.com (2024) |
+| 5 | `tp link er605 wireguard vpn setup` | `/setup/tp-link-omada-er605-wireguard-vpn` | 58 | 80 | 83 | 85 | **76** | `APPROVED` | forum.gl-inet.com (2024) |
+| 6 | `legion go wireguard vpn` | `/setup/lenovo-legion-go-steamos-wireguard` | 57 | 80 | 83 | 85 | **76** | `APPROVED` | forum.gl-inet.com (2024) |
+| 7 | `synology rt6600ax wireguard vpn` | `/setup/synology-rt6600ax-srm-wireguard-vpn` | 57 | 80 | 83 | 85 | **76** | `APPROVED` | forum.gl-inet.com (2024) |
+| 8 | `kaspersky vpn alternative options` | `/vs/kaspersky-vpn-alternative-wireguard` | 73 | 95 | 60 | 65 | **75** | `APPROVED` | reddit.com (2024) |
 | 9 | `unifi express wireguard vpn client` | `/setup/unifi-express-ux-wireguard-client` | 53 | 80 | 83 | 85 | **75** | `APPROVED` | forum.gl-inet.com (2024) |
 | 10 | `draytek vigor 2865 wireguard vpn setup` | `/setup/draytek-vigor-2865-wireguard-uk-fttp` | 53 | 80 | 83 | 85 | **75** | `APPROVED` | forum.gl-inet.com (2024) |
 | 11 | `asus rt-be96u wireguard vpn setup` | `/setup/asus-rt-be96u-wifi7-wireguard-vpn` | 53 | 80 | 83 | 85 | **75** | `APPROVED` | forum.gl-inet.com (2024) |
@@ -48,22 +48,36 @@
 
 | Rank | Query | Target Canonical Pillar | Framing Type | Audited H2 Heading | V / I / W / P | Score | Status |
 |---|---|---|---|---|---|---|---|
-| 1 | `install nordvpn on synology nas` | `/setup/synology-nas-docker-vpn` | `COMPETITOR_DISPLACEMENT_ON_HARDWARE` | Why Synology NAS Users Switch From NordVPN to SWEEPR VPN Native WireGuard (.conf) | 72/100/95/85 | **89** | `APPROVED` |
-| 2 | `mikrotik wireguard config generator` | `/setup/mikrotik-hap-ax3-wireguard-setup` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: MikroTik WireGuard Config Generator | 62/100/95/85 | **87** | `APPROVED` |
-| 3 | `mikrotik wireguard client config generator` | `/setup/mikrotik-hap-ax3-wireguard-setup` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: MikroTik WireGuard Client Config Generator | 54/100/95/85 | **85** | `APPROVED` |
-| 4 | `gl inet nordvpn wireguard setup` | `/setup/gl-inet-travel-router` | `COMPETITOR_DISPLACEMENT_ON_HARDWARE` | Why GL.iNet Travel Router Users Switch From NordVPN to SWEEPR VPN Native WireGuard (.conf) | 41/100/100/95 | **85** | `APPROVED` |
-| 5 | `does bitdefender vpn use wireguard` | `/vs/bitdefender-vpn-renewal-alternative` | `BOFU_COMPETITOR_SWITCHER` | 2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Does Bitdefender VPN Use WireGuard) | 52/85/100/100 | **84** | `APPROVED` |
-| 6 | `mullvad port forwarding alternative` | `/vs/mullvad` | `BOFU_COMPETITOR_SWITCHER` | 2026 Mullvad Renewal Price Hike & Cancellation Comparison (Mullvad Port Forwarding Alternative) | 49/100/100/80 | **84** | `APPROVED` |
-| 7 | `bitdefender vpn wireguard configuration` | `/vs/bitdefender-vpn-renewal-alternative` | `BOFU_COMPETITOR_SWITCHER` | 2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Bitdefender VPN WireGuard Configuration) | 50/85/100/100 | **83** | `APPROVED` |
-| 8 | `zimaboard wireguard vpn gateway not working` | `/setup/zimaboard-casaos-gluetun-wireguard` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: ZimaBoard WireGuard VPN Gateway Not Working | 64/80/100/85 | **83** | `APPROVED` |
-| 9 | `fritzbox wireguard vpn setup` | `/setup/fritzbox-7590-ax-wireguard-vpn` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: FRITZ!Box WireGuard VPN Setup | 63/80/100/85 | **83** | `APPROVED` |
-| 10 | `synology nas wireguard vpn` | `/setup/synology-nas-docker-vpn` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: Synology NAS WireGuard VPN | 63/80/100/85 | **83** | `APPROVED` |
-| 11 | `protonvpn wireguard router` | `/vs/protonvpn` | `BOFU_COMPETITOR_SWITCHER` | 2026 ProtonVPN Renewal Price Hike & Cancellation Comparison (ProtonVPN WireGuard Router) | 54/85/95/95 | **82** | `APPROVED` |
-| 12 | `windows 11 wireguard vpn fritzbox` | `/setup/fritzbox-7590-ax-wireguard-vpn` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: Windows 11 WireGuard VPN FRITZ!Box | 55/80/95/100 | **81** | `APPROVED` |
-| 13 | `steam deck wireguard vpn` | `/setup/steam-deck-vpn` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: Steam Deck WireGuard VPN | 63/80/95/85 | **81** | `APPROVED` |
-| 14 | `gl.inet wireguard config file` | `/setup/gl-inet-travel-router` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: GL.iNet WireGuard Config File | 58/80/100/85 | **81** | `APPROVED` |
-| 15 | `cancel totalvpn` | `/alternatives/totalvpn` | `BOFU_COMPETITOR_SWITCHER` | 2026 TotalVPN Renewal Price Hike & Cancellation Comparison (Cancel TotalVPN) | 66/95/85/65 | **80** | `APPROVED` |
+| 1 | `mikrotik wireguard config generator` | `/setup/mikrotik-hap-ax3-wireguard-setup` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: MikroTik WireGuard Config Generator | 62/100/95/85 | **87** | `APPROVED` |
+| 2 | `mikrotik wireguard client config generator` | `/setup/mikrotik-hap-ax3-wireguard-setup` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: MikroTik WireGuard Client Config Generator | 54/100/95/85 | **85** | `APPROVED` |
+| 3 | `gl inet nordvpn wireguard setup` | `/setup/gl-inet-travel-router` | `COMPETITOR_DISPLACEMENT_ON_HARDWARE` | Why GL.iNet Travel Router Users Switch From NordVPN to SWEEPR VPN Native WireGuard (.conf) | 41/100/100/95 | **85** | `APPROVED` |
+| 4 | `does bitdefender vpn use wireguard` | `/vs/bitdefender-vpn-renewal-alternative` | `BOFU_COMPETITOR_SWITCHER` | 2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Does Bitdefender VPN Use WireGuard) | 52/85/100/100 | **84** | `APPROVED` |
+| 5 | `mullvad port forwarding alternative` | `/vs/mullvad` | `BOFU_COMPETITOR_SWITCHER` | 2026 Mullvad Renewal Price Hike & Cancellation Comparison (Mullvad Port Forwarding Alternative) | 49/100/100/80 | **84** | `APPROVED` |
+| 6 | `bitdefender vpn wireguard configuration` | `/vs/bitdefender-vpn-renewal-alternative` | `BOFU_COMPETITOR_SWITCHER` | 2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Bitdefender VPN WireGuard Configuration) | 50/85/100/100 | **83** | `APPROVED` |
+| 7 | `zimaboard wireguard vpn gateway not working` | `/setup/zimaboard-casaos-gluetun-wireguard` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: ZimaBoard WireGuard VPN Gateway Not Working | 64/80/100/85 | **83** | `APPROVED` |
+| 8 | `fritzbox wireguard vpn setup` | `/setup/fritzbox-7590-ax-wireguard-vpn` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: FRITZ!Box WireGuard VPN Setup | 63/80/100/85 | **83** | `APPROVED` |
+| 9 | `protonvpn wireguard router` | `/vs/protonvpn` | `BOFU_COMPETITOR_SWITCHER` | 2026 ProtonVPN Renewal Price Hike & Cancellation Comparison (ProtonVPN WireGuard Router) | 54/85/95/95 | **82** | `APPROVED` |
+| 10 | `wireguard vpn zu fritzbox` | `/setup/fritzbox-7590-ax-wireguard-vpn` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: WireGuard VPN Zu FRITZ!Box | 62/80/100/85 | **82** | `APPROVED` |
+| 11 | `gl.inet wireguard config file` | `/setup/gl-inet-travel-router` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: GL.iNet WireGuard Config File | 58/80/100/85 | **81** | `APPROVED` |
+| 12 | `synology nas wireguard vpn` | `/setup/synology-nas-docker-vpn` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: Synology NAS WireGuard VPN | 57/80/100/85 | **81** | `APPROVED` |
+| 13 | `cancel totalvpn` | `/alternatives/totalvpn` | `BOFU_COMPETITOR_SWITCHER` | 2026 TotalVPN Renewal Price Hike & Cancellation Comparison (Cancel TotalVPN) | 66/95/85/65 | **80** | `APPROVED` |
+| 14 | `steam deck wireguard vpn` | `/setup/steam-deck-vpn` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: Steam Deck WireGuard VPN | 57/80/95/85 | **80** | `APPROVED` |
+| 15 | `unifi cloud gateway ultra wireguard client` | `/setup/ubiquiti-cloud-gateway-ultra` | `HARDWARE_WIREGUARD_CONFIG` | Verified WireGuard .conf & MTU Configuration: UniFi Cloud Gateway Ultra WireGuard Client | 46/80/95/85 | **77** | `APPROVED` |
 
 ## 4. Automated Self-Healing Repair Log
 
-- Zero repairs needed on this run (100% clean).
+- Demoted CREATE_NEW_PILLAR "bitdefender vpn wireguard config" below 40% structured data / 72 score gate
+- Demoted CREATE_NEW_PILLAR "ugreen dxp4800 vs dxp4800 plus" below 40% structured data / 72 score gate
+- Populated weakSpotCitations on "truenas scale wireguard setup"
+- Populated weakSpotCitations on "kaspersky vpn alternative options"
+- Populated weakSpotCitations on "kaspersky vpn alternative"
+- Populated weakSpotCitations on "totalvpn alternative free"
+- Populated weakSpotCitations on "totalvpn alternatives"
+- Populated weakSpotCitations on "unifi cloud gateway ultra wireguard setup"
+- Healed enrichment H2/FAQ on "fing alternative open source" (/tools/whats-on-my-wifi): "2026 Fing Network Scanner Alternative Plain English Renewal Price Hike & Cancellation Comparison (Fing Alternative Open Source)" -> "2026 Whats on My Wi-Fi Renewal Price Hike & Cancellation Comparison (Fing Alternative Open Source)"
+- Populated weakSpotCitations on "gl inet wireguard config"
+- Healed enrichment H2/FAQ on "best fing alternative no subscription" (/tools/whats-on-my-wifi): "2026 Fing Network Scanner Alternative Plain English Renewal Price Hike & Cancellation Comparison (Best Fing Alternative No Subscription)" -> "2026 Whats on My Wi-Fi Renewal Price Hike & Cancellation Comparison (Best Fing Alternative No Subscription)"
+- Populated weakSpotCitations on "unifi gateway max vs cloud gateway max"
+- Populated weakSpotCitations on "gl inet setup wireguard server"
+- Populated weakSpotCitations on "gl inet setup wireguard client"
+- Populated weakSpotCitations on "gl inet wireguard vpn setup"

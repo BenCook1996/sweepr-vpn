@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-11-05T05:03:06.308Z",
+  "updatedAt": "2026-11-06T10:02:56.820Z",
   "entries": {
     "ddg:en-GB:gl inet slate 7 wireguard": {
       "fetchedAt": 1793831679286,
@@ -2747,6 +2747,276 @@
       "engine": "bing",
       "suggestions": [
         "philips titan os apps"
+      ]
+    },
+    "google:en-GB:what is espressif on my wifi": {
+      "fetchedAt": 1793959372039,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": [
+        "what is espressif on my wifi",
+        "what is espressif on my wifi router",
+        "what is espressif on my wifi list",
+        "what is espressif inc on my wifi",
+        "what device is espressif on my wifi",
+        "what is espressif on my internet",
+        "what is espressif device on my wi fi",
+        "what is espressif connected to my wifi",
+        "what would espressif be on my wifi",
+        "what is espressif device connected to my wifi"
+      ]
+    },
+    "bing:en-GB:what is espressif on my wifi": {
+      "fetchedAt": 1793959372039,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "what is espressif on my wifi",
+        "espressif wifi module",
+        "espressif wifi setup",
+        "espressif wifi device",
+        "what device is espressif on my wifi",
+        "espressif wifi chip",
+        "espressif wifi configuration",
+        "espressif wifi development",
+        "espressif wifi development board",
+        "espressif on my wifi"
+      ]
+    },
+    "ddg:en-GB:what is espressif on my wifi": {
+      "fetchedAt": 1793959372039,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "what is espressif on my wifi",
+        "espressif wifi module",
+        "espressif wifi setup",
+        "espressif wifi device",
+        "what device is espressif on my wifi",
+        "espressif wifi chip",
+        "espressif wifi configuration",
+        "espressif wifi development"
+      ]
+    },
+    "bing:en-GB:what is tuya device on wifi": {
+      "fetchedAt": 1793959372927,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "tuya smart device on my wifi",
+        "what is tuya smart device on my wifi",
+        "what is tuya smart device",
+        "tuya smart inc on my wifi",
+        "what is tuya app",
+        "tuya smart devices list",
+        "what is tuya device",
+        "tuya device on my network",
+        "what is tuya on my network",
+        "tuya smart device on network"
+      ]
+    },
+    "ddg:en-GB:what is tuya device on wifi": {
+      "fetchedAt": 1793959372927,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "tuya smart device on my wifi",
+        "what is tuya smart device on my wifi",
+        "what is tuya smart device",
+        "tuya smart inc on my wifi",
+        "what is tuya app",
+        "tuya smart devices list",
+        "what is tuya device",
+        "tuya device on my network"
+      ]
+    },
+    "google:en-GB:what is tuya device on wifi": {
+      "fetchedAt": 1793959372927,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": [
+        "what is tuya device on wifi",
+        "what is tuya device on my wifi",
+        "what is tuya smart device on wifi",
+        "what is tuya wifi",
+        "can tuya work without internet",
+        "how to connect tuya smart to wifi",
+        "how to share tuya smart device",
+        "what is tuya device on wifi connection",
+        "what is tuya device on wifi network"
+      ]
+    },
+    "ddg:en-GB:murata manufacturing on my wifi": {
+      "fetchedAt": 1793959373613,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "murata manufacturing on my wifi",
+        "murata manufacturing co ltd on my wifi",
+        "what is murata manufacturing on my wifi",
+        "murata manufacturing wifi",
+        "murata manufacturing wifi device",
+        "murata manufacturing co. ltd. devices",
+        "murata manufacturing co. ltd",
+        "murata device on wifi"
+      ]
+    },
+    "google:en-GB:murata manufacturing on my wifi": {
+      "fetchedAt": 1793959373613,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": [
+        "murata manufacturing on my wifi",
+        "murata manufacturing device on my wifi",
+        "murata manufacturing co ltd on my wifi",
+        "murata manufacturing connected to my wifi",
+        "how to make wifi with magnet",
+        "how to control devices on wifi"
+      ]
+    },
+    "bing:en-GB:murata manufacturing on my wifi": {
+      "fetchedAt": 1793959373613,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "murata manufacturing on my wifi",
+        "murata manufacturing co ltd on my wifi",
+        "what is murata manufacturing on my wifi",
+        "murata manufacturing wifi",
+        "murata manufacturing wifi device",
+        "murata manufacturing co. ltd. devices",
+        "murata manufacturing co. ltd",
+        "murata device on wifi",
+        "murata manufacturing email address",
+        "murata manufacturing company limited"
+      ]
+    },
+    "google:en-GB:how to pause wifi on ps5 at bedtime": {
+      "fetchedAt": 1793959374248,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "bing:en-GB:how to pause wifi on ps5 at bedtime": {
+      "fetchedAt": 1793959374248,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "how to change wifi frequency on ps5",
+        "how to pause ps5",
+        "how to unpause wifi on ps5",
+        "how to put ps5 to sleep",
+        "ps5 stopped connecting to wifi",
+        "ps5 constantly disconnects from wifi"
+      ]
+    },
+    "ddg:en-GB:how to pause wifi on ps5 at bedtime": {
+      "fetchedAt": 1793959374248,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "how to change wifi frequency on ps5",
+        "how to pause ps5",
+        "how to unpause wifi on ps5",
+        "how to put ps5 to sleep",
+        "ps5 stopped connecting to wifi",
+        "ps5 constantly disconnects from wifi"
+      ]
+    },
+    "bing:en-GB:turn off kids xbox wifi at night": {
+      "fetchedAt": 1793959374822,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "how to turn off xbox family settings",
+        "how to turn off child account xbox",
+        "how to turn off xbox",
+        "xbox wireless controller turn off",
+        "xbox one s disabled wifi",
+        "xbox disconnecting from wifi"
+      ]
+    },
+    "google:en-GB:turn off kids xbox wifi at night": {
+      "fetchedAt": 1793959374822,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "ddg:en-GB:turn off kids xbox wifi at night": {
+      "fetchedAt": 1793959374822,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "how to turn off xbox family settings",
+        "how to turn off child account xbox",
+        "how to turn off xbox",
+        "xbox wireless controller turn off",
+        "xbox one s disabled wifi",
+        "xbox disconnecting from wifi"
+      ]
+    },
+    "google:en-GB:best fing alternative no subscription": {
+      "fetchedAt": 1793959375427,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "ddg:en-GB:best fing alternative no subscription": {
+      "fetchedAt": 1793959375427,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "alternative to ring subscription",
+        "fing alternative open source",
+        "ring alternatives no subscription",
+        "how to use fing app",
+        "is the fing app safe"
+      ]
+    },
+    "bing:en-GB:best fing alternative no subscription": {
+      "fetchedAt": 1793959375427,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "alternative to ring subscription",
+        "fing alternative open source",
+        "ring alternatives no subscription",
+        "how to use fing app",
+        "is the fing app safe"
+      ]
+    },
+    "bing:en-GB:fing alternative plain english wifi scanner": {
+      "fetchedAt": 1793959376040,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "fing network scanner for windows",
+        "fing network scanner reviews",
+        "fing network scanner app",
+        "fing network scanner download",
+        "fing ip scanner windows",
+        "is fing network scanner safe",
+        "fing - network scanner"
+      ]
+    },
+    "google:en-GB:fing alternative plain english wifi scanner": {
+      "fetchedAt": 1793959376040,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "ddg:en-GB:fing alternative plain english wifi scanner": {
+      "fetchedAt": 1793959376040,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "fing network scanner for windows",
+        "fing network scanner reviews",
+        "fing network scanner app",
+        "fing network scanner download",
+        "fing ip scanner windows",
+        "is fing network scanner safe",
+        "fing - network scanner"
       ]
     }
   }

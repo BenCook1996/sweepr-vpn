@@ -490,6 +490,157 @@ async fn check_app_update(
     .map_err(|e| e.to_string())?
 }
 
+fn load_wifi_guard_json() -> serde_json::Value {
+    let path = app_config_dir().join("wifi_guard_state.json");
+    std::fs::read_to_string(&path)
+        .ok()
+        .and_then(|s| serde_json::from_str(&s).ok())
+        .unwrap_or_else(|| {
+            serde_json::json!({
+                "doorbell_mode": true,
+                "devices": {},
+                "isp_plan": {
+                    "isp_name": "Spectrum / Virgin Media",
+                    "promised_mbps": 500.0,
+                    "monthly_cost": 85.0,
+                    "currency": "USD"
+                },
+                "speed_samples": []
+            })
+        })
+}
+
+fn save_wifi_guard_json(val: &serde_json::Value) {
+    let dir = app_config_dir();
+    let _ = std::fs::create_dir_all(&dir);
+    let path = dir.join("wifi_guard_state.json");
+    let _ = std::fs::write(&path, serde_json::to_string_pretty(val).unwrap_or_default());
+}
+
+/// Saves a custom plain-English household nickname, trust/intruder state, or 1-Tap Kids Bedtime Pause schedule for a device.
+#[tauri::command]
+fn set_wifi_guard_device_policy(
+    mac: String,
+    custom_name: Option<String>,
+    trust_state: Option<String>,
+    paused: Option<bool>,
+    bedtime_schedule: Option<String>,
+) -> Result<serde_json::Value, String> {
+    let mut state = load_wifi_guard_json();
+    let key = mac.trim().to_lowercase();
+    if key.is_empty() {
+        return Err("MAC or IP identifier required".into());
+    }
+    let now = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .map(|d| d.as_secs())
+        .unwrap_or(0);
+
+    let devices = state
+        .as_object_mut()
+        .ok_or("Invalid state")?
+        .entry("devices")
+        .or_insert_with(|| serde_json::json!({}));
+    let entry = devices
+        .as_object_mut()
+        .ok_or("Invalid devices map")?
+        .entry(key)
+        .or_insert_with(|| serde_json::json!({}));
+
+    if let Some(obj) = entry.as_object_mut() {
+        if let Some(name) = custom_name {
+            obj.insert("custom_name".into(), serde_json::Value::String(name));
+        }
+        if let Some(trust) = trust_state {
+            obj.insert("trust_state".into(), serde_json::Value::String(trust));
+        }
+        if let Some(p) = paused {
+            obj.insert("paused".into(), serde_json::Value::Bool(p));
+        }
+        if let Some(sched) = bedtime_schedule {
+            obj.insert("bedtime_schedule".into(), serde_json::Value::String(sched));
+        }
+        obj.insert("updated_at".into(), serde_json::json!(now));
+    }
+
+    save_wifi_guard_json(&state);
+    Ok(state)
+}
+
+/// Toggles "Doorbell Mode for Wi-Fi" (instant alert when a new unrecognized device joins the Wi-Fi).
+#[tauri::command]
+fn set_doorbell_mode(enabled: bool) -> Result<serde_json::Value, String> {
+    let mut state = load_wifi_guard_json();
+    if let Some(obj) = state.as_object_mut() {
+        obj.insert("doorbell_mode".into(), serde_json::Value::Bool(enabled));
+    }
+    save_wifi_guard_json(&state);
+    Ok(state)
+}
+
+/// Logs an ISP speed sample against the user's contracted plan to generate verified ISP bill-credit refund proof.
+#[tauri::command]
+async fn log_isp_speed_sample(
+    isp_name: String,
+    promised_mbps: f64,
+    monthly_cost: f64,
+    currency: String,
+    measured_mbps: f64,
+    ping_ms: f64,
+) -> Result<serde_json::Value, String> {
+    let mut state = load_wifi_guard_json();
+    let now = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .map(|d| d.as_secs())
+        .unwrap_or(0);
+    let drop_pct = if promised_mbps > 0.0 {
+        (((promised_mbps - measured_mbps) / promised_mbps) * 100.0).max(0.0).round()
+    } else {
+        0.0
+    };
+    let suggested_credit = (monthly_cost * (drop_pct / 100.0) * 0.5).clamp(15.0, 45.0).round();
+
+    if let Some(obj) = state.as_object_mut() {
+        obj.insert(
+            "isp_plan".into(),
+            serde_json::json!({
+                "isp_name": isp_name,
+                "promised_mbps": promised_mbps,
+                "monthly_cost": monthly_cost,
+                "currency": currency,
+                "suggested_credit": suggested_credit
+            }),
+        );
+        let samples = obj
+            .entry("speed_samples")
+            .or_insert_with(|| serde_json::json!([]));
+        if let Some(arr) = samples.as_array_mut() {
+            arr.insert(
+                0,
+                serde_json::json!({
+                    "timestamp": now,
+                    "measured_mbps": (measured_mbps * 10.0).round() / 10.0,
+                    "promised_mbps": promised_mbps,
+                    "drop_pct": drop_pct,
+                    "ping_ms": (ping_ms * 10.0).round() / 10.0
+                }),
+            );
+            if arr.len() > 90 {
+                arr.truncate(90);
+            }
+        }
+    }
+
+    save_wifi_guard_json(&state);
+    Ok(state)
+}
+
+/// Returns the persisted Wi-Fi Guard Home state (custom device names, bedtime pauses, Doorbell Mode, and ISP speed-drop log).
+#[tauri::command]
+fn get_wifi_guard_state() -> Result<serde_json::Value, String> {
+    Ok(load_wifi_guard_json())
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     // Headless scan for support and automated tests: `sweepr-vpn --scan-json`
@@ -522,7 +673,11 @@ pub fn run() {
             set_startup,
             set_kill_switch,
             set_smart_tv_shields,
-            check_app_update
+            check_app_update,
+            set_wifi_guard_device_policy,
+            set_doorbell_mode,
+            log_isp_speed_sample,
+            get_wifi_guard_state
         ])
         .on_window_event(|window, event| {
             if let tauri::WindowEvent::CloseRequested { api, .. } = event {

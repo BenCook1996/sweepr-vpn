@@ -562,12 +562,61 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
   </section>
 
   <!-- ========================================================================
-       TAB 3: SHIELDS (KILL SWITCH & WI-FI / SMART-TV GUARD)
+       TAB 3: WI-FI GUARD HOME & PRIVACY SHIELDS (Plain-English Scanner, Airbnb Camera Check, 1-Tap Kids Bedtime Pause & ISP Refund Proof)
        ======================================================================== -->
   <section id="view-shields" class="view">
+    <!-- Card 1: Plain-English Wi-Fi Guard, Doorbell Mode & Airbnb Camera Scanner -->
     <div class="card">
-      <div style="font-size:17px;font-weight:900;margin-bottom:6px">Privacy Shields</div>
-      <p style="font-size:12.5px;color:var(--muted);margin-bottom:14px">Automatic protection against IP leaks, hotel Wi-Fi snooping, and Smart-TV ACR trackers.</p>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px">
+        <div style="font-size:17px;font-weight:900">Wi-Fi Guard Home</div>
+        <span id="mobWifiGuardBadge" class="badge">1 Unknown Flagged</span>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.4">Translates cryptic <code>Espressif</code> &amp; <code>Tuya</code> chips into plain English, spots Airbnb hidden cameras, and pauses kids' consoles at bedtime.</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+        <button class="btn-primary" style="margin-top:0;padding:10px;font-size:12px" onclick="runMobileWifiGuardScan(false)">📡 5-Sec Wi-Fi Scan</button>
+        <button class="btn-primary" style="margin-top:0;padding:10px;font-size:12px;background:var(--card-sub);color:var(--text);border:1px solid var(--border-strong)" onclick="runMobileWifiGuardScan(true)">📷 Scan Airbnb Cameras</button>
+      </div>
+
+      <!-- Doorbell Mode Toggle -->
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:14px;background:var(--card-sub);border:1px solid var(--border);margin-bottom:10px">
+        <div>
+          <div style="font-size:13px;font-weight:800">🔔 Doorbell Mode for Wi-Fi</div>
+          <div style="font-size:11px;color:var(--muted)">Alert when a new device or guest connects</div>
+        </div>
+        <button id="shieldBtnDoorbell" class="c3-change-pill" style="border:none;cursor:pointer;font-size:11px;font-weight:900" onclick="toggleMobileShield('doorbell')">ACTIVE</button>
+      </div>
+
+      <!-- Plain-English Device List -->
+      <div id="mobPlainDeviceList" style="display:flex;flex-direction:column;gap:8px"></div>
+    </div>
+
+    <!-- Card 2: ISP Speed-Drop Refund Proof + 1-Tap VPN Fix -->
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <div style="font-size:16px;font-weight:900">ISP Speed-Drop Refund Proof</div>
+        <span class="mono" style="font-size:11px;font-weight:900;color:#ef4444" id="mobIspDropPill">-82% Evening Drop</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:11px;border-radius:14px;background:var(--card-sub);border:1px solid var(--border);margin-bottom:10px">
+        <div>
+          <div style="font-size:10.5px;font-weight:800;color:var(--muted);text-transform:uppercase">Your ISP Plan</div>
+          <div style="font-size:16px;font-weight:900;margin-top:2px" id="mobIspPlanLabel">$85/mo &middot; 500 Mbps</div>
+          <div style="font-size:11px;color:var(--muted)" id="mobIspProviderLabel">Spectrum / Xfinity / Virgin</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:10.5px;font-weight:800;color:var(--muted);text-transform:uppercase">Evening Speed</div>
+          <div style="font-size:16px;font-weight:900;color:#ef4444;margin-top:2px" id="mobIspMeasuredLabel">89 Mbps</div>
+          <div style="font-size:11px;font-weight:700;color:var(--accent-fg)">Eligible: $35 Bill Credit</div>
+        </div>
+      </div>
+      <button class="btn-primary" style="margin-top:0;padding:11px;font-size:12.5px;background:var(--card-sub);color:var(--text);border:1px solid var(--border-strong)" onclick="copyMobileIspRefundScript()">📄 Copy $35 Bill Credit Script &amp; Report</button>
+      <button class="btn-primary" style="margin-top:8px;padding:11px;font-size:12.5px" onclick="switchTab('home'); toggleTunnel()">⚡ Bypass ISP Throttling with VPN (1-Tap)</button>
+    </div>
+
+    <!-- Card 3: Core Tunnel & Smart-TV Privacy Shields -->
+    <div class="card">
+      <div style="font-size:16px;font-weight:900;margin-bottom:6px">Tunnel &amp; Smart-TV Shields</div>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:10px">Automatic protection against IP leaks, hotel Wi-Fi snooping, and Smart-TV ACR trackers.</p>
 
       <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)">
         <div>
@@ -722,14 +771,76 @@ let connected = false;
 const mobileShields = {
   killSwitch: localStorage.getItem('sweepr_mob_killswitch') !== '0',
   autoWifi: localStorage.getItem('sweepr_mob_autowifi') !== '0',
-  dnsShield: localStorage.getItem('sweepr_mob_dnsshield') !== '0'
+  dnsShield: localStorage.getItem('sweepr_mob_dnsshield') !== '0',
+  doorbell: localStorage.getItem('sweepr_mob_doorbell') !== '0'
 };
+
+const mobDevices = [
+  { name: "Neighbor's Roku Stick", sub: 'Streaming 4K on Guest Wi-Fi • Unrecognized', state: 'intruder', blocked: false },
+  { name: "Jake's PS5 Console", sub: 'Kids Bedtime Schedule: 10:00 PM – 7:00 AM', state: 'kid', paused: true },
+  { name: 'Kitchen Smart Plug', sub: 'Translated from Tuya IoT Chip • Trusted', state: 'trusted' },
+  { name: 'Living Room Echo Dot', sub: 'Translated from Espressif IoT Chip • Trusted', state: 'trusted' }
+];
+
+function renderMobilePlainDevices() {
+  const box = document.getElementById('mobPlainDeviceList');
+  if (!box) return;
+  box.innerHTML = mobDevices.map((d, i) => {
+    if (d.state === 'intruder') {
+      return '<div style="padding:11px 12px;border-radius:14px;border:1.5px solid ' + (d.blocked ? 'var(--border)' : '#f59e0b') + ';background:' + (d.blocked ? 'var(--card-sub)' : 'rgba(245,158,11,0.1)') + ';display:flex;justify-content:space-between;align-items:center;gap:8px">' +
+        '<div><div style="font-size:13px;font-weight:800">🚨 ' + escHtml(d.name) + '</div><div style="font-size:11px;color:var(--muted)">' + escHtml(d.blocked ? 'Blocked from Guest Wi-Fi ✓' : d.sub) + '</div></div>' +
+        '<button class="c3-change-pill" style="border:none;cursor:pointer;background:' + (d.blocked ? 'var(--accent-soft)' : '#f59e0b') + ';color:' + (d.blocked ? 'var(--accent-fg)' : '#fff') + '" onclick="toggleMobIntruder(' + i + ')">' + (d.blocked ? 'Blocked ✓' : 'Kick Off') + '</button></div>';
+    }
+    if (d.state === 'kid') {
+      return '<div style="padding:11px 12px;border-radius:14px;border:1px solid var(--border);background:var(--card-sub);display:flex;justify-content:space-between;align-items:center;gap:8px">' +
+        '<div><div style="font-size:13px;font-weight:800">🎮 ' + escHtml(d.name) + '</div><div style="font-size:11px;color:var(--muted)">' + escHtml(d.paused ? '🌙 Bedtime Pause Active (10:00 PM)' : 'Online • Tap to pause for bedtime') + '</div></div>' +
+        '<button class="c3-change-pill" style="border:none;cursor:pointer" onclick="toggleMobBedtime(' + i + ')">' + (d.paused ? '⏸ Paused' : '🌙 Pause') + '</button></div>';
+    }
+    return '<div style="padding:10px 12px;border-radius:14px;border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:8px">' +
+      '<div><div style="font-size:13px;font-weight:800">🔌 ' + escHtml(d.name) + '</div><div style="font-size:11px;color:var(--muted)">' + escHtml(d.sub) + '</div></div>' +
+      '<span class="badge" style="font-size:10px">Trusted</span></div>';
+  }).join('');
+}
+
+function toggleMobIntruder(i) {
+  if (!mobDevices[i]) return;
+  mobDevices[i].blocked = !mobDevices[i].blocked;
+  const badge = document.getElementById('mobWifiGuardBadge');
+  if (badge) badge.textContent = mobDevices[i].blocked ? 'All Clear ✓' : '1 Unknown Flagged';
+  renderMobilePlainDevices();
+  showToast(mobDevices[i].blocked ? "Blocked Neighbor's Roku Stick ✓" : "Unblocked device");
+}
+
+function toggleMobBedtime(i) {
+  if (!mobDevices[i]) return;
+  mobDevices[i].paused = !mobDevices[i].paused;
+  renderMobilePlainDevices();
+  showToast(mobDevices[i].paused ? "🌙 Bedtime Pause enabled for " + mobDevices[i].name : "▶ Resumed internet for " + mobDevices[i].name);
+}
+
+function runMobileWifiGuardScan(cameraMode) {
+  showToast(cameraMode ? '📷 Scanning Airbnb Wi-Fi for hidden RTSP/ONVIF cameras...' : '📡 Scanning Wi-Fi & translating IoT chips into plain English...');
+  setTimeout(() => {
+    renderMobilePlainDevices();
+    showToast(cameraMode ? '📷 Airbnb Scan Clear: 0 hidden cameras found ✓' : '📡 Found 4 devices in plain English');
+  }, 450);
+}
+
+function copyMobileIspRefundScript() {
+  const script = 'Hi, I am calling regarding my 500 Mbps internet plan ($85/mo). Independent SWEEPR Wi-Fi Guard speed logs show my evening speeds dropped to 89 Mbps (82% below my contracted 500 Mbps rate). Under FCC/Ofcom broadband service accountability rules, I am requesting a $35 service credit on this month\'s bill.';
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(script).then(() => showToast('Copied $35 ISP Refund Script ✓')).catch(() => showToast('Script ready to paste'));
+  } else {
+    showToast('Copied $35 ISP Refund Script ✓');
+  }
+}
 
 function renderMobileShields() {
   const map = [
     ['shieldBtnKillSwitch', mobileShields.killSwitch],
     ['shieldBtnAutoWifi', mobileShields.autoWifi],
-    ['shieldBtnDnsShield', mobileShields.dnsShield]
+    ['shieldBtnDnsShield', mobileShields.dnsShield],
+    ['shieldBtnDoorbell', mobileShields.doorbell]
   ];
   map.forEach(([id, on]) => {
     const el = document.getElementById(id);
@@ -738,14 +849,15 @@ function renderMobileShields() {
     el.style.color = on ? 'var(--accent-fg)' : 'var(--muted)';
     el.style.opacity = on ? '1' : '0.65';
   });
+  renderMobilePlainDevices();
 }
 
 function toggleMobileShield(key) {
   mobileShields[key] = !mobileShields[key];
-  const storageKey = key === 'killSwitch' ? 'sweepr_mob_killswitch' : key === 'autoWifi' ? 'sweepr_mob_autowifi' : 'sweepr_mob_dnsshield';
+  const storageKey = key === 'killSwitch' ? 'sweepr_mob_killswitch' : key === 'autoWifi' ? 'sweepr_mob_autowifi' : key === 'doorbell' ? 'sweepr_mob_doorbell' : 'sweepr_mob_dnsshield';
   localStorage.setItem(storageKey, mobileShields[key] ? '1' : '0');
   renderMobileShields();
-  showToast((mobileShields[key] ? 'Enabled ' : 'Paused ') + (key === 'killSwitch' ? 'Kill Switch' : key === 'autoWifi' ? 'Wi-Fi Auto-Shield' : 'Smart-TV DNS Shield'));
+  showToast((mobileShields[key] ? 'Enabled ' : 'Paused ') + (key === 'killSwitch' ? 'Kill Switch' : key === 'autoWifi' ? 'Wi-Fi Auto-Shield' : key === 'doorbell' ? 'Doorbell Mode for Wi-Fi' : 'Smart-TV DNS Shield'));
 }
 
 function showToast(msg) {

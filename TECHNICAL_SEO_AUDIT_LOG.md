@@ -578,3 +578,58 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 - **index.html** (69.6 KB raw) &rarr; Gzip: **14.5 KB** (79% reduction) | Brotli: **13.6 KB** (80% reduction)
 - **sitemap.xml** (37.7 KB raw) &rarr; Gzip: **2.6 KB** (93% reduction) | Brotli: **2.4 KB** (94% reduction)
 
+## 2026-11-06 — Daily Technical SEO, Crawlability & PageSpeed Audit & Auto-Optimization Pass
+
+### Executive Summary
+- **Overall Scores**: Crawlability **100/100**, Technical SEO **100/100**, PageSpeed & CWV **100/100** across **205 Canonical Pages**.
+- **Auto-Optimizations Executed**:
+  - Synchronized sitemap.xml with 206 canonical URLs (content-hash <lastmod>: 4 modified today)
+  - Synchronized llms.txt & llms-full.txt with all 184 pSEO guides and live 04:00 AM WireGuard/ACR telemetry for GEO AI citations
+
+### Category Scorecards & Verifications
+
+#### 1. Crawlability & Indexability (100/100)
+- **Sitemap Completeness & Content-Hash Freshness**: PASS — 206 canonical URLs registered (1013 thin/duplicate variants consolidated via 301/noindex)
+- **GEO / LLM Discovery Manifests (llms.txt & llms-full.txt)**: PASS — Updated both manifests with 205 canonical URLs and live WireGuard/ACR proof
+- **Search Engine Indexing Queue (Delta-Only)**: PASS — 0 un-pinged/modified delta URLs queued (out of 205 total canonical URLs)
+- **robots.txt Sitemap Directive**: PASS — Valid sitemap directive points to https://sweeprvpn.com/sitemap.xml
+- **robots.txt AI Crawler Allowances (GEO)**: PASS — All 7 major AI search bots explicitly permitted
+- **robots.txt Crawl-Budget Protections**: PASS — Internal APIs, user portals, qr-setup and CRO studios disallowed
+- **Utility & Prototype Pages Noindex Guard**: PASS — All 8 internal utility and prototype pages properly shielded with noindex
+- **PAD 4.0 XML Feed**: PASS — Valid PAD 4.0 metadata for software directory syndication
+- **Public Smart-TV ACR Blocklist Asset**: PASS — smart-tv-acr-blocklist.txt verified for Pi-hole/AdGuard Home & GEO citations
+- **301 Consolidation & Eduroam Hub Redirects (server.mjs)**: PASS — All consolidated noindex variants and Eduroam duplicate slugs 301-redirected to canonical hubs
+
+#### 2. Technical SEO & Rich Schemas (100/100)
+- **Page Titles**: PASS — All 205 pages have valid, descriptive <title> tags
+- **Meta Descriptions**: PASS — All 205 pages have compelling, search-optimized meta descriptions
+- **Canonical URLs**: PASS — All 205 pages have exact self-referencing canonical tags
+- **Robots Snippet Controls**: PASS — All 205 pages specify max-image-preview:large for search & Discover snippets
+- **JSON-LD Structured Data**: PASS — All 205 pages inject verified Schema.org JSON-LD structured data
+- **H1 Heading Hierarchy**: PASS — All 205 pages have exactly 1 descriptive <h1> heading
+- **OpenGraph Social Metadata**: PASS — All 205 pages include complete OpenGraph tags (title, desc, url, og:image)
+- **Twitter Card Metadata**: PASS — All 205 pages include complete summary_large_image Twitter card tags
+- **Mobile Theme-Color Support**: PASS — All 205 pages declare theme-color for mobile chrome styling
+- **Google Analytics 4 (G-7D28EEMNXX) Coverage**: PASS — All 205 canonical pages include active GA4 telemetry
+- **Internal Link Integrity**: PASS — All internal links across 205 pages resolve to valid routes (0 broken links)
+- **Server Canonical 301 Architecture**: PASS — Legacy .html and alias routes seamlessly 301 redirected to clean URLs
+- **Anti-Cannibalization & Title Cooldown Guard**: PASS — 0 consolidated cannibal slugs in sitemap.xml; all 20 GSC Top-20 pillars protected by 14-day title lock
+- **Ad-Platform Policy Compliance Guard (AGENTS.md Principle 2)**: PASS — 0 geo-unblocking, copyright circumvention, or piracy phrases across all 205 indexable pages
+
+#### 3. PageSpeed & Core Web Vitals (100/100)
+- **Image Optimization (<100KB)**: PASS — All 12 website image assets are under 100 KB
+- **Cumulative Layout Shift (CLS) Protection**: PASS — All <img> tags have explicit width & height attributes
+- **Image Accessibility & Alt-Text**: PASS — All <img> tags have descriptive alt attributes
+- **PWA Manifest & Touch Icons**: PASS — 180x180 apple-touch-icon.png, favicon.png and /manifest.webmanifest active
+- **Network Preconnect Efficiency**: PASS — Zero unused preconnects to Google Fonts found across all pages
+- **Render-Blocking Script Elimination**: PASS — All external JavaScript resources use defer or async attributes
+- **Server-Side Compression (Brotli + Gzip)**: PASS — Built-in node:zlib Brotli and Gzip transparently enabled in server.mjs
+- **HTTP ETag & 304 Not Modified Caching**: PASS — Conditional request validation implemented in server.mjs
+- **Modern MIME Types & Static Serving**: PASS — .webp, .avif, .woff2, .woff, .ttf supported in server.mjs
+- **Static Cache-Control Architecture**: PASS — Explicit caching headers configured for HTML (0s), static media (300s/3600s), and XML/TXT (3600s/86400s)
+
+### Compression Benchmark Results
+- **order.html** (124.3 KB raw) &rarr; Gzip: **29.2 KB** (77% reduction) | Brotli: **26.9 KB** (78% reduction)
+- **index.html** (69.6 KB raw) &rarr; Gzip: **14.5 KB** (79% reduction) | Brotli: **13.6 KB** (80% reduction)
+- **sitemap.xml** (37.7 KB raw) &rarr; Gzip: **2.6 KB** (93% reduction) | Brotli: **2.4 KB** (94% reduction)
+

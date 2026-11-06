@@ -930,6 +930,101 @@ export const SEED_TAXONOMY = [
     locales: ['en-US'],
     isTierSGscWinner: true,
     canonicalTarget: '/solutions/rogers-ignite-canada-isp-throttling'
+  },
+  // WiFiGuard Home Plain-English IoT, Airbnb Camera, Bedtime Pause & ISP Refund Clusters
+  {
+    id: 'wifiguard_espressif_tuya_translator',
+    pillar: 'C_ACR_WIFI',
+    cluster: 'guides',
+    entitySlug: 'what-is-espressif-tuya-murata-on-my-wifi',
+    entityTokens: ['espressif on my wifi', 'tuya on my wifi', 'murata manufacturing wifi', 'shenzhen bilian wifi'],
+    stems: ['what is espressif on my wifi', 'what is tuya device on wifi', 'murata manufacturing on my wifi'],
+    locales: ['en-GB', 'en-US'],
+    isTierSGscWinner: true,
+    canonicalTarget: '/tools/whats-on-my-wifi',
+    pillarBriefTemplate: {
+      slug: 'what-is-espressif-tuya-murata-on-my-wifi',
+      name: 'Espressif, Tuya & Murata IoT Wi-Fi Chip Translator',
+      category: 'Plain-English Home Wi-Fi Security Guide',
+      h1: 'What Is "Espressif Inc.", "Tuya" or "Murata" on My Wi-Fi? (2026 Plain-English Guide)',
+      summary: 'Stop guessing at cryptic MAC vendor names in Fing or your router app. Learn how WiFiGuard Home inside SWEEPR VPN translates Espressif ESP32, Tuya Smart, Murata Manufacturing, and Shenzhen Bilian chips into plain English ("Kitchen Smart Plug", "Ring Doorbell", or "Unrecognized Camera").',
+      commands: [
+        '# Instant Browser Lookup: https://sweeprvpn.com/tools/whats-on-my-wifi',
+        '# Common IoT Chip OUI Translations:',
+        '24:6F:28 (Espressif Inc.)      -> Smart Plug / Ring Chime / Shelly Relay / ESP32 Cam',
+        'D8:F1:5B (Tuya Smart)          -> Smart Light Bulb / Wi-Fi Power Strip / Baby Monitor',
+        '1C:99:4C (Murata Manufacturing)-> Nintendo Switch / Samsung Smart TV / Sonos Speaker'
+      ]
+    }
+  },
+  {
+    id: 'wifiguard_airbnb_camera_rtsp',
+    pillar: 'C_ACR_WIFI',
+    cluster: 'guides',
+    entitySlug: 'detect-hidden-wifi-cameras-airbnb',
+    entityTokens: ['airbnb hidden camera wifi', 'find hidden cameras on wifi', 'rtsp camera scanner'],
+    stems: ['how to find hidden cameras on airbnb wifi', 'scan airbnb wifi for hidden cameras'],
+    locales: ['en-GB', 'en-US'],
+    isTierSGscWinner: true,
+    canonicalTarget: '/guides/detect-hidden-wifi-cameras-airbnb'
+  },
+  {
+    id: 'wifiguard_kids_bedtime_pause',
+    pillar: 'C_ACR_WIFI',
+    cluster: 'guides',
+    entitySlug: 'pause-ps5-xbox-wifi-at-bedtime-without-unplugging-router',
+    entityTokens: ['pause ps5 wifi', 'turn off wifi on ps5 at night', 'bedtime wifi pause'],
+    stems: ['how to pause wifi on ps5 at bedtime', 'turn off kids xbox wifi at night'],
+    locales: ['en-GB', 'en-US'],
+    isTierSGscWinner: true,
+    canonicalTarget: null,
+    pillarBriefTemplate: {
+      slug: 'pause-ps5-xbox-wifi-at-bedtime-without-unplugging-router',
+      name: '1-Tap Kids Bedtime Wi-Fi Pause (PS5, Xbox, Switch & iPad)',
+      category: 'Family Digital Safety & Home Wi-Fi Guide',
+      h1: 'How to Pause Wi-Fi on PS5, Xbox & iPads at Bedtime Without Unplugging Your Router',
+      summary: 'Use SWEEPR Wi-Fi Guard Home to schedule a 1-tap 9:30 PM school-night internet pause on kids gaming consoles (PS5, Xbox Series X, Nintendo Switch) and tablets while keeping parents laptops and work Zoom calls running at full 10Gbps speed.',
+      commands: [
+        '# 1. Open SWEEPR VPN -> Wi-Fi Guard Home -> Kids Bedtime Pause tab',
+        '# 2. Select "Jake\'s PS5" or "Emma\'s Nintendo Switch" -> Tap "Pause Until 7:00 AM"',
+        '# 3. Optional Router / OpenWrt / UniFi MAC Schedule Rule:',
+        'iptables -I FORWARD -m mac --mac-source B4:0A:D8:11:22:33 -m time --timestart 21:30 --timestop 07:00 -j REJECT'
+      ]
+    }
+  },
+  {
+    id: 'wifiguard_isp_refund_claim',
+    pillar: 'D_ISP_NETWORK',
+    cluster: 'solutions',
+    entitySlug: 'spectrum-xfinity-virgin-media-slow-speed-bill-credit-refund',
+    entityTokens: ['spectrum speed drop credit', 'xfinity slow internet refund', 'virgin media speed guarantee credit'],
+    stems: ['spectrum slow evening speed refund credit', 'comcast xfinity bill credit slow speed', 'virgin media speed drop compensation'],
+    locales: ['en-GB', 'en-US'],
+    isTierSGscWinner: true,
+    canonicalTarget: '/tools/isp-throttling-test'
+  },
+  {
+    id: 'comp_fing_alternative',
+    pillar: 'A_COMPETITOR',
+    cluster: 'vs',
+    entitySlug: 'fing-network-scanner-alternative-plain-english',
+    entityTokens: ['fing alternative', 'fing desktop subscription alternative', 'fingbox alternative'],
+    stems: ['best fing alternative no subscription', 'fing alternative plain english wifi scanner'],
+    locales: ['en-GB', 'en-US'],
+    isTierSGscWinner: true,
+    canonicalTarget: '/tools/whats-on-my-wifi',
+    pillarBriefTemplate: {
+      slug: 'fing-network-scanner-alternative-plain-english',
+      name: 'Fing Network Tools & Fingbox Alternative',
+      category: 'Plain-English Wi-Fi Watchdog Comparison',
+      h1: 'Best Fing & Fingbox Alternative in 2026: SWEEPR Wi-Fi Guard Home (Plain-English Names + VPN)',
+      summary: 'Tired of Fing dumping cryptic hexadecimal MAC addresses and "Espressif Inc." microchip names—or locking automated alerts behind pricey desktop subscriptions? See how SWEEPR Wi-Fi Guard Home translates every device into plain English, spots Airbnb hidden cameras, pauses kids consoles at bedtime, and includes a 10Gbps WireGuard VPN.',
+      commands: [
+        '# Fing Output:      24:6F:28:1A:4C:9E | Vendor: Espressif Inc. (Generic)',
+        '# SWEEPR Output:    Kitchen Smart Plug / Ring Chime (Espressif IoT Chip) — Safe',
+        '# Plus: Doorbell Mode Alerts + 1-Tap Kids Bedtime Pause + 30-Day ISP Refund Proof Log'
+      ]
+    }
   }
 ];
 

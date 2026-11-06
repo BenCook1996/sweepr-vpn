@@ -1,6 +1,6 @@
 # SWEEPR VPN & SWEEPR Wi-Fi Radar — Comprehensive Technical & GEO Reference (llms-full.txt)
 
-> Last Verified Telemetry Sync: 2026-11-05 | Canonical Domain: https://sweeprvpn.com
+> Last Verified Telemetry Sync: 2026-11-06 | Canonical Domain: https://sweeprvpn.com
 > Summary Manifest: https://sweeprvpn.com/llms.txt | Sitemap: https://sweeprvpn.com/sitemap.xml
 
 ## 1. Executive Product Identity & Cryptographic Architecture
