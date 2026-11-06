@@ -86,7 +86,7 @@
   .ico.a { background:rgba(245,158,11,.16); color:#d97706; }
   .t { font-size:13.5px; font-weight:800; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
   .s { font-size:12px; color:var(--muted); margin-top:1px; }
-  .grow { flex:1; min-width:0; }
+  .grow { flex:1; min-width:0; overflow:hidden; }
 
   .pro-tag { display:inline-flex; align-items:center; padding:1px 6px; border-radius:6px; font-size:10px; font-weight:900; letter-spacing:.4px; background:rgba(16,185,129,.14); color:var(--accent); border:1px solid rgba(16,185,129,.3); }
   body.is-pro .pro-tag { display:none !important; }
@@ -472,8 +472,8 @@
     <section id="view-wifi" class="hidden">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap">
         <div>
-          <h1 class="view-title">Wi-Fi Guard Home &middot; <span id="devCountTitle">4</span> <span data-i18n="wifiTitle">devices in Plain English</span></h1>
-          <div class="view-sub" id="lastChecked">Checked just now &bull; Translates cryptic IoT chips into human words</div>
+          <h1 class="view-title"><span id="devCountTitle">4</span> <span data-i18n="wifiTitle">devices on Wi-Fi</span></h1>
+          <div class="view-sub" id="lastChecked">Checked just now</div>
         </div>
         <div style="display:flex;gap:6px;flex-wrap:wrap">
           <button class="btn-soft" onclick="runAirbnbCameraScan()" id="airbnbScanBtn" title="Check Wi-Fi for hidden RTSP/ONVIF network cameras">📷 Airbnb Camera Scan</button>
@@ -494,8 +494,8 @@
         <div class="set-row" style="padding:0" onclick="toggleAuto()">
           <div class="ico e"><svg width="19" height="19"><use href="#i-shield"/></svg></div>
           <div class="grow">
-            <div class="t"><span data-i18n="intruderTitle">Doorbell Mode for Wi-Fi &amp; Smart-TV Shield</span> <span class="pro-tag">PRO</span></div>
-            <div class="s" data-i18n="intruderSub">Instant alert when an unknown device connects + blocks Samsung, LG &amp; Roku ACR spying</div>
+            <div class="t"><span data-i18n="intruderTitle">New Device Alerts &amp; Smart-TV Protection</span> <span class="pro-tag">PRO</span></div>
+            <div class="s" data-i18n="intruderSub">Alerts you when an unknown device connects + stops Samsung, LG &amp; Roku TV tracking</div>
           </div>
           <button class="toggle" id="autoToggle" role="switch" aria-checked="false" aria-label="Doorbell Mode for Wi-Fi and Smart-TV Shield" onclick="event.stopPropagation();toggleAuto()"><i></i></button>
         </div>
@@ -1437,17 +1437,16 @@
       const isPaused = !!pol.paused;
       const isFlagged = pol.trustState === 'flagged' || (!!d.intruder_risk && pol.trustState !== 'trusted');
       const isKidDevice = ['console','tv','iphone','android','ipad'].includes(String(d.kind || '').toLowerCase()) && !d.is_self && !d.is_router;
-      const chipBadge = d.chip_translation ? ' <span class="pill ok" style="font-size:10px;padding:2px 7px">' + esc(d.chip_translation) + '</span>' : '';
       const camBadge = d.camera_risk ? ' <span class="pill warn" style="font-size:10px;padding:2px 7px">📷 Camera Check</span>' : '';
       const subText = isPaused
         ? '🛏️ Kids Bedtime Schedule: Paused 9:30 PM – 7:00 AM · ' + d.ip
         : (String(d.detail || '').includes(d.ip) ? d.detail : (d.detail + (d.ip ? ' · ' + d.ip : '')));
 
-      let actions = '<button class="btn-soft" style="padding:4px 9px;min-height:28px;font-size:11px" onclick="renameWifiDevice(' + idx + ')" title="Give this device a plain-English household name">✏️ Rename</button>';
+      let actions = '<button class="btn-soft" style="padding:4px 9px;min-height:28px;font-size:11px" onclick="renameWifiDevice(' + idx + ')" title="Give this device a custom household name">✏️ Rename</button>';
       if (isKidDevice || wgCurrentTab === 'bedtime') {
         actions += '<button class="pill ' + (isPaused ? 'warn' : 'ok') + '" style="cursor:pointer" onclick="toggleDeviceBedtimePause(' + idx + ')">' + (isPaused ? '⏸ Paused for Bedtime' : '🌙 Bedtime Pause') + '</button>';
       } else if (d.tracker_risk) {
-        actions += '<button class="pill solid" onclick="blockTv()">Block ACR</button>';
+        actions += '<button class="pill solid" onclick="blockTv()">Block TV Tracking</button>';
       } else if (isFlagged) {
         actions += '<button class="pill warn" style="cursor:pointer" onclick="toggleDeviceIntruderFlag(' + idx + ')">🚨 Block / Trust</button>';
       } else if (!d.is_self && !d.is_router) {
@@ -1457,10 +1456,10 @@
       }
 
       const rowWarn = d.tracker_risk || isFlagged || d.camera_risk;
-      return '<div class="devrow' + (rowWarn ? ' warn' : '') + '" style="--row-idx:' + idx + ';flex-wrap:wrap" title="' + esc((d.ip || '') + '  ·  ' + (d.mac || '')) + '">' +
+      return '<div class="devrow' + (rowWarn ? ' warn' : '') + '" style="--row-idx:' + idx + ';justify-content:space-between" title="' + esc((d.ip || '') + '  ·  ' + (d.mac || '')) + '">' +
         '<div class="ico ' + (rowWarn ? 'a' : 'e') + '"><svg width="18" height="18"><use href="#' + resolveDeviceIcon(d) + '"/></svg></div>' +
-        '<div class="grow"><div class="t">' + esc(displayName) + chipBadge + camBadge + '</div><div class="s">' + esc(subText) + '</div></div>' +
-        '<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">' + actions + '</div></div>';
+        '<div class="grow" style="min-width:140px"><div class="t">' + esc(displayName) + camBadge + '</div><div class="s">' + esc(subText) + '</div></div>' +
+        '<div style="display:flex;gap:6px;align-items:center;flex-shrink:0;margin-left:auto">' + actions + '</div></div>';
     }).join('') : '<div class="card s" style="text-align:center">' +
       (wgCurrentTab === 'camera'
         ? '📷 <strong>Airbnb &amp; Guest Wi-Fi Camera Scan Clear:</strong> 0 hidden RTSP/ONVIF cameras detected on this network ✓'

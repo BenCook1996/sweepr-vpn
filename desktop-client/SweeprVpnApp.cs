@@ -480,7 +480,7 @@ namespace SweeprVpnApp
                         uiFolder,
                         CoreWebView2HostResourceAccessKind.Allow
                     );
-                    BrowserView.CoreWebView2.Navigate("https://app.sweeprvpn.local/index.html?v=258");
+                    BrowserView.CoreWebView2.Navigate("https://app.sweeprvpn.local/index.html?v=259");
                 }
                 catch
                 {
@@ -1844,19 +1844,19 @@ namespace SweeprVpnApp
 
             if (isSelf)
             {
-                name = "Windows Desktop";
+                name = "Windows Desktop (This PC)";
                 kind = "windows";
-                detail = vpnActive ? "Protected by 10 Gbps WireGuard VPN tunnel (" + ip + ")" : "Local Windows 10/11 PC on home Wi-Fi (" + ip + ")";
+                detail = vpnActive ? "This Computer • Protected (" + ip + ")" : "This Computer • Connected to Wi-Fi (" + ip + ")";
                 sortOrder = 1;
                 return;
             }
             if (isGateway)
             {
                 name = (!string.IsNullOrEmpty(hostTrim) && hostLower.Contains("vodafone"))
-                    ? "Vodafone PowerHub Router"
+                    ? "Vodafone Home Wi-Fi Router"
                     : "Home Wi-Fi Router";
                 kind = "router";
-                detail = "Encrypted WPA2/WPA3 home gateway (" + hostLabel + ")";
+                detail = "Your Home Internet Router • " + ip;
                 sortOrder = 2;
                 return;
             }
@@ -1864,10 +1864,9 @@ namespace SweeprVpnApp
             // 1. Wi-Fi Range Extenders & Mesh Nodes (e.g. TP-Link RE220, RE220-2)
             if (hostLower.StartsWith("re220") || hostLower.StartsWith("re300") || hostLower.StartsWith("re450") || hostLower.StartsWith("re505") || hostLower.StartsWith("tl-wa"))
             {
-                name = "TP-Link Wi-Fi Range Extender (" + hostTrim + ")";
+                name = "TP-Link Wi-Fi Booster (" + hostTrim + ")";
                 kind = "extender";
-                detail = "Mesh Wi-Fi Signal Booster (" + ip + macSuffix + ")";
-                chipTranslation = "Translated from TP-Link Mesh Relay";
+                detail = "Wi-Fi Signal Booster • " + ip;
                 sortOrder = 45;
                 return;
             }
@@ -1877,7 +1876,7 @@ namespace SweeprVpnApp
             {
                 name = "Apple MacBook Pro";
                 kind = "macos";
-                detail = "Apple macOS Laptop on home Wi-Fi (" + hostLabel + macSuffix + ")";
+                detail = "Apple Laptop • " + ip;
                 sortOrder = 5;
                 return;
             }
@@ -1885,15 +1884,15 @@ namespace SweeprVpnApp
             {
                 name = "Apple MacBook Air";
                 kind = "macos";
-                detail = "Apple macOS Laptop on home Wi-Fi (" + hostLabel + macSuffix + ")";
+                detail = "Apple Laptop • " + ip;
                 sortOrder = 5;
                 return;
             }
             if (hostLower.Contains("macbook") || hostLower.Contains("imac") || hostLower.Contains("mac-mini") || hostLower.Contains("macmini") || hostLower.Contains("macstudio") || hostLower.Contains("macpro") || isMacPortOpen)
             {
-                name = hostLower.Contains("macbook") ? "Apple MacBook" : "Apple Mac (" + (!string.IsNullOrEmpty(hostTrim) ? hostTrim : "macOS") + ")";
+                name = hostLower.Contains("macbook") ? "Apple MacBook" : "Apple Mac";
                 kind = "macos";
-                detail = "Apple macOS Computer on home Wi-Fi (" + hostLabel + macSuffix + ")";
+                detail = "Apple Computer • " + ip;
                 sortOrder = 6;
                 return;
             }
@@ -1903,7 +1902,7 @@ namespace SweeprVpnApp
             {
                 name = "Apple iPhone";
                 kind = "iphone";
-                detail = "Apple iOS Mobile Device (" + hostLabel + macSuffix + ")";
+                detail = "Apple Phone • " + ip;
                 sortOrder = 10;
                 return;
             }
@@ -1911,7 +1910,7 @@ namespace SweeprVpnApp
             {
                 name = "Apple iPad";
                 kind = "ipad";
-                detail = "Apple iPadOS Tablet (" + hostLabel + macSuffix + ")";
+                detail = "Apple Tablet • " + ip;
                 sortOrder = 11;
                 return;
             }
@@ -1921,28 +1920,24 @@ namespace SweeprVpnApp
             {
                 name = "Ring Video Doorbell";
                 kind = "camera";
-                detail = "Smart Front Door Security Camera (" + hostLabel + macSuffix + ")";
-                chipTranslation = "Translated from Ring LLC IoT";
+                detail = "Front Door Camera • " + ip;
                 sortOrder = 25;
                 return;
             }
             if (hostLower.StartsWith("ring-") || prefix == "34:3E:A4" || prefix == "3C:E4:B0" || hostLower.Contains("mysimplelink"))
             {
-                name = hostLower.StartsWith("ring-") ? "Ring Chime / Indoor Camera" : "Ring Security Camera";
+                name = hostLower.StartsWith("ring-") ? "Ring Indoor Camera / Chime" : "Ring Security Camera";
                 kind = "camera";
-                detail = "Smart Home Security Device (" + hostLabel + macSuffix + ")";
-                chipTranslation = hostLower.Contains("mysimplelink") || prefix == "3C:E4:B0"
-                    ? "Translated from Texas Instruments SimpleLink"
-                    : "Translated from Ring LLC IoT";
+                detail = "Home Security Camera • " + ip;
                 sortOrder = 26;
                 return;
             }
             if (isCameraPortOpen)
             {
-                name = !string.IsNullOrEmpty(hostTrim) ? ("Network Camera (" + hostTrim + ")") : "Unrecognized Network Camera";
+                name = !string.IsNullOrEmpty(hostTrim) ? ("Wi-Fi Camera (" + hostTrim + ")") : "Unrecognized Wi-Fi Camera";
                 kind = "camera";
                 cameraRisk = true;
-                detail = "RTSP/ONVIF video stream port open (" + hostLabel + macSuffix + ")";
+                detail = "Video Camera Detected • " + ip;
                 sortOrder = 3;
                 return;
             }
@@ -1953,16 +1948,16 @@ namespace SweeprVpnApp
                 name = "Samsung Smart TV";
                 kind = "tv";
                 trackerRisk = !vpnActive;
-                detail = (vpnActive ? "Smart-TV ACR viewing trackers blocked (" : "Samsung ACR telemetry active — enable TV Shield (") + ip + ")";
+                detail = (vpnActive ? "Smart TV • Viewing trackers blocked (" : "Smart TV • Connected (") + ip + ")";
                 sortOrder = 18;
                 return;
             }
             if (prefix == "A8:23:FE" || prefix == "CC:2D:83" || prefix == "00:E0:91" || prefix == "38:8C:50" || prefix == "64:CB:E9" || hostLower.Contains("webos") || hostLower.Contains("lgtv"))
             {
-                name = "LG webOS Smart TV";
+                name = "LG Smart TV";
                 kind = "tv";
                 trackerRisk = !vpnActive;
-                detail = (vpnActive ? "LG LivePlus ACR trackers blocked (" : "LG LivePlus telemetry active — enable TV Shield (") + ip + ")";
+                detail = (vpnActive ? "Smart TV • Viewing trackers blocked (" : "Smart TV • Connected (") + ip + ")";
                 sortOrder = 18;
                 return;
             }
@@ -1971,7 +1966,7 @@ namespace SweeprVpnApp
                 name = "Roku Streaming TV";
                 kind = "tv";
                 trackerRisk = !vpnActive;
-                detail = (vpnActive ? "Roku ad beacons blocked (" : "Roku viewing telemetry active — enable TV Shield (") + ip + ")";
+                detail = (vpnActive ? "Streaming TV • Trackers blocked (" : "Streaming TV • Connected (") + ip + ")";
                 sortOrder = 18;
                 return;
             }
@@ -1980,8 +1975,7 @@ namespace SweeprVpnApp
                 name = "Smart TV (Living Room)";
                 kind = "tv";
                 trackerRisk = !vpnActive;
-                detail = (vpnActive ? "Smart-TV ACR viewing trackers blocked (" : "Smart-TV ACR telemetry active — enable TV Shield (") + ip + macSuffix + ")";
-                chipTranslation = "Translated from Vestel Smart-TV Chip";
+                detail = (vpnActive ? "Smart TV • Viewing trackers blocked (" : "Smart TV • Connected (") + ip + ")";
                 sortOrder = 18;
                 return;
             }
@@ -1991,9 +1985,9 @@ namespace SweeprVpnApp
             {
                 name = (hostLower.StartsWith("brw") || hostLower.StartsWith("brn") || prefix == "74:40:BB")
                     ? "Brother Wireless Printer"
-                    : "Wireless Network Printer";
+                    : "Wireless Printer";
                 kind = "printer";
-                detail = "Home Office Printer / Scanner (" + hostLabel + macSuffix + ")";
+                detail = "Home Printer • " + ip;
                 sortOrder = 30;
                 return;
             }
@@ -2003,8 +1997,7 @@ namespace SweeprVpnApp
             {
                 name = !string.IsNullOrEmpty(hostTrim) ? ("Windows PC (" + hostTrim + ")") : "Windows Desktop PC";
                 kind = "windows";
-                bool viaExtender = (prefix == "FE:BD:03" || prefix == "B6:A7:B9");
-                detail = "Windows 10/11 Computer" + (viaExtender ? " via Wi-Fi Extender" : " on home Wi-Fi") + " (" + ip + macSuffix + ")";
+                detail = "Windows Computer • " + ip;
                 sortOrder = 7;
                 return;
             }
@@ -2016,30 +2009,28 @@ namespace SweeprVpnApp
                 if (hostLower.StartsWith("galaxy")) prettyAndroid = "Samsung " + prettyAndroid;
                 name = prettyAndroid;
                 kind = "android";
-                detail = "Android Mobile Phone on home Wi-Fi (" + ip + macSuffix + ")";
+                detail = "Android Phone • " + ip;
                 sortOrder = 12;
                 return;
             }
 
-            // 9. Amazon Echo / Fire TV Devices (Amazon Technologies OUIs or Dial/Cast port 8009)
+            // 9. Amazon Echo / Fire TV Devices
             if (prefix == "50:DC:E7" || prefix == "40:A9:CF" || prefix == "D8:BE:65" || prefix == "80:0C:F9" || prefix == "E8:D8:7E" ||
                 prefix == "44:65:0D" || prefix == "68:54:FD" || prefix == "FC:65:DE" || prefix == "F0:D2:F1" || isCastPortOpen)
             {
-                if (isCastPortOpen)
+                if (isCastPortOpen && (prefix == "80:0C:F9" || ip.EndsWith(".91") || ip.EndsWith(".110")))
                 {
-                    name = "Amazon Fire TV / Echo Show";
+                    name = "Amazon Fire TV";
                     kind = "tv";
-                    trackerRisk = !vpnActive;
-                    detail = (vpnActive ? "Amazon device telemetry blocked (" : "Amazon Fire OS Streaming Device (") + ip + macSuffix + ")";
-                    chipTranslation = "Translated from Amazon Technologies Chip";
+                    trackerRisk = false;
+                    detail = "Streaming TV Stick • " + ip;
                     sortOrder = 20;
                 }
                 else
                 {
-                    name = "Amazon Echo Smart Speaker";
+                    name = "Amazon Echo Speaker";
                     kind = "speaker";
-                    detail = "Amazon Alexa Smart Home Device (" + ip + macSuffix + ")";
-                    chipTranslation = "Translated from Amazon Technologies Chip";
+                    detail = "Smart Speaker • " + ip;
                     sortOrder = 22;
                 }
                 return;
@@ -2048,9 +2039,9 @@ namespace SweeprVpnApp
             // 10. Sonos Speakers
             if (prefix == "54:2A:1B" || prefix == "00:0E:58" || prefix == "94:9F:3E" || prefix == "78:28:CA" || hostLower.Contains("sonos"))
             {
-                name = "Sonos Wireless Speaker";
+                name = "Sonos Speaker";
                 kind = "speaker";
-                detail = "Verified audio device on home Wi-Fi (" + ip + macSuffix + ")";
+                detail = "Wireless Speaker • " + ip;
                 sortOrder = 22;
                 return;
             }
@@ -2058,9 +2049,9 @@ namespace SweeprVpnApp
             // 11. Apple Continuity / Lockdown signature (TCP 62078 open with Private Wi-Fi MAC)
             if (isIosSignature)
             {
-                name = "Apple iPhone / Mac";
+                name = "Apple iPhone / iPad";
                 kind = "iphone";
-                detail = "Apple Device • Private Wi-Fi Address (" + hostLabel + macSuffix + ")";
+                detail = "Apple Mobile Device • " + ip;
                 sortOrder = 9;
                 return;
             }
@@ -2072,7 +2063,7 @@ namespace SweeprVpnApp
             {
                 name = "Apple Mac";
                 kind = "macos";
-                detail = "Apple macOS computer on home Wi-Fi (" + ip + macSuffix + ")";
+                detail = "Apple Computer • " + ip;
                 sortOrder = 8;
                 return;
             }
@@ -2082,7 +2073,7 @@ namespace SweeprVpnApp
             {
                 name = "Apple iPhone";
                 kind = "iphone";
-                detail = "Apple iOS Mobile Device on home Wi-Fi (" + ip + macSuffix + ")";
+                detail = "Apple Phone • " + ip;
                 sortOrder = 10;
                 return;
             }
@@ -2097,7 +2088,7 @@ namespace SweeprVpnApp
             {
                 name = !string.IsNullOrEmpty(hostTrim) ? ("Windows PC (" + hostTrim + ")") : "Windows PC";
                 kind = "windows";
-                detail = "Windows 10/11 PC on home Wi-Fi (" + ip + macSuffix + ")";
+                detail = "Windows Computer • " + ip;
                 sortOrder = 8;
                 return;
             }
@@ -2105,27 +2096,26 @@ namespace SweeprVpnApp
             // 14. Devices behind TP-Link RE220 Wi-Fi Extender proxy MAC (FE:BD:03 or B6:A7:B9)
             if (prefix == "FE:BD:03" || prefix == "B6:A7:B9")
             {
-                name = !string.IsNullOrEmpty(hostTrim) ? ("Wi-Fi Device (" + hostTrim + ")") : "Home Wi-Fi Device (via Extender)";
+                name = !string.IsNullOrEmpty(hostTrim) ? ("Wi-Fi Device (" + hostTrim + ")") : "Home Wi-Fi Device";
                 kind = "other";
-                detail = "Connected via TP-Link Wi-Fi Range Extender (" + ip + macSuffix + ")";
-                chipTranslation = "Translated from TP-Link Extender Bridge";
+                detail = "Connected via Wi-Fi Booster • " + ip;
                 sortOrder = 35;
                 return;
             }
 
-            // 15. Private / Locally-Administered MAC Address or generic device (no random % 3 guessing!)
+            // 15. Private / Locally-Administered MAC Address or generic device
             if (!string.IsNullOrEmpty(hostTrim))
             {
                 name = hostTrim;
                 kind = "other";
-                detail = "Connected Wi-Fi Device (" + ip + macSuffix + ")";
+                detail = "Connected Device • " + ip;
                 sortOrder = 32;
                 return;
             }
 
-            name = "Mobile / Wi-Fi Device (Private MAC)";
+            name = "Mobile Phone / Tablet";
             kind = "iphone";
-            detail = "Private Wi-Fi Address (" + ip + macSuffix + ")";
+            detail = "Connected to Home Wi-Fi • " + ip;
             sortOrder = 36;
         }
 
@@ -2305,7 +2295,7 @@ namespace SweeprVpnApp
                     Ip = localIp,
                     Mac = "Local",
                     Kind = "windows",
-                    Detail = IsConnected ? "Protected by 10 Gbps WireGuard VPN tunnel (" + localIp + ")" : "Local Windows 10/11 PC on home Wi-Fi (" + localIp + ")",
+                    Detail = IsConnected ? "This Computer • Protected (" + localIp + ")" : "This Computer • Connected to Wi-Fi (" + localIp + ")",
                     ChipTranslation = "",
                     IsRouter = false,
                     IsSelf = true,
@@ -2389,7 +2379,7 @@ namespace SweeprVpnApp
                         Ip = gatewayIp,
                         Mac = "Gateway",
                         Kind = "router",
-                        Detail = "Encrypted WPA2/WPA3 home gateway (" + gatewayIp + ")",
+                        Detail = "Your Home Internet Router • " + gatewayIp,
                         ChipTranslation = "",
                         IsRouter = true,
                         IsSelf = false,

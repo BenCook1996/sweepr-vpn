@@ -499,7 +499,7 @@ document.addEventListener('DOMContentLoaded', () => {
             else if (key === 'online-pops' || key === 'online-nodes') el.textContent = `${stats.onlinePopsCount || 8}/${stats.totalPops || 8}`;
             else if (key === 'connected-devices') el.textContent = `${stats.totalConnectedDevices || 139}`;
             else if (key === 'summary-ticker') {
-              el.textContent = `🟢 ${stats.onlinePopsCount || 8}/8 10Gbps Bare-Metal POPs Online • London ${stats.londonLatencyMs || 4}ms (${stats.londonLoadPct || 18}% load) • ${stats.acrDomainsBlockedCount || 65} Smart-TV ACR Domains Blocked • ${stats.diagnosticScans7d || 418} Leak & Speed Audits (7d)`;
+              el.textContent = `🟢 All ${stats.onlinePopsCount || 8} Global VPN Locations Online • Instant 1-Click Setup • 14-Day Money-Back Guarantee`;
             }
           });
         })

@@ -323,13 +323,13 @@ const STRIPE_COUPON = (process.env.STRIPE_COUPON || 'sweepr_intro_gbp_1050').tri
 // Multi-Currency Geo-Pricing Engine (Exact match to pricing-config.js)
 // ============================================================================
 const PRICING_BY_CURRENCY = {
-  gbp: { currency: 'gbp', symbol: '£', symbolPosition: 'prefix', zeroDecimal: false, annualAmount: 7499, sixMonthAmount: 4899, monthlyAmount: 1249, introMonthlyAmount: 199, wifiRadarAnnualAmount: 1499, wifiRadarSixMonthAmount: 999, wifiRadarMonthlyAmount: 199 },
+  gbp: { currency: 'gbp', symbol: 'Ã‚Â£', symbolPosition: 'prefix', zeroDecimal: false, annualAmount: 7499, sixMonthAmount: 4899, monthlyAmount: 1249, introMonthlyAmount: 199, wifiRadarAnnualAmount: 1499, wifiRadarSixMonthAmount: 999, wifiRadarMonthlyAmount: 199 },
   usd: { currency: 'usd', symbol: '$', symbolPosition: 'prefix', zeroDecimal: false, annualAmount: 9599, sixMonthAmount: 6199, monthlyAmount: 1599, introMonthlyAmount: 299, wifiRadarAnnualAmount: 1999, wifiRadarSixMonthAmount: 1299, wifiRadarMonthlyAmount: 299 },
-  eur: { currency: 'eur', symbol: '€', symbolPosition: 'prefix', zeroDecimal: false, annualAmount: 8999, sixMonthAmount: 5899, monthlyAmount: 1499, introMonthlyAmount: 299, wifiRadarAnnualAmount: 1799, wifiRadarSixMonthAmount: 1199, wifiRadarMonthlyAmount: 249 },
+  eur: { currency: 'eur', symbol: 'Ã¢â€šÂ¬', symbolPosition: 'prefix', zeroDecimal: false, annualAmount: 8999, sixMonthAmount: 5899, monthlyAmount: 1499, introMonthlyAmount: 299, wifiRadarAnnualAmount: 1799, wifiRadarSixMonthAmount: 1199, wifiRadarMonthlyAmount: 249 },
   cad: { currency: 'cad', symbol: 'CA$', symbolPosition: 'prefix', zeroDecimal: false, annualAmount: 13199, sixMonthAmount: 8599, monthlyAmount: 2199, introMonthlyAmount: 399, wifiRadarAnnualAmount: 2699, wifiRadarSixMonthAmount: 1799, wifiRadarMonthlyAmount: 349 },
   aud: { currency: 'aud', symbol: 'A$', symbolPosition: 'prefix', zeroDecimal: false, annualAmount: 14999, sixMonthAmount: 9799, monthlyAmount: 2499, introMonthlyAmount: 399, wifiRadarAnnualAmount: 2999, wifiRadarSixMonthAmount: 1999, wifiRadarMonthlyAmount: 399 },
   chf: { currency: 'chf', symbol: 'CHF ', symbolPosition: 'prefix', zeroDecimal: false, annualAmount: 8399, sixMonthAmount: 5499, monthlyAmount: 1399, introMonthlyAmount: 299, wifiRadarAnnualAmount: 1699, wifiRadarSixMonthAmount: 1099, wifiRadarMonthlyAmount: 249 },
-  jpy: { currency: 'jpy', symbol: '¥', symbolPosition: 'prefix', zeroDecimal: true, annualAmount: 14999, sixMonthAmount: 9799, monthlyAmount: 2499, introMonthlyAmount: 399, wifiRadarAnnualAmount: 2999, wifiRadarSixMonthAmount: 1999, wifiRadarMonthlyAmount: 399 }
+  jpy: { currency: 'jpy', symbol: 'Ã‚Â¥', symbolPosition: 'prefix', zeroDecimal: true, annualAmount: 14999, sixMonthAmount: 9799, monthlyAmount: 2499, introMonthlyAmount: 399, wifiRadarAnnualAmount: 2999, wifiRadarSixMonthAmount: 1999, wifiRadarMonthlyAmount: 399 }
 };
 
 const COUNTRY_TO_CURRENCY = {
@@ -345,7 +345,7 @@ const COUNTRY_TO_LANG = {
 
 function countryToFlag(countryCode) {
   const cc = (countryCode || 'GB').toUpperCase();
-  if (!/^[A-Z]{2}$/.test(cc)) return '🇬🇧';
+  if (!/^[A-Z]{2}$/.test(cc)) return 'Ã°Å¸â€¡Â¬Ã°Å¸â€¡Â§';
   return String.fromCodePoint(...[...cc].map((c) => 0x1f1e6 - 65 + c.charCodeAt(0)));
 }
 
@@ -507,7 +507,7 @@ async function getStripeProductId() {
   }
   const created = await stripeRequest('POST', 'products', {
     name: 'SWEEPR VPN Pro',
-    description: 'SWEEPR VPN Pro — High-Speed Private Wi-Fi Encryption, ISP Throttling Protection & Zero-Logs Privacy (Up to 3 Devices — Desktop or Mobile)'
+    description: 'SWEEPR VPN Pro Ã¢â‚¬â€ High-Speed Private Wi-Fi Encryption, ISP Throttling Protection & Zero-Logs Privacy (Up to 3 Devices Ã¢â‚¬â€ Desktop or Mobile)'
   });
   cachedMainProductId = created.id;
   return created.id;
@@ -716,7 +716,7 @@ function evaluateAccountLifecycleOffers(acc) {
           active: true,
           stage: ageHours >= 72 ? '72h_rescue' : '24h_rescue',
           ageHours: Math.round(ageHours),
-          headline: '0 Devices Linked Yet — Activate Your 10Gbps WireGuard Tunnel in 15 Seconds',
+          headline: '0 Devices Linked Yet Ã¢â‚¬â€ Activate Your 10Gbps WireGuard Tunnel in 15 Seconds',
           subheadline:
             'Scan an instant QR code on iPhone/Android, install a 1-click Apple .mobileconfig profile, or generate a native .conf for GL.iNet & routers.',
           quickLinks: [
@@ -733,7 +733,7 @@ function evaluateAccountLifecycleOffers(acc) {
           active: true,
           dayOfCycle: Math.max(1, Math.min(30, Math.round(ageDays || 21))),
           headline: `Lock In ${localizedPricing.annualMonthlyEqFormatted}/mo Forever + Free Smart-TV ACR Shield`,
-          subheadline: `Upgrade from Monthly (${localizedPricing.monthlyFormatted}/mo) to the Annual Price-Lock Plan (${localizedPricing.annualFormatted}/yr — Save 50%) in 1 click and receive SWEEPR Wi-Fi Radar & Smart-TV Shield (${localizedPricing.wifiRadarAnnualFormatted}/yr value) free for Year 1.`,
+          subheadline: `Upgrade from Monthly (${localizedPricing.monthlyFormatted}/mo) to the Annual Price-Lock Plan (${localizedPricing.annualFormatted}/yr Ã¢â‚¬â€ Save 50%) in 1 click and receive SWEEPR Wi-Fi Radar & Smart-TV Shield (${localizedPricing.wifiRadarAnnualFormatted}/yr value) free for Year 1.`,
           ctaLabel: `Upgrade to Annual (${localizedPricing.annualFormatted}/yr) + Free Smart-TV Shield`,
           action: 'upgrade_annual_lock'
         }
@@ -767,7 +767,7 @@ async function runLifecycleAutomationSweeps({ dryRun = false } = {}) {
 
     const pricing = buildLocalizedPricing(acc.country || 'GB');
 
-    // CMO Automation 6: Abandoned Checkout Magic-Link Recovery & £1.99 Trial Downsell (1h-48h window, max 1 email)
+    // CMO Automation 6: Abandoned Checkout Magic-Link Recovery & Ã‚Â£1.99 Trial Downsell (1h-48h window, max 1 email)
     if (acc.status === 'lead' && !acc.stripe_subscription_id) {
       const leadStartIso = acc.leadCapturedAt || acc.createdAt;
       const leadMs = leadStartIso ? new Date(leadStartIso).getTime() : Date.now();
@@ -787,10 +787,10 @@ async function runLifecycleAutomationSweeps({ dryRun = false } = {}) {
             textBody:
               `Hi ${acc.name || 'there'},\n\n` +
               `You started setting up SWEEPR VPN earlier, and we saved your cart so you can finish in 1 click:\n\n` +
-              `• Resume Your Selected Plan (${pricing.annualFormatted}/yr Price-Lock — Save 50%): ${resumeAnnualUrl}\n` +
-              `• Or test-drive SWEEPR VPN Pro for 30 days for just ${pricing.introMonthlyFormatted}: ${resumeTrialUrl}\n\n` +
+              `Ã¢â‚¬Â¢ Resume Your Selected Plan (${pricing.annualFormatted}/yr Price-Lock Ã¢â‚¬â€ Save 50%): ${resumeAnnualUrl}\n` +
+              `Ã¢â‚¬Â¢ Or test-drive SWEEPR VPN Pro for 30 days for just ${pricing.introMonthlyFormatted}: ${resumeTrialUrl}\n\n` +
               `Every plan covers up to 3 devices (Windows, macOS, iOS, Android & WireGuard routers) and is backed by our 30-day 100% money-back guarantee.\n\n` +
-              `— SWEEPR VPN Team\n` +
+              `Ã¢â‚¬â€ SWEEPR VPN Team\n` +
               `Unsubscribe from checkout reminders: ${unsubUrl}`
           }).catch(() => {});
         }
@@ -817,10 +817,10 @@ async function runLifecycleAutomationSweeps({ dryRun = false } = {}) {
             `Hi ${acc.name || 'there'},\n\n` +
             `We noticed your SWEEPR VPN Pro subscription is active, but no devices have completed a WireGuard handshake yet.\n\n` +
             `You can activate your first device in under 15 seconds:\n` +
-            `• License Key: ${acc.licenseKey}\n` +
-            `• Instant Mobile QR & Apple .mobileconfig Portal: https://sweeprvpn.com/dashboard\n` +
-            `• GL.iNet / UniFi / Synology .conf Generator: https://sweeprvpn.com/tools/wireguard-config-generator\n\n` +
-            `Reply directly to this email if you'd like help setting up your router or device.\n— SWEEPR VPN Team`
+            `Ã¢â‚¬Â¢ License Key: ${acc.licenseKey}\n` +
+            `Ã¢â‚¬Â¢ Instant Mobile QR & Apple .mobileconfig Portal: https://sweeprvpn.com/dashboard\n` +
+            `Ã¢â‚¬Â¢ GL.iNet / UniFi / Synology .conf Generator: https://sweeprvpn.com/tools/wireguard-config-generator\n\n` +
+            `Reply directly to this email if you'd like help setting up your router or device.\nÃ¢â‚¬â€ SWEEPR VPN Team`
         }).catch(() => {});
       }
     }
@@ -838,7 +838,7 @@ async function runLifecycleAutomationSweeps({ dryRun = false } = {}) {
             `Your SWEEPR VPN Pro subscription includes 3 simultaneous device slots, but 0 devices are currently linked.\n\n` +
             `Click below to open your Customer Portal and scan a 1-time QR code with your phone or download the Windows/macOS app:\n` +
             `https://sweeprvpn.com/dashboard\n\n` +
-            `Your License Key: ${acc.licenseKey}\n— SWEEPR VPN Team`
+            `Your License Key: ${acc.licenseKey}\nÃ¢â‚¬â€ SWEEPR VPN Team`
         }).catch(() => {});
       }
     }
@@ -854,9 +854,9 @@ async function runLifecycleAutomationSweeps({ dryRun = false } = {}) {
           textBody:
             `Hi ${acc.name || 'there'},\n\n` +
             `Your monthly SWEEPR VPN plan is scheduled to renew in ~9 days at the standard flexible rate (${pricing.monthlyFormatted}/mo).\n\n` +
-            `Want to cut your bill by 50% and avoid renewal hikes forever? You can switch to our Annual Price-Lock Plan (${pricing.annualFormatted}/yr — ${pricing.annualMonthlyEqFormatted}/mo equivalent) in 1 click inside your Customer Portal, and we'll include the SWEEPR Wi-Fi Radar & Smart-TV ACR Shield (${pricing.wifiRadarAnnualFormatted}/yr value) FREE for your first year:\n\n` +
+            `Want to cut your bill by 50% and avoid renewal hikes forever? You can switch to our Annual Price-Lock Plan (${pricing.annualFormatted}/yr Ã¢â‚¬â€ ${pricing.annualMonthlyEqFormatted}/mo equivalent) in 1 click inside your Customer Portal, and we'll include the SWEEPR Wi-Fi Radar & Smart-TV ACR Shield (${pricing.wifiRadarAnnualFormatted}/yr value) FREE for your first year:\n\n` +
             `Upgrade or manage your plan in 1 click: https://sweeprvpn.com/dashboard?upgrade=annual\n\n` +
-            `— SWEEPR VPN Team`
+            `Ã¢â‚¬â€ SWEEPR VPN Team`
         }).catch(() => {});
       }
     }
@@ -1190,7 +1190,7 @@ function applyCustomerReferralRewardIfEligible(refereeAcc, rawRefCode) {
   };
 }
 
-// Seed Founder Pro account (cookbenjamin1996@gmail.com — matches sweepr_crm sub_founder_vpn)
+// Seed Founder Pro account (cookbenjamin1996@gmail.com Ã¢â‚¬â€ matches sweepr_crm sub_founder_vpn)
 // Never seed a hardcoded static 6-digit activation_code in source control; login requires a fresh CSPRNG email OTP or full high-entropy license key.
 {
   const founderLicenseKey = (process.env.FOUNDER_LICENSE_KEY || '').trim().toUpperCase() ||
@@ -1343,14 +1343,14 @@ function syncLocalCacheFromCrm(crmData, fallbackEmail = '', fallbackCode = '') {
 }
 
 const VPN_SERVER_LOCATIONS = [
-  { code: 'UK-LON-01', country: 'United Kingdom', city: 'London Docklands', flag: '🇬🇧', pingMs: 4, speedMbps: 940, loadPct: 18, ip: '78.141.205.68', protocol: 'WireGuard 10Gbps' },
-  { code: 'SE-STO-01', country: 'Sweden', city: 'Stockholm Privacy Core', flag: '🇸🇪', pingMs: 14, speedMbps: 915, loadPct: 22, ip: '70.34.208.107', protocol: 'WireGuard 10Gbps' },
-  { code: 'NL-AMS-01', country: 'Netherlands', city: 'Amsterdam Core', flag: '🇳🇱', pingMs: 8, speedMbps: 930, loadPct: 24, ip: '95.179.181.53', protocol: 'WireGuard 10Gbps' },
-  { code: 'DE-FRA-01', country: 'Germany', city: 'Frankfurt IX', flag: '🇩🇪', pingMs: 11, speedMbps: 925, loadPct: 19, ip: '80.240.20.239', protocol: 'WireGuard 10Gbps' },
-  { code: 'US-NYC-01', country: 'United States', city: 'New York Core', flag: '🇺🇸', pingMs: 68, speedMbps: 860, loadPct: 31, ip: '45.77.109.112', protocol: 'WireGuard 10Gbps' },
-  { code: 'US-LAX-01', country: 'United States', city: 'Los Angeles', flag: '🇺🇸', pingMs: 118, speedMbps: 810, loadPct: 27, ip: '45.32.85.162', protocol: 'WireGuard 10Gbps' },
-  { code: 'SG-SIN-01', country: 'Singapore', city: 'Singapore Marina', flag: '🇸🇬', pingMs: 154, speedMbps: 785, loadPct: 16, ip: '149.28.157.142', protocol: 'WireGuard 10Gbps' },
-  { code: 'JP-TYO-01', country: 'Japan', city: 'Tokyo Shinagawa', flag: '🇯🇵', pingMs: 162, speedMbps: 770, loadPct: 21, ip: '104.156.239.162', protocol: 'WireGuard 10Gbps' }
+  { code: 'UK-LON-01', country: 'United Kingdom', city: 'London Docklands', flag: 'Ã°Å¸â€¡Â¬Ã°Å¸â€¡Â§', pingMs: 4, speedMbps: 940, loadPct: 18, ip: '78.141.205.68', protocol: 'WireGuard 10Gbps' },
+  { code: 'SE-STO-01', country: 'Sweden', city: 'Stockholm Privacy Core', flag: 'Ã°Å¸â€¡Â¸Ã°Å¸â€¡Âª', pingMs: 14, speedMbps: 915, loadPct: 22, ip: '70.34.208.107', protocol: 'WireGuard 10Gbps' },
+  { code: 'NL-AMS-01', country: 'Netherlands', city: 'Amsterdam Core', flag: 'Ã°Å¸â€¡Â³Ã°Å¸â€¡Â±', pingMs: 8, speedMbps: 930, loadPct: 24, ip: '95.179.181.53', protocol: 'WireGuard 10Gbps' },
+  { code: 'DE-FRA-01', country: 'Germany', city: 'Frankfurt IX', flag: 'Ã°Å¸â€¡Â©Ã°Å¸â€¡Âª', pingMs: 11, speedMbps: 925, loadPct: 19, ip: '80.240.20.239', protocol: 'WireGuard 10Gbps' },
+  { code: 'US-NYC-01', country: 'United States', city: 'New York Core', flag: 'Ã°Å¸â€¡ÂºÃ°Å¸â€¡Â¸', pingMs: 68, speedMbps: 860, loadPct: 31, ip: '45.77.109.112', protocol: 'WireGuard 10Gbps' },
+  { code: 'US-LAX-01', country: 'United States', city: 'Los Angeles', flag: 'Ã°Å¸â€¡ÂºÃ°Å¸â€¡Â¸', pingMs: 118, speedMbps: 810, loadPct: 27, ip: '45.32.85.162', protocol: 'WireGuard 10Gbps' },
+  { code: 'SG-SIN-01', country: 'Singapore', city: 'Singapore Marina', flag: 'Ã°Å¸â€¡Â¸Ã°Å¸â€¡Â¬', pingMs: 154, speedMbps: 785, loadPct: 16, ip: '149.28.157.142', protocol: 'WireGuard 10Gbps' },
+  { code: 'JP-TYO-01', country: 'Japan', city: 'Tokyo Shinagawa', flag: 'Ã°Å¸â€¡Â¯Ã°Å¸â€¡Âµ', pingMs: 162, speedMbps: 770, loadPct: 21, ip: '104.156.239.162', protocol: 'WireGuard 10Gbps' }
 ];
 
 // Zero-dependency ISO/IEC 18004 QR Code SVG generator (supports up to 367-byte WireGuard .conf payloads)
@@ -1924,10 +1924,10 @@ async function sendWelcomeLicenseEmail(acc) {
   const licenseKey = acc.licenseKey || 'SWEEPR-VPN-PRO';
   const activationCode = acc.activation_code || generateUniqueActivationCode();
   if (!acc.activation_code) acc.activation_code = activationCode;
-  const subject = 'Welcome to SWEEPR VPN Pro — Your License Key & Setup Guide';
+  const subject = 'Welcome to SWEEPR VPN Pro Ã¢â‚¬â€ Your License Key & Setup Guide';
   const textBody = `Hi ${acc.name || 'there'},\n\nThank you for subscribing to SWEEPR VPN Pro! Your subscription is active for up to 3 devices (any combination of desktop or mobile).\n\nFull Product License Key (Paste in App): ${licenseKey}\n6-Digit Quick Activation Code: ${activationCode}\nRegistered Email: ${email}\n\n1. Open SWEEPR VPN (or download at https://sweeprvpn.com/download?key=${encodeURIComponent(licenseKey)}&autoconf=1)\n2. Paste ${licenseKey} into the license key box to unlock all 8 global locations and Smart-TV shields.\n\nBest regards,\nThe SWEEPR VPN Team`;
   const htmlBody = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:520px;margin:0 auto;padding:28px 24px;color:#0f172a;background:#ffffff;border:1px solid #e2e8f0;border-radius:16px">
-  <h2 style="margin:0 0 8px;font-size:21px;font-weight:800;color:#0f172a">Welcome to SWEEPR VPN Pro! 🎉</h2>
+  <h2 style="margin:0 0 8px;font-size:21px;font-weight:800;color:#0f172a">Welcome to SWEEPR VPN Pro! Ã°Å¸Å½â€°</h2>
   <p style="margin:0 0 18px;font-size:14px;color:#475569">Hi ${escapeHtml(acc.name || 'there')}, your subscription is active across up to 3 devices (any combination of desktop or mobile). Here are your credentials:</p>
   <div style="background:#f0fdf4;border:2px dashed #10b981;border-radius:12px;padding:18px;text-align:center;margin:18px 0">
     <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#047857;margin-bottom:6px">Full Product License Key (Paste in App)</div>
@@ -2600,20 +2600,20 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
 
   const browserAssistBanner = isNonSafariIos
     ? `<div class="mb-5 p-4 rounded-2xl border-2 border-emerald-400 bg-emerald-50/90 text-left space-y-2.5">
-        <div class="font-extrabold text-sm text-emerald-950">📱 iPhone / iPad Detected — 1-Tap Install</div>
+        <div class="font-extrabold text-sm text-emerald-950">Ã°Å¸â€œÂ± iPhone / iPad Detected Ã¢â‚¬â€ 1-Tap Install</div>
         <p class="text-xs text-emerald-900 leading-relaxed">Apple requires iOS Configuration Profiles to be opened in <strong>Safari</strong>, or you can launch the iOS app directly below:</p>
         <div class="grid grid-cols-1 gap-2 pt-1">
-          <a href="${safariDeepLink}" class="btn btn-go w-full justify-center py-2.5 text-xs font-extrabold">🧭 Open in Safari &amp; Install iOS App</a>
-          <a href="/ios-app" class="btn btn-ghost bg-white border border-emerald-300 w-full justify-center py-2.5 text-xs font-extrabold text-emerald-900">🚀 Launch SWEEPR VPN iOS App Now</a>
+          <a href="${safariDeepLink}" class="btn btn-go w-full justify-center py-2.5 text-xs font-extrabold">Ã°Å¸Â§Â­ Open in Safari &amp; Install iOS App</a>
+          <a href="/ios-app" class="btn btn-ghost bg-white border border-emerald-300 w-full justify-center py-2.5 text-xs font-extrabold text-emerald-900">Ã°Å¸Å¡â‚¬ Launch SWEEPR VPN iOS App Now</a>
         </div>
       </div>`
     : isAndroidWebView
     ? `<div class="mb-5 p-4 rounded-2xl border-2 border-emerald-400 bg-emerald-50/90 text-left space-y-2.5">
-        <div class="font-extrabold text-sm text-emerald-950">📱 Android Detected — Downloading SWEEPRVPN.apk...</div>
+        <div class="font-extrabold text-sm text-emerald-950">Ã°Å¸â€œÂ± Android Detected Ã¢â‚¬â€ Downloading SWEEPRVPN.apk...</div>
         <p class="text-xs text-emerald-900 leading-relaxed">If your current in-app browser blocks direct APK installation, tap below to open directly in Chrome:</p>
         <div class="grid grid-cols-1 gap-2 pt-1">
-          <a href="${chromeIntentLink}" class="btn btn-go w-full justify-center py-2.5 text-xs font-extrabold">🌐 Open in Chrome &amp; Install APK</a>
-          <a href="/download/SWEEPRVPN.apk" download="SWEEPRVPN.apk" class="btn btn-ghost bg-white border border-emerald-300 w-full justify-center py-2.5 text-xs font-extrabold text-emerald-900">⬇️ Direct Download SWEEPRVPN.apk</a>
+          <a href="${chromeIntentLink}" class="btn btn-go w-full justify-center py-2.5 text-xs font-extrabold">Ã°Å¸Å’Â Open in Chrome &amp; Install APK</a>
+          <a href="/download/SWEEPRVPN.apk" download="SWEEPRVPN.apk" class="btn btn-ghost bg-white border border-emerald-300 w-full justify-center py-2.5 text-xs font-extrabold text-emerald-900">Ã¢Â¬â€¡Ã¯Â¸Â Direct Download SWEEPRVPN.apk</a>
         </div>
         <iframe src="/download/SWEEPRVPN.apk" class="hidden" title="APK Auto Download"></iframe>
       </div>`
@@ -2674,35 +2674,35 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
     <div class="space-y-3 text-left mb-6">
       <a href="/download/SWEEPRVPN.apk" download="SWEEPRVPN.apk" rel="nofollow" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'android' ? 'border-2 border-emerald-500 bg-emerald-50/40' : 'border-gray-200 bg-white'} hover:border-emerald-400 transition-all no-underline text-gray-900">
         <div>
-          <div class="font-bold text-sm text-gray-900">📱 Android Phone &amp; Tablet Installer (.apk)</div>
+          <div class="font-bold text-sm text-gray-900">Ã°Å¸â€œÂ± Android Phone &amp; Tablet Installer (.apk)</div>
           <div class="text-xs text-gray-500">Direct 1-Tap APK Install &bull; SWEEPRVPN.apk</div>
         </div>
         <span class="btn btn-go text-xs py-2 px-3 shrink-0">Download .apk</span>
       </a>
       <a href="https://play.google.com/apps/testing/com.sweepr.vpn" target="_blank" rel="noopener" class="flex items-center justify-between gap-3 p-4 rounded-xl border border-emerald-300 bg-emerald-50/60 hover:border-emerald-500 transition-all no-underline text-gray-900">
         <div>
-          <div class="font-extrabold text-sm text-gray-900">▶️ Join Official Google Play Beta (Get 30 Days Pro Free)</div>
+          <div class="font-extrabold text-sm text-gray-900">Ã¢â€“Â¶Ã¯Â¸Â Join Official Google Play Beta (Get 30 Days Pro Free)</div>
           <div class="text-xs text-gray-600">Opt in on Google Play &bull; Automatic Play Store Updates</div>
         </div>
         <span class="btn btn-go text-xs py-2 px-3 shrink-0">Join on Play Store &rarr;</span>
       </a>
       <a href="/download/SWEEPRVPN.mobileconfig" rel="nofollow" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'ios' ? 'border-2 border-emerald-500 bg-emerald-50/40' : 'border-gray-200 bg-white'} hover:border-emerald-400 transition-all no-underline text-gray-900">
         <div>
-          <div class="font-bold text-sm text-gray-900">🍎 iPhone &amp; iPad Installer (iOS / iPadOS)</div>
+          <div class="font-bold text-sm text-gray-900">Ã°Å¸ÂÅ½ iPhone &amp; iPad Installer (iOS / iPadOS)</div>
           <div class="text-xs text-gray-500">Installs SWEEPR VPN App &amp; Privacy Profile &bull; 1-Tap Setup</div>
         </div>
         <span class="btn btn-go text-xs py-2 px-3 shrink-0">Install on iOS</span>
       </a>
       <a href="/download?platform=win" rel="nofollow" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'windows' ? 'border-2 border-emerald-500 bg-emerald-50/40' : 'border-gray-200 bg-white'} hover:border-emerald-400 transition-all no-underline text-gray-900">
         <div>
-          <div class="font-bold text-sm text-gray-900">💻 Windows 10 &amp; 11 Desktop Installer (.exe)</div>
+          <div class="font-bold text-sm text-gray-900">Ã°Å¸â€™Â» Windows 10 &amp; 11 Desktop Installer (.exe)</div>
           <div class="text-xs text-gray-500">Direct download &bull; SWEEPRVPN.exe</div>
         </div>
         <span class="btn btn-go text-xs py-2 px-3 shrink-0">Download .exe</span>
       </a>
       <a href="/download?platform=mac" rel="nofollow" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'mac' ? 'border-2 border-emerald-500 bg-emerald-50/40' : 'border-gray-200 bg-white'} hover:border-emerald-400 transition-all no-underline text-gray-900">
         <div>
-          <div class="font-bold text-sm text-gray-900">🍏 macOS 11+ Universal Desktop Installer (.dmg)</div>
+          <div class="font-bold text-sm text-gray-900">Ã°Å¸ÂÂ macOS 11+ Universal Desktop Installer (.dmg)</div>
           <div class="text-xs text-gray-500">Apple Silicon &amp; Intel &bull; SWEEPRVPN.dmg</div>
         </div>
         <span class="btn btn-go text-xs py-2 px-3 shrink-0">Download .dmg</span>
@@ -2723,9 +2723,9 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
       </a>
     </div>
     <div class="mt-4 mb-5 p-3.5 rounded-xl border border-emerald-200 bg-emerald-50/50 text-left text-xs text-gray-600 space-y-1">
-      <div class="font-extrabold text-emerald-900 flex items-center gap-1.5">🛡️ Authenticode Signed &amp; Verified Windows Binary</div>
+      <div class="font-extrabold text-emerald-900 flex items-center gap-1.5">Ã°Å¸â€ºÂ¡Ã¯Â¸Â Authenticode Signed &amp; Verified Windows Binary</div>
       <div><strong>Publisher:</strong> CN=Benjamin Cook, O=Benjamin Cook, L=Worthing, C=GB (SSL.com OV Code Signing)</div>
-      <div class="break-all"><strong>SHA-256 (SWEEPRVPN.exe):</strong> <code class="text-[11px] bg-white px-1 py-0.5 rounded border border-emerald-100">ABC0F5104EBD917D447A33616FCEA3A610E8AE9779B56198864735C8175331A4</code></div>
+      <div class="break-all"><strong>SHA-256 (SWEEPRVPN.exe):</strong> <code class="text-[11px] bg-white px-1 py-0.5 rounded border border-emerald-100">29747663BB80A5CA1C2F7822C069F78CC81368A852FED51DE56636C86276D4C2</code></div>
     </div>
     <div class="flex justify-center pt-4 border-t border-gray-100">
       <a href="/" class="btn btn-ghost w-full justify-center">Back to Home</a>
@@ -2791,7 +2791,7 @@ function renderCheckoutSuccessPage(acc, isCancelled = false, isPopup = false) {
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
-  <title>Checkout Cancelled — SWEEPR VPN</title>
+  <title>Checkout Cancelled Ã¢â‚¬â€ SWEEPR VPN</title>
   <link rel="icon" type="image/svg+xml" href="/logo-emerald.svg?v=5">
   <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png?v=5">
   <link rel="shortcut icon" href="/favicon.ico?v=5">
@@ -2846,7 +2846,7 @@ function renderCheckoutSuccessPage(acc, isCancelled = false, isPopup = false) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
-  <title>You're Activated 🎉 — SWEEPR VPN Pro</title>
+  <title>You're Activated Ã°Å¸Å½â€° Ã¢â‚¬â€ SWEEPR VPN Pro</title>
   <link rel="icon" type="image/svg+xml" href="/logo-emerald.svg?v=5">
   <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png?v=5">
   <link rel="shortcut icon" href="/favicon.ico?v=5">
@@ -2914,7 +2914,7 @@ function renderCheckoutSuccessPage(acc, isCancelled = false, isPopup = false) {
 <body class="bg-[#0b1120] text-white min-h-screen flex items-center justify-center p-6 font-sans antialiased">
   <div class="max-w-xl w-full bg-[#131c31] border border-emerald-500/30 rounded-3xl p-8 sm:p-10 shadow-2xl space-y-6 text-center">
     <div class="w-16 h-16 mx-auto rounded-2xl bg-emerald-500/15 border border-emerald-500/40 flex items-center justify-center text-3xl">
-      🎉
+      Ã°Å¸Å½â€°
     </div>
     <div>
       <span class="inline-block px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 mb-3">
@@ -2932,7 +2932,7 @@ function renderCheckoutSuccessPage(acc, isCancelled = false, isPopup = false) {
           <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Product License Key (Enter in App)</div>
           <div id="licenseKeyText" class="font-mono text-lg sm:text-xl font-black text-emerald-400 tracking-wider mt-0.5">${licenseKey}</div>
         </div>
-        <button onclick="navigator.clipboard.writeText('${licenseKey}'); this.textContent='Copied ✓';" class="px-3.5 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 text-xs font-bold cursor-pointer shrink-0">
+        <button onclick="navigator.clipboard.writeText('${licenseKey}'); this.textContent='Copied Ã¢Å“â€œ';" class="px-3.5 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 text-xs font-bold cursor-pointer shrink-0">
           Copy License Key
         </button>
       </div>
@@ -2941,16 +2941,16 @@ function renderCheckoutSuccessPage(acc, isCancelled = false, isPopup = false) {
           <span class="text-slate-400">6-Digit Portal &amp; Quick Code:</span>
           <span id="activationKeyText" class="font-mono font-bold text-white bg-slate-800 px-2.5 py-1 rounded ml-1.5">${activationCode}</span>
         </div>
-        <button onclick="navigator.clipboard.writeText('${activationCode}'); this.textContent='Copied ✓';" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-[11px] font-bold cursor-pointer">
+        <button onclick="navigator.clipboard.writeText('${activationCode}'); this.textContent='Copied Ã¢Å“â€œ';" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-[11px] font-bold cursor-pointer">
           Copy Code
         </button>
       </div>
       <div class="text-xs text-slate-400 space-y-1 pt-2 border-t border-slate-800/80">
-        <div class="font-bold text-slate-200 mb-1">Unlocked on your account (Up to 3 Devices — Desktop or Mobile):</div>
-        <div>✓ 1-Click Private Browsing &amp; Public Wi-Fi Protection (8 Global Locations)</div>
-        <div>✓ Streaming Speed Booster &amp; Automatic Drop Protection</div>
-        <div>✓ Home Wi-Fi Device Scanner &amp; Smart-TV Spy Blocker Included Free</div>
-        ${acc?.wifiRadarAddon ? '<div class="text-emerald-300 font-semibold">✓ SWEEPR Wi-Fi Radar &amp; Smart-TV Shield Add-on Active</div>' : ''}
+        <div class="font-bold text-slate-200 mb-1">Unlocked on your account (Up to 3 Devices Ã¢â‚¬â€ Desktop or Mobile):</div>
+        <div>Ã¢Å“â€œ 1-Click Private Browsing &amp; Public Wi-Fi Protection (8 Global Locations)</div>
+        <div>Ã¢Å“â€œ Streaming Speed Booster &amp; Automatic Drop Protection</div>
+        <div>Ã¢Å“â€œ Home Wi-Fi Device Scanner &amp; Smart-TV Spy Blocker Included Free</div>
+        ${acc?.wifiRadarAddon ? '<div class="text-emerald-300 font-semibold">Ã¢Å“â€œ SWEEPR Wi-Fi Radar &amp; Smart-TV Shield Add-on Active</div>' : ''}
       </div>
     </div>
 
@@ -2966,7 +2966,7 @@ function renderCheckoutSuccessPage(acc, isCancelled = false, isPopup = false) {
     <!-- CMO Automation 5: Viral Referral Sharing Card ("Give 30 Days Free, Get 30 Days Free") -->
     <div class="bg-emerald-950/50 border border-emerald-500/40 rounded-2xl p-4 text-left space-y-2.5 mt-4">
       <div class="flex items-center justify-between gap-2">
-        <div class="text-xs font-extrabold text-emerald-300 uppercase tracking-wider">🎁 Give 30 Days Free, Get 30 Days Free</div>
+        <div class="text-xs font-extrabold text-emerald-300 uppercase tracking-wider">Ã°Å¸Å½Â Give 30 Days Free, Get 30 Days Free</div>
         <span class="text-[11px] font-bold bg-emerald-500/20 text-emerald-200 px-2 py-0.5 rounded-full">Zero-Cost Referral Reward</span>
       </div>
       <p class="text-xs text-slate-300 leading-relaxed">
@@ -2974,7 +2974,7 @@ function renderCheckoutSuccessPage(acc, isCancelled = false, isPopup = false) {
       </p>
       <div class="flex items-center gap-2">
         <input type="text" readonly value="${escapeHtml(referralShareUrl)}" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs font-mono text-emerald-300" />
-        <button onclick="navigator.clipboard.writeText('${escapeHtml(referralShareUrl)}'); this.textContent='Copied ✓';" class="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black cursor-pointer shrink-0">
+        <button onclick="navigator.clipboard.writeText('${escapeHtml(referralShareUrl)}'); this.textContent='Copied Ã¢Å“â€œ';" class="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black cursor-pointer shrink-0">
           Copy Link
         </button>
       </div>
@@ -3167,7 +3167,7 @@ const server = http.createServer(async (req, res) => {
       res,
       200,
       {
-        name: 'SWEEPR VPN — Easy Privacy & Home Wi-Fi Shield',
+        name: 'SWEEPR VPN Ã¢â‚¬â€ Easy Privacy & Home Wi-Fi Shield',
         short_name: 'SWEEPR VPN',
         description: '1-Click WireGuard VPN, Smart-TV ACR Telemetry Blocker, and Home Wi-Fi Device Radar.',
         start_url: '/app',
@@ -3468,7 +3468,7 @@ self.addEventListener('fetch', e => {
           ok: true,
           ip: 'Public IPv4 (Unencrypted)',
           country: 'GB',
-          countryFlag: '🇬🇧',
+          countryFlag: 'Ã°Å¸â€¡Â¬Ã°Å¸â€¡Â§',
           isp: 'Residential / Consumer ISP (GB)',
           encrypted: false,
           timestamp: Date.now()
@@ -3557,14 +3557,14 @@ self.addEventListener('fetch', e => {
       }
 
       const defaultPops = [
-        { code: 'UK-LON-01', city: 'London', country: 'United Kingdom', flag: '🇬🇧', p99_ms: 4, load_pct: 18 },
-        { code: 'NL-AMS-01', city: 'Amsterdam', country: 'Netherlands', flag: '🇳🇱', p99_ms: 11, load_pct: 19 },
-        { code: 'DE-FRA-01', city: 'Frankfurt', country: 'Germany', flag: '🇩🇪', p99_ms: 14, load_pct: 22 },
-        { code: 'SE-STO-01', city: 'Stockholm', country: 'Sweden', flag: '🇸🇪', p99_ms: 16, load_pct: 15 },
-        { code: 'US-NYC-01', city: 'New York', country: 'United States', flag: '🇺🇸', p99_ms: 19, load_pct: 26 },
-        { code: 'CA-TOR-01', city: 'Toronto', country: 'Canada', flag: '🇨🇦', p99_ms: 29, load_pct: 17 },
-        { code: 'SG-SIN-01', city: 'Singapore', country: 'Singapore', flag: '🇸🇬', p99_ms: 38, load_pct: 21 },
-        { code: 'AU-SYD-01', city: 'Sydney', country: 'Australia', flag: '🇦🇺', p99_ms: 41, load_pct: 16 }
+        { code: 'UK-LON-01', city: 'London', country: 'United Kingdom', flag: 'Ã°Å¸â€¡Â¬Ã°Å¸â€¡Â§', p99_ms: 4, load_pct: 18 },
+        { code: 'NL-AMS-01', city: 'Amsterdam', country: 'Netherlands', flag: 'Ã°Å¸â€¡Â³Ã°Å¸â€¡Â±', p99_ms: 11, load_pct: 19 },
+        { code: 'DE-FRA-01', city: 'Frankfurt', country: 'Germany', flag: 'Ã°Å¸â€¡Â©Ã°Å¸â€¡Âª', p99_ms: 14, load_pct: 22 },
+        { code: 'SE-STO-01', city: 'Stockholm', country: 'Sweden', flag: 'Ã°Å¸â€¡Â¸Ã°Å¸â€¡Âª', p99_ms: 16, load_pct: 15 },
+        { code: 'US-NYC-01', city: 'New York', country: 'United States', flag: 'Ã°Å¸â€¡ÂºÃ°Å¸â€¡Â¸', p99_ms: 19, load_pct: 26 },
+        { code: 'CA-TOR-01', city: 'Toronto', country: 'Canada', flag: 'Ã°Å¸â€¡Â¨Ã°Å¸â€¡Â¦', p99_ms: 29, load_pct: 17 },
+        { code: 'SG-SIN-01', city: 'Singapore', country: 'Singapore', flag: 'Ã°Å¸â€¡Â¸Ã°Å¸â€¡Â¬', p99_ms: 38, load_pct: 21 },
+        { code: 'AU-SYD-01', city: 'Sydney', country: 'Australia', flag: 'Ã°Å¸â€¡Â¦Ã°Å¸â€¡Âº', p99_ms: 41, load_pct: 16 }
       ];
       const wgNodeList = Array.isArray(pipelineState?.wireguardNodes)
         ? pipelineState.wireguardNodes
@@ -3611,7 +3611,7 @@ self.addEventListener('fetch', e => {
         acrDomainsBlockedCount,
         diagnosticScans7d,
         totalConnectedDevices,
-        priceLockGuarantee: '£6.25/mo (£74.99/yr) • 0% Year-2 Renewal Hike',
+        priceLockGuarantee: 'Ã‚Â£6.25/mo (Ã‚Â£74.99/yr) Ã¢â‚¬Â¢ 0% Year-2 Renewal Hike',
         pops,
         updatedAt: new Date().toISOString()
       };
@@ -3632,7 +3632,7 @@ self.addEventListener('fetch', e => {
           acrDomainsBlockedCount: 65,
           diagnosticScans7d: 418,
           totalConnectedDevices: 105,
-          priceLockGuarantee: '£6.25/mo (£74.99/yr) • 0% Year-2 Renewal Hike'
+          priceLockGuarantee: 'Ã‚Â£6.25/mo (Ã‚Â£74.99/yr) Ã¢â‚¬Â¢ 0% Year-2 Renewal Hike'
         },
         { 'Cache-Control': 'public, max-age=120' },
         req
@@ -3672,7 +3672,7 @@ self.addEventListener('fetch', e => {
             savingsPercent: localizedPricing.annualSavingsPercent,
             interval: 'year',
             name: 'SWEEPR VPN Pro (Annual)',
-            label: `Annual Plan (${localizedPricing.annualFormatted}/yr — ${localizedPricing.annualMonthlyEqFormatted}/mo, Save 50%)`
+            label: `Annual Plan (${localizedPricing.annualFormatted}/yr Ã¢â‚¬â€ ${localizedPricing.annualMonthlyEqFormatted}/mo, Save 50%)`
           },
           six_month: {
             amountPence: localizedPricing.sixMonthAmount,
@@ -3681,7 +3681,7 @@ self.addEventListener('fetch', e => {
             savingsPercent: localizedPricing.sixMonthSavingsPercent,
             interval: '6 months',
             name: 'SWEEPR VPN Pro (6-Month)',
-            label: `6-Month Plan (${localizedPricing.sixMonthFormatted}/6mo — ${localizedPricing.sixMonthMonthlyEqFormatted}/mo, Save 35%)`
+            label: `6-Month Plan (${localizedPricing.sixMonthFormatted}/6mo Ã¢â‚¬â€ ${localizedPricing.sixMonthMonthlyEqFormatted}/mo, Save 35%)`
           },
           monthly: {
             amountPence: localizedPricing.monthlyAmount,
@@ -3992,7 +3992,7 @@ self.addEventListener('fetch', e => {
       } catch (subErr) {
         if (isRedirectMethod) {
           const hostOrigin = resolveTrustedOrigin(req);
-          // Tier 2: Direct Redirect PaymentIntent (one-time period charge; never allow £1.99 intro discount without recurring billing)
+          // Tier 2: Direct Redirect PaymentIntent (one-time period charge; never allow Ã‚Â£1.99 intro discount without recurring billing)
           try {
             const baseAmount = unitAmount;
             const addonAmount = includeWifiRadar
@@ -4295,7 +4295,7 @@ self.addEventListener('fetch', e => {
         '';
       const subCustomerId = typeof sub.customer === 'string' ? sub.customer : sub.customer?.id;
 
-      // Enforce 1-per-card / 1-per-canonical-email limit on £1.99 intro offer
+      // Enforce 1-per-card / 1-per-canonical-email limit on Ã‚Â£1.99 intro offer
       if (usedIntroOffer) {
         if (cardFingerprint && claimedIntroCardFingerprints.has(`${cardFingerprint}:${subCustomerId || ''}`) === false && claimedIntroCardFingerprints.has(cardFingerprint)) {
           await stripeRequest('DELETE', `subscriptions/${encodeURIComponent(sub.id)}`).catch(() => {});
@@ -4305,7 +4305,7 @@ self.addEventListener('fetch', e => {
             {
               ok: false,
               error: 'intro_offer_already_claimed',
-              message: 'The £1.99 introductory offer has already been claimed with this payment card.'
+              message: 'The Ã‚Â£1.99 introductory offer has already been claimed with this payment card.'
             },
             {},
             req
@@ -4546,13 +4546,13 @@ self.addEventListener('fetch', e => {
             : 'your locked-in plan rate';
           sendTransactionalAccountEmail({
             toEmail: recipientEmail,
-            subject: 'SWEEPR VPN Upcoming Renewal Notice — Price-Lock Guarantee & 1-Click Manage Link',
+            subject: 'SWEEPR VPN Upcoming Renewal Notice Ã¢â‚¬â€ Price-Lock Guarantee & 1-Click Manage Link',
             textBody:
               `Hi there,\n\n` +
               `Friendly heads-up from SWEEPR VPN: your subscription is scheduled to renew in ~7 days for ${amountFormatted} (covered by our No-Renewal-Hike Guarantee).\n\n` +
-              `Need to pause for 30 days at £0.00, switch plans, or cancel auto-renewal in one click? Manage your subscription anytime with zero dark patterns:\n` +
+              `Need to pause for 30 days at Ã‚Â£0.00, switch plans, or cancel auto-renewal in one click? Manage your subscription anytime with zero dark patterns:\n` +
               `https://sweeprvpn.com/dashboard\n\n` +
-              `Thank you for supporting independent, zero-log WireGuard privacy.\n— SWEEPR VPN Team`
+              `Thank you for supporting independent, zero-log WireGuard privacy.\nÃ¢â‚¬â€ SWEEPR VPN Team`
           }).catch(() => {});
         }
       } else if (event.type === 'invoice.payment_failed') {
@@ -4575,7 +4575,7 @@ self.addEventListener('fetch', e => {
               `We have kept your 10Gbps WireGuard VPN tunnel and Smart-TV Shield ACTIVE for a 7-day grace period so your devices stay protected without interruption.\n\n` +
               `Please update your payment method in 1 click here:\n` +
               `https://sweeprvpn.com/dashboard\n\n` +
-              `— SWEEPR VPN Team`
+              `Ã¢â‚¬â€ SWEEPR VPN Team`
           }).catch(() => {});
         }
       } else if (event.type === 'charge.refunded' || event.type === 'charge.dispute.created') {
@@ -5484,11 +5484,11 @@ self.addEventListener('fetch', e => {
 </head>
 <body>
   <div class="card">
-    <div class="badge">🔒 SWEEPR VPN Device Pairing</div>
+    <div class="badge">Ã°Å¸â€â€™ SWEEPR VPN Device Pairing</div>
     <div id="pairBody">
       ${t ? `
-        <h1>Linking This Device…</h1>
-        <p style="margin-top:6px">Verifying your one-time QR pairing token and reserving a device slot (up to ${MAX_DEVICES_PER_ACCOUNT} devices — desktop or mobile).</p>
+        <h1>Linking This DeviceÃ¢â‚¬Â¦</h1>
+        <p style="margin-top:6px">Verifying your one-time QR pairing token and reserving a device slot (up to ${MAX_DEVICES_PER_ACCOUNT} devices Ã¢â‚¬â€ desktop or mobile).</p>
       ` : c ? `
         <h1>Approve Desktop Device</h1>
         <p style="margin-top:6px">Confirm linking <strong>${escapeHtml(ch ? ch.deviceName : 'SWEEPR VPN Desktop')}</strong> to your SWEEPR VPN Pro subscription.</p>
@@ -5561,7 +5561,7 @@ self.addEventListener('fetch', e => {
         } catch (e) {}
         const deepLink = 'sweeprvpn://activate?key=' + encodeURIComponent(d.licenseKey || '') + '&device_id=' + encodeURIComponent(devId);
         document.getElementById('pairBody').innerHTML =
-          '<h1>✓ Account Activated on This Device!</h1>' +
+          '<h1>Ã¢Å“â€œ Account Activated on This Device!</h1>' +
           '<p style="margin-top:6px">This ' + escHtml(info.name) + ' is now linked to <strong>' + escHtml(d.email || 'your account') + '</strong> (Slot ' + Number(d.devices_used || 1) + ' of ' + Number(d.max_devices || 3) + ').</p>' +
           '<div class="box" style="margin-top:12px"><div style="font-size:11px;font-weight:800;color:#64748b">ACTIVE LICENSE KEY</div><div style="font-family:monospace;font-weight:800;font-size:14px">' + escHtml(d.licenseKey || '') + '</div></div>' +
           '<a href="' + escHtml(deepLink) + '" class="btn btn-go" style="margin-top:14px">Open in SWEEPR VPN App</a>' +
@@ -5581,7 +5581,7 @@ self.addEventListener('fetch', e => {
         email = (document.getElementById('approveEmail')?.value || localStorage.getItem('sweepr_vpn_email') || '').trim();
       }
       btn.disabled = true;
-      btn.textContent = 'Approving…';
+      btn.textContent = 'ApprovingÃ¢â‚¬Â¦';
       try {
         const r = await fetch('/api/vpn/pair/approve', {
           method: 'POST',
@@ -5597,7 +5597,7 @@ self.addEventListener('fetch', e => {
           return;
         }
         document.getElementById('pairBody').innerHTML =
-          '<h1>✓ Desktop Unlocked!</h1>' +
+          '<h1>Ã¢Å“â€œ Desktop Unlocked!</h1>' +
           '<p style="margin-top:6px">Your desktop app is now linked and unlocked (Slot ' + d.devices_used + ' of ' + d.max_devices + '). You can close this tab.</p>';
       } catch (e) {
         err.textContent = 'Network error. Please try again.';
@@ -6160,7 +6160,7 @@ self.addEventListener('fetch', e => {
 </head>
 <body>
   <div class="card">
-    <div class="badge">SWEEPR VPN • Data Safety &amp; Account Deletion</div>
+    <div class="badge">SWEEPR VPN Ã¢â‚¬Â¢ Data Safety &amp; Account Deletion</div>
     <h1>Permanently Delete Your SWEEPR VPN Account</h1>
     <p>You can permanently delete your SWEEPR VPN account and all associated personal data at any time from inside the SWEEPR VPN app (<strong>Account &rarr; Delete Account</strong>) or using the form below.</p>
     <div class="box">
@@ -6185,7 +6185,7 @@ self.addEventListener('fetch', e => {
       </div>`}
       <div>
         <label for="delReason">Reason for leaving (optional)</label>
-        <input id="delReason" class="input" type="text" placeholder="Optional feedback…" style="margin-top:5px" />
+        <input id="delReason" class="input" type="text" placeholder="Optional feedbackÃ¢â‚¬Â¦" style="margin-top:5px" />
       </div>
       <div id="delStatus" class="msg"></div>
       <button id="delBtn" class="btn btn-danger" onclick="submitAccountDelete()">Permanently Delete My Account &amp; Data</button>
@@ -6203,7 +6203,7 @@ self.addEventListener('fetch', e => {
       const reason = (document.getElementById('delReason')?.value || '').trim();
       if (!confirm('Are you sure you want to permanently delete your SWEEPR VPN account and revoke all devices? This action cannot be undone.')) return;
       btn.disabled = true;
-      btn.textContent = 'Deleting Account…';
+      btn.textContent = 'Deleting AccountÃ¢â‚¬Â¦';
       try {
         const r = await fetch('/api/vpn/account/delete', {
           method: 'POST',
@@ -6553,7 +6553,7 @@ self.addEventListener('fetch', e => {
             paymentMethod = {
               id: defPm.id,
               brand: defPm.card.brand || 'card',
-              last4: defPm.card.last4 || '••••',
+              last4: defPm.card.last4 || 'Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢',
               exp_month: defPm.card.exp_month || 0,
               exp_year: defPm.card.exp_year || 0
             };
@@ -6668,7 +6668,7 @@ self.addEventListener('fetch', e => {
     return sendHtml(
       res,
       200,
-      `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Unsubscribed — SWEEPR VPN</title></head><body style="font-family:system-ui,sans-serif;background:#f8fafc;color:#0f172a;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px"><div style="background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:28px;max-width:420px;text-align:center"><h1 style="font-size:20px;margin:0 0 8px">You're Unsubscribed</h1><p style="font-size:14px;color:#475569;margin:0 0 18px">We have removed your email address from checkout reminder messages.</p><a href="/" style="display:inline-block;padding:10px 18px;border-radius:999px;background:#10b981;color:#fff;font-weight:700;text-decoration:none;font-size:13px">Return to SWEEPR VPN</a></div></body></html>`,
+      `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Unsubscribed Ã¢â‚¬â€ SWEEPR VPN</title></head><body style="font-family:system-ui,sans-serif;background:#f8fafc;color:#0f172a;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px"><div style="background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:28px;max-width:420px;text-align:center"><h1 style="font-size:20px;margin:0 0 8px">You're Unsubscribed</h1><p style="font-size:14px;color:#475569;margin:0 0 18px">We have removed your email address from checkout reminder messages.</p><a href="/" style="display:inline-block;padding:10px 18px;border-radius:999px;background:#10b981;color:#fff;font-weight:700;text-decoration:none;font-size:13px">Return to SWEEPR VPN</a></div></body></html>`,
       { 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex, nofollow' }
     );
   }
@@ -6946,14 +6946,14 @@ self.addEventListener('fetch', e => {
           ok: true,
           action: 'pause_30d',
           paused_until: acc.paused_until,
-          message: 'Your billing has been paused for 30 days at £0.00. Your account and WireGuard configs remain saved.'
+          message: 'Your billing has been paused for 30 days at Ã‚Â£0.00. Your account and WireGuard configs remain saved.'
         },
         {},
         req
       );
     }
 
-    // Real Stripe Subscription Item Upgrade to Annual Price-Lock (£74.99/yr) + Free Smart-TV Shield (Year 1)
+    // Real Stripe Subscription Item Upgrade to Annual Price-Lock (Ã‚Â£74.99/yr) + Free Smart-TV Shield (Year 1)
     if (STRIPE_SECRET_KEY && acc.stripe_subscription_id && acc.stripe_subscription_id.startsWith('sub_')) {
       try {
         const sub = await stripeRequest('GET', `subscriptions/${encodeURIComponent(acc.stripe_subscription_id)}`);
@@ -7003,7 +7003,7 @@ self.addEventListener('fetch', e => {
       plan: 'annual',
       status: acc.status,
       addons: ['wifi_radar'],
-      notes: `Customer upgraded to Annual Price-Lock Plan (£74.99/yr Save 50% + Free Year-1 Wi-Fi Radar) via ${action}`
+      notes: `Customer upgraded to Annual Price-Lock Plan (Ã‚Â£74.99/yr Save 50% + Free Year-1 Wi-Fi Radar) via ${action}`
     }).catch(() => {});
     const tierPricing = buildLocalizedPricing(acc.country || 'GB');
     return sendJson(
@@ -7014,7 +7014,7 @@ self.addEventListener('fetch', e => {
         action,
         plan: 'annual',
         addons: ['wifi_radar'],
-        message: `Your subscription has been upgraded to the Annual Price-Lock Plan (${tierPricing.annualFormatted}/year • ${tierPricing.annualMonthlyEqFormatted}/mo equivalent) with SWEEPR Wi-Fi Radar & Smart-TV Shield included free!`
+        message: `Your subscription has been upgraded to the Annual Price-Lock Plan (${tierPricing.annualFormatted}/year Ã¢â‚¬Â¢ ${tierPricing.annualMonthlyEqFormatted}/mo equivalent) with SWEEPR Wi-Fi Radar & Smart-TV Shield included free!`
       },
       {},
       req
@@ -7451,7 +7451,7 @@ self.addEventListener('fetch', e => {
       <key>PayloadDescription</key>
       <string>Configures SWEEPR VPN WireGuard 10Gbps tunnel and Smart-TV DNS Shield</string>
       <key>PayloadDisplayName</key>
-      <string>SWEEPR VPN — ${escapeHtml(node.city)}</string>
+      <string>SWEEPR VPN Ã¢â‚¬â€ ${escapeHtml(node.city)}</string>
       <key>PayloadIdentifier</key>
       <string>com.sweeprvpn.wg.${escapeHtml(node.code.toLowerCase())}</string>
       <key>PayloadType</key>
@@ -7582,10 +7582,10 @@ self.addEventListener('fetch', e => {
         notes: 'Resend Key Sync'
       }).catch(() => {});
       const subject = 'Your SWEEPR VPN Pro License Key & Activation Code';
-      const textBody = `Hi ${localAcc.name || 'there'},\n\nHere are your active SWEEPR VPN Pro subscription credentials (up to 3 devices — desktop or mobile):\n\nFull Product License Key: ${licenseKey}\n6-Digit Quick Activation Code: ${activationCode}\nRegistered Email: ${email}\n\nPaste ${licenseKey} into the license key field inside SWEEPR VPN to unlock all 8 global locations and Smart-TV shields.\n\nBest regards,\nThe SWEEPR VPN Team`;
+      const textBody = `Hi ${localAcc.name || 'there'},\n\nHere are your active SWEEPR VPN Pro subscription credentials (up to 3 devices Ã¢â‚¬â€ desktop or mobile):\n\nFull Product License Key: ${licenseKey}\n6-Digit Quick Activation Code: ${activationCode}\nRegistered Email: ${email}\n\nPaste ${licenseKey} into the license key field inside SWEEPR VPN to unlock all 8 global locations and Smart-TV shields.\n\nBest regards,\nThe SWEEPR VPN Team`;
       const htmlBody = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:520px;margin:0 auto;padding:28px 24px;color:#0f172a;background:#ffffff;border:1px solid #e2e8f0;border-radius:16px">
   <h2 style="margin:0 0 8px;font-size:21px;font-weight:800;color:#0f172a">Your SWEEPR VPN Pro License Key</h2>
-  <p style="margin:0 0 18px;font-size:14px;color:#475569">Hi ${escapeHtml(localAcc.name || 'there')}, here are your active SWEEPR VPN Pro credentials (up to 3 devices — desktop or mobile):</p>
+  <p style="margin:0 0 18px;font-size:14px;color:#475569">Hi ${escapeHtml(localAcc.name || 'there')}, here are your active SWEEPR VPN Pro credentials (up to 3 devices Ã¢â‚¬â€ desktop or mobile):</p>
   <div style="background:#f0fdf4;border:2px dashed #10b981;border-radius:12px;padding:18px;text-align:center;margin:18px 0">
     <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#047857;margin-bottom:6px">Full Product License Key (Paste in App)</div>
     <div style="font-family:monospace;font-size:19px;font-weight:800;color:#0f172a;letter-spacing:1px">${escapeHtml(licenseKey)}</div>
