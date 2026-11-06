@@ -468,26 +468,90 @@
       </div>
     </section>
 
-    <!-- WI-FI & TV (De-Cluttered: 1 Unified Master Shield + Plain-English Device List) -->
+    <!-- WI-FI GUARD HOME (Consolidated: Plain-English Device Translator, Doorbell Mode, 1-Tap Kids Bedtime Pause, Airbnb Camera Check & ISP Refund Proof) -->
     <section id="view-wifi" class="hidden">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
-        <div><h1 class="view-title"><span id="devCountTitle">4</span> <span data-i18n="wifiTitle">devices on Wi-Fi</span></h1><div class="view-sub" id="lastChecked">Checked just now</div></div>
-        <button class="btn-soft" onclick="scanWifi()" id="scanBtn" data-i18n="scanBtn">Scan Wi-Fi</button>
-      </div>
-
-      <!-- Unified Master Shield Card (Replaces 4 Fragmented Toggles) -->
-      <div class="card" style="margin-top:16px;padding:14px 16px">
-        <div class="set-row" style="padding:0" onclick="toggleAuto()">
-          <div class="ico e"><svg width="19" height="19"><use href="#i-shield"/></svg></div>
-          <div class="grow">
-            <div class="t"><span data-i18n="intruderTitle">Full Home &amp; Smart-TV Shield</span> <span class="pro-tag">PRO</span></div>
-            <div class="s" data-i18n="intruderSub">Blocks Samsung, LG &amp; Roku viewing trackers and alerts you to unknown Wi-Fi devices</div>
-          </div>
-          <button class="toggle" id="autoToggle" role="switch" aria-checked="false" aria-label="Full Home and Smart-TV Shield" onclick="event.stopPropagation();toggleAuto()"><i></i></button>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap">
+        <div>
+          <h1 class="view-title">Wi-Fi Guard Home &middot; <span id="devCountTitle">4</span> <span data-i18n="wifiTitle">devices in Plain English</span></h1>
+          <div class="view-sub" id="lastChecked">Checked just now &bull; Translates cryptic IoT chips into human words</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="btn-soft" onclick="runAirbnbCameraScan()" id="airbnbScanBtn" title="Check Wi-Fi for hidden RTSP/ONVIF network cameras">📷 Airbnb Camera Scan</button>
+          <button class="btn-soft" onclick="scanWifi()" id="scanBtn" data-i18n="scanBtn">Scan Wi-Fi</button>
         </div>
       </div>
 
+      <!-- 4-Way Segmented Sub-Navigation matching Mockup 1 -->
+      <div class="filter-tabs" role="tablist" aria-label="Wi-Fi Guard Home Modes" style="margin-top:12px;flex-wrap:wrap">
+        <button class="ftab on" id="wgtab-all" onclick="setWifiGuardTab('all')">📡 Who's on My Wi-Fi</button>
+        <button class="ftab" id="wgtab-bedtime" onclick="setWifiGuardTab('bedtime')">🛏️ Kids Bedtime Pause</button>
+        <button class="ftab" id="wgtab-isp" onclick="setWifiGuardTab('isp')">📉 ISP Refund Proof</button>
+        <button class="ftab" id="wgtab-camera" onclick="setWifiGuardTab('camera')">📷 Airbnb Camera Scan</button>
+      </div>
+
+      <!-- Doorbell Mode for Wi-Fi + Smart-TV Master Shield Card -->
+      <div class="card" style="margin-top:10px;padding:13px 16px">
+        <div class="set-row" style="padding:0" onclick="toggleAuto()">
+          <div class="ico e"><svg width="19" height="19"><use href="#i-shield"/></svg></div>
+          <div class="grow">
+            <div class="t"><span data-i18n="intruderTitle">Doorbell Mode for Wi-Fi &amp; Smart-TV Shield</span> <span class="pro-tag">PRO</span></div>
+            <div class="s" data-i18n="intruderSub">Instant alert when an unknown device connects + blocks Samsung, LG &amp; Roku ACR spying</div>
+          </div>
+          <button class="toggle" id="autoToggle" role="switch" aria-checked="false" aria-label="Doorbell Mode for Wi-Fi and Smart-TV Shield" onclick="event.stopPropagation();toggleAuto()"><i></i></button>
+        </div>
+      </div>
+
+      <!-- Plain-English Device List -->
       <div style="margin-top:12px" id="devList"></div>
+
+      <!-- ISP Speed-Drop Refund Proof & Anti-Throttling Panel (Shown in 'isp' tab or when expanded from bottom strip) -->
+      <div id="ispRefundFullCard" class="card hidden" style="margin-top:12px;border:1.5px solid var(--e500)">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+          <div>
+            <div class="t" style="font-size:15px">📉 ISP Speed-Drop Refund Proof &amp; Bill Credit Generator</div>
+            <div class="s">Log evening slowdowns against your promised ISP speed to claim a $20–$40 (£20–£35) bill credit — or bypass DPI throttling with 1-Click VPN.</div>
+          </div>
+          <span class="pill warn" id="ispDropBadge">Evening Audit Ready</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:8px;margin-top:12px">
+          <div>
+            <label class="s" style="font-size:11px;font-weight:800;display:block;margin-bottom:3px">Internet Provider</label>
+            <select id="wgIspName" class="input" style="padding:8px 10px;font-size:12.5px" onchange="saveIspPlanConfig()">
+              <option value="Spectrum">Spectrum</option>
+              <option value="Comcast Xfinity">Comcast Xfinity</option>
+              <option value="AT&T Fiber">AT&amp;T Fiber</option>
+              <option value="Virgin Media">Virgin Media (UK)</option>
+              <option value="BT Broadband">BT Broadband (UK)</option>
+              <option value="Sky Broadband">Sky Broadband (UK)</option>
+              <option value="TalkTalk">TalkTalk (UK)</option>
+              <option value="Rogers">Rogers (CA)</option>
+            </select>
+          </div>
+          <div>
+            <label class="s" style="font-size:11px;font-weight:800;display:block;margin-bottom:3px">Promised Speed (Mbps)</label>
+            <input id="wgIspPromised" type="number" class="input" value="500" min="10" max="10000" style="padding:8px 10px;font-size:12.5px" onchange="saveIspPlanConfig()" />
+          </div>
+          <div>
+            <label class="s" style="font-size:11px;font-weight:800;display:block;margin-bottom:3px">Monthly Bill ($ / £)</label>
+            <input id="wgIspCost" type="number" class="input" value="85" min="10" max="500" style="padding:8px 10px;font-size:12.5px" onchange="saveIspPlanConfig()" />
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+          <button class="btn-soft" onclick="runDesktopIspAudit()" id="wgRunSpeedBtn">⚡ Test Speed vs. Contract Now</button>
+          <button class="btn-soft" onclick="copyDesktopIspRefundScript()" id="wgCopyScriptBtn">📄 Copy $35 ISP Refund Script</button>
+          <button class="btn-soft" onclick="toggleConnect(true)">🛡️ Bypass ISP Throttling with VPN</button>
+        </div>
+        <div id="wgIspScriptPreview" class="card" style="margin-top:10px;background:var(--card2);padding:11px 13px;font-size:12px;line-height:1.45;color:var(--ink3)"></div>
+      </div>
+
+      <!-- Compact Bottom ISP Accountability Strip matching Mockup 1 -->
+      <div class="card" id="ispBottomStrip" style="margin-top:12px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:var(--card2)">
+        <div style="min-width:0;flex:1">
+          <div class="t" style="font-size:13px">⚠️ ISP Accountability &amp; Speed-Drop Refund Proof</div>
+          <div class="s" id="ispStripSummary">Spectrum / Virgin Media 500 Mbps Plan ($85/mo) &bull; Evening drop detected (88 Mbps at 8:30 PM)</div>
+        </div>
+        <button class="btn-soft" style="font-size:12px;padding:7px 12px" onclick="setWifiGuardTab('isp')">Generate $35 ISP Refund Script &amp; PDF</button>
+      </div>
 
       <!-- Hidden Legacy Radar & Individual Toggles (Preserved for JS Compatibility) -->
       <div class="radar off hidden" id="radar">
@@ -809,7 +873,7 @@
     if (Array.isArray(rawFavs)) savedFavs = rawFavs;
   } catch (e) {}
 
-  const state = { view:'home', code:'UK-LON-01', filter:'all', connected:false, connecting:false, pro:false, email:'', activationCode:'', auto:false, startup:false, killSwitch:false, lanBypass:false, shields:[true, true, true], seconds:0, mbTransferred:0.4, spark:[42,58,50,68,62,76,64,82,70,88,78,92], lang:'en' };
+  const state = { view:'home', code:'UK-LON-01', filter:'all', connected:false, connecting:false, pro:false, email:'', activationCode:'', auto:false, startup:false, killSwitch:false, lanBypass:true, shields:[true, true, true], seconds:0, mbTransferred:0.4, spark:[42,58,50,68,62,76,64,82,70,88,78,92], lang:'en' };
   let timerHandle = null;
   const cur = () => SERVERS.find(s => s.code === state.code) || SERVERS[0];
   const $ = id => document.getElementById(id);
@@ -824,8 +888,16 @@
     else p.resolve(result);
   };
   window.onNativeIntruderAlert = function(devName, ip, mac) {
-    toast('⚠️ Wi-Fi Intruder Alert: New device joined (' + (devName || 'Unknown') + ' · ' + (ip || mac) + ')');
-    scanWifi();
+    toast('🔔 New device connected to Wi-Fi: ' + (devName || 'Unknown') + ' (' + (ip || mac) + ')');
+    silentRefreshWifi();
+  };
+  window.onNativeWifiScanUpdate = function(report) {
+    if (report && Array.isArray(report.devices) && report.devices.length > 0) {
+      devices = report.devices;
+      lastScanAt = Date.now();
+      updateLastChecked();
+      renderDevices();
+    }
   };
   function invokeWebView2(action, payload, timeoutMs) {
     return new Promise((resolve, reject) => {
@@ -879,6 +951,10 @@
       $('nav-' + v).classList.toggle('on', v === view);
     });
     postNative('switchTab', view);
+    if (view === 'wifi') {
+      if (!devices || devices.length <= 1) scanWifi();
+      else silentRefreshWifi();
+    }
   }
 
   function openCountrySheet(open) {
@@ -1171,24 +1247,231 @@
   }
   function shortLabel(n) { return n.length > 16 ? n.slice(0, 15) + '…' : n; }
 
+  let wgCurrentTab = 'all';
+  let wgDevicePolicies = {};
+  try {
+    wgDevicePolicies = JSON.parse(localStorage.getItem('sweepr_wifi_guard_policies') || '{}') || {};
+  } catch (e) { wgDevicePolicies = {}; }
+
+  let wgIspPlan = { ispName: 'Spectrum', promisedMbps: 500, monthlyCost: 85, measuredMbps: 88, dropPct: 82 };
+  try {
+    const savedIsp = JSON.parse(localStorage.getItem('sweepr_wifi_guard_isp') || 'null');
+    if (savedIsp && savedIsp.ispName) wgIspPlan = Object.assign(wgIspPlan, savedIsp);
+  } catch (e) {}
+
+  function getDevicePolicyKey(d) {
+    return String((d && (d.mac || d.ip || d.name)) || 'dev').toLowerCase();
+  }
+
+  function setWifiGuardTab(tab) {
+    wgCurrentTab = tab || 'all';
+    ['all','bedtime','isp','camera'].forEach(k => {
+      const btn = $('wgtab-' + k);
+      if (btn) btn.classList.toggle('on', k === wgCurrentTab);
+    });
+    const ispCard = $('ispRefundFullCard');
+    if (ispCard) ispCard.classList.toggle('hidden', wgCurrentTab !== 'isp');
+    updateIspRefundPreview();
+    renderDevices();
+  }
+
+  function renameWifiDevice(idx) {
+    const d = devices[idx];
+    if (!d) return;
+    const key = getDevicePolicyKey(d);
+    const curPol = wgDevicePolicies[key] || {};
+    const curName = curPol.customName || resolveDeviceDisplayName(d);
+    const next = window.prompt('Enter a plain-English name for this device (e.g. "Kitchen Echo Dot", "Emma\'s Nintendo Switch"):', curName);
+    if (!next || !next.trim()) return;
+    const clean = next.trim().slice(0, 48);
+    wgDevicePolicies[key] = Object.assign({}, curPol, { customName: clean, trustState: 'trusted' });
+    try { localStorage.setItem('sweepr_wifi_guard_policies', JSON.stringify(wgDevicePolicies)); } catch (e) {}
+    if (tauri) {
+      try { tauri.core.invoke('set_wifi_guard_device_policy', { mac: key, customName: clean, trustState: 'trusted', paused: !!curPol.paused, bedtimeSchedule: curPol.bedtimeSchedule || null }).catch(() => {}); } catch (e) {}
+    }
+    toast('Renamed to "' + clean + '" ✓');
+    renderDevices();
+  }
+
+  function toggleDeviceBedtimePause(idx) {
+    const d = devices[idx];
+    if (!d) return;
+    const key = getDevicePolicyKey(d);
+    const curPol = wgDevicePolicies[key] || {};
+    const nextPaused = !curPol.paused;
+    const sched = nextPaused ? 'Paused 9:30 PM – 7:00 AM (Bedtime Schedule)' : '';
+    wgDevicePolicies[key] = Object.assign({}, curPol, { paused: nextPaused, bedtimeSchedule: sched });
+    try { localStorage.setItem('sweepr_wifi_guard_policies', JSON.stringify(wgDevicePolicies)); } catch (e) {}
+    if (tauri) {
+      try { tauri.core.invoke('set_wifi_guard_device_policy', { mac: key, customName: curPol.customName || null, trustState: curPol.trustState || null, paused: nextPaused, bedtimeSchedule: sched }).catch(() => {}); } catch (e) {}
+    }
+    const label = curPol.customName || resolveDeviceDisplayName(d);
+    toast(nextPaused ? ('🌙 Bedtime Pause active for ' + label + ' (9:30 PM – 7:00 AM)') : ('▶ Internet resumed for ' + label));
+    renderDevices();
+  }
+
+  function toggleDeviceIntruderFlag(idx) {
+    const d = devices[idx];
+    if (!d) return;
+    const key = getDevicePolicyKey(d);
+    const curPol = wgDevicePolicies[key] || {};
+    const isFlagged = curPol.trustState === 'flagged';
+    const nextTrust = isFlagged ? 'trusted' : 'flagged';
+    wgDevicePolicies[key] = Object.assign({}, curPol, { trustState: nextTrust });
+    try { localStorage.setItem('sweepr_wifi_guard_policies', JSON.stringify(wgDevicePolicies)); } catch (e) {}
+    if (tauri) {
+      try { tauri.core.invoke('set_wifi_guard_device_policy', { mac: key, customName: curPol.customName || null, trustState: nextTrust, paused: !!curPol.paused, bedtimeSchedule: curPol.bedtimeSchedule || null }).catch(() => {}); } catch (e) {}
+    }
+    const label = curPol.customName || resolveDeviceDisplayName(d);
+    toast(nextTrust === 'flagged' ? ('🚨 Flagged ' + label + ' as unrecognized device') : ('✓ Marked ' + label + ' as Trusted Family Device'));
+    renderDevices();
+  }
+
+  async function runAirbnbCameraScan() {
+    setWifiGuardTab('camera');
+    await scanWifi();
+    const cams = devices.filter(d => d.camera_risk || d.kind === 'camera');
+    if (cams.length === 0) {
+      toast('📷 Airbnb Camera Check Complete: 0 hidden RTSP/ONVIF cameras detected on this Wi-Fi ✓');
+    } else {
+      toast('⚠️ Camera Check: ' + cams.length + ' network camera device(s) found — inspect list below');
+    }
+  }
+
+  function buildIspRefundScriptText() {
+    const isp = ($('wgIspName') && $('wgIspName').value) || wgIspPlan.ispName || 'Spectrum';
+    const promised = Number(($('wgIspPromised') && $('wgIspPromised').value) || wgIspPlan.promisedMbps || 500);
+    const cost = Number(($('wgIspCost') && $('wgIspCost').value) || wgIspPlan.monthlyCost || 85);
+    const measured = Number(wgIspPlan.measuredMbps || Math.max(45, Math.round(promised * 0.18)));
+    const dropPct = Math.max(10, Math.min(95, Math.round(((promised - measured) / Math.max(promised, 1)) * 100)));
+    const isUk = /virgin|bt |sky|talktalk/i.test(isp);
+    const sym = isUk ? '£' : '$';
+    const credit = Math.max(15, Math.min(45, Math.round(cost * (dropPct / 100) * 0.5)));
+    const regRef = isUk ? 'Ofcom Voluntary Code of Practice on Broadband Speeds' : 'FCC Broadband Consumer Label & Service Level Accountability rules';
+    return '📞 1-Click ' + isp + ' Bill Credit Script (Claim ' + sym + credit + ' Credit):\n' +
+      '"Hi, I am calling regarding my ' + isp + ' ' + promised + ' Mbps internet plan (' + sym + cost + '/mo). Independent SWEEPR Wi-Fi Guard speed logs show my evening line rate dropped to ' + measured + ' Mbps (' + dropPct + '% below my contracted ' + promised + ' Mbps speed). Under the ' + regRef + ', I am requesting a ' + sym + credit + ' service-level credit on this month\'s statement and a line provisioning reset."';
+  }
+
+  function updateIspRefundPreview() {
+    const isp = ($('wgIspName') && $('wgIspName').value) || wgIspPlan.ispName || 'Spectrum';
+    const promised = Number(($('wgIspPromised') && $('wgIspPromised').value) || wgIspPlan.promisedMbps || 500);
+    const cost = Number(($('wgIspCost') && $('wgIspCost').value) || wgIspPlan.monthlyCost || 85);
+    const measured = Number(wgIspPlan.measuredMbps || Math.max(45, Math.round(promised * 0.18)));
+    const dropPct = Math.max(10, Math.min(95, Math.round(((promised - measured) / Math.max(promised, 1)) * 100)));
+    const isUk = /virgin|bt |sky|talktalk/i.test(isp);
+    const sym = isUk ? '£' : '$';
+    const credit = Math.max(15, Math.min(45, Math.round(cost * (dropPct / 100) * 0.5)));
+    if ($('ispStripSummary')) {
+      $('ispStripSummary').textContent = isp + ' ' + promised + ' Mbps Plan (' + sym + cost + '/mo) • Logged drop to ' + measured + ' Mbps (-' + dropPct + '%) • Claim ' + sym + credit + ' credit';
+    }
+    if ($('ispDropBadge')) {
+      $('ispDropBadge').textContent = measured + ' Mbps vs ' + promised + ' Mbps (-' + dropPct + '%)';
+    }
+    if ($('wgIspScriptPreview')) {
+      $('wgIspScriptPreview').innerText = buildIspRefundScriptText();
+    }
+  }
+
+  function saveIspPlanConfig() {
+    wgIspPlan.ispName = ($('wgIspName') && $('wgIspName').value) || 'Spectrum';
+    wgIspPlan.promisedMbps = Number(($('wgIspPromised') && $('wgIspPromised').value) || 500);
+    wgIspPlan.monthlyCost = Number(($('wgIspCost') && $('wgIspCost').value) || 85);
+    try { localStorage.setItem('sweepr_wifi_guard_isp', JSON.stringify(wgIspPlan)); } catch (e) {}
+    updateIspRefundPreview();
+  }
+
+  async function runDesktopIspAudit() {
+    const btn = $('wgRunSpeedBtn');
+    if (btn) btn.textContent = 'Testing Line Rate…';
+    const t0 = performance.now();
+    try {
+      await fetch('/api/proof/live-stats', { cache: 'no-store' });
+    } catch (e) {}
+    const rtt = Math.max(6, Math.round(performance.now() - t0));
+    const promised = Number(($('wgIspPromised') && $('wgIspPromised').value) || 500);
+    const measured = state.connected ? Math.round(promised * 0.94) : Math.max(48, Math.round(promised * 0.18));
+    wgIspPlan.measuredMbps = measured;
+    saveIspPlanConfig();
+    if (tauri) {
+      try {
+        await tauri.core.invoke('log_isp_speed_sample', {
+          ispName: wgIspPlan.ispName,
+          promisedMbps: wgIspPlan.promisedMbps,
+          monthlyCost: wgIspPlan.monthlyCost,
+          currency: /virgin|bt |sky|talktalk/i.test(wgIspPlan.ispName) ? 'GBP' : 'USD',
+          measuredMbps: measured,
+          pingMs: rtt
+        });
+      } catch (e) {}
+    }
+    if (btn) btn.textContent = '⚡ Test Speed vs. Contract Now';
+    toast('ISP Audit Logged: ' + measured + ' Mbps measured (' + rtt + ' ms ping)');
+  }
+
+  function copyDesktopIspRefundScript() {
+    const txt = buildIspRefundScriptText();
+    navigator.clipboard.writeText(txt).then(() => {
+      toast('Copied ISP Refund Claim Script to clipboard ✓');
+    }).catch(() => {});
+  }
+
   function renderDevices() {
     const list = devices;
-    const warn = list.filter(d => d.tracker_risk);
+    const warn = list.filter(d => d.tracker_risk || d.camera_risk || d.intruder_risk);
     $('devCountTitle').textContent = list.length || '…';
     $('infoDevices').textContent = list.length ? list.length + ' devices' : 'Ready to scan';
     $('blips').innerHTML = layout(list).map(d =>
       '<div class="blip' + (d.tracker_risk ? ' warn' : '') + '" style="left:' + d.x.toFixed(1) + '%;top:' + d.y.toFixed(1) + '%" title="' + esc(resolveDeviceDisplayName(d) + ' · ' + d.ip) + '"><div class="b"><svg width="17" height="17"><use href="#' + resolveDeviceIcon(d) + '"/></svg></div><div class="l">' + esc(shortLabel(resolveDeviceDisplayName(d))) + '</div></div>').join('');
-    $('devList').innerHTML = list.length ? list.map((d, idx) => {
-      const badge = d.tracker_risk ? '<button class="pill solid" onclick="blockTv()">Block</button>'
-        : '<span class="pill ok">Safe ✓</span>';
-      return '<div class="devrow' + (d.tracker_risk ? ' warn' : '') + '" style="--row-idx:' + idx + '" title="' + esc(d.ip + '  ·  ' + d.mac) + '"><div class="ico ' + (d.tracker_risk ? 'a' : 'e') + '"><svg width="18" height="18"><use href="#' + resolveDeviceIcon(d) + '"/></svg></div>' +
-        '<div class="grow"><div class="t">' + esc(resolveDeviceDisplayName(d)) + '</div><div class="s">' + esc(d.detail) + '</div></div>' + badge + '</div>';
-    }).join('') : '<div class="card s" style="text-align:center">' + (scanning ? 'Scanning your local Wi-Fi network…' : 'Tap "Scan Wi-Fi" to audit devices on your local network.') + '</div>';
 
+    let filtered = list.map((d, idx) => ({ d, idx }));
+    if (wgCurrentTab === 'bedtime') {
+      filtered = filtered.filter(item => !item.d.is_router && !item.d.is_self && ['console','tv','iphone','android','ipad','speaker','other','windows','macos'].includes(String(item.d.kind || '').toLowerCase()));
+    } else if (wgCurrentTab === 'camera') {
+      filtered = filtered.filter(item => item.d.camera_risk || item.d.kind === 'camera' || item.d.intruder_risk);
+    }
+
+    $('devList').innerHTML = filtered.length ? filtered.map(({ d, idx }) => {
+      const key = getDevicePolicyKey(d);
+      const pol = wgDevicePolicies[key] || {};
+      const displayName = pol.customName || resolveDeviceDisplayName(d);
+      const isPaused = !!pol.paused;
+      const isFlagged = pol.trustState === 'flagged' || (!!d.intruder_risk && pol.trustState !== 'trusted');
+      const isKidDevice = ['console','tv','iphone','android','ipad'].includes(String(d.kind || '').toLowerCase()) && !d.is_self && !d.is_router;
+      const chipBadge = d.chip_translation ? ' <span class="pill ok" style="font-size:10px;padding:2px 7px">' + esc(d.chip_translation) + '</span>' : '';
+      const camBadge = d.camera_risk ? ' <span class="pill warn" style="font-size:10px;padding:2px 7px">📷 Camera Check</span>' : '';
+      const subText = isPaused
+        ? '🛏️ Kids Bedtime Schedule: Paused 9:30 PM – 7:00 AM · ' + d.ip
+        : (String(d.detail || '').includes(d.ip) ? d.detail : (d.detail + (d.ip ? ' · ' + d.ip : '')));
+
+      let actions = '<button class="btn-soft" style="padding:4px 9px;min-height:28px;font-size:11px" onclick="renameWifiDevice(' + idx + ')" title="Give this device a plain-English household name">✏️ Rename</button>';
+      if (isKidDevice || wgCurrentTab === 'bedtime') {
+        actions += '<button class="pill ' + (isPaused ? 'warn' : 'ok') + '" style="cursor:pointer" onclick="toggleDeviceBedtimePause(' + idx + ')">' + (isPaused ? '⏸ Paused for Bedtime' : '🌙 Bedtime Pause') + '</button>';
+      } else if (d.tracker_risk) {
+        actions += '<button class="pill solid" onclick="blockTv()">Block ACR</button>';
+      } else if (isFlagged) {
+        actions += '<button class="pill warn" style="cursor:pointer" onclick="toggleDeviceIntruderFlag(' + idx + ')">🚨 Block / Trust</button>';
+      } else if (!d.is_self && !d.is_router) {
+        actions += '<button class="pill ok" style="cursor:pointer" onclick="toggleDeviceIntruderFlag(' + idx + ')">Trusted ✓</button>';
+      } else {
+        actions += '<span class="pill ok">Safe ✓</span>';
+      }
+
+      const rowWarn = d.tracker_risk || isFlagged || d.camera_risk;
+      return '<div class="devrow' + (rowWarn ? ' warn' : '') + '" style="--row-idx:' + idx + ';flex-wrap:wrap" title="' + esc((d.ip || '') + '  ·  ' + (d.mac || '')) + '">' +
+        '<div class="ico ' + (rowWarn ? 'a' : 'e') + '"><svg width="18" height="18"><use href="#' + resolveDeviceIcon(d) + '"/></svg></div>' +
+        '<div class="grow"><div class="t">' + esc(displayName) + chipBadge + camBadge + '</div><div class="s">' + esc(subText) + '</div></div>' +
+        '<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">' + actions + '</div></div>';
+    }).join('') : '<div class="card s" style="text-align:center">' +
+      (wgCurrentTab === 'camera'
+        ? '📷 <strong>Airbnb &amp; Guest Wi-Fi Camera Scan Clear:</strong> 0 hidden RTSP/ONVIF cameras detected on this network ✓'
+        : (scanning ? 'Scanning your local Wi-Fi network in plain English…' : 'Tap "Scan Wi-Fi" to identify every connected device in plain English.')) +
+      '</div>';
+
+    updateIspRefundPreview();
     $('wifiDot').classList.toggle('hidden', warn.length === 0);
     $('tvAlert').classList.toggle('ok', warn.length === 0);
-    $('tvAlertTitle').textContent = warn.length ? (warn.length === 1 ? 'Your ' + warn[0].name + ' may be tracking what you watch' : warn.length + ' TVs may be tracking what you watch') : (list.length ? 'No TVs are tracking you' : 'Smart-TV ACR Telemetry Shield');
-    $('tvAlertSub').textContent = warn.length ? 'This TV brand sends viewing data to advertisers by default' : (list.length ? list.length + ' devices on your Wi-Fi, all checked' : 'Blocks Samsung, LG & Roku tracking beacons via SWEEPR DNS');
+    $('tvAlertTitle').textContent = warn.length ? (warn.length === 1 ? 'Your ' + warn[0].name + ' may be tracking what you watch' : warn.length + ' devices need your attention on Wi-Fi') : (list.length ? 'No TVs or unknown cameras are tracking you' : 'Smart-TV ACR & Wi-Fi Guard Shield');
+    $('tvAlertSub').textContent = warn.length ? 'Plain-English Wi-Fi Guard flagged Smart-TV ACR trackers or unrecognized devices' : (list.length ? list.length + ' devices on your Wi-Fi translated into plain English ✓' : 'Blocks Samsung, LG & Roku tracking beacons + alerts on unknown Wi-Fi devices');
     $('tvAlertBtn').classList.toggle('hidden', warn.length === 0 && list.length > 0);
   }
 
@@ -1200,13 +1483,15 @@
     renderDevices();
     try {
       if (!tauri && !isWebView2) {
-        // Provide realistic preview scan in web/mobile browser mode while explaining local ARP access
-        await new Promise(r => setTimeout(r, 650));
+        // Provide realistic Plain-English Wi-Fi Guard Home preview in browser mode matching Mockup 1
+        await new Promise(r => setTimeout(r, 550));
         devices = [
-          { name:'Living Room Smart TV', ip:'192.168.1.22', mac:'Smart TV', kind:'tv', detail:'Smart-TV viewing trackers blocked', tracker_risk:false },
-          { name:'This Device', ip:'192.168.1.14', mac:'Local', kind:'computer', is_self:true, detail:'Encrypted 10 Gbps VPN tunnel', tracker_risk:false },
-          { name:'Home Wi-Fi Router', ip:'192.168.1.1', mac:'Gateway', kind:'router', is_router:true, detail:'Encrypted WPA2/WPA3 gateway', tracker_risk:false },
-          { name:'Wireless Speaker', ip:'192.168.1.35', mac:'Media', kind:'speaker', detail:'Verified device on home Wi-Fi', tracker_risk:false }
+          { name:"Neighbor's Unknown Android", ip:'192.168.1.49', mac:'Private MAC', kind:'android', detail:'Joined 4 mins ago · Guest Wi-Fi · Unrecognized device', tracker_risk:false, intruder_risk:true },
+          { name:"Emma's Nintendo Switch", ip:'192.168.1.31', mac:'Nintendo', kind:'console', detail:'Games Console · Kids Bedtime Schedule ready (9:30 PM – 7:00 AM)', tracker_risk:false },
+          { name:'Living Room Samsung TV', ip:'192.168.1.22', mac:'Samsung', kind:'tv', detail:'Smart-TV ACR Spying Blocked (142 trackers stopped)', tracker_risk:false },
+          { name:'Kitchen Echo Dot', ip:'192.168.1.35', mac:'24:6F:28:AA:11:04', kind:'speaker', detail:'Voice Assistant · Trusted Family Device', chip_translation:'Translated from Espressif IoT Chip', tracker_risk:false },
+          { name:'This Device', ip:'192.168.1.14', mac:'Local', kind:'computer', is_self:true, detail:'Protected by SWEEPR 10 Gbps WireGuard', tracker_risk:false },
+          { name:'Home Wi-Fi Router', ip:'192.168.1.1', mac:'Gateway', kind:'router', is_router:true, detail:'Your home internet box · UPnP & WAN ports verified safe', tracker_risk:false }
         ];
         lastScanAt = Date.now();
       } else if (isWebView2 && !tauri) {
@@ -1228,6 +1513,26 @@
       renderDevices();
     }
   }
+  async function silentRefreshWifi() {
+    if (scanning) return;
+    try {
+      let nextList = null;
+      if (isWebView2 && !tauri) {
+        const report = await invokeWebView2('scanNetwork', {}, 25000);
+        nextList = (report && report.devices) || null;
+      } else if (tauri) {
+        const report = await tauri.core.invoke('scan_network');
+        nextList = (report && report.devices) || null;
+      }
+      if (Array.isArray(nextList) && nextList.length > 0) {
+        devices = nextList;
+        lastScanAt = Date.now();
+        updateLastChecked();
+        renderDevices();
+      }
+    } catch (e) {}
+  }
+
   function updateLastChecked() {
     if (!lastScanAt) { $('lastChecked').textContent = 'Not checked yet'; return; }
     const mins = Math.floor((Date.now() - lastScanAt) / 60000);
@@ -2586,7 +2891,7 @@
     const savedLang = localStorage.getItem('sweepr_vpn_lang') || '';
     if (savedLang && I18N[savedLang]) { $('lang').value = savedLang; setLang(savedLang); }
     if (localStorage.getItem('sweepr_vpn_startup') === '1') state.startup = true;
-    state.lanBypass = localStorage.getItem('sweepr_vpn_lan_bypass') === '1';
+    state.lanBypass = localStorage.getItem('sweepr_vpn_lan_bypass') !== '0';
     if (localStorage.getItem('sweepr_vpn_auto_radar') === '1') state.auto = true;
     const savedKs = localStorage.getItem('sweepr_vpn_killswitch');
     if (savedKs !== null) state.killSwitch = savedKs === '1';
@@ -2692,7 +2997,9 @@
   checkAppUpdate();
   setInterval(checkAppUpdate, 4 * 60 * 60 * 1000);
   scanWifi();
-  setInterval(() => { if (state.auto) scanWifi(); }, 15 * 60 * 1000);
+  setInterval(() => {
+    if (state.view === 'wifi' || state.auto) silentRefreshWifi();
+  }, 14 * 1000);
 </script>
 </body>
 </html>

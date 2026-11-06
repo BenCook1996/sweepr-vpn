@@ -220,7 +220,12 @@ pub fn scan_network(opts: ScanOptions) -> Result<ScanReport, String> {
     let ips: Vec<Ipv4Addr> = table.iter().map(|(ip, _)| *ip).collect();
     let t_rptr = { let ips = ips.clone(); std::thread::spawn(move || probes::mdns_reverse(&ips, Duration::from_millis(1200))) };
     let t_cam = { let ips = ips.clone(); std::thread::spawn(move || probes::camera_port_probe(&ips, Duration::from_millis(260))) };
-    let rdns = probes::reverse_dns(&ips, Duration::from_millis(1200));
+    let rdns = probes::reverse_dns(&hosts, net.gateway, Duration::from_millis(900));
+    for (ip, _) in &rdns {
+        if net.contains(*ip) && !table.iter().any(|(existing_ip, _)| existing_ip == ip) {
+            table.push((*ip, "DHCP Lease".to_string()));
+        }
+    }
 
     let ssdp = t_ssdp.join().unwrap_or_default();
     let mdns = t_mdns.join().unwrap_or_default();
@@ -526,7 +531,7 @@ fn useful_name(n: &str) -> bool {
 /// "Bens-MacBook-Air.local" -> "Bens MacBook Air"; "android-3f2a.lan" kept short.
 pub(crate) fn pretty_host(h: &str) -> String {
     let mut s = h.trim().trim_end_matches('.').to_string();
-    for suf in [".local", ".lan", ".home", ".localdomain", ".domain", ".router", ".gateway", ".box", ".station", ".broadband", ".bthomehub", ".home.arpa", ".fritz.box", ".sky", ".virginmedia.com"] {
+    for suf in [".powerhub", ".local", ".lan", ".home", ".localdomain", ".domain", ".router", ".gateway", ".box", ".station", ".broadband", ".bthomehub", ".home.arpa", ".fritz.box", ".sky", ".virginmedia.com"] {
         if s.to_lowercase().ends_with(suf) { let n = s.len() - suf.len(); s.truncate(n); }
     }
     // Only cut at the first dot for host names, not friendly names like "Mr. Smith's TV".

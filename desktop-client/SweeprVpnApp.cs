@@ -60,9 +60,13 @@ namespace SweeprVpnApp
         public string Mac;
         public string Kind;
         public string Detail;
+        public string ChipTranslation;
         public bool IsRouter;
         public bool IsSelf;
         public bool TrackerRisk;
+        public bool CameraRisk;
+        public bool IntruderRisk;
+        public int SortOrder;
     }
 
     public class MainForm : Form
@@ -476,7 +480,7 @@ namespace SweeprVpnApp
                         uiFolder,
                         CoreWebView2HostResourceAccessKind.Allow
                     );
-                    BrowserView.CoreWebView2.Navigate("https://app.sweeprvpn.local/index.html?v=256");
+                    BrowserView.CoreWebView2.Navigate("https://app.sweeprvpn.local/index.html?v=258");
                 }
                 catch
                 {
@@ -524,7 +528,7 @@ namespace SweeprVpnApp
                     if (string.IsNullOrEmpty(srvCode)) srvCode = CurrentServer != null ? CurrentServer.Code : "UK-LON-01";
                     string email = ExtractJsonString(msg, "email");
                     string actCode = ExtractJsonString(msg, "activationCode");
-                    bool lanBypass = ExtractJsonBool(msg, "lanBypass", false);
+                    bool lanBypass = ExtractJsonBool(msg, "lanBypass", true);
                     string devId = ExtractJsonString(msg, "deviceId");
                     SelectServer(srvCode);
                     Task.Run(() => ConnectRealWireGuardTunnel(reqId, srvCode, email, actCode, lanBypass, devId));
@@ -558,9 +562,30 @@ namespace SweeprVpnApp
                 {
                     Task.Run(() =>
                     {
-                        RunWifiScan();
+                        string scanJson = ScanLocalNetworkJson();
                         PushDeviceCountToPage();
+                        if (!string.IsNullOrEmpty(scanJson))
+                        {
+                            ExecuteJsSafe("window.onNativeWifiScanUpdate && window.onNativeWifiScanUpdate(" + scanJson + ")");
+                        }
                     });
+                }
+                else if (msg.Contains("\"switchTab\""))
+                {
+                    string tab = ExtractJsonString(msg, "payload");
+                    if (!string.IsNullOrEmpty(tab)) CurrentTab = tab;
+                    if (CurrentTab == "wifi")
+                    {
+                        Task.Run(() =>
+                        {
+                            string scanJson = ScanLocalNetworkJson();
+                            PushDeviceCountToPage();
+                            if (!string.IsNullOrEmpty(scanJson))
+                            {
+                                ExecuteJsSafe("window.onNativeWifiScanUpdate && window.onNativeWifiScanUpdate(" + scanJson + ")");
+                            }
+                        });
+                    }
                 }
                 else if (msg.Contains("\"toggleConnection\""))
                 {
@@ -1018,7 +1043,7 @@ namespace SweeprVpnApp
                 configText = Regex.Replace(configText, @"^DNS\s*=.*$", "DNS = 1.1.1.1, 1.0.0.1\nMTU = 1280", RegexOptions.Multiline);
                 string allowedIpsValue = lanBypass
                     ? "0.0.0.0/5, 8.0.0.0/7, 11.0.0.0/8, 12.0.0.0/6, 16.0.0.0/4, 32.0.0.0/3, 64.0.0.0/2, 128.0.0.0/3, 160.0.0.0/5, 168.0.0.0/6, 172.0.0.0/12, 172.32.0.0/11, 172.64.0.0/10, 172.128.0.0/9, 173.0.0.0/8, 174.0.0.0/7, 176.0.0.0/4, 192.0.0.0/9, 192.128.0.0/11, 192.160.0.0/13, 192.169.0.0/16, 192.170.0.0/15, 192.172.0.0/14, 192.176.0.0/12, 192.192.0.0/10, 193.0.0.0/8, 194.0.0.0/7, 196.0.0.0/6, 200.0.0.0/5, 208.0.0.0/4, 2000::/3"
-                    : "0.0.0.0/0, ::/0";
+                    : "0.0.0.0/1, 128.0.0.0/1, 2000::/3";
                 configText = Regex.Replace(configText, @"^AllowedIPs\s*=.*$", "AllowedIPs = " + allowedIpsValue, RegexOptions.Multiline);
 
                 // Write sweepr0.conf without BOM so WireGuard parser accepts it
@@ -1222,16 +1247,20 @@ namespace SweeprVpnApp
                 KillSwitchWatchdogTimer.Start();
 
                 RadarIntruderTimer = new System.Windows.Forms.Timer();
-                RadarIntruderTimer.Interval = 60000;
+                RadarIntruderTimer.Interval = 18000;
                 RadarIntruderTimer.Tick += (s, e) =>
                 {
-                    if (!IsRadarEnabled) return;
+                    if (!IsRadarEnabled && CurrentTab != "wifi") return;
                     Task.Run(() =>
                     {
                         try
                         {
-                            ScanLocalNetworkJson();
+                            string scanJson = ScanLocalNetworkJson();
                             PushDeviceCountToPage();
+                            if (!string.IsNullOrEmpty(scanJson))
+                            {
+                                ExecuteJsSafe("window.onNativeWifiScanUpdate && window.onNativeWifiScanUpdate(" + scanJson + ")");
+                            }
                         }
                         catch { }
                     });
@@ -1507,34 +1536,249 @@ namespace SweeprVpnApp
             }
         }
 
-        private static bool ProbeIosLockdownSignature(string ip, int timeoutMs)
+        [DllImport("iphlpapi.dll", ExactSpelling = true)]
+        private static extern int SendARP(uint DestIP, uint SrcIP, byte[] pMacAddr, ref int PhyAddrLen);
+
+        private static readonly Dictionary<string, string> CachedRouterHostnames = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        private static readonly Dictionary<string, string> CachedArpMacs = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        private static readonly object DiscoveryCacheLock = new object();
+        private readonly object ScanExecutionLock = new object();
+        private string LastScanJsonCache = null;
+        private DateTime LastScanTimeUtc = DateTime.MinValue;
+
+        private static string TrySendArpFast(string ipStr)
         {
-            // iOS devices listen on or immediately RST TCP 62078 (iphone-sync)
-            Stopwatch sw = Stopwatch.StartNew();
             try
             {
-                using (TcpClient tcp = new TcpClient())
+                IPAddress ipAddr;
+                if (!IPAddress.TryParse(ipStr, out ipAddr)) return null;
+                byte[] addrBytes = ipAddr.GetAddressBytes();
+                uint destIp = BitConverter.ToUInt32(addrBytes, 0);
+                byte[] macAddr = new byte[6];
+                int macLen = macAddr.Length;
+                int rc = SendARP(destIp, 0, macAddr, ref macLen);
+                if (rc == 0 && macLen >= 6)
                 {
-                    IAsyncResult ar = tcp.BeginConnect(ip, 62078, null, null);
-                    bool signaled = ar.AsyncWaitHandle.WaitOne(timeoutMs, false);
-                    if (!signaled) return false;
-                    tcp.EndConnect(ar);
-                    return true;
+                    string mac = string.Format("{0:X2}:{1:X2}:{2:X2}:{3:X2}:{4:X2}:{5:X2}",
+                        macAddr[0], macAddr[1], macAddr[2], macAddr[3], macAddr[4], macAddr[5]);
+                    if (mac != "00:00:00:00:00:00" && mac != "FF:FF:FF:FF:FF:FF")
+                        return mac;
                 }
             }
-            catch (SocketException sx)
-            {
-                sw.Stop();
-                return sx.SocketErrorCode == SocketError.ConnectionRefused && sw.ElapsedMilliseconds < (timeoutMs - 15);
-            }
-            catch
-            {
-                return false;
-            }
+            catch { }
+            return null;
         }
 
-        private static string ResolveShortHostnameFast(string ip)
+        private static void SendUdpWakePacket(string ipStr, int port)
         {
+            try
+            {
+                using (UdpClient u = new UdpClient())
+                {
+                    byte[] payload = new byte[] { 0x00 };
+                    u.Send(payload, payload.Length, ipStr, port);
+                }
+            }
+            catch { }
+        }
+
+        private static byte[] BuildDnsPtrPacket(string ipStr, ushort txId)
+        {
+            string[] parts = ipStr.Split('.');
+            if (parts.Length != 4) return null;
+            string ptrName = parts[3] + "." + parts[2] + "." + parts[1] + "." + parts[0] + ".in-addr.arpa";
+            List<byte> buf = new List<byte>(64);
+            buf.Add((byte)(txId >> 8)); buf.Add((byte)(txId & 0xFF));
+            buf.Add(0x01); buf.Add(0x00); // standard query, recursion desired
+            buf.Add(0x00); buf.Add(0x01); // QDCOUNT = 1
+            buf.Add(0x00); buf.Add(0x00);
+            buf.Add(0x00); buf.Add(0x00);
+            buf.Add(0x00); buf.Add(0x00);
+            foreach (string lbl in ptrName.Split('.'))
+            {
+                byte[] b = Encoding.ASCII.GetBytes(lbl);
+                buf.Add((byte)b.Length);
+                buf.AddRange(b);
+            }
+            buf.Add(0x00);
+            buf.Add(0x00); buf.Add(0x0C); // QTYPE = PTR (12)
+            buf.Add(0x00); buf.Add(0x01); // QCLASS = IN (1)
+            return buf.ToArray();
+        }
+
+        private static string ReadDnsName(byte[] resp, ref int offset)
+        {
+            List<string> labels = new List<string>();
+            int jumps = 0;
+            int savedEnd = -1;
+            int cur = offset;
+            while (cur < resp.Length && jumps < 12)
+            {
+                byte len = resp[cur];
+                if (len == 0)
+                {
+                    cur++;
+                    break;
+                }
+                if ((len & 0xC0) == 0xC0)
+                {
+                    if (cur + 1 >= resp.Length) break;
+                    if (savedEnd < 0) savedEnd = cur + 2;
+                    cur = ((len & 0x3F) << 8) | resp[cur + 1];
+                    jumps++;
+                    continue;
+                }
+                cur++;
+                if (cur + len > resp.Length) break;
+                labels.Add(Encoding.ASCII.GetString(resp, cur, len));
+                cur += len;
+            }
+            offset = (savedEnd >= 0) ? savedEnd : cur;
+            return string.Join(".", labels.ToArray());
+        }
+
+        private static string ParseDnsPtrResponse(byte[] resp)
+        {
+            try
+            {
+                if (resp == null || resp.Length < 12) return null;
+                int rcode = resp[3] & 0x0F;
+                int qdCount = (resp[4] << 8) | resp[5];
+                int anCount = (resp[6] << 8) | resp[7];
+                if (rcode != 0 || anCount <= 0) return null;
+                int offset = 12;
+                for (int q = 0; q < qdCount; q++)
+                {
+                    ReadDnsName(resp, ref offset);
+                    offset += 4;
+                }
+                for (int a = 0; a < anCount; a++)
+                {
+                    if (offset >= resp.Length) break;
+                    ReadDnsName(resp, ref offset);
+                    if (offset + 10 > resp.Length) break;
+                    int rtype = (resp[offset] << 8) | resp[offset + 1];
+                    int rdlen = (resp[offset + 8] << 8) | resp[offset + 9];
+                    offset += 10;
+                    if (rtype == 12) // PTR
+                    {
+                        int rdataOffset = offset;
+                        string rawHost = ReadDnsName(resp, ref rdataOffset);
+                        if (!string.IsNullOrEmpty(rawHost))
+                        {
+                            string cleaned = Regex.Replace(rawHost.Trim().TrimEnd('.'),
+                                @"\.(powerhub|lan|local|home|arpa|dlink|asus|netgear|hub|internal|router|broadband|localdomain)$",
+                                "", RegexOptions.IgnoreCase);
+                            int dot = cleaned.IndexOf('.');
+                            if (dot > 0) cleaned = cleaned.Substring(0, dot);
+                            return cleaned.Trim();
+                        }
+                    }
+                    offset += rdlen;
+                }
+            }
+            catch { }
+            return null;
+        }
+
+        private static Dictionary<string, string> QueryRouterDnsPtrBatch(string gatewayIp, string subnetPrefix)
+        {
+            Dictionary<string, string> result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            lock (DiscoveryCacheLock)
+            {
+                foreach (KeyValuePair<string, string> kv in CachedRouterHostnames)
+                {
+                    if (kv.Key.StartsWith(subnetPrefix + ".")) result[kv.Key] = kv.Value;
+                }
+            }
+
+            try
+            {
+                IPAddress gwAddr;
+                if (!IPAddress.TryParse(gatewayIp, out gwAddr)) return result;
+                IPEndPoint gwEp = new IPEndPoint(gwAddr, 53);
+                bool[] gotReply = new bool[255];
+
+                using (UdpClient udp = new UdpClient())
+                {
+                    udp.Client.ReceiveTimeout = 80;
+                    udp.Client.SendTimeout = 80;
+                    udp.Client.ReceiveBufferSize = 65536;
+
+                    Action drainAvailable = () =>
+                    {
+                        while (udp.Available > 0)
+                        {
+                            try
+                            {
+                                IPEndPoint remoteEp = new IPEndPoint(IPAddress.Any, 0);
+                                byte[] resp = udp.Receive(ref remoteEp);
+                                if (resp == null || resp.Length < 12) continue;
+                                int txId = (resp[0] << 8) | resp[1];
+                                int respOctet = txId - 0x2400;
+                                if (respOctet < 1 || respOctet > 254) continue;
+                                gotReply[respOctet] = true;
+                                string resolvedIp = subnetPrefix + "." + respOctet;
+                                string ptrHost = ParseDnsPtrResponse(resp);
+                                if (!string.IsNullOrEmpty(ptrHost) && ptrHost != resolvedIp)
+                                {
+                                    result[resolvedIp] = ptrHost;
+                                    lock (DiscoveryCacheLock) { CachedRouterHostnames[resolvedIp] = ptrHost; }
+                                }
+                            }
+                            catch { break; }
+                        }
+                    };
+
+                    for (int pass = 0; pass < 2; pass++)
+                    {
+                        for (int octet = 1; octet <= 254; octet++)
+                        {
+                            if (gotReply[octet]) continue;
+                            string targetIp = subnetPrefix + "." + octet;
+                            try
+                            {
+                                byte[] pkt = BuildDnsPtrPacket(targetIp, (ushort)(0x2400 + octet));
+                                if (pkt != null) udp.Send(pkt, pkt.Length, gwEp);
+                            }
+                            catch { }
+                            drainAvailable();
+                            Thread.Sleep(pass == 0 ? 5 : 7);
+                        }
+
+                        Stopwatch waitSw = Stopwatch.StartNew();
+                        while (waitSw.ElapsedMilliseconds < 180)
+                        {
+                            drainAvailable();
+                            Thread.Sleep(12);
+                        }
+                    }
+                }
+            }
+            catch { }
+
+            return result;
+        }
+
+        private static bool ProbeIosLockdownSignature(string ip, int timeoutMs)
+        {
+            // Real Apple iOS and macOS devices with Continuity/Wi-Fi Sync listen on TCP 62078
+            return ProbeTcpPortFast(ip, 62078, timeoutMs);
+        }
+
+        private static string ResolveShortHostnameFast(string ip, Dictionary<string, string> routerHosts)
+        {
+            if (routerHosts != null && routerHosts.ContainsKey(ip) && !string.IsNullOrEmpty(routerHosts[ip]))
+            {
+                return routerHosts[ip];
+            }
+            lock (DiscoveryCacheLock)
+            {
+                if (CachedRouterHostnames.ContainsKey(ip) && !string.IsNullOrEmpty(CachedRouterHostnames[ip]))
+                {
+                    return CachedRouterHostnames[ip];
+                }
+            }
             try
             {
                 string host = null;
@@ -1550,7 +1794,7 @@ namespace SweeprVpnApp
                     }
                     catch { }
                 });
-                t.Wait(180);
+                t.Wait(140);
                 if (!string.IsNullOrEmpty(host) && host != ip)
                 {
                     int dot = host.IndexOf('.');
@@ -1562,35 +1806,155 @@ namespace SweeprVpnApp
             return "";
         }
 
-        private static void ClassifyMacVendor(string ip, string mac, int ttl, string hostHint, bool isWindowsPortOpen, bool isMacPortOpen, bool isIosSignature, bool isGateway, bool isSelf, bool vpnActive, out string name, out string kind, out string detail, out bool trackerRisk)
+        private static void ClassifyMacVendor(
+            string ip,
+            string mac,
+            int ttl,
+            string hostHint,
+            bool isWindowsPortOpen,
+            bool isMacPortOpen,
+            bool isIosSignature,
+            bool isCastPortOpen,
+            bool isPrinterPortOpen,
+            bool isCameraPortOpen,
+            bool isGateway,
+            bool isSelf,
+            bool vpnActive,
+            out string name,
+            out string kind,
+            out string detail,
+            out string chipTranslation,
+            out bool trackerRisk,
+            out bool cameraRisk,
+            out bool intruderRisk,
+            out int sortOrder)
         {
             trackerRisk = false;
+            cameraRisk = false;
+            intruderRisk = false;
+            chipTranslation = "";
+            sortOrder = 50;
+
             string clean = (mac ?? "").Replace("-", ":").ToUpperInvariant();
             string prefix = clean.Length >= 8 ? clean.Substring(0, 8) : "";
-            string hostLower = (hostHint ?? "").ToLowerInvariant();
+            string hostTrim = (hostHint ?? "").Trim();
+            string hostLower = hostTrim.ToLowerInvariant();
+            string macSuffix = (!string.IsNullOrEmpty(clean) && clean != "LOCAL" && clean != "GATEWAY" && clean != "DHCP LEASE") ? (" • " + clean) : "";
+            string hostLabel = !string.IsNullOrEmpty(hostTrim) ? (hostTrim + " • " + ip) : ip;
 
             if (isSelf)
             {
                 name = "Windows Desktop";
                 kind = "windows";
                 detail = vpnActive ? "Protected by 10 Gbps WireGuard VPN tunnel (" + ip + ")" : "Local Windows 10/11 PC on home Wi-Fi (" + ip + ")";
+                sortOrder = 1;
                 return;
             }
             if (isGateway)
             {
-                name = "Home Wi-Fi Router";
+                name = (!string.IsNullOrEmpty(hostTrim) && hostLower.Contains("vodafone"))
+                    ? "Vodafone PowerHub Router"
+                    : "Home Wi-Fi Router";
                 kind = "router";
-                detail = "Encrypted WPA2/WPA3 home gateway (" + ip + ")";
+                detail = "Encrypted WPA2/WPA3 home gateway (" + hostLabel + ")";
+                sortOrder = 2;
                 return;
             }
 
-            // 1. Smart TVs
+            // 1. Wi-Fi Range Extenders & Mesh Nodes (e.g. TP-Link RE220, RE220-2)
+            if (hostLower.StartsWith("re220") || hostLower.StartsWith("re300") || hostLower.StartsWith("re450") || hostLower.StartsWith("re505") || hostLower.StartsWith("tl-wa"))
+            {
+                name = "TP-Link Wi-Fi Range Extender (" + hostTrim + ")";
+                kind = "extender";
+                detail = "Mesh Wi-Fi Signal Booster (" + ip + macSuffix + ")";
+                chipTranslation = "Translated from TP-Link Mesh Relay";
+                sortOrder = 45;
+                return;
+            }
+
+            // 2. Apple Mac Laptops & Desktops (MacBook Pro, MacBook Air, iMac, Mac mini, Mac Studio, or macOS Continuity/AFP/AirPlay ports)
+            if (hostLower.Contains("macbookpro") || hostLower.Contains("macbook-pro"))
+            {
+                name = "Apple MacBook Pro";
+                kind = "macos";
+                detail = "Apple macOS Laptop on home Wi-Fi (" + hostLabel + macSuffix + ")";
+                sortOrder = 5;
+                return;
+            }
+            if (hostLower.Contains("macbookair") || hostLower.Contains("macbook-air"))
+            {
+                name = "Apple MacBook Air";
+                kind = "macos";
+                detail = "Apple macOS Laptop on home Wi-Fi (" + hostLabel + macSuffix + ")";
+                sortOrder = 5;
+                return;
+            }
+            if (hostLower.Contains("macbook") || hostLower.Contains("imac") || hostLower.Contains("mac-mini") || hostLower.Contains("macmini") || hostLower.Contains("macstudio") || hostLower.Contains("macpro") || isMacPortOpen)
+            {
+                name = hostLower.Contains("macbook") ? "Apple MacBook" : "Apple Mac (" + (!string.IsNullOrEmpty(hostTrim) ? hostTrim : "macOS") + ")";
+                kind = "macos";
+                detail = "Apple macOS Computer on home Wi-Fi (" + hostLabel + macSuffix + ")";
+                sortOrder = 6;
+                return;
+            }
+
+            // 3. Apple iPhone & iPad
+            if (hostLower.Contains("iphone"))
+            {
+                name = "Apple iPhone";
+                kind = "iphone";
+                detail = "Apple iOS Mobile Device (" + hostLabel + macSuffix + ")";
+                sortOrder = 10;
+                return;
+            }
+            if (hostLower.Contains("ipad"))
+            {
+                name = "Apple iPad";
+                kind = "ipad";
+                detail = "Apple iPadOS Tablet (" + hostLabel + macSuffix + ")";
+                sortOrder = 11;
+                return;
+            }
+
+            // 4. Smart Cameras & Video Doorbells (Ring Doorbell, Ring Chime/Cam, RTSP/ONVIF cameras)
+            if (hostLower.Contains("ringdoorbell"))
+            {
+                name = "Ring Video Doorbell";
+                kind = "camera";
+                detail = "Smart Front Door Security Camera (" + hostLabel + macSuffix + ")";
+                chipTranslation = "Translated from Ring LLC IoT";
+                sortOrder = 25;
+                return;
+            }
+            if (hostLower.StartsWith("ring-") || prefix == "34:3E:A4" || prefix == "3C:E4:B0" || hostLower.Contains("mysimplelink"))
+            {
+                name = hostLower.StartsWith("ring-") ? "Ring Chime / Indoor Camera" : "Ring Security Camera";
+                kind = "camera";
+                detail = "Smart Home Security Device (" + hostLabel + macSuffix + ")";
+                chipTranslation = hostLower.Contains("mysimplelink") || prefix == "3C:E4:B0"
+                    ? "Translated from Texas Instruments SimpleLink"
+                    : "Translated from Ring LLC IoT";
+                sortOrder = 26;
+                return;
+            }
+            if (isCameraPortOpen)
+            {
+                name = !string.IsNullOrEmpty(hostTrim) ? ("Network Camera (" + hostTrim + ")") : "Unrecognized Network Camera";
+                kind = "camera";
+                cameraRisk = true;
+                detail = "RTSP/ONVIF video stream port open (" + hostLabel + macSuffix + ")";
+                sortOrder = 3;
+                return;
+            }
+
+            // 5. Smart TVs & Streaming Sticks (Samsung, LG, Roku, Vestel, Amazon Fire TV)
             if (prefix == "E4:7D:BD" || prefix == "8C:79:F5" || prefix == "FC:F1:36" || prefix == "D0:66:7B" || prefix == "BC:14:85" || prefix == "40:16:3B" || hostLower.Contains("tizen") || hostLower.Contains("samsung-tv"))
             {
                 name = "Samsung Smart TV";
                 kind = "tv";
                 trackerRisk = !vpnActive;
-                detail = vpnActive ? "Smart-TV ACR viewing trackers blocked" : "Samsung ACR telemetry active — enable TV Shield";
+                detail = (vpnActive ? "Smart-TV ACR viewing trackers blocked (" : "Samsung ACR telemetry active — enable TV Shield (") + ip + ")";
+                sortOrder = 18;
                 return;
             }
             if (prefix == "A8:23:FE" || prefix == "CC:2D:83" || prefix == "00:E0:91" || prefix == "38:8C:50" || prefix == "64:CB:E9" || hostLower.Contains("webos") || hostLower.Contains("lgtv"))
@@ -1598,7 +1962,8 @@ namespace SweeprVpnApp
                 name = "LG webOS Smart TV";
                 kind = "tv";
                 trackerRisk = !vpnActive;
-                detail = vpnActive ? "LG LivePlus ACR trackers blocked" : "LG LivePlus telemetry active — enable TV Shield";
+                detail = (vpnActive ? "LG LivePlus ACR trackers blocked (" : "LG LivePlus telemetry active — enable TV Shield (") + ip + ")";
+                sortOrder = 18;
                 return;
             }
             if (prefix == "B8:3E:59" || prefix == "D8:31:34" || prefix == "AC:3A:7A" || prefix == "C8:3A:6B" || hostLower.Contains("roku"))
@@ -1606,157 +1971,162 @@ namespace SweeprVpnApp
                 name = "Roku Streaming TV";
                 kind = "tv";
                 trackerRisk = !vpnActive;
-                detail = vpnActive ? "Roku ad beacons blocked" : "Roku viewing telemetry active — enable TV Shield";
+                detail = (vpnActive ? "Roku ad beacons blocked (" : "Roku viewing telemetry active — enable TV Shield (") + ip + ")";
+                sortOrder = 18;
                 return;
             }
+            if (prefix == "EC:BE:5F" || hostLower.Contains("vestel"))
+            {
+                name = "Smart TV (Living Room)";
+                kind = "tv";
+                trackerRisk = !vpnActive;
+                detail = (vpnActive ? "Smart-TV ACR viewing trackers blocked (" : "Smart-TV ACR telemetry active — enable TV Shield (") + ip + macSuffix + ")";
+                chipTranslation = "Translated from Vestel Smart-TV Chip";
+                sortOrder = 18;
+                return;
+            }
+
+            // 6. Printers & Scanners (Brother BRW*, HP, Canon, Epson, IPP/JetDirect ports)
+            if (hostLower.StartsWith("brw") || hostLower.StartsWith("brn") || prefix == "74:40:BB" || isPrinterPortOpen)
+            {
+                name = (hostLower.StartsWith("brw") || hostLower.StartsWith("brn") || prefix == "74:40:BB")
+                    ? "Brother Wireless Printer"
+                    : "Wireless Network Printer";
+                kind = "printer";
+                detail = "Home Office Printer / Scanner (" + hostLabel + macSuffix + ")";
+                sortOrder = 30;
+                return;
+            }
+
+            // 7. Windows Desktops & Laptops (hostname DESKTOP-*, WINDOWS-*, LAPTOP-*, Home, or SMB/RPC 445/135 open)
+            if (hostLower.StartsWith("desktop-") || hostLower.StartsWith("windows-") || hostLower.StartsWith("laptop-") || hostLower.StartsWith("win-") || hostLower == "home" || isWindowsPortOpen)
+            {
+                name = !string.IsNullOrEmpty(hostTrim) ? ("Windows PC (" + hostTrim + ")") : "Windows Desktop PC";
+                kind = "windows";
+                bool viaExtender = (prefix == "FE:BD:03" || prefix == "B6:A7:B9");
+                detail = "Windows 10/11 Computer" + (viaExtender ? " via Wi-Fi Extender" : " on home Wi-Fi") + " (" + ip + macSuffix + ")";
+                sortOrder = 7;
+                return;
+            }
+
+            // 8. Samsung Galaxy & Android Phones
+            if (hostLower.Contains("galaxy") || hostLower.Contains("android") || hostLower.Contains("pixel") || hostLower.Contains("oneplus") || hostLower.Contains("xiaomi") || hostLower.Contains("redmi"))
+            {
+                string prettyAndroid = !string.IsNullOrEmpty(hostTrim) ? hostTrim.Replace("-", " ") : "Android Phone";
+                if (hostLower.StartsWith("galaxy")) prettyAndroid = "Samsung " + prettyAndroid;
+                name = prettyAndroid;
+                kind = "android";
+                detail = "Android Mobile Phone on home Wi-Fi (" + ip + macSuffix + ")";
+                sortOrder = 12;
+                return;
+            }
+
+            // 9. Amazon Echo / Fire TV Devices (Amazon Technologies OUIs or Dial/Cast port 8009)
+            if (prefix == "50:DC:E7" || prefix == "40:A9:CF" || prefix == "D8:BE:65" || prefix == "80:0C:F9" || prefix == "E8:D8:7E" ||
+                prefix == "44:65:0D" || prefix == "68:54:FD" || prefix == "FC:65:DE" || prefix == "F0:D2:F1" || isCastPortOpen)
+            {
+                if (isCastPortOpen)
+                {
+                    name = "Amazon Fire TV / Echo Show";
+                    kind = "tv";
+                    trackerRisk = !vpnActive;
+                    detail = (vpnActive ? "Amazon device telemetry blocked (" : "Amazon Fire OS Streaming Device (") + ip + macSuffix + ")";
+                    chipTranslation = "Translated from Amazon Technologies Chip";
+                    sortOrder = 20;
+                }
+                else
+                {
+                    name = "Amazon Echo Smart Speaker";
+                    kind = "speaker";
+                    detail = "Amazon Alexa Smart Home Device (" + ip + macSuffix + ")";
+                    chipTranslation = "Translated from Amazon Technologies Chip";
+                    sortOrder = 22;
+                }
+                return;
+            }
+
+            // 10. Sonos Speakers
             if (prefix == "54:2A:1B" || prefix == "00:0E:58" || prefix == "94:9F:3E" || prefix == "78:28:CA" || hostLower.Contains("sonos"))
             {
                 name = "Sonos Wireless Speaker";
                 kind = "speaker";
-                detail = "Verified audio device on home Wi-Fi (" + ip + ")";
+                detail = "Verified audio device on home Wi-Fi (" + ip + macSuffix + ")";
+                sortOrder = 22;
                 return;
             }
 
-            // 2. Hostname-based exact OS match
-            if (hostLower.Contains("iphone"))
+            // 11. Apple Continuity / Lockdown signature (TCP 62078 open with Private Wi-Fi MAC)
+            if (isIosSignature)
             {
-                name = "iPhone";
+                name = "Apple iPhone / Mac";
                 kind = "iphone";
-                detail = "Apple iOS Mobile Device on home Wi-Fi (" + ip + ")";
-                return;
-            }
-            if (hostLower.Contains("ipad"))
-            {
-                name = "Apple iPad";
-                kind = "iphone";
-                detail = "Apple iPadOS Device on home Wi-Fi (" + ip + ")";
-                return;
-            }
-            if (hostLower.Contains("macbook") || hostLower.Contains("imac") || hostLower.Contains("mac-mini") || hostLower.Contains("macstudio") || hostLower.Contains("macpro") || isMacPortOpen)
-            {
-                name = "macOS Desktop";
-                kind = "macos";
-                detail = "Apple macOS computer on home Wi-Fi (" + ip + ")";
-                return;
-            }
-            if (hostLower.StartsWith("desktop-") || hostLower.StartsWith("laptop-") || hostLower.StartsWith("win-") || isWindowsPortOpen || (ttl > 64 && ttl <= 128))
-            {
-                name = "Windows Desktop";
-                kind = "windows";
-                detail = "Windows 10/11 PC on home Wi-Fi (" + ip + " • " + clean + ")";
-                return;
-            }
-            if (hostLower.Contains("android") || hostLower.Contains("galaxy") || hostLower.Contains("pixel") || hostLower.Contains("oneplus") || hostLower.Contains("xiaomi") || hostLower.Contains("redmi"))
-            {
-                name = "Android Mobile Device";
-                kind = "android";
-                detail = "Android phone / tablet on home Wi-Fi (" + ip + ")";
+                detail = "Apple Device • Private Wi-Fi Address (" + hostLabel + macSuffix + ")";
+                sortOrder = 9;
                 return;
             }
 
-            // 3. Hardware Manufacturer (IEEE OUI) Classification
-            // Windows PC / Laptop Wi-Fi chipsets (Intel, Realtek, Microsoft, Dell, HP, Lenovo, ASUS, MSI)
-            if (prefix == "40:A9:CF" || prefix == "E8:D8:7E" || prefix == "00:15:5D" || prefix == "3C:97:0E" ||
-                prefix == "48:51:B7" || prefix == "5C:87:9C" || prefix == "68:05:CA" || prefix == "7C:B2:7D" ||
-                prefix == "84:A9:38" || prefix == "8C:8D:28" || prefix == "98:AF:65" || prefix == "A4:34:D9" ||
-                prefix == "AC:ED:5C" || prefix == "B4:69:21" || prefix == "C8:5B:76" || prefix == "D8:FC:93" ||
-                prefix == "DC:41:A9" || prefix == "F8:63:3F" || prefix == "00:E0:4C" || prefix == "2C:56:DC" ||
-                prefix == "70:85:C2" || prefix == "B0:6E:BF" || prefix == "D4:5D:64")
-            {
-                name = "Windows Desktop";
-                kind = "windows";
-                detail = "Windows 10/11 PC on home Wi-Fi (" + ip + " • " + clean + ")";
-                return;
-            }
-
-            // Apple Mac OUI prefixes
+            // 12. Known Apple OUI Prefixes
             if (prefix == "F0:18:98" || prefix == "3C:22:FB" || prefix == "A4:83:E7" || prefix == "D0:81:7A" ||
                 prefix == "AC:BC:32" || prefix == "BC:D0:74" || prefix == "00:1C:B3" || prefix == "14:7D:DA" ||
                 prefix == "28:CF:E9" || prefix == "38:C9:86" || prefix == "60:F8:1D" || prefix == "70:56:81")
             {
-                name = "macOS Desktop";
+                name = "Apple Mac";
                 kind = "macos";
-                detail = "Apple macOS computer on home Wi-Fi (" + ip + " • " + clean + ")";
+                detail = "Apple macOS computer on home Wi-Fi (" + ip + macSuffix + ")";
+                sortOrder = 8;
                 return;
             }
-
-            // Apple iPhone / iPad OUI prefixes
             if (prefix == "00:25:00" || prefix == "18:EE:69" || prefix == "24:A0:74" || prefix == "40:CB:C0" ||
                 prefix == "58:55:CA" || prefix == "64:B9:E8" || prefix == "7C:D1:C3" || prefix == "90:B0:ED" ||
                 prefix == "A8:5C:2C" || prefix == "CC:29:F5" || prefix == "D8:BB:2C" || prefix == "F0:D1:A9")
             {
-                name = "iPhone";
+                name = "Apple iPhone";
                 kind = "iphone";
-                detail = "Apple iOS Mobile Device on home Wi-Fi (" + ip + " • " + clean + ")";
+                detail = "Apple iOS Mobile Device on home Wi-Fi (" + ip + macSuffix + ")";
+                sortOrder = 10;
                 return;
             }
 
-            // Android / Fire OS / Google / Samsung Mobile OUI prefixes (including 50:DC:E7)
-            if (prefix == "50:DC:E7" || prefix == "44:65:0D" || prefix == "68:54:FD" || prefix == "FC:65:DE" ||
-                prefix == "F0:D2:F1" || prefix == "3C:5A:B4" || prefix == "54:60:09" || prefix == "F4:F5:D8" ||
-                prefix == "28:39:5E" || prefix == "50:01:BB" || prefix == "78:4B:87" || prefix == "94:35:0A" ||
-                prefix == "C0:BD:D1" || prefix == "E4:58:E7")
+            // 13. Known Windows PC / Intel / Realtek OUI Prefixes
+            if (prefix == "E0:94:67" || prefix == "00:15:5D" || prefix == "3C:97:0E" ||
+                prefix == "48:51:B7" || prefix == "5C:87:9C" || prefix == "68:05:CA" || prefix == "7C:B2:7D" ||
+                prefix == "84:A9:38" || prefix == "8C:8D:28" || prefix == "98:AF:65" || prefix == "A4:34:D9" ||
+                prefix == "AC:ED:5C" || prefix == "B4:69:21" || prefix == "C8:5B:76" || prefix == "D8:FC:93" ||
+                prefix == "DC:41:A9" || prefix == "F8:63:3F" || prefix == "00:E0:4C" || prefix == "2C:56:DC" ||
+                prefix == "70:85:C2" || prefix == "B0:6E:BF" || prefix == "D4:5D:64" || (ttl > 64 && ttl <= 128))
             {
-                name = "Android Mobile Device";
-                kind = "android";
-                detail = "Android device on home Wi-Fi (" + ip + " • " + clean + ")";
-                return;
-            }
-
-            // 4. Randomized / Private Wi-Fi MAC Addresses (second hex char is 2, 6, A, or E)
-            if (clean.Length >= 2)
-            {
-                char second = clean[1];
-                if (second == '2' || second == '6' || second == 'A' || second == 'E')
-                {
-                    int ipLastOctet = 0;
-                    int lastDot = (ip ?? "").LastIndexOf('.');
-                    if (lastDot >= 0 && lastDot + 1 < ip.Length)
-                    {
-                        int.TryParse(ip.Substring(lastDot + 1), out ipLastOctet);
-                    }
-                    int bucket = Math.Abs(ipLastOctet + clean[clean.Length - 1]) % 3;
-                    if (isMacPortOpen || bucket == 0)
-                    {
-                        name = "macOS Desktop";
-                        kind = "macos";
-                        detail = "Apple macOS computer • Private Wi-Fi Address (" + ip + " • " + clean + ")";
-                    }
-                    else if (isIosSignature || bucket == 1)
-                    {
-                        name = "iPhone";
-                        kind = "iphone";
-                        detail = "Apple iOS Mobile Device • Private Wi-Fi Address (" + ip + " • " + clean + ")";
-                    }
-                    else
-                    {
-                        name = "Android Mobile Device";
-                        kind = "android";
-                        detail = "Android Phone / Tablet • Private Wi-Fi Address (" + ip + " • " + clean + ")";
-                    }
-                    return;
-                }
-            }
-
-            // 5. Fallback based on TTL or default desktop/mobile signature
-            if (ttl > 64)
-            {
-                name = "Windows Desktop";
+                name = !string.IsNullOrEmpty(hostTrim) ? ("Windows PC (" + hostTrim + ")") : "Windows PC";
                 kind = "windows";
-                detail = "Windows PC on home Wi-Fi (" + ip + " • " + clean + ")";
+                detail = "Windows 10/11 PC on home Wi-Fi (" + ip + macSuffix + ")";
+                sortOrder = 8;
+                return;
             }
-            else if (isIosSignature)
+
+            // 14. Devices behind TP-Link RE220 Wi-Fi Extender proxy MAC (FE:BD:03 or B6:A7:B9)
+            if (prefix == "FE:BD:03" || prefix == "B6:A7:B9")
             {
-                name = "iPhone";
-                kind = "iphone";
-                detail = "Apple iOS Mobile Device on home Wi-Fi (" + ip + " • " + clean + ")";
+                name = !string.IsNullOrEmpty(hostTrim) ? ("Wi-Fi Device (" + hostTrim + ")") : "Home Wi-Fi Device (via Extender)";
+                kind = "other";
+                detail = "Connected via TP-Link Wi-Fi Range Extender (" + ip + macSuffix + ")";
+                chipTranslation = "Translated from TP-Link Extender Bridge";
+                sortOrder = 35;
+                return;
             }
-            else
+
+            // 15. Private / Locally-Administered MAC Address or generic device (no random % 3 guessing!)
+            if (!string.IsNullOrEmpty(hostTrim))
             {
-                name = "Android Mobile Device";
-                kind = "android";
-                detail = "Android device on home Wi-Fi (" + ip + " • " + clean + ")";
+                name = hostTrim;
+                kind = "other";
+                detail = "Connected Wi-Fi Device (" + ip + macSuffix + ")";
+                sortOrder = 32;
+                return;
             }
+
+            name = "Mobile / Wi-Fi Device (Private MAC)";
+            kind = "iphone";
+            detail = "Private Wi-Fi Address (" + ip + macSuffix + ")";
+            sortOrder = 36;
         }
 
         public void RunWifiScan()
@@ -1764,149 +2134,231 @@ namespace SweeprVpnApp
             ScanLocalNetworkJson();
         }
 
+        private static int ParseIpLastOctet(string ip)
+        {
+            if (string.IsNullOrEmpty(ip)) return 999;
+            int dot = ip.LastIndexOf('.');
+            int octet;
+            if (dot >= 0 && dot + 1 < ip.Length && int.TryParse(ip.Substring(dot + 1), out octet))
+                return octet;
+            return 999;
+        }
+
         public string ScanLocalNetworkJson()
         {
-            string localIp = "192.168.1.14";
-            string gatewayIp = "192.168.1.1";
-            string subnetPrefix = "192.168.1";
-
-            try
+            lock (ScanExecutionLock)
             {
-                foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
+                if (!string.IsNullOrEmpty(LastScanJsonCache) && (DateTime.UtcNow - LastScanTimeUtc).TotalSeconds < 2.5)
                 {
-                    if (ni.OperationalStatus != OperationalStatus.Up) continue;
-                    if (ni.NetworkInterfaceType == NetworkInterfaceType.Loopback) continue;
-                    if (ni.Name.IndexOf("sweepr", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                        ni.Description.IndexOf("WireGuard", StringComparison.OrdinalIgnoreCase) >= 0) continue;
+                    return LastScanJsonCache;
+                }
 
-                    IPInterfaceProperties props = ni.GetIPProperties();
-                    string candGw = null;
-                    foreach (GatewayIPAddressInformation gw in props.GatewayAddresses)
-                    {
-                        if (gw.Address != null && gw.Address.AddressFamily == AddressFamily.InterNetwork)
-                        {
-                            string gws = gw.Address.ToString();
-                            if (gws != "0.0.0.0") { candGw = gws; break; }
-                        }
-                    }
-                    if (string.IsNullOrEmpty(candGw)) continue;
+                string localIp = "192.168.1.14";
+                string gatewayIp = "192.168.1.1";
+                string subnetPrefix = "192.168.1";
 
-                    foreach (UnicastIPAddressInformation uni in props.UnicastAddresses)
+                try
+                {
+                    foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
                     {
-                        if (uni.Address != null && uni.Address.AddressFamily == AddressFamily.InterNetwork)
+                        if (ni.OperationalStatus != OperationalStatus.Up) continue;
+                        if (ni.NetworkInterfaceType == NetworkInterfaceType.Loopback) continue;
+                        if (ni.Name.IndexOf("sweepr", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                            ni.Description.IndexOf("WireGuard", StringComparison.OrdinalIgnoreCase) >= 0) continue;
+
+                        IPInterfaceProperties props = ni.GetIPProperties();
+                        string candGw = null;
+                        foreach (GatewayIPAddressInformation gw in props.GatewayAddresses)
                         {
-                            string ipStr = uni.Address.ToString();
-                            if (!ipStr.StartsWith("127.") && !ipStr.StartsWith("10.64."))
+                            if (gw.Address != null && gw.Address.AddressFamily == AddressFamily.InterNetwork)
                             {
-                                localIp = ipStr;
-                                gatewayIp = candGw;
-                                int lastDot = localIp.LastIndexOf('.');
-                                if (lastDot > 0) subnetPrefix = localIp.Substring(0, lastDot);
-                                break;
+                                string gws = gw.Address.ToString();
+                                if (gws != "0.0.0.0") { candGw = gws; break; }
+                            }
+                        }
+                        if (string.IsNullOrEmpty(candGw)) continue;
+
+                        foreach (UnicastIPAddressInformation uni in props.UnicastAddresses)
+                        {
+                            if (uni.Address != null && uni.Address.AddressFamily == AddressFamily.InterNetwork)
+                            {
+                                string ipStr = uni.Address.ToString();
+                                if (!ipStr.StartsWith("127.") && !ipStr.StartsWith("10.64."))
+                                {
+                                    localIp = ipStr;
+                                    gatewayIp = candGw;
+                                    int lastDot = localIp.LastIndexOf('.');
+                                    if (lastDot > 0) subnetPrefix = localIp.Substring(0, lastDot);
+                                    break;
+                                }
                             }
                         }
                     }
                 }
-            }
-            catch { }
+                catch { }
 
-            Dictionary<string, int> ipTtls = new Dictionary<string, int>();
-            object ttlLock = new object();
-
-            // Actively ping common local subnet hosts in parallel to warm the OS ARP cache and capture TTLs
-            try
-            {
-                int[] commonHosts = new int[] { 1, 2, 10, 11, 12, 15, 20, 21, 22, 25, 30, 35, 40, 42, 50, 60, 75, 100, 101, 102, 105, 110, 150, 254 };
-                Parallel.ForEach(commonHosts, hostOctet =>
+                try
                 {
-                    try
+                    int minW, minIo;
+                    ThreadPool.GetMinThreads(out minW, out minIo);
+                    if (minW < 128) ThreadPool.SetMinThreads(128, Math.Max(minIo, 128));
+                }
+                catch { }
+
+                Dictionary<string, string> discoveredIpToMac = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                object arpLock = new object();
+
+                // 1. First query the router's DNS PTR table cleanly before generating broadcast ARP traffic
+                Dictionary<string, string> routerHosts = QueryRouterDnsPtrBatch(gatewayIp, subnetPrefix);
+
+                // 2. Warm OS ARP cache across all 1..254 via UDP wakeup + async ICMP Ping
+                try
+                {
+                    using (UdpClient wakeUdp = new UdpClient())
                     {
-                        string targetIp = subnetPrefix + "." + hostOctet;
-                        using (Ping p = new Ping())
+                        wakeUdp.Client.SendTimeout = 20;
+                        byte[] wakePayload = new byte[] { 0x00 };
+                        for (int octet = 1; octet <= 254; octet++)
                         {
-                            PingReply rep = p.Send(targetIp, 180);
-                            if (rep != null && rep.Status == IPStatus.Success && rep.Options != null)
-                            {
-                                lock (ttlLock) { ipTtls[targetIp] = rep.Options.Ttl; }
-                            }
+                            string targetIp = subnetPrefix + "." + octet;
+                            if (targetIp == localIp) continue;
+                            try { wakeUdp.Send(wakePayload, 1, targetIp, 5353); } catch { }
+                            try { wakeUdp.Send(wakePayload, 1, targetIp, 62078); } catch { }
                         }
                     }
-                    catch { }
+                    List<Task> pingTasks = new List<Task>(254);
+                    for (int octet = 1; octet <= 254; octet++)
+                    {
+                        string targetIp = subnetPrefix + "." + octet;
+                        if (targetIp == localIp) continue;
+                        pingTasks.Add(Task.Run(async () =>
+                        {
+                            try
+                            {
+                                using (Ping p = new Ping())
+                                {
+                                    await p.SendPingAsync(targetIp, 260);
+                                }
+                            }
+                            catch { }
+                        }));
+                    }
+                    Task.WaitAll(pingTasks.ToArray(), 360);
+                }
+                catch { }
+
+                // Read OS arp -a table (now populated by kernel Layer-2 ARP resolution for all active 1..254 hosts)
+                try
+                {
+                    string arpPath = Path.Combine(Environment.SystemDirectory, "arp.exe");
+                    int arpExit;
+                    string output = RunProcessCapture(File.Exists(arpPath) ? arpPath : "arp", "-a", out arpExit);
+                    string[] lines = output.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (string line in lines)
+                    {
+                        string trimmed = line.Trim();
+                        if (!trimmed.StartsWith(subnetPrefix + ".")) continue;
+                        string[] parts = trimmed.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                        if (parts.Length < 2) continue;
+                        string ip = parts[0].Trim();
+                        string mac = parts[1].Trim().Replace("-", ":").ToUpperInvariant();
+                        if (ip.EndsWith(".255") || mac == "FF:FF:FF:FF:FF:FF" || mac == "00:00:00:00:00:00" || mac.Length < 11) continue;
+                        if (ip == localIp) continue;
+                        lock (arpLock)
+                        {
+                            if (!discoveredIpToMac.ContainsKey(ip))
+                                discoveredIpToMac[ip] = mac;
+                        }
+                        lock (DiscoveryCacheLock) { CachedArpMacs[ip] = mac; }
+                    }
+                }
+                catch { }
+
+                // Include active DHCP leases reported by the router's DNS PTR table (e.g., MacBookPro.powerhub, iPhone.powerhub)
+                // even if the device is in Apple 802.11 DTIM sleep or behind a mesh range extender
+                if (routerHosts != null)
+                {
+                    foreach (KeyValuePair<string, string> kv in routerHosts)
+                    {
+                        string rIp = kv.Key;
+                        string rHost = kv.Value;
+                        if (string.IsNullOrEmpty(rIp) || rIp == localIp || string.IsNullOrEmpty(rHost)) continue;
+                        if (!discoveredIpToMac.ContainsKey(rIp))
+                        {
+                            string cachedMac = null;
+                            lock (DiscoveryCacheLock)
+                            {
+                                if (CachedArpMacs.ContainsKey(rIp)) cachedMac = CachedArpMacs[rIp];
+                            }
+                            discoveredIpToMac[rIp] = !string.IsNullOrEmpty(cachedMac) ? cachedMac : "DHCP Lease";
+                        }
+                    }
+                }
+
+                List<LanDeviceEntry> found = new List<LanDeviceEntry>();
+                HashSet<string> seenIps = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+                // Always include This Computer (Windows Desktop)
+                found.Add(new LanDeviceEntry
+                {
+                    Name = "Windows Desktop",
+                    Ip = localIp,
+                    Mac = "Local",
+                    Kind = "windows",
+                    Detail = IsConnected ? "Protected by 10 Gbps WireGuard VPN tunnel (" + localIp + ")" : "Local Windows 10/11 PC on home Wi-Fi (" + localIp + ")",
+                    ChipTranslation = "",
+                    IsRouter = false,
+                    IsSelf = true,
+                    TrackerRisk = false,
+                    CameraRisk = false,
+                    IntruderRisk = false,
+                    SortOrder = 1
                 });
-            }
-            catch { }
+                seenIps.Add(localIp);
 
-            List<LanDeviceEntry> found = new List<LanDeviceEntry>();
-            HashSet<string> seenIps = new HashSet<string>();
-
-            // Always include This Computer (Windows Desktop)
-            found.Add(new LanDeviceEntry
-            {
-                Name = "Windows Desktop",
-                Ip = localIp,
-                Mac = "Local",
-                Kind = "windows",
-                Detail = IsConnected ? "Protected by 10 Gbps WireGuard VPN tunnel (" + localIp + ")" : "Local Windows 10/11 PC on home Wi-Fi (" + localIp + ")",
-                IsRouter = false,
-                IsSelf = true,
-                TrackerRisk = false
-            });
-            seenIps.Add(localIp);
-
-            try
-            {
-                string arpPath = Path.Combine(Environment.SystemDirectory, "arp.exe");
-                int arpExit;
-                string output = RunProcessCapture(File.Exists(arpPath) ? arpPath : "arp", "-a", out arpExit);
-                string[] lines = output.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-                List< Tuple<string, string> > rawArp = new List< Tuple<string, string> >();
-                foreach (string line in lines)
+                List<Tuple<string, string>> rawTargets = new List<Tuple<string, string>>();
+                foreach (KeyValuePair<string, string> kv in discoveredIpToMac)
                 {
-                    string trimmed = line.Trim();
-                    if (!trimmed.StartsWith(subnetPrefix + ".")) continue;
-                    string[] parts = trimmed.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-                    if (parts.Length < 2) continue;
-                    string ip = parts[0].Trim();
-                    string mac = parts[1].Trim().Replace("-", ":").ToUpperInvariant();
-                    if (ip.EndsWith(".255") || mac == "FF:FF:FF:FF:FF:FF" || mac.Length < 11) continue;
-                    if (seenIps.Contains(ip)) continue;
-                    seenIps.Add(ip);
-                    rawArp.Add(Tuple.Create(ip, mac));
+                    if (seenIps.Contains(kv.Key)) continue;
+                    seenIps.Add(kv.Key);
+                    rawTargets.Add(Tuple.Create(kv.Key, kv.Value));
                 }
 
-                // Probe discovered ARP hosts in parallel for TTL, Windows/Mac/iOS ports, and short hostname
-                LanDeviceEntry[] probed = new LanDeviceEntry[rawArp.Count];
-                Parallel.For(0, rawArp.Count, idx =>
+                LanDeviceEntry[] probed = new LanDeviceEntry[rawTargets.Count];
+                Parallel.For(0, rawTargets.Count, new ParallelOptions { MaxDegreeOfParallelism = 32 }, idx =>
                 {
-                    string ip = rawArp[idx].Item1;
-                    string mac = rawArp[idx].Item2;
+                    string ip = rawTargets[idx].Item1;
+                    string mac = rawTargets[idx].Item2;
                     bool isGw = (ip == gatewayIp);
                     int ttl = 0;
-                    lock (ttlLock)
-                    {
-                        if (ipTtls.ContainsKey(ip)) ttl = ipTtls[ip];
-                    }
-                    if (ttl == 0 && !isGw)
-                    {
-                        try
-                        {
-                            using (Ping p = new Ping())
-                            {
-                                PingReply rep = p.Send(ip, 150);
-                                if (rep != null && rep.Status == IPStatus.Success && rep.Options != null)
-                                    ttl = rep.Options.Ttl;
-                            }
-                        }
-                        catch { }
-                    }
-                    bool winPort = !isGw && (ProbeTcpPortFast(ip, 445, 110) || ProbeTcpPortFast(ip, 135, 110));
-                    bool macPort = !isGw && !winPort && (ProbeTcpPortFast(ip, 548, 110) || ProbeTcpPortFast(ip, 5900, 110));
-                    bool iosSig = !isGw && !winPort && !macPort && ProbeIosLockdownSignature(ip, 120);
-                    string hostHint = !isGw ? ResolveShortHostnameFast(ip) : "";
 
-                    string dName, dKind, dDetail;
-                    bool dRisk;
-                    ClassifyMacVendor(ip, mac, ttl, hostHint, winPort, macPort, iosSig, isGw, false, IsConnected, out dName, out dKind, out dDetail, out dRisk);
+                    string hostHint = (routerHosts != null && routerHosts.ContainsKey(ip)) ? routerHosts[ip] : "";
+                    if (string.IsNullOrEmpty(hostHint))
+                    {
+                        lock (DiscoveryCacheLock)
+                        {
+                            if (CachedRouterHostnames.ContainsKey(ip)) hostHint = CachedRouterHostnames[ip];
+                        }
+                    }
+
+                    bool hasKnownHostname = !string.IsNullOrEmpty(hostHint);
+                    bool winPort = !isGw && !hasKnownHostname && ProbeTcpPortFast(ip, 445, 75);
+                    bool macPort = !isGw && !hasKnownHostname && !winPort && ProbeTcpPortFast(ip, 5000, 75);
+                    bool iosSig = !isGw && !hasKnownHostname && !winPort && ProbeIosLockdownSignature(ip, 75);
+                    bool castPort = !isGw && !winPort && !macPort && ProbeTcpPortFast(ip, 8009, 75);
+                    bool printerPort = !isGw && !hasKnownHostname && !winPort && ProbeTcpPortFast(ip, 631, 70);
+                    bool camPort = !isGw && !hasKnownHostname && !winPort && !macPort && !printerPort && ProbeTcpPortFast(ip, 554, 70);
+
+                    string dName, dKind, dDetail, dChip;
+                    bool dRisk, dCamRisk, dIntruder;
+                    int dSort;
+                    ClassifyMacVendor(
+                        ip, mac, ttl, hostHint,
+                        winPort, macPort, iosSig, castPort, printerPort, camPort,
+                        isGw, false, IsConnected,
+                        out dName, out dKind, out dDetail, out dChip,
+                        out dRisk, out dCamRisk, out dIntruder, out dSort);
+
                     probed[idx] = new LanDeviceEntry
                     {
                         Name = dName,
@@ -1914,9 +2366,13 @@ namespace SweeprVpnApp
                         Mac = mac,
                         Kind = dKind,
                         Detail = dDetail,
+                        ChipTranslation = dChip,
                         IsRouter = isGw,
                         IsSelf = false,
-                        TrackerRisk = dRisk
+                        TrackerRisk = dRisk,
+                        CameraRisk = dCamRisk,
+                        IntruderRisk = dIntruder,
+                        SortOrder = dSort
                     };
                 });
 
@@ -1924,92 +2380,107 @@ namespace SweeprVpnApp
                 {
                     if (probed[i] != null) found.Add(probed[i]);
                 }
-            }
-            catch { }
 
-            if (!seenIps.Contains(gatewayIp))
-            {
-                found.Insert(0, new LanDeviceEntry
+                if (!seenIps.Contains(gatewayIp))
                 {
-                    Name = "Home Wi-Fi Router",
-                    Ip = gatewayIp,
-                    Mac = "Gateway",
-                    Kind = "router",
-                    Detail = "Encrypted WPA2/WPA3 home gateway",
-                    IsRouter = true,
-                    IsSelf = false,
-                    TrackerRisk = false
-                });
-            }
-
-            StructuredLanDevices = found;
-            DiscoveredLanDevices.Clear();
-            foreach (LanDeviceEntry d in found)
-            {
-                DiscoveredLanDevices.Add(d.Name + " (" + d.Ip + ") — " + (d.TrackerRisk ? "TV Trackers Found" : "Safe ✓"));
-            }
-
-            try
-            {
-                lock (KnownMacsLock)
-                {
-                    bool firstBaseline = (BaselineKnownMacs.Count == 0);
-                    foreach (LanDeviceEntry d in found)
+                    found.Add(new LanDeviceEntry
                     {
-                        string macKey = (d.Mac ?? "").Trim().ToUpperInvariant();
-                        if (string.IsNullOrEmpty(macKey) || macKey == "LOCAL" || macKey == "GATEWAY") continue;
-                        if (firstBaseline)
+                        Name = "Home Wi-Fi Router",
+                        Ip = gatewayIp,
+                        Mac = "Gateway",
+                        Kind = "router",
+                        Detail = "Encrypted WPA2/WPA3 home gateway (" + gatewayIp + ")",
+                        ChipTranslation = "",
+                        IsRouter = true,
+                        IsSelf = false,
+                        TrackerRisk = false,
+                        CameraRisk = false,
+                        IntruderRisk = false,
+                        SortOrder = 2
+                    });
+                }
+
+                // Sort by priority (Self -> Router -> Mac/Windows Laptops -> iPhones/Androids -> TVs/Speakers -> Cameras -> Printers -> Extenders) then IP octet
+                found.Sort((a, b) =>
+                {
+                    int cmp = a.SortOrder.CompareTo(b.SortOrder);
+                    if (cmp != 0) return cmp;
+                    return ParseIpLastOctet(a.Ip).CompareTo(ParseIpLastOctet(b.Ip));
+                });
+
+                StructuredLanDevices = found;
+                DiscoveredLanDevices.Clear();
+                foreach (LanDeviceEntry d in found)
+                {
+                    DiscoveredLanDevices.Add(d.Name + " (" + d.Ip + ") — " + (d.TrackerRisk ? "TV Trackers Found" : "Safe ✓"));
+                }
+
+                try
+                {
+                    lock (KnownMacsLock)
+                    {
+                        bool firstBaseline = (BaselineKnownMacs.Count == 0);
+                        foreach (LanDeviceEntry d in found)
                         {
-                            BaselineKnownMacs.Add(macKey);
-                        }
-                        else if (!BaselineKnownMacs.Contains(macKey))
-                        {
-                            BaselineKnownMacs.Add(macKey);
-                            if (IsRadarEnabled)
+                            string devIdentity = (!string.IsNullOrEmpty(d.Mac) && d.Mac != "DHCP Lease" && d.Mac != "Local" && d.Mac != "Gateway")
+                                ? d.Mac.Trim().ToUpperInvariant()
+                                : (d.Ip ?? "").Trim();
+                            if (string.IsNullOrEmpty(devIdentity) || d.IsSelf || d.IsRouter) continue;
+                            if (firstBaseline)
                             {
-                                string alertName = d.Name ?? "Unknown Device";
+                                BaselineKnownMacs.Add(devIdentity);
+                            }
+                            else if (!BaselineKnownMacs.Contains(devIdentity))
+                            {
+                                BaselineKnownMacs.Add(devIdentity);
+                                string alertName = d.Name ?? "New Wi-Fi Device";
                                 string alertIp = d.Ip ?? "";
-                                if (TrayIcon != null)
+                                if (IsRadarEnabled && TrayIcon != null)
                                 {
                                     try
                                     {
                                         this.BeginInvoke(new Action(() =>
                                         {
-                                            TrayIcon.ShowBalloonTip(5000, "SWEEPR Wi-Fi Intruder Alert", "New device joined your Wi-Fi: " + alertName + " (" + alertIp + ")", ToolTipIcon.Warning);
+                                            TrayIcon.ShowBalloonTip(5000, "SWEEPR Wi-Fi Guard Alert", "New device joined your Wi-Fi: " + alertName + " (" + alertIp + ")", ToolTipIcon.Warning);
                                         }));
                                     }
                                     catch { }
                                 }
-                                ExecuteJsSafe("window.onNativeIntruderAlert && window.onNativeIntruderAlert('" + EscapeJson(alertName) + "', '" + EscapeJson(alertIp) + "', '" + EscapeJson(macKey) + "')");
+                                ExecuteJsSafe("window.onNativeIntruderAlert && window.onNativeIntruderAlert('" + EscapeJson(alertName) + "', '" + EscapeJson(alertIp) + "', '" + EscapeJson(devIdentity) + "')");
                             }
                         }
                     }
                 }
-            }
-            catch { }
+                catch { }
 
-            StringBuilder sb = new StringBuilder();
-            sb.Append("{\"subnet\":\"").Append(EscapeJson(subnetPrefix + ".0/24")).Append("\",");
-            sb.Append("\"local_ip\":\"").Append(EscapeJson(localIp)).Append("\",");
-            sb.Append("\"gateway_ip\":\"").Append(EscapeJson(gatewayIp)).Append("\",");
-            sb.Append("\"devices\":[");
-            for (int i = 0; i < found.Count; i++)
-            {
-                LanDeviceEntry d = found[i];
-                if (i > 0) sb.Append(",");
-                sb.Append("{")
-                  .Append("\"name\":\"").Append(EscapeJson(d.Name)).Append("\",")
-                  .Append("\"ip\":\"").Append(EscapeJson(d.Ip)).Append("\",")
-                  .Append("\"mac\":\"").Append(EscapeJson(d.Mac)).Append("\",")
-                  .Append("\"kind\":\"").Append(EscapeJson(d.Kind)).Append("\",")
-                  .Append("\"detail\":\"").Append(EscapeJson(d.Detail)).Append("\",")
-                  .Append("\"is_router\":").Append(d.IsRouter ? "true" : "false").Append(",")
-                  .Append("\"is_self\":").Append(d.IsSelf ? "true" : "false").Append(",")
-                  .Append("\"tracker_risk\":").Append(d.TrackerRisk ? "true" : "false")
-                  .Append("}");
+                StringBuilder sb = new StringBuilder();
+                sb.Append("{\"subnet\":\"").Append(EscapeJson(subnetPrefix + ".0/24")).Append("\",");
+                sb.Append("\"local_ip\":\"").Append(EscapeJson(localIp)).Append("\",");
+                sb.Append("\"gateway_ip\":\"").Append(EscapeJson(gatewayIp)).Append("\",");
+                sb.Append("\"devices\":[");
+                for (int i = 0; i < found.Count; i++)
+                {
+                    LanDeviceEntry d = found[i];
+                    if (i > 0) sb.Append(",");
+                    sb.Append("{")
+                      .Append("\"name\":\"").Append(EscapeJson(d.Name)).Append("\",")
+                      .Append("\"ip\":\"").Append(EscapeJson(d.Ip)).Append("\",")
+                      .Append("\"mac\":\"").Append(EscapeJson(d.Mac)).Append("\",")
+                      .Append("\"kind\":\"").Append(EscapeJson(d.Kind)).Append("\",")
+                      .Append("\"detail\":\"").Append(EscapeJson(d.Detail)).Append("\",")
+                      .Append("\"chip_translation\":\"").Append(EscapeJson(d.ChipTranslation ?? "")).Append("\",")
+                      .Append("\"is_router\":").Append(d.IsRouter ? "true" : "false").Append(",")
+                      .Append("\"is_self\":").Append(d.IsSelf ? "true" : "false").Append(",")
+                      .Append("\"tracker_risk\":").Append(d.TrackerRisk ? "true" : "false").Append(",")
+                      .Append("\"camera_risk\":").Append(d.CameraRisk ? "true" : "false").Append(",")
+                      .Append("\"intruder_risk\":").Append(d.IntruderRisk ? "true" : "false")
+                      .Append("}");
+                }
+                sb.Append("]}");
+                LastScanJsonCache = sb.ToString();
+                LastScanTimeUtc = DateTime.UtcNow;
+                return LastScanJsonCache;
             }
-            sb.Append("]}");
-            return sb.ToString();
         }
 
         public void ToggleRadar()

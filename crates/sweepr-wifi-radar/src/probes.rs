@@ -256,10 +256,45 @@ pub fn mdns_reverse(ips: &[Ipv4Addr], wait: Duration) -> Vec<(Ipv4Addr, Vec<Stri
 }
 
 // ---------------------------------------------------------------- Reverse DNS
-/// Asks the router for the name each device gave it when it joined (DHCP host name).
-pub fn reverse_dns(ips: &[Ipv4Addr], wait: Duration) -> Vec<(Ipv4Addr, String)> {
+/// Asks the home router directly on UDP port 53 (with OS fallback) for each device's DHCP host name.
+pub fn reverse_dns(ips: &[Ipv4Addr], gateway: Option<Ipv4Addr>, wait: Duration) -> Vec<(Ipv4Addr, String)> {
+    let mut out_map: HashMap<Ipv4Addr, String> = HashMap::new();
+
+    if let Some(gw) = gateway {
+        if let Ok(sock) = UdpSocket::bind("0.0.0.0:0") {
+            let _ = sock.set_Write_timeout_ms_safe();
+            for (idx, ip) in ips.iter().copied().enumerate() {
+                let o = ip.octets();
+                let ptr = format!("{}.{}.{}.{}.in-addr.arpa", o[3], o[2], o[1], o[0]);
+                let pkt = dns::build_query(0x3100u16.wrapping_add(idx as u16), &[(&ptr, dns::T_PTR)], false);
+                let _ = sock.send_to(&pkt, (gw, 53));
+                if idx % 2 == 1 {
+                    std::thread::sleep(Duration::from_millis(6));
+                }
+            }
+            recv_until(&sock, Instant::now() + Duration::from_millis(450), |msg, _src| {
+                for r in dns::parse_records(msg) {
+                    if let dns::RData::Ptr(host) = r.data {
+                        if r.name.ends_with("in-addr.arpa") {
+                            let p: Vec<u8> = r.name.split('.').take(4).filter_map(|x| x.parse().ok()).collect();
+                            if p.len() == 4 {
+                                let ip = Ipv4Addr::new(p[3], p[2], p[1], p[0]);
+                                if !host.is_empty() && host.parse::<IpAddr>().is_err() {
+                                    out_map.insert(ip, host);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    }
+
     let (tx, rx) = mpsc::channel();
     for ip in ips.iter().copied() {
+        if out_map.contains_key(&ip) {
+            continue;
+        }
         let tx = tx.clone();
         std::thread::spawn(move || {
             if let Ok(name) = dns_lookup::lookup_addr(&IpAddr::V4(ip)) {
@@ -269,9 +304,19 @@ pub fn reverse_dns(ips: &[Ipv4Addr], wait: Duration) -> Vec<(Ipv4Addr, String)> 
     }
     drop(tx);
     let deadline = Instant::now() + wait;
-    let mut out = Vec::new();
-    while let Ok(item) = rx.recv_timeout(deadline.saturating_duration_since(Instant::now())) { out.push(item); }
-    out
+    while let Ok((ip, name)) = rx.recv_timeout(deadline.saturating_duration_since(Instant::now())) {
+        out_map.entry(ip).or_insert(name);
+    }
+    out_map.into_iter().collect()
+}
+
+trait UdpTimeoutExt {
+    fn set_Write_timeout_ms_safe(&self) -> std::io::Result<()>;
+}
+impl UdpTimeoutExt for UdpSocket {
+    fn set_Write_timeout_ms_safe(&self) -> std::io::Result<()> {
+        self.set_write_timeout(Some(Duration::from_millis(90)))
+    }
 }
 
 // ---------------------------------------------------------------- Airbnb / Hidden Camera Port Check

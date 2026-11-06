@@ -873,7 +873,7 @@
     if (Array.isArray(rawFavs)) savedFavs = rawFavs;
   } catch (e) {}
 
-  const state = { view:'home', code:'UK-LON-01', filter:'all', connected:false, connecting:false, pro:false, email:'', activationCode:'', auto:false, startup:false, killSwitch:false, lanBypass:false, shields:[true, true, true], seconds:0, mbTransferred:0.4, spark:[42,58,50,68,62,76,64,82,70,88,78,92], lang:'en' };
+  const state = { view:'home', code:'UK-LON-01', filter:'all', connected:false, connecting:false, pro:false, email:'', activationCode:'', auto:false, startup:false, killSwitch:false, lanBypass:true, shields:[true, true, true], seconds:0, mbTransferred:0.4, spark:[42,58,50,68,62,76,64,82,70,88,78,92], lang:'en' };
   let timerHandle = null;
   const cur = () => SERVERS.find(s => s.code === state.code) || SERVERS[0];
   const $ = id => document.getElementById(id);
@@ -888,8 +888,16 @@
     else p.resolve(result);
   };
   window.onNativeIntruderAlert = function(devName, ip, mac) {
-    toast('⚠️ Wi-Fi Intruder Alert: New device joined (' + (devName || 'Unknown') + ' · ' + (ip || mac) + ')');
-    scanWifi();
+    toast('🔔 New device connected to Wi-Fi: ' + (devName || 'Unknown') + ' (' + (ip || mac) + ')');
+    silentRefreshWifi();
+  };
+  window.onNativeWifiScanUpdate = function(report) {
+    if (report && Array.isArray(report.devices) && report.devices.length > 0) {
+      devices = report.devices;
+      lastScanAt = Date.now();
+      updateLastChecked();
+      renderDevices();
+    }
   };
   function invokeWebView2(action, payload, timeoutMs) {
     return new Promise((resolve, reject) => {
@@ -943,6 +951,10 @@
       $('nav-' + v).classList.toggle('on', v === view);
     });
     postNative('switchTab', view);
+    if (view === 'wifi') {
+      if (!devices || devices.length <= 1) scanWifi();
+      else silentRefreshWifi();
+    }
   }
 
   function openCountrySheet(open) {
@@ -1429,7 +1441,7 @@
       const camBadge = d.camera_risk ? ' <span class="pill warn" style="font-size:10px;padding:2px 7px">📷 Camera Check</span>' : '';
       const subText = isPaused
         ? '🛏️ Kids Bedtime Schedule: Paused 9:30 PM – 7:00 AM · ' + d.ip
-        : (d.detail + (d.ip ? ' · ' + d.ip : ''));
+        : (String(d.detail || '').includes(d.ip) ? d.detail : (d.detail + (d.ip ? ' · ' + d.ip : '')));
 
       let actions = '<button class="btn-soft" style="padding:4px 9px;min-height:28px;font-size:11px" onclick="renameWifiDevice(' + idx + ')" title="Give this device a plain-English household name">✏️ Rename</button>';
       if (isKidDevice || wgCurrentTab === 'bedtime') {
@@ -1501,6 +1513,26 @@
       renderDevices();
     }
   }
+  async function silentRefreshWifi() {
+    if (scanning) return;
+    try {
+      let nextList = null;
+      if (isWebView2 && !tauri) {
+        const report = await invokeWebView2('scanNetwork', {}, 25000);
+        nextList = (report && report.devices) || null;
+      } else if (tauri) {
+        const report = await tauri.core.invoke('scan_network');
+        nextList = (report && report.devices) || null;
+      }
+      if (Array.isArray(nextList) && nextList.length > 0) {
+        devices = nextList;
+        lastScanAt = Date.now();
+        updateLastChecked();
+        renderDevices();
+      }
+    } catch (e) {}
+  }
+
   function updateLastChecked() {
     if (!lastScanAt) { $('lastChecked').textContent = 'Not checked yet'; return; }
     const mins = Math.floor((Date.now() - lastScanAt) / 60000);
@@ -2859,7 +2891,7 @@
     const savedLang = localStorage.getItem('sweepr_vpn_lang') || '';
     if (savedLang && I18N[savedLang]) { $('lang').value = savedLang; setLang(savedLang); }
     if (localStorage.getItem('sweepr_vpn_startup') === '1') state.startup = true;
-    state.lanBypass = localStorage.getItem('sweepr_vpn_lan_bypass') === '1';
+    state.lanBypass = localStorage.getItem('sweepr_vpn_lan_bypass') !== '0';
     if (localStorage.getItem('sweepr_vpn_auto_radar') === '1') state.auto = true;
     const savedKs = localStorage.getItem('sweepr_vpn_killswitch');
     if (savedKs !== null) state.killSwitch = savedKs === '1';
@@ -2965,7 +2997,9 @@
   checkAppUpdate();
   setInterval(checkAppUpdate, 4 * 60 * 60 * 1000);
   scanWifi();
-  setInterval(() => { if (state.auto) scanWifi(); }, 15 * 60 * 1000);
+  setInterval(() => {
+    if (state.view === 'wifi' || state.auto) silentRefreshWifi();
+  }, 14 * 1000);
 </script>
 </body>
 </html>

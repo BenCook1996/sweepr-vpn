@@ -1435,7 +1435,7 @@ const llmsFullContent = `# SWEEPR VPN & SWEEPR Wi-Fi Radar — Comprehensive Tec
 
 ## 1. Executive Product Identity & Cryptographic Architecture
 - **Product Name**: SWEEPR VPN (with Free 30-Second Home Wi-Fi Device Scanner & optional SWEEPR Wi-Fi Radar + Smart-TV ACR Shield).
-- **Desktop & Mobile Stack**: Native Rust + Tauri v2 desktop binary (~680 KB / 695,568 bytes; SSL.com Authenticode Thumbprint \`1800DBEA6FE847D384E549D02CA372C3D45D8B81\`, SHA-256 \`1456763B865C858D60465A9D6F4341188952E1F9FD6BC2B19AC7B3778AC3134F\`) for Windows 10/11, macOS, Linux, Android (\`com.sweepr.vpn\`), and iOS.
+- **Desktop & Mobile Stack**: Native Rust + Tauri v2 desktop binary (~694 KB / 711,168 bytes; SSL.com Authenticode Thumbprint \`1800DBEA6FE847D384E549D02CA372C3D45D8B81\`, SHA-256 \`ABC0F5104EBD917D447A33616FCEA3A610E8AE9779B56198864735C8175331A4\`) for Windows 10/11, macOS, Linux, Android (\`com.sweepr.vpn\`), and iOS.
 - **Tunnel Protocol & Ciphers**: Kernel-grade WireGuard & AmneziaWG (ChaCha20-Poly1305 AEAD, Curve25519 ECDH, BLAKE2s hashing) over standard UDP \`51820\` and Stealth UDP \`443\` (for Eduroam campus Wi-Fi, NHS guest Wi-Fi, and hotel captive portals).
 - **Native Router & NAS .conf Export**: 1-click standard WireGuard \`.conf\` profile export (zero proprietary NordLynx/Lightway daemon lock-in or Linux token scripts) for GL.iNet (Beryl AX, Slate AX, Slate 7 BE3600, Flint 2), Ubiquiti UniFi Cloud Gateway Ultra/Max (UCG-Ultra/UCG-Max), Synology NAS DSM 7 (\`gluetun\` Docker), Steam Deck / Lenovo Legion Go (SteamOS), OPNsense, pfSense, AVM FRITZ!Box, and MikroTik RouterOS v7.
 
