@@ -3327,26 +3327,18 @@ self.addEventListener('fetch', e => {
       ? `${req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http'}://${req.headers.host}`
       : PUBLIC_URL;
 
-    // Search & AI crawlers: 301 redirect query-param variants to canonical /download, and serve indexable HTML download page
-    if (BOT_UA_RE.test(ua)) {
-      if (urlObj.search) {
+    // Search & AI crawlers (or explicit ?platform=picker): serve indexable HTML download page
+    if (BOT_UA_RE.test(ua) || requestedPlatform === 'picker') {
+      if (BOT_UA_RE.test(ua) && urlObj.search) {
         res.writeHead(301, { Location: '/download', ...COMMON_SECURITY_HEADERS });
         return res.end();
       }
-      return sendHtml(res, 200, renderPlatformDownloadPicker('windows', ua, hostOrigin), {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=3600'
-      });
-    }
-
-    // Canonical /download (without ?platform=... query parameter) ALWAYS serves the indexable 200 OK HTML
-    // Download Hub page to ALL visitors (zero user-agent cloaking, zero noindex on /download).
-    // The HTML page automatically initiates the OS-appropriate installer download on load.
-    if (!requestedPlatform || requestedPlatform === 'picker') {
       return sendHtml(res, 200, renderPlatformDownloadPicker(osType, ua, hostOrigin), {
         'Cache-Control': 'public, max-age=300, stale-while-revalidate=3600'
       });
     }
 
+    // Real visitors on any OS/device: NEVER show the picker screen; always stream the exact OS-matched installer directly.
     // 1. Android: Always stream SWEEPRVPN.apk directly without showing a picker page
     if (osType === 'android') {
       const apkPath = path.join(__dirname, 'SWEEPRVPN.apk');
@@ -3384,7 +3376,7 @@ self.addEventListener('fetch', e => {
       return res.end(req.method === 'HEAD' ? '' : xml);
     }
 
-    const forceWinExe = requestedPlatform === 'win' || requestedPlatform === 'windows';
+    // 3. macOS: Always stream SWEEPRVPN.dmg directly without showing a picker page
     const forceMacDmg = requestedPlatform === 'mac' || requestedPlatform === 'macos' || requestedPlatform === 'dmg';
     const dmgPath = path.join(__dirname, 'SWEEPRVPN.dmg');
 
@@ -3407,12 +3399,7 @@ self.addEventListener('fetch', e => {
       return dmgStream.pipe(res);
     }
 
-    if (!forceWinExe && osType !== 'windows') {
-      return sendHtml(res, 200, renderPlatformDownloadPicker(osType, ua, hostOrigin), {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=3600'
-      });
-    }
-
+    // 4. Windows / Default Desktop: Always stream SWEEPRVPN.exe directly without showing a picker page
     const exePath = path.join(__dirname, 'SWEEPRVPN.exe');
     if (fs.existsSync(exePath)) {
       const stat = fs.statSync(exePath);
@@ -3426,6 +3413,7 @@ self.addEventListener('fetch', e => {
         'X-Robots-Tag': 'noindex, nofollow',
         ...COMMON_SECURITY_HEADERS
       });
+      if (req.method === 'HEAD') return res.end();
       const exeStream = fs.createReadStream(exePath);
       req.on('close', () => exeStream.destroy());
       exeStream.on('error', () => { if (!res.headersSent) res.writeHead(500); res.end(); });

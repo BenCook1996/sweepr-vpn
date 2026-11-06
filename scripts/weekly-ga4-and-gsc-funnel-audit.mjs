@@ -247,21 +247,32 @@ async function runWeeklyFunnelAndGscAudit() {
   }
 
   try {
-    const dlRes = await fetchWithTimeout('https://sweeprvpn.com/download', { redirect: 'manual' });
+    const dlRes = await fetchWithTimeout('https://sweeprvpn.com/download', {
+      redirect: 'manual',
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)' }
+    });
     const dlHtml = dlRes.status === 200 ? await dlRes.text() : '';
+    const userWinRes = await fetchWithTimeout('https://sweeprvpn.com/download', {
+      method: 'HEAD',
+      redirect: 'manual',
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36' }
+    });
+    const winDisp = userWinRes.headers.get('content-disposition') || '';
     const dlOk =
       dlRes.status === 200 &&
       dlHtml.includes('index, follow') &&
       !dlHtml.includes('noindex') &&
-      dlHtml.includes(EXPECTED_EXE_SHA256);
+      dlHtml.includes(EXPECTED_EXE_SHA256) &&
+      userWinRes.status === 200 &&
+      winDisp.includes('SWEEPRVPN.exe');
     record(
       'Funnel B (Installer)',
-      'Live GET /download Crawlability & SHA-256 Verification',
+      'Live GET /download Direct OS Binary Delivery & Crawler Indexability',
       dlOk,
-      `HTTP ${dlRes.status} | index, follow=${dlHtml.includes('index, follow')} | SHA-256 badge=${dlHtml.includes(EXPECTED_EXE_SHA256)}`
+      `User-OS Direct=${winDisp || userWinRes.status} | Bot HTML=${dlRes.status} (SHA-256=${dlHtml.includes(EXPECTED_EXE_SHA256)})`
     );
   } catch (err) {
-    record('Funnel B (Installer)', 'Live GET /download Crawlability & SHA-256 Verification', false, err.message);
+    record('Funnel B (Installer)', 'Live GET /download Direct OS Binary Delivery & Crawler Indexability', false, err.message);
   }
 
   try {

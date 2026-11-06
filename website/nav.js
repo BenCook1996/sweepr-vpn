@@ -385,13 +385,30 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Mobile Direct App Installer & On-Screen Install Confirmation Sheet
+  // Automatic OS & Device Detection for All /download Links (Desktop + Mobile)
   try {
     const ua = (navigator.userAgent || '').toLowerCase();
     const isIpadOs = navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
     const isIos = /iphone|ipad|ipod/.test(ua) || isIpadOs;
     const isAndroid = ua.includes('android') || (ua.includes('linux') && navigator.maxTouchPoints > 0);
     const isOtherMobile = /mobile|iemobile|opera mini/.test(ua);
+    const isMacDesktop = !isIos && (ua.includes('mac os') || ua.includes('macintosh'));
+    const detectedPlatform = isIos ? 'ios' : (isAndroid || isOtherMobile) ? 'android' : isMacDesktop ? 'mac' : 'win';
+
+    document.querySelectorAll('a[href="/download"], a[href^="/download?"]').forEach((a) => {
+      const rawHref = a.getAttribute('href') || '/download';
+      try {
+        const u = new URL(rawHref, window.location.origin);
+        if (!u.searchParams.get('platform')) {
+          u.searchParams.set('platform', detectedPlatform);
+        }
+        if (isIos || isAndroid || isOtherMobile) {
+          u.searchParams.set('direct', '1');
+        }
+        a.setAttribute('href', u.pathname + u.search);
+      } catch {}
+    });
+
     if (isIos || isAndroid || isOtherMobile) {
       const targetHref = isIos ? '/download?platform=ios&direct=1' : '/download?platform=android&direct=1';
 
