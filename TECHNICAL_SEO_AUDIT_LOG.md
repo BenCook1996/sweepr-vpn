@@ -583,7 +583,7 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 ### Executive Summary
 - **Overall Scores**: Crawlability **100/100**, Technical SEO **100/100**, PageSpeed & CWV **100/100** across **205 Canonical Pages**.
 - **Auto-Optimizations Executed**:
-  - Synchronized sitemap.xml with 206 canonical URLs (content-hash <lastmod>: 4 modified today)
+  - Synchronized sitemap.xml with 206 canonical URLs (content-hash <lastmod>: 5 modified today)
   - Synchronized llms.txt & llms-full.txt with all 184 pSEO guides and live 04:00 AM WireGuard/ACR telemetry for GEO AI citations
 
 ### Category Scorecards & Verifications
@@ -629,7 +629,7 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 - **Static Cache-Control Architecture**: PASS — Explicit caching headers configured for HTML (0s), static media (300s/3600s), and XML/TXT (3600s/86400s)
 
 ### Compression Benchmark Results
-- **order.html** (124.3 KB raw) &rarr; Gzip: **29.2 KB** (77% reduction) | Brotli: **26.9 KB** (78% reduction)
-- **index.html** (69.6 KB raw) &rarr; Gzip: **14.5 KB** (79% reduction) | Brotli: **13.6 KB** (80% reduction)
+- **order.html** (124.4 KB raw) &rarr; Gzip: **29.3 KB** (76% reduction) | Brotli: **27.0 KB** (78% reduction)
+- **index.html** (70.3 KB raw) &rarr; Gzip: **14.8 KB** (79% reduction) | Brotli: **13.9 KB** (80% reduction)
 - **sitemap.xml** (37.7 KB raw) &rarr; Gzip: **2.6 KB** (93% reduction) | Brotli: **2.4 KB** (94% reduction)
 
