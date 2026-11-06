@@ -451,7 +451,7 @@ namespace SweeprVpnApp
                     if (!string.IsNullOrEmpty(InitialScreenshotPath))
                     {
                         System.Windows.Forms.Timer t = new System.Windows.Forms.Timer();
-                        t.Interval = 450;
+                        t.Interval = (InitialTabMode == "wifi" || InitialTabMode == "dark") ? 2400 : 450;
                         t.Tick += async (ts, te) =>
                         {
                             t.Stop();
@@ -480,7 +480,7 @@ namespace SweeprVpnApp
                         uiFolder,
                         CoreWebView2HostResourceAccessKind.Allow
                     );
-                    BrowserView.CoreWebView2.Navigate("https://app.sweeprvpn.local/index.html?v=259");
+                    BrowserView.CoreWebView2.Navigate("https://app.sweeprvpn.local/index.html?v=260");
                 }
                 catch
                 {
@@ -2397,6 +2397,25 @@ namespace SweeprVpnApp
                     if (cmp != 0) return cmp;
                     return ParseIpLastOctet(a.Ip).CompareTo(ParseIpLastOctet(b.Ip));
                 });
+
+                // Disambiguate multiple devices of the same model (e.g. Amazon Fire TV #1, #2 or Amazon Echo Speaker #1, #2)
+                Dictionary<string, int> nameTotals = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+                foreach (LanDeviceEntry d in found)
+                {
+                    string bn = d.Name ?? "Wi-Fi Device";
+                    nameTotals[bn] = nameTotals.ContainsKey(bn) ? (nameTotals[bn] + 1) : 1;
+                }
+                Dictionary<string, int> nameSeq = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+                foreach (LanDeviceEntry d in found)
+                {
+                    string bn = d.Name ?? "Wi-Fi Device";
+                    if (nameTotals.ContainsKey(bn) && nameTotals[bn] > 1)
+                    {
+                        int n = nameSeq.ContainsKey(bn) ? (nameSeq[bn] + 1) : 1;
+                        nameSeq[bn] = n;
+                        d.Name = bn + " #" + n;
+                    }
+                }
 
                 StructuredLanDevices = found;
                 DiscoveredLanDevices.Clear();

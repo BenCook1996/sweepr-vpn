@@ -119,7 +119,10 @@
   .flag.xl { width:28px; height:28px; }
 
   .card { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:16px; }
-  .devrow { display:flex; align-items:center; gap:12px; border:1px solid var(--line); border-radius:14px; padding:11px 12px; background:var(--card); }
+  .devrow { display:flex; align-items:center; justify-content:space-between; gap:12px; border:1px solid var(--line); border-radius:14px; padding:11px 14px; background:var(--card); overflow:hidden; }
+  .devrow .grow { flex:1; min-width:0; overflow:hidden; margin-right:6px; }
+  .devrow .t { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .devrow .s { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .devrow.warn { background:var(--amberbg); border:1.5px solid var(--amberline); }
   .devrow + .devrow { margin-top:8px; }
   .set-row { display:flex; align-items:center; gap:12px; padding:12px 0; cursor:pointer; }
@@ -1456,10 +1459,10 @@
       }
 
       const rowWarn = d.tracker_risk || isFlagged || d.camera_risk;
-      return '<div class="devrow' + (rowWarn ? ' warn' : '') + '" style="--row-idx:' + idx + ';justify-content:space-between" title="' + esc((d.ip || '') + '  ·  ' + (d.mac || '')) + '">' +
+      return '<div class="devrow' + (rowWarn ? ' warn' : '') + '" style="--row-idx:' + idx + '" title="' + esc((d.ip || '') + '  ·  ' + (d.mac || '')) + '">' +
         '<div class="ico ' + (rowWarn ? 'a' : 'e') + '"><svg width="18" height="18"><use href="#' + resolveDeviceIcon(d) + '"/></svg></div>' +
-        '<div class="grow" style="min-width:140px"><div class="t">' + esc(displayName) + camBadge + '</div><div class="s">' + esc(subText) + '</div></div>' +
-        '<div style="display:flex;gap:6px;align-items:center;flex-shrink:0;margin-left:auto">' + actions + '</div></div>';
+        '<div class="grow"><div class="t">' + esc(displayName) + camBadge + '</div><div class="s">' + esc(subText) + '</div></div>' +
+        '<div style="display:flex;gap:6px;align-items:center;flex-shrink:0">' + actions + '</div></div>';
     }).join('') : '<div class="card s" style="text-align:center">' +
       (wgCurrentTab === 'camera'
         ? '📷 <strong>Airbnb &amp; Guest Wi-Fi Camera Scan Clear:</strong> 0 hidden RTSP/ONVIF cameras detected on this network ✓'
