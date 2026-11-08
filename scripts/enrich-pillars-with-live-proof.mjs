@@ -117,7 +117,10 @@ const VERIFIED_TELEMETRY_RULES = [
   { id: 'ACR-HIS-01', target: 'vidaa.tv / flingo.tv / ads.vidaahub.com', rule: '0.0.0.0 sinkhole (NXDOMAIN)', action: 'Drops VIDAA OS Telemetry & Banner Ads', scope: 'Hisense / Toshiba Smart-TV Shield' },
   { id: 'DPI-QOS-01', target: 'ISP Deep Packet Inspection (SNI / QUIC)', rule: 'ChaCha20-Poly1305 AEAD (RFC 8439)', action: 'Masks Traffic Class from ISP Shapers', scope: '10Gbps WireGuard Tunnel' },
   { id: 'DNS-DOH-01', target: 'Plaintext UDP/53 ISP Resolver Hijack', rule: 'In-Tunnel DNS 10.66.66.1 (DNSSEC)', action: 'Prevents Transparent DNS Proxying', scope: 'WFP / nftables Leak Lock' },
-  { id: 'LAN-ARP-01', target: 'IEEE 41,000-OUI + mDNS/SSDP/NetBIOS', rule: 'Parallel /24 Sweep (<4.0s)', action: 'Flags Unknown Wi-Fi Intruders & Cameras', scope: 'SWEEPR Wi-Fi Radar Engine' }
+  { id: 'LAN-ARP-01', target: 'IEEE 41,000-OUI + mDNS/SSDP/NetBIOS', rule: 'Parallel /24 Sweep (<4.0s)', action: 'Flags Unknown Wi-Fi Intruders & Cameras', scope: 'SWEEPR Wi-Fi Radar Engine' },
+  { id: 'IOT-CHIP-OUI', target: 'Espressif / Tuya / Murata / Hon Hai / LiteOn', rule: 'OUI + mDNS Plain-English Lookup', action: 'Translates Cryptic Chip Vendor to Device', scope: 'WiFiGuard Home Translator' },
+  { id: 'CAM-RTSP-554', target: 'Airbnb / Hotel RTSP :554, :8554 & ONVIF :37777', rule: '5-Second Subnet Camera Probe', action: 'Detects Hidden IP Cameras on Guest Wi-Fi', scope: 'WiFiGuard Camera Sweep' },
+  { id: 'OFCOM-MDS-01', target: 'UK Ofcom Speed Code & FCC Broadband Label', rule: 'Evening Throughput vs MDS Audit', action: 'Generates £10.34/d Bill Credit Claim Script', scope: 'ISP Refund Proof Engine' }
 ];
 
 function loadEnrichmentState() {
@@ -189,7 +192,10 @@ function selectProofRowsForPillar(urlPath, slug, cluster) {
       (slugLower.includes('sony') && hay.includes('sony')) ||
       (slugLower.includes('hisense') && hay.includes('hisense')) ||
       ((slugLower.includes('eduroam') || slugLower.includes('5g') || slugLower.includes('cgnat')) && r.id === 'WG-MTU-1380') ||
-      ((slugLower.includes('bt-') || slugLower.includes('pppoe') || slugLower.includes('plusnet') || slugLower.includes('talktalk')) && r.id === 'WG-MTU-1412')
+      ((slugLower.includes('bt-') || slugLower.includes('pppoe') || slugLower.includes('plusnet') || slugLower.includes('talktalk')) && r.id === 'WG-MTU-1412') ||
+      ((slugLower.includes('espressif') || slugLower.includes('hon-hai') || slugLower.includes('tuya') || slugLower.includes('unknown-device') || slugLower.includes('private-wifi')) && r.id === 'IOT-CHIP-OUI') ||
+      ((slugLower.includes('airbnb') || slugLower.includes('camera')) && r.id === 'CAM-RTSP-554') ||
+      ((slugLower.includes('ofcom') || slugLower.includes('speed-guarantee') || slugLower.includes('throttling')) && r.id === 'OFCOM-MDS-01')
     ) {
       if (!usedIds.has(r.id)) {
         usedIds.add(r.id);

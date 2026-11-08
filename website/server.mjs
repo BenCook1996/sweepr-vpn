@@ -79,7 +79,10 @@ const BLOCKED_STATIC_FILES = new Set([
   'keyword-opportunities.json',
   'keyword-research-cache.json',
   'serp-cache.json',
-  'seo-strategy-performance-ledger.json'
+  'seo-strategy-performance-ledger.json',
+  'gsc-ga4-latest-snapshot.json',
+  'pillar-enrichment-state.json',
+  'wireguard-acr-pipeline-state.json'
 ]);
 
 const crm = new SweeprCrmClient({ projectId: 'vpn', crmUrl: SWEEPR_CRM_URL, apiKey: SWEEPR_CRM_API_KEY });

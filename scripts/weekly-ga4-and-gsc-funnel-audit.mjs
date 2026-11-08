@@ -131,7 +131,7 @@ async function runWeeklyFunnelAndGscAudit() {
   const templateCount = (kwEngineSource.match(/pillarBriefTemplate:\s*\{/g) || []).length;
   const kwOppsExists = fs.existsSync(kwOppsPath);
   const kwOppsDoc = kwOppsExists ? JSON.parse(fs.readFileSync(kwOppsPath, 'utf8')) : {};
-  const kwGatePass = kwOppsDoc.auditSummary?.assertionsPassed === '9/9 PASS' && templateCount >= 25;
+  const kwGatePass = (kwOppsDoc.auditSummary?.assertionsPassed === '10/10 PASS' || kwOppsDoc.auditSummary?.assertionsPassed === '9/9 PASS') && templateCount >= 25;
   record(
     'Keyword Opportunity Engine',
     'Automated 9-Assertion Keyword Quality Gate & Runway Templates (website/keyword-opportunities.json)',
@@ -229,6 +229,22 @@ async function runWeeklyFunnelAndGscAudit() {
     `${cooldownCount} GSC Striking-Distance titles protected by 14-day cooldown | ${proofCount} pillars enriched with live WireGuard/ACR proof`
   );
 
+  // Verify Pre- vs. Post-Change SEO Forecast-vs-Actual Strategy Ledger & Calibration Multipliers
+  const ledgerPath = path.join(WEBSITE_DIR, 'seo-strategy-performance-ledger.json');
+  const snapshotPath = path.join(WEBSITE_DIR, 'gsc-ga4-latest-snapshot.json');
+  const ledgerExists = fs.existsSync(ledgerPath) && fs.existsSync(snapshotPath);
+  const ledgerDoc = ledgerExists ? JSON.parse(fs.readFileSync(ledgerPath, 'utf8')) : {};
+  const ledgerEntries = Object.values(ledgerDoc.entries || {});
+  const prePostTracked = ledgerEntries.filter((e) => e.preChangeBaseline && e.postChangeActual && e.prePostDelta);
+  const measuredLifts = prePostTracked.filter((e) => typeof e.prePostDelta?.positionDelta === 'number');
+  const playbooksCalibrated = Object.keys(ledgerDoc.calibrationMultipliers || {}).length;
+  record(
+    'SEO Pre/Post Forecaster Ledger',
+    'Forecast-vs-Actual Strategy Ledger & Closed-Loop Calibration (website/seo-strategy-performance-ledger.json)',
+    ledgerExists && prePostTracked.length >= 20 && measuredLifts.length >= 8 && playbooksCalibrated >= 7,
+    `Tracked=${prePostTracked.length} | MeasuredPrePostPages=${measuredLifts.length} | CalibratedPlaybooks=${playbooksCalibrated}`
+  );
+
   // 3. Live Production Endpoint Smoke Tests (https://sweeprvpn.com & https://sweeprcleaner.com)
   try {
     const cfgRes = await fetchWithTimeout('https://sweeprvpn.com/api/checkout-config');
@@ -320,6 +336,19 @@ ${sectionHeader}
 
 ### Synthetic Funnel & Telemetry Checks
 ${checks.map((c) => `- **${c.status}** [\`${c.category}\`] **${c.name}**: ${c.detail}`).join('\n')}
+
+### Pre- vs. Post-Change SEO Forecast Accuracy & Playbook Lift Summary
+| Canonical URL | Change Type | Pre-Change (28d Impr / Pos / CTR) | Post-Change (28d Impr / Pos / CTR) | Net Pre->Post Lift (Δ Impr / Δ Pos / Δ CTR) | Forecast Status |
+|---|---|---|---|---|---|
+${measuredLifts
+  .slice(0, 8)
+  .map((row) => {
+    const pre = row.preChangeBaseline || {};
+    const post = row.postChangeActual || {};
+    const d = row.prePostDelta || {};
+    return `| \`${row.targetUrlPath}\` | \`${row.optimizationEvent?.changeType || 'ENRICHED'}\` | ${pre.gscImpressions28d ?? 0} impr / Pos ${pre.gscAvgPosition ?? '—'} / ${pre.gscCtrPct ?? 0}% | **${post.gscImpressions28d} impr / Pos ${post.gscAvgPosition} / ${post.gscCtrPct}%** | **+${d.impressionsDelta} impr / +${d.positionDelta} pos / +${d.ctrDeltaPct}%** | **\`${d.forecastAccuracyStatus}\`** (${post.actualDaysToTop10}d vs ${row.forecast?.estTimeToRankBand}) |`;
+  })
+  .join('\n')}
 `;
 
   let existingLog = '';

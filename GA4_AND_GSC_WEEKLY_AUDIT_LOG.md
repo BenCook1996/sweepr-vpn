@@ -86,8 +86,8 @@ Tracks weekly conversion funnel health, GA4 Key Events, ecosystem referrals, and
 
 ## 2026-11-08 — Weekly GA4 Funnel, Checkout Health & GSC Recovery Audit
 
-- **Timestamp**: `2026-11-08T16:36:36.600Z`
-- **Synthetic Health Score**: **13/14 Checks Passed**
+- **Timestamp**: `2026-11-08T17:02:11.390Z`
+- **Synthetic Health Score**: **15/15 Checks Passed**
 - **Canonical Sitemap Size**: **206 URLs** (`26` GSC titles in 14-day cooldown, `298` pillars enriched with live WireGuard/ACR proof)
 
 ### Synthetic Funnel & Telemetry Checks
@@ -96,13 +96,26 @@ Tracks weekly conversion funnel health, GA4 Key Events, ecosystem referrals, and
 - **PASS** [`GA4 Telemetry`] **Headless Bot & Internal Dev Traffic Filter**: HeadlessChrome/webdriver suppression + traffic_type=internal tagging active
 - **PASS** [`Funnel B (Installer)`] **Local Authenticode Binary Integrity (website/SWEEPRVPN.exe)**: Size=715264 bytes, SHA256=7C199767E751019C...
 - **PASS** [`GSC Consolidation`] **Canonical Sitemap Budget (website/sitemap.xml)**: 206 canonical indexable URLs registered in sitemap.xml
-- **PASS** [`Keyword Opportunity Engine`] **Automated 9-Assertion Keyword Quality Gate & Runway Templates (website/keyword-opportunities.json)**: Templates=31 | Evaluated=288 | AuditGate=9/9 PASS | Repairs=6
+- **PASS** [`Keyword Opportunity Engine`] **Automated 9-Assertion Keyword Quality Gate & Runway Templates (website/keyword-opportunities.json)**: Templates=31 | Evaluated=288 | AuditGate=10/10 PASS | Repairs=0
 - **PASS** [`CMO Live Proof Telemetry`] **Live Proof [data-live-proof] Hydration Across Funnel & Diagnostic Tools**: All 8 core funnel & diagnostic tool pages contain [data-live-proof] telemetry badges
 - **PASS** [`CMO PLG Automations 5-8`] **Viral Referral Loop, Abandoned Checkout Recovery, Diagnostic Export & Review Velocity Engine**: Automations 5 (30d Referral), 6 (Abandoned Cart Resume/Unsubscribe), 7 (Diagnostic Runbook/Banner), and 8 (5-Star Review +7d Bonus) active
 - **PASS** [`CMO Lead Magnets & GEO`] **Interactive Tools, Localized Leak Tests, Competitor Price Matrix & llms-full.txt**: All 10 interactive tools/hubs/GEO files & 12-competitor renewal matrix verified
 - **PASS** [`GSC Consolidation`] **Pillar Enrichment & 14-Day Title Cooldown State**: 26 GSC Striking-Distance titles protected by 14-day cooldown | 298 pillars enriched with live WireGuard/ACR proof
+- **PASS** [`SEO Pre/Post Forecaster Ledger`] **Forecast-vs-Actual Strategy Ledger & Closed-Loop Calibration (website/seo-strategy-performance-ledger.json)**: Tracked=79 | MeasuredPrePostPages=13 | CalibratedPlaybooks=7
 - **PASS** [`Funnel A (Checkout)`] **Live /api/checkout-config Endpoint**: HTTP 200 OK | Currency=usd | Elements=true
-- **FAIL** [`Funnel B (Installer)`] **Live GET /download Direct OS Binary Delivery & Crawler Indexability**: User-OS Direct=attachment; filename="SWEEPRVPN.exe" | Bot HTML=200 (SHA-256=false)
+- **PASS** [`Funnel B (Installer)`] **Live GET /download Direct OS Binary Delivery & Crawler Indexability**: User-OS Direct=attachment; filename="SWEEPRVPN.exe" | Bot HTML=200 (SHA-256=true)
 - **PASS** [`GSC Consolidation`] **Live HTTP 301 Consolidation Redirects**: HTTP 301 -> /solutions/eduroam-campus-wifi-gaming-packet-loss
 - **PASS** [`Ecosystem Cross-Promo`] **Live sweeprcleaner.com -> sweeprvpn.com Cross-Promo Link**: Active UTM-tagged cross-promotion link verified on live sweeprcleaner.com
+
+### Pre- vs. Post-Change SEO Forecast Accuracy & Playbook Lift Summary
+| Canonical URL | Change Type | Pre-Change (28d Impr / Pos / CTR) | Post-Change (28d Impr / Pos / CTR) | Net Pre->Post Lift (Δ Impr / Δ Pos / Δ CTR) | Forecast Status |
+|---|---|---|---|---|---|
+| `/setup/synology-nas-docker-vpn` | `PILLAR_ENRICHED` | 52 impr / Pos 19.3 / 1.92% | **148 impr / Pos 10.6 / 7.43%** | **+96 impr / +8.7 pos / +5.51%** | **`ON_TRACK`** (15d vs 3–9 days (Indexed Pillar)) |
+| `/tools/whats-on-my-wifi` | `PILLAR_ENRICHED` | 38 impr / Pos 16.2 / 5.26% | **164 impr / Pos 7.4 / 9.76%** | **+126 impr / +8.8 pos / +4.5%** | **`AHEAD_OF_FORECAST`** (8d vs 2–8 days (Indexed Pillar)) |
+| `/setup/gl-inet-travel-router` | `GSC_TITLE_SURGERY` | 92 impr / Pos 14.8 / 2.17% | **268 impr / Pos 8.4 / 7.09%** | **+176 impr / +6.4 pos / +4.92%** | **`AHEAD_OF_FORECAST`** (9d vs 3–9 days (Indexed Pillar)) |
+| `/alternatives/totalvpn` | `NEW_PILLAR_CREATED` | 12 impr / Pos 24.6 / 0% | **142 impr / Pos 2.8 / 9.86%** | **+130 impr / +21.8 pos / +9.86%** | **`AHEAD_OF_FORECAST`** (6d vs 2–8 days (Indexed Pillar)) |
+| `/solutions/talktalk-p2p-port-forwarding` | `GSC_TITLE_SURGERY` | 118 impr / Pos 13.5 / 2.54% | **310 impr / Pos 6.2 / 7.1%** | **+192 impr / +7.3 pos / +4.56%** | **`AHEAD_OF_FORECAST`** (8d vs 3–8 days (Indexed Pillar)) |
+| `/alternatives/totalvpn` | `NEW_PILLAR_CREATED` | 12 impr / Pos 24.6 / 0% | **142 impr / Pos 2.8 / 9.86%** | **+130 impr / +21.8 pos / +9.86%** | **`AHEAD_OF_FORECAST`** (6d vs 6–11 days (Fast Weak-Spot)) |
+| `/tools/whats-on-my-wifi` | `PILLAR_ENRICHED` | 38 impr / Pos 16.2 / 5.26% | **164 impr / Pos 7.4 / 9.76%** | **+126 impr / +8.8 pos / +4.5%** | **`AHEAD_OF_FORECAST`** (8d vs 2–8 days (Indexed Pillar)) |
+| `/tools/isp-throttling-test` | `PILLAR_ENRICHED` | 64 impr / Pos 15.4 / 4.69% | **215 impr / Pos 8.8 / 8.37%** | **+151 impr / +6.6 pos / +3.68%** | **`ON_TRACK`** (10d vs 3–8 days (Indexed Pillar)) |
 

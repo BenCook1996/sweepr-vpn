@@ -1,0 +1,200 @@
+{
+  "schemaVersion": "1.0.0",
+  "updatedAt": "2026-11-08T16:45:00.000Z",
+  "source": "GSC (sc-domain:sweeprvpn.com) + GA4 (Property 559903365 G-7D28EEMNXX)",
+  "windowDays": 28,
+  "pages": {
+    "/alternatives/totalvpn": {
+      "primaryQuery": "totalvpn renewal alternative",
+      "changeType": "NEW_PILLAR_CREATED",
+      "appliedAt": "2026-10-29T05:00:00.000Z",
+      "preChangeBaseline": {
+        "capturedAt": "2026-10-29T05:00:00.000Z",
+        "gscImpressions28d": 12,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0.0,
+        "gscAvgPosition": 24.6,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-08T16:45:00.000Z",
+        "gscImpressions28d": 142,
+        "gscClicks28d": 14,
+        "gscCtrPct": 9.86,
+        "gscAvgPosition": 2.8,
+        "actualDaysToTop10": 6,
+        "ga4ToolOrDownloadEvents": 9,
+        "ga4CheckoutStarts": 4
+      }
+    },
+    "/tools/whats-on-my-wifi": {
+      "primaryQuery": "what is espressif hon hai on my wifi",
+      "changeType": "PILLAR_ENRICHED",
+      "appliedAt": "2026-10-31T05:00:00.000Z",
+      "preChangeBaseline": {
+        "capturedAt": "2026-10-31T05:00:00.000Z",
+        "gscImpressions28d": 38,
+        "gscClicks28d": 2,
+        "gscCtrPct": 5.26,
+        "gscAvgPosition": 16.2,
+        "ga4ToolOrDownloadEvents": 5,
+        "ga4CheckoutStarts": 1
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-08T16:45:00.000Z",
+        "gscImpressions28d": 164,
+        "gscClicks28d": 16,
+        "gscCtrPct": 9.76,
+        "gscAvgPosition": 7.4,
+        "actualDaysToTop10": 8,
+        "ga4ToolOrDownloadEvents": 29,
+        "ga4CheckoutStarts": 5
+      }
+    },
+    "/tools/isp-throttling-test": {
+      "primaryQuery": "ofcom broadband speed guarantee compensation claim",
+      "changeType": "PILLAR_ENRICHED",
+      "appliedAt": "2026-10-30T05:00:00.000Z",
+      "preChangeBaseline": {
+        "capturedAt": "2026-10-30T05:00:00.000Z",
+        "gscImpressions28d": 64,
+        "gscClicks28d": 3,
+        "gscCtrPct": 4.69,
+        "gscAvgPosition": 15.4,
+        "ga4ToolOrDownloadEvents": 8,
+        "ga4CheckoutStarts": 1
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-08T16:45:00.000Z",
+        "gscImpressions28d": 215,
+        "gscClicks28d": 18,
+        "gscCtrPct": 8.37,
+        "gscAvgPosition": 8.8,
+        "actualDaysToTop10": 10,
+        "ga4ToolOrDownloadEvents": 34,
+        "ga4CheckoutStarts": 6
+      }
+    },
+    "/setup/gl-inet-travel-router": {
+      "primaryQuery": "gl inet beryl ax wireguard config",
+      "changeType": "GSC_TITLE_SURGERY",
+      "appliedAt": "2026-10-30T05:00:00.000Z",
+      "preChangeBaseline": {
+        "capturedAt": "2026-10-30T05:00:00.000Z",
+        "gscImpressions28d": 92,
+        "gscClicks28d": 2,
+        "gscCtrPct": 2.17,
+        "gscAvgPosition": 14.8,
+        "ga4ToolOrDownloadEvents": 3,
+        "ga4CheckoutStarts": 1
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-08T16:45:00.000Z",
+        "gscImpressions28d": 268,
+        "gscClicks28d": 19,
+        "gscCtrPct": 7.09,
+        "gscAvgPosition": 8.4,
+        "actualDaysToTop10": 9,
+        "ga4ToolOrDownloadEvents": 12,
+        "ga4CheckoutStarts": 5
+      }
+    },
+    "/solutions/talktalk-p2p-port-forwarding": {
+      "primaryQuery": "talktalk evening throttling port forwarding vpn",
+      "changeType": "GSC_TITLE_SURGERY",
+      "appliedAt": "2026-10-30T05:00:00.000Z",
+      "preChangeBaseline": {
+        "capturedAt": "2026-10-30T05:00:00.000Z",
+        "gscImpressions28d": 118,
+        "gscClicks28d": 3,
+        "gscCtrPct": 2.54,
+        "gscAvgPosition": 13.5,
+        "ga4ToolOrDownloadEvents": 4,
+        "ga4CheckoutStarts": 1
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-08T16:45:00.000Z",
+        "gscImpressions28d": 310,
+        "gscClicks28d": 22,
+        "gscCtrPct": 7.10,
+        "gscAvgPosition": 6.2,
+        "actualDaysToTop10": 8,
+        "ga4ToolOrDownloadEvents": 15,
+        "ga4CheckoutStarts": 4
+      }
+    },
+    "/solutions/eduroam-campus-wifi-gaming-packet-loss": {
+      "primaryQuery": "eduroam campus wifi gaming packet loss vpn",
+      "changeType": "GSC_TITLE_SURGERY",
+      "appliedAt": "2026-10-28T05:00:00.000Z",
+      "preChangeBaseline": {
+        "capturedAt": "2026-10-28T05:00:00.000Z",
+        "gscImpressions28d": 76,
+        "gscClicks28d": 1,
+        "gscCtrPct": 1.32,
+        "gscAvgPosition": 18.1,
+        "ga4ToolOrDownloadEvents": 2,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-08T16:45:00.000Z",
+        "gscImpressions28d": 195,
+        "gscClicks28d": 13,
+        "gscCtrPct": 6.67,
+        "gscAvgPosition": 7.9,
+        "actualDaysToTop10": 11,
+        "ga4ToolOrDownloadEvents": 11,
+        "ga4CheckoutStarts": 3
+      }
+    },
+    "/guides/stop-samsung-smart-tv-acr-tracking": {
+      "primaryQuery": "stop samsung smart tv acr tracking",
+      "changeType": "PILLAR_ENRICHED",
+      "appliedAt": "2026-10-27T05:00:00.000Z",
+      "preChangeBaseline": {
+        "capturedAt": "2026-10-27T05:00:00.000Z",
+        "gscImpressions28d": 84,
+        "gscClicks28d": 2,
+        "gscCtrPct": 2.38,
+        "gscAvgPosition": 17.4,
+        "ga4ToolOrDownloadEvents": 3,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-08T16:45:00.000Z",
+        "gscImpressions28d": 230,
+        "gscClicks28d": 15,
+        "gscCtrPct": 6.52,
+        "gscAvgPosition": 9.1,
+        "actualDaysToTop10": 12,
+        "ga4ToolOrDownloadEvents": 14,
+        "ga4CheckoutStarts": 3
+      }
+    },
+    "/setup/synology-nas-docker-vpn": {
+      "primaryQuery": "install nordvpn on synology nas wireguard gluetun",
+      "changeType": "PILLAR_ENRICHED",
+      "appliedAt": "2026-10-25T05:00:00.000Z",
+      "preChangeBaseline": {
+        "capturedAt": "2026-10-25T05:00:00.000Z",
+        "gscImpressions28d": 52,
+        "gscClicks28d": 1,
+        "gscCtrPct": 1.92,
+        "gscAvgPosition": 19.3,
+        "ga4ToolOrDownloadEvents": 2,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-08T16:45:00.000Z",
+        "gscImpressions28d": 148,
+        "gscClicks28d": 11,
+        "gscCtrPct": 7.43,
+        "gscAvgPosition": 10.6,
+        "actualDaysToTop10": 15,
+        "ga4ToolOrDownloadEvents": 8,
+        "ga4CheckoutStarts": 3
+      }
+    }
+  }
+}

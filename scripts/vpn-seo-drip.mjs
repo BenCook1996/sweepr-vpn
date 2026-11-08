@@ -7,7 +7,7 @@
  *  - ZERO PASTEBIN SYNDICATION (Mass pastebin links on telegra.ph / dpaste.org / catbox.moe are permanently disabled).
  *
  * Actions performed on every daily 10:00 AM run:
- *  1. Verifies `website/pad.xml` (v1.4.0, 695,568 bytes) and `website/keyword-opportunities.json` (`--audit`).
+ *  1. Verifies `website/pad.xml` (v1.4.0, 715,264 bytes) and `website/keyword-opportunities.json` (`--audit`).
  *  2. Loads all canonical URLs from `website/sitemap.xml` (prioritizing Top GSC Pillars & Interactive Tools).
  *  3. Syncs verified Tier-1 software directory listings into the SWEEPR CRM (`project=vpn`) and verifies live backlinks.
  *  4. Pings Bing IndexNow (`www.bing.com/indexnow` & `api.indexnow.org/indexnow`) with up to 25 delta URLs (14-day cooldown).
@@ -182,6 +182,9 @@ const GSC_PRIORITY_URLS = new Set([
   'https://sweeprvpn.com/vs',
   'https://sweeprvpn.com/tools/leak-test',
   'https://sweeprvpn.com/tools/isp-throttling-test',
+  'https://sweeprvpn.com/tools/whats-on-my-wifi',
+  'https://sweeprvpn.com/tools/smart-tv-tracking-check',
+  'https://sweeprvpn.com/tools/vpn-renewal-price-checker',
   'https://sweeprvpn.com/vs/totalvpn',
   'https://sweeprvpn.com/alternatives/totalvpn',
   'https://sweeprvpn.com/solutions/talktalk-p2p-port-forwarding',
@@ -203,6 +206,23 @@ const GSC_PRIORITY_URLS = new Set([
 ]);
 
 function loadTargetItemsFromSitemap() {
+  // Dynamically include priority URLs from the Pre/Post Strategy Performance Ledger
+  const ledgerPath = path.join(WEBSITE_DIR, 'seo-strategy-performance-ledger.json');
+  if (fs.existsSync(ledgerPath)) {
+    try {
+      const ledger = JSON.parse(fs.readFileSync(ledgerPath, 'utf8'));
+      for (const entry of Object.values(ledger.entries || {})) {
+        if (
+          entry?.targetUrlPath &&
+          (entry.optimizationEvent?.changeType === 'NEW_PILLAR_CREATED' ||
+            entry.prePostDelta?.forecastAccuracyStatus === 'BELOW_FORECAST_NEEDS_BOOST' ||
+            entry.prePostDelta?.forecastAccuracyStatus === 'READY_FOR_14D_GSC_CHECK')
+        ) {
+          GSC_PRIORITY_URLS.add(`https://sweeprvpn.com${entry.targetUrlPath}`);
+        }
+      }
+    } catch {}
+  }
   const xml = fs.readFileSync(SITEMAP_PATH, 'utf8');
   const rawUrls = [...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map((m) => m[1].trim());
   // Prioritize Tier 1 Core/Tool Hubs & Tier 2 GSC Striking-Distance Winners before general pillar pages
@@ -608,7 +628,7 @@ async function runVpnDrip(targetCount = 300) {
   console.log('\n==========================================================================');
   console.log('  DAILY SWEEPR VPN DIRECTORY, PAD XML & DELTA INDEXING SUMMARY');
   console.log('==========================================================================');
-  console.log(`✓ PAD XML Specification: v${padInfo?.version || '1.4.0'} (${padInfo?.sizeBytes || '695568'} bytes, HTTPS live probe checked)`);
+  console.log(`✓ PAD XML Specification: v${padInfo?.version || '1.4.0'} (${padInfo?.sizeBytes || '715264'} bytes, HTTPS live probe checked)`);
   console.log(`✓ Verified Directory Submissions Synced: ${VERIFIED_DIRECTORY_SUBMISSIONS.length} authority listings (Pastebin spam disabled: ${completed})`);
   console.log(`✓ Search Indexing (Delta-Only): ${indexStatus.deltaSubmitted} delta URLs submitted via IndexNow (out of ${indexStatus.sitemapUrls} canonical URLs)`);
   console.log(`✓ CRM Database Sync: Upserted to Railway Multi-Project CRM, Cleaner CRM, and local SQLite (Total VPN entries: ${vpnSeed.length})`);
@@ -629,6 +649,8 @@ async function runVpnDrip(targetCount = 300) {
           'website/sitemap.xml',
           'website/llms.txt',
           'website/keyword-opportunities.json',
+          'website/seo-strategy-performance-ledger.json',
+          'website/gsc-ga4-latest-snapshot.json',
           'KEYWORD_OPPORTUNITIES_AUDIT_LOG.md'
         ],
         { cwd: VPN_ROOT, encoding: 'utf8' }
@@ -645,6 +667,8 @@ async function runVpnDrip(targetCount = 300) {
             'website/sitemap.xml',
             'website/llms.txt',
             'website/keyword-opportunities.json',
+            'website/seo-strategy-performance-ledger.json',
+            'website/gsc-ga4-latest-snapshot.json',
             'KEYWORD_OPPORTUNITIES_AUDIT_LOG.md'
           ],
           { cwd: VPN_ROOT, stdio: 'inherit' }
