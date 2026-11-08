@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="robots" content="noindex, nofollow" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Option 5 (Pre vs. Post): Adaptive Contextual Exception-First Workspace — SWEEPR VPN</title>
+  <link rel="stylesheet" href="/ergonomic-mockups.css" />
+</head>
+<body data-option="5">
+  <header class="audit-topbar">
+    <div class="audit-brand">
+      <div class="audit-logo">S</div>
+      <div>
+        <div style="font-weight:900;font-size:14px">SWEEPR VPN · Ergonomic Pre vs. Post Audit</div>
+        <div style="font-size:11px;color:#94a3b8">Fitts's Law · Hick's Law · UI/UX Pro Max · Taste-Skill · Unslop</div>
+      </div>
+    </div>
+
+    <nav class="option-pills" aria-label="Mockup Options">
+      <a href="/prototype-ergonomic-hub.html" class="opt-link">All 5 Hub</a>
+      <a href="/prototype-ergonomic-option-1.html" class="opt-link">1. Zero-Travel Hub</a>
+      <a href="/prototype-ergonomic-option-2.html" class="opt-link">2. Taste &amp; Unslop</a>
+      <a href="/prototype-ergonomic-option-3.html" class="opt-link">3. Progressive (≤3)</a>
+      <a href="/prototype-ergonomic-option-4.html" class="opt-link">4. Thumb-Arc Dock</a>
+      <a href="/prototype-ergonomic-option-5.html" class="opt-link active">5. Exception-First</a>
+    </nav>
+
+    <div class="mode-group" role="group" aria-label="Comparison Mode">
+      <button class="mode-btn active" data-mode-btn="split" onclick="setAuditViewMode('split')">Side-by-Side (Pre vs Post)</button>
+      <button class="mode-btn" data-mode-btn="pre" onclick="setAuditViewMode('pre')">Pre Only</button>
+      <button class="mode-btn" data-mode-btn="post" onclick="setAuditViewMode('post')">Post Only</button>
+    </div>
+  </header>
+
+  <section class="thesis-bar">
+    <div class="thesis-inner">
+      <div>
+        <h1 class="thesis-title">
+          <span>Option 5: Adaptive Contextual Exception-First Workspace</span>
+          <span class="law-tag">Exception-First UI</span>
+          <span class="law-tag">Calm Computing</span>
+        </h1>
+        <p class="thesis-sub">
+          Surfaces ONLY what needs user action right now (such as an unknown Wi-Fi device or an evening ISP slowdown eligible for a $35 credit) at the top, while grouping recognized safe household devices into a 1-click expandable summary.
+        </p>
+      </div>
+      <div class="surface-tabs" role="tablist">
+        <button class="surf-btn active" data-surf-btn="desktop" onclick="setAuditSurface('desktop')">💻 Desktop App</button>
+        <button class="surf-btn" data-surf-btn="mobile" onclick="setAuditSurface('mobile')">📱 Mobile App</button>
+        <button class="surf-btn" data-surf-btn="web" onclick="setAuditSurface('web')">🌐 Website &amp; Checkout</button>
+      </div>
+    </div>
+  </section>
+
+  <main class="stage-wrap">
+    <div id="compareGrid" class="compare-grid"></div>
+  </main>
+
+  <script src="/ergonomic-mockups.js"></script>
+</body>
+</html>

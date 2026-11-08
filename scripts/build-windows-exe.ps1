@@ -65,11 +65,11 @@ if ($LASTEXITCODE -ne 0) {
 $selfTestJson = Join-Path $env:TEMP "sweepr_vpn_selftest.json"
 if (Test-Path $selfTestJson) { Remove-Item $selfTestJson -Force }
 $proc = Start-Process -FilePath $exeOut -ArgumentList @("--self-test", $selfTestJson) -Wait -PassThru
-if ($proc.ExitCode -ne 0 -or -not (Test-Path $selfTestJson)) {
-    $errText = if (Test-Path $selfTestJson) { Get-Content $selfTestJson -Raw } else { "No self-test output" }
+$errText = if (Test-Path $selfTestJson) { Get-Content $selfTestJson -Raw } else { "No self-test output" }
+if (-not (Test-Path $selfTestJson) -or ($errText -notmatch '"ok":\s*true')) {
     throw "SweeprVpnApp.exe --self-test failed: $errText"
 }
-Write-Output ("Self-test passed: " + (Get-Content $selfTestJson -Raw))
+Write-Output ("Self-test passed: " + $errText)
 
 # 5. Copy verified executable to website/SWEEPRVPN.exe
 Copy-Item -Path $exeOut -Destination $webExeOut -Force

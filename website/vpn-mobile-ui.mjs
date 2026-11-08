@@ -108,8 +108,8 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
     gap: 10px;
   }
   .icon-btn {
-    width: 38px;
-    height: 38px;
+    width: 44px;
+    height: 44px;
     border-radius: 11px;
     border: 1px solid var(--border);
     background: var(--card);
@@ -464,9 +464,6 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
   <!-- Top Bar -->
   <header class="topbar">
     <div class="topbar-left">
-      <button class="icon-btn" onclick="toggleDrawer()" aria-label="Menu">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-      </button>
       <div class="brand">
         <div class="logo">S</div>
         <span>SWEEPR <span style="color:var(--accent)">VPN</span></span>
@@ -524,6 +521,13 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
     </div>
 
     <div class="c3-bottom-deck">
+      <!-- Option 1: Inline Thumb-Zone Quick Country Pill Strip (1-Tap Switch & Connect) -->
+      <div id="quickCountryStrip" style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">
+        <button class="srv-btn" style="margin:0;padding:8px 6px;justify-content:center;font-size:11.5px;font-weight:800;border-radius:12px" onclick="pickServer('UK-LON-01')">🇬🇧 UK</button>
+        <button class="srv-btn" style="margin:0;padding:8px 6px;justify-content:center;font-size:11.5px;font-weight:800;border-radius:12px" onclick="pickServer('US-NYC-01')">🇺🇸 USA</button>
+        <button class="srv-btn" style="margin:0;padding:8px 6px;justify-content:center;font-size:11.5px;font-weight:800;border-radius:12px" onclick="pickServer('SE-STO-01')">🇸🇪 SE</button>
+        <button class="srv-btn" style="margin:0;padding:8px 6px;justify-content:center;font-size:11.5px;font-weight:800;border-radius:12px;color:var(--accent-fg)" onclick="switchTab('servers')">All 8 ›</button>
+      </div>
       <!-- Selected Country Switcher Card -->
       <button class="c3-location-card" onclick="switchTab('servers')">
         <div class="c3-loc-left">
@@ -710,6 +714,16 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
     </details>
 
     <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+        <div>
+          <div style="font-size:14px;font-weight:800">Kids Bedtime Pause Schedule</div>
+          <div style="font-size:12px;color:var(--muted)">Daily pause start time for kids' consoles &amp; tablets</div>
+        </div>
+        <input id="mobBedtimeInput" type="time" class="input" style="width:124px;margin-top:0;padding:8px 10px;font-weight:800" value="22:00" onchange="setMobBedtimeTime(this.value)" aria-label="Kids Bedtime Pause start time" />
+      </div>
+    </div>
+
+    <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center">
         <div>
           <div style="font-size:14px;font-weight:800">Appearance Mode</div>
@@ -777,24 +791,44 @@ const mobileShields = {
 
 const mobDevices = [
   { name: "Neighbor's Roku Stick", sub: 'Streaming 4K on Guest Wi-Fi • Unrecognized', state: 'intruder', blocked: false },
-  { name: "Jake's PS5 Console", sub: 'Kids Bedtime Schedule: 10:00 PM – 7:00 AM', state: 'kid', paused: true },
+  { name: "Jake's PS5 Console", sub: 'Kids Bedtime Schedule', state: 'kid', paused: true },
   { name: 'Kitchen Smart Plug', sub: 'Translated from Tuya IoT Chip • Trusted', state: 'trusted' },
   { name: 'Living Room Echo Dot', sub: 'Translated from Espressif IoT Chip • Trusted', state: 'trusted' }
 ];
 
+function getMobBedtimeTime() {
+  try { return localStorage.getItem('sweepr_bedtime_time') || '22:00'; } catch (e) { return '22:00'; }
+}
+function formatMobBedtime12h(hhmm) {
+  const parts = String(hhmm || '22:00').split(':');
+  let h = parseInt(parts[0], 10);
+  const m = parts[1] || '00';
+  if (isNaN(h)) return '10:00 PM';
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  return h + ':' + m + ' ' + ampm;
+}
+function setMobBedtimeTime(val) {
+  const clean = String(val || '22:00').trim() || '22:00';
+  try { localStorage.setItem('sweepr_bedtime_time', clean); } catch (e) {}
+  renderMobilePlainDevices();
+  showToast('Bedtime Pause schedule set to ' + formatMobBedtime12h(clean));
+}
+
 function renderMobilePlainDevices() {
   const box = document.getElementById('mobPlainDeviceList');
   if (!box) return;
+  const btFormatted = formatMobBedtime12h(getMobBedtimeTime());
   box.innerHTML = mobDevices.map((d, i) => {
     if (d.state === 'intruder') {
       return '<div style="padding:11px 12px;border-radius:14px;border:1.5px solid ' + (d.blocked ? 'var(--border)' : '#f59e0b') + ';background:' + (d.blocked ? 'var(--card-sub)' : 'rgba(245,158,11,0.1)') + ';display:flex;justify-content:space-between;align-items:center;gap:8px">' +
         '<div><div style="font-size:13px;font-weight:800">🚨 ' + escHtml(d.name) + '</div><div style="font-size:11px;color:var(--muted)">' + escHtml(d.blocked ? 'Blocked from Guest Wi-Fi ✓' : d.sub) + '</div></div>' +
-        '<button class="c3-change-pill" style="border:none;cursor:pointer;background:' + (d.blocked ? 'var(--accent-soft)' : '#f59e0b') + ';color:' + (d.blocked ? 'var(--accent-fg)' : '#fff') + '" onclick="toggleMobIntruder(' + i + ')">' + (d.blocked ? 'Blocked ✓' : 'Kick Off') + '</button></div>';
+        '<button class="c3-change-pill" style="border:none;cursor:pointer;min-height:38px;background:' + (d.blocked ? 'var(--accent-soft)' : '#f59e0b') + ';color:' + (d.blocked ? 'var(--accent-fg)' : '#fff') + '" onclick="toggleMobIntruder(' + i + ')">' + (d.blocked ? 'Blocked ✓' : 'Kick Off') + '</button></div>';
     }
     if (d.state === 'kid') {
       return '<div style="padding:11px 12px;border-radius:14px;border:1px solid var(--border);background:var(--card-sub);display:flex;justify-content:space-between;align-items:center;gap:8px">' +
-        '<div><div style="font-size:13px;font-weight:800">🎮 ' + escHtml(d.name) + '</div><div style="font-size:11px;color:var(--muted)">' + escHtml(d.paused ? '🌙 Bedtime Pause Active (10:00 PM)' : 'Online • Tap to pause for bedtime') + '</div></div>' +
-        '<button class="c3-change-pill" style="border:none;cursor:pointer" onclick="toggleMobBedtime(' + i + ')">' + (d.paused ? '⏸ Paused' : '🌙 Pause') + '</button></div>';
+        '<div><div style="font-size:13px;font-weight:800">🎮 ' + escHtml(d.name) + '</div><div style="font-size:11px;color:var(--muted)">' + escHtml(d.paused ? ('Bedtime Pause Active (' + btFormatted + ' – 7:00 AM)') : 'Online • Tap to pause for bedtime') + '</div></div>' +
+        '<button class="c3-change-pill" style="border:none;cursor:pointer;min-height:38px" onclick="toggleMobBedtime(' + i + ')">' + (d.paused ? 'Paused' : 'Bedtime Pause') + '</button></div>';
     }
     return '<div style="padding:10px 12px;border-radius:14px;border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:8px">' +
       '<div><div style="font-size:13px;font-weight:800">🔌 ' + escHtml(d.name) + '</div><div style="font-size:11px;color:var(--muted)">' + escHtml(d.sub) + '</div></div>' +
@@ -856,6 +890,7 @@ function toggleMobileShield(key) {
   mobileShields[key] = !mobileShields[key];
   const storageKey = key === 'killSwitch' ? 'sweepr_mob_killswitch' : key === 'autoWifi' ? 'sweepr_mob_autowifi' : key === 'doorbell' ? 'sweepr_mob_doorbell' : 'sweepr_mob_dnsshield';
   localStorage.setItem(storageKey, mobileShields[key] ? '1' : '0');
+  if (document.getElementById('mobBedtimeInput')) document.getElementById('mobBedtimeInput').value = getMobBedtimeTime();
   renderMobileShields();
   showToast((mobileShields[key] ? 'Enabled ' : 'Paused ') + (key === 'killSwitch' ? 'Kill Switch' : key === 'autoWifi' ? 'Wi-Fi Auto-Shield' : key === 'doorbell' ? 'Doorbell Mode for Wi-Fi' : 'Smart-TV DNS Shield'));
 }

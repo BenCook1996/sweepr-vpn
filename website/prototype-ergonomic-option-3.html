@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="robots" content="noindex, nofollow" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Option 3 (Pre vs. Post): Hick's Law Progressive Disclosure (≤ 3 Choices) — SWEEPR VPN</title>
+  <link rel="stylesheet" href="/ergonomic-mockups.css" />
+</head>
+<body data-option="3">
+  <header class="audit-topbar">
+    <div class="audit-brand">
+      <div class="audit-logo">S</div>
+      <div>
+        <div style="font-weight:900;font-size:14px">SWEEPR VPN · Ergonomic Pre vs. Post Audit</div>
+        <div style="font-size:11px;color:#94a3b8">Fitts's Law · Hick's Law · UI/UX Pro Max · Taste-Skill · Unslop</div>
+      </div>
+    </div>
+
+    <nav class="option-pills" aria-label="Mockup Options">
+      <a href="/prototype-ergonomic-hub.html" class="opt-link">All 5 Hub</a>
+      <a href="/prototype-ergonomic-option-1.html" class="opt-link">1. Zero-Travel Hub</a>
+      <a href="/prototype-ergonomic-option-2.html" class="opt-link">2. Taste &amp; Unslop</a>
+      <a href="/prototype-ergonomic-option-3.html" class="opt-link active">3. Progressive (≤3)</a>
+      <a href="/prototype-ergonomic-option-4.html" class="opt-link">4. Thumb-Arc Dock</a>
+      <a href="/prototype-ergonomic-option-5.html" class="opt-link">5. Exception-First</a>
+    </nav>
+
+    <div class="mode-group" role="group" aria-label="Comparison Mode">
+      <button class="mode-btn active" data-mode-btn="split" onclick="setAuditViewMode('split')">Side-by-Side (Pre vs Post)</button>
+      <button class="mode-btn" data-mode-btn="pre" onclick="setAuditViewMode('pre')">Pre Only</button>
+      <button class="mode-btn" data-mode-btn="post" onclick="setAuditViewMode('post')">Post Only</button>
+    </div>
+  </header>
+
+  <section class="thesis-bar">
+    <div class="thesis-inner">
+      <div>
+        <h1 class="thesis-title">
+          <span>Option 3: Hick's Law Progressive Disclosure (≤ 3 Choices)</span>
+          <span class="law-tag">Hick's Law (n ≤ 3)</span>
+          <span class="law-tag">2-Step Checkout</span>
+        </h1>
+        <p class="thesis-sub">
+          Reduces simultaneous choices (n) on every screen to at most 3: collapses Desktop Wi-Fi's 19 competing controls into a 3-card summary, groups 8 countries behind a 'Fastest Automatic' default, and turns the 14-control /order page into a 2-step progressive flow.
+        </p>
+      </div>
+      <div class="surface-tabs" role="tablist">
+        <button class="surf-btn active" data-surf-btn="desktop" onclick="setAuditSurface('desktop')">💻 Desktop App</button>
+        <button class="surf-btn" data-surf-btn="mobile" onclick="setAuditSurface('mobile')">📱 Mobile App</button>
+        <button class="surf-btn" data-surf-btn="web" onclick="setAuditSurface('web')">🌐 Website &amp; Checkout</button>
+      </div>
+    </div>
+  </section>
+
+  <main class="stage-wrap">
+    <div id="compareGrid" class="compare-grid"></div>
+  </main>
+
+  <script src="/ergonomic-mockups.js"></script>
+</body>
+</html>

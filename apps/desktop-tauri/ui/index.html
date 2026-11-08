@@ -277,11 +277,29 @@
   #recBlock > .alert { margin-top:0; margin-bottom:14px; }
   .ping-dot { display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--e400); margin-right:6px; vertical-align:middle; }
   .panel-meta-line { font-size:13.5px; color:#a7f3d0; font-weight:600; margin-top:12px; position:relative; z-index:2; }
-  @media (min-width: 821px) and (max-width: 1000px) {
-    .app { grid-template-columns:60px 1fr 310px; }
-    .panel { padding:18px; margin:10px 10px 10px 0; }
-    .h-big { font-size:25px; }
-    .main { padding:16px; }
+  @media (min-width: 821px) {
+    .app { grid-template-columns:72px 1fr; grid-template-rows:auto 1fr; height:100vh; }
+    .rail { grid-column:1; grid-row:1 / -1; }
+    .rail-btn { width:54px; height:50px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; }
+    .rail-btn .nav-lbl { display:block; font-size:10px; }
+    .panel {
+      grid-column:2; grid-row:1;
+      margin:14px 20px 0 20px; padding:14px 20px; border-radius:18px;
+      flex-direction:row !important; align-items:center !important; justify-content:space-between !important;
+      text-align:left !important; gap:16px; flex-wrap:wrap;
+    }
+    .panel .plogo { position:static; width:38px; height:38px; flex-shrink:0; }
+    .panel .mini-btn { display:none !important; }
+    .panel .h-big { font-size:20px; line-height:1.15; }
+    .panel .h-big br { display:none; }
+    .panel .h-big .g { margin-right:6px; }
+    .panel .panel-meta-line { margin-top:2px; font-size:12.5px; }
+    .panel .timer { margin:0; padding:6px 12px; display:inline-flex; align-items:center; gap:10px; width:auto !important; }
+    .panel .timer .n { font-size:18px; }
+    .panel .spark-bars { display:none; }
+    .panel > div:last-child { margin-top:0 !important; width:auto !important; min-width:170px; }
+    .main { grid-column:2; grid-row:2; padding:14px 20px 20px; }
+    #airbnbScanBtn { display:none !important; }
   }
 
   .toast { position:fixed; bottom:22px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--ink); color:var(--bg); padding:10px 18px; border-radius:999px; font-size:13px; font-weight:700; opacity:0; transition:all .25s; z-index:200; pointer-events:none; max-width:92vw; text-align:center; }
@@ -623,6 +641,10 @@
         <div class="set-row" onclick="toggleKillSwitch()"><div class="grow"><div class="t"><span data-i18n="killTitle">Emergency internet cut-off (Kill Switch)</span> <span class="pro-tag">PRO</span></div><div class="s" data-i18n="killSub">Blocks unencrypted traffic if the VPN tunnel ever drops</div></div><button class="toggle shield" id="killToggle" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleKillSwitch()"><i></i></button></div>
         <div class="set-row" onclick="toggleLanBypass()"><div class="grow"><div class="t"><span data-i18n="lanTitle">Local LAN bypass (Printers &amp; AirPlay)</span> <span class="pro-tag">PRO</span></div><div class="s" data-i18n="lanSub">Keep home printers, NAS drives &amp; Smart TVs reachable while connected</div></div><button class="toggle" id="lanBypassToggle" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleLanBypass()"><i></i></button></div>
         <div class="set-row" onclick="toggleTheme()"><div class="grow"><div class="t" data-i18n="darkTitle">Dark mode</div><div class="s" data-i18n="darkSub">Easier on the eyes in low light</div></div><button class="toggle" id="darkToggle" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleTheme()"><i></i></button></div>
+        <div class="set-row" style="cursor:default">
+          <div class="grow"><div class="t" data-i18n="bedtimeTitle">Kids Bedtime Pause schedule</div><div class="s" data-i18n="bedtimeSub">Daily pause start time for kids' consoles, tablets &amp; TVs</div></div>
+          <input id="bedtimeTimeInput" type="time" class="input" style="width:136px;padding:7px 10px;font-weight:800" value="22:00" onchange="setBedtimeScheduleTime(this.value)" aria-label="Kids Bedtime Pause start time" />
+        </div>
         <div class="set-row" style="cursor:default">
           <div class="grow"><div class="t" data-i18n="langTitle">Language</div><div class="s" data-i18n="langSub">App display language</div></div>
           <select id="lang" class="input" style="width:150px;padding:8px 10px" onchange="setLang(this.value)" aria-label="Language">
@@ -1296,20 +1318,45 @@
     renderDevices();
   }
 
+  function getBedtimeScheduleTime() {
+    try {
+      return localStorage.getItem('sweepr_bedtime_time') || '22:00';
+    } catch (e) { return '22:00'; }
+  }
+  function formatBedtime12h(hhmm) {
+    const parts = String(hhmm || '22:00').split(':');
+    let h = parseInt(parts[0], 10);
+    const m = parts[1] || '00';
+    if (isNaN(h)) return '10:00 PM';
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;
+    return h + ':' + m + ' ' + ampm;
+  }
+  function setBedtimeScheduleTime(val) {
+    const clean = String(val || '22:00').trim() || '22:00';
+    try { localStorage.setItem('sweepr_bedtime_time', clean); } catch (e) {}
+    if ($('bedtimeTimeInput') && $('bedtimeTimeInput').value !== clean) {
+      $('bedtimeTimeInput').value = clean;
+    }
+    toast('Kids Bedtime Pause time set to ' + formatBedtime12h(clean));
+    renderDevices();
+  }
+
   function toggleDeviceBedtimePause(idx) {
     const d = devices[idx];
     if (!d) return;
     const key = getDevicePolicyKey(d);
     const curPol = wgDevicePolicies[key] || {};
     const nextPaused = !curPol.paused;
-    const sched = nextPaused ? 'Paused 9:30 PM – 7:00 AM (Bedtime Schedule)' : '';
+    const btLabel = formatBedtime12h(getBedtimeScheduleTime());
+    const sched = nextPaused ? ('Paused ' + btLabel + ' – 7:00 AM (Bedtime Schedule)') : '';
     wgDevicePolicies[key] = Object.assign({}, curPol, { paused: nextPaused, bedtimeSchedule: sched });
     try { localStorage.setItem('sweepr_wifi_guard_policies', JSON.stringify(wgDevicePolicies)); } catch (e) {}
     if (tauri) {
       try { tauri.core.invoke('set_wifi_guard_device_policy', { mac: key, customName: curPol.customName || null, trustState: curPol.trustState || null, paused: nextPaused, bedtimeSchedule: sched }).catch(() => {}); } catch (e) {}
     }
     const label = curPol.customName || resolveDeviceDisplayName(d);
-    toast(nextPaused ? ('🌙 Bedtime Pause active for ' + label + ' (9:30 PM – 7:00 AM)') : ('▶ Internet resumed for ' + label));
+    toast(nextPaused ? ('Bedtime Pause active for ' + label + ' (' + btLabel + ' – 7:00 AM)') : ('Internet resumed for ' + label));
     renderDevices();
   }
 
@@ -1442,12 +1489,12 @@
       const isKidDevice = ['console','tv','iphone','android','ipad'].includes(String(d.kind || '').toLowerCase()) && !d.is_self && !d.is_router;
       const camBadge = d.camera_risk ? ' <span class="pill warn" style="font-size:10px;padding:2px 7px">📷 Camera Check</span>' : '';
       const subText = isPaused
-        ? '🛏️ Kids Bedtime Schedule: Paused 9:30 PM – 7:00 AM · ' + d.ip
+        ? 'Kids Bedtime Schedule: Paused ' + formatBedtime12h(getBedtimeScheduleTime()) + ' – 7:00 AM · ' + d.ip
         : (String(d.detail || '').includes(d.ip) ? d.detail : (d.detail + (d.ip ? ' · ' + d.ip : '')));
 
       let actions = '<button class="btn-soft" style="padding:4px 9px;min-height:28px;font-size:11px" onclick="renameWifiDevice(' + idx + ')" title="Give this device a custom household name">✏️ Rename</button>';
       if (isKidDevice || wgCurrentTab === 'bedtime') {
-        actions += '<button class="pill ' + (isPaused ? 'warn' : 'ok') + '" style="cursor:pointer" onclick="toggleDeviceBedtimePause(' + idx + ')">' + (isPaused ? '⏸ Paused for Bedtime' : '🌙 Bedtime Pause') + '</button>';
+        actions += '<button class="pill ' + (isPaused ? 'warn' : 'ok') + '" style="cursor:pointer" onclick="toggleDeviceBedtimePause(' + idx + ')">' + (isPaused ? 'Paused' : 'Bedtime Pause') + '</button>';
       } else if (d.tracker_risk) {
         actions += '<button class="pill solid" onclick="blockTv()">Block TV Tracking</button>';
       } else if (isFlagged) {
@@ -1489,7 +1536,7 @@
         await new Promise(r => setTimeout(r, 550));
         devices = [
           { name:"Neighbor's Unknown Android", ip:'192.168.1.49', mac:'Private MAC', kind:'android', detail:'Joined 4 mins ago · Guest Wi-Fi · Unrecognized device', tracker_risk:false, intruder_risk:true },
-          { name:"Emma's Nintendo Switch", ip:'192.168.1.31', mac:'Nintendo', kind:'console', detail:'Games Console · Kids Bedtime Schedule ready (9:30 PM – 7:00 AM)', tracker_risk:false },
+          { name:"Emma's Nintendo Switch", ip:'192.168.1.31', mac:'Nintendo', kind:'console', detail:'Games Console · Kids Bedtime Schedule ready (' + formatBedtime12h(getBedtimeScheduleTime()) + ' – 7:00 AM)', tracker_risk:false },
           { name:'Living Room Samsung TV', ip:'192.168.1.22', mac:'Samsung', kind:'tv', detail:'Smart-TV ACR Spying Blocked (142 trackers stopped)', tracker_risk:false },
           { name:'Kitchen Echo Dot', ip:'192.168.1.35', mac:'24:6F:28:AA:11:04', kind:'speaker', detail:'Voice Assistant · Trusted Family Device', chip_translation:'Translated from Espressif IoT Chip', tracker_risk:false },
           { name:'This Device', ip:'192.168.1.14', mac:'Local', kind:'computer', is_self:true, detail:'Protected by SWEEPR 10 Gbps WireGuard', tracker_risk:false },
@@ -1553,7 +1600,7 @@
     state.auto = !state.auto;
     state.shields = [state.auto, state.auto, state.auto];
     try { localStorage.setItem('sweepr_vpn_auto_radar', state.auto ? '1' : '0'); } catch (e) {}
-    syncSwitchAria($('autoToggle'), state.auto);
+    syncSwitchAria($('autoToggle'), state.auto); if ($('bedtimeTimeInput')) $('bedtimeTimeInput').value = getBedtimeScheduleTime();
     [0, 1, 2].forEach(i => syncSwitchAria($('sh-' + i), state.pro && state.shields[i]));
     $('radar').classList.toggle('off', !state.auto);
     syncHouseholdShieldsToNative(state.auto ? "Full Home & Smart-TV Shield enabled (DNS 1.1.1.2 + Wi-Fi monitoring)" : 'Home & Smart-TV shields paused');

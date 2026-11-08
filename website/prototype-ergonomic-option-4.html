@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="robots" content="noindex, nofollow" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Option 4 (Pre vs. Post): Bottom Thumb-Arc &amp; Corner-Pinned Ergonomics — SWEEPR VPN</title>
+  <link rel="stylesheet" href="/ergonomic-mockups.css" />
+</head>
+<body data-option="4">
+  <header class="audit-topbar">
+    <div class="audit-brand">
+      <div class="audit-logo">S</div>
+      <div>
+        <div style="font-weight:900;font-size:14px">SWEEPR VPN · Ergonomic Pre vs. Post Audit</div>
+        <div style="font-size:11px;color:#94a3b8">Fitts's Law · Hick's Law · UI/UX Pro Max · Taste-Skill · Unslop</div>
+      </div>
+    </div>
+
+    <nav class="option-pills" aria-label="Mockup Options">
+      <a href="/prototype-ergonomic-hub.html" class="opt-link">All 5 Hub</a>
+      <a href="/prototype-ergonomic-option-1.html" class="opt-link">1. Zero-Travel Hub</a>
+      <a href="/prototype-ergonomic-option-2.html" class="opt-link">2. Taste &amp; Unslop</a>
+      <a href="/prototype-ergonomic-option-3.html" class="opt-link">3. Progressive (≤3)</a>
+      <a href="/prototype-ergonomic-option-4.html" class="opt-link active">4. Thumb-Arc Dock</a>
+      <a href="/prototype-ergonomic-option-5.html" class="opt-link">5. Exception-First</a>
+    </nav>
+
+    <div class="mode-group" role="group" aria-label="Comparison Mode">
+      <button class="mode-btn active" data-mode-btn="split" onclick="setAuditViewMode('split')">Side-by-Side (Pre vs Post)</button>
+      <button class="mode-btn" data-mode-btn="pre" onclick="setAuditViewMode('pre')">Pre Only</button>
+      <button class="mode-btn" data-mode-btn="post" onclick="setAuditViewMode('post')">Post Only</button>
+    </div>
+  </header>
+
+  <section class="thesis-bar">
+    <div class="thesis-inner">
+      <div>
+        <h1 class="thesis-title">
+          <span>Option 4: Bottom Thumb-Arc &amp; Fitts's Corner-Pinned Ergonomics</span>
+          <span class="law-tag">Natural Thumb Arc</span>
+          <span class="law-tag">≥ 48×48px Targets</span>
+        </h1>
+        <p class="thesis-sub">
+          Maps every primary trigger to the natural one-handed thumb arc on mobile (bottom 40% of viewport) and Fitts's Law hot-zones on desktop; moves hard-to-reach top-right 'Scan Wi-Fi' and 'Enter Key' buttons into an ergonomic bottom action dock.
+        </p>
+      </div>
+      <div class="surface-tabs" role="tablist">
+        <button class="surf-btn active" data-surf-btn="desktop" onclick="setAuditSurface('desktop')">💻 Desktop App</button>
+        <button class="surf-btn" data-surf-btn="mobile" onclick="setAuditSurface('mobile')">📱 Mobile App</button>
+        <button class="surf-btn" data-surf-btn="web" onclick="setAuditSurface('web')">🌐 Website &amp; Checkout</button>
+      </div>
+    </div>
+  </section>
+
+  <main class="stage-wrap">
+    <div id="compareGrid" class="compare-grid"></div>
+  </main>
+
+  <script src="/ergonomic-mockups.js"></script>
+</body>
+</html>

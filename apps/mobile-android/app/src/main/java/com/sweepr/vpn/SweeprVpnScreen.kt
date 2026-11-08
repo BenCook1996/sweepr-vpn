@@ -1544,6 +1544,7 @@ fun SweeprVpnScreen(
                     // ==================== TAB 1: WI-FI GUARD HOME & SHIELDS ====================
                     var doorbellMode by remember { mutableStateOf(prefs.getBoolean("doorbell_mode", true)) }
                     var bedtimePauseActive by remember { mutableStateOf(prefs.getBoolean("bedtime_pause_active", true)) }
+                    var bedtimeScheduleTime by remember { mutableStateOf(prefs.getString("bedtime_schedule_time", "9:30 PM") ?: "9:30 PM") }
                     var intruderBlocked by remember { mutableStateOf(prefs.getBoolean("intruder_blocked", false)) }
 
                     Card(
@@ -1609,7 +1610,7 @@ fun SweeprVpnScreen(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Column(modifier = Modifier.weight(1f)) {
-                                    Text("🛏️ Kids Bedtime Pause (9:30 PM)", fontWeight = FontWeight.Bold, color = Color.White)
+                                    Text("🛏️ Kids Bedtime Pause", fontWeight = FontWeight.Bold, color = Color.White)
                                     Text(
                                         "Pauses gaming consoles (PS5, Switch, Xbox) & tablets on school nights",
                                         style = MaterialTheme.typography.bodySmall,
@@ -1621,7 +1622,7 @@ fun SweeprVpnScreen(
                                     onCheckedChange = { enabled ->
                                         bedtimePauseActive = enabled
                                         prefs.edit().putBoolean("bedtime_pause_active", enabled).apply()
-                                        statusBanner = if (enabled) "Kids Bedtime Pause scheduled (9:30 PM – 7:00 AM)" else "Kids Bedtime Pause off"
+                                        statusBanner = if (enabled) "Kids Bedtime Pause scheduled ($bedtimeScheduleTime – 7:00 AM)" else "Kids Bedtime Pause off"
                                     }
                                 )
                             }
