@@ -9,10 +9,10 @@ MinimumOSVersion: 10.0.17763.0
 InstallerType: portable
 Commands:
   - sweeprvpn
-ReleaseDate: 2026-10-25
+ReleaseDate: 2026-11-08
 Installers:
   - Architecture: x64
     InstallerUrl: https://sweeprvpn.com/SWEEPRVPN.exe
-    InstallerSha256: 6F7D4AA652A991465C03E4CC34FDDB5F524E9C26C1161F04CA405E3652245AC9
+    InstallerSha256: 7C199767E751019CAD98C4FEBB17E5B1E44A5F4E76F5A3F3A4E1EC09FE41684A
 ManifestType: installer
 ManifestVersion: 1.6.0

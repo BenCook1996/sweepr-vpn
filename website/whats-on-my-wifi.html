@@ -195,7 +195,94 @@
         </div>
       </div>
     </div>
-  
+    
+    <!-- Competitor Organic SEO Playbook 1 & 2: Plain-English Router Vendor & Private MAC Reference Table -->
+    <div class="glass-card p-6 sm:p-8 mb-10 bg-white border border-gray-200 rounded-3xl shadow-sm">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-900">
+          📖 Plain-English Router &amp; Fing Device Cheat Sheet (2026)
+        </span>
+        <span class="text-xs font-bold text-gray-500">Includes 30-Second Isolation Test &amp; Private MAC Guide</span>
+      </div>
+      <h2 class="text-2xl font-black text-gray-900 mb-2">Top 10 Cryptic Device Names on Your Wi-Fi Router (And What They Actually Are)</h2>
+      <p class="text-sm text-gray-600 mb-5">
+        <strong>Direct Answer:</strong> Routers and legacy scanner apps like Fing look up a device's 6-character MAC address prefix (OUI) and display the <em>factory that made the internal Wi-Fi microchip</em> rather than the product brand on the box. Use this table to translate cryptic manufacturer names into plain English:
+      </p>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-xs sm:text-sm">
+          <thead>
+            <tr class="border-b border-gray-200 text-[11px] uppercase tracking-wider text-gray-500">
+              <th class="py-3 pr-3 font-bold">Cryptic Router / Fing Name</th>
+              <th class="py-3 px-3 font-bold">Plain-English Household Device</th>
+              <th class="py-3 px-3 font-bold">Camera / Intruder Risk</th>
+              <th class="py-3 pl-3 font-bold text-emerald-700">How to Verify in 30 Seconds</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 text-gray-700">
+            <tr>
+              <td class="py-3 pr-3 font-bold text-gray-900"><code>Espressif Inc.</code> (ESP32 / ESP8266)</td>
+              <td class="py-3 px-3">Smart Plug (Meross/TP-Link/Sonoff), Ring Chime, Robot Vacuum, Govee Lights, or Micro-Cam</td>
+              <td class="py-3 px-3"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-xs">Low (Home) / Check in Airbnb</span></td>
+              <td class="py-3 pl-3">Check Smart Life / Alexa app or run SWEEPR RTSP port <code>:554</code> check</td>
+            </tr>
+            <tr>
+              <td class="py-3 pr-3 font-bold text-gray-900"><code>Tuya Smart</code> / <code>Hangzhou Tuya</code></td>
+              <td class="py-3 px-3">Smart Light Bulb, Wi-Fi Power Strip, Smart Kettle/Heater, or Budget Baby Monitor</td>
+              <td class="py-3 px-3"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-xs">Safe Smart Home IoT</span></td>
+              <td class="py-3 pl-3">Open Tuya / Smart Life app &rarr; Device Info &rarr; compare MAC address</td>
+            </tr>
+            <tr>
+              <td class="py-3 pr-3 font-bold text-gray-900"><code>Murata Manufacturing</code></td>
+              <td class="py-3 px-3">Nintendo Switch Console, Samsung Smart TV, Sonos Speaker, or Nest Thermostat</td>
+              <td class="py-3 px-3"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-xs">Safe Household Brand</span></td>
+              <td class="py-3 pl-3">Use SWEEPR <strong>Bedtime Pause</strong> if it is a child's Nintendo Switch</td>
+            </tr>
+            <tr>
+              <td class="py-3 pr-3 font-bold text-gray-900"><code>Hon Hai Precision</code> (Foxconn)</td>
+              <td class="py-3 px-3">Sony PlayStation 5, Apple TV, iPhone/iPad, Printer, or Amazon Echo Wi-Fi Card</td>
+              <td class="py-3 px-3"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-xs">Safe Major Electronics</span></td>
+              <td class="py-3 pl-3">SWEEPR mDNS scanner automatically labels PS5, Apple TV, or Printer</td>
+            </tr>
+            <tr>
+              <td class="py-3 pr-3 font-bold text-gray-900"><code>LiteOn Technology</code></td>
+              <td class="py-3 px-3">Sky Q / Virgin TV Box, LG/Samsung Smart TV, or Dell/HP Windows Laptop</td>
+              <td class="py-3 px-3"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-xs">Safe TV / Laptop NIC</span></td>
+              <td class="py-3 pl-3">Enable <strong>Smart-TV ACR Shield</strong> (<code>10.66.0.1</code>) to block TV ad spying</td>
+            </tr>
+            <tr>
+              <td class="py-3 pr-3 font-bold text-gray-900"><code>AzureWave Technologies</code></td>
+              <td class="py-3 px-3">ASUS / Lenovo Laptop, Xbox Console, ROG Ally, or Fire TV / Android TV Box</td>
+              <td class="py-3 px-3"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-xs">Safe PC / Console NIC</span></td>
+              <td class="py-3 pl-3">Rename in SWEEPR Wi-Fi Guard (e.g. <em>&ldquo;Living Room Xbox&rdquo;</em>)</td>
+            </tr>
+            <tr>
+              <td class="py-3 pr-3 font-bold text-gray-900"><code>Arcadyan</code> / <code>Compal</code> / <code>Sagemcom</code></td>
+              <td class="py-3 px-3">BT / EE Complete Wi-Fi Disc, Virgin Media Wi-Fi Pod, or KCOM / Vodafone Booster</td>
+              <td class="py-3 px-3"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-xs">Safe ISP Mesh Extender</span></td>
+              <td class="py-3 pl-3">Mark as <strong>Trusted Infrastructure</strong> in SWEEPR Doorbell Mode</td>
+            </tr>
+            <tr>
+              <td class="py-3 pr-3 font-bold text-amber-900"><code>Shenzhen Bilian</code> (B-Link)</td>
+              <td class="py-3 px-3">Budget Wireless IP Camera, Nanny Cam, Doorbell Cam, or Smart Pet Feeder</td>
+              <td class="py-3 px-3"><span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold text-xs">⚠️ Inspect in Airbnb / Hotel</span></td>
+              <td class="py-3 pl-3">Tap <strong>Airbnb Camera Scan</strong> in SWEEPR to probe RTSP port <code>:554</code> / <code>:8554</code></td>
+            </tr>
+            <tr>
+              <td class="py-3 pr-3 font-bold text-amber-900"><code>Hikvision</code> / <code>Dahua</code> / <code>Reolink</code></td>
+              <td class="py-3 px-3">Dedicated PoE / Wi-Fi Security Camera or NVR Video Recorder</td>
+              <td class="py-3 px-3"><span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold text-xs">📷 Active Camera Stream</span></td>
+              <td class="py-3 pl-3">Verify camera location if connected to a vacation rental Wi-Fi</td>
+            </tr>
+            <tr>
+              <td class="py-3 pr-3 font-bold text-emerald-900"><code>Unknown / Private Address</code> (<code>x2:xx</code>, <code>x6:xx</code>, <code>xA:xx</code>, <code>xE:xx</code>)</td>
+              <td class="py-3 px-3">Family iPhone, iPad, Apple Watch, or Android Phone using <strong>Private Wi-Fi Address</strong></td>
+              <td class="py-3 px-3"><span class="px-2 py-0.5 rounded-full bg-blue-100 text-blue-900 font-bold text-xs">📱 MAC Randomization</span></td>
+              <td class="py-3 pl-3">If the 2nd character of the MAC is <code>2, 6, A, or E</code>, it is a phone rotating its MAC for privacy</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
     <section id="enriched-fing-alternative-open-source" data-enriched-query="fing-alternative-open-source" style="margin:28px 0;padding:20px;background:rgba(15,23,42,0.88);color:#f8fafc;border:1px solid rgba(16,185,129,0.35);border-radius:12px;">
       <h2 style="margin-top:0;color:#f8fafc;">2026 Whats on My Wi-Fi Renewal Price Hike & Cancellation Comparison (Fing Alternative Open Source)</h2>
       <p style="color:#cbd5e1;line-height:1.65;">Users searching for "fing alternative open source" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 30-day money-back guarantee.</p>
@@ -203,8 +290,6 @@
 Installer Footprint: ~680 KB Native Rust + Tauri v2 (vs 200+ MB Antivirus Bloat)
 Included Free Tool: 30-Second Home Wi-Fi Device & Smart-TV ACR Scanner</code></pre>
     </section>
-
-  
     <section id="enriched-best-fing-alternative-no-subscription" data-enriched-query="best-fing-alternative-no-subscription" style="margin:28px 0;padding:20px;background:rgba(15,23,42,0.88);color:#f8fafc;border:1px solid rgba(16,185,129,0.35);border-radius:12px;">
       <h2 style="margin-top:0;color:#f8fafc;">2026 Whats on My Wi-Fi Renewal Price Hike & Cancellation Comparison (Best Fing Alternative No Subscription)</h2>
       <p style="color:#cbd5e1;line-height:1.65;">Users searching for "best fing alternative no subscription" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 30-day money-back guarantee.</p>
@@ -212,8 +297,7 @@ Included Free Tool: 30-Second Home Wi-Fi Device & Smart-TV ACR Scanner</code></p
 Installer Footprint: ~680 KB Native Rust + Tauri v2 (vs 200+ MB Antivirus Bloat)
 Included Free Tool: 30-Second Home Wi-Fi Device & Smart-TV ACR Scanner</code></pre>
     </section>
-
-  </main>
+</main>
 
   <footer class="border-t border-gray-200 py-8 text-center text-sm text-gray-500">
     <div class="max-w-4xl mx-auto px-6 flex flex-wrap justify-center gap-6 mb-4">

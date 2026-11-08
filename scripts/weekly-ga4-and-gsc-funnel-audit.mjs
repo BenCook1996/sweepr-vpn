@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * SWEEPR VPN ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Weekly GA4 Funnel, Checkout Health & Search Console Recovery Audit
+ * SWEEPR VPN — Weekly GA4 Funnel, Checkout Health & Search Console Recovery Audit
  *
  * Executes synthetic health checks across:
  * 1. Funnel A (Direct Web Checkout): /api/checkout-config, /order, /pricing, and GA4 ecommerce instrumentation
@@ -22,8 +22,8 @@ const VPN_ROOT = path.resolve(__dirname, '..');
 const WEBSITE_DIR = path.join(VPN_ROOT, 'website');
 const LOG_PATH = path.join(VPN_ROOT, 'GA4_AND_GSC_WEEKLY_AUDIT_LOG.md');
 
-const EXPECTED_EXE_SHA256 = 'FDEBB9955B6A5FC700D99F213AAFDBCC22E26280267B36F9C08C085F757DA3CD';
-const EXPECTED_EXE_SIZE = 709632;
+const EXPECTED_EXE_SHA256 = '7C199767E751019CAD98C4FEBB17E5B1E44A5F4E76F5A3F3A4E1EC09FE41684A';
+const EXPECTED_EXE_SIZE = 715264;
 
 async function fetchWithTimeout(url, options = {}, timeoutMs = 10000) {
   return fetch(url, {
@@ -39,12 +39,12 @@ async function runWeeklyFunnelAndGscAudit() {
 
   function record(category, name, passed, detail) {
     checks.push({ category, name, status: passed ? 'PASS' : 'FAIL', detail });
-    const icon = passed ? 'ÃƒÂ¢Ã…â€œÃ¢â‚¬Â¦' : 'ÃƒÂ¢Ã‚ÂÃ…â€™';
+    const icon = passed ? '✅' : '❌';
     console.log(`${icon} [${category}] ${name}: ${detail}`);
   }
 
   console.log('='.repeat(78));
-  console.log(`SWEEPR VPN ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Weekly GA4 Funnel, Checkout Health & GSC Recovery Audit (${todayStr})`);
+  console.log(`SWEEPR VPN — Weekly GA4 Funnel, Checkout Health & GSC Recovery Audit (${todayStr})`);
   console.log('='.repeat(78));
 
   // 1. Local GA4 Instrumentation Verification (nav.js, pricing-config.js, server.mjs)
@@ -310,7 +310,7 @@ async function runWeeklyFunnelAndGscAudit() {
 
   // 4. Persist Weekly Summary to GA4_AND_GSC_WEEKLY_AUDIT_LOG.md
   const passedCount = checks.filter((c) => c.status === 'PASS').length;
-  const sectionHeader = `## ${todayStr} ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Weekly GA4 Funnel, Checkout Health & GSC Recovery Audit`;
+  const sectionHeader = `## ${todayStr} — Weekly GA4 Funnel, Checkout Health & GSC Recovery Audit`;
   const mdBlock = `
 ${sectionHeader}
 
@@ -326,7 +326,7 @@ ${checks.map((c) => `- **${c.status}** [\`${c.category}\`] **${c.name}**: ${c.de
   if (fs.existsSync(LOG_PATH)) {
     existingLog = fs.readFileSync(LOG_PATH, 'utf8');
   } else {
-    existingLog = `# SWEEPR VPN ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Weekly GA4 Funnel, Checkout Health & Search Console Recovery Audit Log\n\nTracks weekly conversion funnel health, GA4 Key Events, ecosystem referrals, and Google Search Console impression recovery.\n`;
+    existingLog = `# SWEEPR VPN — Weekly GA4 Funnel, Checkout Health & Search Console Recovery Audit Log\n\nTracks weekly conversion funnel health, GA4 Key Events, ecosystem referrals, and Google Search Console impression recovery.\n`;
   }
 
   if (existingLog.includes(sectionHeader)) {
@@ -336,7 +336,7 @@ ${checks.map((c) => `- **${c.status}** [\`${c.category}\`] **${c.name}**: ${c.de
     existingLog = existingLog.trimEnd() + '\n' + mdBlock + '\n';
   }
   fs.writeFileSync(LOG_PATH, existingLog, 'utf8');
-  console.log(`\nÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã‚Â Logged weekly funnel & GSC health report to ${path.relative(VPN_ROOT, LOG_PATH)}`);
+  console.log(`\n📝 Logged weekly funnel & GSC health report to ${path.relative(VPN_ROOT, LOG_PATH)}`);
 }
 
 runWeeklyFunnelAndGscAudit();

@@ -78,7 +78,8 @@ const BLOCKED_STATIC_FILES = new Set([
   'daily-seo-pages-state.json',
   'keyword-opportunities.json',
   'keyword-research-cache.json',
-  'serp-cache.json'
+  'serp-cache.json',
+  'seo-strategy-performance-ledger.json'
 ]);
 
 const crm = new SweeprCrmClient({ projectId: 'vpn', crmUrl: SWEEPR_CRM_URL, apiKey: SWEEPR_CRM_API_KEY });
@@ -2725,7 +2726,7 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
     <div class="mt-4 mb-5 p-3.5 rounded-xl border border-emerald-200 bg-emerald-50/50 text-left text-xs text-gray-600 space-y-1">
       <div class="font-extrabold text-emerald-900 flex items-center gap-1.5">ÃƒÂ°Ã…Â¸Ã¢â‚¬ÂºÃ‚Â¡ÃƒÂ¯Ã‚Â¸Ã‚Â Authenticode Signed &amp; Verified Windows Binary</div>
       <div><strong>Publisher:</strong> CN=Benjamin Cook, O=Benjamin Cook, L=Worthing, C=GB (SSL.com OV Code Signing)</div>
-      <div class="break-all"><strong>SHA-256 (SWEEPRVPN.exe):</strong> <code class="text-[11px] bg-white px-1 py-0.5 rounded border border-emerald-100">FDEBB9955B6A5FC700D99F213AAFDBCC22E26280267B36F9C08C085F757DA3CD</code></div>
+      <div class="break-all"><strong>SHA-256 (SWEEPRVPN.exe):</strong> <code class="text-[11px] bg-white px-1 py-0.5 rounded border border-emerald-100">7C199767E751019CAD98C4FEBB17E5B1E44A5F4E76F5A3F3A4E1EC09FE41684A</code></div>
     </div>
     <div class="flex justify-center pt-4 border-t border-gray-100">
       <a href="/" class="btn btn-ghost w-full justify-center">Back to Home</a>

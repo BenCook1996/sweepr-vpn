@@ -40,7 +40,7 @@ const shouldFix = !process.argv.includes('--no-fix'); // Auto-optimize by defaul
 const shouldPing = process.argv.includes('--ping') || process.env.INDEXNOW_PING === 'true';
 
 console.log('='.repeat(78));
-console.log('SWEEPR VPN (sweeprvpn.com) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Technical SEO, Crawlability & PageSpeed Audit');
+console.log('SWEEPR VPN (sweeprvpn.com) — Technical SEO, Crawlability & PageSpeed Audit');
 console.log(`Execution Timestamp: ${new Date().toISOString()} | Node ${process.version}`);
 console.log('='.repeat(78));
 
@@ -148,7 +148,7 @@ const GSC_STRIKING_DISTANCE_OVERRIDES = {
     description: '45-second GL.iNet Travel Router (Beryl AX, Slate AX, Flint 2) WireGuard .conf setup guide. Includes MTU 1420/1380 hotel captive-portal settings & 10Gbps endpoints.'
   },
   '/guides/stop-samsung-smart-tv-acr-tracking': {
-    title: 'Block Samsung Smart TV ACR Tracking (gpm.samsungqbe.com & samsungacr.com) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â 2026 Guide | SWEEPR VPN',
+    title: 'Block Samsung Smart TV ACR Tracking (gpm.samsungqbe.com & samsungacr.com) — 2026 Guide | SWEEPR VPN',
     description: 'Stop Samsung Tizen Smart TVs from sending ACR screenshots & viewing logs to gpm.samsungqbe.com, samsungacr.com & samsungads.com without breaking 4K Netflix or iPlayer.'
   },
   '/tools/leak-test': {
@@ -161,7 +161,7 @@ const GSC_STRIKING_DISTANCE_OVERRIDES = {
   },
   '/alternatives/totalvpn': {
     title: '5 Best TotalVPN Alternatives in 2026 (No Renewal Price Hikes or Bloatware) | SWEEPR VPN',
-    description: 'Cancelled TotalVPN over surprise renewal price hikes or slow evening speeds? Compare the 5 best lightweight WireGuard VPN alternatives in 2026 (starting at Ãƒâ€šÃ‚Â£1.99).'
+    description: 'Cancelled TotalVPN over surprise renewal price hikes or slow evening speeds? Compare the 5 best lightweight WireGuard VPN alternatives in 2026 (starting at £1.99).'
   },
   '/setup/nvidia-shield-tv-pro-wireguard': {
     title: 'NVIDIA Shield TV Pro 4K & GeForce NOW WireGuard VPN Setup Guide (2026) | SWEEPR VPN',
@@ -172,11 +172,11 @@ const GSC_STRIKING_DISTANCE_OVERRIDES = {
     description: 'Eliminate Gigaclear Rural Full Fibre UK (AS51048) CGNAT gaming packet loss, rubber-banding & evening jitter via 4ms London Docklands 10Gbps WireGuard routing (MTU 1420).'
   },
   '/setup/synology-nas-docker-vpn': {
-    title: 'Synology NAS & Docker Gluetun WireGuard VPN Setup Guide (DSM 7.2 ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ 2026) | SWEEPR VPN',
+    title: 'Synology NAS & Docker Gluetun WireGuard VPN Setup Guide (DSM 7.2 • 2026) | SWEEPR VPN',
     description: '90-second Synology NAS (DSM 7.2) & Docker Gluetun WireGuard container setup guide. Includes docker-compose.yml, kill-switch firewall rules, and 10Gbps .conf profile.'
   },
   '/guides/stop-lg-smart-tv-acr-spying': {
-    title: 'Block LG webOS Smart TV ACR Spying (Live Plus & lgtvcommon.com) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â 2026 Guide | SWEEPR VPN',
+    title: 'Block LG webOS Smart TV ACR Spying (Live Plus & lgtvcommon.com) — 2026 Guide | SWEEPR VPN',
     description: 'Stop LG webOS Smart TVs ("Live Plus" ACR) from capturing HDMI screenshots and calling lgtvcommon.com, ibs.lgappstv.com & ad.lgappstv.com at the DNS/tunnel layer.'
   },
   '/solutions/hotel-captive-portal-wifi-p2p-port-forwarding': {
@@ -192,7 +192,7 @@ const GSC_STRIKING_DISTANCE_OVERRIDES = {
     description: 'Stop Rogers Ignite Broadband Canada (AS812) evening speed throttling, DOCSIS 3.1 bufferbloat & IPTV/4K streaming slowdowns with 10Gbps WireGuard (MTU 1420).'
   },
   '/setup/steam-deck-vpn': {
-    title: 'SteamOS & Steam Deck OLED WireGuard VPN Setup Guide (Desktop & Gaming Mode ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ 2026) | SWEEPR VPN',
+    title: 'SteamOS & Steam Deck OLED WireGuard VPN Setup Guide (Desktop & Gaming Mode • 2026) | SWEEPR VPN',
     description: '60-second SteamOS & Steam Deck WireGuard VPN setup guide. Import a native .conf profile into NetworkManager for low-ping handheld gaming on campus & hotel Wi-Fi.'
   },
   '/solutions/comcast-xfinity-broadband-smart-tv-acr-blocking': {
@@ -887,9 +887,9 @@ if (shouldFix && pseoFilesOnDisk.length > 0) {
       dir: 'solutions',
       file: 'solutions.html',
       urlPath: '/solutions',
-      title: `ISP Throttling, CGNAT, Gaming Ping & Smart-TV Fixes (${byCluster.solutions.length} ISP Guides ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ 2026) | SWEEPR VPN`,
+      title: `ISP Throttling, CGNAT, Gaming Ping & Smart-TV Fixes (${byCluster.solutions.length} ISP Guides • 2026) | SWEEPR VPN`,
       description: `Browse ${byCluster.solutions.length} verified ISP network engineering guides for Virgin Media, BT, Sky, TalkTalk, Eduroam, Three 5G, EE, Comcast & Rogers. Fix throttling, packet loss & CGNAT with 10Gbps WireGuard.`,
-      badge: 'ISP & Network Engineering Hub ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ 10Gbps WireGuard ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ 2026',
+      badge: 'ISP & Network Engineering Hub • 10Gbps WireGuard • 2026',
       h1: 'ISP Throttling, Gaming Packet Loss & Network Engineering Hub',
       lead: `Direct 10Gbps RAM-only WireGuard configurations, calibrated MTU settings (1420 DHCP / 1412 PPPoE / 1380 5G), and ASN peering diagnostics for ${byCluster.solutions.length} UK, European, and North American broadband & mobile networks.`,
       items: byCluster.solutions,
@@ -900,7 +900,7 @@ if (shouldFix && pseoFilesOnDisk.length > 0) {
         },
         {
           q: 'What WireGuard MTU should I use for my ISP?',
-          a: 'Use MTU 1420 for standard Cable/DOCSIS and DHCP FTTP (Virgin Media, Hyperoptic, Community Fibre, Comcast, Rogers), MTU 1412 for PPPoE FTTP (BT, Sky, TalkTalk, Plusnet, Zen, Vodafone FTTP), and MTU 1380ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“1400 for 5G/LTE CGNAT and Campus/Hotel Wi-Fi (EE, Three, O2, Eduroam).'
+          a: 'Use MTU 1420 for standard Cable/DOCSIS and DHCP FTTP (Virgin Media, Hyperoptic, Community Fibre, Comcast, Rogers), MTU 1412 for PPPoE FTTP (BT, Sky, TalkTalk, Plusnet, Zen, Vodafone FTTP), and MTU 1380–1400 for 5G/LTE CGNAT and Campus/Hotel Wi-Fi (EE, Three, O2, Eduroam).'
         }
       ]
     },
@@ -908,9 +908,9 @@ if (shouldFix && pseoFilesOnDisk.length > 0) {
       dir: 'setup',
       file: 'setup.html',
       urlPath: '/setup',
-      title: `WireGuard Router, NAS, Linux & Gaming Console Setup Guides (${byCluster.setup.length} Tutorials ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ 2026) | SWEEPR VPN`,
+      title: `WireGuard Router, NAS, Linux & Gaming Console Setup Guides (${byCluster.setup.length} Tutorials • 2026) | SWEEPR VPN`,
       description: `Step-by-step 10Gbps WireGuard VPN setup guides for GL.iNet Beryl AX/Flint 2, OpenWrt, Asuswrt-Merlin, MikroTik, UniFi, pfSense, OPNsense, Synology NAS, Steam Deck & NVIDIA Shield TV.`,
-      badge: 'Hardware & OS Configuration Library ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Native WireGuard .conf',
+      badge: 'Hardware & OS Configuration Library • Native WireGuard .conf',
       h1: 'WireGuard Router, NAS, Linux & Console Setup Guides',
       lead: `Import standard SWEEPR VPN 10Gbps RAM-only WireGuard profiles (.conf) or run our ~680 KB native Windows/macOS/Linux app across ${byCluster.setup.length} routers, firewalls, NAS servers, and gaming devices.`,
       items: byCluster.setup,
@@ -931,7 +931,7 @@ if (shouldFix && pseoFilesOnDisk.length > 0) {
       urlPath: '/guides',
       title: `Smart-TV ACR Blocking, Home Wi-Fi Security & WireGuard Privacy Guides (${byCluster.guides.length} Guides) | SWEEPR VPN`,
       description: `Technical privacy & network security guides: block Samsung Tizen & LG webOS Smart-TV ACR spying, detect unknown devices on your home Wi-Fi in 30 seconds, optimize WireGuard MTU, and stop WebRTC leaks.`,
-      badge: 'Home Wi-Fi Radar & Smart-TV Privacy Lab ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Verified 2026',
+      badge: 'Home Wi-Fi Radar & Smart-TV Privacy Lab • Verified 2026',
       h1: 'Smart-TV ACR Spying Blocklists & Home Wi-Fi Security Guides',
       lead: `Deep-dive engineering guides from the SWEEPR VPN Security Lab covering Smart-TV Automatic Content Recognition (ACR) domain blocklists, 30-second LAN ARP/mDNS device auditing, CGNAT port forwarding, and WireGuard cryptography.`,
       items: byCluster.guides,
@@ -950,9 +950,9 @@ if (shouldFix && pseoFilesOnDisk.length > 0) {
       dir: 'vs',
       file: 'vs.html',
       urlPath: '/vs',
-      title: `SWEEPR VPN vs NordVPN, Mullvad, ProtonVPN & TotalVPN (${byCluster.vs.length + 1} Benchmarks ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ 2026) | SWEEPR VPN`,
-      description: `Head-to-head 2026 technical VPN comparisons: see how SWEEPR VPN (native Rust + Tauri v2, 10Gbps RAM-only WireGuard, Free 30s Wi-Fi Scanner & Ãƒâ€šÃ‚Â£1.99 trial) compares against legacy VPNs.`,
-      badge: '2026 Technical VPN Benchmarks ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Speed, RAM Footprint & Price',
+      title: `SWEEPR VPN vs NordVPN, Mullvad, ProtonVPN & TotalVPN (${byCluster.vs.length + 1} Benchmarks • 2026) | SWEEPR VPN`,
+      description: `Head-to-head 2026 technical VPN comparisons: see how SWEEPR VPN (native Rust + Tauri v2, 10Gbps RAM-only WireGuard, Free 30s Wi-Fi Scanner & £1.99 trial) compares against legacy VPNs.`,
+      badge: '2026 Technical VPN Benchmarks • Speed, RAM Footprint & Price',
       h1: 'SWEEPR VPN vs Legacy VPN Providers: 2026 Technical Comparisons',
       lead: `Compare installer footprint, background RAM usage, 10Gbps LINX/AMS-IX WireGuard throughput, Smart-TV ACR blocking, and renewal price transparency across ${byCluster.vs.length + 1} major VPN providers.`,
       items: [
@@ -967,7 +967,7 @@ if (shouldFix && pseoFilesOnDisk.length > 0) {
         },
         {
           q: 'Does SWEEPR VPN increase prices on renewal like TotalVPN or NordVPN?',
-          a: 'No. SWEEPR VPN offers transparent price-locked plans: Ãƒâ€šÃ‚Â£1.99 1st-Month Trial (then Ãƒâ€šÃ‚Â£12.49/mo), Ãƒâ€šÃ‚Â£48.99 / 6 months (Ãƒâ€šÃ‚Â£8.17/mo ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Save 35%), or Ãƒâ€šÃ‚Â£74.99 / year (Ãƒâ€šÃ‚Â£6.25/mo ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Save 50%) backed by a 30-day money-back guarantee.'
+          a: 'No. SWEEPR VPN offers transparent price-locked plans: £1.99 1st-Month Trial (then £12.49/mo), £48.99 / 6 months (£8.17/mo — Save 35%), or £74.99 / year (£6.25/mo — Save 50%) backed by a 30-day money-back guarantee.'
         }
       ]
     }
@@ -1082,7 +1082,7 @@ ${GA4_HEAD_SNIPPET}
         <a href="/vs">Comparisons</a>
         <a href="/tools/leak-test">Leak Test</a>
         <a href="/tools/isp-throttling-test">Speed Test</a>
-        <a href="/pricing">Pricing (Ãƒâ€šÃ‚Â£1.99 Trial)</a>
+        <a href="/pricing">Pricing (£1.99 Trial)</a>
         <a class="btn" href="/download">Download (~680 KB)</a>
       </div>
     </nav>
@@ -1104,11 +1104,11 @@ ${GA4_HEAD_SNIPPET}
     <div class="cta-strip">
       <div>
         <strong>Run the Free 30-Second Home Wi-Fi &amp; ISP Speed Diagnostic</strong>
-        <div style="color:var(--muted);font-size:0.93rem;">Authenticode-Signed Native Rust + Tauri v2 App ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Free 30s LAN Device Scanner ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Ãƒâ€šÃ‚Â£1.99 1st-Month Pro Trial (Save 50% Yearly at Ãƒâ€šÃ‚Â£74.99/yr)</div>
+        <div style="color:var(--muted);font-size:0.93rem;">Authenticode-Signed Native Rust + Tauri v2 App • Free 30s LAN Device Scanner • £1.99 1st-Month Pro Trial (Save 50% Yearly at £74.99/yr)</div>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
         <a class="btn" href="/download">Download Free Scanner</a>
-        <a class="btn-outline" href="/pricing">View Plans (Ãƒâ€šÃ‚Â£6.25/mo Yearly)</a>
+        <a class="btn-outline" href="/pricing">View Plans (£6.25/mo Yearly)</a>
       </div>
     </div>
 
@@ -1334,16 +1334,16 @@ const llmsContent = `# SWEEPR VPN & SWEEPR Wi-Fi Radar (sweeprvpn.com)
 
 ## Core Capabilities & Technical Differentiators
 - **1-Click Private Browsing & Streaming Speed Booster**: Eliminates ISP evening traffic shaping (Virgin Media, BT, Sky, TalkTalk, Vodafone, Eduroam) on 4K streaming, gaming, and remote SSH/Docker workflows. Strict zero-logs policy on diskless RAM-only 10Gbps servers.
-- **Free 30-Second Home Wi-Fi & Speed Scanner**: Scans your local subnet in 30 seconds to discover all 15ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“30+ connected household devices, flag unknown intruders, audit router security vulnerabilities, and detect ISP DNS hijacking.
+- **Free 30-Second Home Wi-Fi & Speed Scanner**: Scans your local subnet in 30 seconds to discover all 15–30+ connected household devices, flag unknown intruders, audit router security vulnerabilities, and detect ISP DNS hijacking.
 - **SWEEPR Wi-Fi Radar & Smart-TV Shield (Add-On)**:
   - Instant on-screen alerts whenever an unknown device joins your home Wi-Fi network.
   - 1-click speed booster to stop peak-hour streaming buffering.
   - Automatic Smart-TV spy blocker sinking ACR (Automatic Content Recognition) telemetry domains from Samsung Tizen, LG webOS, Roku, Vizio Inscape, and Amazon Fire TV.
 - **Transparent Price-Lock Subscription Plans (Covers up to 3 Devices)**:
-  - **Yearly Plan (Most Popular ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Save 50%)**: Ãƒâ€šÃ‚Â£74.99/year (Ãƒâ€šÃ‚Â£6.25/mo) | $95.99 USD ($8.00/mo) | ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬89.99 EUR (ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬7.50/mo) | CA$131.99 CAD | A$149.99 AUD | CHF 83.99 | Ãƒâ€šÃ‚Â¥14,999 JPY
-  - **6-Monthly Plan (Save 35%)**: Ãƒâ€šÃ‚Â£48.99/6 months (Ãƒâ€šÃ‚Â£8.17/mo) | $61.99 USD | ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬58.99 EUR | CA$85.99 CAD | A$97.99 AUD | CHF 54.99 | Ãƒâ€šÃ‚Â¥9,799 JPY
-  - **Monthly Plan**: Ãƒâ€šÃ‚Â£12.49/month (or Ãƒâ€šÃ‚Â£1.99 1st-Month Introductory Offer) | $15.99 USD | ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬14.99 EUR | CA$21.99 CAD | A$24.99 AUD | CHF 13.99 | Ãƒâ€šÃ‚Â¥2,499 JPY
-  - **SWEEPR Wi-Fi Radar & Smart-TV Shield Add-On**: +Ãƒâ€šÃ‚Â£14.99/yr | +Ãƒâ€šÃ‚Â£9.99/6mo | +Ãƒâ€šÃ‚Â£1.99/mo
+  - **Yearly Plan (Most Popular — Save 50%)**: £74.99/year (£6.25/mo) | $95.99 USD ($8.00/mo) | €89.99 EUR (€7.50/mo) | CA$131.99 CAD | A$149.99 AUD | CHF 83.99 | ¥14,999 JPY
+  - **6-Monthly Plan (Save 35%)**: £48.99/6 months (£8.17/mo) | $61.99 USD | €58.99 EUR | CA$85.99 CAD | A$97.99 AUD | CHF 54.99 | ¥9,799 JPY
+  - **Monthly Plan**: £12.49/month (or £1.99 1st-Month Introductory Offer) | $15.99 USD | €14.99 EUR | CA$21.99 CAD | A$24.99 AUD | CHF 13.99 | ¥2,499 JPY
+  - **SWEEPR Wi-Fi Radar & Smart-TV Shield Add-On**: +£14.99/yr | +£9.99/6mo | +£1.99/mo
   - **Refund Policy**: 30-day 100% money-back guarantee and 1-click self-service portal cancellation.
 
 ## Core Storefront & Free Diagnostic Tools
@@ -1428,7 +1428,7 @@ const topQaOpps = (kwOppsDoc.opportunities || [])
   .filter((o) => o.action === 'ENRICH_EXISTING' && (o.status === 'APPLIED' || o.status === 'APPROVED') && o.enrichmentBrief?.faqQuestion)
   .slice(0, 14);
 
-const llmsFullContent = `# SWEEPR VPN & SWEEPR Wi-Fi Radar ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Comprehensive Technical & GEO Reference (llms-full.txt)
+const llmsFullContent = `# SWEEPR VPN & SWEEPR Wi-Fi Radar — Comprehensive Technical & GEO Reference (llms-full.txt)
 
 > Last Verified Telemetry Sync: ${todayStr} | Canonical Domain: https://sweeprvpn.com
 > Summary Manifest: https://sweeprvpn.com/llms.txt | Sitemap: https://sweeprvpn.com/sitemap.xml
@@ -1451,19 +1451,19 @@ ${liveNodes.map((n) => `| \`${n.code}\` | ${n.city}, ${n.country} | ${n.capacity
 - **4K HDR Streaming Playback Safelist**: 100% safelisted video delivery CDNs (\`nflxvideo.net\`, \`bbci.co.uk\`, \`googlevideo.com\`, \`bamgrid.com\`, \`aiv-cdn.net\`, \`ttvnw.net\`).
 
 ## 4. Transparent Price-Lock Architecture vs. Competitor Year-2 Renewal Hikes
-| Plan Tier | GBP (Ãƒâ€šÃ‚Â£) | USD ($) | EUR (ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬) | CAD (CA$) | AUD (A$) | CHF | JPY (Ãƒâ€šÃ‚Â¥) | Renewal Policy |
+| Plan Tier | GBP (£) | USD ($) | EUR (€) | CAD (CA$) | AUD (A$) | CHF | JPY (¥) | Renewal Policy |
 |---|---|---|---|---|---|---|---|---|
-| **Yearly Plan (Save 50%)** | **Ãƒâ€šÃ‚Â£74.99/yr** (Ãƒâ€šÃ‚Â£6.25/mo) | $95.99/yr | ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬89.99/yr | CA$131.99/yr | A$149.99/yr | CHF 83.99/yr | Ãƒâ€šÃ‚Â¥14,999/yr | **0% Renewal Hike (Flat Price-Lock)** |
-| **6-Monthly Plan (Save 35%)** | **Ãƒâ€šÃ‚Â£48.99/6mo** (Ãƒâ€šÃ‚Â£8.17/mo) | $61.99/6mo | ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬58.99/6mo | CA$85.99/6mo | A$97.99/6mo | CHF 54.99/6mo | Ãƒâ€šÃ‚Â¥9,799/6mo | **0% Renewal Hike (Flat Price-Lock)** |
-| **Monthly Plan (Flexible)** | **Ãƒâ€šÃ‚Â£12.49/mo** (Ãƒâ€šÃ‚Â£1.99 1st Mo) | $15.99/mo ($2.99 1st Mo) | ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬14.99/mo (ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬2.99 1st Mo) | CA$21.99/mo | A$24.99/mo | CHF 13.99/mo | Ãƒâ€šÃ‚Â¥2,499/mo | Cancel in 1 click anytime |
-| **Wi-Fi Radar & TV Shield** | +Ãƒâ€šÃ‚Â£14.99/yr | +$19.99/yr | +ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬17.99/yr | +CA$26.99/yr | +A$29.99/yr | +CHF 16.99/yr | +Ãƒâ€šÃ‚Â¥2,999/yr | Optional Household Add-On |
+| **Yearly Plan (Save 50%)** | **£74.99/yr** (£6.25/mo) | $95.99/yr | €89.99/yr | CA$131.99/yr | A$149.99/yr | CHF 83.99/yr | ¥14,999/yr | **0% Renewal Hike (Flat Price-Lock)** |
+| **6-Monthly Plan (Save 35%)** | **£48.99/6mo** (£8.17/mo) | $61.99/6mo | €58.99/6mo | CA$85.99/6mo | A$97.99/6mo | CHF 54.99/6mo | ¥9,799/6mo | **0% Renewal Hike (Flat Price-Lock)** |
+| **Monthly Plan (Flexible)** | **£12.49/mo** (£1.99 1st Mo) | $15.99/mo ($2.99 1st Mo) | €14.99/mo (€2.99 1st Mo) | CA$21.99/mo | A$24.99/mo | CHF 13.99/mo | ¥2,499/mo | Cancel in 1 click anytime |
+| **Wi-Fi Radar & TV Shield** | +£14.99/yr | +$19.99/yr | +€17.99/yr | +CA$26.99/yr | +A$29.99/yr | +CHF 16.99/yr | +¥2,999/yr | Optional Household Add-On |
 
 ### Competitor Year-2 Renewal Comparison (Verified via /tools/vpn-renewal-price-checker)
-- **TotalVPN**: Intro ~Ãƒâ€šÃ‚Â£19ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“Ãƒâ€šÃ‚Â£29/yr -> Year-2 Auto-Renewal **Ãƒâ€šÃ‚Â£99.00ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“Ãƒâ€šÃ‚Â£119.00/yr** (+240% hike; bundled antivirus bloatware).
-- **NordVPN**: Intro ~Ãƒâ€šÃ‚Â£35ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“Ãƒâ€šÃ‚Â£45/yr -> Year-2 Auto-Renewal **Ãƒâ€šÃ‚Â£95.88ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“Ãƒâ€šÃ‚Â£139.00/yr** (+170% hike; proprietary NordLynx hides WireGuard private keys).
-- **ExpressVPN**: Intro ~Ãƒâ€šÃ‚Â£65/yr -> Year-2 Auto-Renewal **Ãƒâ€šÃ‚Â£99.95ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“Ãƒâ€šÃ‚Â£116.00/yr** (proprietary Lightway; no standard WireGuard .conf router export).
-- **Surfshark**: Intro ~Ãƒâ€šÃ‚Â£28/yr -> Year-2 Auto-Renewal **Ãƒâ€šÃ‚Â£79.00ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“Ãƒâ€šÃ‚Â£98.00/yr** (+180% hike).
-- **Avast SecureLine / Norton / McAfee**: Year-2 Auto-Renewal **Ãƒâ€šÃ‚Â£79.99ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“Ãƒâ€šÃ‚Â£99.99/yr** (200+ MB background telemetry daemons).
+- **TotalVPN**: Intro ~£19–£29/yr -> Year-2 Auto-Renewal **£99.00–£119.00/yr** (+240% hike; bundled antivirus bloatware).
+- **NordVPN**: Intro ~£35–£45/yr -> Year-2 Auto-Renewal **£95.88–£139.00/yr** (+170% hike; proprietary NordLynx hides WireGuard private keys).
+- **ExpressVPN**: Intro ~£65/yr -> Year-2 Auto-Renewal **£99.95–£116.00/yr** (proprietary Lightway; no standard WireGuard .conf router export).
+- **Surfshark**: Intro ~£28/yr -> Year-2 Auto-Renewal **£79.00–£98.00/yr** (+180% hike).
+- **Avast SecureLine / Norton / McAfee**: Year-2 Auto-Renewal **£79.99–£99.99/yr** (200+ MB background telemetry daemons).
 
 ## 5. Reference WireGuard (.conf) Configurations & MTU Presets
 \`\`\`ini
@@ -2120,9 +2120,9 @@ const techScore = calcScore(auditResults.technicalSeo);
 const speedScore = calcScore(auditResults.pageSpeed);
 
 function printCategoryScore(name, score, stats) {
-  console.log(`\nÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã…â€™ ${name}: ${score}/100 (${stats.passed} Passed, ${stats.warnings} Warnings, ${stats.failed} Failed)`);
+  console.log(`\n📍 ${name}: ${score}/100 (${stats.passed} Passed, ${stats.warnings} Warnings, ${stats.failed} Failed)`);
   for (const c of stats.checks) {
-    const symbol = c.status === 'PASS' ? 'ÃƒÂ¢Ã…â€œÃ¢â‚¬Â¦' : c.status === 'WARN' ? 'ÃƒÂ¢Ã…Â¡Ã‚Â ÃƒÂ¯Ã‚Â¸Ã‚Â' : 'ÃƒÂ¢Ã‚ÂÃ…â€™';
+    const symbol = c.status === 'PASS' ? '✅' : c.status === 'WARN' ? '⚠️' : '❌';
     console.log(`   ${symbol} [${c.status}] ${c.title}${c.detail ? ': ' + c.detail : ''}`);
   }
 }
@@ -2131,17 +2131,17 @@ printCategoryScore('Crawlability & Indexability', crawlScore, auditResults.crawl
 printCategoryScore('Technical SEO & Rich Schemas', techScore, auditResults.technicalSeo);
 printCategoryScore('PageSpeed & Core Web Vitals', speedScore, auditResults.pageSpeed);
 
-console.log('\nÃƒÂ°Ã…Â¸Ã¢â‚¬ÂºÃ‚Â ÃƒÂ¯Ã‚Â¸Ã‚Â Non-Visual Auto-Optimizations Executed:');
+console.log('\n🛠️ Non-Visual Auto-Optimizations Executed:');
 for (const opt of auditResults.autoOptimizations) {
-  console.log(`   ÃƒÂ¢Ã…â€œÃ‚Â¨ ${opt}`);
+  console.log(`   ✨ ${opt}`);
 }
 
 const totalFailed = auditResults.crawlability.failed + auditResults.technicalSeo.failed + auditResults.pageSpeed.failed;
 console.log('\n' + '='.repeat(78));
 if (totalFailed === 0) {
-  console.log('ÃƒÂ°Ã…Â¸Ã…Â½Ã‚Â¯ DAILY AUDIT RESULT: 100% HEALTHY ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â All Systems Verified & Optimized');
+  console.log('🎯 DAILY AUDIT RESULT: 100% HEALTHY — All Systems Verified & Optimized');
 } else {
-  console.log(`ÃƒÂ¢Ã…Â¡Ã‚Â ÃƒÂ¯Ã‚Â¸Ã‚Â DAILY AUDIT RESULT: ${totalFailed} Failed Checks Requiring Attention`);
+  console.log(`⚠️ DAILY AUDIT RESULT: ${totalFailed} Failed Checks Requiring Attention`);
 }
 console.log('='.repeat(78));
 
@@ -2149,7 +2149,7 @@ console.log('='.repeat(78));
 // 6. PERSIST TO TECHNICAL_SEO_AUDIT_LOG.md
 // ============================================================================
 function updateAuditLog() {
-  const sectionHeader = `## ${todayStr} ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Daily Technical SEO, Crawlability & PageSpeed Audit & Auto-Optimization Pass`;
+  const sectionHeader = `## ${todayStr} — Daily Technical SEO, Crawlability & PageSpeed Audit & Auto-Optimization Pass`;
   const markdownSection = `
 ${sectionHeader}
 
@@ -2161,13 +2161,13 @@ ${auditResults.autoOptimizations.map((opt) => `  - ${opt}`).join('\n')}
 ### Category Scorecards & Verifications
 
 #### 1. Crawlability & Indexability (${crawlScore}/100)
-${auditResults.crawlability.checks.map((c) => `- **${c.title}**: ${c.status} ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â ${c.detail}`).join('\n')}
+${auditResults.crawlability.checks.map((c) => `- **${c.title}**: ${c.status} — ${c.detail}`).join('\n')}
 
 #### 2. Technical SEO & Rich Schemas (${techScore}/100)
-${auditResults.technicalSeo.checks.map((c) => `- **${c.title}**: ${c.status} ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â ${c.detail}`).join('\n')}
+${auditResults.technicalSeo.checks.map((c) => `- **${c.title}**: ${c.status} — ${c.detail}`).join('\n')}
 
 #### 3. PageSpeed & Core Web Vitals (${speedScore}/100)
-${auditResults.pageSpeed.checks.map((c) => `- **${c.title}**: ${c.status} ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â ${c.detail}`).join('\n')}
+${auditResults.pageSpeed.checks.map((c) => `- **${c.title}**: ${c.status} — ${c.detail}`).join('\n')}
 
 ### Compression Benchmark Results
 ${auditResults.benchmarks.map((b) => `- **${b.file}** (${b.rawKb} KB raw) &rarr; Gzip: **${b.gzKb} KB** (${b.gzRatio}% reduction) | Brotli: **${b.brKb} KB** (${b.brRatio}% reduction)`).join('\n')}
@@ -2177,7 +2177,7 @@ ${auditResults.benchmarks.map((b) => `- **${b.file}** (${b.rawKb} KB raw) &rarr;
   if (fs.existsSync(AUDIT_LOG_PATH)) {
     currentLog = fs.readFileSync(AUDIT_LOG_PATH, 'utf8');
   } else {
-    currentLog = `# SWEEPR VPN ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Technical SEO, Crawlability & PageSpeed Audit Log\n\nTracks automated daily technical SEO audits and under-the-hood optimizations (strictly non-visual and non-functional to end users).\n`;
+    currentLog = `# SWEEPR VPN — Technical SEO, Crawlability & PageSpeed Audit Log\n\nTracks automated daily technical SEO audits and under-the-hood optimizations (strictly non-visual and non-functional to end users).\n`;
   }
 
   // If entry for today already exists, replace it; otherwise append
@@ -2189,7 +2189,7 @@ ${auditResults.benchmarks.map((b) => `- **${b.file}** (${b.rawKb} KB raw) &rarr;
   }
 
   fs.writeFileSync(AUDIT_LOG_PATH, currentLog, 'utf8');
-  console.log(`\nÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã‚Â Persisted daily audit report to ${path.relative(VPN_ROOT, AUDIT_LOG_PATH)}`);
+  console.log(`\n📝 Persisted daily audit report to ${path.relative(VPN_ROOT, AUDIT_LOG_PATH)}`);
 }
 
 updateAuditLog();

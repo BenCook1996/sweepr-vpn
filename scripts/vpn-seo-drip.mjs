@@ -506,7 +506,7 @@ async function runVpnDrip(targetCount = 300) {
 
   // Submit delta-only newly created/modified URLs (max 25 per 6h run, 14-day cooldown) to Bing IndexNow API
   // Prevents Bing Webmaster Tools full-sitemap anti-spam throttling while steadily indexing all 1,100+ URLs
-  let indexStatus = { sitemapUrls: 0, deltaSubmitted: 0, bingRes: 'N/A', indexNowRes: 'N/A' };
+  let indexStatus = { sitemapUrls: 0, deltaSubmitted: 0, bingRes: 'N/A', indexNowRes: 'N/A', yandexRes: 'N/A' };
   try {
     let queue = {
       indexnow_key: INDEXNOW_KEY,
@@ -553,6 +553,7 @@ async function runVpnDrip(targetCount = 300) {
 
     let bingRes = 'SKIPPED (0 delta URLs due)';
     let indexNowRes = 'SKIPPED (0 delta URLs due)';
+    let yandexRes = 'SKIPPED (0 delta URLs due)';
 
     if (deltaBatch.length > 0) {
       const indexNowPayload = {
@@ -562,7 +563,7 @@ async function runVpnDrip(targetCount = 300) {
         urlList: deltaBatch
       };
 
-      [bingRes, indexNowRes] = await Promise.all([
+      [bingRes, indexNowRes, yandexRes] = await Promise.all([
         fetch('https://www.bing.com/indexnow', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json; charset=utf-8' },
@@ -570,6 +571,12 @@ async function runVpnDrip(targetCount = 300) {
           signal: AbortSignal.timeout(15000)
         }).then((r) => `HTTP ${r.status}`).catch((e) => `Err: ${e.message}`),
         fetch('https://api.indexnow.org/indexnow', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json; charset=utf-8' },
+          body: JSON.stringify(indexNowPayload),
+          signal: AbortSignal.timeout(15000)
+        }).then((r) => `HTTP ${r.status}`).catch((e) => `Err: ${e.message}`),
+        fetch('https://yandex.com/indexnow', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json; charset=utf-8' },
           body: JSON.stringify(indexNowPayload),
@@ -588,11 +595,12 @@ async function runVpnDrip(targetCount = 300) {
     queue.last_sitemap_ping = new Date().toISOString();
     fs.writeFileSync(INDEXING_QUEUE_PATH, JSON.stringify(queue, null, 2), 'utf8');
 
-    indexStatus = { sitemapUrls: sitemapUrls.length, deltaSubmitted: deltaBatch.length, bingRes, indexNowRes };
+    indexStatus = { sitemapUrls: sitemapUrls.length, deltaSubmitted: deltaBatch.length, bingRes, indexNowRes, yandexRes };
 
-    console.log(`[Bing IndexNow Delta (sweeprvpn.com)] Submitted ${deltaBatch.length} delta URLs (of ${sitemapUrls.length} total in sitemap, ${queue.pending_urls.length} remaining in rolling queue):`);
+    console.log(`[Bing & Yandex IndexNow Delta (sweeprvpn.com)] Submitted ${deltaBatch.length} delta URLs (of ${sitemapUrls.length} total in sitemap, ${queue.pending_urls.length} remaining in rolling queue):`);
     console.log(`  - www.bing.com/indexnow: ${bingRes}`);
     console.log(`  - api.indexnow.org/indexnow: ${indexNowRes}`);
+    console.log(`  - yandex.com/indexnow: ${yandexRes}`);
   } catch (err) {
     console.error('[IndexNow Queue Error]', err.message);
   }

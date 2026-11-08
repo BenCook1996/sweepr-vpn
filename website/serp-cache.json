@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-11-06T10:03:04.591Z",
+  "updatedAt": "2026-11-08T16:35:54.908Z",
   "entries": {
     "3f6375c2084e251e": {
       "fetchedAt": 1793831697933,
@@ -1593,48 +1593,6 @@
           "domain": "github.com",
           "snippet": "Alternate Approach (2023)",
           "year": "2023"
-        }
-      ]
-    },
-    "1405bc7f0f6eb411": {
-      "fetchedAt": 1793959376850,
-      "keyword": "does bitdefender vpn use wireguard",
-      "source": "community-api+serp-verified",
-      "topResults": [
-        {
-          "title": "[Windows][Desktop 26.1007.2314.0] Repeated 0x3B BSOD in nt!CmpKeySecurityIncrementReferenceCount during local execution",
-          "url": "https://github.com/openai/codex/issues/52728",
-          "domain": "github.com",
-          "snippet": "[Windows][Desktop 26.1007.2314.0] Repeated 0x3B BSOD in nt!CmpKeySecurityIncrementReferenceCount during local execution (2026)",
-          "year": "2026"
-        },
-        {
-          "title": "Full VPN Support with WSL2",
-          "url": "https://github.com/microsoft/WSL/issues/10380",
-          "domain": "github.com",
-          "snippet": "Full VPN Support with WSL2 (2023)",
-          "year": "2023"
-        }
-      ]
-    },
-    "8e2609d286d590fa": {
-      "fetchedAt": 1793959379164,
-      "keyword": "gl-be3600 wireguard vpn",
-      "source": "community-api+serp-verified",
-      "topResults": [
-        {
-          "title": "Automated translation sync",
-          "url": "https://github.com/gl-inet/docs4.x/pull/127",
-          "domain": "github.com",
-          "snippet": "Automated translation sync (2026)",
-          "year": "2026"
-        },
-        {
-          "title": "fw4: masquerade incorrectly rewrites source port of router-originated traffic",
-          "url": "https://github.com/openwrt/openwrt/issues/22765",
-          "domain": "github.com",
-          "snippet": "fw4: masquerade incorrectly rewrites source port of router-originated traffic (2026)",
-          "year": "2026"
         }
       ]
     },
