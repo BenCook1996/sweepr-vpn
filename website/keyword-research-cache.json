@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-11-08T16:57:55.430Z",
+  "updatedAt": "2026-11-09T05:03:37.019Z",
   "entries": {
     "ddg:en-GB:gl inet slate 7 wireguard": {
       "fetchedAt": 1793831679286,
@@ -3017,6 +3017,319 @@
         "fing ip scanner windows",
         "is fing network scanner safe",
         "fing - network scanner"
+      ]
+    },
+    "google:en-GB:what is hon hai on my wifi": {
+      "fetchedAt": 1794200611354,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": [
+        "what is hon hai on my wifi",
+        "what is hon hai precision on my wifi",
+        "what is hon hai device on my wi fi",
+        "who is connected to wifi",
+        "does wireless mean wifi"
+      ]
+    },
+    "ddg:en-GB:what is hon hai on my wifi": {
+      "fetchedAt": 1794200611354,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "hon hai precision ind co ltd on my wifi",
+        "hon hai precision wifi",
+        "hon hai device on wifi",
+        "hon hai precision connected to my wifi",
+        "hon hai precision ind. co. ltd on wifi",
+        "what is hon hai on my router",
+        "hon hai device on network",
+        "what is hon hai"
+      ]
+    },
+    "bing:en-GB:what is hon hai on my wifi": {
+      "fetchedAt": 1794200611354,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "hon hai precision ind co ltd on my wifi",
+        "hon hai precision wifi",
+        "hon hai device on wifi",
+        "hon hai precision connected to my wifi",
+        "hon hai precision ind. co. ltd on wifi",
+        "what is hon hai on my router",
+        "hon hai device on network",
+        "what is hon hai",
+        "hon hai precision device on my network",
+        "hon hai precision device"
+      ]
+    },
+    "google:en-GB:liteon technology on my wifi": {
+      "fetchedAt": 1794200612520,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": [
+        "liteon technology on my wifi",
+        "liteon technology corporation on my wifi router",
+        "liteon technology corporation device on my wifi",
+        "what is liteon on my wifi",
+        "what is this liteon technology device on my wireless network",
+        "what is internet wifi switch",
+        "devices won't connect to wifi"
+      ]
+    },
+    "bing:en-GB:liteon technology on my wifi": {
+      "fetchedAt": 1794200612520,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "liteon technology corporation wifi",
+        "liteon technology corporation on my wifi",
+        "liteon technology corporation wifi devices",
+        "liteon technology corporation devices",
+        "liteon device on my network",
+        "what is liteon technology",
+        "liteon technology corporation products",
+        "what is liteon technology corp",
+        "what is a liteon device",
+        "what is liteon technology corporation"
+      ]
+    },
+    "ddg:en-GB:liteon technology on my wifi": {
+      "fetchedAt": 1794200612520,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "liteon technology corporation wifi",
+        "liteon technology corporation on my wifi",
+        "liteon technology corporation wifi devices",
+        "liteon technology corporation devices",
+        "liteon device on my network",
+        "what is liteon technology",
+        "liteon technology corporation products",
+        "what is liteon technology corp"
+      ]
+    },
+    "bing:en-GB:azurewave on my wifi": {
+      "fetchedAt": 1794200613151,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "azurewave technology device on my wifi",
+        "azurewave technology wifi modules",
+        "azurewave device on my wifi",
+        "azurewave technology inc on my wifi",
+        "azurewave technology on my wifi",
+        "azurewave wifi driver",
+        "azurewave eb601nf wifi driver",
+        "azurewave technology inc wifi",
+        "what is azurewave device on my wifi",
+        "azurewave technology device on wifi"
+      ]
+    },
+    "google:en-GB:azurewave on my wifi": {
+      "fetchedAt": 1794200613151,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": [
+        "azurewave on my wifi",
+        "azurewave device on my wifi",
+        "azurewave tech on my wifi",
+        "what is azurewave device on my wifi password",
+        "why is azurewave technology on my wifi iphone",
+        "what is azurewave on my network",
+        "what is azurewave device",
+        "what is azurewave technology"
+      ]
+    },
+    "ddg:en-GB:azurewave on my wifi": {
+      "fetchedAt": 1794200613151,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "azurewave technology device on my wifi",
+        "azurewave technology wifi modules",
+        "azurewave device on my wifi",
+        "azurewave technology inc on my wifi",
+        "azurewave technology on my wifi",
+        "azurewave wifi driver",
+        "azurewave eb601nf wifi driver",
+        "azurewave technology inc wifi"
+      ]
+    },
+    "bing:en-GB:private wifi address showing as unknown device": {
+      "fetchedAt": 1794200613819,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": []
+    },
+    "google:en-GB:private wifi address showing as unknown device": {
+      "fetchedAt": 1794200613819,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "ddg:en-GB:private wifi address showing as unknown device": {
+      "fetchedAt": 1794200613819,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": []
+    },
+    "bing:en-GB:unknown device on wifi randomized mac": {
+      "fetchedAt": 1794200614380,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "unknown device on wifi network",
+        "unknown device connected to wifi",
+        "unknown device on wifi",
+        "wifi non persistent mac randomization",
+        "unknown mac address connected to wifi",
+        "how to find unknown devices on wifi",
+        "unknown device on network",
+        "random mac address wifi",
+        "random device connected to wifi",
+        "how to disconnect unknown devices from wifi"
+      ]
+    },
+    "ddg:en-GB:unknown device on wifi randomized mac": {
+      "fetchedAt": 1794200614380,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "unknown device on wifi network",
+        "unknown device connected to wifi",
+        "unknown device on wifi",
+        "wifi non persistent mac randomization",
+        "unknown mac address connected to wifi",
+        "how to find unknown devices on wifi",
+        "unknown device on network",
+        "random mac address wifi"
+      ]
+    },
+    "google:en-GB:unknown device on wifi randomized mac": {
+      "fetchedAt": 1794200614380,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": [
+        "unknown device on wifi randomized mac address",
+        "unknown device on wifi randomized macos"
+      ]
+    },
+    "google:en-GB:ofcom broadband speed guarantee compensation": {
+      "fetchedAt": 1794200615043,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "bing:en-GB:ofcom broadband speed guarantee compensation": {
+      "fetchedAt": 1794200615043,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "ofcom broadband automatic compensation",
+        "ofcom minimum speed guarantee",
+        "ofcom broadband compensation scheme",
+        "ofcom minimum broadband speed",
+        "ofcom broadband outage compensation",
+        "ofcom broadband speed test",
+        "ofcom broadband speeds code of practice",
+        "ofcom broadband pricing rules",
+        "ofcom check broadband speed",
+        "ofcom broadband speed checker"
+      ]
+    },
+    "ddg:en-GB:ofcom broadband speed guarantee compensation": {
+      "fetchedAt": 1794200615043,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "ofcom broadband automatic compensation",
+        "ofcom minimum speed guarantee",
+        "ofcom broadband compensation scheme",
+        "ofcom minimum broadband speed",
+        "ofcom broadband outage compensation",
+        "ofcom broadband speed test",
+        "ofcom broadband speeds code of practice",
+        "ofcom broadband pricing rules"
+      ]
+    },
+    "ddg:en-GB:virgin media minimum guaranteed speed claim": {
+      "fetchedAt": 1794200615750,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "virgin media minimum speed guarantee",
+        "virgin media guaranteed speed",
+        "virgin media speed guarantee",
+        "virgin media broadband speed guarantee",
+        "virgin media guaranteed broadband speed",
+        "virgin media 1gb minimum speed",
+        "virgin media 1 gig minimum speed",
+        "virgin media free speed upgrade"
+      ]
+    },
+    "google:en-GB:virgin media minimum guaranteed speed claim": {
+      "fetchedAt": 1794200615750,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": []
+    },
+    "bing:en-GB:virgin media minimum guaranteed speed claim": {
+      "fetchedAt": 1794200615750,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "virgin media minimum speed guarantee",
+        "virgin media guaranteed speed",
+        "virgin media speed guarantee",
+        "virgin media broadband speed guarantee",
+        "virgin media guaranteed broadband speed",
+        "virgin media 1gb minimum speed",
+        "virgin media 1 gig minimum speed",
+        "virgin media free speed upgrade",
+        "virgin media speed problems",
+        "virgin media speed issues"
+      ]
+    },
+    "google:en-GB:bt broadband slow speed bill credit": {
+      "fetchedAt": 1794200616382,
+      "locale": "en-GB",
+      "engine": "google",
+      "suggestions": [
+        "bt broadband slow speed bill credit card",
+        "bt broadband slow speed bill credits"
+      ]
+    },
+    "bing:en-GB:bt broadband slow speed bill credit": {
+      "fetchedAt": 1794200616382,
+      "locale": "en-GB",
+      "engine": "bing",
+      "suggestions": [
+        "bt broadband speed slow",
+        "bt slow broadband speed complaint",
+        "bt broadband slow today",
+        "bt broadband very slow",
+        "bt broadband running slow",
+        "how to report slow broadband to bt",
+        "bt internet speed slow",
+        "bt broadband slow in my area",
+        "bt business broadband speed",
+        "my broadband speed bt"
+      ]
+    },
+    "ddg:en-GB:bt broadband slow speed bill credit": {
+      "fetchedAt": 1794200616382,
+      "locale": "en-GB",
+      "engine": "ddg",
+      "suggestions": [
+        "bt broadband speed slow",
+        "bt slow broadband speed complaint",
+        "bt broadband slow today",
+        "bt broadband very slow",
+        "bt broadband running slow",
+        "how to report slow broadband to bt",
+        "bt internet speed slow",
+        "bt broadband slow in my area"
       ]
     }
   }

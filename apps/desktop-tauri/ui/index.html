@@ -17,11 +17,16 @@
     --bg:#ffffff; --rail:#f8fafc; --card:#ffffff; --card2:#f8fafc; --line:#e2e8f0;
     --ink:#0f172a; --ink3:#334155; --muted:#64748b; --amberbg:#fffbeb; --amberline:#fbbf24; --amberink:#b45309;
     --accent:#059669; --sel:#ecfdf5;
+    /* @Memorisely Rule #1 & #10: Concentric Corner Radius & Semantic Tokens */
+    --radius-outer:20px; --pad-outer:10px; --radius-inner:10px;
+    --danger-ink:#dc2626;
   }
   :root[data-theme="dark"] {
-    --bg:#0b1220; --rail:#0b1220; --card:#111a2e; --card2:#0f172a; --line:#1e293b;
+    /* @Memorisely Rule #7: Stepped Dark Mode Surfaces & Desaturated Accents */
+    --bg:#0b1220; --rail:#0b1220; --card:#111a2e; --card2:#16213a; --line:#1e293b;
     --ink:#f1f5f9; --ink3:#cbd5e1; --muted:#94a3b8; --amberbg:rgba(245,158,11,.10); --amberline:rgba(251,191,36,.55); --amberink:#fbbf24;
-    --accent:#34d399; --sel:rgba(16,185,129,.12);
+    --accent:#34d399; --sel:rgba(52,211,153,.14);
+    --danger-ink:#f87171;
   }
   * { box-sizing:border-box; margin:0; padding:0; }
   html, body { height:100%; overflow:hidden; user-select:none; }
@@ -118,8 +123,14 @@
   .flag.lg { width:38px; height:38px; }
   .flag.xl { width:28px; height:28px; }
 
-  .card { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:16px; }
-  .devrow { display:flex; align-items:center; justify-content:space-between; gap:12px; border:1px solid var(--line); border-radius:14px; padding:11px 14px; background:var(--card); overflow:hidden; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:var(--radius-outer); padding:14px; }
+  .devrow { display:flex; align-items:center; justify-content:space-between; gap:12px; border:1px solid var(--line); border-radius:var(--radius-inner); padding:11px 14px; background:var(--card); overflow:hidden; }
+  .set-anchor-ico { width:36px; height:36px; border-radius:var(--radius-inner); display:grid; place-items:center; background:var(--card2); border:1px solid var(--line); color:var(--accent); flex-shrink:0; font-size:15px; }
+  .lang-chip-group { display:inline-flex; gap:5px; flex-wrap:wrap; }
+  .lang-chip { padding:6px 11px; border-radius:8px; border:1px solid var(--line); background:var(--card2); color:var(--ink3); font-size:12px; font-weight:800; transition:all .14s; }
+  .lang-chip:hover { border-color:var(--e500); color:var(--ink); }
+  .lang-chip.on { background:var(--sel); border-color:var(--e500); color:var(--accent); }
+  .field-lbl { display:block; font-size:10.5px; font-weight:800; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); margin-bottom:4px; }
   .devrow .grow { flex:1; min-width:0; overflow:hidden; margin-right:6px; }
   .devrow .t { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .devrow .s { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
@@ -278,9 +289,10 @@
   .ping-dot { display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--e400); margin-right:6px; vertical-align:middle; }
   .panel-meta-line { font-size:13.5px; color:#a7f3d0; font-weight:600; margin-top:12px; position:relative; z-index:2; }
   @media (min-width: 821px) {
-    .app { grid-template-columns:72px 1fr; grid-template-rows:auto 1fr; height:100vh; }
+    .app { grid-template-columns:78px 1fr; grid-template-rows:auto 1fr; height:100vh; }
     .rail { grid-column:1; grid-row:1 / -1; }
-    .rail-btn { width:54px; height:50px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; }
+    .rail-btn { width:64px; height:52px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; }
+    .rail-btn.on::before { content:""; position:absolute; left:0; top:10px; bottom:10px; width:3px; border-radius:0 3px 3px 0; background:var(--accent); }
     .rail-btn .nav-lbl { display:block; font-size:10px; }
     .panel {
       grid-column:2; grid-row:1;
@@ -424,8 +436,8 @@
     <button class="rail-btn" id="nav-wifi" onclick="go('wifi')" aria-label="Wi-Fi & TV"><svg width="20" height="20"><use href="#i-wifi"/></svg><span class="dot" id="wifiDot"></span><span class="nav-lbl" data-i18n="wifi">Wi-Fi &amp; TV</span><span class="tip" data-i18n="wifi">Wi-Fi &amp; TV</span></button>
     <button class="rail-btn" id="nav-account" onclick="go('account')" aria-label="Account"><svg width="20" height="20"><use href="#i-user"/></svg><span class="nav-lbl" data-i18n="account">Account</span><span class="tip" data-i18n="account">Account &amp; Help</span></button>
     <div class="spacer desktop-only"></div>
-    <button class="rail-btn desktop-only" onclick="toggleTheme()" aria-label="Light or dark mode"><svg width="20" height="20" id="themeIcon"><use href="#i-moon"/></svg><span class="tip" id="themeTip">Dark mode</span></button>
-    <button class="rail-btn desktop-only" onclick="setCompact(true)" aria-label="Mini window"><svg width="20" height="20"><use href="#i-min"/></svg><span class="tip">Mini window</span></button>
+    <button class="rail-btn desktop-only" onclick="toggleTheme()" aria-label="Light or dark mode"><svg width="20" height="20" id="themeIcon"><use href="#i-moon"/></svg><span class="nav-lbl">Theme</span><span class="tip" id="themeTip">Dark mode</span></button>
+    <button class="rail-btn desktop-only" onclick="setCompact(true)" aria-label="Mini window"><svg width="20" height="20"><use href="#i-min"/></svg><span class="nav-lbl">Mini</span><span class="tip">Mini window</span></button>
   </nav>
 
   <!-- Main column -->
@@ -637,17 +649,25 @@
 
       <h3 class="sec" data-i18n="settingsHeader">Connection &amp; App Settings</h3>
       <div class="card" style="padding:4px 16px">
-        <div class="set-row" onclick="toggleStartup()"><div class="grow"><div class="t"><span data-i18n="startupTitle">Auto-protect on startup</span> <span class="pro-tag">PRO</span></div><div class="s" data-i18n="startupSub">Connect automatically as soon as you open SWEEPR</div></div><button class="toggle" id="startupToggle" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleStartup()"><i></i></button></div>
-        <div class="set-row" onclick="toggleKillSwitch()"><div class="grow"><div class="t"><span data-i18n="killTitle">Emergency internet cut-off (Kill Switch)</span> <span class="pro-tag">PRO</span></div><div class="s" data-i18n="killSub">Blocks unencrypted traffic if the VPN tunnel ever drops</div></div><button class="toggle shield" id="killToggle" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleKillSwitch()"><i></i></button></div>
-        <div class="set-row" onclick="toggleLanBypass()"><div class="grow"><div class="t"><span data-i18n="lanTitle">Local LAN bypass (Printers &amp; AirPlay)</span> <span class="pro-tag">PRO</span></div><div class="s" data-i18n="lanSub">Keep home printers, NAS drives &amp; Smart TVs reachable while connected</div></div><button class="toggle" id="lanBypassToggle" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleLanBypass()"><i></i></button></div>
-        <div class="set-row" onclick="toggleTheme()"><div class="grow"><div class="t" data-i18n="darkTitle">Dark mode</div><div class="s" data-i18n="darkSub">Easier on the eyes in low light</div></div><button class="toggle" id="darkToggle" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleTheme()"><i></i></button></div>
+        <div class="set-row" onclick="toggleStartup()"><div class="set-anchor-ico"><svg width="17" height="17"><use href="#i-bolt"/></svg></div><div class="grow"><div class="t"><span data-i18n="startupTitle">Auto-protect on startup</span> <span class="pro-tag">PRO</span></div><div class="s" data-i18n="startupSub">Connect automatically as soon as you open SWEEPR</div></div><button class="toggle" id="startupToggle" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleStartup()"><i></i></button></div>
+        <div class="set-row" onclick="toggleKillSwitch()"><div class="set-anchor-ico"><svg width="17" height="17"><use href="#i-shield"/></svg></div><div class="grow"><div class="t"><span data-i18n="killTitle">Emergency internet cut-off (Kill Switch)</span> <span class="pro-tag">PRO</span></div><div class="s" data-i18n="killSub">Blocks unencrypted traffic if the VPN tunnel ever drops</div></div><button class="toggle shield" id="killToggle" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleKillSwitch()"><i></i></button></div>
+        <div class="set-row" onclick="toggleLanBypass()"><div class="set-anchor-ico"><svg width="17" height="17"><use href="#i-printer"/></svg></div><div class="grow"><div class="t"><span data-i18n="lanTitle">Local LAN bypass (Printers &amp; AirPlay)</span> <span class="pro-tag">PRO</span></div><div class="s" data-i18n="lanSub">Keep home printers, NAS drives &amp; Smart TVs reachable while connected</div></div><button class="toggle" id="lanBypassToggle" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleLanBypass()"><i></i></button></div>
+        <div class="set-row" onclick="toggleTheme()"><div class="set-anchor-ico"><svg width="17" height="17"><use href="#i-moon"/></svg></div><div class="grow"><div class="t" data-i18n="darkTitle">Dark mode</div><div class="s" data-i18n="darkSub">Easier on the eyes in low light</div></div><button class="toggle" id="darkToggle" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleTheme()"><i></i></button></div>
         <div class="set-row" style="cursor:default">
+          <div class="set-anchor-ico"><svg width="17" height="17"><use href="#i-bell"/></svg></div>
           <div class="grow"><div class="t" data-i18n="bedtimeTitle">Kids Bedtime Pause schedule</div><div class="s" data-i18n="bedtimeSub">Daily pause start time for kids' consoles, tablets &amp; TVs</div></div>
           <input id="bedtimeTimeInput" type="time" class="input" style="width:136px;padding:7px 10px;font-weight:800" value="22:00" onchange="setBedtimeScheduleTime(this.value)" aria-label="Kids Bedtime Pause start time" />
         </div>
         <div class="set-row" style="cursor:default">
+          <div class="set-anchor-ico">🌐</div>
           <div class="grow"><div class="t" data-i18n="langTitle">Language</div><div class="s" data-i18n="langSub">App display language</div></div>
-          <select id="lang" class="input" style="width:150px;padding:8px 10px" onchange="setLang(this.value)" aria-label="Language">
+          <div class="lang-chip-group" role="group" aria-label="Language">
+            <button type="button" class="lang-chip on" data-lang-chip="en" onclick="setLang('en')">EN</button>
+            <button type="button" class="lang-chip" data-lang-chip="de" onclick="setLang('de')">DE</button>
+            <button type="button" class="lang-chip" data-lang-chip="fr" onclick="setLang('fr')">FR</button>
+            <button type="button" class="lang-chip" data-lang-chip="ja" onclick="setLang('ja')">日本語</button>
+          </div>
+          <select id="lang" class="input hidden" onchange="setLang(this.value)" aria-label="Language">
             <option value="en">English</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="ja">日本語</option>
           </select>
         </div>
@@ -664,8 +684,14 @@
 
       <h3 class="sec"><span style="color:var(--ink);font-size:15px;font-weight:800" data-i18n="helpHeader">Need help?</span> <span style="color:var(--muted)" data-i18n="helpReply">We reply within 24 hours</span></h3>
       <div class="card" style="display:flex;flex-direction:column;gap:10px">
-        <input class="input" id="supEmail" type="email" placeholder="Your email address" />
-        <textarea class="input" id="supMsg" rows="3" placeholder="Tell us how we can help…"></textarea>
+        <div>
+          <label class="field-lbl" for="supEmail">YOUR EMAIL ADDRESS</label>
+          <input class="input" id="supEmail" type="email" placeholder="e.g. you@example.com" />
+        </div>
+        <div>
+          <label class="field-lbl" for="supMsg">HOW CAN WE HELP?</label>
+          <textarea class="input" id="supMsg" rows="3" placeholder="Describe your connection or billing question…"></textarea>
+        </div>
         <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
           <button class="btn-soft" id="supSendBtn" style="align-self:flex-start" onclick="sendSupport()" data-i18n="sendBtn">Send message</button>
           <span class="s" id="supStatusText" style="font-weight:700;display:none"></span>
@@ -746,8 +772,9 @@
     </div>
 
     <div id="mKeySection" style="display:flex;flex-direction:column;gap:8px;padding-top:6px;border-top:1px solid var(--line)">
+      <label class="field-lbl" for="mCode" style="margin-bottom:-2px">LICENSE KEY OR PAIRING CODE</label>
       <div class="key-row">
-        <input class="input" id="mCode" type="text" maxlength="128" placeholder="License key, 6-digit code, or website QR pairing code" oninput="this.value=this.value.replace(/\s+/g,'')" onpaste="handleKeyInputPaste(event)" onkeydown="if(event.key==='Enter')activateKeyOnly()" aria-label="License key" />
+        <input class="input" id="mCode" type="text" maxlength="128" placeholder="e.g. SWEEPR-VPN-XXXX or 6-digit code" oninput="this.value=this.value.replace(/\s+/g,'')" onpaste="handleKeyInputPaste(event)" onkeydown="if(event.key==='Enter')activateKeyOnly()" aria-label="License key" />
         <button type="button" class="btn-soft" onclick="pasteIntoKeyBox()" title="Paste from clipboard" style="padding:8px 11px;min-height:38px;white-space:nowrap;font-weight:800">Paste</button>
         <button class="btn-activate-key" id="mActivateKeyBtn" onclick="activateKeyOnly()">Activate Key</button>
       </div>
@@ -1788,6 +1815,10 @@
   };
   function setLang(l) {
     state.lang = l; const d = I18N[l] || I18N.en;
+    if ($('lang')) $('lang').value = l;
+    document.querySelectorAll('[data-lang-chip]').forEach(btn => {
+      btn.classList.toggle('on', btn.getAttribute('data-lang-chip') === l);
+    });
     document.querySelectorAll('[data-i18n]').forEach(el => { const k = el.getAttribute('data-i18n'); if (d[k]) el.textContent = d[k]; });
     try { localStorage.setItem('sweepr_vpn_lang', l); } catch (e) {}
     renderAll();

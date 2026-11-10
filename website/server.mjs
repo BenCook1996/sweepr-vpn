@@ -2398,7 +2398,28 @@ const CANONICAL_REDIRECTS = {
   '/solutions/eduroam-campus-wifi-p2p-port-forwarding': '/solutions/eduroam-campus-wifi-gaming-packet-loss',
   '/solutions/eduroam-campus-wifi-remote-dev-ssh': '/solutions/eduroam-campus-wifi-gaming-packet-loss',
   '/solutions/eduroam-campus-wifi-uhd-streaming-buffering': '/solutions/eduroam-campus-wifi-gaming-packet-loss',
-  '/solutions/eduroam-campus-wifi-isp-throttling': '/solutions/eduroam-campus-wifi-gaming-packet-loss'
+  '/solutions/eduroam-campus-wifi-isp-throttling': '/solutions/eduroam-campus-wifi-gaming-packet-loss',
+  // Nov 9, 2026 GSC Audit: Legacy Page-1 ranking slugs renamed on disk -> 301 to active canonical pillars
+  '/warrant-canary.html': '/warrant-canary',
+  '/setup/windows-11-wireguard-client': '/setup/windows-11-wireguard-vpn',
+  '/solutions/sky-broadband-uk-uhd-streaming-buffering': '/solutions/sky-broadband-gaming-packet-loss',
+  '/solutions/comcast-xfinity-p2p-port-forwarding': '/solutions/comcast-xfinity-broadband-isp-throttling',
+  '/solutions/deutsche-telekom-gaming-packet-loss': '/solutions/deutsche-telekom-dsl-isp-throttling',
+  '/solutions/vodafone-uk-pro-p2p-port-forwarding': '/solutions/vodafone-uk-gaming-packet-loss',
+  '/guides/stop-isp-throttling-uk-broadband': '/guides/fix-isp-dns-hijacking-and-throttling',
+  '/solutions/bt-halo-smart-hub-2-p2p-port-forwarding': '/solutions/bt-broadband-gaming-packet-loss',
+  '/setup/ps5-xbox-gaming-router': '/setup/xbox-series-x-wireguard-gaming',
+  // Redirect 0-impression sibling slugs to GSC Page-1 winning canonicals
+  '/solutions/virgin-media-p2p-port-forwarding': '/solutions/virgin-media-remote-dev-ssh',
+  '/solutions/t-mobile-5g-home-internet-isp-throttling': '/solutions/t-mobile-5g-home-internet-remote-dev-ssh',
+  '/solutions/community-fibre-london-isp-throttling': '/solutions/community-fibre-london-p2p-port-forwarding',
+  '/solutions/sky-broadband-uk-voip-teams-zoom-jitter': '/solutions/sky-broadband-gaming-packet-loss',
+  '/solutions/virgin-media-uk-isp-throttling': '/solutions/virgin-media-remote-dev-ssh',
+  '/solutions/bt-full-fibre-uk-uhd-streaming-buffering': '/solutions/bt-broadband-gaming-packet-loss',
+  '/solutions/vodafone-full-fibre-uk-smart-tv-acr-blocking': '/solutions/vodafone-uk-gaming-packet-loss',
+  '/solutions/talktalk-fibre-uk-uhd-streaming-buffering': '/solutions/talktalk-p2p-port-forwarding',
+  '/solutions/talktalk-fibre-uk-wifi-arp-spoofing-protection': '/solutions/talktalk-p2p-port-forwarding',
+  '/solutions/three-5g-uk-uhd-streaming-buffering': '/solutions/three-5g-home-broadband-uhd-streaming-buffering'
 };
 
 const ROUTE_ALIASES = {
@@ -2411,6 +2432,7 @@ const ROUTE_ALIASES = {
   '/refund': 'refund.html',
   '/terms': 'terms.html',
   '/privacy': 'privacy.html',
+  '/warrant-canary': 'warrant-canary.html',
   '/support': 'support.html',
   '/guides': 'guides.html',
   '/setup': 'setup.html',

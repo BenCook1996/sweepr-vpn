@@ -32,7 +32,7 @@ const AUTHORITATIVE_SOLUTIONS_PILLARS = new Set([
   'gigaclear-rural-fibre-gaming-packet-loss',
   'gigaclear-rural-fibre-isp-throttling',
   'comcast-xfinity-broadband-isp-throttling',
-  'virgin-media-p2p-port-forwarding',
+  'virgin-media-remote-dev-ssh',
   'virgin-media-gaming-packet-loss',
   'virgin-media-warzone-packet-loss',
   'virgin-media-isp-throttling',
@@ -43,7 +43,7 @@ const AUTHORITATIVE_SOLUTIONS_PILLARS = new Set([
   'sky-broadband-iptv-isp-blocking',
   'vodafone-uk-gaming-packet-loss',
   't-mobile-5g-home-discord-voice-drop',
-  't-mobile-5g-home-internet-isp-throttling',
+  't-mobile-5g-home-internet-remote-dev-ssh',
   'bell-fibe-twitch-4k-buffering',
   'bell-pure-fibre-canada-isp-throttling',
   'ee-mobile-5g-uk-cgnat-port-forwarding',
@@ -60,7 +60,7 @@ const AUTHORITATIVE_SOLUTIONS_PILLARS = new Set([
   'three-5g-home-broadband-isp-throttling',
   'o2-uk-mobile-tethering-isp-throttling',
   'hyperoptic-broadband-isp-throttling',
-  'community-fibre-london-isp-throttling',
+  'community-fibre-london-p2p-port-forwarding',
   'cityfibre-uk-isp-throttling',
   'youfibre-uk-isp-throttling',
   'kcom-lightstream-hull-isp-throttling',
@@ -118,9 +118,13 @@ const SPECIFIC_SOLUTIONS_CANONICAL_MAP = {
   'talktalk-remote-dev-ssh': '/solutions/talktalk-p2p-port-forwarding',
   'talktalk-uhd-streaming-buffering': '/solutions/talktalk-p2p-port-forwarding',
   'talktalk-isp-throttling': '/solutions/talktalk-p2p-port-forwarding',
-  // Virgin Media sub-pages -> Virgin Media Pillar
-  'virgin-media-remote-dev-ssh': '/solutions/virgin-media-p2p-port-forwarding',
-  'virgin-media-uhd-streaming-buffering': '/solutions/virgin-media-p2p-port-forwarding',
+  // Virgin Media sub-pages -> Virgin Media Page-1 GSC Winner Pillar (virgin-media-remote-dev-ssh, Pos 9.2)
+  'virgin-media-p2p-port-forwarding': '/solutions/virgin-media-remote-dev-ssh',
+  'virgin-media-uhd-streaming-buffering': '/solutions/virgin-media-remote-dev-ssh',
+  // T-Mobile 5G Home Internet sub-pages -> T-Mobile 5G Page-1 GSC Winner Pillar (t-mobile-5g-home-internet-remote-dev-ssh, Pos 9.0)
+  't-mobile-5g-home-internet-isp-throttling': '/solutions/t-mobile-5g-home-internet-remote-dev-ssh',
+  // Community Fibre London sub-pages -> Community Fibre Page-1 GSC Winner Pillar (community-fibre-london-p2p-port-forwarding, Pos 8.0)
+  'community-fibre-london-isp-throttling': '/solutions/community-fibre-london-p2p-port-forwarding',
   // BT Broadband sub-pages -> BT Broadband Pillar
   'bt-broadband-p2p-port-forwarding': '/solutions/bt-broadband-gaming-packet-loss',
   'bt-broadband-remote-dev-ssh': '/solutions/bt-broadband-gaming-packet-loss',
@@ -134,6 +138,29 @@ const SPECIFIC_SOLUTIONS_CANONICAL_MAP = {
   'vodafone-uk-remote-dev-ssh': '/solutions/vodafone-uk-gaming-packet-loss',
   'vodafone-uk-uhd-streaming-buffering': '/solutions/vodafone-uk-gaming-packet-loss'
 };
+
+// Dynamic GSC Telemetry Protection: Any /solutions/ URL with verified impressions in website/gsc-ga4-latest-snapshot.json
+// is automatically protected in AUTHORITATIVE_SOLUTIONS_PILLARS and never demoted to noindex, follow.
+const GSC_SNAPSHOT_PATH = path.join(WEBSITE_DIR, 'gsc-ga4-latest-snapshot.json');
+if (fs.existsSync(GSC_SNAPSHOT_PATH)) {
+  try {
+    const snap = JSON.parse(fs.readFileSync(GSC_SNAPSHOT_PATH, 'utf8'));
+    for (const [urlPath, meta] of Object.entries(snap.pages || {})) {
+      if (!urlPath.startsWith('/solutions/')) continue;
+      const slug = urlPath.replace(/^\/solutions\//, '');
+      const impr = Number(meta?.impressions28d ?? meta?.postChangeActual?.gscImpressions28d ?? 0);
+      if (impr > 0 && fs.existsSync(path.join(WEBSITE_DIR, 'solutions', `${slug}.html`))) {
+        if (!AUTHORITATIVE_SOLUTIONS_PILLARS.has(slug)) {
+          console.log(`[GSC Winner Lock] Dynamically protecting live GSC winner /solutions/${slug} (${impr} impr) as an indexable pillar.`);
+          AUTHORITATIVE_SOLUTIONS_PILLARS.add(slug);
+        }
+        delete SPECIFIC_SOLUTIONS_CANONICAL_MAP[slug];
+      }
+    }
+  } catch (err) {
+    console.warn('[GSC Winner Lock] Could not parse gsc-ga4-latest-snapshot.json:', err.message);
+  }
+}
 
 // 18 Low-Search-Volume / Legacy Antivirus-Bundled `/vs/` Pages Consolidated to `/vs`
 const CONSOLIDATED_VS_SLUGS = new Set([
@@ -188,8 +215,9 @@ function resolveCanonicalForConsolidatedSolution(slug) {
   }
   // Check if this slug is a use-case variant of an authoritative ISP pillar
   for (const authSlug of AUTHORITATIVE_SOLUTIONS_PILLARS) {
-    if (authSlug.endsWith('-isp-throttling')) {
-      const ispPrefix = authSlug.replace(/-isp-throttling$/, '');
+    const suffixMatch = authSlug.match(/-(isp-throttling|remote-dev-ssh|p2p-port-forwarding)$/);
+    if (suffixMatch) {
+      const ispPrefix = authSlug.slice(0, -suffixMatch[0].length);
       if (slug.startsWith(`${ispPrefix}-`)) {
         return `/solutions/${authSlug}`;
       }

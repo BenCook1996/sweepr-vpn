@@ -259,6 +259,51 @@ PersistentKeepalive = 25</code></pre>
       </section>
     </div>
 
+
+      <section id="gl-inet-model-compatibility-matrix" class="bg-white rounded-2xl border border-emerald-200 p-6 md:p-8 shadow-sm">
+        <h2 class="text-2xl font-bold text-gray-900 mb-3">4. GL.iNet Firmware v4.5 / v4.6 WireGuard Speed &amp; MTU Matrix (Beryl AX, Slate AX &amp; Flint 2)</h2>
+        <p class="text-gray-700 leading-relaxed mb-4">
+          All GL.iNet travel and home routers running <strong>GL.iNet Admin Panel v4.5+ (OpenWrt 21.02 / 23.05)</strong> support direct drag-and-drop import of your SWEEPR VPN <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">wg0.conf</code> profile under <strong>VPN &rarr; WireGuard Client &rarr; + Add Manually</strong>:
+        </p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border border-gray-200 rounded-xl overflow-hidden">
+            <thead class="bg-gray-50 text-gray-700 font-bold border-b border-gray-200">
+              <tr>
+                <th class="p-3">GL.iNet Router Model</th>
+                <th class="p-3">Tested WireGuard Speed</th>
+                <th class="p-3">Home Fibre MTU</th>
+                <th class="p-3">Hotel / Captive Wi-Fi MTU</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 text-gray-700">
+              <tr>
+                <td class="p-3 font-bold">GL-MT3000 (Beryl AX)</td>
+                <td class="p-3 text-emerald-700 font-semibold">300 Mbps WireGuard</td>
+                <td class="p-3 font-mono">1420</td>
+                <td class="p-3 font-mono">1380 (UDP 443 / 51820)</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold">GL-MT6000 (Flint 2)</td>
+                <td class="p-3 text-emerald-700 font-semibold">900 Mbps WireGuard</td>
+                <td class="p-3 font-mono">1420</td>
+                <td class="p-3 font-mono">1380</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold">GL-AXT1800 (Slate AX)</td>
+                <td class="p-3 text-emerald-700 font-semibold">550 Mbps WireGuard</td>
+                <td class="p-3 font-mono">1420</td>
+                <td class="p-3 font-mono">1380</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold">GL-MT2500 / Brume 2</td>
+                <td class="p-3 text-emerald-700 font-semibold">355 Mbps WireGuard</td>
+                <td class="p-3 font-mono">1420</td>
+                <td class="p-3 font-mono">1380</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
     <!-- FAQ Section (Matches JSON-LD FAQPage) -->
     <div class="bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm mb-14">
       <h2 class="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
@@ -328,15 +373,15 @@ PersistentKeepalive = 25</code></pre>
           <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
           <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media Low-Latency Gaming &amp; Packet Loss (AS5089)</div>
         </a>
-        <a href="/solutions/virgin-media-p2p-port-forwarding" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+        <a href="/solutions/virgin-media-remote-dev-ssh" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
           <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
           <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media Remote SSH, Git &amp; Docker Workflows (AS5089)</div>
         </a>
-        <a href="/solutions/virgin-media-p2p-port-forwarding" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+        <a href="/solutions/virgin-media-remote-dev-ssh" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
           <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
           <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media 4K Live Sports &amp; High-Bitrate Streaming (AS5089)</div>
         </a>
-        <a href="/solutions/virgin-media-p2p-port-forwarding" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+        <a href="/solutions/virgin-media-remote-dev-ssh" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
           <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
           <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media P2P File Sharing &amp; High-Speed Transfers (AS5089)</div>
         </a>

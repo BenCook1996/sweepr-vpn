@@ -202,7 +202,11 @@ const GSC_PRIORITY_URLS = new Set([
   'https://sweeprvpn.com/solutions/ee-5g-mobile-hotspot-wifi-arp-spoofing-protection',
   'https://sweeprvpn.com/solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter',
   'https://sweeprvpn.com/solutions/three-5g-home-broadband-uhd-streaming-buffering',
-  'https://sweeprvpn.com/solutions/fibrus-full-fibre-smart-tv-acr-blocking'
+  'https://sweeprvpn.com/solutions/fibrus-full-fibre-smart-tv-acr-blocking',
+  'https://sweeprvpn.com/warrant-canary',
+  'https://sweeprvpn.com/solutions/virgin-media-remote-dev-ssh',
+  'https://sweeprvpn.com/solutions/t-mobile-5g-home-internet-remote-dev-ssh',
+  'https://sweeprvpn.com/solutions/community-fibre-london-p2p-port-forwarding'
 ]);
 
 function loadTargetItemsFromSitemap() {

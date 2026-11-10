@@ -1,0 +1,1519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SWEEPR VPN × @Memorisely UI/UX Audit — Interactive Pre vs. Post Preview</title>
+  <style>
+    :root {
+      /* Rule #10: Primitive Tokens */
+      --slate-50: #f8fafc;
+      --slate-100: #f1f5f9;
+      --slate-200: #e2e8f0;
+      --slate-300: #cbd5e1;
+      --slate-400: #94a3b8;
+      --slate-500: #64748b;
+      --slate-600: #475569;
+      --slate-700: #334155;
+      --slate-800: #1e293b;
+      --slate-900: #0f172a;
+      --emerald-500: #10b981;
+      --emerald-600: #059669;
+      --indigo-500: #6366f1;
+      --indigo-600: #4f46e5;
+
+      /* Rule #10: Semantic Surface & Typography Tokens (Light Mode Default) */
+      --bg-page: #f1f5f9;
+      --surface-shell: #ffffff;
+      --surface-card: #ffffff;
+      --surface-subtle: #f8fafc;
+      --surface-elevated: #f1f5f9;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --border-hairline: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --brand-primary: #059669;
+      --brand-primary-soft: rgba(16, 185, 129, 0.12);
+      --accent-indigo: #4f46e5;
+      --accent-indigo-soft: rgba(79, 70, 229, 0.1);
+      --danger-semantic: #dc2626;
+      --danger-soft: rgba(239, 68, 68, 0.1);
+
+      /* Rule #1: Concentric Corner Radius Math (R_outer = R_inner + Padding) */
+      --radius-outer: 20px;
+      --pad-outer: 10px;
+      --radius-inner: 10px;
+    }
+
+    [data-theme="dark"] {
+      /* Rule #7: Dark Mode Surface Luminance Steps & Desaturated Semantic Accents */
+      --bg-page: #070b14;
+      --surface-shell: #0b1220;
+      --surface-card: #111a2e;
+      --surface-subtle: #16213a;
+      --surface-elevated: #1c2a48;
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --border-hairline: #1e293b;
+      --border-strong: #334155;
+      --brand-primary: #34d399;
+      --brand-primary-soft: rgba(52, 211, 153, 0.14);
+      --accent-indigo: #818cf8;
+      --accent-indigo-soft: rgba(129, 140, 248, 0.15);
+      --danger-semantic: #f87171;
+      --danger-soft: rgba(248, 113, 113, 0.14);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+      background: var(--bg-page);
+      color: var(--text-primary);
+      line-height: 1.5;
+      padding-bottom: 80px;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    /* Sticky Top Review Header */
+    .review-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(15, 23, 42, 0.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #1e293b;
+      color: #f8fafc;
+      padding: 12px 24px;
+    }
+    .review-header-inner {
+      max-width: 1480px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .brand-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-badge {
+      background: linear-gradient(135deg, #10b981, #4f46e5);
+      color: #fff;
+      font-weight: 900;
+      font-size: 11px;
+      padding: 4px 9px;
+      border-radius: 6px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .brand-title h1 {
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .brand-title p {
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    .toolbar-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+    .seg-group {
+      display: inline-flex;
+      background: #1e293b;
+      padding: 3px;
+      border-radius: 10px;
+      border: 1px solid #334155;
+      gap: 2px;
+    }
+    .seg-btn {
+      background: transparent;
+      color: #cbd5e1;
+      border: none;
+      padding: 6px 11px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .seg-btn:hover { color: #fff; background: rgba(255,255,255,0.08); }
+    .seg-btn.active {
+      background: #10b981;
+      color: #06281e;
+      font-weight: 800;
+    }
+    .seg-btn.mode-btn.active {
+      background: #6366f1;
+      color: #fff;
+    }
+
+    /* Section Divider Banner */
+    .section-banner {
+      margin: 28px 0 14px;
+      padding: 14px 20px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #fff;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      scroll-margin-top: 84px;
+    }
+    .section-banner h2 {
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+    .section-banner span {
+      font-size: 12px;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+
+    /* Summary Strip */
+    .summary-strip {
+      max-width: 1480px;
+      margin: 18px auto 0;
+      padding: 0 24px;
+    }
+    .summary-banner {
+      background: var(--surface-shell);
+      border: 1px solid var(--border-hairline);
+      border-radius: 16px;
+      padding: 16px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+    }
+    .rule-pills-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .rule-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      background: var(--accent-indigo-soft);
+      color: var(--accent-indigo);
+      text-decoration: none;
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      transition: transform 0.12s ease;
+    }
+    .rule-pill:hover { transform: translateY(-1px); }
+
+    /* Main Container — ALL SECTIONS VISIBLE BY DEFAULT */
+    .main-container {
+      max-width: 1480px;
+      margin: 18px auto;
+      padding: 0 24px;
+    }
+    .surface-section {
+      display: block; /* Always visible so you can scroll down and see Mobile & Website immediately */
+      margin-bottom: 36px;
+    }
+    .surface-section.filtered-out {
+      display: none;
+    }
+
+    .comparison-block {
+      margin-bottom: 24px;
+      background: var(--surface-shell);
+      border: 1px solid var(--border-hairline);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+    }
+    .comparison-header {
+      padding: 15px 22px;
+      border-bottom: 1px solid var(--border-hairline);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: var(--surface-subtle);
+    }
+    .comparison-header h3 {
+      font-size: 15.5px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .file-tag {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 11px;
+      background: var(--surface-elevated);
+      color: var(--text-secondary);
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid var(--border-hairline);
+    }
+    .status-pill {
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .status-pill.implemented {
+      background: rgba(16, 185, 129, 0.16);
+      color: var(--brand-primary);
+    }
+    .status-pill.skipped {
+      background: rgba(148, 163, 184, 0.2);
+      color: var(--text-muted);
+    }
+    .status-pill.review {
+      background: rgba(99, 102, 241, 0.15);
+      color: var(--accent-indigo);
+    }
+
+    .split-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+    body[data-view-mode="pre"] .split-grid { grid-template-columns: 1fr; }
+    body[data-view-mode="pre"] .pane-post { display: none; }
+    body[data-view-mode="post"] .split-grid { grid-template-columns: 1fr; }
+    body[data-view-mode="post"] .pane-pre { display: none; }
+
+    @media (max-width: 1024px) {
+      .split-grid { grid-template-columns: 1fr; }
+    }
+
+    .pane { padding: 22px; }
+    .pane-pre {
+      border-right: 1px solid var(--border-hairline);
+      background: rgba(239, 68, 68, 0.015);
+    }
+    .pane-post {
+      background: rgba(16, 185, 129, 0.02);
+    }
+
+    .pane-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed var(--border-hairline);
+    }
+    .badge-pre {
+      background: rgba(239, 68, 68, 0.12);
+      color: var(--danger-semantic);
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .badge-post {
+      background: var(--brand-primary-soft);
+      color: var(--brand-primary);
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .memorisely-callout {
+      margin-top: 14px;
+      padding: 11px 14px;
+      border-radius: 10px;
+      font-size: 12px;
+      background: var(--surface-subtle);
+      border-left: 3px solid var(--accent-indigo);
+      color: var(--text-secondary);
+    }
+    .memorisely-callout strong { color: var(--text-primary); }
+    .memorisely-callout a {
+      color: var(--accent-indigo);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .memorisely-callout a:hover { text-decoration: underline; }
+
+    /* Mockup Components */
+    .mock-desktop-window {
+      border: 1px solid var(--border-strong);
+      border-radius: 16px;
+      background: var(--surface-card);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      min-height: 250px;
+    }
+    .mock-desktop-window.post-window {
+      grid-template-columns: 78px 1fr;
+      border-radius: var(--radius-outer);
+    }
+    .mock-rail {
+      background: #0b1220;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 14px 6px;
+      gap: 10px;
+      border-right: 1px solid #1e293b;
+    }
+    .rail-icon-pre {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      color: #94a3b8;
+      font-size: 16px;
+    }
+    .rail-icon-pre.active {
+      background: rgba(16, 185, 129, 0.16);
+      color: #10b981;
+    }
+    .rail-btn-post {
+      width: 64px;
+      padding: 7px 4px;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      color: #94a3b8;
+      font-size: 10px;
+      font-weight: 700;
+      position: relative;
+    }
+    .rail-btn-post.active {
+      background: rgba(52, 211, 153, 0.14);
+      color: #34d399;
+    }
+    .rail-btn-post.active::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 8px;
+      bottom: 8px;
+      width: 3px;
+      border-radius: 0 3px 3px 0;
+      background: #34d399;
+    }
+
+    .mock-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .pre-card-mismatch {
+      border: 1px solid var(--border-strong);
+      border-radius: 18px;
+      padding: 16px;
+      background: var(--surface-card);
+    }
+    .pre-inner-mismatch {
+      border: 1px solid var(--border-strong);
+      border-radius: 14px;
+      padding: 12px;
+      background: var(--surface-subtle);
+      margin-top: 10px;
+    }
+
+    .post-card-concentric {
+      border: 1px solid var(--border-hairline);
+      border-radius: 20px;
+      padding: 10px;
+      background: var(--surface-card);
+    }
+    .post-inner-concentric {
+      border: 1px solid var(--border-hairline);
+      border-radius: 10px;
+      padding: 12px;
+      background: var(--surface-subtle);
+    }
+
+    .pre-select {
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border-strong);
+      background: var(--surface-card);
+      color: var(--text-primary);
+      font-size: 13px;
+      margin-top: 6px;
+    }
+    .chip-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .ui-chip {
+      padding: 6px 11px;
+      border-radius: 8px;
+      border: 1px solid var(--border-hairline);
+      background: var(--surface-card);
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.14s ease;
+    }
+    .ui-chip:hover { border-color: var(--brand-primary); color: var(--text-primary); }
+    .ui-chip.active {
+      background: var(--brand-primary-soft);
+      border-color: var(--brand-primary);
+      color: var(--brand-primary);
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .btn-pre-competing {
+      flex: 1;
+      padding: 9px 12px;
+      border-radius: 10px;
+      border: 1px solid #4f46e5;
+      background: #4f46e5;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+    }
+    .btn-post-primary {
+      flex: 1.2;
+      padding: 9px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--brand-primary);
+      background: var(--brand-primary);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .btn-post-secondary {
+      flex: 1;
+      padding: 9px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border-strong);
+      background: transparent;
+      color: var(--text-primary);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-post-ghost {
+      padding: 9px 10px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .setting-row-pre {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--border-hairline);
+      font-size: 13px;
+    }
+    .setting-row-post {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 4px;
+      border-bottom: 1px solid var(--border-hairline);
+      gap: 12px;
+    }
+    .setting-anchor-left {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+    .anchor-icon-box {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      display: grid;
+      place-items: center;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border-hairline);
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+    .toggle-pill {
+      width: 38px;
+      height: 22px;
+      border-radius: 999px;
+      background: var(--brand-primary);
+      position: relative;
+      flex-shrink: 0;
+    }
+    .toggle-pill::after {
+      content: "";
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #fff;
+      position: absolute;
+      top: 3px;
+      right: 3px;
+    }
+
+    .form-field-post { margin-bottom: 10px; }
+    .persistent-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+    .form-input {
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: 9px;
+      border: 1px solid var(--border-strong);
+      background: var(--surface-card);
+      color: var(--text-primary);
+      font-size: 13px;
+    }
+
+    /* Mobile Frame */
+    .mock-phone {
+      max-width: 370px;
+      margin: 0 auto;
+      border: 2px solid var(--border-strong);
+      border-radius: 28px;
+      background: var(--surface-card);
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+    }
+    .phone-header {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-hairline);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .phone-body { padding: 14px; }
+    .phone-tabbar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--border-hairline);
+      padding: 6px 8px;
+      background: var(--surface-subtle);
+    }
+    .phone-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      padding: 6px 4px;
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+    .phone-tab.active {
+      color: var(--brand-primary);
+      background: var(--brand-primary-soft);
+    }
+
+    /* Catalog Table */
+    .catalog-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .search-box {
+      padding: 9px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border-strong);
+      background: var(--surface-card);
+      color: var(--text-primary);
+      font-size: 13px;
+      min-width: 280px;
+    }
+    .catalog-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+    }
+    .catalog-table th, .catalog-table td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-hairline);
+      vertical-align: top;
+    }
+    .catalog-table th {
+      background: var(--surface-subtle);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+      font-weight: 800;
+    }
+    .status-applied {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 10.5px;
+      font-weight: 800;
+      background: var(--brand-primary-soft);
+      color: var(--brand-primary);
+    }
+    .status-tool {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 10.5px;
+      font-weight: 700;
+      background: var(--surface-elevated);
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body data-view-mode="split">
+
+  <!-- Sticky Review Toolbar -->
+  <header class="review-header">
+    <div class="review-header-inner">
+      <div class="brand-title">
+        <span class="brand-badge">@Memorisely × SWEEPR</span>
+        <div>
+          <h1>All Surfaces Visible Below: Mobile App (2A–2C), Website (3A–3C) &amp; Desktop App (1A, 1C Implemented)</h1>
+          <p>Scroll down or click any button on the right to jump directly to Mobile App, Website, or Desktop App</p>
+        </div>
+      </div>
+
+      <div class="toolbar-controls">
+        <!-- Quick Jump / Filter Buttons -->
+        <div class="seg-group" role="navigation" aria-label="Jump to Section">
+          <button class="seg-btn active" onclick="filterSurface('all', this)">👁️ Show All Surfaces</button>
+          <button class="seg-btn" onclick="jumpAndFilter('mobile', this)">📱 Mobile App (2A–2C)</button>
+          <button class="seg-btn" onclick="jumpAndFilter('website', this)">🌐 Website &amp; Checkout (3A–3C)</button>
+          <button class="seg-btn" onclick="jumpAndFilter('desktop', this)">🖥️ Desktop App (1A–1C)</button>
+          <button class="seg-btn" onclick="jumpAndFilter('catalog', this)">🎬 All 95 Shorts Table</button>
+        </div>
+
+        <!-- Pre / Post / Split Mode Selector -->
+        <div class="seg-group" role="group" aria-label="Comparison Mode">
+          <button class="seg-btn mode-btn active" onclick="setViewMode('split', this)">🔀 Split View</button>
+          <button class="seg-btn mode-btn" onclick="setViewMode('pre', this)">🔴 Pre Only</button>
+          <button class="seg-btn mode-btn" onclick="setViewMode('post', this)">🟢 Post Only</button>
+        </div>
+
+        <!-- Dark Mode Toggle (Rule #7) -->
+        <button class="seg-btn" style="background:#1e293b;border:1px solid #334155;" onclick="toggleTheme()" id="themeToggleBtn">
+          🌙 Test Dark Mode
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-container">
+
+    <!-- ===================================================================
+         SURFACE 2 (PLACED FIRST FOR REVIEW): MOBILE APP (website/vpn-mobile-ui.mjs)
+         =================================================================== -->
+    <div id="surface-mobile" class="surface-section">
+      <div class="section-banner">
+        <div>
+          <h2>📱 Section 2: Mobile App Proposed Changes (2A, 2B, 2C)</h2>
+          <span>Target Files: website/vpn-mobile-ui.mjs &amp; scripts/vpn-mobile-ui.mjs</span>
+        </div>
+        <span class="status-pill review">Ready for Your Review</span>
+      </div>
+
+      <!-- MOBILE 2A: Connect Screen Concentric Location Card + Clean 4-Tab Bar (No Duplicate Top Drawer) -->
+      <div class="comparison-block">
+        <div class="comparison-header">
+          <h3>2A. Mobile Connect Screen: Concentric Location Card &amp; Removing Duplicate Top Hamburger Menu</h3>
+          <span class="file-tag">website/vpn-mobile-ui.mjs (lines 168–195, 482–504)</span>
+        </div>
+        <div class="split-grid">
+          <!-- PRE 2A -->
+          <div class="pane pane-pre">
+            <div class="pane-label">
+              <span class="badge-pre">🔴 PRE (Current Mobile Connect Tab)</span>
+              <span style="font-size:11px;color:var(--text-muted)">Duplicate Top Hamburger + Mismatched Location Card Radii</span>
+            </div>
+            <div class="mock-phone">
+              <div class="phone-header">
+                <span>🛡️ SWEEPR VPN</span>
+                <span style="padding:4px 8px;border:1px solid var(--border-strong);border-radius:6px;font-size:11px;">☰ Menu (Duplicates Bottom 4 Tabs!)</span>
+              </div>
+              <div class="phone-body">
+                <!-- Mismatched outer 22px, pad 14px, inner 11px (22 - 14 = 8 != 11) -->
+                <div style="border:1px solid var(--border-strong);border-radius:22px;padding:14px;background:var(--surface-subtle);display:flex;align-items:center;justify-content:space-between;">
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <span style="font-size:20px;">🇬🇧</span>
+                    <div>
+                      <div style="font-size:13.5px;font-weight:800;">United Kingdom</div>
+                      <div style="font-size:11px;color:var(--text-muted);">Outer: 22px, Pad: 14px, Inner: 11px (Pinched)</div>
+                    </div>
+                  </div>
+                  <span style="padding:6px 10px;border-radius:11px;background:var(--surface-card);border:1px solid var(--border-strong);font-size:11px;font-weight:700;">Change ›</span>
+                </div>
+              </div>
+              <div class="phone-tabbar">
+                <div class="phone-tab active">🛡️<span>Connect</span></div>
+                <div class="phone-tab">🌍<span>Servers</span></div>
+                <div class="phone-tab">📡<span>Shields</span></div>
+                <div class="phone-tab">👤<span>Account</span></div>
+              </div>
+            </div>
+            <div class="memorisely-callout">
+              <strong>Issues Identified by @Memorisely Shorts:</strong><br/>
+              • <a href="https://www.youtube.com/shorts/0IrWV9nV6Ns" target="_blank">Short #0IrWV9nV6Ns (Mobile Tab Bar)</a>: Top `#drawerMenu` hamburger duplicates the exact same 4 destinations already in the bottom tab bar.<br/>
+              • <a href="https://www.youtube.com/shorts/09T1XTD1FvI" target="_blank">Short #09T1XTD1FvI (Corner Radius Math)</a>: `.c3-location-card` uses `22px` outer radius with `14px` padding while `.c3-change-pill` uses `11px` ($22 - 14 = 8 \neq 11$).
+            </div>
+          </div>
+
+          <!-- POST 2A -->
+          <div class="pane pane-post">
+            <div class="pane-label">
+              <span class="badge-post">🟢 POST (@Memorisely Upgraded Mobile 2A)</span>
+              <span style="font-size:11px;color:var(--text-muted)">Live Status Pill Header + Concentric Location Card (20px = 10px + 10px)</span>
+            </div>
+            <div class="mock-phone">
+              <div class="phone-header">
+                <span>🛡️ SWEEPR VPN</span>
+                <span style="font-size:11px;font-weight:800;color:var(--brand-primary);background:var(--brand-primary-soft);padding:3px 9px;border-radius:999px;">● WireGuard Ready</span>
+              </div>
+              <div class="phone-body">
+                <!-- Exact concentric: Outer 20px, Pad 10px, Inner 10px -->
+                <div style="border:1px solid var(--border-hairline);border-radius:20px;padding:10px;background:var(--surface-subtle);display:flex;align-items:center;justify-content:space-between;">
+                  <div style="display:flex;align-items:center;gap:10px;padding-left:4px;">
+                    <span style="font-size:20px;">🇬🇧</span>
+                    <div>
+                      <div style="font-size:13.5px;font-weight:900;">United Kingdom · London</div>
+                      <div style="font-size:11px;color:var(--brand-primary);font-weight:700;">12 ms · Fastest Node</div>
+                    </div>
+                  </div>
+                  <span style="padding:7px 11px;border-radius:10px;background:var(--surface-card);border:1px solid var(--border-hairline);font-size:11.5px;font-weight:800;color:var(--brand-primary);">Change ›</span>
+                </div>
+              </div>
+              <div class="phone-tabbar">
+                <div class="phone-tab active">🛡️<span>Connect</span></div>
+                <div class="phone-tab">🌍<span>Servers</span></div>
+                <div class="phone-tab">📡<span>Shields</span></div>
+                <div class="phone-tab">👤<span>Account</span></div>
+              </div>
+            </div>
+            <div class="memorisely-callout">
+              <strong>@Memorisely Fixes in 2A:</strong><br/>
+              • Replaces redundant top hamburger menu with a live status pill so the bottom 4-tab bar is the single navigation source.<br/>
+              • Aligns `.c3-location-card` to `20px` outer radius, `10px` padding, and `10px` inner `.c3-change-pill` radius.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MOBILE 2B: Shields Tab De-Boxed Whitespace & Single Primary CTA -->
+      <div class="comparison-block">
+        <div class="comparison-header">
+          <h3>2B. Mobile Shields Tab: De-Boxed Whitespace (Stop Nesting Cards) &amp; Single Primary Button Hierarchy</h3>
+          <span class="file-tag">website/vpn-mobile-ui.mjs (lines 571–620)</span>
+        </div>
+        <div class="split-grid">
+          <!-- PRE 2B -->
+          <div class="pane pane-pre">
+            <div class="pane-label">
+              <span class="badge-pre">🔴 PRE (Current Mobile Shields Tab)</span>
+              <span style="font-size:11px;color:var(--text-muted)">Box-Inside-Box Nesting + 4 Competing Primary Buttons</span>
+            </div>
+            <div class="mock-phone">
+              <div class="phone-body">
+                <div style="border:1px solid var(--border-strong);border-radius:16px;padding:12px;margin-bottom:10px;background:var(--surface-subtle);">
+                  <div style="font-size:13px;font-weight:800;margin-bottom:6px;">Home Wi-Fi Radar (Outer Card)</div>
+                  <div style="border:1px solid var(--border-strong);border-radius:12px;padding:8px;background:var(--surface-card);margin-bottom:8px;font-size:12px;">
+                    🔔 Doorbell Mode (Nested Box #1)
+                  </div>
+                  <button class="btn-pre-competing" style="width:100%;margin-bottom:6px;">📡 5-Sec Wi-Fi Scan (Primary #1)</button>
+                  <button class="btn-pre-competing" style="width:100%;">📷 Scan Airbnb Cameras (Primary #2)</button>
+                </div>
+                <div style="border:1px solid var(--border-strong);border-radius:16px;padding:12px;background:var(--surface-subtle);">
+                  <div style="font-size:13px;font-weight:800;margin-bottom:6px;">ISP Speed &amp; Refund (Outer Card)</div>
+                  <button class="btn-pre-competing" style="width:100%;margin-bottom:6px;">📄 Copy $35 Script (Primary #3)</button>
+                  <button class="btn-pre-competing" style="width:100%;">⚡ Bypass ISP Throttling (Primary #4)</button>
+                </div>
+              </div>
+            </div>
+            <div class="memorisely-callout">
+              <strong>Issues Identified by @Memorisely Shorts:</strong><br/>
+              • <a href="https://www.youtube.com/shorts/VpXDo2_PbIQ" target="_blank">Shorts #VpXDo2_PbIQ &amp; #sXDujQ09xJE (Stop Using Containers Everywhere)</a>: Nested boxes inside cards steal horizontal width on 375px phone screens.<br/>
+              • <a href="https://www.youtube.com/shorts/IrzTgmHdOmk" target="_blank">Short #IrzTgmHdOmk (Stop Overusing Primary Buttons)</a>: 4 full-width `.btn-primary` buttons compete in a single view.
+            </div>
+          </div>
+
+          <!-- POST 2B -->
+          <div class="pane pane-post">
+            <div class="pane-label">
+              <span class="badge-post">🟢 POST (@Memorisely Upgraded Mobile 2B)</span>
+              <span style="font-size:11px;color:var(--text-muted)">De-Boxed Whitespace + Hairline Dividers + 1 Solid Primary CTA</span>
+            </div>
+            <div class="mock-phone">
+              <div class="phone-body">
+                <div style="padding-bottom:14px;border-bottom:1px solid var(--border-hairline);">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                    <div>
+                      <div style="font-size:14px;font-weight:900;">Home Wi-Fi &amp; Camera Radar</div>
+                      <div style="font-size:11.5px;color:var(--text-muted);">3 known devices · 🔔 Doorbell Alert On</div>
+                    </div>
+                  </div>
+                  <div style="display:flex;gap:8px;">
+                    <button class="btn-post-primary">📡 5-Sec Wi-Fi Scan</button>
+                    <button class="btn-post-secondary">📷 Airbnb Sweep</button>
+                  </div>
+                </div>
+                <div style="padding-top:14px;">
+                  <div style="font-size:14px;font-weight:900;">ISP Speed &amp; Refund Evidence</div>
+                  <div style="font-size:11.5px;color:var(--text-muted);margin-bottom:8px;">Spectrum 300M · Actual: 184 Mbps (61%)</div>
+                  <div style="display:flex;gap:8px;">
+                    <button class="btn-post-secondary" style="flex:1;">⚡ Bypass Throttling</button>
+                    <button class="btn-post-ghost">📄 Copy Script</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="memorisely-callout">
+              <strong>@Memorisely Fixes in 2B:</strong><br/>
+              • Replaces nested `.card-sub` boxes with `14px` whitespace and `1px` hairline dividers.<br/>
+              • Keeps `📡 5-Sec Wi-Fi Scan` as the sole solid primary button; demotes secondary actions to outline/ghost buttons.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MOBILE 2C: Protection Toggles Visual Anchors & Persistent License Input Labels -->
+      <div class="comparison-block">
+        <div class="comparison-header">
+          <h3>2C. Mobile Protection Toggles (Uber Visual Anchoring Icons) &amp; Persistent Account Form Labels</h3>
+          <span class="file-tag">website/vpn-mobile-ui.mjs (lines 622–695)</span>
+        </div>
+        <div class="split-grid">
+          <!-- PRE 2C -->
+          <div class="pane pane-pre">
+            <div class="pane-label">
+              <span class="badge-pre">🔴 PRE (Current Mobile Toggles &amp; License Input)</span>
+              <span style="font-size:11px;color:var(--text-muted)">Unanchored Toggle Text + Placeholder-Only License Input</span>
+            </div>
+            <div class="mock-phone">
+              <div class="phone-body">
+                <div class="setting-row-pre">
+                  <span><strong>Kill Switch</strong> (No left icon anchor)</span>
+                  <div class="toggle-pill"></div>
+                </div>
+                <div class="setting-row-pre">
+                  <span><strong>Untrusted Wi-Fi Auto-Shield</strong></span>
+                  <div class="toggle-pill"></div>
+                </div>
+                <div class="setting-row-pre" style="border-bottom:none;margin-bottom:8px;">
+                  <span><strong>Smart-TV Leak Block</strong></span>
+                  <div class="toggle-pill"></div>
+                </div>
+                <input class="form-input" placeholder="Enter license key (no label above input)" />
+              </div>
+            </div>
+            <div class="memorisely-callout">
+              <strong>Issues Identified by @Memorisely Shorts:</strong><br/>
+              • <a href="https://www.youtube.com/shorts/xQWl1kCoq5c" target="_blank">Short #xQWl1kCoq5c (Uber Visual Anchoring)</a>: Plain text toggle rows require reading every word to locate a setting.<br/>
+              • <a href="https://www.youtube.com/shorts/d51i3QJx8jM" target="_blank">Short #d51i3QJx8jM (Stop Using Placeholders as Labels)</a>: License input has no persistent `<label>` above the field.
+            </div>
+          </div>
+
+          <!-- POST 2C -->
+          <div class="pane pane-post">
+            <div class="pane-label">
+              <span class="badge-post">🟢 POST (@Memorisely Upgraded Mobile 2C)</span>
+              <span style="font-size:11px;color:var(--text-muted)">34×34 Visual Anchor Icons + Persistent License Label</span>
+            </div>
+            <div class="mock-phone">
+              <div class="phone-body">
+                <div class="setting-row-post">
+                  <div class="setting-anchor-left">
+                    <div class="anchor-icon-box">🛑</div>
+                    <div>
+                      <div style="font-size:13px;font-weight:800;">Kill Switch</div>
+                      <div style="font-size:11px;color:var(--text-muted);">Block traffic if VPN drops</div>
+                    </div>
+                  </div>
+                  <div class="toggle-pill"></div>
+                </div>
+                <div class="setting-row-post">
+                  <div class="setting-anchor-left">
+                    <div class="anchor-icon-box">📡</div>
+                    <div>
+                      <div style="font-size:13px;font-weight:800;">Auto-Shield Public Wi-Fi</div>
+                      <div style="font-size:11px;color:var(--text-muted);">Encrypt cafe &amp; hotel networks</div>
+                    </div>
+                  </div>
+                  <div class="toggle-pill"></div>
+                </div>
+                <div class="setting-row-post" style="border-bottom:none;margin-bottom:10px;">
+                  <div class="setting-anchor-left">
+                    <div class="anchor-icon-box">📺</div>
+                    <div>
+                      <div style="font-size:13px;font-weight:800;">Smart-TV ACR Shield</div>
+                      <div style="font-size:11px;color:var(--text-muted);">Block Samsung/LG telemetry</div>
+                    </div>
+                  </div>
+                  <div class="toggle-pill"></div>
+                </div>
+                <label class="persistent-label" for="mobLicInput">ACTIVE LICENSE OR PAIRING KEY</label>
+                <input id="mobLicInput" class="form-input" placeholder="e.g. SWEEPR-PRO-XXXX" />
+              </div>
+            </div>
+            <div class="memorisely-callout">
+              <strong>@Memorisely Fixes in 2C:</strong><br/>
+              • Adds `34×34px` rounded visual anchor icons to each mobile shield toggle.<br/>
+              • Adds a persistent uppercase `<label>` above the mobile license key input.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================================================================
+         SURFACE 3: WEBSITE & CHECKOUT (index.html, order.html, isp-throttling-test.html)
+         =================================================================== -->
+    <div id="surface-website" class="surface-section">
+      <div class="section-banner">
+        <div>
+          <h2>🌐 Section 3: Website &amp; Checkout Proposed Changes (3A, 3B, 3C)</h2>
+          <span>Target Files: website/index.html, website/order.html, website/isp-throttling-test.html (Free Download CTA wording untouched!)</span>
+        </div>
+        <span class="status-pill review">Ready for Your Review</span>
+      </div>
+
+      <!-- WEBSITE 3A: Bento Feature Cards (Left-Aligned Copy + 3-Tier Typography) -->
+      <div class="comparison-block">
+        <div class="comparison-header">
+          <h3>3A. Website Bento Feature Cards: Left-Aligned 60ch Body Copy &amp; 3-Tier Typography Hierarchy</h3>
+          <span class="file-tag">website/index.html</span>
+        </div>
+        <div class="split-grid">
+          <!-- PRE 3A -->
+          <div class="pane pane-pre">
+            <div class="pane-label">
+              <span class="badge-pre">🔴 PRE (Current Website Feature Card)</span>
+              <span style="font-size:11px;color:var(--text-muted)">Centered Multi-Line Paragraph + 2-Tier Flat Contrast</span>
+            </div>
+            <div class="pre-card-mismatch" style="text-align:center;">
+              <div style="font-size:16px;font-weight:800;">WireGuard RAM-Only Stealth Nodes</div>
+              <p style="font-size:13px;color:var(--text-secondary);margin-top:6px;">
+                Every SWEEPR server runs in volatile RAM without hard drives, automatically wiping all routing tables on reboot so your browsing history never touches a disk.
+              </p>
+            </div>
+            <div class="memorisely-callout">
+              <strong>Issues Identified by @Memorisely Shorts:</strong><br/>
+              • <a href="https://www.youtube.com/shorts/OcibTxoU6Us" target="_blank">Shorts #OcibTxoU6Us (21K views) &amp; #k4UFDc0_OxY</a>: Centered 3+ line paragraphs force the eye to hunt for the start of each new line.
+            </div>
+          </div>
+
+          <!-- POST 3A -->
+          <div class="pane pane-post">
+            <div class="pane-label">
+              <span class="badge-post">🟢 POST (@Memorisely Upgraded Website 3A)</span>
+              <span style="font-size:11px;color:var(--text-muted)">Left-Aligned 60ch Copy + 3-Tier Contrast (Overline → Title → Body)</span>
+            </div>
+            <div class="post-card-concentric" style="padding:16px;text-align:left;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                <span style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:var(--brand-primary);">ZERO-DISK ARCHITECTURE</span>
+                <span style="font-size:11px;font-weight:700;color:var(--text-muted);">0.4 ms overhead</span>
+              </div>
+              <div style="font-size:17px;font-weight:900;letter-spacing:-0.02em;">WireGuard RAM-Only Stealth Nodes</div>
+              <p style="font-size:13px;color:var(--text-secondary);margin-top:6px;max-width:60ch;">
+                Every SWEEPR server runs in volatile RAM without hard drives, wiping all routing tables on reboot. (Your <strong>Free Download</strong> button wording remains 100% unchanged).
+              </p>
+            </div>
+            <div class="memorisely-callout">
+              <strong>@Memorisely Fixes in 3A:</strong><br/>
+              • Left-aligns multi-line feature descriptions (`max-w-[60ch]`) and adds a 3-tier typographic hierarchy.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEBSITE 3B: Checkout Payment Method Strip Concentric Radius & Persistent Promo Label -->
+      <div class="comparison-block">
+        <div class="comparison-header">
+          <h3>3B. Checkout Page: Concentric Payment Method Strip (14px = 8px + 6px) &amp; Persistent Promo Label</h3>
+          <span class="file-tag">website/order.html (lines 251–285)</span>
+        </div>
+        <div class="split-grid">
+          <!-- PRE 3B -->
+          <div class="pane pane-pre">
+            <div class="pane-label">
+              <span class="badge-pre">🔴 PRE (Current Checkout Strip &amp; Promo Input)</span>
+              <span style="font-size:11px;color:var(--text-muted)">Outer 12px / Pad 6px / Inner 8px (12 - 6 ≠ 8) + Placeholder-Only Promo</span>
+            </div>
+            <div class="pre-card-mismatch">
+              <div style="background:var(--surface-subtle);border:1px solid var(--border-strong);border-radius:12px;padding:6px;display:flex;gap:6px;margin-bottom:12px;">
+                <button style="flex:1;padding:8px;border-radius:8px;border:1px solid var(--brand-primary);background:var(--brand-primary-soft);font-weight:700;font-size:12px;">💳 Card / Apple Pay</button>
+                <button style="flex:1;padding:8px;border-radius:8px;border:none;background:transparent;font-size:12px;">🪙 Crypto / Monero</button>
+              </div>
+              <input class="form-input" placeholder="Promo code (no persistent label above field)" />
+            </div>
+            <div class="memorisely-callout">
+              <strong>Issues Identified by @Memorisely Shorts:</strong><br/>
+              • <a href="https://www.youtube.com/shorts/09T1XTD1FvI" target="_blank">Short #09T1XTD1FvI</a>: `#paymentLogoStripBar` uses `rounded-xl` (`12px`) with `p-1.5` (`6px`) while inner buttons use `rounded-lg` (`8px` instead of `6px`).<br/>
+              • <a href="https://www.youtube.com/shorts/d51i3QJx8jM" target="_blank">Short #d51i3QJx8jM</a>: Promo code input relies on placeholder text instead of a persistent label.
+            </div>
+          </div>
+
+          <!-- POST 3B -->
+          <div class="pane pane-post">
+            <div class="pane-label">
+              <span class="badge-post">🟢 POST (@Memorisely Upgraded Checkout 3B)</span>
+              <span style="font-size:11px;color:var(--text-muted)">Concentric 14px Outer / 6px Pad / 8px Inner + Persistent Promo Label</span>
+            </div>
+            <div class="post-card-concentric" style="padding:14px;">
+              <div style="background:var(--surface-subtle);border:1px solid var(--border-hairline);border-radius:14px;padding:6px;display:flex;gap:6px;margin-bottom:12px;">
+                <button style="flex:1;padding:8px;border-radius:8px;border:1px solid var(--brand-primary);background:var(--brand-primary-soft);color:var(--brand-primary);font-weight:800;font-size:12px;">💳 Card / Apple Pay</button>
+                <button style="flex:1;padding:8px;border-radius:8px;border:none;background:transparent;color:var(--text-secondary);font-weight:700;font-size:12px;">🪙 Crypto / Monero</button>
+              </div>
+              <label class="persistent-label" for="promoPost">PARTNER OR PROMO CODE</label>
+              <input id="promoPost" class="form-input" placeholder="e.g. PRIVACY50" />
+            </div>
+            <div class="memorisely-callout">
+              <strong>@Memorisely Fixes in 3B:</strong><br/>
+              • Aligns `#paymentLogoStripBar` to `14px` outer radius, `6px` padding, and `8px` inner pill radius ($14 - 6 = 8$).<br/>
+              • Adds a persistent uppercase `<label>` above the promo code input.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEBSITE 3C: ISP Throttling Test Tool (1-Click ISP Chips vs Dropdown) -->
+      <div class="comparison-block">
+        <div class="comparison-header">
+          <h3>3C. Website ISP Throttling Test Tool: 1-Click ISP Provider Chips vs. Dropdown</h3>
+          <span class="file-tag">website/isp-throttling-test.html</span>
+        </div>
+        <div class="split-grid">
+          <!-- PRE 3C -->
+          <div class="pane pane-pre">
+            <div class="pane-label">
+              <span class="badge-pre">🔴 PRE (Current ISP Throttling Tool)</span>
+              <span style="font-size:11px;color:var(--text-muted)">2-Click Native Dropdown Selector</span>
+            </div>
+            <div class="pre-card-mismatch">
+              <div style="font-size:13.5px;font-weight:800;">Select Your Broadband ISP</div>
+              <select class="pre-select">
+                <option>Virgin Media (UK)</option>
+                <option>BT Broadband (UK)</option>
+                <option>Sky Broadband (UK)</option>
+                <option>Spectrum / Xfinity (US)</option>
+              </select>
+            </div>
+            <div class="memorisely-callout">
+              <strong>Issue Identified by @Memorisely Shorts:</strong><br/>
+              • <a href="https://www.youtube.com/shorts/3sGb5-nLke0" target="_blank">Short #3sGb5-nLke0 (Chips vs. Dropdowns)</a>: Hiding 6–8 common ISPs behind a `<select>` dropdown adds unnecessary friction.
+            </div>
+          </div>
+
+          <!-- POST 3C -->
+          <div class="pane pane-post">
+            <div class="pane-label">
+              <span class="badge-post">🟢 POST (@Memorisely Upgraded Website 3C)</span>
+              <span style="font-size:11px;color:var(--text-muted)">1-Click Scannable ISP Chip Pills</span>
+            </div>
+            <div class="post-card-concentric" style="padding:14px;">
+              <label class="persistent-label">SELECT YOUR BROADBAND ISP (1-CLICK)</label>
+              <div class="chip-group">
+                <button class="ui-chip active" onclick="selectChip(this)">Virgin Media</button>
+                <button class="ui-chip" onclick="selectChip(this)">BT Fibre</button>
+                <button class="ui-chip" onclick="selectChip(this)">Sky</button>
+                <button class="ui-chip" onclick="selectChip(this)">TalkTalk</button>
+                <button class="ui-chip" onclick="selectChip(this)">Xfinity</button>
+                <button class="ui-chip" onclick="selectChip(this)">Spectrum</button>
+              </div>
+            </div>
+            <div class="memorisely-callout">
+              <strong>@Memorisely Fix in 3C:</strong><br/>
+              • Exposes top UK/US ISPs as 1-tap scannable chips on `website/isp-throttling-test.html`.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================================================================
+         SURFACE 1: DESKTOP APP (1A & 1C IMPLEMENTED, 1B SKIPPED PER YOUR REQUEST)
+         =================================================================== -->
+    <div id="surface-desktop" class="surface-section">
+      <div class="section-banner">
+        <div>
+          <h2>🖥️ Section 1: Desktop App (1A &amp; 1C Implemented — 1B Excluded per Your Request)</h2>
+          <span>Target Files: desktop-client/app-ui.html &amp; apps/desktop-tauri/ui/index.html</span>
+        </div>
+        <span class="status-pill implemented">✅ 1A &amp; 1C Implemented (1B Skipped)</span>
+      </div>
+
+      <!-- DESKTOP 1A -->
+      <div class="comparison-block">
+        <div class="comparison-header">
+          <h3>1A. Desktop Sidebar Rail &amp; Concentric VPN Dashboard Cards <span class="status-pill implemented">✅ Implemented</span></h3>
+          <span class="file-tag">desktop-client/app-ui.html (lines 42–71, 280–303)</span>
+        </div>
+        <div class="split-grid">
+          <div class="pane pane-pre">
+            <div class="pane-label">
+              <span class="badge-pre">🔴 PRE (Old Desktop App)</span>
+              <span style="font-size:11px;color:var(--text-muted)">Unlabeled Theme/Mini Icons + Non-Concentric Card Radii</span>
+            </div>
+            <div class="mock-desktop-window">
+              <div class="mock-rail">
+                <div class="rail-icon-pre active">🛡️</div>
+                <div class="rail-icon-pre">📡</div>
+                <div class="rail-icon-pre">👤</div>
+                <div class="rail-icon-pre" style="margin-top:auto">🌙</div>
+              </div>
+              <div class="mock-body">
+                <div class="pre-card-mismatch">
+                  <div style="font-size:13px;font-weight:800;">Outer Card (18px radius, 16px padding)</div>
+                  <div class="pre-inner-mismatch">Inner Row (14px radius — non-concentric)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="pane pane-post">
+            <div class="pane-label">
+              <span class="badge-post">🟢 POST (Implemented in app-ui.html)</span>
+              <span style="font-size:11px;color:var(--text-muted)">78px Labeled Rail + Active Left Pill + Concentric 20px/10px Cards</span>
+            </div>
+            <div class="mock-desktop-window post-window">
+              <div class="mock-rail">
+                <div class="rail-btn-post active"><span>🛡️</span><span>VPN</span></div>
+                <div class="rail-btn-post"><span>📡</span><span>Wi-Fi</span></div>
+                <div class="rail-btn-post"><span>👤</span><span>Account</span></div>
+                <div class="rail-btn-post" style="margin-top:auto"><span>🌙</span><span>Theme</span></div>
+              </div>
+              <div class="mock-body">
+                <div class="post-card-concentric">
+                  <div class="post-inner-concentric">
+                    <strong>Concentric Curvature Applied:</strong> Outer `20px` radius − `10px` padding = `10px` inner radius.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DESKTOP 1C -->
+      <div class="comparison-block">
+        <div class="comparison-header">
+          <h3>1C. Account Settings (Uber Visual Anchoring Icons + 1-Click Language Pills) &amp; Persistent Form Labels <span class="status-pill implemented">✅ Implemented</span></h3>
+          <span class="file-tag">desktop-client/app-ui.html (lines 639–674, 748–766)</span>
+        </div>
+        <div class="split-grid">
+          <div class="pane pane-pre">
+            <div class="pane-label">
+              <span class="badge-pre">🔴 PRE (Old Settings &amp; Support)</span>
+              <span style="font-size:11px;color:var(--text-muted)">Unanchored Rows + Language Dropdown + Placeholder-Only Inputs</span>
+            </div>
+            <div class="pre-card-mismatch">
+              <div class="setting-row-pre"><span><strong>Emergency internet cut-off (Kill Switch)</strong></span><div class="toggle-pill"></div></div>
+              <div class="setting-row-pre"><span><strong>Language</strong></span><select><option>English</option></select></div>
+              <input class="form-input" style="margin-top:8px;" placeholder="Your email address" />
+            </div>
+          </div>
+          <div class="pane pane-post">
+            <div class="pane-label">
+              <span class="badge-post">🟢 POST (Implemented in app-ui.html)</span>
+              <span style="font-size:11px;color:var(--text-muted)">36×36 Visual Anchor Icons + 1-Click Language Chips + Persistent Labels</span>
+            </div>
+            <div class="post-card-concentric" style="padding:14px;">
+              <div class="setting-row-post">
+                <div class="setting-anchor-left">
+                  <div class="anchor-icon-box">🛑</div>
+                  <div><div style="font-size:13px;font-weight:800;">Emergency internet cut-off (Kill Switch)</div></div>
+                </div>
+                <div class="toggle-pill"></div>
+              </div>
+              <div class="setting-row-post">
+                <div class="setting-anchor-left">
+                  <div class="anchor-icon-box">🌐</div>
+                  <div style="font-size:13px;font-weight:800;">Language</div>
+                </div>
+                <div class="chip-group" style="margin-top:0;">
+                  <button class="ui-chip active" onclick="selectChip(this)">EN</button>
+                  <button class="ui-chip" onclick="selectChip(this)">DE</button>
+                  <button class="ui-chip" onclick="selectChip(this)">FR</button>
+                  <button class="ui-chip" onclick="selectChip(this)">日本語</button>
+                </div>
+              </div>
+              <div style="margin-top:8px;">
+                <label class="persistent-label">YOUR EMAIL ADDRESS</label>
+                <input class="form-input" placeholder="you@example.com" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================================================================
+         SURFACE 4: COMPLETE 95-SHORTS @MEMORISELY AUDIT TABLE
+         =================================================================== -->
+    <div id="surface-catalog" class="surface-section">
+      <div class="section-banner">
+        <div>
+          <h2>🎬 Section 4: Complete @Memorisely YouTube Shorts Catalog (All 95 Shorts Audited)</h2>
+          <span>Search or filter all 95 Shorts from youtube.com/@Memorisely/shorts</span>
+        </div>
+      </div>
+      <div class="comparison-block" style="padding:22px;">
+        <div class="catalog-controls">
+          <input type="search" id="shortSearch" class="search-box" placeholder="Search by title, rule, or SWEEPR file…" oninput="filterCatalog()" />
+          <div class="seg-group">
+            <button class="seg-btn active" onclick="setCatalogFilter('all', this)">All (95)</button>
+            <button class="seg-btn" onclick="setCatalogFilter('applied', this)">Applied to SWEEPR (57)</button>
+            <button class="seg-btn" onclick="setCatalogFilter('tool', this)">Figma/Framer/AI Only (38)</button>
+          </div>
+        </div>
+
+        <div style="overflow-x:auto;">
+          <table class="catalog-table" id="shortsTable">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>YouTube Short</th>
+                <th>Views</th>
+                <th>Status</th>
+                <th>@Memorisely Rule &amp; Where It Applies in SWEEPR VPN</th>
+              </tr>
+            </thead>
+            <tbody id="shortsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    const ALL_SHORTS = [
+      { id: "09T1XTD1FvI", title: "How to Calculate Corner Radius Correctly in UI Design", views: "461K views", applied: true, rule: "Rule #1 (Concentric Radius: R_outer = R_inner + Padding) → Applied to desktop-client/app-ui.html (.card 20px / .rec 10px), vpn-mobile-ui.mjs (.c3-location-card), and website/order.html (#paymentLogoStripBar)." },
+      { id: "ZOLASfGpWTw", title: "How to Calculate Corner Radius Correctly (Inner + Padding)", views: "1.1K views", applied: true, rule: "Rule #1 (Concentric Radius Math) → Aligns nested card/button radii across Desktop, Mobile, and Website." },
+      { id: "11n11lrbTb8", title: "The Corner Radius Rule Every UI Designer Should Know", views: "695 views", applied: true, rule: "Rule #1 (Concentric Radius Math) → Eliminates optical pinching on nested server & device rows." },
+      { id: "3sGb5-nLke0", title: "Form Design Tips: Radio Buttons vs Dropdowns vs Chips", views: "1.3K views", applied: true, rule: "Rule #2 (Chips vs Dropdowns for ≤8 options) → Replaces <select id='lang'> in desktop-client/app-ui.html (1C) and ISP dropdown in website/isp-throttling-test.html (3C) with 1-click chips." },
+      { id: "TPypFTsIf-8", title: "Stop Using Dropdowns: Better Form UI Design Tips", views: "87 views", applied: true, rule: "Rule #2 (Stop Using Dropdowns) → Exposes 4 languages (EN/DE/FR/JA) as 1-tap chips." },
+      { id: "5U1AIZilxCE", title: "Stop Using Dropdowns: Better Form UI Design Tips", views: "1.3K views", applied: true, rule: "Rule #2 (Stop Using Dropdowns) → Exposes small option sets as scannable chips." },
+      { id: "d51i3QJx8jM", title: "Stop Using Placeholders as Labels (Fix Form Usability)", views: "1.4K views", applied: true, rule: "Rule #3 (Persistent Form Labels) → Adds visible <label> tags above #supEmail, #supMsg, #mCode in desktop-client/app-ui.html, license input in vpn-mobile-ui.mjs, and promo input in website/order.html." },
+      { id: "VpXDo2_PbIQ", title: "Stop Using Containers in UI Design (Use White Space Instead)", views: "976 views", applied: true, rule: "Rule #4 (De-Boxed Whitespace Layout) → Removes nested box-in-box containers in Mobile #view-shields (vpn-mobile-ui.mjs) in favor of 14px whitespace + 1px hairline dividers." },
+      { id: "sXDujQ09xJE", title: "Stop Adding Backgrounds to Cards (Better UI Design Tip)", views: "2.5K views", applied: true, rule: "Rule #4 (De-Boxed Sub-Cards) → Removes redundant background fills on nested Doorbell Mode and ISP script boxes." },
+      { id: "IrzTgmHdOmk", title: "Stop Using Primary Buttons for Everything (UI Hierarchy Tips)", views: "2.9K views", applied: true, rule: "Rule #5 (Single Primary CTA Hierarchy) → Demotes competing .btn-primary buttons in Mobile #view-shields (2B) to Secondary Outline and Ghost buttons." },
+      { id: "qO61OKOZ7xA", title: "Stop Overusing Primary Buttons in UI Design", views: "1.8K views", applied: true, rule: "Rule #5 (Single Primary CTA Hierarchy) → Enforces 1 solid primary CTA per card view." },
+      { id: "8eFpocLf9Do", title: "Using Red as a Brand Color in UI Design (Button Hierarchy)", views: "7.9K views", applied: true, rule: "Rule #5 (Semantic Red Discipline) → Reserves red strictly for Kill Switch / Unprotected warning states." },
+      { id: "xQWl1kCoq5c", title: "Visual Anchoring: The UI Design Rule Uber Uses", views: "3.4K views", applied: true, rule: "Rule #6 (Uber Visual Anchoring Icons) → Adds 36×36px rounded icon anchors to all 6 Account Settings rows in desktop-client/app-ui.html (1C) and Shield toggles in vpn-mobile-ui.mjs (2C)." },
+      { id: "7yyvEEwXcko", title: "Dark Mode UI Design: Stop Mixing Light and Dark Surfaces", views: "971 views", applied: true, rule: "Rule #7 (Dark Mode Surface Hierarchy) → Upgrades [data-theme='dark'] with stepped slate surfaces (#0b1220 → #111a2e → #16213a)." },
+      { id: "k5drflvjnNs", title: "Dark Mode Colour Rule: Fix Oversaturated UI Colours", views: "6.5K views", applied: true, rule: "Rule #7 (Desaturated Dark Mode Accents) → Softens neon #10b981/#ef4444 to #34d399/#f87171 in dark mode." },
+      { id: "0IrWV9nV6Ns", title: "How to Design a Better Mobile Tab Bar (UI Design Tips)", views: "1.4K views", applied: true, rule: "Rule #8 (Mobile Tab Bar Ergonomics) → Removes duplicate top #drawerMenu in vpn-mobile-ui.mjs (2A) and upgrades bottom 4-tab bar." },
+      { id: "HgqsqOGPctA", title: "Design a better sidebar navigation #figma #uidesign #design", views: "10K views", applied: true, rule: "Rule #8 (Labeled Desktop Sidebar) → Upgrades desktop-client/app-ui.html .rail to 78px with visible 10px labels + active indicator bar (1A)." },
+      { id: "OcibTxoU6Us", title: "UI Design Tips: Better Hierarchy and Scannable Card Layouts", views: "21K views", applied: true, rule: "Rule #9 (3-Tier Scannable Card Hierarchy) → Applied to website/index.html bento cards (3A)." },
+      { id: "o8WOwOgWJsQ", title: "How to Improve UI Card Design with Better Hierarchy", views: "1.6K views", applied: true, rule: "Rule #9 (Card Typography Contrast) → Separates Primary Title (900), Body Copy (500), and Muted Metadata (700 uppercase)." },
+      { id: "onxbvlk-LW4", title: "5 UI Tips for Designing Better Dashboard Cards", views: "1.5K views", applied: true, rule: "Rule #9 (Dashboard Card Hierarchy) → Applied to Desktop & Mobile cards." },
+      { id: "xM-Aykw2-AI", title: "Typography Anatomy Every UI Designer Needs to Know", views: "10K views", applied: true, rule: "Rule #9 (Typography Line Width & Leading) → Caps website feature copy at 60ch and left-aligns multi-line paragraphs (3A)." },
+      { id: "k4UFDc0_OxY", title: "Website Spacing & Typography Guidelines for UI Designers", views: "1.9K views", applied: true, rule: "Rule #9 (8pt Grid & Section Spacing) → Standardizes website card padding and vertical rhythm." },
+      { id: "4cQfl7U3Hww", title: "How to Fix UI Layout with Visual Hierarchy Principles", views: "3.7K views", applied: true, rule: "Rule #9 (Visual Hierarchy) → Groups related controls by proximity in Desktop & Mobile views." },
+      { id: "1fgEHLFJMNI", title: "Improve Visual Hierarchy with Less Content in UI Design", views: "834 views", applied: true, rule: "Rule #4 & #9 (Progressive Disclosure) → De-clutters nested cards." },
+      { id: "OYCRTpoYWWQ", title: "How to Fix Visual Hierarchy in Your UI Design", views: "904 views", applied: true, rule: "Rule #9 (Contrast & Weight Hierarchy) → Strengthens metric numbers vs muted unit labels." },
+      { id: "_T6KkAwGKr8", title: "UI Design Tutorial: How to Apply Visual Hierarchy to Build Better Layouts in Figma", views: "9.4K views", applied: true, rule: "Rule #9 (Layout Hierarchy) → Applied to pricing & checkout summary cards." },
+      { id: "QFXNkcTdu3A", title: "UI Design Tutorial: Apply Better Visual Hierarchy", views: "6.7K views", applied: true, rule: "Rule #9 (Visual Hierarchy) → Applied across Desktop and Mobile card headers." },
+      { id: "KPKl9i09M04", title: "Primitive vs Semantic Design Tokens Explained for Beginners", views: "596 views", applied: true, rule: "Rule #10 (Primitive → Semantic CSS Variables) → Adds semantic surface/border/radius tokens." },
+      { id: "vgrI0OraARY", title: "Design Tokens Explained: Naming Conventions in 30 Seconds", views: "1K views", applied: true, rule: "Rule #10 (Token Naming Convention) → Standardizes --radius-outer, --radius-inner." },
+      { id: "mYzgPh5wPq4", title: "Figma Color Variables: Primitive & Semantic Tokens Guide", views: "858 views", applied: true, rule: "Rule #10 (Light/Dark Semantic Mapping) → Cleanly maps dark mode tokens." },
+      { id: "GAgKtBnI-ds", title: "How to Structure Semantic Color Tokens for UI Design", views: "802 views", applied: true, rule: "Rule #10 (Semantic Color Architecture) → Separates brand primary from status danger/warning." },
+      { id: "qPxDXkDEPRg", title: "Design Tokens Explained: Primitive to Semantic Tokens", views: "1.9K views", applied: true, rule: "Rule #10 (Design Token Hierarchy) → Applied to root CSS variables." },
+      { id: "5Jcm6geUTwY", title: "Design Tokens Explained: Semantic Color Token Naming Guide", views: "1.2K views", applied: true, rule: "Rule #10 (Semantic Color Naming) → Applied to CSS custom properties." },
+      { id: "i0IWV2K0b84", title: "Figma Design System Tutorial: How to Structure Semantic Colour Tokens", views: "6.9K views", applied: true, rule: "Rule #10 (Semantic Colour Tokens) → Applied to shared theme palette." },
+      { id: "-MPpIaNd7SM", title: "Beginner’s Guide to Design Tokens in Figma", views: "48K views", applied: true, rule: "Rule #10 (Design Tokens Foundation) → Unifies spacing, radius, and color tokens." },
+      { id: "YVP64FDIKM0", title: "UI Button States Explained: Default, Hover, Active & More", views: "2.9K views", applied: true, rule: "Rule #10 (Complete Interactive Button States) → Adds tactile :hover, :active scale(0.98), and :focus-visible rings." },
+      { id: "ok82F_HhgUc", title: "3 UI Transitions Every Designer Should Know", views: "827 views", applied: true, rule: "Rule #10 (150ms Cubic-Bezier Micro-Transitions) → Smooth tab & chip transitions." },
+      { id: "XvmFC8HZq0E", title: "How Motion Hierarchy Turns Good UI Into Great UI", views: "1.5K views", applied: true, rule: "Rule #10 (Motion Hierarchy) → Subtle elevation & state transitions." },
+      { id: "fJ_Z7wXLa0w", title: "Hick's Law: Reduce Choices for Better UX Decisions", views: "720 views", applied: true, rule: "Rule #2 & #5 (Hick's Law Choice Reduction) → Curated chips + 1 primary CTA per card." },
+      { id: "YeqYP0x-zTM", title: "Why You Should Design on iPhone SE First, Not the Largest", views: "7K views", applied: true, rule: "Responsive Small-Viewport Safety → Fits 320px–375px viewports without overflow." },
+      { id: "SP_5Rs_h418", title: "Stop Designing in a Fixed iPhone Frame (Do This Instead)", views: "296K views", applied: true, rule: "Fluid Responsive Containers → Uses fluid flex/grid layouts." },
+      { id: "GuFpXvoyUK8", title: "Responsive Design Breakpoints Guide for UI Designers", views: "3K views", applied: true, rule: "Responsive Breakpoints → Verified across Website, Desktop, and Mobile." },
+      { id: "Bnag-8d0BQ0", title: "How to Fix Text Contrast on Images with Gradients", views: "1.8K views", applied: true, rule: "WCAG AA Contrast Protection → Ensures all badge & hero text passes ≥4.5:1 contrast." },
+      { id: "kOHqBN_-Thk", title: "How to Make Text on Images Pass Contrast Checks", views: "3.5K views", applied: true, rule: "WCAG Contrast Check → High-contrast badge text." },
+      { id: "l5rd6wYC8Jc", title: "UI Design Tutorial: How Using Fewer Colours Improves Your Interface", views: "4.3K views", applied: true, rule: "Restrained Palette Discipline → Consolidates button fills into Slate + Emerald." },
+      { id: "AKLcB1kmFPU", title: "Why Familiar Interactions Make Better UX Design", views: "1.1K views", applied: true, rule: "Jakob's Law Familiar Patterns → Standard segmented controls, bottom 4-tab bar, and labeled inputs." },
+      { id: "pljDzSOF-Do", title: "Add a Tooltip State to Icon Buttons in Figma", views: "1.6K views", applied: true, rule: "Accessible Labels & Tooltips → Pairs rail icons with visible labels + title attributes." },
+      { id: "giY-yze53T8", title: "Stop Using 'Book' in Your UI Copy (Use This Instead)", views: "4.6K views", applied: true, rule: "Action-Specific CTA Microcopy → Keeps Website 'Free Download' CTA unchanged per your rule." },
+      { id: "VUxf62edbxE", title: "Stop Using 'Book' in Your UI Copy (Use This Instead)", views: "1.5K views", applied: true, rule: "Action-Specific CTA Microcopy → Clear outcome-oriented button labels." },
+      { id: "jke-shJUCrc", title: "How to Improve UI Design: Flight App Redesign Walkthrough", views: "1.8K views", applied: true, rule: "Card Consolidation & Scannability → Applied to Server & Latency selection cards." },
+      { id: "yQi4VGRKJEI", title: "Bad UI to Better UI: Fix These Common Chat App Design Mistakes", views: "1.2K views", applied: true, rule: "Spacing & Alignment Cleanup → Applied to device list rows." },
+      { id: "gwVNUSmd-g0", title: "How to Fix Fake UI Design in Under 30 Seconds", views: "6.8K views", applied: true, rule: "Realistic Telemetry & Data Formatting → Tabular-nums latency & load metrics." },
+      { id: "qmW4eV_NEXY", title: "Fixing Wimbledon's UI: Card Carousel Redesign in 30 Seconds", views: "3.7K views", applied: true, rule: "Card Density & Hierarchy → Applied to Website feature cards." },
+      { id: "rMI08gkdcvY", title: "5 Free Icon Libraries Every UI Designer Should Know", views: "1.3K views", applied: true, rule: "Consistent Stroke Iconography → Consistent 2px stroke SVG icons in setting anchors." },
+      { id: "rE_Oy60rPoA", title: "5 Free Icon Libraries Every UI Designer Should Know", views: "839 views", applied: true, rule: "Consistent Icon System → Unified icon sizing." },
+      { id: "NG17TBYc02w", title: "3 Free Icon Libraries Every UI Designer Should Know", views: "2.8K views", applied: true, rule: "Consistent Icon System → Applied to setting anchor icons." },
+      { id: "x0YHWp0qqeQ", title: "Best Icon Libraries for UI Designers: Stop Designing Custom Icons", views: "12K views", applied: true, rule: "Standardized SVG Icons → Clean geometric vector icons." },
+      { id: "fFayB4zZXyc", title: "Design Tutorial | UI/UX Tips & Figma Techniques", views: "700 views", applied: false, rule: "Figma canvas shortcut tutorial." },
+      { id: "5iCnsMkZpZ8", title: "Claude Design AI Converts Sketches to Interactive Prototypes", views: "999 views", applied: false, rule: "AI design news / sketching workflow." },
+      { id: "EZMmaWSZGGU", title: "How to Add a Liquid Gradient Background to Your UI", views: "797 views", applied: false, rule: "Decorative Figma mesh gradient effect." },
+      { id: "luKrjT6s9yM", title: "How to Make Responsive Cards in Figma with AI Auto Layout", views: "1.3K views", applied: false, rule: "Figma AI Auto Layout tool tutorial." },
+      { id: "ItNyVouSG_o", title: "How to Use Figma AI Auto Layout for Responsive Cards", views: "1K views", applied: false, rule: "Figma AI Auto Layout tool tutorial." },
+      { id: "Ghtx-72GiUo", title: "How to Auto-Link Screens in Figma with AI Prototyping", views: "1.3K views", applied: false, rule: "Figma noodle auto-linking tutorial." },
+      { id: "uASNFwFi87Q", title: "How to Go From Wireframe to High Fidelity Design Fast", views: "769 views", applied: false, rule: "Figma wireframing workflow." },
+      { id: "DYab2MTjsb0", title: "POV: Claude Design is Released and your a product Designer", views: "74K views", applied: false, rule: "Designer humor / industry skit." },
+      { id: "cKsSQMcsJKs", title: "3 Free Font Libraries Every Designer Should Bookmark", views: "2.3K views", applied: false, rule: "Font bookmarking resource list." },
+      { id: "XC7o1Ahn1qk", title: "How to Animate Your Portfolio in Framer in 30 Seconds", views: "1.7K views", applied: false, rule: "Framer portfolio animation tutorial." },
+      { id: "zgFtdxqFLd8", title: "Figma Auto Layout for Beginners: Build a Card Component", views: "1.5K views", applied: false, rule: "Figma Auto Layout beginner tutorial." },
+      { id: "JD4rmtsOp3o", title: "Build a Design System in 5 Minutes with Claude AI", views: "38K views", applied: false, rule: "Claude AI workflow demo." },
+      { id: "7lsj9RfGtkg", title: "How to Turn a 2D Logo into a 3D Logo Animation in Figma", views: "1.6K views", applied: false, rule: "3D logo export tool demo." },
+      { id: "pETCTd7jq0w", title: "Why Designers Are Learning to Code in the Age of AI", views: "1.1K views", applied: false, rule: "Career commentary video." },
+      { id: "7na6fbrcfyU", title: "How to Create an Animated Sneaker Card in Figma", views: "1.4K views", applied: false, rule: "E-commerce sneaker concept animation in Figma." },
+      { id: "4O4TEzJgy1Q", title: "How to Connect All Screens in Figma Prototype with AI", views: "2K views", applied: false, rule: "Figma AI prototype connector tutorial." },
+      { id: "tQ7abmUuQsI", title: "How to Animate Components in Figma Using AI", views: "1.1K views", applied: false, rule: "Figma AI component animation tutorial." },
+      { id: "8tRpRGTe88Y", title: "How to Align Icons Responsively in Figma (Keyboard Shortcuts)", views: "4.9K views", applied: false, rule: "Figma keyboard shortcut tip." },
+      { id: "o6RveX2mfT4", title: "How to Structure Your Figma Files Like a Pro Designer", views: "1.4K views", applied: false, rule: "Figma file page organization tip." },
+      { id: "Enpt6Cb1uZE", title: "When a Design Take-Home Task Is Completely Unreasonable", views: "1K views", applied: false, rule: "Design interview humor skit." },
+      { id: "XFV2MGkj75E", title: "How to Name Components in Figma (Button Naming Convention)", views: "1.9K views", applied: false, rule: "Figma layer naming convention." },
+      { id: "I-nGEyLG8uc", title: "How to Remove Anything from an Image in Figma with AI", views: "881 views", applied: false, rule: "Figma AI image eraser tutorial." },
+      { id: "3fso_tzLWV0", title: "Most Creative Website UI Designs You Need to See", views: "931 views", applied: false, rule: "Web design inspiration showcase." },
+      { id: "I1XmHDKRosw", title: "Why Designers Are Learning to Code in the Age of AI", views: "1.6K views", applied: false, rule: "Career commentary video." },
+      { id: "SLugW9mjx4g", title: "How to Create a Liquid Glass Effect in Figma", views: "17K views", applied: false, rule: "Figma glassmorphism blur effect tutorial." },
+      { id: "Z-OTsrRoEsI", title: "New Figma AI Feature: Remove Anything in Seconds", views: "3.7K views", applied: false, rule: "Figma AI object removal tutorial." },
+      { id: "b5fp_iuQCks", title: "Figma Tutorial: How to Quickly Duplicate UI Content Using Replace Content", views: "3.2K views", applied: false, rule: "Figma Replace Content shortcut." },
+      { id: "GO9AGwXIito", title: "Figma Tutorial: How to Create a Liquid Glass Effect (Glassmorphism UI)", views: "1.6K views", applied: false, rule: "Figma glass effect tutorial." },
+      { id: "SQB6dCG-ySc", title: "Turn Your 2D Logo into a 3D Animation in Seconds #Formia", views: "1.9K views", applied: false, rule: "Formia 3D logo tool promo." },
+      { id: "CXr2Bd251AI", title: "Best Design Systems to Learn From (Mews, Skyscanner, Monday, Nordhealth)", views: "3K views", applied: false, rule: "Design system reading list." },
+      { id: "xPSC1kM-2JE", title: "Figma Make: Create Responsive Desktop, Tablet and Mobile Layouts", views: "20K views", applied: false, rule: "Figma Make AI prompt tutorial." },
+      { id: "XtBmCL0oiq0", title: "Figma AI: How to Instantly Translate Designs to Any Language", views: "6.7K views", applied: false, rule: "Figma AI translation feature demo." },
+      { id: "34QxtSxAqkQ", title: "Figma Make Tutorial: Generate UI and Copy to Figma", views: "241K views", applied: false, rule: "Figma Make AI generation tutorial." },
+      { id: "JZ4jO60dg5Y", title: "Figma AI: How To Add Interaction", views: "32K views", applied: false, rule: "Figma Make interaction prompt demo." },
+      { id: "lhKI54ik_mY", title: "Framer Tutorial: How to Animate Your Portfolio with Scale & Slide", views: "5.3K views", applied: false, rule: "Framer portfolio animation tutorial." },
+      { id: "WlAymWs8NUk", title: "Design System Tutorial: How to Name UI Components Correctly", views: "4.9K views", applied: false, rule: "Figma component naming tutorial." },
+      { id: "8GfAm6g7goo", title: "Design skeuomorphic buttons in figma, supafast!", views: "18K views", applied: false, rule: "Figma skeuomorphic shadow exercise." },
+      { id: "UZoG8DCOki8", title: "Creating a UX/UI Portfolio with Framer AI", views: "21K views", applied: false, rule: "Framer AI portfolio generator demo." }
+    ];
+
+    let currentCatalogFilter = 'all';
+
+    function renderCatalog() {
+      const q = (document.getElementById('shortSearch')?.value || '').toLowerCase();
+      const tbody = document.getElementById('shortsTableBody');
+      if (!tbody) return;
+      const rows = ALL_SHORTS.filter(item => {
+        if (currentCatalogFilter === 'applied' && !item.applied) return false;
+        if (currentCatalogFilter === 'tool' && item.applied) return false;
+        if (q && !(item.title.toLowerCase().includes(q) || item.rule.toLowerCase().includes(q) || item.id.toLowerCase().includes(q))) return false;
+        return true;
+      }).map((item, idx) => `
+        <tr>
+          <td style="font-weight:700;color:var(--text-muted);">${idx + 1}</td>
+          <td>
+            <a href="https://www.youtube.com/shorts/${item.id}" target="_blank" style="color:var(--accent-indigo);font-weight:800;text-decoration:none;">
+              🎬 ${item.title}
+            </a>
+            <div style="font-size:11px;color:var(--text-muted);font-family:monospace;">youtube.com/shorts/${item.id}</div>
+          </td>
+          <td style="white-space:nowrap;font-weight:700;">${item.views}</td>
+          <td>
+            ${item.applied
+              ? '<span class="status-applied">✅ Applied to SWEEPR</span>'
+              : '<span class="status-tool">🔧 Figma/Framer Tool</span>'}
+          </td>
+          <td>${item.rule}</td>
+        </tr>
+      `).join('');
+      tbody.innerHTML = rows;
+    }
+
+    function setCatalogFilter(filter, btn) {
+      currentCatalogFilter = filter;
+      btn.parentElement.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderCatalog();
+    }
+
+    function filterCatalog() { renderCatalog(); }
+
+    function filterSurface(surface, btn) {
+      document.querySelectorAll('.surface-section').forEach(s => s.classList.remove('filtered-out'));
+      btn.parentElement.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function jumpAndFilter(surface, btn) {
+      document.querySelectorAll('.surface-section').forEach(s => s.classList.remove('filtered-out'));
+      btn.parentElement.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const target = document.getElementById('surface-' + surface);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function setViewMode(mode, btn) {
+      document.body.setAttribute('data-view-mode', mode);
+      btn.parentElement.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function toggleTheme() {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      if (isDark) {
+        document.documentElement.removeAttribute('data-theme');
+        document.getElementById('themeToggleBtn').textContent = '🌙 Test Dark Mode';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.getElementById('themeToggleBtn').textContent = '☀️ Light Mode';
+      }
+    }
+
+    function selectChip(chip) {
+      chip.parentElement.querySelectorAll('.ui-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+    }
+
+    renderCatalog();
+  </script>
+</body>
+</html>

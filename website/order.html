@@ -580,7 +580,7 @@
           </div>
 
           <!-- Interactive 3-Option Payment Logo-Bar Switcher (Branded Vector Icons) -->
-          <div id="paymentLogoStripBar" class="grid grid-cols-3 gap-1.5 bg-gray-100/90 p-1.5 rounded-xl border border-gray-200" role="tablist" aria-label="Select payment method">
+          <div id="paymentLogoStripBar" class="grid grid-cols-3 gap-1.5 bg-gray-100/90 p-1.5 rounded-[14px] border border-gray-200" role="tablist" aria-label="Select payment method">
             <!-- 1. Card: Visa, Mastercard, Amex & Stripe Logos -->
             <button type="button" data-logo-method="card" onclick="selectPaymentLogoMethod('card')" class="h-12 px-1.5 rounded-lg flex items-center justify-center transition-all cursor-pointer bg-white text-gray-900 shadow-xs border-2 border-emerald-500" aria-label="Pay by Card (Visa, Mastercard, Amex, Stripe)">
               <div class="flex items-center justify-center gap-1 flex-wrap">
@@ -702,6 +702,13 @@
                 <input type="text" id="billingPostcode" name="postal" required placeholder="Postcode / ZIP" autocomplete="postal-code"
                   class="w-full p-2.5 sm:p-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all uppercase">
               </div>
+            </div>
+
+            <!-- @Memorisely Rule #3 (3B): Persistent-Labeled Partner or Promo Code Input -->
+            <div class="pt-0.5">
+              <label for="orderPromoCodeInput" class="block text-[11px] font-extrabold uppercase tracking-wider text-gray-600 mb-1">Partner or Promo Code <span class="font-normal normal-case text-gray-400">(Optional)</span></label>
+              <input type="text" id="orderPromoCodeInput" name="promo" placeholder="e.g. PRIVACY50" autocomplete="off"
+                class="w-full p-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all uppercase">
             </div>
 
           </div>

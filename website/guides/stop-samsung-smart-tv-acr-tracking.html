@@ -227,11 +227,23 @@
       </section>
       <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
         <h2 class="text-2xl font-bold text-gray-900 mb-3">3. Scan Your Home Wi-Fi Free in 30 Seconds</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">NaN</p>
+        <p class="text-gray-700 leading-relaxed mb-3">Download the featherlight ~680 KB SWEEPR VPN client for Windows, macOS, Android, or iOS to run our free 30-second Home Wi-Fi Device Scanner. It uses 100% local ARP, mDNS, and SSDP discovery to list every Smart TV, router, and unknown device on your LAN without uploading your network map to any cloud server.</p>
         <p class="text-gray-700 leading-relaxed">Upgrade to SWEEPR VPN Pro (£74.99/yr — Save 50%) with the Wi-Fi Radar &amp; Smart-TV Shield add-on (+£14.99/yr) for 24/7 stranger alerts and automatic Smart-TV ACR telemetry blocking.</p>
       </section>
     </div>
 
+
+      <section id="turn-off-acr-samsung-tv-steps" class="bg-white rounded-2xl border border-emerald-200 p-6 md:p-8 shadow-sm">
+        <h2 class="text-2xl font-bold text-gray-900 mb-3">4. How to Turn Off ACR on a Samsung TV (Tizen Menu Path + <code class="text-emerald-700">gpm.samsungqbe.com</code> Sinkhole)</h2>
+        <p class="text-gray-700 leading-relaxed mb-4">
+          If you are searching for <strong>how to turn off ACR on a Samsung TV</strong>, you must both disable the Tizen OS menu toggle <em>and</em> sinkhole the background telemetry hosts (<code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">gpm.samsungqbe.com</code>, <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">samsungqbe.com</code>, <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">samsungacr.com</code>, and <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">config.samsungads.com</code>), because Samsung Smart Hub still pings <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">gpm.samsungqbe.com</code> every 60 seconds even after you opt out:
+        </p>
+        <ol class="list-decimal pl-5 space-y-2 text-sm text-gray-700 mb-4">
+          <li><strong>Step 1 (Tizen 2024–2026 Remote):</strong> Press the <strong>Home</strong> button on your Samsung remote and navigate to <strong>Settings &rarr; All Settings &rarr; General &amp; Privacy &rarr; Terms &amp; Privacy</strong>.</li>
+          <li><strong>Step 2 (Disable Viewing Information Services):</strong> Select <strong>Viewing Information Services</strong> (Samsung's Automatic Content Recognition / ACR module) and uncheck <strong>I Agree</strong>. Also uncheck <strong>Interest-Based Advertisements</strong>.</li>
+          <li><strong>Step 3 (Block <code class="text-emerald-700">gpm.samsungqbe.com</code> &amp; <code class="text-emerald-700">samsungacr.com</code> Network-Wide):</strong> Enable <strong>SWEEPR VPN + Wi-Fi Radar</strong> (or configure SWEEPR DNS <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">10.64.0.1</code> on your router) to return <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">0.0.0.0</code> for <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">gpm.samsungqbe.com</code>, <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">samsungqbe.com</code>, <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">log-config.samsungacr.com</code>, and <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">ads.samsung.com</code> so Tizen OS updates can never re-activate screenshot tracking.</li>
+        </ol>
+      </section>
     <!-- FAQ Section (Matches JSON-LD FAQPage) -->
     <div class="bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm mb-14">
       <h2 class="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
@@ -301,17 +313,17 @@
           <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
           <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media Low-Latency Gaming &amp; Packet Loss (AS5089)</div>
         </a>
-        <a href="/solutions/virgin-media-p2p-port-forwarding" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+        <a href="/solutions/virgin-media-remote-dev-ssh" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
           <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media Remote SSH, Git &amp; Docker Workflows (AS5089)</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Fix Virgin Media Throttling for Remote Dev &amp; SSH (2026 AS5089 Guide)</div>
         </a>
-        <a href="/solutions/virgin-media-p2p-port-forwarding" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media 4K Live Sports &amp; High-Bitrate Streaming (AS5089)</div>
+        <a href="/guides/prevent-webrtc-ip-leak-chromium-firefox" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Browser &amp; WebRTC Security Guide</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Prevent WebRTC IP Leaks in Chrome, Brave, Edge &amp; Firefox</div>
         </a>
-        <a href="/solutions/virgin-media-p2p-port-forwarding" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media P2P File Sharing &amp; High-Speed Transfers (AS5089)</div>
+        <a href="/guides/fix-udp-bufferbloat-wireguard-gaming" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Low-Latency WireGuard Guide</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix UDP Bufferbloat &amp; Packet Loss with 1420 MTU WireGuard</div>
         </a>
       </div>
     </div>

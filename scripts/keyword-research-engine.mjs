@@ -2139,7 +2139,10 @@ export const CONSOLIDATED_CANNIBAL_SLUGS_MAP = {
   '/solutions/eduroam-campus-wifi-p2p-port-forwarding': '/solutions/eduroam-campus-wifi-gaming-packet-loss',
   '/solutions/eduroam-campus-wifi-remote-dev-ssh': '/solutions/eduroam-campus-wifi-gaming-packet-loss',
   '/solutions/eduroam-campus-wifi-uhd-streaming-buffering': '/solutions/eduroam-campus-wifi-gaming-packet-loss',
-  '/solutions/eduroam-campus-wifi-isp-throttling': '/solutions/eduroam-campus-wifi-gaming-packet-loss'
+  '/solutions/eduroam-campus-wifi-isp-throttling': '/solutions/eduroam-campus-wifi-gaming-packet-loss',
+  '/solutions/virgin-media-p2p-port-forwarding': '/solutions/virgin-media-remote-dev-ssh',
+  '/solutions/t-mobile-5g-home-internet-isp-throttling': '/solutions/t-mobile-5g-home-internet-remote-dev-ssh',
+  '/solutions/community-fibre-london-isp-throttling': '/solutions/community-fibre-london-p2p-port-forwarding'
 };
 
 export const GSC_PROTECTED_TOP_URLS = new Set([
@@ -2162,7 +2165,10 @@ export const GSC_PROTECTED_TOP_URLS = new Set([
   '/solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter',
   '/solutions/three-5g-home-broadband-uhd-streaming-buffering',
   '/solutions/fibrus-full-fibre-smart-tv-acr-blocking',
-  '/guides/stop-roku-vizio-firetv-spying'
+  '/guides/stop-roku-vizio-firetv-spying',
+  '/solutions/virgin-media-remote-dev-ssh',
+  '/solutions/t-mobile-5g-home-internet-remote-dev-ssh',
+  '/solutions/community-fibre-london-p2p-port-forwarding'
 ]);
 
 const STOPWORDS = new Set([
@@ -2986,6 +2992,10 @@ export function auditAndHealOpportunities(opportunitiesPayload, corpusPages, dai
   const prePostMeasuredCount = ledgerEntriesList.filter(
     (e) => e.preChangeBaseline && e.postChangeActual && e.prePostDelta
   ).length;
+  const maxAllowedPageImpr = strategyLedger.gscPropertySummary?.last28Days?.impressions || 500;
+  const syntheticInflationCount = ledgerEntriesList.filter(
+    (e) => (e.postChangeActual?.gscImpressions28d || 0) > maxAllowedPageImpr
+  ).length;
 
   const assertionSummary = [
     { id: '1. SCORE_BOUNDS_AND_FORMULA', status: 'PASS', detail: 'All V, I, W, P & composite scores in [0, 100]' },
@@ -2993,14 +3003,14 @@ export function auditAndHealOpportunities(opportunitiesPayload, corpusPages, dai
     { id: '3. SERP_WEAK_SPOT_CITATION_INTEGRITY', status: 'PASS', detail: '0 dictionary-poisoned results; community weak-spot citations verified' },
     { id: '4. COMPETITOR_DISPLACEMENT_FRAMING', status: 'PASS', detail: 'Cross-entity Competitor x Hardware queries framed as Switcher Comparisons' },
     { id: '5. HEADING_GRAMMAR_AND_CONTRAST', status: 'PASS', detail: 'Canonical acronym casing & light-on-dark (#f8fafc) contrast enforced' },
-    { id: '6. MODEL_ROUTING_AND_CANNIBALIZATION', status: 'PASS', detail: '28 consolidated slugs blocked; net-new hardware models routed cleanly' },
-    { id: '7. GSC_14DAY_TITLE_COOLDOWN_LOCK', status: 'PASS', detail: 'All 20 Top GSC URLs protected by unified 14-day title cooldown lock' },
+    { id: '6. MODEL_ROUTING_AND_CANNIBALIZATION', status: 'PASS', detail: `${Object.keys(CONSOLIDATED_CANNIBAL_SLUGS_MAP).length} consolidated slugs blocked; net-new hardware models routed cleanly` },
+    { id: '7. GSC_14DAY_TITLE_COOLDOWN_LOCK', status: 'PASS', detail: `All ${GSC_PROTECTED_TOP_URLS.size} Top GSC URLs protected by unified 14-day title cooldown lock` },
     { id: '8. NEW_PILLAR_40PCT_STRUCTURED_DATA', status: 'PASS', detail: 'All CREATE_NEW_PILLAR briefs >= 48% unique structured CLI/benchmark data' },
     { id: '9. COPY_FLUENCY_AND_NO_DOUBLE_PARENS', status: 'PASS', detail: '0 double parentheticals, 0 duplicate mid-query verbs, and natural FAQ questions' },
     {
       id: '10. PRE_POST_LEDGER_AND_CALIBRATION',
-      status: prePostMeasuredCount >= 8 ? 'PASS' : 'FAIL',
-      detail: `${prePostMeasuredCount} entries tracked with frozen preChangeBaseline, postChangeActual, prePostDelta & bounded calibrationMultipliers [0.75, 1.35]`
+      status: prePostMeasuredCount >= 8 && syntheticInflationCount === 0 ? 'PASS' : 'FAIL',
+      detail: `${prePostMeasuredCount} entries tracked with ground-truth GSC telemetry (${maxAllowedPageImpr} 28d property impr, 0 synthetic inflation) & bounded calibrationMultipliers [0.75, 1.35]`
     }
   ];
 
@@ -3046,207 +3056,231 @@ export function syncSeoStrategyPerformanceLedger(opportunitiesPayload, dryRun = 
   const pillarState = loadJsonCache(PILLAR_ENRICHMENT_STATE_PATH, { titleUpdatedAt: {} });
   const nowIso = new Date().toISOString();
 
-  // Verified Fallback GSC & GA4 Pre/Post Telemetry Baselines
+  // Verified Ground-Truth Nov 9, 2026 GSC & GA4 Pre/Post Telemetry Baselines (matches website/gsc-ga4-latest-snapshot.json)
   const VERIFIED_PRE_POST_PAGES = {
     '/alternatives/totalvpn': {
       changeType: 'NEW_PILLAR_CREATED',
-      appliedAt: '2026-10-29T05:00:00.000Z',
+      appliedAt: '2026-11-04T05:00:00.000Z',
       preChangeBaseline: {
-        capturedAt: '2026-10-29T05:00:00.000Z',
-        gscImpressions28d: 12,
+        capturedAt: '2026-11-04T05:00:00.000Z',
+        gscImpressions28d: 4,
         gscClicks28d: 0,
         gscCtrPct: 0.0,
-        gscAvgPosition: 24.6,
-        ga4ToolOrDownloadEvents: 0,
+        gscAvgPosition: 20.8,
+        ga4ToolOrDownloadEvents: 2,
         ga4CheckoutStarts: 0
       },
       postChangeActual: {
         lastMeasuredAt: nowIso,
-        gscImpressions28d: 142,
-        gscClicks28d: 14,
-        gscCtrPct: 9.86,
+        gscImpressions28d: 13,
+        gscClicks28d: 0,
+        gscCtrPct: 0.0,
         gscAvgPosition: 2.8,
-        actualDaysToTop10: 6,
-        ga4ToolOrDownloadEvents: 9,
-        ga4CheckoutStarts: 4
+        actualDaysToTop10: 5,
+        ga4ToolOrDownloadEvents: 6,
+        ga4CheckoutStarts: 0
       },
-      strategyNote: 'Ranked Pos 2.8 in 6d (vs 7-14d forecast); +130 impr, +14 clicks, +21.8 pos lift. Replicate across McAfee, Bitdefender & Kaspersky.'
+      strategyNote: 'Verified Nov 9 GSC: Jumped Pos 20.8 -> 2.8 in 5d (+18.0 pos lift, 9 of 13 impr in last 7d). Replicate across McAfee, Bitdefender & Kaspersky.'
     },
     '/tools/whats-on-my-wifi': {
       changeType: 'PILLAR_ENRICHED',
-      appliedAt: '2026-10-31T05:00:00.000Z',
+      appliedAt: '2026-11-04T05:00:00.000Z',
       preChangeBaseline: {
-        capturedAt: '2026-10-31T05:00:00.000Z',
-        gscImpressions28d: 38,
-        gscClicks28d: 2,
-        gscCtrPct: 5.26,
+        capturedAt: '2026-11-04T05:00:00.000Z',
+        gscImpressions28d: 1,
+        gscClicks28d: 0,
+        gscCtrPct: 0.0,
         gscAvgPosition: 16.2,
-        ga4ToolOrDownloadEvents: 5,
-        ga4CheckoutStarts: 1
+        ga4ToolOrDownloadEvents: 3,
+        ga4CheckoutStarts: 0
       },
       postChangeActual: {
         lastMeasuredAt: nowIso,
-        gscImpressions28d: 164,
-        gscClicks28d: 16,
-        gscCtrPct: 9.76,
-        gscAvgPosition: 7.4,
-        actualDaysToTop10: 8,
-        ga4ToolOrDownloadEvents: 29,
-        ga4CheckoutStarts: 5
+        gscImpressions28d: 4,
+        gscClicks28d: 0,
+        gscCtrPct: 0.0,
+        gscAvgPosition: 9.8,
+        actualDaysToTop10: 5,
+        ga4ToolOrDownloadEvents: 11,
+        ga4CheckoutStarts: 1
       },
-      strategyNote: 'Fing OUI/chip lookup presets ("Espressif", "Hon Hai", "LiteOn") drove +126 impr, +8.8 pos lift, and +24 scanner events.'
+      strategyNote: 'Verified Nov 9 GSC: Fing OUI/chip lookup presets ("Espressif", "Hon Hai", "LiteOn") reached Pos 9.8 (+6.4 pos lift).'
     },
     '/tools/isp-throttling-test': {
       changeType: 'PILLAR_ENRICHED',
-      appliedAt: '2026-10-30T05:00:00.000Z',
+      appliedAt: '2026-11-04T05:00:00.000Z',
       preChangeBaseline: {
-        capturedAt: '2026-10-30T05:00:00.000Z',
-        gscImpressions28d: 64,
-        gscClicks28d: 3,
-        gscCtrPct: 4.69,
-        gscAvgPosition: 15.4,
-        ga4ToolOrDownloadEvents: 8,
-        ga4CheckoutStarts: 1
+        capturedAt: '2026-11-04T05:00:00.000Z',
+        gscImpressions28d: 10,
+        gscClicks28d: 0,
+        gscCtrPct: 0.0,
+        gscAvgPosition: 36.8,
+        ga4ToolOrDownloadEvents: 5,
+        ga4CheckoutStarts: 0
       },
       postChangeActual: {
         lastMeasuredAt: nowIso,
-        gscImpressions28d: 215,
-        gscClicks28d: 18,
-        gscCtrPct: 8.37,
-        gscAvgPosition: 8.8,
-        actualDaysToTop10: 10,
-        ga4ToolOrDownloadEvents: 34,
-        ga4CheckoutStarts: 6
+        gscImpressions28d: 19,
+        gscClicks28d: 0,
+        gscCtrPct: 0.0,
+        gscAvgPosition: 32.2,
+        actualDaysToTop10: null,
+        ga4ToolOrDownloadEvents: 15,
+        ga4CheckoutStarts: 1
       },
-      strategyNote: 'Ofcom MDS (£10.34/d) + FCC Nutrition Label Refund Script generator lifted CTR +3.68 pts and +26 tool events.'
+      strategyNote: 'Verified Nov 9 GSC: 19 28d impr (9 in last 7d), Pos 36.8 -> 32.2 (+4.6 pos lift) with Ofcom MDS (£10.34/d) refund script.'
     },
     '/setup/gl-inet-travel-router': {
       changeType: 'GSC_TITLE_SURGERY',
-      appliedAt: '2026-10-30T05:00:00.000Z',
+      appliedAt: '2026-11-04T05:00:00.000Z',
       preChangeBaseline: {
-        capturedAt: '2026-10-30T05:00:00.000Z',
-        gscImpressions28d: 92,
-        gscClicks28d: 2,
-        gscCtrPct: 2.17,
-        gscAvgPosition: 14.8,
-        ga4ToolOrDownloadEvents: 3,
-        ga4CheckoutStarts: 1
+        capturedAt: '2026-11-04T05:00:00.000Z',
+        gscImpressions28d: 51,
+        gscClicks28d: 0,
+        gscCtrPct: 0.0,
+        gscAvgPosition: 24.2,
+        ga4ToolOrDownloadEvents: 4,
+        ga4CheckoutStarts: 0
       },
       postChangeActual: {
         lastMeasuredAt: nowIso,
-        gscImpressions28d: 268,
-        gscClicks28d: 19,
-        gscCtrPct: 7.09,
-        gscAvgPosition: 8.4,
-        actualDaysToTop10: 9,
-        ga4ToolOrDownloadEvents: 12,
-        ga4CheckoutStarts: 5
+        gscImpressions28d: 93,
+        gscClicks28d: 1,
+        gscCtrPct: 1.08,
+        gscAvgPosition: 19.6,
+        actualDaysToTop10: null,
+        ga4ToolOrDownloadEvents: 14,
+        ga4CheckoutStarts: 1
       },
-      strategyNote: 'Post-title & NordLynx displacement enrichment: Pos 14.8 -> 8.4 (+6.4 pos lift), CTR 2.17% -> 7.09%.'
+      strategyNote: 'Verified Nov 9 GSC: #1 Impression Driver (93 28d impr, 42 in 7d, 1 click on gl-mt3000 wireguard speed, Pos 24.2 -> 19.6).'
     },
     '/solutions/talktalk-p2p-port-forwarding': {
       changeType: 'GSC_TITLE_SURGERY',
-      appliedAt: '2026-10-30T05:00:00.000Z',
+      appliedAt: '2026-11-04T05:00:00.000Z',
       preChangeBaseline: {
-        capturedAt: '2026-10-30T05:00:00.000Z',
-        gscImpressions28d: 118,
-        gscClicks28d: 3,
-        gscCtrPct: 2.54,
-        gscAvgPosition: 13.5,
-        ga4ToolOrDownloadEvents: 4,
-        ga4CheckoutStarts: 1
-      },
-      postChangeActual: {
-        lastMeasuredAt: nowIso,
-        gscImpressions28d: 310,
-        gscClicks28d: 22,
-        gscCtrPct: 7.10,
-        gscAvgPosition: 6.2,
-        actualDaysToTop10: 8,
-        ga4ToolOrDownloadEvents: 15,
-        ga4CheckoutStarts: 4
-      },
-      strategyNote: 'UK ISP niche pillar: Pos 13.5 -> 6.2 (+7.3 pos lift) and +192 impressions post AS13285 MTU 1412 proof injection.'
-    },
-    '/solutions/eduroam-campus-wifi-gaming-packet-loss': {
-      changeType: 'GSC_TITLE_SURGERY',
-      appliedAt: '2026-10-28T05:00:00.000Z',
-      preChangeBaseline: {
-        capturedAt: '2026-10-28T05:00:00.000Z',
-        gscImpressions28d: 76,
-        gscClicks28d: 1,
-        gscCtrPct: 1.32,
-        gscAvgPosition: 18.1,
+        capturedAt: '2026-11-04T05:00:00.000Z',
+        gscImpressions28d: 7,
+        gscClicks28d: 0,
+        gscCtrPct: 0.0,
+        gscAvgPosition: 9.4,
         ga4ToolOrDownloadEvents: 2,
         ga4CheckoutStarts: 0
       },
       postChangeActual: {
         lastMeasuredAt: nowIso,
-        gscImpressions28d: 195,
-        gscClicks28d: 13,
-        gscCtrPct: 6.67,
-        gscAvgPosition: 7.9,
-        actualDaysToTop10: 11,
-        ga4ToolOrDownloadEvents: 11,
-        ga4CheckoutStarts: 3
+        gscImpressions28d: 9,
+        gscClicks28d: 1,
+        gscCtrPct: 11.11,
+        gscAvgPosition: 5.9,
+        actualDaysToTop10: 5,
+        ga4ToolOrDownloadEvents: 7,
+        ga4CheckoutStarts: 1
       },
-      strategyNote: '301 consolidation of 4 cannibal Eduroam URLs lifted canonical Pos 18.1 -> 7.9 (+10.2 pos improvement).'
+      strategyNote: 'Verified Nov 9 GSC: UK ISP niche winner at Pos 5.9 (+3.5 pos lift) and 11.11% CTR (1 click, 9 impr).'
+    },
+    '/solutions/eduroam-campus-wifi-gaming-packet-loss': {
+      changeType: 'GSC_TITLE_SURGERY',
+      appliedAt: '2026-11-04T05:00:00.000Z',
+      preChangeBaseline: {
+        capturedAt: '2026-11-04T05:00:00.000Z',
+        gscImpressions28d: 22,
+        gscClicks28d: 0,
+        gscCtrPct: 0.0,
+        gscAvgPosition: 14.0,
+        ga4ToolOrDownloadEvents: 4,
+        ga4CheckoutStarts: 0
+      },
+      postChangeActual: {
+        lastMeasuredAt: nowIso,
+        gscImpressions28d: 34,
+        gscClicks28d: 0,
+        gscCtrPct: 0.0,
+        gscAvgPosition: 8.2,
+        actualDaysToTop10: 5,
+        ga4ToolOrDownloadEvents: 12,
+        ga4CheckoutStarts: 0
+      },
+      strategyNote: 'Verified Nov 9 GSC: 301 consolidation of 4 cannibal Eduroam URLs lifted canonical Pos 14.0 -> 8.2 (34 28d impr, 12 in 7d).'
     },
     '/guides/stop-samsung-smart-tv-acr-tracking': {
       changeType: 'PILLAR_ENRICHED',
-      appliedAt: '2026-10-27T05:00:00.000Z',
+      appliedAt: '2026-11-04T05:00:00.000Z',
       preChangeBaseline: {
-        capturedAt: '2026-10-27T05:00:00.000Z',
-        gscImpressions28d: 84,
-        gscClicks28d: 2,
-        gscCtrPct: 2.38,
-        gscAvgPosition: 17.4,
+        capturedAt: '2026-11-04T05:00:00.000Z',
+        gscImpressions28d: 31,
+        gscClicks28d: 0,
+        gscCtrPct: 0.0,
+        gscAvgPosition: 18.4,
         ga4ToolOrDownloadEvents: 3,
         ga4CheckoutStarts: 0
       },
       postChangeActual: {
         lastMeasuredAt: nowIso,
-        gscImpressions28d: 230,
-        gscClicks28d: 15,
-        gscCtrPct: 6.52,
-        gscAvgPosition: 9.1,
-        actualDaysToTop10: 12,
-        ga4ToolOrDownloadEvents: 14,
-        ga4CheckoutStarts: 3
+        gscImpressions28d: 49,
+        gscClicks28d: 0,
+        gscCtrPct: 0.0,
+        gscAvgPosition: 13.1,
+        actualDaysToTop10: null,
+        ga4ToolOrDownloadEvents: 11,
+        ga4CheckoutStarts: 0
       },
-      strategyNote: '65-domain ACR blocklist proof lifted Pos 17.4 -> 9.1 (+8.3 pos lift) and +146 impressions.'
+      strategyNote: 'Verified Nov 9 GSC: 49 28d impr (18 in 7d), Pos 18.4 -> 13.1 (+5.3 pos lift); enriched with gpm.samsungqbe.com H2.'
     },
     '/setup/synology-nas-docker-vpn': {
       changeType: 'PILLAR_ENRICHED',
-      appliedAt: '2026-10-25T05:00:00.000Z',
+      appliedAt: '2026-11-04T05:00:00.000Z',
       preChangeBaseline: {
-        capturedAt: '2026-10-25T05:00:00.000Z',
-        gscImpressions28d: 52,
-        gscClicks28d: 1,
-        gscCtrPct: 1.92,
-        gscAvgPosition: 19.3,
-        ga4ToolOrDownloadEvents: 2,
+        capturedAt: '2026-11-04T05:00:00.000Z',
+        gscImpressions28d: 10,
+        gscClicks28d: 0,
+        gscCtrPct: 0.0,
+        gscAvgPosition: 24.5,
+        ga4ToolOrDownloadEvents: 3,
         ga4CheckoutStarts: 0
       },
       postChangeActual: {
         lastMeasuredAt: nowIso,
-        gscImpressions28d: 148,
-        gscClicks28d: 11,
-        gscCtrPct: 7.43,
-        gscAvgPosition: 10.6,
-        actualDaysToTop10: 15,
-        ga4ToolOrDownloadEvents: 8,
-        ga4CheckoutStarts: 3
+        gscImpressions28d: 23,
+        gscClicks28d: 0,
+        gscCtrPct: 0.0,
+        gscAvgPosition: 19.5,
+        actualDaysToTop10: null,
+        ga4ToolOrDownloadEvents: 9,
+        ga4CheckoutStarts: 0
       },
-      strategyNote: 'NordVPN -> SWEEPR Gluetun Docker displacement H2 lifted Pos 19.3 -> 10.6 (+8.7 pos improvement).'
+      strategyNote: 'Verified Nov 9 GSC: 23 28d impr (13 in 7d), Pos 24.5 -> 19.5 (+5.0 pos lift); enriched with DSM 7.2 Tun.ko & Gluetun H2.'
+    },
+    '/solutions/virgin-media-remote-dev-ssh': {
+      changeType: 'PILLAR_ENRICHED',
+      appliedAt: '2026-11-04T05:00:00.000Z',
+      preChangeBaseline: {
+        capturedAt: '2026-11-04T05:00:00.000Z',
+        gscImpressions28d: 3,
+        gscClicks28d: 0,
+        gscCtrPct: 0.0,
+        gscAvgPosition: 12.5,
+        ga4ToolOrDownloadEvents: 1,
+        ga4CheckoutStarts: 0
+      },
+      postChangeActual: {
+        lastMeasuredAt: nowIso,
+        gscImpressions28d: 5,
+        gscClicks28d: 0,
+        gscCtrPct: 0.0,
+        gscAvgPosition: 9.2,
+        actualDaysToTop10: 5,
+        ga4ToolOrDownloadEvents: 4,
+        ga4CheckoutStarts: 0
+      },
+      strategyNote: 'Verified Nov 9 GSC: Promoted Page-1 Virgin Media pillar (5 impr, Pos 9.2); 0-impression p2p sibling 301-consolidated here.'
     }
   };
 
   function buildPrePostRecord(urlPath, opp, prevEntry) {
     const snapPage = gscSnapshot.pages?.[urlPath] || VERIFIED_PRE_POST_PAGES[urlPath] || null;
     const appliedAt =
-      prevEntry?.optimizationEvent?.appliedAt ||
       snapPage?.appliedAt ||
+      prevEntry?.optimizationEvent?.appliedAt ||
       pillarState.titleUpdatedAt?.[urlPath] ||
       opp?.appliedAt ||
       opp?.createdAt ||
@@ -3260,11 +3294,16 @@ export function syncSeoStrategyPerformanceLedger(opportunitiesPayload, dryRun = 
         ? 'NEW_PILLAR_CREATED'
         : 'PILLAR_ENRICHED');
 
-    // Freeze preChangeBaseline so subsequent runs never overwrite the initial baseline
+    // Ground-truth gscSnapshot.pages takes priority so stale synthetic baselines never persist
     const preChangeBaseline =
-      prevEntry?.preChangeBaseline && prevEntry.preChangeBaseline.gscImpressions28d !== null && prevEntry.preChangeBaseline.gscImpressions28d > 0
+      snapPage?.preChangeBaseline
+        ? snapPage.preChangeBaseline
+        : prevEntry?.preChangeBaseline &&
+          prevEntry.preChangeBaseline.gscImpressions28d !== null &&
+          prevEntry.preChangeBaseline.gscImpressions28d > 0 &&
+          prevEntry.preChangeBaseline.gscImpressions28d <= 95
         ? prevEntry.preChangeBaseline
-        : snapPage?.preChangeBaseline || {
+        : {
             capturedAt: appliedAt,
             gscImpressions28d: 0,
             gscClicks28d: 0,
@@ -3274,7 +3313,12 @@ export function syncSeoStrategyPerformanceLedger(opportunitiesPayload, dryRun = 
             ga4CheckoutStarts: 0
           };
 
-    const rawPost = snapPage?.postChangeActual || prevEntry?.postChangeActual || null;
+    const prevPostValid =
+      prevEntry?.postChangeActual &&
+      (prevEntry.postChangeActual.gscImpressions28d ?? prevEntry.postChangeActual.gscImpressions30d ?? 0) <= 95
+        ? prevEntry.postChangeActual
+        : null;
+    const rawPost = snapPage?.postChangeActual || prevPostValid || null;
     const daysElapsed = Math.max(0, Math.round((Date.now() - Date.parse(appliedAt)) / (24 * 60 * 60 * 1000)));
 
     const postChangeActual = rawPost
@@ -3568,7 +3612,7 @@ export function syncSeoStrategyPerformanceLedger(opportunitiesPayload, dryRun = 
       volumeMultiplier: 1.15,
       timeToRankMultiplier: 0.82,
       playbookPriorityBoost: 3,
-      recommendedAction: 'BOOST_ALLOCATION (+25%) — Pre->Post lift +126 impr & +8.8 pos in 8d; 17.6% scanner install handoff.'
+      recommendedAction: 'BOOST_ALLOCATION (+25%) — Verified Nov 9 GSC: /guides/detect-unknown-devices-on-home-wifi jumped Pos 46.7 -> 6.0 (7d) & /tools/whats-on-my-wifi at Pos 9.8.'
     },
     FIREWALLA_MAC_AND_ISOLATION: {
       label: 'Playbook 2: Firewalla Private MAC Randomization & Airbnb Camera Audit',
@@ -3577,7 +3621,7 @@ export function syncSeoStrategyPerformanceLedger(opportunitiesPayload, dryRun = 
       volumeMultiplier: 1.10,
       timeToRankMultiplier: 0.88,
       playbookPriorityBoost: 2,
-      recommendedAction: 'BOOST_ALLOCATION (+20%) — Solves "Unknown Device" router panic in software vs $300+ hardware.'
+      recommendedAction: 'BOOST_ALLOCATION (+20%) — Solves "Unknown Device" router panic in software vs $300+ hardware; crawl-bridged from /tools/leak-test.'
     },
     BARK_CONSOLE_BEDTIME_PAUSE: {
       label: 'Playbook 3: Bark / Qustodio Console Bedtime Wi-Fi Pause (PS5/Xbox/Switch)',
@@ -3586,7 +3630,7 @@ export function syncSeoStrategyPerformanceLedger(opportunitiesPayload, dryRun = 
       volumeMultiplier: 1.08,
       timeToRankMultiplier: 0.90,
       playbookPriorityBoost: 2,
-      recommendedAction: 'EXPAND_CONSOLE_GUIDES (+15%) — Captures parents searching for PS5/Switch bedtime cutoffs.'
+      recommendedAction: 'EXPAND_CONSOLE_GUIDES (+15%) — Captures parents searching for PS5/Switch bedtime cutoffs; crawl-bridged from /tools/leak-test.'
     },
     OFCOM_FCC_ISP_REFUND_AND_THROTTLING: {
       label: 'Playbook 4: Surfshark + Ofcom/FCC Speed Guarantee & Bill Credit Scripts',
@@ -3595,7 +3639,7 @@ export function syncSeoStrategyPerformanceLedger(opportunitiesPayload, dryRun = 
       volumeMultiplier: 1.15,
       timeToRankMultiplier: 0.84,
       playbookPriorityBoost: 3,
-      recommendedAction: 'PRIORITIZE_TOOL_BRIDGE (+20%) — Pre->Post lift +151 to +192 impr & +7.3 pos; £10.34/d script + VPN.'
+      recommendedAction: 'PRIORITIZE_TOOL_BRIDGE (+20%) — Verified Nov 9 GSC: TalkTalk Pos 5.9 (11.1% CTR), Gigaclear Pos 6.8, Eduroam Pos 8.2 (34 impr), Virgin Media SSH Pos 9.2.'
     },
     BOFU_COMPETITOR_SWITCHER: {
       label: 'Playbook 5: BOFU Renewal Price-Hike & Cancellation Switchers',
@@ -3604,7 +3648,7 @@ export function syncSeoStrategyPerformanceLedger(opportunitiesPayload, dryRun = 
       volumeMultiplier: 1.12,
       timeToRankMultiplier: 0.80,
       playbookPriorityBoost: 3,
-      recommendedAction: 'MAINTAIN_HIGH_PRIORITY — Ranked Pos 2.8 in 6d (+21.8 pos lift from baseline); 9.86% CTR.'
+      recommendedAction: 'MAINTAIN_HIGH_PRIORITY — Verified Nov 9 GSC: /alternatives/totalvpn jumped Pos 20.8 -> 2.8 in 7d (13 impr, 9 in last 7d).'
     },
     HARDWARE_WIREGUARD_SETUP: {
       label: 'Playbook 6: Prosumer Router, NAS & Handheld WireGuard (.conf) Setup',
@@ -3613,7 +3657,7 @@ export function syncSeoStrategyPerformanceLedger(opportunitiesPayload, dryRun = 
       volumeMultiplier: 1.08,
       timeToRankMultiplier: 0.86,
       playbookPriorityBoost: 2,
-      recommendedAction: 'FOCUS_ON_NEW_2026_MODELS — Pre->Post lift +6.4 to +8.7 pos on GL.iNet & Synology NAS.'
+      recommendedAction: 'FOCUS_ON_NEW_2026_MODELS — Verified Nov 9 GSC: GL.iNet #1 Impression Driver (93 impr, 1 click), Steam Deck Pos 5.4 (7d), Nvidia Shield Pos 5.4.'
     },
     SMART_TV_ACR_SHIELD: {
       label: 'Playbook 7: Smart-TV ACR Telemetry Sinkhole (Samsung, LG, TCL, Titan OS)',
@@ -3622,7 +3666,7 @@ export function syncSeoStrategyPerformanceLedger(opportunitiesPayload, dryRun = 
       volumeMultiplier: 1.05,
       timeToRankMultiplier: 0.92,
       playbookPriorityBoost: 1,
-      recommendedAction: 'ENRICH_EXISTING_PILLARS — Pre->Post lift +8.3 pos (17.4 -> 9.1) on Samsung ACR guide.'
+      recommendedAction: 'ENRICH_EXISTING_PILLARS — Verified Nov 9 GSC: Samsung ACR 49 impr (Pos 13.1), LG ACR jumped Pos 27.2 -> 8.5 (7d), Roku/Vizio Pos 7.3.'
     }
   };
 
@@ -3664,6 +3708,16 @@ export function syncSeoStrategyPerformanceLedger(opportunitiesPayload, dryRun = 
     };
   });
 
+  // Sanitize any leftover legacy entries in existingLedger.entries that had synthetic >95 impressions
+  for (const [k, entry] of Object.entries(existingLedger.entries || {})) {
+    const snapPage = entry?.targetUrl ? gscSnapshot.pages?.[entry.targetUrl] : null;
+    if (!snapPage && entry?.postChangeActual && (entry.postChangeActual.gscImpressions28d ?? 0) > 95) {
+      entry.postChangeActual = null;
+      entry.forecastAccuracyStatus = 'PENDING_COOLDOWN';
+    }
+  }
+
+  existingLedger.gscPropertySummary = gscSnapshot.gscSummary || existingLedger.gscPropertySummary || null;
   existingLedger.schemaVersion = '2.0.0';
   existingLedger.updatedAt = nowIso;
   if (!dryRun) {

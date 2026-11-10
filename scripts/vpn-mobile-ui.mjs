@@ -35,9 +35,10 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
   }
 
   :root[data-theme="dark"] {
+    /* @Memorisely Rule #7: Stepped Dark Mode Slate Surfaces */
     --bg: #070b14;
-    --card: #0f172a;
-    --card-sub: #1e293b;
+    --card: #111a2e;
+    --card-sub: #16213a;
     --glass: rgba(15, 23, 42, 0.94);
     --text: #f8fafc;
     --text-sub: #cbd5e1;
@@ -296,12 +297,13 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
     gap: 10px;
     margin-top: auto;
   }
+  /* @Memorisely Rule #1 (2A): Concentric Location Card (20px outer - 10px pad = 10px inner) */
   .c3-location-card {
     width: 100%;
     background: var(--card);
     border: 1.5px solid var(--border-strong);
-    border-radius: 22px;
-    padding: 14px 16px;
+    border-radius: 20px;
+    padding: 10px 12px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -314,6 +316,7 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
     display: flex;
     align-items: center;
     gap: 12px;
+    padding-left: 2px;
   }
   .flag-box {
     width: 34px;
@@ -327,7 +330,7 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
   .flag-box svg { width: 100%; height: 100%; display: block; }
   .c3-change-pill {
     padding: 7px 12px;
-    border-radius: 11px;
+    border-radius: 10px;
     background: var(--card-sub);
     color: var(--accent-fg);
     font-size: 12px;
@@ -355,9 +358,43 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
   .card {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 22px;
-    padding: 18px;
+    border-radius: 20px;
+    padding: 16px;
     box-shadow: var(--shadow);
+  }
+  .btn-secondary {
+    width: 100%;
+    padding: 11px 12px;
+    border-radius: 12px;
+    border: 1.5px solid var(--border-strong);
+    background: transparent;
+    color: var(--text);
+    font-weight: 800;
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .btn-secondary:active, .btn-primary:active { transform: scale(0.98); }
+  .mob-anchor-ico {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    background: var(--card-sub);
+    border: 1px solid var(--border);
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+  .mob-field-lbl {
+    display: block;
+    font-size: 10.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    margin-top: 12px;
+    margin-bottom: 4px;
   }
   .srv-btn {
     width: 100%;
@@ -470,7 +507,7 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
       </div>
     </div>
     <div class="topbar-right">
-      <span id="proBadge" class="badge">Ready</span>
+      <span id="proBadge" class="badge">● WireGuard Ready</span>
       <button class="icon-btn" onclick="toggleTheme()" aria-label="Toggle Light/Dark Mode">
         <svg id="iconSun" style="display:none" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
         <svg id="iconMoon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -577,16 +614,20 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
       </div>
       <p style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.4">Translates cryptic <code>Espressif</code> &amp; <code>Tuya</code> chips into plain English, spots Airbnb hidden cameras, and pauses kids' consoles at bedtime.</p>
 
+      <!-- @Memorisely Rule #5 (2B): Single Primary CTA + Secondary Outline Button -->
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
-        <button class="btn-primary" style="margin-top:0;padding:10px;font-size:12px" onclick="runMobileWifiGuardScan(false)">📡 5-Sec Wi-Fi Scan</button>
-        <button class="btn-primary" style="margin-top:0;padding:10px;font-size:12px;background:var(--card-sub);color:var(--text);border:1px solid var(--border-strong)" onclick="runMobileWifiGuardScan(true)">📷 Scan Airbnb Cameras</button>
+        <button class="btn-primary" style="margin-top:0;padding:10px;font-size:12px;border-radius:12px" onclick="runMobileWifiGuardScan(false)">📡 5-Sec Wi-Fi Scan</button>
+        <button class="btn-secondary" style="padding:10px;font-size:12px" onclick="runMobileWifiGuardScan(true)">📷 Scan Airbnb Cameras</button>
       </div>
 
-      <!-- Doorbell Mode Toggle -->
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:14px;background:var(--card-sub);border:1px solid var(--border);margin-bottom:10px">
-        <div>
-          <div style="font-size:13px;font-weight:800">🔔 Doorbell Mode for Wi-Fi</div>
-          <div style="font-size:11px;color:var(--muted)">Alert when a new device or guest connects</div>
+      <!-- @Memorisely Rule #4 (2B): De-Boxed Doorbell Mode Row using Whitespace + Hairline Dividers -->
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:10px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="mob-anchor-ico">🔔</div>
+          <div>
+            <div style="font-size:13px;font-weight:800">Doorbell Mode for Wi-Fi</div>
+            <div style="font-size:11px;color:var(--muted)">Alert when a new device or guest connects</div>
+          </div>
         </div>
         <button id="shieldBtnDoorbell" class="c3-change-pill" style="border:none;cursor:pointer;font-size:11px;font-weight:900" onclick="toggleMobileShield('doorbell')">ACTIVE</button>
       </div>
@@ -595,13 +636,13 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
       <div id="mobPlainDeviceList" style="display:flex;flex-direction:column;gap:8px"></div>
     </div>
 
-    <!-- Card 2: ISP Speed-Drop Refund Proof + 1-Tap VPN Fix -->
+    <!-- Card 2: ISP Speed-Drop Refund Proof + 1-Tap VPN Fix (De-Boxed + Single Primary CTA) -->
     <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
         <div style="font-size:16px;font-weight:900">ISP Speed-Drop Refund Proof</div>
         <span class="mono" style="font-size:11px;font-weight:900;color:#ef4444" id="mobIspDropPill">-82% Evening Drop</span>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:11px;border-radius:14px;background:var(--card-sub);border:1px solid var(--border);margin-bottom:10px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:12px">
         <div>
           <div style="font-size:10.5px;font-weight:800;color:var(--muted);text-transform:uppercase">Your ISP Plan</div>
           <div style="font-size:16px;font-weight:900;margin-top:2px" id="mobIspPlanLabel">$85/mo &middot; 500 Mbps</div>
@@ -613,35 +654,46 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
           <div style="font-size:11px;font-weight:700;color:var(--accent-fg)">Eligible: $35 Bill Credit</div>
         </div>
       </div>
-      <button class="btn-primary" style="margin-top:0;padding:11px;font-size:12.5px;background:var(--card-sub);color:var(--text);border:1px solid var(--border-strong)" onclick="copyMobileIspRefundScript()">📄 Copy $35 Bill Credit Script &amp; Report</button>
-      <button class="btn-primary" style="margin-top:8px;padding:11px;font-size:12.5px" onclick="switchTab('home'); toggleTunnel()">⚡ Bypass ISP Throttling with VPN (1-Tap)</button>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn-primary" style="flex:1.2;margin-top:0;padding:11px;font-size:12.5px;border-radius:12px" onclick="switchTab('home'); toggleTunnel()">⚡ Bypass ISP Throttling</button>
+        <button class="btn-secondary" style="flex:1;width:auto;padding:11px;font-size:12px" onclick="copyMobileIspRefundScript()">📄 Copy $35 Script</button>
+      </div>
     </div>
 
-    <!-- Card 3: Core Tunnel & Smart-TV Privacy Shields -->
+    <!-- Card 3: Core Tunnel & Smart-TV Privacy Shields (2C: Uber Visual Anchoring Icons) -->
     <div class="card">
-      <div style="font-size:16px;font-weight:900;margin-bottom:6px">Tunnel &amp; Smart-TV Shields</div>
-      <p style="font-size:12px;color:var(--muted);margin-bottom:10px">Automatic protection against IP leaks, hotel Wi-Fi snooping, and Smart-TV ACR trackers.</p>
+      <div style="font-size:16px;font-weight:900;margin-bottom:4px">Tunnel &amp; Smart-TV Shields</div>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:8px">Automatic protection against IP leaks, hotel Wi-Fi snooping, and Smart-TV ACR trackers.</p>
 
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)">
-        <div>
-          <div style="font-size:14px;font-weight:800">Internet Kill Switch</div>
-          <div style="font-size:11.5px;color:var(--muted)">Blocks traffic if the VPN tunnel drops</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--border);gap:10px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="mob-anchor-ico">🛑</div>
+          <div>
+            <div style="font-size:14px;font-weight:800">Internet Kill Switch</div>
+            <div style="font-size:11.5px;color:var(--muted)">Blocks traffic if the VPN tunnel drops</div>
+          </div>
         </div>
         <button id="shieldBtnKillSwitch" class="c3-change-pill" style="border:none;cursor:pointer;font-size:11.5px;font-weight:900" onclick="toggleMobileShield('killSwitch')">ACTIVE</button>
       </div>
 
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)">
-        <div>
-          <div style="font-size:14px;font-weight:800">Untrusted Wi-Fi Auto-Shield</div>
-          <div style="font-size:11.5px;color:var(--muted)">Secures airport, cafe &amp; hotel Wi-Fi</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--border);gap:10px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="mob-anchor-ico">📡</div>
+          <div>
+            <div style="font-size:14px;font-weight:800">Untrusted Wi-Fi Auto-Shield</div>
+            <div style="font-size:11.5px;color:var(--muted)">Secures airport, cafe &amp; hotel Wi-Fi</div>
+          </div>
         </div>
         <button id="shieldBtnAutoWifi" class="c3-change-pill" style="border:none;cursor:pointer;font-size:11.5px;font-weight:900" onclick="toggleMobileShield('autoWifi')">ACTIVE</button>
       </div>
 
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0">
-        <div>
-          <div style="font-size:14px;font-weight:800">Smart-TV &amp; WebRTC Leak Block</div>
-          <div style="font-size:11.5px;color:var(--muted)">Masks real UK/local IP from analytics</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 0;gap:10px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="mob-anchor-ico">📺</div>
+          <div>
+            <div style="font-size:14px;font-weight:800">Smart-TV &amp; WebRTC Leak Block</div>
+            <div style="font-size:11.5px;color:var(--muted)">Masks real UK/local IP from analytics</div>
+          </div>
         </div>
         <button id="shieldBtnDnsShield" class="c3-change-pill" style="border:none;cursor:pointer;font-size:11.5px;font-weight:900" onclick="toggleMobileShield('dnsShield')">ACTIVE</button>
       </div>
@@ -689,8 +741,10 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
       <p style="font-size:12px;color:var(--muted);margin-top:4px;line-height:1.45">
         Purchased on desktop first? Sign in at <strong>sweeprvpn.com/login</strong> to scan your QR code or paste your <code>ptk_...</code> pairing code or <code>SWEEPR-VPN-...</code> license key below (up to 3 devices).
       </p>
-      <input id="codeInput" class="input mono" placeholder="SWEEPR-VPN-XXXX or ptk_..." autocomplete="off" />
-      <input id="emailInput" class="input" type="email" placeholder="Account Email (optional)" autocomplete="email" />
+      <label class="mob-field-lbl" for="codeInput">ACTIVE LICENSE OR PAIRING KEY</label>
+      <input id="codeInput" class="input mono" style="margin-top:0" placeholder="e.g. SWEEPR-VPN-XXXX or ptk_..." autocomplete="off" />
+      <label class="mob-field-lbl" for="emailInput">ACCOUNT EMAIL (OPTIONAL)</label>
+      <input id="emailInput" class="input" style="margin-top:0" type="email" placeholder="e.g. you@example.com" autocomplete="email" />
       <button class="btn-primary" onclick="activateDevice()">Activate Pro on This Device</button>
       <div id="actMsg" style="font-size:12px;font-weight:700;margin-top:10px"></div>
     </div>

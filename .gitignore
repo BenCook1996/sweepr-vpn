@@ -26,3 +26,9 @@ scripts/raw_ws.mjs
 scripts/read_*.mjs
 scripts/search_*.mjs
 scripts/test_*.mjs
+
+# Google Cloud Service Account keys
+.gcp-service-account.json
+*.service-account.json
+sweepr-*.json
+

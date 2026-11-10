@@ -1,0 +1,74 @@
+name: "SWEEPR VPN — Daily Cloud SEO, WireGuard/ACR, GSC/GA4 CTR & Indexing Pipeline"
+
+on:
+  schedule:
+    - cron: "0 5 * * *"
+  workflow_dispatch:
+    inputs:
+      force_run:
+        description: "Force full pipeline run even if already executed today"
+        required: false
+        default: "false"
+
+permissions:
+  contents: write
+
+jobs:
+  vpn-daily-cloud-seo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      GCP_SERVICE_ACCOUNT_JSON: ${{ secrets.GCP_SERVICE_ACCOUNT_JSON }}
+      CRM_ADMIN_PASSWORD: ${{ secrets.CRM_ADMIN_PASSWORD }}
+      GSC_SITE_URL: "sc-domain:sweeprvpn.com"
+      GA4_PROPERTY_ID: "559903365"
+    steps:
+      - name: Checkout SWEEPR VPN Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: 1. Daily WireGuard Bare-Metal POP & 8-OS Smart-TV ACR Blocklist Pipeline (04:00 Task)
+        run: |
+          node scripts/daily-wireguard-and-acr-pipeline.mjs
+
+      - name: 2. Cloud Google Search Console, GA4 & Play Console Sync + Strike-Zone CTR Surgery (05:00 Task A)
+        run: |
+          node scripts/lib/google-cloud-api.mjs --self-test
+          node scripts/cloud-gsc-ga4-sync.mjs
+
+      - name: 3. Automated Keyword Discovery, 10-Assertion Quality Gate & Pre/Post Forecaster (05:00 Task B)
+        run: |
+          node scripts/keyword-research-engine.mjs --discover --score --audit --apply --limit=2
+
+      - name: 4. GSC Winner Lock Consolidation & Live 10Gbps WireGuard/ACR Proof Injection (05:00 Task C)
+        run: |
+          node scripts/consolidate-and-optimize-gsc.mjs
+          node scripts/enrich-pillars-with-live-proof.mjs
+
+      - name: 5. 100/100 Technical SEO, 301 Redirect, Historical GSC 404 Guard & PageSpeed Audit (06:00 Task)
+        run: |
+          node scripts/daily-seo-pagespeed-audit.mjs
+          node .agents/skills/vpn-seo-and-geo/scripts/pseo_and_seo_validator.mjs --action validate
+
+      - name: 6. PAD 4.0 XML, CRM Backlink Verification & Delta IndexNow Sync (10:00 Task)
+        run: |
+          node scripts/vpn-seo-drip.mjs
+
+      - name: Commit & Push Cloud SEO Updates to Production (Railway Auto-Deploy)
+        run: |
+          git config user.name "sweepr-cloud-bot"
+          git config user.email "bot@sweeprvpn.com"
+          git add website/ KEYWORD_OPPORTUNITIES_AUDIT_LOG.md TECHNICAL_SEO_AUDIT_LOG.md WIREGUARD_AND_ACR_DAILY_AUDIT_LOG.md
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(seo): automated cloud GSC/GA4 sync, WireGuard/ACR proof & sitemap audit"
+            git pull --rebase -X ours origin main
+            git push origin HEAD:main
+          else
+            echo "No content hashes changed today — skipping commit."
+          fi

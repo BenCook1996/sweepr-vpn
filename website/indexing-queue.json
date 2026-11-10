@@ -1,6 +1,11 @@
 {
+  "pending_urls": [
+    "https://sweeprvpn.com/warrant-canary",
+    "https://sweeprvpn.com/solutions/t-mobile-5g-home-internet-remote-dev-ssh",
+    "https://sweeprvpn.com/solutions/community-fibre-london-p2p-port-forwarding"
+  ],
+  "gsc_requested": [],
   "indexnow_key": "8f9a2b4c6d1e3f5a7b9c0d2e4f6a8b0c",
-  "pending_urls": [],
   "indexnow_submitted_at": {
     "https://sweeprvpn.com/solutions/talktalk-p2p-port-forwarding": "2026-11-01T23:05:54.478Z",
     "https://sweeprvpn.com/setup/gl-inet-travel-router": "2026-11-01T23:05:54.478Z",
@@ -394,21 +399,20 @@
     "https://sweeprvpn.com/setup/mikrotik-hap-ax3-wireguard-setup": "2026-11-05T06:01:39.079Z",
     "https://sweeprvpn.com/setup/fritzbox-7590-ax-wireguard-vpn": "2026-11-05T06:01:39.079Z"
   },
-  "gsc_requested": [],
   "bing_requested": [],
   "directory_forms_submitted": [],
   "last_indexnow_ping": "2026-11-05T06:01:39.079Z",
   "last_sitemap_ping": "2026-11-08T10:09:08.702Z",
   "last_daily_50_batch": {
-    "date": "2026-11-05",
-    "newCount": 2,
+    "date": "2026-11-09",
+    "newCount": 0,
     "totalPseoPages": 184,
     "consolidatedNoIndexExcluded": 1013,
-    "totalSitemapUrls": 206
+    "totalSitemapUrls": 207
   },
   "last_audit": {
-    "date": "2026-11-08",
-    "totalUrls": 205,
-    "pendingDeltaUrls": 0
+    "date": "2026-11-09",
+    "totalUrls": 206,
+    "pendingDeltaUrls": 3
   }
 }

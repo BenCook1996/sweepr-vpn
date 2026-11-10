@@ -1,0 +1,50 @@
+name: "SWEEPR VPN — Weekly GA4 Funnel, Checkout Health & GSC Recovery Audit"
+
+on:
+  schedule:
+    - cron: "0 8 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  vpn-weekly-ga4-gsc-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GCP_SERVICE_ACCOUNT_JSON: ${{ secrets.GCP_SERVICE_ACCOUNT_JSON }}
+      CRM_ADMIN_PASSWORD: ${{ secrets.CRM_ADMIN_PASSWORD }}
+      GSC_SITE_URL: "sc-domain:sweeprvpn.com"
+      GA4_PROPERTY_ID: "559903365"
+    steps:
+      - name: Checkout SWEEPR VPN Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: 1. Pull Live 7d/28d GSC & GA4 Telemetry via Google Cloud Service Account
+        run: |
+          node scripts/cloud-gsc-ga4-sync.mjs
+
+      - name: 2. Recalculate Pre/Post Strategy Performance Ledger & Calibration Multipliers
+        run: |
+          node scripts/keyword-research-engine.mjs --sync-ledger
+
+      - name: 3. Run 17-Check Weekly GA4 Funnel, Checkout Health & GSC Recovery Audit
+        run: |
+          node scripts/weekly-ga4-and-gsc-funnel-audit.mjs
+
+      - name: Commit & Push Weekly GA4 + GSC Scorecard
+        run: |
+          git config user.name "sweepr-cloud-bot"
+          git config user.email "bot@sweeprvpn.com"
+          git add website/gsc-ga4-latest-snapshot.json website/seo-strategy-performance-ledger.json website/pillar-enrichment-state.json GA4_AND_GSC_WEEKLY_AUDIT_LOG.md KEYWORD_OPPORTUNITIES_AUDIT_LOG.md
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(analytics): weekly cloud GA4 funnel & GSC recovery scorecard"
+            git pull --rebase -X ours origin main
+            git push origin HEAD:main
+          fi

@@ -113,3 +113,23 @@
   - **Remediation Implemented**: Enforced mandatory `hasValidServiceApiKey(c)` authentication on `GET /v1/deepblock/blocked-sites`.
 - **Vuln 10 (Sensitive Account Identification Disclosure in Self-Service Portal)**: In `sweepr_crm/src/app.ts`, `POST /v1/license/portal-lookup` querying with a high-entropy license key returned unmasked internal `account_id` and raw 6-digit `activation_code`.
   - **Remediation Implemented**: Omitted `account_id` and `activation_code` unless the lookup is performed with service API key credentials or verified with the account's matching email. In addition, enhanced `resolveVerifiedPortalAccount` to correctly handle combined `{ lookup: code, email }` payload representations.
+
+## Cloud Security Audit — 2026-11-09 (2026-11-09T22:59:00.076Z)
+- **Status**: 1 FAILED (6/7 checks passed)
+- **[FAIL] Desktop & Supply Chain — SSL.com Authenticode Binary Integrity (website/SWEEPRVPN.exe)**: Size=715264 bytes | SHA-256=7C199767E751019CAD98... | Authenticode=false
+- **[PASS] Payments & Webhooks — Stripe Webhook HMAC timingSafeEqual & Replay Protection**: verifyStripeWebhookSignature + timingSafeEqual + event idempotency verified
+- **[PASS] Auth & Session Lifecycle — HttpOnly Session Cookies, CSRF Origin Guard & 3-Device Slot Limit**: HttpOnly/SameSite=Lax cookies, isSameOriginOrTrusted CSRF check, and MAX_DEVICES_PER_ACCOUNT=3 active
+- **[PASS] Cloud & Static Serving — Path Traversal & Internal State File Isolation**: SAFE_STATIC_ROOT prefix enforcement + BLOCKED_STATIC_FILES active
+- **[PASS] Web Protocol & Headers — HSTS, CSP, X-Frame-Options & X-Content-Type-Options**: All 4 mandatory HTTP security headers enforced in COMMON_SECURITY_HEADERS
+- **[PASS] Secret Hygiene — Zero Hardcoded Plaintext API Keys in Source**: 0 plaintext Stripe/Shopify/Webhook keys found in tracked files
+- **[PASS] Runtime Integrity — Node.js Syntax Check (server.mjs & sweepr-client.mjs)**: server.mjs and sweepr-client.mjs passed node --check
+
+## Cloud Security Audit — 2026-11-09 (2026-11-09T22:59:51.309Z)
+- **Status**: 100% PASS (7/7 checks passed)
+- **[PASS] Desktop & Supply Chain — SSL.com Authenticode Binary Integrity (website/SWEEPRVPN.exe)**: Size=715264 bytes | SHA-256=7C199767E751019CAD98... | PE+Authenticode=true
+- **[PASS] Payments & Webhooks — Stripe Webhook HMAC timingSafeEqual & Replay Protection**: verifyStripeWebhookSignature + timingSafeEqual + event idempotency verified
+- **[PASS] Auth & Session Lifecycle — HttpOnly Session Cookies, CSRF Origin Guard & 3-Device Slot Limit**: HttpOnly/SameSite=Lax cookies, isSameOriginOrTrusted CSRF check, and MAX_DEVICES_PER_ACCOUNT=3 active
+- **[PASS] Cloud & Static Serving — Path Traversal & Internal State File Isolation**: SAFE_STATIC_ROOT prefix enforcement + BLOCKED_STATIC_FILES active
+- **[PASS] Web Protocol & Headers — HSTS, CSP, X-Frame-Options & X-Content-Type-Options**: All 4 mandatory HTTP security headers enforced in COMMON_SECURITY_HEADERS
+- **[PASS] Secret Hygiene — Zero Hardcoded Plaintext API Keys in Source**: 0 plaintext Stripe/Shopify/Webhook keys found in tracked files
+- **[PASS] Runtime Integrity — Node.js Syntax Check (server.mjs & sweepr-client.mjs)**: server.mjs and sweepr-client.mjs passed node --check

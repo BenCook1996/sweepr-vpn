@@ -245,6 +245,26 @@ async function runWeeklyFunnelAndGscAudit() {
     `Tracked=${prePostTracked.length} | MeasuredPrePostPages=${measuredLifts.length} | CalibratedPlaybooks=${playbooksCalibrated}`
   );
 
+  // Verify Warrant Canary & Promoted Page-1 GSC Winners + 0 Historical GSC 404s
+  const warrantCanaryExists = fs.existsSync(path.join(WEBSITE_DIR, 'warrant-canary.html'));
+  const promotedPage1Winners = [
+    'solutions/virgin-media-remote-dev-ssh.html',
+    'solutions/t-mobile-5g-home-internet-remote-dev-ssh.html',
+    'solutions/community-fibre-london-p2p-port-forwarding.html'
+  ];
+  const winnersAllIndexable = promotedPage1Winners.every((rel) => {
+    const abs = path.join(WEBSITE_DIR, rel);
+    return fs.existsSync(abs) && !/<meta\s+name=["']robots["']\s+content=["'][^"']*noindex/i.test(fs.readFileSync(abs, 'utf8'));
+  });
+  const gscSnapObj = ledgerExists ? JSON.parse(fs.readFileSync(snapshotPath, 'utf8')) : {};
+  const gsc404Count = Number(gscSnapObj?.gscSummary?.notFound404 ?? 0);
+  record(
+    'GSC Page-1 Winner Lock & 404 Guard',
+    'Promoted Page-1 Winners Indexable, Warrant Canary Live & 0 GSC Not-Found (404)',
+    warrantCanaryExists && winnersAllIndexable && gsc404Count === 0 && sitemapXml.includes('https://sweeprvpn.com/warrant-canary'),
+    `WarrantCanary=${warrantCanaryExists ? 'OK' : 'MISSING'} | PromotedWinnersIndexable=${winnersAllIndexable ? '3/3' : 'FAIL'} | GSC_404s=${gsc404Count}`
+  );
+
   // 3. Live Production Endpoint Smoke Tests (https://sweeprvpn.com & https://sweeprcleaner.com)
   try {
     const cfgRes = await fetchWithTimeout('https://sweeprvpn.com/api/checkout-config');

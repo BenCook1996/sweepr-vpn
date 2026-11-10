@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-11-08T16:58:04.361Z",
+  "updatedAt": "2026-11-09T05:04:09.073Z",
   "entries": {
     "3f6375c2084e251e": {
       "fetchedAt": 1793831697933,
@@ -1697,6 +1697,459 @@
           "domain": "superuser.com",
           "snippet": "Setting up a FritzBox VPN via IPSec (2023)",
           "year": "2023"
+        }
+      ]
+    },
+    "56d5b0d8ff3ab907": {
+      "fetchedAt": 1794200617044,
+      "keyword": "what is espressif on my wifi",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Wifi UDP Broadcasting on Verizon Router",
+          "url": "https://superuser.com/questions/1329645/wifi-udp-broadcasting-on-verizon-router",
+          "domain": "superuser.com",
+          "snippet": "Wifi UDP Broadcasting on Verizon Router (2018)",
+          "year": "2018"
+        }
+      ]
+    },
+    "f8ace18218ada2bd": {
+      "fetchedAt": 1794200619657,
+      "keyword": "azurewave device on my wifi",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Add USB Bluetooth to mPCIE card?",
+          "url": "https://superuser.com/questions/1085909/add-usb-bluetooth-to-mpcie-card",
+          "domain": "superuser.com",
+          "snippet": "Add USB Bluetooth to mPCIE card? (2016)",
+          "year": "2016"
+        }
+      ]
+    },
+    "9dd0a03aed8c9b3f": {
+      "fetchedAt": 1794200622214,
+      "keyword": "liteon technology corporation on my wifi router",
+      "source": "bing-rss-verified",
+      "topResults": [
+        {
+          "title": "LITEON Technology | LITEON",
+          "url": "https://www.liteon.com/en",
+          "domain": "liteon.com",
+          "snippet": "Liteon Technology is on a mission to revolutionize the world with its cutting-edge, intelligent, and sustainable energy solutions. With a focus on energy-saving, energy-storage, energy-conversion, and energy-managing technologies, we're creating an efficient, eco-friendly, and exciting future!"
+        },
+        {
+          "title": "Products | LITEON",
+          "url": "https://www.liteon.com/en/product/overview",
+          "domain": "liteon.com",
+          "snippet": "LITEON is dedicated to providing advanced intelligent IoT products and Networking infrastructure, meeting customer needs through comprehensive services and superior user experiences, and offering all-round solutions for customers."
+        },
+        {
+          "title": "Lite-On - Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Lite-On",
+          "domain": "en.wikipedia.org",
+          "snippet": "Lite-On Technology Corporation (also known as LiteOn and LiteON) is a Taiwanese company that primarily manufactures consumer electronics, including LEDs, semiconductors, computer chassis, monitors, motherboards, optical disc drives, and other electronic components."
+        },
+        {
+          "title": "首頁 | Liteon",
+          "url": "https://liteonqa.liteon.com/en",
+          "domain": "liteonqa.liteon.com",
+          "snippet": "LITEON provides the most energy-efficient hardware equipment for the construction of green energy data centers, such as customized energy-saving mechanism designs and liquid cooling systems that effectively reduce data center energy consumption and temperature, and improve energy utilization."
+        },
+        {
+          "title": "LiteOn - Home",
+          "url": "https://us.liteon.com/en-global/Home/index",
+          "domain": "us.liteon.com",
+          "snippet": "13/09/2019 TAIPEI, TAIWAN, Sept. 13, 2019 –LITE-ON Technology Corporation (TWSE:2301), a global leader in optoelectronic components today announced that it signed a strategic partnership agreement with, II‐VI Incorporated (Nasdaq:IIVI), a leader in semiconductor lasers, to partner in the volume manufacturing and commercialization of packaged semiconductor lasers for mass-market light ..."
+        }
+      ]
+    },
+    "066e69534ec7932a": {
+      "fetchedAt": 1794200623546,
+      "keyword": "what is espressif on my wifi router",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Wifi UDP Broadcasting on Verizon Router",
+          "url": "https://superuser.com/questions/1329645/wifi-udp-broadcasting-on-verizon-router",
+          "domain": "superuser.com",
+          "snippet": "Wifi UDP Broadcasting on Verizon Router (2018)",
+          "year": "2018"
+        }
+      ]
+    },
+    "da0ec9c6a65fefe5": {
+      "fetchedAt": 1794200627534,
+      "keyword": "liteon technology corporation wifi",
+      "source": "bing-rss-verified",
+      "topResults": [
+        {
+          "title": "LITEON Technology | LITEON",
+          "url": "https://www.liteon.com/en",
+          "domain": "liteon.com",
+          "snippet": "Liteon Technology is on a mission to revolutionize the world with its cutting-edge, intelligent, and sustainable energy solutions. With a focus on energy-saving, energy-storage, energy-conversion, and energy-managing technologies, we're creating an efficient, eco-friendly, and exciting future!"
+        },
+        {
+          "title": "Products | LITEON",
+          "url": "https://www.liteon.com/en/product/overview",
+          "domain": "liteon.com",
+          "snippet": "LITEON is dedicated to providing advanced intelligent IoT products and Networking infrastructure, meeting customer needs through comprehensive services and superior user experiences, and offering all-round solutions for customers."
+        },
+        {
+          "title": "Lite-On - Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Lite-On",
+          "domain": "en.wikipedia.org",
+          "snippet": "Lite-On Technology Corporation (also known as LiteOn and LiteON) is a Taiwanese company that primarily manufactures consumer electronics, including LEDs, semiconductors, computer chassis, monitors, motherboards, optical disc drives, and other electronic components."
+        },
+        {
+          "title": "首頁 | Liteon",
+          "url": "https://liteonqa.liteon.com/en",
+          "domain": "liteonqa.liteon.com",
+          "snippet": "LITEON provides the most energy-efficient hardware equipment for the construction of green energy data centers, such as customized energy-saving mechanism designs and liquid cooling systems that effectively reduce data center energy consumption and temperature, and improve energy utilization."
+        },
+        {
+          "title": "LiteOn - Home",
+          "url": "https://us.liteon.com/en-global/Home/index",
+          "domain": "us.liteon.com",
+          "snippet": "13/09/2019 TAIPEI, TAIWAN, Sept. 13, 2019 –LITE-ON Technology Corporation (TWSE:2301), a global leader in optoelectronic components today announced that it signed a strategic partnership agreement with, II‐VI Incorporated (Nasdaq:IIVI), a leader in semiconductor lasers, to partner in the volume manufacturing and commercialization of packaged semiconductor lasers for mass-market light ..."
+        }
+      ]
+    },
+    "a45fbb22ae87f2da": {
+      "fetchedAt": 1794200628705,
+      "keyword": "azurewave on my wifi",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Add USB Bluetooth to mPCIE card?",
+          "url": "https://superuser.com/questions/1085909/add-usb-bluetooth-to-mpcie-card",
+          "domain": "superuser.com",
+          "snippet": "Add USB Bluetooth to mPCIE card? (2016)",
+          "year": "2016"
+        },
+        {
+          "title": "Why is hostapd in IEEE 802.11a (5Ghz) not starting on boot?",
+          "url": "https://superuser.com/questions/1264499/why-is-hostapd-in-ieee-802-11a-5ghz-not-starting-on-boot",
+          "domain": "superuser.com",
+          "snippet": "Why is hostapd in IEEE 802.11a (5Ghz) not starting on boot? (2017)",
+          "year": "2017"
+        }
+      ]
+    },
+    "f44d64f027b88a79": {
+      "fetchedAt": 1794200629738,
+      "keyword": "ofcom broadband automatic compensation",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Automatic compensation for broadband and landline users",
+          "url": "https://www.ofcom.org.uk/about-ofcom/latest/features-and-news/automatic-compensation2",
+          "domain": "news.ycombinator.com",
+          "snippet": "Automatic compensation for broadband and landline users (2017)",
+          "year": "2017"
+        },
+        {
+          "title": "Ofcom - How could online age checks work?",
+          "url": "https://www.ofcom.org.uk/",
+          "domain": "ofcom.org.uk",
+          "snippet": "Ofcom is the UK’s regulator for the communications services that we use and rely on each day. We regulate broadband, home phone and mobile services, TV, radio and video on demand services, oversee the universal postal service, look after the airwaves used by wireless devices, and help make online services safer for the people who use them."
+        },
+        {
+          "title": "Ofcom - Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Ofcom",
+          "domain": "en.wikipedia.org",
+          "snippet": "The Office of Communications (Ofcom) is the government-approved regulatory and competition authority for the broadcasting, internet, telecommunications and postal industries of the United Kingdom. Ofcom has wide-ranging powers across the television, radio, telecoms, internet and postal sectors. It has a statutory duty to represent the interests of citizens and consumers by promoting ..."
+        },
+        {
+          "title": "Ofcom - GOV.UK",
+          "url": "https://www.gov.uk/government/organisations/ofcom",
+          "domain": "gov.uk",
+          "snippet": "Ofcom is the regulator and competition authority for the UK communications industries. It regulates the TV and radio sectors, fixed line telecoms, mobiles, postal services, plus the airwaves over ..."
+        },
+        {
+          "title": "What is Ofcom?",
+          "url": "https://www.ofcom.org.uk/about-ofcom/what-we-do/what-is-ofcom",
+          "domain": "ofcom.org.uk",
+          "snippet": "Ofcom is the communications regulator in the UK. We regulate the TV, radio and video-on-demand sectors, fixed line telecoms, mobiles, postal services, plus the airwaves over which wireless devices operate."
+        }
+      ]
+    },
+    "175fca6353f3294c": {
+      "fetchedAt": 1794200631044,
+      "keyword": "virgin media minimum speed guarantee",
+      "source": "bing-rss-verified",
+      "topResults": [
+        {
+          "title": "Book flights with Virgin Atlantic",
+          "url": "https://www.virginatlantic.com/",
+          "domain": "virginatlantic.com",
+          "snippet": "Hello you. Welcome to Virgin Atlantic. Find our best fares on your next flights to the US and beyond, with a fantastic choice of food, drinks, award winning entertainment and onboard WiFi."
+        },
+        {
+          "title": "Cruises &amp; Cruise Holidays | Virgin Voyages",
+          "url": "https://www.virginvoyages.com/",
+          "domain": "virginvoyages.com",
+          "snippet": "Ahoy Sailor! Our adult only cruise ships redefine luxury cruise vacations to the Caribbean, Mediterranean, Europe, and beyond."
+        },
+        {
+          "title": "Book Flights &amp; Plane Tickets | Virgin Atlantic",
+          "url": "https://flights.virginatlantic.com/en-us/",
+          "domain": "flights.virginatlantic.com",
+          "snippet": "Welcome to Virgin Atlantic. Discover our best flight fares with a fantastic choice of food, drinks, award winning entertainment and onboard WiFi."
+        },
+        {
+          "title": "Official site | Virgin",
+          "url": "https://www.virgin.com/",
+          "domain": "virgin.com",
+          "snippet": "We’re the official home of the Virgin Group and Branson family. Get the latest from Richard Branson and the Virgin companies."
+        },
+        {
+          "title": "Cruises by Virgin Voyages",
+          "url": "https://www.virginvoyages.com/cruises",
+          "domain": "virginvoyages.com",
+          "snippet": "From sun-soaked Caribbean cruises to iconic European ports, Virgin Voyages offers unforgettable cruise experiences. Plan your escape, explore our cruises."
+        }
+      ]
+    },
+    "39f170dd3aed7e69": {
+      "fetchedAt": 1794200633759,
+      "keyword": "liteon technology corporation on my wifi",
+      "source": "bing-rss-verified",
+      "topResults": [
+        {
+          "title": "LITEON Technology | LITEON",
+          "url": "https://www.liteon.com/en",
+          "domain": "liteon.com",
+          "snippet": "Liteon Technology is on a mission to revolutionize the world with its cutting-edge, intelligent, and sustainable energy solutions. With a focus on energy-saving, energy-storage, energy-conversion, and energy-managing technologies, we're creating an efficient, eco-friendly, and exciting future!"
+        },
+        {
+          "title": "Products | LITEON",
+          "url": "https://www.liteon.com/en/product/overview",
+          "domain": "liteon.com",
+          "snippet": "LITEON is dedicated to providing advanced intelligent IoT products and Networking infrastructure, meeting customer needs through comprehensive services and superior user experiences, and offering all-round solutions for customers."
+        },
+        {
+          "title": "Lite-On - Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Lite-On",
+          "domain": "en.wikipedia.org",
+          "snippet": "Lite-On Technology Corporation (also known as LiteOn and LiteON) is a Taiwanese company that primarily manufactures consumer electronics, including LEDs, semiconductors, computer chassis, monitors, motherboards, optical disc drives, and other electronic components."
+        },
+        {
+          "title": "首頁 | Liteon",
+          "url": "https://liteonqa.liteon.com/en",
+          "domain": "liteonqa.liteon.com",
+          "snippet": "LITEON provides the most energy-efficient hardware equipment for the construction of green energy data centers, such as customized energy-saving mechanism designs and liquid cooling systems that effectively reduce data center energy consumption and temperature, and improve energy utilization."
+        },
+        {
+          "title": "LiteOn - Home",
+          "url": "https://us.liteon.com/en-global/Home/index",
+          "domain": "us.liteon.com",
+          "snippet": "13/09/2019 TAIPEI, TAIWAN, Sept. 13, 2019 –LITE-ON Technology Corporation (TWSE:2301), a global leader in optoelectronic components today announced that it signed a strategic partnership agreement with, II‐VI Incorporated (Nasdaq:IIVI), a leader in semiconductor lasers, to partner in the volume manufacturing and commercialization of packaged semiconductor lasers for mass-market light ..."
+        }
+      ]
+    },
+    "2e5aa12524670e6a": {
+      "fetchedAt": 1794200635018,
+      "keyword": "bt broadband slow speed bill credit card",
+      "source": "bing-rss-verified",
+      "topResults": [
+        {
+          "title": "Broadband, TV Packages, TNT Sports &amp; Mobile Deals | BT",
+          "url": "https://www.bt.com/",
+          "domain": "bt.com",
+          "snippet": "From Ultra Fast Full Fibre broadband to TV &amp; Mobile, BT helps UK families, communities &amp; companies reach their potential. Find more BT products here."
+        },
+        {
+          "title": "BT Email Login | Email | BT Help",
+          "url": "https://www.bt.com/help/email/bt-email-login",
+          "domain": "bt.com",
+          "snippet": "Log in to your BT Email account to read and manage your emails. Log in online or download the BT Email app."
+        },
+        {
+          "title": "Log into My BT account",
+          "url": "https://my.bt.com/appsyouraccount/public/logout.do",
+          "domain": "my.bt.com",
+          "snippet": "What do you want to do? View your bill Manage your payments See your BT Services Check your calls and broadband usage"
+        },
+        {
+          "title": "MyBT",
+          "url": "https://my.bt.com/mybt",
+          "domain": "my.bt.com",
+          "snippet": "Manage your BT account, view bills, check broadband usage, and access services conveniently on MyBT."
+        },
+        {
+          "title": "BT Email",
+          "url": "https://email.bt.com/mail/index-tui.jsp?v=2.32.0",
+          "domain": "email.bt.com",
+          "snippet": "BT Email"
+        }
+      ]
+    },
+    "d34cb204d5aaab81": {
+      "fetchedAt": 1794200636170,
+      "keyword": "what is hon hai on my wifi",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Show HN: I built Knemora – An Open-source AI Second brain",
+          "url": "https://github.com/federicolaterra/knemora",
+          "domain": "news.ycombinator.com",
+          "snippet": "Show HN: I built Knemora – An Open-source AI Second brain (2026)",
+          "year": "2026"
+        },
+        {
+          "title": "Tell YC: Answers from John McCarthy",
+          "url": "https://news.ycombinator.com/item?id=185348",
+          "domain": "news.ycombinator.com",
+          "snippet": "Tell YC: Answers from John McCarthy (2008)",
+          "year": "2008"
+        }
+      ]
+    },
+    "f4c03c31ee0ee90c": {
+      "fetchedAt": 1794200637549,
+      "keyword": "hon hai precision wifi",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Unknown device connected to LAN",
+          "url": "https://superuser.com/questions/1123293/unknown-device-connected-to-lan",
+          "domain": "superuser.com",
+          "snippet": "Unknown device connected to LAN (2016)",
+          "year": "2016"
+        }
+      ]
+    },
+    "e0af1ad63fed2d7f": {
+      "fetchedAt": 1794200638750,
+      "keyword": "liteon technology on my wifi",
+      "source": "bing-rss-verified",
+      "topResults": [
+        {
+          "title": "LITEON Technology | LITEON",
+          "url": "https://www.liteon.com/en",
+          "domain": "liteon.com",
+          "snippet": "Liteon Technology is on a mission to revolutionize the world with its cutting-edge, intelligent, and sustainable energy solutions. With a focus on energy-saving, energy-storage, energy-conversion, and energy-managing technologies, we're creating an efficient, eco-friendly, and exciting future!"
+        },
+        {
+          "title": "Products | LITEON",
+          "url": "https://www.liteon.com/en/product/overview",
+          "domain": "liteon.com",
+          "snippet": "LITEON is dedicated to providing advanced intelligent IoT products and Networking infrastructure, meeting customer needs through comprehensive services and superior user experiences, and offering all-round solutions for customers."
+        },
+        {
+          "title": "Lite-On - Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Lite-On",
+          "domain": "en.wikipedia.org",
+          "snippet": "Lite-On Technology Corporation (also known as LiteOn and LiteON) is a Taiwanese company that primarily manufactures consumer electronics, including LEDs, semiconductors, computer chassis, monitors, motherboards, optical disc drives, and other electronic components."
+        },
+        {
+          "title": "首頁 | Liteon",
+          "url": "https://liteonqa.liteon.com/en",
+          "domain": "liteonqa.liteon.com",
+          "snippet": "LITEON provides the most energy-efficient hardware equipment for the construction of green energy data centers, such as customized energy-saving mechanism designs and liquid cooling systems that effectively reduce data center energy consumption and temperature, and improve energy utilization."
+        },
+        {
+          "title": "LiteOn - Home",
+          "url": "https://us.liteon.com/en-global/Home/index",
+          "domain": "us.liteon.com",
+          "snippet": "13/09/2019 TAIPEI, TAIWAN, Sept. 13, 2019 –LITE-ON Technology Corporation (TWSE:2301), a global leader in optoelectronic components today announced that it signed a strategic partnership agreement with, II‐VI Incorporated (Nasdaq:IIVI), a leader in semiconductor lasers, to partner in the volume manufacturing and commercialization of packaged semiconductor lasers for mass-market light ..."
+        }
+      ]
+    },
+    "675453f8aa706ea6": {
+      "fetchedAt": 1794200640076,
+      "keyword": "ofcom minimum speed guarantee",
+      "source": "bing-rss-verified",
+      "topResults": [
+        {
+          "title": "Ofcom - How could online age checks work?",
+          "url": "https://www.ofcom.org.uk/",
+          "domain": "ofcom.org.uk",
+          "snippet": "Ofcom is the UK’s regulator for the communications services that we use and rely on each day. We regulate broadband, home phone and mobile services, TV, radio and video on demand services, oversee the universal postal service, look after the airwaves used by wireless devices, and help make online services safer for the people who use them."
+        },
+        {
+          "title": "Ofcom - Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Ofcom",
+          "domain": "en.wikipedia.org",
+          "snippet": "The Office of Communications (Ofcom) is the government-approved regulatory and competition authority for the broadcasting, internet, telecommunications and postal industries of the United Kingdom. Ofcom has wide-ranging powers across the television, radio, telecoms, internet and postal sectors. It has a statutory duty to represent the interests of citizens and consumers by promoting ..."
+        },
+        {
+          "title": "Ofcom - GOV.UK",
+          "url": "https://www.gov.uk/government/organisations/ofcom",
+          "domain": "gov.uk",
+          "snippet": "Ofcom is the regulator and competition authority for the UK communications industries. It regulates the TV and radio sectors, fixed line telecoms, mobiles, postal services, plus the airwaves over ..."
+        },
+        {
+          "title": "What is Ofcom?",
+          "url": "https://www.ofcom.org.uk/about-ofcom/what-we-do/what-is-ofcom",
+          "domain": "ofcom.org.uk",
+          "snippet": "Ofcom is the communications regulator in the UK. We regulate the TV, radio and video-on-demand sectors, fixed line telecoms, mobiles, postal services, plus the airwaves over which wireless devices operate."
+        },
+        {
+          "title": "OFCOM website",
+          "url": "https://ui-test.ofcom.org.uk/",
+          "domain": "ui-test.ofcom.org.uk",
+          "snippet": "Broadcast and On Demand Bulletin The Broadcast and On Demand Bulletin reports on investigations into potential breaches of Ofcom’s codes and rules for TV, radio and video-on-demand programmes."
+        }
+      ]
+    },
+    "bb6a60039546959b": {
+      "fetchedAt": 1794200642488,
+      "keyword": "what is hon hai on my router",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "The Houthis took out my Ring doorbell",
+          "url": "https://news.ycombinator.com/item?id=39852930",
+          "domain": "news.ycombinator.com",
+          "snippet": "The Houthis took out my Ring doorbell (2024)",
+          "year": "2024"
+        },
+        {
+          "title": "Ask HN: How's your home-cooked software revolution going?",
+          "url": "https://news.ycombinator.com/item?id=50391446",
+          "domain": "news.ycombinator.com",
+          "snippet": "Ask HN: How's your home-cooked software revolution going? (2026)",
+          "year": "2026"
+        }
+      ]
+    },
+    "e135f27ba4ce784e": {
+      "fetchedAt": 1794200643886,
+      "keyword": "liteon technology corporation wifi devices",
+      "source": "bing-rss-verified",
+      "topResults": [
+        {
+          "title": "LITEON Technology | LITEON",
+          "url": "https://www.liteon.com/en",
+          "domain": "liteon.com",
+          "snippet": "Liteon Technology is on a mission to revolutionize the world with its cutting-edge, intelligent, and sustainable energy solutions. With a focus on energy-saving, energy-storage, energy-conversion, and energy-managing technologies, we're creating an efficient, eco-friendly, and exciting future!"
+        },
+        {
+          "title": "Products | LITEON",
+          "url": "https://www.liteon.com/en/product/overview",
+          "domain": "liteon.com",
+          "snippet": "LITEON is dedicated to providing advanced intelligent IoT products and Networking infrastructure, meeting customer needs through comprehensive services and superior user experiences, and offering all-round solutions for customers."
+        },
+        {
+          "title": "Lite-On - Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Lite-On",
+          "domain": "en.wikipedia.org",
+          "snippet": "Lite-On Technology Corporation (also known as LiteOn and LiteON) is a Taiwanese company that primarily manufactures consumer electronics, including LEDs, semiconductors, computer chassis, monitors, motherboards, optical disc drives, and other electronic components."
+        },
+        {
+          "title": "首頁 | Liteon",
+          "url": "https://liteonqa.liteon.com/en",
+          "domain": "liteonqa.liteon.com",
+          "snippet": "LITEON provides the most energy-efficient hardware equipment for the construction of green energy data centers, such as customized energy-saving mechanism designs and liquid cooling systems that effectively reduce data center energy consumption and temperature, and improve energy utilization."
+        },
+        {
+          "title": "LiteOn - Home",
+          "url": "https://us.liteon.com/en-global/Home/index",
+          "domain": "us.liteon.com",
+          "snippet": "13/09/2019 TAIPEI, TAIWAN, Sept. 13, 2019 –LITE-ON Technology Corporation (TWSE:2301), a global leader in optoelectronic components today announced that it signed a strategic partnership agreement with, II‐VI Incorporated (Nasdaq:IIVI), a leader in semiconductor lasers, to partner in the volume manufacturing and commercialization of packaged semiconductor lasers for mass-market light ..."
         }
       ]
     }

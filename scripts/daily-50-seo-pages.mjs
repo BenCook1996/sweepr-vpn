@@ -1896,7 +1896,9 @@ PersistentKeepalive = 25</code></pre>`;
   });
 }
 
-async function runDaily50Pages(targetCount = 50, force = false) {
+const MAX_DAILY_DRIP = 5;
+
+async function runDaily50Pages(targetCount = 3, force = false) {
   const todayStr = new Date().toISOString().slice(0, 10);
   let state = { lastRunDate: null, totalGenerated: 0, batches: [] };
   if (fs.existsSync(DAILY_STATE_PATH)) {
@@ -1906,12 +1908,36 @@ async function runDaily50Pages(targetCount = 50, force = false) {
   }
 
   if (!force && state.lastRunDate === todayStr) {
-    console.log(`[SWEEPR Daily 50 SEO Pages] Already generated today's SEO pillar pages on ${todayStr}. Use --force to run another sync.`);
+    console.log(`[SWEEPR Daily Pillar SEO Sync] Already synchronized today's SEO pillar pages on ${todayStr}. Use --force to run another sync.`);
     return;
   }
 
   const sitemapXml = fs.readFileSync(SITEMAP_PATH, 'utf8');
   const allowCartesian = process.argv.includes('--allow-cartesian');
+  const forceCreate = process.argv.includes('--force-create');
+
+  // Unindexed Ratio Gate: block net-new page generation whenever GSC "Discovered - currently not indexed" / sitemapCanonicalUrls > 20%
+  const gscSnapPath = path.join(WEBSITE_DIR, 'gsc-ga4-latest-snapshot.json');
+  let unindexedRatioBlocked = false;
+  if (fs.existsSync(gscSnapPath) && !forceCreate) {
+    try {
+      const snap = JSON.parse(fs.readFileSync(gscSnapPath, 'utf8'));
+      const discCount = Number(
+        snap?.gscSummary?.indexing?.discoveredCurrentlyNotIndexed ?? snap?.gscSummary?.discoveredCurrentlyNotIndexed ?? 0
+      );
+      const canonTotal = Number(
+        snap?.gscSummary?.indexing?.sitemapCanonicalUrls ?? snap?.gscSummary?.sitemapCanonicalUrls ?? 207
+      );
+      if (canonTotal > 0 && discCount / canonTotal > 0.20) {
+        unindexedRatioBlocked = true;
+        if (targetCount > 0) {
+          console.log(
+            `[Unindexed Ratio Gate] GSC Discovered-not-indexed ratio (${discCount}/${canonTotal} = ${((discCount / canonTotal) * 100).toFixed(1)}%) > 20% threshold — throttling net-new page creation to 0 (refresh-only mode).`
+          );
+        }
+      }
+    } catch {}
+  }
 
   const selected = [];
   const sevenDaysAgoMs = Date.now() - 7 * 24 * 60 * 60 * 1000;
@@ -1921,11 +1947,16 @@ async function runDaily50Pages(targetCount = 50, force = false) {
         b?.date &&
         Date.parse(b.date) >= sevenDaysAgoMs &&
         b.consolidatedNoIndexExcluded !== undefined &&
-        Number(b.newGenerated || 0) <= 2
+        Number(b.newGenerated || 0) <= MAX_DAILY_DRIP
     )
     .reduce((sum, b) => sum + Number(b.newGenerated || 0), 0);
   const remainingWeeklyQuota = Math.max(0, 10 - rolling7DayGenerated);
-  const effectiveMaxCount = allowCartesian ? targetCount : Math.min(targetCount, 2, remainingWeeklyQuota);
+  const cappedTarget = Math.min(Math.max(0, targetCount), MAX_DAILY_DRIP);
+  const effectiveMaxCount = unindexedRatioBlocked
+    ? 0
+    : allowCartesian
+    ? cappedTarget
+    : Math.min(cappedTarget, 2, remainingWeeklyQuota);
 
   // Strictly consume approved CREATE_NEW_PILLAR briefs from website/keyword-opportunities.json (Zero Cartesian Fallback)
   const opportunitiesPath = path.join(WEBSITE_DIR, 'keyword-opportunities.json');
@@ -2006,6 +2037,7 @@ async function runDaily50Pages(targetCount = 50, force = false) {
     { loc: 'https://sweeprvpn.com/support', priority: '0.6', changefreq: 'monthly', absPath: path.join(WEBSITE_DIR, 'support.html') },
     { loc: 'https://sweeprvpn.com/refund', priority: '0.5', changefreq: 'monthly', absPath: path.join(WEBSITE_DIR, 'refund.html') },
     { loc: 'https://sweeprvpn.com/privacy', priority: '0.5', changefreq: 'monthly', absPath: path.join(WEBSITE_DIR, 'privacy.html') },
+    { loc: 'https://sweeprvpn.com/warrant-canary', priority: '0.6', changefreq: 'monthly', absPath: path.join(WEBSITE_DIR, 'warrant-canary.html') },
     { loc: 'https://sweeprvpn.com/terms', priority: '0.5', changefreq: 'monthly', absPath: path.join(WEBSITE_DIR, 'terms.html') }
   ];
 

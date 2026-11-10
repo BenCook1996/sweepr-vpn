@@ -260,6 +260,23 @@
       </section>
     </div>
 
+
+      <section id="synology-router-wireguard-srm-dsm" class="bg-white rounded-2xl border border-emerald-200 p-6 md:p-8 shadow-sm">
+        <h2 class="text-2xl font-bold text-gray-900 mb-3">4. Synology Router WireGuard (SRM 1.3) vs. Synology DSM 7.2 Container Manager (<code class="text-emerald-700">gluetun synology</code>)</h2>
+        <p class="text-gray-700 leading-relaxed mb-4">
+          Whether you are configuring <strong>Synology Router WireGuard</strong> on a Synology RT6600ax / WRX560 running <strong>SRM 1.3+</strong> or binding containers via <strong>Gluetun WireGuard on Synology DSM 7.2</strong>, use the verified settings below so your LAN Plex and SMB shares remain accessible locally while outbound traffic routes through SWEEPR's 10Gbps RAM-only tunnel:
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
+          <div class="p-4 rounded-xl bg-gray-50 border border-gray-200">
+            <h3 class="font-bold text-gray-900 mb-1.5">Option A: Gluetun Synology DSM 7.2 (Container Manager)</h3>
+            <p class="text-xs leading-relaxed">In Synology DSM 7.2 <strong>Container Manager &rarr; Project</strong>, deploy <code class="bg-white px-1 rounded">qmcgaw/gluetun</code> with <code class="bg-white px-1 rounded">VPN_TYPE=wireguard</code>, <code class="bg-white px-1 rounded">WIREGUARD_MTU=1420</code>, and <code class="bg-white px-1 rounded">FIREWALL_OUTBOUND_SUBNETS=192.168.1.0/24</code>. Attach dependent containers via <code class="bg-white px-1 rounded">network_mode: "service:gluetun"</code>.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-gray-50 border border-gray-200">
+            <h3 class="font-bold text-gray-900 mb-1.5">Option B: Synology Router WireGuard Client (SRM 1.3+)</h3>
+            <p class="text-xs leading-relaxed">On Synology RT6600ax, WRX560, or RT2600ac, open <strong>Network Center &rarr; Internet &rarr; VPN Connection &rarr; Create &rarr; WireGuard</strong>, import your SWEEPR <code class="bg-white px-1 rounded">wg0.conf</code> file (MTU <code class="bg-white px-1 rounded">1420</code>, DNS <code class="bg-white px-1 rounded">10.64.0.1</code>), and select which LAN devices route through the WireGuard policy gateway.</p>
+          </div>
+        </div>
+      </section>
     <!-- FAQ Section (Matches JSON-LD FAQPage) -->
     <div class="bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm mb-14">
       <h2 class="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
@@ -329,15 +346,15 @@
           <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
           <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media Low-Latency Gaming &amp; Packet Loss (AS5089)</div>
         </a>
-        <a href="/solutions/virgin-media-p2p-port-forwarding" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+        <a href="/solutions/virgin-media-remote-dev-ssh" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
           <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
           <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media Remote SSH, Git &amp; Docker Workflows (AS5089)</div>
         </a>
-        <a href="/solutions/virgin-media-p2p-port-forwarding" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+        <a href="/solutions/virgin-media-remote-dev-ssh" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
           <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
           <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media 4K Live Sports &amp; High-Bitrate Streaming (AS5089)</div>
         </a>
-        <a href="/solutions/virgin-media-p2p-port-forwarding" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+        <a href="/solutions/virgin-media-remote-dev-ssh" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
           <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
           <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media P2P File Sharing &amp; High-Speed Transfers (AS5089)</div>
         </a>

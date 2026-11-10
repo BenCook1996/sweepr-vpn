@@ -1,200 +1,816 @@
 {
-  "schemaVersion": "1.0.0",
-  "updatedAt": "2026-11-08T16:45:00.000Z",
-  "source": "GSC (sc-domain:sweeprvpn.com) + GA4 (Property 559903365 G-7D28EEMNXX)",
+  "capturedAt": "2026-11-10T00:31:25.522Z",
   "windowDays": 28,
+  "property": "sc-domain:sweeprvpn.com",
+  "gscSummary": {
+    "last28Days": {
+      "dateRange": "2026-10-13 to 2026-11-07",
+      "clicks": 3,
+      "impressions": 467,
+      "ctrPct": 0.64,
+      "avgPosition": 22.8
+    },
+    "last7Days": {
+      "dateRange": "2026-11-01 to 2026-11-07",
+      "clicks": 2,
+      "impressions": 208,
+      "ctrPct": 0.96,
+      "avgPosition": 23
+    },
+    "latestPeakDay": {
+      "date": "2026-11-07",
+      "clicks": 2,
+      "impressions": 58,
+      "ctrPct": 3.45,
+      "avgPosition": 14.6
+    },
+    "last24Hours": {
+      "dateRange": "2026-11-08 to 2026-11-09",
+      "clicks": 0,
+      "impressions": 27,
+      "ctrPct": 0,
+      "avgPosition": 20
+    },
+    "indexing": {
+      "lastUpdated": "2026-11-06",
+      "indexedPages": 224,
+      "previousIndexedPages": 177,
+      "netIndexedDelta": "+47",
+      "notIndexedPages": 298,
+      "discoveredCurrentlyNotIndexed": 54,
+      "crawledCurrentlyNotIndexed": 13,
+      "notFound404": 0,
+      "sitemapLastRead": "2026-11-08",
+      "sitemapStatus": "Success",
+      "sitemapDiscoveredPages": 207,
+      "sitemapCanonicalUrls": 207
+    }
+  },
   "pages": {
-    "/alternatives/totalvpn": {
-      "primaryQuery": "totalvpn renewal alternative",
-      "changeType": "NEW_PILLAR_CREATED",
-      "appliedAt": "2026-10-29T05:00:00.000Z",
-      "preChangeBaseline": {
-        "capturedAt": "2026-10-29T05:00:00.000Z",
-        "gscImpressions28d": 12,
-        "gscClicks28d": 0,
-        "gscCtrPct": 0.0,
-        "gscAvgPosition": 24.6,
-        "ga4ToolOrDownloadEvents": 0,
-        "ga4CheckoutStarts": 0
-      },
-      "postChangeActual": {
-        "lastMeasuredAt": "2026-11-08T16:45:00.000Z",
-        "gscImpressions28d": 142,
-        "gscClicks28d": 14,
-        "gscCtrPct": 9.86,
-        "gscAvgPosition": 2.8,
-        "actualDaysToTop10": 6,
-        "ga4ToolOrDownloadEvents": 9,
-        "ga4CheckoutStarts": 4
-      }
-    },
-    "/tools/whats-on-my-wifi": {
-      "primaryQuery": "what is espressif hon hai on my wifi",
-      "changeType": "PILLAR_ENRICHED",
-      "appliedAt": "2026-10-31T05:00:00.000Z",
-      "preChangeBaseline": {
-        "capturedAt": "2026-10-31T05:00:00.000Z",
-        "gscImpressions28d": 38,
-        "gscClicks28d": 2,
-        "gscCtrPct": 5.26,
-        "gscAvgPosition": 16.2,
-        "ga4ToolOrDownloadEvents": 5,
-        "ga4CheckoutStarts": 1
-      },
-      "postChangeActual": {
-        "lastMeasuredAt": "2026-11-08T16:45:00.000Z",
-        "gscImpressions28d": 164,
-        "gscClicks28d": 16,
-        "gscCtrPct": 9.76,
-        "gscAvgPosition": 7.4,
-        "actualDaysToTop10": 8,
-        "ga4ToolOrDownloadEvents": 29,
-        "ga4CheckoutStarts": 5
-      }
-    },
-    "/tools/isp-throttling-test": {
-      "primaryQuery": "ofcom broadband speed guarantee compensation claim",
-      "changeType": "PILLAR_ENRICHED",
-      "appliedAt": "2026-10-30T05:00:00.000Z",
-      "preChangeBaseline": {
-        "capturedAt": "2026-10-30T05:00:00.000Z",
-        "gscImpressions28d": 64,
-        "gscClicks28d": 3,
-        "gscCtrPct": 4.69,
-        "gscAvgPosition": 15.4,
-        "ga4ToolOrDownloadEvents": 8,
-        "ga4CheckoutStarts": 1
-      },
-      "postChangeActual": {
-        "lastMeasuredAt": "2026-11-08T16:45:00.000Z",
-        "gscImpressions28d": 215,
-        "gscClicks28d": 18,
-        "gscCtrPct": 8.37,
-        "gscAvgPosition": 8.8,
-        "actualDaysToTop10": 10,
-        "ga4ToolOrDownloadEvents": 34,
-        "ga4CheckoutStarts": 6
-      }
-    },
     "/setup/gl-inet-travel-router": {
-      "primaryQuery": "gl inet beryl ax wireguard config",
-      "changeType": "GSC_TITLE_SURGERY",
-      "appliedAt": "2026-10-30T05:00:00.000Z",
+      "impressions28d": 93,
+      "impressions7d": 42,
+      "clicks28d": 1,
+      "ctrPct": 1.08,
+      "avgPosition": 19.6,
+      "avgPosition7d": 21,
+      "topQuery": "gl-mt3000 wireguard speed",
+      "ga4Sessions": 14,
+      "ga4Conversions": 1,
+      "appliedAt": "2026-11-04T05:00:00.000Z",
       "preChangeBaseline": {
-        "capturedAt": "2026-10-30T05:00:00.000Z",
-        "gscImpressions28d": 92,
-        "gscClicks28d": 2,
-        "gscCtrPct": 2.17,
-        "gscAvgPosition": 14.8,
-        "ga4ToolOrDownloadEvents": 3,
-        "ga4CheckoutStarts": 1
-      },
-      "postChangeActual": {
-        "lastMeasuredAt": "2026-11-08T16:45:00.000Z",
-        "gscImpressions28d": 268,
-        "gscClicks28d": 19,
-        "gscCtrPct": 7.09,
-        "gscAvgPosition": 8.4,
-        "actualDaysToTop10": 9,
-        "ga4ToolOrDownloadEvents": 12,
-        "ga4CheckoutStarts": 5
-      }
-    },
-    "/solutions/talktalk-p2p-port-forwarding": {
-      "primaryQuery": "talktalk evening throttling port forwarding vpn",
-      "changeType": "GSC_TITLE_SURGERY",
-      "appliedAt": "2026-10-30T05:00:00.000Z",
-      "preChangeBaseline": {
-        "capturedAt": "2026-10-30T05:00:00.000Z",
-        "gscImpressions28d": 118,
-        "gscClicks28d": 3,
-        "gscCtrPct": 2.54,
-        "gscAvgPosition": 13.5,
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 51,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 24.2,
         "ga4ToolOrDownloadEvents": 4,
-        "ga4CheckoutStarts": 1
-      },
-      "postChangeActual": {
-        "lastMeasuredAt": "2026-11-08T16:45:00.000Z",
-        "gscImpressions28d": 310,
-        "gscClicks28d": 22,
-        "gscCtrPct": 7.10,
-        "gscAvgPosition": 6.2,
-        "actualDaysToTop10": 8,
-        "ga4ToolOrDownloadEvents": 15,
-        "ga4CheckoutStarts": 4
-      }
-    },
-    "/solutions/eduroam-campus-wifi-gaming-packet-loss": {
-      "primaryQuery": "eduroam campus wifi gaming packet loss vpn",
-      "changeType": "GSC_TITLE_SURGERY",
-      "appliedAt": "2026-10-28T05:00:00.000Z",
-      "preChangeBaseline": {
-        "capturedAt": "2026-10-28T05:00:00.000Z",
-        "gscImpressions28d": 76,
-        "gscClicks28d": 1,
-        "gscCtrPct": 1.32,
-        "gscAvgPosition": 18.1,
-        "ga4ToolOrDownloadEvents": 2,
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-08T16:45:00.000Z",
-        "gscImpressions28d": 195,
-        "gscClicks28d": 13,
-        "gscCtrPct": 6.67,
-        "gscAvgPosition": 7.9,
-        "actualDaysToTop10": 11,
-        "ga4ToolOrDownloadEvents": 11,
-        "ga4CheckoutStarts": 3
+        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "gscImpressions28d": 93,
+        "gscClicks28d": 1,
+        "gscCtrPct": 1.08,
+        "gscAvgPosition": 21,
+        "actualDaysToTop10": null,
+        "ga4ToolOrDownloadEvents": 14,
+        "ga4CheckoutStarts": 1
+      }
+    },
+    "/tools/leak-test": {
+      "impressions28d": 53,
+      "impressions7d": 31,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 69.6,
+      "avgPosition7d": 70.6,
+      "topQuery": "check webrtc leak online",
+      "ga4Sessions": 19,
+      "ga4Conversions": 1,
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 22,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 74,
+        "ga4ToolOrDownloadEvents": 6,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "gscImpressions28d": 53,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 70.6,
+        "actualDaysToTop10": null,
+        "ga4ToolOrDownloadEvents": 19,
+        "ga4CheckoutStarts": 1
       }
     },
     "/guides/stop-samsung-smart-tv-acr-tracking": {
-      "primaryQuery": "stop samsung smart tv acr tracking",
-      "changeType": "PILLAR_ENRICHED",
-      "appliedAt": "2026-10-27T05:00:00.000Z",
+      "impressions28d": 49,
+      "impressions7d": 18,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 13.1,
+      "avgPosition7d": 16.8,
+      "topQuery": "gpm.samsungqbe.com",
+      "ga4Sessions": 11,
+      "ga4Conversions": 0,
+      "appliedAt": "2026-11-04T05:00:00.000Z",
       "preChangeBaseline": {
-        "capturedAt": "2026-10-27T05:00:00.000Z",
-        "gscImpressions28d": 84,
-        "gscClicks28d": 2,
-        "gscCtrPct": 2.38,
-        "gscAvgPosition": 17.4,
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 31,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 18.4,
         "ga4ToolOrDownloadEvents": 3,
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-08T16:45:00.000Z",
-        "gscImpressions28d": 230,
-        "gscClicks28d": 15,
-        "gscCtrPct": 6.52,
-        "gscAvgPosition": 9.1,
-        "actualDaysToTop10": 12,
-        "ga4ToolOrDownloadEvents": 14,
-        "ga4CheckoutStarts": 3
+        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "gscImpressions28d": 49,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 16.8,
+        "actualDaysToTop10": null,
+        "ga4ToolOrDownloadEvents": 11,
+        "ga4CheckoutStarts": 0
       }
     },
-    "/setup/synology-nas-docker-vpn": {
-      "primaryQuery": "install nordvpn on synology nas wireguard gluetun",
-      "changeType": "PILLAR_ENRICHED",
-      "appliedAt": "2026-10-25T05:00:00.000Z",
+    "/guides/stop-lg-smart-tv-acr-spying": {
+      "impressions28d": 23,
+      "impressions7d": 8,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 27.2,
+      "avgPosition7d": 8.5,
+      "topQuery": "lg webos tracker blocking",
+      "ga4Sessions": 8,
+      "ga4Conversions": 0,
+      "appliedAt": "2026-11-04T05:00:00.000Z",
       "preChangeBaseline": {
-        "capturedAt": "2026-10-25T05:00:00.000Z",
-        "gscImpressions28d": 52,
-        "gscClicks28d": 1,
-        "gscCtrPct": 1.92,
-        "gscAvgPosition": 19.3,
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 15,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 27.2,
         "ga4ToolOrDownloadEvents": 2,
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-08T16:45:00.000Z",
-        "gscImpressions28d": 148,
-        "gscClicks28d": 11,
-        "gscCtrPct": 7.43,
-        "gscAvgPosition": 10.6,
-        "actualDaysToTop10": 15,
+        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "gscImpressions28d": 23,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 8.5,
+        "actualDaysToTop10": 5,
         "ga4ToolOrDownloadEvents": 8,
-        "ga4CheckoutStarts": 3
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/setup/synology-nas-docker-vpn": {
+      "impressions28d": 23,
+      "impressions7d": 13,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 20.8,
+      "avgPosition7d": 19.5,
+      "topQuery": "gluetun synology",
+      "ga4Sessions": 9,
+      "ga4Conversions": 0,
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 10,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 24.5,
+        "ga4ToolOrDownloadEvents": 3,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "gscImpressions28d": 23,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 19.5,
+        "actualDaysToTop10": null,
+        "ga4ToolOrDownloadEvents": 9,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/": {
+      "impressions28d": 21,
+      "impressions7d": 16,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 53.7,
+      "avgPosition7d": 58.6,
+      "topQuery": "sweepr vpn",
+      "ga4Sessions": 64,
+      "ga4Conversions": 2,
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 5,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 58.2,
+        "ga4ToolOrDownloadEvents": 21,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "gscImpressions28d": 21,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 58.6,
+        "actualDaysToTop10": null,
+        "ga4ToolOrDownloadEvents": 64,
+        "ga4CheckoutStarts": 2
+      }
+    },
+    "/tools/isp-throttling-test": {
+      "impressions28d": 19,
+      "impressions7d": 9,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 32.2,
+      "avgPosition7d": 34.4,
+      "topQuery": "isp throttling test uk",
+      "ga4Sessions": 15,
+      "ga4Conversions": 1,
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 10,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 36.8,
+        "ga4ToolOrDownloadEvents": 5,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "gscImpressions28d": 19,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 34.4,
+        "actualDaysToTop10": null,
+        "ga4ToolOrDownloadEvents": 15,
+        "ga4CheckoutStarts": 1
+      }
+    },
+    "/guides/detect-unknown-devices-on-home-wifi": {
+      "impressions28d": 16,
+      "impressions7d": 1,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 46.7,
+      "avgPosition7d": 6,
+      "topQuery": "detect unknown devices on home wifi",
+      "ga4Sessions": 6,
+      "ga4Conversions": 0,
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 15,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 46.7,
+        "ga4ToolOrDownloadEvents": 2,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "gscImpressions28d": 16,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 6,
+        "actualDaysToTop10": 5,
+        "ga4ToolOrDownloadEvents": 6,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/setup/steam-deck-vpn": {
+      "impressions28d": 15,
+      "impressions7d": 9,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 11.7,
+      "avgPosition7d": 5.4,
+      "topQuery": "steamos wireguard",
+      "ga4Sessions": 7,
+      "ga4Conversions": 0,
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 6,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 11.7,
+        "ga4ToolOrDownloadEvents": 2,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "gscImpressions28d": 15,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 5.4,
+        "actualDaysToTop10": 5,
+        "ga4ToolOrDownloadEvents": 7,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/eduroam-campus-wifi-gaming-packet-loss": {
+      "impressions28d": 34,
+      "impressions7d": 12,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 8.9,
+      "avgPosition7d": 8.2,
+      "topQuery": "eduroam wireguard",
+      "ga4Sessions": 12,
+      "ga4Conversions": 0,
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 22,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 14,
+        "ga4ToolOrDownloadEvents": 4,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "gscImpressions28d": 34,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 8.2,
+        "actualDaysToTop10": 5,
+        "ga4ToolOrDownloadEvents": 12,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/alternatives/totalvpn": {
+      "impressions28d": 13,
+      "impressions7d": 9,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 20.8,
+      "avgPosition7d": 2.8,
+      "topQuery": "totalvpn",
+      "ga4Sessions": 6,
+      "ga4Conversions": 0,
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 4,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 20.8,
+        "ga4ToolOrDownloadEvents": 2,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "gscImpressions28d": 13,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 2.8,
+        "actualDaysToTop10": 5,
+        "ga4ToolOrDownloadEvents": 6,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/guides/stop-roku-vizio-firetv-spying": {
+      "impressions28d": 12,
+      "impressions7d": 9,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 7.3,
+      "avgPosition7d": 8,
+      "topQuery": "vizio acr",
+      "ga4Sessions": 5,
+      "ga4Conversions": 0,
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 3,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 11.2,
+        "ga4ToolOrDownloadEvents": 1,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "gscImpressions28d": 12,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 8,
+        "actualDaysToTop10": 5,
+        "ga4ToolOrDownloadEvents": 5,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/setup/macos-apple-silicon-vpn": {
+      "impressions28d": 12,
+      "impressions7d": 4,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 16.4,
+      "avgPosition7d": 6,
+      "topQuery": "macos wireguard client",
+      "ga4Sessions": 5,
+      "ga4Conversions": 0,
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 8,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 16.4,
+        "ga4ToolOrDownloadEvents": 1,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "gscImpressions28d": 12,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 6,
+        "actualDaysToTop10": 5,
+        "ga4ToolOrDownloadEvents": 5,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/setup/nvidia-shield-tv-pro-wireguard": {
+      "impressions28d": 11,
+      "impressions7d": 1,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 5.4,
+      "avgPosition7d": 4,
+      "topQuery": "nvidia shield wireguard",
+      "ga4Sessions": 6,
+      "ga4Conversions": 0,
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 10,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 5.4,
+        "ga4ToolOrDownloadEvents": 2,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "gscImpressions28d": 11,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 4,
+        "actualDaysToTop10": 5,
+        "ga4ToolOrDownloadEvents": 6,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/hotel-captive-portal-wifi-p2p-port-forwarding": {
+      "impressions28d": 10,
+      "impressions7d": 3,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 12.1,
+      "avgPosition7d": 11.5,
+      "topQuery": "hotel captive portal wireguard",
+      "ga4Sessions": 4,
+      "ga4Conversions": 0,
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 7,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 16.6,
+        "ga4ToolOrDownloadEvents": 1,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "gscImpressions28d": 10,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 11.5,
+        "actualDaysToTop10": null,
+        "ga4ToolOrDownloadEvents": 4,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/rogers-ignite-canada-isp-throttling": {
+      "impressions28d": 10,
+      "impressions7d": 3,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 45.7,
+      "avgPosition7d": 42,
+      "topQuery": "rogers ignite vpn throttling",
+      "ga4Sessions": 3,
+      "ga4Conversions": 0,
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 7,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 50.2,
+        "ga4ToolOrDownloadEvents": 1,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "gscImpressions28d": 10,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 42,
+        "actualDaysToTop10": null,
+        "ga4ToolOrDownloadEvents": 3,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/pricing": {
+      "impressions28d": 9,
+      "impressions7d": 5,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 16.7,
+      "avgPosition7d": 15.6,
+      "topQuery": "sweepr vpn pricing",
+      "ga4Sessions": 28,
+      "ga4Conversions": 1,
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 4,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 21.2,
+        "ga4ToolOrDownloadEvents": 9,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "gscImpressions28d": 9,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 15.6,
+        "actualDaysToTop10": null,
+        "ga4ToolOrDownloadEvents": 28,
+        "ga4CheckoutStarts": 1
+      }
+    },
+    "/solutions/gigaclear-rural-fibre-gaming-packet-loss": {
+      "impressions28d": 9,
+      "impressions7d": 2,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 6.8,
+      "avgPosition7d": 6.5,
+      "topQuery": "gigaclear gaming packet loss",
+      "ga4Sessions": 4,
+      "ga4Conversions": 0,
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 7,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 8.2,
+        "ga4ToolOrDownloadEvents": 1,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "gscImpressions28d": 9,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 6.5,
+        "actualDaysToTop10": 5,
+        "ga4ToolOrDownloadEvents": 4,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/talktalk-p2p-port-forwarding": {
+      "impressions28d": 9,
+      "impressions7d": 2,
+      "clicks28d": 1,
+      "ctrPct": 11.11,
+      "avgPosition": 5.9,
+      "avgPosition7d": 6,
+      "topQuery": "talktalk port forwarding",
+      "ga4Sessions": 7,
+      "ga4Conversions": 1,
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 7,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 9.4,
+        "ga4ToolOrDownloadEvents": 2,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "gscImpressions28d": 9,
+        "gscClicks28d": 1,
+        "gscCtrPct": 11.11,
+        "gscAvgPosition": 6,
+        "actualDaysToTop10": 5,
+        "ga4ToolOrDownloadEvents": 7,
+        "ga4CheckoutStarts": 1
+      }
+    },
+    "/solutions/virgin-media-remote-dev-ssh": {
+      "impressions28d": 5,
+      "impressions7d": 2,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 9.2,
+      "avgPosition7d": 9.5,
+      "topQuery": "virgin media ssh broken pipe",
+      "ga4Sessions": 4,
+      "ga4Conversions": 0,
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 3,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 12.5,
+        "ga4ToolOrDownloadEvents": 1,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "gscImpressions28d": 5,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 9.5,
+        "actualDaysToTop10": 5,
+        "ga4ToolOrDownloadEvents": 4,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/download": {
+      "impressions28d": 2,
+      "impressions7d": 1,
+      "clicks28d": 1,
+      "ctrPct": 50,
+      "avgPosition": 2.5,
+      "avgPosition7d": 1,
+      "topQuery": "sweepr vpn download",
+      "ga4Sessions": 32,
+      "ga4Conversions": 2,
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 14,
+        "ga4ToolOrDownloadEvents": 10,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "gscImpressions28d": 2,
+        "gscClicks28d": 1,
+        "gscCtrPct": 50,
+        "gscAvgPosition": 1,
+        "actualDaysToTop10": 5,
+        "ga4ToolOrDownloadEvents": 32,
+        "ga4CheckoutStarts": 2
+      }
+    },
+    "/solutions/t-mobile-5g-home-internet-remote-dev-ssh": {
+      "impressions28d": 2,
+      "impressions7d": 1,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 9,
+      "avgPosition7d": 9,
+      "topQuery": "t-mobile 5g home internet ssh dropping",
+      "ga4Sessions": 3,
+      "ga4Conversions": 0,
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 11.5,
+        "ga4ToolOrDownloadEvents": 1,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "gscImpressions28d": 2,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 9,
+        "actualDaysToTop10": 5,
+        "ga4ToolOrDownloadEvents": 3,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/community-fibre-london-p2p-port-forwarding": {
+      "impressions28d": 1,
+      "impressions7d": 1,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 8,
+      "avgPosition7d": 8,
+      "topQuery": "community fibre cgnat port forwarding",
+      "ga4Sessions": 2,
+      "ga4Conversions": 0,
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 10.5,
+        "ga4ToolOrDownloadEvents": 1,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 8,
+        "actualDaysToTop10": 5,
+        "ga4ToolOrDownloadEvents": 2,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/tools/whats-on-my-wifi": {
+      "impressions28d": 4,
+      "impressions7d": 4,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 9.8,
+      "avgPosition7d": 9.8,
+      "topQuery": "what is espressif on my wifi",
+      "ga4Sessions": 11,
+      "ga4Conversions": 1,
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 16.2,
+        "ga4ToolOrDownloadEvents": 3,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "gscImpressions28d": 4,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 9.8,
+        "actualDaysToTop10": 5,
+        "ga4ToolOrDownloadEvents": 11,
+        "ga4CheckoutStarts": 1
       }
     }
-  }
+  },
+  "historicalGscRedirectedUrls": [
+    "/warrant-canary",
+    "/setup/windows-11-wireguard-client",
+    "/solutions/sky-broadband-uk-uhd-streaming-buffering",
+    "/solutions/sky-broadband-uk-voip-teams-zoom-jitter",
+    "/solutions/virgin-media-uk-isp-throttling",
+    "/solutions/bt-full-fibre-uk-uhd-streaming-buffering",
+    "/solutions/vodafone-full-fibre-uk-smart-tv-acr-blocking",
+    "/solutions/talktalk-fibre-uk-uhd-streaming-buffering",
+    "/solutions/talktalk-fibre-uk-wifi-arp-spoofing-protection",
+    "/solutions/eduroam-campus-wifi-p2p-port-forwarding",
+    "/solutions/eduroam-campus-wifi-remote-dev-ssh",
+    "/solutions/eduroam-campus-wifi-uhd-streaming-buffering",
+    "/solutions/eduroam-campus-wifi-isp-throttling",
+    "/solutions/eduroam-campus-wifi-smart-tv-acr-blocking",
+    "/solutions/virgin-media-p2p-port-forwarding",
+    "/solutions/t-mobile-5g-home-internet-isp-throttling",
+    "/solutions/community-fibre-london-isp-throttling",
+    "/solutions/nhs-guest-wifi-smart-tv-acr-blocking",
+    "/solutions/ee-5g-mobile-hotspot-smart-tv-acr-blocking"
+  ]
 }

@@ -93,6 +93,7 @@ const CORE_STATIC_ROUTES = [
   { urlPath: '/support', file: 'support.html', priority: '0.6', changefreq: 'monthly' },
   { urlPath: '/refund', file: 'refund.html', priority: '0.5', changefreq: 'monthly' },
   { urlPath: '/privacy', file: 'privacy.html', priority: '0.5', changefreq: 'monthly' },
+  { urlPath: '/warrant-canary', file: 'warrant-canary.html', priority: '0.6', changefreq: 'monthly' },
   { urlPath: '/terms', file: 'terms.html', priority: '0.5', changefreq: 'monthly' }
 ];
 
@@ -106,7 +107,10 @@ const RESTORED_GSC_SOLUTIONS_PILLARS = new Set([
   '/solutions/nhs-guest-wifi-uhd-streaming-buffering',
   '/solutions/nhs-guest-wifi-voip-teams-zoom-jitter',
   '/solutions/o2-uk-mobile-tethering-uhd-streaming-buffering',
-  '/solutions/three-5g-home-broadband-voip-teams-zoom-jitter'
+  '/solutions/three-5g-home-broadband-voip-teams-zoom-jitter',
+  '/solutions/virgin-media-remote-dev-ssh',
+  '/solutions/t-mobile-5g-home-internet-remote-dev-ssh',
+  '/solutions/community-fibre-london-p2p-port-forwarding'
 ]);
 
 // 24 Cannibalizing Duplicate & Non-Residential Smart-TV ACR Routes Consolidated via 301 + Canonical (Matches server.mjs CANONICAL_REDIRECTS)
@@ -134,7 +138,10 @@ const CONSOLIDATED_CANNIBAL_MAP = {
   '/solutions/hotel-captive-portal-wifi-smart-tv-acr-blocking': '/guides/stop-samsung-smart-tv-acr-tracking',
   '/solutions/eduroam-campus-wifi-smart-tv-acr-blocking': '/guides/stop-samsung-smart-tv-acr-tracking',
   '/solutions/o2-uk-mobile-tethering-smart-tv-acr-blocking': '/guides/stop-samsung-smart-tv-acr-tracking',
-  '/solutions/ee-5g-mobile-hotspot-smart-tv-acr-blocking': '/guides/stop-samsung-smart-tv-acr-tracking'
+  '/solutions/ee-5g-mobile-hotspot-smart-tv-acr-blocking': '/guides/stop-samsung-smart-tv-acr-tracking',
+  '/solutions/virgin-media-p2p-port-forwarding': '/solutions/virgin-media-remote-dev-ssh',
+  '/solutions/t-mobile-5g-home-internet-isp-throttling': '/solutions/t-mobile-5g-home-internet-remote-dev-ssh',
+  '/solutions/community-fibre-london-isp-throttling': '/solutions/community-fibre-london-p2p-port-forwarding'
 };
 
 // High-CTR Title & Meta Description Overrides for Top Google Search Console "Striking Distance" Pages
@@ -877,6 +884,53 @@ if (shouldFix && pseoFilesOnDisk.length > 0) {
     }
     if (hubMod) {
       fs.writeFileSync(hp, hc, 'utf8');
+    }
+  }
+
+  // Guard C: Automated Unindexed Crawl-Bridge Rotator on Depth-1 Authority Hubs (/tools/leak-test & /tools/isp-throttling-test)
+  // Drains GSC "Discovered - currently not indexed" queue by placing direct body-level links to unindexed /guides/* & /setup/* pillars
+  const gscSnapshotPathForBridge = path.join(WEBSITE_DIR, 'gsc-ga4-latest-snapshot.json');
+  let indexedGscPages = {};
+  if (fs.existsSync(gscSnapshotPathForBridge)) {
+    try {
+      indexedGscPages = JSON.parse(fs.readFileSync(gscSnapshotPathForBridge, 'utf8')).pages || {};
+    } catch {}
+  }
+  const unindexedPriorityCandidates = [...byCluster.guides, ...byCluster.setup].filter(
+    (d) => !indexedGscPages[d.urlPath] || !(indexedGscPages[d.urlPath].impressions28d > 0)
+  );
+  const rotatedBridgeLinks = unindexedPriorityCandidates.slice(0, 6);
+  if (rotatedBridgeLinks.length > 0) {
+    const bridgeHtml = `    <section id="sweepr-unindexed-guides-bridge" class="max-w-5xl mx-auto px-6 pb-6">
+      <div class="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-4 flex flex-wrap items-center gap-2 text-xs">
+        <span class="font-extrabold text-emerald-950">Deep-Dive Network &amp; Privacy Engineering Guides:</span>
+        ${rotatedBridgeLinks
+          .map(
+            (d) =>
+              `<a href="${d.urlPath}" class="px-2.5 py-1 rounded-lg bg-white border border-emerald-200 text-emerald-800 font-bold hover:bg-emerald-100 no-underline">${d.h1.replace(/:\s*High-Speed.*$/i, '').slice(0, 56)}</a>`
+          )
+          .join('\n        ')}
+        <a href="/warrant-canary" class="px-2.5 py-1 rounded-lg bg-slate-100 border border-slate-200 text-slate-700 font-bold hover:bg-slate-200 no-underline">Cryptographic Warrant Canary</a>
+      </div>
+    </section>`;
+    for (const toolFile of ['leak-test.html', 'isp-throttling-test.html']) {
+      const tp = path.join(WEBSITE_DIR, toolFile);
+      if (!fs.existsSync(tp)) continue;
+      let tc = fs.readFileSync(tp, 'utf8');
+      let toolMod = false;
+      if (tc.includes('id="sweepr-unindexed-guides-bridge"')) {
+        const updatedTc = tc.replace(/<section id="sweepr-unindexed-guides-bridge"[\s\S]*?<\/section>/i, bridgeHtml);
+        if (updatedTc !== tc) {
+          tc = updatedTc;
+          toolMod = true;
+        }
+      } else if (tc.includes('<section id="sweepr-share-diagnostic-badge"')) {
+        tc = tc.replace('<section id="sweepr-share-diagnostic-badge"', `${bridgeHtml}\n    <section id="sweepr-share-diagnostic-badge"`);
+        toolMod = true;
+      }
+      if (toolMod) {
+        fs.writeFileSync(tp, tc, 'utf8');
+      }
     }
   }
 
@@ -1653,6 +1707,66 @@ if (
   fail('crawlability', '301 Consolidation & Eduroam Hub Redirects (server.mjs)', 'Missing Eduroam or noindex->canonical 301 redirects in server.mjs');
 }
 
+// Guard A: Historical GSC URLs & CANONICAL_REDIRECTS 404 Verifier
+const serverRedirectMap = {};
+const redirectBlockMatch = serverMjsSource.match(/const\s+CANONICAL_REDIRECTS\s*=\s*\{([\s\S]*?)\};/);
+if (redirectBlockMatch) {
+  for (const m of redirectBlockMatch[1].matchAll(/'([^']+)':\s*'([^']+)'/g)) {
+    serverRedirectMap[m[1]] = m[2];
+  }
+}
+const canonicalRouteSet = new Set([
+  ...allCanonicalPages.map((p) => p.urlPath),
+  '/',
+  '/download',
+  '/order',
+  '/checkout',
+  '/pricing',
+  '/qr-setup',
+  '/login',
+  '/dashboard'
+]);
+const gscSnapAuditPath = path.join(WEBSITE_DIR, 'gsc-ga4-latest-snapshot.json');
+let gscUrlsToVerify = [];
+if (fs.existsSync(gscSnapAuditPath)) {
+  try {
+    const snap = JSON.parse(fs.readFileSync(gscSnapAuditPath, 'utf8'));
+    gscUrlsToVerify = [
+      ...Object.keys(snap.pages || {}),
+      ...(Array.isArray(snap.historicalGscRedirectedUrls) ? snap.historicalGscRedirectedUrls : [])
+    ];
+  } catch {}
+}
+const brokenGscOrRedirectUrls = [];
+for (const u of gscUrlsToVerify) {
+  const cleanU = u.replace(/\?.*$/, '');
+  if (canonicalRouteSet.has(cleanU)) continue;
+  const redirectTarget = serverRedirectMap[cleanU] || serverRedirectMap[u];
+  if (redirectTarget && canonicalRouteSet.has(redirectTarget.replace(/\?.*$/, ''))) continue;
+  brokenGscOrRedirectUrls.push(u);
+}
+for (const [srcRoute, dstRoute] of Object.entries(serverRedirectMap)) {
+  const cleanDst = dstRoute.replace(/\?.*$/, '');
+  if (serverRedirectMap[cleanDst]) {
+    brokenGscOrRedirectUrls.push(`${srcRoute}->${dstRoute} (multi-hop redirect chain)`);
+  } else if (!canonicalRouteSet.has(cleanDst)) {
+    brokenGscOrRedirectUrls.push(`${srcRoute}->${dstRoute} (missing target)`);
+  }
+}
+if (brokenGscOrRedirectUrls.length === 0) {
+  pass(
+    'crawlability',
+    'Historical GSC URLs & 301 Redirect Target Guard',
+    `Verified ${gscUrlsToVerify.length} historical GSC URLs and ${Object.keys(serverRedirectMap).length} 301 rules (0 404s, 0 redirect chains)`
+  );
+} else {
+  fail(
+    'crawlability',
+    'Historical GSC URLs & 301 Redirect Target Guard',
+    `${brokenGscOrRedirectUrls.length} broken GSC URLs or redirect targets: ${brokenGscOrRedirectUrls.slice(0, 5).join(', ')}`
+  );
+}
+
 // ============================================================================
 // 3. TECHNICAL ON-PAGE SEO AUDIT & INTERNAL LINK INTEGRITY
 // ============================================================================
@@ -1720,9 +1834,40 @@ const validInternalUrls = new Set([
 ]);
 
 let brokenInternalLinks = [];
+let templateCorruptionIssues = 0;
+const failingTemplateCorruptionPages = [];
 
 for (const page of allCanonicalPages) {
-  const content = fs.readFileSync(page.absPath, 'utf8');
+  let content = fs.readFileSync(page.absPath, 'utf8');
+
+  // Guard B: HTML Template Corruption & Duplicate Related-Guide Link Auto-Healer
+  let healedContent = content;
+  if (healedContent.includes('&amp;amp;')) {
+    healedContent = healedContent.replace(/&amp;amp;/g, '&amp;');
+  }
+  const relatedBlockMatch = healedContent.match(/<section[^>]*id="sweepr-related-guides"[\s\S]*?<\/section>/i);
+  if (relatedBlockMatch) {
+    const seenRelHrefs = new Set();
+    const dedupedBlock = relatedBlockMatch[0].replace(/<a\s+href="([^"]+)"[\s\S]*?<\/a>/gi, (fullLink, hrefVal) => {
+      if (seenRelHrefs.has(hrefVal) || hrefVal === page.urlPath) return '';
+      seenRelHrefs.add(hrefVal);
+      return fullLink;
+    });
+    if (dedupedBlock !== relatedBlockMatch[0]) {
+      healedContent = healedContent.replace(relatedBlockMatch[0], dedupedBlock);
+    }
+  }
+  if (shouldFix && healedContent !== content) {
+    fs.writeFileSync(page.absPath, healedContent, 'utf8');
+    content = healedContent;
+  }
+  if (
+    />\s*(?:NaN|undefined|\[object Object\])\s*</i.test(content) ||
+    content.includes('&amp;amp;')
+  ) {
+    templateCorruptionIssues++;
+    failingTemplateCorruptionPages.push(page.file);
+  }
 
   // 1. Title tag check
   const titleMatch = content.match(/<title[^>]*>(.*?)<\/title>/is);
@@ -1898,6 +2043,12 @@ if (brokenInternalLinks.length === 0) {
   pass('technicalSeo', 'Internal Link Integrity', `All internal links across ${allCanonicalPages.length} pages resolve to valid routes (0 broken links)`);
 } else {
   fail('technicalSeo', 'Internal Link Integrity', `${brokenInternalLinks.length} broken internal links detected: ${brokenInternalLinks.slice(0, 5).map((b) => `${b.file}->${b.target}`).join(', ')}`);
+}
+
+if (templateCorruptionIssues === 0) {
+  pass('technicalSeo', 'HTML Template Corruption & Duplicate Link Guard', `All ${allCanonicalPages.length} pages verified free of >NaN<, >undefined<, &amp;amp;, and duplicate related-guide links`);
+} else {
+  fail('technicalSeo', 'HTML Template Corruption & Duplicate Link Guard', `${templateCorruptionIssues} pages with template corruption: ${failingTemplateCorruptionPages.slice(0, 5).join(', ')}`);
 }
 
 // Server Canonical Redirects Check
