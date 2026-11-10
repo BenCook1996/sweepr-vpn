@@ -1,20 +1,20 @@
 {
-  "capturedAt": "2026-11-10T00:31:25.522Z",
+  "capturedAt": "2026-11-10T01:01:20.927Z",
   "windowDays": 28,
   "property": "sc-domain:sweeprvpn.com",
   "gscSummary": {
     "last28Days": {
-      "dateRange": "2026-10-13 to 2026-11-07",
+      "dateRange": "2026-10-11 to 2026-11-08",
       "clicks": 3,
-      "impressions": 467,
-      "ctrPct": 0.64,
-      "avgPosition": 22.8
+      "impressions": 475,
+      "ctrPct": 0.63,
+      "avgPosition": 22.7
     },
     "last7Days": {
-      "dateRange": "2026-11-01 to 2026-11-07",
+      "dateRange": "2026-11-01 to 2026-11-08",
       "clicks": 2,
-      "impressions": 208,
-      "ctrPct": 0.96,
+      "impressions": 212,
+      "ctrPct": 0.94,
       "avgPosition": 23
     },
     "latestPeakDay": {
@@ -49,13 +49,13 @@
   "pages": {
     "/setup/gl-inet-travel-router": {
       "impressions28d": 93,
-      "impressions7d": 42,
+      "impressions7d": 47,
       "clicks28d": 1,
       "ctrPct": 1.08,
       "avgPosition": 19.6,
-      "avgPosition7d": 21,
+      "avgPosition7d": 21.2,
       "topQuery": "gl-mt3000 wireguard speed",
-      "ga4Sessions": 14,
+      "ga4Sessions": 1,
       "ga4Conversions": 1,
       "appliedAt": "2026-11-04T05:00:00.000Z",
       "preChangeBaseline": {
@@ -68,25 +68,26 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
         "gscImpressions28d": 93,
         "gscClicks28d": 1,
         "gscCtrPct": 1.08,
-        "gscAvgPosition": 21,
-        "actualDaysToTop10": null,
-        "ga4ToolOrDownloadEvents": 14,
-        "ga4CheckoutStarts": 1
-      }
+        "gscAvgPosition": 19.6,
+        "ga4ToolOrDownloadEvents": 1,
+        "ga4CheckoutStarts": 0
+      },
+      "changeType": "GSC_TITLE_SURGERY"
     },
     "/tools/leak-test": {
       "impressions28d": 53,
-      "impressions7d": 31,
+      "impressions7d": 27,
       "clicks28d": 0,
       "ctrPct": 0,
       "avgPosition": 69.6,
-      "avgPosition7d": 70.6,
+      "avgPosition7d": 77.3,
       "topQuery": "check webrtc leak online",
-      "ga4Sessions": 19,
+      "ga4Sessions": 2,
       "ga4Conversions": 1,
       "appliedAt": "2026-11-04T05:00:00.000Z",
       "preChangeBaseline": {
@@ -99,15 +100,16 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
         "gscImpressions28d": 53,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
-        "gscAvgPosition": 70.6,
-        "actualDaysToTop10": null,
-        "ga4ToolOrDownloadEvents": 19,
-        "ga4CheckoutStarts": 1
-      }
+        "gscAvgPosition": 69.6,
+        "ga4ToolOrDownloadEvents": 1,
+        "ga4CheckoutStarts": 0
+      },
+      "changeType": "GSC_TITLE_SURGERY"
     },
     "/guides/stop-samsung-smart-tv-acr-tracking": {
       "impressions28d": 49,
@@ -115,8 +117,8 @@
       "clicks28d": 0,
       "ctrPct": 0,
       "avgPosition": 13.1,
-      "avgPosition7d": 16.8,
-      "topQuery": "gpm.samsungqbe.com",
+      "avgPosition7d": 17.6,
+      "topQuery": "how to turn off acr on samsung tv",
       "ga4Sessions": 11,
       "ga4Conversions": 0,
       "appliedAt": "2026-11-04T05:00:00.000Z",
@@ -130,24 +132,25 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
         "gscImpressions28d": 49,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
-        "gscAvgPosition": 16.8,
-        "actualDaysToTop10": null,
-        "ga4ToolOrDownloadEvents": 11,
+        "gscAvgPosition": 13.1,
+        "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0
-      }
+      },
+      "changeType": "GSC_TITLE_SURGERY"
     },
     "/guides/stop-lg-smart-tv-acr-spying": {
-      "impressions28d": 23,
-      "impressions7d": 8,
+      "impressions28d": 9,
+      "impressions7d": 2,
       "clicks28d": 0,
       "ctrPct": 0,
       "avgPosition": 27.2,
       "avgPosition7d": 8.5,
-      "topQuery": "lg webos tracker blocking",
+      "topQuery": "how to turn off acr on lg tv",
       "ga4Sessions": 8,
       "ga4Conversions": 0,
       "appliedAt": "2026-11-04T05:00:00.000Z",
@@ -161,15 +164,16 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
-        "gscImpressions28d": 23,
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 9,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
-        "gscAvgPosition": 8.5,
-        "actualDaysToTop10": 5,
-        "ga4ToolOrDownloadEvents": 8,
+        "gscAvgPosition": 27.2,
+        "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0
-      }
+      },
+      "changeType": "GSC_TITLE_SURGERY"
     },
     "/setup/synology-nas-docker-vpn": {
       "impressions28d": 23,
@@ -177,9 +181,9 @@
       "clicks28d": 0,
       "ctrPct": 0,
       "avgPosition": 20.8,
-      "avgPosition7d": 19.5,
-      "topQuery": "gluetun synology",
-      "ga4Sessions": 9,
+      "avgPosition7d": 21,
+      "topQuery": "wireguard synology",
+      "ga4Sessions": 1,
       "ga4Conversions": 0,
       "appliedAt": "2026-11-04T05:00:00.000Z",
       "preChangeBaseline": {
@@ -192,25 +196,26 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
         "gscImpressions28d": 23,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
-        "gscAvgPosition": 19.5,
-        "actualDaysToTop10": null,
-        "ga4ToolOrDownloadEvents": 9,
+        "gscAvgPosition": 20.8,
+        "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0
-      }
+      },
+      "changeType": "GSC_TITLE_SURGERY"
     },
     "/": {
-      "impressions28d": 21,
+      "impressions28d": 2,
       "impressions7d": 16,
       "clicks28d": 0,
       "ctrPct": 0,
-      "avgPosition": 53.7,
+      "avgPosition": 2.5,
       "avgPosition7d": 58.6,
       "topQuery": "sweepr vpn",
-      "ga4Sessions": 64,
+      "ga4Sessions": 132,
       "ga4Conversions": 2,
       "appliedAt": "2026-11-04T05:00:00.000Z",
       "preChangeBaseline": {
@@ -223,24 +228,25 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
-        "gscImpressions28d": 21,
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
-        "gscAvgPosition": 58.6,
-        "actualDaysToTop10": null,
-        "ga4ToolOrDownloadEvents": 64,
-        "ga4CheckoutStarts": 2
-      }
+        "gscAvgPosition": 2.5,
+        "ga4ToolOrDownloadEvents": 2,
+        "ga4CheckoutStarts": 0
+      },
+      "changeType": "GSC_TITLE_SURGERY"
     },
     "/tools/isp-throttling-test": {
       "impressions28d": 19,
-      "impressions7d": 9,
+      "impressions7d": 13,
       "clicks28d": 0,
       "ctrPct": 0,
       "avgPosition": 32.2,
-      "avgPosition7d": 34.4,
-      "topQuery": "isp throttling test uk",
+      "avgPosition7d": 30.7,
+      "topQuery": "isp throttling test",
       "ga4Sessions": 15,
       "ga4Conversions": 1,
       "appliedAt": "2026-11-04T05:00:00.000Z",
@@ -254,24 +260,25 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
         "gscImpressions28d": 19,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
-        "gscAvgPosition": 34.4,
-        "actualDaysToTop10": null,
-        "ga4ToolOrDownloadEvents": 15,
-        "ga4CheckoutStarts": 1
-      }
+        "gscAvgPosition": 32.2,
+        "ga4ToolOrDownloadEvents": 1,
+        "ga4CheckoutStarts": 0
+      },
+      "changeType": "GSC_TITLE_SURGERY"
     },
     "/guides/detect-unknown-devices-on-home-wifi": {
-      "impressions28d": 16,
+      "impressions28d": 6,
       "impressions7d": 1,
       "clicks28d": 0,
       "ctrPct": 0,
       "avgPosition": 46.7,
       "avgPosition7d": 6,
-      "topQuery": "detect unknown devices on home wifi",
+      "topQuery": "find devices not connected to vpn",
       "ga4Sessions": 6,
       "ga4Conversions": 0,
       "appliedAt": "2026-11-04T05:00:00.000Z",
@@ -285,15 +292,16 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
-        "gscImpressions28d": 16,
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 6,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
-        "gscAvgPosition": 6,
-        "actualDaysToTop10": 5,
-        "ga4ToolOrDownloadEvents": 6,
+        "gscAvgPosition": 46.7,
+        "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0
-      }
+      },
+      "changeType": "GSC_TITLE_SURGERY"
     },
     "/setup/steam-deck-vpn": {
       "impressions28d": 15,
@@ -316,24 +324,25 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
         "gscImpressions28d": 15,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
-        "gscAvgPosition": 5.4,
-        "actualDaysToTop10": 5,
-        "ga4ToolOrDownloadEvents": 7,
+        "gscAvgPosition": 11.7,
+        "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0
-      }
+      },
+      "changeType": "GSC_TITLE_SURGERY"
     },
     "/solutions/eduroam-campus-wifi-gaming-packet-loss": {
-      "impressions28d": 34,
-      "impressions7d": 12,
+      "impressions28d": 25,
+      "impressions7d": 5,
       "clicks28d": 0,
       "ctrPct": 0,
-      "avgPosition": 8.9,
+      "avgPosition": 7.3,
       "avgPosition7d": 8.2,
-      "topQuery": "eduroam wireguard",
+      "topQuery": "eduroam gaming",
       "ga4Sessions": 12,
       "ga4Conversions": 0,
       "appliedAt": "2026-11-04T05:00:00.000Z",
@@ -347,24 +356,25 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
-        "gscImpressions28d": 34,
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 25,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
-        "gscAvgPosition": 8.2,
-        "actualDaysToTop10": 5,
-        "ga4ToolOrDownloadEvents": 12,
+        "gscAvgPosition": 7.3,
+        "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0
-      }
+      },
+      "changeType": "GSC_TITLE_SURGERY"
     },
     "/alternatives/totalvpn": {
-      "impressions28d": 13,
+      "impressions28d": 20,
       "impressions7d": 9,
       "clicks28d": 0,
       "ctrPct": 0,
       "avgPosition": 20.8,
       "avgPosition7d": 2.8,
-      "topQuery": "totalvpn",
+      "topQuery": "\"nordvpn\"",
       "ga4Sessions": 6,
       "ga4Conversions": 0,
       "appliedAt": "2026-11-04T05:00:00.000Z",
@@ -378,22 +388,23 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
-        "gscImpressions28d": 13,
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 20,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
-        "gscAvgPosition": 2.8,
-        "actualDaysToTop10": 5,
-        "ga4ToolOrDownloadEvents": 6,
+        "gscAvgPosition": 20.8,
+        "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0
-      }
+      },
+      "changeType": "GSC_TITLE_SURGERY"
     },
     "/guides/stop-roku-vizio-firetv-spying": {
       "impressions28d": 12,
       "impressions7d": 9,
       "clicks28d": 0,
       "ctrPct": 0,
-      "avgPosition": 7.3,
+      "avgPosition": 8.2,
       "avgPosition7d": 8,
       "topQuery": "vizio acr",
       "ga4Sessions": 5,
@@ -409,19 +420,20 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
         "gscImpressions28d": 12,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
-        "gscAvgPosition": 8,
-        "actualDaysToTop10": 5,
-        "ga4ToolOrDownloadEvents": 5,
+        "gscAvgPosition": 8.2,
+        "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0
-      }
+      },
+      "changeType": "GSC_TITLE_SURGERY"
     },
     "/setup/macos-apple-silicon-vpn": {
-      "impressions28d": 12,
-      "impressions7d": 4,
+      "impressions28d": 5,
+      "impressions7d": 3,
       "clicks28d": 0,
       "ctrPct": 0,
       "avgPosition": 16.4,
@@ -440,19 +452,20 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
-        "gscImpressions28d": 12,
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 5,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
-        "gscAvgPosition": 6,
-        "actualDaysToTop10": 5,
-        "ga4ToolOrDownloadEvents": 5,
+        "gscAvgPosition": 16.4,
+        "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0
-      }
+      },
+      "changeType": "GSC_TITLE_SURGERY"
     },
     "/setup/nvidia-shield-tv-pro-wireguard": {
-      "impressions28d": 11,
-      "impressions7d": 1,
+      "impressions28d": 12,
+      "impressions7d": 4,
       "clicks28d": 0,
       "ctrPct": 0,
       "avgPosition": 5.4,
@@ -471,23 +484,24 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
-        "gscImpressions28d": 11,
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 12,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
-        "gscAvgPosition": 4,
-        "actualDaysToTop10": 5,
-        "ga4ToolOrDownloadEvents": 6,
+        "gscAvgPosition": 5.4,
+        "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0
-      }
+      },
+      "changeType": "GSC_TITLE_SURGERY"
     },
     "/solutions/hotel-captive-portal-wifi-p2p-port-forwarding": {
-      "impressions28d": 10,
-      "impressions7d": 3,
+      "impressions28d": 8,
+      "impressions7d": 2,
       "clicks28d": 0,
       "ctrPct": 0,
-      "avgPosition": 12.1,
-      "avgPosition7d": 11.5,
+      "avgPosition": 9.8,
+      "avgPosition7d": 7.5,
       "topQuery": "hotel captive portal wireguard",
       "ga4Sessions": 4,
       "ga4Conversions": 0,
@@ -502,22 +516,23 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
-        "gscImpressions28d": 10,
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 8,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
-        "gscAvgPosition": 11.5,
-        "actualDaysToTop10": null,
-        "ga4ToolOrDownloadEvents": 4,
+        "gscAvgPosition": 9.8,
+        "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0
-      }
+      },
+      "changeType": "GSC_TITLE_SURGERY"
     },
     "/solutions/rogers-ignite-canada-isp-throttling": {
-      "impressions28d": 10,
+      "impressions28d": 5,
       "impressions7d": 3,
       "clicks28d": 0,
       "ctrPct": 0,
-      "avgPosition": 45.7,
+      "avgPosition": 10.6,
       "avgPosition7d": 42,
       "topQuery": "rogers ignite vpn throttling",
       "ga4Sessions": 3,
@@ -533,25 +548,26 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
-        "gscImpressions28d": 10,
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 5,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
-        "gscAvgPosition": 42,
-        "actualDaysToTop10": null,
-        "ga4ToolOrDownloadEvents": 3,
+        "gscAvgPosition": 10.6,
+        "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0
-      }
+      },
+      "changeType": "GSC_TITLE_SURGERY"
     },
     "/pricing": {
       "impressions28d": 9,
-      "impressions7d": 5,
+      "impressions7d": 8,
       "clicks28d": 0,
       "ctrPct": 0,
       "avgPosition": 16.7,
-      "avgPosition7d": 15.6,
-      "topQuery": "sweepr vpn pricing",
-      "ga4Sessions": 28,
+      "avgPosition7d": 17.9,
+      "topQuery": "adguard home keenetic",
+      "ga4Sessions": 6,
       "ga4Conversions": 1,
       "appliedAt": "2026-11-04T05:00:00.000Z",
       "preChangeBaseline": {
@@ -564,22 +580,23 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
         "gscImpressions28d": 9,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
-        "gscAvgPosition": 15.6,
-        "actualDaysToTop10": null,
-        "ga4ToolOrDownloadEvents": 28,
-        "ga4CheckoutStarts": 1
-      }
+        "gscAvgPosition": 16.7,
+        "ga4ToolOrDownloadEvents": 1,
+        "ga4CheckoutStarts": 0
+      },
+      "changeType": "GSC_TITLE_SURGERY"
     },
     "/solutions/gigaclear-rural-fibre-gaming-packet-loss": {
-      "impressions28d": 9,
+      "impressions28d": 11,
       "impressions7d": 2,
       "clicks28d": 0,
       "ctrPct": 0,
-      "avgPosition": 6.8,
+      "avgPosition": 6.7,
       "avgPosition7d": 6.5,
       "topQuery": "gigaclear gaming packet loss",
       "ga4Sessions": 4,
@@ -595,25 +612,26 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
-        "gscImpressions28d": 9,
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 11,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
-        "gscAvgPosition": 6.5,
-        "actualDaysToTop10": 5,
-        "ga4ToolOrDownloadEvents": 4,
+        "gscAvgPosition": 6.7,
+        "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0
-      }
+      },
+      "changeType": "GSC_TITLE_SURGERY"
     },
     "/solutions/talktalk-p2p-port-forwarding": {
-      "impressions28d": 9,
-      "impressions7d": 2,
+      "impressions28d": 5,
+      "impressions7d": 1,
       "clicks28d": 1,
-      "ctrPct": 11.11,
-      "avgPosition": 5.9,
+      "ctrPct": 20,
+      "avgPosition": 21,
       "avgPosition7d": 6,
-      "topQuery": "talktalk port forwarding",
-      "ga4Sessions": 7,
+      "topQuery": "talktalk vpn",
+      "ga4Sessions": 1,
       "ga4Conversions": 1,
       "appliedAt": "2026-11-04T05:00:00.000Z",
       "preChangeBaseline": {
@@ -626,22 +644,23 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
-        "gscImpressions28d": 9,
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 5,
         "gscClicks28d": 1,
-        "gscCtrPct": 11.11,
-        "gscAvgPosition": 6,
-        "actualDaysToTop10": 5,
-        "ga4ToolOrDownloadEvents": 7,
-        "ga4CheckoutStarts": 1
-      }
+        "gscCtrPct": 20,
+        "gscAvgPosition": 21,
+        "ga4ToolOrDownloadEvents": 1,
+        "ga4CheckoutStarts": 0
+      },
+      "changeType": "GSC_TITLE_SURGERY"
     },
     "/solutions/virgin-media-remote-dev-ssh": {
       "impressions28d": 5,
       "impressions7d": 2,
       "clicks28d": 0,
       "ctrPct": 0,
-      "avgPosition": 9.2,
+      "avgPosition": 20.8,
       "avgPosition7d": 9.5,
       "topQuery": "virgin media ssh broken pipe",
       "ga4Sessions": 4,
@@ -657,23 +676,24 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
         "gscImpressions28d": 5,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
-        "gscAvgPosition": 9.5,
-        "actualDaysToTop10": 5,
-        "ga4ToolOrDownloadEvents": 4,
+        "gscAvgPosition": 20.8,
+        "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0
-      }
+      },
+      "changeType": "GSC_TITLE_SURGERY"
     },
     "/download": {
       "impressions28d": 2,
-      "impressions7d": 1,
+      "impressions7d": 2,
       "clicks28d": 1,
       "ctrPct": 50,
       "avgPosition": 2.5,
-      "avgPosition7d": 1,
+      "avgPosition7d": 2.5,
       "topQuery": "sweepr vpn download",
       "ga4Sessions": 32,
       "ga4Conversions": 2,
@@ -688,15 +708,16 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
         "gscImpressions28d": 2,
         "gscClicks28d": 1,
         "gscCtrPct": 50,
-        "gscAvgPosition": 1,
-        "actualDaysToTop10": 5,
-        "ga4ToolOrDownloadEvents": 32,
-        "ga4CheckoutStarts": 2
-      }
+        "gscAvgPosition": 2.5,
+        "ga4ToolOrDownloadEvents": 2,
+        "ga4CheckoutStarts": 0
+      },
+      "changeType": "GSC_TITLE_SURGERY"
     },
     "/solutions/t-mobile-5g-home-internet-remote-dev-ssh": {
       "impressions28d": 2,
@@ -790,6 +811,1326 @@
         "ga4ToolOrDownloadEvents": 11,
         "ga4CheckoutStarts": 1
       }
+    },
+    "/guides": {
+      "impressions28d": 2,
+      "impressions7d": 2,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 7,
+      "avgPosition7d": 7,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 2,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 7,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 2,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 7,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/guides/block-sony-bravia-samba-tv-acr": {
+      "impressions28d": 1,
+      "impressions7d": 0,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 7,
+      "avgPosition7d": 7,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 7,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 7,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/guides/fix-wireguard-mtu-fragmentation-pppoe": {
+      "impressions28d": 2,
+      "impressions7d": 0,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 56,
+      "avgPosition7d": 56,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 2,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 56,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 2,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 56,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/guides/public-hotel-airport-wifi-security": {
+      "impressions28d": 1,
+      "impressions7d": 1,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 11,
+      "avgPosition7d": 11,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 11,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 11,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/guides/stop-isp-dns-hijacking-nxdomain": {
+      "impressions28d": 1,
+      "impressions7d": 1,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 10,
+      "avgPosition7d": 10,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 10,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 10,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/setup": {
+      "impressions28d": 1,
+      "impressions7d": 1,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 38,
+      "avgPosition7d": 38,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 38,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 38,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/setup/openwrt-wireguard-router": {
+      "impressions28d": 2,
+      "impressions7d": 0,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 9,
+      "avgPosition7d": 9,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 2,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 9,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 2,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 9,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/setup/pfsense-opnsense-router": {
+      "impressions28d": 1,
+      "impressions7d": 0,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 80,
+      "avgPosition7d": 80,
+      "topQuery": "opnsense wireguard",
+      "appliedAt": "2026-11-03T21:30:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-03T21:30:00.000Z",
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 80,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 80,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/setup/windows-11-wireguard-vpn": {
+      "impressions28d": 1,
+      "impressions7d": 0,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 154,
+      "avgPosition7d": 154,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 154,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 154,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/brsk-better-net-uk-voip-teams-zoom-jitter": {
+      "impressions28d": 1,
+      "impressions7d": 1,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 7,
+      "avgPosition7d": 7,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 7,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 7,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/bt-broadband-gaming-packet-loss": {
+      "impressions28d": 1,
+      "impressions7d": 1,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 7,
+      "avgPosition7d": 7,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 7,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 7,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/comcast-xfinity-broadband-isp-throttling": {
+      "impressions28d": 4,
+      "impressions7d": 0,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 8.3,
+      "avgPosition7d": 8.3,
+      "topQuery": "",
+      "appliedAt": "2026-11-03T21:30:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-03T21:30:00.000Z",
+        "gscImpressions28d": 4,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 8.3,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 4,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 8.3,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/comcast-xfinity-broadband-smart-tv-acr-blocking": {
+      "impressions28d": 6,
+      "impressions7d": 0,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 6.3,
+      "avgPosition7d": 6.3,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 6,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 6.3,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 6,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 6.3,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/eduroam-campus-wifi-p2p-port-forwarding": {
+      "impressions28d": 7,
+      "impressions7d": 4,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 19.9,
+      "avgPosition7d": 7.8,
+      "topQuery": "torrenting on eduroam",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 7,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 19.9,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 7,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 19.9,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/eduroam-campus-wifi-remote-dev-ssh": {
+      "impressions28d": 8,
+      "impressions7d": 3,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 8.8,
+      "avgPosition7d": 14,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 8,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 8.8,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 8,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 8.8,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter": {
+      "impressions28d": 3,
+      "impressions7d": 0,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 8,
+      "avgPosition7d": 8,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 3,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 8,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 3,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 8,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/ee-5g-mobile-hotspot-wifi-arp-spoofing-protection": {
+      "impressions28d": 3,
+      "impressions7d": 0,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 7,
+      "avgPosition7d": 7,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 3,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 7,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 3,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 7,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/fibrus-full-fibre-smart-tv-acr-blocking": {
+      "impressions28d": 4,
+      "impressions7d": 2,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 11,
+      "avgPosition7d": 11,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 4,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 11,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 4,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 11,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/gigaclear-rural-fibre-voip-teams-zoom-jitter": {
+      "impressions28d": 1,
+      "impressions7d": 1,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 8,
+      "avgPosition7d": 8,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 8,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 8,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/gigaclear-rural-fibre-wifi-arp-spoofing-protection": {
+      "impressions28d": 1,
+      "impressions7d": 1,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 3,
+      "avgPosition7d": 3,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 3,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 3,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/national-rail-train-wifi-remote-dev-ssh": {
+      "impressions28d": 2,
+      "impressions7d": 2,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 11,
+      "avgPosition7d": 11,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 2,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 11,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 2,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 11,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/nhs-guest-wifi-smart-tv-acr-blocking": {
+      "impressions28d": 1,
+      "impressions7d": 0,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 6,
+      "avgPosition7d": 6,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 6,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 6,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/nhs-guest-wifi-uhd-streaming-buffering": {
+      "impressions28d": 1,
+      "impressions7d": 0,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 8,
+      "avgPosition7d": 8,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 8,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 8,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/nhs-guest-wifi-voip-teams-zoom-jitter": {
+      "impressions28d": 1,
+      "impressions7d": 0,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 8,
+      "avgPosition7d": 8,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 8,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 8,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/o2-uk-mobile-tethering-smart-tv-acr-blocking": {
+      "impressions28d": 1,
+      "impressions7d": 0,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 4,
+      "avgPosition7d": 4,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 4,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 4,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/o2-uk-mobile-tethering-uhd-streaming-buffering": {
+      "impressions28d": 1,
+      "impressions7d": 0,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 9,
+      "avgPosition7d": 9,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 9,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 9,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/sky-broadband-gaming-packet-loss": {
+      "impressions28d": 1,
+      "impressions7d": 0,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 16,
+      "avgPosition7d": 16,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 16,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 16,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/sky-broadband-remote-dev-ssh": {
+      "impressions28d": 1,
+      "impressions7d": 1,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 4,
+      "avgPosition7d": 4,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 4,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 4,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/telstra-nbn-australia-gaming-packet-loss": {
+      "impressions28d": 2,
+      "impressions7d": 2,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 7.5,
+      "avgPosition7d": 7.5,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 2,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 7.5,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 2,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 7.5,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/three-5g-home-broadband-uhd-streaming-buffering": {
+      "impressions28d": 2,
+      "impressions7d": 0,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 8.5,
+      "avgPosition7d": 8.5,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 2,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 8.5,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 2,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 8.5,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/three-5g-home-broadband-voip-teams-zoom-jitter": {
+      "impressions28d": 1,
+      "impressions7d": 0,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 9,
+      "avgPosition7d": 9,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 9,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 9,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/toob-full-fibre-uk-voip-teams-zoom-jitter": {
+      "impressions28d": 1,
+      "impressions7d": 1,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 10,
+      "avgPosition7d": 10,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 10,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 10,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/virgin-media-gaming-packet-loss": {
+      "impressions28d": 2,
+      "impressions7d": 0,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 37,
+      "avgPosition7d": 37,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 2,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 37,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 2,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 37,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/virgin-media-p2p-port-forwarding": {
+      "impressions28d": 2,
+      "impressions7d": 0,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 43,
+      "avgPosition7d": 43,
+      "topQuery": "",
+      "appliedAt": "2026-11-03T21:30:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-03T21:30:00.000Z",
+        "gscImpressions28d": 2,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 43,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 2,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 43,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/virgin-media-uhd-streaming-buffering": {
+      "impressions28d": 1,
+      "impressions7d": 1,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 6,
+      "avgPosition7d": 6,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 6,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 6,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/vodafone-uk-gaming-packet-loss": {
+      "impressions28d": 3,
+      "impressions7d": 3,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 6,
+      "avgPosition7d": 6,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 3,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 6,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 3,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 6,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/vodafone-uk-remote-dev-ssh": {
+      "impressions28d": 1,
+      "impressions7d": 1,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 4,
+      "avgPosition7d": 4,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 4,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 4,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/youfibre-uk-voip-teams-zoom-jitter": {
+      "impressions28d": 1,
+      "impressions7d": 1,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 9,
+      "avgPosition7d": 9,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 9,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 9,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/youfibre-uk-wifi-arp-spoofing-protection": {
+      "impressions28d": 1,
+      "impressions7d": 1,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 11,
+      "avgPosition7d": 11,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 11,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 11,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/zen-internet-uk-gaming-packet-loss": {
+      "impressions28d": 1,
+      "impressions7d": 1,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 1,
+      "avgPosition7d": 1,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 1,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 1,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/solutions/zen-internet-uk-isp-throttling": {
+      "impressions28d": 5,
+      "impressions7d": 0,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 32.8,
+      "avgPosition7d": 32.8,
+      "topQuery": "",
+      "appliedAt": "2026-11-03T21:30:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-03T21:30:00.000Z",
+        "gscImpressions28d": 5,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 32.8,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 5,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 32.8,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/terms": {
+      "impressions28d": 2,
+      "impressions7d": 1,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 24,
+      "avgPosition7d": 42,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 2,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 24,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 2,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 24,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/vs/ipvanish": {
+      "impressions28d": 1,
+      "impressions7d": 1,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 9,
+      "avgPosition7d": 9,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 9,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 9,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
+    },
+    "/vs/windscribe": {
+      "impressions28d": 1,
+      "impressions7d": 1,
+      "clicks28d": 0,
+      "ctrPct": 0,
+      "avgPosition": 5,
+      "avgPosition7d": 5,
+      "topQuery": "",
+      "appliedAt": "2026-11-04T05:00:00.000Z",
+      "changeType": "GSC_TITLE_SURGERY",
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 5,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-10T01:01:20.927Z",
+        "daysElapsed": 6,
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 5,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      }
     }
   },
   "historicalGscRedirectedUrls": [
@@ -812,5 +2153,15 @@
     "/solutions/community-fibre-london-isp-throttling",
     "/solutions/nhs-guest-wifi-smart-tv-acr-blocking",
     "/solutions/ee-5g-mobile-hotspot-smart-tv-acr-blocking"
-  ]
+  ],
+  "ga4Summary": {
+    "capturedAt": "2026-11-10T01:01:20.927Z",
+    "propertyId": "559903365",
+    "activeUsers": 121,
+    "sessions": 145,
+    "engagedSessions": 40,
+    "engagementRate": 27.59,
+    "totalEvents": 794,
+    "events": {}
+  }
 }
