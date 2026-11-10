@@ -1,13 +1,13 @@
 # SWEEPR VPN — Automated Keyword Opportunities, Competitor SEO & Pre/Post Forecast Audit Log
 
-- **Last Audited**: `2026-11-09T19:27:04.634Z`
-- **Canonical Sitemap Corpus**: `206` URLs (`28` consolidated cannibal slugs blocked)
+- **Last Audited**: `2026-11-10T13:13:40.193Z`
+- **Canonical Sitemap Corpus**: `222` URLs (`31` consolidated cannibal slugs blocked)
 - **Total Candidate Queries Evaluated**: `350`
 - **Approved / Applied `CREATE_NEW_PILLAR`**: `23` (Caps: `2/day`, `10/week` | Rolling 7-Day Post-Consolidation Created: `6`)
-- **Approved / Applied `ENRICH_EXISTING`**: `49`
+- **Approved / Applied `ENRICH_EXISTING`**: `48`
 - **Filtered / Rejected (`REJECT_OR_DEFER`)**: `187`
-- **Pre/Post Strategy Ledger**: `website/seo-strategy-performance-ledger.json` (`86` tracked entries; live input from `website/gsc-ga4-latest-snapshot.json`)
-- **Quality Gate Status**: **`10/10 PASS`** (`0` automated self-healing repairs applied)
+- **Pre/Post Strategy Ledger**: `website/seo-strategy-performance-ledger.json` (`88` tracked entries; live input from `website/gsc-ga4-latest-snapshot.json`)
+- **Quality Gate Status**: **`10/10 PASS`** (`6` automated self-healing repairs applied)
 
 ## 1. 10-Assertion Automated Quality Gate Scorecard
 
@@ -22,14 +22,14 @@
 | `7. GSC_14DAY_TITLE_COOLDOWN_LOCK` | **PASS** | All 23 Top GSC URLs protected by unified 14-day title cooldown lock |
 | `8. NEW_PILLAR_40PCT_STRUCTURED_DATA` | **PASS** | All CREATE_NEW_PILLAR briefs >= 48% unique structured CLI/benchmark data |
 | `9. COPY_FLUENCY_AND_NO_DOUBLE_PARENS` | **PASS** | 0 double parentheticals, 0 duplicate mid-query verbs, and natural FAQ questions |
-| `10. PRE_POST_LEDGER_AND_CALIBRATION` | **PASS** | 86 entries tracked with ground-truth GSC telemetry (467 28d property impr, 0 synthetic inflation) & bounded calibrationMultipliers [0.75, 1.35] |
+| `10. PRE_POST_LEDGER_AND_CALIBRATION` | **PASS** | 86 entries tracked with ground-truth GSC telemetry (533 28d property impr, 0 synthetic inflation) & bounded calibrationMultipliers [0.75, 1.35] |
 
 ## 2. Approved / Applied `CREATE_NEW_PILLAR` Queue (With Calibrated KD, Volume, Time-to-Rank & Transactional Forecast)
 
 | Rank | Query | Target Canonical URL | Playbook | KD (Tier) | Est. Volume/mo | Calibrated Time to Top 10 | Transactional Tier (Est. CVR) | Score | Status |
 |---|---|---|---|---|---|---|---|---|---|
-| 1 | `what is espressif on my wifi` | `/guides/what-is-espressif-tuya-murata-on-my-wifi` | `FING_OUI_DIRECTORY` | **13** (`VERY_EASY`) | 1,380–4,020/mo | 6–11 days (Fast Weak-Spot) | `T1_BOFU_TOOL_ACTION` (3.9%) | **93** | `APPLIED` |
-| 2 | `azurewave device on my wifi` | `/guides/what-is-hon-hai-liteon-azurewave-on-my-wifi` | `FING_OUI_DIRECTORY` | **13** (`VERY_EASY`) | 1,380–4,020/mo | 6–11 days (Fast Weak-Spot) | `T1_BOFU_TOOL_ACTION` (3.9%) | **93** | `APPLIED` |
+| 1 | `what is espressif on my wifi` | `/guides/what-is-espressif-tuya-murata-on-my-wifi` | `FING_OUI_DIRECTORY` | **13** (`VERY_EASY`) | 1,380–4,020/mo | 6–11 days (Fast Weak-Spot) | `T1_BOFU_TOOL_ACTION` (3.9%) | **93** | `APPROVED` |
+| 2 | `azurewave device on my wifi` | `/guides/what-is-hon-hai-liteon-azurewave-on-my-wifi` | `FING_OUI_DIRECTORY` | **13** (`VERY_EASY`) | 1,380–4,020/mo | 6–11 days (Fast Weak-Spot) | `T1_BOFU_TOOL_ACTION` (3.9%) | **93** | `APPROVED` |
 | 3 | `ofcom broadband automatic compensation` | `/solutions/uk-ofcom-broadband-speed-guarantee-compensation-claim` | `OFCOM_FCC_ISP_REFUND_AND_THROTTLING` | **13** (`VERY_EASY`) | 520–1,380/mo | 6–12 days (Fast Weak-Spot) | `T1_BOFU_TOOL_ACTION` (3.9%) | **89** | `APPROVED` |
 | 4 | `unknown device on wifi randomized mac address` | `/guides/private-wifi-address-mac-randomization-unknown-device` | `FIREWALLA_MAC_AND_ISOLATION` | **28** (`EASY`) | 200–500/mo | 12–25 days | `T2_MOFU_FAMILY_WIFI_CONTROL` (3.2%) | **81** | `APPROVED` |
 | 5 | `how to pause wifi on ps5 at bedtime` | `/guides/pause-ps5-xbox-wifi-at-bedtime-without-unplugging-router` | `BARK_CONSOLE_BEDTIME_PAUSE` | **28** (`EASY`) | 190–490/mo | 13–25 days | `T2_MOFU_FAMILY_WIFI_CONTROL` (3.2%) | **80** | `APPROVED` |
@@ -56,48 +56,48 @@
 
 | Rank | Query | Target Canonical Pillar | Playbook | KD (Tier) | Est. Volume/mo | Calibrated Time to Top 10 | Transactional Tier | Score | Status |
 |---|---|---|---|---|---|---|---|---|---|
-| 1 | `liteon technology corporation on my wifi router` | `/guides/what-is-hon-hai-liteon-azurewave-on-my-wifi` | `FING_OUI_DIRECTORY` | **13** (`VERY_EASY`) | 210–520/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_TOOL_ACTION` (3.9%) | **89** | `APPROVED` |
-| 2 | `what is espressif on my wifi router` | `/guides/what-is-espressif-tuya-murata-on-my-wifi` | `FING_OUI_DIRECTORY` | **13** (`VERY_EASY`) | 210–520/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_TOOL_ACTION` (3.9%) | **89** | `APPROVED` |
-| 3 | `liteon technology corporation wifi` | `/guides/what-is-hon-hai-liteon-azurewave-on-my-wifi` | `FING_OUI_DIRECTORY` | **13** (`VERY_EASY`) | 520–1,380/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_TOOL_ACTION` (3.9%) | **89** | `APPROVED` |
+| 1 | `azurewave technology device on my wifi` | `/guides/what-is-hon-hai-liteon-azurewave-on-my-wifi` | `FING_OUI_DIRECTORY` | **13** (`VERY_EASY`) | 520–1,380/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_TOOL_ACTION` (3.9%) | **91** | `APPROVED` |
+| 2 | `azurewave technology wifi modules` | `/guides/what-is-hon-hai-liteon-azurewave-on-my-wifi` | `FING_OUI_DIRECTORY` | **13** (`VERY_EASY`) | 520–1,380/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_TOOL_ACTION` (3.9%) | **90** | `APPROVED` |
+| 3 | `what is espressif on my wifi router` | `/guides/what-is-espressif-tuya-murata-on-my-wifi` | `FING_OUI_DIRECTORY` | **13** (`VERY_EASY`) | 210–520/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_TOOL_ACTION` (3.9%) | **89** | `APPROVED` |
 | 4 | `virgin media minimum speed guarantee` | `/solutions/uk-ofcom-broadband-speed-guarantee-compensation-claim` | `OFCOM_FCC_ISP_REFUND_AND_THROTTLING` | **13** (`VERY_EASY`) | 520–1,380/mo | 3–8 days (Indexed Pillar) | `T1_BOFU_TOOL_ACTION` (3.9%) | **89** | `APPROVED` |
 | 5 | `bt broadband slow speed bill credit card` | `/solutions/uk-ofcom-broadband-speed-guarantee-compensation-claim` | `OFCOM_FCC_ISP_REFUND_AND_THROTTLING` | **13** (`VERY_EASY`) | 210–520/mo | 3–8 days (Indexed Pillar) | `T1_BOFU_TOOL_ACTION` (3.9%) | **88** | `APPROVED` |
-| 6 | `mikrotik wireguard config generator` | `/setup/mikrotik-hap-ax3-wireguard-setup` | `HARDWARE_WIREGUARD_SETUP` | **17** (`VERY_EASY`) | 490–1,300/mo | 3–9 days (Indexed Pillar) | `T1_BOFU_TOOL_ACTION` (3.9%) | **87** | `APPROVED` |
-| 7 | `mikrotik wireguard client config generator` | `/setup/mikrotik-hap-ax3-wireguard-setup` | `HARDWARE_WIREGUARD_SETUP` | **17** (`VERY_EASY`) | 190–490/mo | 3–9 days (Indexed Pillar) | `T1_BOFU_TOOL_ACTION` (3.9%) | **85** | `APPROVED` |
-| 8 | `mullvad port forwarding alternative` | `/vs/mullvad` | `BOFU_COMPETITOR_SWITCHER` | **12** (`VERY_EASY`) | 200–500/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_SWITCHER` (4.5%) | **84** | `APPROVED` |
-| 9 | `what device is espressif on my wifi` | `/guides/what-is-espressif-tuya-murata-on-my-wifi` | `FING_OUI_DIRECTORY` | **28** (`EASY`) | 520–1,380/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_TOOL_ACTION` (3.9%) | **83** | `APPROVED` |
-| 10 | `bitdefender vpn wireguard configuration` | `/vs/bitdefender-vpn-renewal-alternative` | `BOFU_COMPETITOR_SWITCHER` | **13** (`VERY_EASY`) | 200–500/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_SWITCHER` (4.5%) | **83** | `APPROVED` |
-| 11 | `zimaboard wireguard vpn gateway not working` | `/setup/zimaboard-casaos-gluetun-wireguard` | `HARDWARE_WIREGUARD_SETUP` | **13** (`VERY_EASY`) | 490–1,300/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **83** | `APPROVED` |
-| 12 | `fritzbox wireguard vpn setup` | `/setup/fritzbox-7590-ax-wireguard-vpn` | `HARDWARE_WIREGUARD_SETUP` | **12** (`VERY_EASY`) | 490–1,300/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **83** | `APPROVED` |
-| 13 | `protonvpn wireguard router` | `/vs/protonvpn` | `BOFU_COMPETITOR_SWITCHER` | **12** (`VERY_EASY`) | 200–500/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_SWITCHER` (4.5%) | **82** | `APPROVED` |
-| 14 | `wireguard vpn zu fritzbox` | `/setup/fritzbox-7590-ax-wireguard-vpn` | `HARDWARE_WIREGUARD_SETUP` | **13** (`VERY_EASY`) | 490–1,300/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **82** | `APPROVED` |
-| 15 | `synology nas wireguard vpn` | `/setup/synology-nas-docker-vpn` | `HARDWARE_WIREGUARD_SETUP` | **17** (`VERY_EASY`) | 190–490/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **81** | `APPROVED` |
-| 16 | `private wifi address showing as unknown device` | `/guides/private-wifi-address-mac-randomization-unknown-device` | `FIREWALLA_MAC_AND_ISOLATION` | **28** (`EASY`) | 200–500/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_FAMILY_WIFI_CONTROL` (3.2%) | **80** | `APPROVED` |
-| 17 | `steam deck wireguard vpn` | `/setup/steam-deck-vpn` | `HARDWARE_WIREGUARD_SETUP` | **17** (`VERY_EASY`) | 190–490/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **80** | `APPROVED` |
-| 18 | `does bitdefender vpn use wireguard` | `/vs/bitdefender-vpn-renewal-alternative` | `BOFU_COMPETITOR_SWITCHER` | **24** (`EASY`) | 200–500/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_SWITCHER` (4.5%) | **79** | `APPROVED` |
+| 6 | `mikrotik wireguard config generator` | `/setup/mikrotik-hap-ax3-wireguard-setup` | `HARDWARE_WIREGUARD_SETUP` | **17** (`VERY_EASY`) | 490–1,300/mo | 3–9 days (Indexed Pillar) | `T1_BOFU_TOOL_ACTION` (3.9%) | **87** | `APPLIED` |
+| 7 | `mikrotik wireguard client config generator` | `/setup/mikrotik-hap-ax3-wireguard-setup` | `HARDWARE_WIREGUARD_SETUP` | **17** (`VERY_EASY`) | 190–490/mo | 3–9 days (Indexed Pillar) | `T1_BOFU_TOOL_ACTION` (3.9%) | **85** | `APPLIED` |
+| 8 | `what device is espressif on my wifi` | `/guides/what-is-espressif-tuya-murata-on-my-wifi` | `FING_OUI_DIRECTORY` | **28** (`EASY`) | 520–1,380/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_TOOL_ACTION` (3.9%) | **83** | `APPROVED` |
+| 9 | `bitdefender vpn wireguard configuration` | `/vs/bitdefender-vpn-renewal-alternative` | `BOFU_COMPETITOR_SWITCHER` | **13** (`VERY_EASY`) | 200–500/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_SWITCHER` (4.5%) | **83** | `APPROVED` |
+| 10 | `zimaboard wireguard vpn gateway not working` | `/setup/zimaboard-casaos-gluetun-wireguard` | `HARDWARE_WIREGUARD_SETUP` | **13** (`VERY_EASY`) | 490–1,300/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **83** | `APPROVED` |
+| 11 | `fritzbox wireguard vpn setup` | `/setup/fritzbox-7590-ax-wireguard-vpn` | `HARDWARE_WIREGUARD_SETUP` | **12** (`VERY_EASY`) | 490–1,300/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **83** | `APPROVED` |
+| 12 | `protonvpn wireguard router` | `/vs/protonvpn` | `BOFU_COMPETITOR_SWITCHER` | **12** (`VERY_EASY`) | 200–500/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_SWITCHER` (4.5%) | **82** | `APPROVED` |
+| 13 | `wireguard vpn zu fritzbox` | `/setup/fritzbox-7590-ax-wireguard-vpn` | `HARDWARE_WIREGUARD_SETUP` | **13** (`VERY_EASY`) | 490–1,300/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **82** | `APPROVED` |
+| 14 | `synology nas wireguard vpn` | `/setup/synology-nas-docker-vpn` | `HARDWARE_WIREGUARD_SETUP` | **17** (`VERY_EASY`) | 190–490/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **81** | `APPROVED` |
+| 15 | `private wifi address showing as unknown device` | `/guides/private-wifi-address-mac-randomization-unknown-device` | `FIREWALLA_MAC_AND_ISOLATION` | **28** (`EASY`) | 200–500/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_FAMILY_WIFI_CONTROL` (3.2%) | **80** | `APPROVED` |
+| 16 | `steam deck wireguard vpn` | `/setup/steam-deck-vpn` | `HARDWARE_WIREGUARD_SETUP` | **17** (`VERY_EASY`) | 190–490/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **80** | `APPROVED` |
+| 17 | `does bitdefender vpn use wireguard` | `/vs/bitdefender-vpn-renewal-alternative` | `BOFU_COMPETITOR_SWITCHER` | **24** (`EASY`) | 200–500/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_SWITCHER` (4.5%) | **79** | `APPROVED` |
+| 18 | `truenas scale electric eel wireguard vpn client` | `/setup/truenas-scale-electric-eel-wireguard` | `HARDWARE_WIREGUARD_SETUP` | **26** (`EASY`) | 190–490/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **76** | `APPROVED` |
 
 ## 4. Pre- vs. Post-Change SEO Performance Ledger (Forecast vs. Actual GSC + GA4 Lift)
 
 | Target Canonical URL | Change Type | Pre-Change Baseline (28d Impr / Pos / CTR) | Post-Change Actual (28d Impr / Pos / CTR) | Net Pre->Post Lift (Δ Impr / Δ Pos / Δ CTR) | Forecast vs Actual Top-10 Speed | GA4 Tool / Checkout Lift | Status & Strategy Note |
 |---|---|---|---|---|---|---|---|
-| `/setup/synology-nas-docker-vpn` | `PILLAR_ENRICHED` | 10 impr / Pos 24.5 / 0% | **23 impr / Pos 19.5 / 0%** | **+13 impr / +5 pos / +0%** | Forecast 3–9 days (Indexed Pillar) vs **Actual nulld** | +6 events (+0 checkouts) | **`BELOW_FORECAST_NEEDS_BOOST`**: Verified Nov 9 GSC: 23 28d impr (13 in 7d), Pos 24.5 -> 19.5 (+5.0 pos lift); enriched with DSM 7.2 Tun.ko & Gluetun H2. |
-| `/setup/steam-deck-vpn` | `GSC_TITLE_SURGERY` | 6 impr / Pos 11.7 / 0% | **15 impr / Pos 5.4 / 0%** | **+9 impr / +6.3 pos / +0%** | Forecast 3–9 days (Indexed Pillar) vs **Actual 5d** | +5 events (+0 checkouts) | **`AHEAD_OF_FORECAST`**: Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 190–490/mo volume band. |
+| `/setup/synology-nas-docker-vpn` | `GSC_TITLE_SURGERY` | 10 impr / Pos 24.5 / 0% | **24 impr / Pos 20.2 / 0%** | **+14 impr / +4.3 pos / +0%** | Forecast 3–9 days (Indexed Pillar) vs **Actual nulld** | +-3 events (+0 checkouts) | **`BELOW_FORECAST_NEEDS_BOOST`**: Verified Nov 9 GSC: 23 28d impr (13 in 7d), Pos 24.5 -> 19.5 (+5.0 pos lift); enriched with DSM 7.2 Tun.ko & Gluetun H2. |
+| `/setup/steam-deck-vpn` | `GSC_TITLE_SURGERY` | 6 impr / Pos 11.7 / 0% | **18 impr / Pos 11.6 / 0%** | **+12 impr / +0.1 pos / +0%** | Forecast 3–9 days (Indexed Pillar) vs **Actual nulld** | +-2 events (+0 checkouts) | **`ON_TRACK`**: Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 190–490/mo volume band. |
 | `/tools/whats-on-my-wifi` | `PILLAR_ENRICHED` | 1 impr / Pos 16.2 / 0% | **4 impr / Pos 9.8 / 0%** | **+3 impr / +6.4 pos / +0%** | Forecast 2–8 days (Indexed Pillar) vs **Actual 5d** | +8 events (+1 checkouts) | **`ON_TRACK`**: Verified Nov 9 GSC: Fing OUI/chip lookup presets ("Espressif", "Hon Hai", "LiteOn") reached Pos 9.8 (+6.4 pos lift). |
-| `/setup/gl-inet-travel-router` | `GSC_TITLE_SURGERY` | 51 impr / Pos 24.2 / 0% | **93 impr / Pos 21 / 1.08%** | **+42 impr / +3.2 pos / +1.08%** | Forecast 3–9 days (Indexed Pillar) vs **Actual nulld** | +10 events (+1 checkouts) | **`BELOW_FORECAST_NEEDS_BOOST`**: Verified Nov 9 GSC: #1 Impression Driver (93 28d impr, 42 in 7d, 1 click on gl-mt3000 wireguard speed, Pos 24.2 -> 19.6). |
-| `/setup/nvidia-shield-tv-pro-wireguard` | `GSC_TITLE_SURGERY` | 10 impr / Pos 5.4 / 0% | **11 impr / Pos 4 / 0%** | **+1 impr / +1.4 pos / +0%** | Forecast 3–9 days (Indexed Pillar) vs **Actual 5d** | +4 events (+0 checkouts) | **`AHEAD_OF_FORECAST`**: Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 190–490/mo volume band. |
-| `/solutions/gigaclear-rural-fibre-gaming-packet-loss` | `GSC_TITLE_SURGERY` | 7 impr / Pos 8.2 / 0% | **9 impr / Pos 6.5 / 0%** | **+2 impr / +1.7 pos / +0%** | Forecast 3–8 days (Indexed Pillar) vs **Actual 5d** | +3 events (+0 checkouts) | **`AHEAD_OF_FORECAST`**: Monitoring pre->post lift against 3–8 days (Indexed Pillar) Top-10 target and 210–520/mo volume band. |
-| `/guides/stop-roku-vizio-firetv-spying` | `PILLAR_ENRICHED` | 3 impr / Pos 11.2 / 0% | **12 impr / Pos 8 / 0%** | **+9 impr / +3.2 pos / +0%** | Forecast 3–9 days (Indexed Pillar) vs **Actual 5d** | +4 events (+0 checkouts) | **`AHEAD_OF_FORECAST`**: Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 190–470/mo volume band. |
-| `/alternatives/totalvpn` | `NEW_PILLAR_CREATED` | 4 impr / Pos 20.8 / 0% | **13 impr / Pos 2.8 / 0%** | **+9 impr / +18 pos / +0%** | Forecast 2–8 days (Indexed Pillar) vs **Actual 5d** | +4 events (+0 checkouts) | **`AHEAD_OF_FORECAST`**: Verified Nov 9 GSC: Jumped Pos 20.8 -> 2.8 in 5d (+18.0 pos lift, 9 of 13 impr in last 7d). Replicate across McAfee, Bitdefender & Kaspersky. |
-| `/solutions/talktalk-p2p-port-forwarding` | `GSC_TITLE_SURGERY` | 7 impr / Pos 9.4 / 0% | **9 impr / Pos 6 / 11.11%** | **+2 impr / +3.4 pos / +11.11%** | Forecast 3–8 days (Indexed Pillar) vs **Actual 5d** | +5 events (+1 checkouts) | **`AHEAD_OF_FORECAST`**: Verified Nov 9 GSC: UK ISP niche winner at Pos 5.9 (+3.5 pos lift) and 11.11% CTR (1 click, 9 impr). |
-| `/solutions/rogers-ignite-canada-isp-throttling` | `PILLAR_ENRICHED` | 7 impr / Pos 50.2 / 0% | **10 impr / Pos 42 / 0%** | **+3 impr / +8.2 pos / +0%** | Forecast 3–8 days (Indexed Pillar) vs **Actual nulld** | +2 events (+0 checkouts) | **`BELOW_FORECAST_NEEDS_BOOST`**: Monitoring pre->post lift against 3–8 days (Indexed Pillar) Top-10 target and 210–520/mo volume band. |
-| `/tools/isp-throttling-test` | `PILLAR_ENRICHED` | 10 impr / Pos 36.8 / 0% | **19 impr / Pos 34.4 / 0%** | **+9 impr / +2.4 pos / +0%** | Forecast 3–8 days (Indexed Pillar) vs **Actual nulld** | +10 events (+1 checkouts) | **`BELOW_FORECAST_NEEDS_BOOST`**: Verified Nov 9 GSC: 19 28d impr (9 in last 7d), Pos 36.8 -> 32.2 (+4.6 pos lift) with Ofcom MDS (£10.34/d) refund script. |
-| `/guides/stop-samsung-smart-tv-acr-tracking` | `PILLAR_ENRICHED` | 31 impr / Pos 18.4 / 0% | **49 impr / Pos 16.8 / 0%** | **+18 impr / +1.6 pos / +0%** | Forecast 9–19 days (Indexed Pillar) vs **Actual nulld** | +8 events (+0 checkouts) | **`BELOW_FORECAST_NEEDS_BOOST`**: Verified Nov 9 GSC: 49 28d impr (18 in 7d), Pos 18.4 -> 13.1 (+5.3 pos lift); enriched with gpm.samsungqbe.com H2. |
-| `/solutions/eduroam-campus-wifi-gaming-packet-loss` | `GSC_TITLE_SURGERY` | 22 impr / Pos 14 / 0% | **34 impr / Pos 8.2 / 0%** | **+12 impr / +5.8 pos / +0%** | Forecast 6–12 days (Fast Weak-Spot) vs **Actual 5d** | +8 events (+0 checkouts) | **`AHEAD_OF_FORECAST`**: Verified Nov 9 GSC: 301 consolidation of 4 cannibal Eduroam URLs lifted canonical Pos 14.0 -> 8.2 (34 28d impr, 12 in 7d). |
+| `/setup/nvidia-shield-tv-pro-wireguard` | `GSC_TITLE_SURGERY` | 10 impr / Pos 5.4 / 0% | **13 impr / Pos 5.6 / 0%** | **+3 impr / +-0.2 pos / +0%** | Forecast 3–9 days (Indexed Pillar) vs **Actual nulld** | +-2 events (+0 checkouts) | **`ON_TRACK`**: Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 190–490/mo volume band. |
+| `/solutions/gigaclear-rural-fibre-gaming-packet-loss` | `GSC_TITLE_SURGERY` | 7 impr / Pos 8.2 / 0% | **11 impr / Pos 6.7 / 0%** | **+4 impr / +1.5 pos / +0%** | Forecast 3–8 days (Indexed Pillar) vs **Actual nulld** | +-1 events (+0 checkouts) | **`ON_TRACK`**: Monitoring pre->post lift against 3–8 days (Indexed Pillar) Top-10 target and 210–520/mo volume band. |
+| `/guides/stop-roku-vizio-firetv-spying` | `GSC_TITLE_SURGERY` | 3 impr / Pos 11.2 / 0% | **12 impr / Pos 8.2 / 0%** | **+9 impr / +3 pos / +0%** | Forecast 3–9 days (Indexed Pillar) vs **Actual nulld** | +-1 events (+0 checkouts) | **`ON_TRACK`**: Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 190–470/mo volume band. |
+| `/alternatives/totalvpn` | `GSC_TITLE_SURGERY` | 4 impr / Pos 20.8 / 0% | **22 impr / Pos 19.5 / 0%** | **+18 impr / +1.3 pos / +0%** | Forecast 2–8 days (Indexed Pillar) vs **Actual nulld** | +-2 events (+0 checkouts) | **`BELOW_FORECAST_NEEDS_BOOST`**: Verified Nov 9 GSC: Jumped Pos 20.8 -> 2.8 in 5d (+18.0 pos lift, 9 of 13 impr in last 7d). Replicate across McAfee, Bitdefender & Kaspersky. |
+| `/solutions/talktalk-p2p-port-forwarding` | `GSC_TITLE_SURGERY` | 7 impr / Pos 9.4 / 0% | **12 impr / Pos 26.8 / 8.33%** | **+5 impr / +-17.4 pos / +8.33%** | Forecast 3–8 days (Indexed Pillar) vs **Actual nulld** | +-1 events (+0 checkouts) | **`BELOW_FORECAST_NEEDS_BOOST`**: Verified Nov 9 GSC: UK ISP niche winner at Pos 5.9 (+3.5 pos lift) and 11.11% CTR (1 click, 9 impr). |
+| `/solutions/comcast-xfinity-broadband-smart-tv-acr-blocking` | `GSC_TITLE_SURGERY` | 6 impr / Pos 6.3 / 0% | **6 impr / Pos 6.3 / 0%** | **+0 impr / +0 pos / +0%** | Forecast 3–8 days (Indexed Pillar) vs **Actual nulld** | +0 events (+0 checkouts) | **`ON_TRACK`**: Monitoring pre->post lift against 3–8 days (Indexed Pillar) Top-10 target and 210–520/mo volume band. |
+| `/solutions/rogers-ignite-canada-isp-throttling` | `GSC_TITLE_SURGERY` | 7 impr / Pos 50.2 / 0% | **5 impr / Pos 10.6 / 0%** | **+-2 impr / +39.6 pos / +0%** | Forecast 3–8 days (Indexed Pillar) vs **Actual nulld** | +-1 events (+0 checkouts) | **`ON_TRACK`**: Monitoring pre->post lift against 3–8 days (Indexed Pillar) Top-10 target and 210–520/mo volume band. |
+| `/tools/isp-throttling-test` | `GSC_TITLE_SURGERY` | 10 impr / Pos 36.8 / 0% | **22 impr / Pos 29 / 0%** | **+12 impr / +7.8 pos / +0%** | Forecast 3–8 days (Indexed Pillar) vs **Actual nulld** | +-4 events (+0 checkouts) | **`BELOW_FORECAST_NEEDS_BOOST`**: Verified Nov 9 GSC: 19 28d impr (9 in last 7d), Pos 36.8 -> 32.2 (+4.6 pos lift) with Ofcom MDS (£10.34/d) refund script. |
+| `/guides/stop-samsung-smart-tv-acr-tracking` | `GSC_TITLE_SURGERY` | 31 impr / Pos 18.4 / 0% | **51 impr / Pos 12.9 / 0%** | **+20 impr / +5.5 pos / +0%** | Forecast 9–19 days (Indexed Pillar) vs **Actual nulld** | +-3 events (+0 checkouts) | **`BELOW_FORECAST_NEEDS_BOOST`**: Verified Nov 9 GSC: 49 28d impr (18 in 7d), Pos 18.4 -> 13.1 (+5.3 pos lift); enriched with gpm.samsungqbe.com H2. |
+| `/solutions/eduroam-campus-wifi-gaming-packet-loss` | `GSC_TITLE_SURGERY` | 22 impr / Pos 14 / 0% | **26 impr / Pos 7.3 / 0%** | **+4 impr / +6.7 pos / +0%** | Forecast 6–12 days (Fast Weak-Spot) vs **Actual nulld** | +-4 events (+0 checkouts) | **`ON_TRACK`**: Verified Nov 9 GSC: 301 consolidation of 4 cannibal Eduroam URLs lifted canonical Pos 14.0 -> 8.2 (34 28d impr, 12 in 7d). |
 
 ## 5. Closed-Loop Forecaster Auto-Calibration & Competitor Playbook ROI Matrix
 
 | Playbook ID | Competitor Strategy Replicated | Tracked Queries | Avg KD | Calibrated Time to Top 10 | Empirical Multipliers (Vol / Speed / Boost) | Automated Strategy Adjustment Going Forward |
 |---|---|---|---|---|---|---|
-| `FING_OUI_DIRECTORY` | Playbook 1: Fing OUI / Chip Translator ("Espressif", "Hon Hai", "LiteOn") | `13` | **15/100** | 2–11 days | `1.15x Vol | 0.82x Days | +3 pts` | BOOST_ALLOCATION (+25%) — Verified Nov 9 GSC: /guides/detect-unknown-devices-on-home-wifi jumped Pos 46.7 -> 6.0 (7d) & /tools/whats-on-my-wifi at Pos 9.8. |
+| `FING_OUI_DIRECTORY` | Playbook 1: Fing OUI / Chip Translator ("Espressif", "Hon Hai", "LiteOn") | `15` | **15/100** | 2–11 days | `1.15x Vol | 0.82x Days | +3 pts` | BOOST_ALLOCATION (+25%) — Verified Nov 9 GSC: /guides/detect-unknown-devices-on-home-wifi jumped Pos 46.7 -> 6.0 (7d) & /tools/whats-on-my-wifi at Pos 9.8. |
 | `FIREWALLA_MAC_AND_ISOLATION` | Playbook 2: Firewalla Private MAC Randomization & Airbnb Camera Audit | `4` | **19/100** | 6–16 days | `1.1x Vol | 0.88x Days | +2 pts` | BOOST_ALLOCATION (+20%) — Solves "Unknown Device" router panic in software vs $300+ hardware; crawl-bridged from /tools/leak-test. |
 | `BARK_CONSOLE_BEDTIME_PAUSE` | Playbook 3: Bark / Qustodio Console Bedtime Wi-Fi Pause (PS5/Xbox/Switch) | `1` | **21/100** | 6–19 days | `1.08x Vol | 0.9x Days | +2 pts` | EXPAND_CONSOLE_GUIDES (+15%) — Captures parents searching for PS5/Switch bedtime cutoffs; crawl-bridged from /tools/leak-test. |
 | `OFCOM_FCC_ISP_REFUND_AND_THROTTLING` | Playbook 4: Surfshark + Ofcom/FCC Speed Guarantee & Bill Credit Scripts | `12` | **20/100** | 3–12 days | `1.15x Vol | 0.84x Days | +3 pts` | PRIORITIZE_TOOL_BRIDGE (+20%) — Verified Nov 9 GSC: TalkTalk Pos 5.9 (11.1% CTR), Gigaclear Pos 6.8, Eduroam Pos 8.2 (34 impr), Virgin Media SSH Pos 9.2. |
@@ -107,4 +107,9 @@
 
 ## 6. Automated Self-Healing Repair Log
 
-- Zero repairs needed on this run (100% clean).
+- Cleaned legacy FAQ/enrichment copy in /solutions/bt-broadband-uhd-streaming-buffering
+- Cleaned legacy FAQ/enrichment copy in /solutions/eduroam-campus-wifi-p2p-port-forwarding
+- Cleaned legacy FAQ/enrichment copy in /solutions/eduroam-campus-wifi-remote-dev-ssh
+- Cleaned legacy FAQ/enrichment copy in /solutions/sky-broadband-remote-dev-ssh
+- Cleaned legacy FAQ/enrichment copy in /solutions/virgin-media-uhd-streaming-buffering
+- Cleaned legacy FAQ/enrichment copy in /solutions/vodafone-uk-remote-dev-ssh

@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-11-09T05:04:09.073Z",
+  "updatedAt": "2026-11-10T13:13:36.899Z",
   "entries": {
     "3f6375c2084e251e": {
       "fetchedAt": 1793831697933,
@@ -1700,34 +1700,6 @@
         }
       ]
     },
-    "56d5b0d8ff3ab907": {
-      "fetchedAt": 1794200617044,
-      "keyword": "what is espressif on my wifi",
-      "source": "community-api+serp-verified",
-      "topResults": [
-        {
-          "title": "Wifi UDP Broadcasting on Verizon Router",
-          "url": "https://superuser.com/questions/1329645/wifi-udp-broadcasting-on-verizon-router",
-          "domain": "superuser.com",
-          "snippet": "Wifi UDP Broadcasting on Verizon Router (2018)",
-          "year": "2018"
-        }
-      ]
-    },
-    "f8ace18218ada2bd": {
-      "fetchedAt": 1794200619657,
-      "keyword": "azurewave device on my wifi",
-      "source": "community-api+serp-verified",
-      "topResults": [
-        {
-          "title": "Add USB Bluetooth to mPCIE card?",
-          "url": "https://superuser.com/questions/1085909/add-usb-bluetooth-to-mpcie-card",
-          "domain": "superuser.com",
-          "snippet": "Add USB Bluetooth to mPCIE card? (2016)",
-          "year": "2016"
-        }
-      ]
-    },
     "9dd0a03aed8c9b3f": {
       "fetchedAt": 1794200622214,
       "keyword": "liteon technology corporation on my wifi router",
@@ -1765,20 +1737,6 @@
         }
       ]
     },
-    "066e69534ec7932a": {
-      "fetchedAt": 1794200623546,
-      "keyword": "what is espressif on my wifi router",
-      "source": "community-api+serp-verified",
-      "topResults": [
-        {
-          "title": "Wifi UDP Broadcasting on Verizon Router",
-          "url": "https://superuser.com/questions/1329645/wifi-udp-broadcasting-on-verizon-router",
-          "domain": "superuser.com",
-          "snippet": "Wifi UDP Broadcasting on Verizon Router (2018)",
-          "year": "2018"
-        }
-      ]
-    },
     "da0ec9c6a65fefe5": {
       "fetchedAt": 1794200627534,
       "keyword": "liteon technology corporation wifi",
@@ -1813,27 +1771,6 @@
           "url": "https://us.liteon.com/en-global/Home/index",
           "domain": "us.liteon.com",
           "snippet": "13/09/2019 TAIPEI, TAIWAN, Sept. 13, 2019 –LITE-ON Technology Corporation (TWSE:2301), a global leader in optoelectronic components today announced that it signed a strategic partnership agreement with, II‐VI Incorporated (Nasdaq:IIVI), a leader in semiconductor lasers, to partner in the volume manufacturing and commercialization of packaged semiconductor lasers for mass-market light ..."
-        }
-      ]
-    },
-    "a45fbb22ae87f2da": {
-      "fetchedAt": 1794200628705,
-      "keyword": "azurewave on my wifi",
-      "source": "community-api+serp-verified",
-      "topResults": [
-        {
-          "title": "Add USB Bluetooth to mPCIE card?",
-          "url": "https://superuser.com/questions/1085909/add-usb-bluetooth-to-mpcie-card",
-          "domain": "superuser.com",
-          "snippet": "Add USB Bluetooth to mPCIE card? (2016)",
-          "year": "2016"
-        },
-        {
-          "title": "Why is hostapd in IEEE 802.11a (5Ghz) not starting on boot?",
-          "url": "https://superuser.com/questions/1264499/why-is-hostapd-in-ieee-802-11a-5ghz-not-starting-on-boot",
-          "domain": "superuser.com",
-          "snippet": "Why is hostapd in IEEE 802.11a (5Ghz) not starting on boot? (2017)",
-          "year": "2017"
         }
       ]
     },
@@ -1986,41 +1923,6 @@
         }
       ]
     },
-    "d34cb204d5aaab81": {
-      "fetchedAt": 1794200636170,
-      "keyword": "what is hon hai on my wifi",
-      "source": "community-api+serp-verified",
-      "topResults": [
-        {
-          "title": "Show HN: I built Knemora – An Open-source AI Second brain",
-          "url": "https://github.com/federicolaterra/knemora",
-          "domain": "news.ycombinator.com",
-          "snippet": "Show HN: I built Knemora – An Open-source AI Second brain (2026)",
-          "year": "2026"
-        },
-        {
-          "title": "Tell YC: Answers from John McCarthy",
-          "url": "https://news.ycombinator.com/item?id=185348",
-          "domain": "news.ycombinator.com",
-          "snippet": "Tell YC: Answers from John McCarthy (2008)",
-          "year": "2008"
-        }
-      ]
-    },
-    "f4c03c31ee0ee90c": {
-      "fetchedAt": 1794200637549,
-      "keyword": "hon hai precision wifi",
-      "source": "community-api+serp-verified",
-      "topResults": [
-        {
-          "title": "Unknown device connected to LAN",
-          "url": "https://superuser.com/questions/1123293/unknown-device-connected-to-lan",
-          "domain": "superuser.com",
-          "snippet": "Unknown device connected to LAN (2016)",
-          "year": "2016"
-        }
-      ]
-    },
     "e0af1ad63fed2d7f": {
       "fetchedAt": 1794200638750,
       "keyword": "liteon technology on my wifi",
@@ -2095,27 +1997,6 @@
         }
       ]
     },
-    "bb6a60039546959b": {
-      "fetchedAt": 1794200642488,
-      "keyword": "what is hon hai on my router",
-      "source": "community-api+serp-verified",
-      "topResults": [
-        {
-          "title": "The Houthis took out my Ring doorbell",
-          "url": "https://news.ycombinator.com/item?id=39852930",
-          "domain": "news.ycombinator.com",
-          "snippet": "The Houthis took out my Ring doorbell (2024)",
-          "year": "2024"
-        },
-        {
-          "title": "Ask HN: How's your home-cooked software revolution going?",
-          "url": "https://news.ycombinator.com/item?id=50391446",
-          "domain": "news.ycombinator.com",
-          "snippet": "Ask HN: How's your home-cooked software revolution going? (2026)",
-          "year": "2026"
-        }
-      ]
-    },
     "e135f27ba4ce784e": {
       "fetchedAt": 1794200643886,
       "keyword": "liteon technology corporation wifi devices",
@@ -2150,6 +2031,278 @@
           "url": "https://us.liteon.com/en-global/Home/index",
           "domain": "us.liteon.com",
           "snippet": "13/09/2019 TAIPEI, TAIWAN, Sept. 13, 2019 –LITE-ON Technology Corporation (TWSE:2301), a global leader in optoelectronic components today announced that it signed a strategic partnership agreement with, II‐VI Incorporated (Nasdaq:IIVI), a leader in semiconductor lasers, to partner in the volume manufacturing and commercialization of packaged semiconductor lasers for mass-market light ..."
+        }
+      ]
+    },
+    "56d5b0d8ff3ab907": {
+      "fetchedAt": 1794316401187,
+      "keyword": "what is espressif on my wifi",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Wifi UDP Broadcasting on Verizon Router",
+          "url": "https://superuser.com/questions/1329645/wifi-udp-broadcasting-on-verizon-router",
+          "domain": "superuser.com",
+          "snippet": "Wifi UDP Broadcasting on Verizon Router (2018)",
+          "year": "2018"
+        }
+      ]
+    },
+    "f8ace18218ada2bd": {
+      "fetchedAt": 1794316402492,
+      "keyword": "azurewave device on my wifi",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Add USB Bluetooth to mPCIE card?",
+          "url": "https://superuser.com/questions/1085909/add-usb-bluetooth-to-mpcie-card",
+          "domain": "superuser.com",
+          "snippet": "Add USB Bluetooth to mPCIE card? (2016)",
+          "year": "2016"
+        },
+        {
+          "title": "Azurewave",
+          "url": "https://www.azurewave.com/",
+          "domain": "azurewave.com",
+          "snippet": "Who We Are AzureWave Technologies, Inc. is a worldwide leading provider of wireless connectivity and image processing solutions."
+        },
+        {
+          "title": "What Is the “Azurewave Device” on My Wi-Fi Network?",
+          "url": "https://devicetests.com/what-is-the-azurewave-device-on-my-wi-fi-network",
+          "domain": "devicetests.com",
+          "snippet": "An AzureWave device is a wireless network controller that connects different IoT and desktop PC devices to your Wi-Fi network. A few devices embedded with Azurewave Wi-Fi modules are PS4, Chromebook, Smart Sprinkler System, Chromecast, and smart plug."
+        },
+        {
+          "title": "what is an azurewave device on my wi-fi? (uncovering its role)",
+          "url": "https://laptopjudge.com/what-is-an-azurewave-device-on-my-wi-fi/",
+          "domain": "laptopjudge.com",
+          "snippet": "Discover what an AzureWave device is on your Wi-Fi network and learn its role in connectivity. Uncover essential insights for better network management!"
+        },
+        {
+          "title": "Azurewave Device On My Wi-Fi Network (Is Someone Stealing ... - RouterCtrl",
+          "url": "https://routerctrl.com/azurewave-device-on-my-wi-fi-network/",
+          "domain": "routerctrl.com",
+          "snippet": "Azurewave produces tiny wireless modules that might be embedded into your Wi-Fi-enabled devices connected to your home network. You would generally find a connected device displaying its name, but sometimes, due to various reasons, your network displays the device as an Azurewave instead."
+        }
+      ]
+    },
+    "cc8da3d16f161629": {
+      "fetchedAt": 1794316403605,
+      "keyword": "azurewave technology device on my wifi",
+      "source": "bing-rss-verified",
+      "topResults": [
+        {
+          "title": "Azurewave",
+          "url": "https://www.azurewave.com/",
+          "domain": "azurewave.com",
+          "snippet": "Who We Are AzureWave Technologies, Inc. is a worldwide leading provider of wireless connectivity and image processing solutions."
+        },
+        {
+          "title": "What Is the “Azurewave Device” on My Wi-Fi Network?",
+          "url": "https://devicetests.com/what-is-the-azurewave-device-on-my-wi-fi-network",
+          "domain": "devicetests.com",
+          "snippet": "An AzureWave device is a wireless network controller that connects different IoT and desktop PC devices to your Wi-Fi network. A few devices embedded with Azurewave Wi-Fi modules are PS4, Chromebook, Smart Sprinkler System, Chromecast, and smart plug."
+        },
+        {
+          "title": "what is an azurewave device on my wi-fi? (uncovering its role)",
+          "url": "https://laptopjudge.com/what-is-an-azurewave-device-on-my-wi-fi/",
+          "domain": "laptopjudge.com",
+          "snippet": "Discover what an AzureWave device is on your Wi-Fi network and learn its role in connectivity. Uncover essential insights for better network management!"
+        },
+        {
+          "title": "Azurewave Device On My Wi-Fi Network (Is Someone Stealing ... - RouterCtrl",
+          "url": "https://routerctrl.com/azurewave-device-on-my-wi-fi-network/",
+          "domain": "routerctrl.com",
+          "snippet": "Azurewave produces tiny wireless modules that might be embedded into your Wi-Fi-enabled devices connected to your home network. You would generally find a connected device displaying its name, but sometimes, due to various reasons, your network displays the device as an Azurewave instead."
+        },
+        {
+          "title": "Azurewave - Infineon Technologies",
+          "url": "https://www.infineon.com/partners/design-partner/azurewave",
+          "domain": "infineon.com",
+          "snippet": "Partner details AzureWave Technologies is a worldwide leading provider of wireless connectivity and image processing solutions."
+        }
+      ]
+    },
+    "066e69534ec7932a": {
+      "fetchedAt": 1794316404555,
+      "keyword": "what is espressif on my wifi router",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Wifi UDP Broadcasting on Verizon Router",
+          "url": "https://superuser.com/questions/1329645/wifi-udp-broadcasting-on-verizon-router",
+          "domain": "superuser.com",
+          "snippet": "Wifi UDP Broadcasting on Verizon Router (2018)",
+          "year": "2018"
+        }
+      ]
+    },
+    "8fc1822fdffbbe6d": {
+      "fetchedAt": 1794316406768,
+      "keyword": "azurewave technology wifi modules",
+      "source": "bing-rss-verified",
+      "topResults": [
+        {
+          "title": "Azurewave",
+          "url": "https://www.azurewave.com/",
+          "domain": "azurewave.com",
+          "snippet": "Who We Are AzureWave Technologies, Inc. is a worldwide leading provider of wireless connectivity and image processing solutions."
+        },
+        {
+          "title": "What Is the “Azurewave Device” on My Wi-Fi Network?",
+          "url": "https://devicetests.com/what-is-the-azurewave-device-on-my-wi-fi-network",
+          "domain": "devicetests.com",
+          "snippet": "An AzureWave device is a wireless network controller that connects different IoT and desktop PC devices to your Wi-Fi network. A few devices embedded with Azurewave Wi-Fi modules are PS4, Chromebook, Smart Sprinkler System, Chromecast, and smart plug."
+        },
+        {
+          "title": "what is an azurewave device on my wi-fi? (uncovering its role)",
+          "url": "https://laptopjudge.com/what-is-an-azurewave-device-on-my-wi-fi/",
+          "domain": "laptopjudge.com",
+          "snippet": "Discover what an AzureWave device is on your Wi-Fi network and learn its role in connectivity. Uncover essential insights for better network management!"
+        },
+        {
+          "title": "Azurewave Device On My Wi-Fi Network (Is Someone Stealing ... - RouterCtrl",
+          "url": "https://routerctrl.com/azurewave-device-on-my-wi-fi-network/",
+          "domain": "routerctrl.com",
+          "snippet": "Azurewave produces tiny wireless modules that might be embedded into your Wi-Fi-enabled devices connected to your home network. You would generally find a connected device displaying its name, but sometimes, due to various reasons, your network displays the device as an Azurewave instead."
+        },
+        {
+          "title": "Azurewave - Infineon Technologies",
+          "url": "https://www.infineon.com/partners/design-partner/azurewave",
+          "domain": "infineon.com",
+          "snippet": "Partner details AzureWave Technologies is a worldwide leading provider of wireless connectivity and image processing solutions."
+        }
+      ]
+    },
+    "a45fbb22ae87f2da": {
+      "fetchedAt": 1794316407876,
+      "keyword": "azurewave on my wifi",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Add USB Bluetooth to mPCIE card?",
+          "url": "https://superuser.com/questions/1085909/add-usb-bluetooth-to-mpcie-card",
+          "domain": "superuser.com",
+          "snippet": "Add USB Bluetooth to mPCIE card? (2016)",
+          "year": "2016"
+        },
+        {
+          "title": "Why is hostapd in IEEE 802.11a (5Ghz) not starting on boot?",
+          "url": "https://superuser.com/questions/1264499/why-is-hostapd-in-ieee-802-11a-5ghz-not-starting-on-boot",
+          "domain": "superuser.com",
+          "snippet": "Why is hostapd in IEEE 802.11a (5Ghz) not starting on boot? (2017)",
+          "year": "2017"
+        },
+        {
+          "title": "Azurewave",
+          "url": "https://www.azurewave.com/",
+          "domain": "azurewave.com",
+          "snippet": "Who We Are AzureWave Technologies, Inc. is a worldwide leading provider of wireless connectivity and image processing solutions."
+        },
+        {
+          "title": "What Is the “Azurewave Device” on My Wi-Fi Network?",
+          "url": "https://devicetests.com/what-is-the-azurewave-device-on-my-wi-fi-network",
+          "domain": "devicetests.com",
+          "snippet": "An AzureWave device is a wireless network controller that connects different IoT and desktop PC devices to your Wi-Fi network. A few devices embedded with Azurewave Wi-Fi modules are PS4, Chromebook, Smart Sprinkler System, Chromecast, and smart plug."
+        },
+        {
+          "title": "what is an azurewave device on my wi-fi? (uncovering its role)",
+          "url": "https://laptopjudge.com/what-is-an-azurewave-device-on-my-wi-fi/",
+          "domain": "laptopjudge.com",
+          "snippet": "Discover what an AzureWave device is on your Wi-Fi network and learn its role in connectivity. Uncover essential insights for better network management!"
+        }
+      ]
+    },
+    "d34cb204d5aaab81": {
+      "fetchedAt": 1794316410243,
+      "keyword": "what is hon hai on my wifi",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Tell YC: Answers from John McCarthy",
+          "url": "https://news.ycombinator.com/item?id=185348",
+          "domain": "news.ycombinator.com",
+          "snippet": "Tell YC: Answers from John McCarthy (2008)",
+          "year": "2008"
+        },
+        {
+          "title": "Ask HN: Are you building an AI company brain?",
+          "url": "https://news.ycombinator.com/item?id=50379710",
+          "domain": "news.ycombinator.com",
+          "snippet": "Ask HN: Are you building an AI company brain? (2026)",
+          "year": "2026"
+        }
+      ]
+    },
+    "f4c03c31ee0ee90c": {
+      "fetchedAt": 1794316411092,
+      "keyword": "hon hai precision wifi",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Unknown device connected to LAN",
+          "url": "https://superuser.com/questions/1123293/unknown-device-connected-to-lan",
+          "domain": "superuser.com",
+          "snippet": "Unknown device connected to LAN (2016)",
+          "year": "2016"
+        }
+      ]
+    },
+    "74b14fd04828d670": {
+      "fetchedAt": 1794316412404,
+      "keyword": "azurewave technology inc on my wifi",
+      "source": "bing-rss-verified",
+      "topResults": [
+        {
+          "title": "Azurewave",
+          "url": "https://www.azurewave.com/",
+          "domain": "azurewave.com",
+          "snippet": "Who We Are AzureWave Technologies, Inc. is a worldwide leading provider of wireless connectivity and image processing solutions."
+        },
+        {
+          "title": "What Is the “Azurewave Device” on My Wi-Fi Network?",
+          "url": "https://devicetests.com/what-is-the-azurewave-device-on-my-wi-fi-network",
+          "domain": "devicetests.com",
+          "snippet": "An AzureWave device is a wireless network controller that connects different IoT and desktop PC devices to your Wi-Fi network. A few devices embedded with Azurewave Wi-Fi modules are PS4, Chromebook, Smart Sprinkler System, Chromecast, and smart plug."
+        },
+        {
+          "title": "what is an azurewave device on my wi-fi? (uncovering its role)",
+          "url": "https://laptopjudge.com/what-is-an-azurewave-device-on-my-wi-fi/",
+          "domain": "laptopjudge.com",
+          "snippet": "Discover what an AzureWave device is on your Wi-Fi network and learn its role in connectivity. Uncover essential insights for better network management!"
+        },
+        {
+          "title": "Azurewave Device On My Wi-Fi Network (Is Someone Stealing ... - RouterCtrl",
+          "url": "https://routerctrl.com/azurewave-device-on-my-wi-fi-network/",
+          "domain": "routerctrl.com",
+          "snippet": "Azurewave produces tiny wireless modules that might be embedded into your Wi-Fi-enabled devices connected to your home network. You would generally find a connected device displaying its name, but sometimes, due to various reasons, your network displays the device as an Azurewave instead."
+        },
+        {
+          "title": "Azurewave - Infineon Technologies",
+          "url": "https://www.infineon.com/partners/design-partner/azurewave",
+          "domain": "infineon.com",
+          "snippet": "Partner details AzureWave Technologies is a worldwide leading provider of wireless connectivity and image processing solutions."
+        }
+      ]
+    },
+    "bb6a60039546959b": {
+      "fetchedAt": 1794316413345,
+      "keyword": "what is hon hai on my router",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "The Houthis took out my Ring doorbell",
+          "url": "https://news.ycombinator.com/item?id=39852930",
+          "domain": "news.ycombinator.com",
+          "snippet": "The Houthis took out my Ring doorbell (2024)",
+          "year": "2024"
+        },
+        {
+          "title": "Show HN: Prism – Self-hosted notification gateway (Signal, Telegram, WebPush)",
+          "url": "https://github.com/lone-cloud/prism",
+          "domain": "news.ycombinator.com",
+          "snippet": "Show HN: Prism – Self-hosted notification gateway (Signal, Telegram, WebPush) (2026)",
+          "year": "2026"
         }
       ]
     }

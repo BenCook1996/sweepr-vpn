@@ -1,6 +1,6 @@
 {
   "lastRunDate": "2026-11-09",
-  "totalGenerated": 184,
+  "totalGenerated": 200,
   "batches": [
     {
       "date": "2026-10-21",
@@ -209,36 +209,36 @@
   ],
   "urlLastModHashes": {
     "https://sweeprvpn.com/": {
-      "hash": "d9f7cbe7c5f6",
-      "lastmod": "2026-11-09"
+      "hash": "df3f0e504f0b",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/pricing": {
-      "hash": "24945b424096",
-      "lastmod": "2026-11-09"
+      "hash": "47e11013bc67",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions": {
-      "hash": "5766675ea33e",
-      "lastmod": "2026-11-09"
+      "hash": "689fb2b3bdf6",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup": {
-      "hash": "a3c062c6e324",
-      "lastmod": "2026-11-08"
+      "hash": "6e0e9c6ce939",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/guides": {
-      "hash": "ec9433347448",
-      "lastmod": "2026-11-08"
+      "hash": "5aa0bb9dec33",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs": {
-      "hash": "66e4a48d5d1e",
-      "lastmod": "2026-11-08"
+      "hash": "f24d3c5f13e1",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/tools/leak-test": {
-      "hash": "88f6efcc4f15",
-      "lastmod": "2026-11-09"
+      "hash": "fee603fec32c",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/tools/isp-throttling-test": {
-      "hash": "a40b3d02e5e7",
-      "lastmod": "2026-11-09"
+      "hash": "47458ba71526",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/totalvpn": {
       "hash": "d99b1d42c51e",
@@ -273,24 +273,24 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/airport-lounge-public-wifi-isp-throttling": {
-      "hash": "8f69e1643e8b",
-      "lastmod": "2026-11-08"
+      "hash": "f261702b8cc3",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/altafiber-cincinnati-bell-isp-throttling": {
       "hash": "59e086df6ef3",
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/astound-broadband-us-isp-throttling": {
-      "hash": "aedf5a850e9d",
-      "lastmod": "2026-11-08"
+      "hash": "2941755ebf09",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/att-fiber-broadband-isp-throttling": {
-      "hash": "efe87a8b75e0",
-      "lastmod": "2026-11-08"
+      "hash": "f363e41dad89",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/aussie-broadband-australia-isp-throttling": {
-      "hash": "8fb3536c1bd3",
-      "lastmod": "2026-11-08"
+      "hash": "84232db21731",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/b4rn-rural-broadband-isp-throttling": {
       "hash": "851b9fc4cc44",
@@ -301,8 +301,8 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/bell-pure-fibre-canada-isp-throttling": {
-      "hash": "adf59fa418e3",
-      "lastmod": "2026-11-08"
+      "hash": "c5ed79f4d262",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/belong-nbn-australia-isp-throttling": {
       "hash": "768c7139e397",
@@ -329,8 +329,8 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/bt-broadband-gaming-packet-loss": {
-      "hash": "ba8610c51f0e",
-      "lastmod": "2026-11-09"
+      "hash": "1d034eb28335",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/bt-broadband-p2p-port-forwarding": {
       "hash": "252717038326",
@@ -341,32 +341,32 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/bt-broadband-uhd-streaming-buffering": {
-      "hash": "837b91bd97cf",
-      "lastmod": "2026-11-03"
+      "hash": "1b2a580cce1c",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/bt-ireland-broadband-isp-throttling": {
-      "hash": "4af893458713",
-      "lastmod": "2026-11-09"
+      "hash": "8bd2cedb8d84",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/centurylink-quantum-fiber-isp-throttling": {
-      "hash": "f261b569f79a",
-      "lastmod": "2026-11-08"
+      "hash": "94d96b3855f0",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/cityfibre-uk-isp-throttling": {
-      "hash": "5d7ae1f4950c",
-      "lastmod": "2026-11-08"
+      "hash": "89f556968a0c",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/cogeco-connexion-canada-isp-throttling": {
       "hash": "b7941d069c86",
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/comcast-xfinity-broadband-isp-throttling": {
-      "hash": "fd42a273236a",
-      "lastmod": "2026-11-09"
+      "hash": "c08c32d562b2",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/comcast-xfinity-broadband-smart-tv-acr-blocking": {
-      "hash": "6b34afec1d9d",
-      "lastmod": "2026-11-09"
+      "hash": "c2b60a9118e4",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/community-fibre-london-isp-throttling": {
       "hash": "050736b2f09c",
@@ -389,8 +389,8 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/cox-panoramic-wifi-isp-throttling": {
-      "hash": "eea73155efea",
-      "lastmod": "2026-11-08"
+      "hash": "c722cddc7744",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/cuckoo-broadband-uk-isp-throttling": {
       "hash": "c979bc5af7ad",
@@ -401,8 +401,8 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/deutsche-telekom-dsl-isp-throttling": {
-      "hash": "ddb985a987b3",
-      "lastmod": "2026-11-08"
+      "hash": "9fb89e5fa1e6",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/digi-mobil-fibra-spain-isp-throttling": {
       "hash": "c97eedea3789",
@@ -417,36 +417,36 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/eduroam-campus-wifi-gaming-packet-loss": {
-      "hash": "80e5f7d18347",
-      "lastmod": "2026-11-09"
+      "hash": "e5c2807fa0e1",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/eduroam-campus-wifi-p2p-port-forwarding": {
-      "hash": "3f6c611b5c74",
-      "lastmod": "2026-11-03"
+      "hash": "d92aa96909e9",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/eduroam-campus-wifi-remote-dev-ssh": {
-      "hash": "d930e359693e",
-      "lastmod": "2026-11-03"
+      "hash": "429f302964ba",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/eduroam-campus-wifi-uhd-streaming-buffering": {
       "hash": "e8418e1fd53f",
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/ee-5g-mobile-hotspot-isp-throttling": {
-      "hash": "0e45d4eea2ec",
-      "lastmod": "2026-11-08"
+      "hash": "5bab2ab5f0f8",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter": {
-      "hash": "a71efaca1278",
-      "lastmod": "2026-11-08"
+      "hash": "8c3bdcc78ea8",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/ee-5g-mobile-hotspot-wifi-arp-spoofing-protection": {
-      "hash": "3b00242c71e9",
-      "lastmod": "2026-11-08"
+      "hash": "4d8c1dcba6fc",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/eir-fibre-ireland-isp-throttling": {
-      "hash": "e07056b0900a",
-      "lastmod": "2026-11-08"
+      "hash": "1270ae07a41e",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/factco-community-fibre-isp-throttling": {
       "hash": "741653eaf443",
@@ -465,8 +465,8 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/fibrus-full-fibre-smart-tv-acr-blocking": {
-      "hash": "2637bbd72251",
-      "lastmod": "2026-11-08"
+      "hash": "d5440a67d37d",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/fidium-fiber-us-isp-throttling": {
       "hash": "3ddf04ac1514",
@@ -481,28 +481,28 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/frontier-fiber-us-isp-throttling": {
-      "hash": "87f283b6c384",
-      "lastmod": "2026-11-08"
+      "hash": "c15082a3d956",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/g-network-london-isp-throttling": {
       "hash": "ea17685fae73",
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/gigaclear-rural-fibre-gaming-packet-loss": {
-      "hash": "aecc92bb7839",
-      "lastmod": "2026-11-08"
+      "hash": "272af2c43f3c",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/gigaclear-rural-fibre-isp-throttling": {
-      "hash": "49373c379344",
-      "lastmod": "2026-11-08"
+      "hash": "8c9e9ab4582b",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/gofibre-scotland-isp-throttling": {
       "hash": "181da999caf0",
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/google-fiber-us-isp-throttling": {
-      "hash": "41536fe10649",
-      "lastmod": "2026-11-08"
+      "hash": "dae92739e8c7",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/grain-connect-uk-isp-throttling": {
       "hash": "e8abdf88674e",
@@ -513,20 +513,20 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/hotel-captive-portal-wifi-isp-throttling": {
-      "hash": "015c543c7547",
-      "lastmod": "2026-11-08"
+      "hash": "9ec07207e2f0",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/hotel-captive-portal-wifi-p2p-port-forwarding": {
-      "hash": "ef9bccf53d25",
-      "lastmod": "2026-11-08"
+      "hash": "c288a0ed41a2",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/hyperoptic-broadband-isp-throttling": {
-      "hash": "7334982d79a6",
-      "lastmod": "2026-11-08"
+      "hash": "fc294e4805b3",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/iinet-australia-isp-throttling": {
-      "hash": "1924c9da7068",
-      "lastmod": "2026-11-08"
+      "hash": "dbb000601417",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/iliad-fibra-italy-isp-throttling": {
       "hash": "355e1c7d9fce",
@@ -541,8 +541,8 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/kcom-lightstream-hull-isp-throttling": {
-      "hash": "faa6410a1411",
-      "lastmod": "2026-11-08"
+      "hash": "1f38119c0ab0",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/kpn-glasvezel-nl-isp-throttling": {
       "hash": "ffab5cf7a0f2",
@@ -577,8 +577,8 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/national-rail-train-wifi-isp-throttling": {
-      "hash": "13f5e6a155ac",
-      "lastmod": "2026-11-08"
+      "hash": "cc134ba7706c",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/netcologne-fibre-germany-isp-throttling": {
       "hash": "2388a7ed05ed",
@@ -589,32 +589,32 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/nhs-guest-wifi-isp-throttling": {
-      "hash": "68a1de4781b3",
-      "lastmod": "2026-11-08"
+      "hash": "0bbe6c1ee7db",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/nhs-guest-wifi-uhd-streaming-buffering": {
-      "hash": "ba86f7140afd",
-      "lastmod": "2026-11-08"
+      "hash": "541f26527299",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/nhs-guest-wifi-voip-teams-zoom-jitter": {
-      "hash": "a8dcd7fbafb4",
-      "lastmod": "2026-11-08"
+      "hash": "4d7a930a2877",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/now-broadband-uk-isp-throttling": {
-      "hash": "a5f805b77155",
-      "lastmod": "2026-11-08"
+      "hash": "acd9f0ab28d2",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/o2-telefonica-germany-isp-throttling": {
       "hash": "6ca6f5b14fae",
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/o2-uk-mobile-tethering-isp-throttling": {
-      "hash": "98e555fdb0cc",
-      "lastmod": "2026-11-09"
+      "hash": "120c7ce96f62",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/o2-uk-mobile-tethering-uhd-streaming-buffering": {
-      "hash": "0c873bfec71b",
-      "lastmod": "2026-11-08"
+      "hash": "b054b76e39ac",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/octaplus-uk-isp-throttling": {
       "hash": "89221e683857",
@@ -629,12 +629,12 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/optimum-altice-cable-us-isp-throttling": {
-      "hash": "2190e01fd040",
-      "lastmod": "2026-11-08"
+      "hash": "c836af3cbe03",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/optus-nbn-australia-isp-throttling": {
-      "hash": "545f2020174e",
-      "lastmod": "2026-11-08"
+      "hash": "c77a3c83fd3e",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/orange-livebox-fibre-fr-isp-throttling": {
       "hash": "b34d67685c2a",
@@ -649,8 +649,8 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/plusnet-broadband-uk-isp-throttling": {
-      "hash": "6edcdc256486",
-      "lastmod": "2026-11-08"
+      "hash": "320bd72d6338",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/post-telecom-luxembourg-isp-throttling": {
       "hash": "89fd799dfb5c",
@@ -669,8 +669,8 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/rogers-ignite-canada-isp-throttling": {
-      "hash": "a24b6a097d19",
-      "lastmod": "2026-11-08"
+      "hash": "f0efcfe66937",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/salt-home-10gbps-ch-isp-throttling": {
       "hash": "ded4a8b8b79c",
@@ -685,56 +685,56 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/shaw-rogers-fibre-plus-isp-throttling": {
-      "hash": "4a53ef74d18b",
-      "lastmod": "2026-11-08"
+      "hash": "78d0e0b24d85",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/shell-energy-broadband-isp-throttling": {
       "hash": "5621064a3af2",
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/sky-broadband-gaming-packet-loss": {
-      "hash": "ce1430068cf0",
-      "lastmod": "2026-11-09"
+      "hash": "909d5b0f39f7",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/sky-broadband-p2p-port-forwarding": {
       "hash": "3dd8b98acb8f",
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/sky-broadband-remote-dev-ssh": {
-      "hash": "f7decb6aee33",
-      "lastmod": "2026-11-03"
+      "hash": "19bae8d99030",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/sky-broadband-uhd-streaming-buffering": {
       "hash": "40182ffd3113",
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/sonic-fiber-california-isp-throttling": {
-      "hash": "1dd7a3cdf463",
-      "lastmod": "2026-11-09"
+      "hash": "806580130d4e",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/spark-fibre-new-zealand-isp-throttling": {
-      "hash": "3d9af5c00e11",
-      "lastmod": "2026-11-08"
+      "hash": "711c87552459",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/sparklight-cable-one-us-isp-throttling": {
       "hash": "ec1db89a1844",
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/spectrum-charter-cable-isp-throttling": {
-      "hash": "748f8f55ad55",
-      "lastmod": "2026-11-08"
+      "hash": "02e5fd2e28b9",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/spring-fibre-uk-isp-throttling": {
       "hash": "cf4ddfd30710",
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/starlink-rv-roam-isp-throttling": {
-      "hash": "209390d219a9",
-      "lastmod": "2026-11-09"
+      "hash": "97c084702806",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/starlink-satellite-uk-isp-throttling": {
-      "hash": "17599ca04621",
-      "lastmod": "2026-11-09"
+      "hash": "502c6c001f2b",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/sunrise-internet-ch-isp-throttling": {
       "hash": "b50d9d314e1b",
@@ -757,16 +757,16 @@
       "lastmod": "2026-11-08"
     },
     "https://sweeprvpn.com/solutions/t-mobile-fiber-us-isp-throttling": {
-      "hash": "5e5ae515e1be",
-      "lastmod": "2026-11-08"
+      "hash": "1ce5564f779d",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/talktalk-gaming-packet-loss": {
       "hash": "fb644dc717ec",
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/talktalk-p2p-port-forwarding": {
-      "hash": "a6be0ce052f4",
-      "lastmod": "2026-11-09"
+      "hash": "a4e7bc1a311c",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/talktalk-remote-dev-ssh": {
       "hash": "e325bc743b34",
@@ -785,24 +785,24 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/telstra-nbn-australia-isp-throttling": {
-      "hash": "fad700b9eb17",
-      "lastmod": "2026-11-08"
+      "hash": "5970d3632ffd",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/telus-purefibre-canada-isp-throttling": {
-      "hash": "970b8e7a5d4c",
-      "lastmod": "2026-11-08"
+      "hash": "ac4cec161cae",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/three-5g-home-broadband-isp-throttling": {
-      "hash": "ff54931af582",
-      "lastmod": "2026-11-08"
+      "hash": "21e1dbaa7360",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/three-5g-home-broadband-uhd-streaming-buffering": {
-      "hash": "f4f4cc8b58af",
-      "lastmod": "2026-11-08"
+      "hash": "07158b5c58b5",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/three-5g-home-broadband-voip-teams-zoom-jitter": {
-      "hash": "557cc48d4b93",
-      "lastmod": "2026-11-08"
+      "hash": "9b5945147e07",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/tim-telecom-italia-fibra-isp-throttling": {
       "hash": "d13867102639",
@@ -813,8 +813,8 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/tpg-telecom-australia-isp-throttling": {
-      "hash": "f91057816d59",
-      "lastmod": "2026-11-09"
+      "hash": "ac9f72a31e69",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/trooli-broadband-uk-isp-throttling": {
       "hash": "632eb1c138cc",
@@ -825,36 +825,36 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/verizon-fios-broadband-isp-throttling": {
-      "hash": "aff812729f1f",
-      "lastmod": "2026-11-08"
+      "hash": "042f51053c4c",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/videotron-helix-canada-isp-throttling": {
-      "hash": "edd63bdfb195",
-      "lastmod": "2026-11-08"
+      "hash": "acffb0408fb6",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/virgin-media-gaming-packet-loss": {
-      "hash": "433ef12df7de",
-      "lastmod": "2026-11-09"
+      "hash": "c02f6db4a610",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/virgin-media-ireland-isp-throttling": {
-      "hash": "5c7f55016ae5",
-      "lastmod": "2026-11-09"
+      "hash": "807147c6ebb9",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/virgin-media-p2p-port-forwarding": {
       "hash": "1184887973a0",
       "lastmod": "2026-11-08"
     },
     "https://sweeprvpn.com/solutions/virgin-media-remote-dev-ssh": {
-      "hash": "a35cc664c4f1",
-      "lastmod": "2026-11-09"
+      "hash": "1289d8daf2aa",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/virgin-media-uhd-streaming-buffering": {
-      "hash": "e10424e3ef1f",
-      "lastmod": "2026-11-03"
+      "hash": "6d4aa1a5b342",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/vodafone-ireland-siro-isp-throttling": {
-      "hash": "1ce88cbf9265",
-      "lastmod": "2026-11-08"
+      "hash": "6b53a1a591ac",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/vodafone-kabel-deutschland-isp-throttling": {
       "hash": "77eed9b85e0d",
@@ -865,16 +865,16 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/vodafone-uk-gaming-packet-loss": {
-      "hash": "f1e6c074fcb4",
-      "lastmod": "2026-11-09"
+      "hash": "d31fcff6980f",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/vodafone-uk-p2p-port-forwarding": {
       "hash": "15e8b7f623e1",
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/vodafone-uk-remote-dev-ssh": {
-      "hash": "993030adeabf",
-      "lastmod": "2026-11-03"
+      "hash": "a239eb120dbc",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/vodafone-uk-uhd-streaming-buffering": {
       "hash": "372ace7edafb",
@@ -901,256 +901,256 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/youfibre-uk-isp-throttling": {
-      "hash": "0bb96e3e076a",
-      "lastmod": "2026-11-08"
+      "hash": "7e30af6fd795",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/zen-internet-uk-isp-throttling": {
-      "hash": "f92f05288d9c",
-      "lastmod": "2026-11-09"
+      "hash": "461e97cedcbb",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/ziggo-cable-nl-isp-throttling": {
       "hash": "71da9f17fbf4",
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/ziply-fiber-us-isp-throttling": {
-      "hash": "188b2aa891c0",
-      "lastmod": "2026-11-08"
+      "hash": "1207a59068ac",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/almalinux-9-wireguard-gateway": {
-      "hash": "7ebd7d6acf9f",
-      "lastmod": "2026-11-08"
+      "hash": "6ec3d8c49cf7",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/alpinelinux-diskless-wireguard": {
-      "hash": "8038935378e7",
-      "lastmod": "2026-11-08"
+      "hash": "e2cadbb5d75c",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/apple-tv-tvos-17-wireguard": {
-      "hash": "aad9168f602c",
-      "lastmod": "2026-11-08"
+      "hash": "9aca944506b6",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/arch-linux-systemd-networkd": {
-      "hash": "ab5b3a9df56a",
-      "lastmod": "2026-11-08"
+      "hash": "5da2bf0defb5",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/asus-rog-rapture-wireguard-fusion": {
-      "hash": "6b610cace801",
-      "lastmod": "2026-11-08"
+      "hash": "bd7d4bace219",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/asustor-nas-adm-wireguard": {
-      "hash": "7f1e60cfd1c9",
-      "lastmod": "2026-11-08"
+      "hash": "da716a148006",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/asuswrt-merlin-vpn-router": {
-      "hash": "5c779cc23d3b",
-      "lastmod": "2026-11-09"
+      "hash": "d1e3f8602466",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/casaos-docker-wireguard": {
-      "hash": "0e37a3f70163",
-      "lastmod": "2026-11-08"
+      "hash": "10a0f31c1866",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/debian-12-headless-wireguard-gateway": {
-      "hash": "4e6c0fe98b9f",
-      "lastmod": "2026-11-08"
+      "hash": "add468626531",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/draytek-vigor-2962-wireguard": {
       "hash": "c50a1e1d19b9",
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/setup/draytek-vigor-wireguard-client": {
-      "hash": "e760c120d6f4",
-      "lastmod": "2026-11-08"
+      "hash": "3d8a701983b9",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/fedora-silverblue-immutable-wireguard": {
-      "hash": "fd400bb6219f",
-      "lastmod": "2026-11-08"
+      "hash": "f75b7d71efff",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/firewalla-gold-plus-wireguard": {
       "hash": "b6a590116870",
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/setup/firewalla-gold-wireguard-vpn": {
-      "hash": "5b77e6f210e9",
-      "lastmod": "2026-11-08"
+      "hash": "a506ccfe1b4b",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/freebsd-14-wireguard-kmod": {
-      "hash": "c409f579826b",
-      "lastmod": "2026-11-08"
+      "hash": "6c42a017201e",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/gl-inet-b3000-marble-wireguard": {
-      "hash": "f10c6426a21c",
-      "lastmod": "2026-11-08"
+      "hash": "ebcc72d1aaca",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/gl-inet-flint-2-wireguard": {
-      "hash": "1a01b7b4e9e6",
-      "lastmod": "2026-11-08"
+      "hash": "257802ef0494",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/gl-inet-slate-ax-travel-router": {
-      "hash": "5ce4f7532a83",
-      "lastmod": "2026-11-08"
+      "hash": "4f77196aee07",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/gl-inet-spitz-ax-5g-router": {
-      "hash": "dcfcc12ba4c4",
-      "lastmod": "2026-11-08"
+      "hash": "200eb52a2d19",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/gl-inet-travel-router": {
-      "hash": "09290f96a80f",
-      "lastmod": "2026-11-09"
+      "hash": "70fd3243be78",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/keenetic-titan-wireguard-router": {
-      "hash": "0d49490b7de1",
-      "lastmod": "2026-11-08"
+      "hash": "65195810b38e",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/linux-cli-wireguard": {
-      "hash": "d505a1d379b3",
-      "lastmod": "2026-11-09"
+      "hash": "f06dde658dbf",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/macos-apple-silicon-vpn": {
-      "hash": "aec45702f749",
-      "lastmod": "2026-11-09"
+      "hash": "e2c07e87d0ce",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/mikrotik-routeros-v7-wireguard": {
-      "hash": "0e15ca772033",
-      "lastmod": "2026-11-08"
+      "hash": "7a95a4f8fa29",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/netgate-6100-pfsense-wireguard": {
-      "hash": "63eaa81d91a5",
-      "lastmod": "2026-11-08"
+      "hash": "aa232f3adc68",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/nintendo-switch-wireguard-proxy": {
-      "hash": "eb6ea12cdd81",
-      "lastmod": "2026-11-08"
+      "hash": "4dc76b905bf0",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/nixos-declarative-wireguard": {
-      "hash": "abee6724864b",
-      "lastmod": "2026-11-08"
+      "hash": "dc28d01c25fc",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/nvidia-shield-tv-pro-wireguard": {
-      "hash": "58f2f2be8450",
-      "lastmod": "2026-11-08"
+      "hash": "3ba96c833229",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/openwrt-travel-glinet-dropin": {
       "hash": "2858feee4cfc",
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/setup/openwrt-wireguard-router": {
-      "hash": "3d7d07620611",
-      "lastmod": "2026-11-09"
+      "hash": "2892a37fe56a",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/opnsense-24-kernel-wireguard": {
       "hash": "639d1650dd4d",
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/setup/pfsense-opnsense-router": {
-      "hash": "addefb97fc44",
-      "lastmod": "2026-11-09"
+      "hash": "eb72b8439796",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/pfsense-plus-wireguard-client": {
       "hash": "25fa6f22ced2",
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/setup/playstation-5-wireguard-router": {
-      "hash": "707f7f7bbc7b",
-      "lastmod": "2026-11-08"
+      "hash": "af4a5b48ccfe",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/protectli-vault-opnsense": {
-      "hash": "1b7a284c9e8d",
-      "lastmod": "2026-11-08"
+      "hash": "0e02d4869b8a",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/proxmox-lxc-wireguard-gateway": {
-      "hash": "2b6591ac67ed",
-      "lastmod": "2026-11-08"
+      "hash": "ffa348489e98",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/proxmox-ve-8-sdn-wireguard": {
-      "hash": "9058643f89ac",
-      "lastmod": "2026-11-08"
+      "hash": "9125a0d89c82",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/qnap-qts-wireguard-client": {
-      "hash": "8c07b27eae65",
-      "lastmod": "2026-11-08"
+      "hash": "7f4d3fff6b46",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/raspberry-pi-5-wireguard-gateway": {
       "hash": "189c725ecb12",
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/setup/raspberry-pi-home-gateway": {
-      "hash": "2d0e785291cf",
-      "lastmod": "2026-11-09"
+      "hash": "4df21821f77e",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/rog-ally-windows-11-wireguard": {
-      "hash": "bf638def60c0",
-      "lastmod": "2026-11-08"
+      "hash": "7ad49d839f23",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/steam-deck-vpn": {
-      "hash": "272d00e78b72",
-      "lastmod": "2026-11-09"
+      "hash": "a517e6b86647",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/synology-nas-docker-vpn": {
-      "hash": "07454b5de1c4",
-      "lastmod": "2026-11-09"
+      "hash": "3ad32524a588",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/tailscale-wireguard-exit-node": {
-      "hash": "a0ee5d74b722",
-      "lastmod": "2026-11-08"
+      "hash": "f7309f19a476",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/tp-link-omada-er605-wireguard": {
-      "hash": "d13588895ce8",
-      "lastmod": "2026-11-08"
+      "hash": "7428e79d89c4",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/truenas-scale-wireguard-container": {
-      "hash": "828e1cfbd7de",
-      "lastmod": "2026-11-08"
+      "hash": "ba9b87644d45",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/ubiquiti-cloud-gateway-ultra": {
-      "hash": "e877e34066bc",
-      "lastmod": "2026-11-08"
+      "hash": "6a8c9e65805c",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/ubiquiti-edgerouter-wireguard": {
-      "hash": "fd6754fb285f",
-      "lastmod": "2026-11-08"
+      "hash": "42f31702a21b",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/ubiquiti-unifi-dream-machine-wireguard": {
-      "hash": "e579e05b2783",
-      "lastmod": "2026-11-08"
+      "hash": "d7b1111acfce",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/unifi-gateway-max-uxg-max": {
-      "hash": "dd6498afcafb",
-      "lastmod": "2026-11-08"
+      "hash": "3e4610676380",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/unraid-wireguard-docker-tunnel": {
-      "hash": "f280e412428d",
-      "lastmod": "2026-11-08"
+      "hash": "d151e287b476",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/vyos-1-4-wireguard-router": {
-      "hash": "b134a5c01774",
-      "lastmod": "2026-11-08"
+      "hash": "7f478d3356d5",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/windows-11-wireguard-vpn": {
-      "hash": "f4bf0fda9209",
-      "lastmod": "2026-11-09"
+      "hash": "9d6234fce3bc",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/wsl2-windows-subsystem-wireguard": {
-      "hash": "6ed346b802ce",
-      "lastmod": "2026-11-08"
+      "hash": "9d1f20ddadea",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/xbox-series-x-wireguard-gaming": {
-      "hash": "e6c4bd1e3f23",
-      "lastmod": "2026-11-08"
+      "hash": "c4b174feecea",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/adguard-vpn": {
-      "hash": "e71a46ffb083",
-      "lastmod": "2026-11-08"
+      "hash": "61d511a5af96",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/airvpn": {
-      "hash": "f3818fa97712",
-      "lastmod": "2026-11-08"
+      "hash": "b30178bab70a",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/astrill-vpn": {
-      "hash": "87c4d5a99744",
-      "lastmod": "2026-11-08"
+      "hash": "5330562cda11",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/avast-secureline-vpn": {
-      "hash": "3a266ff40b16",
-      "lastmod": "2026-11-08"
+      "hash": "2bbb53a01e93",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/avg-secure-vpn": {
       "hash": "feb6d4a39842",
@@ -1161,32 +1161,32 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/vs/betternet": {
-      "hash": "eef070ab685e",
-      "lastmod": "2026-11-08"
+      "hash": "1ad0f7cb8b8f",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/bitdefender-vpn": {
       "hash": "3d2776a49629",
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/vs/cactusvpn": {
-      "hash": "811af2fd3e26",
-      "lastmod": "2026-11-08"
+      "hash": "f7ce5ff6af78",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/cloudflare-warp-plus": {
-      "hash": "868687bd6758",
-      "lastmod": "2026-11-08"
+      "hash": "ef12a8d2ec20",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/cyberghost": {
-      "hash": "fdd8e335ae61",
-      "lastmod": "2026-11-09"
+      "hash": "2d5bec0e5b67",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/expressvpn-aircove": {
-      "hash": "a297fc0b1d62",
-      "lastmod": "2026-11-08"
+      "hash": "630b841ccaf2",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/expressvpn": {
-      "hash": "35970ca09bf7",
-      "lastmod": "2026-11-09"
+      "hash": "3e442e86b5f8",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/f-secure-freedome": {
       "hash": "200fc652faba",
@@ -1201,28 +1201,28 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/vs/hide-me-vpn": {
-      "hash": "8c0ad647edb5",
-      "lastmod": "2026-11-08"
+      "hash": "41444559baff",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/hola-vpn": {
-      "hash": "6973a9d1d2fd",
-      "lastmod": "2026-11-08"
+      "hash": "c38c2f49c791",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/hotspot-shield": {
-      "hash": "3f5ce6d2725e",
-      "lastmod": "2026-11-08"
+      "hash": "2c3ab8343125",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/ipvanish": {
-      "hash": "f48a93fea538",
-      "lastmod": "2026-11-09"
+      "hash": "3e89a9cc68c0",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/ivacy-vpn": {
       "hash": "8342e9645e08",
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/vs/ivpn-net": {
-      "hash": "e3c086d66da1",
-      "lastmod": "2026-11-08"
+      "hash": "22cc818851d7",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/kaspersky-vpn": {
       "hash": "534c444f4084",
@@ -1245,28 +1245,28 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/vs/mozilla-vpn": {
-      "hash": "f0f6b153bf10",
-      "lastmod": "2026-11-08"
+      "hash": "a743e505bbbf",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/mullvad": {
-      "hash": "a9fb916d8128",
-      "lastmod": "2026-11-09"
+      "hash": "be5ecafbf363",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/nordlayer": {
-      "hash": "8efa6b2142a6",
-      "lastmod": "2026-11-08"
+      "hash": "0fa8d430ceac",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/nordvpn": {
-      "hash": "ee20b0892c95",
-      "lastmod": "2026-11-09"
+      "hash": "05014cb7f11e",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/norton-secure-vpn": {
       "hash": "d1361eeebb4e",
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/vs/ovpn-com": {
-      "hash": "679e76a38d00",
-      "lastmod": "2026-11-08"
+      "hash": "ab78dae1c7df",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/panda-dome-vpn": {
       "hash": "e5eff44dc66d",
@@ -1277,216 +1277,216 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/vs/perimeter-81": {
-      "hash": "10fb27914816",
-      "lastmod": "2026-11-08"
+      "hash": "096d46fc2903",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/privadovpn": {
-      "hash": "fa22f10ff3a3",
-      "lastmod": "2026-11-08"
+      "hash": "045c21637aba",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/private-internet-access": {
-      "hash": "1ca9861b21e6",
-      "lastmod": "2026-11-08"
+      "hash": "23b14346eb9c",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/privatevpn": {
-      "hash": "ebda730e0ce3",
-      "lastmod": "2026-11-08"
+      "hash": "81c0bff68e57",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/protonvpn": {
-      "hash": "bd397a05a7b8",
-      "lastmod": "2026-11-09"
+      "hash": "2f1c05f50c6e",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/purevpn": {
-      "hash": "e01fa9878544",
-      "lastmod": "2026-11-08"
+      "hash": "c973e02a947d",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/surfshark-one": {
       "hash": "424e37a381e0",
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/vs/surfshark": {
-      "hash": "a0904b8cf6f9",
-      "lastmod": "2026-11-09"
+      "hash": "ba691b9c4d3d",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/tailscale-saas": {
-      "hash": "b9990519d833",
-      "lastmod": "2026-11-08"
+      "hash": "98eecb31956f",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/torguard-vpn": {
-      "hash": "b501ea8516a7",
-      "lastmod": "2026-11-08"
+      "hash": "e43973b161b2",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/tunnelbear": {
-      "hash": "ccb5571d070a",
-      "lastmod": "2026-11-08"
+      "hash": "1aefa537db8f",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/turbo-vpn": {
-      "hash": "e295bee99cf4",
-      "lastmod": "2026-11-08"
+      "hash": "9cd2ff47f920",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/twingate": {
-      "hash": "062d0ecb1a6e",
-      "lastmod": "2026-11-08"
+      "hash": "8833a273ffaf",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/urban-vpn": {
-      "hash": "fc560a844b64",
-      "lastmod": "2026-11-08"
+      "hash": "35ee1ead3bb8",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/vpn-ac": {
       "hash": "08539f28bc34",
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/vs/vyprvpn": {
-      "hash": "1fef738d22d1",
-      "lastmod": "2026-11-08"
+      "hash": "48703f5ab044",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/warp-plus-team": {
       "hash": "cc8c44903eb6",
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/vs/windscribe": {
-      "hash": "a2ae5ba1508f",
-      "lastmod": "2026-11-08"
+      "hash": "4bbcb324b2de",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/vs/zoogvpn": {
       "hash": "4a46f92e9e3e",
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/guides/audit-home-iot-botnet-vulnerabilities": {
-      "hash": "0299aaf43acc",
-      "lastmod": "2026-11-08"
+      "hash": "3602c8999c67",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/guides/audit-home-nas-ransomware-wan-exposure": {
-      "hash": "1df4db194dae",
-      "lastmod": "2026-11-08"
+      "hash": "5e2810415be5",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/guides/block-hisense-vidaa-fire-tv-acr": {
-      "hash": "2782686df056",
-      "lastmod": "2026-11-08"
+      "hash": "d867b488eda2",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/guides/block-panasonic-smart-tv-telemetry": {
-      "hash": "1c127052e802",
-      "lastmod": "2026-11-08"
+      "hash": "41da883b3b63",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/guides/block-philips-titan-os-acr": {
-      "hash": "51cd7e1aee78",
-      "lastmod": "2026-11-08"
+      "hash": "500a167d9bb9",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/guides/block-roku-os-smart-tv-telemetry": {
       "hash": "d96587a86c43",
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/guides/block-sharp-aquos-google-tv-acr": {
-      "hash": "6b3edb7b3c11",
-      "lastmod": "2026-11-08"
+      "hash": "74c2facbf4dd",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/guides/block-sony-bravia-samba-tv-acr": {
-      "hash": "a9a8963b0d4b",
-      "lastmod": "2026-11-08"
+      "hash": "4e4b5fe47c33",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/guides/block-tcl-google-tv-acr-telemetry": {
-      "hash": "7c82b3274ff9",
-      "lastmod": "2026-11-08"
+      "hash": "3fa3a898df5b",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/guides/block-vizio-smartcast-inscape-acr": {
       "hash": "6c88ccfac7c1",
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/guides/bypass-cgnat-for-self-hosted-home-lab": {
-      "hash": "5d6a0eb68875",
-      "lastmod": "2026-11-08"
+      "hash": "dd5935143b48",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/guides/detect-hidden-wifi-cameras-airbnb": {
-      "hash": "097925ed17d2",
-      "lastmod": "2026-11-08"
+      "hash": "d74b41125123",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/guides/detect-hotel-chromecast-spoofing": {
-      "hash": "7b5358e86ebf",
-      "lastmod": "2026-11-08"
+      "hash": "068fb934a0c6",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/guides/detect-hotel-wifi-evil-twin-ap": {
-      "hash": "65cf953eba6d",
-      "lastmod": "2026-11-08"
+      "hash": "4d5a826a8fd1",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/guides/detect-rogue-dhcp-server-guest-wifi": {
-      "hash": "26dd83c55e46",
-      "lastmod": "2026-11-08"
+      "hash": "29eefd0bd5b6",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/guides/detect-rogue-mesh-repeaters": {
-      "hash": "24c1455ba4c4",
-      "lastmod": "2026-11-08"
+      "hash": "c4795f2c5007",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/guides/detect-unknown-devices-on-home-wifi": {
-      "hash": "d0f26da7ed5b",
-      "lastmod": "2026-11-09"
+      "hash": "b76b7ccdf163",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/guides/disable-ipv6-leak-windows-linux": {
-      "hash": "49330d071c06",
-      "lastmod": "2026-11-08"
+      "hash": "ec2bba168753",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/guides/fix-isp-dns-hijacking-and-throttling": {
-      "hash": "62e823a778f5",
-      "lastmod": "2026-11-09"
+      "hash": "17eb7e672931",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/guides/fix-udp-bufferbloat-wireguard-gaming": {
-      "hash": "782c35f64b6c",
-      "lastmod": "2026-11-08"
+      "hash": "84e338992f1c",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/guides/prevent-webrtc-ip-leak-chromium-firefox": {
-      "hash": "7aac2bb02c9c",
-      "lastmod": "2026-11-08"
+      "hash": "34a05f01c7ca",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/guides/prevent-windows-11-dns-leaks-doh": {
-      "hash": "86b659e6b37b",
-      "lastmod": "2026-11-08"
+      "hash": "6956005c99de",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/guides/public-hotel-airport-wifi-security": {
-      "hash": "b8e8015cafa6",
-      "lastmod": "2026-11-09"
+      "hash": "98e96041195c",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/guides/secure-smart-speaker-iot-isolation": {
-      "hash": "914977e6985d",
-      "lastmod": "2026-11-08"
+      "hash": "3b7600bb7be7",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/guides/stop-5g-hotspot-carrier-throttling": {
-      "hash": "73387b80df1b",
-      "lastmod": "2026-11-08"
+      "hash": "fac916ff7e71",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/guides/stop-isp-deep-packet-inspection-dpi": {
-      "hash": "b476edd7d23e",
-      "lastmod": "2026-11-08"
+      "hash": "da5eb7fd7944",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/guides/stop-isp-dns-hijacking-nxdomain": {
       "hash": "8bd9ebabd194",
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/guides/stop-isp-tcp-reset-attacks": {
-      "hash": "0f82f6ddd377",
-      "lastmod": "2026-11-08"
+      "hash": "5676f993fdae",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/guides/stop-lg-smart-tv-acr-spying": {
-      "hash": "adde8880f68a",
-      "lastmod": "2026-11-09"
+      "hash": "6bc02b50e496",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/guides/stop-roku-vizio-firetv-spying": {
-      "hash": "1d53a43ded2a",
-      "lastmod": "2026-11-09"
+      "hash": "e8ab539b503e",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/guides/stop-samsung-smart-tv-acr-tracking": {
-      "hash": "33586c331272",
-      "lastmod": "2026-11-09"
+      "hash": "e044f8b3a3a9",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/download": {
       "hash": "9058aa003379",
       "lastmod": "2026-11-08"
     },
     "https://sweeprvpn.com/setup/docker-gluetun-wireguard-compose": {
-      "hash": "051fdcebd95d",
-      "lastmod": "2026-11-08"
+      "hash": "0cce230f6e53",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/guides/fix-wireguard-mtu-fragmentation-pppoe": {
-      "hash": "9caa80a01d6d",
-      "lastmod": "2026-11-08"
+      "hash": "fdb955468e1b",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/tools/vpn-renewal-price-checker": {
       "hash": "9183796b35de",
@@ -1497,8 +1497,8 @@
       "lastmod": "2026-11-05"
     },
     "https://sweeprvpn.com/tools/whats-on-my-wifi": {
-      "hash": "934bae6a19a2",
-      "lastmod": "2026-11-08"
+      "hash": "8ebac814949c",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/public-wifi": {
       "hash": "46a5915a92b8",
@@ -1517,28 +1517,28 @@
       "lastmod": "2026-11-04"
     },
     "https://sweeprvpn.com/setup/fritzbox-7590-ax-wireguard-vpn": {
-      "hash": "5757b97386ef",
-      "lastmod": "2026-11-08"
+      "hash": "c521ddf865eb",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/unifi-cloud-gateway-max-ucg-max-wireguard": {
-      "hash": "49c1d4a77b01",
-      "lastmod": "2026-11-08"
+      "hash": "6d8738fce32b",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/mikrotik-hap-ax3-wireguard-setup": {
-      "hash": "1ff6b2c8cb52",
-      "lastmod": "2026-11-05"
+      "hash": "4b2612ab37a1",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/zimaboard-casaos-gluetun-wireguard": {
       "hash": "b36b4f921d6d",
       "lastmod": "2026-11-05"
     },
     "https://sweeprvpn.com/solutions/community-fibre-london-p2p-port-forwarding": {
-      "hash": "a1b3cd826b02",
-      "lastmod": "2026-11-09"
+      "hash": "aeb9359246e7",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/t-mobile-5g-home-internet-remote-dev-ssh": {
-      "hash": "6f6e16c4d0c8",
-      "lastmod": "2026-11-09"
+      "hash": "f272c9c83217",
+      "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/warrant-canary": {
       "hash": "defbdae74edb",
@@ -1551,6 +1551,54 @@
     "https://sweeprvpn.com/guides/what-is-hon-hai-liteon-azurewave-on-my-wifi": {
       "hash": "9dbcf107f828",
       "lastmod": "2026-11-09"
+    },
+    "https://sweeprvpn.com/solutions/brsk-better-net-uk-voip-teams-zoom-jitter": {
+      "hash": "e75ed7f71488",
+      "lastmod": "2026-11-10"
+    },
+    "https://sweeprvpn.com/solutions/gigaclear-rural-fibre-voip-teams-zoom-jitter": {
+      "hash": "cdb8098c43ab",
+      "lastmod": "2026-11-10"
+    },
+    "https://sweeprvpn.com/solutions/gigaclear-rural-fibre-wifi-arp-spoofing-protection": {
+      "hash": "5ae3b561f024",
+      "lastmod": "2026-11-10"
+    },
+    "https://sweeprvpn.com/solutions/national-rail-train-wifi-remote-dev-ssh": {
+      "hash": "afd9d1cccbf9",
+      "lastmod": "2026-11-10"
+    },
+    "https://sweeprvpn.com/solutions/nhs-guest-wifi-smart-tv-acr-blocking": {
+      "hash": "0d1a707eefab",
+      "lastmod": "2026-11-10"
+    },
+    "https://sweeprvpn.com/solutions/o2-uk-mobile-tethering-smart-tv-acr-blocking": {
+      "hash": "df18fe548eb6",
+      "lastmod": "2026-11-10"
+    },
+    "https://sweeprvpn.com/solutions/telstra-nbn-australia-gaming-packet-loss": {
+      "hash": "f610f5bdd4bd",
+      "lastmod": "2026-11-10"
+    },
+    "https://sweeprvpn.com/solutions/toob-full-fibre-uk-smart-tv-acr-blocking": {
+      "hash": "ee5b47ab9b43",
+      "lastmod": "2026-11-10"
+    },
+    "https://sweeprvpn.com/solutions/toob-full-fibre-uk-voip-teams-zoom-jitter": {
+      "hash": "d269532b9306",
+      "lastmod": "2026-11-10"
+    },
+    "https://sweeprvpn.com/solutions/youfibre-uk-voip-teams-zoom-jitter": {
+      "hash": "d0979b35fe79",
+      "lastmod": "2026-11-10"
+    },
+    "https://sweeprvpn.com/solutions/youfibre-uk-wifi-arp-spoofing-protection": {
+      "hash": "02e1ad2aab55",
+      "lastmod": "2026-11-10"
+    },
+    "https://sweeprvpn.com/solutions/zen-internet-uk-gaming-packet-loss": {
+      "hash": "bfd73bf090d2",
+      "lastmod": "2026-11-10"
     }
   },
   "titleLastModifiedAt": {
