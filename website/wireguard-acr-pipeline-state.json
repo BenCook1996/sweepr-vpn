@@ -1,14 +1,14 @@
 {
-  "lastRunAt": "2026-11-10T13:12:56.572Z",
+  "lastRunAt": "2026-11-11T12:23:26.698Z",
   "liveSiteReachable": true,
   "liveHttpStatus": 200,
-  "liveSiteRttMs": 340,
+  "liveSiteRttMs": 278,
   "liveVpnServersEndpointReachable": true,
   "liveVpnFleetSummary": {
     "totalServers": 8,
     "onlineServers": 8,
     "totalConnectedDevices": 17,
-    "apiLatencyMs": 800
+    "apiLatencyMs": 612
   },
   "liveVpnServers": [
     {
@@ -18,8 +18,8 @@
       "flag": "SE",
       "online": true,
       "devices": 1,
-      "probe_ms": 230,
-      "p99_ms": 230
+      "probe_ms": 228,
+      "p99_ms": 228
     },
     {
       "code": "UK-LON-01",
@@ -28,8 +28,8 @@
       "flag": "GB",
       "online": true,
       "devices": 5,
-      "probe_ms": 158,
-      "p99_ms": 158
+      "probe_ms": 157,
+      "p99_ms": 157
     },
     {
       "code": "DE-FRA-01",
@@ -48,8 +48,8 @@
       "flag": "US",
       "online": true,
       "devices": 1,
-      "probe_ms": 118,
-      "p99_ms": 118
+      "probe_ms": 113,
+      "p99_ms": 113
     },
     {
       "code": "NL-AMS-01",
@@ -58,8 +58,8 @@
       "flag": "NL",
       "online": true,
       "devices": 1,
-      "probe_ms": 194,
-      "p99_ms": 194
+      "probe_ms": 180,
+      "p99_ms": 180
     },
     {
       "code": "US-NYC-01",
@@ -68,8 +68,8 @@
       "flag": "US",
       "online": true,
       "devices": 4,
-      "probe_ms": 21,
-      "p99_ms": 21
+      "probe_ms": 18,
+      "p99_ms": 18
     },
     {
       "code": "JP-TYO-01",
@@ -78,8 +78,8 @@
       "flag": "JP",
       "online": true,
       "devices": 1,
-      "probe_ms": 334,
-      "p99_ms": 334
+      "probe_ms": 312,
+      "p99_ms": 312
     },
     {
       "code": "SG-SIN-01",
@@ -88,8 +88,8 @@
       "flag": "SG",
       "online": true,
       "devices": 3,
-      "probe_ms": 483,
-      "p99_ms": 483
+      "probe_ms": 462,
+      "p99_ms": 462
     }
   ],
   "wireguardFleetCount": 6,

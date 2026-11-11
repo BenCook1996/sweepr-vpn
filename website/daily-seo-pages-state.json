@@ -209,12 +209,12 @@
   ],
   "urlLastModHashes": {
     "https://sweeprvpn.com/": {
-      "hash": "df3f0e504f0b",
-      "lastmod": "2026-11-10"
+      "hash": "81802d914e90",
+      "lastmod": "2026-11-11"
     },
     "https://sweeprvpn.com/pricing": {
-      "hash": "47e11013bc67",
-      "lastmod": "2026-11-10"
+      "hash": "b4f42a249110",
+      "lastmod": "2026-11-11"
     },
     "https://sweeprvpn.com/solutions": {
       "hash": "689fb2b3bdf6",
@@ -233,12 +233,12 @@
       "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/tools/leak-test": {
-      "hash": "fee603fec32c",
-      "lastmod": "2026-11-10"
+      "hash": "afcb7c246290",
+      "lastmod": "2026-11-11"
     },
     "https://sweeprvpn.com/tools/isp-throttling-test": {
-      "hash": "47458ba71526",
-      "lastmod": "2026-11-10"
+      "hash": "66689394b06f",
+      "lastmod": "2026-11-11"
     },
     "https://sweeprvpn.com/vs/totalvpn": {
       "hash": "d99b1d42c51e",
@@ -341,8 +341,8 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/bt-broadband-uhd-streaming-buffering": {
-      "hash": "1b2a580cce1c",
-      "lastmod": "2026-11-10"
+      "hash": "4082e8a840ad",
+      "lastmod": "2026-11-11"
     },
     "https://sweeprvpn.com/solutions/bt-ireland-broadband-isp-throttling": {
       "hash": "8bd2cedb8d84",
@@ -421,12 +421,12 @@
       "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/eduroam-campus-wifi-p2p-port-forwarding": {
-      "hash": "d92aa96909e9",
-      "lastmod": "2026-11-10"
+      "hash": "e89ff342c405",
+      "lastmod": "2026-11-11"
     },
     "https://sweeprvpn.com/solutions/eduroam-campus-wifi-remote-dev-ssh": {
-      "hash": "429f302964ba",
-      "lastmod": "2026-11-10"
+      "hash": "fac8ddb7865b",
+      "lastmod": "2026-11-11"
     },
     "https://sweeprvpn.com/solutions/eduroam-campus-wifi-uhd-streaming-buffering": {
       "hash": "e8418e1fd53f",
@@ -701,8 +701,8 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/sky-broadband-remote-dev-ssh": {
-      "hash": "19bae8d99030",
-      "lastmod": "2026-11-10"
+      "hash": "4645c408cc3c",
+      "lastmod": "2026-11-11"
     },
     "https://sweeprvpn.com/solutions/sky-broadband-uhd-streaming-buffering": {
       "hash": "40182ffd3113",
@@ -849,8 +849,8 @@
       "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/virgin-media-uhd-streaming-buffering": {
-      "hash": "6d4aa1a5b342",
-      "lastmod": "2026-11-10"
+      "hash": "8a377e00ada1",
+      "lastmod": "2026-11-11"
     },
     "https://sweeprvpn.com/solutions/vodafone-ireland-siro-isp-throttling": {
       "hash": "6b53a1a591ac",
@@ -873,8 +873,8 @@
       "lastmod": "2026-11-03"
     },
     "https://sweeprvpn.com/solutions/vodafone-uk-remote-dev-ssh": {
-      "hash": "a239eb120dbc",
-      "lastmod": "2026-11-10"
+      "hash": "27be309d418c",
+      "lastmod": "2026-11-11"
     },
     "https://sweeprvpn.com/solutions/vodafone-uk-uhd-streaming-buffering": {
       "hash": "372ace7edafb",
@@ -1525,8 +1525,8 @@
       "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/setup/mikrotik-hap-ax3-wireguard-setup": {
-      "hash": "4b2612ab37a1",
-      "lastmod": "2026-11-10"
+      "hash": "5bccb79311c9",
+      "lastmod": "2026-11-11"
     },
     "https://sweeprvpn.com/setup/zimaboard-casaos-gluetun-wireguard": {
       "hash": "b36b4f921d6d",
@@ -1553,20 +1553,20 @@
       "lastmod": "2026-11-09"
     },
     "https://sweeprvpn.com/solutions/brsk-better-net-uk-voip-teams-zoom-jitter": {
-      "hash": "e75ed7f71488",
-      "lastmod": "2026-11-10"
+      "hash": "e4b6b8ad3c2b",
+      "lastmod": "2026-11-11"
     },
     "https://sweeprvpn.com/solutions/gigaclear-rural-fibre-voip-teams-zoom-jitter": {
-      "hash": "cdb8098c43ab",
-      "lastmod": "2026-11-10"
+      "hash": "1edf083ca725",
+      "lastmod": "2026-11-11"
     },
     "https://sweeprvpn.com/solutions/gigaclear-rural-fibre-wifi-arp-spoofing-protection": {
-      "hash": "5ae3b561f024",
-      "lastmod": "2026-11-10"
+      "hash": "85c0dd20c78a",
+      "lastmod": "2026-11-11"
     },
     "https://sweeprvpn.com/solutions/national-rail-train-wifi-remote-dev-ssh": {
-      "hash": "afd9d1cccbf9",
-      "lastmod": "2026-11-10"
+      "hash": "ea65e6f778fe",
+      "lastmod": "2026-11-11"
     },
     "https://sweeprvpn.com/solutions/nhs-guest-wifi-smart-tv-acr-blocking": {
       "hash": "0d1a707eefab",
@@ -1581,24 +1581,24 @@
       "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/toob-full-fibre-uk-smart-tv-acr-blocking": {
-      "hash": "ee5b47ab9b43",
-      "lastmod": "2026-11-10"
+      "hash": "8f80868dab81",
+      "lastmod": "2026-11-11"
     },
     "https://sweeprvpn.com/solutions/toob-full-fibre-uk-voip-teams-zoom-jitter": {
-      "hash": "d269532b9306",
-      "lastmod": "2026-11-10"
+      "hash": "2827b3c029c5",
+      "lastmod": "2026-11-11"
     },
     "https://sweeprvpn.com/solutions/youfibre-uk-voip-teams-zoom-jitter": {
-      "hash": "d0979b35fe79",
-      "lastmod": "2026-11-10"
+      "hash": "4ddbc5ea5568",
+      "lastmod": "2026-11-11"
     },
     "https://sweeprvpn.com/solutions/youfibre-uk-wifi-arp-spoofing-protection": {
       "hash": "02e1ad2aab55",
       "lastmod": "2026-11-10"
     },
     "https://sweeprvpn.com/solutions/zen-internet-uk-gaming-packet-loss": {
-      "hash": "bfd73bf090d2",
-      "lastmod": "2026-11-10"
+      "hash": "0b9bd4034c90",
+      "lastmod": "2026-11-11"
     }
   },
   "titleLastModifiedAt": {
@@ -1630,7 +1630,7 @@
     "commercial_vs": 37,
     "informational_setup": 54,
     "informational_guides": 29,
-    "problem_solutions": 66,
+    "problem_solutions": 82,
     "interactive_tools_and_hubs": 7
   }
 }

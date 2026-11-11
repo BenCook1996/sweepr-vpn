@@ -108,7 +108,7 @@
       },
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -219,7 +219,7 @@
       },
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -340,7 +340,7 @@
       },
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -445,7 +445,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -550,7 +550,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -654,7 +654,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -764,7 +764,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -869,7 +869,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -992,7 +992,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -1103,7 +1103,7 @@
       },
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -1209,7 +1209,7 @@
         "faqAnswer": "Connect to SWEEPR VPN's 10Gbps RAM-only WireGuard endpoint on UDP port 51820 (or Stealth UDP 443 on restricted networks) with MTU 1412/1380 and a 25-second PersistentKeepalive."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -1314,7 +1314,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -1419,7 +1419,7 @@
         "faqAnswer": "Connect to SWEEPR VPN's 10Gbps RAM-only WireGuard endpoint on UDP port 51820 (or Stealth UDP 443 on restricted networks) with MTU 1412/1380 and a 25-second PersistentKeepalive."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -1465,16 +1465,16 @@
         ],
         "weakSpotCitations": [
           {
+            "title": "Show HN: Fishoid: an ambient fish tank for your screen",
+            "url": "https://fishoid.net/",
+            "domain": "news.ycombinator.com",
+            "year": "2026"
+          },
+          {
             "title": "Tell YC: Answers from John McCarthy",
             "url": "https://news.ycombinator.com/item?id=185348",
             "domain": "news.ycombinator.com",
             "year": "2008"
-          },
-          {
-            "title": "Ask HN: Are you building an AI company brain?",
-            "url": "https://news.ycombinator.com/item?id=50379710",
-            "domain": "news.ycombinator.com",
-            "year": "2026"
           }
         ],
         "exactTitleMatchesInTop5": 0,
@@ -1508,16 +1508,16 @@
         "siblingKeywords": [],
         "serpWeakSpots": [
           {
+            "title": "Show HN: Fishoid: an ambient fish tank for your screen",
+            "url": "https://fishoid.net/",
+            "domain": "news.ycombinator.com",
+            "year": "2026"
+          },
+          {
             "title": "Tell YC: Answers from John McCarthy",
             "url": "https://news.ycombinator.com/item?id=185348",
             "domain": "news.ycombinator.com",
             "year": "2008"
-          },
-          {
-            "title": "Ask HN: Are you building an AI company brain?",
-            "url": "https://news.ycombinator.com/item?id=50379710",
-            "domain": "news.ycombinator.com",
-            "year": "2026"
           }
         ],
         "title": "Hon Hai (Foxconn), LiteOn, AzureWave & Arcadyan Wi-Fi Chip Translator WireGuard VPN Setup Guide (MTU 1420 .conf • 2026) | SWEEPR VPN",
@@ -1542,7 +1542,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -1654,7 +1654,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -1758,7 +1758,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -1864,7 +1864,7 @@
         "faqAnswer": "Connect to SWEEPR VPN's 10Gbps RAM-only WireGuard endpoint on UDP port 51820 (or Stealth UDP 443 on restricted networks) with MTU 1412/1380 and a 25-second PersistentKeepalive."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -1969,7 +1969,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -2059,8 +2059,8 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
-      "appliedAt": "2026-11-10T13:13:37.241Z"
+      "createdAt": "2026-11-11T12:23:30.175Z",
+      "appliedAt": "2026-11-11T12:23:39.680Z"
     },
     {
       "id": "kw_what_is_hon_hai_on_my_router",
@@ -2112,8 +2112,8 @@
             "year": "2024"
           },
           {
-            "title": "Show HN: Prism – Self-hosted notification gateway (Signal, Telegram, WebPush)",
-            "url": "https://github.com/lone-cloud/prism",
+            "title": "Ask HN: How's your home-cooked software revolution going?",
+            "url": "https://news.ycombinator.com/item?id=50391446",
             "domain": "news.ycombinator.com",
             "year": "2026"
           }
@@ -2157,8 +2157,8 @@
             "year": "2024"
           },
           {
-            "title": "Show HN: Prism – Self-hosted notification gateway (Signal, Telegram, WebPush)",
-            "url": "https://github.com/lone-cloud/prism",
+            "title": "Ask HN: How's your home-cooked software revolution going?",
+            "url": "https://news.ycombinator.com/item?id=50391446",
             "domain": "news.ycombinator.com",
             "year": "2026"
           }
@@ -2185,7 +2185,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -2290,7 +2290,119 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
+      "appliedAt": null
+    },
+    {
+      "id": "kw_hon_hai_device_on_wifi",
+      "forecast": {
+        "kdScore": 13,
+        "difficultyTier": "VERY_EASY",
+        "estMonthlyVolumeMin": 210,
+        "estMonthlyVolumeMax": 520,
+        "estMonthlyVolumeBand": "210–520/mo",
+        "estDaysToTop10Min": 2,
+        "estDaysToTop10Max": 8,
+        "estTimeToRankBand": "2–8 days (Indexed Pillar)",
+        "transactionalTier": "T1_BOFU_TOOL_ACTION",
+        "estCtrPct": 9.5,
+        "estConversionRatePct": 3.9,
+        "estMonthlyClicks": 35,
+        "estMonthlyConversionsBand": "1–2/mo",
+        "competitorPlaybook": "FING_OUI_DIRECTORY",
+        "calibrationApplied": {
+          "volumeMultiplier": 1.15,
+          "timeToRankMultiplier": 0.82,
+          "playbookPriorityBoost": 3
+        }
+      },
+      "query": "hon hai device on wifi",
+      "cluster": "guides",
+      "pillar": "C_ACR_WIFI",
+      "discoveredFrom": [
+        "bing_autocomplete",
+        "ddg_autocomplete"
+      ],
+      "scores": {
+        "volumeScore": 54,
+        "commercialIntentScore": 100,
+        "lowDifficultyScore": 100,
+        "sweeprFitScore": 90,
+        "opportunityScore": 87
+      },
+      "serpSignals": {
+        "source": "community-api+serp-verified",
+        "forumWeakSpots": [
+          "news.ycombinator.com"
+        ],
+        "weakSpotCitations": [
+          {
+            "title": "Show HN: Valin – your private memory for everything you save",
+            "url": "https://www.valin.ai/",
+            "domain": "news.ycombinator.com",
+            "year": "2026"
+          }
+        ],
+        "exactTitleMatchesInTop5": 0,
+        "outdatedYearsFound": [],
+        "missingInteractiveOrConfig": false,
+        "redOceanMediaCount": 0
+      },
+      "cannibalization": {
+        "maxSimilarity": 0.32,
+        "entityOverlap": 0.35,
+        "jaccardTokenSimilarity": 0.28,
+        "closestCanonicalUrl": null,
+        "isConsolidatedSlug": false
+      },
+      "action": "ENRICH_EXISTING",
+      "status": "DEFERRED_PAGE_CAP",
+      "rejectReason": null,
+      "targetUrlPath": "/guides/what-is-hon-hai-liteon-azurewave-on-my-wifi",
+      "uniquenessCheck": {
+        "uniqueStructuredDataRatio": 0.48,
+        "hasVerifiedCliBlock": true,
+        "hasBenchmarkTable": true,
+        "hasJsonLdGraph": true
+      },
+      "pillarBrief": {
+        "slug": "what-is-hon-hai-liteon-azurewave-on-my-wifi",
+        "name": "Hon Hai (Foxconn), LiteOn, AzureWave & Arcadyan Wi-Fi Chip Translator",
+        "category": "Plain-English Router OUI & Device Identification Guide",
+        "primaryKeyword": "hon hai device on wifi",
+        "formattedKeyword": "Hon Hai Device on Wi-Fi",
+        "siblingKeywords": [],
+        "serpWeakSpots": [
+          {
+            "title": "Show HN: Valin – your private memory for everything you save",
+            "url": "https://www.valin.ai/",
+            "domain": "news.ycombinator.com",
+            "year": "2026"
+          }
+        ],
+        "title": "Hon Hai (Foxconn), LiteOn, AzureWave & Arcadyan Wi-Fi Chip Translator WireGuard VPN Setup Guide (MTU 1420 .conf • 2026) | SWEEPR VPN",
+        "description": "Seeing Hon Hai Precision (Foxconn), LiteOn Technology, AzureWave, or Arcadyan on your router or Fing scan? Learn which household gadgets use these Wi-Fi.",
+        "h1": "What Is \"Hon Hai Precision\", \"LiteOn\" or \"AzureWave\" on My Wi-Fi? (2026 Plain-English Guide)",
+        "summary": "Seeing Hon Hai Precision (Foxconn), LiteOn Technology, AzureWave, or Arcadyan on your router or Fing scan? Learn which household gadgets use these Wi-Fi modules (PlayStation 5, iPhones, Smart TVs, Laptops, ISP Boosters) and use SWEEPR Wi-Fi Guard Home to label every device in plain English in 5 seconds.",
+        "commands": [
+          "# Instant Plain-English Browser Lookup: https://sweeprvpn.com/tools/whats-on-my-wifi",
+          "00:1C:B3 / F8:E4:E3 (Hon Hai / Foxconn) -> Apple iPhone/iPad, Sony PS5, or Amazon Echo Wi-Fi NIC",
+          "00:23:5A / C8:FF:28 (LiteOn Technology) -> Sky Q Box, Samsung/LG Smart TV, or Windows Laptop",
+          "74:C6:3B / 80:C5:F2 (AzureWave Tech)    -> ASUS/Lenovo Laptop, Xbox Console, or Streaming Stick",
+          "78:94:B4 (Arcadyan Technology)          -> BT/EE Smart Hub Booster, Virgin Wi-Fi Pod, or Smart Meter"
+        ]
+      },
+      "enrichmentBrief": {
+        "subSlug": "hon-hai-device-on-wifi",
+        "framingType": "ACR_TELEMETRY_AND_WIFI_AUDIT",
+        "generatedH2": "How to Audit & Block Telemetry: Hon Hai Device on Wi-Fi",
+        "answerFirstSummary": "When addressing \"hon hai device on wifi\", Smart TVs and IoT devices transmit viewing fingerprints and mDNS/ARP beacons over your local subnet every 500ms. SWEEPR VPN's free 30-second Home Wi-Fi Scanner identifies every active LAN device while in-tunnel DNS (10.66.0.1) sinks ACR telemetry domains without breaking 4K HDR streaming.",
+        "technicalConfigSnippet": "# Verified SWEEPR In-Tunnel ACR Sinkhole Resolver\nDNS = 10.66.0.1\n# Sinks: gpm.samsungqbe.com, samsungacr.com, lgtvcommon.com, logs.roku.com, tvinteractive.tv\n# Preserves: 100% of Netflix, BBC iPlayer, Prime Video, Disney+ & YouTube 4K CDNs",
+        "faqQuestion": "Does blocking Hon Hai Device on Wi-Fi break Netflix, BBC iPlayer, or 4K streaming apps?",
+        "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
+      },
+      "ctrUpgradeBrief": null,
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -2361,7 +2473,7 @@
         "isConsolidatedSlug": false
       },
       "action": "ENRICH_EXISTING",
-      "status": "APPLIED",
+      "status": "ALREADY_COVERED",
       "rejectReason": null,
       "targetUrlPath": "/setup/mikrotik-hap-ax3-wireguard-setup",
       "uniquenessCheck": null,
@@ -2379,8 +2491,8 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
-      "appliedAt": "2026-11-10T13:13:37.241Z"
+      "createdAt": "2026-11-11T12:23:30.175Z",
+      "appliedAt": null
     },
     {
       "id": "kw_hon_hai_precision_ind_co_ltd_on_my_wifi",
@@ -2495,7 +2607,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -2587,7 +2699,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -2703,7 +2815,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -2826,7 +2938,7 @@
         "faqAnswer": "SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -2917,7 +3029,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -3017,7 +3129,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -3108,7 +3220,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -3193,7 +3305,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -3291,7 +3403,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -3381,7 +3493,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -3473,7 +3585,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -3572,7 +3684,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -3687,123 +3799,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
-      "appliedAt": null
-    },
-    {
-      "id": "kw_hon_hai_device_on_wifi",
-      "forecast": {
-        "kdScore": 28,
-        "difficultyTier": "EASY",
-        "estMonthlyVolumeMin": 210,
-        "estMonthlyVolumeMax": 520,
-        "estMonthlyVolumeBand": "210–520/mo",
-        "estDaysToTop10Min": 2,
-        "estDaysToTop10Max": 8,
-        "estTimeToRankBand": "2–8 days (Indexed Pillar)",
-        "transactionalTier": "T1_BOFU_TOOL_ACTION",
-        "estCtrPct": 7.2,
-        "estConversionRatePct": 3.9,
-        "estMonthlyClicks": 26,
-        "estMonthlyConversionsBand": "1–2/mo",
-        "competitorPlaybook": "FING_OUI_DIRECTORY",
-        "calibrationApplied": {
-          "volumeMultiplier": 1.15,
-          "timeToRankMultiplier": 0.82,
-          "playbookPriorityBoost": 3
-        }
-      },
-      "query": "hon hai device on wifi",
-      "cluster": "guides",
-      "pillar": "C_ACR_WIFI",
-      "discoveredFrom": [
-        "bing_autocomplete",
-        "ddg_autocomplete"
-      ],
-      "scores": {
-        "volumeScore": 54,
-        "commercialIntentScore": 100,
-        "lowDifficultyScore": 81,
-        "sweeprFitScore": 90,
-        "opportunityScore": 81
-      },
-      "serpSignals": {
-        "source": "heuristic-lexical",
-        "forumWeakSpots": [
-          "reddit.com",
-          "superuser.com"
-        ],
-        "weakSpotCitations": [
-          {
-            "title": "ISP throttling & Smart-TV ACR telemetry thread for \"hon hai device on wifi\"",
-            "url": "https://superuser.com/search?q=hon%20hai%20device%20on%20wifi",
-            "domain": "superuser.com",
-            "year": "2024"
-          }
-        ],
-        "exactTitleMatchesInTop5": 1,
-        "outdatedYearsFound": [
-          "2023",
-          "2024"
-        ],
-        "missingInteractiveOrConfig": true,
-        "redOceanMediaCount": 0
-      },
-      "cannibalization": {
-        "maxSimilarity": 0.32,
-        "entityOverlap": 0.35,
-        "jaccardTokenSimilarity": 0.28,
-        "closestCanonicalUrl": null,
-        "isConsolidatedSlug": false
-      },
-      "action": "ENRICH_EXISTING",
-      "status": "DEFERRED_PAGE_CAP",
-      "rejectReason": null,
-      "targetUrlPath": "/guides/what-is-hon-hai-liteon-azurewave-on-my-wifi",
-      "uniquenessCheck": {
-        "uniqueStructuredDataRatio": 0.48,
-        "hasVerifiedCliBlock": true,
-        "hasBenchmarkTable": true,
-        "hasJsonLdGraph": true
-      },
-      "pillarBrief": {
-        "slug": "what-is-hon-hai-liteon-azurewave-on-my-wifi",
-        "name": "Hon Hai (Foxconn), LiteOn, AzureWave & Arcadyan Wi-Fi Chip Translator",
-        "category": "Plain-English Router OUI & Device Identification Guide",
-        "primaryKeyword": "hon hai device on wifi",
-        "formattedKeyword": "Hon Hai Device on Wi-Fi",
-        "siblingKeywords": [],
-        "serpWeakSpots": [
-          {
-            "title": "ISP throttling & Smart-TV ACR telemetry thread for \"hon hai device on wifi\"",
-            "url": "https://superuser.com/search?q=hon%20hai%20device%20on%20wifi",
-            "domain": "superuser.com",
-            "year": "2024"
-          }
-        ],
-        "title": "Hon Hai (Foxconn), LiteOn, AzureWave & Arcadyan Wi-Fi Chip Translator WireGuard VPN Setup Guide (MTU 1420 .conf • 2026) | SWEEPR VPN",
-        "description": "Seeing Hon Hai Precision (Foxconn), LiteOn Technology, AzureWave, or Arcadyan on your router or Fing scan? Learn which household gadgets use these Wi-Fi.",
-        "h1": "What Is \"Hon Hai Precision\", \"LiteOn\" or \"AzureWave\" on My Wi-Fi? (2026 Plain-English Guide)",
-        "summary": "Seeing Hon Hai Precision (Foxconn), LiteOn Technology, AzureWave, or Arcadyan on your router or Fing scan? Learn which household gadgets use these Wi-Fi modules (PlayStation 5, iPhones, Smart TVs, Laptops, ISP Boosters) and use SWEEPR Wi-Fi Guard Home to label every device in plain English in 5 seconds.",
-        "commands": [
-          "# Instant Plain-English Browser Lookup: https://sweeprvpn.com/tools/whats-on-my-wifi",
-          "00:1C:B3 / F8:E4:E3 (Hon Hai / Foxconn) -> Apple iPhone/iPad, Sony PS5, or Amazon Echo Wi-Fi NIC",
-          "00:23:5A / C8:FF:28 (LiteOn Technology) -> Sky Q Box, Samsung/LG Smart TV, or Windows Laptop",
-          "74:C6:3B / 80:C5:F2 (AzureWave Tech)    -> ASUS/Lenovo Laptop, Xbox Console, or Streaming Stick",
-          "78:94:B4 (Arcadyan Technology)          -> BT/EE Smart Hub Booster, Virgin Wi-Fi Pod, or Smart Meter"
-        ]
-      },
-      "enrichmentBrief": {
-        "subSlug": "hon-hai-device-on-wifi",
-        "framingType": "ACR_TELEMETRY_AND_WIFI_AUDIT",
-        "generatedH2": "How to Audit & Block Telemetry: Hon Hai Device on Wi-Fi",
-        "answerFirstSummary": "When addressing \"hon hai device on wifi\", Smart TVs and IoT devices transmit viewing fingerprints and mDNS/ARP beacons over your local subnet every 500ms. SWEEPR VPN's free 30-second Home Wi-Fi Scanner identifies every active LAN device while in-tunnel DNS (10.66.0.1) sinks ACR telemetry domains without breaking 4K HDR streaming.",
-        "technicalConfigSnippet": "# Verified SWEEPR In-Tunnel ACR Sinkhole Resolver\nDNS = 10.66.0.1\n# Sinks: gpm.samsungqbe.com, samsungacr.com, lgtvcommon.com, logs.roku.com, tvinteractive.tv\n# Preserves: 100% of Netflix, BBC iPlayer, Prime Video, Disney+ & YouTube 4K CDNs",
-        "faqQuestion": "Does blocking Hon Hai Device on Wi-Fi break Netflix, BBC iPlayer, or 4K streaming apps?",
-        "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
-      },
-      "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -3918,7 +3914,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -4034,7 +4030,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -4143,7 +4139,7 @@
       },
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -4260,7 +4256,7 @@
         "faqAnswer": "Connect to SWEEPR VPN's 10Gbps RAM-only WireGuard endpoint on UDP port 51820 (or Stealth UDP 443 on restricted networks) with MTU 1412/1380 and a 25-second PersistentKeepalive."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -4377,7 +4373,7 @@
         "faqAnswer": "Connect to SWEEPR VPN's 10Gbps RAM-only WireGuard endpoint on UDP port 51820 (or Stealth UDP 443 on restricted networks) with MTU 1412/1380 and a 25-second PersistentKeepalive."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -4493,7 +4489,7 @@
         "faqAnswer": "Connect to SWEEPR VPN's 10Gbps RAM-only WireGuard endpoint on UDP port 51820 (or Stealth UDP 443 on restricted networks) with MTU 1412/1380 and a 25-second PersistentKeepalive."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -4609,7 +4605,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -4724,7 +4720,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -4840,7 +4836,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -4930,7 +4926,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -5015,7 +5011,7 @@
         "isLockedByGsc14DayCooldown": true,
         "cooldownExpiresAt": "2026-11-17T21:30:00.000Z"
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -5130,7 +5126,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -5245,7 +5241,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -5360,7 +5356,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -5476,7 +5472,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -5593,7 +5589,7 @@
         "faqAnswer": "Connect to SWEEPR VPN's 10Gbps RAM-only WireGuard endpoint on UDP port 51820 (or Stealth UDP 443 on restricted networks) with MTU 1412/1380 and a 25-second PersistentKeepalive."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -5707,7 +5703,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -5823,7 +5819,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -5938,7 +5934,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -6054,7 +6050,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -6169,7 +6165,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -6275,7 +6271,7 @@
       },
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -6391,7 +6387,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -6507,7 +6503,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -6622,7 +6618,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -6739,7 +6735,7 @@
         "faqAnswer": "Connect to SWEEPR VPN's 10Gbps RAM-only WireGuard endpoint on UDP port 51820 (or Stealth UDP 443 on restricted networks) with MTU 1412/1380 and a 25-second PersistentKeepalive."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -6828,7 +6824,7 @@
         "isLockedByGsc14DayCooldown": true,
         "cooldownExpiresAt": "2026-11-17T21:30:00.000Z"
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -6942,7 +6938,7 @@
         "faqAnswer": "SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -7057,7 +7053,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -7172,7 +7168,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -7288,7 +7284,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -7404,7 +7400,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -7521,7 +7517,7 @@
         "faqAnswer": "Connect to SWEEPR VPN's 10Gbps RAM-only WireGuard endpoint on UDP port 51820 (or Stealth UDP 443 on restricted networks) with MTU 1412/1380 and a 25-second PersistentKeepalive."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -7638,7 +7634,7 @@
         "faqAnswer": "Connect to SWEEPR VPN's 10Gbps RAM-only WireGuard endpoint on UDP port 51820 (or Stealth UDP 443 on restricted networks) with MTU 1412/1380 and a 25-second PersistentKeepalive."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -7754,7 +7750,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -7869,7 +7865,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -7984,7 +7980,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -8093,7 +8089,7 @@
       },
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -8207,7 +8203,7 @@
         "faqAnswer": "SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -8323,7 +8319,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -8439,7 +8435,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -8554,7 +8550,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -8671,7 +8667,7 @@
         "faqAnswer": "Connect to SWEEPR VPN's 10Gbps RAM-only WireGuard endpoint on UDP port 51820 (or Stealth UDP 443 on restricted networks) with MTU 1412/1380 and a 25-second PersistentKeepalive."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -8788,7 +8784,7 @@
         "faqAnswer": "Connect to SWEEPR VPN's 10Gbps RAM-only WireGuard endpoint on UDP port 51820 (or Stealth UDP 443 on restricted networks) with MTU 1412/1380 and a 25-second PersistentKeepalive."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -8900,7 +8896,7 @@
       },
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -9015,7 +9011,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -9130,7 +9126,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -9244,7 +9240,7 @@
         "faqAnswer": "SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -9357,7 +9353,7 @@
         "faqAnswer": "SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -9463,7 +9459,7 @@
       },
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -9567,7 +9563,7 @@
       },
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -9679,7 +9675,7 @@
       },
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -9794,7 +9790,7 @@
         "faqAnswer": "Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -9911,7 +9907,7 @@
         "faqAnswer": "Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -10024,7 +10020,7 @@
       },
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -10139,7 +10135,7 @@
         "faqAnswer": "Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -10254,7 +10250,7 @@
         "faqAnswer": "Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -10342,7 +10338,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -10430,7 +10426,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -10518,7 +10514,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -10607,7 +10603,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -10695,7 +10691,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -10803,7 +10799,7 @@
       },
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -10910,7 +10906,7 @@
       },
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -10998,7 +10994,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -11113,7 +11109,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -11227,7 +11223,7 @@
         "faqAnswer": "SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -11326,7 +11322,7 @@
       },
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -11435,7 +11431,7 @@
       },
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -11550,7 +11546,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -11665,7 +11661,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -11782,7 +11778,7 @@
         "faqAnswer": "Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -11897,7 +11893,7 @@
         "faqAnswer": "Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -12012,7 +12008,7 @@
         "faqAnswer": "Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -12127,7 +12123,7 @@
         "faqAnswer": "Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -12214,7 +12210,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -12290,7 +12286,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -12366,7 +12362,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -12454,7 +12450,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -12562,7 +12558,7 @@
       },
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -12677,7 +12673,7 @@
         "faqAnswer": "Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -12792,7 +12788,7 @@
         "faqAnswer": "Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -12900,7 +12896,7 @@
       },
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -13008,7 +13004,7 @@
       },
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -13122,7 +13118,7 @@
         "faqAnswer": "Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -13229,7 +13225,7 @@
       },
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -13337,7 +13333,7 @@
       },
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -13452,7 +13448,7 @@
         "faqAnswer": "Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -13560,7 +13556,7 @@
       },
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -13667,7 +13663,7 @@
       },
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -13774,7 +13770,7 @@
       },
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -13881,7 +13877,7 @@
       },
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -13970,7 +13966,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -14058,7 +14054,7 @@
         "isLockedByGsc14DayCooldown": true,
         "cooldownExpiresAt": "2026-11-17T21:30:00.000Z"
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -14146,7 +14142,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -14234,7 +14230,7 @@
         "isLockedByGsc14DayCooldown": true,
         "cooldownExpiresAt": "2026-11-17T21:30:00.000Z"
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -14323,7 +14319,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -14412,7 +14408,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -14527,7 +14523,7 @@
         "faqAnswer": "Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -14642,7 +14638,7 @@
         "faqAnswer": "Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -14758,7 +14754,7 @@
         "faqAnswer": "Connect to SWEEPR VPN's 10Gbps RAM-only WireGuard endpoint on UDP port 51820 (or Stealth UDP 443 on restricted networks) with MTU 1412/1380 and a 25-second PersistentKeepalive."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -14846,7 +14842,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -14961,7 +14957,7 @@
         "faqAnswer": "Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -15049,7 +15045,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -15138,7 +15134,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -15225,7 +15221,7 @@
         "isLockedByGsc14DayCooldown": true,
         "cooldownExpiresAt": "2026-11-17T21:30:00.000Z"
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -15312,7 +15308,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -15399,7 +15395,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -15486,7 +15482,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -15573,7 +15569,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -15676,7 +15672,7 @@
         "faqAnswer": "SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -15790,7 +15786,7 @@
         "faqAnswer": "SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -15878,7 +15874,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -15993,7 +15989,7 @@
         "faqAnswer": "Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -16081,7 +16077,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -16169,7 +16165,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -16284,7 +16280,7 @@
         "faqAnswer": "SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -16372,7 +16368,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -16460,7 +16456,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -16548,7 +16544,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -16664,7 +16660,7 @@
         "faqAnswer": "Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT."
       },
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -16727,7 +16723,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -16790,7 +16786,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -16853,7 +16849,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -16941,7 +16937,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -17017,7 +17013,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -17105,7 +17101,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -17183,7 +17179,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -17271,7 +17267,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -17349,7 +17345,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -17436,7 +17432,7 @@
         "isLockedByGsc14DayCooldown": true,
         "cooldownExpiresAt": "2026-11-18T00:00:00.000Z"
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -17512,7 +17508,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -17588,7 +17584,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -17665,7 +17661,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -17752,7 +17748,7 @@
         "isLockedByGsc14DayCooldown": true,
         "cooldownExpiresAt": "2026-11-17T21:30:00.000Z"
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -17818,7 +17814,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -17894,7 +17890,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -17971,7 +17967,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -18054,7 +18050,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -18130,7 +18126,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -18207,7 +18203,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -18284,7 +18280,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -18361,7 +18357,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -18448,7 +18444,7 @@
         "isLockedByGsc14DayCooldown": true,
         "cooldownExpiresAt": "2026-11-17T21:30:00.000Z"
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -18525,7 +18521,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -18602,7 +18598,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -18678,7 +18674,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -18765,7 +18761,7 @@
         "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": null
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -18842,7 +18838,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -18919,7 +18915,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -18996,7 +18992,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -19083,7 +19079,7 @@
         "isLockedByGsc14DayCooldown": true,
         "cooldownExpiresAt": "2026-11-18T00:00:00.000Z"
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -19170,7 +19166,7 @@
         "isLockedByGsc14DayCooldown": true,
         "cooldownExpiresAt": "2026-11-18T00:00:00.000Z"
       },
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -19247,7 +19243,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -19324,7 +19320,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -19401,7 +19397,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -19478,7 +19474,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -19555,7 +19551,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -19632,7 +19628,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -19709,7 +19705,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -19785,7 +19781,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -19861,7 +19857,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -19927,7 +19923,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -20003,7 +19999,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -20079,7 +20075,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -20155,7 +20151,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -20231,7 +20227,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -20298,7 +20294,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -20364,7 +20360,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -20430,7 +20426,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -20496,7 +20492,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -20562,7 +20558,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -20635,7 +20631,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -20713,7 +20709,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -20791,7 +20787,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -20869,7 +20865,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -20947,7 +20943,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -21025,7 +21021,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -21103,7 +21099,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -21181,7 +21177,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -21259,7 +21255,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -21336,7 +21332,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -21414,7 +21410,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -21492,7 +21488,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -21570,7 +21566,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -21648,7 +21644,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -21726,7 +21722,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -21804,7 +21800,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -21882,7 +21878,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -21959,7 +21955,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -22036,7 +22032,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -22113,7 +22109,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -22191,7 +22187,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -22269,7 +22265,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -22345,7 +22341,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -22422,7 +22418,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -22499,7 +22495,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -22576,7 +22572,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -22654,7 +22650,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -22732,7 +22728,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -22810,7 +22806,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -22888,7 +22884,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -22966,7 +22962,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -23044,7 +23040,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -23122,7 +23118,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -23200,7 +23196,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -23278,7 +23274,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -23356,7 +23352,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -23434,7 +23430,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -23512,7 +23508,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -23590,7 +23586,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -23668,7 +23664,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -23746,7 +23742,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -23823,7 +23819,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -23900,7 +23896,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -23977,7 +23973,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -24055,7 +24051,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -24133,7 +24129,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -24211,7 +24207,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -24289,7 +24285,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -24367,7 +24363,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -24445,7 +24441,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -24523,7 +24519,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -24601,7 +24597,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -24679,7 +24675,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -24757,7 +24753,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -24835,7 +24831,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -24913,7 +24909,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -24991,7 +24987,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -25069,7 +25065,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -25146,7 +25142,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -25223,7 +25219,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -25301,7 +25297,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -25379,7 +25375,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -25457,7 +25453,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -25535,7 +25531,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -25613,7 +25609,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -25691,7 +25687,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -25769,7 +25765,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -25847,7 +25843,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -25924,7 +25920,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -26001,7 +25997,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -26078,7 +26074,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -26156,7 +26152,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -26234,7 +26230,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -26311,7 +26307,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -26389,7 +26385,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -26467,7 +26463,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -26545,7 +26541,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -26623,7 +26619,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -26701,7 +26697,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -26779,7 +26775,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -26857,7 +26853,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -26935,7 +26931,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -27012,7 +27008,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -27089,7 +27085,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -27167,7 +27163,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -27245,7 +27241,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -27323,7 +27319,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -27400,7 +27396,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -27478,7 +27474,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -27556,7 +27552,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -27633,7 +27629,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -27711,7 +27707,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -27789,7 +27785,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -27867,7 +27863,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -27945,7 +27941,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -28023,7 +28019,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -28101,7 +28097,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -28179,7 +28175,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -28257,7 +28253,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -28334,7 +28330,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -28411,7 +28407,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -28489,7 +28485,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -28566,7 +28562,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -28644,7 +28640,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -28722,7 +28718,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -28800,7 +28796,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -28878,7 +28874,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -28956,7 +28952,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -29034,7 +29030,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -29111,7 +29107,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -29189,7 +29185,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -29267,7 +29263,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -29345,7 +29341,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -29423,7 +29419,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -29501,7 +29497,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -29579,7 +29575,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -29657,7 +29653,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -29735,7 +29731,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -29813,7 +29809,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -29880,7 +29876,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -29956,7 +29952,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -30032,7 +30028,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -30109,7 +30105,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -30186,7 +30182,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -30263,7 +30259,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -30339,7 +30335,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -30416,7 +30412,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -30493,7 +30489,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -30570,7 +30566,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -30647,7 +30643,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -30724,7 +30720,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -30801,7 +30797,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -30878,7 +30874,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -30955,7 +30951,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -31032,7 +31028,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -31109,7 +31105,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -31186,7 +31182,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -31263,7 +31259,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -31340,7 +31336,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -31407,7 +31403,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -31483,7 +31479,7 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     },
     {
@@ -31560,31 +31556,24 @@
       "pillarBrief": null,
       "enrichmentBrief": null,
       "ctrUpgradeBrief": null,
-      "createdAt": "2026-11-10T13:13:21.113Z",
+      "createdAt": "2026-11-11T12:23:30.175Z",
       "appliedAt": null
     }
   ],
-  "lastUpdatedAt": "2026-11-10T13:13:36.901Z",
+  "lastUpdatedAt": "2026-11-11T12:23:39.459Z",
   "corpusSummary": {
     "canonicalSitemapUrls": 222,
     "consolidatedCannibalUrlsBlocked": 31,
     "gscTitleCooldownLockedUrls": 23,
-    "rolling7DayNewPillarsCreated": 6,
+    "rolling7DayNewPillarsCreated": 4,
     "weeklyNewPillarCap": 10,
     "dailyNewPillarCap": 2
   },
   "auditSummary": {
-    "auditedAt": "2026-11-10T13:13:40.193Z",
+    "auditedAt": "2026-11-11T12:23:41.714Z",
     "assertionsPassed": "10/10 PASS",
-    "autoRepairsApplied": 6,
-    "repairLog": [
-      "Cleaned legacy FAQ/enrichment copy in /solutions/bt-broadband-uhd-streaming-buffering",
-      "Cleaned legacy FAQ/enrichment copy in /solutions/eduroam-campus-wifi-p2p-port-forwarding",
-      "Cleaned legacy FAQ/enrichment copy in /solutions/eduroam-campus-wifi-remote-dev-ssh",
-      "Cleaned legacy FAQ/enrichment copy in /solutions/sky-broadband-remote-dev-ssh",
-      "Cleaned legacy FAQ/enrichment copy in /solutions/virgin-media-uhd-streaming-buffering",
-      "Cleaned legacy FAQ/enrichment copy in /solutions/vodafone-uk-remote-dev-ssh"
-    ]
+    "autoRepairsApplied": 0,
+    "repairLog": []
   },
   "strategyLedgerSummary": {
     "ledgerPath": "website/seo-strategy-performance-ledger.json",

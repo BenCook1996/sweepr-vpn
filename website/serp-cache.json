@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-11-10T13:13:36.899Z",
+  "updatedAt": "2026-11-11T12:23:39.458Z",
   "entries": {
     "3f6375c2084e251e": {
       "fetchedAt": 1793831697933,
@@ -2034,20 +2034,6 @@
         }
       ]
     },
-    "56d5b0d8ff3ab907": {
-      "fetchedAt": 1794316401187,
-      "keyword": "what is espressif on my wifi",
-      "source": "community-api+serp-verified",
-      "topResults": [
-        {
-          "title": "Wifi UDP Broadcasting on Verizon Router",
-          "url": "https://superuser.com/questions/1329645/wifi-udp-broadcasting-on-verizon-router",
-          "domain": "superuser.com",
-          "snippet": "Wifi UDP Broadcasting on Verizon Router (2018)",
-          "year": "2018"
-        }
-      ]
-    },
     "f8ace18218ada2bd": {
       "fetchedAt": 1794316402492,
       "keyword": "azurewave device on my wifi",
@@ -2120,20 +2106,6 @@
           "url": "https://www.infineon.com/partners/design-partner/azurewave",
           "domain": "infineon.com",
           "snippet": "Partner details AzureWave Technologies is a worldwide leading provider of wireless connectivity and image processing solutions."
-        }
-      ]
-    },
-    "066e69534ec7932a": {
-      "fetchedAt": 1794316404555,
-      "keyword": "what is espressif on my wifi router",
-      "source": "community-api+serp-verified",
-      "topResults": [
-        {
-          "title": "Wifi UDP Broadcasting on Verizon Router",
-          "url": "https://superuser.com/questions/1329645/wifi-udp-broadcasting-on-verizon-router",
-          "domain": "superuser.com",
-          "snippet": "Wifi UDP Broadcasting on Verizon Router (2018)",
-          "year": "2018"
         }
       ]
     },
@@ -2213,41 +2185,6 @@
         }
       ]
     },
-    "d34cb204d5aaab81": {
-      "fetchedAt": 1794316410243,
-      "keyword": "what is hon hai on my wifi",
-      "source": "community-api+serp-verified",
-      "topResults": [
-        {
-          "title": "Tell YC: Answers from John McCarthy",
-          "url": "https://news.ycombinator.com/item?id=185348",
-          "domain": "news.ycombinator.com",
-          "snippet": "Tell YC: Answers from John McCarthy (2008)",
-          "year": "2008"
-        },
-        {
-          "title": "Ask HN: Are you building an AI company brain?",
-          "url": "https://news.ycombinator.com/item?id=50379710",
-          "domain": "news.ycombinator.com",
-          "snippet": "Ask HN: Are you building an AI company brain? (2026)",
-          "year": "2026"
-        }
-      ]
-    },
-    "f4c03c31ee0ee90c": {
-      "fetchedAt": 1794316411092,
-      "keyword": "hon hai precision wifi",
-      "source": "community-api+serp-verified",
-      "topResults": [
-        {
-          "title": "Unknown device connected to LAN",
-          "url": "https://superuser.com/questions/1123293/unknown-device-connected-to-lan",
-          "domain": "superuser.com",
-          "snippet": "Unknown device connected to LAN (2016)",
-          "year": "2016"
-        }
-      ]
-    },
     "74b14fd04828d670": {
       "fetchedAt": 1794316412404,
       "keyword": "azurewave technology inc on my wifi",
@@ -2285,8 +2222,71 @@
         }
       ]
     },
+    "56d5b0d8ff3ab907": {
+      "fetchedAt": 1794399810224,
+      "keyword": "what is espressif on my wifi",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Wifi UDP Broadcasting on Verizon Router",
+          "url": "https://superuser.com/questions/1329645/wifi-udp-broadcasting-on-verizon-router",
+          "domain": "superuser.com",
+          "snippet": "Wifi UDP Broadcasting on Verizon Router (2018)",
+          "year": "2018"
+        }
+      ]
+    },
+    "066e69534ec7932a": {
+      "fetchedAt": 1794399811467,
+      "keyword": "what is espressif on my wifi router",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Wifi UDP Broadcasting on Verizon Router",
+          "url": "https://superuser.com/questions/1329645/wifi-udp-broadcasting-on-verizon-router",
+          "domain": "superuser.com",
+          "snippet": "Wifi UDP Broadcasting on Verizon Router (2018)",
+          "year": "2018"
+        }
+      ]
+    },
+    "d34cb204d5aaab81": {
+      "fetchedAt": 1794399814331,
+      "keyword": "what is hon hai on my wifi",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Show HN: Fishoid: an ambient fish tank for your screen",
+          "url": "https://fishoid.net/",
+          "domain": "news.ycombinator.com",
+          "snippet": "Show HN: Fishoid: an ambient fish tank for your screen (2026)",
+          "year": "2026"
+        },
+        {
+          "title": "Tell YC: Answers from John McCarthy",
+          "url": "https://news.ycombinator.com/item?id=185348",
+          "domain": "news.ycombinator.com",
+          "snippet": "Tell YC: Answers from John McCarthy (2008)",
+          "year": "2008"
+        }
+      ]
+    },
+    "f4c03c31ee0ee90c": {
+      "fetchedAt": 1794399815428,
+      "keyword": "hon hai precision wifi",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Unknown device connected to LAN",
+          "url": "https://superuser.com/questions/1123293/unknown-device-connected-to-lan",
+          "domain": "superuser.com",
+          "snippet": "Unknown device connected to LAN (2016)",
+          "year": "2016"
+        }
+      ]
+    },
     "bb6a60039546959b": {
-      "fetchedAt": 1794316413345,
+      "fetchedAt": 1794399816413,
       "keyword": "what is hon hai on my router",
       "source": "community-api+serp-verified",
       "topResults": [
@@ -2298,10 +2298,24 @@
           "year": "2024"
         },
         {
-          "title": "Show HN: Prism – Self-hosted notification gateway (Signal, Telegram, WebPush)",
-          "url": "https://github.com/lone-cloud/prism",
+          "title": "Ask HN: How's your home-cooked software revolution going?",
+          "url": "https://news.ycombinator.com/item?id=50391446",
           "domain": "news.ycombinator.com",
-          "snippet": "Show HN: Prism – Self-hosted notification gateway (Signal, Telegram, WebPush) (2026)",
+          "snippet": "Ask HN: How's your home-cooked software revolution going? (2026)",
+          "year": "2026"
+        }
+      ]
+    },
+    "f03de47da6754dea": {
+      "fetchedAt": 1794399818344,
+      "keyword": "hon hai device on wifi",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Show HN: Valin – your private memory for everything you save",
+          "url": "https://www.valin.ai/",
+          "domain": "news.ycombinator.com",
+          "snippet": "Show HN: Valin – your private memory for everything you save (2026)",
           "year": "2026"
         }
       ]
