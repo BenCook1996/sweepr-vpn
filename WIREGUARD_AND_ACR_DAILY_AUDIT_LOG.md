@@ -338,3 +338,45 @@ Daily automated operational verification for the SWEEPR WireGuard 10Gbps server 
 7. **Hisense VIDAA & TCL Smart-TV Telemetry** (`msg.vidaahub.com`, `tcllauncher.tclclouds.com`, etc.)
 8. **Cross-Vendor Samba TV, Alphonso & Gracenote ACR SDKs** (`api.cid.samba.tv`, `alphonso.tv`, `acr.gracenote.com`, etc.)
 
+## 2026-11-12 — Daily WireGuard Node Health & Smart-TV ACR Blocklist Audit
+
+- **Timestamp**: `2026-11-12T13:29:56.965Z`
+- **WireGuard Production Fleet Health**: **8/8 POPs Online (100%)** | Active Devices: `17`
+- **Storefront Reachability**: HTTP `200` (`584ms` RTT)
+- **Smart-TV ACR Sinkhole Blocklist**: `65` Verified Domains across `8` OS families (SHA-1: `9526d5e56139`)
+- **Strict Compliance Rules**:
+  - `NEVER BLOCK STREAMING PLAYBACK CDNs`: **PASS** (0 false positives; Netflix, BBC, ITV, Channel 4, YouTube, Disney+, Prime Video unblocked)
+  - `DO NOT SEND EMAILS`: **PASS** (0 emails dispatched)
+
+### Live WireGuard Production POPs
+| POP Code | City | Country | Online Status | Probe Latency | p99 Latency | Connected Devices |
+|:---|:---|:---:|:---:|:---:|:---:|:---:|
+| **SE-STO-01** | Stockholm | Sweden (SE) | 🟢 Online | `196ms` | `199ms` | `1` |
+| **UK-LON-01** | London | United Kingdom (GB) | 🟢 Online | `157ms` | `161ms` | `5` |
+| **DE-FRA-01** | Frankfurt | Germany (DE) | 🟢 Online | `181ms` | `183ms` | `1` |
+| **US-LAX-01** | Los Angeles | United States (US) | 🟢 Online | `126ms` | `134ms` | `1` |
+| **NL-AMS-01** | Amsterdam | Netherlands (NL) | 🟢 Online | `177ms` | `177ms` | `1` |
+| **US-NYC-01** | New York | United States (US) | 🟢 Online | `21ms` | `23ms` | `4` |
+| **JP-TYO-01** | Tokyo | Japan (JP) | 🟢 Online | `330ms` | `330ms` | `1` |
+| **SG-SIN-01** | Singapore | Singapore (SG) | 🟢 Online | `446ms` | `452ms` | `3` |
+
+### Core Bare-Metal 10Gbps Reference Configurations & MTU Presets
+| POP ID | City | Endpoint | Ports | Capacity | Baseline RTT | MTU Presets (Std / PPPoE / CGNAT) |
+|:---|:---|:---|:---:|:---:|:---:|:---:|
+| **UK-LON-01** | London Docklands (Telehouse North) | `lon01.wg.sweeprvpn.com` | `51820, 443` | 10 Gbps | `4.1ms` | `1420` / `1412` / `1380` |
+| **UK-MAN-02** | Manchester (Equinix MA1) | `man02.wg.sweeprvpn.com` | `51820, 443` | 10 Gbps | `6.4ms` | `1420` / `1412` / `1380` |
+| **NL-AMS-01** | Amsterdam (Equinix AM7) | `ams01.wg.sweeprvpn.com` | `51820, 443` | 10 Gbps | `11.2ms` | `1420` / `1412` / `1380` |
+| **DE-FRA-01** | Frankfurt (DE-CIX Interconnect) | `fra01.wg.sweeprvpn.com` | `51820, 443` | 10 Gbps | `14.3ms` | `1420` / `1412` / `1380` |
+| **CH-ZRH-01** | Zurich (SwissIX Privacy Core) | `zrh01.wg.sweeprvpn.com` | `51820, 443` | 10 Gbps | `17.8ms` | `1420` / `1412` / `1380` |
+| **US-NYC-01** | New York / Secaucus (NY4) | `nyc01.wg.sweeprvpn.com` | `51820, 443` | 10 Gbps | `68.4ms` | `1420` / `1412` / `1380` |
+
+### Smart-TV ACR & IoT Telemetry Categories Verified
+1. **Samsung Tizen SmartHub & ACR Frame Fingerprinting** (`gpm.samsungqbe.com`, `ACR0.samsungcloudsolution.com`, etc.)
+2. **LG webOS LivePlus ACR & Home Screen Ad Beacons** (`ibs.lgappstv.com`, `cdpbeacon.lgtvcommon.com`, etc.)
+3. **Roku OS Automated Content Recognition & Ad Beacons** (`cooper.logs.roku.com`, `traces.sr.roku.com`, etc.)
+4. **Vizio SmartCast (Inscape ACR) & Viewing Data Telemetry** (`tvinteractive.tv`, `inscape.tv`, etc.)
+5. **Amazon Fire TV (FireOS) ACR & Marketing Telemetry** (`device-metrics-us.amazon.com`, `aax-us-east.amazon-adsystem.com`, etc.)
+6. **Sony Bravia / Google TV / Android TV Interactive ACR** (`sonyselect.tv`, `agn.fe.ca.sambatv.com`, etc.)
+7. **Hisense VIDAA & TCL Smart-TV Telemetry** (`msg.vidaahub.com`, `tcllauncher.tclclouds.com`, etc.)
+8. **Cross-Vendor Samba TV, Alphonso & Gracenote ACR SDKs** (`api.cid.samba.tv`, `alphonso.tv`, `acr.gracenote.com`, etc.)
+

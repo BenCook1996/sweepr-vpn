@@ -8,7 +8,7 @@
   "bing_requested": [],
   "directory_forms_submitted": [],
   "last_indexnow_ping": "2026-11-10T13:13:41.797Z",
-  "last_sitemap_ping": "2026-11-11T12:23:42.290Z",
+  "last_sitemap_ping": "2026-11-12T13:30:49.015Z",
   "pending_urls": [],
   "indexnow_submitted_at": {
     "https://sweeprvpn.com/solutions/talktalk-p2p-port-forwarding": "2026-11-01T23:05:54.478Z",
@@ -416,14 +416,14 @@
     "https://sweeprvpn.com/solutions/brsk-better-net-uk-voip-teams-zoom-jitter": "2026-11-10T13:13:41.797Z"
   },
   "last_daily_50_batch": {
-    "date": "2026-11-11",
+    "date": "2026-11-12",
     "newCount": 0,
     "totalPseoPages": 200,
     "consolidatedNoIndexExcluded": 997,
     "totalSitemapUrls": 223
   },
   "last_audit": {
-    "date": "2026-11-11",
+    "date": "2026-11-12",
     "totalUrls": 222,
     "pendingDeltaUrls": 0
   }

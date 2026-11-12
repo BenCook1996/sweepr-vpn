@@ -1,20 +1,20 @@
 {
-  "capturedAt": "2026-11-11T12:23:27.679Z",
+  "capturedAt": "2026-11-12T13:29:58.441Z",
   "windowDays": 28,
   "property": "sc-domain:sweeprvpn.com",
   "gscSummary": {
     "last28Days": {
-      "dateRange": "2026-10-12 to 2026-11-09",
+      "dateRange": "2026-10-13 to 2026-11-10",
       "clicks": 3,
-      "impressions": 534,
+      "impressions": 535,
       "ctrPct": 0.56,
-      "avgPosition": 22.4
+      "avgPosition": 22.3
     },
     "last7Days": {
-      "dateRange": "2026-11-02 to 2026-11-09",
+      "dateRange": "2026-11-03 to 2026-11-10",
       "clicks": 2,
-      "impressions": 255,
-      "ctrPct": 0.78,
+      "impressions": 246,
+      "ctrPct": 0.81,
       "avgPosition": 23
     },
     "latestPeakDay": {
@@ -49,11 +49,11 @@
   "pages": {
     "/setup/gl-inet-travel-router": {
       "impressions28d": 100,
-      "impressions7d": 50,
+      "impressions7d": 46,
       "clicks28d": 1,
       "ctrPct": 1,
       "avgPosition": 19,
-      "avgPosition7d": 19.1,
+      "avgPosition7d": 19.9,
       "topQuery": "gl-mt3000 wireguard speed",
       "ga4Sessions": 1,
       "ga4Conversions": 1,
@@ -68,8 +68,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 100,
         "gscClicks28d": 1,
         "gscCtrPct": 1,
@@ -100,8 +100,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 60,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -113,11 +113,11 @@
     },
     "/guides/stop-samsung-smart-tv-acr-tracking": {
       "impressions28d": 51,
-      "impressions7d": 17,
+      "impressions7d": 16,
       "clicks28d": 0,
       "ctrPct": 0,
       "avgPosition": 12.9,
-      "avgPosition7d": 11.6,
+      "avgPosition7d": 11.7,
       "topQuery": "how to turn off acr on samsung tv",
       "ga4Sessions": 11,
       "ga4Conversions": 0,
@@ -132,8 +132,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 51,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -164,8 +164,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 10,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -196,8 +196,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 24,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -215,7 +215,7 @@
       "avgPosition": 2.5,
       "avgPosition7d": 58.6,
       "topQuery": "sweepr vpn",
-      "ga4Sessions": 139,
+      "ga4Sessions": 141,
       "ga4Conversions": 2,
       "appliedAt": "2026-11-04T05:00:00.000Z",
       "preChangeBaseline": {
@@ -228,8 +228,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -260,8 +260,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 22,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -292,8 +292,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 6,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -324,8 +324,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 18,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -356,8 +356,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 26,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -369,11 +369,11 @@
     },
     "/alternatives/totalvpn": {
       "impressions28d": 22,
-      "impressions7d": 10,
+      "impressions7d": 9,
       "clicks28d": 0,
       "ctrPct": 0,
       "avgPosition": 19.5,
-      "avgPosition7d": 3.4,
+      "avgPosition7d": 3.2,
       "topQuery": "\"nordvpn\"",
       "ga4Sessions": 6,
       "ga4Conversions": 0,
@@ -388,8 +388,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 22,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -401,11 +401,11 @@
     },
     "/guides/stop-roku-vizio-firetv-spying": {
       "impressions28d": 12,
-      "impressions7d": 8,
+      "impressions7d": 7,
       "clicks28d": 0,
       "ctrPct": 0,
       "avgPosition": 8.2,
-      "avgPosition7d": 8,
+      "avgPosition7d": 7.9,
       "topQuery": "vizio acr",
       "ga4Sessions": 5,
       "ga4Conversions": 0,
@@ -420,8 +420,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 12,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -433,7 +433,7 @@
     },
     "/setup/macos-apple-silicon-vpn": {
       "impressions28d": 5,
-      "impressions7d": 3,
+      "impressions7d": 2,
       "clicks28d": 0,
       "ctrPct": 0,
       "avgPosition": 16.4,
@@ -452,8 +452,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 5,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -465,11 +465,11 @@
     },
     "/setup/nvidia-shield-tv-pro-wireguard": {
       "impressions28d": 13,
-      "impressions7d": 5,
+      "impressions7d": 3,
       "clicks28d": 0,
       "ctrPct": 0,
       "avgPosition": 5.6,
-      "avgPosition7d": 4.8,
+      "avgPosition7d": 5.3,
       "topQuery": "nvidia shield wireguard",
       "ga4Sessions": 6,
       "ga4Conversions": 0,
@@ -484,8 +484,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 13,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -516,8 +516,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 8,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -548,8 +548,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 5,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -580,8 +580,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 10,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -612,8 +612,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 11,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -644,8 +644,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 12,
         "gscClicks28d": 1,
         "gscCtrPct": 8.33,
@@ -676,8 +676,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 5,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -708,8 +708,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 3,
         "gscClicks28d": 1,
         "gscCtrPct": 33.33,
@@ -771,8 +771,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -833,8 +833,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 3,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -863,8 +863,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -893,8 +893,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -923,8 +923,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -953,8 +953,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -964,12 +964,12 @@
       }
     },
     "/setup": {
-      "impressions28d": 2,
-      "impressions7d": 2,
+      "impressions28d": 3,
+      "impressions7d": 3,
       "clicks28d": 0,
       "ctrPct": 0,
-      "avgPosition": 35,
-      "avgPosition7d": 35,
+      "avgPosition": 23.7,
+      "avgPosition7d": 23.7,
       "topQuery": "\"tailscale\" -/kb",
       "appliedAt": "2026-11-04T05:00:00.000Z",
       "changeType": "GSC_TITLE_SURGERY",
@@ -983,12 +983,12 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
-        "gscImpressions28d": 2,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
+        "gscImpressions28d": 3,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
-        "gscAvgPosition": 35,
+        "gscAvgPosition": 23.7,
         "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0
       }
@@ -1013,8 +1013,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1043,8 +1043,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 8,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 9,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1073,8 +1073,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1103,8 +1103,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1133,8 +1133,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1163,8 +1163,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 8,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 9,
         "gscImpressions28d": 4,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1193,8 +1193,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 6,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1223,8 +1223,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 7,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1253,8 +1253,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 8,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1283,8 +1283,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 3,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1313,8 +1313,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 3,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1343,8 +1343,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 4,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1373,8 +1373,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1403,8 +1403,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1433,8 +1433,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1463,8 +1463,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1493,8 +1493,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1523,8 +1523,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1553,8 +1553,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1583,8 +1583,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1613,8 +1613,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1643,8 +1643,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1673,8 +1673,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1703,8 +1703,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1733,8 +1733,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1763,8 +1763,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1793,8 +1793,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1823,8 +1823,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 8,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 9,
         "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1853,8 +1853,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1883,8 +1883,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 5,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1913,8 +1913,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1943,8 +1943,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1973,8 +1973,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2003,8 +2003,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2033,8 +2033,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 8,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 9,
         "gscImpressions28d": 5,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2063,8 +2063,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2093,8 +2093,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2123,8 +2123,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2153,8 +2153,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2183,8 +2183,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 3,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2213,8 +2213,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 3,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2243,8 +2243,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2273,8 +2273,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2303,8 +2303,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2333,8 +2333,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2363,8 +2363,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2393,8 +2393,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 7,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 8,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2423,8 +2423,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-11T12:23:27.679Z",
-        "daysElapsed": 8,
+        "lastMeasuredAt": "2026-11-12T13:29:58.441Z",
+        "daysElapsed": 9,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2456,13 +2456,13 @@
     "/solutions/ee-5g-mobile-hotspot-smart-tv-acr-blocking"
   ],
   "ga4Summary": {
-    "capturedAt": "2026-11-11T12:23:27.679Z",
+    "capturedAt": "2026-11-12T13:29:58.441Z",
     "propertyId": "559903365",
-    "activeUsers": 128,
-    "sessions": 152,
+    "activeUsers": 130,
+    "sessions": 154,
     "engagedSessions": 42,
-    "engagementRate": 27.63,
-    "totalEvents": 820,
+    "engagementRate": 27.27,
+    "totalEvents": 826,
     "events": {}
   }
 }
