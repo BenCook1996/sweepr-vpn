@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-11-12T13:30:26.958Z",
+  "updatedAt": "2026-11-13T12:48:55.001Z",
   "entries": {
     "ddg:en-GB:gl inet slate 7 wireguard": {
       "fetchedAt": 1794490201331,
@@ -2777,20 +2777,20 @@
       ]
     },
     "google:en-GB:what is espressif on my wifi": {
-      "fetchedAt": 1793959372039,
+      "fetchedAt": 1794574131028,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": [
         "what is espressif on my wifi",
         "what is espressif on my wifi router",
         "what is espressif on my wifi list",
-        "what is espressif inc on my wifi",
-        "what device is espressif on my wifi",
         "what is espressif on my internet",
         "what is espressif device on my wi fi",
-        "what is espressif connected to my wifi",
+        "what is espressif on my wi fi network",
         "what would espressif be on my wifi",
-        "what is espressif device connected to my wifi"
+        "what is espressif on my network",
+        "what is espressif",
+        "what devices use espressif"
       ]
     },
     "bing:en-GB:what is espressif on my wifi": {
@@ -2811,7 +2811,7 @@
       ]
     },
     "ddg:en-GB:what is espressif on my wifi": {
-      "fetchedAt": 1793959372039,
+      "fetchedAt": 1794574131028,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -2843,7 +2843,7 @@
       ]
     },
     "ddg:en-GB:what is tuya device on wifi": {
-      "fetchedAt": 1793959372927,
+      "fetchedAt": 1794574131745,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -2858,7 +2858,7 @@
       ]
     },
     "google:en-GB:what is tuya device on wifi": {
-      "fetchedAt": 1793959372927,
+      "fetchedAt": 1794574131745,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": [
@@ -2868,13 +2868,11 @@
         "what is tuya wifi",
         "can tuya work without internet",
         "how to connect tuya smart to wifi",
-        "how to share tuya smart device",
-        "what is tuya device on wifi connection",
-        "what is tuya device on wifi network"
+        "how to share tuya smart device"
       ]
     },
     "ddg:en-GB:murata manufacturing on my wifi": {
-      "fetchedAt": 1793959373613,
+      "fetchedAt": 1794574132304,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -2889,16 +2887,19 @@
       ]
     },
     "google:en-GB:murata manufacturing on my wifi": {
-      "fetchedAt": 1793959373613,
+      "fetchedAt": 1794574132304,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": [
         "murata manufacturing on my wifi",
         "murata manufacturing device on my wifi",
-        "murata manufacturing co ltd on my wifi",
+        "murata manufacturing co on.my wifi",
         "murata manufacturing connected to my wifi",
         "how to make wifi with magnet",
-        "how to control devices on wifi"
+        "how to control devices on wifi",
+        "murata manufacturing on my wifi router",
+        "murata manufacturing on my wifi network",
+        "murata manufacturing on my wifi dongle"
       ]
     },
     "bing:en-GB:murata manufacturing on my wifi": {
@@ -2919,7 +2920,7 @@
       ]
     },
     "google:en-GB:how to pause wifi on ps5 at bedtime": {
-      "fetchedAt": 1793959374248,
+      "fetchedAt": 1794574132901,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": []
@@ -2938,7 +2939,7 @@
       ]
     },
     "ddg:en-GB:how to pause wifi on ps5 at bedtime": {
-      "fetchedAt": 1793959374248,
+      "fetchedAt": 1794574132901,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -2964,13 +2965,13 @@
       ]
     },
     "google:en-GB:turn off kids xbox wifi at night": {
-      "fetchedAt": 1793959374822,
+      "fetchedAt": 1794574133344,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": []
     },
     "ddg:en-GB:turn off kids xbox wifi at night": {
-      "fetchedAt": 1793959374822,
+      "fetchedAt": 1794574133344,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -2983,13 +2984,13 @@
       ]
     },
     "google:en-GB:best fing alternative no subscription": {
-      "fetchedAt": 1793959375427,
+      "fetchedAt": 1794574133875,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": []
     },
     "ddg:en-GB:best fing alternative no subscription": {
-      "fetchedAt": 1793959375427,
+      "fetchedAt": 1794574133875,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -3027,13 +3028,13 @@
       ]
     },
     "google:en-GB:fing alternative plain english wifi scanner": {
-      "fetchedAt": 1793959376040,
+      "fetchedAt": 1794574134448,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": []
     },
     "ddg:en-GB:fing alternative plain english wifi scanner": {
-      "fetchedAt": 1793959376040,
+      "fetchedAt": 1794574134448,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [

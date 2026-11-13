@@ -1,12 +1,12 @@
 # SWEEPR VPN — Automated Keyword Opportunities, Competitor SEO & Pre/Post Forecast Audit Log
 
-- **Last Audited**: `2026-11-12T13:30:48.491Z`
+- **Last Audited**: `2026-11-13T12:49:06.760Z`
 - **Canonical Sitemap Corpus**: `222` URLs (`31` consolidated cannibal slugs blocked)
 - **Total Candidate Queries Evaluated**: `369`
 - **Approved / Applied `CREATE_NEW_PILLAR`**: `23` (Caps: `2/day`, `10/week` | Rolling 7-Day Post-Consolidation Created: `2`)
 - **Approved / Applied `ENRICH_EXISTING`**: `54`
 - **Filtered / Rejected (`REJECT_OR_DEFER`)**: `189`
-- **Pre/Post Strategy Ledger**: `website/seo-strategy-performance-ledger.json` (`111` tracked entries; live input from `website/gsc-ga4-latest-snapshot.json`)
+- **Pre/Post Strategy Ledger**: `website/seo-strategy-performance-ledger.json` (`112` tracked entries; live input from `website/gsc-ga4-latest-snapshot.json`)
 - **Quality Gate Status**: **`10/10 PASS`** (`0` automated self-healing repairs applied)
 
 ## 1. 10-Assertion Automated Quality Gate Scorecard
@@ -22,7 +22,7 @@
 | `7. GSC_14DAY_TITLE_COOLDOWN_LOCK` | **PASS** | All 23 Top GSC URLs protected by unified 14-day title cooldown lock |
 | `8. NEW_PILLAR_40PCT_STRUCTURED_DATA` | **PASS** | All CREATE_NEW_PILLAR briefs >= 48% unique structured CLI/benchmark data |
 | `9. COPY_FLUENCY_AND_NO_DOUBLE_PARENS` | **PASS** | 0 double parentheticals, 0 duplicate mid-query verbs, and natural FAQ questions |
-| `10. PRE_POST_LEDGER_AND_CALIBRATION` | **PASS** | 109 entries tracked with ground-truth GSC telemetry (535 28d property impr, 0 synthetic inflation) & bounded calibrationMultipliers [0.75, 1.35] |
+| `10. PRE_POST_LEDGER_AND_CALIBRATION` | **PASS** | 110 entries tracked with ground-truth GSC telemetry (535 28d property impr, 0 synthetic inflation) & bounded calibrationMultipliers [0.75, 1.35] |
 
 ## 2. Approved / Applied `CREATE_NEW_PILLAR` Queue (With Calibrated KD, Volume, Time-to-Rank & Transactional Forecast)
 
@@ -61,12 +61,12 @@
 | 3 | `what is espressif on my wifi router` | `/guides/what-is-espressif-tuya-murata-on-my-wifi` | `FING_OUI_DIRECTORY` | **13** (`VERY_EASY`) | 210–520/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_TOOL_ACTION` (3.9%) | **89** | `APPROVED` |
 | 4 | `virgin media minimum speed guarantee` | `/solutions/uk-ofcom-broadband-speed-guarantee-compensation-claim` | `OFCOM_FCC_ISP_REFUND_AND_THROTTLING` | **13** (`VERY_EASY`) | 520–1,380/mo | 3–8 days (Indexed Pillar) | `T1_BOFU_TOOL_ACTION` (3.9%) | **89** | `APPROVED` |
 | 5 | `bt broadband slow speed bill credit card` | `/solutions/uk-ofcom-broadband-speed-guarantee-compensation-claim` | `OFCOM_FCC_ISP_REFUND_AND_THROTTLING` | **13** (`VERY_EASY`) | 210–520/mo | 3–8 days (Indexed Pillar) | `T1_BOFU_TOOL_ACTION` (3.9%) | **88** | `APPROVED` |
-| 6 | `what device is espressif on my wifi` | `/guides/what-is-espressif-tuya-murata-on-my-wifi` | `FING_OUI_DIRECTORY` | **28** (`EASY`) | 520–1,380/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_TOOL_ACTION` (3.9%) | **83** | `APPROVED` |
-| 7 | `zimaboard wireguard vpn gateway not working` | `/setup/zimaboard-casaos-gluetun-wireguard` | `HARDWARE_WIREGUARD_SETUP` | **13** (`VERY_EASY`) | 490–1,300/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **83** | `APPROVED` |
-| 8 | `fritzbox wireguard vpn setup` | `/setup/fritzbox-7590-ax-wireguard-vpn` | `HARDWARE_WIREGUARD_SETUP` | **12** (`VERY_EASY`) | 490–1,300/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **83** | `APPROVED` |
-| 9 | `protonvpn wireguard router` | `/vs/protonvpn` | `BOFU_COMPETITOR_SWITCHER` | **12** (`VERY_EASY`) | 200–500/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_SWITCHER` (4.5%) | **82** | `APPROVED` |
-| 10 | `wireguard vpn zu fritzbox` | `/setup/fritzbox-7590-ax-wireguard-vpn` | `HARDWARE_WIREGUARD_SETUP` | **13** (`VERY_EASY`) | 490–1,300/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **82** | `APPROVED` |
-| 11 | `synology nas wireguard vpn` | `/setup/synology-nas-docker-vpn` | `HARDWARE_WIREGUARD_SETUP` | **17** (`VERY_EASY`) | 190–490/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **81** | `APPROVED` |
+| 6 | `zimaboard wireguard vpn gateway not working` | `/setup/zimaboard-casaos-gluetun-wireguard` | `HARDWARE_WIREGUARD_SETUP` | **13** (`VERY_EASY`) | 490–1,300/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **83** | `APPROVED` |
+| 7 | `fritzbox wireguard vpn setup` | `/setup/fritzbox-7590-ax-wireguard-vpn` | `HARDWARE_WIREGUARD_SETUP` | **12** (`VERY_EASY`) | 490–1,300/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **83** | `APPROVED` |
+| 8 | `protonvpn wireguard router` | `/vs/protonvpn` | `BOFU_COMPETITOR_SWITCHER` | **12** (`VERY_EASY`) | 200–500/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_SWITCHER` (4.5%) | **82** | `APPROVED` |
+| 9 | `wireguard vpn zu fritzbox` | `/setup/fritzbox-7590-ax-wireguard-vpn` | `HARDWARE_WIREGUARD_SETUP` | **13** (`VERY_EASY`) | 490–1,300/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **82** | `APPROVED` |
+| 10 | `synology nas wireguard vpn` | `/setup/synology-nas-docker-vpn` | `HARDWARE_WIREGUARD_SETUP` | **17** (`VERY_EASY`) | 190–490/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **81** | `APPROVED` |
+| 11 | `murata manufacturing wifi` | `/guides/what-is-espressif-tuya-murata-on-my-wifi` | `FING_OUI_DIRECTORY` | **28** (`EASY`) | 210–520/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_TOOL_ACTION` (3.9%) | **80** | `APPROVED` |
 | 12 | `private wifi address showing as unknown device` | `/guides/private-wifi-address-mac-randomization-unknown-device` | `FIREWALLA_MAC_AND_ISOLATION` | **28** (`EASY`) | 200–500/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_FAMILY_WIFI_CONTROL` (3.2%) | **80** | `APPROVED` |
 | 13 | `steam deck wireguard vpn` | `/setup/steam-deck-vpn` | `HARDWARE_WIREGUARD_SETUP` | **17** (`VERY_EASY`) | 190–490/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **80** | `APPROVED` |
 | 14 | `does bitdefender vpn use wireguard` | `/vs/bitdefender-vpn-renewal-alternative` | `BOFU_COMPETITOR_SWITCHER` | **24** (`EASY`) | 200–500/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_SWITCHER` (4.5%) | **79** | `APPROVED` |
@@ -97,7 +97,7 @@
 
 | Playbook ID | Competitor Strategy Replicated | Tracked Queries | Avg KD | Calibrated Time to Top 10 | Empirical Multipliers (Vol / Speed / Boost) | Automated Strategy Adjustment Going Forward |
 |---|---|---|---|---|---|---|
-| `FING_OUI_DIRECTORY` | Playbook 1: Fing OUI / Chip Translator ("Espressif", "Hon Hai", "LiteOn") | `15` | **15/100** | 2–11 days | `1.15x Vol | 0.82x Days | +3 pts` | BOOST_ALLOCATION (+25%) — Verified Nov 9 GSC: /guides/detect-unknown-devices-on-home-wifi jumped Pos 46.7 -> 6.0 (7d) & /tools/whats-on-my-wifi at Pos 9.8. |
+| `FING_OUI_DIRECTORY` | Playbook 1: Fing OUI / Chip Translator ("Espressif", "Hon Hai", "LiteOn") | `16` | **15/100** | 2–11 days | `1.15x Vol | 0.82x Days | +3 pts` | BOOST_ALLOCATION (+25%) — Verified Nov 9 GSC: /guides/detect-unknown-devices-on-home-wifi jumped Pos 46.7 -> 6.0 (7d) & /tools/whats-on-my-wifi at Pos 9.8. |
 | `FIREWALLA_MAC_AND_ISOLATION` | Playbook 2: Firewalla Private MAC Randomization & Airbnb Camera Audit | `4` | **19/100** | 6–16 days | `1.1x Vol | 0.88x Days | +2 pts` | BOOST_ALLOCATION (+20%) — Solves "Unknown Device" router panic in software vs $300+ hardware; crawl-bridged from /tools/leak-test. |
 | `BARK_CONSOLE_BEDTIME_PAUSE` | Playbook 3: Bark / Qustodio Console Bedtime Wi-Fi Pause (PS5/Xbox/Switch) | `1` | **21/100** | 6–19 days | `1.08x Vol | 0.9x Days | +2 pts` | EXPAND_CONSOLE_GUIDES (+15%) — Captures parents searching for PS5/Switch bedtime cutoffs; crawl-bridged from /tools/leak-test. |
 | `OFCOM_FCC_ISP_REFUND_AND_THROTTLING` | Playbook 4: Surfshark + Ofcom/FCC Speed Guarantee & Bill Credit Scripts | `12` | **20/100** | 3–12 days | `1.15x Vol | 0.84x Days | +3 pts` | PRIORITIZE_TOOL_BRIDGE (+20%) — Verified Nov 9 GSC: TalkTalk Pos 5.9 (11.1% CTR), Gigaclear Pos 6.8, Eduroam Pos 8.2 (34 impr), Virgin Media SSH Pos 9.2. |
