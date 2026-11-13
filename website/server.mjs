@@ -7844,7 +7844,7 @@ self.addEventListener('fetch', e => {
     } else if (isLoginRoute) {
       headers['X-Robots-Tag'] = 'noindex, nofollow';
       headers['Cache-Control'] = 'no-store, no-cache, must-revalidate';
-    } else if (/^(prototype-|sweepr-motion-review|sweepr-vpn-scorecard|popup-alternatives)/i.test(baseName)) {
+    } else if (/^(prototype-|sweepr-motion-review|sweepr-vpn-scorecard|popup-alternatives|ui-ux-audit-mockups)/i.test(baseName)) {
       headers['X-Robots-Tag'] = 'noindex, nofollow';
       headers['Cache-Control'] = 'no-store, no-cache, must-revalidate';
     } else if (/^(favicon|logo-|padlock-favicon|icon-)/i.test(baseName) || ext === '.ico' || ext === '.js' || ext === '.css') {

@@ -1238,7 +1238,8 @@ const UTILITY_AND_PROTOTYPE_PAGES = [
   'prototype-mockup-a.html',
   'prototype-mockup-b.html',
   'sweepr-motion-review.html',
-  'sweepr-vpn-scorecard.html'
+  'sweepr-vpn-scorecard.html',
+  'ui-ux-audit-mockups.html'
 ];
 let autoShieldedProtoCount = 0;
 if (shouldFix) {
@@ -1743,6 +1744,12 @@ for (const u of gscUrlsToVerify) {
   if (canonicalRouteSet.has(cleanU)) continue;
   const redirectTarget = serverRedirectMap[cleanU] || serverRedirectMap[u];
   if (redirectTarget && canonicalRouteSet.has(redirectTarget.replace(/\?.*$/, ''))) continue;
+  const diskHtmlPath = path.join(WEBSITE_DIR, cleanU.replace(/^\/+/, '') + '.html');
+  if (fs.existsSync(diskHtmlPath)) {
+    const diskHtml = fs.readFileSync(diskHtmlPath, 'utf8');
+    const canonM = diskHtml.match(/<link\s+rel=["']canonical["']\s+href=["']https?:\/\/sweeprvpn\.com(\/[^"']*)["']/i);
+    if (canonM && canonM[1] && canonicalRouteSet.has(canonM[1])) continue;
+  }
   brokenGscOrRedirectUrls.push(u);
 }
 for (const [srcRoute, dstRoute] of Object.entries(serverRedirectMap)) {

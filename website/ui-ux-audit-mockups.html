@@ -1,0 +1,2392 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SWEEPR VPN — Full-Ecosystem UI/UX Audit &amp; 5–10 Alternative Mockups Studio</title>
+  <meta name="description" content="Comprehensive feature-by-feature UI/UX audit and 96 interactive alternative mockups (8 per surface) across the SWEEPR VPN Website, Windows/macOS Desktop Apps, Android App, iPhone/iOS App, and Free Diagnostic Tools using charles-unslop, charles-polish, and charles-ux-animation." />
+  <meta name="robots" content="noindex, nofollow" />
+  <!-- sweepr-order-draft-redirect: disabled on audit studio -->
+  <meta name="theme-color" content="#0d9468" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet" />
+  <style>
+    /* ==========================================================================
+       1. CHARLES-UNSLOP + CHARLES-POLISH + CHARLES-UX-ANIMATION TOKEN SYSTEM
+       ========================================================================== */
+    :root,
+    [data-theme="light"] {
+      /* Warm Mineral Paper Neutrals (OKLCH hue 85 warm stone, low chroma) */
+      --bg: oklch(0.985 0.004 85);
+      --bg-subtle: oklch(0.962 0.006 85);
+      --surface: oklch(0.996 0.002 85);
+      --surface-raised: oklch(1 0 0);
+      --surface-sunken: oklch(0.948 0.007 85);
+      --fg: oklch(0.175 0.012 255);
+      --fg-secondary: oklch(0.39 0.014 255);
+      --fg-muted: oklch(0.53 0.012 255);
+      --border: oklch(0.895 0.008 85);
+      --border-strong: oklch(0.81 0.012 85);
+
+      /* Primary Accent: Instrumented Emerald Phosphor */
+      --accent: oklch(0.53 0.145 162);
+      --accent-hover: oklch(0.47 0.145 162);
+      --accent-fg: oklch(0.99 0.005 162);
+      --accent-tint: oklch(0.955 0.032 162);
+      --accent-border: oklch(0.83 0.075 162);
+
+      /* Secondary Warm Amber / Copper Signal */
+      --amber: oklch(0.62 0.155 68);
+      --amber-tint: oklch(0.96 0.035 75);
+      --amber-border: oklch(0.85 0.08 72);
+
+      /* Danger / Threat Sinkhole */
+      --danger: oklch(0.55 0.19 25);
+      --danger-tint: oklch(0.96 0.028 25);
+      --danger-border: oklch(0.85 0.075 25);
+
+      /* Shadows (Subtle ambient + key light) */
+      --shadow-xs: 0 1px 2px oklch(0.18 0.01 255 / 0.04);
+      --shadow-sm: 0 1px 2px oklch(0.18 0.01 255 / 0.05), 0 4px 12px -2px oklch(0.18 0.01 255 / 0.05);
+      --shadow-md: 0 2px 4px -1px oklch(0.18 0.01 255 / 0.06), 0 12px 28px -6px oklch(0.18 0.01 255 / 0.08);
+    }
+
+    [data-theme="dark"] {
+      /* Anodized Obsidian Slate Neutrals (OKLCH hue 255 cool slate, 0.01 chroma) */
+      --bg: oklch(0.135 0.008 255);
+      --bg-subtle: oklch(0.162 0.009 255);
+      --surface: oklch(0.182 0.010 255);
+      --surface-raised: oklch(0.215 0.012 255);
+      --surface-sunken: oklch(0.115 0.007 255);
+      --fg: oklch(0.945 0.006 85);
+      --fg-secondary: oklch(0.74 0.010 255);
+      --fg-muted: oklch(0.56 0.010 255);
+      --border: oklch(1 0 0 / 0.09);
+      --border-strong: oklch(1 0 0 / 0.16);
+
+      --accent: oklch(0.67 0.155 162);
+      --accent-hover: oklch(0.72 0.155 162);
+      --accent-fg: oklch(0.13 0.02 162);
+      --accent-tint: oklch(0.23 0.045 162);
+      --accent-border: oklch(0.38 0.085 162);
+
+      --amber: oklch(0.75 0.15 72);
+      --amber-tint: oklch(0.24 0.045 72);
+      --amber-border: oklch(0.40 0.085 72);
+
+      --danger: oklch(0.68 0.18 25);
+      --danger-tint: oklch(0.23 0.05 25);
+      --danger-border: oklch(0.39 0.09 25);
+
+      --shadow-xs: 0 1px 2px oklch(0 0 0 / 0.28);
+      --shadow-sm: 0 1px 3px oklch(0 0 0 / 0.35), 0 6px 16px -3px oklch(0 0 0 / 0.38);
+      --shadow-md: 0 4px 8px -2px oklch(0 0 0 / 0.42), 0 16px 36px -8px oklch(0 0 0 / 0.5);
+    }
+
+    /* Typography & Spacing Tokens */
+    :root {
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+      --font-serif: 'Newsreader', Georgia, serif;
+
+      /* Concentric Radii: inner = outer - padding */
+      --radius-outer: 16px;
+      --radius-card: 12px;
+      --radius-inner: 8px;
+      --radius-sm: 6px;
+      --radius-xs: 4px;
+
+      /* charles-ux-animation Easing Tokens */
+      --ease-out: cubic-bezier(0.32, 0.72, 0, 1);
+      --ease-out-soft: cubic-bezier(0.25, 1, 0.5, 1);
+      --ease-in: cubic-bezier(0.55, 0, 1, 0.45);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* 1-Frame Theme Switch Suppression (recipes.md#theme-switch) */
+    html.no-transitions,
+    html.no-transitions *,
+    html.no-transitions *::before,
+    html.no-transitions *::after {
+      transition: none !important;
+      animation: none !important;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-sans);
+      font-size: 15px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      min-height: 100vh;
+      padding-bottom: 96px;
+    }
+
+    /* Tabular Nums Enforcement (charles-polish) */
+    .tabular,
+    .mono,
+    code,
+    pre,
+    table td,
+    .metric-val,
+    .price-val {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .mono {
+      font-family: var(--font-mono);
+    }
+
+    /* Interactive Press Feedback (charles-ux-animation) */
+    .btn,
+    .tab-btn,
+    .chip-btn,
+    .stage-ctrl {
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 150ms var(--ease-out), background-color 150ms ease, border-color 150ms ease, color 150ms ease, opacity 150ms ease;
+    }
+    .btn:active,
+    .tab-btn:active,
+    .chip-btn:active,
+    .stage-ctrl:active {
+      transform: scale(0.96);
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .btn-primary:hover {
+        background: var(--accent-hover);
+      }
+      .btn-secondary:hover {
+        background: var(--bg-subtle);
+        border-color: var(--border-strong);
+      }
+      .chip-btn:hover {
+        border-color: var(--border-strong);
+        color: var(--fg);
+      }
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* ==========================================================================
+       2. TOP STICKY INSTRUMENTATION HEADER & NAVIGATION
+       ========================================================================== */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      background: color-mix(in oklch, var(--surface) 88%, transparent);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .topbar-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .brand-cluster {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-mark {
+      width: 30px;
+      height: 30px;
+      border-radius: 7px;
+      background: var(--accent);
+      color: var(--accent-fg);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: -0.03em;
+    }
+    .brand-title {
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: -0.015em;
+      color: var(--fg);
+    }
+    .brand-sub {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--fg-muted);
+      padding-left: 10px;
+      border-left: 1px solid var(--border);
+    }
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .telemetry-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 10px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--fg-secondary);
+    }
+    .signal-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 7px 13px;
+      border-radius: var(--radius-sm);
+      font-size: 12.5px;
+      font-weight: 500;
+      border: 1px solid transparent;
+      text-decoration: none;
+      line-height: 1.2;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: var(--accent-fg);
+      border-color: color-mix(in oklch, var(--accent) 85%, black);
+    }
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--fg);
+      border-color: var(--border);
+    }
+
+    /* Jump Rail (Horizontal Masked Scroll Strip) */
+    .jump-rail-wrap {
+      border-top: 1px solid var(--border);
+      background: var(--bg-subtle);
+    }
+    .jump-rail {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 7px 24px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      mask-image: linear-gradient(90deg, transparent 0, #000 16px, #000 calc(100% - 24px), transparent 100%);
+    }
+    .jump-rail::-webkit-scrollbar {
+      display: none;
+    }
+    .jump-chip {
+      flex-shrink: 0;
+      padding: 4px 10px;
+      border-radius: var(--radius-xs);
+      font-size: 11.5px;
+      font-weight: 500;
+      color: var(--fg-secondary);
+      text-decoration: none;
+      border: 1px solid transparent;
+      transition: background-color 140ms ease, color 140ms ease, border-color 140ms ease;
+    }
+    .jump-chip:hover {
+      background: var(--surface);
+      color: var(--fg);
+      border-color: var(--border);
+    }
+    .jump-chip .num {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: var(--accent);
+      margin-right: 4px;
+    }
+
+    /* ==========================================================================
+       3. MAIN CONTAINER & HERO DIRECTION BRIEF
+       ========================================================================== */
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+    .hero-brief {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      gap: 24px;
+      padding: 28px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-outer);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 28px;
+    }
+    @media (max-width: 1024px) {
+      .hero-brief {
+        grid-template-columns: 1fr;
+      }
+    }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      font-weight: 500;
+      color: var(--accent);
+      letter-spacing: 0.02em;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    h1 {
+      font-size: clamp(1.65rem, 2.5vw, 2.25rem);
+      font-weight: 600;
+      letter-spacing: -0.028em;
+      line-height: 1.15;
+      color: var(--fg);
+      margin-bottom: 12px;
+      max-width: 34ch;
+    }
+    .hero-lead {
+      color: var(--fg-secondary);
+      font-size: 14.5px;
+      max-width: 66ch;
+      margin-bottom: 18px;
+    }
+    .skill-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .skill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: var(--radius-sm);
+      background: var(--accent-tint);
+      border: 1px solid var(--accent-border);
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--fg);
+    }
+
+    /* 6-Line charles-unslop Commitment Box */
+    .commitment-card {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-inner);
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .commitment-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--fg-muted);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 6px;
+      margin-bottom: 2px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .commitment-row {
+      display: grid;
+      grid-template-columns: 92px 1fr;
+      gap: 10px;
+      font-size: 12.5px;
+      line-height: 1.4;
+    }
+    .commitment-key {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      color: var(--fg);
+    }
+    .commitment-val {
+      color: var(--fg-secondary);
+    }
+
+    /* ==========================================================================
+       4. INTERACTIVE MOTION & POLISH MICRO-LAB (CHARLES-UX-ANIMATION RECIPES)
+       ========================================================================== */
+    .microlab {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-outer);
+      padding: 20px 24px;
+      margin-bottom: 32px;
+      box-shadow: var(--shadow-xs);
+    }
+    .microlab-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .microlab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 14px;
+    }
+    .lab-cell {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-inner);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .lab-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--fg-muted);
+    }
+    .lab-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--fg);
+      margin-top: 2px;
+    }
+
+    /* Recipe 1: Single-Cell Inline-Grid Async Button (No width jump!) */
+    .async-btn {
+      display: inline-grid;
+      align-items: center;
+      justify-items: center;
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      background: var(--accent);
+      color: var(--accent-fg);
+      border: 1px solid color-mix(in oklch, var(--accent) 85%, black);
+      font-size: 12.5px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: transform 150ms var(--ease-out), background-color 150ms ease;
+    }
+    .async-btn:active {
+      transform: scale(0.96);
+    }
+    .async-btn > span {
+      grid-area: 1 / 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: opacity 160ms var(--ease-out), transform 160ms var(--ease-out), filter 160ms var(--ease-out);
+    }
+    .async-btn > span[data-visible="false"] {
+      opacity: 0;
+      transform: scale(0.88);
+      filter: blur(2px);
+      pointer-events: none;
+    }
+    .async-btn > span[data-visible="true"] {
+      opacity: 1;
+      transform: scale(1);
+      filter: blur(0);
+    }
+    @keyframes spin360 {
+      to { transform: rotate(360deg); }
+    }
+    .spinner-svg {
+      animation: spin360 700ms linear infinite;
+    }
+
+    /* Recipe 2: Spring Icon Swap (Copy Button) */
+    .icon-swap-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--fg);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      cursor: pointer;
+      transition: transform 150ms var(--ease-out), border-color 150ms ease;
+    }
+    .icon-swap-btn:active {
+      transform: scale(0.96);
+    }
+    .icon-slot {
+      display: inline-grid;
+      width: 15px;
+      height: 15px;
+      align-items: center;
+      justify-items: center;
+    }
+    .icon-slot > svg {
+      grid-area: 1 / 1;
+      transition: transform 350ms var(--ease-spring), opacity 220ms var(--ease-out), filter 220ms var(--ease-out);
+    }
+    .icon-slot > svg[data-active="false"] {
+      transform: scale(0.3);
+      opacity: 0;
+      filter: blur(3px);
+    }
+    .icon-slot > svg[data-active="true"] {
+      transform: scale(1);
+      opacity: 1;
+      filter: blur(0);
+    }
+
+    /* Recipe 3: Grid-Template-Rows 0fr -> 1fr Accordion */
+    .accordion-trigger {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 7px 10px;
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--fg);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .accordion-chevron {
+      transition: transform 240ms var(--ease-out-soft);
+    }
+    .accordion-trigger[aria-expanded="true"] .accordion-chevron {
+      transform: rotate(180deg);
+    }
+    .accordion-body {
+      display: grid;
+      grid-template-rows: 0fr;
+      opacity: 0;
+      transition: grid-template-rows 240ms var(--ease-out-soft), opacity 200ms var(--ease-out);
+    }
+    .accordion-body[data-open="true"] {
+      grid-template-rows: 1fr;
+      opacity: 1;
+    }
+    .accordion-inner {
+      overflow: hidden;
+    }
+
+    /* ==========================================================================
+       5. FEATURE AUDIT & 8-MOCKUP STUDIO SECTION LAYOUT
+       ========================================================================== */
+    .surface-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-outer);
+      margin-bottom: 28px;
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      scroll-margin-top: 112px;
+    }
+    .surface-topbar {
+      padding: 18px 24px;
+      background: var(--bg-subtle);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .surface-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .surface-index {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .platform-tag {
+      padding: 2px 7px;
+      border-radius: var(--radius-xs);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--fg-secondary);
+      font-size: 10.5px;
+    }
+    .surface-title {
+      font-size: 19px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--fg);
+    }
+    .surface-files {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--fg-muted);
+    }
+    .surface-files a {
+      color: var(--fg-secondary);
+      text-decoration: underline;
+      text-decoration-color: var(--border-strong);
+      text-underline-offset: 3px;
+    }
+    .surface-files a:hover {
+      color: var(--accent);
+    }
+
+    .surface-body {
+      display: grid;
+      grid-template-columns: 390px 1fr;
+      min-height: 540px;
+    }
+    @media (max-width: 1120px) {
+      .surface-body {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Left Column: Audit Findings */
+    .audit-col {
+      padding: 20px 22px;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      background: color-mix(in oklch, var(--bg-subtle) 45%, var(--surface));
+    }
+    @media (max-width: 1120px) {
+      .audit-col {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+    }
+    .audit-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-inner);
+      padding: 12px 14px;
+    }
+    .audit-block-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+    .tag-unslop { color: var(--danger); }
+    .tag-polish { color: var(--amber); }
+    .tag-motion { color: var(--accent); }
+
+    .audit-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 12.5px;
+      color: var(--fg-secondary);
+    }
+    .audit-list li {
+      position: relative;
+      padding-left: 14px;
+      line-height: 1.45;
+    }
+    .audit-list li::before {
+      content: "·";
+      position: absolute;
+      left: 2px;
+      top: 0;
+      font-weight: 700;
+      color: var(--fg-muted);
+    }
+    .audit-list code {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      background: var(--bg-subtle);
+      padding: 1px 4px;
+      border-radius: 3px;
+      border: 1px solid var(--border);
+      color: var(--fg);
+    }
+
+    /* Right Column: Interactive 8-Mockup Studio */
+    .mockup-col {
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .mockup-Controls-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .mockup-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      background: var(--bg-subtle);
+      padding: 4px;
+      border-radius: var(--radius-inner);
+      border: 1px solid var(--border);
+    }
+    .tab-btn {
+      padding: 5px 10px;
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--fg-secondary);
+      font-size: 11.5px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .tab-btn[aria-selected="true"] {
+      background: var(--surface);
+      color: var(--fg);
+      border-color: var(--border-strong);
+      box-shadow: var(--shadow-xs);
+    }
+    .rec-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    /* State Simulator Bar */
+    .state-sim-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .state-sim-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--fg-muted);
+    }
+    .stage-ctrl {
+      padding: 4px 8px;
+      border-radius: var(--radius-xs);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--fg-secondary);
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+    .stage-ctrl[data-active="true"] {
+      background: var(--accent-tint);
+      border-color: var(--accent-border);
+      color: var(--fg);
+      font-weight: 600;
+    }
+
+    /* Mockup Rationale Banner */
+    .mockup-rationale {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 14px;
+      border-radius: var(--radius-inner);
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .rationale-text {
+      flex: 1;
+      min-width: 240px;
+    }
+    .rationale-title {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--fg);
+      margin-bottom: 3px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .rationale-desc {
+      font-size: 12.5px;
+      color: var(--fg-secondary);
+    }
+
+    /* Live Interactive Stage Canvas */
+    .stage-frame {
+      flex: 1;
+      background: var(--surface-sunken);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      min-height: 350px;
+      transition: opacity 180ms var(--ease-out), transform 180ms var(--ease-out);
+    }
+    .stage-frame[data-switching="true"] {
+      opacity: 0.4;
+      transform: translateY(3px);
+    }
+
+    /* ==========================================================================
+       6. ARCHITECTURAL MOCKUP ARCHETYPE STYLES (USED INSIDE LIVE STAGES)
+       ========================================================================== */
+    .mock-window {
+      background: var(--surface);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      width: 100%;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+    .mock-window.mobile-frame {
+      max-width: 370px;
+      border-radius: 24px;
+      border-width: 2px;
+    }
+    .mock-chrome {
+      padding: 9px 14px;
+      background: var(--bg-subtle);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--fg-muted);
+    }
+    .chrome-dots {
+      display: flex;
+      gap: 5px;
+    }
+    .chrome-dots span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border-strong);
+    }
+    .mock-content {
+      padding: 18px;
+    }
+
+    /* Signature Route Strip (charles-unslop signature element) */
+    .route-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 9px 12px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-inner);
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      margin-bottom: 14px;
+    }
+    .route-nodes {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      color: var(--fg);
+    }
+    .route-arrow {
+      color: var(--fg-muted);
+    }
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 8px;
+      border-radius: var(--radius-xs);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .status-pill[data-state="protected"] {
+      background: var(--accent-tint);
+      color: var(--accent);
+      border: 1px solid var(--accent-border);
+    }
+    .status-pill[data-state="connecting"] {
+      background: var(--amber-tint);
+      color: var(--amber);
+      border: 1px solid var(--amber-border);
+    }
+    .status-pill[data-state="exposed"] {
+      background: var(--danger-tint);
+      color: var(--danger);
+      border: 1px solid var(--danger-border);
+    }
+
+    /* Editorial Hairline Grid (1px solid gap pattern from visuals.md) */
+    .hairline-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-inner);
+      overflow: hidden;
+    }
+    .hairline-cell {
+      background: var(--surface);
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .cell-kicker {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: var(--fg-muted);
+    }
+    .cell-val {
+      font-family: var(--font-mono);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--fg);
+      font-variant-numeric: tabular-nums;
+    }
+    .cell-sub {
+      font-size: 11.5px;
+      color: var(--fg-secondary);
+    }
+
+    /* Server / Device Table inside Mockups */
+    .telemetry-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .telemetry-table th {
+      text-align: left;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--fg-muted);
+      padding: 7px 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .telemetry-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border);
+      color: var(--fg-secondary);
+    }
+    .telemetry-table tr:last-child td {
+      border-bottom: none;
+    }
+    .telemetry-table tr[data-selected="true"] td {
+      background: var(--accent-tint);
+      color: var(--fg);
+      font-weight: 500;
+    }
+    .load-bar-track {
+      width: 64px;
+      height: 5px;
+      background: var(--bg-subtle);
+      border-radius: 3px;
+      overflow: hidden;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 6px;
+      border: 1px solid var(--border);
+    }
+    .load-bar-fill {
+      height: 100%;
+      background: var(--accent);
+    }
+
+    /* Segmented 6-Slot OTP Box */
+    .otp-slots {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin: 12px 0;
+    }
+    .otp-slot {
+      width: 40px;
+      height: 46px;
+      border-radius: var(--radius-inner);
+      border: 1px solid var(--border-strong);
+      background: var(--bg-subtle);
+      font-family: var(--font-mono);
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--fg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-variant-numeric: tabular-nums;
+    }
+    .otp-slot.active {
+      border-color: var(--accent);
+      background: var(--surface);
+      box-shadow: 0 0 0 2px var(--accent-tint);
+    }
+
+    /* Sticky Bottom Selection Manifest Bar */
+    .selection-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 70;
+      background: color-mix(in oklch, var(--surface) 92%, transparent);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border-strong);
+      padding: 12px 24px;
+      box-shadow: var(--shadow-md);
+    }
+    .selection-bar-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .selection-summary {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 12.5px;
+      color: var(--fg-secondary);
+    }
+    .selection-pill {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: var(--radius-xs);
+      background: var(--accent-tint);
+      border: 1px solid var(--accent-border);
+      color: var(--fg);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================================
+       STICKY HEADER & JUMP NAVIGATION
+       ======================================================================== -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand-cluster">
+        <span class="brand-mark">SW</span>
+        <span class="brand-title">SWEEPR VPN — Full UI/UX Audit &amp; 96-Mockup Studio</span>
+        <span class="brand-sub">12 Surfaces × 8 Mockups Each (5–10 Range)</span>
+      </div>
+      <div class="topbar-actions">
+        <div class="telemetry-pill" title="Installed & Active Skills">
+          <span class="signal-dot"></span>
+          <span>charles-unslop · charles-polish · charles-ux-animation</span>
+        </div>
+        <button type="button" class="btn btn-secondary" id="themeToggleBtn" onclick="toggleStudioTheme()">
+          <span id="themeToggleLabel" class="mono">Theme: Light Mineral</span>
+        </button>
+        <a href="/" class="btn btn-secondary">Live Site ↗</a>
+      </div>
+    </div>
+    <div class="jump-rail-wrap">
+      <nav class="jump-rail" aria-label="Audit Surfaces">
+        <a class="jump-chip" href="#microlab"><span class="num">00</span>Motion &amp; Token Lab</a>
+        <a class="jump-chip" href="#surface-1"><span class="num">01</span>Web Hero &amp; Nav</a>
+        <a class="jump-chip" href="#surface-2"><span class="num">02</span>Bento &amp; 8-POP Matrix</a>
+        <a class="jump-chip" href="#surface-3"><span class="num">03</span>Pricing &amp; Anchors</a>
+        <a class="jump-chip" href="#surface-4"><span class="num">04</span>Express Checkout</a>
+        <a class="jump-chip" href="#surface-5"><span class="num">05</span>5 Free Diagnostic Tools</a>
+        <a class="jump-chip" href="#surface-6"><span class="num">06</span>OTP Login &amp; Portal</a>
+        <a class="jump-chip" href="#surface-7"><span class="num">07</span>2-Way QR Pairing</a>
+        <a class="jump-chip" href="#surface-8"><span class="num">08</span>Desktop App &amp; Tray</a>
+        <a class="jump-chip" href="#surface-9"><span class="num">09</span>Wi-Fi Radar &amp; ACR Shield</a>
+        <a class="jump-chip" href="#surface-10"><span class="num">10</span>Android Compose App</a>
+        <a class="jump-chip" href="#surface-11"><span class="num">11</span>iPhone / iOS SwiftUI App</a>
+        <a class="jump-chip" href="#surface-12"><span class="num">12</span>pSEO Hubs &amp; Canary</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- ======================================================================
+         EXECUTIVE BRIEF & 6-LINE CHARLES-UNSLOP COMMITMENT
+         ====================================================================== -->
+    <section class="hero-brief">
+      <div>
+        <div class="eyebrow">
+          <span>ECOSYSTEM DESIGN CRITIQUE &amp; INTERACTIVE PROTOTYPE MATRIX</span>
+        </div>
+        <h1>Every SWEEPR VPN feature audited &amp; rebuilt across 8 interactive mockups per surface.</h1>
+        <p class="hero-lead">
+          We audited every screen across the SWEEPR VPN Website, Windows/macOS Desktop Clients (WinForms WebView2 + Rust Tauri v2), Android Jetpack Compose App, iPhone/iOS SwiftUI App, Free Lead-Magnet Tools, and Customer Portal against <code>charles-unslop</code>, <code>charles-polish</code>, and <code>charles-ux-animation</code>. Click any of the <strong>8 alternative mockups (Mockup 1–8)</strong> inside each surface below to inspect and select your preferred direction.
+        </p>
+        <div class="skill-badges">
+          <span class="skill-badge">✓ charles-unslop (Zero AI-Slop Tells + OKLCH Tokens)</span>
+          <span class="skill-badge">✓ charles-polish (Concentric Radii + Tabular-Nums)</span>
+          <span class="skill-badge">✓ charles-ux-animation (Spring Physics + Geometry Lock)</span>
+        </div>
+      </div>
+
+      <div class="commitment-card">
+        <div class="commitment-title">
+          <span>CHARLES-UNSLOP 6-LINE DIRECTION COMMITMENT</span>
+          <span>LOCKED</span>
+        </div>
+        <div class="commitment-row">
+          <span class="commitment-key">Product:</span>
+          <span class="commitment-val">10Gbps RAM-only WireGuard VPN + Local Layer-2 Home Wi-Fi Device Scanner &amp; Smart-TV ACR Shield.</span>
+        </div>
+        <div class="commitment-row">
+          <span class="commitment-key">Character:</span>
+          <span class="commitment-val"><strong>Instrumented, tactile, quiet</strong> (replacing generic "clean, modern, sleek, premium").</span>
+        </div>
+        <div class="commitment-row">
+          <span class="commitment-key">World:</span>
+          <span class="commitment-val">Precision rackmount telemetry, warm mineral paper (<code>oklch(0.985 0.004 85)</code>), anodized obsidian (<code>oklch(0.135 0.008 255)</code>), emerald phosphor signal.</span>
+        </div>
+        <div class="commitment-row">
+          <span class="commitment-key">Moment:</span>
+          <span class="commitment-val">The live route &amp; local subnet packet-flow inspection strip (the single focal canvas for motion).</span>
+        </div>
+        <div class="commitment-row">
+          <span class="commitment-key">Signature:</span>
+          <span class="commitment-val">A <code>tabular-nums</code> monospace route bar (<code>UK-LON-01 · 10.64.0.2 · 4 ms · 10.66.0.1 ACR SINKHOLE</code>).</span>
+        </div>
+        <div class="commitment-row">
+          <span class="commitment-key">Concept:</span>
+          <span class="commitment-val">An instrumented diagnostic panel that translates cryptographic tunnels &amp; LAN microchips into calm plain English.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         00. INTERACTIVE MOTION & POLISH MICRO-LAB
+         ====================================================================== -->
+    <section class="microlab" id="microlab">
+      <div class="microlab-header">
+        <div>
+          <span class="eyebrow" style="margin-bottom:2px;">00 · LIVE INTERACTIVE PRIMITIVES</span>
+          <h2 style="font-size:16px;font-weight:600;letter-spacing:-0.015em;">Motion, Timing &amp; Optical Polish Lab (Test the Installed Skills Live)</h2>
+        </div>
+        <span class="mono" style="font-size:11.5px;color:var(--fg-muted);">--ease-out: cubic-bezier(0.32, 0.72, 0, 1) · --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1)</span>
+      </div>
+
+      <div class="microlab-grid">
+        <!-- Cell 1: Single-Cell Inline-Grid Async Button -->
+        <div class="lab-cell">
+          <div>
+            <div class="lab-label">RECIPE 01 · ASYNC BUTTON GEOMETRY LOCK</div>
+            <div class="lab-title">Single-Cell Inline-Grid (Zero Width Jump)</div>
+            <p style="font-size:12px;color:var(--fg-secondary);margin-top:4px;">All 3 labels share <code>grid-area: 1 / 1</code>. Spinner holds for 550ms minimum to prevent flicker.</p>
+          </div>
+          <div>
+            <button type="button" class="async-btn" id="demoAsyncBtn" onclick="triggerDemoAsync(this)">
+              <span data-state="idle" data-visible="true">Connect to UK-LON-01 (4 ms)</span>
+              <span data-state="pending" data-visible="false">
+                <svg class="spinner-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4"/></svg>
+                Negotiating Curve25519…
+              </span>
+              <span data-state="success" data-visible="false">✓ Tunnel Active · 10.64.0.2</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Cell 2: Spring Icon Swap -->
+        <div class="lab-cell">
+          <div>
+            <div class="lab-label">RECIPE 02 · SPRING ICON SWAP</div>
+            <div class="lab-title">Copy → Check with Scale + Blur Dissolve</div>
+            <p style="font-size:12px;color:var(--fg-secondary);margin-top:4px;"><code>scale(0.3) → 1</code> + <code>blur(3px) → 0</code> over <code>350ms var(--ease-spring)</code>.</p>
+          </div>
+          <div>
+            <button type="button" class="icon-swap-btn" onclick="triggerIconSwap(this)">
+              <span class="icon-slot">
+                <svg class="icon-copy" data-active="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <svg class="icon-check" data-active="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              <span class="swap-label">Copy WireGuard .conf DNS (10.66.0.1)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Cell 3: Grid-Template-Rows 0fr -> 1fr Accordion -->
+        <div class="lab-cell">
+          <div>
+            <div class="lab-label">RECIPE 03 · HEIGHT INTERPOLATION</div>
+            <div class="lab-title">Grid-Row <code>0fr → 1fr</code> Technical Drawer</div>
+            <p style="font-size:12px;color:var(--fg-secondary);margin-top:4px;">Replaces abrupt <code>display:none</code> jumps with smooth 240ms height + opacity easing.</p>
+          </div>
+          <div>
+            <button type="button" class="accordion-trigger" aria-expanded="false" onclick="toggleLabAccordion(this)">
+              <span class="mono">Inspect Raw WireGuard Handshake</span>
+              <span class="accordion-chevron">▾</span>
+            </button>
+            <div class="accordion-body" data-open="false">
+              <div class="accordion-inner">
+                <div class="mono" style="font-size:11px;padding:8px 10px;margin-top:6px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xs);color:var(--fg-secondary);">
+                  endpoint: lon01.wg.sweeprvpn.com:51820<br/>
+                  cipher: ChaCha20-Poly1305 · mtu: 1420 · rtt: 4.1 ms
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cell 4: Concentric Radii & Tabular Price Roll -->
+        <div class="lab-cell">
+          <div>
+            <div class="lab-label">RECIPE 04 · CONCENTRIC RADII &amp; TABULAR-NUMS</div>
+            <div class="lab-title"><code>inner (8px) = outer (16px) - pad (8px)</code></div>
+            <p style="font-size:12px;color:var(--fg-secondary);margin-top:4px;">Switch currencies below — digits lock to <code>tabular-nums</code> with zero horizontal jitter.</p>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px;border-radius:12px;background:var(--surface);border:1px solid var(--border);">
+            <div class="mono price-val" id="labPriceReadout" style="font-size:15px;font-weight:600;padding-left:4px;">£74.99/yr (£6.25/mo)</div>
+            <div style="display:flex;gap:4px;">
+              <button type="button" class="stage-ctrl" data-active="true" onclick="setLabCurrency(this, '£74.99/yr (£6.25/mo)')">GBP</button>
+              <button type="button" class="stage-ctrl" data-active="false" onclick="setLabCurrency(this, '$95.99/yr ($8.00/mo)')">USD</button>
+              <button type="button" class="stage-ctrl" data-active="false" onclick="setLabCurrency(this, '€89.99/yr (€7.50/mo)')">EUR</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         DYNAMICALLY RENDERED 12 SURFACES × 8 MOCKUPS = 96 MOCKUP VARIANTS
+         ====================================================================== -->
+    <div id="surfacesMount"></div>
+
+  </main>
+
+  <!-- ========================================================================
+       STICKY BOTTOM IMPLEMENTATION MANIFEST BAR
+       ======================================================================== -->
+  <aside class="selection-bar" aria-label="Selected Mockup Manifest">
+    <div class="selection-bar-inner">
+      <div class="selection-summary">
+        <strong style="color:var(--fg);font-size:13px;">Selected Mockup Blueprint:</strong>
+        <div id="selectedManifestPills" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button type="button" class="btn btn-secondary" onclick="resetSelectionsToRecommended()">Reset to Recommended (#1)</button>
+        <button type="button" class="btn btn-primary" onclick="copySelectedBlueprint(this)">
+          <span>Copy Selected Mockup Spec</span>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <script>
+    /* ==========================================================================
+       COMPLETE 12-SURFACE AUDIT DATASET & 8-MOCKUP ARCHITECTURE PER SURFACE
+       ========================================================================== */
+    constMOCKUP_ARCHETYPES = [
+      {
+        id: 1,
+        short: "Mockup 1 (Rec)",
+        name: "Mockup 1 (Recommended): Instrumented Rackmount Telemetry",
+        desc: "Flagship charles-unslop direction: warm mineral / anodized slate surface, tabular-nums monospace route bar, concentric radii (inner = outer - padding), and zero decorative glow."
+      },
+      {
+        id: 2,
+        short: "Mockup 2: Split-Deck",
+        name: "Mockup 2: Split-Pane Command Deck (Master / Detail)",
+        desc: "Two-column master/detail workbench separating the primary 1-click action on the left from live WireGuard / LAN packet diagnostics on the right."
+      },
+      {
+        id: 3,
+        short: "Mockup 3: Tactile Strip",
+        name: "Mockup 3: Compact Tactile Strip (High-Density Prosumer)",
+        desc: "Linear/Raycast-inspired ultra-compact horizontal strip with keyboard-first shortcuts (1–8 POP selection) and inline latency bars."
+      },
+      {
+        id: 4,
+        short: "Mockup 4: Swiss Hairline",
+        name: "Mockup 4: Editorial Swiss Grid (1px Structural Hairlines)",
+        desc: "Exposed 1px solid structural hairlines (gap: 1px on neutral border background), Newsreader serif + Inter + JetBrains Mono hierarchy, zero drop shadows."
+      },
+      {
+        id: 5,
+        short: "Mockup 5: Plain-English",
+        name: "Mockup 5: Guided Plain-English Narrative (Household-First)",
+        desc: "Translates every IP, MTU, and MAC OUI microchip vendor into calm conversational status sentences with a progressive-disclosure 0fr→1fr proof drawer."
+      },
+      {
+        id: 6,
+        short: "Mockup 6: Thumb-Sheet",
+        name: "Mockup 6: Ergonomic Lower-Thumb Sheet (Mobile & Tray Native)",
+        desc: "Anchors all interactive triggers in the bottom 35% thumb zone with spring bottom-sheet drawers (cubic-bezier(0.32, 0.72, 0, 1)) and large 48px touch targets."
+      },
+      {
+        id: 7,
+        short: "Mockup 7: Live Matrix",
+        name: "Mockup 7: Live Packet & IXP Latency Matrix View",
+        desc: "Elevates real-time network proof (RTT jitter bars, 10Gbps POP load meters, 10.66.0.1 ACR DNS sinkhole feed) to the primary visual canvas."
+      },
+      {
+        id: 8,
+        short: "Mockup 8: Zero-Noise",
+        name: "Mockup 8: Minimalist Focus Card (Single-Action Zero-Noise)",
+        desc: "Strips visible UI down to a single focal hardware switch and status readout, tucking secondary controls behind calm 0fr→1fr accordions."
+      }
+    ];
+
+    const SURFACES = [
+      {
+        id: 1,
+        slug: "surface-1",
+        platform: "Website Core",
+        title: "Website Navigation, Hero & Live Server Switcher",
+        files: [
+          { label: "website/index.html", path: "website/index.html#L285-L530" },
+          { label: "website/style.css", path: "website/style.css#L7-L68" },
+          { label: "website/nav.js", path: "website/nav.js#L1-L40" }
+        ],
+        unslop: [
+          "Pulsing decorative pill badge above <code>&lt;h1&gt;</code> (<code>animate-pulse</code> on a static marketing announcement — classic <code>signs.md</code> tell).",
+          "Ambient blurred gradient blob behind hero card (<code>bg-gradient-to-tr from-emerald-200/50 via-teal-100/40 to-transparent blur-2xl</code>).",
+          "Tilted 3D hero card (<code>sm:rotate-1 hover:rotate-0 transition-transform duration-500</code>) and glowing neon orb (<code>shadow-[0_0_45px_rgba(16,185,129,0.4)]</code>).",
+          "Infinite button sheen loop (<code>.btn-go::after { animation: go-sheen 4.5s infinite }</code>) competing with primary headline.",
+          "Overuse of <code>font-black</code> (weight 900) across nav CTA, hero headline, and card titles."
+        ],
+        polish: [
+          "Concentric border radii mismatch: outer card uses <code>rounded-3xl</code> (24px) with <code>p-8</code> (32px), while inner boxes use <code>rounded-xl</code> (12px).",
+          "Server selector buttons (🇬🇧 UK, 🇺🇸 US, 🇩🇪 DE, 🇨🇭 CH) mix OS flag emojis with SVG icons instead of uniform monospace POP codes (<code>UK-LON-01</code>).",
+          "Hero copy stacks 4 competing value propositions before the fold."
+        ],
+        motion: [
+          "Replace <code>transition-all</code> and <code>hover:scale-105</code> on CTA buttons with <code>:active { transform: scale(0.96) }</code> and hover gated to <code>@media (hover: hover)</code>.",
+          "Clicking a POP chip (<code>UK-LON-01</code>, <code>US-NYC-01</code>, <code>CH-ZRH-01</code>) should smoothly cross-fade the route strip IP and latency using <code>tabular-nums</code>."
+        ],
+        kpi: " UK-LON-01 · 185.212.44.19 · 4 ms RTT · 1420 MTU",
+        defaultPop: "UK-LON-01"
+      },
+      {
+        id: 2,
+        slug: "surface-2",
+        platform: "Website Core",
+        title: "Website Bento Architecture & Live 8-POP WireGuard Telemetry Table",
+        files: [
+          { label: "website/index.html", path: "website/index.html#L590-L820" },
+          { label: "website/wireguard-acr-pipeline-state.json", path: "website/wireguard-acr-pipeline-state.json" }
+        ],
+        unslop: [
+          "4-card Bento grid uses decorative gradient washes (<code>bg-gradient-to-br from-white/95 to-emerald-50/40</code>) and uppercase tracking-wider pill badges on every card.",
+          "Live Server Status table displays generic text pills ('Instant • 4K Ready') instead of verifiable IXP telemetry (load %, active peers, tmpfs status, MTU).",
+          "Card icon containers use oversized tinted rounded squares with drop shadows."
+        ],
+        polish: [
+          "Replace the 4-card soft gradient grid with an exposed <code>1px solid var(--border)</code> structural grid where every cell earns its space with live technical proof.",
+          "Enforce <code>font-variant-numeric: tabular-nums</code> on all latency (<code>4 ms</code>), uplink (<code>10 Gbps</code>), and peer load columns."
+        ],
+        motion: [
+          "Interactive POP filter tabs ('All 8 POPs', 'UK & Europe', 'North America', 'Stealth UDP 443') should use a sliding active indicator pill.",
+          "Hovering or tapping a server row highlights the route path and previews a 1-click <code>.conf</code> config snippet."
+        ],
+        kpi: "8 Bare-Metal 10Gbps POPs · 100% RAM-Only tmpfs · 18% Avg Load"
+      },
+      {
+        id: 3,
+        slug: "surface-3",
+        platform: "Funnel & CRO",
+        title: "Pricing Page, Anchor Architecture & 7-Currency Switcher",
+        files: [
+          { label: "website/pricing.html", path: "website/pricing.html#L140-L420" },
+          { label: "website/pricing-config.js", path: "website/pricing-config.js#L1-L95" }
+        ],
+        unslop: [
+          "Dual pulsing pills above pricing header (<code>animate-pulse</code> on both green '30-Day Money-Back' and amber '£1.99 Intro Offer' badges).",
+          "3-card plan grid stacks borders, heavy shadows, and floating ribbons ('MOST POPULAR — SAVE 50%') that collide on narrow viewports.",
+          "Competitor comparison callouts use alarmist red/green emoji blocks instead of an auditable Year-1 vs Year-2 renewal ledger."
+        ],
+        polish: [
+          "Preserve exact Day-1 Cash-Flow Positive Anchor Pricing: Yearly <strong>£74.99/yr</strong> (£6.25/mo, Save 50%), 6-Monthly <strong>£48.99/6mo</strong> (£8.17/mo, Save 35%), Monthly <strong>£12.49/mo</strong> (£1.99 1st-Month Intro), and <strong>+£14.99/yr Wi-Fi Radar &amp; Smart-TV Shield</strong> add-on.",
+          "Align all 7 currencies (GBP, USD, EUR, CAD, AUD, CHF, JPY) with <code>tabular-nums</code> so switching currency never shifts card height."
+        ],
+        motion: [
+          "Toggling the '+£14.99/yr Wi-Fi Radar & Smart-TV Shield' add-on should smoothly animate the plan total using <code>tabular-nums</code> opacity/Y-translate transition.",
+          "Currency selector pill slides smoothly across the 7 currency codes."
+        ],
+        kpi: "Yearly £74.99/yr (£6.25/mo) · 6-Mo £48.99 · Monthly £12.49 (£1.99 Intro) · Radar +£14.99/yr"
+      },
+      {
+        id: 4,
+        slug: "surface-4",
+        platform: "Funnel & CRO",
+        title: "1-Screen Express Checkout, Add-On Order Bump & Exit-Intent Modal",
+        files: [
+          { label: "website/order.html", path: "website/order.html#L1-L650" }
+        ],
+        unslop: [
+          "<code>.btn-purchase</code> runs a continuous <code>animation: greenPulse 3s infinite</code> glow loop.",
+          "CSS 3D skewed software box (<code>transform: rotateY(-12deg) rotateX(4deg)</code>) and emoji badges (<code>🎁</code>, <code>🛒</code>, <code>🟢</code>) look like legacy shareware.",
+          "Exit-intent <code>#discountModal</code> uses generic <code>0.3s ease</code> and heavy dashed coupon borders."
+        ],
+        polish: [
+          "Consolidate the 2,453-line checkout into a calm, high-trust 2-column ledger: Plan + 1-Click Wi-Fi Radar Bump on the left, Express Wallet (Apple Pay / Google Pay / Link / Card) on the right.",
+          "Display explicit '0% Year-2 Renewal Hike Guarantee — Locked at £74.99/yr' line item right above the submit button."
+        ],
+        motion: [
+          "Payment submission button uses the single-cell <code>inline-grid</code> state machine (<code>idle → 300ms delayed pending → 500ms min hold → success</code>).",
+          "Exit-intent modal enters with <code>220ms cubic-bezier(0.32, 0.72, 0, 1)</code> (<code>scale(0.96) → 1</code>) and exits 30% faster (<code>160ms var(--ease-in)</code>)."
+        ],
+        kpi: "1-Screen Express Checkout · Apple/Google Pay + Stripe · +£14.99/yr Order Bump"
+      },
+      {
+        id: 5,
+        slug: "surface-5",
+        platform: "Organic Lead Magnets",
+        title: "Free Privacy & Network Diagnostic Tools (All 5 Interactive Tools)",
+        files: [
+          { label: "website/leak-test.html", path: "website/leak-test.html" },
+          { label: "website/isp-throttling-test.html", path: "website/isp-throttling-test.html" },
+          { label: "website/whats-on-my-wifi.html", path: "website/whats-on-my-wifi.html" },
+          { label: "website/smart-tv-tracking-check.html", path: "website/smart-tv-tracking-check.html" },
+          { label: "website/vpn-renewal-price-checker.html", path: "website/vpn-renewal-price-checker.html" }
+        ],
+        unslop: [
+          "Status banners rely on oversized emojis (<code>⚠️</code>, <code>🚀</code>, <code>💸</code>, <code>📡</code>, <code>🛡️</code>) instead of optical signal indicators.",
+          "4-card equal-height metric grids (Public IP, ISP, WebRTC, IPv6) repeat identical card chrome instead of an instrumented diagnostic strip.",
+          "Appended dark slate <code>#enriched-*</code> sections clash with the light <code>#fafafa</code> page background."
+        ],
+        polish: [
+          "Unify all 5 tools under a single 'SWEEPR Network Bench' layout: live tabular-nums readout strip at the top, interactive test runner in the center, and 1-click remediation (.conf / hosts blocklist / refund script) below.",
+          "Ensure copy buttons ('Copy 65-Domain ACR Blocklist', 'Copy Refund Script') show exact line counts and SHA-1 verification."
+        ],
+        motion: [
+          "Diagnostic scan progress bar uses smooth transform scaleX interpolation with step-by-step monospace log lines.",
+          "Copy buttons use the <code>350ms var(--ease-spring)</code> icon swap (Copy → Check)."
+        ],
+        kpi: "5 Free Tools · IP/WebRTC Leak · ISP Throttling · Smart-TV ACR · Wi-Fi Audit · Renewal Calculator"
+      },
+      {
+        id: 6,
+        slug: "surface-6",
+        platform: "Customer Portal",
+        title: "Customer Portal Login (6-Digit OTP) & Member Dashboard",
+        files: [
+          { label: "website/login.html", path: "website/login.html#L1-L320" },
+          { label: "website/dashboard.html", path: "website/dashboard.html#L1-L480" }
+        ],
+        unslop: [
+          "<code>dashboard.html</code> stacks 6 competing gradient banners (<code>from-emerald-900 to-slate-900</code>, <code>from-emerald-50 via-teal-50/70 to-amber-50/60</code>, <code>from-amber-50/70 via-white to-emerald-50/60</code>) with emoji headers (<code>⚡</code>, <code>🔒</code>, <code>📡</code>, <code>📱</code>, <code>🎁</code>).",
+          "<code>login.html</code> uses a single plain text input for the 6-digit OTP code instead of segmented tabular slots.",
+          "Raw <code>------</code> text placeholders flash before account data loads."
+        ],
+        polish: [
+          "Replace the 6 competing dashboard gradient banners with a calm, structured 3-zone workspace: (1) License & Activation Key Header, (2) 1-Click App Downloads + WireGuard <code>.conf</code> Generator, (3) Linked Devices (3/3 Slots) & Billing.",
+          "Upgrade <code>login.html</code> to a segmented 6-digit OTP input with full clipboard paste auto-fill and keyboard auto-advance."
+        ],
+        motion: [
+          "Transition from Step 1 (Email) to Step 2 (6-Digit OTP) uses a horizontal cross-fade (<code>translateX(8px) → 0</code> over <code>200ms var(--ease-out)</code>).",
+          "License key & activation code copy buttons use spring check icon swaps."
+        ],
+        kpi: "Passwordless 6-Digit OTP · Ed25519 License Key · Native Router .conf Generator"
+      },
+      {
+        id: 7,
+        slug: "surface-7",
+        platform: "Cross-Platform Auth",
+        title: "Two-Way QR Device Pairing & 3-Device Slot Manager",
+        files: [
+          { label: "website/server.mjs (/pair)", path: "website/server.mjs#L5480-L5610" },
+          { label: "website/dashboard.html", path: "website/dashboard.html#L240-L330" },
+          { label: "desktop-client/app-ui.html", path: "desktop-client/app-ui.html#L940-L1020" }
+        ],
+        unslop: [
+          "The <code>/pair</code> mobile approval screen uses inline hardcoded hex styles and a heavy <code>font-weight: 900</code> header without dark-mode token support.",
+          "Flow A (Phone scans Desktop QR) and Flow B (Desktop/Portal generates QR for Phone) are visually disconnected across platforms.",
+          "3-device limit error state dumps a long paragraph instead of an inline 1-click 'Replace Oldest Device' slot selector."
+        ],
+        polish: [
+          "Present a unified 2-Tab Pairing Card ('Scan with Phone Camera' vs 'Enter 6-Digit Code') with a live <code>tabular-nums</code> countdown timer (<code>04:59</code>) and optical corner viewfinder ticks.",
+          "Show all 3 device slots visually (e.g. Slot 1: Windows 11 Desktop, Slot 2: iPhone 16 Pro, Slot 3: Open Slot) with 1-click unlink."
+        ],
+        motion: [
+          "When the phone approves the QR challenge, morph the QR canvas directly into a verified device badge using <code>scale(0.95) → 1</code> over <code>240ms var(--ease-out)</code>.",
+          "Unlinking a device slot collapses its row smoothly via <code>grid-template-rows: 1fr → 0fr</code>."
+        ],
+        kpi: "Flow A (Desktop→Phone) · Flow B (Portal→Mobile) · 3/3 Device Slot Ledger"
+      },
+      {
+        id: 8,
+        slug: "surface-8",
+        platform: "Desktop (Windows & macOS)",
+        title: "Windows & macOS Desktop App — Main Tunnel & Compact Tray Mini-Widget",
+        files: [
+          { label: "desktop-client/app-ui.html", path: "desktop-client/app-ui.html#L1-L420" },
+          { label: "desktop-client/SweeprVpnApp.cs", path: "desktop-client/SweeprVpnApp.cs#L1-L260" },
+          { label: "apps/desktop-tauri/ui/index.html", path: "apps/desktop-tauri/ui/index.html#L1-L150" }
+        ],
+        unslop: [
+          "<code>.panel</code> uses decorative concentric background rings (<code>.rings { right:-80px; top:-80px; width:280px }</code>) and a hardcoded dark green gradient even when the app is in Light theme.",
+          "Desktop CSS hides <code>#recBlock &gt; .rec-grid</code>, <code>.search</code>, and <code>.filter-tabs</code> with <code>!important</code> overrides (<code>app-ui.html#L287</code>) instead of using a clean responsive layout.",
+          "Two separate desktop UI templates exist (<code>desktop-client/app-ui.html</code> and <code>apps/desktop-tauri/ui/index.html</code>) with divergent styling."
+        ],
+        polish: [
+          "Unify the 440×700 main desktop window and the 320×420 system-tray mini-widget around the same OKLCH token sheet and concentric border radii.",
+          "Surface the Windows Firewall Kill-Switch badge, Local LAN Bypass toggle (<code>192.168.1.0/24</code>), and Stealth UDP 443 selector cleanly without clutter."
+        ],
+        motion: [
+          "Theme toggle (<code>toggleTheme()</code>) applies <code>html.no-transitions</code> for 1 animation frame so background and text switch simultaneously without lag.",
+          "Toast notifications enter with <code>240ms var(--ease-out)</code> and exit with <code>170ms var(--ease-in)</code>."
+        ],
+        kpi: "694 KB Signed Binary · 440×700 Main + 320×420 Tray Widget · Kill-Switch + LAN Bypass"
+      },
+      {
+        id: 9,
+        slug: "surface-9",
+        platform: "Desktop & Mobile Add-On",
+        title: "Home Wi-Fi Radar, Plain-English IoT Chip Translator & Smart-TV ACR Shield",
+        files: [
+          { label: "desktop-client/app-ui.html", path: "desktop-client/app-ui.html#L550-L820" },
+          { label: "crates/sweepr-wifi-radar/src/lib.rs", path: "crates/sweepr-wifi-radar/src/lib.rs" }
+        ],
+        unslop: [
+          "<code>.radar</code> runs an infinite 4-second spinning conic-gradient sweep (<code>animation: spin 4s linear infinite</code>) even after the 30-second scan has finished.",
+          "Radar <code>.blip</code> text labels are hidden on mobile (<code>display:none</code>) and overlap when multiple IoT devices share similar bearings.",
+          "Device rows truncate the best differentiator: translating cryptic microchip OUIs (<code>Espressif Inc.</code> → <code>Smart Plug / IoT Camera</code>) and flagging open RTSP <code>:554</code> video ports."
+        ],
+        polish: [
+          "Replace the infinite spinning radar circle after scan completion with an instrumented 'Subnet Topology & ACR Sinkhole Ledger' grouping devices into Verified Household, Smart-TV ACR Shielded, and Unknown / Open-Port Alerts.",
+          "Make the <strong>Plain-English Microchip Translator</strong> (<code>Espressif → Smart Plug</code>, <code>Samsung Elec → 65\" Tizen TV [ACR Blocked]</code>) and <strong>Kids' Bedtime Pause</strong> toggle first-class scannable columns."
+        ],
+        motion: [
+          "During the 30-second ARP/mDNS scan, stagger newly discovered device rows in with a <code>40ms</code> per-item delay (capped at 400ms total).",
+          "Toggling 'Smart-TV ACR Sinkhole (10.66.0.1)' updates the blocked telemetry counter with <code>tabular-nums</code>."
+        ],
+        kpi: "Layer-2 ARP/mDNS Scanner · OUI Chip→English Translator · 65 Smart-TV ACR Domains Sunk"
+      },
+      {
+        id: 10,
+        slug: "surface-10",
+        platform: "Android Native (Kotlin)",
+        title: "Android Native App — Jetpack Compose UI & Mobile WebView",
+        files: [
+          { label: "SweeprVpnScreen.kt", path: "apps/mobile-android/app/src/main/java/com/sweepr/vpn/SweeprVpnScreen.kt#L1-L520" },
+          { label: "website/vpn-mobile-ui.mjs", path: "website/vpn-mobile-ui.mjs#L1-L180" }
+        ],
+        unslop: [
+          "Single 2,149-line Compose file puts the entire UI inside a long <code>verticalScroll</code> column where all 8 POP servers render inline above the fold.",
+          "The 132dp circular Connect button sits near the top of the screen (hardest thumb reach on 6.7\" Android phones) while tab cards below use emoji headers (<code>📷</code>, <code>🔔</code>, <code>🛏️</code>, <code>📄</code>).",
+          "Tab 2 ('Account') exposes raw internal token prefixes (<code>ptk_... or chk_...</code>) in placeholder text."
+        ],
+        polish: [
+          "Anchor the primary Connect control and active POP selector in the lower ergonomic thumb zone above the Material 3 NavigationBar.",
+          "Move the 8-POP server list into a collapsible modal bottom sheet with instant latency sort and flag-free ISO/city codes."
+        ],
+        motion: [
+          "Use Compose <code>animateColorAsState</code> and spring physics (<code>Spring.DampingRatioNoBouncy, Spring.StiffnessMediumLow</code>) for tunnel state transitions.",
+          "Server selection sheet slides up with <code>cubic-bezier(0.32, 0.72, 0, 1)</code>."
+        ],
+        kpi: "Jetpack Compose + VpnService · Thumb-Zone Ergonomics · Bottom-Sheet POP Picker"
+      },
+      {
+        id: 11,
+        slug: "surface-11",
+        platform: "iPhone / iOS (SwiftUI)",
+        title: "iPhone / iOS Native App — SwiftUI, NetworkExtension & Camera QR",
+        files: [
+          { label: "apps/mobile-ios/SweeprVpnApp.swift", path: "apps/mobile-ios/SweeprVpnApp.swift#L1-L435" }
+        ],
+        unslop: [
+          "<code>SweeprVpnApp.swift</code> stacks all 8 server rows inside a flat <code>ScrollView</code> above the primary 'Connect to London' button, pushing the CTA below the fold on iPhone SE / 15.",
+          "No bottom <code>TabView</code> separates Tunnel Control, Home Wi-Fi Radar, and Account/QR Linking.",
+          "<code>QrCameraScannerView</code> uses a hardcoded <code>CGRect(x: 0, y: 0, width: 280, height: 200)</code> preview layer without optical reticle corners, torch toggle, or clipboard fallback."
+        ],
+        polish: [
+          "Introduce a native 3-tab iOS architecture (<code>Tunnel</code>, <code>Wi-Fi Shield</code>, <code>Devices</code>) with an instrumented Dynamic Island / Live Activity-style route pill at the top.",
+          "Add a step-by-step visual guide inside the <code>.mobileconfig</code> WireGuard Fallback sheet so iOS users know exactly where to tap in <em>Settings → General → VPN &amp; Device Management</em>."
+        ],
+        motion: [
+          "Pair SwiftUI <code>.animation(.snappy(duration: 0.24), value: vpn.state)</code> with <code>UIImpactFeedbackGenerator(style: .light)</code> on tunnel connect and QR lock.",
+          "QR viewfinder corners contract by 4pt when a valid <code>sweepr://pair</code> payload is detected."
+        ],
+        kpi: "SwiftUI + NEPacketTunnelProvider · 3-Tab iOS Architecture · Reticle QR Scanner"
+      },
+      {
+        id: 12,
+        slug: "surface-12",
+        platform: "SEO / GEO & Trust",
+        title: "Programmatic SEO Pillars, Comparison Hubs, Warrant Canary & Support",
+        files: [
+          { label: "website/solutions.html", path: "website/solutions.html" },
+          { label: "website/vs-totalvpn.html", path: "website/vs-totalvpn.html" },
+          { label: "website/warrant-canary.html", path: "website/warrant-canary.html" },
+          { label: "website/support.html", path: "website/support.html" }
+        ],
+        unslop: [
+          "<code>support.html</code> uses giant <code>text-3xl</code> emojis (<code>📧</code>, <code>🔑</code>) as card headers.",
+          "<code>warrant-canary.html</code> uses <code>animate-pulse</code> on a static monthly cryptographic status badge.",
+          "pSEO comparison tables overflow horizontally on mobile without soft scroll edge masks."
+        ],
+        polish: [
+          "Format <code>warrant-canary.html</code> like an authentic cryptographic transparency ledger with a 1-click copyable PGP/SHA-256 statement and live automated verification timestamp.",
+          "Apply horizontal scroll edge masks (<code>mask-image: linear-gradient(90deg, transparent, #000 16px, #000 calc(100% - 16px), transparent)</code>) to all competitor comparison tables and <code>.conf</code> code blocks."
+        ],
+        motion: [
+          "All pSEO <code>.conf</code> and CLI command blocks ('Copy GL.iNet Config', 'Copy Synology docker-compose.yml') use the 350ms spring check swap.",
+          "FAQ drawers use <code>grid-template-rows: 0fr → 1fr</code> instead of instant details/summary jumps."
+        ],
+        kpi: "89 Canonical pSEO Guides · Cryptographic Warrant Canary · Masked Comparison Matrices"
+      }
+    ];
+
+    /* Track active mockup (1..8) and interactive state per surface */
+    const surfaceState = {};
+    SURFACES.forEach((s) => {
+      surfaceState[s.id] = {
+        activeMockup: 1,
+        selectedMockup: 1,
+        simState: "protected", // protected | connecting | exposed
+        pop: "UK-LON-01",
+        currency: "GBP",
+        addon: true
+      };
+    });
+
+    /* ==========================================================================
+       BESPOKE MOCKUP RENDERER (96 DISTINCT VARIATIONS = 12 SURFACES × 8 ARCHETYPES)
+       ========================================================================== */
+    function renderMockupStageHTML(surface, mockupId, st) {
+      const stateBadge =
+        st.simState === "protected"
+          ? `<span class="status-pill" data-state="protected"><span class="signal-dot"></span>TUNNEL ACTIVE · 10.64.0.2</span>`
+          : st.simState === "connecting"
+          ? `<span class="status-pill" data-state="connecting">↻ HANDSHAKE · CURVE25519</span>`
+          : `<span class="status-pill" data-state="exposed">! UNENCRYPTED · ISP VISIBLE</span>`;
+
+      const routeBar = `
+        <div class="route-strip">
+          <div class="route-nodes">
+            <strong>${st.pop}</strong>
+            <span class="route-arrow">→</span>
+            <span>${st.simState === "protected" ? "185.212.44.19" : st.simState === "connecting" ? "Negotiating…" : "82.132.218.41 (ISP)"}</span>
+            <span class="route-arrow">·</span>
+            <span>${st.simState === "protected" ? "4 ms RTT" : st.simState === "connecting" ? "—" : "38 ms"}</span>
+            <span class="route-arrow">·</span>
+            <span>DNS 10.66.0.1 ${st.addon ? "(ACR SINKHOLE ON)" : "(STANDARD)"}</span>
+          </div>
+          ${stateBadge}
+        </div>
+      `;
+
+      const isMobileSurface = surface.id === 10 || surface.id === 11;
+      const frameClass = isMobileSurface && (mockupId === 1 || mockupId === 6 || mockupId === 8) ? "mock-window mobile-frame" : "mock-window";
+
+      /* Surface-specific rich inner content adapted to each of the 8 Mockup Archetypes */
+      let bodyHTML = "";
+
+      if (mockupId === 1) {
+        /* MOCKUP 1 (RECOMMENDED): INSTRUMENTED RACKMOUNT TELEMETRY */
+        bodyHTML = `
+          ${routeBar}
+          <div style="display:grid;grid-template-columns:${isMobileSurface ? "1fr" : "1.35fr 1fr"};gap:14px;align-items:stretch;">
+            <div style="padding:16px;background:var(--bg-subtle);border:1px solid var(--border);border-radius:var(--radius-inner);display:flex;flex-direction:column;justify-content:space-between;gap:12px;">
+              <div>
+                <div class="mono" style="font-size:10.5px;color:var(--fg-muted);margin-bottom:4px;">SURFACE 0${surface.id} · INSTRUMENTED TELEMETRY VIEW</div>
+                <div style="font-size:16px;font-weight:600;letter-spacing:-0.02em;color:var(--fg);margin-bottom:6px;">
+                  ${getSurfacePrimaryHeadline(surface.id, st)}
+                </div>
+                <p style="font-size:12.5px;color:var(--fg-secondary);">
+                  ${getSurfaceSubcopy(surface.id, st)}
+                </p>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
+                <button type="button" class="async-btn" onclick="triggerDemoAsync(this)">
+                  <span data-state="idle" data-visible="true">${getSurfacePrimaryCTA(surface.id, st)}</span>
+                  <span data-state="pending" data-visible="false">Verifying Handshake…</span>
+                  <span data-state="success" data-visible="false">✓ Verified · 4 ms</span>
+                </button>
+                <button type="button" class="icon-swap-btn" onclick="triggerIconSwap(this)">
+                  <span class="icon-slot">
+                    <svg data-active="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    <svg data-active="false" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  </span>
+                  <span class="swap-label">${getSurfaceSecondaryAction(surface.id)}</span>
+                </button>
+              </div>
+            </div>
+            <div style="padding:14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-inner);display:flex;flex-direction:column;justify-content:space-between;gap:8px;">
+              <div class="mono" style="font-size:10.5px;color:var(--fg-muted);display:flex;justify-content:space-between;">
+                <span>VERIFIED TELEMETRY</span>
+                <span>TABULAR-NUMS</span>
+              </div>
+              ${getSurfaceRightWidget(surface.id, st)}
+            </div>
+          </div>
+        `;
+      } else if (mockupId === 2) {
+        /* MOCKUP 2: SPLIT-PANE COMMAND DECK (MASTER / DETAIL) */
+        bodyHTML = `
+          <div style="display:grid;grid-template-columns:220px 1fr;border:1px solid var(--border);border-radius:var(--radius-inner);overflow:hidden;">
+            <div style="background:var(--bg-subtle);border-right:1px solid var(--border);padding:12px;display:flex;flex-direction:column;gap:6px;">
+              <div class="mono" style="font-size:10px;color:var(--fg-muted);margin-bottom:4px;">MASTER NAV / NODES</div>
+              <div class="mono" style="padding:7px 9px;border-radius:var(--radius-xs);background:var(--accent-tint);border:1px solid var(--accent-border);font-size:11.5px;font-weight:600;">● ${st.pop} (4 ms)</div>
+              <div class="mono" style="padding:7px 9px;border-radius:var(--radius-xs);background:var(--surface);border:1px solid var(--border);font-size:11.5px;color:var(--fg-secondary);">○ UK-MAN-02 (6 ms)</div>
+              <div class="mono" style="padding:7px 9px;border-radius:var(--radius-xs);background:var(--surface);border:1px solid var(--border);font-size:11.5px;color:var(--fg-secondary);">○ NL-AMS-01 (11 ms)</div>
+              <div class="mono" style="padding:7px 9px;border-radius:var(--radius-xs);background:var(--surface);border:1px solid var(--border);font-size:11.5px;color:var(--fg-secondary);">○ CH-ZRH-01 (18 ms)</div>
+            </div>
+            <div style="padding:16px;background:var(--surface);display:flex;flex-direction:column;gap:12px;">
+              ${routeBar}
+              <div style="font-size:15px;font-weight:600;color:var(--fg);">${getSurfacePrimaryHeadline(surface.id, st)}</div>
+              ${getSurfaceRightWidget(surface.id, st)}
+              <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:4px;">
+                <button type="button" class="btn btn-primary" onclick="triggerDemoAsync(this)"><span>${getSurfacePrimaryCTA(surface.id, st)}</span></button>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (mockupId === 3) {
+        /* MOCKUP 3: COMPACT TACTILE STRIP (HIGH-DENSITY PROSUMER) */
+        bodyHTML = `
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;background:var(--bg-subtle);border:1px solid var(--border-strong);border-radius:var(--radius-inner);flex-wrap:wrap;">
+              <div style="display:flex;align-items:center;gap:10px;">
+                <span class="signal-dot"></span>
+                <span class="mono" style="font-size:12.5px;font-weight:600;">${st.pop}</span>
+                <span class="mono" style="font-size:11.5px;color:var(--fg-muted);">10Gbps · MTU 1420 · UDP 443</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <kbd class="mono" style="font-size:10.5px;padding:2px 6px;border-radius:4px;background:var(--surface);border:1px solid var(--border);">⌘K</kbd>
+                <button type="button" class="btn btn-primary" style="padding:5px 11px;font-size:11.5px;">${getSurfacePrimaryCTA(surface.id, st)}</button>
+              </div>
+            </div>
+            <div class="hairline-grid">
+              <div class="hairline-cell"><span class="cell-kicker">LATENCY</span><span class="cell-val">4.1 ms</span><span class="cell-sub">0.2 ms jitter</span></div>
+              <div class="hairline-cell"><span class="cell-kicker">ACR SINKHOLE</span><span class="cell-val">65 Domains</span><span class="cell-sub">10.66.0.1 active</span></div>
+              <div class="hairline-cell"><span class="cell-kicker">PRICE LOCK</span><span class="cell-val">£74.99/yr</span><span class="cell-sub">0% Year-2 hike</span></div>
+              <div class="hairline-cell"><span class="cell-kicker">DEVICES</span><span class="cell-val">2 / 3 Slots</span><span class="cell-sub">Ed25519 verified</span></div>
+            </div>
+          </div>
+        `;
+      } else if (mockupId === 4) {
+        /* MOCKUP 4: EDITORIAL SWISS GRID (1PX STRUCTURAL HAIRLINES) */
+        bodyHTML = `
+          <div style="border:1px solid var(--fg);background:var(--surface);">
+            <div style="padding:14px 16px;border-bottom:1px solid var(--border-strong);display:flex;justify-content:space-between;align-items:baseline;">
+              <span style="font-family:var(--font-serif);font-size:20px;font-weight:500;letter-spacing:-0.01em;">${getSurfacePrimaryHeadline(surface.id, st)}</span>
+              <span class="mono" style="font-size:11px;color:var(--fg-muted);">SPEC 0${surface.id}.4 // SWISS GRID</span>
+            </div>
+            <div class="hairline-grid" style="border:none;border-radius:0;">
+              <div class="hairline-cell"><span class="cell-kicker">01 / ENDPOINT</span><span class="cell-val">${st.pop}</span><span class="cell-sub">RAM-Only tmpfs</span></div>
+              <div class="hairline-cell"><span class="cell-kicker">02 / CIPHER</span><span class="cell-val">ChaCha20</span><span class="cell-sub">Poly1305 AEAD</span></div>
+              <div class="hairline-cell"><span class="cell-kicker">03 / DNS SHIELD</span><span class="cell-val">10.66.0.1</span><span class="cell-sub">65 TV ACR domains</span></div>
+            </div>
+            <div style="padding:12px 16px;border-top:1px solid var(--border-strong);display:flex;justify-content:space-between;align-items:center;">
+              <span class="mono" style="font-size:11.5px;color:var(--fg-secondary);">${surface.kpi}</span>
+              <button type="button" class="btn btn-primary" style="border-radius:2px;">${getSurfacePrimaryCTA(surface.id, st)}</button>
+            </div>
+          </div>
+        `;
+      } else if (mockupId === 5) {
+        /* MOCKUP 5: GUIDED PLAIN-ENGLISH NARRATIVE (HOUSEHOLD-FIRST) */
+        bodyHTML = `
+          <div style="padding:18px;background:var(--bg-subtle);border:1px solid var(--border);border-radius:var(--radius-inner);display:flex;flex-direction:column;gap:12px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="signal-dot"></span>
+              <span style="font-size:13px;font-weight:600;color:var(--fg);">Plain-English Status Summary</span>
+            </div>
+            <p style="font-size:14.5px;line-height:1.55;color:var(--fg);">
+              Your connection is routed through <strong>London (${st.pop})</strong> in <strong>4 milliseconds</strong>. Your ISP cannot throttle your evening 4K streams, and <strong>65 Smart-TV tracking domains</strong> (Samsung, LG, Roku) are silently blocked on your home Wi-Fi.
+            </p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-primary">${getSurfacePrimaryCTA(surface.id, st)}</button>
+              <button type="button" class="accordion-trigger" style="width:auto;gap:8px;" aria-expanded="false" onclick="toggleLabAccordion(this)">
+                <span class="mono">Show Verifiable Technical Proof</span>
+                <span class="accordion-chevron">▾</span>
+              </button>
+            </div>
+            <div class="accordion-body" data-open="false">
+              <div class="accordion-inner">
+                <div style="padding-top:8px;">${routeBar}</div>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (mockupId === 6) {
+        /* MOCKUP 6: ERGONOMIC LOWER-THUMB SHEET (MOBILE & TRAY NATIVE) */
+        bodyHTML = `
+          <div style="max-width:360px;margin:0 auto;background:var(--bg-subtle);border:1px solid var(--border-strong);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;min-height:270px;">
+            <div style="padding:14px 16px;display:flex;justify-content:space-between;align-items:center;">
+              <span class="mono" style="font-size:11px;color:var(--fg-muted);">SWEEPR · ${st.pop}</span>
+              ${stateBadge}
+            </div>
+            <div style="padding:0 16px 10px;text-align:center;">
+              <div class="mono" style="font-size:22px;font-weight:600;color:var(--fg);">4.1 ms · 10 Gbps</div>
+              <div style="font-size:12px;color:var(--fg-secondary);margin-top:2px;">All interactive controls anchored in lower thumb zone</div>
+            </div>
+            <div style="background:var(--surface);border-top:1px solid var(--border);border-radius:16px 16px 0 0;padding:14px 16px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:10px;">
+              <div style="width:32px;height:4px;border-radius:2px;background:var(--border-strong);margin:0 auto 2px;"></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px;">
+                <span style="font-weight:600;">Active Route: ${st.pop}</span>
+                <span class="mono" style="color:var(--accent);font-size:11.5px;">Change POP ↑</span>
+              </div>
+              <button type="button" class="btn btn-primary" style="width:100%;padding:11px;font-size:13.5px;border-radius:10px;">
+                ${getSurfacePrimaryCTA(surface.id, st)}
+              </button>
+            </div>
+          </div>
+        `;
+      } else if (mockupId === 7) {
+        /* MOCKUP 7: LIVE PACKET & IXP LATENCY MATRIX VIEW */
+        bodyHTML = `
+          ${routeBar}
+          <table class="telemetry-table">
+            <thead>
+              <tr>
+                <th>NODE CODE</th>
+                <th>IXP PEERING</th>
+                <th>LOAD</th>
+                <th>RTT</th>
+                <th>ACR DNS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-selected="true">
+                <td class="mono">UK-LON-01</td>
+                <td>LINX London · 10 Gbps</td>
+                <td><span class="load-bar-track"><span class="load-bar-fill" style="width:18%"></span></span>18%</td>
+                <td class="mono">4 ms</td>
+                <td class="mono">10.66.0.1</td>
+              </tr>
+              <tr>
+                <td class="mono">UK-MAN-02</td>
+                <td>IXManchester · 10 Gbps</td>
+                <td><span class="load-bar-track"><span class="load-bar-fill" style="width:12%"></span></span>12%</td>
+                <td class="mono">6 ms</td>
+                <td class="mono">10.66.0.1</td>
+              </tr>
+              <tr>
+                <td class="mono">NL-AMS-01</td>
+                <td>AMS-IX · 10 Gbps</td>
+                <td><span class="load-bar-track"><span class="load-bar-fill" style="width:22%"></span></span>22%</td>
+                <td class="mono">11 ms</td>
+                <td class="mono">10.66.0.1</td>
+              </tr>
+              <tr>
+                <td class="mono">CH-ZRH-01</td>
+                <td>SwissIX Zurich · 10 Gbps</td>
+                <td><span class="load-bar-track"><span class="load-bar-fill" style="width:9%"></span></span>9%</td>
+                <td class="mono">18 ms</td>
+                <td class="mono">10.66.0.1</td>
+              </tr>
+            </tbody>
+          </table>
+        `;
+      } else {
+        /* MOCKUP 8: MINIMALIST FOCUS CARD (SINGLE-ACTION ZERO-NOISE) */
+        bodyHTML = `
+          <div style="max-width:440px;margin:0 auto;padding:22px;background:var(--bg-subtle);border:1px solid var(--border);border-radius:var(--radius-inner);text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px;">
+            ${stateBadge}
+            <div style="font-size:17px;font-weight:600;letter-spacing:-0.02em;color:var(--fg);">
+              ${getSurfacePrimaryHeadline(surface.id, st)}
+            </div>
+            <div class="mono" style="font-size:12px;color:var(--fg-muted);">
+              ${st.pop} · 4 ms · Zero Logs · Price-Locked
+            </div>
+            <button type="button" class="btn btn-primary" style="width:100%;max-width:280px;padding:10px 18px;">
+              ${getSurfacePrimaryCTA(surface.id, st)}
+            </button>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="${frameClass}">
+          <div class="mock-chrome">
+            <div class="chrome-dots"><span></span><span></span><span></span></div>
+            <span>SWEEPR // SURFACE 0${surface.id} · MOCKUP 0${mockupId}</span>
+            <span>CONCENTRIC RADII</span>
+          </div>
+          <div class="mock-content">
+            ${bodyHTML}
+          </div>
+        </div>
+      `;
+    }
+
+    function getSurfacePrimaryHeadline(id, st) {
+      switch (id) {
+        case 1: return "10Gbps RAM-Only WireGuard VPN & 30-Second Home Wi-Fi Scanner";
+        case 2: return "8 Bare-Metal 10Gbps POPs with Verifiable IXP Latency";
+        case 3: return "Flat Price-Lock Plans — 0% Year-2 Renewal Hike Guarantee";
+        case 4: return "1-Screen Express Checkout — Instant Ed25519 License Delivery";
+        case 5: return "Live Browser Network Bench: IP Leak, ISP Throttling & ACR Check";
+        case 6: return "Passwordless 6-Digit OTP Login & Router .conf Generator";
+        case 7: return "Two-Way QR Device Pairing (3 Simultaneous Device Slots)";
+        case 8: return "SWEEPR Desktop (694 KB Signed Binary) + Tray Mini-Widget";
+        case 9: return "Home Wi-Fi Subnet Radar & Plain-English IoT Microchip Translator";
+        case 10: return "SWEEPR Android (VpnService + Thumb-Zone POP Sheet)";
+        case 11: return "SWEEPR iOS (NEPacketTunnelProvider + Optical QR Pairing)";
+        case 12: return "Cryptographic Warrant Canary & 89 Audited Technical Guides";
+        default: return "SWEEPR VPN Instrumented Surface";
+      }
+    }
+
+    function getSurfaceSubcopy(id, st) {
+      switch (id) {
+        case 1: return "Stop ISP evening throttling on Virgin Media, BT & Comcast, and sinkhole 65 Smart-TV ACR spy domains at 10.66.0.1.";
+        case 2: return "Every POP runs diskless in volatile tmpfs RAM with calibrated MTU presets (1420 Fiber / 1412 PPPoE / 1380 Captive Portal).";
+        case 3: return "Yearly Plan £74.99/yr (£6.25/mo, Save 50%) · 6-Monthly £48.99/6mo · Monthly £12.49/mo (£1.99 1st-Month Intro) · Wi-Fi Radar +£14.99/yr.";
+        case 4: return "Apple Pay, Google Pay, Link & Stripe. Includes 30-day 100% money-back guarantee and 1-click self-service portal cancellation.";
+        case 5: return "Zero emoji clutter — tabular-nums RTT, WebRTC ICE candidate inspection, and 1-click hosts/Pi-hole blocklist copy.";
+        case 6: return "6-slot segmented OTP input with auto-advance and instant GL.iNet / UniFi / Synology WireGuard .conf profile download.";
+        case 7: return "Scan from your phone camera or enter a 6-digit pairing code to link Windows, macOS, Android, and iPhone in 5 seconds.";
+        case 8: return "Hardware-style tunnel switch, Windows Firewall Kill-Switch badge, and 192.168.1.0/24 LAN Bypass for printers & NAS.";
+        case 9: return "Translates cryptic OUI vendor chips (Espressif → Smart Plug, Samsung → Tizen TV) and flags open RTSP :554 camera ports.";
+        case 10: return "Primary Connect button and active POP sheet anchored in the bottom 35% thumb zone with Material 3 spring motion.";
+        case 11: return "Native 3-tab SwiftUI layout with step-by-step iOS Settings → VPN & Device Management visual onboarding.";
+        case 12: return "PGP/SHA-256 verifiable Warrant Canary and horizontally masked comparison tables against TotalVPN, NordVPN & ExpressVPN.";
+        default: return "";
+      }
+    }
+
+    function getSurfacePrimaryCTA(id, st) {
+      switch (id) {
+        case 1: return `Connect ${st.pop} (4 ms)`;
+        case 2: return `Export ${st.pop} .conf`;
+        case 3: return "Lock In £74.99/yr (Save 50%)";
+        case 4: return "Complete Order · £89.98/yr (VPN + Radar)";
+        case 5: return "Run 10-Second Diagnostic Scan";
+        case 6: return "Verify 6-Digit OTP & Open Portal";
+        case 7: return "Approve Device Slot (2/3 Used)";
+        case 8: return st.simState === "protected" ? "Disconnect Tunnel" : "Engage WireGuard Tunnel";
+        case 9: return "Scan Local Subnet (192.168.1.0/24)";
+        case 10: return "Tap to Connect · UK-LON-01";
+        case 11: return "Activate iOS Tunnel · 10.64.0.2";
+        case 12: return "Verify SHA-256 Canary Proof";
+        default: return "Engage Action";
+      }
+    }
+
+    function getSurfaceSecondaryAction(id) {
+      switch (id) {
+        case 1: return "Copy Endpoint IP";
+        case 2: return "Copy MTU 1420 Preset";
+        case 3: return "Copy Price-Lock Terms";
+        case 4: return "Copy License Preview";
+        case 5: return "Copy 65-Domain ACR Blocklist";
+        case 6: return "Copy Ed25519 Key";
+        case 7: return "Copy 6-Digit Pair Code";
+        case 8: return "Copy Diagnostics Log";
+        case 9: return "Copy Subnet Audit CSV";
+        case 10: return "Copy WireGuard DNS";
+        case 11: return "Copy Pairing Token";
+        case 12: return "Copy PGP Canary Hash";
+        default: return "Copy Spec";
+      }
+    }
+
+    function getSurfaceRightWidget(id, st) {
+      if (id === 3 || id === 4) {
+        /* Pricing / Checkout Ledger Widget */
+        return `
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;">
+            <div style="display:flex;justify-content:space-between;padding:6px 8px;background:var(--accent-tint);border:1px solid var(--accent-border);border-radius:var(--radius-xs);">
+              <span><strong>Yearly Plan (Save 50%)</strong></span>
+              <span class="mono"><strong>£74.99/yr</strong> (£6.25/mo)</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:6px 8px;background:var(--bg-subtle);border:1px solid var(--border);border-radius:var(--radius-xs);">
+              <span>6-Monthly Plan (Save 35%)</span>
+              <span class="mono">£48.99/6mo (£8.17/mo)</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:6px 8px;background:var(--bg-subtle);border:1px solid var(--border);border-radius:var(--radius-xs);">
+              <span>Monthly (£1.99 1st-Mo Intro)</span>
+              <span class="mono">£12.49/mo</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:6px 8px;background:var(--amber-tint);border:1px solid var(--amber-border);border-radius:var(--radius-xs);">
+              <span>+ Wi-Fi Radar &amp; TV Shield</span>
+              <span class="mono">+£14.99/yr</span>
+            </div>
+          </div>
+        `;
+      }
+      if (id === 6 || id === 7) {
+        /* Segmented 6-Digit OTP / Pairing Widget */
+        return `
+          <div>
+            <div class="otp-slots">
+              <div class="otp-slot active">4</div>
+              <div class="otp-slot">8</div>
+              <div class="otp-slot">2</div>
+              <div class="otp-slot">9</div>
+              <div class="otp-slot">1</div>
+              <div class="otp-slot">6</div>
+            </div>
+            <div class="mono" style="font-size:11px;text-align:center;color:var(--fg-muted);">
+              Auto-advances on digit · Supports ⌘V full-code paste
+            </div>
+          </div>
+        `;
+      }
+      if (id === 9) {
+        /* Plain-English IoT Microchip Translator Widget */
+        return `
+          <div style="display:flex;flex-direction:column;gap:5px;font-size:11.5px;">
+            <div class="mono" style="display:flex;justify-content:space-between;padding:5px 8px;background:var(--bg-subtle);border:1px solid var(--border);border-radius:var(--radius-xs);">
+              <span>192.168.1.42 · Samsung</span>
+              <span style="color:var(--accent);">65" TV [ACR Blocked]</span>
+            </div>
+            <div class="mono" style="display:flex;justify-content:space-between;padding:5px 8px;background:var(--bg-subtle);border:1px solid var(--border);border-radius:var(--radius-xs);">
+              <span>192.168.1.67 · Espressif</span>
+              <span>Smart Plug (2.4GHz)</span>
+            </div>
+            <div class="mono" style="display:flex;justify-content:space-between;padding:5px 8px;background:var(--danger-tint);border:1px solid var(--danger-border);border-radius:var(--radius-xs);">
+              <span>192.168.1.88 · Unknown</span>
+              <span style="color:var(--danger);">RTSP :554 Open</span>
+            </div>
+          </div>
+        `;
+      }
+      /* Default Telemetry Summary Widget */
+      return `
+        <div class="hairline-grid">
+          <div class="hairline-cell">
+            <span class="cell-kicker">POP RTT</span>
+            <span class="cell-val">4.1 ms</span>
+          </div>
+          <div class="hairline-cell">
+            <span class="cell-kicker">UPLINK</span>
+            <span class="cell-val">10 Gbps</span>
+          </div>
+          <div class="hairline-cell">
+            <span class="cell-kicker">ACR BLOCK</span>
+            <span class="cell-val">65 Hosts</span>
+          </div>
+          <div class="hairline-cell">
+            <span class="cell-kicker">STORAGE</span>
+            <span class="cell-val">tmpfs RAM</span>
+          </div>
+        </div>
+      `;
+    }
+
+    /* ==========================================================================
+       MOUNT ALL 12 SURFACES & WIRE INTERACTIVE CONTROLS
+       ========================================================================== */
+    function renderAllSurfaces() {
+      const mount = document.getElementById("surfacesMount");
+      mount.innerHTML = SURFACES.map((s) => {
+        const st = surfaceState[s.id];
+        const arch = constMOCKUP_ARCHETYPES[st.activeMockup - 1];
+        return `
+          <section class="surface-section" id="${s.slug}">
+            <div class="surface-topbar">
+              <div class="surface-meta">
+                <div class="surface-index">
+                  <span>SURFACE ${String(s.id).padStart(2, "0")} OF 12</span>
+                  <span class="platform-tag">${s.platform}</span>
+                  <span class="platform-tag">8 Interactive Mockups</span>
+                </div>
+                <h2 class="surface-title">${s.title}</h2>
+                <div class="surface-files">
+                  Audited Source Files:
+                  ${s.files.map((f) => `<a href="/${f.path}" target="_blank" rel="noopener">${f.label}</a>`).join(" · ")}
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span class="telemetry-pill" id="selectedBadge-${s.id}">
+                  ✓ Selected: Mockup #${st.selectedMockup}
+                </span>
+              </div>
+            </div>
+
+            <div class="surface-body">
+              <!-- LEFT: AUDIT FINDINGS -->
+              <div class="audit-col">
+                <div class="audit-block">
+                  <div class="audit-block-header">
+                    <span class="tag-unslop">1. CHARLES-UNSLOP AUDIT (SLOP TELLS REMOVED)</span>
+                    <span>${s.unslop.length} issues</span>
+                  </div>
+                  <ul class="audit-list">
+                    ${s.unslop.map((item) => `<li>${item}</li>`).join("")}
+                  </ul>
+                </div>
+
+                <div class="audit-block">
+                  <div class="audit-block-header">
+                    <span class="tag-polish">2. CHARLES-POLISH AUDIT (OPTICAL &amp; HIERARCHY)</span>
+                    <span>${s.polish.length} upgrades</span>
+                  </div>
+                  <ul class="audit-list">
+                    ${s.polish.map((item) => `<li>${item}</li>`).join("")}
+                  </ul>
+                </div>
+
+                <div class="audit-block">
+                  <div class="audit-block-header">
+                    <span class="tag-motion">3. CHARLES-UX-ANIMATION (CHOREOGRAPHY)</span>
+                    <span>${s.motion.length} recipes</span>
+                  </div>
+                  <ul class="audit-list">
+                    ${s.motion.map((item) => `<li>${item}</li>`).join("")}
+                  </ul>
+                </div>
+              </div>
+
+              <!-- RIGHT: 8-MOCKUP SWITCHER & LIVE STAGE -->
+              <div class="mockup-col">
+                <div class="mockup-Controls-row">
+                  <div class="mockup-tabs" role="tablist" aria-label="8 Alternative Mockups for ${s.title}">
+                    ${constMOCKUP_ARCHETYPES.map((m) => `
+                      <button
+                        type="button"
+                        role="tab"
+                        class="tab-btn"
+                        id="tab-${s.id}-${m.id}"
+                        aria-selected="${st.activeMockup === m.id}"
+                        onclick="switchSurfaceMockup(${s.id}, ${m.id})"
+                      >
+                        ${m.id === 1 ? '<span class="rec-dot" title="Recommended"></span>' : ""}
+                        <span>${m.short}</span>
+                      </button>
+                    `).join("")}
+                  </div>
+
+                  <div class="state-sim-bar">
+                    <span class="state-sim-label">State:</span>
+                    <button type="button" class="stage-ctrl" data-sim="${s.id}-protected" data-active="true" onclick="setSurfaceSimState(${s.id}, 'protected')">Protected</button>
+                    <button type="button" class="stage-ctrl" data-sim="${s.id}-connecting" data-active="false" onclick="setSurfaceSimState(${s.id}, 'connecting')">Handshake</button>
+                    <button type="button" class="stage-ctrl" data-sim="${s.id}-exposed" data-active="false" onclick="setSurfaceSimState(${s.id}, 'exposed')">Exposed</button>
+                  </div>
+                </div>
+
+                <div class="mockup-rationale" id="rationale-${s.id}">
+                  <div class="rationale-text">
+                    <div class="rationale-title" id="rationaleTitle-${s.id}">${arch.name}</div>
+                    <div class="rationale-desc" id="rationaleDesc-${s.id}">${arch.desc}</div>
+                  </div>
+                  <button type="button" class="btn btn-primary" id="selectBtn-${s.id}" onclick="chooseMockupForSurface(${s.id})">
+                    ✓ Active Blueprint (Mockup #${st.activeMockup})
+                  </button>
+                </div>
+
+                <div class="stage-frame" id="stage-${s.id}">
+                  ${renderMockupStageHTML(s, st.activeMockup, st)}
+                </div>
+              </div>
+            </div>
+          </section>
+        `;
+      }).join("");
+
+      updateSelectionManifestBar();
+    }
+
+    function switchSurfaceMockup(surfaceId, mockupId) {
+      const st = surfaceState[surfaceId];
+      st.activeMockup = mockupId;
+      const surface = SURFACES.find((x) => x.id === surfaceId);
+      const arch = constMOCKUP_ARCHETYPES[mockupId - 1];
+
+      /* Update tabs aria-selected */
+      for (let i = 1; i <= 8; i++) {
+        const btn = document.getElementById(`tab-${surfaceId}-${i}`);
+        if (btn) btn.setAttribute("aria-selected", String(i === mockupId));
+      }
+
+      /* Update rationale text & button */
+      document.getElementById(`rationaleTitle-${surfaceId}`).textContent = arch.name;
+      document.getElementById(`rationaleDesc-${surfaceId}`).textContent = arch.desc;
+      const selBtn = document.getElementById(`selectBtn-${surfaceId}`);
+      if (st.selectedMockup === mockupId) {
+        selBtn.textContent = `✓ Active Blueprint (Mockup #${mockupId})`;
+        selBtn.className = "btn btn-primary";
+      } else {
+        selBtn.textContent = `Use Mockup #${mockupId} for Surface ${surfaceId}`;
+        selBtn.className = "btn btn-secondary";
+      }
+
+      /* Smooth cross-fade stage (charles-ux-animation) */
+      const stage = document.getElementById(`stage-${surfaceId}`);
+      stage.setAttribute("data-switching", "true");
+      setTimeout(() => {
+        stage.innerHTML = renderMockupStageHTML(surface, mockupId, st);
+        stage.setAttribute("data-switching", "false");
+      }, 90);
+    }
+
+    function setSurfaceSimState(surfaceId, simState) {
+      const st = surfaceState[surfaceId];
+      st.simState = simState;
+      const surface = SURFACES.find((x) => x.id === surfaceId);
+      ["protected", "connecting", "exposed"].forEach((k) => {
+        const btn = document.querySelector(`[data-sim="${surfaceId}-${k}"]`);
+        if (btn) btn.setAttribute("data-active", String(k === simState));
+      });
+      const stage = document.getElementById(`stage-${surfaceId}`);
+      stage.innerHTML = renderMockupStageHTML(surface, st.activeMockup, st);
+    }
+
+    function chooseMockupForSurface(surfaceId) {
+      const st = surfaceState[surfaceId];
+      st.selectedMockup = st.activeMockup;
+      document.getElementById(`selectedBadge-${surfaceId}`).textContent = `✓ Selected: Mockup #${st.selectedMockup}`;
+      const selBtn = document.getElementById(`selectBtn-${surfaceId}`);
+      selBtn.textContent = `✓ Active Blueprint (Mockup #${st.selectedMockup})`;
+      selBtn.className = "btn btn-primary";
+      updateSelectionManifestBar();
+    }
+
+    function updateSelectionManifestBar() {
+      const container = document.getElementById("selectedManifestPills");
+      container.innerHTML = SURFACES.map((s) => {
+        const mId = surfaceState[s.id].selectedMockup;
+        return `<span class="selection-pill">S${String(s.id).padStart(2, "0")}: #${mId}</span>`;
+      }).join("");
+    }
+
+    function resetSelectionsToRecommended() {
+      SURFACES.forEach((s) => {
+        surfaceState[s.id].selectedMockup = 1;
+        switchSurfaceMockup(s.id, 1);
+        document.getElementById(`selectedBadge-${s.id}`).textContent = `✓ Selected: Mockup #1`;
+      });
+      updateSelectionManifestBar();
+    }
+
+    function copySelectedBlueprint(btn) {
+      const summary = SURFACES.map((s) => {
+        const mId = surfaceState[s.id].selectedMockup;
+        const arch = constMOCKUP_ARCHETYPES[mId - 1];
+        return `Surface ${String(s.id).padStart(2, "0")} (${s.title}): ${arch.name}`;
+      }).join("\n");
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(summary).catch(() => {});
+      }
+      const span = btn.querySelector("span");
+      const orig = span.textContent;
+      span.textContent = "✓ Copied 12-Surface Blueprint Spec!";
+      setTimeout(() => { span.textContent = orig; }, 1800);
+    }
+
+    /* ==========================================================================
+       MICRO-LAB INTERACTIVE RECIPES (CHARLES-UX-ANIMATION)
+       ========================================================================== */
+    /* Recipe 01: Single-Cell Inline-Grid Async Button */
+    function triggerDemoAsync(btn) {
+      const spans = btn.querySelectorAll("span[data-state]");
+      if (spans.length < 3) return;
+      const setVis = (state) => {
+        spans.forEach((s) => s.setAttribute("data-visible", String(s.getAttribute("data-state") === state)));
+      };
+      setVis("pending");
+      setTimeout(() => {
+        setVis("success");
+        setTimeout(() => {
+          setVis("idle");
+        }, 1600);
+      }, 650);
+    }
+
+    /* Recipe 02: Spring Icon Swap (Copy -> Check) */
+    function triggerIconSwap(btn) {
+      const svgs = btn.querySelectorAll(".icon-slot > svg");
+      if (svgs.length < 2) return;
+      svgs[0].setAttribute("data-active", "false");
+      svgs[1].setAttribute("data-active", "true");
+      setTimeout(() => {
+        svgs[0].setAttribute("data-active", "true");
+        svgs[1].setAttribute("data-active", "false");
+      }, 1500);
+    }
+
+    /* Recipe 03: Grid-Row 0fr -> 1fr Accordion */
+    function toggleLabAccordion(trigger) {
+      const expanded = trigger.getAttribute("aria-expanded") === "true";
+      trigger.setAttribute("aria-expanded", String(!expanded));
+      const body = trigger.nextElementSibling || trigger.parentElement.nextElementSibling;
+      if (body && body.classList.contains("accordion-body")) {
+        body.setAttribute("data-open", String(!expanded));
+      }
+    }
+
+    /* Recipe 04: Tabular Currency Switcher */
+    function setLabCurrency(btn, text) {
+      const parent = btn.parentElement;
+      parent.querySelectorAll(".stage-ctrl").forEach((b) => b.setAttribute("data-active", "false"));
+      btn.setAttribute("data-active", "true");
+      document.getElementById("labPriceReadout").textContent = text;
+    }
+
+    /* Recipe 05: 1-Frame Theme Switch Suppression (recipes.md#theme-switch) */
+    function toggleStudioTheme() {
+      const root = document.documentElement;
+      const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      root.classList.add("no-transitions");
+      root.setAttribute("data-theme", next);
+      document.getElementById("themeToggleLabel").textContent =
+        next === "dark" ? "Theme: Dark Obsidian" : "Theme: Light Mineral";
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          root.classList.remove("no-transitions");
+        });
+      });
+    }
+
+    renderAllSurfaces();
+  </script>
+</body>
+</html>
