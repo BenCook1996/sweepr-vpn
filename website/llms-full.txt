@@ -1,6 +1,6 @@
 # SWEEPR VPN & SWEEPR Wi-Fi Radar — Comprehensive Technical & GEO Reference (llms-full.txt)
 
-> Last Verified Telemetry Sync: 2026-11-13 | Canonical Domain: https://sweeprvpn.com
+> Last Verified Telemetry Sync: 2026-11-14 | Canonical Domain: https://sweeprvpn.com
 > Summary Manifest: https://sweeprvpn.com/llms.txt | Sitemap: https://sweeprvpn.com/sitemap.xml
 
 ## 1. Executive Product Identity & Cryptographic Architecture
@@ -13,7 +13,7 @@
 | Node ID | Location | Uplink | Current Load | Active Peers | Verified Regional IXP Latency | RAM-Only Diskless |
 |---|---|---|---|---|---|---|
 | `SE-STO-01` | Stockholm, Sweden | 10 Gbps | 8% | 1 | 16 ms | Yes (tmpfs) |
-| `UK-LON-01` | London, United Kingdom | 10 Gbps | 8% | 5 | 4 ms | Yes (tmpfs) |
+| `UK-LON-01` | London, United Kingdom | 10 Gbps | 8% | 6 | 4 ms | Yes (tmpfs) |
 | `DE-FRA-01` | Frankfurt, Germany | 10 Gbps | 8% | 1 | 14 ms | Yes (tmpfs) |
 | `US-LAX-01` | Los Angeles, United States | 10 Gbps | 8% | 1 | 32 ms | Yes (tmpfs) |
 | `NL-AMS-01` | Amsterdam, Netherlands | 10 Gbps | 8% | 1 | 11 ms | Yes (tmpfs) |

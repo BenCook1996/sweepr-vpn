@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-11-13T12:49:04.717Z",
+  "updatedAt": "2026-11-14T11:55:03.054Z",
   "entries": {
     "3f6375c2084e251e": {
       "fetchedAt": 1793831697933,
@@ -2223,7 +2223,7 @@
       ]
     },
     "56d5b0d8ff3ab907": {
-      "fetchedAt": 1794574135009,
+      "fetchedAt": 1794657294301,
       "keyword": "what is espressif on my wifi",
       "source": "community-api+serp-verified",
       "topResults": [
@@ -2237,7 +2237,7 @@
       ]
     },
     "066e69534ec7932a": {
-      "fetchedAt": 1794574136313,
+      "fetchedAt": 1794657295327,
       "keyword": "what is espressif on my wifi router",
       "source": "community-api+serp-verified",
       "topResults": [
@@ -2250,18 +2250,48 @@
         }
       ]
     },
+    "d38442dc40c1809f": {
+      "fetchedAt": 1794657296362,
+      "keyword": "hon hai precision ind co ltd on my wifi",
+      "source": "bing-rss-verified",
+      "topResults": [
+        {
+          "title": "Solved: Unknown device on my network - BT Community",
+          "url": "https://community.bt.com/t5/Home-setup-Wi-Fi-network/Unknown-device-on-my-network/td-p/2170148",
+          "domain": "community.bt.com",
+          "snippet": "The MAC address is for a device made by Hon Hai Precision and a quick Google says this: Hon Hai Precision Industry Co., also known by its trade name, Foxconn, is the world's largest contract electronics manufacturer."
+        },
+        {
+          "title": "Why is Hon Hai Precision on My Network? [Identify &amp; Secure]",
+          "url": "https://techdepot.blog/hon-hai-precision-on-my-network",
+          "domain": "techdepot.blog",
+          "snippet": "Hon Hai Precision appears on your network because it is the manufacturing parent company of Foxconn, which produces hardware for brands like Apple, Sony, and Amazon. If you see this name, it is likely a smartphone, gaming console, or smart home device using a Foxconn-manufactured wireless chip."
+        },
+        {
+          "title": "What is HonHaipr device on your WiFi network? - Candid.Technology",
+          "url": "https://candid.technology/honhaipr/",
+          "domain": "candid.technology",
+          "snippet": "In this article, we're talking about what is a HonHaipr device on your WiFi network, what does it do and whether or not it's safe."
+        },
+        {
+          "title": "Why is Hon Hai Precision on My Network? | Expert Q&amp;A",
+          "url": "https://www.justanswer.com/computer-networking/fascw-discovered-mac-address-00-71-cc-49-43-f9-manufacture.html",
+          "domain": "justanswer.com",
+          "snippet": "Remove unknown devices by changing Wi-Fi passwords and enabling MAC filtering on your router. Regularly update router firmware and monitor network activity to prevent unauthorized access and maintain network security."
+        },
+        {
+          "title": "Hon Hai Precision Ind. Co. Ltd Connected To My Network ...",
+          "url": "https://routerctrl.com/hon-hai-precision-ind-co-ltd-connected-to-my-network/",
+          "domain": "routerctrl.com",
+          "snippet": "Here in this post, we explain what is Hon Hai Precision Ind. Co. Ltd and why it appears on your network. We also guide you on how to handle it and possibly get rid of it if it’s malicious."
+        }
+      ]
+    },
     "d34cb204d5aaab81": {
-      "fetchedAt": 1794574138327,
+      "fetchedAt": 1794657297258,
       "keyword": "what is hon hai on my wifi",
       "source": "community-api+serp-verified",
       "topResults": [
-        {
-          "title": "Launch HN: Almanac (YC S26) – AI that knows your company",
-          "url": "https://usealmanac.com/",
-          "domain": "news.ycombinator.com",
-          "snippet": "Launch HN: Almanac (YC S26) – AI that knows your company (2026)",
-          "year": "2026"
-        },
         {
           "title": "Tell YC: Answers from John McCarthy",
           "url": "https://news.ycombinator.com/item?id=185348",
@@ -2272,7 +2302,7 @@
       ]
     },
     "f4c03c31ee0ee90c": {
-      "fetchedAt": 1794574139418,
+      "fetchedAt": 1794657298161,
       "keyword": "hon hai precision wifi",
       "source": "community-api+serp-verified",
       "topResults": [
@@ -2286,7 +2316,7 @@
       ]
     },
     "bb6a60039546959b": {
-      "fetchedAt": 1794574140529,
+      "fetchedAt": 1794657298986,
       "keyword": "what is hon hai on my router",
       "source": "community-api+serp-verified",
       "topResults": [
@@ -2298,11 +2328,48 @@
           "year": "2024"
         },
         {
-          "title": "Show HN: Prism – Self-hosted notification gateway (Signal, Telegram, WebPush)",
-          "url": "https://github.com/lone-cloud/prism",
+          "title": "Ask HN: How's your home-cooked software revolution going?",
+          "url": "https://news.ycombinator.com/item?id=50391446",
           "domain": "news.ycombinator.com",
-          "snippet": "Show HN: Prism – Self-hosted notification gateway (Signal, Telegram, WebPush) (2026)",
+          "snippet": "Ask HN: How's your home-cooked software revolution going? (2026)",
           "year": "2026"
+        }
+      ]
+    },
+    "d9afd897a49713ac": {
+      "fetchedAt": 1794657301590,
+      "keyword": "azurewave tech on my wifi",
+      "source": "bing-rss-verified",
+      "topResults": [
+        {
+          "title": "Azurewave",
+          "url": "https://www.azurewave.com/",
+          "domain": "azurewave.com",
+          "snippet": "Who We Are AzureWave Technologies, Inc. is a worldwide leading provider of wireless connectivity and image processing solutions. Our ultra-small wireless modules and digital camera modules could be extensively applied in personal and industrial computers, mobile and internet devices, consumer electronics, home appliances, automotive components, manufacturing facilities and more."
+        },
+        {
+          "title": "What Is the “Azurewave Device” on My Wi-Fi Network?",
+          "url": "https://devicetests.com/what-is-the-azurewave-device-on-my-wi-fi-network",
+          "domain": "devicetests.com",
+          "snippet": "An Azurewave device is a micro wireless network controller in IoT and desktop PC devices, like PS4, Chromebook, Chromecast, and smart plug connected to your network. We took the time to write a comprehensive guide on what is an Azurewave device on your Wi-Fi network."
+        },
+        {
+          "title": "what is an azurewave device on my wi-fi? (uncovering its role)",
+          "url": "https://laptopjudge.com/what-is-an-azurewave-device-on-my-wi-fi/",
+          "domain": "laptopjudge.com",
+          "snippet": "Discover what an AzureWave device is on your Wi-Fi network and learn its role in connectivity. Uncover essential insights for better network management!"
+        },
+        {
+          "title": "Azurewave Device On My Wi-Fi Network (Is Someone Stealing ... - RouterCtrl",
+          "url": "https://routerctrl.com/azurewave-device-on-my-wi-fi-network/",
+          "domain": "routerctrl.com",
+          "snippet": "How to Identify Azurewave Device on your Wi-Fi Network Here’s one of the easiest ways to identify AzureWave device on your Wi-Fi: Firstly, switch off the router to kick the Azurwave device off your network. Switch it on and wait for devices to reconnect to the network automatically. Log into your router, and go to Connected/Attached Devices."
+        },
+        {
+          "title": "Azurewave - Infineon Technologies",
+          "url": "https://www.infineon.com/partners/design-partner/azurewave",
+          "domain": "infineon.com",
+          "snippet": "AzureWave Technologies is a worldwide leading provider of wireless connectivity and image processing solutions. Our products lines include wireless modules and Digital Camera modules which could be extensively applied in personal computers, cellular phones, mobile internet devices, consumer electronics, home appliances, industrial facilities and more.As a leading module maker, we provide ..."
         }
       ]
     }
