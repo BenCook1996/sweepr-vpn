@@ -20,6 +20,8 @@ jobs:
     env:
       GCP_SERVICE_ACCOUNT_JSON: ${{ secrets.GCP_SERVICE_ACCOUNT_JSON }}
       CRM_ADMIN_PASSWORD: ${{ secrets.CRM_ADMIN_PASSWORD }}
+      SWEEPR_RAILWAY_CRM: ${{ secrets.SWEEPR_RAILWAY_CRM || 'https://sweepr-crm-production.up.railway.app' }}
+      CRM_ADMIN_USER: ${{ secrets.CRM_ADMIN_USER || 'admin' }}
       GSC_SITE_URL: "sc-domain:sweeprvpn.com"
       GA4_PROPERTY_ID: "559903365"
     steps:
@@ -69,6 +71,14 @@ jobs:
             git commit -m "chore(seo): automated cloud GSC/GA4 sync, WireGuard/ACR proof & sitemap audit"
             git pull --rebase -X ours origin main
             git push origin HEAD:main
+            if [ -n "${CRM_ADMIN_PASSWORD:-}" ]; then
+              COMMIT_SHA=$(git rev-parse --short HEAD)
+              curl -fsS -m 10 -X POST "${SWEEPR_RAILWAY_CRM}/api/crm/seo/changelog" \
+                -u "${CRM_ADMIN_USER:-admin}:${CRM_ADMIN_PASSWORD}" \
+                -H "Content-Type: application/json" \
+                -d "{\"project_id\":\"vpn\",\"category\":\"gsc_indexing\",\"title\":\"Daily Cloud SEO & WireGuard/ACR Pipeline (${COMMIT_SHA})\",\"description\":\"Automated GSC/GA4 telemetry sync, keyword audit, WireGuard/ACR live proof refresh, and IndexNow drip pushed to main.\",\"impact_area\":\"sweeprvpn.com pillars & sitemap\",\"author\":\"sweepr-cloud-bot\",\"status\":\"deployed\"}" \
+                || echo "::warning::Central CRM changelog sync skipped or unreachable"
+            fi
           else
             echo "No content hashes changed today — skipping commit."
           fi
