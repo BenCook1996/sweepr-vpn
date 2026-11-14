@@ -21,9 +21,9 @@
     gtag('config', 'G-7D28EEMNXX');
   </script>
 </head>
-<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+<body class="text-gray-800 min-h-screen flex flex-col">
 
-  <header class="bg-white border-b border-gray-200 py-4 px-4 sm:px-6 flex justify-between items-center gap-2">
+  <header class="bg-[var(--surface)] border-b border-[var(--border)] py-4 px-4 sm:px-6 flex justify-between items-center gap-2">
     <a href="/" class="flex items-center gap-2.5 sm:gap-3 min-w-0 text-inherit no-underline">
       <div class="logo-box text-sm w-8 h-8">S</div>
       <span class="font-bold text-base sm:text-lg truncate">SWEEPR <span class="text-emerald-600">VPN</span> Portal</span>
@@ -36,42 +36,53 @@
 
   <main class="max-w-4xl mx-auto p-4 sm:p-6 mt-4 sm:mt-8 w-full flex-1">
 
+    <div class="rack-telemetry-bar mb-5">
+      <span class="rack-telemetry-segment"><span class="rack-led"></span>PORTAL // SUBSCRIPTION-TELEMETRY</span>
+      <span class="rack-telemetry-segment">WIREGUARD 10GBPS &middot; 3-DEVICE SLOTS</span>
+      <span class="rack-telemetry-segment">ACR-SINKHOLE 10.66.0.1</span>
+    </div>
+
     <div id="loading" class="text-center py-12 text-gray-500">Loading your account...</div>
 
     <div id="dashboardContent" class="hidden space-y-6">
 
       <!-- CMO Automation 2A: Zero-Handshake Activation Rescue Banner -->
-      <div id="zeroHandshakeRescueCard" class="hidden glass-card p-5 sm:p-6 bg-gradient-to-r from-emerald-900 to-slate-900 text-white shadow-md rounded-2xl border border-emerald-500/40">
+      <div id="zeroHandshakeRescueCard" class="hidden p-5 sm:p-6 bg-[#111315] text-white shadow-sm rounded-2xl border border-[#262B33]">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 mb-1.5">
-              ⚡ Instant 15-Second Setup Rescue
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-bold font-mono uppercase tracking-wider bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 mb-1.5">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              <span>Instant 15-Second Setup Rescue</span>
             </span>
-            <h3 id="rescueHeadline" class="text-lg sm:text-xl font-black text-white">0 Devices Linked Yet — Activate Your 10Gbps WireGuard Tunnel</h3>
-            <p id="rescueSubheadline" class="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl">Scan an instant QR code on iPhone/Android, install a 1-click Apple .mobileconfig profile, or generate a native .conf for GL.iNet &amp; routers.</p>
+            <h3 id="rescueHeadline" class="text-lg sm:text-xl font-bold text-white">0 Devices Linked Yet — Activate Your 10Gbps WireGuard Tunnel</h3>
+            <p id="rescueSubheadline" class="text-xs sm:text-sm text-gray-300 mt-1 max-w-2xl">Scan an instant QR code on iPhone/Android, install a 1-click Apple .mobileconfig profile, or generate a native .conf for GL.iNet &amp; routers.</p>
           </div>
           <div class="flex flex-wrap items-center gap-2 shrink-0 w-full sm:w-auto">
-            <button type="button" onclick="generatePortalPairingQr()" class="px-4 py-2.5 rounded-xl font-extrabold text-xs bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition-all cursor-pointer">
-              📱 Scan Mobile QR
+            <button type="button" onclick="generatePortalPairingQr()" class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl font-bold text-xs bg-emerald-500 hover:bg-emerald-400 text-[#0B1210] transition-colors cursor-pointer">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM18 18h3v3h-3z"/></svg>
+              <span>Scan Mobile QR</span>
             </button>
-            <a href="/api/vpn/apple-mobileconfig" class="px-3.5 py-2.5 rounded-xl font-bold text-xs bg-white/10 hover:bg-white/20 text-white border border-white/20 no-underline">
-              🍎 iOS .mobileconfig
+            <a href="/api/vpn/apple-mobileconfig" class="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl font-semibold text-xs bg-white/10 hover:bg-white/15 text-white border border-white/15 no-underline">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+              <span>iOS .mobileconfig</span>
             </a>
-            <a href="/tools/wireguard-config-generator" class="px-3.5 py-2.5 rounded-xl font-bold text-xs bg-white/10 hover:bg-white/20 text-white border border-white/20 no-underline">
-              ⚙️ Router .conf
+            <a href="/tools/wireguard-config-generator" class="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl font-semibold text-xs bg-white/10 hover:bg-white/15 text-white border border-white/15 no-underline">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <span>Router .conf</span>
             </a>
           </div>
         </div>
       </div>
 
       <!-- CMO Automation 2B: Day-21 Intro-Monthly-to-Annual Price-Lock Upgrade Bridge -->
-      <div id="annualUpgradeBridgeCard" class="hidden glass-card p-5 sm:p-6 bg-gradient-to-r from-emerald-50 via-teal-50/70 to-amber-50/60 shadow-sm rounded-2xl border-2 border-emerald-400/70">
+      <div id="annualUpgradeBridgeCard" class="hidden rack-card glass-card p-5 sm:p-6 bg-emerald-50/70 shadow-sm rounded-2xl border border-emerald-400">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-emerald-700 text-white mb-1.5">
-              🔒 Permanent Price-Lock Upgrade + Free Smart-TV Shield
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-bold font-mono uppercase tracking-wider bg-emerald-700 text-white mb-1.5">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <span>Permanent Price-Lock Upgrade + Free Smart-TV Shield</span>
             </span>
-            <h3 id="annualBridgeHeadline" class="text-lg sm:text-xl font-black text-gray-900">Lock In £6.25/mo Forever + Free Smart-TV ACR Shield</h3>
+            <h3 id="annualBridgeHeadline" class="text-lg sm:text-xl font-bold text-gray-900">Lock In £6.25/mo Forever + Free Smart-TV ACR Shield</h3>
             <p id="annualBridgeSubheadline" class="text-xs sm:text-sm text-gray-700 mt-1 max-w-2xl">Upgrade from Monthly (£12.49/mo) to the Annual Price-Lock Plan (£74.99/yr — Save 50%) in 1 click and receive SWEEPR Wi-Fi Radar &amp; Smart-TV Shield (£14.99/yr value) free for Year 1.</p>
           </div>
           <div class="shrink-0 w-full sm:w-auto">
@@ -83,7 +94,7 @@
       </div>
 
       <!-- Subscription Overview Card -->
-      <div class="glass-card p-5 sm:p-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white shadow-sm rounded-2xl border border-gray-100">
+      <div class="rack-card glass-card p-5 sm:p-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white shadow-sm rounded-2xl border border-gray-100">
         <div>
           <h2 class="text-xl sm:text-2xl font-bold mb-1">Your Subscription</h2>
           <p class="text-gray-500 text-sm sm:text-base mb-4">Manage your SWEEPR VPN Pro access, activation key, and billing.</p>
@@ -103,18 +114,18 @@
         </div>
         <div class="text-left sm:text-right w-full sm:w-auto pt-3 sm:pt-0 border-t sm:border-t-0 border-gray-100 flex sm:block items-center justify-between">
           <span id="statusBadge" class="inline-block px-3 py-1 rounded-full text-sm font-semibold tracking-wide bg-emerald-100 text-emerald-800 uppercase">ACTIVE</span>
-          <div id="planName" class="text-lg font-black sm:mt-2 uppercase tracking-wide">ANNUAL</div>
+          <div id="planName" class="text-lg font-bold sm:mt-2 uppercase tracking-wide tabular-nums">ANNUAL</div>
         </div>
       </div>
 
       <!-- Instant Activation Code & License Key Card -->
-      <div class="glass-card p-5 sm:p-6 bg-white shadow-sm rounded-2xl border border-gray-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div class="rack-card glass-card p-5 sm:p-6 bg-white shadow-sm rounded-2xl border border-gray-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <div class="text-xs font-bold uppercase tracking-wider text-gray-400">6-Digit App Activation Code</div>
           <div class="flex items-center gap-3 mt-1">
-            <span id="activationCodeText" class="font-mono text-2xl sm:text-3xl font-black text-emerald-600 tracking-widest">------</span>
-            <button type="button" id="copyCodeBtn" class="px-3 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-xs font-bold cursor-pointer">
-              Copy Code
+            <span id="activationCodeText" class="font-mono text-2xl sm:text-3xl font-bold text-emerald-700 tracking-widest tabular-nums">------</span>
+            <button type="button" id="copyCodeBtn" class="copy-spring-btn">
+              <span class="copy-icon-stack"><svg class="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="copy-label">Copy Code</span>
             </button>
           </div>
           <p class="text-xs text-gray-500 mt-1">Enter your email and this 6-digit code inside the SWEEPR VPN app to unlock Pro on up to 3 devices (any combination of desktop or mobile).</p>
@@ -126,11 +137,12 @@
       </div>
 
       <!-- SWEEPR Wi-Fi Radar & Smart-TV Shield Add-on Card -->
-      <div id="wifiRadarPortalCard" class="glass-card p-6 sm:p-8 bg-gradient-to-br from-amber-50/70 via-white to-emerald-50/60 shadow-sm rounded-2xl border border-amber-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-5">
+      <div id="wifiRadarPortalCard" class="rack-card glass-card p-6 sm:p-8 bg-gradient-to-br from-amber-50/70 via-white to-emerald-50/60 shadow-sm rounded-2xl border border-amber-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-5">
         <div>
           <div class="flex items-center gap-2 mb-1.5">
-            <span id="wifiRadarPortalBadge" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-extrabold uppercase tracking-wider bg-amber-100 text-amber-900 border border-amber-300">
-              📡 Paid Add-on Available
+            <span id="wifiRadarPortalBadge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-bold font-mono uppercase tracking-wider bg-amber-100 text-amber-900 border border-amber-300">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+              <span>Paid Add-on Available</span>
             </span>
           </div>
           <h3 class="text-xl font-bold text-gray-900">SWEEPR Wi-Fi Radar &amp; Smart-TV Shield</h3>
@@ -154,11 +166,16 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="glass-card p-6 bg-white shadow-sm rounded-2xl border border-gray-100 flex flex-col justify-between">
+        <div class="rack-card glass-card p-6 bg-white shadow-sm rounded-2xl border border-gray-100 flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between gap-2 mb-2">
               <h3 class="font-bold text-lg">Linked Devices</h3>
-              <span id="deviceCountBadge" class="text-xs font-extrabold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">0 / 3 Devices</span>
+              <span id="deviceCountBadge" class="text-xs font-bold font-mono tabular-nums px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200">0 / 3 Devices</span>
+            </div>
+            <div id="deviceSlotsVisualBar" class="grid grid-cols-3 gap-1.5 mb-3" aria-label="Device slot usage">
+              <div class="h-2 rounded-sm bg-gray-200 border border-gray-300/60 transition-colors"></div>
+              <div class="h-2 rounded-sm bg-gray-200 border border-gray-300/60 transition-colors"></div>
+              <div class="h-2 rounded-sm bg-gray-200 border border-gray-300/60 transition-colors"></div>
             </div>
             <p class="text-sm text-gray-500 mb-4">Purchased on desktop and downloaded the app separately on another device? Generate a one-time QR code below to activate your account on your separate device (up to 3 devices — desktop or mobile).</p>
 
@@ -166,9 +183,10 @@
               type="button"
               id="openPortalQrBtn"
               onclick="generatePortalPairingQr()"
-              class="w-full mb-4 px-4 py-2.5 rounded-xl font-bold text-sm text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 transition-all flex items-center justify-center gap-2 cursor-pointer"
+              class="w-full mb-4 px-4 py-2.5 rounded-xl font-bold text-sm text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 transition-colors flex items-center justify-center gap-2 cursor-pointer"
             >
-              <span>📱 Activate Separate Device via QR Code</span>
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM18 18h3v3h-3zM14 19h2M19 14h2"/></svg>
+              <span>Activate Separate Device via QR Code</span>
             </button>
 
             <div id="portalQrDrawer" class="hidden mb-4 p-4 rounded-xl bg-gray-50 border border-emerald-200 text-center">
@@ -180,11 +198,13 @@
                 <span class="text-xs text-gray-500">Generating secure 120s pairing code…</span>
               </div>
               <div id="portalQrStatusText" class="text-xs font-semibold text-gray-600 mt-1">Scan with your separate device or paste the pairing code in the SWEEPR VPN app</div>
-              <div id="portalQrTokenRow" class="hidden mt-2 flex items-center justify-center gap-2">
-                <code id="portalQrTokenVal" class="text-xs font-mono font-bold bg-white border border-gray-200 px-2.5 py-1 rounded-lg text-gray-800"></code>
-                <button type="button" id="portalQrCopyBtn" class="text-xs font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-2.5 py-1 rounded-lg cursor-pointer">Copy Pairing Code</button>
+              <div id="portalQrTokenRow" class="hidden mt-2 flex items-center justify-center gap-2 flex-wrap">
+                <code id="portalQrTokenVal" class="text-xs font-mono font-bold bg-white border border-gray-200 px-2.5 py-1 rounded-lg text-gray-800 tabular-nums"></code>
+                <button type="button" id="portalQrCopyBtn" class="copy-spring-btn">
+                  <span class="copy-icon-stack"><svg class="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="copy-label">Copy Pairing Code</span>
+                </button>
               </div>
-              <div id="portalQrTimerText" class="text-xs font-mono font-bold text-emerald-700 mt-1">Expires in 02:00</div>
+              <div id="portalQrTimerText" class="text-xs font-mono font-bold text-emerald-700 mt-1 tabular-nums">Expires in 02:00</div>
             </div>
 
             <ul id="deviceList" class="space-y-3">
@@ -193,20 +213,20 @@
           </div>
         </div>
 
-        <div class="glass-card p-6 bg-white shadow-sm rounded-2xl border border-gray-100 flex flex-col justify-center items-center text-center">
+        <div class="rack-card glass-card p-6 bg-white shadow-sm rounded-2xl border border-gray-100 flex flex-col justify-center items-center text-center">
           <h3 class="font-bold text-lg mb-2">Need the app on another device?</h3>
           <p class="text-sm text-gray-500 mb-5">Download the latest version of SWEEPR VPN on your separate device, then use the QR code on the left to activate your account.</p>
           <div class="grid grid-cols-2 gap-2.5 w-full max-w-sm">
             <a href="/download?platform=win" class="btn btn-go justify-center gap-2 text-xs sm:text-sm py-3 no-underline">
               <span>Windows (.exe)</span>
             </a>
-            <a href="/download?platform=mac" class="btn btn-go justify-center gap-2 text-xs sm:text-sm py-3 no-underline" style="background:#0f172a;">
+            <a href="/download?platform=mac" class="btn btn-go justify-center gap-2 text-xs sm:text-sm py-3 no-underline" style="background:#111315;border-color:#262b33;">
               <span>macOS (.dmg)</span>
             </a>
-            <a href="/SWEEPRVPN.apk" class="btn btn-go justify-center gap-2 text-xs sm:text-sm py-3 no-underline" style="background:#047857;">
+            <a href="/SWEEPRVPN.apk" class="btn btn-go justify-center gap-2 text-xs sm:text-sm py-3 no-underline" style="background:#047857;border-color:#065f46;">
               <span>Android (.apk)</span>
             </a>
-            <a href="/api/vpn/apple-mobileconfig" id="iosProfileLink" class="btn btn-go justify-center gap-2 text-xs sm:text-sm py-3 no-underline" style="background:#1e293b;">
+            <a href="/api/vpn/apple-mobileconfig" id="iosProfileLink" class="btn btn-go justify-center gap-2 text-xs sm:text-sm py-3 no-underline" style="background:#1c2128;border-color:#2d343f;">
               <span>iOS (.mobileconfig)</span>
             </a>
           </div>
@@ -221,19 +241,24 @@
       <!-- CMO Automation 5 & 8: PLG Viral Referral Loop + Moment-of-Delight Review Velocity -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
         <!-- CMO Automation 5: Give 30 Days Free, Get 30 Days Free -->
-        <div id="portalReferralCard" class="glass-card p-6 bg-gradient-to-br from-emerald-50/90 to-teal-50/70 shadow-sm rounded-2xl border border-emerald-200 flex flex-col justify-between">
+        <div id="portalReferralCard" class="rack-card glass-card p-6 bg-gradient-to-br from-emerald-50/90 to-teal-50/70 shadow-sm rounded-2xl border border-emerald-200 flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between gap-2 mb-2">
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-emerald-600 text-white">🎁 Give 30 Days, Get 30 Days</span>
-              <span id="portalReferralCountBadge" class="text-xs font-extrabold px-2.5 py-1 rounded-full bg-white text-emerald-800 border border-emerald-200">0 Referrals • +0 Bonus Days</span>
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold font-mono uppercase tracking-wider bg-emerald-700 text-white">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+                <span>Give 30 Days, Get 30 Days</span>
+              </span>
+              <span id="portalReferralCountBadge" class="text-xs font-bold font-mono tabular-nums px-2.5 py-1 rounded-md bg-white text-emerald-800 border border-emerald-200">0 Referrals &bull; +0 Bonus Days</span>
             </div>
-            <h3 class="font-extrabold text-lg text-gray-900 mb-1">Invite a Friend — Both Get +30 Days Free</h3>
+            <h3 class="font-bold text-lg text-gray-900 mb-1">Invite a Friend — Both Get +30 Days Free</h3>
             <p class="text-xs text-gray-600 mb-4 leading-relaxed">
               Share your personal referral link below. Every time a friend activates SWEEPR VPN Pro, we automatically credit <strong>+30 extra days free</strong> to both of your accounts.
             </p>
             <div class="flex items-center gap-2 mb-3">
-              <input id="portalReferralLinkInput" type="text" readonly value="https://sweeprvpn.com/?ref=SWEEPR" class="w-full px-3 py-2 rounded-xl border border-emerald-200 bg-white text-xs font-mono font-bold text-gray-800" />
-              <button type="button" id="portalReferralCopyBtn" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold shrink-0 cursor-pointer">Copy Link</button>
+              <input id="portalReferralLinkInput" type="text" readonly value="https://sweeprvpn.com/?ref=SWEEPR" class="w-full px-3 py-2 rounded-xl border border-emerald-200 bg-white text-xs font-mono font-bold text-gray-800 tabular-nums" />
+              <button type="button" id="portalReferralCopyBtn" class="copy-spring-btn shrink-0">
+                <span class="copy-icon-stack"><svg class="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="copy-label">Copy Link</span>
+              </button>
             </div>
           </div>
           <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-emerald-200/60">
@@ -244,10 +269,10 @@
         </div>
 
         <!-- CMO Automation 8: Moment-of-Delight Review Velocity & +7 Bonus Days Booster -->
-        <div id="momentOfDelightReviewCard" class="glass-card p-6 bg-white shadow-sm rounded-2xl border border-gray-100 flex flex-col justify-between">
+        <div id="momentOfDelightReviewCard" class="rack-card glass-card p-6 bg-white shadow-sm rounded-2xl border border-gray-100 flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between gap-2 mb-2">
-              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-amber-50 text-amber-800 border border-amber-200">⭐ 10-Second Speed Feedback</span>
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold font-mono uppercase tracking-wider bg-amber-50 text-amber-800 border border-amber-200"><svg class="w-3.5 h-3.5 text-amber-600" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><span>10-Second Speed Feedback</span></span>
               <span id="reviewBonusBadge" class="text-xs font-extrabold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">+7 Bonus Days Free</span>
             </div>
             <h3 class="font-extrabold text-lg text-gray-900 mb-1">How is your SWEEPR VPN speed &amp; setup experience?</h3>
@@ -294,6 +319,21 @@
   </footer>
 
   <script>
+    function portalSpringCopy(btn, text, idleLabel) {
+      if (!navigator.clipboard || !navigator.clipboard.writeText) return;
+      navigator.clipboard.writeText(text).then(() => {
+        if (!btn) return;
+        const lbl = btn.querySelector('.copy-label');
+        if (lbl) lbl.textContent = 'Copied';
+        btn.classList.add('is-copied');
+        clearTimeout(btn._copyTimer);
+        btn._copyTimer = setTimeout(() => {
+          btn.classList.remove('is-copied');
+          if (lbl) lbl.textContent = idleLabel || 'Copy';
+        }, 1800);
+      }).catch(() => {});
+    }
+
     function escapeHtml(v) {
       return String(v ?? '')
         .replace(/&/g, '&amp;')
@@ -375,11 +415,7 @@
             refBadge.textContent = `${Number(data.referral.referrals_count || 0)} Referrals • +${Number(data.referral.bonus_days_earned || 0)} Bonus Days`;
           }
           if (refCopy) {
-            refCopy.onclick = () => {
-              navigator.clipboard.writeText(shareUrl);
-              refCopy.textContent = 'Copied ✓';
-              setTimeout(() => { refCopy.textContent = 'Copy Link'; }, 2000);
-            };
+            refCopy.onclick = () => portalSpringCopy(refCopy, shareUrl, 'Copy Link');
           }
           if (waBtn) waBtn.href = 'https://wa.me/?text=' + encodeURIComponent('Try SWEEPR VPN (10Gbps WireGuard + Smart-TV ACR Shield) and get +30 days free: ' + shareUrl);
           if (tgBtn) tgBtn.href = 'https://t.me/share/url?url=' + encodeURIComponent(shareUrl) + '&text=' + encodeURIComponent('Get +30 Days Free on SWEEPR VPN (10Gbps WireGuard):');
@@ -411,11 +447,7 @@
           keyEl.textContent = data.licenseKey;
         }
         if (copyBtn && data.activation_code) {
-          copyBtn.onclick = () => {
-            navigator.clipboard.writeText(data.activation_code);
-            copyBtn.textContent = 'Copied ✓';
-            setTimeout(() => { copyBtn.textContent = 'Copy Code'; }, 2000);
-          };
+          copyBtn.onclick = () => portalSpringCopy(copyBtn, data.activation_code, 'Copy Code');
         }
 
         if (data.has_stripe) {
@@ -486,8 +518,20 @@
         if (countBadge) {
           countBadge.textContent = `${usedDevices} / ${maxDevices} Devices`;
           countBadge.className = usedDevices >= maxDevices
-            ? 'text-xs font-extrabold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-300'
-            : 'text-xs font-extrabold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200';
+            ? 'text-xs font-bold font-mono tabular-nums px-2.5 py-1 rounded-md bg-amber-100 text-amber-800 border border-amber-300'
+            : 'text-xs font-bold font-mono tabular-nums px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200';
+        }
+        const slotsBar = document.getElementById('deviceSlotsVisualBar');
+        if (slotsBar) {
+          const totalSlots = Math.max(1, Number(maxDevices) || 3);
+          let slotsHtml = '';
+          for (let si = 0; si < totalSlots; si++) {
+            const filled = si < usedDevices;
+            slotsHtml += filled
+              ? '<div class="h-2 rounded-sm bg-emerald-500 border border-emerald-600 transition-colors"></div>'
+              : '<div class="h-2 rounded-sm bg-gray-200 border border-gray-300/60 transition-colors"></div>';
+          }
+          slotsBar.innerHTML = slotsHtml;
         }
 
         const deviceList = document.getElementById('deviceList');
@@ -548,7 +592,8 @@
           return;
         }
         if (box) {
-          box.innerHTML = `<div class="bg-white p-2 rounded-xl border border-gray-200 inline-block shadow-sm">${String(data.qr_svg || '').startsWith('<svg') && !/<script|onload|onerror|javascript:/i.test(String(data.qr_svg || '')) ? data.qr_svg : ''}</div>`;
+          const safeQrSvg = String(data.qr_svg || '').startsWith('<svg') && !/<script|onload|onerror|javascript:/i.test(String(data.qr_svg || '')) ? data.qr_svg : '';
+          box.innerHTML = `<div class="relative inline-block p-3.5 bg-white rounded-xl border border-gray-200 shadow-sm"><span class="pointer-events-none absolute top-1.5 left-1.5 w-3 h-3 border-t-2 border-l-2 border-emerald-600 rounded-tl-sm"></span><span class="pointer-events-none absolute top-1.5 right-1.5 w-3 h-3 border-t-2 border-r-2 border-emerald-600 rounded-tr-sm"></span><span class="pointer-events-none absolute bottom-1.5 left-1.5 w-3 h-3 border-b-2 border-l-2 border-emerald-600 rounded-bl-sm"></span><span class="pointer-events-none absolute bottom-1.5 right-1.5 w-3 h-3 border-b-2 border-r-2 border-emerald-600 rounded-br-sm"></span>${safeQrSvg}</div>`;
         }
         const tokenRow = document.getElementById('portalQrTokenRow');
         const tokenVal = document.getElementById('portalQrTokenVal');
@@ -557,11 +602,7 @@
           tokenVal.textContent = data.token;
           tokenRow.classList.remove('hidden');
           if (copyTokenBtn) {
-            copyTokenBtn.onclick = () => {
-              navigator.clipboard.writeText(data.token);
-              copyTokenBtn.textContent = 'Copied ✓';
-              setTimeout(() => { copyTokenBtn.textContent = 'Copy Pairing Code'; }, 2000);
-            };
+            copyTokenBtn.onclick = () => portalSpringCopy(copyTokenBtn, data.token, 'Copy Pairing Code');
           }
         }
         let remaining = Number(data.expires_in || 120);
@@ -655,19 +696,19 @@
               <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-extrabold uppercase tracking-wider">1-Click Transparent Billing</span>
               <button onclick="document.getElementById('cancelSaveModal').remove()" class="text-gray-400 hover:text-gray-600 text-lg font-bold">&times;</button>
             </div>
-            <h3 class="text-xl font-black text-gray-900 mb-2">Before you cancel auto-renewal, how can we help?</h3>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Before you cancel auto-renewal, how can we help?</h3>
             <p class="text-sm text-gray-600 mb-5">You can cancel immediately in one click below—or choose a tailored option to keep your devices protected:</p>
             <div class="space-y-3 mb-6">
-              <button onclick="applySaveOffer('pause_30d')" class="w-full text-left p-4 rounded-2xl border-2 border-emerald-500/30 hover:border-emerald-600 bg-emerald-50/50 transition-all">
-                <div class="font-extrabold text-sm text-gray-900">⏸️ "I'm not using it right now" — Pause for 30 Days (£0.00)</div>
+              <button onclick="applySaveOffer('pause_30d')" class="w-full text-left p-4 rounded-xl border border-emerald-500/40 hover:border-emerald-600 bg-emerald-50/60 transition-colors cursor-pointer">
+                <div class="font-bold text-sm text-gray-900">Pause Subscription — 30 Days at £0.00</div>
                 <div class="text-xs text-gray-600 mt-0.5">Pause billing for 30 days at £0.00 while keeping your account &amp; router configs saved.</div>
               </button>
-              <button onclick="applySaveOffer('switch_annual')" class="w-full text-left p-4 rounded-2xl border-2 border-gray-200 hover:border-emerald-600 bg-gray-50 transition-all">
-                <div class="font-extrabold text-sm text-gray-900">💷 "Monthly price is too high" — Switch to Annual (£6.25/mo • Save 50%)</div>
+              <button onclick="applySaveOffer('switch_annual')" class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-emerald-600 bg-gray-50 transition-colors cursor-pointer">
+                <div class="font-bold text-sm text-gray-900 tabular-nums">Switch to Annual — £6.25/mo (Save 50%)</div>
                 <div class="text-xs text-gray-600 mt-0.5">Lock in £74.99/year (£6.25/mo equivalent) with our permanent No-Renewal-Hike Guarantee.</div>
               </button>
-              <a href="/support" class="block w-full text-left p-4 rounded-2xl border-2 border-gray-200 hover:border-emerald-600 bg-gray-50 transition-all">
-                <div class="font-extrabold text-sm text-gray-900">🛠️ "I'm having a technical or router setup issue"</div>
+              <a href="/support" class="block w-full text-left p-4 rounded-xl border border-gray-200 hover:border-emerald-600 bg-gray-50 transition-colors no-underline">
+                <div class="font-bold text-sm text-gray-900">Request Engineering Support</div>
                 <div class="text-xs text-gray-600 mt-0.5">Get priority engineering help for WireGuard MTU, GL.iNet routers, or Smart-TV ACR blocking.</div>
               </a>
             </div>

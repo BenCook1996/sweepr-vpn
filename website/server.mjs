@@ -5494,38 +5494,57 @@ self.addEventListener('fetch', e => {
   <meta name="robots" content="noindex, nofollow">
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f8fafc;color:#0f172a;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
-    .card{background:#fff;border:1px solid #e2e8f0;border-radius:20px;box-shadow:0 16px 40px -12px rgba(15,23,42,.08);max-width:440px;width:100%;padding:28px 24px;display:flex;flex-direction:column;gap:16px}
-    .badge{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;font-size:12px;font-weight:800;background:#ecfdf5;color:#047857;border:1px solid #a7f3d0;align-self:flex-start}
-    h1{font-size:21px;font-weight:900;letter-spacing:-.02em}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f7f7f5;color:#161a22;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;font-variant-numeric:tabular-nums}
+    .rack-bar{max-width:440px;width:100%;margin-bottom:10px;padding:8px 14px;background:#fff;border:1px solid #dfddd4;border-radius:10px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;color:#475569;font-variant-numeric:tabular-nums}
+    .rack-bar-seg{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+    .rack-led{width:7px;height:7px;border-radius:999px;background:#059669;box-shadow:0 0 0 2px #d1fae5;display:inline-block}
+    .card{background:#fff;border:1px solid #dfddd4;border-radius:16px;box-shadow:0 1px 3px rgba(15,23,42,.05);max-width:440px;width:100%;padding:26px 24px;display:flex;flex-direction:column;gap:16px}
+    .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:6px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;font-weight:700;background:#ecfdf5;color:#047857;border:1px solid #a7f3d0;align-self:flex-start;letter-spacing:.02em}
+    h1{font-size:21px;font-weight:700;letter-spacing:-.02em;color:#111315}
     p{font-size:14px;color:#475569;line-height:1.5}
-    .box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px}
-    .input{width:100%;padding:11px 14px;border:1px solid #cbd5e1;border-radius:12px;font-size:14px;font-family:monospace;font-weight:700}
-    .btn{width:100%;padding:13px 16px;border-radius:12px;border:none;font-size:14px;font-weight:800;cursor:pointer;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
-    .btn-go{background:linear-gradient(135deg,#059669,#10b981);color:#fff;box-shadow:0 6px 18px -4px rgba(5,150,105,.4)}
-    .btn-soft{background:#f1f5f9;color:#0f172a;border:1px solid #e2e8f0}
+    .box{background:#f7f7f5;border:1px solid #dfddd4;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px}
+    .input{width:100%;padding:11px 14px;border:1px solid #cbd5e1;border-radius:10px;font-size:14px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-weight:700;background:#fff;color:#111315}
+    .btn{width:100%;padding:13px 16px;border-radius:10px;border:1px solid transparent;font-size:14px;font-weight:700;cursor:pointer;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform 110ms cubic-bezier(.32,.72,0,1),background-color 140ms ease}
+    .btn:active:not(:disabled){transform:scale(0.97)}
+    .btn-go{background:#059669;color:#fff;border-color:#047857;box-shadow:0 2px 6px rgba(5,150,105,.22)}
+    .btn-go:hover:not(:disabled){background:#047857}
+    .btn-soft{background:#f3f2ed;color:#161a22;border:1px solid #dfddd4}
+    .btn-async-grid{display:inline-grid;align-items:center;justify-items:center}
+    .btn-async-grid>.btn-state-idle,.btn-async-grid>.btn-state-loading{grid-area:1/1;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:opacity 150ms ease,transform 150ms ease}
+    .btn-async-grid>.btn-state-loading{opacity:0;visibility:hidden;transform:scale(.96);pointer-events:none}
+    .btn-async-grid.is-loading>.btn-state-idle{opacity:0;visibility:hidden;transform:scale(.96)}
+    .btn-async-grid.is-loading>.btn-state-loading{opacity:1;visibility:visible;transform:scale(1)}
+    @keyframes spin360{to{transform:rotate(360deg)}}
+    .spin{animation:spin360 .8s linear infinite}
     .err{color:#dc2626;font-size:13px;font-weight:700;display:none}
-    .ok{color:#059669;font-size:13.5px;font-weight:800}
+    .ok{color:#059669;font-size:13.5px;font-weight:700}
   </style>
 </head>
 <body>
+  <div class="rack-bar">
+    <span class="rack-bar-seg"><span class="rack-led"></span>PAIR // 120S SINGLE-USE TOKEN</span>
+    <span class="rack-bar-seg">${MAX_DEVICES_PER_ACCOUNT}-SLOT MAX</span>
+  </div>
   <div class="card">
-    <div class="badge">ÃƒÂ°Ã…Â¸Ã¢â‚¬ÂÃ¢â‚¬â„¢ SWEEPR VPN Device Pairing</div>
+    <div class="badge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span>SWEEPR VPN &middot; DEVICE PAIRING</span></div>
     <div id="pairBody">
       ${t ? `
-        <h1>Linking This DeviceÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦</h1>
-        <p style="margin-top:6px">Verifying your one-time QR pairing token and reserving a device slot (up to ${MAX_DEVICES_PER_ACCOUNT} devices ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â desktop or mobile).</p>
+        <h1>Linking This Device…</h1>
+        <p style="margin-top:6px">Verifying your one-time QR pairing token and reserving a device slot (up to ${MAX_DEVICES_PER_ACCOUNT} devices &mdash; desktop or mobile).</p>
       ` : c ? `
         <h1>Approve Desktop Device</h1>
         <p style="margin-top:6px">Confirm linking <strong>${escapeHtml(ch ? ch.deviceName : 'SWEEPR VPN Desktop')}</strong> to your SWEEPR VPN Pro subscription.</p>
-        ${sessAcc ? `<div class="box" style="margin-top:12px"><div style="font-size:12px;color:#64748b;font-weight:700">SIGNED IN AS</div><div style="font-size:14px;font-weight:800">${escapeHtml(sessAcc.email)} (${(sessAcc.devices || []).length} / ${MAX_DEVICES_PER_ACCOUNT} devices used)</div></div>` : `
+        ${sessAcc ? `<div class="box" style="margin-top:12px"><div style="font-size:11px;color:#64748b;font-weight:700;font-family:monospace">SIGNED IN AS</div><div style="font-size:14px;font-weight:700">${escapeHtml(sessAcc.email)} (${(sessAcc.devices || []).length} / ${MAX_DEVICES_PER_ACCOUNT} devices used)</div></div>` : `
         <div class="box" style="margin-top:12px">
-          <label style="font-size:12px;font-weight:800;color:#475569">Your License Key or 6-Digit Code</label>
+          <label style="font-size:12px;font-weight:700;color:#475569">Your License Key or 6-Digit Code</label>
           <input id="approveKey" class="input" placeholder="SWEEPR-VPN-XXXX-XXXX-XXXX" />
           <input id="approveEmail" class="input" type="email" placeholder="Account email (if using 6-digit code)" style="font-family:sans-serif;font-weight:600" />
         </div>`}
         <div id="pairErr" class="err" style="margin-top:10px"></div>
-        <button class="btn btn-go" style="margin-top:14px" id="approveBtn" onclick="approveDesktop()">Approve &amp; Unlock Desktop</button>
+        <button class="btn btn-go btn-async-grid" style="margin-top:14px" id="approveBtn" onclick="approveDesktop()">
+          <span class="btn-state-idle">Approve &amp; Unlock Desktop</span>
+          <span class="btn-state-loading"><svg class="spin" width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.5" opacity="0.25"/><path d="M21 12a9 9 0 0 0-9-9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg><span>Approving…</span></span>
+        </button>
       ` : `
         <h1>Invalid Pairing Link</h1>
         <p style="margin-top:6px">Please scan a fresh QR code from your SWEEPR VPN Customer Portal or Desktop App.</p>
@@ -5587,9 +5606,9 @@ self.addEventListener('fetch', e => {
         } catch (e) {}
         const deepLink = 'sweeprvpn://activate?key=' + encodeURIComponent(d.licenseKey || '') + '&device_id=' + encodeURIComponent(devId);
         document.getElementById('pairBody').innerHTML =
-          '<h1>ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Account Activated on This Device!</h1>' +
+          '<h1>Account Activated on This Device</h1>' +
           '<p style="margin-top:6px">This ' + escHtml(info.name) + ' is now linked to <strong>' + escHtml(d.email || 'your account') + '</strong> (Slot ' + Number(d.devices_used || 1) + ' of ' + Number(d.max_devices || 3) + ').</p>' +
-          '<div class="box" style="margin-top:12px"><div style="font-size:11px;font-weight:800;color:#64748b">ACTIVE LICENSE KEY</div><div style="font-family:monospace;font-weight:800;font-size:14px">' + escHtml(d.licenseKey || '') + '</div></div>' +
+          '<div class="box" style="margin-top:12px"><div style="font-size:11px;font-weight:700;color:#64748b">ACTIVE LICENSE KEY</div><div style="font-family:monospace;font-weight:700;font-size:14px">' + escHtml(d.licenseKey || '') + '</div></div>' +
           '<a href="' + escHtml(deepLink) + '" class="btn btn-go" style="margin-top:14px">Open in SWEEPR VPN App</a>' +
           '<a href="/download" class="btn btn-soft" style="margin-top:8px">Download SWEEPR VPN App</a>';
       } catch (e) {
@@ -5607,7 +5626,7 @@ self.addEventListener('fetch', e => {
         email = (document.getElementById('approveEmail')?.value || localStorage.getItem('sweepr_vpn_email') || '').trim();
       }
       btn.disabled = true;
-      btn.textContent = 'ApprovingÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦';
+      btn.classList.add('is-loading');
       try {
         const r = await fetch('/api/vpn/pair/approve', {
           method: 'POST',
@@ -5619,17 +5638,17 @@ self.addEventListener('fetch', e => {
           err.textContent = d.message || 'Could not approve device.';
           err.style.display = 'block';
           btn.disabled = false;
-          btn.textContent = 'Approve & Unlock Desktop';
+          btn.classList.remove('is-loading');
           return;
         }
         document.getElementById('pairBody').innerHTML =
-          '<h1>ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Desktop Unlocked!</h1>' +
+          '<h1>Desktop Unlocked</h1>' +
           '<p style="margin-top:6px">Your desktop app is now linked and unlocked (Slot ' + d.devices_used + ' of ' + d.max_devices + '). You can close this tab.</p>';
       } catch (e) {
         err.textContent = 'Network error. Please try again.';
         err.style.display = 'block';
         btn.disabled = false;
-        btn.textContent = 'Approve & Unlock Desktop';
+        btn.classList.remove('is-loading');
       }
     }
     if (token) redeemFlowA();

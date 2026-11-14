@@ -574,8 +574,29 @@ final class SweeprVpnViewModel: ObservableObject {
     }
 }
 
-/// Real AVCaptureSession camera QR scanner for iOS
+/// Real AVCaptureSession camera QR scanner for iOS with dynamic preview bounds & torch toggle
+final class ScannerHostViewController: UIViewController {
+    var previewLayer: AVCaptureVideoPreviewLayer?
+    var captureDevice: AVCaptureDevice?
+    var captureSession: AVCaptureSession?
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        previewLayer?.frame = view.bounds
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if captureSession?.isRunning == true {
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                self?.captureSession?.stopRunning()
+            }
+        }
+    }
+}
+
 struct QrCameraScannerView: UIViewControllerRepresentable {
+    var isTorchOn: Bool = false
     var onCodeScanned: (String) -> Void
 
     final class Coordinator: NSObject, AVCaptureMetadataOutputObjectsDelegate {
@@ -600,12 +621,14 @@ struct QrCameraScannerView: UIViewControllerRepresentable {
         Coordinator(parent: self)
     }
 
-    func makeUIViewController(context: Context) -> UIViewController {
-        let vc = UIViewController()
+    func makeUIViewController(context: Context) -> ScannerHostViewController {
+        let vc = ScannerHostViewController()
         let session = AVCaptureSession()
+        vc.captureSession = session
         if let device = AVCaptureDevice.default(for: .video),
            let input = try? AVCaptureDeviceInput(device: device),
            session.canAddInput(input) {
+            vc.captureDevice = device
             session.addInput(input)
             let output = AVCaptureMetadataOutput()
             if session.canAddOutput(output) {
@@ -614,9 +637,10 @@ struct QrCameraScannerView: UIViewControllerRepresentable {
                 output.metadataObjectTypes = [.qr]
             }
             let preview = AVCaptureVideoPreviewLayer(session: session)
-            preview.frame = CGRect(x: 0, y: 0, width: 280, height: 200)
+            preview.frame = vc.view.bounds
             preview.videoGravity = .resizeAspectFill
             vc.view.layer.addSublayer(preview)
+            vc.previewLayer = preview
             DispatchQueue.global(qos: .userInitiated).async {
                 session.startRunning()
             }
@@ -624,234 +648,603 @@ struct QrCameraScannerView: UIViewControllerRepresentable {
         return vc
     }
 
-    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
+    func updateUIViewController(_ uiViewController: ScannerHostViewController, context: Context) {
+        guard let device = uiViewController.captureDevice, device.hasTorch else { return }
+        let desiredMode: AVCaptureDevice.TorchMode = isTorchOn ? .on : .off
+        if device.torchMode != desiredMode {
+            try? device.lockForConfiguration()
+            device.torchMode = desiredMode
+            device.unlockForConfiguration()
+        }
+    }
 }
 
 struct SweeprVpnRootView: View {
     @StateObject private var vm = SweeprVpnViewModel()
     @Environment(\.openURL) private var openURL
+    @State private var selectedTab: Int = 0
+    @State private var showServerPickerSheet: Bool = false
+    @State private var isTorchOn: Bool = false
+    @AppStorage("sweepr_ios_acr_shield") private var acrShieldEnabled: Bool = true
+    @AppStorage("sweepr_ios_doorbell") private var doorbellModeEnabled: Bool = true
+    @AppStorage("sweepr_ios_bedtime") private var bedtimePauseEnabled: Bool = false
+
+    private func isoBadge(for code: String) -> String {
+        String(code.prefix(2)).uppercased()
+    }
 
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(spacing: 18) {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("SWEEPR VPN")
-                                .font(.headline.weight(.heavy))
-                            Text(vm.isPro ? "Pro Active • \(vm.deviceCount)/\(vm.deviceLimit) Devices" : "Free Wi-Fi Diagnostic Mode")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-                        Spacer()
-                        Button {
-                            vm.showQrScannerSheet = true
-                        } label: {
-                            Label("Scan QR", systemImage: "qrcode.viewfinder")
-                                .font(.subheadline.weight(.bold))
-                        }
-                        .buttonStyle(.borderedProminent)
-                    }
-                    .padding(.horizontal)
+        TabView(selection: $selectedTab) {
+            // TAB 0: TUNNEL
+            NavigationStack {
+                VStack(spacing: 0) {
+                    ScrollView {
+                        VStack(spacing: 14) {
+                            // Instrumentation Strip
+                            HStack {
+                                HStack(spacing: 6) {
+                                    Circle()
+                                        .fill(Color(red: 0.02, green: 0.59, blue: 0.41))
+                                        .frame(width: 7, height: 7)
+                                    Text("TUNNEL // WIREGUARD 10GBPS")
+                                        .font(.caption2.monospaced().weight(.bold))
+                                        .foregroundStyle(.primary)
+                                }
+                                Spacer()
+                                Text("ACR 10.66.0.1")
+                                    .font(.caption2.monospaced().weight(.semibold))
+                                    .foregroundStyle(.secondary)
+                            }
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                            .background(Color(.secondarySystemBackground))
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color(.separator).opacity(0.45), lineWidth: 1)
+                            )
+                            .padding(.horizontal)
 
-                    VStack(spacing: 6) {
-                        Text(vm.statusBanner)
-                            .font(.footnote.weight(.medium))
-                            .multilineTextAlignment(.center)
-                        Text("Egress: \(vm.egressIpSummary)")
-                            .font(.caption2.monospaced())
-                            .foregroundStyle(.secondary)
-                    }
-                    .padding(.horizontal)
+                            // Header
+                            HStack {
+                                VStack(alignment: .leading, spacing: 3) {
+                                    Text("SWEEPR VPN")
+                                        .font(.headline.weight(.bold))
+                                    Text(vm.isPro ? "Pro Active • \(vm.deviceCount)/\(vm.deviceLimit) Devices" : "Free Wi-Fi Diagnostic Mode")
+                                        .font(.caption.monospacedDigit())
+                                        .foregroundStyle(.secondary)
+                                }
+                                Spacer()
+                                Button {
+                                    vm.showQrScannerSheet = true
+                                } label: {
+                                    Label("Scan QR", systemImage: "qrcode.viewfinder")
+                                        .font(.caption.weight(.bold))
+                                }
+                                .buttonStyle(.borderedProminent)
+                                .tint(Color(red: 0.02, green: 0.59, blue: 0.41))
+                            }
+                            .padding(.horizontal)
 
-                    // Country / Server Location Picker
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("VPN Server Location")
-                            .font(.caption.weight(.bold))
-                            .foregroundStyle(.secondary)
-                        ForEach(vm.servers) { srv in
-                            Button {
-                                Task { await vm.selectServer(srv.code) }
-                            } label: {
+                            // Status & Egress Telemetry Card
+                            VStack(alignment: .leading, spacing: 6) {
                                 HStack {
-                                    Text(srv.flag)
-                                        .font(.title3)
-                                    VStack(alignment: .leading, spacing: 2) {
-                                        Text("\(srv.country) — \(srv.city)")
-                                            .font(.subheadline.weight(.semibold))
-                                            .foregroundStyle(.primary)
-                                        Text("\(srv.code) • \(srv.probe_ms ?? 15) ms • 10 Gbps WireGuard")
-                                            .font(.caption2)
+                                    Text(vm.isConnected ? "PROTECTED ROUTE" : (vm.isConnecting ? "HANDSHAKE IN PROGRESS" : "STANDBY"))
+                                        .font(.caption2.monospaced().weight(.bold))
+                                        .foregroundStyle(vm.isConnected ? Color(red: 0.02, green: 0.59, blue: 0.41) : .secondary)
+                                    Spacer()
+                                    Text("\(vm.currentServer.probe_ms ?? 15) ms")
+                                        .font(.caption.monospaced().monospacedDigit().weight(.bold))
+                                        .foregroundStyle(Color(red: 0.02, green: 0.59, blue: 0.41))
+                                }
+                                Text(vm.statusBanner)
+                                    .font(.subheadline.weight(.medium))
+                                Text("Egress: \(vm.egressIpSummary)")
+                                    .font(.caption2.monospaced().monospacedDigit())
+                                    .foregroundStyle(.secondary)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(14)
+                            .background(Color(.secondarySystemBackground))
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(vm.isConnected ? Color(red: 0.02, green: 0.59, blue: 0.41).opacity(0.6) : Color(.separator).opacity(0.4), lineWidth: 1)
+                            )
+                            .padding(.horizontal)
+
+                            // Selected Server + Quick-Pick ISO POP Pills
+                            VStack(alignment: .leading, spacing: 10) {
+                                HStack {
+                                    Text("SELECTED WIREGUARD POP")
+                                        .font(.caption2.monospaced().weight(.bold))
+                                        .foregroundStyle(.secondary)
+                                    Spacer()
+                                    Button("All \(vm.servers.count) ›") {
+                                        showServerPickerSheet = true
+                                    }
+                                    .font(.caption.monospacedDigit().weight(.bold))
+                                    .tint(Color(red: 0.02, green: 0.59, blue: 0.41))
+                                }
+
+                                Button {
+                                    showServerPickerSheet = true
+                                } label: {
+                                    HStack(spacing: 12) {
+                                        Text(isoBadge(for: vm.currentServer.code))
+                                            .font(.caption.monospaced().weight(.bold))
+                                            .padding(.horizontal, 8)
+                                            .padding(.vertical, 5)
+                                            .background(Color(red: 0.02, green: 0.59, blue: 0.41).opacity(0.14))
+                                            .foregroundStyle(Color(red: 0.02, green: 0.59, blue: 0.41))
+                                            .clipShape(RoundedRectangle(cornerRadius: 6))
+                                        VStack(alignment: .leading, spacing: 2) {
+                                            Text("\(vm.currentServer.country) — \(vm.currentServer.city)")
+                                                .font(.subheadline.weight(.semibold))
+                                                .foregroundStyle(.primary)
+                                            Text("\(vm.currentServer.code) • \(vm.currentServer.probe_ms ?? 15) ms • 10 Gbps WireGuard")
+                                                .font(.caption2.monospaced().monospacedDigit())
+                                                .foregroundStyle(.secondary)
+                                        }
+                                        Spacer()
+                                        Image(systemName: "chevron.right")
+                                            .font(.caption.weight(.semibold))
                                             .foregroundStyle(.secondary)
                                     }
-                                    Spacer()
-                                    if vm.selectedServerCode == srv.code {
-                                        Image(systemName: vm.isConnected ? "checkmark.shield.fill" : "checkmark.circle.fill")
-                                            .foregroundStyle(vm.isConnected ? .green : .teal)
+                                    .padding(12)
+                                    .background(Color(.secondarySystemBackground))
+                                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .stroke(Color(.separator).opacity(0.45), lineWidth: 1)
+                                    )
+                                }
+                                .buttonStyle(.plain)
+
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    HStack(spacing: 8) {
+                                        ForEach(vm.servers.prefix(4)) { srv in
+                                            let isSelected = vm.selectedServerCode == srv.code
+                                            Button {
+                                                Task { await vm.selectServer(srv.code) }
+                                            } label: {
+                                                HStack(spacing: 5) {
+                                                    Text(isoBadge(for: srv.code))
+                                                        .font(.caption2.monospaced().weight(.bold))
+                                                    Text("\(srv.probe_ms ?? 15)ms")
+                                                        .font(.caption2.monospacedDigit())
+                                                        .foregroundStyle(.secondary)
+                                                }
+                                                .padding(.horizontal, 10)
+                                                .padding(.vertical, 7)
+                                                .background(isSelected ? Color(red: 0.02, green: 0.59, blue: 0.41).opacity(0.16) : Color(.secondarySystemBackground))
+                                                .foregroundStyle(isSelected ? Color(red: 0.02, green: 0.59, blue: 0.41) : .primary)
+                                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                                                .overlay(
+                                                    RoundedRectangle(cornerRadius: 8)
+                                                        .stroke(isSelected ? Color(red: 0.02, green: 0.59, blue: 0.41) : Color(.separator).opacity(0.4), lineWidth: 1)
+                                                )
+                                            }
+                                            .buttonStyle(.plain)
+                                        }
                                     }
                                 }
+                            }
+                            .padding(.horizontal)
+
+                            // LAN Bypass Toggle
+                            Toggle("Local LAN Bypass (AirPlay & Printers)", isOn: $vm.lanBypass)
+                                .font(.footnote.weight(.semibold))
                                 .padding(12)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .fill(vm.selectedServerCode == srv.code ? Color.teal.opacity(0.12) : Color(.secondarySystemBackground))
-                                )
-                            }
-                            .buttonStyle(.plain)
+                                .background(Color(.secondarySystemBackground))
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
+                                .padding(.horizontal)
+                                .onChange(of: vm.lanBypass) { newVal in
+                                    UserDefaults.standard.set(newVal, forKey: "sweepr_lan_bypass")
+                                    if vm.isConnected {
+                                        Task { await vm.connectTunnel() }
+                                    }
+                                }
                         }
+                        .padding(.vertical, 14)
                     }
-                    .padding(.horizontal)
 
-                    Toggle("Local LAN Bypass (AirPlay & Printers)", isOn: $vm.lanBypass)
-                        .font(.footnote.weight(.semibold))
-                        .padding(.horizontal)
-                        .onChange(of: vm.lanBypass) { newVal in
-                            UserDefaults.standard.set(newVal, forKey: "sweepr_lan_bypass")
-                            if vm.isConnected {
-                                Task { await vm.connectTunnel() }
+                    // Thumb-Zone Sticky Primary Connect Control
+                    VStack(spacing: 8) {
+                        Button {
+                            Task { await vm.toggleConnection() }
+                        } label: {
+                            HStack(spacing: 8) {
+                                Image(systemName: vm.isConnected ? "lock.shield.fill" : "shield.lefthalf.filled")
+                                Text(vm.isConnecting ? "Connecting WireGuard…" : (vm.isConnected ? "Protected via \(vm.currentServer.city) — Tap to Pause" : "Connect to \(vm.currentServer.city)"))
                             }
-                        }
-
-                    Button {
-                        Task { await vm.toggleConnection() }
-                    } label: {
-                        Text(vm.isConnecting ? "Connecting WireGuard…" : (vm.isConnected ? "Protected via \(vm.currentServer.city) — Tap to Pause" : "Connect to \(vm.currentServer.city)"))
-                            .font(.title3.weight(.bold))
+                            .font(.headline.weight(.bold))
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 14)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .tint(vm.isConnected ? Color(red: 0.02, green: 0.59, blue: 0.41) : Color(red: 0.06, green: 0.46, blue: 0.35))
+                        .disabled(vm.isConnecting)
                     }
-                    .buttonStyle(.borderedProminent)
-                    .tint(vm.isConnected ? .green : .teal)
-                    .disabled(vm.isConnecting)
                     .padding(.horizontal)
-
-                    HStack(spacing: 12) {
-                        Button("Enter License Key") {
-                            vm.showActivationSheet = true
-                        }
-                        .font(.footnote.weight(.semibold))
-
-                        Button("Scan QR Code") {
-                            vm.showQrScannerSheet = true
-                        }
-                        .font(.footnote.weight(.semibold))
-                    }
+                    .padding(.vertical, 10)
+                    .background(.ultraThinMaterial)
                 }
-                .padding(.vertical, 16)
+                .navigationTitle("Tunnel")
+                .navigationBarTitleDisplayMode(.inline)
             }
-            .sheet(isPresented: $vm.showActivationSheet) {
-                VStack(spacing: 16) {
-                    Text("Activate SWEEPR Pro")
-                        .font(.title3.weight(.bold))
-                    Text("Enter your license key (up to 3 desktop or mobile devices) or scan a pairing QR code.")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
-                    TextField("License Key (SWEEPR-PRO-...)", text: $vm.licenseInputKey)
-                        .textFieldStyle(.roundedBorder)
-                        .autocorrectionDisabled()
-                        .textInputAutocapitalization(.characters)
-                    TextField("Purchase Email (optional)", text: $vm.licenseInputEmail)
-                        .textFieldStyle(.roundedBorder)
-                        .autocorrectionDisabled()
-                        .textInputAutocapitalization(.never)
-                    Button {
-                        Task { await vm.activateLicenseKey() }
-                    } label: {
-                        Text("Activate Key")
-                            .font(.headline)
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 10)
-                    }
-                    .buttonStyle(.borderedProminent)
-                }
-                .padding(24)
-                .presentationDetents([.medium])
+            .tabItem {
+                Label("Tunnel", systemImage: "shield.lefthalf.filled")
             }
-            .sheet(isPresented: $vm.showProfileExportSheet) {
-                VStack(spacing: 16) {
-                    Text("Install WireGuard Tunnel Profile")
-                        .font(.title3.weight(.bold))
-                    Text("Your encrypted peer (\(vm.assignedTunnelIp)) is registered on \(vm.currentServer.city). Install the native Apple VPN profile or copy the WireGuard configuration.")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
-                    Button {
-                        Task {
-                            if let mobileConfigUrl = await vm.requestAppleMobileConfigUrl() {
-                                openURL(mobileConfigUrl)
+            .tag(0)
+
+            // TAB 1: WI-FI SHIELD
+            NavigationStack {
+                ScrollView {
+                    VStack(spacing: 14) {
+                        HStack {
+                            HStack(spacing: 6) {
+                                Circle()
+                                    .fill(acrShieldEnabled ? Color(red: 0.02, green: 0.59, blue: 0.41) : Color.gray)
+                                    .frame(width: 7, height: 7)
+                                Text("DNS SINKHOLE // 10.66.0.1 \(acrShieldEnabled ? "ACTIVE" : "PAUSED")")
+                                    .font(.caption2.monospaced().weight(.bold))
+                            }
+                            Spacer()
+                            Text("ON-DEVICE SCAN")
+                                .font(.caption2.monospaced())
+                                .foregroundStyle(.secondary)
+                        }
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 9)
+                        .background(Color(.secondarySystemBackground))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color(.separator).opacity(0.45), lineWidth: 1)
+                        )
+                        .padding(.horizontal)
+
+                        VStack(spacing: 12) {
+                            Toggle("Smart-TV ACR Telemetry Shield", isOn: $acrShieldEnabled)
+                                .font(.subheadline.weight(.semibold))
+                            Divider()
+                            Toggle("Wi-Fi Doorbell Intruder Alerts", isOn: $doorbellModeEnabled)
+                                .font(.subheadline.weight(.semibold))
+                            Divider()
+                            Toggle("Kids Console Bedtime Pause", isOn: $bedtimePauseEnabled)
+                                .font(.subheadline.weight(.semibold))
+                        }
+                        .padding(14)
+                        .background(Color(.secondarySystemBackground))
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .padding(.horizontal)
+
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("LOCAL TUNNEL & DNS READOUT")
+                                .font(.caption2.monospaced().weight(.bold))
+                                .foregroundStyle(.secondary)
+                            HStack {
+                                Text("Assigned WireGuard IP")
+                                    .font(.footnote)
+                                    .foregroundStyle(.secondary)
+                                Spacer()
+                                Text(vm.assignedTunnelIp.isEmpty ? "10.64.0.2" : vm.assignedTunnelIp)
+                                    .font(.footnote.monospaced().monospacedDigit().weight(.semibold))
+                            }
+                            HStack {
+                                Text("Active ACR Resolver")
+                                    .font(.footnote)
+                                    .foregroundStyle(.secondary)
+                                Spacer()
+                                Text(acrShieldEnabled ? "10.66.0.1 (Filtered)" : "1.1.1.1 (Unfiltered)")
+                                    .font(.footnote.monospaced().monospacedDigit().weight(.semibold))
+                                    .foregroundStyle(acrShieldEnabled ? Color(red: 0.02, green: 0.59, blue: 0.41) : .secondary)
+                            }
+                            HStack {
+                                Text("Route Summary")
+                                    .font(.footnote)
+                                    .foregroundStyle(.secondary)
+                                Spacer()
+                                Text(vm.egressIpSummary)
+                                    .font(.caption.monospaced().monospacedDigit())
+                                    .foregroundStyle(.secondary)
                             }
                         }
-                    } label: {
-                        Text("Install Apple iOS .mobileconfig Profile")
-                            .font(.headline)
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 10)
+                        .padding(14)
+                        .background(Color(.secondarySystemBackground))
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .padding(.horizontal)
                     }
-                    .buttonStyle(.borderedProminent)
+                    .padding(.vertical, 14)
+                }
+                .navigationTitle("Wi-Fi Shield")
+                .navigationBarTitleDisplayMode(.inline)
+            }
+            .tabItem {
+                Label("Wi-Fi Shield", systemImage: "wifi.router")
+            }
+            .tag(1)
+
+            // TAB 2: DEVICES
+            NavigationStack {
+                ScrollView {
+                    VStack(spacing: 14) {
+                        VStack(alignment: .leading, spacing: 10) {
+                            HStack {
+                                Text("LINKED DEVICE SLOTS")
+                                    .font(.caption2.monospaced().weight(.bold))
+                                    .foregroundStyle(.secondary)
+                                Spacer()
+                                Text("\(vm.deviceCount) / \(vm.deviceLimit) Slots Active")
+                                    .font(.caption.monospaced().monospacedDigit().weight(.bold))
+                                    .foregroundStyle(Color(red: 0.02, green: 0.59, blue: 0.41))
+                            }
+                            HStack(spacing: 6) {
+                                ForEach(0..<max(1, vm.deviceLimit), id: \.self) { slotIdx in
+                                    RoundedRectangle(cornerRadius: 3)
+                                        .fill(slotIdx < vm.deviceCount ? Color(red: 0.02, green: 0.59, blue: 0.41) : Color(.tertiarySystemFill))
+                                        .frame(height: 8)
+                                }
+                            }
+                            Text(vm.isPro ? "SWEEPR Pro active on this device. Install WireGuard on your Apple profile or scan another device QR code below." : "Activate with a 1-tap camera QR scan from sweeprvpn.com/login or enter your SWEEPR license key.")
+                                .font(.footnote)
+                                .foregroundStyle(.secondary)
+                        }
+                        .padding(14)
+                        .background(Color(.secondarySystemBackground))
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .padding(.horizontal)
+
+                        VStack(spacing: 10) {
+                            Button {
+                                vm.showQrScannerSheet = true
+                            } label: {
+                                Label("Scan Pairing QR Code", systemImage: "qrcode.viewfinder")
+                                    .font(.subheadline.weight(.bold))
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 10)
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .tint(Color(red: 0.02, green: 0.59, blue: 0.41))
+
+                            Button {
+                                vm.showActivationSheet = true
+                            } label: {
+                                Label("Enter License Key", systemImage: "key.fill")
+                                    .font(.subheadline.weight(.semibold))
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 8)
+                            }
+                            .buttonStyle(.bordered)
+
+                            Button {
+                                vm.showProfileExportSheet = true
+                            } label: {
+                                Label("Apple .mobileconfig & WireGuard Export", systemImage: "doc.badge.gearshape")
+                                    .font(.subheadline.weight(.semibold))
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 8)
+                            }
+                            .buttonStyle(.bordered)
+                        }
+                        .padding(.horizontal)
+                    }
+                    .padding(.vertical, 14)
+                }
+                .navigationTitle("Devices")
+                .navigationBarTitleDisplayMode(.inline)
+            }
+            .tabItem {
+                Label("Devices", systemImage: "laptopcomputer.and.iphone")
+            }
+            .tag(2)
+        }
+        .sheet(isPresented: $showServerPickerSheet) {
+            NavigationStack {
+                List(vm.servers) { srv in
                     Button {
-                        UIPasteboard.general.string = vm.provisionedWgConf
-                        vm.statusBanner = "Copied \(vm.selectedServerCode) WireGuard config to clipboard"
-                        vm.showProfileExportSheet = false
+                        Task { await vm.selectServer(srv.code) }
+                        showServerPickerSheet = false
                     } label: {
-                        Text("Copy WireGuard .conf to Clipboard")
-                            .font(.subheadline.weight(.semibold))
+                        HStack(spacing: 12) {
+                            Text(isoBadge(for: srv.code))
+                                .font(.caption.monospaced().weight(.bold))
+                                .padding(.horizontal, 7)
+                                .padding(.vertical, 4)
+                                .background(Color(red: 0.02, green: 0.59, blue: 0.41).opacity(0.14))
+                                .foregroundStyle(Color(red: 0.02, green: 0.59, blue: 0.41))
+                                .clipShape(RoundedRectangle(cornerRadius: 6))
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("\(srv.country) — \(srv.city)")
+                                    .font(.subheadline.weight(.semibold))
+                                    .foregroundStyle(.primary)
+                                Text(srv.code)
+                                    .font(.caption2.monospaced())
+                                    .foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                            Text("\(srv.probe_ms ?? 15) ms")
+                                .font(.caption.monospaced().monospacedDigit().weight(.bold))
+                                .foregroundStyle((srv.probe_ms ?? 15) < 40 ? Color(red: 0.02, green: 0.59, blue: 0.41) : .orange)
+                            if vm.selectedServerCode == srv.code {
+                                Image(systemName: vm.isConnected ? "checkmark.shield.fill" : "checkmark.circle.fill")
+                                    .foregroundStyle(Color(red: 0.02, green: 0.59, blue: 0.41))
+                            }
+                        }
                     }
                 }
-                .padding(24)
-                .presentationDetents([.medium])
+                .navigationTitle("Select WireGuard POP")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Close") { showServerPickerSheet = false }
+                    }
+                }
             }
-            .sheet(isPresented: $vm.showQrScannerSheet) {
-                VStack(spacing: 14) {
-                    Text("Link via QR Code")
-                        .font(.title3.weight(.bold))
-                    QrCameraScannerView { scanned in
+            .presentationDetents([.medium, .large])
+        }
+        .sheet(isPresented: $vm.showActivationSheet) {
+            VStack(spacing: 16) {
+                Text("Activate SWEEPR Pro")
+                    .font(.title3.weight(.bold))
+                Text("Enter your license key (up to 3 desktop or mobile devices) or scan a pairing QR code.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+                TextField("License Key (SWEEPR-PRO-...)", text: $vm.licenseInputKey)
+                    .textFieldStyle(.roundedBorder)
+                    .autocorrectionDisabled()
+                    .textInputAutocapitalization(.characters)
+                TextField("Purchase Email (optional)", text: $vm.licenseInputEmail)
+                    .textFieldStyle(.roundedBorder)
+                    .autocorrectionDisabled()
+                    .textInputAutocapitalization(.never)
+                Button {
+                    Task { await vm.activateLicenseKey() }
+                } label: {
+                    Text("Activate Key")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 10)
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(Color(red: 0.02, green: 0.59, blue: 0.41))
+            }
+            .padding(24)
+            .presentationDetents([.medium])
+        }
+        .sheet(isPresented: $vm.showProfileExportSheet) {
+            VStack(alignment: .leading, spacing: 14) {
+                Text("Install WireGuard Tunnel Profile")
+                    .font(.title3.weight(.bold))
+                Text("Peer \(vm.assignedTunnelIp) registered on \(vm.currentServer.city).")
+                    .font(.caption.monospaced().monospacedDigit())
+                    .foregroundStyle(.secondary)
+
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("1. Download Apple On-Demand .mobileconfig profile below.")
+                    Text("2. Open Settings > Profile Downloaded > Install.")
+                    Text("3. Enable On-Demand WireGuard in Settings > VPN.")
+                }
+                .font(.footnote)
+                .padding(12)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color(.secondarySystemBackground))
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+
+                Button {
+                    Task {
+                        if let mobileConfigUrl = await vm.requestAppleMobileConfigUrl() {
+                            openURL(mobileConfigUrl)
+                        }
+                    }
+                } label: {
+                    Text("Install Apple iOS .mobileconfig Profile")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 10)
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(Color(red: 0.02, green: 0.59, blue: 0.41))
+
+                Button {
+                    UIPasteboard.general.string = vm.provisionedWgConf
+                    vm.statusBanner = "Copied \(vm.selectedServerCode) WireGuard config to clipboard"
+                    vm.showProfileExportSheet = false
+                } label: {
+                    Text("Copy WireGuard .conf to Clipboard")
+                        .font(.subheadline.weight(.semibold))
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.bordered)
+            }
+            .padding(24)
+            .presentationDetents([.medium])
+        }
+        .sheet(isPresented: $vm.showQrScannerSheet) {
+            VStack(spacing: 14) {
+                Text("Link via QR Code")
+                    .font(.title3.weight(.bold))
+                ZStack {
+                    QrCameraScannerView(isTorchOn: isTorchOn) { scanned in
                         Task { await vm.handleScannedQrPayload(scanned) }
                     }
-                    .frame(width: 280, height: 180)
+                    .frame(height: 210)
                     .clipShape(RoundedRectangle(cornerRadius: 14))
-                    TextField("Or paste pairing link / token (ptk_... or chk_...)", text: $vm.manualQrTokenInput)
-                        .textFieldStyle(.roundedBorder)
-                        .autocorrectionDisabled()
-                        .textInputAutocapitalization(.never)
+
+                    RoundedRectangle(cornerRadius: 12)
+                        .strokeBorder(style: StrokeStyle(lineWidth: 2, dash: [14, 18]))
+                        .foregroundStyle(Color(red: 0.06, green: 0.72, blue: 0.51))
+                        .frame(width: 144, height: 144)
+                        .allowsHitTesting(false)
+                }
+
+                HStack(spacing: 10) {
                     Button {
-                        Task {
-                            await vm.handleScannedQrPayload(vm.manualQrTokenInput)
+                        isTorchOn.toggle()
+                    } label: {
+                        Label(isTorchOn ? "Torch On" : "Torch Off", systemImage: isTorchOn ? "flashlight.on.fill" : "flashlight.off.fill")
+                            .font(.caption.weight(.bold))
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.bordered)
+
+                    Button {
+                        if let clip = UIPasteboard.general.string {
+                            vm.manualQrTokenInput = clip
                         }
                     } label: {
-                        Text("Link Device Now")
-                            .font(.headline)
+                        Label("Paste Clipboard", systemImage: "doc.on.clipboard")
+                            .font(.caption.weight(.bold))
                             .frame(maxWidth: .infinity)
-                            .padding(.vertical, 10)
                     }
-                    .buttonStyle(.borderedProminent)
+                    .buttonStyle(.bordered)
                 }
-                .padding(24)
-                .presentationDetents([.medium, .large])
-            }
-            .onOpenURL { url in
-                Task {
-                    await vm.handleScannedQrPayload(url.absoluteString, requireConfirmForChallenge: true)
-                }
-            }
-            .alert(
-                "Approve Desktop Device Linking?",
-                isPresented: Binding(
-                    get: { vm.pendingDesktopChallengeId != nil },
-                    set: { if !$0 { vm.pendingDesktopChallengeId = nil } }
-                )
-            ) {
-                Button("Approve Device") {
-                    if let chId = vm.pendingDesktopChallengeId {
-                        vm.pendingDesktopChallengeId = nil
-                        Task { await vm.approveDesktopChallenge(chId) }
+
+                TextField("Or paste pairing link or code", text: $vm.manualQrTokenInput)
+                    .textFieldStyle(.roundedBorder)
+                    .autocorrectionDisabled()
+                    .textInputAutocapitalization(.never)
+                Button {
+                    Task {
+                        await vm.handleScannedQrPayload(vm.manualQrTokenInput)
                     }
+                } label: {
+                    Text("Link Device Now")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 10)
                 }
-                Button("Cancel", role: .cancel) {
+                .buttonStyle(.borderedProminent)
+                .tint(Color(red: 0.02, green: 0.59, blue: 0.41))
+            }
+            .padding(24)
+            .presentationDetents([.medium, .large])
+        }
+        .onOpenURL { url in
+            Task {
+                await vm.handleScannedQrPayload(url.absoluteString, requireConfirmForChallenge: true)
+            }
+        }
+        .alert(
+            "Approve Desktop Device Linking?",
+            isPresented: Binding(
+                get: { vm.pendingDesktopChallengeId != nil },
+                set: { if !$0 { vm.pendingDesktopChallengeId = nil } }
+            )
+        ) {
+            Button("Approve Device") {
+                if let chId = vm.pendingDesktopChallengeId {
                     vm.pendingDesktopChallengeId = nil
+                    Task { await vm.approveDesktopChallenge(chId) }
                 }
-            } message: {
-                Text("Only approve this request if you just scanned a QR code displayed on your own computer. Approving links a desktop device to your active SWEEPR VPN subscription.")
             }
+            Button("Cancel", role: .cancel) {
+                vm.pendingDesktopChallengeId = nil
+            }
+        } message: {
+            Text("Only approve this request if you just scanned a QR code displayed on your own computer. Approving links a desktop device to your active SWEEPR VPN subscription.")
         }
     }
 }

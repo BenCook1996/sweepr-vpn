@@ -134,11 +134,20 @@
   </nav>
 
   <main class="max-w-5xl mx-auto px-4 sm:px-6 py-12 md:py-16">
+    <div class="rack-telemetry-bar mb-6">
+      <div class="flex items-center gap-2 font-mono text-xs font-semibold">
+        <span class="rack-led is-live" aria-hidden="true"></span>
+        <span>BENCH // YEAR-2 RENEWAL PRICE LEDGER</span>
+      </div>
+      <div class="flex flex-wrap items-center gap-3 font-mono text-xs tabular-nums">
+        <span>POPS ONLINE: <strong data-live-proof="online-pops" class="text-emerald-400">8/8</strong></span><span>SWEEPR RENEWAL HIKE: <strong class="text-emerald-400">0%</strong></span>
+      </div>
+    </div>
     <div class="text-center max-w-3xl mx-auto mb-10">
       <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 mb-3">
         Free Billing Transparency Tool &bull; 2026 Verified Rates &bull; <span data-live-proof="online-pops">8/8</span> POPs Online
       </span>
-      <h1 class="text-3xl sm:text-5xl font-black tracking-tight text-gray-900 mb-4">
+      <h1 class="text-3xl sm:text-5xl font-bold tracking-tight text-gray-900 mb-4">
         VPN Renewal Price Checker &amp; 3-Year Cost Calculator
       </h1>
       <p class="text-base sm:text-lg text-gray-600 leading-relaxed">
@@ -175,28 +184,28 @@
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 my-6">
         <div class="bg-red-50/70 border border-red-200 rounded-2xl p-5">
           <div id="compNameLabel" class="text-xs font-extrabold uppercase tracking-wider text-red-700 mb-1">TotalVPN Renewal Bill</div>
-          <div id="compRenewalPrice" class="text-2xl sm:text-3xl font-black text-red-600">£109.00 / yr</div>
+          <div id="compRenewalPrice" class="text-2xl sm:text-3xl font-bold font-mono tabular-nums text-red-600">£109.00 / yr</div>
           <div id="compHikeBadge" class="text-xs font-bold text-red-700 mt-1.5">+275% vs. £29.00 Year-1 Intro</div>
         </div>
         <div class="bg-emerald-50/80 border-2 border-emerald-500 rounded-2xl p-5">
           <div class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 mb-1">SWEEPR VPN Flat Annual Rate</div>
-          <div class="text-2xl sm:text-3xl font-black text-emerald-700"><span data-price="annualStr">£74.99</span> / yr</div>
+          <div class="text-2xl sm:text-3xl font-bold font-mono tabular-nums text-emerald-700"><span data-price="annualStr">£74.99</span> / yr</div>
           <div class="text-xs font-bold text-emerald-800 mt-1.5">0% Renewal Hike &bull; 7-Day Email Reminder</div>
         </div>
         <div class="bg-slate-900 text-white rounded-2xl p-5">
           <div class="text-xs font-extrabold uppercase tracking-wider text-emerald-300 mb-1">Your Renewal Savings + Extras</div>
-          <div id="savingsAmount" class="text-2xl sm:text-3xl font-black text-emerald-400">Save £68.02</div>
+          <div id="savingsAmount" class="text-2xl sm:text-3xl font-bold font-mono tabular-nums text-emerald-400">Save £68.02</div>
           <div id="savingsNote" class="text-xs text-slate-300 mt-1.5">Across 2 renewals + Free Wi-Fi Scanner &amp; .conf Export</div>
         </div>
       </div>
 
       <!-- Dynamic Conversion Bridge -->
-      <div class="rounded-2xl bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-950 text-white p-6 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="rounded-2xl bg-[#111315] border border-slate-800 text-white p-6 flex flex-col md:flex-row items-center justify-between gap-6">
         <div class="text-left space-y-1.5">
           <div class="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-emerald-300">
-            <span>🛡️ Honest Flat Pricing &bull; Zero Renewal Surprises</span>
+            <span class="inline-flex items-center gap-1.5"><svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2L4 5v6c0 5.25 3.4 10.15 8 11.35 4.6-1.2 8-6.1 8-11.35V5l-8-3z"/><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4"/></svg><span>Honest Flat Pricing &bull; Zero Renewal Surprises</span></span>
           </div>
-          <h2 id="bridgeHeadline" class="text-lg sm:text-xl font-black">Switch from TotalVPN in 60 seconds — try Month 1 for £1.99</h2>
+          <h2 id="bridgeHeadline" class="text-lg sm:text-xl font-bold">Switch from TotalVPN in 60 seconds — try Month 1 for £1.99</h2>
           <p class="text-xs sm:text-sm text-slate-300 max-w-xl">
             Every SWEEPR VPN plan includes 10Gbps RAM-only WireGuard, 1-click router <code>.conf</code> exports (GL.iNet, OpenWrt, SteamOS, Shield TV), our free 30-second Home Wi-Fi Device Scanner, and a mandatory 7-day pre-renewal reminder email.
           </p>
@@ -214,12 +223,12 @@
 
     <!-- Full Sourced Comparison Table -->
     <div class="bg-white border border-gray-200 rounded-2xl p-6 sm:p-8 shadow-sm mb-10">
-      <h2 class="text-2xl font-black text-gray-900 mb-2">2026 VPN Renewal Price &amp; Feature Audit Table</h2>
+      <h2 class="text-2xl font-bold text-gray-900 mb-2">2026 VPN Renewal Price &amp; Feature Audit Table</h2>
       <p class="text-sm text-gray-600 mb-6">
         Verified introductory vs. Year-2 standard renewal pricing across the top consumer VPNs:
       </p>
-      <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse text-xs sm:text-sm">
+      <div class="overflow-x-auto edge-scroll-mask">
+        <table class="w-full text-left border-collapse text-xs sm:text-sm tabular-nums">
           <thead>
             <tr class="border-b-2 border-gray-200 text-[11px] uppercase tracking-wider text-gray-500 bg-gray-50">
               <th class="py-3 px-3 font-bold">Provider</th>
@@ -232,9 +241,9 @@
           </thead>
           <tbody class="divide-y divide-gray-100 text-gray-700">
             <tr class="bg-emerald-50/70 font-semibold">
-              <td class="py-3.5 px-3 font-black text-emerald-900">SWEEPR VPN</td>
+              <td class="py-3.5 px-3 font-bold text-emerald-900">SWEEPR VPN</td>
               <td class="py-3.5 px-3 text-emerald-800">£1.99 1st mo / £74.99/yr</td>
-              <td class="py-3.5 px-3 font-black text-emerald-700">£74.99/yr (0% Hike)</td>
+              <td class="py-3.5 px-3 font-bold text-emerald-700">£74.99/yr (0% Hike)</td>
               <td class="py-3.5 px-3 text-emerald-800">✓ 7 Days Before</td>
               <td class="py-3.5 px-3 text-emerald-800">✓ 1-Click .conf</td>
               <td class="py-3.5 px-3"><a href="/pricing" class="text-emerald-700 font-bold hover:underline">View Plans &rarr;</a></td>

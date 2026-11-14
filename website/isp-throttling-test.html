@@ -152,7 +152,7 @@
                   <p class="text-xs text-gray-500 leading-snug">Test if your internet provider is slowing down your streaming or gaming speeds.</p>
                 </div>
               </a>
-              <a href="/vs/totalvpn" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
+              <a href="/alternatives/totalvpn" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
                 <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </div>
@@ -220,12 +220,21 @@
   </nav>
 
   <main class="flex-1 pt-28 pb-16 px-4 sm:px-6 max-w-5xl mx-auto w-full">
+    <div class="rack-telemetry-bar mb-6">
+      <div class="flex items-center gap-2 font-mono text-xs font-semibold">
+        <span class="rack-led is-live" aria-hidden="true"></span>
+        <span>BENCH // ISP THROTTLING & RTT JITTER PROBE</span>
+      </div>
+      <div class="flex flex-wrap items-center gap-3 font-mono text-xs tabular-nums">
+        <span>LONDON IXP: <strong data-live-proof="london-latency" class="text-emerald-400">4ms</strong></span><span>ENGINE: <strong>5-SAMPLE TLS PING</strong></span>
+      </div>
+    </div>
     <!-- Answer-First Header Block -->
     <div class="text-center max-w-3xl mx-auto mb-10">
       <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 mb-3">
         Free 10-Second Speed &amp; Streaming Check &bull; Zero Signup &bull; <span data-live-proof="london-latency">4ms</span> London IXP
       </span>
-      <h1 class="text-3xl sm:text-5xl font-black tracking-tight text-gray-900 mb-4">
+      <h1 class="text-3xl sm:text-5xl font-bold tracking-tight text-gray-900 mb-4">
         ISP Speed Slowdown &amp; Streaming Checker
       </h1>
       <p class="text-base sm:text-lg text-gray-600 leading-relaxed">
@@ -234,15 +243,15 @@
     </div>
 
     <!-- Interactive Throttling & Latency Probe Card -->
-    <div class="glass-card p-6 sm:p-8 mb-8">
+    <div class="rack-card glass-card p-6 sm:p-8 mb-8">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-gray-100">
         <div class="flex items-center gap-3.5">
-          <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 text-xl font-bold">
-            🚀
+          <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 font-bold">
+            <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <h2 id="probeHeadline" class="text-xl font-black text-gray-900">Running Live Connection Probe...</h2>
+              <h2 id="probeHeadline" class="text-xl font-bold text-gray-900">Running Live Connection Probe...</h2>
               <span id="probeBadge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800">Measuring</span>
             </div>
             <p id="probeSubtext" class="text-sm text-gray-600 mt-0.5">Measuring round-trip ping, jitter stability, and traffic inspection exposure.</p>
@@ -257,33 +266,33 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 my-6">
         <div class="bg-white/90 border border-gray-100 rounded-2xl p-4">
           <div class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1">Average Response Ping</div>
-          <div id="metricPing" class="text-2xl font-black text-gray-900">-- ms</div>
+          <div id="metricPing" class="text-2xl font-bold font-mono tabular-nums text-gray-900">-- ms</div>
           <div id="metricPingNote" class="text-xs font-semibold text-emerald-600 mt-1">Measuring 5 samples...</div>
         </div>
         <div class="bg-white/90 border border-gray-100 rounded-2xl p-4">
           <div class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1">Connection Jitter</div>
-          <div id="metricJitter" class="text-2xl font-black text-gray-900">-- ms</div>
+          <div id="metricJitter" class="text-2xl font-bold font-mono tabular-nums text-gray-900">-- ms</div>
           <div id="metricJitterNote" class="text-xs font-semibold text-gray-500 mt-1">Streaming stability</div>
         </div>
         <div class="bg-white/90 border border-gray-100 rounded-2xl p-4">
           <div class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1">Traffic Visibility</div>
-          <div id="metricVisibility" class="text-xl font-black text-amber-600">Unencrypted</div>
+          <div id="metricVisibility" class="text-xl font-bold tabular-nums text-amber-600">Unencrypted</div>
           <div class="text-xs font-semibold text-amber-600 mt-1">Provider can throttle video</div>
         </div>
         <div class="bg-white/90 border border-gray-100 rounded-2xl p-4">
           <div class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1">1-Click Speed Boost</div>
-          <div class="text-xl font-black text-emerald-600">Available</div>
+          <div class="text-xl font-bold text-emerald-600">Available</div>
           <div class="text-xs font-semibold text-emerald-700 mt-1">Bypass provider slowdowns</div>
         </div>
       </div>
 
       <!-- Conversion Bridge Banner (Automation A3 Dynamic Tool-Result Offer Bridge) -->
-      <div class="rounded-2xl bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-950 text-white p-6 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="rounded-2xl bg-[#111315] border border-slate-800 text-white p-6 flex flex-col md:flex-row items-center justify-between gap-6">
         <div class="text-left space-y-1.5">
           <div id="thrBridgePill" class="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-emerald-300">
-            <span>⚡ Stop Evening Buffering &amp; Slowdowns</span>
+            <span class="inline-flex items-center gap-1.5"><svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg><span>Stop Evening Buffering &amp; Slowdowns</span></span>
           </div>
-          <h3 id="thrBridgeTitle" class="text-lg sm:text-xl font-black">Lock your connection so your provider cannot slow down streaming</h3>
+          <h3 id="thrBridgeTitle" class="text-lg sm:text-xl font-bold">Lock your connection so your provider cannot slow down streaming</h3>
           <p class="text-xs sm:text-sm text-slate-300 max-w-xl">
             When SWEEPR VPN is on, your internet provider cannot tell whether you are streaming 4K video, gaming, or reading a webpage—stopping selective speed throttling in 1 click. Try it from <strong class="text-white" data-price="introStr">£1.99</strong> (14-Day Money-Back Guarantee).
           </p>
@@ -301,14 +310,14 @@
     </div>
 
     <!-- Interactive WiFiGuard Home 1-Click ISP Bill Credit & Refund Claim Script Generator -->
-    <div id="ispRefundGeneratorCard" class="glass-card p-6 sm:p-8 mb-8 border-2 border-emerald-500/30 shadow-lg">
+    <div id="ispRefundGeneratorCard" class="rack-card glass-card p-6 sm:p-8 mb-8 border-2 border-emerald-500/30 shadow-lg">
       <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
         <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-900">
-          💸 WiFiGuard Home™ ISP Speed-Drop Refund Proof Generator
+          <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"/></svg><span>WiFiGuard Home™ ISP Speed-Drop Refund Proof Generator</span>
         </span>
         <span class="text-xs font-bold text-emerald-700">FCC Broadband Consumer Label &amp; Ofcom Speed Guarantee Compliant</span>
       </div>
-      <h2 class="text-2xl font-black text-gray-900 mb-2">Paying $85/mo for &ldquo;Gigabit&rdquo; Wi-Fi That Drops Every Evening? Claim a $20–$40 Bill Credit</h2>
+      <h2 class="text-2xl font-bold text-gray-900 mb-2">Paying $85/mo for &ldquo;Gigabit&rdquo; Wi-Fi That Drops Every Evening? Claim a $20–$40 Bill Credit</h2>
       <p class="text-sm text-gray-600 mb-6">
         Select your internet provider and enter your promised plan speed vs. your actual evening speed below. Generate a word-for-word customer retention script + printable speed audit certificate to demand an immediate pro-rata bill credit.
       </p>
@@ -345,33 +354,37 @@
         </div>
         <div>
           <label for="ispPromisedInput" class="block text-xs font-bold text-gray-700 mb-1">Promised Plan Speed (Mbps)</label>
-          <input id="ispPromisedInput" type="number" value="500" min="10" max="10000" oninput="generateWebIspRefundScript()" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 bg-white text-sm font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          <input id="ispPromisedInput" type="number" value="500" min="10" max="10000" oninput="generateWebIspRefundScript()" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 bg-white text-sm font-bold font-mono tabular-nums text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500">
         </div>
         <div>
           <label for="ispMeasuredInput" class="block text-xs font-bold text-gray-700 mb-1">Evening Measured Speed (Mbps)</label>
-          <input id="ispMeasuredInput" type="number" value="92" min="1" max="10000" oninput="generateWebIspRefundScript()" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 bg-white text-sm font-bold text-amber-700 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          <input id="ispMeasuredInput" type="number" value="92" min="1" max="10000" oninput="generateWebIspRefundScript()" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 bg-white text-sm font-bold font-mono tabular-nums text-amber-700 focus:outline-none focus:ring-2 focus:ring-emerald-500">
         </div>
         <div>
           <label for="ispBillInput" class="block text-xs font-bold text-gray-700 mb-1">Monthly ISP Bill ($ / £)</label>
-          <input id="ispBillInput" type="number" value="85" min="15" max="500" oninput="generateWebIspRefundScript()" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 bg-white text-sm font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          <input id="ispBillInput" type="number" value="85" min="15" max="500" oninput="generateWebIspRefundScript()" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 bg-white text-sm font-bold font-mono tabular-nums text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500">
         </div>
       </div>
 
       <div class="rounded-2xl bg-slate-950 text-emerald-200 p-4 sm:p-5 border border-emerald-500/30 mb-4">
         <div class="flex flex-wrap items-center justify-between gap-2 mb-2 pb-2 border-b border-slate-800">
-          <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-400">📋 Word-for-Word ISP Retention &amp; Bill Credit Claim Script</span>
-          <span id="ispCreditEstimateBadge" class="text-xs font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">Recommended Claim: $30.00 Bill Credit</span>
+          <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-400 inline-flex items-center gap-1.5"><svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg><span>Word-for-Word ISP Retention &amp; Bill Credit Claim Script</span></span>
+          <span id="ispCreditEstimateBadge" class="text-xs font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 tabular-nums">Recommended Claim: $30.00 Bill Credit</span>
         </div>
         <pre id="webIspRefundScriptBox" class="text-xs sm:text-sm font-mono text-emerald-100 whitespace-pre-wrap leading-relaxed select-all"></pre>
       </div>
 
       <div class="flex flex-wrap items-center justify-between gap-3">
         <div class="flex flex-wrap gap-2.5">
-          <button type="button" id="copyWebIspScriptBtn" onclick="copyWebIspRefundScript()" class="btn btn-go px-5 py-2.5 text-xs sm:text-sm font-bold">
-            📋 Copy Refund Claim Script
-          </button>
-          <button type="button" onclick="window.print()" class="btn btn-ghost px-4 py-2.5 text-xs sm:text-sm font-bold">
-            🖨️ Print Verified Speed Audit Certificate
+<button type="button" id="copyWebIspScriptBtn" onclick="copyWebIspRefundScript()" class="copy-spring-btn btn btn-go px-5 py-2.5 text-xs sm:text-sm font-bold">
+          <span class="copy-icon-stack" aria-hidden="true">
+            <svg class="icon-copy w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            <svg class="icon-check w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          </span>
+          <span class="copy-btn-label">Copy Refund Claim Script</span>
+        </button>
+          <button type="button" onclick="window.print()" class="btn btn-ghost px-4 py-2.5 text-xs sm:text-sm font-bold inline-flex items-center gap-1.5">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg><span>Print Verified Speed Audit Certificate</span>
           </button>
         </div>
         <a href="/download?utm_source=throttling_test&amp;utm_medium=isp_refund_generator" class="text-xs font-extrabold text-emerald-700 hover:text-emerald-800 underline">
@@ -382,11 +395,11 @@
 
     <!-- Common Internet Provider Throttling Reference Table (GEO & Long-Tail SEO Asset) -->
     <div class="glass-card p-6 sm:p-8 mb-8">
-      <h2 class="text-2xl font-black text-gray-900 mb-2">Common Internet Provider Peak-Hour Slowdowns (2026 Guide)</h2>
+      <h2 class="text-2xl font-bold text-gray-900 mb-2">Common Internet Provider Peak-Hour Slowdowns (2026 Guide)</h2>
       <p class="text-sm text-gray-600 mb-6">
         Why does fast fibre internet suddenly buffer at 8 PM? Here is how major providers handle evening traffic and how 1-click VPN protection keeps your speeds consistent:
       </p>
-      <div class="overflow-x-auto">
+      <div class="overflow-x-auto edge-scroll-mask">
         <table class="w-full text-left border-collapse text-sm">
           <thead>
             <tr class="border-b border-gray-200 text-xs uppercase tracking-wider text-gray-500">
@@ -428,7 +441,7 @@
 
     <!-- Technical Methodology Section (GSC Query Expansion: free internet throttling test / isp throttling checker) -->
     <div class="glass-card p-6 sm:p-8 mb-8">
-      <h2 class="text-2xl font-black text-gray-900 mb-2">How This Free Internet Throttling Test &amp; ISP Speed Slowdown Checker Works</h2>
+      <h2 class="text-2xl font-bold text-gray-900 mb-2">How This Free Internet Throttling Test &amp; ISP Speed Slowdown Checker Works</h2>
       <p class="text-sm text-gray-600 mb-4">
         <strong>Direct Answer:</strong> Standard speed tests (like Ookla Speedtest) connect to whitelist servers hosted inside your ISP's own core network, showing fast headline speeds even while your 4K streaming, gaming, or downloads are throttled. Our <strong>free internet throttling test</strong> measures round-trip latency variance (jitter), HTTP chunk timing, and Deep Packet Inspection (DPI) exposure across real external transit paths.
       </p>
@@ -456,35 +469,38 @@
           Helping someone troubleshoot evening streaming buffering? Share the direct link to this free browser tool.
         </p>
       </div>
-      <button type="button" onclick="navigator.clipboard.writeText('https://sweeprvpn.com/tools/isp-throttling-test'); this.textContent='Link Copied ✓';" class="btn bg-white border border-gray-200 hover:border-emerald-400 text-xs font-bold shrink-0">
-        Copy Tool Link
-      </button>
+<button type="button" onclick="window.sweeprSpringCopy(this, 'https://sweeprvpn.com/tools/isp-throttling-test', 'Link Copied')" class="copy-spring-btn btn bg-white border border-gray-200 hover:border-emerald-400 text-xs font-bold shrink-0">
+          <span class="copy-icon-stack" aria-hidden="true">
+            <svg class="icon-copy w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            <svg class="icon-check w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          </span>
+          <span class="copy-btn-label">Copy Tool Link</span>
+        </button>
     </div>
   </main>
 
-  
-                                                                <section id="sweepr-unindexed-guides-bridge" class="max-w-5xl mx-auto px-6 pb-6">
-      <div class="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-4 flex flex-wrap items-center gap-2 text-xs">
-        <span class="font-extrabold text-emerald-950">Deep-Dive Network &amp; Privacy Engineering Guides:</span>
-        <a href="/guides/audit-home-iot-botnet-vulnerabilities" class="px-2.5 py-1 rounded-lg bg-white border border-emerald-200 text-emerald-800 font-bold hover:bg-emerald-100 no-underline">Audit Smart Home Plugs, IP Cameras & IoT Devices for Bot</a>
-        <a href="/guides/audit-home-nas-ransomware-wan-exposure" class="px-2.5 py-1 rounded-lg bg-white border border-emerald-200 text-emerald-800 font-bold hover:bg-emerald-100 no-underline">How to Audit Your Synology & QNAP NAS for Open WAN Ports</a>
-        <a href="/guides/block-hisense-vidaa-fire-tv-acr" class="px-2.5 py-1 rounded-lg bg-white border border-emerald-200 text-emerald-800 font-bold hover:bg-emerald-100 no-underline">Stop Hisense VIDAA OS & Amazon Fire TV ACR Tracking at t</a>
-        <a href="/guides/block-panasonic-smart-tv-telemetry" class="px-2.5 py-1 rounded-lg bg-white border border-emerald-200 text-emerald-800 font-bold hover:bg-emerald-100 no-underline">Stop Panasonic Smart TV ACR Tracking & Home Screen Telem</a>
-        <a href="/guides/block-sharp-aquos-google-tv-acr" class="px-2.5 py-1 rounded-lg bg-white border border-emerald-200 text-emerald-800 font-bold hover:bg-emerald-100 no-underline">Stop Sharp Aquos Google TV ACR Content Recognition at th</a>
-        <a href="/guides/block-tcl-google-tv-acr-telemetry" class="px-2.5 py-1 rounded-lg bg-white border border-emerald-200 text-emerald-800 font-bold hover:bg-emerald-100 no-underline">How to Block TCL Google TV ACR Tracking & Ad Spyware at </a>
-        <a href="/warrant-canary" class="px-2.5 py-1 rounded-lg bg-slate-100 border border-slate-200 text-slate-700 font-bold hover:bg-slate-200 no-underline">Cryptographic Warrant Canary</a>
-      </div>
-    </section>
     <section id="sweepr-share-diagnostic-badge" class="max-w-5xl mx-auto px-6 pb-8">
       <div class="bg-slate-900/90 border border-emerald-500/30 rounded-2xl p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
-          <div class="text-xs font-extrabold uppercase tracking-wider text-emerald-400 mb-1">🔗 Share or Cite This Free Diagnostic Tool</div>
+          <div class="text-xs font-extrabold uppercase tracking-wider text-emerald-400 mb-1 flex items-center gap-1.5"><svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path stroke-linecap="round" stroke-linejoin="round" d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg><span>Share or Cite This Free Diagnostic Tool</span></div>
           <p class="text-xs text-slate-300 m-0">Sharing a router setup guide on Reddit, GitHub, or a broadband forum? Copy a 1-click verification link or HTML badge:</p>
         </div>
         <div class="flex flex-wrap gap-2 shrink-0">
-          <button type="button" onclick="navigator.clipboard.writeText('https://sweeprvpn.com/tools/isp-throttling-test');this.textContent='✓ Copied Link!';" class="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs transition-all cursor-pointer">📋 Copy Tool URL</button>
-          <button type="button" onclick="navigator.clipboard.writeText('<a href=&quot;https://sweeprvpn.com/tools/isp-throttling-test&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;>Free ISP Speed Slowdown & Throttling Checker — Verified by SWEEPR VPN</a>');this.textContent='✓ Copied HTML Badge!';" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-emerald-300 font-bold text-xs transition-all cursor-pointer">&lt;/&gt; Copy HTML Embed Badge</button>
-          <a href="/smart-tv-acr-blocklist.txt" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-xs no-underline">📄 Smart-TV ACR Blocklist (.txt)</a>
+          <button type="button" onclick="window.sweeprSpringCopy(this, 'https://sweeprvpn.com/tools/isp-throttling-test', 'Copied Link!')" class="copy-spring-btn px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs transition-all cursor-pointer">
+          <span class="copy-icon-stack" aria-hidden="true">
+            <svg class="icon-copy w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            <svg class="icon-check w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          </span>
+          <span class="copy-btn-label">Copy Tool URL</span>
+        </button>
+          <button type="button" onclick="window.sweeprSpringCopy(this, '<a href=\'https://sweeprvpn.com/tools/isp-throttling-test\' target=\'_blank\' rel=\'noopener\'>Free ISP Speed Slowdown & Throttling Checker — Verified by SWEEPR VPN</a>', 'Copied HTML!')" class="copy-spring-btn px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-emerald-300 font-bold text-xs transition-all cursor-pointer">
+          <span class="copy-icon-stack" aria-hidden="true">
+            <svg class="icon-copy w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            <svg class="icon-check w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          </span>
+          <span class="copy-btn-label">&lt;/&gt; Copy HTML Embed Badge</span>
+        </button>
+          <a href="/smart-tv-acr-blocklist.txt" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-xs no-underline"><svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg><span>Smart-TV ACR Blocklist (.txt)</span></a>
         </div>
       </div>
     </section>
@@ -497,267 +513,59 @@
       <a href="/privacy" class="hover:text-emerald-600 transition-colors">Privacy Policy</a>
       <a href="/support" class="hover:text-emerald-600 transition-colors">Support &amp; Help</a>
     </div>
-    <div class="flex flex-wrap justify-center gap-x-4 gap-y-1.5 mb-4 px-4 text-xs text-gray-400 max-w-5xl mx-auto">
-      <a href="/setup/gl-inet-travel-router" class="hover:text-emerald-600 transition-colors">GL.iNet Router WireGuard</a>
-      <span>&bull;</span>
-      <a href="/guides/stop-samsung-smart-tv-acr-tracking" class="hover:text-emerald-600 transition-colors">Block Samsung TV ACR Tracking</a>
-      <span>&bull;</span>
-      <a href="/solutions/eduroam-campus-wifi-gaming-packet-loss" class="hover:text-emerald-600 transition-colors">Eduroam Gaming &amp; WireGuard</a>
-      <span>&bull;</span>
-      <a href="/setup/nvidia-shield-tv-pro-wireguard" class="hover:text-emerald-600 transition-colors">Nvidia Shield TV WireGuard</a>
-      <span>&bull;</span>
-      <a href="/setup/steam-deck-vpn" class="hover:text-emerald-600 transition-colors">SteamOS &amp; Steam Deck VPN</a>
-      <span>&bull;</span>
-      <a href="/solutions/gigaclear-rural-fibre-gaming-packet-loss" class="hover:text-emerald-600 transition-colors">Gigaclear Packet Loss Fix</a>
-      <span>&bull;</span>
-      <a href="/solutions/talktalk-p2p-port-forwarding" class="hover:text-emerald-600 transition-colors">TalkTalk Throttling Fix</a>
-      <span>&bull;</span>
-      <a href="/solutions/rogers-ignite-canada-isp-throttling" class="hover:text-emerald-600 transition-colors">Rogers Ignite Throttling Fix</a>
-    </div>
-                                                                                                                                                                                                                                                <details id="sweepr-seo-directory" class="max-w-5xl mx-auto mb-4 px-4 text-xs text-gray-400">
-      <summary class="cursor-pointer hover:text-emerald-600 font-semibold select-none">Browse All 118 WireGuard Router Setup Guides, Smart-TV Privacy Guides &amp; VPN Comparisons</summary>
-      <div class="flex flex-wrap justify-center gap-x-3 gap-y-1.5 mt-3 pt-3 border-t border-gray-100 text-[11px]">
-        <a href="/setup/almalinux-9-wireguard-gateway" class="hover:text-emerald-600 transition-colors">AlmaLinux 9 & Rocky Linux 9 Enterprise WireGuard Gateway: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/alpinelinux-diskless-wireguard" class="hover:text-emerald-600 transition-colors">Alpine Linux Diskless RAM-Run WireGuard Gateway Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/apple-tv-tvos-17-wireguard" class="hover:text-emerald-600 transition-colors">Apple TV 4K (tvOS 17 / tvOS 18) Native WireGuard Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/arch-linux-systemd-networkd" class="hover:text-emerald-600 transition-colors">Arch Linux systemd-networkd Native WireGuard Configuration: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/asus-rog-rapture-wireguard-fusion" class="hover:text-emerald-600 transition-colors">ASUS ROG Rapture WireGuard VPN Fusion Policy Routing: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/asustor-nas-adm-wireguard" class="hover:text-emerald-600 transition-colors">Asustor NAS (ADM 4.2+) WireGuard VPN Client Setup Guide: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/asuswrt-merlin-vpn-router" class="hover:text-emerald-600 transition-colors">WireGuard VPN Setup for ASUSWRT-Merlin &amp; ASUS VPN Fusion Routers</a>
-        <span>&bull;</span>
-        <a href="/setup/casaos-docker-wireguard" class="hover:text-emerald-600 transition-colors">CasaOS & ZimaBoard Homelab WireGuard VPN Client Stack: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/debian-12-headless-wireguard-gateway" class="hover:text-emerald-600 transition-colors">Debian 12 / Ubuntu 24.04 Headless WireGuard nftables Gateway: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/docker-gluetun-wireguard-compose" class="hover:text-emerald-600 transition-colors">Docker Compose + Gluetun WireGuard Sidecar Stack: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/draytek-vigor-wireguard-client" class="hover:text-emerald-600 transition-colors">DrayTek Vigor 2865 & 2927 WireGuard VPN Tunnel Guide: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/fedora-silverblue-immutable-wireguard" class="hover:text-emerald-600 transition-colors">Fedora Silverblue 40 Immutable WireGuard VPN Guide: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/firewalla-gold-wireguard-vpn" class="hover:text-emerald-600 transition-colors">Firewalla Gold & Purple WireGuard VPN Client Configuration: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/freebsd-14-wireguard-kmod" class="hover:text-emerald-600 transition-colors">FreeBSD 14.1 Kernel WireGuard (if_wg) & pf Firewall Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/fritzbox-7590-ax-wireguard-vpn" class="hover:text-emerald-600 transition-colors">AVM FRITZ!Box 7590 AX & 6690 Cable (FRITZ!OS 8): High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/gl-inet-b3000-marble-wireguard" class="hover:text-emerald-600 transition-colors">GL.iNet Marble (GL-B3000) Wi-Fi 6 WireGuard Home Router: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/gl-inet-flint-2-wireguard" class="hover:text-emerald-600 transition-colors">GL.iNet Flint 2 (GL-MT6000) & Beryl AX Travel Router: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/gl-inet-slate-ax-travel-router" class="hover:text-emerald-600 transition-colors">GL.iNet Slate AX (GL-AXT1800) WireGuard Travel Router Guide: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/gl-inet-spitz-ax-5g-router" class="hover:text-emerald-600 transition-colors">GL.iNet Spitz AX (GL-X3000) 5G Cellular WireGuard Gateway: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/gl-inet-travel-router" class="hover:text-emerald-600 transition-colors">WireGuard VPN Setup for GL.iNet Beryl AX (GL-MT3000) &amp; Slate AX Travel Router</a>
-        <span>&bull;</span>
-        <a href="/setup/keenetic-titan-wireguard-router" class="hover:text-emerald-600 transition-colors">Keenetic Titan & Hero Wi-Fi 6 WireGuard VPN Client Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/linux-cli-wireguard" class="hover:text-emerald-600 transition-colors">WireGuard VPN Setup for Linux CLI (Ubuntu, Debian, Arch &amp; Fedora)</a>
-        <span>&bull;</span>
-        <a href="/setup/macos-apple-silicon-vpn" class="hover:text-emerald-600 transition-colors">WireGuard VPN Setup for macOS (Apple Silicon M1/M2/M3/M4 &amp; Intel)</a>
-        <span>&bull;</span>
-        <a href="/setup/mikrotik-hap-ax3-wireguard-setup" class="hover:text-emerald-600 transition-colors">MikroTik hAP ax3 & RB5009: RouterOS v7 WireGuard Client & MSS Clamping Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/mikrotik-routeros-v7-wireguard" class="hover:text-emerald-600 transition-colors">MikroTik RouterOS v7 (RB5009 / hAP ax3): High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/netgate-6100-pfsense-wireguard" class="hover:text-emerald-600 transition-colors">Netgate 6100 pfSense Plus 10Gbps WireGuard Gateway Guide: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/nintendo-switch-wireguard-proxy" class="hover:text-emerald-600 transition-colors">Nintendo Switch OLED Low-NAT WireGuard Gaming Router Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/nixos-declarative-wireguard" class="hover:text-emerald-600 transition-colors">NixOS Declarative WireGuard Interface Configuration Guide: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/nvidia-shield-tv-pro-wireguard" class="hover:text-emerald-600 transition-colors">NVIDIA Shield TV Pro 4K WireGuard & GeForce NOW Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/openwrt-wireguard-router" class="hover:text-emerald-600 transition-colors">WireGuard VPN Setup for OpenWrt 23.05+ Router WireGuard &amp; Policy Routing</a>
-        <span>&bull;</span>
-        <a href="/setup/pfsense-opnsense-router" class="hover:text-emerald-600 transition-colors">WireGuard VPN Setup for pfSense &amp; OPNsense Home Firewall</a>
-        <span>&bull;</span>
-        <a href="/setup/playstation-5-wireguard-router" class="hover:text-emerald-600 transition-colors">PlayStation 5 (PS5) Low-Ping WireGuard & NAT Type 2 Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/protectli-vault-opnsense" class="hover:text-emerald-600 transition-colors">Protectli Vault 6-Port Core i5 OPNsense WireGuard Gateway: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/proxmox-lxc-wireguard-gateway" class="hover:text-emerald-600 transition-colors">Proxmox VE 8.x Unprivileged LXC WireGuard Gateway: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/proxmox-ve-8-sdn-wireguard" class="hover:text-emerald-600 transition-colors">Proxmox VE 8.2 SDN VNet WireGuard Gateway Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/qnap-qts-wireguard-client" class="hover:text-emerald-600 transition-colors">QNAP QTS 5.x & QuTS hero (QVPN Service 3): High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/raspberry-pi-home-gateway" class="hover:text-emerald-600 transition-colors">WireGuard VPN Setup for Raspberry Pi 5 Whole-Home WireGuard Gateway &amp; TV Shield</a>
-        <span>&bull;</span>
-        <a href="/setup/rog-ally-windows-11-wireguard" class="hover:text-emerald-600 transition-colors">ASUS ROG Ally & ROG Ally X Low-Latency WireGuard Gaming Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/steam-deck-vpn" class="hover:text-emerald-600 transition-colors">WireGuard VPN Setup for Steam Deck &amp; Handheld Gaming OS (SteamOS)</a>
-        <span>&bull;</span>
-        <a href="/setup/synology-nas-docker-vpn" class="hover:text-emerald-600 transition-colors">WireGuard VPN Setup for Synology NAS &amp; Docker Gluetun WireGuard Container</a>
-        <span>&bull;</span>
-        <a href="/setup/tailscale-wireguard-exit-node" class="hover:text-emerald-600 transition-colors">Tailscale Subnet Router to SWEEPR WireGuard Exit Bridge: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/tp-link-omada-er605-wireguard" class="hover:text-emerald-600 transition-colors">TP-Link Omada ER605 / ER7206 WireGuard Gateway Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/truenas-scale-wireguard-container" class="hover:text-emerald-600 transition-colors">TrueNAS SCALE 24.x WireGuard & Docker App Routing Guide: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/ubiquiti-cloud-gateway-ultra" class="hover:text-emerald-600 transition-colors">Ubiquiti UniFi Cloud Gateway Ultra (UCG-Ultra) WireGuard Client: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/ubiquiti-edgerouter-wireguard" class="hover:text-emerald-600 transition-colors">Ubiquiti EdgeRouter 4 & EdgeRouter X WireGuard Kernel Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/ubiquiti-unifi-dream-machine-wireguard" class="hover:text-emerald-600 transition-colors">Ubiquiti UniFi Dream Machine (UDM-Pro / UDM-SE / UDR): High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/unifi-cloud-gateway-max-ucg-max-wireguard" class="hover:text-emerald-600 transition-colors">Ubiquiti UniFi Cloud Gateway Max (UCG-Max) 2.5Gbps: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/unifi-gateway-max-uxg-max" class="hover:text-emerald-600 transition-colors">Ubiquiti UniFi Gateway Max (UXG-Max) 2.5G WireGuard Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/unraid-wireguard-docker-tunnel" class="hover:text-emerald-600 transition-colors">Unraid 6.12 WireGuard Client & Container VPN Routing Guide: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/vyos-1-4-wireguard-router" class="hover:text-emerald-600 transition-colors">VyOS 1.4 Rolling / LTS WireGuard Interface & BGP Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/windows-11-wireguard-vpn" class="hover:text-emerald-600 transition-colors">WireGuard VPN Setup for Windows 10 &amp; 11 Native Kernel WireGuard</a>
-        <span>&bull;</span>
-        <a href="/setup/wsl2-windows-subsystem-wireguard" class="hover:text-emerald-600 transition-colors">WSL2 (Windows Subsystem for Linux 2) Native WireGuard Tunnel: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/xbox-series-x-wireguard-gaming" class="hover:text-emerald-600 transition-colors">Xbox Series X|S WireGuard Low-Latency & Open NAT Guide: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/zimaboard-casaos-gluetun-wireguard" class="hover:text-emerald-600 transition-colors">ZimaBoard 832 & CasaOS: Dual-NIC WireGuard Gateway & Gluetun Docker Setup</a>
-        <span>&bull;</span>
-        <a href="/guides/audit-home-iot-botnet-vulnerabilities" class="hover:text-emerald-600 transition-colors">Audit Smart Home Plugs, IP Cameras & IoT Devices for Botnets in 30 Seconds</a>
-        <span>&bull;</span>
-        <a href="/guides/audit-home-nas-ransomware-wan-exposure" class="hover:text-emerald-600 transition-colors">How to Audit Your Synology & QNAP NAS for Open WAN Ports and UPnP Leakage</a>
-        <span>&bull;</span>
-        <a href="/guides/block-hisense-vidaa-fire-tv-acr" class="hover:text-emerald-600 transition-colors">Stop Hisense VIDAA OS & Amazon Fire TV ACR Tracking at the Network Layer</a>
-        <span>&bull;</span>
-        <a href="/guides/block-panasonic-smart-tv-telemetry" class="hover:text-emerald-600 transition-colors">Stop Panasonic Smart TV ACR Tracking & Home Screen Telemetry Beacons</a>
-        <span>&bull;</span>
-        <a href="/guides/block-philips-titan-os-acr" class="hover:text-emerald-600 transition-colors">How to Block Philips Titan OS & Ambilight ACR Screenshot Telemetry</a>
-        <span>&bull;</span>
-        <a href="/guides/block-sharp-aquos-google-tv-acr" class="hover:text-emerald-600 transition-colors">Stop Sharp Aquos Google TV ACR Content Recognition at the Router Level</a>
-        <span>&bull;</span>
-        <a href="/guides/block-sony-bravia-samba-tv-acr" class="hover:text-emerald-600 transition-colors">How to Block Sony Bravia & Samba TV ACR Screenshot Spying on Your Home Wi-Fi</a>
-        <span>&bull;</span>
-        <a href="/guides/block-tcl-google-tv-acr-telemetry" class="hover:text-emerald-600 transition-colors">How to Block TCL Google TV ACR Tracking & Ad Spyware at Router Level</a>
-        <span>&bull;</span>
-        <a href="/guides/bypass-cgnat-for-self-hosted-home-lab" class="hover:text-emerald-600 transition-colors">Understanding Carrier-Grade NAT (CGNAT) on Hyperoptic, Community Fibre & 5G</a>
-        <span>&bull;</span>
-        <a href="/guides/detect-hidden-wifi-cameras-airbnb" class="hover:text-emerald-600 transition-colors">How to Audit Airbnb & Hotel Wi-Fi Subnets for Hidden IP Cameras & Rogue Devices</a>
-        <span>&bull;</span>
-        <a href="/guides/detect-hotel-chromecast-spoofing" class="hover:text-emerald-600 transition-colors">How to Audit Hotel & Airbnb Wi-Fi for Rogue Cast Devices & Screen Hijackers</a>
-        <span>&bull;</span>
-        <a href="/guides/detect-hotel-wifi-evil-twin-ap" class="hover:text-emerald-600 transition-colors">How to Detect Evil Twin Hotspots & ARP Poisoning on Hotel & Airport Wi-Fi</a>
-        <span>&bull;</span>
-        <a href="/guides/detect-rogue-dhcp-server-guest-wifi" class="hover:text-emerald-600 transition-colors">How to Detect Rogue DHCP Servers & DNS Poisoning on Coworking & Guest Wi-Fi</a>
-        <span>&bull;</span>
-        <a href="/guides/detect-rogue-mesh-repeaters" class="hover:text-emerald-600 transition-colors">How to Detect Rogue Wi-Fi Extenders & Unauthorized Repeaters on Your Network</a>
-        <span>&bull;</span>
-        <a href="/guides/detect-unknown-devices-on-home-wifi" class="hover:text-emerald-600 transition-colors">How to Find Unknown Devices &amp; Strangers on Your Home Wi-Fi in 30 Seconds</a>
-        <span>&bull;</span>
-        <a href="/guides/disable-ipv6-leak-windows-linux" class="hover:text-emerald-600 transition-colors">How to Prevent Silent IPv6 Tunnel Leaks on Dual-Stack Residential Broadband</a>
-        <span>&bull;</span>
-        <a href="/guides/fix-isp-dns-hijacking-and-throttling" class="hover:text-emerald-600 transition-colors">How UK ISPs Use DNS Inspection to Throttle Evening Speeds (And How to Fix It)</a>
-        <span>&bull;</span>
-        <a href="/guides/fix-udp-bufferbloat-wireguard-gaming" class="hover:text-emerald-600 transition-colors">How to Eliminate UDP Bufferbloat & Jitter Spikes on FTTP Fibre for Gaming</a>
-        <span>&bull;</span>
-        <a href="/guides/fix-wireguard-mtu-fragmentation-pppoe" class="hover:text-emerald-600 transition-colors">How to Fix WireGuard MTU Packet Fragmentation on PPPoE Fibre (1412) & 5G (1380)</a>
-        <span>&bull;</span>
-        <a href="/guides/prevent-webrtc-ip-leak-chromium-firefox" class="hover:text-emerald-600 transition-colors">How to Prevent Silent WebRTC STUN/TURN IP Address Leaks in All Browsers</a>
-        <span>&bull;</span>
-        <a href="/guides/prevent-windows-11-dns-leaks-doh" class="hover:text-emerald-600 transition-colors">Fix Windows 11 Multi-Homed DNS Leaks & Bypass ISP Port 53 Interception</a>
-        <span>&bull;</span>
-        <a href="/guides/public-hotel-airport-wifi-security" class="hover:text-emerald-600 transition-colors">Public, Hotel &amp; Airport Wi-Fi Security: Evil Twin &amp; Packet Sniffing Protection</a>
-        <span>&bull;</span>
-        <a href="/guides/secure-smart-speaker-iot-isolation" class="hover:text-emerald-600 transition-colors">How to Isolate Smart Speakers & IoT Gadgets From Your Primary Work Network</a>
-        <span>&bull;</span>
-        <a href="/guides/stop-5g-hotspot-carrier-throttling" class="hover:text-emerald-600 transition-colors">How to Stop Mobile Carrier 5G Hotspot Throttling & DPI Tethering Caps</a>
-        <span>&bull;</span>
-        <a href="/guides/stop-isp-deep-packet-inspection-dpi" class="hover:text-emerald-600 transition-colors">How to Defeat ISP Deep Packet Inspection (DPI) & SNI Censorship with WireGuard</a>
-        <span>&bull;</span>
-        <a href="/guides/stop-isp-tcp-reset-attacks" class="hover:text-emerald-600 transition-colors">How to Bypass ISP TCP RST Packet Injection & Deep Packet Inspection with WireGuard</a>
-        <span>&bull;</span>
-        <a href="/guides/stop-lg-smart-tv-acr-spying" class="hover:text-emerald-600 transition-colors">How to Stop LG webOS Smart TVs From Taking Screenshots of What You Watch (2026 Guide)</a>
-        <span>&bull;</span>
-        <a href="/guides/stop-roku-vizio-firetv-spying" class="hover:text-emerald-600 transition-colors">How to Block Roku, Vizio Inscape &amp; Fire TV ACR Spying on Your Home Wi-Fi</a>
-        <span>&bull;</span>
-        <a href="/guides/stop-samsung-smart-tv-acr-tracking" class="hover:text-emerald-600 transition-colors">How to Block Samsung Tizen Smart-TV ACR Telemetry &amp; Home Menu Ads (2026 Guide)</a>
-        <span>&bull;</span>
-        <a href="/vs/adguard-vpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs AdGuard VPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/airvpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs AirVPN (Eddie Client): 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/astrill-vpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Astrill VPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/avast-secureline-vpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Avast SecureLine VPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/betternet" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Betternet VPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/cactusvpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs CactusVPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/cloudflare-warp-plus" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Cloudflare WARP+: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/cyberghost" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs CyberGhost (2026 Comparison)</a>
-        <span>&bull;</span>
-        <a href="/vs/expressvpn-aircove" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs ExpressVPN & Aircove: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/expressvpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs ExpressVPN (2026 Comparison)</a>
-        <span>&bull;</span>
-        <a href="/vs/hide-me-vpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs hide.me VPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/hola-vpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Hola VPN Free Proxy: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/hotspot-shield" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Hotspot Shield: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/ipvanish" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs IPVanish (2026 Comparison)</a>
-        <span>&bull;</span>
-        <a href="/vs/ivpn-net" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs IVPN Pro: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/mozilla-vpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Mozilla VPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/mullvad" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Mullvad VPN (2026 Comparison)</a>
-        <span>&bull;</span>
-        <a href="/vs/nordlayer" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs NordLayer Business VPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/nordvpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs NordVPN (2026 Comparison)</a>
-        <span>&bull;</span>
-        <a href="/vs/ovpn-com" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs OVPN.com Sweden: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/perimeter-81" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Perimeter 81 (Check Point Harmony): 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/privadovpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs PrivadoVPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/private-internet-access" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Private Internet Access (PIA): 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/privatevpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs PrivateVPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/protonvpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Proton VPN (2026 Comparison)</a>
-        <span>&bull;</span>
-        <a href="/vs/purevpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs PureVPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/surfshark" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Surfshark (2026 Comparison)</a>
-        <span>&bull;</span>
-        <a href="/vs/tailscale-saas" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Tailscale Commercial SaaS: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/torguard-vpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs TorGuard Anonymous VPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/tunnelbear" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs TunnelBear VPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/turbo-vpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Turbo VPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/twingate" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Twingate Zero Trust Network Access: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/urban-vpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Urban VPN Free: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/vyprvpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs VyprVPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/windscribe" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Windscribe Pro: 2026 Speed, Footprint & Privacy Comparison</a>
+    <!-- Curated Editorial 12-Pillar Navigation Grid -->
+    <nav id="sweepr-curated-pillars-grid" aria-label="Curated Network Tools &amp; Engineering Guides" class="max-w-5xl mx-auto my-6 px-4 pt-6 border-t border-gray-100 text-left">
+      <div class="mb-4 text-center md:text-left">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400">Core Network Tools &amp; Engineering Guides</h3>
       </div>
-    </details>
-
-
-
-
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-xs text-gray-500">
+        <!-- Column 1: Diagnostic Tools & Authority -->
+        <div>
+          <h4 class="font-bold text-gray-900 mb-2.5 flex items-center gap-1.5">
+            <span class="text-emerald-600"><svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></span> Diagnostic Tools
+          </h4>
+          <ul class="space-y-2">
+            <li><a href="/tools/leak-test" class="hover:text-emerald-600 transition-colors">IP, DNS &amp; WebRTC Leak Test</a></li>
+            <li><a href="/tools/isp-throttling-test" class="hover:text-emerald-600 transition-colors">ISP Speed &amp; Throttling Test</a></li>
+            <li><a href="/warrant-canary" class="hover:text-emerald-600 transition-colors font-medium text-gray-700">Cryptographic Warrant Canary</a></li>
+          </ul>
+        </div>
+        <!-- Column 2: Hardware & Router Setups -->
+        <div>
+          <h4 class="font-bold text-gray-900 mb-2.5 flex items-center gap-1.5">
+            <span class="text-emerald-600"><svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></span> Hardware Setup Guides
+          </h4>
+          <ul class="space-y-2">
+            <li><a href="/setup/gl-inet-travel-router" class="hover:text-emerald-600 transition-colors">GL.iNet Travel Router WireGuard</a></li>
+            <li><a href="/setup/synology-nas-docker-vpn" class="hover:text-emerald-600 transition-colors">Synology NAS Docker WireGuard</a></li>
+            <li><a href="/setup/steam-deck-vpn" class="hover:text-emerald-600 transition-colors">Steam Deck &amp; SteamOS VPN</a></li>
+            <li><a href="/setup/nvidia-shield-tv-pro-wireguard" class="hover:text-emerald-600 transition-colors">NVIDIA Shield TV Pro WireGuard</a></li>
+          </ul>
+        </div>
+        <!-- Column 3: Smart-TV & IoT Privacy Guides -->
+        <div>
+          <h4 class="font-bold text-gray-900 mb-2.5 flex items-center gap-1.5">
+            <span class="text-emerald-600"><svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="17 2 12 7 7 2"/></svg></span> Smart-TV Privacy Guides
+          </h4>
+          <ul class="space-y-2">
+            <li><a href="/guides/stop-samsung-smart-tv-acr-tracking" class="hover:text-emerald-600 transition-colors">Block Samsung Smart-TV ACR</a></li>
+            <li><a href="/guides/stop-lg-smart-tv-acr-spying" class="hover:text-emerald-600 transition-colors">Stop LG webOS LivePlus Spying</a></li>
+            <li><a href="/guides/stop-roku-vizio-firetv-spying" class="hover:text-emerald-600 transition-colors">Block Roku, Vizio &amp; Fire TV ACR</a></li>
+          </ul>
+        </div>
+        <!-- Column 4: ISP Network Solutions & Comparisons -->
+        <div>
+          <h4 class="font-bold text-gray-900 mb-2.5 flex items-center gap-1.5">
+            <span class="text-emerald-600"><svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></span> ISP Solutions &amp; Reviews
+          </h4>
+          <ul class="space-y-2">
+            <li><a href="/solutions/eduroam-campus-wifi-gaming-packet-loss" class="hover:text-emerald-600 transition-colors">Eduroam Gaming Packet Loss Fix</a></li>
+            <li><a href="/solutions/talktalk-p2p-port-forwarding" class="hover:text-emerald-600 transition-colors">TalkTalk P2P Port Forwarding</a></li>
+            <li><a href="/alternatives/totalvpn" class="hover:text-emerald-600 transition-colors font-medium text-gray-700">TotalVPN Alternatives (2026)</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
 
     <p>&copy; 2026 SWEEPR VPN Inc. All rights reserved.</p>
   </footer>
@@ -819,8 +627,8 @@
       const thrCta = document.getElementById('thrBridgeCta');
       if (thrPill) {
         thrPill.innerHTML = jitter >= 15
-          ? `<span>⚡ Detected ${jitter} ms Jitter Spike — Bypass ISP Shaping</span>`
-          : `<span>⚡ Measured ${avg} ms Unencrypted Transit — Stop SNI Throttling</span>`;
+          ? `<span class="inline-flex items-center gap-1.5"><span class="rack-led is-warn"></span><span>Detected ${jitter} ms Jitter Spike — Bypass ISP Shaping</span></span>`
+          : `<span class="inline-flex items-center gap-1.5"><span class="rack-led is-warn"></span><span>Measured ${avg} ms Unencrypted Transit — Stop SNI Throttling</span></span>`;
       }
       if (thrTitle) {
         thrTitle.textContent = `Encrypt your ${avg} ms connection with 10Gbps WireGuard to stop evening throttling`;
@@ -861,14 +669,12 @@
     function copyWebIspRefundScript() {
       const box = document.getElementById('webIspRefundScriptBox');
       const btn = document.getElementById('copyWebIspScriptBtn');
-      if (!box) return;
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(box.textContent || '');
-      }
-      if (btn) {
-        const orig = btn.textContent;
-        btn.textContent = '✓ Copied Refund Script to Clipboard!';
-        setTimeout(() => { btn.textContent = orig; }, 2200);
+      if (!box || !btn) return;
+      const text = box.textContent || '';
+      if (typeof window.sweeprSpringCopy === 'function') {
+        window.sweeprSpringCopy(btn, text, 'Copied Refund Script!');
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(text);
       }
     }
 

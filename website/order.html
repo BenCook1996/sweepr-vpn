@@ -73,70 +73,6 @@
     }
 
     /* 3D Box Mockup (Exact match to sweeprcleaner.com/order) */
-    .software-box {
-      width: 76px;
-      height: 104px;
-      position: relative;
-      perspective: 600px;
-      filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.16));
-    }
-    .box-face {
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(145deg, #064e3b 0%, #022c22 100%);
-      border-radius: 4px 6px 6px 4px;
-      border: 1px solid rgba(16, 185, 129, 0.35);
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 8px 7px;
-      color: white;
-      transform: rotateY(-18deg);
-      transform-style: preserve-3d;
-    }
-    .box-face::before {
-      content: "";
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, transparent 60%);
-      pointer-events: none;
-    }
-    .box-spine {
-      position: absolute;
-      left: -11px;
-      top: 2px;
-      width: 13px;
-      height: 100px;
-      background: #022c22;
-      border-radius: 4px 0 0 4px;
-      border: 1px solid rgba(16, 185, 129, 0.25);
-      transform: rotateY(-72deg);
-      transform-origin: right center;
-    }
-    .box-badge {
-      background: #10b981;
-      font-size: 7px;
-      font-weight: 800;
-      padding: 1px 4px;
-      border-radius: 2px;
-      align-self: flex-start;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .box-title {
-      font-size: 9px;
-      font-weight: 800;
-      line-height: 1.1;
-      letter-spacing: -0.2px;
-    }
-    .box-year {
-      font-size: 7px;
-      color: #6ee7b7;
-      font-weight: 600;
-    }
-
     /* Tooltip */
     .tooltip-wrapper {
       position: relative;
@@ -168,28 +104,23 @@
     }
 
     /* Pulse effect on green button */
-    @keyframes greenPulse {
-      0%, 100% { box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35); }
-      50% { box-shadow: 0 6px 22px rgba(16, 185, 129, 0.55); }
-    }
     .btn-purchase {
       background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      animation: greenPulse 3s infinite;
-      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4), 0 0 0 1px rgba(16, 185, 129, 0.15);
+      transition: transform 140ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 180ms ease, background 180ms ease;
+      box-shadow: 0 4px 16px rgba(5, 150, 105, 0.28), 0 0 0 1px rgba(16, 185, 129, 0.2);
     }
     .btn-purchase:hover {
       background: linear-gradient(135deg, #059669 0%, #047857 100%);
       transform: translateY(-1px);
-      box-shadow: 0 8px 30px rgba(16, 185, 129, 0.55), 0 0 0 2px rgba(16, 185, 129, 0.3);
+      box-shadow: 0 8px 24px rgba(5, 150, 105, 0.36), 0 0 0 1px rgba(16, 185, 129, 0.35);
     }
     .btn-purchase:active {
-      transform: translateY(1px);
+      transform: scale(0.975);
     }
 
-    /* Discount Modal Transition */
+    /* Discount Modal Transition (Asymmetric 220ms enter / 160ms exit) */
     #discountModal {
-      transition: opacity 0.3s ease, visibility 0.3s ease;
+      transition: opacity 160ms cubic-bezier(0.32, 0.72, 0, 1), visibility 160ms linear;
     }
     #discountModal.hidden-modal {
       opacity: 0;
@@ -200,17 +131,19 @@
       opacity: 1;
       visibility: visible;
       pointer-events: auto;
+      transition: opacity 220ms cubic-bezier(0.22, 1, 0.36, 1), visibility 0ms linear;
     }
     #discountModal .modal-card {
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+      transition: transform 160ms cubic-bezier(0.32, 0.72, 0, 1), opacity 160ms ease;
     }
     #discountModal.hidden-modal .modal-card {
-      transform: scale(0.92) translateY(20px);
+      transform: scale(0.96);
       opacity: 0;
     }
     #discountModal.visible-modal .modal-card {
-      transform: scale(1) translateY(0);
+      transform: scale(1);
       opacity: 1;
+      transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), opacity 220ms ease-out;
     }
 
     /* Laptop UI Mockup */
@@ -279,7 +212,7 @@
       <a href="/" onclick="try{localStorage.removeItem('sweepr_order_draft');document.cookie='sweepr_order_draft=; Path=/; Max-Age=0; SameSite=Lax';}catch(e){}" class="inline-flex items-center gap-2.5 text-inherit no-underline group">
         <img src="/logo-mint-glass.svg" alt="SWEEPR VPN" width="32" height="32" fetchpriority="high" class="w-8 h-8 rounded-lg drop-shadow transition-transform group-hover:scale-105" />
         <div class="flex items-baseline gap-1.5">
-          <span class="font-black text-xl tracking-tight text-white">SWEEPR <span class="text-emerald-400">VPN</span></span>
+          <span class="font-bold text-xl tracking-tight text-white">SWEEPR <span class="text-emerald-400">VPN</span></span>
         </div>
       </a>
 
@@ -295,16 +228,16 @@
     <!-- Center Headline & Subline (Matched to sweeprdeepblock.com/order) -->
     <div class="max-w-4xl mx-auto text-center pt-5 pb-3">
       <div id="refBonusBanner" class="hidden items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-200 text-[11.5px] font-bold mb-2">
-        <span>🎁 Friend Invite Applied: +1 Bonus Month Free</span>
+        <span class="inline-flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-emerald-300 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Friend Invite Applied: +1 Bonus Month Free</span>
       </div>
-      <h1 id="bannerTitle" class="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight">
+      <h1 id="bannerTitle" class="text-2xl sm:text-3xl md:text-4xl font-bold text-white tracking-tight">
         Get Complete Online Privacy &amp; Wi-Fi Protection for 2026
       </h1>
       <p id="bannerSubtitle" class="text-gray-300 text-xs sm:text-sm md:text-base mt-1.5 font-normal max-w-2xl mx-auto">
         Keep Your Browsing Private in 1 Click, Stop Internet Slowdowns &amp; Protect Every Device on Your Home Wi-Fi
       </p>
       <div class="mt-2.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700 text-emerald-300 text-[11px] font-semibold">
-        <span data-live-proof="summary-ticker">🟢 All 8 Global VPN Locations Online • Instant 1-Click Setup • 14-Day Money-Back Guarantee</span>
+        <span class="rack-led is-live shrink-0" aria-hidden="true"></span><span data-live-proof="summary-ticker">All 8 Global VPN Locations Online • Instant 1-Click Setup • 14-Day Money-Back Guarantee</span>
       </div>
     </div>
     <script>
@@ -326,7 +259,7 @@
     <!-- Top Segmented Plan Switcher Bar (Instant 1-Click Plan Switching on /order) -->
     <div class="bg-white rounded-2xl p-1.5 sm:p-2 border border-gray-200/90 shadow-xs mb-5 grid grid-cols-1 sm:grid-cols-3 gap-1.5 sm:gap-2">
       <button type="button" id="planTabAnnual" onclick="selectOrderPlan('annual')" class="py-2 sm:py-2.5 px-3 rounded-xl bg-emerald-600 text-white font-extrabold text-xs sm:text-sm shadow-xs cursor-pointer transition-all">
-        ★ Annual — £6.25/mo (Save 50%)
+        Annual — £6.25/mo (Save 50%)
       </button>
       <button type="button" id="planTabSixMonth" onclick="selectOrderPlan('six_month')" class="py-2 sm:py-2.5 px-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-700 font-bold text-xs sm:text-sm cursor-pointer transition-all">
         6-Month — £8.17/mo (Save 35%)
@@ -341,12 +274,12 @@
       <button type="button" id="mobileSummaryToggleBtn" onclick="toggleMobileOrderSummary()" aria-expanded="false" class="w-full bg-white rounded-xl p-3.5 border border-emerald-200 shadow-xs flex items-center justify-between gap-3 cursor-pointer text-left">
         <div>
           <div class="text-[11px] font-extrabold uppercase tracking-wider text-emerald-700 flex items-center gap-1.5">
-            <span>🛒 Order Summary (SWEEPR VPN Pro)</span>
+            <span class="inline-flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>Order Summary (SWEEPR VPN Pro)</span>
           </div>
           <div id="mobileAccordionHint" class="text-[11px] text-gray-500 mt-0.5">Tap to expand itemized summary &amp; 1-click add-on &darr;</div>
         </div>
         <div class="text-right shrink-0">
-          <div id="mobileAccordionTotal" class="font-black text-base text-gray-900 tabular-nums">£89.98</div>
+          <div id="mobileAccordionTotal" class="font-bold text-base text-gray-900 tabular-nums">£89.98</div>
           <div class="text-[10px] font-bold text-emerald-700">14-Day Refund</div>
         </div>
       </button>
@@ -355,24 +288,21 @@
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
 
       <!-- LEFT COLUMN: Unified 1-Screen Order Summary Card (Matched to sweeprcleaner.com/order) -->
-      <div id="orderDetailsColumn" class="hidden lg:block lg:col-span-6 bg-white rounded-2xl p-5 sm:p-6 border border-gray-200/90 shadow-md space-y-4">
+      <div id="orderDetailsColumn" class="hidden lg:block lg:col-span-6 rack-card p-5 sm:p-6 shadow-md space-y-4">
 
         <!-- 1. Main Product Header -->
         <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3.5 border-b border-gray-100 pb-4">
           <div class="flex items-start gap-3.5">
-            <!-- 3D Box Mockup -->
-            <div class="software-box shrink-0 mt-0.5 ml-1 sm:ml-0">
-              <div class="box-spine"></div>
-              <div class="box-face">
-                <div class="flex items-center justify-between w-full">
-                  <img src="/logo-mint-glass.svg" alt="SWEEPR VPN" width="16" height="16" class="w-4 h-4 rounded-sm" />
-                  <div class="box-badge">2026</div>
-                </div>
-                <div>
-                  <div class="box-title">SWEEPR VPN</div>
-                  <div class="box-year">PRO EDITION</div>
-                </div>
-                <div style="font-size: 6.5px; color: #a7f3d0; font-weight: 700;">ALL-IN-ONE</div>
+            <!-- License & Tunnel Spec Badge -->
+            <div class="shrink-0 mt-0.5 rounded-xl bg-[#111315] text-white border border-slate-700/80 p-3 w-[108px] flex flex-col justify-between gap-2 shadow-sm">
+              <div class="flex items-center justify-between gap-1.5">
+                <img src="/logo-mint-glass.svg" alt="SWEEPR VPN" width="16" height="16" class="w-4 h-4 rounded-sm shrink-0" />
+                <span class="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-mono">PRO</span>
+              </div>
+              <div class="font-mono text-[9.5px] leading-tight text-slate-300 space-y-0.5 tabular-nums">
+                <div class="font-bold text-white tracking-tight">WG-KERNEL</div>
+                <div class="text-emerald-400">3 DEVICES</div>
+                <div class="text-slate-400">ZERO-LOG</div>
               </div>
             </div>
 
@@ -383,7 +313,7 @@
                   Save 50% vs monthly billing
                 </span>
               </div>
-              <h2 class="text-lg sm:text-xl font-black text-gray-900 tracking-tight leading-snug">SWEEPR VPN Pro All-Access</h2>
+              <h2 class="text-lg sm:text-xl font-bold text-gray-900 tracking-tight leading-snug">SWEEPR VPN Pro All-Access</h2>
               <p id="productSubtitle" class="text-xs text-gray-500 mt-0.5 leading-relaxed">
                 Keep your browsing private in 1 click, stop internet slowdowns &amp; scan every device on your home Wi-Fi
               </p>
@@ -399,8 +329,8 @@
           </div>
 
           <div class="flex sm:block items-baseline justify-between pt-2 sm:pt-0 border-t sm:border-t-0 border-gray-100 text-left sm:text-right shrink-0">
-            <div id="productPriceTop" class="text-2xl font-black text-gray-900 tracking-tight">£74.99</div>
-            <div id="productPriceSub" class="text-[11px] text-gray-500 font-medium">per year (£6.25/mo)</div>
+            <div id="productPriceTop" class="text-2xl font-bold text-gray-900 tracking-tight tabular-nums">£74.99</div>
+            <div id="productPriceSub" class="text-[11px] text-gray-500 font-medium tabular-nums">per year (£6.25/mo)</div>
           </div>
         </div>
 
@@ -408,7 +338,7 @@
         <div class="grid grid-cols-1 gap-2">
           <div class="bg-emerald-50/60 border border-emerald-200/80 rounded-xl px-3.5 py-2.5 flex items-center justify-between gap-3">
             <div class="flex items-center gap-2.5">
-              <span class="text-base shrink-0">🎁</span>
+              <span class="w-6 h-6 rounded-md bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>
               <div>
                 <div class="font-bold text-gray-900 text-xs sm:text-sm">Streaming &amp; Gaming Speed Booster</div>
                 <div class="text-[11px] text-gray-500">Stops your internet provider from slowing down evening 4K streaming</div>
@@ -419,7 +349,7 @@
 
           <div class="bg-emerald-50/60 border border-emerald-200/80 rounded-xl px-3.5 py-2.5 flex items-center justify-between gap-3">
             <div class="flex items-center gap-2.5">
-              <span class="text-base shrink-0">🎁</span>
+              <span class="w-6 h-6 rounded-md bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>
               <div>
                 <div class="font-bold text-gray-900 text-xs sm:text-sm">Plain-English Home Wi-Fi &amp; Airbnb Camera Scanner</div>
                 <div class="text-[11px] text-gray-500">Translates cryptic microchips (`Espressif`/`Tuya`) into real names &amp; spots hidden cameras</div>
@@ -443,9 +373,9 @@
               <div>
                 <div class="flex flex-wrap items-center gap-1.5 mb-1">
                   <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider bg-white text-emerald-800 border border-emerald-200">
-                    ⚡ 1-CLICK WIFIGUARD HOME &amp; TV ADD-ON
+                    <svg class="w-3 h-3 text-emerald-700 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>1-CLICK WIFIGUARD HOME &amp; TV ADD-ON
                   </span>
-                  <span id="wifiRadarAddonPriceBadge" class="text-xs font-extrabold text-emerald-800 bg-emerald-100/80 px-2 py-0.5 rounded border border-emerald-200">
+                  <span id="wifiRadarAddonPriceBadge" class="text-xs font-extrabold text-emerald-800 bg-emerald-100/80 px-2 py-0.5 rounded border border-emerald-200 tabular-nums">
                     + £14.99/yr (£1.25/mo eq.)
                   </span>
                 </div>
@@ -464,22 +394,22 @@
         <div class="bg-gray-50/80 rounded-xl p-4 border border-gray-200/80 space-y-2.5 text-xs sm:text-sm">
           <div class="flex items-center justify-between text-gray-700">
             <span id="summaryPlanTitle">SWEEPR VPN Pro (Annual Plan)</span>
-            <span id="summaryPlanPrice" class="font-semibold text-gray-900">£74.99/year</span>
+            <span id="summaryPlanPrice" class="font-semibold text-gray-900 tabular-nums">£74.99/year</span>
           </div>
 
           <div id="addonSummaryRow" class="flex items-center justify-between text-emerald-800 bg-emerald-50/90 px-2.5 py-1.5 rounded-lg border border-emerald-200/80">
             <span class="flex items-center gap-1.5 font-semibold text-xs">
-              <span>⚡</span>
+              <svg class="w-3.5 h-3.5 text-emerald-700 shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"/></svg>
               <span>SWEEPR Wi-Fi Guard Home &amp; Smart-TV Shield Add-On</span>
             </span>
-            <span id="addonSummaryPrice" class="font-bold text-gray-900 text-xs">+ £14.99/year</span>
+            <span id="addonSummaryPrice" class="font-bold text-gray-900 text-xs tabular-nums">+ £14.99/year</span>
           </div>
 
           <!-- Savings Line -->
           <div id="savingsSummaryRow" class="flex flex-col gap-0.5 text-emerald-600 font-medium border-t border-dashed border-gray-200 pt-2">
             <div class="flex items-center justify-between text-xs">
               <span id="savingsSummaryLabel">Annual Plan Savings (Save 50%)</span>
-              <span id="savingsSummaryAmount" class="font-bold">- £74.89</span>
+              <span id="savingsSummaryAmount" class="font-bold tabular-nums">- £74.89</span>
             </div>
             <div id="savingsSummaryNote" class="text-[10px] text-gray-500 font-normal">
               Billed annually at £74.99/year (£6.25/month equivalent) instead of standard £149.88/year.
@@ -490,7 +420,7 @@
           <div id="discountSummaryRow" class="hidden flex flex-col gap-0.5 text-emerald-600 font-medium border-t border-dashed border-gray-200 pt-2">
             <div class="flex items-center justify-between text-xs">
               <span>Introductory 1st-Month Discount (<strong id="discountSaveStrong" class="font-bold">Save £10.50</strong>)</span>
-              <span id="discountAmountMinus" class="font-bold">- £10.50</span>
+              <span id="discountAmountMinus" class="font-bold tabular-nums">- £10.50</span>
             </div>
             <div id="discountNoteText" class="text-[10px] text-gray-500 font-normal">
               Discount applies strictly to month 1. All future monthly renewals are billed at the standard rate of £12.49/month unless cancelled.
@@ -499,7 +429,7 @@
 
           <div class="pt-2.5 border-t border-gray-200 flex items-center justify-between">
             <span id="totalTodayLabel" class="font-bold text-gray-900 text-sm sm:text-base">Total Today (GBP)</span>
-            <span id="totalTodayText" class="font-black text-xl sm:text-2xl text-gray-900">£89.98</span>
+            <span id="totalTodayText" class="font-bold text-xl sm:text-2xl text-gray-900 tabular-nums">£89.98</span>
           </div>
         </div>
 
@@ -524,7 +454,7 @@
       </div>
 
       <!-- RIGHT COLUMN: Express Payment Form (Matched to sweeprcleaner.com/order) -->
-      <div id="checkoutBox" class="lg:col-span-6 bg-white p-5 sm:p-6 rounded-2xl border border-gray-200/90 shadow-md">
+      <div id="checkoutBox" class="lg:col-span-6 rack-card p-5 sm:p-6 shadow-md">
 
         <!-- Order Form -->
         <form id="orderForm" class="space-y-4" novalidate>
@@ -532,7 +462,7 @@
           <!-- 1-Row Express Bar Elevated Directly to Top (OS- & Country-Aware — CHK-02, Deduplicated) -->
           <div class="space-y-1.5">
             <div class="flex items-center justify-between text-[11px] font-bold uppercase tracking-wider text-gray-400">
-              <span>⚡ 1-Click Express Checkout</span>
+              <span class="inline-flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>1-Click Express Checkout</span>
               <span class="text-emerald-600 font-semibold normal-case tracking-normal">Instant Activation</span>
             </div>
             <div id="expressPaymentRow" class="grid grid-cols-2 gap-2 sm:gap-2.5">
@@ -543,7 +473,7 @@
                     <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 2.28A.773.773 0 0 1 5.707 1.6h6.71c2.878 0 4.863 1.38 4.417 4.21-.522 3.314-2.816 5.093-6.06 5.093H8.397l-1.32 10.434Z" fill="#003087"/>
                     <path d="M19.442 6.84c-.48 3.394-2.927 5.475-6.517 5.475h-2.16l-1.266 8.382a.559.559 0 0 1-.552.474H5.694l1.15-9.088 1.553-1.288h2.377c3.244 0 5.538-1.78 6.06-5.093.103-.654.095-1.233-.01-1.74.197.095.383.204.558.327 1.547 1.09 2.275 2.753 2.06 4.551Z" fill="#0079C1"/>
                   </svg>
-                  <span class="italic font-black text-base sm:text-lg tracking-tighter text-[#003087] leading-none">Pay<span class="text-[#0079c1]">Pal</span></span>
+                  <span class="italic font-bold text-base sm:text-lg tracking-tighter text-[#003087] leading-none">Pay<span class="text-[#0079c1]">Pal</span></span>
                 </button>
               </div>
 
@@ -613,7 +543,7 @@
                     <path d="M5.5 4.5h8c3 0 5 1.8 5 4.5 0 2-1.1 3.6-3 4.2l3.5 6.3h-3.8l-3.1-5.7H9v5.7H5.5V4.5zm3.5 3v3.4h4.1c1.2 0 2-.7 2-1.7S14.3 7.5 13.1 7.5H9z" fill="#FFFFFF"/>
                   </svg>
                 </span>
-                <span class="font-black text-xs sm:text-sm tracking-tight text-gray-900">Revolut</span>
+                <span class="font-bold text-xs sm:text-sm tracking-tight text-gray-900">Revolut</span>
                 <span class="bg-[#0666eb] text-white px-1.5 py-0.5 rounded text-[10px] font-extrabold leading-none">Pay</span>
               </span>
             </button>
@@ -633,7 +563,7 @@
             <!-- Local Redirect / Wallet Method Header Banner (Shown when Revolut / Amazon is selected) -->
             <div id="localMethodCallout" class="hidden bg-emerald-50/50 border border-emerald-200 rounded-xl p-3 space-y-1">
               <div class="flex items-center justify-between gap-2">
-                <span id="localMethodTitle" class="text-xs font-extrabold text-gray-900">⚡ Revolut Pay</span>
+                <span id="localMethodTitle" class="text-xs font-extrabold text-gray-900">Revolut Pay</span>
                 <span id="localMethodBadge" class="text-[11px] font-bold text-emerald-700 bg-emerald-100/80 px-2 py-0.5 rounded-full">Instant App Approval</span>
               </div>
               <p id="localMethodDesc" class="text-[11px] text-gray-600 leading-relaxed">
@@ -645,7 +575,7 @@
             <div>
               <div class="flex items-center justify-between mb-1">
                 <label for="email" class="block text-xs font-bold text-gray-700">Email Address <span class="font-normal text-gray-400">(For instant license key)</span></label>
-                <span class="px-1.5 py-0.5 rounded bg-[#00D66F]/15 border border-[#00D66F]/40 text-emerald-900 text-[10px] font-extrabold">⚡ Stripe Link 1-Click</span>
+                <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-[#00D66F]/15 border border-[#00D66F]/40 text-emerald-900 text-[10px] font-extrabold"><svg class="w-2.5 h-2.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>Stripe Link 1-Click</span>
               </div>
               <input type="email" id="email" name="email" required placeholder="you@example.com" autocomplete="email" inputmode="email"
                 class="w-full p-2.5 sm:p-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all">
@@ -735,18 +665,27 @@
 
           <!-- COMPLETE ORDER GREEN BUTTON WITH PADLOCK VECTOR ICON -->
           <div class="pt-3">
-            <button type="submit" id="submitBtn" class="btn-purchase w-full h-13 py-3.5 px-6 rounded-full text-white font-black text-base sm:text-lg tracking-wide flex items-center justify-center gap-2.5 cursor-pointer shadow-lg">
-              <svg class="w-5 h-5 text-white fill-current shrink-0" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
-              </svg>
-              <span id="submitBtnText" class="uppercase">PURCHASE SECURELY</span>
+            <button type="submit" id="submitBtn" class="btn-purchase btn-async-grid w-full h-13 py-3.5 px-6 rounded-full text-white font-bold text-base sm:text-lg tracking-wide cursor-pointer shadow-lg">
+              <span class="btn-state-idle flex items-center justify-center gap-2.5">
+                <svg class="w-5 h-5 text-white fill-current shrink-0" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+                </svg>
+                <span id="submitBtnText" class="uppercase">PURCHASE SECURELY</span>
+              </span>
+              <span class="btn-state-loading flex items-center justify-center gap-2.5">
+                <svg class="animate-spin h-5 w-5 text-white shrink-0" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span class="uppercase tracking-wide font-bold">PROCESSING SECURE PAYMENT...</span>
+              </span>
             </button>
           </div>
 
           <!-- Point-of-Anxiety Micro-Trust Strip Within 28px of Submit Button (CHK-09) -->
           <div class="bg-[#f0fdf4] border border-[#bbf7d0] rounded-xl px-3.5 py-2.5 text-center space-y-1">
             <div class="text-xs font-extrabold text-emerald-900 flex items-center justify-center gap-1.5">
-              <span>🛡️ 14-Day 100% Money-Back Guarantee — Cancel Anytime in 1-Click</span>
+              <svg class="w-3.5 h-3.5 text-emerald-700 shrink-0" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg><span>14-Day 100% Money-Back Guarantee — Cancel Anytime in 1-Click</span>
             </div>
             <div class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[11px] text-gray-600 font-medium">
               <span class="inline-flex items-center gap-1">
@@ -784,9 +723,6 @@
   <div id="discountModal" class="hidden-modal fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md">
     <div class="modal-card bg-[#141820] text-white rounded-2xl max-w-2xl sm:max-w-3xl w-full p-6 sm:p-8 relative shadow-2xl border border-emerald-500/25 overflow-hidden">
       
-      <!-- Ambient emerald decorative glow -->
-      <div class="absolute -top-24 -left-24 w-56 h-56 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="absolute -bottom-24 -right-24 w-56 h-56 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
       <!-- Close Button 'X' -->
       <button type="button" onclick="closeDiscountModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white p-1.5 rounded-lg transition-colors cursor-pointer z-20" aria-label="Close dialog">
@@ -799,13 +735,13 @@
           
           <!-- Pill Badge -->
           <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold text-emerald-400 bg-emerald-500/15 border border-emerald-500/30">
-            <span>⚡</span>
+            <span class="rack-led is-live shrink-0" aria-hidden="true"></span>
             <span>SPECIAL INTRODUCTORY OFFER</span>
           </div>
 
           <!-- Headline -->
-          <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">
-            Get 1st Month of <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">SWEEPR VPN</span> for Just <span id="modalIntroPriceText" data-price="introStr">£1.99</span>
+          <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight leading-tight">
+            Get 1st Month of <span class="text-emerald-400">SWEEPR VPN</span> for Just <span id="modalIntroPriceText" class="tabular-nums" data-price="introStr">£1.99</span>
           </h2>
 
           <!-- 3 Checkmarks with Emerald Accent -->
@@ -835,7 +771,7 @@
             <div>
               <span class="text-xs text-gray-400 block">1st Month Only</span>
               <div class="flex items-baseline gap-2">
-                <span id="modalIntroBigPrice" class="text-2xl sm:text-3xl font-black text-emerald-400" data-price="introStr">£1.99</span>
+                <span id="modalIntroBigPrice" class="text-2xl sm:text-3xl font-bold text-emerald-400 tabular-nums" data-price="introStr">£1.99</span>
                 <span id="modalRegularStrikePrice" class="text-xs text-gray-400 line-through">Regular <span data-price="monthlyStr">£12.49</span></span>
               </div>
             </div>
@@ -847,7 +783,7 @@
 
           <!-- Brand Button with Padlock -->
           <div>
-            <button type="button" onclick="activateDiscountOffer()" class="w-full py-3.5 px-6 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-black text-sm sm:text-base tracking-wide flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-emerald-500/25 transition-all transform hover:-translate-y-0.5">
+            <button type="button" onclick="activateDiscountOffer()" class="w-full py-3.5 px-6 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-bold text-sm sm:text-base tracking-wide flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-emerald-500/25 transition-all transform hover:-translate-y-0.5">
               <svg class="w-4 h-4 text-white fill-current shrink-0" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
               </svg>
@@ -861,11 +797,11 @@
               Introductory <span data-price="introSavingsStr">£10.50</span> savings applies strictly to month 1. Auto-renews at standard <span data-price="monthlyStr">£12.49</span>/month unless cancelled.
             </p>
             <div class="flex items-center justify-between gap-2 text-[10px] sm:text-[11px] text-emerald-400/90 font-medium pt-1 px-1">
-              <span class="whitespace-nowrap flex items-center gap-1">🔒 256-Bit SSL</span>
+              <span class="whitespace-nowrap flex items-center gap-1"><svg class="w-3 h-3 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>256-Bit SSL</span>
               <span class="text-gray-600">•</span>
-              <span class="whitespace-nowrap flex items-center gap-1">⚡ Instant Delivery</span>
+              <span class="whitespace-nowrap flex items-center gap-1"><svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>Instant Delivery</span>
               <span class="text-gray-600">•</span>
-              <span class="whitespace-nowrap flex items-center gap-1">🛡️ 14-Day Refund</span>
+              <span class="whitespace-nowrap flex items-center gap-1"><svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>14-Day Refund</span>
             </div>
           </div>
 
@@ -883,20 +819,20 @@
                   <div class="flex flex-col items-center gap-2 w-full">
                     <img src="/logo-mint-glass.svg" width="16" height="16" class="w-4 h-4 rounded" alt="SWEEPR VPN">
                     <div class="w-full py-1 rounded bg-emerald-500/15 border border-emerald-500/30 flex flex-col items-center text-emerald-400">
-                      <span class="text-[9px] leading-none">🛡️</span>
+                      <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2L4 5v6c0 5.25 3.4 10.15 8 11.35 4.6-1.2 8-6.1 8-11.35V5l-8-3z"/></svg>
                       <span class="text-[6px] font-bold mt-0.5">VPN</span>
                     </div>
                     <div class="w-full py-1 rounded flex flex-col items-center text-slate-400 relative">
                       <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 absolute top-0.5 right-1.5"></span>
-                      <span class="text-[9px] leading-none">📶</span>
+                      <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01M4.93 12.93c3.904-3.905 10.236-3.905 14.141 0"/></svg>
                       <span class="text-[6px] font-semibold mt-0.5">Wi-Fi</span>
                     </div>
                     <div class="w-full py-1 rounded flex flex-col items-center text-slate-400">
-                      <span class="text-[9px] leading-none">👤</span>
+                      <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                       <span class="text-[6px] font-semibold mt-0.5">Acct</span>
                     </div>
                   </div>
-                  <div class="text-[8px] text-slate-500">🌙</div>
+                  <div class="text-[7px] font-mono text-slate-400">DARK</div>
                 </div>
 
                 <!-- Column 2: Center Location Picker & Smart-TV Shield (#view-home) -->
@@ -904,7 +840,7 @@
                   <div>
                     <div class="flex items-center justify-between mb-1">
                       <div>
-                        <div class="text-[8.5px] font-black text-white leading-none">Select a Location</div>
+                        <div class="text-[8.5px] font-bold text-white leading-none">Select a Location</div>
                         <div class="text-[6.5px] text-slate-400 mt-0.5">Choose a Country</div>
                       </div>
                       <span class="text-[6px] px-1 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold">PRO</span>
@@ -912,13 +848,13 @@
 
                     <!-- Quick Pick Grid (.rec-grid) -->
                     <div class="text-[6px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Quick pick</div>
-                    <div class="grid grid-cols-2 gap-1 mb-1.5">
+                    <div class="grid grid-cols-2 gap-1 mb-1.5 tabular-nums">
                       <div class="bg-emerald-500/10 border border-emerald-500/60 rounded p-1">
-                        <div class="text-[7.5px] font-extrabold text-white truncate">🇬🇧 UK</div>
+                        <div class="text-[7.5px] font-bold text-white truncate"><span class="font-mono text-emerald-300">UK</span> London</div>
                         <div class="text-[6px] text-emerald-400 font-bold">Fastest · 8ms</div>
                       </div>
                       <div class="bg-slate-800/90 border border-slate-700/70 rounded p-1">
-                        <div class="text-[7.5px] font-extrabold text-slate-200 truncate">🇸🇪 Sweden</div>
+                        <div class="text-[7.5px] font-bold text-slate-200 truncate"><span class="font-mono text-slate-400">SE</span> Sweden</div>
                         <div class="text-[6px] text-slate-400">Privacy · 19ms</div>
                       </div>
                     </div>
@@ -926,22 +862,22 @@
                     <!-- Smart-TV Tracker Shield Alert (.alert) -->
                     <div class="bg-amber-500/10 border border-amber-500/30 rounded p-1 mb-1.5 flex items-center justify-between gap-1">
                       <div class="truncate">
-                        <div class="text-[6.5px] font-bold text-amber-200 truncate">📺 TV Shield Active</div>
+                        <div class="text-[6.5px] font-bold text-amber-200 truncate">TV Shield Active</div>
                         <div class="text-[5.5px] text-amber-300/80 truncate">Samsung ACR blocked</div>
                       </div>
-                      <span class="text-[6px] px-1 py-0.5 rounded bg-emerald-500 text-slate-950 font-black flex-shrink-0">ON</span>
+                      <span class="text-[6px] px-1 py-0.5 rounded bg-emerald-500 text-slate-950 font-bold flex-shrink-0">ON</span>
                     </div>
                   </div>
 
                   <!-- Country Rows (#locList) -->
-                  <div class="space-y-1">
+                  <div class="space-y-1 tabular-nums">
                     <div class="flex items-center justify-between bg-slate-800/80 border border-emerald-500/40 rounded px-1.5 py-0.5 text-[7px]">
-                      <span class="font-bold text-white truncate">🇬🇧 United Kingdom</span>
-                      <span class="text-emerald-400 font-mono text-[6.5px]">8ms ●</span>
+                      <span class="font-bold text-white truncate"><span class="font-mono text-emerald-300 mr-1">UK</span>United Kingdom</span>
+                      <span class="text-emerald-400 font-mono text-[6.5px]">8ms</span>
                     </div>
                     <div class="flex items-center justify-between bg-slate-800/40 rounded px-1.5 py-0.5 text-[7px]">
-                      <span class="font-medium text-slate-300 truncate">🇺🇸 United States</span>
-                      <span class="text-emerald-400 font-mono text-[6.5px]">24ms ●</span>
+                      <span class="font-medium text-slate-300 truncate"><span class="font-mono text-slate-400 mr-1">US</span>United States</span>
+                      <span class="text-emerald-400 font-mono text-[6.5px]">24ms</span>
                     </div>
                   </div>
                 </div>
@@ -952,15 +888,15 @@
                     <div class="w-6 h-6 rounded-full bg-emerald-400/20 border border-emerald-300/40 flex items-center justify-center mb-1 shadow-sm">
                       <img src="/logo-mint-glass.svg" width="14" height="14" class="w-3.5 h-3.5 rounded" alt="Shield">
                     </div>
-                    <div class="text-[9.5px] font-black leading-tight text-white">You're <span class="text-emerald-300">protected</span></div>
+                    <div class="text-[9.5px] font-bold leading-tight text-white">You're <span class="text-emerald-300">protected</span></div>
                     <div class="text-[6px] text-emerald-100/80 mt-0.5">London, UK • 8 ms • 4 devices</div>
                   </div>
 
                   <!-- Protected Session Timer Box (#timerBox) -->
                   <div class="w-full bg-slate-950/55 border border-emerald-300/20 rounded-md p-1.5 my-1">
                     <div class="text-[5.5px] uppercase tracking-wider text-emerald-200/80 font-bold">Protected session</div>
-                    <div class="text-[10px] font-mono font-black text-white leading-tight">01:42:18</div>
-                    <div class="text-[5.5px] text-emerald-300 font-mono">↓ 84.2 Mbps · ↑ 22.8 Mbps</div>
+                    <div class="text-[10px] font-mono font-bold text-white leading-tight tabular-nums">01:42:18</div>
+                    <div class="text-[5.5px] text-emerald-300 font-mono tabular-nums">DL 84.2 Mbps · UL 22.8 Mbps</div>
                     <div class="flex items-end justify-center gap-0.5 h-2 mt-1">
                       <span class="w-1 h-1 bg-emerald-400/70 rounded-t"></span>
                       <span class="w-1 h-1.5 bg-emerald-400/80 rounded-t"></span>
@@ -974,11 +910,11 @@
                   <!-- Active Server & Connect Pill (#connectBtn) -->
                   <div class="w-full space-y-1">
                     <div class="w-full bg-slate-950/50 border border-emerald-300/25 rounded px-1.5 py-0.5 flex items-center justify-between text-[6.5px]">
-                      <span class="font-bold text-white truncate">🇬🇧 UK · London</span>
-                      <span class="text-emerald-300 font-bold">Change ›</span>
+                      <span class="font-bold text-white truncate">UK · London</span>
+                      <span class="text-emerald-300 font-bold">Change</span>
                     </div>
-                    <div class="w-full py-1 rounded-full bg-gradient-to-r from-emerald-400 to-emerald-500 text-slate-950 font-black text-[7.5px] shadow">
-                      🛡️ Connected ✓
+                    <div class="w-full py-1 rounded-full bg-gradient-to-r from-emerald-400 to-emerald-500 text-slate-950 font-bold text-[7.5px] shadow inline-flex items-center justify-center gap-1">
+                      <span>CONNECTED</span>
                     </div>
                   </div>
                 </div>
@@ -1315,7 +1251,7 @@
       const inactiveTabCls = 'py-2 sm:py-2.5 px-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-700 font-bold text-xs sm:text-sm cursor-pointer transition-all';
       if (tabAnnual) {
         tabAnnual.className = plan === 'annual' ? activeTabCls : inactiveTabCls;
-        tabAnnual.textContent = `★ Annual — ${p.annualPerMonthStr}/mo (Save 50%)`;
+        tabAnnual.textContent = `Annual — ${p.annualPerMonthStr}/mo (Save 50%)`;
       }
       if (tabSix) {
         tabSix.className = plan === 'six_month' ? activeTabCls : inactiveTabCls;
@@ -1335,14 +1271,14 @@
     let selectedLogoMethod = 'card';
     const PAYMENT_METHOD_META = {
       revolut_pay: {
-        icon: '⚡',
+        icon: '',
         name: 'Revolut Pay',
         shortUpper: 'REVOLUT PAY',
         badge: 'Instant App Approval',
         desc: 'Enter your email below so we can send your instant license key, then click the green button to approve your auto-renewing subscription in 1 tap.'
       },
       amazon_pay: {
-        icon: '🛒',
+        icon: '',
         name: 'Amazon Pay',
         shortUpper: 'AMAZON PAY',
         badge: 'Use Your Amazon Account',
@@ -1418,7 +1354,7 @@
           const titleEl = document.getElementById('localMethodTitle');
           const badgeEl = document.getElementById('localMethodBadge');
           const descEl = document.getElementById('localMethodDesc');
-          if (titleEl) titleEl.textContent = `${meta.icon} ${meta.name}`;
+          if (titleEl) titleEl.textContent = meta.name;
           if (badgeEl) badgeEl.textContent = meta.badge;
           if (descEl) descEl.textContent = meta.desc;
         }
@@ -1905,8 +1841,8 @@
 
       const bannerTitle = document.getElementById('bannerTitle');
       const bannerSubtitle = document.getElementById('bannerSubtitle');
-      if (bannerTitle) bannerTitle.innerHTML = `Special Introductory Offer - <span class="text-emerald-400 font-black">1st Month for ${p.introStr}</span>`;
-      if (bannerSubtitle) bannerSubtitle.innerHTML = `⚡ Full Pro Access across up to 3 Devices (Desktop or Mobile). Renews at standard ${p.monthlyStr}/mo; cancel anytime in 1 click.`;
+      if (bannerTitle) bannerTitle.innerHTML = `Special Introductory Offer - <span class="text-emerald-400 font-bold">1st Month for ${p.introStr}</span>`;
+      if (bannerSubtitle) bannerSubtitle.innerHTML = `Full Pro Access across up to 3 Devices (Desktop or Mobile). Renews at standard ${p.monthlyStr}/mo; cancel anytime in 1 click.`;
 
       selectOrderPlan('monthly');
       document.getElementById('checkoutBox')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1979,7 +1915,6 @@
       const paypalBtn = document.getElementById('paypalBtn');
       const expressGPayBtn = document.getElementById('expressGPayBtn');
       const expressApplePayBtn = document.getElementById('expressApplePayBtn');
-      const originalBtnHTML = btn ? btn.innerHTML : '';
       const originalPaypalHTML = paypalBtn ? paypalBtn.innerHTML : '';
       const originalGPayHTML = expressGPayBtn ? expressGPayBtn.innerHTML : '';
       const originalApplePayHTML = expressApplePayBtn ? expressApplePayBtn.innerHTML : '';
@@ -1987,8 +1922,7 @@
       const restoreButtons = () => {
         if (btn) {
           btn.disabled = false;
-          btn.classList.remove('opacity-80', 'cursor-not-allowed');
-          btn.innerHTML = originalBtnHTML;
+          btn.classList.remove('is-loading', 'opacity-80', 'cursor-not-allowed');
         }
         if (paypalBtn) {
           paypalBtn.disabled = false;
@@ -2006,14 +1940,7 @@
 
       if (btn) {
         btn.disabled = true;
-        btn.classList.add('opacity-80', 'cursor-not-allowed');
-        btn.innerHTML = `
-          <svg class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-          </svg>
-          <span class="uppercase tracking-wide font-black">Processing Secure Payment...</span>
-        `;
+        btn.classList.add('is-loading', 'opacity-80', 'cursor-not-allowed');
       }
       if (paypalBtn) paypalBtn.disabled = true;
       if (expressGPayBtn) expressGPayBtn.disabled = true;

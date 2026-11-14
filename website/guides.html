@@ -36,10 +36,10 @@
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://sweeprvpn.com/"},{"@type":"ListItem","position":2,"name":"Smart-TV ACR Spying Blocklists & Home Wi-Fi Security Guides","item":"https://sweeprvpn.com/guides"}]}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How can I block Samsung, LG, Roku, and Fire TV ACR tracking without breaking Netflix?","acceptedAnswer":{"@type":"Answer","text":"Use SWEEPR VPN with In-Tunnel DNS (10.66.0.1) and the SWEEPR Wi-Fi Radar & Smart-TV Shield Add-On, which sinks ACR screenshot telemetry endpoints (such as gpm.samsungqbe.com and lgtvcommon.com) while preserving 4K CDN video delivery."}},{"@type":"Question","name":"How do I scan my home Wi-Fi for unknown devices or hidden cameras?","acceptedAnswer":{"@type":"Answer","text":"Download the featherlight SWEEPR VPN desktop app and run the Free 30-Second Home Wi-Fi Scanner (no credit card required) to inspect local ARP tables, MAC OUI vendors, and mDNS broadcasts."}}]}</script>
   <style>
-    :root { --bg:#070b14; --card:#0f172a; --border:#1e293b; --text:#f8fafc; --muted:#94a3b8; --accent:#10b981; --accent2:#38bdf8; }
+    :root { --bg:#111315; --card:#181b1f; --border:#262b33; --text:#f3f4f6; --muted:#9ca3af; --accent:#10b981; --accent2:#34d399; }
     * { box-sizing:border-box; }
     body { margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; background:var(--bg); color:var(--text); line-height:1.68; }
-    header { border-bottom:1px solid var(--border); background:rgba(7,11,20,0.92); position:sticky; top:0; z-index:20; backdrop-filter:blur(10px); }
+    header { border-bottom:1px solid var(--border); background:rgba(17,19,21,0.95); position:sticky; top:0; z-index:20; backdrop-filter:blur(10px); }
     .nav { max-width:1100px; margin:0 auto; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
     .brand { font-weight:800; font-size:1.15rem; color:var(--text); text-decoration:none; }
     .brand span { color:var(--accent); }
@@ -54,7 +54,7 @@
     h2 { font-size:1.45rem; margin:34px 0 12px; color:#e2e8f0; }
     h3 { font-size:1.05rem; margin:0 0 6px; color:#f1f5f9; }
     .lead { font-size:1.12rem; color:var(--muted); max-width:880px; margin-bottom:26px; }
-    .cta-strip { background:linear-gradient(135deg,#0f172a,#064e3b); border:1px solid rgba(16,185,129,0.4); border-radius:14px; padding:22px; margin:26px 0; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; }
+    .cta-strip { background:#181b1f; border:1px solid #262b33; border-radius:14px; padding:22px; margin:26px 0; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; }
     .grid-cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(310px,1fr)); gap:14px; margin:20px 0; }
     .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:18px; transition:border-color 0.15s; }
     .card:hover { border-color:var(--accent); }
@@ -65,6 +65,12 @@
     .hub-tab.active { border-color:var(--accent); color:var(--accent); background:rgba(16,185,129,0.1); }
     footer { border-top:1px solid var(--border); padding:32px 20px; text-align:center; color:var(--muted); font-size:0.88rem; }
     footer a { color:var(--accent2); text-decoration:none; margin:0 8px; }
+    .hub-telemetry { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; padding:8px 13px; margin-bottom:18px; background:#181b1f; border:1px solid #262b33; border-radius:10px; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:0.76rem; color:var(--muted); font-variant-numeric:tabular-nums; }
+    .hub-led { width:7px; height:7px; border-radius:999px; background:#10b981; display:inline-block; margin-right:6px; box-shadow:0 0 0 2px rgba(16,185,129,0.2); }
+    .hub-filter-wrap { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:14px 0 6px; }
+    .hub-filter-input { flex:1; min-width:240px; padding:10px 14px; border-radius:10px; border:1px solid var(--border); background:#181b1f; color:var(--text); font-size:0.92rem; outline:none; }
+    .hub-filter-input:focus { border-color:var(--accent); }
+    .hub-filter-count { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:0.78rem; color:var(--muted); font-variant-numeric:tabular-nums; }
   </style>
 </head>
 <body>
@@ -84,6 +90,10 @@
     </nav>
   </header>
   <main>
+    <div class="hub-telemetry">
+      <span><span class="hub-led"></span>GUIDES // 29 SMART-TV ACR BLOCKLISTS</span>
+      <span>10GBPS WIREGUARD &middot; RAM-ONLY TMPFS</span>
+    </div>
     <span class="badge">Home Wi-Fi Radar & Smart-TV Privacy Lab • Verified 2026</span>
     <h1>Smart-TV ACR Spying Blocklists & Home Wi-Fi Security Guides</h1>
     <p class="lead">Deep-dive engineering guides from the SWEEPR VPN Security Lab covering Smart-TV Automatic Content Recognition (ACR) domain blocklists, 30-second LAN ARP/mDNS device auditing, CGNAT port forwarding, and WireGuard cryptography.</p>
@@ -109,6 +119,10 @@
     </div>
 
     <h2>All 29 Verified Smart-TV ACR Spying Blocklists & Home Wi-Fi Security Guides</h2>
+    <div class="hub-filter-wrap">
+      <input type="search" id="hubFilterInput" class="hub-filter-input" placeholder="Filter 29 Smart-TV ACR & Wi-Fi guides (e.g. Samsung, LG, Roku)..." aria-label="Filter hub articles" />
+      <span id="hubFilterCount" class="hub-filter-count"></span>
+    </div>
     <div class="grid-cards">
       <div class="card">
         <a href="/guides/audit-home-iot-botnet-vulnerabilities">Audit Smart Home Plugs, IP Cameras & IoT Devices for Botnets in 30 Seconds</a>
@@ -248,5 +262,24 @@
       <a href="/privacy">Privacy Policy</a>
     </p>
   </footer>
+  <script>
+    (function() {
+      const input = document.getElementById('hubFilterInput');
+      const countEl = document.getElementById('hubFilterCount');
+      const cards = Array.from(document.querySelectorAll('.grid-cards > .card'));
+      function update() {
+        const q = (input && input.value || '').trim().toLowerCase();
+        let shown = 0;
+        for (const c of cards) {
+          const hit = !q || c.textContent.toLowerCase().includes(q);
+          c.style.display = hit ? '' : 'none';
+          if (hit) shown++;
+        }
+        if (countEl) countEl.textContent = shown + ' / ' + cards.length + ' shown';
+      }
+      if (input) input.addEventListener('input', update);
+      update();
+    })();
+  </script>
 </body>
 </html>

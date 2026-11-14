@@ -115,40 +115,50 @@
   </nav>
 
   <main class="flex-1 pt-28 pb-16 px-6 max-w-4xl mx-auto w-full">
-    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-extrabold uppercase tracking-wider mb-4">
-      <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+    <div class="rack-telemetry-bar mb-5">
+      <span class="rack-telemetry-segment"><span class="rack-led"></span>CANARY // CRYPTOGRAPHIC-LEDGER</span>
+      <span class="rack-telemetry-segment">SHA-256 SIGNED</span>
+      <span class="rack-telemetry-segment">100% TMPFS RAM-ONLY</span>
+    </div>
+    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-mono font-bold uppercase tracking-wider mb-4">
+      <span class="rack-led"></span>
       Status: Active &amp; Verified &bull; November 2026
     </div>
-    <h1 class="text-3xl sm:text-4xl font-black mb-4 text-gray-900">Cryptographic Warrant Canary &amp; Transparency Report</h1>
+    <h1 class="text-3xl sm:text-4xl font-bold mb-4 text-gray-900">Cryptographic Warrant Canary &amp; Transparency Report</h1>
     <p class="text-base text-gray-600 mb-8 leading-relaxed">
       Privacy should rely on verifiable mathematics and RAM-only architecture rather than corporate promises. Below is SWEEPR VPN's live cryptographic Warrant Canary, transparency ledger, and reproducible binary verification statement.
     </p>
 
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-      <div class="p-4 rounded-2xl bg-white border border-emerald-200 shadow-sm text-center">
-        <div class="text-3xl font-black text-emerald-600">0</div>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8 tabular-nums">
+      <div class="rack-card p-4 rounded-2xl bg-white border border-emerald-200 shadow-sm text-center">
+        <div class="text-3xl font-bold text-emerald-600">0</div>
         <div class="text-xs font-bold text-gray-700 mt-1">Secret Subpoenas / NSLs</div>
       </div>
-      <div class="p-4 rounded-2xl bg-white border border-emerald-200 shadow-sm text-center">
-        <div class="text-3xl font-black text-emerald-600">0</div>
+      <div class="rack-card p-4 rounded-2xl bg-white border border-emerald-200 shadow-sm text-center">
+        <div class="text-3xl font-bold text-emerald-600">0</div>
         <div class="text-xs font-bold text-gray-700 mt-1">Gag Orders or Backdoors</div>
       </div>
-      <div class="p-4 rounded-2xl bg-white border border-emerald-200 shadow-sm text-center">
-        <div class="text-3xl font-black text-emerald-600">0</div>
+      <div class="rack-card p-4 rounded-2xl bg-white border border-emerald-200 shadow-sm text-center">
+        <div class="text-3xl font-bold text-emerald-600">0</div>
         <div class="text-xs font-bold text-gray-700 mt-1">Server Seizures</div>
       </div>
-      <div class="p-4 rounded-2xl bg-white border border-emerald-200 shadow-sm text-center">
-        <div class="text-3xl font-black text-emerald-600">100%</div>
+      <div class="rack-card p-4 rounded-2xl bg-white border border-emerald-200 shadow-sm text-center">
+        <div class="text-3xl font-bold text-emerald-600">100%</div>
         <div class="text-xs font-bold text-gray-700 mt-1">RAM-Only WireGuard Nodes</div>
       </div>
     </div>
 
     <section class="mb-10">
-      <h2 class="text-xl font-extrabold text-gray-900 mb-3">1. Signed Warrant Canary Statement (November 2026)</h2>
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+        <h2 class="text-xl font-bold text-gray-900">1. Signed Warrant Canary Statement (November 2026)</h2>
+        <button type="button" onclick="copyCanaryStatement(this)" class="copy-spring-btn">
+          <span class="copy-icon-stack"><svg class="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="copy-label">Copy Signed Canary &amp; SHA-256</span>
+        </button>
+      </div>
       <p class="text-sm text-gray-600 mb-3">
         The following machine-readable statement is updated at the start of every calendar month. If any line below is ever removed or goes un-updated for more than 45 days, assume that condition has changed:
       </p>
-      <pre class="bg-slate-950 text-emerald-300 p-5 rounded-2xl text-xs font-mono overflow-x-auto border border-slate-800 leading-relaxed">-----BEGIN SWEEPR VPN SIGNED WARRANT CANARY-----
+      <pre id="canaryPreBlock" class="bg-[#111315] text-emerald-300 p-5 rounded-xl text-xs font-mono overflow-x-auto border border-[#262B33] leading-relaxed sweepr-pre-wrap">-----BEGIN SWEEPR VPN SIGNED WARRANT CANARY-----
 Statement-Date: 2026-11-09T00:00:00Z
 Valid-Through: 2026-12-15T00:00:00Z
 Domain: sweeprvpn.com
@@ -232,5 +242,22 @@ Canary-Statement-SHA256:
     </div>
     <p>&copy; 2026 SWEEPR VPN Inc. All rights reserved.</p>
   </footer>
+  <script>
+    function copyCanaryStatement(btn) {
+      const pre = document.getElementById('canaryPreBlock');
+      if (!pre || !navigator.clipboard) return;
+      navigator.clipboard.writeText(pre.innerText).then(() => {
+        if (!btn) return;
+        const lbl = btn.querySelector('.copy-label');
+        if (lbl) lbl.textContent = 'Copied SHA-256 Statement';
+        btn.classList.add('is-copied');
+        clearTimeout(btn._t);
+        btn._t = setTimeout(() => {
+          btn.classList.remove('is-copied');
+          if (lbl) lbl.textContent = 'Copy Signed Canary & SHA-256';
+        }, 1800);
+      }).catch(() => {});
+    }
+  </script>
 </body>
 </html>

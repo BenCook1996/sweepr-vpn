@@ -171,7 +171,7 @@
           <div id="navDropdownMenu" class="hidden absolute left-0 md:left-1/2 md:-translate-x-1/2 mt-2 w-[340px] sm:w-[420px] bg-white/95 backdrop-blur-xl border border-gray-200/90 rounded-2xl shadow-2xl p-2.5 z-50 transition-all">
             <div class="grid grid-cols-1 gap-1.5">
               <!-- Tile 1: SWEEPR VPN vs Total VPN -->
-              <a href="/vs/totalvpn" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
+              <a href="/alternatives/totalvpn" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
                 <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
@@ -241,7 +241,7 @@
     <div class="flex gap-2 md:gap-3 items-center">
       <div class="relative inline-block text-left" id="langDropdownContainer">
         <button type="button" id="langDropdownBtn" class="btn btn-ghost text-sm flex items-center gap-1.5 px-2.5 py-1.5 cursor-pointer font-medium text-gray-700 hover:text-emerald-600 transition-colors" aria-expanded="false" aria-label="Select Language">
-          <span class="text-base" id="currentLangFlag">🇬🇧</span>
+          <span class="font-mono text-[11px] font-bold px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200" id="currentLangFlag">GB</span>
           <span class="text-xs font-bold tracking-wide" id="currentLangCode">EN</span>
           <svg id="langDropdownChevron" class="w-3 h-3 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
@@ -250,19 +250,19 @@
         <div id="langDropdownMenu" class="hidden absolute right-0 mt-2 w-44 bg-white/95 backdrop-blur-xl border border-gray-200/90 rounded-2xl shadow-xl p-1.5 z-50 transition-all text-gray-800">
           <div class="space-y-0.5 text-xs">
             <button type="button" onclick="setLanguage('en')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 transition-colors font-medium cursor-pointer">
-              <span class="flex items-center gap-2"><span>🇬🇧</span> <span>English</span></span>
+              <span class="flex items-center gap-2"><span class="font-mono text-[10px] font-bold px-1.5 py-0.5 rounded bg-gray-100 text-gray-700">GB</span> <span>English</span></span>
               <span class="text-[10px] text-gray-400 font-mono">EN</span>
             </button>
             <button type="button" onclick="setLanguage('de')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 transition-colors font-medium cursor-pointer">
-              <span class="flex items-center gap-2"><span>🇩🇪</span> <span>Deutsch</span></span>
+              <span class="flex items-center gap-2"><span class="font-mono text-[10px] font-bold px-1.5 py-0.5 rounded bg-gray-100 text-gray-700">DE</span> <span>Deutsch</span></span>
               <span class="text-[10px] text-gray-400 font-mono">DE</span>
             </button>
             <button type="button" onclick="setLanguage('fr')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 transition-colors font-medium cursor-pointer">
-              <span class="flex items-center gap-2"><span>🇫🇷</span> <span>Français</span></span>
+              <span class="flex items-center gap-2"><span class="font-mono text-[10px] font-bold px-1.5 py-0.5 rounded bg-gray-100 text-gray-700">FR</span> <span>Français</span></span>
               <span class="text-[10px] text-gray-400 font-mono">FR</span>
             </button>
             <button type="button" onclick="setLanguage('es')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 transition-colors font-medium cursor-pointer">
-              <span class="flex items-center gap-2"><span>🇪🇸</span> <span>Español</span></span>
+              <span class="flex items-center gap-2"><span class="font-mono text-[10px] font-bold px-1.5 py-0.5 rounded bg-gray-100 text-gray-700">ES</span> <span>Español</span></span>
               <span class="text-[10px] text-gray-400 font-mono">ES</span>
             </button>
           </div>
@@ -278,11 +278,16 @@
 
   <!-- Content Container -->
   <main class="max-w-4xl mx-auto px-6 py-12 md:py-16">
+    <div class="rack-telemetry-bar mb-6">
+      <span class="rack-telemetry-segment"><span class="rack-led"></span>BENCHMARK // 2026 RENEWAL-AUDIT</span>
+      <span class="rack-telemetry-segment">0% YEAR-2 HIKE</span>
+      <span class="rack-telemetry-segment">10GBPS WIREGUARD</span>
+    </div>
     <div class="text-center mb-10">
       <div class="inline-block text-xs font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full mb-3 border border-emerald-200">
         Software Roundup
       </div>
-      <h1 class="text-3xl md:text-5xl font-black text-gray-900 tracking-tight mb-4">
+      <h1 class="text-3xl md:text-5xl font-bold text-gray-900 tracking-tight mb-4">
         The 5 Best Total VPN Alternatives in 2026
       </h1>
       <p class="text-gray-600 text-lg max-w-2xl mx-auto">
@@ -291,7 +296,7 @@
     </div>
 
     <!-- Quick Takeaways -->
-    <div class="bg-white border border-gray-200 rounded-2xl p-6 md:p-8 shadow-sm mb-8">
+    <div class="rack-card bg-white border border-gray-200 rounded-2xl p-6 md:p-8 shadow-sm mb-8">
       <h2 class="text-xl font-bold text-gray-900 mb-4">Quick Summary: Top Picks at a Glance</h2>
       <ul class="space-y-3 text-gray-700">
         <li><strong>1. SWEEPR VPN (4.9/5 ★★★★★):</strong> Best overall for fast 10Gbps WireGuard streaming, simple 1-click privacy, and home Wi-Fi protection. Featherlight native app (~3.7MB), strict zero-logs policy, free 30-second Wi-Fi device scanner, Smart-TV ACR spy blocker, native <code>.conf</code> router export, and flat pricing with zero Year-2 renewal price hikes (covers 3 devices + whole-router configs).</li>
@@ -303,24 +308,24 @@
     </div>
 
     <!-- Campaign 1: Sourced Renewal Price Truth Table (S4 + S1 Commercial Proof) -->
-    <div class="bg-white border-2 border-emerald-500/80 rounded-2xl p-6 md:p-8 shadow-md mb-12">
+    <div class="rack-card bg-white border-2 border-emerald-500/80 rounded-2xl p-6 md:p-8 shadow-sm mb-12">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
         <div>
           <span class="inline-block text-[11px] font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full mb-1.5">
             2026 Verified Billing Audit &bull; No Renewal Traps
           </span>
-          <h2 class="text-xl md:text-2xl font-black text-gray-900">Renewal Price Truth: Year-1 Intro vs. Year-2 Auto-Renewal</h2>
+          <h2 class="text-xl md:text-2xl font-bold text-gray-900">Renewal Price Truth: Year-1 Intro vs. Year-2 Auto-Renewal</h2>
         </div>
         <a href="/tools/vpn-renewal-price-checker" class="inline-flex items-center gap-1.5 text-xs font-extrabold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-3.5 py-2 rounded-xl no-underline shrink-0">
-          <span>🧮 Open 3-Year Cost Calculator</span>
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="11" x2="10" y2="11"/><line x1="14" y1="11" x2="16" y2="11"/><line x1="8" y1="15" x2="10" y2="15"/><line x1="14" y1="15" x2="16" y2="15"/></svg><span>Open 3-Year Cost Calculator</span>
           <span>&rarr;</span>
         </a>
       </div>
       <p class="text-sm text-gray-600 mb-5">
         Most big-name VPNs hook you with a cheap introductory price, then silently bill <strong>2× to 3.5× more</strong> on automatic renewal in Year 2. Here is how standard renewal pricing compares as of November 2026:
       </p>
-      <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse text-xs sm:text-sm">
+      <div class="overflow-x-auto edge-scroll-mask">
+        <table class="w-full text-left border-collapse text-xs sm:text-sm tabular-nums">
           <thead>
             <tr class="border-b-2 border-gray-200 text-[11px] uppercase tracking-wider text-gray-500 bg-gray-50">
               <th class="py-3 px-3 font-extrabold">VPN Provider</th>
@@ -333,10 +338,10 @@
           </thead>
           <tbody class="divide-y divide-gray-100 text-gray-700">
             <tr class="bg-emerald-50/70 font-semibold">
-              <td class="py-3.5 px-3 font-black text-emerald-900">SWEEPR VPN <span class="text-[10px] bg-emerald-600 text-white px-1.5 py-0.5 rounded ml-1">FLAT RATE</span></td>
+              <td class="py-3.5 px-3 font-bold text-emerald-900">SWEEPR VPN <span class="text-[10px] bg-emerald-600 text-white px-1.5 py-0.5 rounded ml-1">FLAT RATE</span></td>
               <td class="py-3.5 px-3 text-emerald-800"><span data-price="introStr">£1.99</span> 1st mo / <span data-price="annualStr">£74.99</span>/yr</td>
-              <td class="py-3.5 px-3 font-black text-emerald-700"><span data-price="annualStr">£74.99</span>/yr (£6.25/mo)</td>
-              <td class="py-3.5 px-3 font-black text-emerald-700">0% Hike (7-Day Email Notice)</td>
+              <td class="py-3.5 px-3 font-bold text-emerald-700"><span data-price="annualStr">£74.99</span>/yr (£6.25/mo)</td>
+              <td class="py-3.5 px-3 font-bold text-emerald-700">0% Hike (7-Day Email Notice)</td>
               <td class="py-3.5 px-3 text-emerald-800">✓ 1-Click Export</td>
               <td class="py-3.5 px-3 text-emerald-800">✓ Built-In + Wi-Fi Scanner</td>
             </tr>
@@ -413,7 +418,7 @@
           <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
             <span class="font-bold text-gray-800 block mb-1">Pricing</span>
             <p class="text-gray-600 mb-2">Free Wi-Fi &amp; speed scan. Full Pro access for <span data-price="annualStr">£74.99</span>/yr (Save 50%), <span data-price="sixMonthStr">£48.99</span>/6mo, or <span data-price="introStr">£1.99</span> (1st month, then <span data-price="monthlyStr">£12.49</span>/mo).</p>
-            <a href="/vs/totalvpn" class="text-emerald-600 font-semibold hover:underline">Read SWEEPR VPN vs Total VPN Comparison &rarr;</a>
+            <a href="/vs" class="text-emerald-600 font-semibold hover:underline">Explore All 2026 VPN Technical Comparisons &rarr;</a>
           </div>
         </div>
         <div class="flex gap-3">
@@ -496,8 +501,8 @@
     </div>
 
     <!-- Final Call to Action -->
-    <div class="bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-2xl p-8 md:p-12 text-center shadow-xl">
-      <h3 class="text-2xl md:text-3xl font-black mb-4">Secure your Wi-Fi in seconds today</h3>
+    <div class="bg-[#111315] border border-[#262B33] text-white rounded-2xl p-8 md:p-12 text-center shadow-sm">
+      <h3 class="text-2xl md:text-3xl font-bold mb-4">Secure your Wi-Fi in seconds today</h3>
       <p class="text-gray-300 max-w-xl mx-auto mb-8 text-base">
         Download SWEEPR VPN to scan your home Wi-Fi in under 30 seconds and keep your browsing private in one click.
       </p>

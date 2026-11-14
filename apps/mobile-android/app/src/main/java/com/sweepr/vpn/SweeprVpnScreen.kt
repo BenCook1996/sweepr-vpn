@@ -40,6 +40,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -78,6 +79,7 @@ data class WifiDiagnosticsReport(
     val isUntrustedPublicWifi: Boolean = false
 )
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SweeprVpnScreen(
     deviceId: String,
@@ -165,6 +167,7 @@ fun SweeprVpnScreen(
     var supportFeedback by remember { mutableStateOf("") }
 
     var showDeleteConfirmDialog by remember { mutableStateOf(false) }
+    var showServerSheet by remember { mutableStateOf(false) }
     var deleteReasonInput by remember { mutableStateOf("") }
 
     var updateAvailable by remember { mutableStateOf(false) }
@@ -345,7 +348,7 @@ fun SweeprVpnScreen(
             val isNotMetered = caps?.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED) == true
 
             val captiveStatus = when {
-                hasCaptive -> "⚠️ Captive Portal Intercept Detected"
+                hasCaptive -> "Captive Portal Intercept Detected"
                 isValidated -> "Validated TLS/HTTPS Route ✓"
                 else -> "Unverified Network Route"
             }
@@ -843,7 +846,7 @@ fun SweeprVpnScreen(
             challengeMatch != null -> if (requireConfirmForChallenge) { pendingChallengeToConfirm = URLDecoder.decode(challengeMatch, "UTF-8") } else { approveDesktopChallenge(URLDecoder.decode(challengeMatch, "UTF-8")) }
             trimmed.startsWith("ptk_") -> redeemPairingToken(trimmed)
             trimmed.startsWith("chk_") -> if (requireConfirmForChallenge) { pendingChallengeToConfirm = trimmed } else { approveDesktopChallenge(trimmed) }
-            else -> statusBanner = "Enter a valid QR link or token starting with ptk_ (activate this phone) or chk_ (approve Desktop)."
+            else -> statusBanner = "Enter a valid SWEEPR pairing link or activation code from your Customer Portal or Desktop App."
         }
     }
 
@@ -1059,7 +1062,7 @@ fun SweeprVpnScreen(
         val chId = pendingChallengeToConfirm ?: ""
         AlertDialog(
             onDismissRequest = { pendingChallengeToConfirm = null },
-            title = { Text("Approve Desktop Device Linking?", fontWeight = FontWeight.ExtraBold) },
+            title = { Text("Approve Desktop Device Linking?", fontWeight = FontWeight.Bold) },
             text = { Text("Only approve this request if you just scanned a QR code displayed on your own computer (${chId.take(16)}…). Approving shares your active SWEEPR VPN license slot.") },
             confirmButton = {
                 Button(onClick = {
@@ -1082,7 +1085,7 @@ fun SweeprVpnScreen(
             title = {
                 Text(
                     "Mandatory Update Required",
-                    fontWeight = FontWeight.ExtraBold
+                    fontWeight = FontWeight.Bold
                 )
             },
             text = {
@@ -1116,7 +1119,7 @@ fun SweeprVpnScreen(
             title = {
                 Text(
                     "Android VpnService Disclosure",
-                    fontWeight = FontWeight.ExtraBold
+                    fontWeight = FontWeight.Bold
                 )
             },
             text = {
@@ -1161,7 +1164,7 @@ fun SweeprVpnScreen(
         AlertDialog(
             onDismissRequest = { showDeleteConfirmDialog = false },
             icon = { Icon(Icons.Default.DeleteForever, contentDescription = null, tint = Color(0xFFEF4444)) },
-            title = { Text("Delete Account & Data?", fontWeight = FontWeight.ExtraBold) },
+            title = { Text("Delete Account & Data?", fontWeight = FontWeight.Bold) },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Text(
@@ -1193,10 +1196,90 @@ fun SweeprVpnScreen(
         )
     }
 
+    if (showServerSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { showServerSheet = false },
+            containerColor = Color(0xFF181B1F),
+            contentColor = Color.White
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 18.dp)
+                    .padding(bottom = 28.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        "Select WireGuard POP (${servers.size})",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+                    TextButton(onClick = { scope.launch { refreshServers() } }) {
+                        Text("Refresh Ping", color = Color(0xFF34D399), fontWeight = FontWeight.Bold)
+                    }
+                }
+                servers.forEach { srv ->
+                    val selected = srv.code == selectedServerCode
+                    Surface(
+                        shape = RoundedCornerShape(10.dp),
+                        color = if (selected) Color(0xFF064E3B) else Color(0xFF242931),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                selectedServerCode = srv.code
+                                prefs.edit().putString("selected_server", srv.code).apply()
+                                showServerSheet = false
+                                if (isConnected) {
+                                    requestConnectWithDisclosureCheck(srv.code)
+                                }
+                            }
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 11.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Surface(shape = RoundedCornerShape(6.dp), color = Color(0xFF111315)) {
+                                    Text(
+                                        srv.code.take(2),
+                                        style = TextStyle(fontFamily = FontFamily.Monospace, fontFeatureSettings = "tnum", fontSize = 11.sp, fontWeight = FontWeight.Bold),
+                                        color = Color(0xFF34D399),
+                                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp)
+                                    )
+                                }
+                                Text(
+                                    "${srv.country} — ${srv.city}",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+                                    color = Color.White
+                                )
+                            }
+                            Text(
+                                "${srv.pingMs} ms",
+                                style = TextStyle(fontFamily = FontFamily.Monospace, fontFeatureSettings = "tnum", fontSize = 12.sp, fontWeight = FontWeight.Bold),
+                                color = if (srv.pingMs < 40) Color(0xFF34D399) else Color(0xFFFBBF24)
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     Scaffold(
         bottomBar = {
             NavigationBar(
-                containerColor = Color(0xFF111827)
+                containerColor = Color(0xFF181B1F)
             ) {
                 NavigationBarItem(
                     selected = activeTab == 0,
@@ -1225,7 +1308,7 @@ fun SweeprVpnScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFF0B1120))
+                .background(Color(0xFF111315))
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
                 .padding(18.dp),
@@ -1251,7 +1334,7 @@ fun SweeprVpnScreen(
                             Text(
                                 "Update Available (v$latestAppVersion)",
                                 style = MaterialTheme.typography.labelLarge,
-                                fontWeight = FontWeight.ExtraBold,
+                                fontWeight = FontWeight.Bold,
                                 color = Color(0xFFA7F3D0)
                             )
                             Text(
@@ -1266,7 +1349,7 @@ fun SweeprVpnScreen(
                             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF10B981)),
                             contentPadding = PaddingValues(horizontal = 14.dp, vertical = 6.dp)
                         ) {
-                            Text("Update", color = Color(0xFF042F2E), fontWeight = FontWeight.ExtraBold)
+                            Text("Update", color = Color(0xFF042F2E), fontWeight = FontWeight.Bold)
                         }
                     }
                 }
@@ -1281,7 +1364,7 @@ fun SweeprVpnScreen(
                     Text(
                         "SWEEPR VPN",
                         style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.ExtraBold,
+                        fontWeight = FontWeight.Bold,
                         color = Color.White
                     )
                     Text(
@@ -1292,7 +1375,7 @@ fun SweeprVpnScreen(
                 }
                 Surface(
                     shape = RoundedCornerShape(999.dp),
-                    color = if (isConnected) Color(0xFF064E3B) else Color(0xFF1E293B),
+                    color = if (isConnected) Color(0xFF064E3B) else Color(0xFF242931),
                     modifier = Modifier.clickable { activeTab = 2 }
                 ) {
                     Text(
@@ -1308,10 +1391,10 @@ fun SweeprVpnScreen(
             // Status Banner
             Surface(
                 shape = RoundedCornerShape(12.dp),
-                color = Color(0xFF111827),
+                color = Color(0xFF181B1F),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .border(1.dp, Color(0xFF1E293B), RoundedCornerShape(12.dp))
+                    .border(1.dp, Color(0xFF242931), RoundedCornerShape(12.dp))
             ) {
                 Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Text(statusBanner, style = MaterialTheme.typography.bodySmall, color = Color(0xFFE2E8F0))
@@ -1322,14 +1405,41 @@ fun SweeprVpnScreen(
             when (activeTab) {
                 0 -> {
                     // ==================== TAB 0: VPN TUNNEL ====================
+                    Surface(
+                        shape = RoundedCornerShape(10.dp),
+                        color = Color(0xFF181B1F),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .border(1.dp, Color(0xFF242931), RoundedCornerShape(10.dp))
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 12.dp, vertical = 8.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                "WIREGUARD 10GBPS · KILL SWITCH",
+                                style = TextStyle(fontFamily = FontFamily.Monospace, fontFeatureSettings = "tnum", fontSize = 10.5.sp, fontWeight = FontWeight.Bold),
+                                color = Color(0xFF34D399)
+                            )
+                            Text(
+                                "ACR SHIELD",
+                                style = TextStyle(fontFamily = FontFamily.Monospace, fontFeatureSettings = "tnum", fontSize = 10.5.sp, fontWeight = FontWeight.Bold),
+                                color = Color(0xFF94A3B8)
+                            )
+                        }
+                    }
+
                     Card(
-                        colors = CardDefaults.cardColors(containerColor = Color(0xFF111827)),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFF181B1F)),
                         shape = RoundedCornerShape(20.dp),
                         modifier = Modifier
                             .fillMaxWidth()
                             .border(
                                 1.dp,
-                                if (isConnected) Color(0xFF10B981) else Color(0xFF1E293B),
+                                if (isConnected) Color(0xFF10B981) else Color(0xFF242931),
                                 RoundedCornerShape(20.dp)
                             )
                     ) {
@@ -1346,15 +1456,20 @@ fun SweeprVpnScreen(
                                     .size(132.dp)
                                     .clip(CircleShape)
                                     .background(
-                                        Brush.radialGradient(
-                                            colors = if (isConnected) {
-                                                listOf(Color(0xFF10B981), Color(0xFF047857))
-                                            } else if (isConnecting) {
-                                                listOf(Color(0xFFF59E0B), Color(0xFFB45309))
-                                            } else {
-                                                listOf(Color(0xFF334155), Color(0xFF1E293B))
-                                            }
-                                        )
+                                        when {
+                                            isConnected -> Color(0xFF059669)
+                                            isConnecting -> Color(0xFFD97706)
+                                            else -> Color(0xFF242931)
+                                        }
+                                    )
+                                    .border(
+                                        1.5.dp,
+                                        when {
+                                            isConnected -> Color(0xFF34D399)
+                                            isConnecting -> Color(0xFFFBBF24)
+                                            else -> Color(0xFF333B47)
+                                        },
+                                        CircleShape
                                     )
                                     .clickable(enabled = !isConnecting) {
                                         if (isConnected) {
@@ -1379,24 +1494,40 @@ fun SweeprVpnScreen(
                                             else -> "TAP TO\nCONNECT"
                                         },
                                         color = Color.White,
-                                        fontWeight = FontWeight.ExtraBold,
+                                        fontWeight = FontWeight.Bold,
                                         fontSize = 12.sp,
                                         textAlign = TextAlign.Center
                                     )
                                 }
                             }
 
-                            Text(
-                                text = "${currentServer.flag} ${currentServer.city}, ${currentServer.country}",
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.White
-                            )
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Surface(
+                                    shape = RoundedCornerShape(6.dp),
+                                    color = Color(0xFF242931)
+                                ) {
+                                    Text(
+                                        text = currentServer.code.take(2),
+                                        style = TextStyle(fontFamily = FontFamily.Monospace, fontFeatureSettings = "tnum", fontSize = 11.sp, fontWeight = FontWeight.Bold),
+                                        color = Color(0xFF34D399),
+                                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                                    )
+                                }
+                                Text(
+                                    text = "${currentServer.city}, ${currentServer.country}",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White
+                                )
+                            }
 
                             if (isConnected) {
                                 Text(
                                     text = "Session ${formatDuration(elapsedSec)} • Tunnel IP ${tunnelState.assignedIp.ifBlank { "10.64.0.2" }}",
-                                    style = MaterialTheme.typography.labelMedium,
+                                    style = TextStyle(fontFamily = FontFamily.Monospace, fontFeatureSettings = "tnum", fontSize = 12.sp, fontWeight = FontWeight.Medium),
                                     color = Color(0xFF6EE7B7)
                                 )
                                 Row(
@@ -1434,7 +1565,7 @@ fun SweeprVpnScreen(
                             } else {
                                 Text(
                                     text = "WireGuard® 10Gbps • ${currentServer.pingMs} ms latency • Zero-Logs",
-                                    style = MaterialTheme.typography.bodySmall,
+                                    style = TextStyle(fontFeatureSettings = "tnum", fontSize = 12.sp),
                                     color = Color(0xFF94A3B8)
                                 )
                             }
@@ -1443,7 +1574,7 @@ fun SweeprVpnScreen(
 
                     // Server Picker Card
                     Card(
-                        colors = CardDefaults.cardColors(containerColor = Color(0xFF111827)),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFF181B1F)),
                         shape = RoundedCornerShape(16.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -1462,8 +1593,13 @@ fun SweeprVpnScreen(
                                     fontWeight = FontWeight.Bold,
                                     color = Color.White
                                 )
-                                IconButton(onClick = { scope.launch { refreshServers() } }) {
-                                    Icon(Icons.Default.Refresh, contentDescription = "Refresh Latency", tint = Color(0xFF34D399))
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    TextButton(onClick = { showServerSheet = true }) {
+                                        Text("Quick Drawer", style = MaterialTheme.typography.labelSmall, color = Color(0xFF34D399), fontWeight = FontWeight.Bold)
+                                    }
+                                    IconButton(onClick = { scope.launch { refreshServers() } }) {
+                                        Icon(Icons.Default.Refresh, contentDescription = "Refresh Latency", tint = Color(0xFF34D399))
+                                    }
                                 }
                             }
 
@@ -1471,7 +1607,7 @@ fun SweeprVpnScreen(
                                 val selected = srv.code == selectedServerCode
                                 Surface(
                                     shape = RoundedCornerShape(10.dp),
-                                    color = if (selected) Color(0xFF064E3B) else Color(0xFF1E293B),
+                                    color = if (selected) Color(0xFF064E3B) else Color(0xFF242931),
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .clickable {
@@ -1487,17 +1623,29 @@ fun SweeprVpnScreen(
                                         horizontalArrangement = Arrangement.SpaceBetween,
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
-                                        Text(
-                                            "${srv.flag}  ${srv.country} — ${srv.city}",
-                                            style = MaterialTheme.typography.bodyMedium,
-                                            fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
-                                            color = Color.White
-                                        )
+                                        Row(
+                                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Surface(shape = RoundedCornerShape(6.dp), color = Color(0xFF111315)) {
+                                                Text(
+                                                    srv.code.take(2),
+                                                    style = TextStyle(fontFamily = FontFamily.Monospace, fontFeatureSettings = "tnum", fontSize = 11.sp, fontWeight = FontWeight.Bold),
+                                                    color = Color(0xFF34D399),
+                                                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                                                )
+                                            }
+                                            Text(
+                                                "${srv.country} — ${srv.city}",
+                                                style = MaterialTheme.typography.bodyMedium,
+                                                fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+                                                color = Color.White
+                                            )
+                                        }
                                         Text(
                                             "${srv.pingMs} ms",
-                                            style = MaterialTheme.typography.labelSmall,
-                                            color = if (srv.pingMs < 40) Color(0xFF34D399) else Color(0xFFFBBF24),
-                                            fontWeight = FontWeight.Bold
+                                            style = TextStyle(fontFamily = FontFamily.Monospace, fontFeatureSettings = "tnum", fontSize = 12.sp, fontWeight = FontWeight.Bold),
+                                            color = if (srv.pingMs < 40) Color(0xFF34D399) else Color(0xFFFBBF24)
                                         )
                                     }
                                 }
@@ -1507,7 +1655,7 @@ fun SweeprVpnScreen(
 
                     // LAN Bypass Quick Toggle
                     Card(
-                        colors = CardDefaults.cardColors(containerColor = Color(0xFF111827)),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFF181B1F)),
                         shape = RoundedCornerShape(14.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -1548,7 +1696,7 @@ fun SweeprVpnScreen(
                     var intruderBlocked by remember { mutableStateOf(prefs.getBoolean("intruder_blocked", false)) }
 
                     Card(
-                        colors = CardDefaults.cardColors(containerColor = Color(0xFF111827)),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFF181B1F)),
                         shape = RoundedCornerShape(16.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -1571,7 +1719,7 @@ fun SweeprVpnScreen(
                                     scope.launch { wifiReport = scanAndroidNetworkDiagnostics() }
                                     statusBanner = "Airbnb & Home Wi-Fi Camera Check: 0 hidden RTSP cameras found ✓"
                                 }) {
-                                    Text("📷 Airbnb Scan")
+                                    Text("Airbnb Scan")
                                 }
                             }
 
@@ -1587,7 +1735,7 @@ fun SweeprVpnScreen(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Column(modifier = Modifier.weight(1f)) {
-                                    Text("🔔 Doorbell Mode for Wi-Fi", fontWeight = FontWeight.Bold, color = Color.White)
+                                    Text("Doorbell Mode for Wi-Fi", fontWeight = FontWeight.Bold, color = Color.White)
                                     Text(
                                         "Instant alert when an unrecognized device joins your Wi-Fi",
                                         style = MaterialTheme.typography.bodySmall,
@@ -1610,7 +1758,7 @@ fun SweeprVpnScreen(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Column(modifier = Modifier.weight(1f)) {
-                                    Text("🛏️ Kids Bedtime Pause", fontWeight = FontWeight.Bold, color = Color.White)
+                                    Text("Kids Bedtime Pause", fontWeight = FontWeight.Bold, color = Color.White)
                                     Text(
                                         "Pauses gaming consoles (PS5, Switch, Xbox) & tablets on school nights",
                                         style = MaterialTheme.typography.bodySmall,
@@ -1645,13 +1793,13 @@ fun SweeprVpnScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF059669))
                             ) {
-                                Text("📄 Copy $35 ISP Speed-Drop Refund Script", color = Color.White, fontWeight = FontWeight.Bold)
+                                Text("Copy $35 ISP Speed-Drop Refund Script", color = Color.White, fontWeight = FontWeight.Bold)
                             }
                         }
                     }
 
                     Card(
-                        colors = CardDefaults.cardColors(containerColor = Color(0xFF111827)),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFF181B1F)),
                         shape = RoundedCornerShape(16.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -1768,7 +1916,7 @@ fun SweeprVpnScreen(
                     // ==================== TAB 2: ACCOUNT, BILLING & SUPPORT ====================
                     // 1. Active License Status Card
                     Card(
-                        colors = CardDefaults.cardColors(containerColor = Color(0xFF111827)),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFF181B1F)),
                         shape = RoundedCornerShape(16.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -1795,7 +1943,7 @@ fun SweeprVpnScreen(
                             if (isPro && licenseKey.isNotBlank()) {
                                 Surface(
                                     shape = RoundedCornerShape(10.dp),
-                                    color = Color(0xFF1E293B),
+                                    color = Color(0xFF242931),
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
                                     Row(
@@ -1838,7 +1986,7 @@ fun SweeprVpnScreen(
                             playPlans.forEach { plan ->
                                 Surface(
                                     shape = RoundedCornerShape(12.dp),
-                                    color = Color(0xFF1E293B),
+                                    color = Color(0xFF242931),
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .clickable {
@@ -1857,7 +2005,7 @@ fun SweeprVpnScreen(
                                                 plan.badge,
                                                 style = MaterialTheme.typography.labelSmall,
                                                 color = Color(0xFF34D399),
-                                                fontWeight = FontWeight.ExtraBold
+                                                fontWeight = FontWeight.Bold
                                             )
                                             Text(plan.title, fontWeight = FontWeight.Bold, color = Color.White)
                                             Text(plan.subtitle, style = MaterialTheme.typography.bodySmall, color = Color(0xFF94A3B8))
@@ -1886,7 +2034,7 @@ fun SweeprVpnScreen(
 
                     // 2. License Key & Email OTP Activation Card
                     Card(
-                        colors = CardDefaults.cardColors(containerColor = Color(0xFF111827)),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFF181B1F)),
                         shape = RoundedCornerShape(16.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -1952,7 +2100,7 @@ fun SweeprVpnScreen(
 
                     // 3. Two-Way QR Device Pairing Card
                     Card(
-                        colors = CardDefaults.cardColors(containerColor = Color(0xFF111827)),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFF181B1F)),
                         shape = RoundedCornerShape(16.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -1973,14 +2121,14 @@ fun SweeprVpnScreen(
                                 )
                             }
                             Text(
-                                "Paste a Portal/Desktop pairing token (ptk_...) to unlock this phone, or enter a Desktop challenge code (chk_...) to sign in your PC.",
+                                "Paste a pairing code from sweeprvpn.com/login to unlock this phone, or scan a Desktop QR code to link your PC.",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = Color(0xFF94A3B8)
                             )
                             OutlinedTextField(
                                 value = qrPayloadInput,
                                 onValueChange = { qrPayloadInput = it },
-                                label = { Text("Pairing Token (ptk_... or chk_...)") },
+                                label = { Text("Pairing Link or Code") },
                                 singleLine = true,
                                 modifier = Modifier.fillMaxWidth()
                             )
@@ -2016,7 +2164,7 @@ fun SweeprVpnScreen(
 
                     // 4. In-App Customer Support Ticket Form
                     Card(
-                        colors = CardDefaults.cardColors(containerColor = Color(0xFF111827)),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFF181B1F)),
                         shape = RoundedCornerShape(16.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -2051,7 +2199,7 @@ fun SweeprVpnScreen(
 
                     // 5. Legal Links & Mandatory Google Play Account Deletion
                     Card(
-                        colors = CardDefaults.cardColors(containerColor = Color(0xFF111827)),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFF181B1F)),
                         shape = RoundedCornerShape(16.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {

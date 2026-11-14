@@ -200,7 +200,7 @@
           <div id="navDropdownMenu" class="hidden absolute left-0 md:left-1/2 md:-translate-x-1/2 mt-2 w-[340px] sm:w-[420px] bg-white/95 backdrop-blur-xl border border-gray-200/90 rounded-2xl shadow-2xl p-2.5 z-50 transition-all">
             <div class="grid grid-cols-1 gap-1.5">
               <!-- Tile 1: SWEEPR VPN vs Total VPN -->
-              <a href="/vs/totalvpn" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
+              <a href="/alternatives/totalvpn" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
                 <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
@@ -305,20 +305,35 @@
     </div>
   </nav>
 
-  <!-- Pricing Hero Section (sweeprcleaner.com/pricing split layout) -->
-  <main class="flex-1 pt-32 pb-16 px-6 max-w-6xl mx-auto">
+  <!-- Pricing Hero Section (Mockup 1: Instrumented Rackmount Telemetry) -->
+  <main class="flex-1 pt-24 md:pt-28 pb-16 px-6 max-w-6xl mx-auto w-full">
+    <div class="rack-telemetry-bar mb-8 justify-between" aria-label="Pricing and Network Telemetry">
+      <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+        <span class="inline-flex items-center gap-1.5 font-mono text-[11px] font-bold tracking-wider uppercase text-emerald-700">
+          <span class="rack-led"></span>
+          <span>2026 INTRODUCTORY RATE LOCKED</span>
+        </span>
+        <span class="text-gray-300" aria-hidden="true">|</span>
+        <span class="font-mono text-xs font-semibold tabular-nums text-emerald-800">0% RENEWAL HIKE</span>
+        <span class="text-gray-300" aria-hidden="true">|</span>
+        <span class="font-mono text-xs tabular-nums"><strong data-live-proof="online-pops" class="font-bold">8/8</strong> POPS ONLINE</span>
+      </div>
+      <div class="font-mono text-[11px] font-semibold tabular-nums text-amber-800" id="pricingLiveIp">
+        Your IP is currently exposed
+      </div>
+    </div>
+
     <div class="flex flex-col lg:flex-row items-start gap-12">
       
       <!-- Left Column: Value Prop & Overview -->
-      <div class="flex-1 pt-4 text-center lg:text-left">
-        <div class="flex flex-wrap items-center justify-center lg:justify-start gap-2 mb-6">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100/70 border border-emerald-200">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span>2026 Special Introductory Offer &bull; Save up to 50% &bull; 14-Day Money-Back Guarantee<span data-live-proof="online-pops" class="hidden">8/8</span></span>
+      <div class="flex-1 pt-2 text-center lg:text-left">
+        <div class="flex flex-wrap items-center justify-center lg:justify-start gap-2 mb-5">
+          <div class="rack-pill">
+            <span class="rack-led"></span>
+            <span>Save up to 50% &bull; 14-Day Money-Back Guarantee</span>
           </div>
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold text-amber-800 bg-amber-50 border border-amber-200">
-            <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-            <span id="pricingLiveIp">Your IP is currently exposed</span>
+          <div class="rack-pill !bg-amber-50 !border-amber-300 !text-amber-900">
+            <span>Zero Renewal Price Traps</span>
           </div>
         </div>
         <script>
@@ -326,13 +341,13 @@
             fetch(['', 'api', 'tools', 'network-check'].join('/')).then(function(r){return r.json();}).then(function(d){
               if (d && d.ip) {
                 var el = document.getElementById('pricingLiveIp');
-                if (el) el.textContent = 'Exposed IP: ' + d.ip + (d.country ? ' (' + d.country + ')' : '');
+                if (el) el.textContent = 'EXPOSED IP: ' + d.ip + (d.country ? ' (' + d.country + ')' : '');
               }
             }).catch(function(){});
           }
         </script>
 
-        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black mb-6 leading-tight tracking-tight text-gray-900">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight tracking-tight text-gray-900">
           Get SWEEPR VPN Pro <br>
           <span style="color: var(--accent);">All-in-One Wi-Fi &amp; Privacy Care</span>
         </h1>
@@ -363,34 +378,38 @@
         </div>
 
         <div class="flex flex-wrap items-center gap-3 justify-center lg:justify-start text-xs text-gray-500 font-medium">
-          <span class="inline-flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Windows 10/11, macOS &amp; Linux</span>
-          <span>•</span>
-          <span>⚡ 14-Day Money-Back Guarantee</span>
-          <span>•</span>
-          <span>🛡️ Cancel Anytime in 1-Click</span>
+          <span class="inline-flex items-center gap-1.5"><span class="rack-led"></span> Windows 10/11, macOS, iOS, Android &amp; Linux</span>
+          <span>&bull;</span>
+          <span class="inline-flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-emerald-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            <span>14-Day Money-Back Guarantee</span>
+          </span>
+          <span>&bull;</span>
+          <span class="inline-flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-emerald-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            <span>Cancel Anytime in 1-Click</span>
+          </span>
         </div>
       </div>
 
       <!-- Right Column: Product Pricing Card (Direct Checkout - Default Annual) -->
       <div id="order" class="w-full lg:w-[460px] shrink-0">
-        <div class="glass-card p-6 sm:p-8 relative overflow-hidden border border-emerald-100/80 shadow-2xl">
-          <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-600"></div>
-          
+        <div class="rack-card p-6 sm:p-8 relative overflow-hidden border-t-2 border-t-emerald-600">
           <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
             <div>
-              <span class="text-xs font-bold text-emerald-700 tracking-wider uppercase">Official Full License</span>
-              <h3 class="text-2xl font-black text-gray-900">SWEEPR VPN Pro</h3>
+              <span class="font-mono text-[11px] font-bold text-emerald-700 tracking-wider uppercase">Official Full License</span>
+              <h3 class="text-2xl font-bold text-gray-900">SWEEPR VPN Pro</h3>
             </div>
-            <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-black text-white bg-emerald-600 border border-emerald-700 uppercase tracking-wider shadow-sm">MOST POPULAR / BEST VALUE</span>
+            <span class="rack-pill !bg-emerald-600 !border-emerald-700 !text-white font-bold uppercase tracking-wider">MOST POPULAR / BEST VALUE</span>
           </div>
 
-          <div class="my-6 pb-6 border-b border-gray-100">
+          <div class="my-6 pb-6 border-b border-black/10">
             <div class="flex items-baseline gap-2">
-              <span class="text-5xl font-black text-gray-900" data-price="annualStr">£74.99</span>
-              <span class="text-gray-500 font-medium text-sm">per year (<span data-price="annualPerMonthStr">£6.25</span>/mo)</span>
+              <span id="heroPriceValue" class="text-5xl font-bold text-gray-900 tabular-nums" data-price="annualStr">£74.99</span>
+              <span class="text-gray-500 font-medium text-sm tabular-nums">per year (<span id="heroPerMonthValue" data-price="annualPerMonthStr">£6.25</span>/mo)</span>
             </div>
-            <p class="text-xs text-gray-500 mt-2">
-              Just <span data-price="annualPerMonthStr">£6.25</span>/month billed annually at <span data-price="annualStr">£74.99</span>. Save 50% compared to monthly. Includes all features, 14-day money-back guarantee, cancel anytime in 1 click.
+            <p class="text-xs text-gray-500 mt-2 tabular-nums">
+              Just <span data-price="annualPerMonthStr">£6.25</span>/month billed annually at <span id="heroBilledRateValue" data-price="annualStr">£74.99</span>. Save 50% compared to monthly. Includes 0% renewal hike, 14-day refund, cancel anytime in 1 click.
             </p>
           </div>
 
@@ -410,7 +429,7 @@
             </div>
             <div class="flex items-center gap-2.5 text-gray-700">
               <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-              <span>WiFiGuard Home™ Plain-English Device Scanner &amp; Airbnb Camera Detector</span>
+              <span>WiFiGuard Home&trade; Plain-English Device Scanner &amp; Airbnb Camera Detector</span>
             </div>
             <div class="flex items-center gap-2.5 text-gray-700">
               <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
@@ -418,13 +437,13 @@
             </div>
             <div class="flex items-center gap-2.5 text-gray-700">
               <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-              <span>Covers up to 10 Computers &amp; Devices per license</span>
+              <span>3 Simultaneous Devices (+ Whole-Home Router .conf)</span>
             </div>
           </div>
 
           <!-- Order CTA -->
           <div class="space-y-3 pt-2">
-            <a rel="nofollow" href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-go btn-big pulse-glow w-full justify-center gap-2">
+            <a rel="nofollow" id="heroOrderCtaBtn" href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-go btn-big w-full justify-center gap-2">
               <span>Buy Now</span>
               <svg class="arrow-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
             </a>
@@ -449,37 +468,68 @@
     </div>
 
     <!-- Feature Comparison Matrix & Plan Selector -->
-    <section id="compare-plans" class="mt-28">
-      <div class="text-center max-w-2xl mx-auto mb-10">
-        <h2 class="text-3xl font-black text-gray-900 mb-3">Compare Plans</h2>
-        <p class="text-gray-600">Select a Pro plan duration below or compare full feature capabilities in the table.</p>
+    <section id="compare-plans" class="mt-20">
+      <div class="text-center max-w-2xl mx-auto mb-8">
+        <h2 class="text-3xl font-bold text-gray-900 mb-3">Compare Plans</h2>
+        <p class="text-gray-600">Select your billing currency, preview the Wi-Fi Radar &amp; Smart-TV Shield add-on, or compare full features below.</p>
+      </div>
+
+      <!-- Instrumented Billing Control Bar (Surface 03: 7-Currency + Add-On Preview) -->
+      <div id="billingControlBar" class="rack-card p-3.5 sm:p-4 mb-8 max-w-5xl mx-auto flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+        <div class="flex flex-wrap items-center gap-1.5" role="group" aria-label="Select Currency">
+          <span class="font-mono text-[10px] font-bold uppercase tracking-wider text-gray-500 mr-1.5">CURRENCY</span>
+          <button type="button" data-currency-btn="GBP" onclick="selectPricingCurrency('GBP', this)" class="curr-pill px-2.5 py-1.5 rounded-lg font-mono text-xs font-bold border border-emerald-600 bg-emerald-600 text-white cursor-pointer transition-colors">GBP £</button>
+          <button type="button" data-currency-btn="USD" onclick="selectPricingCurrency('USD', this)" class="curr-pill px-2.5 py-1.5 rounded-lg font-mono text-xs font-bold border border-black/10 bg-black/[0.025] text-gray-700 hover:border-black/25 cursor-pointer transition-colors">USD $</button>
+          <button type="button" data-currency-btn="EUR" onclick="selectPricingCurrency('EUR', this)" class="curr-pill px-2.5 py-1.5 rounded-lg font-mono text-xs font-bold border border-black/10 bg-black/[0.025] text-gray-700 hover:border-black/25 cursor-pointer transition-colors">EUR €</button>
+          <button type="button" data-currency-btn="CAD" onclick="selectPricingCurrency('CAD', this)" class="curr-pill px-2.5 py-1.5 rounded-lg font-mono text-xs font-bold border border-black/10 bg-black/[0.025] text-gray-700 hover:border-black/25 cursor-pointer transition-colors">CAD CA$</button>
+          <button type="button" data-currency-btn="AUD" onclick="selectPricingCurrency('AUD', this)" class="curr-pill px-2.5 py-1.5 rounded-lg font-mono text-xs font-bold border border-black/10 bg-black/[0.025] text-gray-700 hover:border-black/25 cursor-pointer transition-colors">AUD A$</button>
+          <button type="button" data-currency-btn="CHF" onclick="selectPricingCurrency('CHF', this)" class="curr-pill px-2.5 py-1.5 rounded-lg font-mono text-xs font-bold border border-black/10 bg-black/[0.025] text-gray-700 hover:border-black/25 cursor-pointer transition-colors">CHF</button>
+          <button type="button" data-currency-btn="JPY" onclick="selectPricingCurrency('JPY', this)" class="curr-pill px-2.5 py-1.5 rounded-lg font-mono text-xs font-bold border border-black/10 bg-black/[0.025] text-gray-700 hover:border-black/25 cursor-pointer transition-colors">JPY ¥</button>
+        </div>
+
+        <label for="pricingWifiAddonToggle" class="flex items-center justify-between lg:justify-end gap-3 px-3.5 py-2 rounded-xl border border-black/10 bg-black/[0.025] cursor-pointer select-none">
+          <div class="flex items-center gap-2 text-xs">
+            <input type="checkbox" id="pricingWifiAddonToggle" onchange="togglePricingWifiAddon(this.checked)" class="w-4 h-4 rounded accent-emerald-600 cursor-pointer shrink-0" />
+            <span class="font-bold text-gray-900">Wi-Fi Radar &amp; Smart-TV Shield</span>
+          </div>
+          <span id="pricingAddonPriceTag" class="rack-pill tabular-nums">+ £14.99/yr</span>
+        </label>
       </div>
 
       <!-- 3-Way Plan Selector Cards (Default: Annual) -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-16 items-stretch">
         
         <!-- 1. Annual Plan (Default Selected & Highlighted) -->
-        <div id="compareCardAnnual" onclick="selectComparePlan('annual')" class="relative rounded-2xl p-6 border-2 border-emerald-500 bg-gradient-to-b from-emerald-50/70 to-white shadow-xl flex flex-col justify-between cursor-pointer transition-all transform hover:-translate-y-1">
-          <div class="absolute -top-3.5 left-1/2 transform -translate-x-1/2 z-10">
-            <span class="inline-flex items-center px-3.5 py-1 rounded-full text-[11px] font-black text-white bg-emerald-600 border border-emerald-700 uppercase tracking-wider shadow-sm whitespace-nowrap">MOST POPULAR / BEST VALUE</span>
+        <div id="compareCardAnnual" onclick="selectComparePlan('annual')" class="relative rack-card p-6 border-2 border-emerald-600 bg-white flex flex-col justify-between cursor-pointer transition-colors">
+          <div class="flex items-center justify-between mb-3">
+            <span class="rack-pill !bg-emerald-600 !border-emerald-700 !text-white font-bold uppercase tracking-wider">BEST VALUE</span>
+            <span class="rack-pill font-bold tabular-nums">Save 50%</span>
           </div>
           <div>
-            <div class="flex items-center justify-between mt-2 mb-3">
-              <span class="text-base font-black text-gray-900">Annual Plan</span>
-              <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">Save 50%</span>
-            </div>
+            <div class="text-base font-bold text-gray-900 mb-2">Annual Plan</div>
             <div class="mb-4">
               <div class="flex items-baseline gap-1">
-                <span class="text-4xl font-black text-gray-900" data-price="annualStr">£74.99</span>
+                <span id="compareAnnualPrice" class="text-4xl font-bold text-gray-900 tabular-nums" data-price="annualStr">£74.99</span>
                 <span class="text-xs font-bold text-gray-500">/year</span>
               </div>
-              <div class="text-xs font-semibold text-emerald-700 mt-1">Just <span data-price="annualPerMonthStr">£6.25</span>/month equivalent</div>
+              <div class="text-xs font-semibold text-emerald-700 mt-1 tabular-nums">Just <span id="compareAnnualSub" data-price="annualPerMonthStr">£6.25</span>/month equivalent</div>
             </div>
-            <p class="text-xs text-gray-600 mb-5 leading-relaxed">
-              Billed annually at <span data-price="annualStr">£74.99</span>/year. Maximum savings for full online privacy, faster streaming speeds, and protection across up to 3 devices (desktop or mobile).
+            <!-- Year-1 vs Year-2: 0% Renewal Hike Ledger -->
+            <div class="rack-bento-grid grid-cols-2 text-[11px] font-mono mb-4">
+              <div class="rack-bento-cell p-2">
+                <div class="text-gray-500 uppercase text-[10px]">Year-1 Rate</div>
+                <div id="annualLedgerY1" class="font-bold text-gray-900 tabular-nums mt-0.5">£74.99</div>
+              </div>
+              <div class="rack-bento-cell p-2 bg-emerald-50/50">
+                <div class="text-emerald-700 uppercase text-[10px]">Year-2+ Renewal</div>
+                <div id="annualLedgerY2" class="font-bold text-emerald-800 tabular-nums mt-0.5">£74.99 (0% Hike)</div>
+              </div>
+            </div>
+            <p class="text-xs text-gray-600 mb-5 leading-relaxed tabular-nums">
+              Billed annually at <span id="compareAnnualBilled" data-price="annualStr">£74.99</span>/year. Full Pro privacy, faster streaming speeds, and 3 simultaneous devices.
             </p>
           </div>
-          <div class="pt-4 border-t border-emerald-100">
+          <div class="pt-4 border-t border-black/10">
             <a rel="nofollow" id="compareBtnAnnual" href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-go w-full justify-center text-center font-bold text-sm py-3">
               <span>Choose Annual Plan</span>
             </a>
@@ -487,27 +537,25 @@
         </div>
 
         <!-- 2. 6-Month Plan -->
-        <div id="compareCardSixMonth" onclick="selectComparePlan('six_month')" class="relative rounded-2xl p-6 border border-gray-200 bg-white hover:border-emerald-300 shadow-sm flex flex-col justify-between cursor-pointer transition-all transform hover:-translate-y-1">
-          <div class="absolute -top-3.5 left-1/2 transform -translate-x-1/2">
-            <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-black text-teal-800 bg-teal-100 border border-teal-200 uppercase tracking-wider shadow-xs">SAVE 35%</span>
+        <div id="compareCardSixMonth" onclick="selectComparePlan('six_month')" class="relative rack-card p-6 border border-black/15 bg-white hover:border-emerald-400 flex flex-col justify-between cursor-pointer transition-colors">
+          <div class="flex items-center justify-between mb-3">
+            <span class="font-mono text-[10px] font-bold uppercase tracking-wider text-gray-500">SEMI-ANNUAL</span>
+            <span class="rack-pill font-bold tabular-nums">Save 35%</span>
           </div>
           <div>
-            <div class="flex items-center justify-between mt-2 mb-3">
-              <span class="text-base font-black text-gray-900">6-Month Plan</span>
-              <span class="text-xs font-bold text-teal-700 bg-teal-100 px-2 py-0.5 rounded-full">Save 35%</span>
-            </div>
+            <div class="text-base font-bold text-gray-900 mb-2">6-Month Plan</div>
             <div class="mb-4">
               <div class="flex items-baseline gap-1">
-                <span class="text-4xl font-black text-gray-900" data-price="sixMonthStr">£48.99</span>
+                <span id="compareSixMonthPrice" class="text-4xl font-bold text-gray-900 tabular-nums" data-price="sixMonthStr">£48.99</span>
                 <span class="text-xs font-bold text-gray-500">/6 months</span>
               </div>
-              <div class="text-xs font-semibold text-teal-700 mt-1">Just <span data-price="sixMonthPerMonthStr">£8.17</span>/month equivalent</div>
+              <div class="text-xs font-semibold text-teal-700 mt-1 tabular-nums">Just <span id="compareSixMonthSub" data-price="sixMonthPerMonthStr">£8.17</span>/month equivalent</div>
             </div>
-            <p class="text-xs text-gray-600 mb-5 leading-relaxed">
-              Billed every 6 months at <span data-price="sixMonthStr">£48.99</span>. Balanced semi-annual savings with full Pro privacy features and priority updates.
+            <p class="text-xs text-gray-600 mb-5 leading-relaxed tabular-nums">
+              Billed every 6 months at <span id="compareSixMonthBilled" data-price="sixMonthStr">£48.99</span>. Balanced semi-annual savings with full Pro privacy features across 3 devices.
             </p>
           </div>
-          <div class="pt-4 border-t border-gray-100">
+          <div class="pt-4 border-t border-black/10">
             <a rel="nofollow" id="compareBtnSixMonth" href="/order?plan=six_month" onclick="try{sessionStorage.setItem('sweepr_selected_plan','six_month')}catch(e){}" class="w-full py-3 px-4 rounded-xl border-2 border-emerald-600 text-emerald-700 hover:bg-emerald-50 text-center font-bold text-sm block transition-colors">
               <span>Choose 6-Month Plan</span>
             </a>
@@ -515,27 +563,25 @@
         </div>
 
         <!-- 3. Monthly Plan -->
-        <div id="compareCardMonthly" onclick="selectComparePlan('monthly')" class="relative rounded-2xl p-6 border border-gray-200 bg-white hover:border-emerald-300 shadow-sm flex flex-col justify-between cursor-pointer transition-all transform hover:-translate-y-1">
-          <div class="absolute -top-3.5 left-1/2 transform -translate-x-1/2">
-            <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-black text-gray-700 bg-gray-100 border border-gray-200 uppercase tracking-wider shadow-xs">FLEXIBLE</span>
+        <div id="compareCardMonthly" onclick="selectComparePlan('monthly')" class="relative rack-card p-6 border border-black/15 bg-white hover:border-emerald-400 flex flex-col justify-between cursor-pointer transition-colors">
+          <div class="flex items-center justify-between mb-3">
+            <span class="font-mono text-[10px] font-bold uppercase tracking-wider text-gray-500">FLEXIBLE</span>
+            <span class="font-mono text-[11px] font-bold text-gray-600 bg-black/[0.04] px-2 py-0.5 rounded-md">Cancel Anytime</span>
           </div>
           <div>
-            <div class="flex items-center justify-between mt-2 mb-3">
-              <span class="text-base font-black text-gray-900">Monthly Plan</span>
-              <span class="text-xs font-bold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">Cancel Anytime</span>
-            </div>
+            <div class="text-base font-bold text-gray-900 mb-2">Monthly Plan</div>
             <div class="mb-4">
               <div class="flex items-baseline gap-1">
-                <span class="text-4xl font-black text-gray-900" data-price="monthlyStr">£12.49</span>
+                <span id="compareMonthlyPrice" class="text-4xl font-bold text-gray-900 tabular-nums" data-price="monthlyStr">£12.49</span>
                 <span class="text-xs font-bold text-gray-500">/month</span>
               </div>
-              <div class="text-xs font-semibold text-gray-500 mt-1">Standard monthly billing</div>
+              <div class="text-xs font-semibold text-gray-500 mt-1">Standard monthly billing (+ 1st-mo intro offer)</div>
             </div>
-            <p class="text-xs text-gray-600 mb-5 leading-relaxed">
-              Pay <span data-price="monthlyStr">£12.49</span> monthly with no long-term commitment. Full Pro privacy protection; cancel anytime in 1 click via your customer portal.
+            <p class="text-xs text-gray-600 mb-5 leading-relaxed tabular-nums">
+              Pay <span id="compareMonthlyBilled" data-price="monthlyStr">£12.49</span> monthly with no long-term commitment. Full Pro privacy protection; cancel anytime in 1 click.
             </p>
           </div>
-          <div class="pt-4 border-t border-gray-100">
+          <div class="pt-4 border-t border-black/10">
             <a rel="nofollow" id="compareBtnMonthly" href="/order?plan=monthly" onclick="try{sessionStorage.setItem('sweepr_selected_plan','monthly')}catch(e){}" class="w-full py-3 px-4 rounded-xl border-2 border-emerald-600 text-emerald-700 hover:bg-emerald-50 text-center font-bold text-sm block transition-colors">
               <span>Choose Monthly Plan</span>
             </a>
@@ -545,32 +591,32 @@
       </div>
 
       <!-- Sweepr Complete Security Suite Annual Bundle Banner -->
-      <div class="mb-10 rounded-3xl p-6 sm:p-8 bg-gradient-to-br from-emerald-950 via-teal-900 to-emerald-900 text-white border-2 border-emerald-400/40 shadow-xl relative overflow-hidden">
+      <div class="mb-10 rounded-2xl p-6 sm:p-8 bg-[#111315] text-white border border-emerald-500/35 relative overflow-hidden">
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
           <div class="max-w-2xl">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400 text-gray-950 text-[11px] font-black uppercase tracking-wider mb-3">
-              ★ Complete Ecosystem Bundle &bull; Save 45% (vs £164.97/yr Separate)
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400 text-gray-950 font-mono text-[11px] font-bold uppercase tracking-wider mb-3">
+              Complete Ecosystem Bundle &bull; Save 45% (vs £164.97/yr Separate)
             </div>
-            <h3 class="text-2xl sm:text-3xl font-black tracking-tight text-white mb-2">Sweepr Complete Security Suite (Annual)</h3>
-            <p class="text-sm text-emerald-100/90 leading-relaxed mb-4">
+            <h3 class="text-2xl sm:text-3xl font-bold tracking-tight text-white mb-2">Sweepr Complete Security Suite (Annual)</h3>
+            <p class="text-sm text-gray-300 leading-relaxed mb-4">
               Combine all three flagship Sweepr privacy &amp; performance engines under one unified license across up to 5 devices: <strong>SWEEPR VPN Pro</strong> (WireGuard 10 Gbps + Home Wi-Fi Scanner) + <strong>SWEEPR DeepBlock Pro</strong> (YouTube MV3 Ad &amp; Cookie Shield + Scam Store Detector + Total Tab &amp; RAM Tamer) + <strong>Sweepr Desktop Cleaner Pro</strong> (PC &amp; Mac Junk/RAM Optimizer).
             </p>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-semibold text-emerald-100">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-semibold text-emerald-200 tabular-nums">
               <div>✓ SWEEPR VPN Pro (Normally £74.99/yr)</div>
               <div>✓ SWEEPR DeepBlock Pro + RAM Tamer (Normally £29.99/yr)</div>
               <div>✓ Sweepr Desktop Cleaner Pro (Normally £59.99/yr)</div>
               <div>✓ Unified 5-Device Ecosystem Key &amp; 30-Day Guarantee</div>
             </div>
           </div>
-          <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 text-center lg:min-w-[270px] shrink-0">
-            <div class="text-xs font-bold uppercase tracking-wider text-emerald-200 mb-1">All 3 Pro Apps Included</div>
-            <div class="flex items-baseline justify-center gap-2 mb-1">
-              <span class="text-sm line-through text-emerald-300/70">£164.97</span>
-              <span class="text-4xl font-black text-white">£89.99</span>
-              <span class="text-xs font-bold text-emerald-200">/year</span>
+          <div class="bg-white/[0.06] border border-white/15 rounded-xl p-6 text-center lg:min-w-[270px] shrink-0">
+            <div class="font-mono text-xs font-bold uppercase tracking-wider text-emerald-300 mb-1">All 3 Pro Apps Included</div>
+            <div class="flex items-baseline justify-center gap-2 mb-1 tabular-nums">
+              <span class="text-sm line-through text-gray-400">£164.97</span>
+              <span class="text-4xl font-bold text-white">£89.99</span>
+              <span class="text-xs font-bold text-gray-300">/year</span>
             </div>
-            <div class="text-xs font-semibold text-amber-300 mb-4">Just £7.50/mo equivalent &bull; Save £74.98/yr</div>
-            <a href="https://sweeprdeepblock.com/order?plan=suite_annual&utm_source=sweeprvpn&utm_medium=pricing_suite_bundle" class="w-full py-3.5 px-5 rounded-xl bg-amber-400 hover:bg-amber-300 text-gray-950 font-black text-sm block transition-all shadow-md">
+            <div class="text-xs font-semibold text-amber-300 mb-4 tabular-nums">Just £7.50/mo equivalent &bull; Save £74.98/yr</div>
+            <a href="https://sweeprdeepblock.com/order?plan=suite_annual&utm_source=sweeprvpn&utm_medium=pricing_suite_bundle" class="w-full py-3.5 px-5 rounded-xl bg-amber-400 hover:bg-amber-300 text-gray-950 font-bold text-sm block transition-colors">
               Get Complete Security Suite &rarr;
             </a>
           </div>
@@ -578,8 +624,8 @@
       </div>
 
       <!-- Feature Comparison Table (Matched to sweeprcleaner.com/pricing) -->
-      <div class="glass-card overflow-hidden">
-        <div class="overflow-x-auto">
+      <div class="rack-card overflow-hidden">
+        <div class="edge-scroll-mask">
           <table class="w-full text-left border-collapse">
             <thead>
               <tr class="border-b border-gray-100 bg-white/40">
@@ -649,7 +695,7 @@
     <!-- Frequently Asked Questions (Matched to sweeprcleaner.com/pricing) -->
     <section id="faqs" class="mt-28">
       <div class="text-center max-w-2xl mx-auto mb-16">
-        <h2 class="text-3xl font-black text-gray-900 mb-4">Frequently Asked Questions</h2>
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
         <p class="text-gray-600">Everything you need to know about SWEEPR VPN subscriptions and protection.</p>
       </div>
 
@@ -697,294 +743,175 @@
       <a href="/privacy" class="hover:text-gray-900 transition-colors">Privacy Policy</a>
       <a href="/support" class="hover:text-gray-900 transition-colors">Support &amp; Help</a>
     </div>
-        <div class="flex flex-wrap justify-center gap-x-4 gap-y-1.5 mb-4 px-4 text-xs text-gray-400 max-w-5xl mx-auto">
-      <a href="/setup/gl-inet-travel-router" class="hover:text-emerald-600 transition-colors">GL.iNet Router WireGuard</a>
-      <span>&bull;</span>
-      <a href="/guides/stop-samsung-smart-tv-acr-tracking" class="hover:text-emerald-600 transition-colors">Block Samsung TV ACR Tracking</a>
-      <span>&bull;</span>
-      <a href="/guides/stop-lg-smart-tv-acr-spying" class="hover:text-emerald-600 transition-colors">Stop LG TV ACR Spying</a>
-      <span>&bull;</span>
-      <a href="/solutions/eduroam-campus-wifi-gaming-packet-loss" class="hover:text-emerald-600 transition-colors">Eduroam Gaming &amp; WireGuard</a>
-      <span>&bull;</span>
-      <a href="/setup/nvidia-shield-tv-pro-wireguard" class="hover:text-emerald-600 transition-colors">Nvidia Shield TV WireGuard</a>
-      <span>&bull;</span>
-      <a href="/setup/steam-deck-vpn" class="hover:text-emerald-600 transition-colors">SteamOS &amp; Steam Deck VPN</a>
-      <span>&bull;</span>
-      <a href="/setup/synology-nas-docker-vpn" class="hover:text-emerald-600 transition-colors">Synology NAS Docker VPN</a>
-      <span>&bull;</span>
-      <a href="/solutions/gigaclear-rural-fibre-gaming-packet-loss" class="hover:text-emerald-600 transition-colors">Gigaclear Packet Loss Fix</a>
-      <span>&bull;</span>
-      <a href="/solutions/talktalk-p2p-port-forwarding" class="hover:text-emerald-600 transition-colors">TalkTalk Throttling Fix</a>
-      <span>&bull;</span>
-      <a href="/solutions/hotel-captive-portal-wifi-p2p-port-forwarding" class="hover:text-emerald-600 transition-colors">Hotel Wi-Fi Captive Portal VPN</a>
-      <span>&bull;</span>
-      <a href="/solutions/rogers-ignite-canada-isp-throttling" class="hover:text-emerald-600 transition-colors">Rogers Ignite Throttling Fix</a>
-      <span>&bull;</span>
-      <a href="/alternatives/totalvpn" class="hover:text-emerald-600 transition-colors">Best TotalVPN Alternatives</a>
-    </div>
-                                                                                                                                                                                                                                                <details id="sweepr-seo-directory" class="max-w-5xl mx-auto mb-4 px-4 text-xs text-gray-400">
-      <summary class="cursor-pointer hover:text-emerald-600 font-semibold select-none">Browse All 118 WireGuard Router Setup Guides, Smart-TV Privacy Guides &amp; VPN Comparisons</summary>
-      <div class="flex flex-wrap justify-center gap-x-3 gap-y-1.5 mt-3 pt-3 border-t border-gray-100 text-[11px]">
-        <a href="/setup/almalinux-9-wireguard-gateway" class="hover:text-emerald-600 transition-colors">AlmaLinux 9 & Rocky Linux 9 Enterprise WireGuard Gateway: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/alpinelinux-diskless-wireguard" class="hover:text-emerald-600 transition-colors">Alpine Linux Diskless RAM-Run WireGuard Gateway Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/apple-tv-tvos-17-wireguard" class="hover:text-emerald-600 transition-colors">Apple TV 4K (tvOS 17 / tvOS 18) Native WireGuard Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/arch-linux-systemd-networkd" class="hover:text-emerald-600 transition-colors">Arch Linux systemd-networkd Native WireGuard Configuration: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/asus-rog-rapture-wireguard-fusion" class="hover:text-emerald-600 transition-colors">ASUS ROG Rapture WireGuard VPN Fusion Policy Routing: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/asustor-nas-adm-wireguard" class="hover:text-emerald-600 transition-colors">Asustor NAS (ADM 4.2+) WireGuard VPN Client Setup Guide: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/asuswrt-merlin-vpn-router" class="hover:text-emerald-600 transition-colors">WireGuard VPN Setup for ASUSWRT-Merlin &amp; ASUS VPN Fusion Routers</a>
-        <span>&bull;</span>
-        <a href="/setup/casaos-docker-wireguard" class="hover:text-emerald-600 transition-colors">CasaOS & ZimaBoard Homelab WireGuard VPN Client Stack: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/debian-12-headless-wireguard-gateway" class="hover:text-emerald-600 transition-colors">Debian 12 / Ubuntu 24.04 Headless WireGuard nftables Gateway: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/docker-gluetun-wireguard-compose" class="hover:text-emerald-600 transition-colors">Docker Compose + Gluetun WireGuard Sidecar Stack: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/draytek-vigor-wireguard-client" class="hover:text-emerald-600 transition-colors">DrayTek Vigor 2865 & 2927 WireGuard VPN Tunnel Guide: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/fedora-silverblue-immutable-wireguard" class="hover:text-emerald-600 transition-colors">Fedora Silverblue 40 Immutable WireGuard VPN Guide: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/firewalla-gold-wireguard-vpn" class="hover:text-emerald-600 transition-colors">Firewalla Gold & Purple WireGuard VPN Client Configuration: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/freebsd-14-wireguard-kmod" class="hover:text-emerald-600 transition-colors">FreeBSD 14.1 Kernel WireGuard (if_wg) & pf Firewall Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/fritzbox-7590-ax-wireguard-vpn" class="hover:text-emerald-600 transition-colors">AVM FRITZ!Box 7590 AX & 6690 Cable (FRITZ!OS 8): High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/gl-inet-b3000-marble-wireguard" class="hover:text-emerald-600 transition-colors">GL.iNet Marble (GL-B3000) Wi-Fi 6 WireGuard Home Router: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/gl-inet-flint-2-wireguard" class="hover:text-emerald-600 transition-colors">GL.iNet Flint 2 (GL-MT6000) & Beryl AX Travel Router: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/gl-inet-slate-ax-travel-router" class="hover:text-emerald-600 transition-colors">GL.iNet Slate AX (GL-AXT1800) WireGuard Travel Router Guide: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/gl-inet-spitz-ax-5g-router" class="hover:text-emerald-600 transition-colors">GL.iNet Spitz AX (GL-X3000) 5G Cellular WireGuard Gateway: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/gl-inet-travel-router" class="hover:text-emerald-600 transition-colors">WireGuard VPN Setup for GL.iNet Beryl AX (GL-MT3000) &amp; Slate AX Travel Router</a>
-        <span>&bull;</span>
-        <a href="/setup/keenetic-titan-wireguard-router" class="hover:text-emerald-600 transition-colors">Keenetic Titan & Hero Wi-Fi 6 WireGuard VPN Client Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/linux-cli-wireguard" class="hover:text-emerald-600 transition-colors">WireGuard VPN Setup for Linux CLI (Ubuntu, Debian, Arch &amp; Fedora)</a>
-        <span>&bull;</span>
-        <a href="/setup/macos-apple-silicon-vpn" class="hover:text-emerald-600 transition-colors">WireGuard VPN Setup for macOS (Apple Silicon M1/M2/M3/M4 &amp; Intel)</a>
-        <span>&bull;</span>
-        <a href="/setup/mikrotik-hap-ax3-wireguard-setup" class="hover:text-emerald-600 transition-colors">MikroTik hAP ax3 & RB5009: RouterOS v7 WireGuard Client & MSS Clamping Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/mikrotik-routeros-v7-wireguard" class="hover:text-emerald-600 transition-colors">MikroTik RouterOS v7 (RB5009 / hAP ax3): High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/netgate-6100-pfsense-wireguard" class="hover:text-emerald-600 transition-colors">Netgate 6100 pfSense Plus 10Gbps WireGuard Gateway Guide: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/nintendo-switch-wireguard-proxy" class="hover:text-emerald-600 transition-colors">Nintendo Switch OLED Low-NAT WireGuard Gaming Router Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/nixos-declarative-wireguard" class="hover:text-emerald-600 transition-colors">NixOS Declarative WireGuard Interface Configuration Guide: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/nvidia-shield-tv-pro-wireguard" class="hover:text-emerald-600 transition-colors">NVIDIA Shield TV Pro 4K WireGuard & GeForce NOW Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/openwrt-wireguard-router" class="hover:text-emerald-600 transition-colors">WireGuard VPN Setup for OpenWrt 23.05+ Router WireGuard &amp; Policy Routing</a>
-        <span>&bull;</span>
-        <a href="/setup/pfsense-opnsense-router" class="hover:text-emerald-600 transition-colors">WireGuard VPN Setup for pfSense &amp; OPNsense Home Firewall</a>
-        <span>&bull;</span>
-        <a href="/setup/playstation-5-wireguard-router" class="hover:text-emerald-600 transition-colors">PlayStation 5 (PS5) Low-Ping WireGuard & NAT Type 2 Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/protectli-vault-opnsense" class="hover:text-emerald-600 transition-colors">Protectli Vault 6-Port Core i5 OPNsense WireGuard Gateway: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/proxmox-lxc-wireguard-gateway" class="hover:text-emerald-600 transition-colors">Proxmox VE 8.x Unprivileged LXC WireGuard Gateway: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/proxmox-ve-8-sdn-wireguard" class="hover:text-emerald-600 transition-colors">Proxmox VE 8.2 SDN VNet WireGuard Gateway Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/qnap-qts-wireguard-client" class="hover:text-emerald-600 transition-colors">QNAP QTS 5.x & QuTS hero (QVPN Service 3): High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/raspberry-pi-home-gateway" class="hover:text-emerald-600 transition-colors">WireGuard VPN Setup for Raspberry Pi 5 Whole-Home WireGuard Gateway &amp; TV Shield</a>
-        <span>&bull;</span>
-        <a href="/setup/rog-ally-windows-11-wireguard" class="hover:text-emerald-600 transition-colors">ASUS ROG Ally & ROG Ally X Low-Latency WireGuard Gaming Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/steam-deck-vpn" class="hover:text-emerald-600 transition-colors">WireGuard VPN Setup for Steam Deck &amp; Handheld Gaming OS (SteamOS)</a>
-        <span>&bull;</span>
-        <a href="/setup/synology-nas-docker-vpn" class="hover:text-emerald-600 transition-colors">WireGuard VPN Setup for Synology NAS &amp; Docker Gluetun WireGuard Container</a>
-        <span>&bull;</span>
-        <a href="/setup/tailscale-wireguard-exit-node" class="hover:text-emerald-600 transition-colors">Tailscale Subnet Router to SWEEPR WireGuard Exit Bridge: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/tp-link-omada-er605-wireguard" class="hover:text-emerald-600 transition-colors">TP-Link Omada ER605 / ER7206 WireGuard Gateway Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/truenas-scale-wireguard-container" class="hover:text-emerald-600 transition-colors">TrueNAS SCALE 24.x WireGuard & Docker App Routing Guide: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/ubiquiti-cloud-gateway-ultra" class="hover:text-emerald-600 transition-colors">Ubiquiti UniFi Cloud Gateway Ultra (UCG-Ultra) WireGuard Client: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/ubiquiti-edgerouter-wireguard" class="hover:text-emerald-600 transition-colors">Ubiquiti EdgeRouter 4 & EdgeRouter X WireGuard Kernel Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/ubiquiti-unifi-dream-machine-wireguard" class="hover:text-emerald-600 transition-colors">Ubiquiti UniFi Dream Machine (UDM-Pro / UDM-SE / UDR): High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/unifi-cloud-gateway-max-ucg-max-wireguard" class="hover:text-emerald-600 transition-colors">Ubiquiti UniFi Cloud Gateway Max (UCG-Max) 2.5Gbps: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/unifi-gateway-max-uxg-max" class="hover:text-emerald-600 transition-colors">Ubiquiti UniFi Gateway Max (UXG-Max) 2.5G WireGuard Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/unraid-wireguard-docker-tunnel" class="hover:text-emerald-600 transition-colors">Unraid 6.12 WireGuard Client & Container VPN Routing Guide: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/vyos-1-4-wireguard-router" class="hover:text-emerald-600 transition-colors">VyOS 1.4 Rolling / LTS WireGuard Interface & BGP Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/windows-11-wireguard-vpn" class="hover:text-emerald-600 transition-colors">WireGuard VPN Setup for Windows 10 &amp; 11 Native Kernel WireGuard</a>
-        <span>&bull;</span>
-        <a href="/setup/wsl2-windows-subsystem-wireguard" class="hover:text-emerald-600 transition-colors">WSL2 (Windows Subsystem for Linux 2) Native WireGuard Tunnel: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/xbox-series-x-wireguard-gaming" class="hover:text-emerald-600 transition-colors">Xbox Series X|S WireGuard Low-Latency & Open NAT Guide: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/zimaboard-casaos-gluetun-wireguard" class="hover:text-emerald-600 transition-colors">ZimaBoard 832 & CasaOS: Dual-NIC WireGuard Gateway & Gluetun Docker Setup</a>
-        <span>&bull;</span>
-        <a href="/guides/audit-home-iot-botnet-vulnerabilities" class="hover:text-emerald-600 transition-colors">Audit Smart Home Plugs, IP Cameras & IoT Devices for Botnets in 30 Seconds</a>
-        <span>&bull;</span>
-        <a href="/guides/audit-home-nas-ransomware-wan-exposure" class="hover:text-emerald-600 transition-colors">How to Audit Your Synology & QNAP NAS for Open WAN Ports and UPnP Leakage</a>
-        <span>&bull;</span>
-        <a href="/guides/block-hisense-vidaa-fire-tv-acr" class="hover:text-emerald-600 transition-colors">Stop Hisense VIDAA OS & Amazon Fire TV ACR Tracking at the Network Layer</a>
-        <span>&bull;</span>
-        <a href="/guides/block-panasonic-smart-tv-telemetry" class="hover:text-emerald-600 transition-colors">Stop Panasonic Smart TV ACR Tracking & Home Screen Telemetry Beacons</a>
-        <span>&bull;</span>
-        <a href="/guides/block-philips-titan-os-acr" class="hover:text-emerald-600 transition-colors">How to Block Philips Titan OS & Ambilight ACR Screenshot Telemetry</a>
-        <span>&bull;</span>
-        <a href="/guides/block-sharp-aquos-google-tv-acr" class="hover:text-emerald-600 transition-colors">Stop Sharp Aquos Google TV ACR Content Recognition at the Router Level</a>
-        <span>&bull;</span>
-        <a href="/guides/block-sony-bravia-samba-tv-acr" class="hover:text-emerald-600 transition-colors">How to Block Sony Bravia & Samba TV ACR Screenshot Spying on Your Home Wi-Fi</a>
-        <span>&bull;</span>
-        <a href="/guides/block-tcl-google-tv-acr-telemetry" class="hover:text-emerald-600 transition-colors">How to Block TCL Google TV ACR Tracking & Ad Spyware at Router Level</a>
-        <span>&bull;</span>
-        <a href="/guides/bypass-cgnat-for-self-hosted-home-lab" class="hover:text-emerald-600 transition-colors">Understanding Carrier-Grade NAT (CGNAT) on Hyperoptic, Community Fibre & 5G</a>
-        <span>&bull;</span>
-        <a href="/guides/detect-hidden-wifi-cameras-airbnb" class="hover:text-emerald-600 transition-colors">How to Audit Airbnb & Hotel Wi-Fi Subnets for Hidden IP Cameras & Rogue Devices</a>
-        <span>&bull;</span>
-        <a href="/guides/detect-hotel-chromecast-spoofing" class="hover:text-emerald-600 transition-colors">How to Audit Hotel & Airbnb Wi-Fi for Rogue Cast Devices & Screen Hijackers</a>
-        <span>&bull;</span>
-        <a href="/guides/detect-hotel-wifi-evil-twin-ap" class="hover:text-emerald-600 transition-colors">How to Detect Evil Twin Hotspots & ARP Poisoning on Hotel & Airport Wi-Fi</a>
-        <span>&bull;</span>
-        <a href="/guides/detect-rogue-dhcp-server-guest-wifi" class="hover:text-emerald-600 transition-colors">How to Detect Rogue DHCP Servers & DNS Poisoning on Coworking & Guest Wi-Fi</a>
-        <span>&bull;</span>
-        <a href="/guides/detect-rogue-mesh-repeaters" class="hover:text-emerald-600 transition-colors">How to Detect Rogue Wi-Fi Extenders & Unauthorized Repeaters on Your Network</a>
-        <span>&bull;</span>
-        <a href="/guides/detect-unknown-devices-on-home-wifi" class="hover:text-emerald-600 transition-colors">How to Find Unknown Devices &amp; Strangers on Your Home Wi-Fi in 30 Seconds</a>
-        <span>&bull;</span>
-        <a href="/guides/disable-ipv6-leak-windows-linux" class="hover:text-emerald-600 transition-colors">How to Prevent Silent IPv6 Tunnel Leaks on Dual-Stack Residential Broadband</a>
-        <span>&bull;</span>
-        <a href="/guides/fix-isp-dns-hijacking-and-throttling" class="hover:text-emerald-600 transition-colors">How UK ISPs Use DNS Inspection to Throttle Evening Speeds (And How to Fix It)</a>
-        <span>&bull;</span>
-        <a href="/guides/fix-udp-bufferbloat-wireguard-gaming" class="hover:text-emerald-600 transition-colors">How to Eliminate UDP Bufferbloat & Jitter Spikes on FTTP Fibre for Gaming</a>
-        <span>&bull;</span>
-        <a href="/guides/fix-wireguard-mtu-fragmentation-pppoe" class="hover:text-emerald-600 transition-colors">How to Fix WireGuard MTU Packet Fragmentation on PPPoE Fibre (1412) & 5G (1380)</a>
-        <span>&bull;</span>
-        <a href="/guides/prevent-webrtc-ip-leak-chromium-firefox" class="hover:text-emerald-600 transition-colors">How to Prevent Silent WebRTC STUN/TURN IP Address Leaks in All Browsers</a>
-        <span>&bull;</span>
-        <a href="/guides/prevent-windows-11-dns-leaks-doh" class="hover:text-emerald-600 transition-colors">Fix Windows 11 Multi-Homed DNS Leaks & Bypass ISP Port 53 Interception</a>
-        <span>&bull;</span>
-        <a href="/guides/public-hotel-airport-wifi-security" class="hover:text-emerald-600 transition-colors">Public, Hotel &amp; Airport Wi-Fi Security: Evil Twin &amp; Packet Sniffing Protection</a>
-        <span>&bull;</span>
-        <a href="/guides/secure-smart-speaker-iot-isolation" class="hover:text-emerald-600 transition-colors">How to Isolate Smart Speakers & IoT Gadgets From Your Primary Work Network</a>
-        <span>&bull;</span>
-        <a href="/guides/stop-5g-hotspot-carrier-throttling" class="hover:text-emerald-600 transition-colors">How to Stop Mobile Carrier 5G Hotspot Throttling & DPI Tethering Caps</a>
-        <span>&bull;</span>
-        <a href="/guides/stop-isp-deep-packet-inspection-dpi" class="hover:text-emerald-600 transition-colors">How to Defeat ISP Deep Packet Inspection (DPI) & SNI Censorship with WireGuard</a>
-        <span>&bull;</span>
-        <a href="/guides/stop-isp-tcp-reset-attacks" class="hover:text-emerald-600 transition-colors">How to Bypass ISP TCP RST Packet Injection & Deep Packet Inspection with WireGuard</a>
-        <span>&bull;</span>
-        <a href="/guides/stop-lg-smart-tv-acr-spying" class="hover:text-emerald-600 transition-colors">How to Stop LG webOS Smart TVs From Taking Screenshots of What You Watch (2026 Guide)</a>
-        <span>&bull;</span>
-        <a href="/guides/stop-roku-vizio-firetv-spying" class="hover:text-emerald-600 transition-colors">How to Block Roku, Vizio Inscape &amp; Fire TV ACR Spying on Your Home Wi-Fi</a>
-        <span>&bull;</span>
-        <a href="/guides/stop-samsung-smart-tv-acr-tracking" class="hover:text-emerald-600 transition-colors">How to Block Samsung Tizen Smart-TV ACR Telemetry &amp; Home Menu Ads (2026 Guide)</a>
-        <span>&bull;</span>
-        <a href="/vs/adguard-vpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs AdGuard VPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/airvpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs AirVPN (Eddie Client): 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/astrill-vpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Astrill VPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/avast-secureline-vpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Avast SecureLine VPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/betternet" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Betternet VPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/cactusvpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs CactusVPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/cloudflare-warp-plus" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Cloudflare WARP+: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/cyberghost" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs CyberGhost (2026 Comparison)</a>
-        <span>&bull;</span>
-        <a href="/vs/expressvpn-aircove" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs ExpressVPN & Aircove: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/expressvpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs ExpressVPN (2026 Comparison)</a>
-        <span>&bull;</span>
-        <a href="/vs/hide-me-vpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs hide.me VPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/hola-vpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Hola VPN Free Proxy: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/hotspot-shield" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Hotspot Shield: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/ipvanish" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs IPVanish (2026 Comparison)</a>
-        <span>&bull;</span>
-        <a href="/vs/ivpn-net" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs IVPN Pro: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/mozilla-vpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Mozilla VPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/mullvad" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Mullvad VPN (2026 Comparison)</a>
-        <span>&bull;</span>
-        <a href="/vs/nordlayer" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs NordLayer Business VPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/nordvpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs NordVPN (2026 Comparison)</a>
-        <span>&bull;</span>
-        <a href="/vs/ovpn-com" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs OVPN.com Sweden: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/perimeter-81" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Perimeter 81 (Check Point Harmony): 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/privadovpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs PrivadoVPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/private-internet-access" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Private Internet Access (PIA): 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/privatevpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs PrivateVPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/protonvpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Proton VPN (2026 Comparison)</a>
-        <span>&bull;</span>
-        <a href="/vs/purevpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs PureVPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/surfshark" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Surfshark (2026 Comparison)</a>
-        <span>&bull;</span>
-        <a href="/vs/tailscale-saas" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Tailscale Commercial SaaS: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/torguard-vpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs TorGuard Anonymous VPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/tunnelbear" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs TunnelBear VPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/turbo-vpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Turbo VPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/twingate" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Twingate Zero Trust Network Access: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/urban-vpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Urban VPN Free: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/vyprvpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs VyprVPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/windscribe" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Windscribe Pro: 2026 Speed, Footprint & Privacy Comparison</a>
+    <!-- Curated Editorial 12-Pillar Navigation Grid -->
+    <nav id="sweepr-curated-pillars-grid" aria-label="Curated Network Tools &amp; Engineering Guides" class="max-w-5xl mx-auto my-6 px-4 pt-6 border-t border-gray-100 text-left">
+      <div class="mb-4 text-center md:text-left">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400">Core Network Tools &amp; Engineering Guides</h3>
       </div>
-    </details>
-
-
-
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-xs text-gray-500">
+        <!-- Column 1: Diagnostic Tools & Authority -->
+        <div>
+          <h4 class="font-bold text-gray-900 mb-2.5 flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-emerald-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            <span>Diagnostic Tools</span>
+          </h4>
+          <ul class="space-y-2">
+            <li><a href="/tools/leak-test" class="hover:text-emerald-600 transition-colors">IP, DNS &amp; WebRTC Leak Test</a></li>
+            <li><a href="/tools/isp-throttling-test" class="hover:text-emerald-600 transition-colors">ISP Speed &amp; Throttling Test</a></li>
+            <li><a href="/warrant-canary" class="hover:text-emerald-600 transition-colors font-medium text-gray-700">Cryptographic Warrant Canary</a></li>
+          </ul>
+        </div>
+        <!-- Column 2: Hardware & Router Setups -->
+        <div>
+          <h4 class="font-bold text-gray-900 mb-2.5 flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-emerald-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"/></svg>
+            <span>Hardware Setup Guides</span>
+          </h4>
+          <ul class="space-y-2">
+            <li><a href="/setup/gl-inet-travel-router" class="hover:text-emerald-600 transition-colors">GL.iNet Travel Router WireGuard</a></li>
+            <li><a href="/setup/synology-nas-docker-vpn" class="hover:text-emerald-600 transition-colors">Synology NAS Docker WireGuard</a></li>
+            <li><a href="/setup/steam-deck-vpn" class="hover:text-emerald-600 transition-colors">Steam Deck &amp; SteamOS VPN</a></li>
+            <li><a href="/setup/nvidia-shield-tv-pro-wireguard" class="hover:text-emerald-600 transition-colors">NVIDIA Shield TV Pro WireGuard</a></li>
+          </ul>
+        </div>
+        <!-- Column 3: Smart-TV & IoT Privacy Guides -->
+        <div>
+          <h4 class="font-bold text-gray-900 mb-2.5 flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-emerald-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            <span>Smart-TV Privacy Guides</span>
+          </h4>
+          <ul class="space-y-2">
+            <li><a href="/guides/stop-samsung-smart-tv-acr-tracking" class="hover:text-emerald-600 transition-colors">Block Samsung Smart-TV ACR</a></li>
+            <li><a href="/guides/stop-lg-smart-tv-acr-spying" class="hover:text-emerald-600 transition-colors">Stop LG webOS LivePlus Spying</a></li>
+            <li><a href="/guides/stop-roku-vizio-firetv-spying" class="hover:text-emerald-600 transition-colors">Block Roku, Vizio &amp; Fire TV ACR</a></li>
+          </ul>
+        </div>
+        <!-- Column 4: ISP Network Solutions & Comparisons -->
+        <div>
+          <h4 class="font-bold text-gray-900 mb-2.5 flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-emerald-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/></svg>
+            <span>ISP Solutions &amp; Reviews</span>
+          </h4>
+          <ul class="space-y-2">
+            <li><a href="/solutions/eduroam-campus-wifi-gaming-packet-loss" class="hover:text-emerald-600 transition-colors">Eduroam Gaming Packet Loss Fix</a></li>
+            <li><a href="/solutions/talktalk-p2p-port-forwarding" class="hover:text-emerald-600 transition-colors">TalkTalk P2P Port Forwarding</a></li>
+            <li><a href="/alternatives/totalvpn" class="hover:text-emerald-600 transition-colors font-medium text-gray-700">TotalVPN Alternatives (2026)</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
 
     <p>&copy; 2026 SWEEPR VPN Inc. All rights reserved.</p>
   </footer>
 
   <script>
     let selectedPricingPlan = 'annual';
+    let includeWifiAddonPreview = false;
 
-    function updateTableProCtaButton() {
+    function syncCurrencyButtons(activeCode) {
+      const code = String(activeCode || 'GBP').toUpperCase();
+      document.querySelectorAll('[data-currency-btn]').forEach((btn) => {
+        const isSelected = btn.getAttribute('data-currency-btn') === code;
+        btn.className = isSelected
+          ? 'curr-pill px-2.5 py-1.5 rounded-lg font-mono text-xs font-bold border border-emerald-600 bg-emerald-600 text-white cursor-pointer transition-colors'
+          : 'curr-pill px-2.5 py-1.5 rounded-lg font-mono text-xs font-bold border border-black/10 bg-black/[0.025] text-gray-700 hover:border-black/25 cursor-pointer transition-colors';
+      });
+    }
+
+    function selectPricingCurrency(code) {
+      if (window.setSweeprCurrency) {
+        window.setSweeprCurrency(code);
+      }
+      syncCurrencyButtons(code);
+      updatePricingAddonUI();
+    }
+
+    function togglePricingWifiAddon(checked) {
+      includeWifiAddonPreview = !!checked;
+      updatePricingAddonUI();
+    }
+
+    function formatCurrencyNum(p, val) {
+      if (!p) return '£' + Number(val || 0).toFixed(2);
+      if (p.decimals === 0) return p.symbol + Math.round(val).toLocaleString();
+      return p.symbol + Number(val || 0).toFixed(2);
+    }
+
+    function updatePricingAddonUI() {
+      const p = window.SWEEPR_ACTIVE_PRICING || (window.getSweeprPricing ? window.getSweeprPricing('GBP') : { code: 'GBP', symbol: '£', decimals: 2, annual: 74.99, sixMonth: 48.99, monthly: 12.49, addonAnnual: 14.99, addonSixMonth: 9.99, addonMonthly: 1.99, annualStr: '£74.99', sixMonthStr: '£48.99', monthlyStr: '£12.49', annualPerMonthStr: '£6.25', sixMonthPerMonthStr: '£8.17', addonAnnualStr: '£14.99' });
+      const activeCode = p.code || 'GBP';
+      syncCurrencyButtons(activeCode);
+
+      const getPlanBundle = (planKey, monthsCount) => {
+        if (window.getSweeprPlanWithAddon) {
+          const info = window.getSweeprPlanWithAddon(activeCode, planKey, includeWifiAddonPreview);
+          return {
+            totalStr: info.totalStr,
+            perMoStr: formatCurrencyNum(info.pricing, info.total / monthsCount),
+            addonAnnualStr: info.pricing.addonAnnualStr || formatCurrencyNum(info.pricing, info.pricing.addonAnnual)
+          };
+        }
+        const base = planKey === 'annual' ? p.annual : (planKey === 'six_month' ? p.sixMonth : p.monthly);
+        const addon = planKey === 'annual' ? (p.addonAnnual || 14.99) : (planKey === 'six_month' ? (p.addonSixMonth || 9.99) : (p.addonMonthly || 1.99));
+        const tot = base + (includeWifiAddonPreview ? addon : 0);
+        return {
+          totalStr: formatCurrencyNum(p, tot),
+          perMoStr: formatCurrencyNum(p, tot / monthsCount),
+          addonAnnualStr: p.addonAnnualStr || formatCurrencyNum(p, p.addonAnnual || 14.99)
+        };
+      };
+
+      const ann = getPlanBundle('annual', 12);
+      const six = getPlanBundle('six_month', 6);
+      const mon = getPlanBundle('monthly', 1);
+
+      const setTxt = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+      setTxt('pricingAddonPriceTag', '+ ' + ann.addonAnnualStr + '/yr');
+      setTxt('heroPriceValue', ann.totalStr);
+      setTxt('heroPerMonthValue', ann.perMoStr);
+      setTxt('heroBilledRateValue', ann.totalStr);
+      setTxt('compareAnnualPrice', ann.totalStr);
+      setTxt('compareAnnualSub', ann.perMoStr);
+      setTxt('compareAnnualBilled', ann.totalStr);
+      setTxt('annualLedgerY1', ann.totalStr);
+      setTxt('annualLedgerY2', ann.totalStr + ' (0% Hike)');
+      setTxt('compareSixMonthPrice', six.totalStr);
+      setTxt('compareSixMonthSub', six.perMoStr);
+      setTxt('compareSixMonthBilled', six.totalStr);
+      setTxt('compareMonthlyPrice', mon.totalStr);
+      setTxt('compareMonthlyBilled', mon.totalStr);
+
+      const addonSuffix = includeWifiAddonPreview ? '&addon=wifi_radar' : '';
+      const setHref = (id, planKey) => {
+        const el = document.getElementById(id);
+        if (el) el.href = '/order?plan=' + planKey + addonSuffix;
+      };
+      setHref('heroOrderCtaBtn', 'annual');
+      setHref('compareBtnAnnual', 'annual');
+      setHref('compareBtnSixMonth', 'six_month');
+      setHref('compareBtnMonthly', 'monthly');
+
+      updateTableProCtaButton(ann, six, mon);
+    }
+
+    function updateTableProCtaButton(ann, six, mon) {
       const p = window.SWEEPR_ACTIVE_PRICING || (window.getSweeprPricing ? window.getSweeprPricing('GBP') : { annualStr: '£74.99', sixMonthStr: '£48.99', monthlyStr: '£12.49' });
       const tableProCta = document.getElementById('tableProCtaBtn');
       if (!tableProCta) return;
+      const addonSuffix = includeWifiAddonPreview ? '&addon=wifi_radar' : '';
+      const annStr = ann ? ann.totalStr : p.annualStr;
+      const sixStr = six ? six.totalStr : p.sixMonthStr;
+      const monStr = mon ? mon.totalStr : p.monthlyStr;
+
       if (selectedPricingPlan === 'annual') {
-        tableProCta.href = '/order?plan=annual';
-        tableProCta.textContent = `Get Pro (Annual - ${p.annualStr}/yr)`;
+        tableProCta.href = '/order?plan=annual' + addonSuffix;
+        tableProCta.textContent = `Get Pro (Annual - ${annStr}/yr)`;
       } else if (selectedPricingPlan === 'six_month') {
-        tableProCta.href = '/order?plan=six_month';
-        tableProCta.textContent = `Get Pro (6-Month - ${p.sixMonthStr}/6mo)`;
+        tableProCta.href = '/order?plan=six_month' + addonSuffix;
+        tableProCta.textContent = `Get Pro (6-Month - ${sixStr}/6mo)`;
       } else {
-        tableProCta.href = '/order?plan=monthly';
-        tableProCta.textContent = `Get Pro (Monthly - ${p.monthlyStr}/mo)`;
+        tableProCta.href = '/order?plan=monthly' + addonSuffix;
+        tableProCta.textContent = `Get Pro (Monthly - ${monStr}/mo)`;
       }
     }
 
@@ -1002,8 +929,8 @@
       const btnSixMonth = document.getElementById('compareBtnSixMonth');
       const btnMonthly = document.getElementById('compareBtnMonthly');
 
-      const activeCardClass = 'relative rounded-2xl p-6 border-2 border-emerald-500 bg-gradient-to-b from-emerald-50/70 to-white shadow-xl flex flex-col justify-between cursor-pointer transition-all transform hover:-translate-y-1';
-      const normalCardClass = 'relative rounded-2xl p-6 border border-gray-200 bg-white hover:border-emerald-300 shadow-sm flex flex-col justify-between cursor-pointer transition-all transform hover:-translate-y-1';
+      const activeCardClass = 'relative rack-card p-6 border-2 border-emerald-600 bg-white flex flex-col justify-between cursor-pointer transition-colors';
+      const normalCardClass = 'relative rack-card p-6 border border-black/15 bg-white hover:border-emerald-400 flex flex-col justify-between cursor-pointer transition-colors';
 
       const activeBtnClass = 'btn btn-go w-full justify-center text-center font-bold text-sm py-3';
       const normalBtnClass = 'w-full py-3 px-4 rounded-xl border-2 border-emerald-600 text-emerald-700 hover:bg-emerald-50 text-center font-bold text-sm block transition-colors';
@@ -1016,12 +943,15 @@
       if (btnSixMonth) btnSixMonth.className = plan === 'six_month' ? activeBtnClass : normalBtnClass;
       if (btnMonthly) btnMonthly.className = plan === 'monthly' ? activeBtnClass : normalBtnClass;
 
-      updateTableProCtaButton();
+      updatePricingAddonUI();
     }
 
     window.onSweeprCurrencyChanged = function () {
-      updateTableProCtaButton();
+      updatePricingAddonUI();
     };
+    window.addEventListener('sweepr:currencyChanged', function () {
+      updatePricingAddonUI();
+    });
 
     window.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
@@ -1032,6 +962,13 @@
         selectComparePlan('monthly');
       } else {
         selectComparePlan('annual');
+      }
+      if (urlParams.get('addon') === 'wifi_radar') {
+        const cb = document.getElementById('pricingWifiAddonToggle');
+        if (cb) cb.checked = true;
+        togglePricingWifiAddon(true);
+      } else {
+        updatePricingAddonUI();
       }
     });
   </script>

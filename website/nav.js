@@ -104,11 +104,99 @@
     } catch (e) {}
   };
 
+  window.sweeprSpringCopy = async function (btn, textToCopy, copiedLabel) {
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(String(textToCopy || ''));
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = String(textToCopy || '');
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    } catch (e) {}
+    if (!btn) return;
+    if (btn.__copyTimer) clearTimeout(btn.__copyTimer);
+    const labelEl = btn.querySelector('.copy-btn-label');
+    if (labelEl && !btn.dataset.origLabel) {
+      btn.dataset.origLabel = labelEl.textContent;
+    }
+    btn.classList.add('is-copied');
+    if (labelEl && copiedLabel) labelEl.textContent = copiedLabel;
+    btn.__copyTimer = setTimeout(() => {
+      btn.classList.remove('is-copied');
+      if (labelEl && btn.dataset.origLabel) {
+        labelEl.textContent = btn.dataset.origLabel;
+      }
+    }, 1800);
+  };
+
   document.addEventListener('DOMContentLoaded', () => {
     const path = window.location.pathname;
     if (path === '/pricing') {
       window.sweeprTrack('view_pricing', { source_page: document.referrer || 'direct' });
     }
+
+    // Progressive Mockup 1 Craft Enhancements:
+    // 1) Horizontal Edge-Scroll Fade Masks on wide comparison/telemetry tables
+    try {
+      const updateEdgeMask = (wrap) => {
+        const hasOverflow = wrap.scrollWidth > wrap.clientWidth + 2;
+        wrap.classList.toggle('has-overflow', hasOverflow);
+        const atEnd = wrap.scrollLeft + wrap.clientWidth >= wrap.scrollWidth - 4;
+        wrap.classList.toggle('is-scrolled-end', !hasOverflow || atEnd);
+      };
+      document.querySelectorAll('table').forEach((tbl) => {
+        let wrap = tbl.closest('.edge-scroll-mask');
+        if (!wrap && tbl.parentElement && tbl.parentElement.classList.contains('overflow-x-auto')) {
+          wrap = tbl.parentElement;
+          wrap.classList.add('edge-scroll-mask');
+        } else if (!wrap && tbl.parentElement && !tbl.closest('[data-no-scroll-mask]')) {
+          wrap = document.createElement('div');
+          wrap.className = 'edge-scroll-mask';
+          tbl.parentElement.insertBefore(wrap, tbl);
+          wrap.appendChild(tbl);
+        }
+        if (wrap && !wrap.dataset.edgeMaskBound) {
+          wrap.dataset.edgeMaskBound = '1';
+          updateEdgeMask(wrap);
+          wrap.addEventListener('scroll', () => updateEdgeMask(wrap), { passive: true });
+          window.addEventListener('resize', () => updateEdgeMask(wrap), { passive: true });
+        }
+      });
+    } catch (e) {}
+
+    // 2) Spring-Swap Copy Buttons on technical WireGuard .conf / CLI <pre> code blocks
+    try {
+      document.querySelectorAll('pre').forEach((pre) => {
+        if (pre.closest('[data-no-auto-copy]') || pre.parentElement?.classList.contains('sweepr-pre-wrap')) return;
+        const txt = (pre.innerText || pre.textContent || '').trim();
+        if (txt.length < 24 || (!txt.includes('\n') && txt.length < 48)) return;
+        const wrap = document.createElement('div');
+        wrap.className = 'sweepr-pre-wrap';
+        pre.parentElement.insertBefore(wrap, pre);
+        wrap.appendChild(pre);
+        const copyBtn = document.createElement('button');
+        copyBtn.type = 'button';
+        copyBtn.className = 'copy-spring-btn sweepr-pre-copy';
+        copyBtn.setAttribute('aria-label', 'Copy snippet to clipboard');
+        copyBtn.innerHTML = `
+          <span class="copy-icon-stack">
+            <svg class="icon-copy" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+            <svg class="icon-check" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+          </span>
+          <span class="copy-btn-label">Copy</span>
+        `;
+        copyBtn.addEventListener('click', () => {
+          window.sweeprSpringCopy(copyBtn, txt, 'Copied');
+        });
+        wrap.appendChild(copyBtn);
+      });
+    } catch (e) {}
 
     // Delegated Funnel Click Listener (Downloads, Checkout CTAs, Pricing Navigation)
     document.addEventListener(
@@ -270,13 +358,15 @@ document.addEventListener('DOMContentLoaded', () => {
       drawer.style.backgroundColor = '#ffffff';
       drawer.style.zIndex = '9999';
       drawer.innerHTML = `
-        <div class="max-w-lg mx-auto space-y-3 text-left bg-white">
+        <div class="max-w-lg mx-auto space-y-3 text-left" style="background: var(--surface);">
           <div class="grid grid-cols-2 gap-2">
             <a href="/#features" class="mobile-nav-link flex items-center gap-2.5 p-3 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 text-gray-900 font-bold text-sm no-underline">
-              <span>⚡ Features</span>
+              <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+              <span>Features</span>
             </a>
             <a href="/pricing" class="mobile-nav-link flex items-center gap-2.5 p-3 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 text-gray-900 font-bold text-sm no-underline">
-              <span>💎 Pricing</span>
+              <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h10l3 5-8 8-8-8 3-5z"/></svg>
+              <span>Pricing</span>
             </a>
           </div>
 
@@ -303,8 +393,8 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="pt-1">
             <div class="text-[11px] font-extrabold uppercase tracking-wider text-gray-400 px-1 mb-1.5">Comparisons &amp; Guides</div>
             <div class="grid grid-cols-1 gap-1.5">
-              <a href="/vs/totalvpn" class="mobile-nav-link flex items-center justify-between px-3 py-2.5 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 text-xs font-bold text-gray-800 no-underline">
-                <span>SWEEPR VPN vs Total VPN</span>
+              <a href="/alternatives/totalvpn" class="mobile-nav-link flex items-center justify-between px-3 py-2.5 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 text-xs font-bold text-gray-800 no-underline">
+                <span>Total VPN Alternatives &amp; Comparison</span>
                 <span class="text-emerald-600">&rarr;</span>
               </a>
               <a href="/alternatives/totalvpn" class="mobile-nav-link flex items-center justify-between px-3 py-2.5 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 text-xs font-bold text-gray-800 no-underline">
@@ -424,7 +514,10 @@ document.addEventListener('DOMContentLoaded', () => {
             ? `
               <div class="max-w-md mx-auto text-left space-y-2.5">
                 <div class="flex items-center justify-between">
-                  <div class="font-extrabold text-sm text-gray-900">🍎 Installing SWEEPR VPN on iOS</div>
+                  <div class="inline-flex items-center gap-2 font-bold text-sm text-gray-900">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                    <span>Installing SWEEPR VPN on iOS</span>
+                  </div>
                   <button type="button" id="closeMobileInstallSheet" class="text-xs font-bold text-gray-400 hover:text-gray-700 px-2 py-1 cursor-pointer">&#10005;</button>
                 </div>
                 <p class="text-xs text-gray-600 leading-relaxed">
@@ -432,23 +525,26 @@ document.addEventListener('DOMContentLoaded', () => {
                   <strong>2.</strong> Open <strong>Settings &rarr; Profile Downloaded &rarr; Install</strong>, or launch the iOS app directly below:
                 </p>
                 <div class="grid grid-cols-1 gap-2 pt-1">
-                  <a href="/ios-app" class="btn btn-go w-full justify-center py-2.5 text-xs font-extrabold">🚀 Open SWEEPR VPN App Now</a>
-                  <a href="/download/SWEEPRVPN.mobileconfig" class="flex items-center justify-center rounded-xl border border-gray-200 bg-gray-50 text-gray-800 w-full py-2 text-xs font-bold no-underline">⬇️ Re-download iOS Installer Profile</a>
+                  <a href="/ios-app" class="btn btn-go w-full justify-center py-2.5 text-xs font-bold">Open SWEEPR VPN App Now</a>
+                  <a href="/download/SWEEPRVPN.mobileconfig" class="flex items-center justify-center rounded-xl border border-gray-200 bg-gray-50 text-gray-800 w-full py-2 text-xs font-semibold no-underline">Re-download iOS Installer Profile</a>
                 </div>
               </div>`
             : `
               <div class="max-w-md mx-auto text-left space-y-2.5">
                 <div class="flex items-center justify-between">
-                  <div class="font-extrabold text-sm text-gray-900">📱 Downloading SWEEPRVPN.apk...</div>
+                  <div class="inline-flex items-center gap-2 font-bold text-sm text-gray-900">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                    <span>Downloading SWEEPRVPN.apk...</span>
+                  </div>
                   <button type="button" id="closeMobileInstallSheet" class="text-xs font-bold text-gray-400 hover:text-gray-700 px-2 py-1 cursor-pointer">&#10005;</button>
                 </div>
                 <p class="text-xs text-gray-600 leading-relaxed">
                   Your Android installer (<strong>SWEEPRVPN.apk</strong>) is downloading now. Tap <strong>Open</strong> in your browser notification bar to install, or launch directly below:
                 </p>
                 <div class="grid grid-cols-1 gap-2 pt-1">
-                  <a href="https://play.google.com/apps/testing/com.sweepr.vpn" target="_blank" rel="noopener" class="btn btn-go w-full justify-center py-2.5 text-xs font-extrabold">▶️ Join Official Google Play Beta (Get 30 Days Pro Free)</a>
-                  <a href="/download/SWEEPRVPN.apk" download="SWEEPRVPN.apk" class="flex items-center justify-center rounded-xl border border-emerald-300 bg-emerald-50 text-emerald-900 w-full py-2 text-xs font-extrabold no-underline">⬇️ Download SWEEPRVPN.apk Again</a>
-                  <a href="/ios-app" class="flex items-center justify-center rounded-xl border border-gray-200 bg-gray-50 text-gray-800 w-full py-2 text-xs font-bold no-underline">🚀 Open SWEEPR VPN Mobile App Now</a>
+                  <a href="https://play.google.com/apps/testing/com.sweepr.vpn" target="_blank" rel="noopener" class="btn btn-go w-full justify-center py-2.5 text-xs font-bold">Join Official Google Play Beta (Get 30 Days Pro Free)</a>
+                  <a href="/download/SWEEPRVPN.apk" download="SWEEPRVPN.apk" class="flex items-center justify-center rounded-xl border border-emerald-300 bg-emerald-50 text-emerald-900 w-full py-2 text-xs font-bold no-underline">Download SWEEPRVPN.apk Again</a>
+                  <a href="/ios-app" class="flex items-center justify-center rounded-xl border border-gray-200 bg-gray-50 text-gray-800 w-full py-2 text-xs font-semibold no-underline">Open SWEEPR VPN Mobile App Now</a>
                 </div>
               </div>`;
           document.body.appendChild(sheet);
@@ -499,7 +595,7 @@ document.addEventListener('DOMContentLoaded', () => {
             else if (key === 'online-pops' || key === 'online-nodes') el.textContent = `${stats.onlinePopsCount || 8}/${stats.totalPops || 8}`;
             else if (key === 'connected-devices') el.textContent = `${stats.totalConnectedDevices || 139}`;
             else if (key === 'summary-ticker') {
-              el.textContent = `🟢 All ${stats.onlinePopsCount || 8} Global VPN Locations Online • Instant 1-Click Setup • 14-Day Money-Back Guarantee`;
+              el.textContent = `All ${stats.onlinePopsCount || 8} Global VPN Locations Online • Instant 1-Click Setup • 14-Day Money-Back Guarantee`;
             }
           });
         })
@@ -514,22 +610,27 @@ document.addEventListener('DOMContentLoaded', () => {
         exportSection.id = 'sweeprDiagnosticExportBar';
         exportSection.className = 'max-w-4xl mx-auto my-8 px-4';
         exportSection.innerHTML = `
-          <div class="bg-slate-900 text-white rounded-2xl p-5 sm:p-6 border border-emerald-500/30 shadow-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div class="rounded-2xl p-5 sm:p-6 border border-[#2a3242] bg-[#141820] text-[#f1f5f9] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div class="space-y-1">
-              <div class="inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wider text-emerald-400">
-                <span>🛠️ Diagnostic Report &amp; Remediation Runbook</span>
+              <div class="inline-flex items-center gap-1.5 font-mono text-[11px] font-semibold uppercase tracking-wider text-emerald-400">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                <span>Diagnostic Report &amp; Remediation Runbook</span>
               </div>
-              <h3 class="text-base sm:text-lg font-black text-white">Save or Share Your Network Audit Snapshot</h3>
+              <h3 class="text-base sm:text-lg font-bold text-white">Save or Share Your Network Audit Snapshot</h3>
               <p class="text-xs text-slate-300 max-w-xl">
-                Copy a clean Markdown summary for Reddit/forums or download a custom WireGuard + DNS remediation runbook (\`.txt\`).
+                Copy a clean Markdown summary for technical forums or download a custom WireGuard + DNS remediation runbook (\`.txt\`).
               </p>
             </div>
             <div class="flex flex-wrap items-center gap-2.5 shrink-0">
-              <button type="button" id="copyDiagMarkdownBtn" class="px-3.5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs cursor-pointer transition-colors">
-                📋 Copy Markdown Report
+              <button type="button" id="copyDiagMarkdownBtn" class="copy-spring-btn px-3.5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 border-emerald-500 text-white font-semibold text-xs cursor-pointer">
+                <span class="copy-icon-stack">
+                  <svg class="icon-copy" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                  <svg class="icon-check" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                </span>
+                <span class="copy-btn-label">Copy Markdown Report</span>
               </button>
-              <button type="button" id="downloadDiagRunbookBtn" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white font-bold text-xs cursor-pointer transition-colors">
-                ⬇️ Download Fix Runbook (.txt)
+              <button type="button" id="downloadDiagRunbookBtn" class="px-3.5 py-2.5 rounded-xl bg-[#1e2533] hover:bg-[#273042] border border-[#323d52] text-white font-semibold text-xs cursor-pointer transition-colors">
+                Download Runbook (.txt)
               </button>
             </div>
           </div>
@@ -547,7 +648,7 @@ document.addEventListener('DOMContentLoaded', () => {
             londonLatencyMs: proof.londonLatencyMs || 4,
             acrDomains: proof.acrDomainsBlockedCount || 65,
             markdown: [
-              `### 🛡️ ${toolTitle} — Audit Snapshot`,
+              `### ${toolTitle} — Audit Snapshot`,
               `- **Tool URL**: ${window.location.origin}${window.location.pathname}`,
               `- **Timestamp (UTC)**: \`${nowIso}\``,
               `- **Reference WireGuard Baseline**: UK-LON-01 \`${proof.londonLatencyMs || 4}ms\` IXP RTT (ChaCha20-Poly1305, 1380 MTU)`,
@@ -586,15 +687,10 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('copyDiagMarkdownBtn')?.addEventListener('click', (ev) => {
           const snap = buildDiagnosticSnapshot();
           const btn = ev.currentTarget;
-          if (navigator.clipboard && navigator.clipboard.writeText) {
+          if (window.sweeprSpringCopy) {
+            window.sweeprSpringCopy(btn, snap.markdown, 'Copied Markdown');
+          } else if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(snap.markdown).catch(() => {});
-          }
-          if (btn) {
-            const orig = btn.textContent;
-            btn.textContent = '✅ Copied Markdown!';
-            setTimeout(() => {
-              btn.textContent = orig;
-            }, 2200);
           }
           window.sweeprTrack('diagnostic_badge_copied', {
             format: 'markdown',

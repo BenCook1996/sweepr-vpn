@@ -8,59 +8,59 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
 <title>SWEEPR VPN</title>
 <style>
   :root[data-theme="light"] {
-    --bg: #f8fafc;
+    --bg: #f7f7f5;
     --card: #ffffff;
-    --card-sub: #f1f5f9;
-    --glass: rgba(255, 255, 255, 0.94);
-    --text: #0f172a;
-    --text-sub: #334155;
-    --muted: #64748b;
-    --border: #e2e8f0;
-    --border-strong: #cbd5e1;
+    --card-sub: #f3f2ed;
+    --glass: rgba(255, 255, 255, 0.96);
+    --text: #161a22;
+    --text-sub: #374151;
+    --muted: #5e6776;
+    --border: #dfddd4;
+    --border-strong: #cbc8bc;
     --accent: #059669;
     --accent-bright: #10b981;
     --accent-soft: #d1fae5;
     --accent-fg: #065f46;
     --accent-border: #10b981;
-    --orb-off-bg: linear-gradient(145deg, #ffffff, #f1f5f9);
-    --orb-off-border: #cbd5e1;
-    --orb-off-text: #0f172a;
-    --orb-off-ring: rgba(148, 163, 184, 0.14);
-    --orb-on-bg: radial-gradient(circle at 30% 30%, #10b981, #059669);
-    --orb-on-border: #34d399;
+    --orb-off-bg: #ffffff;
+    --orb-off-border: #cbc8bc;
+    --orb-off-text: #161a22;
+    --orb-off-ring: rgba(94, 103, 118, 0.12);
+    --orb-on-bg: #059669;
+    --orb-on-border: #047857;
     --orb-on-text: #ffffff;
-    --orb-on-ring: rgba(16, 185, 129, 0.16);
-    --shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+    --orb-on-ring: rgba(5, 150, 105, 0.18);
+    --shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
     --input-bg: #ffffff;
   }
 
   :root[data-theme="dark"] {
-    /* @Memorisely Rule #7: Stepped Dark Mode Slate Surfaces */
-    --bg: #070b14;
-    --card: #111a2e;
-    --card-sub: #16213a;
-    --glass: rgba(15, 23, 42, 0.94);
-    --text: #f8fafc;
-    --text-sub: #cbd5e1;
-    --muted: #94a3b8;
-    --border: rgba(148, 163, 184, 0.16);
-    --border-strong: rgba(148, 163, 184, 0.32);
+    --bg: #111315;
+    --card: #181b1f;
+    --card-sub: #20242a;
+    --glass: rgba(24, 27, 31, 0.96);
+    --text: #f3f4f6;
+    --text-sub: #d1d5db;
+    --muted: #8c95a3;
+    --border: #2b3038;
+    --border-strong: #3a414c;
     --accent: #10b981;
     --accent-bright: #34d399;
-    --accent-soft: rgba(16, 185, 129, 0.16);
+    --accent-soft: rgba(16, 185, 129, 0.14);
     --accent-fg: #34d399;
     --accent-border: rgba(52, 211, 153, 0.45);
-    --orb-off-bg: linear-gradient(145deg, #1e293b, #0f172a);
-    --orb-off-border: #334155;
-    --orb-off-text: #f8fafc;
-    --orb-off-ring: rgba(148, 163, 184, 0.1);
-    --orb-on-bg: radial-gradient(circle at 30% 30%, #34d399, #059669);
-    --orb-on-border: #6ee7b7;
-    --orb-on-text: #022c22;
+    --orb-off-bg: #181b1f;
+    --orb-off-border: #3a414c;
+    --orb-off-text: #f3f4f6;
+    --orb-off-ring: rgba(140, 149, 163, 0.1);
+    --orb-on-bg: #059669;
+    --orb-on-border: #34d399;
+    --orb-on-text: #ffffff;
     --orb-on-ring: rgba(16, 185, 129, 0.22);
-    --shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
-    --input-bg: #090d16;
+    --shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    --input-bg: #111315;
   }
+  html.no-transitions, html.no-transitions * { transition: none !important; }
 
   * {
     box-sizing: border-box;
@@ -124,7 +124,7 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
     display: flex;
     align-items: center;
     gap: 8px;
-    font-weight: 900;
+    font-weight:700;
     font-size: 16px;
     letter-spacing: -0.02em;
   }
@@ -134,7 +134,7 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
     border-radius: 9px;
     background: linear-gradient(135deg, #10b981, #059669);
     color: #fff;
-    font-weight: 900;
+    font-weight:700;
     font-size: 14px;
     display: flex;
     align-items: center;
@@ -224,7 +224,7 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
     align-items: center;
     gap: 6px;
     font-size: 11px;
-    font-weight: 900;
+    font-weight:700;
     padding: 5px 14px;
     border-radius: 999px;
     background: var(--card-sub);
@@ -239,7 +239,7 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
   }
   .c3-headline {
     font-size: 22px;
-    font-weight: 900;
+    font-weight:700;
     margin-top: 12px;
     letter-spacing: -0.02em;
   }
@@ -286,7 +286,7 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
   }
   .c3-orb-label {
     font-size: 11.5px;
-    font-weight: 900;
+    font-weight:700;
     letter-spacing: 0.06em;
   }
 
@@ -431,7 +431,7 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
     border: none;
     background: linear-gradient(135deg, #10b981, #059669);
     color: #fff;
-    font-weight: 900;
+    font-weight:700;
     font-size: 14px;
     margin-top: 12px;
     cursor: pointer;
@@ -544,6 +544,10 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
        TAB 1: CONCEPT 3 — TACTILE POWER ORB HOME
        ======================================================================== -->
   <main id="view-home" class="view active">
+    <div class="mono" style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 11px;margin-bottom:12px;border:1px solid var(--border);background:var(--card-sub);border-radius:10px;font-size:10.5px;color:var(--muted)">
+      <span style="display:inline-flex;align-items:center;gap:6px;color:var(--text-sub);font-weight:700"><span style="width:7px;height:7px;border-radius:999px;background:#059669;display:inline-block"></span>TUNNEL // WIREGUARD 10GBPS</span>
+      <span>ACR SINKHOLE 10.66.0.1</span>
+    </div>
     <div class="c3-status-header">
       <div id="statusPill" class="c3-status-pill">TAP ORB TO PROTECT</div>
       <div id="statusHeadline" class="c3-headline">Protection is Paused</div>
@@ -560,9 +564,9 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
     <div class="c3-bottom-deck">
       <!-- Option 1: Inline Thumb-Zone Quick Country Pill Strip (1-Tap Switch & Connect) -->
       <div id="quickCountryStrip" style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">
-        <button class="srv-btn" style="margin:0;padding:8px 6px;justify-content:center;font-size:11.5px;font-weight:800;border-radius:12px" onclick="pickServer('UK-LON-01')">🇬🇧 UK</button>
-        <button class="srv-btn" style="margin:0;padding:8px 6px;justify-content:center;font-size:11.5px;font-weight:800;border-radius:12px" onclick="pickServer('US-NYC-01')">🇺🇸 USA</button>
-        <button class="srv-btn" style="margin:0;padding:8px 6px;justify-content:center;font-size:11.5px;font-weight:800;border-radius:12px" onclick="pickServer('SE-STO-01')">🇸🇪 SE</button>
+        <button class="srv-btn" style="margin:0;padding:8px 6px;justify-content:center;font-size:11.5px;font-weight:800;border-radius:12px" onclick="pickServer('UK-LON-01')">GB &middot; UK</button>
+        <button class="srv-btn" style="margin:0;padding:8px 6px;justify-content:center;font-size:11.5px;font-weight:800;border-radius:12px" onclick="pickServer('US-NYC-01')">US &middot; NYC</button>
+        <button class="srv-btn" style="margin:0;padding:8px 6px;justify-content:center;font-size:11.5px;font-weight:800;border-radius:12px" onclick="pickServer('SE-STO-01')">SE &middot; STO</button>
         <button class="srv-btn" style="margin:0;padding:8px 6px;justify-content:center;font-size:11.5px;font-weight:800;border-radius:12px;color:var(--accent-fg)" onclick="switchTab('servers')">All 8 ›</button>
       </div>
       <!-- Selected Country Switcher Card -->
@@ -571,7 +575,7 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
           <span id="curFlag" class="flag-box"></span>
           <div>
             <div style="font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em">Selected Location</div>
-            <div id="curLoc" style="font-size:14.5px;font-weight:900;margin-top:2px">United Kingdom &middot; London</div>
+            <div id="curLoc" style="font-size:14.5px;font-weight:700;margin-top:2px">United Kingdom &middot; London</div>
           </div>
         </div>
         <span class="c3-change-pill">Change</span>
@@ -596,7 +600,7 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
        ======================================================================== -->
   <section id="view-servers" class="view">
     <div class="card">
-      <div style="font-size:17px;font-weight:900;margin-bottom:4px">Select Country</div>
+      <div style="font-size:17px;font-weight:700;margin-bottom:4px">Select Country</div>
       <p style="font-size:12.5px;color:var(--muted);margin-bottom:14px">10 Gbps RAM-only WireGuard gateways with full IPv4, IPv6 &amp; DNS leak protection.</p>
       <div id="fullSrvList"></div>
     </div>
@@ -609,27 +613,27 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
     <!-- Card 1: Plain-English Wi-Fi Guard, Doorbell Mode & Airbnb Camera Scanner -->
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px">
-        <div style="font-size:17px;font-weight:900">Wi-Fi Guard Home</div>
+        <div style="font-size:17px;font-weight:700">Wi-Fi Guard Home</div>
         <span id="mobWifiGuardBadge" class="badge">1 Unknown Flagged</span>
       </div>
       <p style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.4">Translates cryptic <code>Espressif</code> &amp; <code>Tuya</code> chips into plain English, spots Airbnb hidden cameras, and pauses kids' consoles at bedtime.</p>
 
       <!-- @Memorisely Rule #5 (2B): Single Primary CTA + Secondary Outline Button -->
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
-        <button class="btn-primary" style="margin-top:0;padding:10px;font-size:12px;border-radius:12px" onclick="runMobileWifiGuardScan(false)">📡 5-Sec Wi-Fi Scan</button>
-        <button class="btn-secondary" style="padding:10px;font-size:12px" onclick="runMobileWifiGuardScan(true)">📷 Scan Airbnb Cameras</button>
+        <button class="btn-primary" style="margin-top:0;padding:10px;font-size:12px;border-radius:12px" onclick="runMobileWifiGuardScan(false)">5-Sec Wi-Fi Scan</button>
+        <button class="btn-secondary" style="padding:10px;font-size:12px" onclick="runMobileWifiGuardScan(true)">Scan Airbnb Cameras</button>
       </div>
 
       <!-- @Memorisely Rule #4 (2B): De-Boxed Doorbell Mode Row using Whitespace + Hairline Dividers -->
       <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:10px">
         <div style="display:flex;align-items:center;gap:10px">
-          <div class="mob-anchor-ico">🔔</div>
+          <div class="mob-anchor-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
           <div>
             <div style="font-size:13px;font-weight:800">Doorbell Mode for Wi-Fi</div>
             <div style="font-size:11px;color:var(--muted)">Alert when a new device or guest connects</div>
           </div>
         </div>
-        <button id="shieldBtnDoorbell" class="c3-change-pill" style="border:none;cursor:pointer;font-size:11px;font-weight:900" onclick="toggleMobileShield('doorbell')">ACTIVE</button>
+        <button id="shieldBtnDoorbell" class="c3-change-pill" style="border:none;cursor:pointer;font-size:11px;font-weight:700" onclick="toggleMobileShield('doorbell')">ACTIVE</button>
       </div>
 
       <!-- Plain-English Device List -->
@@ -639,63 +643,63 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
     <!-- Card 2: ISP Speed-Drop Refund Proof + 1-Tap VPN Fix (De-Boxed + Single Primary CTA) -->
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <div style="font-size:16px;font-weight:900">ISP Speed-Drop Refund Proof</div>
-        <span class="mono" style="font-size:11px;font-weight:900;color:#ef4444" id="mobIspDropPill">-82% Evening Drop</span>
+        <div style="font-size:16px;font-weight:700">ISP Speed-Drop Refund Proof</div>
+        <span class="mono" style="font-size:11px;font-weight:700;color:#ef4444" id="mobIspDropPill">-82% Evening Drop</span>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:12px">
         <div>
           <div style="font-size:10.5px;font-weight:800;color:var(--muted);text-transform:uppercase">Your ISP Plan</div>
-          <div style="font-size:16px;font-weight:900;margin-top:2px" id="mobIspPlanLabel">$85/mo &middot; 500 Mbps</div>
+          <div style="font-size:16px;font-weight:700;margin-top:2px" id="mobIspPlanLabel">$85/mo &middot; 500 Mbps</div>
           <div style="font-size:11px;color:var(--muted)" id="mobIspProviderLabel">Spectrum / Xfinity / Virgin</div>
         </div>
         <div style="text-align:right">
           <div style="font-size:10.5px;font-weight:800;color:var(--muted);text-transform:uppercase">Evening Speed</div>
-          <div style="font-size:16px;font-weight:900;color:#ef4444;margin-top:2px" id="mobIspMeasuredLabel">89 Mbps</div>
+          <div style="font-size:16px;font-weight:700;color:#ef4444;margin-top:2px" id="mobIspMeasuredLabel">89 Mbps</div>
           <div style="font-size:11px;font-weight:700;color:var(--accent-fg)">Eligible: $35 Bill Credit</div>
         </div>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn-primary" style="flex:1.2;margin-top:0;padding:11px;font-size:12.5px;border-radius:12px" onclick="switchTab('home'); toggleTunnel()">⚡ Bypass ISP Throttling</button>
-        <button class="btn-secondary" style="flex:1;width:auto;padding:11px;font-size:12px" onclick="copyMobileIspRefundScript()">📄 Copy $35 Script</button>
+        <button class="btn-primary" style="flex:1.2;margin-top:0;padding:11px;font-size:12.5px;border-radius:12px" onclick="switchTab('home'); toggleTunnel()">Bypass ISP Throttling</button>
+        <button class="btn-secondary" style="flex:1;width:auto;padding:11px;font-size:12px" onclick="copyMobileIspRefundScript()">Copy $35 Script</button>
       </div>
     </div>
 
     <!-- Card 3: Core Tunnel & Smart-TV Privacy Shields (2C: Uber Visual Anchoring Icons) -->
     <div class="card">
-      <div style="font-size:16px;font-weight:900;margin-bottom:4px">Tunnel &amp; Smart-TV Shields</div>
+      <div style="font-size:16px;font-weight:700;margin-bottom:4px">Tunnel &amp; Smart-TV Shields</div>
       <p style="font-size:12px;color:var(--muted);margin-bottom:8px">Automatic protection against IP leaks, hotel Wi-Fi snooping, and Smart-TV ACR trackers.</p>
 
       <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--border);gap:10px">
         <div style="display:flex;align-items:center;gap:10px">
-          <div class="mob-anchor-ico">🛑</div>
+          <div class="mob-anchor-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
           <div>
             <div style="font-size:14px;font-weight:800">Internet Kill Switch</div>
             <div style="font-size:11.5px;color:var(--muted)">Blocks traffic if the VPN tunnel drops</div>
           </div>
         </div>
-        <button id="shieldBtnKillSwitch" class="c3-change-pill" style="border:none;cursor:pointer;font-size:11.5px;font-weight:900" onclick="toggleMobileShield('killSwitch')">ACTIVE</button>
+        <button id="shieldBtnKillSwitch" class="c3-change-pill" style="border:none;cursor:pointer;font-size:11.5px;font-weight:700" onclick="toggleMobileShield('killSwitch')">ACTIVE</button>
       </div>
 
       <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--border);gap:10px">
         <div style="display:flex;align-items:center;gap:10px">
-          <div class="mob-anchor-ico">📡</div>
+          <div class="mob-anchor-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg></div>
           <div>
             <div style="font-size:14px;font-weight:800">Untrusted Wi-Fi Auto-Shield</div>
             <div style="font-size:11.5px;color:var(--muted)">Secures airport, cafe &amp; hotel Wi-Fi</div>
           </div>
         </div>
-        <button id="shieldBtnAutoWifi" class="c3-change-pill" style="border:none;cursor:pointer;font-size:11.5px;font-weight:900" onclick="toggleMobileShield('autoWifi')">ACTIVE</button>
+        <button id="shieldBtnAutoWifi" class="c3-change-pill" style="border:none;cursor:pointer;font-size:11.5px;font-weight:700" onclick="toggleMobileShield('autoWifi')">ACTIVE</button>
       </div>
 
       <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 0;gap:10px">
         <div style="display:flex;align-items:center;gap:10px">
-          <div class="mob-anchor-ico">📺</div>
+          <div class="mob-anchor-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="17 2 12 7 7 2"/></svg></div>
           <div>
             <div style="font-size:14px;font-weight:800">Smart-TV &amp; WebRTC Leak Block</div>
             <div style="font-size:11.5px;color:var(--muted)">Masks real UK/local IP from analytics</div>
           </div>
         </div>
-        <button id="shieldBtnDnsShield" class="c3-change-pill" style="border:none;cursor:pointer;font-size:11.5px;font-weight:900" onclick="toggleMobileShield('dnsShield')">ACTIVE</button>
+        <button id="shieldBtnDnsShield" class="c3-change-pill" style="border:none;cursor:pointer;font-size:11.5px;font-weight:700" onclick="toggleMobileShield('dnsShield')">ACTIVE</button>
       </div>
     </div>
 
@@ -724,7 +728,7 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
         <button class="btn-primary" style="margin-top:10px;padding:11px" onclick="runInAppLeakCheck()">Run Live ISP &amp; Leak Diagnostic</button>
         <div id="inAppDiagOut" class="mono" style="font-size:11.5px;margin-top:8px;color:var(--text-sub);line-height:1.45"></div>
         <div id="momentOfProofPaywall" style="display:none;margin-top:10px;padding:12px;border-radius:14px;background:var(--accent-soft);border:1px solid var(--accent-border)">
-          <div style="font-size:11.5px;font-weight:900;color:var(--accent-fg);margin-bottom:4px">🛡️ Moment of Proof: Unencrypted ISP &amp; Smart-TV ACR Detected</div>
+          <div style="font-size:11.5px;font-weight:700;color:var(--accent-fg);margin-bottom:4px">Moment of Proof: Unencrypted ISP &amp; Smart-TV ACR Detected</div>
           <p id="momentOfProofText" style="font-size:11.5px;color:var(--text-sub);line-height:1.4;margin-bottom:8px">Your connection is exposed to ISP throttling and Smart-TV ACR beacons (gpm.samsungqbe.com). Lock your tunnel + Wi-Fi Radar now.</p>
           <a href="/order?plan=annual&amp;utm_source=inapp_scanner&amp;utm_medium=plg_moment_of_proof&amp;utm_content=acr_shield" class="btn-primary" style="display:block;text-align:center;text-decoration:none;padding:9px;font-size:12px">Unlock Pro + Smart-TV Shield (£1.99 1st Mo)</a>
         </div>
@@ -737,12 +741,12 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
        ======================================================================== -->
   <section id="view-account" class="view">
     <div class="card">
-      <div style="font-size:16px;font-weight:900">Activate Pro Device</div>
+      <div style="font-size:16px;font-weight:700">Activate Pro Device</div>
       <p style="font-size:12px;color:var(--muted);margin-top:4px;line-height:1.45">
-        Purchased on desktop first? Sign in at <strong>sweeprvpn.com/login</strong> to scan your QR code or paste your <code>ptk_...</code> pairing code or <code>SWEEPR-VPN-...</code> license key below (up to 3 devices).
+        Purchased on desktop first? Sign in at <strong>sweeprvpn.com/login</strong> to scan your QR code or paste your pairing link or <code>SWEEPR-VPN-...</code> license key below (up to 3 devices).
       </p>
       <label class="mob-field-lbl" for="codeInput">ACTIVE LICENSE OR PAIRING KEY</label>
-      <input id="codeInput" class="input mono" style="margin-top:0" placeholder="e.g. SWEEPR-VPN-XXXX or ptk_..." autocomplete="off" />
+      <input id="codeInput" class="input mono" style="margin-top:0" placeholder="e.g. SWEEPR-VPN-XXXX or pairing link" autocomplete="off" />
       <label class="mob-field-lbl" for="emailInput">ACCOUNT EMAIL (OPTIONAL)</label>
       <input id="emailInput" class="input" style="margin-top:0" type="email" placeholder="e.g. you@example.com" autocomplete="email" />
       <button class="btn-primary" onclick="activateDevice()">Activate Pro on This Device</button>
@@ -876,16 +880,16 @@ function renderMobilePlainDevices() {
   box.innerHTML = mobDevices.map((d, i) => {
     if (d.state === 'intruder') {
       return '<div style="padding:11px 12px;border-radius:14px;border:1.5px solid ' + (d.blocked ? 'var(--border)' : '#f59e0b') + ';background:' + (d.blocked ? 'var(--card-sub)' : 'rgba(245,158,11,0.1)') + ';display:flex;justify-content:space-between;align-items:center;gap:8px">' +
-        '<div><div style="font-size:13px;font-weight:800">🚨 ' + escHtml(d.name) + '</div><div style="font-size:11px;color:var(--muted)">' + escHtml(d.blocked ? 'Blocked from Guest Wi-Fi ✓' : d.sub) + '</div></div>' +
+        '<div><div style="font-size:13px;font-weight:800">' + escHtml(d.name) + '</div><div style="font-size:11px;color:var(--muted)">' + escHtml(d.blocked ? 'Blocked from Guest Wi-Fi ✓' : d.sub) + '</div></div>' +
         '<button class="c3-change-pill" style="border:none;cursor:pointer;min-height:38px;background:' + (d.blocked ? 'var(--accent-soft)' : '#f59e0b') + ';color:' + (d.blocked ? 'var(--accent-fg)' : '#fff') + '" onclick="toggleMobIntruder(' + i + ')">' + (d.blocked ? 'Blocked ✓' : 'Kick Off') + '</button></div>';
     }
     if (d.state === 'kid') {
       return '<div style="padding:11px 12px;border-radius:14px;border:1px solid var(--border);background:var(--card-sub);display:flex;justify-content:space-between;align-items:center;gap:8px">' +
-        '<div><div style="font-size:13px;font-weight:800">🎮 ' + escHtml(d.name) + '</div><div style="font-size:11px;color:var(--muted)">' + escHtml(d.paused ? ('Bedtime Pause Active (' + btFormatted + ' – 7:00 AM)') : 'Online • Tap to pause for bedtime') + '</div></div>' +
+        '<div><div style="font-size:13px;font-weight:800">' + escHtml(d.name) + '</div><div style="font-size:11px;color:var(--muted)">' + escHtml(d.paused ? ('Bedtime Pause Active (' + btFormatted + ' – 7:00 AM)') : 'Online • Tap to pause for bedtime') + '</div></div>' +
         '<button class="c3-change-pill" style="border:none;cursor:pointer;min-height:38px" onclick="toggleMobBedtime(' + i + ')">' + (d.paused ? 'Paused' : 'Bedtime Pause') + '</button></div>';
     }
     return '<div style="padding:10px 12px;border-radius:14px;border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:8px">' +
-      '<div><div style="font-size:13px;font-weight:800">🔌 ' + escHtml(d.name) + '</div><div style="font-size:11px;color:var(--muted)">' + escHtml(d.sub) + '</div></div>' +
+      '<div><div style="font-size:13px;font-weight:800">' + escHtml(d.name) + '</div><div style="font-size:11px;color:var(--muted)">' + escHtml(d.sub) + '</div></div>' +
       '<span class="badge" style="font-size:10px">Trusted</span></div>';
   }).join('');
 }
@@ -903,14 +907,14 @@ function toggleMobBedtime(i) {
   if (!mobDevices[i]) return;
   mobDevices[i].paused = !mobDevices[i].paused;
   renderMobilePlainDevices();
-  showToast(mobDevices[i].paused ? "🌙 Bedtime Pause enabled for " + mobDevices[i].name : "▶ Resumed internet for " + mobDevices[i].name);
+  showToast(mobDevices[i].paused ? "Bedtime Pause enabled for " + mobDevices[i].name : "Resumed internet for " + mobDevices[i].name);
 }
 
 function runMobileWifiGuardScan(cameraMode) {
-  showToast(cameraMode ? '📷 Scanning Airbnb Wi-Fi for hidden RTSP/ONVIF cameras...' : '📡 Scanning Wi-Fi & translating IoT chips into plain English...');
+  showToast(cameraMode ? 'Scanning Airbnb Wi-Fi for hidden RTSP/ONVIF cameras...' : 'Scanning Wi-Fi & translating IoT chips into plain English...');
   setTimeout(() => {
     renderMobilePlainDevices();
-    showToast(cameraMode ? '📷 Airbnb Scan Clear: 0 hidden cameras found ✓' : '📡 Found 4 devices in plain English');
+    showToast(cameraMode ? 'Airbnb Scan Clear: 0 hidden cameras found' : 'Found 4 devices in plain English');
   }, 450);
 }
 
@@ -959,10 +963,13 @@ function showToast(msg) {
 
 function applyTheme(theme) {
   const isDark = theme === 'dark';
+  document.documentElement.classList.add('no-transitions');
   document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
   document.getElementById('iconSun').style.display = isDark ? 'block' : 'none';
   document.getElementById('iconMoon').style.display = isDark ? 'none' : 'block';
   document.getElementById('drawerThemeText').textContent = isDark ? 'Dark Mode' : 'Light Mode';
+  void document.documentElement.offsetHeight;
+  requestAnimationFrame(() => document.documentElement.classList.remove('no-transitions'));
   localStorage.setItem('sweepr_vpn_theme', isDark ? 'dark' : 'light');
 }
 
@@ -1040,7 +1047,7 @@ async function activateDevice() {
   const msg = document.getElementById('actMsg');
   if (!raw) {
     msg.style.color = '#ef4444';
-    msg.textContent = 'Enter your license key or ptk_ pairing code.';
+    msg.textContent = 'Enter your license key or pairing code.';
     return;
   }
   msg.style.color = 'var(--muted)';
@@ -1140,7 +1147,7 @@ async function checkMobileWebUpdate() {
       if (d.force_update) {
         const modal = document.createElement('div');
         modal.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(11,17,32,0.92);display:flex;align-items:center;justify-content:center;padding:20px';
-        modal.innerHTML = '<div class="card" style="max-width:360px;width:100%;text-align:center"><div style="font-size:18px;font-weight:900;margin-bottom:8px">Mandatory Update Required</div><p style="font-size:13px;color:var(--muted);margin-bottom:16px">' + escHtml(d.notes || 'Please update SWEEPR VPN to the latest version.') + '</p><a href="' + escHtml(targetUrl) + '" class="btn-primary" style="display:block;text-decoration:none;text-align:center">Update Now</a></div>';
+        modal.innerHTML = '<div class="card" style="max-width:360px;width:100%;text-align:center"><div style="font-size:18px;font-weight:700;margin-bottom:8px">Mandatory Update Required</div><p style="font-size:13px;color:var(--muted);margin-bottom:16px">' + escHtml(d.notes || 'Please update SWEEPR VPN to the latest version.') + '</p><a href="' + escHtml(targetUrl) + '" class="btn-primary" style="display:block;text-decoration:none;text-align:center">Update Now</a></div>';
         document.body.appendChild(modal);
       } else {
         showToast('SWEEPR VPN v' + (d.latest_version || '') + ' update available');

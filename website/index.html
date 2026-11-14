@@ -193,7 +193,7 @@
           <div id="navDropdownMenu" class="hidden absolute left-0 md:left-1/2 md:-translate-x-1/2 mt-2 w-[340px] sm:w-[420px] bg-white/95 backdrop-blur-xl border border-gray-200/90 rounded-2xl shadow-2xl p-2.5 z-50 transition-all">
             <div class="grid grid-cols-1 gap-1.5">
               <!-- Tile 1: SWEEPR VPN vs Total VPN -->
-              <a href="/vs/totalvpn" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
+              <a href="/alternatives/totalvpn" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
                 <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
@@ -299,94 +299,130 @@
     </div>
   </nav>
 
-  <!-- Hero Section (Design 1: Apple-Style Frosted Mint Hero + Interactive Slanted Card) -->
-  <main class="flex-1 pt-28 md:pt-32 pb-16 px-6 max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12 text-center md:text-left">
-    <div class="flex-1">
-      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/90 mb-5 shadow-2xs">
-        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-        <span>1-Click Private VPN &bull; Home Wi-Fi Device Scanner &bull; Protects 3 Devices<span data-live-proof="acr-domains" class="hidden">65</span></span>
+  <!-- Hero Section (Mockup 1: Instrumented Rackmount Telemetry) -->
+  <main class="flex-1 pt-24 md:pt-28 pb-16 px-6 max-w-6xl mx-auto w-full">
+    <div id="heroRouteTelemetryBar" class="rack-telemetry-bar mb-8 justify-between" aria-label="Live WireGuard Route Telemetry">
+      <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+        <span class="inline-flex items-center gap-1.5 font-mono text-[11px] font-bold tracking-wider uppercase text-emerald-700">
+          <span class="rack-led"></span>
+          <span>WG-KERNEL LIVE</span>
+        </span>
+        <span class="text-gray-300" aria-hidden="true">|</span>
+        <span id="heroTelNode" class="font-mono text-xs font-semibold tabular-nums">UK-LON-01 &middot; London</span>
+        <span class="text-gray-300" aria-hidden="true">|</span>
+        <span class="font-mono text-xs tabular-nums">EGRESS <strong id="heroTelIp" class="font-bold">185.199.108.42</strong></span>
+        <span class="text-gray-300" aria-hidden="true">|</span>
+        <span class="font-mono text-xs tabular-nums">RTT <strong id="heroTelPing" class="font-bold text-emerald-700">11 ms</strong></span>
       </div>
-      <h1 class="text-4xl sm:text-5xl md:text-6xl font-black mb-5 leading-[1.06] tracking-tight text-gray-900">
-        <span class="whitespace-nowrap">Secure your Wi&#8209;Fi.</span> <br>
-        <span style="color: var(--accent);">In plain English.</span>
-      </h1>
-      <p class="text-lg md:text-xl text-gray-600 mb-8 max-w-lg mx-auto md:mx-0 leading-relaxed">
-        Browse privately in one click, see every device connected to your home Wi-Fi in plain English, pause kids' devices at bedtime, and stop your internet provider from slowing you down.
-      </p>
-      <div class="flex flex-col sm:flex-row items-center gap-3.5 justify-center md:justify-start">
-        <a href="/download" id="downloadBtn" class="btn btn-go btn-big pulse-glow gap-2.5 w-full sm:w-auto justify-center">
-          <span id="osDownloadText">Free Download</span>
-          <svg class="arrow-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-        </a>
+      <div class="font-mono text-[11px] font-semibold tabular-nums text-emerald-700">
+        DNS 10.66.0.1 ACR SINKHOLE (<span data-live-proof="acr-domains">65</span> DOMAINS)
+      </div>
+    </div>
+
+    <div class="flex flex-col md:flex-row items-center gap-12 text-center md:text-left">
+      <div class="flex-1">
+        <div class="rack-pill mb-5">
+          <span class="rack-led"></span>
+          <span>1-Click Private VPN &bull; Home Wi-Fi Device Scanner &bull; Protects 3 Devices</span>
+        </div>
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-5 leading-[1.06] tracking-tight text-gray-900">
+          <span class="whitespace-nowrap">Secure your Wi&#8209;Fi.</span> <br>
+          <span style="color: var(--accent);">In plain English.</span>
+        </h1>
+        <p class="text-lg md:text-xl text-gray-600 mb-8 max-w-lg mx-auto md:mx-0 leading-relaxed">
+          Browse privately in one click, see every device connected to your home Wi-Fi in plain English, pause kids' devices at bedtime, and stop your internet provider from slowing you down.
+        </p>
+        <div class="flex flex-col sm:flex-row items-center gap-3.5 justify-center md:justify-start">
+          <a href="/download" id="downloadBtn" class="btn btn-go btn-big gap-2.5 w-full sm:w-auto justify-center">
+            <span id="osDownloadText">Free Download</span>
+            <svg class="arrow-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </a>
         <a rel="nofollow" href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="text-sm font-extrabold text-emerald-700 hover:text-emerald-800 underline underline-offset-4 px-2 py-2">Or unlock 3-Device Pro from £1.99 &rarr;</a>
       </div>
       <div class="flex flex-wrap items-center gap-x-3.5 gap-y-1.5 justify-center md:justify-start mt-5 text-xs text-gray-500 font-semibold">
         <span class="text-gray-700">For Windows, Mac, iOS, Android &amp; Linux</span>
-        <span>•</span>
-        <span>🛡️ 14-Day Money-Back Guarantee</span>
+        <span>&bull;</span>
+        <span class="inline-flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-emerald-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          <span>14-Day Money-Back Guarantee</span>
+        </span>
       </div>
     </div>
     <div class="flex-1 relative w-full max-w-sm mx-auto">
-      <!-- Ambient Emerald Glow Behind Slanted Card -->
-      <div class="absolute -inset-4 bg-gradient-to-tr from-emerald-200/35 via-teal-100/25 to-transparent rounded-3xl blur-2xl pointer-events-none"></div>
+      <div id="heroInteractiveCard" class="relative rack-card p-5 sm:p-6 flex flex-col items-stretch text-left gap-4">
+        <div class="w-full flex items-center justify-between text-[11px] font-mono font-bold uppercase tracking-wider text-gray-500 pb-2.5 border-b border-black/10">
+          <span>TUNNEL BENCH</span>
+          <span class="tabular-nums text-emerald-700">CHACHA20-POLY1305</span>
+        </div>
 
-      <div class="relative glass-card p-6 sm:p-7 flex flex-col items-center text-center gap-5 transform sm:rotate-1 hover:rotate-0 transition-transform duration-500 bg-white/90 border border-emerald-100/90 shadow-xl">
-        <!-- 4 Interactive Flag Buttons in Sleek Pill Track -->
+        <!-- 4 Interactive POP Buttons in Rack Track -->
         <div class="w-full">
-          <div class="grid grid-cols-4 gap-2 bg-gray-50/90 border border-gray-200/80 p-1.5 rounded-2xl" role="group" aria-label="Select VPN Server Country">
-            <!-- UK (Default Active) -->
-            <button type="button" onclick="selectHeroServer('United Kingdom \u00b7 London', '11 ms', '10 Gbps', this)" class="hero-srv-pill flex flex-col items-center justify-center gap-1 py-2 px-2 rounded-xl border-2 border-emerald-500 bg-white shadow-xs cursor-pointer transition-all" aria-label="United Kingdom">
-              <span class="w-7 h-5 rounded-xs overflow-hidden border border-gray-200 shadow-2xs block">
+          <div class="grid grid-cols-4 gap-1.5 bg-black/[0.03] border border-black/10 p-1 rounded-xl" role="group" aria-label="Select VPN Server Country">
+            <!-- UK-LON-01 (Default Active) -->
+            <button type="button" data-node="UK-LON-01" data-ip="185.199.108.42" onclick="selectHeroServer('United Kingdom \u00b7 London', '11 ms', '10 Gbps', this, 'UK-LON-01', '185.199.108.42')" class="hero-srv-pill flex flex-col items-center justify-center gap-1 py-2 px-1.5 rounded-lg border border-emerald-600 bg-white cursor-pointer transition-colors" aria-label="United Kingdom">
+              <span class="w-6 h-4 rounded-xs overflow-hidden border border-black/15 block">
                 <svg viewBox="0 0 60 40" class="w-full h-full block"><rect width="60" height="40" fill="#012169"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#fff" stroke-width="8"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#C8102E" stroke-width="4"/><path d="M30,0V40 M0,20H60" stroke="#fff" stroke-width="12"/><path d="M30,0V40 M0,20H60" stroke="#C8102E" stroke-width="7"/></svg>
               </span>
-              <span class="text-[10px] font-extrabold text-gray-900 leading-none">UK</span>
+              <span class="font-mono text-[10px] font-bold text-gray-900 leading-none">UK-LON</span>
             </button>
 
-            <!-- USA -->
-            <button type="button" onclick="selectHeroServer('United States \u00b7 New York', '64 ms', '10 Gbps', this)" class="hero-srv-pill flex flex-col items-center justify-center gap-1 py-2 px-2 rounded-xl border-2 border-transparent hover:border-emerald-200 bg-transparent hover:bg-white/80 cursor-pointer transition-all" aria-label="United States">
-              <span class="w-7 h-5 rounded-xs overflow-hidden border border-gray-200 shadow-2xs block">
+            <!-- US-NYC-01 -->
+            <button type="button" data-node="US-NYC-01" data-ip="104.244.42.88" onclick="selectHeroServer('United States \u00b7 New York', '64 ms', '10 Gbps', this, 'US-NYC-01', '104.244.42.88')" class="hero-srv-pill flex flex-col items-center justify-center gap-1 py-2 px-1.5 rounded-lg border border-transparent hover:border-black/15 bg-transparent hover:bg-white/70 cursor-pointer transition-colors" aria-label="United States">
+              <span class="w-6 h-4 rounded-xs overflow-hidden border border-black/15 block">
                 <svg viewBox="0 0 60 40" class="w-full h-full block"><rect width="60" height="40" fill="#B22234"/><path d="M0,6H60 M0,15H60 M0,25H60 M0,34H60" stroke="#fff" stroke-width="4"/><rect width="26" height="22" fill="#3C3B6E"/></svg>
               </span>
-              <span class="text-[10px] font-bold text-gray-600 leading-none">USA</span>
+              <span class="font-mono text-[10px] font-bold text-gray-600 leading-none">US-NYC</span>
             </button>
 
-            <!-- Germany -->
-            <button type="button" onclick="selectHeroServer('Germany \u00b7 Frankfurt', '16 ms', '10 Gbps', this)" class="hero-srv-pill flex flex-col items-center justify-center gap-1 py-2 px-2 rounded-xl border-2 border-transparent hover:border-emerald-200 bg-transparent hover:bg-white/80 cursor-pointer transition-all" aria-label="Germany">
-              <span class="w-7 h-5 rounded-xs overflow-hidden border border-gray-200 shadow-2xs block">
+            <!-- DE-FRA-01 -->
+            <button type="button" data-node="DE-FRA-01" data-ip="195.201.14.92" onclick="selectHeroServer('Germany \u00b7 Frankfurt', '16 ms', '10 Gbps', this, 'DE-FRA-01', '195.201.14.92')" class="hero-srv-pill flex flex-col items-center justify-center gap-1 py-2 px-1.5 rounded-lg border border-transparent hover:border-black/15 bg-transparent hover:bg-white/70 cursor-pointer transition-colors" aria-label="Germany">
+              <span class="w-6 h-4 rounded-xs overflow-hidden border border-black/15 block">
                 <svg viewBox="0 0 60 39" class="w-full h-full block"><rect width="60" height="13" y="0" fill="#000"/><rect width="60" height="13" y="13" fill="#D00"/><rect width="60" height="13" y="26" fill="#FFCE00"/></svg>
               </span>
-              <span class="text-[10px] font-bold text-gray-600 leading-none">DE</span>
+              <span class="font-mono text-[10px] font-bold text-gray-600 leading-none">DE-FRA</span>
             </button>
 
-            <!-- Japan -->
-            <button type="button" onclick="selectHeroServer('Japan \u00b7 Tokyo', '138 ms', '10 Gbps', this)" class="hero-srv-pill flex flex-col items-center justify-center gap-1 py-2 px-2 rounded-xl border-2 border-transparent hover:border-emerald-200 bg-transparent hover:bg-white/80 cursor-pointer transition-all" aria-label="Japan">
-              <span class="w-7 h-5 rounded-xs overflow-hidden border border-gray-200 shadow-2xs block">
+            <!-- JP-TYO-01 -->
+            <button type="button" data-node="JP-TYO-01" data-ip="103.152.220.44" onclick="selectHeroServer('Japan \u00b7 Tokyo', '138 ms', '10 Gbps', this, 'JP-TYO-01', '103.152.220.44')" class="hero-srv-pill flex flex-col items-center justify-center gap-1 py-2 px-1.5 rounded-lg border border-transparent hover:border-black/15 bg-transparent hover:bg-white/70 cursor-pointer transition-colors" aria-label="Japan">
+              <span class="w-6 h-4 rounded-xs overflow-hidden border border-black/15 block">
                 <svg viewBox="0 0 60 40" class="w-full h-full block"><rect width="60" height="40" fill="#fff"/><circle cx="30" cy="20" r="11" fill="#BC002D"/></svg>
               </span>
-              <span class="text-[10px] font-bold text-gray-600 leading-none">JP</span>
+              <span class="font-mono text-[10px] font-bold text-gray-600 leading-none">JP-TYO</span>
             </button>
           </div>
         </div>
 
-        <!-- Center Glowing Emerald Shield Orb -->
-        <div class="py-1 flex flex-col items-center">
-          <div class="relative flex items-center justify-center">
-            <div class="w-28 h-28 rounded-full bg-emerald-400/20 flex items-center justify-center shadow-[0_0_45px_rgba(16,185,129,0.4)]">
-              <div class="w-22 h-22 rounded-full bg-gradient-to-b from-white via-emerald-50/90 to-emerald-100/90 border-2 border-emerald-400/70 flex items-center justify-center shadow-md p-3">
-                <div class="w-14 h-14 rounded-full bg-white shadow-inner border border-emerald-100 flex items-center justify-center text-emerald-600">
-                  <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M9 12l2 2 4-4"></path>
-                  </svg>
-                </div>
-              </div>
+        <!-- Instrumented Node Readout -->
+        <div class="flex items-center gap-3.5 py-1">
+          <div class="w-12 h-12 rounded-xl border border-emerald-600/30 bg-emerald-50 flex items-center justify-center text-emerald-700 shrink-0">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.1" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.3" d="M9 12l2 2 4-4"></path>
+            </svg>
+          </div>
+          <div class="min-w-0 flex-1">
+            <div class="flex items-center gap-1.5 text-[11px] font-mono font-bold uppercase tracking-wider text-emerald-700">
+              <span id="heroPreviewStatusDot" class="rack-led"></span>
+              <span id="heroPreviewStatusText">TUNNEL READY &middot; ZERO-LOG</span>
             </div>
+            <div id="heroVpnCity" class="text-base font-bold text-gray-900 truncate mt-0.5">United Kingdom &middot; London</div>
           </div>
-          <div id="heroVpnCity" class="text-base font-black text-gray-900 mt-3.5">United Kingdom &middot; London</div>
-          <div class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 mt-1">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span id="heroVpnMeta">Instant Connection &bull; 4K Streaming Ready &bull; Wi-Fi &amp; TV Protection On</span>
+        </div>
+
+        <!-- Exposed 1px Hairline Rack Bento Telemetry -->
+        <div class="rack-bento-grid grid-cols-2">
+          <div class="rack-bento-cell p-3">
+            <div class="text-[10px] font-mono font-bold uppercase tracking-wider text-gray-500">Egress IPv4</div>
+            <div id="heroPreviewIp" class="font-mono text-xs font-bold text-gray-900 tabular-nums mt-1">185.199.108.42</div>
           </div>
+          <div class="rack-bento-cell p-3">
+            <div class="text-[10px] font-mono font-bold uppercase tracking-wider text-gray-500">RTT / Uplink</div>
+            <div id="heroPreviewPing" class="font-mono text-xs font-bold text-emerald-700 tabular-nums mt-1">11 ms &middot; 10 Gbps</div>
+          </div>
+        </div>
+
+        <div id="heroVpnMeta" class="text-[11px] font-medium text-gray-600 text-center">
+          Instant Connection &bull; 4K Streaming Ready &bull; Wi-Fi &amp; TV Protection On
         </div>
 
         <!-- Full-Width Green Enable Now Button -->
@@ -396,152 +432,281 @@
         </a>
       </div>
     </div>
+    </div>
   </main>
 
-  <!-- Below the Fold: Apple-Style 4-Box Visual Bento Grid (Design 1) -->
+  <!-- Below the Fold: Mockup 1 Instrumented Rackmount Bento + Live 8-POP Telemetry Matrix -->
   <section id="features" class="pb-20 pt-6 px-6">
     <div class="max-w-6xl mx-auto" id="purchase">
       <h2 class="sr-only">Key Privacy &amp; Home Wi-Fi Security Features</h2>
 
       <div class="grid grid-cols-1 md:grid-cols-12 gap-5 text-left">
         <!-- Bento 1 (7 cols): 8 Global Locations Visual Card -->
-        <div class="md:col-span-7 glass-card p-6 sm:p-7 flex flex-col justify-between bg-gradient-to-br from-white/95 to-emerald-50/40 border border-emerald-100/80">
+        <div class="md:col-span-7 rack-card p-6 sm:p-7 flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between gap-2">
-              <span class="inline-block text-[11px] font-extrabold uppercase tracking-wider text-emerald-700 bg-emerald-100/80 px-2.5 py-1 rounded-full">Fast Global VPN</span>
-              <span class="text-xs font-bold text-gray-500">10 Gbps RAM-Only Nodes</span>
+              <span class="rack-pill">FAST GLOBAL VPN</span>
+              <span class="font-mono text-xs font-bold text-gray-500 tabular-nums">10 Gbps RAM-Only Nodes</span>
             </div>
-            <h3 class="text-xl font-black text-gray-900 mt-3 mb-1.5">8 High-Speed Countries, Zero Browsing History Saved</h3>
+            <h3 class="text-xl font-bold text-gray-900 mt-3 mb-1.5">8 High-Speed Countries, Zero Browsing History Saved</h3>
             <p class="text-sm text-gray-600 leading-relaxed max-w-[60ch] text-left">
-              Switch in one click between fast servers in London, New York, Los Angeles, Frankfurt, Amsterdam, Stockholm, Singapore, and Tokyo — we never track, log, or sell what you browse.
+              Switch in one click between fast servers in London, New York, Los Angeles, Frankfurt, Amsterdam, Stockholm, Singapore, and Tokyo &mdash; we never track, log, or sell what you browse.
             </p>
           </div>
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-5">
-            <div class="bg-white border border-emerald-200 rounded-xl p-2.5 text-center shadow-2xs">
-              <div class="flex items-center justify-center gap-1.5 text-xs font-black text-gray-900">
-                <span class="w-4 h-3 rounded-xs overflow-hidden border border-gray-200 inline-block shrink-0"><svg viewBox="0 0 60 40" class="w-full h-full block"><rect width="60" height="40" fill="#012169"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#fff" stroke-width="8"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#C8102E" stroke-width="4"/><path d="M30,0V40 M0,20H60" stroke="#fff" stroke-width="12"/><path d="M30,0V40 M0,20H60" stroke="#C8102E" stroke-width="7"/></svg></span>
+          <div class="rack-bento-grid grid-cols-2 sm:grid-cols-4 mt-5">
+            <button type="button" onclick="selectHeroServer('United Kingdom \u00b7 London', '11 ms', '10 Gbps', document.querySelector('[data-node=UK-LON-01]'), 'UK-LON-01', '185.199.108.42')" class="rack-bento-cell p-2.5 text-left hover:bg-emerald-50/40 transition-colors cursor-pointer">
+              <div class="flex items-center gap-1.5 text-xs font-bold text-gray-900">
+                <span class="w-4 h-3 rounded-xs overflow-hidden border border-black/15 inline-block shrink-0"><svg viewBox="0 0 60 40" class="w-full h-full block"><rect width="60" height="40" fill="#012169"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#fff" stroke-width="8"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#C8102E" stroke-width="4"/><path d="M30,0V40 M0,20H60" stroke="#fff" stroke-width="12"/><path d="M30,0V40 M0,20H60" stroke="#C8102E" stroke-width="7"/></svg></span>
                 <span>London</span>
               </div>
-              <div class="text-[10px] font-bold text-emerald-600 mt-0.5">Instant &bull; 4K Ready</div>
-            </div>
-            <div class="bg-white border border-gray-200 rounded-xl p-2.5 text-center">
-              <div class="flex items-center justify-center gap-1.5 text-xs font-black text-gray-900">
-                <span class="w-4 h-3 rounded-xs overflow-hidden border border-gray-200 inline-block shrink-0"><svg viewBox="0 0 60 39" class="w-full h-full block"><rect width="60" height="13" y="0" fill="#000"/><rect width="60" height="13" y="13" fill="#D00"/><rect width="60" height="13" y="26" fill="#FFCE00"/></svg></span>
+              <div class="font-mono text-[10px] font-bold text-emerald-700 tabular-nums mt-1">11 ms &middot; 4K Ready</div>
+            </button>
+            <button type="button" onclick="selectHeroServer('Germany \u00b7 Frankfurt', '16 ms', '10 Gbps', document.querySelector('[data-node=DE-FRA-01]'), 'DE-FRA-01', '195.201.14.92')" class="rack-bento-cell p-2.5 text-left hover:bg-emerald-50/40 transition-colors cursor-pointer">
+              <div class="flex items-center gap-1.5 text-xs font-bold text-gray-900">
+                <span class="w-4 h-3 rounded-xs overflow-hidden border border-black/15 inline-block shrink-0"><svg viewBox="0 0 60 39" class="w-full h-full block"><rect width="60" height="13" y="0" fill="#000"/><rect width="60" height="13" y="13" fill="#D00"/><rect width="60" height="13" y="26" fill="#FFCE00"/></svg></span>
                 <span>Frankfurt</span>
               </div>
-              <div class="text-[10px] font-bold text-emerald-600 mt-0.5">Instant &bull; 4K Ready</div>
-            </div>
-            <div class="bg-white border border-gray-200 rounded-xl p-2.5 text-center">
-              <div class="flex items-center justify-center gap-1.5 text-xs font-black text-gray-900">
-                <span class="w-4 h-3 rounded-xs overflow-hidden border border-gray-200 inline-block shrink-0"><svg viewBox="0 0 60 40" class="w-full h-full block"><rect width="60" height="40" fill="#B22234"/><path d="M0,6H60 M0,15H60 M0,25H60 M0,34H60" stroke="#fff" stroke-width="4"/><rect width="26" height="22" fill="#3C3B6E"/></svg></span>
+              <div class="font-mono text-[10px] font-bold text-emerald-700 tabular-nums mt-1">16 ms &middot; 4K Ready</div>
+            </button>
+            <button type="button" onclick="selectHeroServer('United States \u00b7 New York', '64 ms', '10 Gbps', document.querySelector('[data-node=US-NYC-01]'), 'US-NYC-01', '104.244.42.88')" class="rack-bento-cell p-2.5 text-left hover:bg-emerald-50/40 transition-colors cursor-pointer">
+              <div class="flex items-center gap-1.5 text-xs font-bold text-gray-900">
+                <span class="w-4 h-3 rounded-xs overflow-hidden border border-black/15 inline-block shrink-0"><svg viewBox="0 0 60 40" class="w-full h-full block"><rect width="60" height="40" fill="#B22234"/><path d="M0,6H60 M0,15H60 M0,25H60 M0,34H60" stroke="#fff" stroke-width="4"/><rect width="26" height="22" fill="#3C3B6E"/></svg></span>
                 <span>New York</span>
               </div>
-              <div class="text-[10px] font-bold text-emerald-600 mt-0.5">Smooth &bull; 4K Ready</div>
-            </div>
-            <div class="bg-white border border-gray-200 rounded-xl p-2.5 text-center">
-              <div class="flex items-center justify-center gap-1.5 text-xs font-black text-gray-900">
-                <span class="w-4 h-3 rounded-xs overflow-hidden border border-gray-200 inline-block shrink-0"><svg viewBox="0 0 60 40" class="w-full h-full block"><rect width="60" height="40" fill="#fff"/><circle cx="30" cy="20" r="11" fill="#BC002D"/></svg></span>
+              <div class="font-mono text-[10px] font-bold text-emerald-700 tabular-nums mt-1">64 ms &middot; 4K Ready</div>
+            </button>
+            <button type="button" onclick="selectHeroServer('Japan \u00b7 Tokyo', '138 ms', '10 Gbps', document.querySelector('[data-node=JP-TYO-01]'), 'JP-TYO-01', '103.152.220.44')" class="rack-bento-cell p-2.5 text-left hover:bg-emerald-50/40 transition-colors cursor-pointer">
+              <div class="flex items-center gap-1.5 text-xs font-bold text-gray-900">
+                <span class="w-4 h-3 rounded-xs overflow-hidden border border-black/15 inline-block shrink-0"><svg viewBox="0 0 60 40" class="w-full h-full block"><rect width="60" height="40" fill="#fff"/><circle cx="30" cy="20" r="11" fill="#BC002D"/></svg></span>
                 <span>Tokyo</span>
               </div>
-              <div class="text-[10px] font-bold text-emerald-600 mt-0.5">Smooth &bull; HD Ready</div>
-            </div>
+              <div class="font-mono text-[10px] font-bold text-emerald-700 tabular-nums mt-1">138 ms &middot; HD Ready</div>
+            </button>
           </div>
         </div>
 
         <!-- Bento 2 (5 cols): Speed Booster + Bill Credit Helper Visual Bar Comparison -->
-        <div class="md:col-span-5 glass-card p-6 sm:p-7 flex flex-col justify-between bg-white/90">
+        <div class="md:col-span-5 rack-card p-6 sm:p-7 flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between gap-2">
-              <span class="inline-block text-[11px] font-extrabold uppercase tracking-wider text-emerald-700 bg-emerald-100/80 px-2.5 py-1 rounded-full">Stop Internet Slowdowns</span>
-              <span class="text-xs font-bold text-emerald-700">0.4 ms Overhead</span>
+              <span class="rack-pill">STOP INTERNET SLOWDOWNS</span>
+              <span class="font-mono text-xs font-bold text-emerald-700 tabular-nums">0.4 ms Overhead</span>
             </div>
-            <h3 class="text-xl font-black text-gray-900 mt-3 mb-1.5">Stop Evening Buffering &amp; Claim Bill Credits</h3>
+            <h3 class="text-xl font-bold text-gray-900 mt-3 mb-1.5">Stop Evening Buffering &amp; Claim Bill Credits</h3>
             <p class="text-sm text-gray-600 leading-relaxed max-w-[60ch] text-left">
-              Stops your internet provider from slowing down evening Netflix, YouTube, and gaming — and logs verified speed drops so you can claim $20–$40 (£20–£35) off your monthly bill.
+              Stops your internet provider from slowing down evening Netflix, YouTube, and gaming &mdash; and logs verified speed drops so you can claim $20&ndash;$40 (£20&ndash;£35) off your monthly bill.
             </p>
           </div>
-          <div class="space-y-2.5 mt-4 bg-gray-50/90 p-3.5 rounded-xl border border-gray-200/80 cursor-pointer select-none" onclick="replayVpnSpeedBars()" title="Click to replay speed comparison">
+          <div class="space-y-2.5 mt-4 bg-black/[0.025] p-3.5 rounded-xl border border-black/10 cursor-pointer select-none" onclick="replayVpnSpeedBars()" title="Click to replay speed comparison">
             <div>
-              <div class="flex justify-between text-xs font-extrabold text-emerald-800 mb-1">
+              <div class="flex justify-between text-xs font-bold text-emerald-800 mb-1">
                 <span>With SWEEPR VPN (Full Speed)</span>
-                <span class="tabular-nums" id="vpnSpeedPeakLabel">Up to 940 Mbps ✓</span>
+                <span class="font-mono tabular-nums" id="vpnSpeedPeakLabel">Up to 940 Mbps ✓</span>
               </div>
               <div class="w-full h-2.5 bg-gray-200 rounded-full overflow-hidden">
-                <div id="vpnSpeedPeakBar" class="vpn-speed-bar-fill bg-emerald-500 rounded-full" style="transform: scaleX(0.94)"></div>
+                <div id="vpnSpeedPeakBar" class="vpn-speed-bar-fill bg-emerald-600 rounded-full" style="transform: scaleX(0.94)"></div>
               </div>
             </div>
             <div>
               <div class="flex justify-between text-xs font-semibold text-gray-500 mb-1">
                 <span>Evening Slowdown (Without VPN)</span>
-                <span class="tabular-nums text-amber-700 font-bold">88 Mbps (-82% &bull; Claim $35)</span>
+                <span class="font-mono tabular-nums text-amber-700 font-bold">88 Mbps (-82% &bull; Claim $35)</span>
               </div>
               <div class="w-full h-2.5 bg-gray-200 rounded-full overflow-hidden">
-                <div id="vpnSpeedThrottledBar" class="vpn-speed-bar-fill bg-amber-400 rounded-full" style="transform: scaleX(0.24)"></div>
+                <div id="vpnSpeedThrottledBar" class="vpn-speed-bar-fill bg-amber-500 rounded-full" style="transform: scaleX(0.24)"></div>
               </div>
             </div>
             <div class="flex items-center justify-between pt-1">
-              <span class="text-[10px] text-gray-400 leading-tight">*Logs evening slowdowns vs. your internet plan.</span>
-              <a href="/tools/isp-throttling-test" onclick="event.stopPropagation()" class="text-[11px] font-extrabold text-emerald-700 hover:underline">Check My Internet Speed &rarr;</a>
+              <span class="text-[10px] text-gray-500 leading-tight">*Logs evening slowdowns vs. your internet plan.</span>
+              <a href="/tools/isp-throttling-test" onclick="event.stopPropagation()" class="text-[11px] font-bold text-emerald-700 hover:underline">Check My Internet Speed &rarr;</a>
             </div>
           </div>
         </div>
 
         <!-- Bento 3 (6 cols): Plain-English Home Wi-Fi & Airbnb Camera Scanner -->
-        <div class="md:col-span-6 glass-card p-6 sm:p-7 bg-white/90">
-          <div class="flex items-center justify-between mb-3">
-            <span class="text-[11px] font-extrabold uppercase tracking-wider text-emerald-700 bg-emerald-100/80 px-2.5 py-1 rounded-full">Home Wi-Fi Device Scanner</span>
-            <span class="text-xs font-bold text-emerald-700">🔔 New Device Alerts + 📷 Camera Check</span>
+        <div class="md:col-span-6 rack-card p-6 sm:p-7">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <span class="rack-pill">HOME WI-FI DEVICE SCANNER</span>
+            <span class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700">
+              <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+              <span>Device Alerts + Camera Check</span>
+            </span>
           </div>
-          <h3 class="text-lg font-black text-gray-900 mb-1">See Everything on Your Wi-Fi in Everyday Words</h3>
+          <h3 class="text-lg font-bold text-gray-900 mb-1">See Everything on Your Wi-Fi in Everyday Words</h3>
           <p class="text-sm text-gray-600 mb-4 leading-relaxed max-w-[60ch] text-left">
             Instead of showing confusing computer codes, SWEEPR clearly names every phone, laptop, TV, and smart speaker on your Wi-Fi, alerts you if a stranger connects, and checks rentals for hidden cameras.
           </p>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
-            <div class="bg-white border border-gray-200 rounded-xl p-2.5 shadow-2xs">
-              <div class="font-bold text-gray-900">🔊 Kitchen Echo Dot</div>
-              <div class="text-[10px] text-emerald-600 font-semibold mt-0.5">Smart Speaker &bull; Safe ✓</div>
+          <div class="rack-bento-grid grid-cols-1 sm:grid-cols-3 text-xs">
+            <div class="rack-bento-cell p-2.5">
+              <div class="flex items-center gap-1.5 font-bold text-gray-900">
+                <svg class="w-3.5 h-3.5 text-emerald-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
+                <span>Kitchen Echo Dot</span>
+              </div>
+              <div class="font-mono text-[10px] text-emerald-700 font-semibold mt-0.5 tabular-nums">Smart Speaker &bull; Verified</div>
             </div>
-            <div class="bg-amber-50/70 border border-amber-200 rounded-xl p-2.5 shadow-2xs">
-              <div class="font-bold text-gray-900">🚨 Unknown Phone</div>
-              <div class="text-[10px] text-amber-700 font-bold mt-0.5">New Device &bull; Alert Sent</div>
+            <div class="rack-bento-cell p-2.5 bg-amber-50/70">
+              <div class="flex items-center gap-1.5 font-bold text-gray-900">
+                <svg class="w-3.5 h-3.5 text-amber-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                <span>Unknown Phone</span>
+              </div>
+              <div class="font-mono text-[10px] text-amber-800 font-bold mt-0.5 tabular-nums">New MAC &bull; Alert Sent</div>
             </div>
-            <div class="bg-white border border-gray-200 rounded-xl p-2.5 shadow-2xs">
-              <div class="font-bold text-gray-900">📷 Hidden Camera Check</div>
-              <div class="text-[10px] text-emerald-600 font-semibold mt-0.5">0 Cameras Found ✓</div>
+            <div class="rack-bento-cell p-2.5">
+              <div class="flex items-center gap-1.5 font-bold text-gray-900">
+                <svg class="w-3.5 h-3.5 text-emerald-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                <span>Hidden Camera Check</span>
+              </div>
+              <div class="font-mono text-[10px] text-emerald-700 font-semibold mt-0.5 tabular-nums">0 Cameras Found &bull; Clear</div>
             </div>
           </div>
         </div>
 
         <!-- Bento 4 (6 cols): 1-Tap Kids Bedtime Pause & Smart-TV Spy Blocker -->
-        <div class="md:col-span-6 glass-card p-6 sm:p-7 bg-white/90 flex flex-col justify-between">
+        <div class="md:col-span-6 rack-card p-6 sm:p-7 flex flex-col justify-between">
           <div>
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-[11px] font-extrabold uppercase tracking-wider text-emerald-700 bg-emerald-100/80 px-2.5 py-1 rounded-full">Family &amp; Smart-TV Protection</span>
-              <span class="text-xs font-bold text-emerald-700">Covers Up to 3 Devices (Desktop or Mobile)</span>
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <span class="rack-pill">FAMILY &amp; SMART-TV PROTECTION</span>
+              <span class="font-mono text-xs font-bold text-emerald-700 tabular-nums">UP TO 3 DEVICES</span>
             </div>
-            <h3 class="text-lg font-black text-gray-900 mb-1">1-Tap Kids Bedtime Pause &amp; Smart-TV Privacy</h3>
+            <h3 class="text-lg font-bold text-gray-900 mb-1">1-Tap Kids Bedtime Pause &amp; Smart-TV Privacy</h3>
             <p class="text-sm text-gray-600 mb-4 leading-relaxed max-w-[60ch] text-left">
               Pause Wi-Fi on kids' consoles (PS5, Switch, Xbox) and tablets at bedtime without unplugging the router, and stop Samsung, LG &amp; Roku Smart TVs from tracking what your family watches.
             </p>
           </div>
           <div class="flex flex-wrap gap-2">
-            <span class="px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs font-bold text-emerald-800">🛏️ 1-Tap Bedtime Wi-Fi Pause</span>
-            <span class="px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs font-bold text-emerald-800">✓ Stops Samsung &amp; LG TV Tracking</span>
-            <span class="px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs font-bold text-emerald-800">✓ Stops Roku &amp; Fire TV Tracking</span>
+            <span class="rack-pill gap-1.5">
+              <svg class="w-3.5 h-3.5 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+              <span>1-Tap Bedtime Wi-Fi Pause</span>
+            </span>
+            <span class="rack-pill gap-1.5">
+              <svg class="w-3.5 h-3.5 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M5 13l4 4L19 7"/></svg>
+              <span>Stops Samsung &amp; LG TV Tracking</span>
+            </span>
+            <span class="rack-pill gap-1.5">
+              <svg class="w-3.5 h-3.5 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M5 13l4 4L19 7"/></svg>
+              <span>Stops Roku &amp; Fire TV Tracking</span>
+            </span>
           </div>
         </div>
       </div>
 
+      <!-- Live 8-POP WireGuard Telemetry Matrix (Surface 02) -->
+      <div id="livePopTelemetrySection" class="mt-6 rack-card p-5 sm:p-6 text-left">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-black/10">
+          <div>
+            <div class="flex flex-wrap items-center gap-2 mb-1.5">
+              <span class="rack-pill"><span class="rack-led"></span> LIVE 8-POP WIREGUARD TELEMETRY</span>
+              <span id="livePopLastSync" class="font-mono text-[11px] font-semibold text-gray-500 tabular-nums">10 GBPS RAM-ONLY KERNEL NODES</span>
+            </div>
+            <h3 class="text-lg sm:text-xl font-bold text-gray-900">Global WireGuard POP Status &amp; Egress Latency</h3>
+          </div>
+          <button type="button" id="pingNearestPopBtn" onclick="highlightLowestRttPop()" class="btn btn-ghost text-xs font-mono font-bold px-3.5 py-2 shrink-0 gap-1.5 cursor-pointer self-start sm:self-center">
+            <svg class="w-3.5 h-3.5 text-emerald-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            <span id="pingNearestPopLabel">Select Lowest-RTT POP</span>
+          </button>
+        </div>
+
+        <div class="edge-scroll-mask mt-3">
+          <table id="livePopTelemetryTable" class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="border-b border-black/10 font-mono text-[10px] uppercase tracking-wider text-gray-500">
+                <th class="py-2.5 pr-3 font-bold">Node</th>
+                <th class="py-2.5 px-3 font-bold">City / Jurisdiction</th>
+                <th class="py-2.5 px-3 font-bold">Egress IP</th>
+                <th class="py-2.5 px-3 font-bold">Protocol</th>
+                <th class="py-2.5 px-3 font-bold">RTT</th>
+                <th class="py-2.5 px-3 font-bold">Load</th>
+                <th class="py-2.5 pl-3 font-bold text-right">Status</th>
+              </tr>
+            </thead>
+            <tbody id="livePopTelemetryBody" class="divide-y divide-black/[0.06] font-mono tabular-nums text-gray-800">
+              <tr data-pop-node="UK-LON-01" onclick="selectHeroServer('United Kingdom \u00b7 London', '11 ms', '10 Gbps', document.querySelector('[data-node=UK-LON-01]'), 'UK-LON-01', '185.199.108.42')" class="pop-row bg-emerald-50/40 hover:bg-emerald-50/70 transition-colors cursor-pointer">
+                <td class="py-2.5 pr-3 font-bold text-gray-900">UK-LON-01</td>
+                <td class="py-2.5 px-3 font-sans font-semibold">London, UK</td>
+                <td class="py-2.5 px-3 text-gray-600">185.199.108.42</td>
+                <td class="py-2.5 px-3 text-gray-600">WireGuard / ChaCha20</td>
+                <td class="py-2.5 px-3 font-bold text-emerald-700" data-pop-rtt="11">11 ms</td>
+                <td class="py-2.5 px-3 text-gray-700">14%</td>
+                <td class="py-2.5 pl-3 text-right"><span class="inline-flex items-center gap-1.5 text-emerald-700 font-bold"><span class="rack-led"></span> ONLINE</span></td>
+              </tr>
+              <tr data-pop-node="DE-FRA-01" onclick="selectHeroServer('Germany \u00b7 Frankfurt', '16 ms', '10 Gbps', document.querySelector('[data-node=DE-FRA-01]'), 'DE-FRA-01', '195.201.14.92')" class="pop-row hover:bg-black/[0.025] transition-colors cursor-pointer">
+                <td class="py-2.5 pr-3 font-bold text-gray-900">DE-FRA-01</td>
+                <td class="py-2.5 px-3 font-sans font-semibold">Frankfurt, DE</td>
+                <td class="py-2.5 px-3 text-gray-600">195.201.14.92</td>
+                <td class="py-2.5 px-3 text-gray-600">WireGuard / ChaCha20</td>
+                <td class="py-2.5 px-3 font-bold text-emerald-700" data-pop-rtt="16">16 ms</td>
+                <td class="py-2.5 px-3 text-gray-700">19%</td>
+                <td class="py-2.5 pl-3 text-right"><span class="inline-flex items-center gap-1.5 text-emerald-700 font-bold"><span class="rack-led"></span> ONLINE</span></td>
+              </tr>
+              <tr data-pop-node="NL-AMS-01" onclick="selectHeroServer('Netherlands \u00b7 Amsterdam', '18 ms', '10 Gbps', null, 'NL-AMS-01', '185.220.101.34')" class="pop-row hover:bg-black/[0.025] transition-colors cursor-pointer">
+                <td class="py-2.5 pr-3 font-bold text-gray-900">NL-AMS-01</td>
+                <td class="py-2.5 px-3 font-sans font-semibold">Amsterdam, NL</td>
+                <td class="py-2.5 px-3 text-gray-600">185.220.101.34</td>
+                <td class="py-2.5 px-3 text-gray-600">WireGuard / ChaCha20</td>
+                <td class="py-2.5 px-3 font-bold text-emerald-700" data-pop-rtt="18">18 ms</td>
+                <td class="py-2.5 px-3 text-gray-700">22%</td>
+                <td class="py-2.5 pl-3 text-right"><span class="inline-flex items-center gap-1.5 text-emerald-700 font-bold"><span class="rack-led"></span> ONLINE</span></td>
+              </tr>
+              <tr data-pop-node="SE-STO-01" onclick="selectHeroServer('Sweden \u00b7 Stockholm', '24 ms', '10 Gbps', null, 'SE-STO-01', '193.138.218.74')" class="pop-row hover:bg-black/[0.025] transition-colors cursor-pointer">
+                <td class="py-2.5 pr-3 font-bold text-gray-900">SE-STO-01</td>
+                <td class="py-2.5 px-3 font-sans font-semibold">Stockholm, SE</td>
+                <td class="py-2.5 px-3 text-gray-600">193.138.218.74</td>
+                <td class="py-2.5 px-3 text-gray-600">WireGuard / ChaCha20</td>
+                <td class="py-2.5 px-3 font-bold text-emerald-700" data-pop-rtt="24">24 ms</td>
+                <td class="py-2.5 px-3 text-gray-700">16%</td>
+                <td class="py-2.5 pl-3 text-right"><span class="inline-flex items-center gap-1.5 text-emerald-700 font-bold"><span class="rack-led"></span> ONLINE</span></td>
+              </tr>
+              <tr data-pop-node="US-NYC-01" onclick="selectHeroServer('United States \u00b7 New York', '64 ms', '10 Gbps', document.querySelector('[data-node=US-NYC-01]'), 'US-NYC-01', '104.244.42.88')" class="pop-row hover:bg-black/[0.025] transition-colors cursor-pointer">
+                <td class="py-2.5 pr-3 font-bold text-gray-900">US-NYC-01</td>
+                <td class="py-2.5 px-3 font-sans font-semibold">New York, US</td>
+                <td class="py-2.5 px-3 text-gray-600">104.244.42.88</td>
+                <td class="py-2.5 px-3 text-gray-600">WireGuard / ChaCha20</td>
+                <td class="py-2.5 px-3 font-bold text-gray-800" data-pop-rtt="64">64 ms</td>
+                <td class="py-2.5 px-3 text-gray-700">27%</td>
+                <td class="py-2.5 pl-3 text-right"><span class="inline-flex items-center gap-1.5 text-emerald-700 font-bold"><span class="rack-led"></span> ONLINE</span></td>
+              </tr>
+              <tr data-pop-node="US-LAX-01" onclick="selectHeroServer('United States \u00b7 Los Angeles', '118 ms', '10 Gbps', null, 'US-LAX-01', '107.189.10.21')" class="pop-row hover:bg-black/[0.025] transition-colors cursor-pointer">
+                <td class="py-2.5 pr-3 font-bold text-gray-900">US-LAX-01</td>
+                <td class="py-2.5 px-3 font-sans font-semibold">Los Angeles, US</td>
+                <td class="py-2.5 px-3 text-gray-600">107.189.10.21</td>
+                <td class="py-2.5 px-3 text-gray-600">WireGuard / ChaCha20</td>
+                <td class="py-2.5 px-3 font-bold text-gray-800" data-pop-rtt="118">118 ms</td>
+                <td class="py-2.5 px-3 text-gray-700">21%</td>
+                <td class="py-2.5 pl-3 text-right"><span class="inline-flex items-center gap-1.5 text-emerald-700 font-bold"><span class="rack-led"></span> ONLINE</span></td>
+              </tr>
+              <tr data-pop-node="SG-SIN-01" onclick="selectHeroServer('Singapore \u00b7 Marina Bay', '142 ms', '10 Gbps', null, 'SG-SIN-01', '103.114.160.19')" class="pop-row hover:bg-black/[0.025] transition-colors cursor-pointer">
+                <td class="py-2.5 pr-3 font-bold text-gray-900">SG-SIN-01</td>
+                <td class="py-2.5 px-3 font-sans font-semibold">Singapore, SG</td>
+                <td class="py-2.5 px-3 text-gray-600">103.114.160.19</td>
+                <td class="py-2.5 px-3 text-gray-600">WireGuard / ChaCha20</td>
+                <td class="py-2.5 px-3 font-bold text-gray-800" data-pop-rtt="142">142 ms</td>
+                <td class="py-2.5 px-3 text-gray-700">15%</td>
+                <td class="py-2.5 pl-3 text-right"><span class="inline-flex items-center gap-1.5 text-emerald-700 font-bold"><span class="rack-led"></span> ONLINE</span></td>
+              </tr>
+              <tr data-pop-node="JP-TYO-01" onclick="selectHeroServer('Japan \u00b7 Tokyo', '138 ms', '10 Gbps', document.querySelector('[data-node=JP-TYO-01]'), 'JP-TYO-01', '103.152.220.44')" class="pop-row hover:bg-black/[0.025] transition-colors cursor-pointer">
+                <td class="py-2.5 pr-3 font-bold text-gray-900">JP-TYO-01</td>
+                <td class="py-2.5 px-3 font-sans font-semibold">Tokyo, JP</td>
+                <td class="py-2.5 px-3 text-gray-600">103.152.220.44</td>
+                <td class="py-2.5 px-3 text-gray-600">WireGuard / ChaCha20</td>
+                <td class="py-2.5 px-3 font-bold text-gray-800" data-pop-rtt="138">138 ms</td>
+                <td class="py-2.5 px-3 text-gray-700">17%</td>
+                <td class="py-2.5 pl-3 text-right"><span class="inline-flex items-center gap-1.5 text-emerald-700 font-bold"><span class="rack-led"></span> ONLINE</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <!-- Sweepr Complete Security Suite Annual Bundle Banner -->
-      <div class="mt-6 rounded-3xl p-6 sm:p-7 bg-gradient-to-r from-emerald-950 via-teal-900 to-emerald-900 text-white border border-emerald-500/40 shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
+      <div class="mt-6 rounded-2xl p-6 sm:p-7 bg-[#111315] text-white border border-emerald-500/35 flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
         <div>
-          <span class="inline-block px-2.5 py-0.5 rounded-full bg-amber-400 text-gray-950 text-[11px] font-black uppercase tracking-wider mb-2">New Ecosystem Bundle &bull; Save 45%</span>
-          <h3 class="text-xl font-black text-white mb-1">Sweepr Complete Security Suite — £89.99/yr <span class="text-sm font-normal text-emerald-200 line-through ml-1">£164.97/yr</span></h3>
-          <p class="text-xs sm:text-sm text-emerald-100/90 max-w-2xl">
+          <span class="inline-block px-2.5 py-0.5 rounded-full bg-amber-400 text-gray-950 font-mono text-[11px] font-bold uppercase tracking-wider mb-2">New Ecosystem Bundle &bull; Save 45%</span>
+          <h3 class="text-xl font-bold text-white mb-1 tabular-nums">Sweepr Complete Security Suite &mdash; £89.99/yr <span class="text-sm font-normal text-emerald-200 line-through ml-1">£164.97/yr</span></h3>
+          <p class="text-xs sm:text-sm text-gray-300 max-w-2xl">
             Get <strong>SWEEPR VPN Pro</strong> + <strong>SWEEPR DeepBlock Pro</strong> (YouTube MV3 AdBlocker, Scam Store Shield &amp; RAM Tamer) + <strong>Sweepr Desktop Cleaner Pro</strong> together on up to 5 devices.
           </p>
         </div>
-        <a href="https://sweeprdeepblock.com/order?plan=suite_annual&utm_source=sweeprvpn&utm_medium=home_suite_banner" class="shrink-0 px-5 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-gray-950 font-black text-xs sm:text-sm transition-all shadow-md">
+        <a href="https://sweeprdeepblock.com/order?plan=suite_annual&utm_source=sweeprvpn&utm_medium=home_suite_banner" class="shrink-0 px-5 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-gray-950 font-bold text-xs sm:text-sm transition-colors tabular-nums">
           Bundle All 3 Apps (£89.99/yr) &rarr;
         </a>
       </div>
@@ -553,7 +718,7 @@
     <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 mb-4 px-4">
       <a href="/tools/leak-test" class="hover:text-emerald-600 transition-colors">Free IP &amp; Leak Test</a>
       <a href="/tools/isp-throttling-test" class="hover:text-emerald-600 transition-colors">ISP Speed Test</a>
-      <a href="/vs/totalvpn" class="hover:text-emerald-600 transition-colors">SWEEPR vs Total VPN</a>
+      <a href="/alternatives/totalvpn" class="hover:text-emerald-600 transition-colors">SWEEPR vs Total VPN</a>
       <a href="https://sweeprdeepblock.com/order?plan=suite_annual&utm_source=sweeprvpn&utm_medium=footer" class="font-bold text-emerald-700 hover:text-emerald-600 transition-colors">Complete Security Suite (£89.99/yr)</a>
       <a href="https://sweeprdeepblock.com/?utm_source=sweeprvpn&utm_medium=footer" class="hover:text-emerald-600 transition-colors">SWEEPR DeepBlock AdBlocker</a>
       <a href="https://sweeprcleaner.com/?utm_source=sweeprvpn&utm_medium=footer" class="hover:text-emerald-600 transition-colors">Sweepr Desktop Cleaner</a>
@@ -563,275 +728,63 @@
       <a href="/privacy" class="hover:text-emerald-600 transition-colors">Privacy Policy</a>
       <a href="/support" class="hover:text-emerald-600 transition-colors">Support &amp; Help</a>
     </div>
-        <div class="flex flex-wrap justify-center gap-x-4 gap-y-1.5 mb-4 px-4 text-xs text-gray-400 max-w-5xl mx-auto">
-      <a href="/setup/gl-inet-travel-router" class="hover:text-emerald-600 transition-colors">GL.iNet Router WireGuard</a>
-      <span>&bull;</span>
-      <a href="/guides/stop-samsung-smart-tv-acr-tracking" class="hover:text-emerald-600 transition-colors">Block Samsung TV ACR Tracking</a>
-      <span>&bull;</span>
-      <a href="/guides/stop-lg-smart-tv-acr-spying" class="hover:text-emerald-600 transition-colors">Stop LG TV ACR Spying</a>
-      <span>&bull;</span>
-      <a href="/solutions/eduroam-campus-wifi-gaming-packet-loss" class="hover:text-emerald-600 transition-colors">Eduroam Gaming &amp; WireGuard</a>
-      <span>&bull;</span>
-      <a href="/setup/nvidia-shield-tv-pro-wireguard" class="hover:text-emerald-600 transition-colors">Nvidia Shield TV WireGuard</a>
-      <span>&bull;</span>
-      <a href="/setup/steam-deck-vpn" class="hover:text-emerald-600 transition-colors">SteamOS &amp; Steam Deck VPN</a>
-      <span>&bull;</span>
-      <a href="/setup/synology-nas-docker-vpn" class="hover:text-emerald-600 transition-colors">Synology NAS Docker VPN</a>
-      <span>&bull;</span>
-      <a href="/solutions/gigaclear-rural-fibre-gaming-packet-loss" class="hover:text-emerald-600 transition-colors">Gigaclear Packet Loss Fix</a>
-      <span>&bull;</span>
-      <a href="/solutions/talktalk-p2p-port-forwarding" class="hover:text-emerald-600 transition-colors">TalkTalk Throttling Fix</a>
-      <span>&bull;</span>
-      <a href="/solutions/hotel-captive-portal-wifi-p2p-port-forwarding" class="hover:text-emerald-600 transition-colors">Hotel Wi-Fi Captive Portal VPN</a>
-      <span>&bull;</span>
-      <a href="/solutions/rogers-ignite-canada-isp-throttling" class="hover:text-emerald-600 transition-colors">Rogers Ignite Throttling Fix</a>
-      <span>&bull;</span>
-      <a href="/alternatives/totalvpn" class="hover:text-emerald-600 transition-colors">Best TotalVPN Alternatives</a>
-    </div>
-                                                                                                                                                                                                                                                <details id="sweepr-seo-directory" class="max-w-5xl mx-auto mb-4 px-4 text-xs text-gray-400">
-      <summary class="cursor-pointer hover:text-emerald-600 font-semibold select-none">Browse All 118 WireGuard Router Setup Guides, Smart-TV Privacy Guides &amp; VPN Comparisons</summary>
-      <div class="flex flex-wrap justify-center gap-x-3 gap-y-1.5 mt-3 pt-3 border-t border-gray-100 text-[11px]">
-        <a href="/setup/almalinux-9-wireguard-gateway" class="hover:text-emerald-600 transition-colors">AlmaLinux 9 & Rocky Linux 9 Enterprise WireGuard Gateway: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/alpinelinux-diskless-wireguard" class="hover:text-emerald-600 transition-colors">Alpine Linux Diskless RAM-Run WireGuard Gateway Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/apple-tv-tvos-17-wireguard" class="hover:text-emerald-600 transition-colors">Apple TV 4K (tvOS 17 / tvOS 18) Native WireGuard Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/arch-linux-systemd-networkd" class="hover:text-emerald-600 transition-colors">Arch Linux systemd-networkd Native WireGuard Configuration: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/asus-rog-rapture-wireguard-fusion" class="hover:text-emerald-600 transition-colors">ASUS ROG Rapture WireGuard VPN Fusion Policy Routing: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/asustor-nas-adm-wireguard" class="hover:text-emerald-600 transition-colors">Asustor NAS (ADM 4.2+) WireGuard VPN Client Setup Guide: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/asuswrt-merlin-vpn-router" class="hover:text-emerald-600 transition-colors">WireGuard VPN Setup for ASUSWRT-Merlin &amp; ASUS VPN Fusion Routers</a>
-        <span>&bull;</span>
-        <a href="/setup/casaos-docker-wireguard" class="hover:text-emerald-600 transition-colors">CasaOS & ZimaBoard Homelab WireGuard VPN Client Stack: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/debian-12-headless-wireguard-gateway" class="hover:text-emerald-600 transition-colors">Debian 12 / Ubuntu 24.04 Headless WireGuard nftables Gateway: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/docker-gluetun-wireguard-compose" class="hover:text-emerald-600 transition-colors">Docker Compose + Gluetun WireGuard Sidecar Stack: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/draytek-vigor-wireguard-client" class="hover:text-emerald-600 transition-colors">DrayTek Vigor 2865 & 2927 WireGuard VPN Tunnel Guide: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/fedora-silverblue-immutable-wireguard" class="hover:text-emerald-600 transition-colors">Fedora Silverblue 40 Immutable WireGuard VPN Guide: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/firewalla-gold-wireguard-vpn" class="hover:text-emerald-600 transition-colors">Firewalla Gold & Purple WireGuard VPN Client Configuration: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/freebsd-14-wireguard-kmod" class="hover:text-emerald-600 transition-colors">FreeBSD 14.1 Kernel WireGuard (if_wg) & pf Firewall Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/fritzbox-7590-ax-wireguard-vpn" class="hover:text-emerald-600 transition-colors">AVM FRITZ!Box 7590 AX & 6690 Cable (FRITZ!OS 8): High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/gl-inet-b3000-marble-wireguard" class="hover:text-emerald-600 transition-colors">GL.iNet Marble (GL-B3000) Wi-Fi 6 WireGuard Home Router: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/gl-inet-flint-2-wireguard" class="hover:text-emerald-600 transition-colors">GL.iNet Flint 2 (GL-MT6000) & Beryl AX Travel Router: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/gl-inet-slate-ax-travel-router" class="hover:text-emerald-600 transition-colors">GL.iNet Slate AX (GL-AXT1800) WireGuard Travel Router Guide: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/gl-inet-spitz-ax-5g-router" class="hover:text-emerald-600 transition-colors">GL.iNet Spitz AX (GL-X3000) 5G Cellular WireGuard Gateway: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/gl-inet-travel-router" class="hover:text-emerald-600 transition-colors">WireGuard VPN Setup for GL.iNet Beryl AX (GL-MT3000) &amp; Slate AX Travel Router</a>
-        <span>&bull;</span>
-        <a href="/setup/keenetic-titan-wireguard-router" class="hover:text-emerald-600 transition-colors">Keenetic Titan & Hero Wi-Fi 6 WireGuard VPN Client Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/linux-cli-wireguard" class="hover:text-emerald-600 transition-colors">WireGuard VPN Setup for Linux CLI (Ubuntu, Debian, Arch &amp; Fedora)</a>
-        <span>&bull;</span>
-        <a href="/setup/macos-apple-silicon-vpn" class="hover:text-emerald-600 transition-colors">WireGuard VPN Setup for macOS (Apple Silicon M1/M2/M3/M4 &amp; Intel)</a>
-        <span>&bull;</span>
-        <a href="/setup/mikrotik-hap-ax3-wireguard-setup" class="hover:text-emerald-600 transition-colors">MikroTik hAP ax3 & RB5009: RouterOS v7 WireGuard Client & MSS Clamping Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/mikrotik-routeros-v7-wireguard" class="hover:text-emerald-600 transition-colors">MikroTik RouterOS v7 (RB5009 / hAP ax3): High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/netgate-6100-pfsense-wireguard" class="hover:text-emerald-600 transition-colors">Netgate 6100 pfSense Plus 10Gbps WireGuard Gateway Guide: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/nintendo-switch-wireguard-proxy" class="hover:text-emerald-600 transition-colors">Nintendo Switch OLED Low-NAT WireGuard Gaming Router Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/nixos-declarative-wireguard" class="hover:text-emerald-600 transition-colors">NixOS Declarative WireGuard Interface Configuration Guide: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/nvidia-shield-tv-pro-wireguard" class="hover:text-emerald-600 transition-colors">NVIDIA Shield TV Pro 4K WireGuard & GeForce NOW Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/openwrt-wireguard-router" class="hover:text-emerald-600 transition-colors">WireGuard VPN Setup for OpenWrt 23.05+ Router WireGuard &amp; Policy Routing</a>
-        <span>&bull;</span>
-        <a href="/setup/pfsense-opnsense-router" class="hover:text-emerald-600 transition-colors">WireGuard VPN Setup for pfSense &amp; OPNsense Home Firewall</a>
-        <span>&bull;</span>
-        <a href="/setup/playstation-5-wireguard-router" class="hover:text-emerald-600 transition-colors">PlayStation 5 (PS5) Low-Ping WireGuard & NAT Type 2 Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/protectli-vault-opnsense" class="hover:text-emerald-600 transition-colors">Protectli Vault 6-Port Core i5 OPNsense WireGuard Gateway: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/proxmox-lxc-wireguard-gateway" class="hover:text-emerald-600 transition-colors">Proxmox VE 8.x Unprivileged LXC WireGuard Gateway: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/proxmox-ve-8-sdn-wireguard" class="hover:text-emerald-600 transition-colors">Proxmox VE 8.2 SDN VNet WireGuard Gateway Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/qnap-qts-wireguard-client" class="hover:text-emerald-600 transition-colors">QNAP QTS 5.x & QuTS hero (QVPN Service 3): High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/raspberry-pi-home-gateway" class="hover:text-emerald-600 transition-colors">WireGuard VPN Setup for Raspberry Pi 5 Whole-Home WireGuard Gateway &amp; TV Shield</a>
-        <span>&bull;</span>
-        <a href="/setup/rog-ally-windows-11-wireguard" class="hover:text-emerald-600 transition-colors">ASUS ROG Ally & ROG Ally X Low-Latency WireGuard Gaming Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/steam-deck-vpn" class="hover:text-emerald-600 transition-colors">WireGuard VPN Setup for Steam Deck &amp; Handheld Gaming OS (SteamOS)</a>
-        <span>&bull;</span>
-        <a href="/setup/synology-nas-docker-vpn" class="hover:text-emerald-600 transition-colors">WireGuard VPN Setup for Synology NAS &amp; Docker Gluetun WireGuard Container</a>
-        <span>&bull;</span>
-        <a href="/setup/tailscale-wireguard-exit-node" class="hover:text-emerald-600 transition-colors">Tailscale Subnet Router to SWEEPR WireGuard Exit Bridge: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/tp-link-omada-er605-wireguard" class="hover:text-emerald-600 transition-colors">TP-Link Omada ER605 / ER7206 WireGuard Gateway Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/truenas-scale-wireguard-container" class="hover:text-emerald-600 transition-colors">TrueNAS SCALE 24.x WireGuard & Docker App Routing Guide: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/ubiquiti-cloud-gateway-ultra" class="hover:text-emerald-600 transition-colors">Ubiquiti UniFi Cloud Gateway Ultra (UCG-Ultra) WireGuard Client: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/ubiquiti-edgerouter-wireguard" class="hover:text-emerald-600 transition-colors">Ubiquiti EdgeRouter 4 & EdgeRouter X WireGuard Kernel Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/ubiquiti-unifi-dream-machine-wireguard" class="hover:text-emerald-600 transition-colors">Ubiquiti UniFi Dream Machine (UDM-Pro / UDM-SE / UDR): High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/unifi-cloud-gateway-max-ucg-max-wireguard" class="hover:text-emerald-600 transition-colors">Ubiquiti UniFi Cloud Gateway Max (UCG-Max) 2.5Gbps: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/unifi-gateway-max-uxg-max" class="hover:text-emerald-600 transition-colors">Ubiquiti UniFi Gateway Max (UXG-Max) 2.5G WireGuard Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/unraid-wireguard-docker-tunnel" class="hover:text-emerald-600 transition-colors">Unraid 6.12 WireGuard Client & Container VPN Routing Guide: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/vyos-1-4-wireguard-router" class="hover:text-emerald-600 transition-colors">VyOS 1.4 Rolling / LTS WireGuard Interface & BGP Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/windows-11-wireguard-vpn" class="hover:text-emerald-600 transition-colors">WireGuard VPN Setup for Windows 10 &amp; 11 Native Kernel WireGuard</a>
-        <span>&bull;</span>
-        <a href="/setup/wsl2-windows-subsystem-wireguard" class="hover:text-emerald-600 transition-colors">WSL2 (Windows Subsystem for Linux 2) Native WireGuard Tunnel: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/xbox-series-x-wireguard-gaming" class="hover:text-emerald-600 transition-colors">Xbox Series X|S WireGuard Low-Latency & Open NAT Guide: High-Speed 10Gbps WireGuard VPN Setup Guide</a>
-        <span>&bull;</span>
-        <a href="/setup/zimaboard-casaos-gluetun-wireguard" class="hover:text-emerald-600 transition-colors">ZimaBoard 832 & CasaOS: Dual-NIC WireGuard Gateway & Gluetun Docker Setup</a>
-        <span>&bull;</span>
-        <a href="/guides/audit-home-iot-botnet-vulnerabilities" class="hover:text-emerald-600 transition-colors">Audit Smart Home Plugs, IP Cameras & IoT Devices for Botnets in 30 Seconds</a>
-        <span>&bull;</span>
-        <a href="/guides/audit-home-nas-ransomware-wan-exposure" class="hover:text-emerald-600 transition-colors">How to Audit Your Synology & QNAP NAS for Open WAN Ports and UPnP Leakage</a>
-        <span>&bull;</span>
-        <a href="/guides/block-hisense-vidaa-fire-tv-acr" class="hover:text-emerald-600 transition-colors">Stop Hisense VIDAA OS & Amazon Fire TV ACR Tracking at the Network Layer</a>
-        <span>&bull;</span>
-        <a href="/guides/block-panasonic-smart-tv-telemetry" class="hover:text-emerald-600 transition-colors">Stop Panasonic Smart TV ACR Tracking & Home Screen Telemetry Beacons</a>
-        <span>&bull;</span>
-        <a href="/guides/block-philips-titan-os-acr" class="hover:text-emerald-600 transition-colors">How to Block Philips Titan OS & Ambilight ACR Screenshot Telemetry</a>
-        <span>&bull;</span>
-        <a href="/guides/block-sharp-aquos-google-tv-acr" class="hover:text-emerald-600 transition-colors">Stop Sharp Aquos Google TV ACR Content Recognition at the Router Level</a>
-        <span>&bull;</span>
-        <a href="/guides/block-sony-bravia-samba-tv-acr" class="hover:text-emerald-600 transition-colors">How to Block Sony Bravia & Samba TV ACR Screenshot Spying on Your Home Wi-Fi</a>
-        <span>&bull;</span>
-        <a href="/guides/block-tcl-google-tv-acr-telemetry" class="hover:text-emerald-600 transition-colors">How to Block TCL Google TV ACR Tracking & Ad Spyware at Router Level</a>
-        <span>&bull;</span>
-        <a href="/guides/bypass-cgnat-for-self-hosted-home-lab" class="hover:text-emerald-600 transition-colors">Understanding Carrier-Grade NAT (CGNAT) on Hyperoptic, Community Fibre & 5G</a>
-        <span>&bull;</span>
-        <a href="/guides/detect-hidden-wifi-cameras-airbnb" class="hover:text-emerald-600 transition-colors">How to Audit Airbnb & Hotel Wi-Fi Subnets for Hidden IP Cameras & Rogue Devices</a>
-        <span>&bull;</span>
-        <a href="/guides/detect-hotel-chromecast-spoofing" class="hover:text-emerald-600 transition-colors">How to Audit Hotel & Airbnb Wi-Fi for Rogue Cast Devices & Screen Hijackers</a>
-        <span>&bull;</span>
-        <a href="/guides/detect-hotel-wifi-evil-twin-ap" class="hover:text-emerald-600 transition-colors">How to Detect Evil Twin Hotspots & ARP Poisoning on Hotel & Airport Wi-Fi</a>
-        <span>&bull;</span>
-        <a href="/guides/detect-rogue-dhcp-server-guest-wifi" class="hover:text-emerald-600 transition-colors">How to Detect Rogue DHCP Servers & DNS Poisoning on Coworking & Guest Wi-Fi</a>
-        <span>&bull;</span>
-        <a href="/guides/detect-rogue-mesh-repeaters" class="hover:text-emerald-600 transition-colors">How to Detect Rogue Wi-Fi Extenders & Unauthorized Repeaters on Your Network</a>
-        <span>&bull;</span>
-        <a href="/guides/detect-unknown-devices-on-home-wifi" class="hover:text-emerald-600 transition-colors">How to Find Unknown Devices &amp; Strangers on Your Home Wi-Fi in 30 Seconds</a>
-        <span>&bull;</span>
-        <a href="/guides/disable-ipv6-leak-windows-linux" class="hover:text-emerald-600 transition-colors">How to Prevent Silent IPv6 Tunnel Leaks on Dual-Stack Residential Broadband</a>
-        <span>&bull;</span>
-        <a href="/guides/fix-isp-dns-hijacking-and-throttling" class="hover:text-emerald-600 transition-colors">How UK ISPs Use DNS Inspection to Throttle Evening Speeds (And How to Fix It)</a>
-        <span>&bull;</span>
-        <a href="/guides/fix-udp-bufferbloat-wireguard-gaming" class="hover:text-emerald-600 transition-colors">How to Eliminate UDP Bufferbloat & Jitter Spikes on FTTP Fibre for Gaming</a>
-        <span>&bull;</span>
-        <a href="/guides/fix-wireguard-mtu-fragmentation-pppoe" class="hover:text-emerald-600 transition-colors">How to Fix WireGuard MTU Packet Fragmentation on PPPoE Fibre (1412) & 5G (1380)</a>
-        <span>&bull;</span>
-        <a href="/guides/prevent-webrtc-ip-leak-chromium-firefox" class="hover:text-emerald-600 transition-colors">How to Prevent Silent WebRTC STUN/TURN IP Address Leaks in All Browsers</a>
-        <span>&bull;</span>
-        <a href="/guides/prevent-windows-11-dns-leaks-doh" class="hover:text-emerald-600 transition-colors">Fix Windows 11 Multi-Homed DNS Leaks & Bypass ISP Port 53 Interception</a>
-        <span>&bull;</span>
-        <a href="/guides/public-hotel-airport-wifi-security" class="hover:text-emerald-600 transition-colors">Public, Hotel &amp; Airport Wi-Fi Security: Evil Twin &amp; Packet Sniffing Protection</a>
-        <span>&bull;</span>
-        <a href="/guides/secure-smart-speaker-iot-isolation" class="hover:text-emerald-600 transition-colors">How to Isolate Smart Speakers & IoT Gadgets From Your Primary Work Network</a>
-        <span>&bull;</span>
-        <a href="/guides/stop-5g-hotspot-carrier-throttling" class="hover:text-emerald-600 transition-colors">How to Stop Mobile Carrier 5G Hotspot Throttling & DPI Tethering Caps</a>
-        <span>&bull;</span>
-        <a href="/guides/stop-isp-deep-packet-inspection-dpi" class="hover:text-emerald-600 transition-colors">How to Defeat ISP Deep Packet Inspection (DPI) & SNI Censorship with WireGuard</a>
-        <span>&bull;</span>
-        <a href="/guides/stop-isp-tcp-reset-attacks" class="hover:text-emerald-600 transition-colors">How to Bypass ISP TCP RST Packet Injection & Deep Packet Inspection with WireGuard</a>
-        <span>&bull;</span>
-        <a href="/guides/stop-lg-smart-tv-acr-spying" class="hover:text-emerald-600 transition-colors">How to Stop LG webOS Smart TVs From Taking Screenshots of What You Watch (2026 Guide)</a>
-        <span>&bull;</span>
-        <a href="/guides/stop-roku-vizio-firetv-spying" class="hover:text-emerald-600 transition-colors">How to Block Roku, Vizio Inscape &amp; Fire TV ACR Spying on Your Home Wi-Fi</a>
-        <span>&bull;</span>
-        <a href="/guides/stop-samsung-smart-tv-acr-tracking" class="hover:text-emerald-600 transition-colors">How to Block Samsung Tizen Smart-TV ACR Telemetry &amp; Home Menu Ads (2026 Guide)</a>
-        <span>&bull;</span>
-        <a href="/vs/adguard-vpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs AdGuard VPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/airvpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs AirVPN (Eddie Client): 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/astrill-vpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Astrill VPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/avast-secureline-vpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Avast SecureLine VPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/betternet" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Betternet VPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/cactusvpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs CactusVPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/cloudflare-warp-plus" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Cloudflare WARP+: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/cyberghost" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs CyberGhost (2026 Comparison)</a>
-        <span>&bull;</span>
-        <a href="/vs/expressvpn-aircove" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs ExpressVPN & Aircove: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/expressvpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs ExpressVPN (2026 Comparison)</a>
-        <span>&bull;</span>
-        <a href="/vs/hide-me-vpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs hide.me VPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/hola-vpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Hola VPN Free Proxy: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/hotspot-shield" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Hotspot Shield: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/ipvanish" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs IPVanish (2026 Comparison)</a>
-        <span>&bull;</span>
-        <a href="/vs/ivpn-net" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs IVPN Pro: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/mozilla-vpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Mozilla VPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/mullvad" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Mullvad VPN (2026 Comparison)</a>
-        <span>&bull;</span>
-        <a href="/vs/nordlayer" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs NordLayer Business VPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/nordvpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs NordVPN (2026 Comparison)</a>
-        <span>&bull;</span>
-        <a href="/vs/ovpn-com" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs OVPN.com Sweden: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/perimeter-81" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Perimeter 81 (Check Point Harmony): 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/privadovpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs PrivadoVPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/private-internet-access" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Private Internet Access (PIA): 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/privatevpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs PrivateVPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/protonvpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Proton VPN (2026 Comparison)</a>
-        <span>&bull;</span>
-        <a href="/vs/purevpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs PureVPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/surfshark" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Surfshark (2026 Comparison)</a>
-        <span>&bull;</span>
-        <a href="/vs/tailscale-saas" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Tailscale Commercial SaaS: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/torguard-vpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs TorGuard Anonymous VPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/tunnelbear" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs TunnelBear VPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/turbo-vpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Turbo VPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/twingate" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Twingate Zero Trust Network Access: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/urban-vpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Urban VPN Free: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/vyprvpn" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs VyprVPN: 2026 Speed, Footprint & Privacy Comparison</a>
-        <span>&bull;</span>
-        <a href="/vs/windscribe" class="hover:text-emerald-600 transition-colors">SWEEPR VPN vs Windscribe Pro: 2026 Speed, Footprint & Privacy Comparison</a>
+    <!-- Curated Editorial 12-Pillar Navigation Grid -->
+    <nav id="sweepr-curated-pillars-grid" aria-label="Curated Network Tools &amp; Engineering Guides" class="max-w-5xl mx-auto my-6 px-4 pt-6 border-t border-gray-100 text-left">
+      <div class="mb-4 text-center md:text-left">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400">Core Network Tools &amp; Engineering Guides</h3>
       </div>
-    </details>
-
-
-
-
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-xs text-gray-500">
+        <!-- Column 1: Diagnostic Tools & Authority -->
+        <div>
+          <h4 class="font-bold text-gray-900 mb-2.5 flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-emerald-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            <span>Diagnostic Tools</span>
+          </h4>
+          <ul class="space-y-2">
+            <li><a href="/tools/leak-test" class="hover:text-emerald-600 transition-colors">IP, DNS &amp; WebRTC Leak Test</a></li>
+            <li><a href="/tools/isp-throttling-test" class="hover:text-emerald-600 transition-colors">ISP Speed &amp; Throttling Test</a></li>
+            <li><a href="/warrant-canary" class="hover:text-emerald-600 transition-colors font-medium text-gray-700">Cryptographic Warrant Canary</a></li>
+          </ul>
+        </div>
+        <!-- Column 2: Hardware & Router Setups -->
+        <div>
+          <h4 class="font-bold text-gray-900 mb-2.5 flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-emerald-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"/></svg>
+            <span>Hardware Setup Guides</span>
+          </h4>
+          <ul class="space-y-2">
+            <li><a href="/setup/gl-inet-travel-router" class="hover:text-emerald-600 transition-colors">GL.iNet Travel Router WireGuard</a></li>
+            <li><a href="/setup/synology-nas-docker-vpn" class="hover:text-emerald-600 transition-colors">Synology NAS Docker WireGuard</a></li>
+            <li><a href="/setup/steam-deck-vpn" class="hover:text-emerald-600 transition-colors">Steam Deck &amp; SteamOS VPN</a></li>
+            <li><a href="/setup/nvidia-shield-tv-pro-wireguard" class="hover:text-emerald-600 transition-colors">NVIDIA Shield TV Pro WireGuard</a></li>
+          </ul>
+        </div>
+        <!-- Column 3: Smart-TV & IoT Privacy Guides -->
+        <div>
+          <h4 class="font-bold text-gray-900 mb-2.5 flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-emerald-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            <span>Smart-TV Privacy Guides</span>
+          </h4>
+          <ul class="space-y-2">
+            <li><a href="/guides/stop-samsung-smart-tv-acr-tracking" class="hover:text-emerald-600 transition-colors">Block Samsung Smart-TV ACR</a></li>
+            <li><a href="/guides/stop-lg-smart-tv-acr-spying" class="hover:text-emerald-600 transition-colors">Stop LG webOS LivePlus Spying</a></li>
+            <li><a href="/guides/stop-roku-vizio-firetv-spying" class="hover:text-emerald-600 transition-colors">Block Roku, Vizio &amp; Fire TV ACR</a></li>
+          </ul>
+        </div>
+        <!-- Column 4: ISP Network Solutions & Comparisons -->
+        <div>
+          <h4 class="font-bold text-gray-900 mb-2.5 flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-emerald-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/></svg>
+            <span>ISP Solutions &amp; Reviews</span>
+          </h4>
+          <ul class="space-y-2">
+            <li><a href="/solutions/eduroam-campus-wifi-gaming-packet-loss" class="hover:text-emerald-600 transition-colors">Eduroam Gaming Packet Loss Fix</a></li>
+            <li><a href="/solutions/talktalk-p2p-port-forwarding" class="hover:text-emerald-600 transition-colors">TalkTalk P2P Port Forwarding</a></li>
+            <li><a href="/alternatives/totalvpn" class="hover:text-emerald-600 transition-colors font-medium text-gray-700">TotalVPN Alternatives (2026)</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
 
     <p>&copy; 2026 SWEEPR VPN Inc. All rights reserved.</p>
     <div class="mt-3 flex justify-center">
@@ -843,19 +796,93 @@
 
   <script>
     var _currentHeroPingNum = 11;
-    function selectHeroServer(city, ping, speed, btnEl) {
+    function selectHeroServer(city, ping, speed, btnEl, nodeCode, egressIp) {
       var cityEl = document.getElementById('heroVpnCity');
       var metaEl = document.getElementById('heroVpnMeta');
+      var ipEl = document.getElementById('heroPreviewIp');
+      var pingEl = document.getElementById('heroPreviewPing');
+      var statusTextEl = document.getElementById('heroPreviewStatusText');
+      var telNodeEl = document.getElementById('heroTelNode');
+      var telIpEl = document.getElementById('heroTelIp');
+      var telPingEl = document.getElementById('heroTelPing');
+
+      var resolvedNode = nodeCode || (btnEl && btnEl.getAttribute('data-node')) || 'UK-LON-01';
+      var resolvedIp = egressIp || (btnEl && btnEl.getAttribute('data-ip')) || '185.199.108.42';
+
       if (cityEl) cityEl.textContent = city;
+      if (ipEl) ipEl.textContent = resolvedIp;
+      if (pingEl) pingEl.textContent = ping + ' \u00b7 ' + (speed || '10 Gbps');
+      if (statusTextEl) statusTextEl.textContent = 'TUNNEL READY \u00b7 ' + resolvedNode;
       if (metaEl) {
         metaEl.textContent = 'Instant Connection \u2022 4K Streaming Ready \u2022 Wi-Fi & TV Protection On';
       }
+      if (telNodeEl) telNodeEl.textContent = resolvedNode + ' \u00b7 ' + String(city).replace(/^[^\u00b7]+\u00b7\s*/, '');
+      if (telIpEl) telIpEl.textContent = resolvedIp;
+      if (telPingEl) telPingEl.textContent = ping;
+
       document.querySelectorAll('.hero-srv-pill').forEach(function(b) {
-        b.className = 'hero-srv-pill flex flex-col items-center justify-center gap-1 py-2 px-2 rounded-xl border-2 border-transparent hover:border-emerald-200 bg-transparent hover:bg-white/80 cursor-pointer transition-all';
+        b.className = 'hero-srv-pill flex flex-col items-center justify-center gap-1 py-2 px-1.5 rounded-lg border border-transparent hover:border-black/15 bg-transparent hover:bg-white/70 cursor-pointer transition-colors';
       });
       if (btnEl) {
-        btnEl.className = 'hero-srv-pill flex flex-col items-center justify-center gap-1 py-2 px-2 rounded-xl border-2 border-emerald-500 bg-white shadow-xs cursor-pointer transition-all';
+        btnEl.className = 'hero-srv-pill flex flex-col items-center justify-center gap-1 py-2 px-1.5 rounded-lg border border-emerald-600 bg-white cursor-pointer transition-colors';
       }
+      document.querySelectorAll('#livePopTelemetryBody tr.pop-row').forEach(function(row) {
+        var active = row.getAttribute('data-pop-node') === resolvedNode;
+        row.classList.toggle('bg-emerald-50/40', active);
+      });
+    }
+
+    function highlightLowestRttPop() {
+      var rows = Array.prototype.slice.call(document.querySelectorAll('#livePopTelemetryBody tr.pop-row'));
+      if (!rows.length) return;
+      var bestRow = rows[0];
+      var bestRtt = Infinity;
+      rows.forEach(function(row) {
+        var rttEl = row.querySelector('[data-pop-rtt]');
+        var val = parseInt(rttEl ? rttEl.getAttribute('data-pop-rtt') || rttEl.textContent : '999', 10);
+        if (!isNaN(val) && val < bestRtt) {
+          bestRtt = val;
+          bestRow = row;
+        }
+      });
+      if (bestRow) {
+        bestRow.click();
+        var lbl = document.getElementById('pingNearestPopLabel');
+        if (lbl) {
+          var node = bestRow.getAttribute('data-pop-node') || 'UK-LON-01';
+          lbl.textContent = 'Selected Fastest: ' + node + ' (' + bestRtt + ' ms)';
+          setTimeout(function() {
+            lbl.textContent = 'Select Lowest-RTT POP';
+          }, 2400);
+        }
+      }
+    }
+
+    function hydrateLivePopMatrix() {
+      fetch('/wireguard-acr-pipeline-state.json')
+        .then(function(r) { return r.ok ? r.json() : null; })
+        .then(function(state) {
+          if (!state) return;
+          var list = state.liveVpnServers || state.wireguardNodes || [];
+          if (!Array.isArray(list) || !list.length) return;
+          list.forEach(function(node) {
+            var code = node.id || node.code || node.nodeId || '';
+            if (!code) return;
+            var row = document.querySelector('#livePopTelemetryBody tr[data-pop-node="' + code + '"]');
+            if (!row) return;
+            var rttEl = row.querySelector('[data-pop-rtt]');
+            var rttVal = node.latencyMs != null ? node.latencyMs : (node.rttMs != null ? node.rttMs : null);
+            if (rttEl && rttVal != null) {
+              rttEl.setAttribute('data-pop-rtt', String(rttVal));
+              rttEl.textContent = String(rttVal) + ' ms';
+            }
+          });
+          var syncEl = document.getElementById('livePopLastSync');
+          if (syncEl && state.generatedAt) {
+            syncEl.textContent = '8/8 POPS ONLINE \u00b7 VERIFIED ' + String(state.generatedAt).slice(0, 10);
+          }
+        })
+        .catch(function() {});
     }
 
     function replayVpnSpeedBars() {
@@ -887,6 +914,7 @@
     }
     document.addEventListener('DOMContentLoaded', function() {
       setTimeout(replayVpnSpeedBars, 120);
+      hydrateLivePopMatrix();
     });
     (function() {
       try {

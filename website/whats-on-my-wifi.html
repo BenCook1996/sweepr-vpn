@@ -133,11 +133,20 @@
   </nav>
 
   <main class="max-w-5xl mx-auto px-4 sm:px-6 py-12 md:py-16">
+    <div class="rack-telemetry-bar mb-6">
+      <div class="flex items-center gap-2 font-mono text-xs font-semibold">
+        <span class="rack-led is-live" aria-hidden="true"></span>
+        <span>BENCH // PLAIN-ENGLISH IOT OUI & CAMERA TRANSLATOR</span>
+      </div>
+      <div class="flex flex-wrap items-center gap-3 font-mono text-xs tabular-nums">
+        <span>ACR SINKHOLE: <strong data-live-proof="acr-domains" class="text-emerald-400">65</strong> DOMAINS</span><span>LOOKUP: <strong>IEEE OUI + RTSP :554</strong></span>
+      </div>
+    </div>
     <div class="text-center max-w-3xl mx-auto mb-10">
       <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 mb-3">
         Free Home Network Diagnostic &bull; Zero Signup Required &bull; <span data-live-proof="acr-domains">65</span> ACR Domains Blocked
       </span>
-      <h1 class="text-3xl sm:text-5xl font-black tracking-tight text-gray-900 mb-4">
+      <h1 class="text-3xl sm:text-5xl font-bold tracking-tight text-gray-900 mb-4">
         What's on My Wi-Fi? Plain-English Device &amp; Airbnb Camera Inspector
       </h1>
       <p class="text-base sm:text-lg text-gray-600 leading-relaxed">
@@ -150,12 +159,12 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6 border-b border-gray-100">
         <div class="bg-gray-50 border border-gray-200 rounded-2xl p-5">
           <div class="text-xs font-extrabold uppercase tracking-wider text-gray-500 mb-2">1. Your Current Wi-Fi WAN Gateway</div>
-          <div id="wanIpBox" class="text-xl font-black text-gray-900 font-mono">Scanning Gateway...</div>
+          <div id="wanIpBox" class="text-xl font-bold text-gray-900 font-mono tabular-nums">Scanning Gateway...</div>
           <div id="wanIspBox" class="text-xs font-semibold text-amber-700 mt-1">Checking ISP &amp; DNS visibility...</div>
           <div class="mt-3 pt-3 border-t border-gray-200 flex flex-wrap gap-1.5 text-[11px] font-bold text-emerald-800">
-            <span class="px-2.5 py-1 rounded-full bg-emerald-100">🔔 Doorbell Mode Ready</span>
-            <span class="px-2.5 py-1 rounded-full bg-emerald-100">📷 RTSP Camera Check</span>
-            <span class="px-2.5 py-1 rounded-full bg-emerald-100">🛏️ Bedtime Pause</span>
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-100"><svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg><span>Doorbell Mode Ready</span></span>
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-100"><svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg><span>RTSP Camera Check</span></span>
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-100"><svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><span>Bedtime Pause</span></span>
           </div>
         </div>
         <div class="bg-gray-50 border border-gray-200 rounded-2xl p-5">
@@ -168,19 +177,19 @@
             <button type="button" onclick="quickChipLookup('Espressif')" class="text-[11px] font-bold px-2.5 py-1 rounded-lg bg-white border border-gray-200 hover:border-emerald-400 text-gray-700 cursor-pointer">Espressif Inc.</button>
             <button type="button" onclick="quickChipLookup('Tuya')" class="text-[11px] font-bold px-2.5 py-1 rounded-lg bg-white border border-gray-200 hover:border-emerald-400 text-gray-700 cursor-pointer">Tuya Smart</button>
             <button type="button" onclick="quickChipLookup('Murata')" class="text-[11px] font-bold px-2.5 py-1 rounded-lg bg-white border border-gray-200 hover:border-emerald-400 text-gray-700 cursor-pointer">Murata Mfg</button>
-            <button type="button" onclick="quickChipLookup('Shenzhen Bilian')" class="text-[11px] font-bold px-2.5 py-1 rounded-lg bg-white border border-gray-200 hover:border-emerald-400 text-amber-800 cursor-pointer">📷 Shenzhen Bilian</button>
+            <button type="button" onclick="quickChipLookup('Shenzhen Bilian')" class="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-lg bg-white border border-gray-200 hover:border-emerald-400 text-amber-800 cursor-pointer"><svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg><span>Shenzhen Bilian</span></button>
           </div>
           <div id="macResultBox" class="text-xs font-bold text-emerald-800 mt-2.5 leading-relaxed">Click a cryptic chip name above or paste any 6-character MAC address from your router.</div>
         </div>
       </div>
 
       <!-- Free 30-Second Full LAN Scanner Handoff -->
-      <div class="mt-6 rounded-2xl bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-950 text-white p-6 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="mt-6 rounded-2xl bg-[#111315] border border-slate-800 text-white p-6 flex flex-col md:flex-row items-center justify-between gap-6">
         <div class="text-left space-y-1.5">
           <div class="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-emerald-300">
-            <span>📡 Free 30-Second Layer-2 ARP &amp; mDNS Scanner</span>
+            <span class="inline-flex items-center gap-1.5"><svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"/></svg><span>Free 30-Second Layer-2 ARP &amp; mDNS Scanner</span></span>
           </div>
-          <h2 class="text-lg sm:text-xl font-black">Scan all 20+ connected devices on your home Wi-Fi in 30 seconds</h2>
+          <h2 class="text-lg sm:text-xl font-bold">Scan all 20+ connected devices on your home Wi-Fi in 30 seconds</h2>
           <p class="text-xs sm:text-sm text-slate-300 max-w-xl">
             Web browsers cannot read Layer-2 ARP tables directly. Download the free 680KB SWEEPR app to automatically discover every phone, laptop, Smart TV, and IoT camera on your Wi-Fi — and block Smart-TV ACR spying in one click.
           </p>
@@ -200,15 +209,15 @@
     <div class="glass-card p-6 sm:p-8 mb-10 bg-white border border-gray-200 rounded-3xl shadow-sm">
       <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
         <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-900">
-          📖 Plain-English Router &amp; Fing Device Cheat Sheet (2026)
+          <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path stroke-linecap="round" stroke-linejoin="round" d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg><span>Plain-English Router &amp; Fing Device Cheat Sheet (2026)</span>
         </span>
         <span class="text-xs font-bold text-gray-500">Includes 30-Second Isolation Test &amp; Private MAC Guide</span>
       </div>
-      <h2 class="text-2xl font-black text-gray-900 mb-2">Top 10 Cryptic Device Names on Your Wi-Fi Router (And What They Actually Are)</h2>
+      <h2 class="text-2xl font-bold text-gray-900 mb-2">Top 10 Cryptic Device Names on Your Wi-Fi Router (And What They Actually Are)</h2>
       <p class="text-sm text-gray-600 mb-5">
         <strong>Direct Answer:</strong> Routers and legacy scanner apps like Fing look up a device's 6-character MAC address prefix (OUI) and display the <em>factory that made the internal Wi-Fi microchip</em> rather than the product brand on the box. Use this table to translate cryptic manufacturer names into plain English:
       </p>
-      <div class="overflow-x-auto">
+      <div class="overflow-x-auto edge-scroll-mask">
         <table class="w-full text-left border-collapse text-xs sm:text-sm">
           <thead>
             <tr class="border-b border-gray-200 text-[11px] uppercase tracking-wider text-gray-500">
@@ -264,19 +273,19 @@
             <tr>
               <td class="py-3 pr-3 font-bold text-amber-900"><code>Shenzhen Bilian</code> (B-Link)</td>
               <td class="py-3 px-3">Budget Wireless IP Camera, Nanny Cam, Doorbell Cam, or Smart Pet Feeder</td>
-              <td class="py-3 px-3"><span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold text-xs">⚠️ Inspect in Airbnb / Hotel</span></td>
+              <td class="py-3 px-3"><span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold text-xs">Inspect in Airbnb / Hotel</span></td>
               <td class="py-3 pl-3">Tap <strong>Airbnb Camera Scan</strong> in SWEEPR to probe RTSP port <code>:554</code> / <code>:8554</code></td>
             </tr>
             <tr>
               <td class="py-3 pr-3 font-bold text-amber-900"><code>Hikvision</code> / <code>Dahua</code> / <code>Reolink</code></td>
               <td class="py-3 px-3">Dedicated PoE / Wi-Fi Security Camera or NVR Video Recorder</td>
-              <td class="py-3 px-3"><span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold text-xs">📷 Active Camera Stream</span></td>
+              <td class="py-3 px-3"><span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold text-xs">Active Camera Stream</span></td>
               <td class="py-3 pl-3">Verify camera location if connected to a vacation rental Wi-Fi</td>
             </tr>
             <tr>
               <td class="py-3 pr-3 font-bold text-emerald-900"><code>Unknown / Private Address</code> (<code>x2:xx</code>, <code>x6:xx</code>, <code>xA:xx</code>, <code>xE:xx</code>)</td>
               <td class="py-3 px-3">Family iPhone, iPad, Apple Watch, or Android Phone using <strong>Private Wi-Fi Address</strong></td>
-              <td class="py-3 px-3"><span class="px-2 py-0.5 rounded-full bg-blue-100 text-blue-900 font-bold text-xs">📱 MAC Randomization</span></td>
+              <td class="py-3 px-3"><span class="px-2 py-0.5 rounded-full bg-blue-100 text-blue-900 font-bold text-xs">MAC Randomization</span></td>
               <td class="py-3 pl-3">If the 2nd character of the MAC is <code>2, 6, A, or E</code>, it is a phone rotating its MAC for privacy</td>
             </tr>
           </tbody>
@@ -360,8 +369,8 @@ Included Free Tool: 30-Second Home Wi-Fi Device & Smart-TV ACR Scanner</code></p
       espressif: 'Plain-English Translation: Smart Plug, Echo/Voice Dot, Robot Vacuum, or Low-Cost Wi-Fi Micro-Camera (uses an ESP8266/ESP32 Wi-Fi chip). Run the Airbnb Camera Port Check if seen in a rental.',
       tuya: 'Plain-English Translation: Smart Light Bulb, Smart Plug, or Indoor Pet/Baby Camera powered by a Tuya Smart Home module.',
       murata: 'Plain-English Translation: Smart TV, Nintendo Switch, Sonos Speaker, or Nest Thermostat (uses a Murata embedded Wi-Fi radio).',
-      bilian: '⚠️ Airbnb Hidden Camera Alert: Shenzhen Bilian (B-Link) Wi-Fi modules are heavily used in budget wireless IP cameras and nanny cams. Check RTSP port 554 with the SWEEPR Scanner.',
-      hikvision: '⚠️ Network Camera Detected: Hikvision IP Security Camera / NVR Recorder (checks RTSP :554 & ONVIF :8000).',
+      bilian: 'Airbnb Hidden Camera Alert: Shenzhen Bilian (B-Link) Wi-Fi modules are heavily used in budget wireless IP cameras and nanny cams. Check RTSP port 554 with the SWEEPR Scanner.',
+      hikvision: 'Network Camera Detected: Hikvision IP Security Camera / NVR Recorder (checks RTSP :554 & ONVIF :8000).',
       wyze: 'Plain-English Translation: Wyze Cam Indoor/Outdoor Wi-Fi Camera or Wyze Smart Plug.'
     };
 
@@ -411,7 +420,7 @@ Included Free Tool: 30-Second Home Wi-Fi Device & Smart-TV ACR Scanner</code></p
         if (/bot|crawl|spider|slurp|google|bing|gpt|claude|perplexity|applebot/i.test(navigator.userAgent || '')) return;
         const r = await fetch('/api/tools/network-check');
         const d = await r.json();
-        document.getElementById('wanIpBox').textContent = `${d.countryFlag || '🇬🇧'} ${d.ip || 'Public IPv4'}`;
+        document.getElementById('wanIpBox').textContent = `${d.country || 'WAN'} · ${d.ip || 'Public IPv4'}`;
         document.getElementById('wanIspBox').textContent = `${d.isp || 'Residential ISP'} — ${d.encrypted ? 'Protected by SWEEPR' : 'Unencrypted WAN Gateway'}`;
       } catch {}
     });

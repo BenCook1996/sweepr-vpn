@@ -232,7 +232,34 @@
     if (typeof window.onSweeprCurrencyChanged === 'function') {
       window.onSweeprCurrencyChanged(p);
     }
+    try {
+      window.dispatchEvent(new CustomEvent('sweepr:currencyChanged', { detail: p }));
+    } catch (e) {}
   }
+
+  window.getSweeprPlanWithAddon = function (currencyCode, plan, includeAddon) {
+    const p = getComputedPricing(currencyCode || getActiveCurrency());
+    const base =
+      plan === 'annual' ? p.annual :
+      plan === 'six_month' ? p.sixMonth :
+      plan === 'intro' ? p.introFirstMonth :
+      p.monthly;
+    const addon = !includeAddon ? 0 : (
+      plan === 'annual' ? p.addonAnnual :
+      plan === 'six_month' ? p.addonSixMonth :
+      p.addonMonthly
+    );
+    const total = p.decimals === 0 ? Math.round(base + addon) : Number((base + addon).toFixed(2));
+    return {
+      pricing: p,
+      base,
+      addon,
+      total,
+      baseStr: formatAmount(p, base),
+      addonStr: formatAmount(p, addon),
+      totalStr: formatAmount(p, total)
+    };
+  };
 
   window.setSweeprCurrency = function (code) {
     if (!SWEEPR_PRICING[code]) code = 'GBP';

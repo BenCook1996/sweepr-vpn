@@ -14,20 +14,19 @@
 <style>
   :root {
     --e400:#34d399; --e500:#10b981; --e600:#059669; --e700:#047857; --mint:#a7f3d0; --mint50:#ecfdf5;
-    --bg:#ffffff; --rail:#f8fafc; --card:#ffffff; --card2:#f8fafc; --line:#e2e8f0;
-    --ink:#0f172a; --ink3:#334155; --muted:#64748b; --amberbg:#fffbeb; --amberline:#fbbf24; --amberink:#b45309;
+    --bg:#f7f7f5; --rail:#f2f1ec; --card:#ffffff; --card2:#f3f2ed; --line:#dfddd4;
+    --ink:#161a22; --ink3:#374151; --muted:#5e6776; --amberbg:#fffbeb; --amberline:#fbbf24; --amberink:#b45309;
     --accent:#059669; --sel:#ecfdf5;
-    /* @Memorisely Rule #1 & #10: Concentric Corner Radius & Semantic Tokens */
-    --radius-outer:20px; --pad-outer:10px; --radius-inner:10px;
+    --radius-outer:18px; --pad-outer:10px; --radius-inner:10px;
     --danger-ink:#dc2626;
   }
   :root[data-theme="dark"] {
-    /* @Memorisely Rule #7: Stepped Dark Mode Surfaces & Desaturated Accents */
-    --bg:#0b1220; --rail:#0b1220; --card:#111a2e; --card2:#16213a; --line:#1e293b;
-    --ink:#f1f5f9; --ink3:#cbd5e1; --muted:#94a3b8; --amberbg:rgba(245,158,11,.10); --amberline:rgba(251,191,36,.55); --amberink:#fbbf24;
-    --accent:#34d399; --sel:rgba(52,211,153,.14);
+    --bg:#111315; --rail:#131619; --card:#181b1f; --card2:#20242a; --line:#2b3038;
+    --ink:#f3f4f6; --ink3:#d1d5db; --muted:#8c95a3; --amberbg:rgba(245,158,11,.10); --amberline:rgba(251,191,36,.55); --amberink:#fbbf24;
+    --accent:#34d399; --sel:rgba(16,185,129,.12);
     --danger-ink:#f87171;
   }
+  html.no-transitions, html.no-transitions * { transition:none !important; }
   * { box-sizing:border-box; margin:0; padding:0; }
   html, body { height:100%; overflow:hidden; user-select:none; }
   body { font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI Variable","Segoe UI",Inter,Roboto,sans-serif; font-size:14px; color:var(--ink); background:var(--bg); -webkit-font-smoothing:antialiased; transition:background .2s,color .2s; }
@@ -40,7 +39,7 @@
 
   /* Mobile Top Bar (hidden on desktop) */
   .mobile-topbar { display:none; align-items:center; justify-content:space-between; padding:10px 14px; border-bottom:1px solid var(--line); background:var(--card); position:sticky; top:0; z-index:35; }
-  .mobile-brand { display:flex; align-items:center; gap:8px; font-weight:900; font-size:15px; letter-spacing:-.3px; }
+  .mobile-brand { display:flex; align-items:center; gap:8px; font-weight:700; font-size:15px; letter-spacing:-.3px; }
   .mobile-brand svg { width:26px; height:26px; filter:drop-shadow(0 2px 6px rgba(16,185,129,.3)); }
   .mobile-actions { display:flex; align-items:center; gap:8px; }
   .icon-pill-btn { width:36px; height:36px; border-radius:10px; display:grid; place-items:center; background:var(--card2); border:1px solid var(--line); color:var(--ink3); }
@@ -59,7 +58,7 @@
 
   /* Main column */
   .main { padding:18px 20px; overflow-y:auto; scrollbar-width:thin; scrollbar-color:rgba(148,163,184,.35) transparent; }
-  h1.view-title { font-size:21px; font-weight:900; letter-spacing:-.4px; }
+  h1.view-title { font-size:21px; font-weight:700; letter-spacing:-.4px; }
   .view-sub { color:var(--muted); font-size:13px; margin-top:2px; }
   h3.sec { font-size:14.5px; font-weight:800; margin:16px 0 9px; display:flex; justify-content:space-between; align-items:center; }
   h3.sec span { font-size:12px; font-weight:700; color:var(--accent); }
@@ -93,7 +92,7 @@
   .s { font-size:12px; color:var(--muted); margin-top:1px; }
   .grow { flex:1; min-width:0; overflow:hidden; }
 
-  .pro-tag { display:inline-flex; align-items:center; padding:1px 6px; border-radius:6px; font-size:10px; font-weight:900; letter-spacing:.4px; background:rgba(16,185,129,.14); color:var(--accent); border:1px solid rgba(16,185,129,.3); }
+  .pro-tag { display:inline-flex; align-items:center; padding:1px 6px; border-radius:6px; font-size:10px; font-weight:700; letter-spacing:.4px; background:rgba(16,185,129,.14); color:var(--accent); border:1px solid rgba(16,185,129,.3); }
   body.is-pro .pro-tag { display:none !important; }
 
   .pill { display:inline-flex; align-items:center; gap:5px; border-radius:999px; font-size:11.5px; font-weight:800; padding:5px 11px; white-space:nowrap; }
@@ -163,47 +162,34 @@
   :root[data-theme="dark"] .toggle { background:#334155; }
   :root[data-theme="dark"] .toggle.on { background:var(--e500); }
 
-  .btn-go { width:100%; background:linear-gradient(135deg,#10b981 0%,#059669 100%); color:#fff; border-radius:999px; font-weight:800; font-size:15px; padding:14px 22px; box-shadow:0 6px 20px rgba(16,185,129,.38); display:flex; align-items:center; justify-content:center; gap:9px; transition:transform 140ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 140ms cubic-bezier(0.16, 1, 0.3, 1), background 140ms cubic-bezier(0.16, 1, 0.3, 1); will-change:transform; }
-  .btn-go:hover { background:linear-gradient(135deg,#059669 0%,#047857 100%); transform:translateY(-1px); box-shadow:0 8px 26px rgba(16,185,129,.5); }
-  .btn-go:active { transform:scale(0.985); transition-duration:75ms; }
+  .btn-go { width:100%; background:#059669; border:1px solid #047857; color:#fff; border-radius:12px; font-weight:700; font-size:15px; padding:14px 22px; box-shadow:0 2px 8px rgba(5,150,105,.25); display:flex; align-items:center; justify-content:center; gap:9px; transition:transform 100ms cubic-bezier(0.32, 0.72, 0, 1), background-color 140ms ease; will-change:transform; }
+  .btn-go:hover { background:#047857; }
+  .btn-go:active { transform:scale(0.97); transition-duration:75ms; }
   .btn-go.pause { background:rgba(255,255,255,.08); color:#d1fae5; box-shadow:none; border:1.5px solid rgba(167,243,208,.35); }
   .btn-go.pause:hover { background:rgba(255,255,255,.14); }
-  .btn-soft { background:rgba(16,185,129,.12); color:var(--accent); border:1px solid rgba(16,185,129,.3); border-radius:999px; font-weight:800; font-size:12.5px; padding:8px 14px; min-height:38px; display:inline-flex; align-items:center; justify-content:center; gap:6px; transition:transform 140ms cubic-bezier(0.16, 1, 0.3, 1), background 140ms cubic-bezier(0.16, 1, 0.3, 1); }
+  .btn-soft { background:rgba(16,185,129,.12); color:var(--accent); border:1px solid rgba(16,185,129,.3); border-radius:10px; font-weight:700; font-size:12.5px; padding:8px 14px; min-height:38px; display:inline-flex; align-items:center; justify-content:center; gap:6px; transition:transform 100ms cubic-bezier(0.32, 0.72, 0, 1), background-color 140ms ease; }
   .btn-soft:hover { background:rgba(16,185,129,.2); }
-  .btn-soft:active, .rail-btn:active, .rec:active, .ftab:active, .loc:active, .plan:active, .btn-activate-key:active, .powerbtn:active { transform:scale(0.985); transition-duration:75ms; }
-  .ping-badge, #devCountTitle, #infoSpeed, #cStream { font-variant-numeric:tabular-nums; }
-  .input { width:100%; border:1.5px solid var(--line); background:var(--card2); color:var(--ink); border-radius:12px; padding:11px 14px; font:inherit; font-size:13.5px; outline:none; }
+  .btn-soft:active, .rail-btn:active, .rec:active, .ftab:active, .loc:active, .plan:active, .btn-activate-key:active, .powerbtn:active { transform:scale(0.97); transition-duration:75ms; }
+  .ping-badge, #devCountTitle, #infoSpeed, #cStream, .desktop-telemetry-bar, .c-pill-box, .timer .n { font-variant-numeric:tabular-nums; }
+  .desktop-telemetry-bar { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; padding:7px 11px; margin-bottom:12px; border:1px solid var(--line); background:var(--card2); border-radius:10px; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:11px; color:var(--muted); }
+  .desktop-telemetry-left { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .desk-led { width:7px; height:7px; border-radius:999px; background:#059669; box-shadow:0 0 0 2px rgba(5,150,105,.22); display:inline-block; flex-shrink:0; }
+  .desktop-telemetry-chips { display:flex; align-items:center; gap:6px; }
+  .desk-chip { display:inline-flex; align-items:center; gap:5px; padding:3px 8px; border-radius:6px; border:1px solid var(--line); background:var(--card); color:var(--muted); font-size:10.5px; font-weight:700; cursor:pointer; transition:background-color .12s, border-color .12s, color .12s; }
+  .desk-chip.on { border-color:rgba(5,150,105,.45); background:var(--sel); color:var(--accent); }
+  .desk-chip-dot { width:6px; height:6px; border-radius:999px; background:currentColor; }
+  .input { width:100%; border:1.5px solid var(--line); background:var(--card2); color:var(--ink); border-radius:10px; padding:11px 14px; font:inherit; font-size:13.5px; outline:none; }
   .input:focus { border-color:var(--e500); }
   textarea.input { resize:none; }
 
-  /* Connect panel (always dark emerald) */
-  .panel { margin:12px 12px 12px 0; border-radius:24px; background:linear-gradient(160deg,#064e3b 0%,#0b1220 72%); color:#ecfdf5; padding:24px; position:relative; overflow:hidden; display:flex; flex-direction:column; }
-  .panel.on { background:linear-gradient(160deg,#047857 0%,#064e3b 45%,#0b1220 100%); }
-  .panel .rings { position:absolute; right:-80px; top:-80px; width:280px; height:280px; border-radius:50%; border:1.5px solid rgba(167,243,208,.18); box-shadow:0 0 0 38px rgba(167,243,208,.05),0 0 0 76px rgba(167,243,208,.03); pointer-events:none; transition:border-color 180ms cubic-bezier(0.16, 1, 0.3, 1), transform 180ms cubic-bezier(0.16, 1, 0.3, 1); will-change:transform; }
-  .panel .rings::before, .panel .rings::after { content:""; position:absolute; inset:0; border-radius:50%; border:1.5px solid rgba(110,231,183,.32); opacity:0; pointer-events:none; will-change:transform, opacity; }
-  .panel.on .rings { border-color:rgba(110,231,183,.36); animation:ringsBreathe 550ms cubic-bezier(0.16, 1, 0.3, 1) 1 forwards; }
-  .panel.on .rings::before { animation:ringsRipple 650ms cubic-bezier(0.16, 1, 0.3, 1) 1 forwards; }
-  .panel.on .rings::after { animation:ringsRipple 650ms cubic-bezier(0.16, 1, 0.3, 1) 120ms 1 forwards; }
-  @keyframes ringsBreathe {
-    0% { transform:scale(0.96); }
-    60% { transform:scale(1.03); }
-    100% { transform:scale(1); }
-  }
-  @keyframes ringsRipple {
-    0% { transform:scale(.86); opacity:0; }
-    35% { opacity:.42; }
-    100% { transform:scale(1.38); opacity:0; }
-  }
-  .panel .plogo { position:absolute; right:24px; top:24px; width:50px; height:50px; filter:drop-shadow(0 6px 16px rgba(0,0,0,.35)); transition:filter 180ms cubic-bezier(0.16, 1, 0.3, 1), transform 180ms cubic-bezier(0.16, 1, 0.3, 1); }
-  .panel.on .plogo { filter:drop-shadow(0 6px 18px rgba(0,0,0,.35)) drop-shadow(0 0 12px rgba(52,211,153,.38)); animation:logoGlow 400ms cubic-bezier(0.16, 1, 0.3, 1) 1 forwards; }
-  @keyframes logoGlow {
-    0% { transform:scale(0.95); }
-    65% { transform:scale(1.04); }
-    100% { transform:scale(1); }
-  }
+  /* Connect panel (Anodized Obsidian hardware chassis) */
+  .panel { margin:12px 12px 12px 0; border-radius:18px; background:#111315; border:1px solid #262b33; color:#ecfdf5; padding:24px; position:relative; overflow:hidden; display:flex; flex-direction:column; }
+  .panel.on { background:#0e1714; border-color:#065f46; }
+  .panel .rings { display:none !important; }
+  .panel .plogo { position:absolute; right:24px; top:24px; width:48px; height:48px; filter:drop-shadow(0 4px 12px rgba(0,0,0,.35)); }
   .panel .mini-btn { position:absolute; right:84px; top:34px; width:32px; height:32px; border-radius:9px; display:grid; place-items:center; color:#a7f3d0; background:rgba(255,255,255,.06); border:1px solid rgba(167,243,208,.18); }
   .panel .mini-btn:hover { background:rgba(255,255,255,.12); }
-  .h-big { font-size:32px; font-weight:900; line-height:1.08; letter-spacing:-.6px; }
+  .h-big { font-size:32px; font-weight:700; line-height:1.08; letter-spacing:-.6px; }
   .h-big .g { color:var(--e400); }
   .info { display:grid; grid-template-columns:1fr 1fr; gap:14px 12px; margin-top:22px; position:relative; }
   .info .v { font-size:14.5px; font-weight:800; color:#fff; }
@@ -213,7 +199,7 @@
   .v.okc { color:var(--e400) !important; }
   .timer { margin-top:16px; text-align:center; background:rgba(255,255,255,.04); border:1px solid rgba(167,243,208,.14); border-radius:16px; padding:10px 12px; }
   .timer .k { font-size:11.5px; color:#94a3b8; font-weight:700; }
-  .timer .n { font-size:30px; font-weight:900; letter-spacing:-1px; color:#fff; font-variant-numeric:tabular-nums; line-height:1.15; }
+  .timer .n { font-size:30px; font-weight:700; letter-spacing:-1px; color:#fff; font-variant-numeric:tabular-nums; line-height:1.15; }
   .spark-meta { font-size:11.5px; font-weight:800; color:#a7f3d0; font-variant-numeric:tabular-nums; margin-top:3px; }
   .spark-bars { display:flex; align-items:flex-end; justify-content:center; gap:3px; height:22px; margin-top:6px; }
   .spark-bar { width:6px; border-radius:3px; background:linear-gradient(180deg,#34d399,#059669); transition:height .3s ease; min-height:4px; }
@@ -229,10 +215,10 @@
   body.is-compact .app, body.is-compact .mobile-topbar { display:none !important; }
   body.is-compact .compact { display:flex; }
   .c-head { display:flex; justify-content:space-between; align-items:center; }
-  .c-city { font-size:36px; font-weight:900; letter-spacing:-.8px; text-align:center; margin-top:8px; }
+  .c-city { font-size:36px; font-weight:700; letter-spacing:-.8px; text-align:center; margin-top:8px; }
   .c-power-wrap { display:flex; flex-direction:column; align-items:center; margin:16px 0 14px; gap:14px; }
-  .powerbtn { width:92px; height:92px; border-radius:50%; display:grid; place-items:center; color:#fff; background:linear-gradient(135deg,#10b981,#047857); box-shadow:0 0 0 8px rgba(16,185,129,.16),0 10px 26px rgba(5,150,105,.4); transition:all .2s; }
-  .powerbtn.off { background:linear-gradient(135deg,#64748b,#475569); box-shadow:0 0 0 8px rgba(148,163,184,.15),0 10px 22px rgba(15,23,42,.2); }
+  .powerbtn { width:88px; height:88px; border-radius:50%; display:grid; place-items:center; color:#fff; background:#059669; border:2px solid #047857; box-shadow:0 0 0 6px rgba(5,150,105,.16); transition:transform 100ms ease, background-color 140ms ease; }
+  .powerbtn.off { background:#374151; border:2px solid #4b5563; box-shadow:0 0 0 6px rgba(148,163,184,.12); }
   .c-pills { display:grid; grid-template-columns:1fr 1fr; gap:8px; width:100%; }
   .c-pill-box { background:var(--card2); border:1px solid var(--line); border-radius:12px; padding:8px 10px; text-align:center; }
   .c-list { border:1px solid var(--line); border-radius:16px; overflow-y:auto; flex:1; background:var(--card); }
@@ -260,7 +246,7 @@
   .modal-divider::before, .modal-divider::after { content:""; flex:1; height:1px; background:var(--line); }
   .plan { border:1.5px solid var(--line); border-radius:14px; padding:9px 12px; display:flex; align-items:center; justify-content:space-between; text-align:left; width:100%; position:relative; transition:all .12s; }
   .plan.on { border:2px solid var(--e500); background:var(--sel); }
-  .plan .tag { position:absolute; top:-9px; right:12px; background:var(--e600); color:#fff; font-size:9.5px; font-weight:900; padding:2px 8px; border-radius:99px; letter-spacing:.3px; }
+  .plan .tag { position:absolute; top:-9px; right:12px; background:var(--e600); color:#fff; font-size:9.5px; font-weight:700; padding:2px 8px; border-radius:99px; letter-spacing:.3px; }
 
   /* QR / WireGuard Mobile Setup Modal (Strategic Overhaul 2) */
   .qr-box { background:#fff; border:1.5px solid var(--line); border-radius:16px; padding:14px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; margin:4px 0; }
@@ -456,6 +442,16 @@
 
     <!-- HOME -->
     <section id="view-home">
+      <div class="desktop-telemetry-bar">
+        <div class="desktop-telemetry-left">
+          <span style="display:inline-flex;align-items:center;gap:6px;color:var(--ink3);font-weight:700"><span class="desk-led"></span>TUNNEL // WIREGUARD 10GBPS</span>
+          <span id="deskTelemetryNode">UK-LON-01 &middot; 8 ms &middot; STANDBY</span>
+        </div>
+        <div class="desktop-telemetry-chips">
+          <button type="button" class="desk-chip" id="deskKillChip" onclick="toggleKillSwitch()"><span class="desk-chip-dot"></span><span>KILL SWITCH</span></button>
+          <button type="button" class="desk-chip" id="deskLanChip" onclick="toggleLanBypass()"><span class="desk-chip-dot"></span><span>LAN BYPASS</span></button>
+        </div>
+      </div>
       <div class="home-head-desktop" style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:14px">
         <div><h1 class="view-title" data-i18n="welcome">Select a Location</h1><div class="view-sub" data-i18n="homeSub">Choose a Country</div></div>
         <button class="pill warn" id="planPill" onclick="openActivate()"><svg width="13" height="13"><use href="#i-key"/></svg><span id="planPillText">Free plan · Enter license key</span></button>
@@ -477,14 +473,14 @@
       <!-- Strategic Overhaul 1: Mobile Progressive Disclosure Trigger + Bottom Sheet Drawer -->
       <button class="mobile-country-trigger" id="openCountrySheetBtn" onclick="openCountrySheet(true)">
         <span>Browse all 8 countries &amp; cities</span>
-        <span style="color:var(--accent);font-weight:900">View all ›</span>
+        <span style="color:var(--accent);font-weight:700">View all ›</span>
       </button>
 
       <div class="country-sheet-backdrop" onclick="openCountrySheet(false)"></div>
       <div class="country-drawer" id="countryDrawer">
         <div class="sheet-handle"></div>
         <div class="sheet-head-mobile">
-          <div style="font-size:16px;font-weight:900">Choose a country</div>
+          <div style="font-size:16px;font-weight:700">Choose a country</div>
           <button onclick="openCountrySheet(false)" style="font-size:18px;color:var(--muted);padding:4px 8px" aria-label="Close country list">✕</button>
         </div>
 
@@ -492,8 +488,8 @@
 
         <div class="filter-tabs" role="tablist" aria-label="Filter countries">
           <button class="ftab on" id="ftab-all" onclick="setCountryFilter('all')">All (8)</button>
-          <button class="ftab" id="ftab-fast" onclick="setCountryFilter('fast')">⚡ Fastest</button>
-          <button class="ftab" id="ftab-fav" onclick="setCountryFilter('fav')">★ Saved</button>
+          <button class="ftab" id="ftab-fast" onclick="setCountryFilter('fast')">Fastest</button>
+          <button class="ftab" id="ftab-fav" onclick="setCountryFilter('fav')">Saved</button>
         </div>
 
         <h3 class="sec" style="margin-top:8px"><span style="color:var(--ink);font-size:14px;font-weight:800" data-i18n="allCountries">Available locations</span><span id="countLabel">8 places</span></h3>
@@ -507,19 +503,20 @@
         <div>
           <h1 class="view-title"><span id="devCountTitle">4</span> <span data-i18n="wifiTitle">devices on Wi-Fi</span></h1>
           <div class="view-sub" id="lastChecked">Checked just now</div>
+          <div style="display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:6px;background:var(--sel);border:1px solid rgba(5,150,105,.35);color:var(--accent);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;font-weight:700;margin-top:6px"><span style="width:6px;height:6px;border-radius:999px;background:currentColor;display:inline-block"></span>10.66.0.1 ACR SINKHOLE ACTIVE</div>
         </div>
         <div style="display:flex;gap:6px;flex-wrap:wrap">
-          <button class="btn-soft" onclick="runAirbnbCameraScan()" id="airbnbScanBtn" title="Check Wi-Fi for hidden RTSP/ONVIF network cameras">📷 Airbnb Camera Scan</button>
+          <button class="btn-soft" onclick="runAirbnbCameraScan()" id="airbnbScanBtn" title="Check Wi-Fi for hidden RTSP/ONVIF network cameras"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg><span>Airbnb Camera Scan</span></button>
           <button class="btn-soft" onclick="scanWifi()" id="scanBtn" data-i18n="scanBtn">Scan Wi-Fi</button>
         </div>
       </div>
 
       <!-- 4-Way Segmented Sub-Navigation matching Mockup 1 -->
       <div class="filter-tabs" role="tablist" aria-label="Wi-Fi Guard Home Modes" style="margin-top:12px;flex-wrap:wrap">
-        <button class="ftab on" id="wgtab-all" onclick="setWifiGuardTab('all')">📡 Who's on My Wi-Fi</button>
-        <button class="ftab" id="wgtab-bedtime" onclick="setWifiGuardTab('bedtime')">🛏️ Kids Bedtime Pause</button>
-        <button class="ftab" id="wgtab-isp" onclick="setWifiGuardTab('isp')">📉 ISP Refund Proof</button>
-        <button class="ftab" id="wgtab-camera" onclick="setWifiGuardTab('camera')">📷 Airbnb Camera Scan</button>
+        <button class="ftab on" id="wgtab-all" onclick="setWifiGuardTab('all')">Who's on My Wi-Fi</button>
+        <button class="ftab" id="wgtab-bedtime" onclick="setWifiGuardTab('bedtime')">Kids Bedtime Pause</button>
+        <button class="ftab" id="wgtab-isp" onclick="setWifiGuardTab('isp')">ISP Refund Proof</button>
+        <button class="ftab" id="wgtab-camera" onclick="setWifiGuardTab('camera')">Airbnb Camera Scan</button>
       </div>
 
       <!-- Doorbell Mode for Wi-Fi + Smart-TV Master Shield Card -->
@@ -541,7 +538,7 @@
       <div id="ispRefundFullCard" class="card hidden" style="margin-top:12px;border:1.5px solid var(--e500)">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
           <div>
-            <div class="t" style="font-size:15px">📉 ISP Speed-Drop Refund Proof &amp; Bill Credit Generator</div>
+            <div class="t" style="font-size:15px">ISP Speed-Drop Refund Proof &amp; Bill Credit Generator</div>
             <div class="s">Log evening slowdowns against your promised ISP speed to claim a $20–$40 (£20–£35) bill credit — or bypass DPI throttling with 1-Click VPN.</div>
           </div>
           <span class="pill warn" id="ispDropBadge">Evening Audit Ready</span>
@@ -570,9 +567,9 @@
           </div>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
-          <button class="btn-soft" onclick="runDesktopIspAudit()" id="wgRunSpeedBtn">⚡ Test Speed vs. Contract Now</button>
-          <button class="btn-soft" onclick="copyDesktopIspRefundScript()" id="wgCopyScriptBtn">📄 Copy $35 ISP Refund Script</button>
-          <button class="btn-soft" onclick="toggleConnect(true)">🛡️ Bypass ISP Throttling with VPN</button>
+          <button class="btn-soft" onclick="runDesktopIspAudit()" id="wgRunSpeedBtn">Test Speed vs. Contract Now</button>
+          <button class="btn-soft" onclick="copyDesktopIspRefundScript()" id="wgCopyScriptBtn">Copy $35 ISP Refund Script</button>
+          <button class="btn-soft" onclick="toggleConnect(true)">Bypass ISP Throttling with VPN</button>
         </div>
         <div id="wgIspScriptPreview" class="card" style="margin-top:10px;background:var(--card2);padding:11px 13px;font-size:12px;line-height:1.45;color:var(--ink3)"></div>
       </div>
@@ -580,7 +577,7 @@
       <!-- Compact Bottom ISP Accountability Strip matching Mockup 1 -->
       <div class="card" id="ispBottomStrip" style="margin-top:12px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:var(--card2)">
         <div style="min-width:0;flex:1">
-          <div class="t" style="font-size:13px">⚠️ ISP Accountability &amp; Speed-Drop Refund Proof</div>
+          <div class="t" style="font-size:13px">ISP Accountability &amp; Speed-Drop Refund Proof</div>
           <div class="s" id="ispStripSummary">Spectrum / Virgin Media 500 Mbps Plan ($85/mo) &bull; Evening drop detected (88 Mbps at 8:30 PM)</div>
         </div>
         <button class="btn-soft" style="font-size:12px;padding:7px 12px" onclick="setWifiGuardTab('isp')">Generate $35 ISP Refund Script &amp; PDF</button>
@@ -659,7 +656,7 @@
           <input id="bedtimeTimeInput" type="time" class="input" style="width:136px;padding:7px 10px;font-weight:800" value="22:00" onchange="setBedtimeScheduleTime(this.value)" aria-label="Kids Bedtime Pause start time" />
         </div>
         <div class="set-row" style="cursor:default">
-          <div class="set-anchor-ico">🌐</div>
+          <div class="set-anchor-ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
           <div class="grow"><div class="t" data-i18n="langTitle">Language</div><div class="s" data-i18n="langSub">App display language</div></div>
           <div class="lang-chip-group" role="group" aria-label="Language">
             <button type="button" class="lang-chip on" data-lang-chip="en" onclick="setLang('en')">EN</button>
@@ -734,10 +731,11 @@
 <!-- ======================= MINI WINDOW (Quick Win 5: Clean 2-pill layout) ======================= -->
 <div class="compact" id="compact">
   <div class="c-head">
-    <div style="display:flex;align-items:center;gap:8px;font-weight:900;font-size:14px"><svg style="width:26px;height:26px"><use href="#logo"/></svg>SWEEPR <span style="color:var(--accent)">VPN</span></div>
+    <div style="display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px"><svg style="width:26px;height:26px"><use href="#logo"/></svg>SWEEPR <span style="color:var(--accent)">VPN</span></div>
     <button class="btn-soft" onclick="setCompact(false)"><svg width="13" height="13"><use href="#i-max"/></svg>Full app</button>
   </div>
-  <div style="text-align:center;margin-top:14px"><span class="pill warn" id="cStatus">● Not protected</span></div>
+  <div style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:10.5px;color:var(--muted);text-align:center;margin-top:8px;letter-spacing:.03em;font-variant-numeric:tabular-nums">TRAY // WIREGUARD 10GBPS &middot; ACR SHIELD</div>
+  <div style="text-align:center;margin-top:10px"><span class="pill warn" id="cStatus">● Not protected</span></div>
   <div class="c-city" id="cCity">London</div>
   <div style="text-align:center;color:var(--muted);font-size:13.5px" id="cCountry">United Kingdom</div>
   <div class="c-power-wrap">
@@ -755,15 +753,15 @@
   <div class="sheet" onclick="event.stopPropagation()">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:2px">
       <svg style="width:40px;height:40px;flex-shrink:0"><use href="#logo"/></svg>
-      <div class="grow"><div style="font-size:18px;font-weight:900">Unlock SWEEPR Pro</div><div class="s">Up to 3 devices (desktop or mobile) · 14-day money-back guarantee</div></div>
+      <div class="grow"><div style="font-size:18px;font-weight:700">Unlock SWEEPR Pro</div><div class="s">Up to 3 devices (desktop or mobile) · 14-day money-back guarantee</div></div>
       <button onclick="closeActivate()" aria-label="Close" style="font-size:18px;color:var(--muted);padding:4px 8px">✕</button>
     </div>
 
     <div class="s" id="mError" style="color:#ef4444;font-weight:700;display:none">Please enter a valid license key.</div>
 
-    <button class="plan on" data-plan="monthly" onclick="plan(this)"><span class="tag">POPULAR · £1.99 INTRO</span><div><div class="t">1st-Month Trial</div><div class="s">£1.99 first month, then £12.49/mo</div></div><div style="text-align:right"><div style="font-weight:900;font-size:16px;color:var(--accent)">£1.99</div><div class="s">today</div></div></button>
-    <button class="plan" data-plan="annual" onclick="plan(this)"><div><div class="t">Yearly Plan</div><div class="s">£74.99 billed once a year · Save 50%</div></div><div style="text-align:right"><div style="font-weight:900;font-size:15px">£6.25</div><div class="s">/month</div></div></button>
-    <button class="plan" data-plan="six_month" onclick="plan(this)"><div><div class="t">6-Month Plan</div><div class="s">£48.99 · Save 35%</div></div><div style="text-align:right"><div style="font-weight:900;font-size:15px">£8.17</div><div class="s">/month</div></div></button>
+    <button class="plan on" data-plan="monthly" onclick="plan(this)"><span class="tag">POPULAR · £1.99 INTRO</span><div><div class="t">1st-Month Trial</div><div class="s">£1.99 first month, then £12.49/mo</div></div><div style="text-align:right"><div style="font-weight:700;font-size:16px;color:var(--accent)">£1.99</div><div class="s">today</div></div></button>
+    <button class="plan" data-plan="annual" onclick="plan(this)"><div><div class="t">Yearly Plan</div><div class="s">£74.99 billed once a year · Save 50%</div></div><div style="text-align:right"><div style="font-weight:700;font-size:15px">£6.25</div><div class="s">/month</div></div></button>
+    <button class="plan" data-plan="six_month" onclick="plan(this)"><div><div class="t">6-Month Plan</div><div class="s">£48.99 · Save 35%</div></div><div style="text-align:right"><div style="font-weight:700;font-size:15px">£8.17</div><div class="s">/month</div></div></button>
 
     <button class="btn-go" id="mCheckoutBtn" onclick="checkoutSelectedPlan()">Continue — £1.99 (1st Month)</button>
 
@@ -800,7 +798,7 @@
     <div style="display:flex;align-items:center;gap:12px">
       <svg style="width:40px;height:40px;flex-shrink:0"><use href="#logo"/></svg>
       <div class="grow">
-        <div style="font-size:17px;font-weight:900">iOS, Android &amp; macOS Tunnel Setup</div>
+        <div style="font-size:17px;font-weight:700">iOS, Android &amp; macOS Tunnel Setup</div>
         <div class="s" id="wgModalSub">Instant 10Gbps WireGuard profile, QR code, or Apple On-Demand profile</div>
       </div>
       <button onclick="closeMobileWireGuardModal()" aria-label="Close" style="font-size:18px;color:var(--muted);padding:4px 8px">✕</button>
@@ -940,7 +938,7 @@
     else p.resolve(result);
   };
   window.onNativeIntruderAlert = function(devName, ip, mac) {
-    toast('🔔 New device connected to Wi-Fi: ' + (devName || 'Unknown') + ' (' + (ip || mac) + ')');
+    toast('New device connected to Wi-Fi: ' + (devName || 'Unknown') + ' (' + (ip || mac) + ')');
     silentRefreshWifi();
   };
   window.onNativeWifiScanUpdate = function(report) {
@@ -1400,7 +1398,7 @@
       try { tauri.core.invoke('set_wifi_guard_device_policy', { mac: key, customName: curPol.customName || null, trustState: nextTrust, paused: !!curPol.paused, bedtimeSchedule: curPol.bedtimeSchedule || null }).catch(() => {}); } catch (e) {}
     }
     const label = curPol.customName || resolveDeviceDisplayName(d);
-    toast(nextTrust === 'flagged' ? ('🚨 Flagged ' + label + ' as unrecognized device') : ('✓ Marked ' + label + ' as Trusted Family Device'));
+    toast(nextTrust === 'flagged' ? ('Flagged ' + label + ' as unrecognized device') : ('Marked ' + label + ' as Trusted Family Device'));
     renderDevices();
   }
 
@@ -1409,9 +1407,9 @@
     await scanWifi();
     const cams = devices.filter(d => d.camera_risk || d.kind === 'camera');
     if (cams.length === 0) {
-      toast('📷 Airbnb Camera Check Complete: 0 hidden RTSP/ONVIF cameras detected on this Wi-Fi ✓');
+      toast('Airbnb Camera Check Complete: 0 hidden RTSP/ONVIF cameras detected on this Wi-Fi');
     } else {
-      toast('⚠️ Camera Check: ' + cams.length + ' network camera device(s) found — inspect list below');
+      toast('Camera Check: ' + cams.length + ' network camera device(s) found — inspect list below');
     }
   }
 
@@ -1425,7 +1423,7 @@
     const sym = isUk ? '£' : '$';
     const credit = Math.max(15, Math.min(45, Math.round(cost * (dropPct / 100) * 0.5)));
     const regRef = isUk ? 'Ofcom Voluntary Code of Practice on Broadband Speeds' : 'FCC Broadband Consumer Label & Service Level Accountability rules';
-    return '📞 1-Click ' + isp + ' Bill Credit Script (Claim ' + sym + credit + ' Credit):\n' +
+    return '1-Click ' + isp + ' Bill Credit Script (Claim ' + sym + credit + ' Credit):\n' +
       '"Hi, I am calling regarding my ' + isp + ' ' + promised + ' Mbps internet plan (' + sym + cost + '/mo). Independent SWEEPR Wi-Fi Guard speed logs show my evening line rate dropped to ' + measured + ' Mbps (' + dropPct + '% below my contracted ' + promised + ' Mbps speed). Under the ' + regRef + ', I am requesting a ' + sym + credit + ' service-level credit on this month\'s statement and a line provisioning reset."';
   }
 
@@ -1481,7 +1479,7 @@
         });
       } catch (e) {}
     }
-    if (btn) btn.textContent = '⚡ Test Speed vs. Contract Now';
+    if (btn) btn.textContent = 'Test Speed vs. Contract Now';
     toast('ISP Audit Logged: ' + measured + ' Mbps measured (' + rtt + ' ms ping)');
   }
 
@@ -1514,18 +1512,18 @@
       const isPaused = !!pol.paused;
       const isFlagged = pol.trustState === 'flagged' || (!!d.intruder_risk && pol.trustState !== 'trusted');
       const isKidDevice = ['console','tv','iphone','android','ipad'].includes(String(d.kind || '').toLowerCase()) && !d.is_self && !d.is_router;
-      const camBadge = d.camera_risk ? ' <span class="pill warn" style="font-size:10px;padding:2px 7px">📷 Camera Check</span>' : '';
+      const camBadge = d.camera_risk ? ' <span class="pill warn" style="font-size:10px;padding:2px 7px">Camera Check</span>' : '';
       const subText = isPaused
         ? 'Kids Bedtime Schedule: Paused ' + formatBedtime12h(getBedtimeScheduleTime()) + ' – 7:00 AM · ' + d.ip
         : (String(d.detail || '').includes(d.ip) ? d.detail : (d.detail + (d.ip ? ' · ' + d.ip : '')));
 
-      let actions = '<button class="btn-soft" style="padding:4px 9px;min-height:28px;font-size:11px" onclick="renameWifiDevice(' + idx + ')" title="Give this device a custom household name">✏️ Rename</button>';
+      let actions = '<button class="btn-soft" style="padding:4px 9px;min-height:28px;font-size:11px" onclick="renameWifiDevice(' + idx + ')" title="Give this device a custom household name">Rename</button>';
       if (isKidDevice || wgCurrentTab === 'bedtime') {
         actions += '<button class="pill ' + (isPaused ? 'warn' : 'ok') + '" style="cursor:pointer" onclick="toggleDeviceBedtimePause(' + idx + ')">' + (isPaused ? 'Paused' : 'Bedtime Pause') + '</button>';
       } else if (d.tracker_risk) {
         actions += '<button class="pill solid" onclick="blockTv()">Block TV Tracking</button>';
       } else if (isFlagged) {
-        actions += '<button class="pill warn" style="cursor:pointer" onclick="toggleDeviceIntruderFlag(' + idx + ')">🚨 Block / Trust</button>';
+        actions += '<button class="pill warn" style="cursor:pointer" onclick="toggleDeviceIntruderFlag(' + idx + ')">Block / Trust</button>';
       } else if (!d.is_self && !d.is_router) {
         actions += '<button class="pill ok" style="cursor:pointer" onclick="toggleDeviceIntruderFlag(' + idx + ')">Trusted ✓</button>';
       } else {
@@ -1539,7 +1537,7 @@
         '<div style="display:flex;gap:6px;align-items:center;flex-shrink:0">' + actions + '</div></div>';
     }).join('') : '<div class="card s" style="text-align:center">' +
       (wgCurrentTab === 'camera'
-        ? '📷 <strong>Airbnb &amp; Guest Wi-Fi Camera Scan Clear:</strong> 0 hidden RTSP/ONVIF cameras detected on this network ✓'
+        ? '<strong>Airbnb &amp; Guest Wi-Fi Camera Scan Clear:</strong> 0 hidden RTSP/ONVIF cameras detected on this network'
         : (scanning ? 'Scanning your local Wi-Fi network in plain English…' : 'Tap "Scan Wi-Fi" to identify every connected device in plain English.')) +
       '</div>';
 
@@ -1584,7 +1582,7 @@
     } finally {
       scanning = false;
       $('scanBtn').textContent = 'Scan Wi-Fi';
-      if (!state.auto) $('radar').classList.add('off');
+      $('radar').classList.add('off');
       updateLastChecked();
       renderDevices();
     }
@@ -1629,7 +1627,7 @@
     try { localStorage.setItem('sweepr_vpn_auto_radar', state.auto ? '1' : '0'); } catch (e) {}
     syncSwitchAria($('autoToggle'), state.auto); if ($('bedtimeTimeInput')) $('bedtimeTimeInput').value = getBedtimeScheduleTime();
     [0, 1, 2].forEach(i => syncSwitchAria($('sh-' + i), state.pro && state.shields[i]));
-    $('radar').classList.toggle('off', !state.auto);
+    $('radar').classList.add('off');
     syncHouseholdShieldsToNative(state.auto ? "Full Home & Smart-TV Shield enabled (DNS 1.1.1.2 + Wi-Fi monitoring)" : 'Home & Smart-TV shields paused');
     postNative('toggleRadar', state.auto);
   }
@@ -1692,6 +1690,7 @@
     state.killSwitch = !state.killSwitch;
     try { localStorage.setItem('sweepr_vpn_killswitch', state.killSwitch ? '1' : '0'); } catch (e) {}
     syncSwitchAria($('killToggle'), state.killSwitch);
+    if ($('deskKillChip')) $('deskKillChip').classList.toggle('on', !!state.killSwitch);
     if (isWebView2 && !tauri) {
       try { await invokeWebView2('setKillSwitch', { enabled: state.killSwitch }, 6000); } catch (e) {}
     } else {
@@ -1704,6 +1703,7 @@
     state.lanBypass = !state.lanBypass;
     try { localStorage.setItem('sweepr_vpn_lan_bypass', state.lanBypass ? '1' : '0'); } catch (e) {}
     syncSwitchAria($('lanBypassToggle'), state.lanBypass);
+    if ($('deskLanChip')) $('deskLanChip').classList.toggle('on', !!state.lanBypass);
     toast(state.lanBypass ? 'Local LAN Bypass enabled (printers & AirPlay reachable)' : 'Strict full-tunnel mode (local LAN blocked)');
     if (state.connected && (tauri || isWebView2)) {
       toggleConnect(true);
@@ -1720,6 +1720,7 @@
   }
   function toggleTheme() {
     const dark = document.documentElement.getAttribute('data-theme') !== 'dark';
+    document.documentElement.classList.add('no-transitions');
     document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
     syncSwitchAria($('darkToggle'), dark);
     const iconHref = '<use href="#' + (dark ? 'i-sun' : 'i-moon') + '"/>';
@@ -1727,6 +1728,8 @@
     if ($('mobileThemeIcon')) $('mobileThemeIcon').innerHTML = iconHref;
     $('themeTip').textContent = dark ? 'Light mode' : 'Dark mode';
     try { localStorage.setItem('sweepr_vpn_theme', dark ? 'dark' : 'light'); } catch (e) {}
+    void document.documentElement.offsetHeight;
+    requestAnimationFrame(() => document.documentElement.classList.remove('no-transitions'));
     postNative('toggleTheme', dark ? 'dark' : 'light');
   }
   function setCompact(on) { document.body.classList.toggle('is-compact', on); postNative('compact', on); }
@@ -2703,6 +2706,9 @@
     syncSwitchAria($('startupToggle'), state.startup);
     syncSwitchAria($('killToggle'), state.killSwitch);
     syncSwitchAria($('lanBypassToggle'), state.lanBypass);
+    if ($('deskTelemetryNode')) $('deskTelemetryNode').textContent = s.code + ' · ' + s.ping + ' ms · ' + (on ? 'ENCRYPTED' : 'STANDBY');
+    if ($('deskKillChip')) $('deskKillChip').classList.toggle('on', !!state.killSwitch);
+    if ($('deskLanChip')) $('deskLanChip').classList.toggle('on', !!state.lanBypass);
     syncSwitchAria($('autoToggle'), state.auto);
     [0, 1, 2].forEach(i => syncSwitchAria($('sh-' + i), state.pro && state.shields[i]));
     $('timerBox').classList.toggle('hidden', !on);
@@ -2847,7 +2853,7 @@
   document.addEventListener('contextmenu', e => {
     if (e.target && (e.target.id === 'mCode' || (e.target.closest && e.target.closest('#modal')))) {
       positionAndShowCtx(e,
-        '<button class="ctx-item" onclick="hideCtxMenu();pasteIntoKeyBox()"><span>📋 Paste &amp; Activate License Key</span><span class="k">' + modKeyLabel + '+V</span></button>' +
+        '<button class="ctx-item" onclick="hideCtxMenu();pasteIntoKeyBox()"><span>Paste &amp; Activate License Key</span><span class="k">' + modKeyLabel + '+V</span></button>' +
         '<button class="ctx-item" onclick="hideCtxMenu();toggleForgotKeyBox()"><span>Email Lost License Key…</span></button>'
       );
       return;
@@ -3055,7 +3061,7 @@
           fm.innerHTML =
             '<div class="modal-card" style="max-width:440px;text-align:center">' +
             '<div class="ico e" style="width:52px;height:52px;margin:0 auto 12px;border-radius:14px"><svg width="26" height="26"><use href="#i-shield"/></svg></div>' +
-            '<h2 style="font-size:20px;font-weight:900;margin:0 0 6px">Mandatory Update Required (v' + esc(latest) + ')</h2>' +
+            '<h2 style="font-size:20px;font-weight:700;margin:0 0 6px">Mandatory Update Required (v' + esc(latest) + ')</h2>' +
             '<p class="s" style="font-size:13px;line-height:1.5;margin-bottom:16px">' + esc(data.notes || 'A critical security and WireGuard protocol update is required to continue using SWEEPR VPN.') + '</p>' +
             '<button class="cta" style="width:100%" onclick="installAppUpdate()">Download &amp; Install Update</button>' +
             '</div>';
