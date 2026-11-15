@@ -4,29 +4,27 @@ options:
   deploymentTarget:
     iOS: "16.0"
     macOS: "13.0"
-packages:
-  WireGuardKit:
-    url: https://git.zx2c4.com/wireguard-apple
-    from: "1.0.16"
+# Note: Attach a prebuilt WireGuardKit.xcframework (from https://git.zx2c4.com/wireguard-apple)
+# to TunnelExtension & TunnelExtensionMac dependencies when archiving signed release builds.
+# PacketTunnelProvider.swift compiles cleanly via `#if canImport(WireGuardKit)` without it in unsigned CI.
 targets:
   SweeprVPN:
     type: application
-    platform: [iOS, macOS]
+    platform: iOS
+    deploymentTarget: "16.0"
     sources:
       - SweeprVpnApp.swift
       - Assets.xcassets
       - PrivacyInfo.xcprivacy
     settings:
       base:
+        PRODUCT_NAME: SweeprVPN
         PRODUCT_BUNDLE_IDENTIFIER: com.sweepr.vpn
         MARKETING_VERSION: "2.6.0"
         CURRENT_PROJECT_VERSION: 1
         INFOPLIST_FILE: Info.plist
         GENERATE_INFOPLIST_FILE: NO
         SWIFT_VERSION: "5.9"
-        CODE_SIGN_ENTITLEMENTS[sdk=iphoneos*]: SweeprVPN.entitlements
-        CODE_SIGN_ENTITLEMENTS[sdk=iphonesimulator*]: SweeprVPN.entitlements
-        CODE_SIGN_ENTITLEMENTS[sdk=macosx*]: SweeprVPNMac.entitlements
     entitlements:
       path: SweeprVPN.entitlements
     dependencies:
@@ -34,30 +32,72 @@ targets:
         embed: true
   TunnelExtension:
     type: app-extension
-    platform: [iOS, macOS]
+    platform: iOS
+    deploymentTarget: "16.0"
     sources:
       - TunnelExtension/PacketTunnelProvider.swift
       - TunnelExtension/PrivacyInfo.xcprivacy
     settings:
       base:
+        PRODUCT_NAME: TunnelExtension
         PRODUCT_BUNDLE_IDENTIFIER: com.sweepr.vpn.tunnel
         MARKETING_VERSION: "2.6.0"
         CURRENT_PROJECT_VERSION: 1
         INFOPLIST_FILE: TunnelExtension/Info.plist
         GENERATE_INFOPLIST_FILE: NO
         SWIFT_VERSION: "5.9"
-        CODE_SIGN_ENTITLEMENTS[sdk=iphoneos*]: TunnelExtension/TunnelExtension.entitlements
-        CODE_SIGN_ENTITLEMENTS[sdk=iphonesimulator*]: TunnelExtension/TunnelExtension.entitlements
-        CODE_SIGN_ENTITLEMENTS[sdk=macosx*]: TunnelExtension/TunnelExtensionMac.entitlements
     entitlements:
       path: TunnelExtension/TunnelExtension.entitlements
+  SweeprVPNMac:
+    type: application
+    platform: macOS
+    deploymentTarget: "13.0"
+    sources:
+      - SweeprVpnApp.swift
+      - Assets.xcassets
+      - PrivacyInfo.xcprivacy
+    settings:
+      base:
+        PRODUCT_NAME: SweeprVPN
+        PRODUCT_BUNDLE_IDENTIFIER: com.sweepr.vpn
+        MARKETING_VERSION: "2.6.0"
+        CURRENT_PROJECT_VERSION: 1
+        INFOPLIST_FILE: Info.plist
+        GENERATE_INFOPLIST_FILE: NO
+        SWIFT_VERSION: "5.9"
+    entitlements:
+      path: SweeprVPNMac.entitlements
     dependencies:
-      - package: WireGuardKit
-        product: WireGuardKit
+      - target: TunnelExtensionMac
+        embed: true
+  TunnelExtensionMac:
+    type: app-extension
+    platform: macOS
+    deploymentTarget: "13.0"
+    sources:
+      - TunnelExtension/PacketTunnelProvider.swift
+      - TunnelExtension/PrivacyInfo.xcprivacy
+    settings:
+      base:
+        PRODUCT_NAME: TunnelExtension
+        PRODUCT_BUNDLE_IDENTIFIER: com.sweepr.vpn.tunnel
+        MARKETING_VERSION: "2.6.0"
+        CURRENT_PROJECT_VERSION: 1
+        INFOPLIST_FILE: TunnelExtension/Info.plist
+        GENERATE_INFOPLIST_FILE: NO
+        SWIFT_VERSION: "5.9"
+    entitlements:
+      path: TunnelExtension/TunnelExtensionMac.entitlements
 schemes:
   SweeprVPN:
     build:
       targets:
         SweeprVPN: all
+    run:
+      storeKitConfiguration: SweeprVPN.storekit
+  SweeprVPNMac:
+    build:
+      targets:
+        SweeprVPNMac: all
     run:
       storeKitConfiguration: SweeprVPN.storekit
