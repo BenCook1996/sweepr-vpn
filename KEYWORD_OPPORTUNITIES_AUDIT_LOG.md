@@ -1,13 +1,13 @@
 # SWEEPR VPN — Automated Keyword Opportunities, Competitor SEO & Pre/Post Forecast Audit Log
 
-- **Last Audited**: `2026-11-13T01:28:02.101Z`
-- **Canonical Sitemap Corpus**: `222` URLs (`31` consolidated cannibal slugs blocked)
+- **Last Audited**: `2026-11-15T12:28:00.762Z`
+- **Canonical Sitemap Corpus**: `83` URLs (`31` consolidated cannibal slugs blocked)
 - **Total Candidate Queries Evaluated**: `55`
 - **Approved / Applied `CREATE_NEW_PILLAR`**: `21` (Caps: `2/day`, `10/week` | Rolling 7-Day Post-Consolidation Created: `2`)
 - **Approved / Applied `ENRICH_EXISTING`**: `23`
 - **Filtered / Rejected (`REJECT_OR_DEFER`)**: `11`
 - **Pre/Post Strategy Ledger**: `website/seo-strategy-performance-ledger.json` (`113` tracked entries; live input from `website/gsc-ga4-latest-snapshot.json`)
-- **Quality Gate Status**: **`10/10 PASS`** (`3` automated self-healing repairs applied)
+- **Quality Gate Status**: **`10/10 PASS`** (`0` automated self-healing repairs applied)
 
 ## 1. 10-Assertion Automated Quality Gate Scorecard
 
@@ -105,6 +105,4 @@
 
 ## 6. Automated Self-Healing Repair Log
 
-- Populated weakSpotCitations on "ofcom broadband speed guarantee compensation"
-- Demoted CREATE_NEW_PILLAR "bitdefender vpn renewal price alternative" below 40% structured data / 72 score gate
-- Populated weakSpotCitations on "kaspersky vpn alternative"
+- Zero repairs needed on this run (100% clean).

@@ -1,14 +1,5 @@
 {
   "schemaVersion": "1.0.0",
-  "lastUpdatedAt": "2026-11-13T01:28:01.874Z",
-  "corpusSummary": {
-    "canonicalSitemapUrls": 222,
-    "consolidatedCannibalUrlsBlocked": 31,
-    "gscTitleCooldownLockedUrls": 23,
-    "rolling7DayNewPillarsCreated": 2,
-    "weeklyNewPillarCap": 10,
-    "dailyNewPillarCap": 2
-  },
   "opportunities": [
     {
       "id": "kw_what_is_espressif_on_my_wifi",
@@ -5196,15 +5187,20 @@
       "appliedAt": null
     }
   ],
+  "lastUpdatedAt": "2026-11-13T01:28:01.874Z",
+  "corpusSummary": {
+    "canonicalSitemapUrls": 83,
+    "consolidatedCannibalUrlsBlocked": 31,
+    "gscTitleCooldownLockedUrls": 23,
+    "rolling7DayNewPillarsCreated": 2,
+    "weeklyNewPillarCap": 10,
+    "dailyNewPillarCap": 2
+  },
   "auditSummary": {
-    "auditedAt": "2026-11-13T01:28:02.101Z",
+    "auditedAt": "2026-11-15T12:28:00.762Z",
     "assertionsPassed": "10/10 PASS",
-    "autoRepairsApplied": 3,
-    "repairLog": [
-      "Populated weakSpotCitations on \"ofcom broadband speed guarantee compensation\"",
-      "Demoted CREATE_NEW_PILLAR \"bitdefender vpn renewal price alternative\" below 40% structured data / 72 score gate",
-      "Populated weakSpotCitations on \"kaspersky vpn alternative\""
-    ]
+    "autoRepairsApplied": 0,
+    "repairLog": []
   },
   "strategyLedgerSummary": {
     "ledgerPath": "website/seo-strategy-performance-ledger.json",

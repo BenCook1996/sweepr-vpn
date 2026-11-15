@@ -912,7 +912,7 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 - **Static Cache-Control Architecture**: PASS — Explicit caching headers configured for HTML (0s), static media (300s/3600s), and XML/TXT (3600s/86400s)
 
 ### Compression Benchmark Results
-- **order.html** (130.1 KB raw) &rarr; Gzip: **29.4 KB** (77% reduction) | Brotli: **27.2 KB** (79% reduction)
-- **index.html** (66.6 KB raw) &rarr; Gzip: **14.2 KB** (79% reduction) | Brotli: **13.2 KB** (80% reduction)
+- **order.html** (127.7 KB raw) &rarr; Gzip: **29.3 KB** (77% reduction) | Brotli: **27.1 KB** (79% reduction)
+- **index.html** (65.7 KB raw) &rarr; Gzip: **14.2 KB** (78% reduction) | Brotli: **13.2 KB** (80% reduction)
 - **sitemap.xml** (15.2 KB raw) &rarr; Gzip: **1.3 KB** (91% reduction) | Brotli: **1.3 KB** (92% reduction)
 

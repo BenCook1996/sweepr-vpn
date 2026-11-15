@@ -13,11 +13,11 @@
 | Node ID | Location | Uplink | Current Load | Active Peers | Verified Regional IXP Latency | RAM-Only Diskless |
 |---|---|---|---|---|---|---|
 | `SE-STO-01` | Stockholm, Sweden | 10 Gbps | 8% | 1 | 16 ms | Yes (tmpfs) |
-| `UK-LON-01` | London, United Kingdom | 10 Gbps | 8% | 5 | 4 ms | Yes (tmpfs) |
+| `UK-LON-01` | London, United Kingdom | 10 Gbps | 8% | 6 | 4 ms | Yes (tmpfs) |
 | `DE-FRA-01` | Frankfurt, Germany | 10 Gbps | 8% | 1 | 14 ms | Yes (tmpfs) |
 | `US-LAX-01` | Los Angeles, United States | 10 Gbps | 8% | 1 | 32 ms | Yes (tmpfs) |
 | `NL-AMS-01` | Amsterdam, Netherlands | 10 Gbps | 8% | 1 | 11 ms | Yes (tmpfs) |
-| `US-NYC-01` | New York, United States | 10 Gbps | 8% | 4 | 68 ms | Yes (tmpfs) |
+| `US-NYC-01` | New York, United States | 10 Gbps | 8% | 5 | 68 ms | Yes (tmpfs) |
 | `JP-TYO-01` | Tokyo, Japan | 10 Gbps | 8% | 1 | 15 ms | Yes (tmpfs) |
 | `SG-SIN-01` | Singapore, Singapore | 10 Gbps | 8% | 3 | 15 ms | Yes (tmpfs) |
 
