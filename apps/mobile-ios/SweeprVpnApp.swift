@@ -198,7 +198,7 @@ final class SweeprStoreKitManager: ObservableObject {
 
     init() {
         updatesTask = Task { [weak self] in
-            for await result in Transaction.updates {
+            for await result in StoreKit.Transaction.updates {
                 await self?.handleTransactionResult(result)
             }
         }
@@ -255,7 +255,7 @@ final class SweeprStoreKitManager: ObservableObject {
         do {
             try await AppStore.sync()
             var foundAny = false
-            for await result in Transaction.currentEntitlements {
+            for await result in StoreKit.Transaction.currentEntitlements {
                 if case .verified(let tx) = result {
                     foundAny = true
                     purchasedProductIds.insert(tx.productID)
@@ -273,7 +273,7 @@ final class SweeprStoreKitManager: ObservableObject {
     }
 
     func refreshEntitlementsOnLaunch() async {
-        for await result in Transaction.currentEntitlements {
+        for await result in StoreKit.Transaction.currentEntitlements {
             if case .verified(let tx) = result, tx.revocationDate == nil {
                 purchasedProductIds.insert(tx.productID)
                 SweeprKeychain.save(key: "apple_signed_tx_jws", value: result.jwsRepresentation)
@@ -282,7 +282,7 @@ final class SweeprStoreKitManager: ObservableObject {
         }
     }
 
-    private func handleTransactionResult(_ result: VerificationResult<Transaction>) async {
+    private func handleTransactionResult(_ result: VerificationResult<StoreKit.Transaction>) async {
         switch result {
         case .verified(let tx):
             purchasedProductIds.insert(tx.productID)
