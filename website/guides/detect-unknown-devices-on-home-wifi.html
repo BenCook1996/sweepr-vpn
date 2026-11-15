@@ -69,7 +69,7 @@
           </button>
           <div id="navDropdownMenu" class="hidden absolute left-0 md:left-1/2 md:-translate-x-1/2 mt-2 w-[340px] sm:w-[420px] bg-white/95 backdrop-blur-xl border border-gray-200/90 rounded-2xl shadow-2xl p-2.5 z-50 transition-all">
             <div class="grid grid-cols-1 gap-1.5">
-              <a href="/vs/totalvpn" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
+              <a href="/alternatives/totalvpn" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
                 <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">⚡</div>
                 <div class="flex-1 min-w-0">
                   <div class="flex items-center justify-between gap-1 mb-0.5">
@@ -134,101 +134,87 @@
       <h1 class="text-3xl md:text-5xl font-black text-gray-900 tracking-tight mb-4">
         How to Find Unknown Devices &amp; Strangers on Your Home Wi-Fi in 30 Seconds
       </h1>
-      <p class="text-gray-600 text-lg max-w-2xl mx-auto">
-        Protect your home Wi-Fi, block hidden telemetry endpoints (Local ARP / mDNS (`_services._dns-sd._udp.local`) / SSDP (`239.255.255.250:1900`) + IEEE OUI Vendor Lookup), and encrypt up to 3 devices in one click.
-      </p>
+      <p class="text-gray-600 text-lg max-w-2xl mx-auto">Identify rogue Wi-Fi clients, randomized MAC addresses, and stealthy IoT electronics across your home wireless frequencies in 30 seconds.</p>
     </div>
 
     <!-- GEO Answer-First Quick Verdict Block -->
-    <div class="bg-white border-2 border-emerald-500/30 rounded-2xl p-6 md:p-8 shadow-sm mb-12 relative overflow-hidden">
-      <div class="absolute top-0 right-0 bg-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
-        Verified 2026 Summary
+        <div class="bg-white border-2 border-indigo-500/30 rounded-2xl p-6 md:p-8 shadow-sm mb-12 relative overflow-hidden">
+      <div class="absolute top-0 right-0 bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
+        LAN Security Diagnostic
       </div>
-      <h2 class="text-xl font-bold text-gray-900 mb-2">Quick Technical Summary (GEO Answer Block)</h2>
+      <h2 class="text-xl font-bold text-gray-900 mb-2">Home Subnet Discovery &amp; Intruder Audit</h2>
       <p class="text-gray-700 leading-relaxed mb-5">
-        The average UK household has 18 to 32 devices connected to its Wi-Fi router—including forgotten IoT plugs, unpatched IP cameras, and occasionally neighbours or rogue devices. SWEEPR VPN includes a free 30-second local ARP/mDNS Wi-Fi Scanner and optional real-time desktop alerts whenever a new MAC address joins your network.
+        Unknown devices on private Wi-Fi networks often stem from iOS/Android private MAC features or unmonitored IoT peripherals. SWEEPR Wi-Fi Radar executes low-level layer-2 ARP discovery across your local subnet, identifying client vendors and unmapped network endpoints without cloud uploads.
       </p>
       <div class="flex flex-wrap gap-3 items-center">
         <a href="/download" class="btn btn-go gap-2">
-          <span>Free Download (30s Wi-Fi &amp; Speed Scan)</span>
+          <span>Scan Subnet Free (14 MB)</span>
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
-        <a href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-ghost text-sm font-semibold">
-          Get Pro (<span data-price="annualPerMonthStr">£6.25</span>/mo — Save 50%) &rarr;
-        </a>
-        <a href="/tools/isp-throttling-test" class="text-xs font-bold text-emerald-700 hover:underline ml-auto">
-          Run Browser Throttling Test &rarr;
+        <a href="/order?plan=annual" class="btn btn-ghost text-sm font-semibold">
+          Pro Annual Plan (<span data-price="annualPerMonthStr">£6.25</span>/mo) &rarr;
         </a>
       </div>
-    </div>
-
-    
-
-    <!-- Structured Comparison / Benchmark Table -->
-    <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm mb-14">
+    </div>    <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm mb-14">
       <div class="p-6 border-b border-gray-200">
-        <h2 class="text-2xl font-bold text-gray-900">Protection Breakdown: Unprotected Home Wi-Fi vs. SWEEPR VPN + Wi-Fi Radar</h2>
+        <h2 class="text-2xl font-bold text-gray-900">Subnet Visibility: Router Admin Console vs. SWEEPR Wi-Fi Radar</h2>
       </div>
       <div class="overflow-x-auto">
         <table class="w-full text-left text-sm">
           <thead>
             <tr class="bg-gray-50 border-b border-gray-200 text-gray-600 font-semibold">
-              <th class="p-4 pl-6">Metric / Capability</th>
-              <th class="p-4 w-2/5 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">With SWEEPR VPN + Wi-Fi Radar</th>
-              <th class="p-4 w-2/5 text-gray-700 border-l border-gray-200">Standard Unprotected Home Wi-Fi</th>
+              <th class="p-4 pl-6">Subnet Metric</th>
+              <th class="p-4 w-2/5 bg-indigo-50/50 text-indigo-900 font-bold border-l border-indigo-100">SWEEPR Wi-Fi Radar</th>
+              <th class="p-4 w-2/5 text-gray-700 border-l border-gray-200">Standard Router DHCP Table</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-100 text-gray-700">
-            
             <tr>
-              <td class="p-4 pl-6 font-medium">Discovery Protocol</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Parallel ARP + mDNS + SSDP scan in &lt;30 seconds</td>
-              <td class="p-4 border-l border-gray-200">Manual router admin login (`192.168.1.1`) shows cryptic IPs</td>
+              <td class="p-4 pl-6 font-medium">Randomized MAC Resolution</td>
+              <td class="p-4 bg-indigo-50/50 text-indigo-900 font-bold border-l border-indigo-100">Discovers live ARP frames and matches OUI prefixes</td>
+              <td class="p-4 border-l border-gray-200">Shows unhelpful &quot;Unknown Device&quot; strings</td>
             </tr>
             <tr>
-              <td class="p-4 pl-6 font-medium">Device Identification</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Embedded IEEE OUI lookup names Apple, Samsung, Ring, LG, etc.</td>
-              <td class="p-4 border-l border-gray-200">Raw MAC addresses (`A4:83:E7:...`) with no vendor labels</td>
+              <td class="p-4 pl-6 font-medium">Scan Runtime &amp; Impact</td>
+              <td class="p-4 bg-indigo-50/50 text-indigo-900 font-bold border-l border-indigo-100">Sub-30-second passive subnet query</td>
+              <td class="p-4 border-l border-gray-200">Static lease list with stale disconnected entries</td>
             </tr>
             <tr>
-              <td class="p-4 pl-6 font-medium">Real-Time Intruder Alert</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Instant OS alert: &quot;⚠️ New Device Joined Your Wi-Fi&quot;</td>
-              <td class="p-4 border-l border-gray-200">Zero warning when a new device connects to your Wi-Fi</td>
+              <td class="p-4 pl-6 font-medium">IoT Anomaly Detection</td>
+              <td class="p-4 bg-indigo-50/50 text-indigo-900 font-bold border-l border-indigo-100">Flags unencrypted UDP broadcasting sockets</td>
+              <td class="p-4 border-l border-gray-200">No telemetry inspection or port analysis</td>
             </tr>
             <tr>
-              <td class="p-4 pl-6 font-medium">Router Gateway Audit</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Audits ports `:80`, `:23`, `:7547` (TR-069) &amp; UPnP IGD</td>
-              <td class="p-4 border-l border-gray-200">Hidden UPnP WAN port forwards &amp; exposed admin ports</td>
+              <td class="p-4 pl-6 font-medium">Privacy Architecture</td>
+              <td class="p-4 bg-indigo-50/50 text-indigo-900 font-bold border-l border-indigo-100">100% on-device memory-safe Rust execution</td>
+              <td class="p-4 border-l border-gray-200">ISP cloud routers upload device logs to provider</td>
             </tr>
             <tr>
-              <td class="p-4 pl-6 font-medium">Transparent Price-Lock</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">
+              <td class="p-4 pl-6 font-medium">Pro Subscription</td>
+              <td class="p-4 bg-indigo-50/50 text-indigo-900 font-bold border-l border-indigo-100">
                 <span data-price="annualStr">£74.99</span>/yr (Save 50%), <span data-price="sixMonthStr">£48.99</span>/6mo, or <span data-price="introStr">£1.99</span> 1st Month
               </td>
-              <td class="p-4 border-l border-gray-200">Unprotected or subject to 2nd-year renewal hikes</td>
+              <td class="p-4 border-l border-gray-200">Zero encryption, vulnerable to LAN lateral movement</td>
             </tr>
           </tbody>
         </table>
       </div>
-    </div>
-
-    <!-- Deep-Dive Technical Sections -->
-    <div class="space-y-10 mb-14">
+    </div><div class="space-y-10 mb-14">
       
-      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">1. How This Threat Works on Everyday Home Networks</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">The average UK household has 18 to 32 devices connected to its Wi-Fi router—including forgotten IoT plugs, unpatched IP cameras, and occasionally neighbours or rogue devices. SWEEPR VPN includes a free 30-second local ARP/mDNS Wi-Fi Scanner and optional real-time desktop alerts whenever a new MAC address joins your network.</p>
-        <p class="text-gray-700 leading-relaxed">Technical inspection shows continuous background connections involving Local ARP / mDNS (`_services._dns-sd._udp.local`) / SSDP (`239.255.255.250:1900`) + IEEE OUI Vendor Lookup. Because these requests happen silently in the background, most households have no idea their viewing habits, local device list, or DNS queries are being logged.</p>
+            <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
+        <h2 class="text-2xl font-bold text-gray-900 mb-3">1. How Stealth Devices Penetrate Local Wireless Networks</h2>
+        <p class="text-gray-700 leading-relaxed mb-3">Residential local area networks frequently host dozens of connected endpoints ranging from smart thermostat sensors to unmonitored security peripherals. As operating systems adopt MAC randomization, network visibility degrades, creating blind spots where unauthorized connections can linger unnoticed.</p>
+        <p class="text-gray-700 leading-relaxed">SWEEPR VPN pairs layer-2 network discovery with encrypted 10Gbps WireGuard tunnels, ensuring you maintain full awareness of every active device on your physical network.</p>
       </section>
-      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">2. Why Manual Menu Toggles &amp; Basic DNS Changes Fall Short</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">Smart-TV firmware updates frequently reset privacy toggles back to default opt-in states, and UK ISPs routinely intercept standard UDP port-53 DNS requests via transparent proxies.</p>
-        <p class="text-gray-700 leading-relaxed">SWEEPR VPN solves this permanently at the network and tunnel layer: our encrypted 10.64.0.1 DNS shield and WireGuard tunnel block telemetry endpoints automatically while keeping 4K streaming apps (Netflix, BBC iPlayer, Prime Video, Disney+, YouTube) running at peak speed.</p>
+            <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
+        <h2 class="text-2xl font-bold text-gray-900 mb-3">2. Why Modern Devices Evade Standard Router Client Lists</h2>
+        <p class="text-gray-700 leading-relaxed mb-3">Operating systems like iOS, iPadOS, Android, and Windows 11 now utilize randomized Media Access Control (MAC) hardware identifiers by default. When devices rotate private Wi-Fi addresses, standard consumer router admin pages display confusing duplicate entries and unassigned hostnames.</p>
+        <p class="text-gray-700 leading-relaxed">Furthermore, dormant IoT devices, such as smart plugs, Wi-Fi security cameras, and voice assistants, remain silent between transmission bursts, evading standard polling tables until queried with targeted ARP requests.</p>
       </section>
-      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">3. Scan Your Home Wi-Fi Free in 30 Seconds</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">Download the featherlight ~680 KB SWEEPR VPN client for Windows, macOS, Android, or iOS to run our free 30-second Home Wi-Fi Device Scanner. It uses 100% local ARP, mDNS, and SSDP discovery to list every Smart TV, router, and unknown device on your LAN without uploading your network map to any cloud server.</p>
-        <p class="text-gray-700 leading-relaxed">Upgrade to SWEEPR VPN Pro (£74.99/yr — Save 50%) with the Wi-Fi Radar &amp; Smart-TV Shield add-on (+£14.99/yr) for 24/7 stranger alerts and automatic Smart-TV ACR telemetry blocking.</p>
+            <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
+        <h2 class="text-2xl font-bold text-gray-900 mb-3">3. Instant Non-Intrusive ARP and SSDP Subnet Sweeping</h2>
+        <p class="text-gray-700 leading-relaxed mb-3">SWEEPR utilizes local raw ARP packets and Universal Plug and Play (UPnP/SSDP) query frames across your Class C subnet (e.g. 192.168.1.0/24). This approach maps every active network interface without aggressive TCP SYN scanning that could trip internal security sensors or crash cheap IoT microcontrollers.</p>
+        <p class="text-gray-700 leading-relaxed">Upgrading to SWEEPR Pro (<span data-price="annualStr">£74.99</span>/year, saving 50%) provides automated intrusion notifications and continuous subnet monitoring (+<span data-price="addonAnnualStr">£14.99</span>/yr add-on).</p>
       </section>
     </div>
 
@@ -277,121 +263,27 @@
     </div>
 
     <!-- Related Guides & Internal Crawl Mesh -->
-    <div class="border-t border-gray-200 pt-10">
-      <h2 class="text-lg font-bold text-gray-900 mb-4">Related Technical Guides &amp; Comparisons</h2>
+        <div class="border-t border-gray-200 pt-10">
+      <h2 class="text-lg font-bold text-gray-900 mb-4">Recommended Security &amp; Router Guides</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        
-        <a href="/guides/stop-lg-smart-tv-acr-spying" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Smart-TV Privacy Guide</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Stop LG webOS Smart TVs From Taking Screenshots of What You Watch (2026 Guide)</div>
+        <a href="/guides/fix-isp-dns-hijacking-and-throttling" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-indigo-400 no-underline">
+          <div class="text-xs font-bold text-indigo-600 mb-1">DNS Security</div>
+          <div class="text-sm font-bold text-gray-900">Stop ISP DNS Hijacking &amp; Transparent Proxies</div>
+          <div class="text-xs text-gray-500 mt-1">Enforce in-tunnel DNS resolution on port 51820.</div>
         </a>
-        <a href="/guides/stop-samsung-smart-tv-acr-tracking" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Smart-TV Privacy Guide</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Block Samsung Tizen Smart-TV ACR Telemetry &amp; Home Menu Ads (2026 Guide)</div>
+        <a href="/setup/gl-inet-travel-router" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-indigo-400 no-underline">
+          <div class="text-xs font-bold text-indigo-600 mb-1">Router Setup</div>
+          <div class="text-sm font-bold text-gray-900">GL.iNet Travel Router WireGuard Setup</div>
+          <div class="text-xs text-gray-500 mt-1">Portable hotel and public Wi-Fi security.</div>
         </a>
-        <a href="/guides/stop-roku-vizio-firetv-spying" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Smart-TV Privacy Guide</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Block Roku, Vizio Inscape &amp; Fire TV ACR Spying on Your Home Wi-Fi</div>
-        </a>
-        <a href="/guides/public-hotel-airport-wifi-security" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Travel &amp; Remote Work Guide</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Public, Hotel &amp; Airport Wi-Fi Security: Evil Twin &amp; Packet Sniffing Protection</div>
-        </a>
-        <a href="/solutions/virgin-media-gaming-packet-loss" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media Low-Latency Gaming &amp; Packet Loss (AS5089)</div>
-        </a>
-        <a href="/solutions/virgin-media-remote-dev-ssh" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Fix Virgin Media Throttling for Remote Dev &amp; SSH (2026 AS5089 Guide)</div>
-        </a>
-        <a href="/guides/prevent-webrtc-ip-leak-chromium-firefox" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Browser &amp; WebRTC Security Guide</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Prevent WebRTC IP Leaks in Chrome, Brave, Edge &amp; Firefox</div>
-        </a>
-        <a href="/guides/fix-udp-bufferbloat-wireguard-gaming" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Low-Latency WireGuard Guide</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix UDP Bufferbloat &amp; Packet Loss with 1420 MTU WireGuard</div>
+        <a href="/setup/synology-nas-docker-vpn" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-indigo-400 no-underline">
+          <div class="text-xs font-bold text-indigo-600 mb-1">NAS Protection</div>
+          <div class="text-sm font-bold text-gray-900">Synology NAS Docker WireGuard Guide</div>
+          <div class="text-xs text-gray-500 mt-1">Secure local file shares and self-hosted services.</div>
         </a>
       </div>
     </div>
-    <section id="sweepr-live-wireguard-acr-proof" style="margin:2rem 0;background:#0f172a;border:1px solid #1e293b;border-radius:14px;padding:1.4rem 1.5rem;color:#f8fafc;">
-      <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;">
-        <h2 style="font-size:1.2rem;margin:0;color:#f8fafc;border:none;padding:0;">Live 10Gbps WireGuard Node Telemetry &amp; Interactive MTU Calculator (detect-unknown-devices-on-home-wifi)</h2>
-        <span style="font-size:0.75rem;background:rgba(16,185,129,0.14);color:#34d399;border:1px solid rgba(16,185,129,0.3);padding:4px 10px;border-radius:999px;font-weight:700;">
-          Verified Kernel WireGuard &bull; 35ms 1-RTT Handshake
-        </span>
-      </div>
-      <p style="color:#94a3b8;font-size:0.9rem;line-height:1.55;margin:0 0 14px;">
-        Below is the verified bare-metal node routing and Smart-TV ACR DNS sinkhole telemetry executed by <strong>SWEEPR VPN v1.4.0</strong> (SSL.com Authenticode Signed) for <code>/guides/detect-unknown-devices-on-home-wifi</code>:
-      </p>
-      <div style="overflow-x:auto;margin-bottom:16px;">
-        <table style="width:100%;border-collapse:collapse;font-size:0.82rem;color:#e2e8f0;margin:0;">
-          <thead>
-            <tr style="border-bottom:1px solid #1e293b;text-align:left;color:#94a3b8;background:#020617;">
-              <th style="padding:8px 10px;">Node / Rule ID</th>
-              <th style="padding:8px 10px;">Endpoint / Target Domain</th>
-              <th style="padding:8px 10px;">WireGuard / Sinkhole Rule</th>
-              <th style="padding:8px 10px;">Measured Output</th>
-              <th style="padding:8px 10px;">Transit / Scope</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">DE-FRA-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">Frankfurt IX (DE-CIX) (80.240.20.239)</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">WireGuard UDP 443 / 51820 | ChaCha20</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">14ms RTT | 925 Mbps Verified</td>
-              <td style="padding:8px 10px;color:#94a3b8;">AS20473 DE-CIX Transit</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">NL-AMS-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">Amsterdam Core (AMS-IX) (95.179.181.53)</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">WireGuard UDP 443 / 51820 | ChaCha20</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">11ms RTT | 930 Mbps Verified</td>
-              <td style="padding:8px 10px;color:#94a3b8;">AS20473 AMS-IX Direct</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">ACR-HIS-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">vidaa.tv / flingo.tv / ads.vidaahub.com</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">0.0.0.0 sinkhole (NXDOMAIN)</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">Drops VIDAA OS Telemetry &amp; Banner Ads</td>
-              <td style="padding:8px 10px;color:#94a3b8;">Hisense / Toshiba Smart-TV Shield</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">LAN-ARP-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">IEEE 41,000-OUI + mDNS/SSDP/NetBIOS</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">Parallel /24 Sweep (&lt;4.0s)</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">Flags Unknown Wi-Fi Intruders &amp; Cameras</td>
-              <td style="padding:8px 10px;color:#94a3b8;">SWEEPR Wi-Fi Radar Engine</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">WG-MTU-1412</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">UK/EU Openreach &amp; PPPoE Fibre (8B Tag)</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">MTU = 1412 | TCPMSS = 1372</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">Eliminates PPPoE DF-Bit Drops</td>
-              <td style="padding:8px 10px;color:#94a3b8;">FTTP / VDSL2 PPPoE Framing</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div style="background:#020617;border:1px solid #1e293b;border-radius:10px;padding:14px 16px;">
-        <div style="font-size:0.85rem;font-weight:700;color:#34d399;margin-bottom:8px;">⚙️ Interactive WireGuard MTU &amp; TCP MSS Clamping Calculator</div>
-        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:10px;">
-          <label for="sweepr-mtu-select-detect-unknown-devices-on-home-wifi" style="font-size:0.8rem;color:#cbd5e1;">Select Uplink Encapsulation:</label>
-          <select id="sweepr-mtu-select-detect-unknown-devices-on-home-wifi" onchange="(function(el){var mtu=parseInt(el.value,10)||1420;var mss=mtu-40;var out=document.getElementById('sweepr-mtu-out-detect-unknown-devices-on-home-wifi');if(out){out.textContent='[Interface]\nMTU = '+mtu+'\nPostUp = iptables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss '+mss;}})(this)" style="background:#0f172a;color:#f8fafc;border:1px solid #334155;border-radius:6px;padding:5px 10px;font-size:0.8rem;">
-            <option value="1420" selected>Standard Cable / DOCSIS / Ethernet (1500 WAN &rarr; 1420 WG MTU)</option>
-            <option value="1412">UK/EU Openreach FTTP / PPPoE Fibre (1492 WAN &rarr; 1412 WG MTU)</option>
-            <option value="1380">5G Fixed Wireless / CGNAT / Eduroam / Starlink (1380 WG MTU)</option>
-            <option value="1360">DS-Lite / MAP-E / Double-VLAN Enterprise Wi-Fi (1360 WG MTU)</option>
-          </select>
-        </div>
-        <pre id="sweepr-mtu-out-detect-unknown-devices-on-home-wifi" style="margin:0;padding:10px 12px;background:#0f172a;border:1px solid #1e293b;border-radius:6px;font-size:0.78rem;color:#a7f3d0;overflow-x:auto;">[Interface]
-MTU = 1420
-PostUp = iptables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1380</pre>
-      </div>
-    </section>
-</main>
+  </main>
 
   <!-- Footer -->
   <footer class="border-t border-gray-200 py-8 text-center text-sm text-gray-500">
@@ -401,7 +293,7 @@ PostUp = iptables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS 
         <a href="/pricing" class="hover:underline">Pricing</a>
         <a href="/tools/leak-test" class="hover:underline">IP Leak Test</a>
         <a href="/tools/isp-throttling-test" class="hover:underline">ISP Throttling Test</a>
-        <a href="/vs/totalvpn" class="hover:underline">vs Total VPN</a>
+        <a href="/alternatives/totalvpn" class="hover:underline">TotalVPN Alternatives</a>
         <a href="/vs/nordvpn" class="hover:underline">vs NordVPN</a>
         <a href="/privacy" class="hover:underline">Privacy Policy</a>
         <a href="/terms" class="hover:underline">Terms</a>

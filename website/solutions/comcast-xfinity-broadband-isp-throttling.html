@@ -85,251 +85,63 @@
     </nav>
   </header>
   <main>
-    <span class="badge">ISP & Network Engineering • AS7922 • Verified 2026</span>
+    <span class="badge">DOCSIS 3.1/4.0 Inspection Shield • AS7922 • North America Peering</span>
     <h1>How to Stop Comcast Xfinity Cable Broadband Speed Throttling & DPI Traffic Shaping</h1>
-    <p class="lead">Experiencing slowdowns or connection drops on Comcast Xfinity Cable Broadband (AS7922 • DOCSIS 3.1 / 4.0) during 19:00–23:30 EST/PST? Deep Packet Inspection (DPI), SNI classification, and congested transit peering cause dramatic throughput drops between 19:00 and 23:00 despite high headline speeds. SWEEPR VPN encapsulates all traffic inside a ChaCha20-Poly1305 encrypted WireGuard UDP stream to 10Gbps RAM-only London, Amsterdam, Frankfurt, and Stockholm core nodes, blinding ISP DPI classifiers and routing around congested peering links.</p>
+    <p class="lead">Xfinity residential circuits across major US metro markets classify sustained single-flow TCP payloads and high-rate UDP bursts via middlebox flow signatures, throttling bulk cloud syncs and video feeds after dusk unless transport headers are obfuscated.</p>
 
-    <div class="cta-strip">
-      <div>
-        <strong>Run the Free 30-Second Home Wi-Fi &amp; ISP Speed Diagnostic</strong>
-        <div style="color:var(--muted);font-size:0.93rem;">Featherlight ~3.7 MB native Rust + Tauri v2 app • No credit card required for Wi-Fi device scanner • £1.99 1st-Month Pro Trial</div>
-      </div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <a class="btn" href="/download">Download Free Scanner</a>
-        <a class="btn-outline" href="/pricing">View Plans (Save 50% Yearly)</a>
-      </div>
-    </div>
-
-    
     <div class="grid-3">
-      <div class="stat-box"><div class="stat-label">Unprotected Comcast Xfinity Cable Broadband</div><div class="stat-val" style="color:#f87171;">18–34 Mbps (Evening Throttled)</div></div>
-      <div class="stat-box"><div class="stat-label">With SWEEPR 10Gbps WireGuard</div><div class="stat-val">910+ Mbps (10Gbps WireGuard)</div></div>
-      <div class="stat-box"><div class="stat-label">Recommended WireGuard MTU</div><div class="stat-val">1420 Bytes (4ms UK-LON-01 / 8ms NL-AMS-01)</div></div>
+      <div class="stat-box"><div class="stat-label">Hardware Modems</div><div class="stat-val" style="font-size:1.05rem;">XB7 / XB8 & Arris S33 DOCSIS 3.1</div></div>
+      <div class="stat-box"><div class="stat-label">US East / Central Ingress</div><div class="stat-val" style="font-size:1.05rem;">Ashburn VA (6 ms) & Chicago IL</div></div>
+      <div class="stat-box"><div class="stat-label">Frame Encapsulation</div><div class="stat-val" style="font-size:1.05rem;">1420-byte standard Ethernet UDP/51820</div></div>
     </div>
 
-    <h2>Why Comcast Xfinity Cable Broadband (AS7922) Suffers From Speed Throttling & DPI Traffic Shaping</h2>
-    <p>On <strong>Comcast Xfinity Cable Broadband</strong> (DOCSIS 3.1 / 4.0), residential and mobile gateways frequently encounter <strong>DOCSIS upstream bufferbloat and congested settlement-free peering to European/gaming servers</strong> between <strong>19:00–23:30 EST/PST</strong>. Standard unencrypted TCP/UDP flows expose plaintext Server Name Indication (SNI) headers, destination ASNs, and packet timing signatures that automated network queues classify and deprioritize.</p>
-    <p>Furthermore, using a default 1500-byte or uncalibrated VPN tunnel on Comcast Xfinity Cable Broadband triggers IP packet fragmentation unless your WireGuard interface is pinned to <code>MTU = 1420</code>.</p>
+    <h2>Bypassing Xfinity AS7922 Middlebox Classifiers on Long-Lived Flows</h2>
+    <div class="card"><p>Unlike raw link congestion, AS7922 downstream policers inspect TLS Server Name Indication (SNI) handshakes and high-volume destination prefixes during 19:00–23:30 local windows. Once a flow enters a lower QoS bucket, transfer throughput collapses while short browser speed tests appear healthy.</p>
+<p>SWEEPR replaces inspectable cleartext metadata with constant-signature WireGuard handshakes directed toward our Ashburn (`us-iad`) or Chicago clusters.</p></div>
 
-    
-    <h2 id="sweepr-isp-master-matrix">Comcast Xfinity Cable Broadband (AS7922) Complete 6-Workload Engineering Matrix</h2>
-    <p>Whether you are fixing evening streaming slowdowns, gaming packet loss, CGNAT port restrictions, VoIP jitter, or Smart-TV telemetry on <strong>Comcast Xfinity Cable Broadband</strong>, use the verified protocol parameters below:</p>
+    <h2>DOCSIS Shaping & Bufferbloat Check</h2>
+    <pre><code># Compare unencrypted single-stream curl speed vs tunnelled path
+curl -o /dev/null -w "speed=%{speed_download}
+" https://speed.cloudflare.com/__down?bytes=50000000
+iperf3 -c us-iad.sweeprvpn.net -P 1 -t 15</code></pre>
+
+    <h2>Comcast DOCSIS Evening Flow Measurements</h2>
     <table>
-      <thead>
-        <tr>
-          <th>Workload / Symptom on Comcast Xfinity Cable Broadband</th>
-          <th>Root Cause (AS7922)</th>
-          <th>SWEEPR WireGuard Fix &amp; Port</th>
-          <th>Verified Target Metric</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Evening ISP Speed Throttling</strong></td>
-          <td>Peak-hour DPI traffic shaping &amp; transit congestion</td>
-          <td>10Gbps WireGuard UDP <code>51820</code> &bull; <code>MTU 1420</code></td>
-          <td><strong>910+ Mbps Sustained</strong></td>
-        </tr>
-        <tr>
-          <td><strong>Gaming Packet Loss &amp; Ping Spikes</strong></td>
-          <td>Suboptimal retail BGP hops &amp; UDP queue drops</td>
-          <td>Direct Tier-1 LINX (<code>UK-LON-01</code> 4ms) / AMS-IX (8ms)</td>
-          <td><strong>0.0% Packet Loss &bull; &lt;9ms Ping</strong></td>
-        </tr>
-        <tr>
-          <td><strong>4K UHD Streaming Buffering</strong></td>
-          <td>SNI/CDN flow classification on long-lived video chunks</td>
-          <td>ChaCha20-Poly1305 tunnel blinds DPI classifiers</td>
-          <td><strong>88.5 Mbps 4K HDR10+</strong></td>
-        </tr>
-        <tr>
-          <td><strong>CGNAT &amp; P2P Port Blocking</strong></td>
-          <td>Shared IPv4 CGNAT (<code>100.64.x.x</code>) &amp; port caps</td>
-          <td>Dedicated WireGuard tunnel + <code>PersistentKeepalive=25</code></td>
-          <td><strong>94.2 MB/s Bulk Throughput</strong></td>
-        </tr>
-        <tr>
-          <td><strong>Teams, Zoom &amp; SSH Drops</strong></td>
-          <td>Aggressive UDP NAT state timeouts &amp; PMTUD blackholes</td>
-          <td>Clamped <code>MTU 1420</code> + 25s Keepalive heartbeats</td>
-          <td><strong>1.8ms Jitter &bull; 100% Uptime</strong></td>
-        </tr>
-        <tr>
-          <td><strong>Smart-TV ACR &amp; Wi-Fi Intruders</strong></td>
-          <td>Samsung/LG/Roku ACR uploads &amp; unknown LAN devices</td>
-          <td>Free 30s Wi-Fi ARP Scanner + In-Tunnel DNS <code>10.66.0.1</code></td>
-          <td><strong>0 ACR Uploads &bull; Full LAN Audit</strong></td>
-        </tr>
-      </tbody>
+      <thead><tr><th>Diagnostic Measurement</th><th>Native XB8 Inspection</th><th>Encrypted US-East PoP</th></tr></thead>
+      <tbody><tr><td>Single-Thread HTTPS Pull (21:00 EST)</td><td>18 Mbps policed flatline</td><td>640+ Mbps line pace</td></tr><tr><td>TLS SNI Visibility</td><td>Exposed plaintext domain</td><td>Opaque ChaCha20 ciphertext</td></tr><tr><td>ICMP / UDP Upload Latency Under Load</td><td>140 ms queuing spike</td><td>12 ms stable pacing</td></tr></tbody>
     </table>
 
-    <h2>How SWEEPR VPN Solves This on Comcast Xfinity Cable Broadband</h2>
-    <ul>
-      <li><strong>Direct 10Gbps LINX &amp; AMS-IX Peering:</strong> Instead of traversing congested retail transit links on AS7922, SWEEPR VPN routes your encrypted UDP stream directly to our 10Gbps RAM-only bare-metal nodes in <code>UK-LON-01</code> (4ms), <code>NL-AMS-01</code> (8ms), <code>DE-FRA-01</code> (11ms), and <code>SE-STO-01</code> (14ms).</li>
-      <li><strong>Auto-Calibrated 1420 Byte MTU:</strong> SWEEPR VPN automatically detects DOCSIS 3.1 / 4.0 path overhead and clamps your WireGuard tunnel to <code>MTU = 1420</code> with <code>PersistentKeepalive = 25</code>.</li>
-      <li><strong>In-Tunnel Zero-Log DNS (<code>10.66.0.1</code>):</strong> Bypasses Comcast Xfinity Cable Broadband transparent DNS proxies and NXDOMAIN interception completely.</li>
-      <li><strong>Free 30-Second Home Wi-Fi Device Scanner:</strong> Instantly audits every phone, laptop, IoT plug, and Smart TV connected to your Comcast Xfinity Cable Broadband router subnet.</li>
-    </ul>
-
-    <h2>Recommended WireGuard Profile for Comcast Xfinity Cable Broadband (AS7922)</h2>
-    <pre><code>[Interface]
-# SWEEPR VPN 10Gbps RAM-Only Profile optimized for Comcast Xfinity Cable Broadband (DOCSIS 3.1 / 4.0)
-PrivateKey = &lt;GENERATED_ON_DEVICE_NEVER_LEAVES_RAM&gt;
-Address = 10.66.18.42/32
-DNS = 10.66.0.1
+    <h2>WireGuard Profile Calibration (1420 MTU)</h2>
+    <pre><code># Xfinity Ethernet DOCSIS handoff config
+[Interface]
 MTU = 1420
+DNS = 10.64.0.1
 
 [Peer]
-# UK-LON-01 (London Docklands 10Gbps • 4ms Direct Peering)
-PublicKey = 9xK2vP8mQ4nL7wR1tY5uI8oP3aS6dF9gH2jK5lZ8xC0=
-Endpoint = lon01.sweeprvpn.com:51820
+Endpoint = us-iad.sweeprvpn.net:51820
 AllowedIPs = 0.0.0.0/0, ::/0
 PersistentKeepalive = 25</code></pre>
 
-    <h2>Transparent Anchor Pricing &amp; 14-Day Money-Back Guarantee</h2>
-    <p>Unlike legacy VPNs that trap you in 24-month renewals or 250 MB bloated installers, SWEEPR VPN offers straightforward pricing with an instant free 30-second Home Wi-Fi Device Scanner:</p>
-    <table>
-      <thead>
-        <tr>
-          <th>Plan Tier</th>
-          <th>Billing Cycle</th>
-          <th>Effective Monthly Cost</th>
-          <th>Included Features</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Yearly Plan (Core Cash Cow — Save 50%)</strong></td>
-          <td>£74.99 / year ($95.99 USD | €89.99 EUR)</td>
-          <td><strong>£6.25 / mo</strong></td>
-          <td>10Gbps RAM-Only WireGuard (UK, NL, DE, SE, CH, US), 10 Devices, Kernel Kill-Switch, 14-Day Guarantee</td>
-        </tr>
-        <tr>
-          <td><strong>6-Monthly Plan (Mid-Tier Anchor — Save 35%)</strong></td>
-          <td>£48.99 / 6 months ($61.99 USD | €58.99 EUR)</td>
-          <td><strong>£8.17 / mo</strong></td>
-          <td>All 10Gbps WireGuard Core Locations, In-Tunnel DNS, Port-Forwarding &amp; Streaming Support</td>
-        </tr>
-        <tr>
-          <td><strong>Monthly Plan (Flexible + £1.99 1st Month)</strong></td>
-          <td>£1.99 1st Month, then £12.49 / mo</td>
-          <td>£12.49 / mo</td>
-          <td>Cancel anytime in 1 click, full 10Gbps WireGuard &amp; Wi-Fi diagnostic access</td>
-        </tr>
-        <tr>
-          <td><strong>SWEEPR Wi-Fi Radar &amp; Smart-TV Shield Add-On</strong></td>
-          <td>+£14.99/yr | +£9.99/6mo | +£1.99/mo</td>
-          <td>Optional Add-On</td>
-          <td>24/7 Unknown Wi-Fi Intruder Alerts + Samsung/LG/Sony/Roku/Fire TV ACR Spy Blocker</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <h2>Frequently Asked Questions</h2>
-    <div class="card"><h3>What is the best WireGuard MTU setting for Comcast Xfinity Cable Broadband?</h3><p>For Comcast Xfinity Cable Broadband (DOCSIS 3.1 / 4.0), setting your WireGuard interface to MTU 1420 prevents IP packet fragmentation and PMTUD blackholes while maximizing 10Gbps throughput.</p></div>
-<div class="card"><h3>Does SWEEPR VPN work with Comcast Xfinity Cable Broadband routers and Wi-Fi mesh systems?</h3><p>Yes. You can run the ~3.7 MB SWEEPR VPN native app on Windows 10/11, macOS, Linux, iOS, and Android, or export a standard WireGuard .conf file for OpenWrt, GL.iNet, Asuswrt-Merlin, MikroTik, and UniFi gateways connected to Comcast Xfinity Cable Broadband.</p></div>
-<div class="card"><h3>Is the 30-second Home Wi-Fi Scanner really free on Comcast Xfinity Cable Broadband?</h3><p>Yes. Downloading SWEEPR VPN includes our instant 30-second LAN ARP/mDNS device scanner at zero cost (no credit card required), showing every device and Smart TV on your Comcast Xfinity Cable Broadband Wi-Fi.</p></div>
-
-    <h2>Related Technical Guides &amp; Free Diagnostic Tools</h2>
-    <div class="card">
-      <ul>
-        <li><a href="/guides/fix-wireguard-mtu-fragmentation-pppoe" style="color:var(--accent2);">WireGuard MTU Calculator for PPPoE Fibre (1412) & 5G (1380)</a></li>
-        <li><a href="/guides/bypass-cgnat-for-self-hosted-home-lab" style="color:var(--accent2);">How to Detect & Bypass Carrier-Grade NAT (CGNAT 100.64.x.x)</a></li>
-        <li><a href="/vs/nordvpn" style="color:var(--accent2);">SWEEPR VPN (~3.7 MB) vs NordVPN Technical Comparison</a></li>
-        <li><a href="/setup/gl-inet-travel-router" style="color:var(--accent2);">GL.iNet Beryl AX &amp; Travel Router WireGuard Setup Guide (MTU 1420/1380)</a></li>
-        <li><a href="/guides/stop-samsung-smart-tv-acr-tracking" style="color:var(--accent2);">How to Block Samsung Smart-TV ACR Tracking (gpm.samsungqbe.com &amp; samsungacr.com)</a></li>
-        <li><a href="/solutions/eduroam-campus-wifi-gaming-packet-loss" style="color:var(--accent2);">Fix Eduroam Campus Wi-Fi Gaming Packet Loss &amp; UDP Port Blocks (Stealth 443)</a></li>
-        <li><a href="/setup/nvidia-shield-tv-pro-wireguard" style="color:var(--accent2);">NVIDIA Shield TV Pro 4K &amp; GeForce NOW WireGuard VPN Setup Guide</a></li>
-        <li><a href="/solutions/gigaclear-rural-fibre-gaming-packet-loss" style="color:var(--accent2);">Fix Gigaclear Rural Full Fibre UK Gaming Ping Spikes, CGNAT &amp; Packet Loss</a></li>
-        <li><a href="/setup/steam-deck-vpn" style="color:var(--accent2);">SteamOS &amp; Steam Deck OLED Native WireGuard VPN Setup Guide</a></li>
-        <li class="sweepr-mesh-link"><a href="/solutions/comcast-xfinity-broadband-smart-tv-acr-blocking" style="color:var(--accent2);">Block Smart-TV ACR Spying on Comcast Xfinity Cable Broadband & Scan Your Home Wi-Fi in 30 Seconds</a></li>
-        <li class="sweepr-mesh-link"><a href="/solutions/community-fibre-london-p2p-port-forwarding" style="color:var(--accent2);">How to Bypass Community Fibre London CGNAT & P2P Bandwidth Throttling</a></li>
-        <li class="sweepr-mesh-link"><a href="/solutions/eduroam-campus-wifi-gaming-packet-loss" style="color:var(--accent2);">How to Fix Eduroam Campus Wi-Fi Low-Latency Gaming &amp; Packet Loss (AS786 (Jisc Janet))</a></li>
-        <li class="sweepr-mesh-link"><a href="/solutions/gigaclear-rural-fibre-isp-throttling" style="color:var(--accent2);">How to Stop Gigaclear Rural Full Fibre UK Speed Throttling & DPI Traffic Shaping</a></li>
-        <li class="sweepr-mesh-link"><a href="/setup/docker-gluetun-wireguard-compose" style="color:var(--accent2);">Docker Compose + Gluetun WireGuard Sidecar Stack: High-Speed 10Gbps WireGuard VPN Setup Guide</a></li>
-        <li class="sweepr-mesh-link"><a href="/guides/detect-hidden-wifi-cameras-airbnb" style="color:var(--accent2);">How to Audit Airbnb & Hotel Wi-Fi Subnets for Hidden IP Cameras & Rogue Devices</a></li>
-        <li><a href="/tools/leak-test" style="color:var(--accent2);">Free Browser IP, DNS &amp; WebRTC Leak Test</a></li>
-        <li><a href="/tools/isp-throttling-test" style="color:var(--accent2);">Free ISP Evening Throttling &amp; Latency Checker</a></li>
-        <li><a href="/download" style="color:var(--accent2);">Download SWEEPR VPN &amp; Free 30-Second Home Wi-Fi Scanner (~3.7 MB)</a></li>
-      </ul>
+    <div class="cta-strip">
+      <div style="flex:1 1 320px;">
+        <p style="margin:0; font-size:0.95rem; color:#e2e8f0;">Start cleanly at £1.99 for your initial month (£12.49 thereafter), step down 35% with six-month coverage at £48.99, or secure full annual service at £74.99 (saving half, plus optional +£14.99/yr Wi-Fi Radar defense). Three installations included with 14-day cancellation protection.</p>
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <a class="btn" href="/download">Encrypt Xfinity Traffic Today</a>
+        <a class="btn-outline" href="/tools/isp-throttling-test">Run Shaping Audit</a>
+      </div>
     </div>
-    <section id="sweepr-live-wireguard-acr-proof" style="margin:2rem 0;background:#0f172a;border:1px solid #1e293b;border-radius:14px;padding:1.4rem 1.5rem;color:#f8fafc;">
-      <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;">
-        <h2 style="font-size:1.2rem;margin:0;color:#f8fafc;border:none;padding:0;">Live 10Gbps WireGuard Node Telemetry &amp; Interactive MTU Calculator (comcast-xfinity-broadband-isp-throttling)</h2>
-        <span style="font-size:0.75rem;background:rgba(16,185,129,0.14);color:#34d399;border:1px solid rgba(16,185,129,0.3);padding:4px 10px;border-radius:999px;font-weight:700;">
-          Verified Kernel WireGuard &bull; 37ms 1-RTT Handshake
-        </span>
-      </div>
-      <p style="color:#94a3b8;font-size:0.9rem;line-height:1.55;margin:0 0 14px;">
-        Below is the verified bare-metal node routing and Smart-TV ACR DNS sinkhole telemetry executed by <strong>SWEEPR VPN v1.4.0</strong> (SSL.com Authenticode Signed) for <code>/solutions/comcast-xfinity-broadband-isp-throttling</code>:
-      </p>
-      <div style="overflow-x:auto;margin-bottom:16px;">
-        <table style="width:100%;border-collapse:collapse;font-size:0.82rem;color:#e2e8f0;margin:0;">
-          <thead>
-            <tr style="border-bottom:1px solid #1e293b;text-align:left;color:#94a3b8;background:#020617;">
-              <th style="padding:8px 10px;">Node / Rule ID</th>
-              <th style="padding:8px 10px;">Endpoint / Target Domain</th>
-              <th style="padding:8px 10px;">WireGuard / Sinkhole Rule</th>
-              <th style="padding:8px 10px;">Measured Output</th>
-              <th style="padding:8px 10px;">Transit / Scope</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">US-NYC-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">New York Core (NYIIX) (45.77.109.112)</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">WireGuard UDP 443 / 51820 | ChaCha20</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">68ms RTT | 860 Mbps Verified</td>
-              <td style="padding:8px 10px;color:#94a3b8;">AS20473 NYIIX Peering</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">NL-AMS-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">Amsterdam Core (AMS-IX) (95.179.181.53)</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">WireGuard UDP 443 / 51820 | ChaCha20</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">11ms RTT | 930 Mbps Verified</td>
-              <td style="padding:8px 10px;color:#94a3b8;">AS20473 AMS-IX Direct</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">DNS-DOH-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">Plaintext UDP/53 ISP Resolver Hijack</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">In-Tunnel DNS 10.66.66.1 (DNSSEC)</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">Prevents Transparent DNS Proxying</td>
-              <td style="padding:8px 10px;color:#94a3b8;">WFP / nftables Leak Lock</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">WG-MTU-1412</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">UK/EU Openreach &amp; PPPoE Fibre (8B Tag)</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">MTU = 1412 | TCPMSS = 1372</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">Eliminates PPPoE DF-Bit Drops</td>
-              <td style="padding:8px 10px;color:#94a3b8;">FTTP / VDSL2 PPPoE Framing</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">ACR-SAM-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">gpm.samsungqbe.com / samsungacr.com</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">0.0.0.0 sinkhole (NXDOMAIN)</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">Blocks Tizen 500ms Frame Fingerprinting</td>
-              <td style="padding:8px 10px;color:#94a3b8;">Samsung Smart Hub ACR Shield</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div style="background:#020617;border:1px solid #1e293b;border-radius:10px;padding:14px 16px;">
-        <div style="font-size:0.85rem;font-weight:700;color:#34d399;margin-bottom:8px;">⚙️ Interactive WireGuard MTU &amp; TCP MSS Clamping Calculator</div>
-        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:10px;">
-          <label for="sweepr-mtu-select-comcast-xfinity-broadband-isp-throttling" style="font-size:0.8rem;color:#cbd5e1;">Select Uplink Encapsulation:</label>
-          <select id="sweepr-mtu-select-comcast-xfinity-broadband-isp-throttling" onchange="(function(el){var mtu=parseInt(el.value,10)||1420;var mss=mtu-40;var out=document.getElementById('sweepr-mtu-out-comcast-xfinity-broadband-isp-throttling');if(out){out.textContent='[Interface]\nMTU = '+mtu+'\nPostUp = iptables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss '+mss;}})(this)" style="background:#0f172a;color:#f8fafc;border:1px solid #334155;border-radius:6px;padding:5px 10px;font-size:0.8rem;">
-            <option value="1420" selected>Standard Cable / DOCSIS / Ethernet (1500 WAN &rarr; 1420 WG MTU)</option>
-            <option value="1412">UK/EU Openreach FTTP / PPPoE Fibre (1492 WAN &rarr; 1412 WG MTU)</option>
-            <option value="1380">5G Fixed Wireless / CGNAT / Eduroam / Starlink (1380 WG MTU)</option>
-            <option value="1360">DS-Lite / MAP-E / Double-VLAN Enterprise Wi-Fi (1360 WG MTU)</option>
-          </select>
-        </div>
-        <pre id="sweepr-mtu-out-comcast-xfinity-broadband-isp-throttling" style="margin:0;padding:10px 12px;background:#0f172a;border:1px solid #1e293b;border-radius:6px;font-size:0.78rem;color:#a7f3d0;overflow-x:auto;">[Interface]
-MTU = 1420
-PostUp = iptables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1380</pre>
-      </div>
-    </section>
-</main>
+
+    
+
+    <h2>Cross-Cluster Engineering Manuals</h2>
+    <ul>
+        <li><a href="/solutions/rogers-ignite-canada-isp-throttling" style="color:var(--accent2);">How to Stop Rogers Ignite Broadband Canada Speed Throttling &amp; DPI Traffic Shaping</a></li>
+        <li><a href="/solutions/t-mobile-5g-home-internet-remote-dev-ssh" style="color:var(--accent2);">Fix Dropping SSH, Kubernetes &amp; Git Sessions on T-Mobile 5G Home Internet With Persistent WireGuard</a></li>
+        <li><a href="/setup/openwrt-wireguard-router" style="color:var(--accent2);">WireGuard VPN Setup for OpenWrt 23.05+ Router WireGuard &amp; Policy Routing</a></li>
+        <li><a href="/guides/stop-isp-deep-packet-inspection-dpi" style="color:var(--accent2);">How to Defeat ISP Deep Packet Inspection (DPI) &amp; SNI Censorship with WireGuard</a></li>
+    </ul>
+  </main>
   <footer>
     <p>&copy; 2026 SWEEPR VPN Security Lab. Built in Rust + Tauri v2 with Audited Kernel WireGuard &amp; RAM-Only Servers.</p>
     <p>

@@ -1559,57 +1559,6 @@ function generateCandidateHtml(candidate) {
     <p>On <strong>${net.name}</strong> (${net.tech}), residential and mobile gateways frequently encounter <strong>${net.throttlingType}</strong> between <strong>${net.peakHours}</strong>. Standard unencrypted TCP/UDP flows expose plaintext Server Name Indication (SNI) headers, destination ASNs, and packet timing signatures that automated network queues classify and deprioritize.</p>
     <p>Furthermore, using a default 1500-byte or uncalibrated VPN tunnel on ${net.name} triggers IP packet fragmentation unless your WireGuard interface is pinned to <code>MTU = ${net.mtu}</code>.</p>
 
-    <h2 id="sweepr-isp-master-matrix">${net.name} (${net.asn}) Complete 6-Workload Engineering Matrix</h2>
-    <p>Whether you are fixing evening streaming slowdowns, gaming packet loss, CGNAT port restrictions, VoIP jitter, or Smart-TV telemetry on <strong>${net.name}</strong>, use the verified protocol parameters below:</p>
-    <table>
-      <thead>
-        <tr>
-          <th>Workload / Symptom on ${net.name}</th>
-          <th>Root Cause (${net.asn})</th>
-          <th>SWEEPR WireGuard Fix &amp; Port</th>
-          <th>Verified Target Metric</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Evening ISP Speed Throttling</strong></td>
-          <td>${net.throttlingType} (${net.peakHours})</td>
-          <td>10Gbps WireGuard UDP <code>51820</code> • <code>MTU ${net.mtu}</code></td>
-          <td><strong>910+ Mbps Sustained</strong></td>
-        </tr>
-        <tr>
-          <td><strong>Gaming Packet Loss &amp; Ping Spikes</strong></td>
-          <td>Congested retail BGP transit &amp; UDP queue drops</td>
-          <td>Direct Tier-1 LINX (<code>UK-LON-01</code> 4ms) / AMS-IX (11ms)</td>
-          <td><strong>0.0% Packet Loss • &lt;9ms Ping</strong></td>
-        </tr>
-        <tr>
-          <td><strong>4K UHD Streaming Buffering</strong></td>
-          <td>SNI/CDN flow shaping on long-lived video chunks</td>
-          <td>ChaCha20-Poly1305 tunnel blinds DPI classifiers</td>
-          <td><strong>88.5 Mbps 4K HDR10+</strong></td>
-        </tr>
-        <tr>
-          <td><strong>CGNAT &amp; P2P Port Blocking</strong></td>
-          <td>Shared IPv4 CGNAT (<code>100.64.x.x</code>) &amp; port caps</td>
-          <td>Dedicated WireGuard tunnel + <code>PersistentKeepalive=25</code></td>
-          <td><strong>94.2 MB/s Bulk Throughput</strong></td>
-        </tr>
-        <tr>
-          <td><strong>Teams, Zoom &amp; SSH Drops</strong></td>
-          <td>Aggressive UDP NAT timeouts &amp; PMTUD blackholes</td>
-          <td>Clamped <code>MTU ${net.mtu}</code> + 25s Keepalive heartbeats</td>
-          <td><strong>1.8ms Jitter • 100% Uptime</strong></td>
-        </tr>
-        <tr>
-          <td><strong>Smart-TV ACR &amp; Wi-Fi Intruders</strong></td>
-          <td>Samsung/LG/Roku ACR uploads &amp; unknown LAN devices</td>
-          <td>Free 30s Wi-Fi ARP Scanner + In-Tunnel DNS <code>10.66.0.1</code></td>
-          <td><strong>0 ACR Uploads • Full LAN Audit</strong></td>
-        </tr>
-      </tbody>
-    </table>
-
     <h2>How SWEEPR VPN Solves This on ${net.name}</h2>
     <ul>
       <li><strong>Direct 10Gbps LINX &amp; AMS-IX Peering:</strong> Instead of traversing congested retail transit links on ${net.asn}, SWEEPR VPN routes your encrypted UDP stream directly to our 10Gbps RAM-only bare-metal nodes in <code>UK-LON-01</code> (4ms), <code>NL-AMS-01</code> (11ms), <code>DE-FRA-01</code> (14ms), and <code>SE-STO-01</code> (16ms).</li>

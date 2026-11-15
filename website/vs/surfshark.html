@@ -69,7 +69,7 @@
           </button>
           <div id="navDropdownMenu" class="hidden absolute left-0 md:left-1/2 md:-translate-x-1/2 mt-2 w-[340px] sm:w-[420px] bg-white/95 backdrop-blur-xl border border-gray-200/90 rounded-2xl shadow-2xl p-2.5 z-50 transition-all">
             <div class="grid grid-cols-1 gap-1.5">
-              <a href="/vs/totalvpn" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
+              <a href="/alternatives/totalvpn" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
                 <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">⚡</div>
                 <div class="flex-1 min-w-0">
                   <div class="flex items-center justify-between gap-1 mb-0.5">
@@ -134,106 +134,72 @@
       <h1 class="text-3xl md:text-5xl font-black text-gray-900 tracking-tight mb-4">
         SWEEPR VPN vs Surfshark (2026 Comparison)
       </h1>
-      <p class="text-gray-600 text-lg max-w-2xl mx-auto">
-        Side-by-side comparison of 10Gbps WireGuard speeds, Home Wi-Fi intruder scanning, Smart-TV spy blocking, and second-year renewal prices.
-      </p>
+      <p class="text-gray-600 text-lg max-w-2xl mx-auto">Compare dedicated 10Gbps RAM-only gaming routes, lightweight native Rust engineering, and honest renewal rates against Surfshark.</p>
     </div>
 
     <!-- GEO Answer-First Quick Verdict Block -->
-    <div class="bg-white border-2 border-emerald-500/30 rounded-2xl p-6 md:p-8 shadow-sm mb-12 relative overflow-hidden">
-      <div class="absolute top-0 right-0 bg-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
-        Verified 2026 Summary
+        <div class="bg-white border-2 border-cyan-500/30 rounded-2xl p-6 md:p-8 shadow-sm mb-12 relative overflow-hidden">
+      <div class="absolute top-0 right-0 bg-cyan-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
+        Surfshark Audit
       </div>
-      <h2 class="text-xl font-bold text-gray-900 mb-2">Quick Verdict: SWEEPR VPN vs Surfshark</h2>
+      <h2 class="text-xl font-bold text-gray-900 mb-2">Verdict: SWEEPR Pro vs Surfshark</h2>
       <p class="text-gray-700 leading-relaxed mb-5">
-        Surfshark’s teaser price triples at renewal time. SWEEPR VPN keeps pricing transparent forever (£74.99/yr or £48.99/6mo), runs in a clean 14 MB native Rust client with zero popups, and actively alerts you when unknown devices join your home Wi-Fi.
+        Surfshark advertises "unlimited devices" but crowds connections onto shared virtual multi-tenant infrastructure, causing evening throughput drops and ping jitter. SWEEPR VPN provides dedicated 10Gbps RAM-only servers, whole-home LAN radar, and locked-in £74.99/year pricing.
       </p>
       <div class="flex flex-wrap gap-3 items-center">
         <a href="/download" class="btn btn-go gap-2">
-          <span>Free Download (30s Wi-Fi &amp; Speed Scan)</span>
+          <span>Download Free App (14 MB)</span>
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
-        <a href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-ghost text-sm font-semibold">
-          Get Pro (<span data-price="annualPerMonthStr">£6.25</span>/mo — Save 50%) &rarr;
-        </a>
-        <a href="/tools/isp-throttling-test" class="text-xs font-bold text-emerald-700 hover:underline ml-auto">
-          Run Browser Throttling Test &rarr;
+        <a href="/order?plan=annual" class="btn btn-ghost text-sm font-semibold">
+          Pro Annual Plan (<span data-price="annualPerMonthStr">£6.25</span>/mo) &rarr;
         </a>
       </div>
-    </div>
-
-    
-
-    <!-- Structured Comparison / Benchmark Table -->
-    <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm mb-14">
+    </div>    <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm mb-14">
       <div class="p-6 border-b border-gray-200">
-        <h2 class="text-2xl font-bold text-gray-900">Side-by-Side Comparison: SWEEPR VPN Pro vs Surfshark</h2>
+        <h2 class="text-2xl font-bold text-gray-900">Side-by-Side: SWEEPR VPN Pro vs Surfshark</h2>
       </div>
       <div class="overflow-x-auto">
         <table class="w-full text-left text-sm">
           <thead>
             <tr class="bg-gray-50 border-b border-gray-200 text-gray-600 font-semibold">
-              <th class="p-4 pl-6">Metric / Capability</th>
-              <th class="p-4 w-2/5 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">SWEEPR VPN Pro</th>
+              <th class="p-4 pl-6">Service Metric</th>
+              <th class="p-4 w-2/5 bg-cyan-50/50 text-cyan-900 font-bold border-l border-cyan-100">SWEEPR VPN Pro</th>
               <th class="p-4 w-2/5 text-gray-700 border-l border-gray-200">Surfshark</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-100 text-gray-700">
-            
             <tr>
-              <td class="p-4 pl-6 font-medium">App Size &amp; Footprint</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Ultra-lightweight ~14 MB native Rust/Tauri app</td>
-              <td class="p-4 border-l border-gray-200">~120 MB bundle (Bundled with Surfshark One antivirus upsells)</td>
+              <td class="p-4 pl-6 font-medium">Server Resource Allocation</td>
+              <td class="p-4 bg-cyan-50/50 text-cyan-900 font-bold border-l border-cyan-100">Dedicated 10Gbps RAM-only bare-metal nodes</td>
+              <td class="p-4 border-l border-gray-200">Shared multi-tenant virtual nodes with peak-hour load</td>
             </tr>
             <tr>
-              <td class="p-4 pl-6 font-medium">Renewal Price Policy</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Honest flat £74.99/yr (Save 50%) — Zero surprise hikes</td>
-              <td class="p-4 border-l border-gray-200">£85–£145/year after initial promotional term expires</td>
+              <td class="p-4 pl-6 font-medium">App Installation Size</td>
+              <td class="p-4 bg-cyan-50/50 text-cyan-900 font-bold border-l border-cyan-100">14 MB native Rust &amp; Tauri v2 binary</td>
+              <td class="p-4 border-l border-gray-200">~130 MB bundled antivirus and alert suite</td>
             </tr>
             <tr>
-              <td class="p-4 pl-6 font-medium">Free 30s Home Wi-Fi Scanner</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Included free (Lists all 15–30+ devices on your Wi-Fi)</td>
-              <td class="p-4 border-l border-gray-200">Not included</td>
+              <td class="p-4 pl-6 font-medium">Subsequent Renewal Pricing</td>
+              <td class="p-4 bg-cyan-50/50 text-cyan-900 font-bold border-l border-cyan-100">Locked-in flat £74.99/year (Save 50%)</td>
+              <td class="p-4 border-l border-gray-200">Increases sharply following 24-month promo period</td>
             </tr>
             <tr>
-              <td class="p-4 pl-6 font-medium">Real-Time Wi-Fi Stranger Alerts</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Included in Wi-Fi Radar Add-On (+£14.99/yr)</td>
-              <td class="p-4 border-l border-gray-200">Not included</td>
+              <td class="p-4 pl-6 font-medium">Home Wi-Fi Threat Discovery</td>
+              <td class="p-4 bg-cyan-50/50 text-cyan-900 font-bold border-l border-cyan-100">Free 30s layer-2 ARP discovery &amp; Smart-TV shield</td>
+              <td class="p-4 border-l border-gray-200">No local network device visibility or ACR blocking</td>
             </tr>
             <tr>
-              <td class="p-4 pl-6 font-medium">Smart-TV ACR Screenshot Blocker</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Blocks LG, Samsung, Roku, Vizio &amp; Fire TV ACR spying</td>
-              <td class="p-4 border-l border-gray-200">Not included (Basic browser/DNS ad block only)</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">WireGuard 10Gbps RAM-Only Nodes</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Included (4ms London, 8ms Amsterdam, 11ms Frankfurt)</td>
-              <td class="p-4 border-l border-gray-200">Shared servers with evening peak-hour variability</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Devices Covered Per License</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Up to 10 Computers, Phones &amp; Routers</td>
-              <td class="p-4 border-l border-gray-200">Unlimited (with automated fair-use throttling)</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Cancellation &amp; Refund Policy</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">30-Day Money-Back Guarantee + 1-Click Portal Cancel</td>
-              <td class="p-4 border-l border-gray-200">Multi-step retention chat / auto-renewal traps</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Transparent Price-Lock</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">
+              <td class="p-4 pl-6 font-medium">Cost Structure</td>
+              <td class="p-4 bg-cyan-50/50 text-cyan-900 font-bold border-l border-cyan-100">
                 <span data-price="annualStr">£74.99</span>/yr (Save 50%), <span data-price="sixMonthStr">£48.99</span>/6mo, or <span data-price="introStr">£1.99</span> 1st Month
               </td>
-              <td class="p-4 border-l border-gray-200">Unprotected or subject to 2nd-year renewal hikes</td>
+              <td class="p-4 border-l border-gray-200">Upfront 2-year lock with steep auto-renewal fee</td>
             </tr>
           </tbody>
         </table>
       </div>
-    </div>
-
-    <!-- Deep-Dive Technical Sections -->
-    <div class="space-y-10 mb-14">
+    </div><div class="space-y-10 mb-14">
       
       <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
         <h2 class="text-2xl font-bold text-gray-900 mb-3">1. Transparent Price-Lock vs. Surfshark's Renewal Price Jump</h2>
@@ -297,121 +263,27 @@
     </div>
 
     <!-- Related Guides & Internal Crawl Mesh -->
-    <div class="border-t border-gray-200 pt-10">
-      <h2 class="text-lg font-bold text-gray-900 mb-4">Related Technical Guides &amp; Comparisons</h2>
+        <div class="border-t border-gray-200 pt-10">
+      <h2 class="text-lg font-bold text-gray-900 mb-4">Related Comparisons &amp; Diagnostics</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        
-        <a href="/vs/nordvpn" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 Head-to-Head Comparison</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">SWEEPR VPN vs NordVPN (2026 Comparison)</div>
+        <a href="/vs/nordvpn" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-cyan-400 no-underline">
+          <div class="text-xs font-bold text-cyan-600 mb-1">Competitor Analysis</div>
+          <div class="text-sm font-bold text-gray-900">SWEEPR VPN vs NordVPN Comparison</div>
+          <div class="text-xs text-gray-500 mt-1">NordLynx daemon overhead vs pure native Rust client.</div>
         </a>
-        <a href="/vs/expressvpn" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 Head-to-Head Comparison</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">SWEEPR VPN vs ExpressVPN (2026 Comparison)</div>
+        <a href="/setup/openwrt-wireguard-router" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-cyan-400 no-underline">
+          <div class="text-xs font-bold text-cyan-600 mb-1">Router Setup</div>
+          <div class="text-sm font-bold text-gray-900">OpenWrt WireGuard Router Setup</div>
+          <div class="text-xs text-gray-500 mt-1">Configure full-network VPN encryption on home gateways.</div>
         </a>
-        <a href="/vs/cyberghost" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 Head-to-Head Comparison</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">SWEEPR VPN vs CyberGhost (2026 Comparison)</div>
-        </a>
-        <a href="/vs/protonvpn" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 Head-to-Head Comparison</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">SWEEPR VPN vs Proton VPN (2026 Comparison)</div>
-        </a>
-        <a href="/solutions/virgin-media-gaming-packet-loss" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media Low-Latency Gaming &amp; Packet Loss (AS5089)</div>
-        </a>
-        <a href="/solutions/virgin-media-remote-dev-ssh" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media Remote SSH, Git &amp; Docker Workflows (AS5089)</div>
-        </a>
-        <a href="/solutions/virgin-media-remote-dev-ssh" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media 4K Live Sports &amp; High-Bitrate Streaming (AS5089)</div>
-        </a>
-        <a href="/solutions/virgin-media-remote-dev-ssh" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media P2P File Sharing &amp; High-Speed Transfers (AS5089)</div>
+        <a href="/setup/steam-deck-vpn" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-cyan-400 no-underline">
+          <div class="text-xs font-bold text-cyan-600 mb-1">Gaming Setup</div>
+          <div class="text-sm font-bold text-gray-900">Steam Deck &amp; SteamOS Native VPN Guide</div>
+          <div class="text-xs text-gray-500 mt-1">Low-latency handheld gaming on portable consoles.</div>
         </a>
       </div>
     </div>
-    <section id="sweepr-live-wireguard-acr-proof" style="margin:2rem 0;background:#0f172a;border:1px solid #1e293b;border-radius:14px;padding:1.4rem 1.5rem;color:#f8fafc;">
-      <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;">
-        <h2 style="font-size:1.2rem;margin:0;color:#f8fafc;border:none;padding:0;">Live 10Gbps WireGuard Node Telemetry &amp; Interactive MTU Calculator (surfshark)</h2>
-        <span style="font-size:0.75rem;background:rgba(16,185,129,0.14);color:#34d399;border:1px solid rgba(16,185,129,0.3);padding:4px 10px;border-radius:999px;font-weight:700;">
-          Verified Kernel WireGuard &bull; 30ms 1-RTT Handshake
-        </span>
-      </div>
-      <p style="color:#94a3b8;font-size:0.9rem;line-height:1.55;margin:0 0 14px;">
-        Below is the verified bare-metal node routing and Smart-TV ACR DNS sinkhole telemetry executed by <strong>SWEEPR VPN v1.4.0</strong> (SSL.com Authenticode Signed) for <code>/vs/surfshark</code>:
-      </p>
-      <div style="overflow-x:auto;margin-bottom:16px;">
-        <table style="width:100%;border-collapse:collapse;font-size:0.82rem;color:#e2e8f0;margin:0;">
-          <thead>
-            <tr style="border-bottom:1px solid #1e293b;text-align:left;color:#94a3b8;background:#020617;">
-              <th style="padding:8px 10px;">Node / Rule ID</th>
-              <th style="padding:8px 10px;">Endpoint / Target Domain</th>
-              <th style="padding:8px 10px;">WireGuard / Sinkhole Rule</th>
-              <th style="padding:8px 10px;">Measured Output</th>
-              <th style="padding:8px 10px;">Transit / Scope</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">NL-AMS-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">Amsterdam Core (AMS-IX) (95.179.181.53)</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">WireGuard UDP 443 / 51820 | ChaCha20</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">11ms RTT | 930 Mbps Verified</td>
-              <td style="padding:8px 10px;color:#94a3b8;">AS20473 AMS-IX Direct</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">UK-LON-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">London Docklands (LINX) (78.141.205.68)</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">WireGuard UDP 443 / 51820 | ChaCha20</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">4ms RTT | 940 Mbps Verified</td>
-              <td style="padding:8px 10px;color:#94a3b8;">AS20473 Choopa / LINX Peering</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">ACR-LG-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">ibs.lgappstv.com / ad.lgappstv.com</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">0.0.0.0 sinkhole (NXDOMAIN)</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">Blocks webOS LivePlus ACR Uploads</td>
-              <td style="padding:8px 10px;color:#94a3b8;">LG webOS Smart-TV Shield</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">ACR-VIZ-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">tvinteractive.tv / insights.vizio.com</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">0.0.0.0 sinkhole (NXDOMAIN)</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">Blocks Inscape ACR Pixel Hashing</td>
-              <td style="padding:8px 10px;color:#94a3b8;">Vizio SmartCast Shield</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">ACR-HIS-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">vidaa.tv / flingo.tv / ads.vidaahub.com</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">0.0.0.0 sinkhole (NXDOMAIN)</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">Drops VIDAA OS Telemetry &amp; Banner Ads</td>
-              <td style="padding:8px 10px;color:#94a3b8;">Hisense / Toshiba Smart-TV Shield</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div style="background:#020617;border:1px solid #1e293b;border-radius:10px;padding:14px 16px;">
-        <div style="font-size:0.85rem;font-weight:700;color:#34d399;margin-bottom:8px;">⚙️ Interactive WireGuard MTU &amp; TCP MSS Clamping Calculator</div>
-        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:10px;">
-          <label for="sweepr-mtu-select-surfshark" style="font-size:0.8rem;color:#cbd5e1;">Select Uplink Encapsulation:</label>
-          <select id="sweepr-mtu-select-surfshark" onchange="(function(el){var mtu=parseInt(el.value,10)||1420;var mss=mtu-40;var out=document.getElementById('sweepr-mtu-out-surfshark');if(out){out.textContent='[Interface]\nMTU = '+mtu+'\nPostUp = iptables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss '+mss;}})(this)" style="background:#0f172a;color:#f8fafc;border:1px solid #334155;border-radius:6px;padding:5px 10px;font-size:0.8rem;">
-            <option value="1420" selected>Standard Cable / DOCSIS / Ethernet (1500 WAN &rarr; 1420 WG MTU)</option>
-            <option value="1412">UK/EU Openreach FTTP / PPPoE Fibre (1492 WAN &rarr; 1412 WG MTU)</option>
-            <option value="1380">5G Fixed Wireless / CGNAT / Eduroam / Starlink (1380 WG MTU)</option>
-            <option value="1360">DS-Lite / MAP-E / Double-VLAN Enterprise Wi-Fi (1360 WG MTU)</option>
-          </select>
-        </div>
-        <pre id="sweepr-mtu-out-surfshark" style="margin:0;padding:10px 12px;background:#0f172a;border:1px solid #1e293b;border-radius:6px;font-size:0.78rem;color:#a7f3d0;overflow-x:auto;">[Interface]
-MTU = 1420
-PostUp = iptables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1380</pre>
-      </div>
-    </section>
-</main>
+  </main>
 
   <!-- Footer -->
   <footer class="border-t border-gray-200 py-8 text-center text-sm text-gray-500">
@@ -421,7 +293,7 @@ PostUp = iptables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS 
         <a href="/pricing" class="hover:underline">Pricing</a>
         <a href="/tools/leak-test" class="hover:underline">IP Leak Test</a>
         <a href="/tools/isp-throttling-test" class="hover:underline">ISP Throttling Test</a>
-        <a href="/vs/totalvpn" class="hover:underline">vs Total VPN</a>
+        <a href="/alternatives/totalvpn" class="hover:underline">TotalVPN Alternatives</a>
         <a href="/vs/nordvpn" class="hover:underline">vs NordVPN</a>
         <a href="/privacy" class="hover:underline">Privacy Policy</a>
         <a href="/terms" class="hover:underline">Terms</a>

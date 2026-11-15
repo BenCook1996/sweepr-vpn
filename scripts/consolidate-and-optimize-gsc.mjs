@@ -26,143 +26,102 @@ const WEBSITE_DIR = path.join(ROOT_DIR, 'website');
 // 1. Authoritative Set of Indexable `/solutions/` Pillars (~56 Tier-1 + GSC Winners)
 // ============================================================================
 const AUTHORITATIVE_SOLUTIONS_PILLARS = new Set([
-  // Proven GSC Impression / Click Winners & Primary UK/US/CA/AU/Global ISP Pillars
-  'talktalk-p2p-port-forwarding',
-  'eduroam-campus-wifi-gaming-packet-loss',
-  'gigaclear-rural-fibre-gaming-packet-loss',
-  'gigaclear-rural-fibre-isp-throttling',
-  'comcast-xfinity-broadband-isp-throttling',
-  'virgin-media-remote-dev-ssh',
-  'virgin-media-gaming-packet-loss',
-  'virgin-media-warzone-packet-loss',
-  'virgin-media-isp-throttling',
-  'zen-internet-uk-isp-throttling',
-  'bt-broadband-gaming-packet-loss',
-  'bt-broadband-iptv-isp-blocking',
-  'sky-broadband-gaming-packet-loss',
-  'sky-broadband-iptv-isp-blocking',
-  'vodafone-uk-gaming-packet-loss',
-  't-mobile-5g-home-discord-voice-drop',
-  't-mobile-5g-home-internet-remote-dev-ssh',
-  'bell-fibe-twitch-4k-buffering',
-  'bell-pure-fibre-canada-isp-throttling',
-  'ee-mobile-5g-uk-cgnat-port-forwarding',
-  'ee-5g-mobile-hotspot-isp-throttling',
-  'rogers-ignite-ca-teams-zoom-jitter',
-  'rogers-ignite-canada-isp-throttling',
-  'telstra-nbn-au-valorant-high-ping',
-  'telstra-nbn-australia-isp-throttling',
-  'deutsche-telekom-iptv-isp-blocking',
-  'deutsche-telekom-dsl-isp-throttling',
-  // Major Tier-1 UK / Ireland / US / Canada / Australia / Global Networks
-  'plusnet-broadband-uk-isp-throttling',
-  'now-broadband-uk-isp-throttling',
-  'three-5g-home-broadband-isp-throttling',
-  'o2-uk-mobile-tethering-isp-throttling',
-  'hyperoptic-broadband-isp-throttling',
-  'community-fibre-london-p2p-port-forwarding',
-  'cityfibre-uk-isp-throttling',
-  'youfibre-uk-isp-throttling',
-  'kcom-lightstream-hull-isp-throttling',
-  'starlink-satellite-uk-isp-throttling',
-  'starlink-rv-roam-isp-throttling',
-  'virgin-media-ireland-isp-throttling',
-  'eir-fibre-ireland-isp-throttling',
-  'vodafone-ireland-siro-isp-throttling',
-  'bt-ireland-broadband-isp-throttling',
-  'att-fiber-broadband-isp-throttling',
-  'verizon-fios-broadband-isp-throttling',
-  'spectrum-charter-cable-isp-throttling',
-  'cox-panoramic-wifi-isp-throttling',
-  'optimum-altice-cable-us-isp-throttling',
-  'frontier-fiber-us-isp-throttling',
-  'centurylink-quantum-fiber-isp-throttling',
-  'google-fiber-us-isp-throttling',
-  'astound-broadband-us-isp-throttling',
-  't-mobile-fiber-us-isp-throttling',
-  'ziply-fiber-us-isp-throttling',
-  'sonic-fiber-california-isp-throttling',
-  'telus-purefibre-canada-isp-throttling',
-  'shaw-rogers-fibre-plus-isp-throttling',
-  'videotron-helix-canada-isp-throttling',
-  'optus-nbn-australia-isp-throttling',
-  'aussie-broadband-australia-isp-throttling',
-  'tpg-telecom-australia-isp-throttling',
-  'iinet-australia-isp-throttling',
-  'spark-fibre-new-zealand-isp-throttling',
-  'nhs-guest-wifi-isp-throttling',
-  'hotel-captive-portal-wifi-isp-throttling',
-  'hotel-captive-portal-wifi-p2p-port-forwarding',
-  'comcast-xfinity-broadband-smart-tv-acr-blocking',
-  'ee-5g-mobile-hotspot-wifi-arp-spoofing-protection',
-  'ee-5g-mobile-hotspot-voip-teams-zoom-jitter',
-  'three-5g-home-broadband-uhd-streaming-buffering',
-  'three-5g-home-broadband-voip-teams-zoom-jitter',
-  'o2-uk-mobile-tethering-uhd-streaming-buffering',
-  'nhs-guest-wifi-uhd-streaming-buffering',
-  'nhs-guest-wifi-voip-teams-zoom-jitter',
-  'fibrus-full-fibre-smart-tv-acr-blocking',
-  'airport-lounge-public-wifi-isp-throttling',
-  'national-rail-train-wifi-isp-throttling'
+  "brsk-better-net-uk-voip-teams-zoom-jitter",
+  "bt-broadband-gaming-packet-loss",
+  "comcast-xfinity-broadband-isp-throttling",
+  "community-fibre-london-p2p-port-forwarding",
+  "eduroam-campus-wifi-gaming-packet-loss",
+  "ee-5g-mobile-hotspot-voip-teams-zoom-jitter",
+  "gigaclear-rural-fibre-gaming-packet-loss",
+  "hotel-captive-portal-wifi-p2p-port-forwarding",
+  "hyperoptic-broadband-isp-throttling",
+  "national-rail-train-wifi-remote-dev-ssh",
+  "nhs-guest-wifi-voip-teams-zoom-jitter",
+  "o2-uk-mobile-tethering-uhd-streaming-buffering",
+  "rogers-ignite-canada-isp-throttling",
+  "sky-broadband-gaming-packet-loss",
+  "starlink-satellite-uk-isp-throttling",
+  "t-mobile-5g-home-internet-remote-dev-ssh",
+  "talktalk-p2p-port-forwarding",
+  "telstra-nbn-australia-gaming-packet-loss",
+  "three-5g-home-broadband-uhd-streaming-buffering",
+  "toob-full-fibre-uk-voip-teams-zoom-jitter",
+  "virgin-media-remote-dev-ssh",
+  "vodafone-uk-gaming-packet-loss",
+  "youfibre-uk-wifi-arp-spoofing-protection",
+  "zen-internet-uk-isp-throttling"
 ]);
 
-// Specific Consolidation Target Map for `/solutions/` sub-pages
 const SPECIFIC_SOLUTIONS_CANONICAL_MAP = {
-  // Eduroam sub-pages -> Unified Eduroam Hub (Phase 3 Item 4)
-  'eduroam-campus-wifi-p2p-port-forwarding': '/solutions/eduroam-campus-wifi-gaming-packet-loss',
-  'eduroam-campus-wifi-remote-dev-ssh': '/solutions/eduroam-campus-wifi-gaming-packet-loss',
-  'eduroam-campus-wifi-uhd-streaming-buffering': '/solutions/eduroam-campus-wifi-gaming-packet-loss',
-  'eduroam-campus-wifi-isp-throttling': '/solutions/eduroam-campus-wifi-gaming-packet-loss',
-  // TalkTalk sub-pages -> Click-winning TalkTalk Pillar
-  'talktalk-gaming-packet-loss': '/solutions/talktalk-p2p-port-forwarding',
-  'talktalk-remote-dev-ssh': '/solutions/talktalk-p2p-port-forwarding',
-  'talktalk-uhd-streaming-buffering': '/solutions/talktalk-p2p-port-forwarding',
-  'talktalk-isp-throttling': '/solutions/talktalk-p2p-port-forwarding',
-  // Virgin Media sub-pages -> Virgin Media Page-1 GSC Winner Pillar (virgin-media-remote-dev-ssh, Pos 9.2)
-  'virgin-media-p2p-port-forwarding': '/solutions/virgin-media-remote-dev-ssh',
-  'virgin-media-uhd-streaming-buffering': '/solutions/virgin-media-remote-dev-ssh',
-  // T-Mobile 5G Home Internet sub-pages -> T-Mobile 5G Page-1 GSC Winner Pillar (t-mobile-5g-home-internet-remote-dev-ssh, Pos 9.0)
-  't-mobile-5g-home-internet-isp-throttling': '/solutions/t-mobile-5g-home-internet-remote-dev-ssh',
-  // Community Fibre London sub-pages -> Community Fibre Page-1 GSC Winner Pillar (community-fibre-london-p2p-port-forwarding, Pos 8.0)
-  'community-fibre-london-isp-throttling': '/solutions/community-fibre-london-p2p-port-forwarding',
-  // BT Broadband sub-pages -> BT Broadband Pillar
-  'bt-broadband-p2p-port-forwarding': '/solutions/bt-broadband-gaming-packet-loss',
-  'bt-broadband-remote-dev-ssh': '/solutions/bt-broadband-gaming-packet-loss',
-  'bt-broadband-uhd-streaming-buffering': '/solutions/bt-broadband-gaming-packet-loss',
-  // Sky Broadband sub-pages -> Sky Broadband Pillar
-  'sky-broadband-p2p-port-forwarding': '/solutions/sky-broadband-gaming-packet-loss',
-  'sky-broadband-remote-dev-ssh': '/solutions/sky-broadband-gaming-packet-loss',
-  'sky-broadband-uhd-streaming-buffering': '/solutions/sky-broadband-gaming-packet-loss',
-  // Vodafone UK sub-pages -> Vodafone UK Pillar
-  'vodafone-uk-p2p-port-forwarding': '/solutions/vodafone-uk-gaming-packet-loss',
-  'vodafone-uk-remote-dev-ssh': '/solutions/vodafone-uk-gaming-packet-loss',
-  'vodafone-uk-uhd-streaming-buffering': '/solutions/vodafone-uk-gaming-packet-loss'
+  "eduroam-campus-wifi-p2p-port-forwarding": "/solutions/eduroam-campus-wifi-gaming-packet-loss",
+  "eduroam-campus-wifi-remote-dev-ssh": "/solutions/eduroam-campus-wifi-gaming-packet-loss",
+  "eduroam-campus-wifi-uhd-streaming-buffering": "/solutions/eduroam-campus-wifi-gaming-packet-loss",
+  "eduroam-campus-wifi-isp-throttling": "/solutions/eduroam-campus-wifi-gaming-packet-loss",
+  "talktalk-gaming-packet-loss": "/solutions/talktalk-p2p-port-forwarding",
+  "talktalk-remote-dev-ssh": "/solutions/talktalk-p2p-port-forwarding",
+  "talktalk-uhd-streaming-buffering": "/solutions/talktalk-p2p-port-forwarding",
+  "talktalk-isp-throttling": "/solutions/talktalk-p2p-port-forwarding",
+  "talktalk-fibre-uk-uhd-streaming-buffering": "/solutions/talktalk-p2p-port-forwarding",
+  "talktalk-fibre-uk-wifi-arp-spoofing-protection": "/solutions/talktalk-p2p-port-forwarding",
+  "virgin-media-ireland-isp-throttling": "/solutions",
+  "virgin-media-p2p-port-forwarding": "/solutions/virgin-media-remote-dev-ssh",
+  "virgin-media-uhd-streaming-buffering": "/solutions/virgin-media-remote-dev-ssh",
+  "virgin-media-uk-isp-throttling": "/solutions/virgin-media-remote-dev-ssh",
+  "virgin-media-gaming-packet-loss": "/solutions/virgin-media-remote-dev-ssh",
+  "virgin-media-warzone-packet-loss": "/solutions/virgin-media-remote-dev-ssh",
+  "virgin-media-isp-throttling": "/solutions/virgin-media-remote-dev-ssh",
+  "t-mobile-5g-home-internet-isp-throttling": "/solutions/t-mobile-5g-home-internet-remote-dev-ssh",
+  "t-mobile-5g-home-discord-voice-drop": "/solutions/t-mobile-5g-home-internet-remote-dev-ssh",
+  "community-fibre-london-isp-throttling": "/solutions/community-fibre-london-p2p-port-forwarding",
+  "bt-broadband-p2p-port-forwarding": "/solutions/bt-broadband-gaming-packet-loss",
+  "bt-broadband-remote-dev-ssh": "/solutions/bt-broadband-gaming-packet-loss",
+  "bt-broadband-uhd-streaming-buffering": "/solutions/bt-broadband-gaming-packet-loss",
+  "bt-broadband-iptv-isp-blocking": "/solutions/bt-broadband-gaming-packet-loss",
+  "bt-full-fibre-uk-uhd-streaming-buffering": "/solutions/bt-broadband-gaming-packet-loss",
+  "bt-halo-smart-hub-2-p2p-port-forwarding": "/solutions/bt-broadband-gaming-packet-loss",
+  "sky-broadband-p2p-port-forwarding": "/solutions/sky-broadband-gaming-packet-loss",
+  "sky-broadband-remote-dev-ssh": "/solutions/sky-broadband-gaming-packet-loss",
+  "sky-broadband-uhd-streaming-buffering": "/solutions/sky-broadband-gaming-packet-loss",
+  "sky-broadband-iptv-isp-blocking": "/solutions/sky-broadband-gaming-packet-loss",
+  "sky-broadband-uk-uhd-streaming-buffering": "/solutions/sky-broadband-gaming-packet-loss",
+  "sky-broadband-uk-voip-teams-zoom-jitter": "/solutions/sky-broadband-gaming-packet-loss",
+  "vodafone-ireland-siro-isp-throttling": "/solutions",
+  "vodafone-uk-p2p-port-forwarding": "/solutions/vodafone-uk-gaming-packet-loss",
+  "vodafone-uk-remote-dev-ssh": "/solutions/vodafone-uk-gaming-packet-loss",
+  "vodafone-uk-uhd-streaming-buffering": "/solutions/vodafone-uk-gaming-packet-loss",
+  "vodafone-uk-pro-p2p-port-forwarding": "/solutions/vodafone-uk-gaming-packet-loss",
+  "vodafone-full-fibre-uk-smart-tv-acr-blocking": "/solutions/vodafone-uk-gaming-packet-loss",
+  "comcast-xfinity-p2p-port-forwarding": "/solutions/comcast-xfinity-broadband-isp-throttling",
+  "deutsche-telekom-gaming-packet-loss": "/solutions",
+  "deutsche-telekom-iptv-isp-blocking": "/solutions",
+  "deutsche-telekom-dsl-isp-throttling": "/solutions",
+  "shaw-rogers-fibre-plus-isp-throttling": "/solutions/rogers-ignite-canada-isp-throttling",
+  "rogers-ignite-ca-teams-zoom-jitter": "/solutions/rogers-ignite-canada-isp-throttling",
+  "ee-mobile-5g-uk-cgnat-port-forwarding": "/solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter",
+  "ee-5g-mobile-hotspot-isp-throttling": "/solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter",
+  "ee-5g-mobile-hotspot-wifi-arp-spoofing-protection": "/solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter",
+  "three-5g-uk-uhd-streaming-buffering": "/solutions/three-5g-home-broadband-uhd-streaming-buffering",
+  "three-5g-home-broadband-isp-throttling": "/solutions/three-5g-home-broadband-uhd-streaming-buffering",
+  "three-5g-home-broadband-voip-teams-zoom-jitter": "/solutions/three-5g-home-broadband-uhd-streaming-buffering",
+  "o2-uk-mobile-tethering-isp-throttling": "/solutions/o2-uk-mobile-tethering-uhd-streaming-buffering",
+  "nhs-guest-wifi-isp-throttling": "/solutions/nhs-guest-wifi-voip-teams-zoom-jitter",
+  "nhs-guest-wifi-uhd-streaming-buffering": "/solutions/nhs-guest-wifi-voip-teams-zoom-jitter",
+  "hotel-captive-portal-wifi-isp-throttling": "/solutions/hotel-captive-portal-wifi-p2p-port-forwarding",
+  "national-rail-train-wifi-isp-throttling": "/solutions/national-rail-train-wifi-remote-dev-ssh",
+  "gigaclear-rural-fibre-isp-throttling": "/solutions/gigaclear-rural-fibre-gaming-packet-loss",
+  "gigaclear-rural-fibre-voip-teams-zoom-jitter": "/solutions/gigaclear-rural-fibre-gaming-packet-loss",
+  "gigaclear-rural-fibre-wifi-arp-spoofing-protection": "/solutions/gigaclear-rural-fibre-gaming-packet-loss",
+  "zen-internet-uk-gaming-packet-loss": "/solutions/zen-internet-uk-isp-throttling",
+  "youfibre-uk-isp-throttling": "/solutions/youfibre-uk-wifi-arp-spoofing-protection",
+  "youfibre-uk-voip-teams-zoom-jitter": "/solutions/youfibre-uk-wifi-arp-spoofing-protection",
+  "starlink-rv-roam-isp-throttling": "/solutions/starlink-satellite-uk-isp-throttling",
+  "telstra-nbn-au-valorant-high-ping": "/solutions/telstra-nbn-australia-gaming-packet-loss",
+  "telstra-nbn-australia-isp-throttling": "/solutions/telstra-nbn-australia-gaming-packet-loss"
 };
 
-// Dynamic GSC Telemetry Protection: Any /solutions/ URL with verified impressions in website/gsc-ga4-latest-snapshot.json
-// is automatically protected in AUTHORITATIVE_SOLUTIONS_PILLARS and never demoted to noindex, follow.
-const GSC_SNAPSHOT_PATH = path.join(WEBSITE_DIR, 'gsc-ga4-latest-snapshot.json');
-if (fs.existsSync(GSC_SNAPSHOT_PATH)) {
-  try {
-    const snap = JSON.parse(fs.readFileSync(GSC_SNAPSHOT_PATH, 'utf8'));
-    for (const [urlPath, meta] of Object.entries(snap.pages || {})) {
-      if (!urlPath.startsWith('/solutions/')) continue;
-      const slug = urlPath.replace(/^\/solutions\//, '');
-      const impr = Number(meta?.impressions28d ?? meta?.postChangeActual?.gscImpressions28d ?? 0);
-      if (impr > 0 && fs.existsSync(path.join(WEBSITE_DIR, 'solutions', `${slug}.html`))) {
-        if (!AUTHORITATIVE_SOLUTIONS_PILLARS.has(slug)) {
-          console.log(`[GSC Winner Lock] Dynamically protecting live GSC winner /solutions/${slug} (${impr} impr) as an indexable pillar.`);
-          AUTHORITATIVE_SOLUTIONS_PILLARS.add(slug);
-        }
-        delete SPECIFIC_SOLUTIONS_CANONICAL_MAP[slug];
-      }
-    }
-  } catch (err) {
-    console.warn('[GSC Winner Lock] Could not parse gsc-ga4-latest-snapshot.json:', err.message);
-  }
-}
+// [GSC Winner Lock] disabled per turnaround plan (F13): no dynamic additions to AUTHORITATIVE_SOLUTIONS_PILLARS.
 
-// 18 Low-Search-Volume / Legacy Antivirus-Bundled `/vs/` Pages Consolidated to `/vs`
+// Low-Search-Volume / Legacy Antivirus-Bundled `/vs/` Pages Consolidated to `/vs`
 const CONSOLIDATED_VS_SLUGS = new Set([
   'goose-vpn',
   'le-vpn',
@@ -213,9 +172,11 @@ function resolveCanonicalForConsolidatedSolution(slug) {
   if (slug.endsWith('-smart-tv-acr-blocking')) {
     return '/guides/stop-samsung-smart-tv-acr-tracking';
   }
-  // Check if this slug is a use-case variant of an authoritative ISP pillar
+  if (/^(virgin-media-ireland|vodafone-ireland)-/.test(slug)) {
+    return '/solutions';
+  }
   for (const authSlug of AUTHORITATIVE_SOLUTIONS_PILLARS) {
-    const suffixMatch = authSlug.match(/-(isp-throttling|remote-dev-ssh|p2p-port-forwarding)$/);
+    const suffixMatch = authSlug.match(/-(isp-throttling|remote-dev-ssh|p2p-port-forwarding|gaming-packet-loss|voip-teams-zoom-jitter|uhd-streaming-buffering|wifi-arp-spoofing-protection|broadband-isp-throttling|mobile-hotspot-voip-teams-zoom-jitter|rural-fibre-gaming-packet-loss|campus-wifi-gaming-packet-loss)$/);
     if (suffixMatch) {
       const ispPrefix = authSlug.slice(0, -suffixMatch[0].length);
       if (slug.startsWith(`${ispPrefix}-`)) {
@@ -223,14 +184,18 @@ function resolveCanonicalForConsolidatedSolution(slug) {
       }
     }
   }
-  // Micro-regional / non-English ISP with 0 GSC impressions -> consolidate to /solutions Category Hub
   return '/solutions';
 }
 
 // ============================================================================
 // 2. Consolidate `/solutions/` and `/vs/` & Rewrite Internal Links to Canonicals
 // ============================================================================
-const rewriteLinkMap = new Map();
+const rewriteLinkMap = new Map([
+  ['/vs/totalvpn', '/alternatives/totalvpn'],
+  ['/guides/fix-udp-bufferbloat-wireguard-gaming', '/guides/fix-wireguard-mtu-fragmentation-pppoe'],
+  ['/guides/stop-5g-hotspot-carrier-throttling', '/guides/stop-isp-deep-packet-inspection-dpi'],
+  ...Object.entries(SPECIFIC_SOLUTIONS_CANONICAL_MAP).map(([s, t]) => [`/solutions/${s}`, t])
+]);
 let consolidatedSolutionsCount = 0;
 let indexableSolutionsCount = 0;
 

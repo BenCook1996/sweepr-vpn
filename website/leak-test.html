@@ -376,6 +376,47 @@
           <p>UK and US ISPs (Virgin Media, BT, Sky, TalkTalk, Comcast) intercept port <code>53</code> DNS lookups. SWEEPR VPN forces all DNS queries inside the ChaCha20-Poly1305 WireGuard tunnel to our RAM-only resolver at <code>10.66.0.1</code>.</p>
         </div>
       </div>
+      <div class="mt-5 pt-4 border-t border-gray-100">
+        <h3 class="text-sm font-bold text-gray-900 mb-2">WebRTC STUN / TURN ICE Candidate Leak Reference Matrix</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="border-b border-gray-200 text-[11px] uppercase tracking-wider text-gray-500">
+                <th class="py-2 pr-3 font-bold">ICE Candidate Type</th>
+                <th class="py-2 px-3 font-bold">Transport / Mechanism</th>
+                <th class="py-2 px-3 font-bold">Exposure Without SWEEPR</th>
+                <th class="py-2 pl-3 font-bold text-emerald-700">With SWEEPR WireGuard Kernel Tunnel</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 text-gray-700">
+              <tr>
+                <td class="py-2 pr-3 font-mono font-bold text-gray-900"><code>host</code></td>
+                <td class="py-2 px-3">Direct local interface (LAN / mDNS)</td>
+                <td class="py-2 px-3">Reveals internal RFC 1918 subnet if mDNS disabled</td>
+                <td class="py-2 pl-3 font-semibold text-emerald-700">Isolated behind virtual interface <code>10.66.0.1</code></td>
+              </tr>
+              <tr>
+                <td class="py-2 pr-3 font-mono font-bold text-gray-900"><code>srflx</code></td>
+                <td class="py-2 px-3">Server Reflexive (UDP <code>STUN</code> binding)</td>
+                <td class="py-2 px-3 text-red-600 font-semibold">Leaks real ISP IPv4/IPv6 behind browser proxies</td>
+                <td class="py-2 pl-3 font-semibold text-emerald-700">Returns only SWEEPR RAM-only exit IP</td>
+              </tr>
+              <tr>
+                <td class="py-2 pr-3 font-mono font-bold text-gray-900"><code>prflx</code></td>
+                <td class="py-2 px-3">Peer Reflexive (mid-handshake NAT discovery)</td>
+                <td class="py-2 px-3">Can expose asymmetric NAT port mappings</td>
+                <td class="py-2 pl-3 font-semibold text-emerald-700">Kernel socket binding blocks off-tunnel UDP</td>
+              </tr>
+              <tr>
+                <td class="py-2 pr-3 font-mono font-bold text-gray-900"><code>relay</code></td>
+                <td class="py-2 px-3">Relayed via <code>TURN</code> server (UDP/TCP 3478)</td>
+                <td class="py-2 px-3">Exposes ISP origin to third-party TURN relays</td>
+                <td class="py-2 pl-3 font-semibold text-emerald-700">All TURN traffic stays encrypted inside ChaCha20</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
       <div id="webrtc-deep-dive-crawl-bridge" class="mt-5 pt-4 border-t border-gray-100 flex flex-wrap items-center gap-2 text-xs">
         <span class="font-extrabold text-gray-800">Related Deep-Dive Remediation Guides:</span>
         <a href="/guides/prevent-webrtc-ip-leak-chromium-firefox" class="px-2.5 py-1 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 font-bold hover:bg-emerald-100 no-underline">Prevent WebRTC IP Leaks (Chrome &amp; Firefox)</a>

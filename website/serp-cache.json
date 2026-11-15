@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-11-14T11:55:03.054Z",
+  "updatedAt": "2026-11-13T01:28:01.870Z",
   "entries": {
     "3f6375c2084e251e": {
       "fetchedAt": 1793831697933,
@@ -2222,22 +2222,8 @@
         }
       ]
     },
-    "56d5b0d8ff3ab907": {
-      "fetchedAt": 1794657294301,
-      "keyword": "what is espressif on my wifi",
-      "source": "community-api+serp-verified",
-      "topResults": [
-        {
-          "title": "Wifi UDP Broadcasting on Verizon Router",
-          "url": "https://superuser.com/questions/1329645/wifi-udp-broadcasting-on-verizon-router",
-          "domain": "superuser.com",
-          "snippet": "Wifi UDP Broadcasting on Verizon Router (2018)",
-          "year": "2018"
-        }
-      ]
-    },
     "066e69534ec7932a": {
-      "fetchedAt": 1794657295327,
+      "fetchedAt": 1794490230249,
       "keyword": "what is espressif on my wifi router",
       "source": "community-api+serp-verified",
       "topResults": [
@@ -2250,59 +2236,8 @@
         }
       ]
     },
-    "d38442dc40c1809f": {
-      "fetchedAt": 1794657296362,
-      "keyword": "hon hai precision ind co ltd on my wifi",
-      "source": "bing-rss-verified",
-      "topResults": [
-        {
-          "title": "Solved: Unknown device on my network - BT Community",
-          "url": "https://community.bt.com/t5/Home-setup-Wi-Fi-network/Unknown-device-on-my-network/td-p/2170148",
-          "domain": "community.bt.com",
-          "snippet": "The MAC address is for a device made by Hon Hai Precision and a quick Google says this: Hon Hai Precision Industry Co., also known by its trade name, Foxconn, is the world's largest contract electronics manufacturer."
-        },
-        {
-          "title": "Why is Hon Hai Precision on My Network? [Identify &amp; Secure]",
-          "url": "https://techdepot.blog/hon-hai-precision-on-my-network",
-          "domain": "techdepot.blog",
-          "snippet": "Hon Hai Precision appears on your network because it is the manufacturing parent company of Foxconn, which produces hardware for brands like Apple, Sony, and Amazon. If you see this name, it is likely a smartphone, gaming console, or smart home device using a Foxconn-manufactured wireless chip."
-        },
-        {
-          "title": "What is HonHaipr device on your WiFi network? - Candid.Technology",
-          "url": "https://candid.technology/honhaipr/",
-          "domain": "candid.technology",
-          "snippet": "In this article, we're talking about what is a HonHaipr device on your WiFi network, what does it do and whether or not it's safe."
-        },
-        {
-          "title": "Why is Hon Hai Precision on My Network? | Expert Q&amp;A",
-          "url": "https://www.justanswer.com/computer-networking/fascw-discovered-mac-address-00-71-cc-49-43-f9-manufacture.html",
-          "domain": "justanswer.com",
-          "snippet": "Remove unknown devices by changing Wi-Fi passwords and enabling MAC filtering on your router. Regularly update router firmware and monitor network activity to prevent unauthorized access and maintain network security."
-        },
-        {
-          "title": "Hon Hai Precision Ind. Co. Ltd Connected To My Network ...",
-          "url": "https://routerctrl.com/hon-hai-precision-ind-co-ltd-connected-to-my-network/",
-          "domain": "routerctrl.com",
-          "snippet": "Here in this post, we explain what is Hon Hai Precision Ind. Co. Ltd and why it appears on your network. We also guide you on how to handle it and possibly get rid of it if it’s malicious."
-        }
-      ]
-    },
-    "d34cb204d5aaab81": {
-      "fetchedAt": 1794657297258,
-      "keyword": "what is hon hai on my wifi",
-      "source": "community-api+serp-verified",
-      "topResults": [
-        {
-          "title": "Tell YC: Answers from John McCarthy",
-          "url": "https://news.ycombinator.com/item?id=185348",
-          "domain": "news.ycombinator.com",
-          "snippet": "Tell YC: Answers from John McCarthy (2008)",
-          "year": "2008"
-        }
-      ]
-    },
     "f4c03c31ee0ee90c": {
-      "fetchedAt": 1794657298161,
+      "fetchedAt": 1794490237779,
       "keyword": "hon hai precision wifi",
       "source": "community-api+serp-verified",
       "topResults": [
@@ -2316,7 +2251,7 @@
       ]
     },
     "bb6a60039546959b": {
-      "fetchedAt": 1794657298986,
+      "fetchedAt": 1794490239904,
       "keyword": "what is hon hai on my router",
       "source": "community-api+serp-verified",
       "topResults": [
@@ -2328,48 +2263,509 @@
           "year": "2024"
         },
         {
-          "title": "Ask HN: How's your home-cooked software revolution going?",
-          "url": "https://news.ycombinator.com/item?id=50391446",
+          "title": "Show HN: Prism – Self-hosted notification gateway (Signal, Telegram, WebPush)",
+          "url": "https://github.com/lone-cloud/prism",
           "domain": "news.ycombinator.com",
-          "snippet": "Ask HN: How's your home-cooked software revolution going? (2026)",
+          "snippet": "Show HN: Prism – Self-hosted notification gateway (Signal, Telegram, WebPush) (2026)",
           "year": "2026"
         }
       ]
     },
-    "d9afd897a49713ac": {
-      "fetchedAt": 1794657301590,
-      "keyword": "azurewave tech on my wifi",
+    "f03de47da6754dea": {
+      "fetchedAt": 1794490243212,
+      "keyword": "hon hai device on wifi",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Show HN: We built a Plug-in Home Battery for the 99.7% of us without Powerwalls",
+          "url": "https://pilaenergy.com",
+          "domain": "news.ycombinator.com",
+          "snippet": "Show HN: We built a Plug-in Home Battery for the 99.7% of us without Powerwalls (2025)",
+          "year": "2025"
+        }
+      ]
+    },
+    "f339cae83b7c5929": {
+      "fetchedAt": 1794533004185,
+      "keyword": "ofcom broadband speed guarantee compensation",
       "source": "bing-rss-verified",
       "topResults": [
         {
-          "title": "Azurewave",
-          "url": "https://www.azurewave.com/",
-          "domain": "azurewave.com",
-          "snippet": "Who We Are AzureWave Technologies, Inc. is a worldwide leading provider of wireless connectivity and image processing solutions. Our ultra-small wireless modules and digital camera modules could be extensively applied in personal and industrial computers, mobile and internet devices, consumer electronics, home appliances, automotive components, manufacturing facilities and more."
+          "title": "Home [www.ofcom.org.uk]",
+          "url": "https://www.ofcom.org.uk/",
+          "domain": "ofcom.org.uk",
+          "snippet": "Ofcom has given its consent to a request from Warner Bros. Discovery to broadcast live English language coverage of the 2026 Commonwealth Games, as well as to S4C for its Welsh language live coverage of the Games, and to the BBC for its Gaelic language live coverage on BBC ALBA."
         },
         {
-          "title": "What Is the “Azurewave Device” on My Wi-Fi Network?",
-          "url": "https://devicetests.com/what-is-the-azurewave-device-on-my-wi-fi-network",
-          "domain": "devicetests.com",
-          "snippet": "An Azurewave device is a micro wireless network controller in IoT and desktop PC devices, like PS4, Chromebook, Chromecast, and smart plug connected to your network. We took the time to write a comprehensive guide on what is an Azurewave device on your Wi-Fi network."
+          "title": "Ofcom - Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Ofcom",
+          "domain": "en.wikipedia.org",
+          "snippet": "Ofcom has wide-ranging powers across the television, radio, telecoms, internet and postal sectors. It has a statutory duty to represent the interests of citizens and consumers by promoting competition and protecting the public from harmful or offensive material. [4][5]"
         },
         {
-          "title": "what is an azurewave device on my wi-fi? (uncovering its role)",
-          "url": "https://laptopjudge.com/what-is-an-azurewave-device-on-my-wi-fi/",
-          "domain": "laptopjudge.com",
-          "snippet": "Discover what an AzureWave device is on your Wi-Fi network and learn its role in connectivity. Uncover essential insights for better network management!"
+          "title": "Ofcom - GOV.UK",
+          "url": "https://www.gov.uk/government/organisations/ofcom",
+          "domain": "gov.uk",
+          "snippet": "Ofcom is the regulator and competition authority for the UK communications industries."
         },
         {
-          "title": "Azurewave Device On My Wi-Fi Network (Is Someone Stealing ... - RouterCtrl",
-          "url": "https://routerctrl.com/azurewave-device-on-my-wi-fi-network/",
-          "domain": "routerctrl.com",
-          "snippet": "How to Identify Azurewave Device on your Wi-Fi Network Here’s one of the easiest ways to identify AzureWave device on your Wi-Fi: Firstly, switch off the router to kick the Azurwave device off your network. Switch it on and wait for devices to reconnect to the network automatically. Log into your router, and go to Connected/Attached Devices."
+          "title": "What is Ofcom?",
+          "url": "https://www.ofcom.org.uk/about-ofcom/what-we-do/what-is-ofcom",
+          "domain": "ofcom.org.uk",
+          "snippet": "Ofcom is the communications regulator in the UK. We regulate the TV, radio and video-on-demand sectors, fixed line telecoms, mobiles, postal services, plus the airwaves over which wireless devices operate."
         },
         {
-          "title": "Azurewave - Infineon Technologies",
-          "url": "https://www.infineon.com/partners/design-partner/azurewave",
-          "domain": "infineon.com",
-          "snippet": "AzureWave Technologies is a worldwide leading provider of wireless connectivity and image processing solutions. Our products lines include wireless modules and Digital Camera modules which could be extensively applied in personal computers, cellular phones, mobile internet devices, consumer electronics, home appliances, industrial facilities and more.As a leading module maker, we provide ..."
+          "title": "OFCOM website",
+          "url": "https://ui-test.ofcom.org.uk/",
+          "domain": "ui-test.ofcom.org.uk",
+          "snippet": "This is the third edition of Ofcom’s online safety industry bulletin and the first since new rules came into force to protect children online in the UK. In that time, Ofcom has seen change across industry, with many websites and apps putting in place age checks, alongside other new measures."
+        }
+      ]
+    },
+    "7835437b3a9b7aad": {
+      "fetchedAt": 1794533008773,
+      "keyword": "legion go wireguard vpn",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Post-S4 Hibernate Resume Routing Thrash with Fast Wi-Fi (AX55/NDIS)",
+          "url": "https://github.com/mullvad/mullvadvpn-app/issues/11153",
+          "domain": "github.com",
+          "snippet": "Post-S4 Hibernate Resume Routing Thrash with Fast Wi-Fi (AX55/NDIS) (2026)",
+          "year": "2026"
+        },
+        {
+          "title": "feat(repo): add sovereign-swarm zero-trust mesh infrastructure",
+          "url": "https://github.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-/pull/598",
+          "domain": "github.com",
+          "snippet": "feat(repo): add sovereign-swarm zero-trust mesh infrastructure (2025)",
+          "year": "2025"
+        },
+        {
+          "title": "Legion Enterprise",
+          "url": "https://enterprise.legion.work/legion/",
+          "domain": "enterprise.legion.work",
+          "snippet": "Legion Enterprise provides innovative workforce management solutions to enhance business operations and optimize labor efficiency."
+        },
+        {
+          "title": "Login Mobile - Legion",
+          "url": "https://legion.co/login-mobile/",
+          "domain": "legion.co",
+          "snippet": "You can easily log in to your Legion account via mobile. Our platform ensures a secure and efficient experience, perfect for managing your tasks anytime, anywhere."
+        },
+        {
+          "title": "The American Legion | Serving Veterans, Families, &amp; Communities Nationwide",
+          "url": "https://www.legion.org/",
+          "domain": "legion.org",
+          "snippet": "Chartered by Congress in 1919, The American Legion is the nation’s largest wartime veterans service organization, advocating for service members, veterans, families, youth, and communities."
+        }
+      ]
+    },
+    "5c1b9df1dc37eda0": {
+      "fetchedAt": 1794533010432,
+      "keyword": "synology rt6600ax wireguard vpn",
+      "source": "bing-rss-verified",
+      "topResults": [
+        {
+          "title": "Synology Inc.",
+          "url": "https://www.synology.com/",
+          "domain": "synology.com",
+          "snippet": "Synology uniquely enables you to manage, secure, and protect your data - at the scale needed to accommodate the exponential data growth of the digital world."
+        },
+        {
+          "title": "Product List | Synology Inc.",
+          "url": "https://www.synology.com/en-us/products",
+          "domain": "synology.com",
+          "snippet": "240,000 4K random write IOPS Dual 8-core 2.1 GHz CPU Synology RAID F1 for flash storage endurance"
+        },
+        {
+          "title": "Synology QuickConnect",
+          "url": "https://quickconnect.to/",
+          "domain": "quickconnect.to",
+          "snippet": "Synology QuickConnect allows you to access your Synology NAS anytime, anywhere, from any device and browser, without having to set up port forwarding and firewalls."
+        },
+        {
+          "title": "Synology Sign-In",
+          "url": "https://account.synology.com/sso/",
+          "domain": "account.synology.com",
+          "snippet": "Login into your Synology Account and access Synology online services, including QuickConnect, Active Insight, and more."
+        },
+        {
+          "title": "Synology Web Assistant",
+          "url": "http://finds.synology.com/",
+          "domain": "finds.synology.com",
+          "snippet": "No Synology Device Found in LAN Check the connectivity of your Synology devices and click Refresh. If you still cannot find any devices, download Synology Assistant to find your device. Learn more about Synology Assistant."
+        }
+      ]
+    },
+    "df3eb0f179e7b6c7": {
+      "fetchedAt": 1794533013159,
+      "keyword": "gl inet slate 7 wireguard",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Use ThingM blink(1) mk2 to indicate whether a configured WireGuard VPN at the GL.iNET BE3600 Slate 7 travel router is connected or not",
+          "url": "https://forum.gl-inet.com/t/use-thingm-blink-1-mk2-to-indicate-whether-a-configured-wireguard-vpn-at-the-gl-inet-be3600-slate-7-travel-router-is-connected-or-not/71446",
+          "domain": "forum.gl-inet.com",
+          "snippet": "Use ThingM blink(1) mk2 to indicate whether a configured WireGuard VPN at the GL.iNET BE3600 Slate 7 travel router is connected or not (2026)",
+          "year": "2026"
+        },
+        {
+          "title": "Gl.iNet GL-A1300 (Slate Plus) - WireGuard to Fritz!Box 7530",
+          "url": "https://forum.gl-inet.com/t/gl-inet-gl-a1300-slate-plus-wireguard-to-fritz-box-7530/32682",
+          "domain": "forum.gl-inet.com",
+          "snippet": "Gl.iNet GL-A1300 (Slate Plus) - WireGuard to Fritz!Box 7530 (2023)",
+          "year": "2023"
+        },
+        {
+          "title": "Site to site IPv6 wireguard vpn using GL.iNet Flint 2 router as a client: iPhone gets full speed, but other clients get very slow speeds (Flint 2 Client -> Slate AX Server)",
+          "url": "https://forum.gl-inet.com/t/site-to-site-ipv6-wireguard-vpn-using-gl-inet-flint-2-router-as-a-client-iphone-gets-full-speed-but-other-clients-get-very-slow-speeds-flint-2-client-slate-ax-server/66302",
+          "domain": "forum.gl-inet.com",
+          "snippet": "Site to site IPv6 wireguard vpn using GL.iNet Flint 2 router as a client: iPhone gets full speed, but other clients get very slow speeds (Flint 2 Client -> Slate AX Server) (2025)",
+          "year": "2025"
+        },
+        {
+          "title": "feat: one tailscaled per internet connection, so each bonded path gets Tailscale NAT traversal (servers behind CGNAT)",
+          "url": "https://github.com/kaovilai/tailbond/issues/44",
+          "domain": "github.com",
+          "snippet": "feat: one tailscaled per internet connection, so each bonded path gets Tailscale NAT traversal (servers behind CGNAT) (2026)",
+          "year": "2026"
+        },
+        {
+          "title": "Does not reconnect after a reboot",
+          "url": "https://github.com/looong-cat/luci-app-netbird/issues/7",
+          "domain": "github.com",
+          "snippet": "Does not reconnect after a reboot (2026)",
+          "year": "2026"
+        }
+      ]
+    },
+    "1b188c97ed5b218f": {
+      "fetchedAt": 1794533014749,
+      "keyword": "unifi express wireguard vpn client",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "feat(network): support remote-user-vpn purpose (WireGuard VPN Server)",
+          "url": "https://github.com/filipowm/terraform-provider-unifi/pull/195",
+          "domain": "github.com",
+          "snippet": "feat(network): support remote-user-vpn purpose (WireGuard VPN Server) (2026)",
+          "year": "2026"
+        },
+        {
+          "title": "docs(unifi): bring the UniFi docs to provider 0.65.0",
+          "url": "https://github.com/angel-penchev/servacho-infrastructure/pull/91",
+          "domain": "github.com",
+          "snippet": "docs(unifi): bring the UniFi docs to provider 0.65.0 (2026)",
+          "year": "2026"
+        },
+        {
+          "title": "UniFi - Rethinking IT - Ubiquiti",
+          "url": "https://www.ui.com/",
+          "domain": "ui.com",
+          "snippet": "UniFi is rethinking IT with industry-leading products for enterprise networking, security, and more unified in an incredible software interface."
+        },
+        {
+          "title": "Unifi – North America's Largest Provider of Aviation Services",
+          "url": "https://unifiservice.com/",
+          "domain": "unifiservice.com",
+          "snippet": "With stations in over 240 airports, Unifi provides comprehensive aviation and security services that keep the industry moving. Our relentless focus on operational excellence ensures safer flights, stronger performance and reliability."
+        },
+        {
+          "title": "UniFi WiFi - Ubiquiti",
+          "url": "https://www.ui.com/wifi",
+          "domain": "ui.com",
+          "snippet": "UniFi is a state-of-the-art solution allowing you to effortlessly manage 100+ APs in the same way you manage an individual AP. They offer enterprise quality hardware performance in a variety of elegantly designed form factors for a wide range of applications in any professional environment."
+        }
+      ]
+    },
+    "9a37a542b564e534": {
+      "fetchedAt": 1794533019040,
+      "keyword": "draytek vigor 2865 wireguard vpn setup",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "More robust deployment e2e tests are needed",
+          "url": "https://github.com/openshift/origin/issues/2865",
+          "domain": "github.com",
+          "snippet": "More robust deployment e2e tests are needed (2015)",
+          "year": "2015"
+        },
+        {
+          "title": "gruntz doesn't work properly for big-O with point!=0",
+          "url": "https://github.com/sympy/sympy/issues/2865",
+          "domain": "github.com",
+          "snippet": "gruntz doesn't work properly for big-O with point!=0 (2014)",
+          "year": "2014"
+        }
+      ]
+    },
+    "9d35c47b87fcc639": {
+      "fetchedAt": 1794533020334,
+      "keyword": "asus rt-be96u wireguard vpn setup",
+      "source": "bing-rss-verified",
+      "topResults": [
+        {
+          "title": "ASUS USA",
+          "url": "https://www.asus.com/us/",
+          "domain": "asus.com",
+          "snippet": "Driven by innovation &amp; committed to quality, ASUS has a wide selection of best in class products. Find &amp; buy a laptop, phone, router, monitor, motherboard &amp; more"
+        },
+        {
+          "title": "ASUS Global",
+          "url": "https://www.asus.com/",
+          "domain": "asus.com",
+          "snippet": "Driven by innovation &amp; committed to quality, ASUS has a wide selection of best in class products. Find &amp; buy a laptop, phone, router, monitor, motherboard &amp; more"
+        },
+        {
+          "title": "ROG - Republic of Gamers｜Global | For Those Who Dare",
+          "url": "https://rog.asus.com/",
+          "domain": "rog.asus.com",
+          "snippet": "If you choose to fill in “Feeback” form on the upper-right side of the chatroom, ASUS may collect the satisfaction rate and comments that you submit on this Service."
+        },
+        {
+          "title": "ASUS DriverHub",
+          "url": "https://driverhub.asus.com/en",
+          "domain": "driverhub.asus.com",
+          "snippet": "ASUS DriverHub offers personalized support and easy updates for ASUS devices, ensuring system stability with automatic configuration detection and tailored driver downloads."
+        },
+        {
+          "title": "Asus - Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Asus",
+          "domain": "en.wikipedia.org",
+          "snippet": "Asustek Computer Inc. (/ ˈeɪsuːs /, [4] / eɪˈsuːs /, [5] / ɑːˈ -/, [6] / əˈ -/ [7]), doing business as Asus (stylized as ASUS), is a Taiwanese [8] multinational computer, phone hardware and electronics manufacturer headquartered in Beitou District, Taipei, Taiwan."
+        }
+      ]
+    },
+    "e4668a9edd97f6c6": {
+      "fetchedAt": 1794533021938,
+      "keyword": "ugreen nasync docker wireguard vpn",
+      "source": "bing-rss-verified",
+      "topResults": [
+        {
+          "title": "UGREEN Official Site",
+          "url": "https://www.ugreen.com/",
+          "domain": "ugreen.com",
+          "snippet": "UGREEN offers NAS, chargers, power banks, cables, and hubs for iPhone, Android, Mac, and PC. Explore the latest products and campaign updates now."
+        },
+        {
+          "title": "Chargers, USB Hubs, Docking Stations, and More – UGREEN US",
+          "url": "https://us.ugreen.com/",
+          "domain": "us.ugreen.com",
+          "snippet": "Discover the latest in consumer electronics with UGREEN. Browse our collection of chargers, USB hubs, cables, docking stations, adapters, and more."
+        },
+        {
+          "title": "UGREENlink",
+          "url": "https://www.ug.link/",
+          "domain": "ug.link",
+          "snippet": "UGREENlink remote access allows you to easily connect and access your UGREEN NAS device anytime, anywhere."
+        },
+        {
+          "title": "UGREEN NAS: 2–8 Bay Personal Cloud &amp; AI NAS Home Server",
+          "url": "https://ai.ugreen.com/",
+          "domain": "ai.ugreen.com",
+          "snippet": "Get your UGREEN NAS up and running in minutes with a step-by-step guide to setup, RAID, storage management, and data protection."
+        },
+        {
+          "title": "UGREEN绿联-品质新体验,数码选绿联",
+          "url": "https://www.lulian.cn/",
+          "domain": "lulian.cn",
+          "snippet": "UGREEN绿联是全球领先的消费电子科技品牌，业务覆盖180多个国家和地区，依托于充电创意、智能办公、智能影音、智能存储四大品类，为全球用户带来从容掌控的数字生活体验。"
+        }
+      ]
+    },
+    "06af386c0b7a4c12": {
+      "fetchedAt": 1794533023284,
+      "keyword": "terramaster tos 6 wireguard vpn",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "lein add (EOF while reading)",
+          "url": "https://github.com/Licenser/lein-search/issues/6",
+          "domain": "github.com",
+          "snippet": "lein add (EOF while reading) (2014)",
+          "year": "2014"
+        },
+        {
+          "title": "Thin Line on 3.3 Release",
+          "url": "https://github.com/ricardoalcocer/actionbarclone/issues/6",
+          "domain": "github.com",
+          "snippet": "Thin Line on 3.3 Release (2014)",
+          "year": "2014"
+        },
+        {
+          "title": "TerraMaster | NAS, DAS &amp; Data Storage Solutions",
+          "url": "https://www.terra-master.com/",
+          "domain": "terra-master.com",
+          "snippet": "TerraMaster SSD NAS Storage, the best SSD NAS Storage Device for Home and Server."
+        },
+        {
+          "title": "Download Center - TerraMaster",
+          "url": "https://help.terra-master.com/download/",
+          "domain": "help.terra-master.com",
+          "snippet": "Download Center Please select a product ID or model, then click \"Start\". If you encounter issues during installation, please Get Help"
+        },
+        {
+          "title": "TOS 7 – TerraMaster Official Store",
+          "url": "https://www.terra-master.com/pages/tos7",
+          "domain": "terra-master.com",
+          "snippet": "TerraMaster SSD NAS Storage, the best SSD NAS Storage Device for Home and Server."
+        }
+      ]
+    },
+    "9d8b349a193d2b7d": {
+      "fetchedAt": 1794533024526,
+      "keyword": "proxmox lxc wireguard vpn gateway",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "[EPIC 1] KISS — Stable, Secure & Recoverable Homelab Infrastructure",
+          "url": "https://github.com/jrwroberts1976/homelab-platform/issues/285",
+          "domain": "github.com",
+          "snippet": "[EPIC 1] KISS — Stable, Secure & Recoverable Homelab Infrastructure (2026)",
+          "year": "2026"
+        },
+        {
+          "title": "no ipv6 traffic routed through Newt tunnel when in tunnel all mode",
+          "url": "https://github.com/fosrl/pangolin/issues/3839",
+          "domain": "github.com",
+          "snippet": "no ipv6 traffic routed through Newt tunnel when in tunnel all mode (2026)",
+          "year": "2026"
+        },
+        {
+          "title": "Use OpenVPN /dev/net/tun from an LXC in other LXCs",
+          "url": "https://superuser.com/questions/1849055/use-openvpn-dev-net-tun-from-an-lxc-in-other-lxcs",
+          "domain": "superuser.com",
+          "snippet": "Use OpenVPN /dev/net/tun from an LXC in other LXCs (2024)",
+          "year": "2024"
+        },
+        {
+          "title": "Proxmox - Powerful open-source server solutions",
+          "url": "https://www.proxmox.com/en/",
+          "domain": "proxmox.com",
+          "snippet": "Proxmox Backup Server is an enterprise backup solution for backing up and restoring VMs, containers, and physical hosts. The open-source solution supports incremental backups, deduplication, Zstandard compression, and authenticated encryption."
+        },
+        {
+          "title": "Download Proxmox software, datasheets, agreements",
+          "url": "https://www.proxmox.com/en/downloads",
+          "domain": "proxmox.com",
+          "snippet": "Proxmox Virtual Environment Proxmox Backup Server Proxmox Mail Gateway Proxmox Datacenter Manager"
+        }
+      ]
+    },
+    "2958a1467d1f2b75": {
+      "fetchedAt": 1794533025847,
+      "keyword": "truenas scale electric eel wireguard vpn",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "[TrueNAS Scale | arch-qbittorrentvpn] \"Downloading Metadata\" stuck - External IP/DNS Connectivity Issue with WireGuard Configuration",
+          "url": "https://github.com/binhex/arch-qbittorrentvpn/issues/307",
+          "domain": "github.com",
+          "snippet": "[TrueNAS Scale | arch-qbittorrentvpn] \"Downloading Metadata\" stuck - External IP/DNS Connectivity Issue with WireGuard Configuration (2025)",
+          "year": "2025"
+        },
+        {
+          "title": "Unable to use Exit node with Tailscale properly since upgrading to Electric Eel",
+          "url": "https://github.com/truenas/apps/issues/1159",
+          "domain": "github.com",
+          "snippet": "Unable to use Exit node with Tailscale properly since upgrading to Electric Eel (2024)",
+          "year": "2024"
+        },
+        {
+          "title": "TrueNAS | Mission-Critical Open Enterprise Storage",
+          "url": "https://www.truenas.com/",
+          "domain": "truenas.com",
+          "snippet": "What is TrueNAS? TrueNAS is a high performance data platform for managing any type of data, delivered through turnkey self-healing storage appliances and expert around-the-clock support."
+        },
+        {
+          "title": "Download TrueNAS | TrueNAS - Open Enterprise Storage",
+          "url": "https://www.truenas.com/download/",
+          "domain": "truenas.com",
+          "snippet": "The world’s most deployed data storage platform: free, open, and ready to run on any x86 hardware. Test drive the full TrueNAS platform with file, block, and object storage in one unified interface, zero vendor lock-in, and the backing of a million-strong community."
+        },
+        {
+          "title": "TrueNAS - Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/TrueNAS",
+          "domain": "en.wikipedia.org",
+          "snippet": "TrueNAS is a family of network-attached storage (NAS) products developed by iXsystems Inc. (doing business as TrueNAS as of 2025). The products consist of TrueNAS Enterprise and TrueNAS Community Edition."
+        }
+      ]
+    },
+    "56d5b0d8ff3ab907": {
+      "fetchedAt": 1794533271878,
+      "keyword": "what is espressif on my wifi",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Wifi UDP Broadcasting on Verizon Router",
+          "url": "https://superuser.com/questions/1329645/wifi-udp-broadcasting-on-verizon-router",
+          "domain": "superuser.com",
+          "snippet": "Wifi UDP Broadcasting on Verizon Router (2018)",
+          "year": "2018"
+        }
+      ]
+    },
+    "d34cb204d5aaab81": {
+      "fetchedAt": 1794533274306,
+      "keyword": "what is hon hai on my wifi",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "What is apple share and why is it on my Android device?",
+          "url": "https://news.ycombinator.com/item?id=15479532",
+          "domain": "news.ycombinator.com",
+          "snippet": "What is apple share and why is it on my Android device? (2017)",
+          "year": "2017"
+        },
+        {
+          "title": "Show HN: Daily Atlas, my geography quiz game where rarer answers score more",
+          "url": "https://dailyatlas.io/",
+          "domain": "news.ycombinator.com",
+          "snippet": "Show HN: Daily Atlas, my geography quiz game where rarer answers score more (2026)",
+          "year": "2026"
+        }
+      ]
+    },
+    "581647611124aaa0": {
+      "fetchedAt": 1794533278001,
+      "keyword": "zimaboard wireguard vpn gateway",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "Broken app connectors and subnets from disabled IP forwarding",
+          "url": "https://github.com/hassio-addons/app-tailscale/issues/661",
+          "domain": "github.com",
+          "snippet": "Broken app connectors and subnets from disabled IP forwarding (2026)",
+          "year": "2026"
+        },
+        {
+          "title": "feat(fastestvpn): support for Wireguard",
+          "url": "https://github.com/passteque/gluetun/pull/2383",
+          "domain": "github.com",
+          "snippet": "feat(fastestvpn): support for Wireguard (2024)",
+          "year": "2024"
+        }
+      ]
+    },
+    "10ec06eba2928aaa": {
+      "fetchedAt": 1794533280515,
+      "keyword": "cudy wr3000 wireguard vpn setup",
+      "source": "community-api+serp-verified",
+      "topResults": [
+        {
+          "title": "feat: implement Cudy Home Assistant integration baseline",
+          "url": "https://github.com/odairb12/Wired-HomeAssistant-OCI/pull/2",
+          "domain": "github.com",
+          "snippet": "feat: implement Cudy Home Assistant integration baseline (2026)",
+          "year": "2026"
+        },
+        {
+          "title": "only link-local ipv6 address available on gluon node",
+          "url": "https://github.com/freifunk-gluon/gluon/issues/3130",
+          "domain": "github.com",
+          "snippet": "only link-local ipv6 address available on gluon node (2023)",
+          "year": "2023"
         }
       ]
     }

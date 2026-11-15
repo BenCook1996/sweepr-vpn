@@ -6,8 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fix Virgin Media Throttling for Remote Dev &amp; SSH (2026 AS5089 Guide) | SWEEPR VPN</title>
   <meta name="description" content="Experiencing Virgin Media (AS5089) dropped SSH pipes (broken pipe), stalled git push / Docker layer pulls, and CGNAT state timeouts? See how SWEEPR VPN fixes peak-hour throttling and lowers latency via London Docklands (UK-LON-01 • 4ms) in 30 seconds." />
-  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-  <link rel="canonical" href="https://sweeprvpn.com/solutions/virgin-media-remote-dev-ssh" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://sweeprvpn.com/solutions/virgin-media-remote-dev-ssh">
   <meta name="theme-color" content="#10b981">
   <link rel="preconnect" href="https://cdn.tailwindcss.com">
   <link rel="preconnect" href="https://www.googletagmanager.com">
@@ -16,7 +16,7 @@
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="SWEEPR VPN">
   <meta property="og:locale" content="en_GB">
-  <meta property="og:url" content="https://sweeprvpn.com/solutions/virgin-media-remote-dev-ssh" />
+  <meta property="og:url" content="https://sweeprvpn.com/solutions/virgin-media-remote-dev-ssh">
   <meta property="og:title" content="Fix Virgin Media Throttling for Remote Dev &amp; SSH (2026 AS5089 Guide) | SWEEPR VPN" />
   <meta property="og:description" content="Experiencing Virgin Media (AS5089) dropped SSH pipes (broken pipe), stalled git push / Docker layer pulls, and CGNAT state timeouts? See how SWEEPR VPN fixes peak-hour throttling and lowers latency via London Docklands (UK-LON-01 • 4ms) in 30 seconds." />
   <meta property="og:image" content="https://sweeprvpn.com/og-image.png">
@@ -69,7 +69,7 @@
           </button>
           <div id="navDropdownMenu" class="hidden absolute left-0 md:left-1/2 md:-translate-x-1/2 mt-2 w-[340px] sm:w-[420px] bg-white/95 backdrop-blur-xl border border-gray-200/90 rounded-2xl shadow-2xl p-2.5 z-50 transition-all">
             <div class="grid grid-cols-1 gap-1.5">
-              <a href="/vs/totalvpn" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
+              <a href="/alternatives/totalvpn" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
                 <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">⚡</div>
                 <div class="flex-1 min-w-0">
                   <div class="flex items-center justify-between gap-1 mb-0.5">
@@ -125,288 +125,101 @@
   </nav>
 
   <!-- Main Content -->
-  <main class="max-w-4xl mx-auto px-6 py-12 md:py-16">
-    <!-- Breadcrumb & Badge -->
-    <div class="text-center mb-10">
-      <div class="inline-block text-xs font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full mb-3 border border-emerald-200">
-        Virgin Media (AS5089) Technical Fix
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 pt-10 pb-20">
+    <div class="mb-8">
+      <div class="inline-block text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full mb-3 border border-emerald-200">
+        AS5089 Cable Engineering • Hub 4/5 DOCSIS • Zero-Drop DevOps Tunnels
       </div>
-      <h1 class="text-3xl md:text-5xl font-black text-gray-900 tracking-tight mb-4">
-        How to Fix Virgin Media Remote SSH, Git &amp; Docker Workflows (AS5089)
-      </h1>
-      <p class="text-gray-600 text-lg max-w-2xl mx-auto">
-        Eliminate Virgin Media dropped SSH pipes (`broken pipe`), stalled `git push` / Docker layer pulls, and CGNAT state timeouts during peak UK hours (19:00–23:00 GMT) with direct 10Gbps WireGuard routing to London Docklands (UK-LON-01 • 4ms).
-      </p>
+      <h1 class="text-3xl md:text-5xl font-black text-gray-900 tracking-tight mb-4">How to Fix Virgin Media Remote SSH, Git &amp; Docker Workflows (AS5089)</h1>
+      <p class="text-gray-700 text-lg leading-relaxed">Developers working on Virgin Media Hub 4 and Hub 5 cable lines frequently battle random SSH freezes, stalled npm/Docker layer pushes, and asymmetric Puma chipset latency spikes across evening work sessions.</p>
     </div>
 
-    <!-- GEO Answer-First Quick Verdict Block -->
-    <div class="bg-white border-2 border-emerald-500/30 rounded-2xl p-6 md:p-8 shadow-sm mb-12 relative overflow-hidden">
-      <div class="absolute top-0 right-0 bg-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
-        Verified 2026 Summary
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+      <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+        <div class="text-[11px] font-bold uppercase tracking-wider text-gray-500">Cable Hardware</div>
+        <div class="text-sm font-bold text-gray-900 mt-1">Virgin Hub 4 / Hub 5 (Modem Mode)</div>
       </div>
-      <h2 class="text-xl font-bold text-gray-900 mb-2">Quick Technical Verdict (Virgin Media AS5089)</h2>
-      <p class="text-gray-700 leading-relaxed mb-5">
-        <strong>Virgin Media (AS5089)</strong> connections using <em>DOCSIS 3.1 Hybrid Fibre-Coax (Liberty Global Transit)</em> frequently suffer from dropped SSH pipes (`broken pipe`), stalled `git push` / Docker layer pulls, and CGNAT state timeouts between <strong>19:00–23:00 GMT</strong>. Virgin Media Hub 3/4/5 gateways operating on shared DOCSIS 3.1 street cabinets frequently suffer from upstream bufferbloat and Liberty Global transit congestion at Telehouse North during peak evening hours. <strong>SWEEPR VPN</strong> maintains a rock-solid 25-second WireGuard persistent keepalive with clamp-mss-to-pmtu enabled, preventing ISP middleboxes and CGNAT gateways from dropping idle SSH sessions or throttling large container registries—stabilising latency from <strong>38–64 ms (with DOCSIS jitter spikes)</strong> down to <strong>8–12 ms (stabilised direct peering)</strong> (940 Mbps Sustained • Zero SSH Drops).
-      </p>
-      <div class="flex flex-wrap gap-3 items-center">
-        <a href="/download" class="btn btn-go gap-2">
-          <span>Free Download (30s Wi-Fi &amp; Speed Scan)</span>
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-        </a>
-        <a href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-ghost text-sm font-semibold">
-          Get Pro (<span data-price="annualPerMonthStr">£6.25</span>/mo — Save 50%) &rarr;
-        </a>
-        <a href="/tools/isp-throttling-test" class="text-xs font-bold text-emerald-700 hover:underline ml-auto">
-          Run Browser Throttling Test &rarr;
-        </a>
+      <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+        <div class="text-[11px] font-bold uppercase tracking-wider text-gray-500">Session Keeper</div>
+        <div class="text-sm font-bold text-gray-900 mt-1">15s heartbeat prevents TCP reset</div>
+      </div>
+      <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+        <div class="text-[11px] font-bold uppercase tracking-wider text-gray-500">Frame Calibration</div>
+        <div class="text-sm font-bold text-gray-900 mt-1">1420 bytes DOCSIS standard WAN</div>
       </div>
     </div>
+
+    <section class="mb-10">
+      <h2 class="text-2xl font-black text-gray-900 mb-3">Diagnosing AS5089 Socket Resets & DOCSIS Upstream Contention</h2>
+      <div class="space-y-3 text-gray-700 leading-relaxed"><p>Shared coaxial HFC clusters combine asymmetric upload bandwidth (often 35–100 Mbps against 1Gbps down) with aggressive residential state timers inside Virgin Media’s edge gateways. Quiet SSH terminals to AWS, Hetzner, or Railway drop unexpectedly whenever upstream idle tracking expires.</p>
+<p>Shifting stateful TCP control sockets into a single persistent UDP WireGuard flow prevents intermediate residential gateways from tracking or dropping individual developer connections.</p></div>
+    </section>
+
+    <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm mb-10">
+      <div class="px-4 py-3 bg-gray-50 border-b border-gray-200 font-bold text-sm text-gray-900">Developer Workflow Telemetry on Hub 5</div>
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse">
+          <thead><tr class="bg-gray-50"><th class="p-3 text-left text-xs font-extrabold uppercase tracking-wider text-gray-700 border-b border-gray-200">Engineering Task</th><th class="p-3 text-left text-xs font-extrabold uppercase tracking-wider text-gray-700 border-b border-gray-200">Direct Virgin Media WAN</th><th class="p-3 text-left text-xs font-extrabold uppercase tracking-wider text-gray-700 border-b border-gray-200">SWEEPR Docklands Tunnel</th></tr></thead>
+          <tbody><tr class="border-b border-gray-100"><td class="p-3 text-sm font-semibold text-gray-900">Long-Running SSH / tmux Session</td><td class="p-3 text-sm text-gray-600">Drops cleanly during quiet diffs</td><td class="p-3 text-sm font-semibold text-emerald-700">Maintains heartbeat indefinitely</td></tr><tr class="border-b border-gray-100"><td class="p-3 text-sm font-semibold text-gray-900">Docker Layer & Git Push Stability</td><td class="p-3 text-sm text-gray-600">Periodic connection reset by peer</td><td class="p-3 text-sm font-semibold text-emerald-700">Smooth single-UDP flow pacing</td></tr><tr class="border-b border-gray-100"><td class="p-3 text-sm font-semibold text-gray-900">Private DNS for Staging Hosts</td><td class="p-3 text-sm text-gray-600">ISP Web Safe NXDOMAIN pollution</td><td class="p-3 text-sm font-semibold text-emerald-700">Clean unfiltered resolver inside PoP</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <section class="mb-10">
+      <h2 class="text-2xl font-black text-gray-900 mb-3">Production Workstation Config for SSH, Git & Kubernetes</h2>
+      <div class="text-gray-700 leading-relaxed"><p>DOCSIS cable bridges natively at a full 1500 Ethernet frame, allowing clean <code class="font-mono text-emerald-700">MTU = 1420</code> performance whether your Hub 5 sits in router or modem-only bridge mode.</p>
+<pre class="bg-slate-900 text-emerald-300 p-4 rounded-xl text-xs overflow-x-auto my-4">[Interface]
+MTU = 1420
+DNS = 10.64.0.1
+
+[Peer]
+Endpoint = uk-lon.sweeprvpn.net:51820
+AllowedIPs = 0.0.0.0/0, ::/0
+PersistentKeepalive = 15</pre></div>
+    </section>
+
+    <div class="bg-slate-900 text-white rounded-2xl p-6 mb-10 border border-slate-700">
+  <h2 class="text-xl font-black mb-2">Developer-Ready Licensing Across Laptop, WSL2 &amp; Workstation</h2>
+  <p class="text-sm text-slate-300 mb-4">Cut yearly overhead 50% at <span data-price="annualStr">£74.99</span>/yr (<span data-price="annualPerMonthStr">£6.25</span>/mo), pick six-month flexibility at <span data-price="sixMonthStr">£48.99</span> (35% savings), or start for <span data-price="introStr">£1.99</span> month one before £12.49 renewals. Optional +£14.99/yr LAN Radar; 3 dev machines protected under a 14-day refund pledge.</p>
+  <div class="flex flex-wrap gap-3">
+    <a href="/download" class="btn btn-go text-sm">Download Native Client</a>
+    <a href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-ghost text-sm text-white border-slate-500">Activate <span data-price="annualStr">£74.99</span>/yr &rarr;</a>
+    <a href="/setup/linux-cli-wireguard" class="text-xs font-bold text-emerald-400 underline self-center ml-auto">Linux wg-quick Setup &rarr;</a>
+  </div>
+</div>
 
     
 
-    <!-- Structured Comparison / Benchmark Table -->
-    <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm mb-14">
-      <div class="p-6 border-b border-gray-200">
-        <h2 class="text-2xl font-bold text-gray-900">Benchmark: Direct Virgin Media (AS5089) vs. SWEEPR VPN WireGuard Tunnel</h2>
-      </div>
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-sm">
-          <thead>
-            <tr class="bg-gray-50 border-b border-gray-200 text-gray-600 font-semibold">
-              <th class="p-4 pl-6">Metric / Capability</th>
-              <th class="p-4 w-2/5 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">SWEEPR VPN 10Gbps WireGuard</th>
-              <th class="p-4 w-2/5 text-gray-700 border-l border-gray-200">Unencrypted Virgin Media (AS5089)</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-gray-100 text-gray-700">
-            
-            <tr>
-              <td class="p-4 pl-6 font-medium">Routing Path &amp; Peering POP</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Direct Tier-1 transit via London Docklands (UK-LON-01 • 4ms)</td>
-              <td class="p-4 border-l border-gray-200">DOCSIS 3.1 Hybrid Fibre-Coax (Liberty Global Transit) (Peak-hour congestion)</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Peak-Hour Latency (19:00–23:00)</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">8–12 ms (stabilised direct peering)</td>
-              <td class="p-4 border-l border-gray-200">38–64 ms (with DOCSIS jitter spikes)</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Packet Loss &amp; Jitter</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">940 Mbps Sustained • Zero SSH Drops</td>
-              <td class="p-4 border-l border-gray-200">2.4% – 5.8% packet loss during evening peak</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Target Ports &amp; Protocol</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">WireGuard Persistent Keepalive (25s) &amp; Split-Horizon DoH (TCP 22 (SSH), TCP 443, TCP 2376, UDP 51820)</td>
-              <td class="p-4 border-l border-gray-200">Exposed TCP 22 (SSH), TCP 443, TCP 2376, UDP 51820 subject to ISP DPI &amp; shaping</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Recommended WireGuard MTU</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">1500 (WireGuard tunnel MTU 1420)</td>
-              <td class="p-4 border-l border-gray-200">Default unoptimised WAN framing</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">DNS &amp; Smart-TV Privacy</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Encrypted 10.64.0.1 DoH + Smart-TV ACR Spy Blocker</td>
-              <td class="p-4 border-l border-gray-200">Plaintext ISP DNS logging &amp; transparent proxy</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Home Wi-Fi Device Scanner</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Free 30-second scanner for all 15–30+ home devices</td>
-              <td class="p-4 border-l border-gray-200">Not included</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Transparent Price-Lock</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">
-                <span data-price="annualStr">£74.99</span>/yr (Save 50%), <span data-price="sixMonthStr">£48.99</span>/6mo, or <span data-price="introStr">£1.99</span> 1st Month
-              </td>
-              <td class="p-4 border-l border-gray-200">Unprotected or subject to 2nd-year renewal hikes</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Deep-Dive Technical Sections -->
-    <div class="space-y-10 mb-14">
-      
-      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">1. Why Virgin Media (AS5089) Slows Down Remote SSH, Git &amp; Docker Workflows</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">Virgin Media Hub 3/4/5 gateways operating on shared DOCSIS 3.1 street cabinets frequently suffer from upstream bufferbloat and Liberty Global transit congestion at Telehouse North during peak evening hours.</p>
-        <p class="text-gray-700 leading-relaxed">When your Virgin Media router sends unencrypted traffic across ports TCP 22 (SSH), TCP 443, TCP 2376, UDP 51820 during 19:00–23:00 GMT, automated traffic-shaping middleboxes and congested peering links introduce dropped SSH pipes (`broken pipe`), stalled `git push` / Docker layer pulls, and CGNAT state timeouts. Simply rebooting your hub or switching plaintext UDP port-53 DNS does not bypass AS5089 core transit bottlenecks.</p>
-      </section>
-      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">2. How SWEEPR VPN Re-Routes Virgin Media Traffic in 1 Click</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">SWEEPR VPN maintains a rock-solid 25-second WireGuard persistent keepalive with clamp-mss-to-pmtu enabled, preventing ISP middleboxes and CGNAT gateways from dropping idle SSH sessions or throttling large container registries. Because every packet is encrypted with modern ChaCha20-Poly1305 WireGuard and framed at 1500 (WireGuard tunnel MTU 1420), Virgin Media cannot inspect or deprioritise your remote dev &amp; ssh streams.</p>
-        <p class="text-gray-700 leading-relaxed">Even better, SWEEPR VPN is an ultra-lightweight ~14 MB native app (Windows, macOS, Linux, plus router .conf support) that includes a free 30-second Home Wi-Fi &amp; Speed Scanner to verify whether unknown devices or Smart TVs on your LAN are hogging your Virgin Media upload bandwidth.</p>
-      </section>
-      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">3. Step-by-Step 60-Second Fix for Virgin Media Customers</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">Step 1: Download the free SWEEPR VPN installer (or run our instant browser ISP Throttling Test) to benchmark your current Virgin Media connection.</p>
-        <p class="text-gray-700 leading-relaxed">Step 2: Connect in one click to London Docklands (UK-LON-01 • 4ms). SWEEPR automatically configures 1500 (WireGuard tunnel MTU 1420), enables Automatic Drop Protection, and activates our 10.64.0.1 anti-throttling DNS resolver.</p>
-      </section>
-    </div>
-
-    <!-- FAQ Section (Matches JSON-LD FAQPage) -->
-    <div class="bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm mb-14">
-      <h2 class="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
-      <div class="space-y-6">
-        
-        <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
-          <h3 class="text-base font-bold text-gray-900 mb-2">Is it legal to use SWEEPR VPN on Virgin Media in the UK?</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">Yes, 100%. Using a WireGuard VPN on Virgin Media (AS5089) to encrypt your home Wi-Fi, protect your privacy, and prevent peak-hour packet loss or ISP throttling is completely legal in the UK.</p>
-        </div>
-        <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
-          <h3 class="text-base font-bold text-gray-900 mb-2">Which SWEEPR VPN server is fastest for Virgin Media (Remote Dev &amp; SSH)?</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">For Virgin Media customers, our London Docklands (UK-LON-01 • 4ms) 10Gbps RAM-only WireGuard server delivers the lowest latency (8–12 ms (stabilised direct peering)) and up to 940 Mbps throughput.</p>
-        </div>
-        <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
-          <h3 class="text-base font-bold text-gray-900 mb-2">What MTU setting should I use on Virgin Media for Remote Dev &amp; SSH?</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">SWEEPR VPN automatically negotiates 1500 (WireGuard tunnel MTU 1420) to prevent packet fragmentation across DOCSIS 3.1 Hybrid Fibre-Coax (Liberty Global Transit).</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Conversion Banner -->
-    <div class="bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-2xl p-8 md:p-12 text-center shadow-xl mb-14">
-      <h3 class="text-2xl md:text-3xl font-black mb-3">Ready for 10Gbps WireGuard Speed &amp; Whole-Home Wi-Fi Protection?</h3>
-      <p class="text-gray-300 max-w-xl mx-auto mb-7 text-base">
-        Scan your home Wi-Fi in under 30 seconds, stop ISP evening throttling, and protect up to 3 devices for just <span data-price="annualPerMonthStr">£6.25</span>/mo (<span data-price="annualStr">£74.99</span>/yr — Save 50%).
-      </p>
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-        <a href="/download" class="btn btn-go btn-big gap-2">
-          <span>Free Download</span>
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-        </a>
-        <a href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-big">
-          Get SWEEPR VPN Pro &rarr;
-        </a>
-      </div>
-      <div class="flex flex-wrap items-center justify-center gap-4 text-xs text-gray-400 mt-6">
-        <span>🛡️ 30-Day Money-Back Guarantee</span>
-        <span>•</span>
-        <span>⚡ 680KB Featherlight App</span>
-        <span>•</span>
-        <span>📡 Free 30s Home Wi-Fi Scanner</span>
-      </div>
-    </div>
-
-    <!-- Related Guides & Internal Crawl Mesh -->
-    <div class="border-t border-gray-200 pt-10">
-      <h2 class="text-lg font-bold text-gray-900 mb-4">Related Technical Guides &amp; Comparisons</h2>
+    <section class="border-t border-gray-200 pt-8">
+      <h2 class="text-lg font-black text-gray-900 mb-4">Further Technical Guides &amp; Network Diagnostics</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        
-        <a href="/solutions/virgin-media-gaming-packet-loss" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media Low-Latency Gaming &amp; Packet Loss (AS5089)</div>
-        </a>
-        <a href="/solutions/virgin-media-gaming-packet-loss" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media 4K Live Sports &amp; High-Bitrate Streaming (AS5089)</div>
-        </a>
-        <a href="/solutions/virgin-media-remote-dev-ssh" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media P2P File Sharing &amp; High-Speed Transfers (AS5089)</div>
-        </a>
-        <a href="/solutions/bt-broadband-gaming-packet-loss" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">BT Broadband (AS2856) Technical Fix</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix BT Broadband Low-Latency Gaming &amp; Packet Loss (AS2856)</div>
-        </a>
-        <a href="/setup/gl-inet-travel-router" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 WireGuard Setup Guide • 45 Seconds</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">WireGuard VPN Setup for GL.iNet Beryl AX (GL-MT3000) &amp; Slate AX Travel Router</div>
-        </a>
-        <a href="/setup/linux-cli-wireguard" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 WireGuard Setup Guide • 30 Seconds</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">WireGuard VPN Setup for Linux CLI (Ubuntu, Debian, Arch &amp; Fedora)</div>
-        </a>
-        <a href="/setup/pfsense-opnsense-router" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 WireGuard Setup Guide • 3 Minutes</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">WireGuard VPN Setup for pfSense &amp; OPNsense Home Firewall</div>
-        </a>
-        <a href="/setup/steam-deck-vpn" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 WireGuard Setup Guide • 60 Seconds</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">WireGuard VPN Setup for Steam Deck &amp; Handheld Gaming OS (SteamOS)</div>
-        </a>
-      </div>
-    </div>
-    <section id="sweepr-live-wireguard-acr-proof" style="margin:2rem 0;background:#0f172a;border:1px solid #1e293b;border-radius:14px;padding:1.4rem 1.5rem;color:#f8fafc;">
-      <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;">
-        <h2 style="font-size:1.2rem;margin:0;color:#f8fafc;border:none;padding:0;">Live 10Gbps WireGuard Node Telemetry &amp; Interactive MTU Calculator (virgin-media-remote-dev-ssh)</h2>
-        <span style="font-size:0.75rem;background:rgba(16,185,129,0.14);color:#34d399;border:1px solid rgba(16,185,129,0.3);padding:4px 10px;border-radius:999px;font-weight:700;">
-          Verified Kernel WireGuard &bull; 18ms 1-RTT Handshake
-        </span>
-      </div>
-      <p style="color:#94a3b8;font-size:0.9rem;line-height:1.55;margin:0 0 14px;">
-        Below is the verified bare-metal node routing and Smart-TV ACR DNS sinkhole telemetry executed by <strong>SWEEPR VPN v1.4.0</strong> (SSL.com Authenticode Signed) for <code>/solutions/virgin-media-remote-dev-ssh</code>:
-      </p>
-      <div style="overflow-x:auto;margin-bottom:16px;">
-        <table style="width:100%;border-collapse:collapse;font-size:0.82rem;color:#e2e8f0;margin:0;">
-          <thead>
-            <tr style="border-bottom:1px solid #1e293b;text-align:left;color:#94a3b8;background:#020617;">
-              <th style="padding:8px 10px;">Node / Rule ID</th>
-              <th style="padding:8px 10px;">Endpoint / Target Domain</th>
-              <th style="padding:8px 10px;">WireGuard / Sinkhole Rule</th>
-              <th style="padding:8px 10px;">Measured Output</th>
-              <th style="padding:8px 10px;">Transit / Scope</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">UK-LON-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">London Docklands (LINX) (78.141.205.68)</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">WireGuard UDP 443 / 51820 | ChaCha20</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">4ms RTT | 940 Mbps Verified</td>
-              <td style="padding:8px 10px;color:#94a3b8;">AS20473 Choopa / LINX Peering</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">JP-TYO-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">Tokyo Shinagawa (JPIX) (104.156.239.162)</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">WireGuard UDP 443 / 51820 | ChaCha20</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">162ms RTT | 770 Mbps Verified</td>
-              <td style="padding:8px 10px;color:#94a3b8;">AS20473 JPIX Backbone</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">WG-MTU-1420</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">DHCP / Cable DOCSIS 3.1 Uplink</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">MTU = 1420 | TCPMSS = 1380</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">Zero IPv4/IPv6 Packet Fragmentation</td>
-              <td style="padding:8px 10px;color:#94a3b8;">Kernel WireGuard UDP 51820</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">ACR-SAM-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">gpm.samsungqbe.com / samsungacr.com</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">0.0.0.0 sinkhole (NXDOMAIN)</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">Blocks Tizen 500ms Frame Fingerprinting</td>
-              <td style="padding:8px 10px;color:#94a3b8;">Samsung Smart Hub ACR Shield</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">ACR-LG-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">ibs.lgappstv.com / ad.lgappstv.com</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">0.0.0.0 sinkhole (NXDOMAIN)</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">Blocks webOS LivePlus ACR Uploads</td>
-              <td style="padding:8px 10px;color:#94a3b8;">LG webOS Smart-TV Shield</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div style="background:#020617;border:1px solid #1e293b;border-radius:10px;padding:14px 16px;">
-        <div style="font-size:0.85rem;font-weight:700;color:#34d399;margin-bottom:8px;">⚙️ Interactive WireGuard MTU &amp; TCP MSS Clamping Calculator</div>
-        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:10px;">
-          <label for="sweepr-mtu-select-virgin-media-remote-dev-ssh" style="font-size:0.8rem;color:#cbd5e1;">Select Uplink Encapsulation:</label>
-          <select id="sweepr-mtu-select-virgin-media-remote-dev-ssh" onchange="(function(el){var mtu=parseInt(el.value,10)||1420;var mss=mtu-40;var out=document.getElementById('sweepr-mtu-out-virgin-media-remote-dev-ssh');if(out){out.textContent='[Interface]\nMTU = '+mtu+'\nPostUp = iptables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss '+mss;}})(this)" style="background:#0f172a;color:#f8fafc;border:1px solid #334155;border-radius:6px;padding:5px 10px;font-size:0.8rem;">
-            <option value="1420" selected>Standard Cable / DOCSIS / Ethernet (1500 WAN &rarr; 1420 WG MTU)</option>
-            <option value="1412">UK/EU Openreach FTTP / PPPoE Fibre (1492 WAN &rarr; 1412 WG MTU)</option>
-            <option value="1380">5G Fixed Wireless / CGNAT / Eduroam / Starlink (1380 WG MTU)</option>
-            <option value="1360">DS-Lite / MAP-E / Double-VLAN Enterprise Wi-Fi (1360 WG MTU)</option>
-          </select>
-        </div>
-        <pre id="sweepr-mtu-out-virgin-media-remote-dev-ssh" style="margin:0;padding:10px 12px;background:#0f172a;border:1px solid #1e293b;border-radius:6px;font-size:0.78rem;color:#a7f3d0;overflow-x:auto;">[Interface]
-MTU = 1420
-PostUp = iptables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1380</pre>
+      <a href="/solutions/t-mobile-5g-home-internet-remote-dev-ssh" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 shadow-sm transition-all no-underline block">
+        <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 mb-1">SOLUTIONS RESOURCE</div>
+        <div class="text-sm font-bold text-gray-900">Fix Dropping SSH, Kubernetes &amp; Git Sessions on T-Mobile 5G Home Internet With Persistent WireGuard</div>
+      </a>
+      <a href="/solutions/national-rail-train-wifi-remote-dev-ssh" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 shadow-sm transition-all no-underline block">
+        <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 mb-1">SOLUTIONS RESOURCE</div>
+        <div class="text-sm font-bold text-gray-900">Fix Dropping SSH, Kubernetes &amp; Git Sessions on UK Train Wi-Fi (LNER, GWR, Avanti) With Persistent WireGuard</div>
+      </a>
+      <a href="/setup/synology-nas-docker-vpn" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 shadow-sm transition-all no-underline block">
+        <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 mb-1">SETUP RESOURCE</div>
+        <div class="text-sm font-bold text-gray-900">WireGuard VPN Setup for Synology NAS &amp; Docker Gluetun WireGuard Container</div>
+      </a>
+      <a href="/setup/macos-apple-silicon-vpn" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 shadow-sm transition-all no-underline block">
+        <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 mb-1">SETUP RESOURCE</div>
+        <div class="text-sm font-bold text-gray-900">WireGuard VPN Setup for macOS (Apple Silicon M1/M2/M3/M4 &amp; Intel)</div>
+      </a>
+      <a href="/guides/fix-isp-dns-hijacking-and-throttling" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 shadow-sm transition-all no-underline block">
+        <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 mb-1">GUIDES RESOURCE</div>
+        <div class="text-sm font-bold text-gray-900">How UK ISPs Use DNS Inspection to Throttle Evening Speeds (And How to Fix It)</div>
+      </a>
+      <a href="/vs/mullvad" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 shadow-sm transition-all no-underline block">
+        <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 mb-1">VS RESOURCE</div>
+        <div class="text-sm font-bold text-gray-900">SWEEPR VPN vs Mullvad VPN (2026 Comparison)</div>
+      </a>
       </div>
     </section>
-</main>
+  </main>
 
   <!-- Footer -->
   <footer class="border-t border-gray-200 py-8 text-center text-sm text-gray-500">
@@ -416,7 +229,7 @@ PostUp = iptables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS 
         <a href="/pricing" class="hover:underline">Pricing</a>
         <a href="/tools/leak-test" class="hover:underline">IP Leak Test</a>
         <a href="/tools/isp-throttling-test" class="hover:underline">ISP Throttling Test</a>
-        <a href="/vs/totalvpn" class="hover:underline">vs Total VPN</a>
+        <a href="/alternatives/totalvpn" class="hover:underline">TotalVPN Alternatives</a>
         <a href="/vs/nordvpn" class="hover:underline">vs NordVPN</a>
         <a href="/privacy" class="hover:underline">Privacy Policy</a>
         <a href="/terms" class="hover:underline">Terms</a>

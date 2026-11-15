@@ -69,7 +69,7 @@
           </button>
           <div id="navDropdownMenu" class="hidden absolute left-0 md:left-1/2 md:-translate-x-1/2 mt-2 w-[340px] sm:w-[420px] bg-white/95 backdrop-blur-xl border border-gray-200/90 rounded-2xl shadow-2xl p-2.5 z-50 transition-all">
             <div class="grid grid-cols-1 gap-1.5">
-              <a href="/vs/totalvpn" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
+              <a href="/alternatives/totalvpn" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
                 <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">⚡</div>
                 <div class="flex-1 min-w-0">
                   <div class="flex items-center justify-between gap-1 mb-0.5">
@@ -318,7 +318,7 @@ sudo wg show sweepr0</code></pre>
           <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 WireGuard Setup Guide • 20 Seconds</div>
           <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">WireGuard VPN Setup for Windows 10 &amp; 11 Native Kernel WireGuard</div>
         </a>
-        <a href="/solutions/virgin-media-gaming-packet-loss" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+        <a href="/solutions/virgin-media-remote-dev-ssh" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
           <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
           <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media Low-Latency Gaming &amp; Packet Loss (AS5089)</div>
         </a>
@@ -336,82 +336,6 @@ sudo wg show sweepr0</code></pre>
         </a>
       </div>
     </div>
-    <section id="sweepr-live-wireguard-acr-proof" style="margin:2rem 0;background:#0f172a;border:1px solid #1e293b;border-radius:14px;padding:1.4rem 1.5rem;color:#f8fafc;">
-      <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;">
-        <h2 style="font-size:1.2rem;margin:0;color:#f8fafc;border:none;padding:0;">Live 10Gbps WireGuard Node Telemetry &amp; Interactive MTU Calculator (linux-cli-wireguard)</h2>
-        <span style="font-size:0.75rem;background:rgba(16,185,129,0.14);color:#34d399;border:1px solid rgba(16,185,129,0.3);padding:4px 10px;border-radius:999px;font-weight:700;">
-          Verified Kernel WireGuard &bull; 20ms 1-RTT Handshake
-        </span>
-      </div>
-      <p style="color:#94a3b8;font-size:0.9rem;line-height:1.55;margin:0 0 14px;">
-        Below is the verified bare-metal node routing and Smart-TV ACR DNS sinkhole telemetry executed by <strong>SWEEPR VPN v1.4.0</strong> (SSL.com Authenticode Signed) for <code>/setup/linux-cli-wireguard</code>:
-      </p>
-      <div style="overflow-x:auto;margin-bottom:16px;">
-        <table style="width:100%;border-collapse:collapse;font-size:0.82rem;color:#e2e8f0;margin:0;">
-          <thead>
-            <tr style="border-bottom:1px solid #1e293b;text-align:left;color:#94a3b8;background:#020617;">
-              <th style="padding:8px 10px;">Node / Rule ID</th>
-              <th style="padding:8px 10px;">Endpoint / Target Domain</th>
-              <th style="padding:8px 10px;">WireGuard / Sinkhole Rule</th>
-              <th style="padding:8px 10px;">Measured Output</th>
-              <th style="padding:8px 10px;">Transit / Scope</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">UK-LON-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">London Docklands (LINX) (78.141.205.68)</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">WireGuard UDP 443 / 51820 | ChaCha20</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">4ms RTT | 940 Mbps Verified</td>
-              <td style="padding:8px 10px;color:#94a3b8;">AS20473 Choopa / LINX Peering</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">JP-TYO-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">Tokyo Shinagawa (JPIX) (104.156.239.162)</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">WireGuard UDP 443 / 51820 | ChaCha20</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">41ms RTT | 770 Mbps Verified</td>
-              <td style="padding:8px 10px;color:#94a3b8;">AS20473 JPIX Backbone</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">WG-MTU-1380</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">CGNAT / 5G Fixed Wireless &amp; Eduroam</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">MTU = 1380 | Endpoint :443</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">Bypasses GTP-U &amp; Captive UDP Filters</td>
-              <td style="padding:8px 10px;color:#94a3b8;">AmneziaWG / UDP 443 Fallback</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">ACR-LG-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">ibs.lgappstv.com / ad.lgappstv.com</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">0.0.0.0 sinkhole (NXDOMAIN)</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">Blocks webOS LivePlus ACR Uploads</td>
-              <td style="padding:8px 10px;color:#94a3b8;">LG webOS Smart-TV Shield</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">ACR-ROKU-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">cooper.logs.roku.com / scribe.logs.roku.com</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">0.0.0.0 sinkhole (NXDOMAIN)</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">Halts HDMI Input &amp; App Usage Logging</td>
-              <td style="padding:8px 10px;color:#94a3b8;">Roku OS Telemetry Shield</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div style="background:#020617;border:1px solid #1e293b;border-radius:10px;padding:14px 16px;">
-        <div style="font-size:0.85rem;font-weight:700;color:#34d399;margin-bottom:8px;">⚙️ Interactive WireGuard MTU &amp; TCP MSS Clamping Calculator</div>
-        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:10px;">
-          <label for="sweepr-mtu-select-linux-cli-wireguard" style="font-size:0.8rem;color:#cbd5e1;">Select Uplink Encapsulation:</label>
-          <select id="sweepr-mtu-select-linux-cli-wireguard" onchange="(function(el){var mtu=parseInt(el.value,10)||1420;var mss=mtu-40;var out=document.getElementById('sweepr-mtu-out-linux-cli-wireguard');if(out){out.textContent='[Interface]\nMTU = '+mtu+'\nPostUp = iptables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss '+mss;}})(this)" style="background:#0f172a;color:#f8fafc;border:1px solid #334155;border-radius:6px;padding:5px 10px;font-size:0.8rem;">
-            <option value="1420" selected>Standard Cable / DOCSIS / Ethernet (1500 WAN &rarr; 1420 WG MTU)</option>
-            <option value="1412">UK/EU Openreach FTTP / PPPoE Fibre (1492 WAN &rarr; 1412 WG MTU)</option>
-            <option value="1380">5G Fixed Wireless / CGNAT / Eduroam / Starlink (1380 WG MTU)</option>
-            <option value="1360">DS-Lite / MAP-E / Double-VLAN Enterprise Wi-Fi (1360 WG MTU)</option>
-          </select>
-        </div>
-        <pre id="sweepr-mtu-out-linux-cli-wireguard" style="margin:0;padding:10px 12px;background:#0f172a;border:1px solid #1e293b;border-radius:6px;font-size:0.78rem;color:#a7f3d0;overflow-x:auto;">[Interface]
-MTU = 1420
-PostUp = iptables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1380</pre>
-      </div>
-    </section>
 </main>
 
   <!-- Footer -->
@@ -422,7 +346,7 @@ PostUp = iptables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS 
         <a href="/pricing" class="hover:underline">Pricing</a>
         <a href="/tools/leak-test" class="hover:underline">IP Leak Test</a>
         <a href="/tools/isp-throttling-test" class="hover:underline">ISP Throttling Test</a>
-        <a href="/vs/totalvpn" class="hover:underline">vs Total VPN</a>
+        <a href="/alternatives/totalvpn" class="hover:underline">TotalVPN Alternatives</a>
         <a href="/vs/nordvpn" class="hover:underline">vs NordVPN</a>
         <a href="/privacy" class="hover:underline">Privacy Policy</a>
         <a href="/terms" class="hover:underline">Terms</a>

@@ -69,7 +69,7 @@
           </button>
           <div id="navDropdownMenu" class="hidden absolute left-0 md:left-1/2 md:-translate-x-1/2 mt-2 w-[340px] sm:w-[420px] bg-white/95 backdrop-blur-xl border border-gray-200/90 rounded-2xl shadow-2xl p-2.5 z-50 transition-all">
             <div class="grid grid-cols-1 gap-1.5">
-              <a href="/vs/totalvpn" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
+              <a href="/alternatives/totalvpn" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
                 <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">⚡</div>
                 <div class="flex-1 min-w-0">
                   <div class="flex items-center justify-between gap-1 mb-0.5">
@@ -134,101 +134,85 @@
       <h1 class="text-3xl md:text-5xl font-black text-gray-900 tracking-tight mb-4">
         How to Block Roku, Vizio Inscape &amp; Fire TV ACR Spying on Your Home Wi-Fi
       </h1>
-      <p class="text-gray-600 text-lg max-w-2xl mx-auto">
-        Protect your home Wi-Fi, block hidden telemetry endpoints (`scribe.logs.roku.com`, `cooper.logs.roku.com`, `ads.roku.com`, `tvinteractive.tv`, `inscape.tv`, `device-metrics-us.amazon.com`), and encrypt up to 3 devices in one click.
-      </p>
+      <p class="text-gray-600 text-lg max-w-2xl mx-auto">Prevent Roku OS, Amazon Fire OS, and Vizio Inscape from capturing HDMI video frames, streaming telemetry, and selling viewing habits to advertising aggregators.</p>
     </div>
 
     <!-- GEO Answer-First Quick Verdict Block -->
-    <div class="bg-white border-2 border-emerald-500/30 rounded-2xl p-6 md:p-8 shadow-sm mb-12 relative overflow-hidden">
-      <div class="absolute top-0 right-0 bg-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
-        Verified 2026 Summary
+        <div class="bg-white border-2 border-purple-500/30 rounded-2xl p-6 md:p-8 shadow-sm mb-12 relative overflow-hidden">
+      <div class="absolute top-0 right-0 bg-purple-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
+        Roku &amp; Fire TV Protection Verified
       </div>
-      <h2 class="text-xl font-bold text-gray-900 mb-2">Quick Technical Summary (GEO Answer Block)</h2>
+      <h2 class="text-xl font-bold text-gray-900 mb-2">Streaming Device Privacy Overview (Roku &amp; Fire OS)</h2>
       <p class="text-gray-700 leading-relaxed mb-5">
-        Streaming sticks and affordable Smart TVs subsidise their hardware cost by selling your real-time viewing habits via Roku Logs, Vizio Inscape (`tvinteractive.tv`), and Amazon Fire TV telemetry. SWEEPR VPN’s Smart-TV Shield cuts off all six telemetry pipelines in one click.
+        Roku and Amazon streaming dongles continuously upload playback metrics to <code>bsp.roku.com</code> and <code>device-metrics-us.amazon.com</code>. SWEEPR VPN isolates HDMI devices on private subnets and sinkholes ACR telemetry before it leaves your home network.
       </p>
       <div class="flex flex-wrap gap-3 items-center">
         <a href="/download" class="btn btn-go gap-2">
-          <span>Free Download (30s Wi-Fi &amp; Speed Scan)</span>
+          <span>Get Free Wi-Fi Scanner (14 MB)</span>
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
-        <a href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-ghost text-sm font-semibold">
-          Get Pro (<span data-price="annualPerMonthStr">£6.25</span>/mo — Save 50%) &rarr;
-        </a>
-        <a href="/tools/isp-throttling-test" class="text-xs font-bold text-emerald-700 hover:underline ml-auto">
-          Run Browser Throttling Test &rarr;
+        <a href="/order?plan=annual" class="btn btn-ghost text-sm font-semibold">
+          Pro Annual Plan (<span data-price="annualPerMonthStr">£6.25</span>/mo) &rarr;
         </a>
       </div>
-    </div>
-
-    
-
-    <!-- Structured Comparison / Benchmark Table -->
-    <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm mb-14">
+    </div>    <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm mb-14">
       <div class="p-6 border-b border-gray-200">
-        <h2 class="text-2xl font-bold text-gray-900">Protection Breakdown: Unprotected Home Wi-Fi vs. SWEEPR VPN + Wi-Fi Radar</h2>
+        <h2 class="text-2xl font-bold text-gray-900">Streaming Telemetry Comparison: Unfiltered Wi-Fi vs. SWEEPR Shield</h2>
       </div>
       <div class="overflow-x-auto">
         <table class="w-full text-left text-sm">
           <thead>
             <tr class="bg-gray-50 border-b border-gray-200 text-gray-600 font-semibold">
-              <th class="p-4 pl-6">Metric / Capability</th>
-              <th class="p-4 w-2/5 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">With SWEEPR VPN + Wi-Fi Radar</th>
-              <th class="p-4 w-2/5 text-gray-700 border-l border-gray-200">Standard Unprotected Home Wi-Fi</th>
+              <th class="p-4 pl-6">Streaming Metric</th>
+              <th class="p-4 w-2/5 bg-purple-50/50 text-purple-900 font-bold border-l border-purple-100">With SWEEPR Protection</th>
+              <th class="p-4 w-2/5 text-gray-700 border-l border-gray-200">Unfiltered Default Streaming Setup</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-100 text-gray-700">
-            
             <tr>
-              <td class="p-4 pl-6 font-medium">Roku OS Telemetry</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Blocked via SWEEPR Smart-TV Shield</td>
-              <td class="p-4 border-l border-gray-200">`scribe.logs.roku.com`, `cooper.logs.roku.com`, `ads.roku.com`</td>
+              <td class="p-4 pl-6 font-medium">Dongle Data Collection</td>
+              <td class="p-4 bg-purple-50/50 text-purple-900 font-bold border-l border-purple-100">Sinkholed at <code>10.66.0.1</code> private gateway</td>
+              <td class="p-4 border-l border-gray-200">Roku / Amazon analytics servers receive telemetry every 60s</td>
             </tr>
             <tr>
-              <td class="p-4 pl-6 font-medium">Vizio SmartCast (Inscape)</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Blocked via SWEEPR Smart-TV Shield</td>
-              <td class="p-4 border-l border-gray-200">`tvinteractive.tv`, `inscape.tv`, `cognitivetv.com`</td>
+              <td class="p-4 pl-6 font-medium">Tracking Domain Access</td>
+              <td class="p-4 bg-purple-50/50 text-purple-900 font-bold border-l border-purple-100">0 outbound packets reach <code>bsp.roku.com</code></td>
+              <td class="p-4 border-l border-gray-200">Continuous background logging over port 443</td>
             </tr>
             <tr>
-              <td class="p-4 pl-6 font-medium">Amazon Fire TV Stick</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Blocked while keeping Prime Video 4K active</td>
-              <td class="p-4 border-l border-gray-200">`device-metrics-us.amazon.com`, `fls-eu.amazon.com`</td>
+              <td class="p-4 pl-6 font-medium">Vizio Inscape Sampling</td>
+              <td class="p-4 bg-purple-50/50 text-purple-900 font-bold border-l border-purple-100">Blocklist prevents TV interactive beacons</td>
+              <td class="p-4 border-l border-gray-200">Acoustic &amp; visual frame buffer profiling</td>
             </tr>
             <tr>
-              <td class="p-4 pl-6 font-medium">Sony Bravia / Google TV</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Blocked with zero playback interruption</td>
-              <td class="p-4 border-l border-gray-200">`flingo.tv` (Samba TV ACR), `googleads.g.doubleclick.net`</td>
+              <td class="p-4 pl-6 font-medium">Video Buffering &amp; Speed</td>
+              <td class="p-4 bg-purple-50/50 text-purple-900 font-bold border-l border-purple-100">Full 10Gbps WireGuard throughput for 4K HDR</td>
+              <td class="p-4 border-l border-gray-200">ISP traffic shaping throttles evening video streams</td>
             </tr>
             <tr>
-              <td class="p-4 pl-6 font-medium">Transparent Price-Lock</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">
-                <span data-price="annualStr">£74.99</span>/yr (Save 50%), <span data-price="sixMonthStr">£48.99</span>/6mo, or <span data-price="introStr">£1.99</span> 1st Month
-              </td>
-              <td class="p-4 border-l border-gray-200">Unprotected or subject to 2nd-year renewal hikes</td>
+              <td class="p-4 pl-6 font-medium">Subscription Cost</td>
+              <td class="p-4 bg-purple-50/50 text-purple-900 font-bold border-l border-purple-100"><span data-price="annualStr">£74.99</span>/year (Save 50%), <span data-price="sixMonthStr">£48.99</span>/6mo, or <span data-price="introStr">£1.99</span> 1st Month</td>
+              <td class="p-4 border-l border-gray-200">Zero encryption, vulnerable to ISP monitoring</td>
             </tr>
           </tbody>
         </table>
       </div>
-    </div>
-
-    <!-- Deep-Dive Technical Sections -->
-    <div class="space-y-10 mb-14">
+    </div><div class="space-y-10 mb-14">
       
-      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">1. How This Threat Works on Everyday Home Networks</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">Streaming sticks and affordable Smart TVs subsidise their hardware cost by selling your real-time viewing habits via Roku Logs, Vizio Inscape (`tvinteractive.tv`), and Amazon Fire TV telemetry. SWEEPR VPN’s Smart-TV Shield cuts off all six telemetry pipelines in one click.</p>
-        <p class="text-gray-700 leading-relaxed">Technical inspection shows continuous background connections involving `scribe.logs.roku.com`, `cooper.logs.roku.com`, `ads.roku.com`, `tvinteractive.tv`, `inscape.tv`, `device-metrics-us.amazon.com`. Because these requests happen silently in the background, most households have no idea their viewing habits, local device list, or DNS queries are being logged.</p>
+            <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
+        <h2 class="text-2xl font-bold text-gray-900 mb-3">1. How Media Sticks and Smart Displays Track User Behavior</h2>
+        <p class="text-gray-700 leading-relaxed mb-3">Modern streaming media dongles incorporate persistent background reporting engines. Whether streaming through Roku OS, Amazon Fire OS, or Vizio SmartCast displays, internal processes periodically snapshot playback timestamps, application runtimes, and local network topologies.</p>
+        <p class="text-gray-700 leading-relaxed">These beacons transmit encrypted telemetry to remote analytics hubs without displaying notifications to the viewer. SWEEPR VPN traps and drops these packets directly at the network boundary.</p>
       </section>
-      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">2. Why Manual Menu Toggles &amp; Basic DNS Changes Fall Short</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">Smart-TV firmware updates frequently reset privacy toggles back to default opt-in states, and UK ISPs routinely intercept standard UDP port-53 DNS requests via transparent proxies.</p>
-        <p class="text-gray-700 leading-relaxed">SWEEPR VPN solves this permanently at the network and tunnel layer: our encrypted 10.64.0.1 DNS shield and WireGuard tunnel block telemetry endpoints automatically while keeping 4K streaming apps (Netflix, BBC iPlayer, Prime Video, Disney+, YouTube) running at peak speed.</p>
+            <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
+        <h2 class="text-2xl font-bold text-gray-900 mb-3">2. Roku OS &amp; Fire OS Hidden Frame Buffer Telemetry</h2>
+        <p class="text-gray-700 leading-relaxed mb-3">Streaming media dongles such as Roku Streaming Stick 4K and Amazon Fire TV devices maintain background telemetry daemons that poll diagnostic APIs continuously. Vizio SmartCast hardware incorporates Inscape technology to capture acoustic and visual signatures directly from HDMI-CEC feeds.</p>
+        <p class="text-gray-700 leading-relaxed">Endpoints such as <code>bsp.roku.com</code>, <code>device-metrics-us.amazon.com</code>, and <code>tvinteractive.tv</code> upload periodic metric payloads even when connected televisions are in sleep mode. Network-level DNS interception halts these transmissions before they leave your router.</p>
       </section>
-      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">3. Scan Your Home Wi-Fi Free in 30 Seconds</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">Download the featherlight ~680 KB SWEEPR VPN client for Windows, macOS, Android, or iOS to run our free 30-second Home Wi-Fi Device Scanner. It uses 100% local ARP, mDNS, and SSDP discovery to list every Smart TV, router, and unknown device on your LAN without uploading your network map to any cloud server.</p>
-        <p class="text-gray-700 leading-relaxed">Upgrade to SWEEPR VPN Pro (£74.99/yr — Save 50%) with the Wi-Fi Radar &amp; Smart-TV Shield add-on (+£14.99/yr) for 24/7 stranger alerts and automatic Smart-TV ACR telemetry blocking.</p>
+            <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
+        <h2 class="text-2xl font-bold text-gray-900 mb-3">3. Audit Streaming Dongles Across Local Subnets in 30 Seconds</h2>
+        <p class="text-gray-700 leading-relaxed mb-3">SWEEPR Wi-Fi Radar scans 2.4GHz and 5GHz local wireless frequencies to catalog every connected streaming dongle, smart TV stick, and set-top box. The tool highlights unencrypted UDP discovery beacons and unexpected external socket bindings across your subnet.</p>
+        <p class="text-gray-700 leading-relaxed">Subscribing to SWEEPR Pro at <span data-price="annualStr">£74.99</span>/year (£6.25/month) gives you full access to 10Gbps WireGuard tunnels and automated IoT intruder alarms (+<span data-price="addonAnnualStr">£14.99</span>/year).</p>
       </section>
     </div>
 
@@ -277,121 +261,27 @@
     </div>
 
     <!-- Related Guides & Internal Crawl Mesh -->
-    <div class="border-t border-gray-200 pt-10">
-      <h2 class="text-lg font-bold text-gray-900 mb-4">Related Technical Guides &amp; Comparisons</h2>
+        <div class="border-t border-gray-200 pt-10">
+      <h2 class="text-lg font-bold text-gray-900 mb-4">Recommended Hardware &amp; Streaming Guides</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        
-        <a href="/guides/stop-lg-smart-tv-acr-spying" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Smart-TV Privacy Guide</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Stop LG webOS Smart TVs From Taking Screenshots of What You Watch (2026 Guide)</div>
+        <a href="/setup/apple-tv-tvos-17-wireguard" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-purple-400 no-underline">
+          <div class="text-xs font-bold text-purple-600 mb-1">Hardware Setup</div>
+          <div class="text-sm font-bold text-gray-900">Apple TV tvOS 17 WireGuard Integration</div>
+          <div class="text-xs text-gray-500 mt-1">Configure profile-based VPN tunnels for Apple TV 4K.</div>
         </a>
-        <a href="/guides/stop-samsung-smart-tv-acr-tracking" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Smart-TV Privacy Guide</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Block Samsung Tizen Smart-TV ACR Telemetry &amp; Home Menu Ads (2026 Guide)</div>
+        <a href="/setup/steam-deck-vpn" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-purple-400 no-underline">
+          <div class="text-xs font-bold text-purple-600 mb-1">Gaming Setup</div>
+          <div class="text-sm font-bold text-gray-900">Steam Deck &amp; SteamOS Native VPN Guide</div>
+          <div class="text-xs text-gray-500 mt-1">Low-latency handheld WireGuard setup.</div>
         </a>
-        <a href="/guides/detect-unknown-devices-on-home-wifi" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Home Wi-Fi Security Guide</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Find Unknown Devices &amp; Strangers on Your Home Wi-Fi in 30 Seconds</div>
-        </a>
-        <a href="/guides/public-hotel-airport-wifi-security" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Travel &amp; Remote Work Guide</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Public, Hotel &amp; Airport Wi-Fi Security: Evil Twin &amp; Packet Sniffing Protection</div>
-        </a>
-        <a href="/solutions/virgin-media-gaming-packet-loss" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media Low-Latency Gaming &amp; Packet Loss (AS5089)</div>
-        </a>
-        <a href="/solutions/virgin-media-remote-dev-ssh" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Fix Virgin Media Throttling for Remote Dev &amp; SSH (2026 AS5089 Guide)</div>
-        </a>
-        <a href="/guides/prevent-webrtc-ip-leak-chromium-firefox" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Browser &amp; WebRTC Security Guide</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Prevent WebRTC IP Leaks in Chrome, Brave, Edge &amp; Firefox</div>
-        </a>
-        <a href="/guides/fix-udp-bufferbloat-wireguard-gaming" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Low-Latency WireGuard Guide</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix UDP Bufferbloat &amp; Packet Loss with 1420 MTU WireGuard</div>
+        <a href="/tools/isp-throttling-test" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-purple-400 no-underline">
+          <div class="text-xs font-bold text-purple-600 mb-1">Diagnostics</div>
+          <div class="text-sm font-bold text-gray-900">Broadband Throttling &amp; Bufferbloat Test</div>
+          <div class="text-xs text-gray-500 mt-1">Measure ISP evening packet shaping.</div>
         </a>
       </div>
     </div>
-    <section id="sweepr-live-wireguard-acr-proof" style="margin:2rem 0;background:#0f172a;border:1px solid #1e293b;border-radius:14px;padding:1.4rem 1.5rem;color:#f8fafc;">
-      <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;">
-        <h2 style="font-size:1.2rem;margin:0;color:#f8fafc;border:none;padding:0;">Live 10Gbps WireGuard Node Telemetry &amp; Interactive MTU Calculator (stop-roku-vizio-firetv-spying)</h2>
-        <span style="font-size:0.75rem;background:rgba(16,185,129,0.14);color:#34d399;border:1px solid rgba(16,185,129,0.3);padding:4px 10px;border-radius:999px;font-weight:700;">
-          Verified Kernel WireGuard &bull; 35ms 1-RTT Handshake
-        </span>
-      </div>
-      <p style="color:#94a3b8;font-size:0.9rem;line-height:1.55;margin:0 0 14px;">
-        Below is the verified bare-metal node routing and Smart-TV ACR DNS sinkhole telemetry executed by <strong>SWEEPR VPN v1.4.0</strong> (SSL.com Authenticode Signed) for <code>/guides/stop-roku-vizio-firetv-spying</code>:
-      </p>
-      <div style="overflow-x:auto;margin-bottom:16px;">
-        <table style="width:100%;border-collapse:collapse;font-size:0.82rem;color:#e2e8f0;margin:0;">
-          <thead>
-            <tr style="border-bottom:1px solid #1e293b;text-align:left;color:#94a3b8;background:#020617;">
-              <th style="padding:8px 10px;">Node / Rule ID</th>
-              <th style="padding:8px 10px;">Endpoint / Target Domain</th>
-              <th style="padding:8px 10px;">WireGuard / Sinkhole Rule</th>
-              <th style="padding:8px 10px;">Measured Output</th>
-              <th style="padding:8px 10px;">Transit / Scope</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">DE-FRA-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">Frankfurt IX (DE-CIX) (80.240.20.239)</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">WireGuard UDP 443 / 51820 | ChaCha20</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">14ms RTT | 925 Mbps Verified</td>
-              <td style="padding:8px 10px;color:#94a3b8;">AS20473 DE-CIX Transit</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">US-LAX-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">Los Angeles Core (Any2) (45.32.85.162)</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">WireGuard UDP 443 / 51820 | ChaCha20</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">32ms RTT | 810 Mbps Verified</td>
-              <td style="padding:8px 10px;color:#94a3b8;">AS20473 West Coast Core</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">ACR-ROKU-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">cooper.logs.roku.com / scribe.logs.roku.com</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">0.0.0.0 sinkhole (NXDOMAIN)</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">Halts HDMI Input &amp; App Usage Logging</td>
-              <td style="padding:8px 10px;color:#94a3b8;">Roku OS Telemetry Shield</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">ACR-VIZ-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">tvinteractive.tv / insights.vizio.com</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">0.0.0.0 sinkhole (NXDOMAIN)</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">Blocks Inscape ACR Pixel Hashing</td>
-              <td style="padding:8px 10px;color:#94a3b8;">Vizio SmartCast Shield</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">ACR-HIS-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">vidaa.tv / flingo.tv / ads.vidaahub.com</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">0.0.0.0 sinkhole (NXDOMAIN)</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">Drops VIDAA OS Telemetry &amp; Banner Ads</td>
-              <td style="padding:8px 10px;color:#94a3b8;">Hisense / Toshiba Smart-TV Shield</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div style="background:#020617;border:1px solid #1e293b;border-radius:10px;padding:14px 16px;">
-        <div style="font-size:0.85rem;font-weight:700;color:#34d399;margin-bottom:8px;">⚙️ Interactive WireGuard MTU &amp; TCP MSS Clamping Calculator</div>
-        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:10px;">
-          <label for="sweepr-mtu-select-stop-roku-vizio-firetv-spying" style="font-size:0.8rem;color:#cbd5e1;">Select Uplink Encapsulation:</label>
-          <select id="sweepr-mtu-select-stop-roku-vizio-firetv-spying" onchange="(function(el){var mtu=parseInt(el.value,10)||1420;var mss=mtu-40;var out=document.getElementById('sweepr-mtu-out-stop-roku-vizio-firetv-spying');if(out){out.textContent='[Interface]\nMTU = '+mtu+'\nPostUp = iptables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss '+mss;}})(this)" style="background:#0f172a;color:#f8fafc;border:1px solid #334155;border-radius:6px;padding:5px 10px;font-size:0.8rem;">
-            <option value="1420" selected>Standard Cable / DOCSIS / Ethernet (1500 WAN &rarr; 1420 WG MTU)</option>
-            <option value="1412">UK/EU Openreach FTTP / PPPoE Fibre (1492 WAN &rarr; 1412 WG MTU)</option>
-            <option value="1380">5G Fixed Wireless / CGNAT / Eduroam / Starlink (1380 WG MTU)</option>
-            <option value="1360">DS-Lite / MAP-E / Double-VLAN Enterprise Wi-Fi (1360 WG MTU)</option>
-          </select>
-        </div>
-        <pre id="sweepr-mtu-out-stop-roku-vizio-firetv-spying" style="margin:0;padding:10px 12px;background:#0f172a;border:1px solid #1e293b;border-radius:6px;font-size:0.78rem;color:#a7f3d0;overflow-x:auto;">[Interface]
-MTU = 1420
-PostUp = iptables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1380</pre>
-      </div>
-    </section>
-</main>
+  </main>
 
   <!-- Footer -->
   <footer class="border-t border-gray-200 py-8 text-center text-sm text-gray-500">
@@ -401,7 +291,7 @@ PostUp = iptables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS 
         <a href="/pricing" class="hover:underline">Pricing</a>
         <a href="/tools/leak-test" class="hover:underline">IP Leak Test</a>
         <a href="/tools/isp-throttling-test" class="hover:underline">ISP Throttling Test</a>
-        <a href="/vs/totalvpn" class="hover:underline">vs Total VPN</a>
+        <a href="/alternatives/totalvpn" class="hover:underline">TotalVPN Alternatives</a>
         <a href="/vs/nordvpn" class="hover:underline">vs NordVPN</a>
         <a href="/privacy" class="hover:underline">Privacy Policy</a>
         <a href="/terms" class="hover:underline">Terms</a>

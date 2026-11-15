@@ -4276,16 +4276,7 @@ export async function runKeywordResearchPipeline(options = {}) {
 
     saveJsonCacheAtomic(OPPORTUNITIES_PATH, opportunitiesPayload);
 
-    // Step 3C: Run enrich-pillars-with-live-proof.mjs so newly created pillars receive the verified live WireGuard & ACR block
-    try {
-      execFileSync(
-        process.execPath,
-        [path.join(__dirname, 'enrich-pillars-with-live-proof.mjs')],
-        { cwd: VPN_ROOT, stdio: 'inherit' }
-      );
-    } catch (err) {
-      console.error('[Keyword Engine -> enrich-pillars-with-live-proof.mjs Error]', err?.message || err);
-    }
+    // Step 3C: Disabled per GSC turnaround plan (R2/F7) - live proof boilerplate injection permanently deactivated.
 
     // Step 3D: Re-sync audit log after apply status updates
     if (audit) {
@@ -4438,6 +4429,10 @@ if (isMainModule) {
     const offline = args.includes('--offline');
     const limitArg = args.find((a) => a.startsWith('--limit='));
     const limitVal = limitArg ? Number(limitArg.split('=')[1]) : apply ? DAILY_NEW_PILLAR_CAP : 65;
+    if (limitArg && Number.isFinite(limitVal) && limitVal <= 0) {
+      console.log('[Keyword Engine] Page generation paused (limit=0): 0 new pillar pages created.');
+      process.exit(0);
+    }
 
     runKeywordResearchPipeline({
       discover,

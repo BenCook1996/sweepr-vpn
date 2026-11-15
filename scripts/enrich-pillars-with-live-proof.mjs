@@ -285,96 +285,10 @@ PostUp = iptables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS 
 }
 
 function runLiveProofEnrichment() {
-  const limitArg = process.argv[2] && !process.argv[2].startsWith('--') ? Number(process.argv[2]) : 300;
-  const forceProof = process.argv.includes('--force-proof');
-
-  const state = loadEnrichmentState();
-  let seoState = {};
-  if (fs.existsSync(SEO_STATE_PATH)) {
-    try {
-      seoState = JSON.parse(fs.readFileSync(SEO_STATE_PATH, 'utf8'));
-    } catch {}
-  }
-  if (!seoState.urlLastModHashes) seoState.urlLastModHashes = {};
-
-  const sitemapXml = fs.existsSync(SITEMAP_PATH) ? fs.readFileSync(SITEMAP_PATH, 'utf8') : '';
-  const modifiedLocs = new Set();
-  let enrichedCount = 0;
-
-  for (const cluster of ['setup', 'solutions', 'vs', 'guides']) {
-    const dirAbs = path.join(WEBSITE_DIR, cluster);
-    if (!fs.existsSync(dirAbs)) continue;
-    for (const file of fs.readdirSync(dirAbs).sort()) {
-      if (!file.endsWith('.html')) continue;
-      if (enrichedCount >= limitArg) break;
-
-      const absPath = path.join(dirAbs, file);
-      const html = fs.readFileSync(absPath, 'utf8');
-
-      // Strictly skip consolidated noindex sub-variants
-      if (/<meta\s+name=["']robots["']\s+content=["'][^"']*noindex/i.test(html)) {
-        continue;
-      }
-
-      const slug = file.replace(/\.html$/, '');
-      const urlPath = `/${cluster}/${slug}`;
-      const loc = `https://sweeprvpn.com${urlPath}`;
-
-      if (html.includes('id="sweepr-live-wireguard-acr-proof"') && !forceProof) {
-        continue;
-      }
-
-      const proofHtml = buildProofSectionHtml(urlPath, slug, cluster);
-      let updatedHtml = html;
-
-      if (updatedHtml.includes('id="sweepr-live-wireguard-acr-proof"')) {
-        updatedHtml = updatedHtml.replace(
-          /<section id="sweepr-live-wireguard-acr-proof"[\s\S]*?<\/section>/i,
-          proofHtml
-        );
-      } else if (updatedHtml.includes('<div class="cta-box">')) {
-        updatedHtml = updatedHtml.replace('<div class="cta-box">', `${proofHtml}\n    <div class="cta-box">`);
-      } else if (updatedHtml.includes('</article>')) {
-        updatedHtml = updatedHtml.replace('</article>', `  ${proofHtml}\n</article>`);
-      } else if (updatedHtml.includes('</main>')) {
-        updatedHtml = updatedHtml.replace('</main>', `  ${proofHtml}\n</main>`);
-      }
-
-      if (updatedHtml !== html) {
-        fs.writeFileSync(absPath, updatedHtml, 'utf8');
-        state.proofUpdatedAt[urlPath] = nowIso;
-        const sha1 = crypto
-          .createHash('sha1')
-          .update(fs.readFileSync(absPath))
-          .digest('hex')
-          .slice(0, 12);
-        state.contentHashes[urlPath] = sha1;
-        seoState.urlLastModHashes[loc] = { hash: sha1, lastmod: todayStr };
-        modifiedLocs.add(loc);
-        enrichedCount++;
-      }
-    }
-  }
-
-  if (modifiedLocs.size > 0 && sitemapXml) {
-    const updatedSitemap = sitemapXml.replace(
-      /<url>\s*<loc>([^<]+)<\/loc>\s*<lastmod>([^<]+)<\/lastmod>/g,
-      (fullMatch, locUrl, oldLastMod) => {
-        const cleanLoc = locUrl.trim();
-        const nextLastMod = modifiedLocs.has(cleanLoc) ? todayStr : oldLastMod.trim();
-        return fullMatch.replace(`<lastmod>${oldLastMod}</lastmod>`, `<lastmod>${nextLastMod}</lastmod>`);
-      }
-    );
-    fs.writeFileSync(SITEMAP_PATH, updatedSitemap, 'utf8');
-    fs.writeFileSync(SEO_STATE_PATH, JSON.stringify(seoState, null, 2), 'utf8');
-  }
-
-  state.lastRunAt = nowIso;
-  fs.writeFileSync(STATE_PATH, JSON.stringify(state, null, 2), 'utf8');
-
-  console.log(
-    `[SWEEPR VPN Live Proof Injector] Enriched ${enrichedCount} indexable Pillar pages with 10Gbps WireGuard telemetry & interactive MTU calculator | Updated <lastmod> on ${modifiedLocs.size} sitemap URLs | 14-day title cooldown tracked for ${Object.keys(state.titleUpdatedAt).length} GSC pages.`
-  );
+  // Disabled per GSC turnaround plan (R2 / F7).
+  // Live proof section injection is permanently deactivated to prevent template boilerplate
+  // similarity (>25% 5-gram overlap) and eliminate artificial sitemap <lastmod> churn.
+  console.log('[SWEEPR VPN Live Proof Injector] Disabled per GSC turnaround plan (R2/F7). No-op.');
 }
 
 runLiveProofEnrichment();

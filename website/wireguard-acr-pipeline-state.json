@@ -1,14 +1,14 @@
 {
-  "lastRunAt": "2026-11-14T11:54:26.686Z",
+  "lastRunAt": "2026-11-13T12:48:42.750Z",
   "liveSiteReachable": true,
   "liveHttpStatus": 200,
-  "liveSiteRttMs": 160,
+  "liveSiteRttMs": 245,
   "liveVpnServersEndpointReachable": true,
   "liveVpnFleetSummary": {
     "totalServers": 8,
     "onlineServers": 8,
-    "totalConnectedDevices": 18,
-    "apiLatencyMs": 496
+    "totalConnectedDevices": 17,
+    "apiLatencyMs": 615
   },
   "liveVpnServers": [
     {
@@ -18,8 +18,8 @@
       "flag": "SE",
       "online": true,
       "devices": 1,
-      "probe_ms": 213,
-      "p99_ms": 234
+      "probe_ms": 199,
+      "p99_ms": 199
     },
     {
       "code": "UK-LON-01",
@@ -27,9 +27,9 @@
       "city": "London",
       "flag": "GB",
       "online": true,
-      "devices": 6,
-      "probe_ms": 158,
-      "p99_ms": 160
+      "devices": 5,
+      "probe_ms": 177,
+      "p99_ms": 177
     },
     {
       "code": "DE-FRA-01",
@@ -38,8 +38,8 @@
       "flag": "DE",
       "online": true,
       "devices": 1,
-      "probe_ms": 192,
-      "p99_ms": 192
+      "probe_ms": 183,
+      "p99_ms": 183
     },
     {
       "code": "US-LAX-01",
@@ -48,8 +48,8 @@
       "flag": "US",
       "online": true,
       "devices": 1,
-      "probe_ms": 118,
-      "p99_ms": 144
+      "probe_ms": 136,
+      "p99_ms": 136
     },
     {
       "code": "NL-AMS-01",
@@ -58,8 +58,8 @@
       "flag": "NL",
       "online": true,
       "devices": 1,
-      "probe_ms": 207,
-      "p99_ms": 207
+      "probe_ms": 177,
+      "p99_ms": 177
     },
     {
       "code": "US-NYC-01",
@@ -68,8 +68,8 @@
       "flag": "US",
       "online": true,
       "devices": 4,
-      "probe_ms": 18,
-      "p99_ms": 22
+      "probe_ms": 31,
+      "p99_ms": 31
     },
     {
       "code": "JP-TYO-01",
@@ -78,8 +78,8 @@
       "flag": "JP",
       "online": true,
       "devices": 1,
-      "probe_ms": 323,
-      "p99_ms": 352
+      "probe_ms": 326,
+      "p99_ms": 326
     },
     {
       "code": "SG-SIN-01",
@@ -88,8 +88,8 @@
       "flag": "SG",
       "online": true,
       "devices": 3,
-      "probe_ms": 451,
-      "p99_ms": 483
+      "probe_ms": 477,
+      "p99_ms": 477
     }
   ],
   "wireguardFleetCount": 6,

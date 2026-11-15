@@ -2352,12 +2352,18 @@ const CANONICAL_REDIRECTS = {
   '/app': '/download',
   '/app-preview.html': '/download',
   '/app-preview': '/download',
-  '/vs-totalvpn.html': '/vs/totalvpn',
-  '/vs-totalvpn': '/vs/totalvpn',
+  '/vs-totalvpn.html': '/alternatives/totalvpn',
+  '/vs-totalvpn': '/alternatives/totalvpn',
+  '/vs/totalvpn': '/alternatives/totalvpn',
+  '/vs/totalvpn.html': '/alternatives/totalvpn',
   '/alternatives-totalvpn.html': '/alternatives/totalvpn',
   '/alternatives-totalvpn': '/alternatives/totalvpn',
+  '/leak-test': '/tools/leak-test',
   '/leak-test.html': '/tools/leak-test',
+  '/isp-throttling-test': '/tools/isp-throttling-test',
   '/isp-throttling-test.html': '/tools/isp-throttling-test',
+  '/tools/mtu-calculator': '/tools/isp-throttling-test',
+  '/tools/mtu-calculator.html': '/tools/isp-throttling-test',
   '/vpn-renewal-price-checker.html': '/tools/vpn-renewal-price-checker',
   '/smart-tv-tracking-check.html': '/tools/smart-tv-tracking-check',
   '/whats-on-my-wifi.html': '/tools/whats-on-my-wifi',
@@ -2380,8 +2386,8 @@ const CANONICAL_REDIRECTS = {
   '/setup/openwrt-travel-glinet-dropin': '/setup/gl-inet-travel-router',
   '/setup/opnsense-24-kernel-wireguard': '/setup/pfsense-opnsense-router',
   '/setup/pfsense-plus-wireguard-client': '/setup/pfsense-opnsense-router',
-  '/setup/firewalla-gold-plus-wireguard': '/setup/firewalla-gold-wireguard-vpn',
-  '/setup/draytek-vigor-2962-wireguard': '/setup/draytek-vigor-wireguard-client',
+  '/setup/firewalla-gold-plus-wireguard': '/setup',
+  '/setup/draytek-vigor-2962-wireguard': '/setup',
   '/setup/raspberry-pi-5-wireguard-gateway': '/setup/raspberry-pi-home-gateway',
   '/vs/pia-private-internet-access': '/vs/private-internet-access',
   '/vs/surfshark-one': '/vs/surfshark',
@@ -2404,11 +2410,11 @@ const CANONICAL_REDIRECTS = {
   '/setup/windows-11-wireguard-client': '/setup/windows-11-wireguard-vpn',
   '/solutions/sky-broadband-uk-uhd-streaming-buffering': '/solutions/sky-broadband-gaming-packet-loss',
   '/solutions/comcast-xfinity-p2p-port-forwarding': '/solutions/comcast-xfinity-broadband-isp-throttling',
-  '/solutions/deutsche-telekom-gaming-packet-loss': '/solutions/deutsche-telekom-dsl-isp-throttling',
+  '/solutions/deutsche-telekom-gaming-packet-loss': '/solutions',
   '/solutions/vodafone-uk-pro-p2p-port-forwarding': '/solutions/vodafone-uk-gaming-packet-loss',
   '/guides/stop-isp-throttling-uk-broadband': '/guides/fix-isp-dns-hijacking-and-throttling',
   '/solutions/bt-halo-smart-hub-2-p2p-port-forwarding': '/solutions/bt-broadband-gaming-packet-loss',
-  '/setup/ps5-xbox-gaming-router': '/setup/xbox-series-x-wireguard-gaming',
+  '/setup/ps5-xbox-gaming-router': '/setup/steam-deck-vpn',
   // Redirect 0-impression sibling slugs to GSC Page-1 winning canonicals
   '/solutions/virgin-media-p2p-port-forwarding': '/solutions/virgin-media-remote-dev-ssh',
   '/solutions/t-mobile-5g-home-internet-isp-throttling': '/solutions/t-mobile-5g-home-internet-remote-dev-ssh',
@@ -2421,6 +2427,339 @@ const CANONICAL_REDIRECTS = {
   '/solutions/talktalk-fibre-uk-wifi-arp-spoofing-protection': '/solutions/talktalk-p2p-port-forwarding',
   '/solutions/three-5g-uk-uhd-streaming-buffering': '/solutions/three-5g-home-broadband-uhd-streaming-buffering'
 };
+
+// Retired legacy antivirus comparison pages consolidated to /vs (Requirement R1 / Feature F3)
+export const RETIRED_VS_SLUGS = new Set([
+  'goose-vpn',
+  'le-vpn',
+  'panda-dome-vpn',
+  'zoogvpn',
+  'vpn-ac',
+  'perfect-privacy',
+  'f-secure-freedome',
+  'kaspersky-vpn',
+  'keepsolid-vpn-unlimited',
+  'norton-secure-vpn',
+  'mcafee-safe-connect',
+  'avira-phantom-vpn',
+  'avg-secure-vpn',
+  'avast-secureline',
+  'avast-secureline-vpn',
+  'bitdefender-vpn',
+  'malwarebytes-privacy-vpn',
+  'ivacy-vpn',
+  'fastestvpn'
+]);
+
+// Authoritative indexable pillars across all 4 pSEO clusters (62 curated canonicals)
+export const AUTHORITATIVE_SOLUTIONS_PILLARS = new Set([
+  "brsk-better-net-uk-voip-teams-zoom-jitter",
+  "bt-broadband-gaming-packet-loss",
+  "comcast-xfinity-broadband-isp-throttling",
+  "community-fibre-london-p2p-port-forwarding",
+  "eduroam-campus-wifi-gaming-packet-loss",
+  "ee-5g-mobile-hotspot-voip-teams-zoom-jitter",
+  "gigaclear-rural-fibre-gaming-packet-loss",
+  "hotel-captive-portal-wifi-p2p-port-forwarding",
+  "hyperoptic-broadband-isp-throttling",
+  "national-rail-train-wifi-remote-dev-ssh",
+  "nhs-guest-wifi-voip-teams-zoom-jitter",
+  "o2-uk-mobile-tethering-uhd-streaming-buffering",
+  "rogers-ignite-canada-isp-throttling",
+  "sky-broadband-gaming-packet-loss",
+  "starlink-satellite-uk-isp-throttling",
+  "t-mobile-5g-home-internet-remote-dev-ssh",
+  "talktalk-p2p-port-forwarding",
+  "telstra-nbn-australia-gaming-packet-loss",
+  "three-5g-home-broadband-uhd-streaming-buffering",
+  "toob-full-fibre-uk-voip-teams-zoom-jitter",
+  "virgin-media-remote-dev-ssh",
+  "vodafone-uk-gaming-packet-loss",
+  "youfibre-uk-wifi-arp-spoofing-protection",
+  "zen-internet-uk-isp-throttling"
+]);
+
+export const AUTHORITATIVE_SETUP_PILLARS = new Set([
+  "almalinux-9-wireguard-gateway",
+  "apple-tv-tvos-17-wireguard",
+  "asuswrt-merlin-vpn-router",
+  "freebsd-14-wireguard-kmod",
+  "gl-inet-travel-router",
+  "linux-cli-wireguard",
+  "macos-apple-silicon-vpn",
+  "nvidia-shield-tv-pro-wireguard",
+  "openwrt-wireguard-router",
+  "pfsense-opnsense-router",
+  "raspberry-pi-home-gateway",
+  "steam-deck-vpn",
+  "synology-nas-docker-vpn",
+  "ubiquiti-unifi-dream-machine-wireguard",
+  "windows-11-wireguard-vpn"
+]);
+
+export const AUTHORITATIVE_GUIDES_PILLARS = new Set([
+  "block-philips-titan-os-acr",
+  "block-sony-bravia-samba-tv-acr",
+  "detect-unknown-devices-on-home-wifi",
+  "disable-ipv6-leak-windows-linux",
+  "fix-isp-dns-hijacking-and-throttling",
+  "fix-wireguard-mtu-fragmentation-pppoe",
+  "prevent-webrtc-ip-leak-chromium-firefox",
+  "prevent-windows-11-dns-leaks-doh",
+  "public-hotel-airport-wifi-security",
+  "stop-isp-deep-packet-inspection-dpi",
+  "stop-lg-smart-tv-acr-spying",
+  "stop-roku-vizio-firetv-spying",
+  "stop-samsung-smart-tv-acr-tracking"
+]);
+
+export const AUTHORITATIVE_VS_PILLARS = new Set([
+  "cloudflare-warp-plus",
+  "cyberghost",
+  "expressvpn",
+  "ipvanish",
+  "mullvad",
+  "nordvpn",
+  "private-internet-access",
+  "protonvpn",
+  "surfshark",
+  "windscribe"
+]);
+
+// Specific Consolidation Target Map for /solutions/ sub-pages
+export const SPECIFIC_SOLUTIONS_CANONICAL_MAP = {
+  "eduroam-campus-wifi-p2p-port-forwarding": "/solutions/eduroam-campus-wifi-gaming-packet-loss",
+  "eduroam-campus-wifi-remote-dev-ssh": "/solutions/eduroam-campus-wifi-gaming-packet-loss",
+  "eduroam-campus-wifi-uhd-streaming-buffering": "/solutions/eduroam-campus-wifi-gaming-packet-loss",
+  "eduroam-campus-wifi-isp-throttling": "/solutions/eduroam-campus-wifi-gaming-packet-loss",
+  "talktalk-gaming-packet-loss": "/solutions/talktalk-p2p-port-forwarding",
+  "talktalk-remote-dev-ssh": "/solutions/talktalk-p2p-port-forwarding",
+  "talktalk-uhd-streaming-buffering": "/solutions/talktalk-p2p-port-forwarding",
+  "talktalk-isp-throttling": "/solutions/talktalk-p2p-port-forwarding",
+  "talktalk-fibre-uk-uhd-streaming-buffering": "/solutions/talktalk-p2p-port-forwarding",
+  "talktalk-fibre-uk-wifi-arp-spoofing-protection": "/solutions/talktalk-p2p-port-forwarding",
+  "virgin-media-ireland-isp-throttling": "/solutions",
+  "virgin-media-p2p-port-forwarding": "/solutions/virgin-media-remote-dev-ssh",
+  "virgin-media-uhd-streaming-buffering": "/solutions/virgin-media-remote-dev-ssh",
+  "virgin-media-uk-isp-throttling": "/solutions/virgin-media-remote-dev-ssh",
+  "virgin-media-gaming-packet-loss": "/solutions/virgin-media-remote-dev-ssh",
+  "virgin-media-warzone-packet-loss": "/solutions/virgin-media-remote-dev-ssh",
+  "virgin-media-isp-throttling": "/solutions/virgin-media-remote-dev-ssh",
+  "t-mobile-5g-home-internet-isp-throttling": "/solutions/t-mobile-5g-home-internet-remote-dev-ssh",
+  "t-mobile-5g-home-discord-voice-drop": "/solutions/t-mobile-5g-home-internet-remote-dev-ssh",
+  "community-fibre-london-isp-throttling": "/solutions/community-fibre-london-p2p-port-forwarding",
+  "bt-broadband-p2p-port-forwarding": "/solutions/bt-broadband-gaming-packet-loss",
+  "bt-broadband-remote-dev-ssh": "/solutions/bt-broadband-gaming-packet-loss",
+  "bt-broadband-uhd-streaming-buffering": "/solutions/bt-broadband-gaming-packet-loss",
+  "bt-broadband-iptv-isp-blocking": "/solutions/bt-broadband-gaming-packet-loss",
+  "bt-full-fibre-uk-uhd-streaming-buffering": "/solutions/bt-broadband-gaming-packet-loss",
+  "bt-halo-smart-hub-2-p2p-port-forwarding": "/solutions/bt-broadband-gaming-packet-loss",
+  "sky-broadband-p2p-port-forwarding": "/solutions/sky-broadband-gaming-packet-loss",
+  "sky-broadband-remote-dev-ssh": "/solutions/sky-broadband-gaming-packet-loss",
+  "sky-broadband-uhd-streaming-buffering": "/solutions/sky-broadband-gaming-packet-loss",
+  "sky-broadband-iptv-isp-blocking": "/solutions/sky-broadband-gaming-packet-loss",
+  "sky-broadband-uk-uhd-streaming-buffering": "/solutions/sky-broadband-gaming-packet-loss",
+  "sky-broadband-uk-voip-teams-zoom-jitter": "/solutions/sky-broadband-gaming-packet-loss",
+  "vodafone-ireland-siro-isp-throttling": "/solutions",
+  "vodafone-uk-p2p-port-forwarding": "/solutions/vodafone-uk-gaming-packet-loss",
+  "vodafone-uk-remote-dev-ssh": "/solutions/vodafone-uk-gaming-packet-loss",
+  "vodafone-uk-uhd-streaming-buffering": "/solutions/vodafone-uk-gaming-packet-loss",
+  "vodafone-uk-pro-p2p-port-forwarding": "/solutions/vodafone-uk-gaming-packet-loss",
+  "vodafone-full-fibre-uk-smart-tv-acr-blocking": "/solutions/vodafone-uk-gaming-packet-loss",
+  "comcast-xfinity-p2p-port-forwarding": "/solutions/comcast-xfinity-broadband-isp-throttling",
+  "deutsche-telekom-gaming-packet-loss": "/solutions",
+  "deutsche-telekom-iptv-isp-blocking": "/solutions",
+  "deutsche-telekom-dsl-isp-throttling": "/solutions",
+  "shaw-rogers-fibre-plus-isp-throttling": "/solutions/rogers-ignite-canada-isp-throttling",
+  "rogers-ignite-ca-teams-zoom-jitter": "/solutions/rogers-ignite-canada-isp-throttling",
+  "ee-mobile-5g-uk-cgnat-port-forwarding": "/solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter",
+  "ee-5g-mobile-hotspot-isp-throttling": "/solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter",
+  "ee-5g-mobile-hotspot-wifi-arp-spoofing-protection": "/solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter",
+  "three-5g-uk-uhd-streaming-buffering": "/solutions/three-5g-home-broadband-uhd-streaming-buffering",
+  "three-5g-home-broadband-isp-throttling": "/solutions/three-5g-home-broadband-uhd-streaming-buffering",
+  "three-5g-home-broadband-voip-teams-zoom-jitter": "/solutions/three-5g-home-broadband-uhd-streaming-buffering",
+  "o2-uk-mobile-tethering-isp-throttling": "/solutions/o2-uk-mobile-tethering-uhd-streaming-buffering",
+  "nhs-guest-wifi-isp-throttling": "/solutions/nhs-guest-wifi-voip-teams-zoom-jitter",
+  "nhs-guest-wifi-uhd-streaming-buffering": "/solutions/nhs-guest-wifi-voip-teams-zoom-jitter",
+  "hotel-captive-portal-wifi-isp-throttling": "/solutions/hotel-captive-portal-wifi-p2p-port-forwarding",
+  "national-rail-train-wifi-isp-throttling": "/solutions/national-rail-train-wifi-remote-dev-ssh",
+  "gigaclear-rural-fibre-isp-throttling": "/solutions/gigaclear-rural-fibre-gaming-packet-loss",
+  "gigaclear-rural-fibre-voip-teams-zoom-jitter": "/solutions/gigaclear-rural-fibre-gaming-packet-loss",
+  "gigaclear-rural-fibre-wifi-arp-spoofing-protection": "/solutions/gigaclear-rural-fibre-gaming-packet-loss",
+  "zen-internet-uk-gaming-packet-loss": "/solutions/zen-internet-uk-isp-throttling",
+  "youfibre-uk-isp-throttling": "/solutions/youfibre-uk-wifi-arp-spoofing-protection",
+  "youfibre-uk-voip-teams-zoom-jitter": "/solutions/youfibre-uk-wifi-arp-spoofing-protection",
+  "starlink-rv-roam-isp-throttling": "/solutions/starlink-satellite-uk-isp-throttling",
+  "telstra-nbn-au-valorant-high-ping": "/solutions/telstra-nbn-australia-gaming-packet-loss",
+  "telstra-nbn-australia-isp-throttling": "/solutions/telstra-nbn-australia-gaming-packet-loss"
+};
+
+export const EXACT_CANONICAL_REDIRECTS = {
+  // Core Tool & Competitor Aliases (Requirement R1 / Feature F4)
+  '/leak-test': '/tools/leak-test',
+  '/leak-test.html': '/tools/leak-test',
+  '/isp-throttling-test': '/tools/isp-throttling-test',
+  '/isp-throttling-test.html': '/tools/isp-throttling-test',
+  '/tools/mtu-calculator': '/tools/isp-throttling-test',
+  '/tools/mtu-calculator.html': '/tools/isp-throttling-test',
+  '/vs/totalvpn': '/alternatives/totalvpn',
+  '/vs/totalvpn.html': '/alternatives/totalvpn',
+  '/vs-totalvpn': '/alternatives/totalvpn',
+  '/vs-totalvpn.html': '/alternatives/totalvpn',
+  '/alternatives-totalvpn': '/alternatives/totalvpn',
+  '/alternatives-totalvpn.html': '/alternatives/totalvpn',
+  // Setup Guide Aliases (Single-hop targets inside 15 kept setup pillars or /setup hub)
+  '/setup/draytek-vigor-2962-wireguard': '/setup',
+  '/setup/firewalla-gold-plus-wireguard': '/setup',
+  '/setup/openwrt-luci-wireguard-interface': '/setup/openwrt-wireguard-router',
+  '/setup/openwrt-travel-glinet-dropin': '/setup/gl-inet-travel-router',
+  '/setup/opnsense-24-kernel-wireguard': '/setup/pfsense-opnsense-router',
+  '/setup/pfsense-plus-wireguard-client': '/setup/pfsense-opnsense-router',
+  '/setup/raspberry-pi-5-wireguard-gateway': '/setup/raspberry-pi-home-gateway',
+  '/setup/steamos-steam-deck-wireguard': '/setup/steam-deck-vpn',
+  '/setup/synology-dsm-7-wireguard': '/setup/synology-nas-docker-vpn',
+  '/setup/asuswrt-merlin-vpn-client': '/setup/asuswrt-merlin-vpn-router',
+  '/setup/windows-11-wireguard-client': '/setup/windows-11-wireguard-vpn',
+  '/setup/ps5-xbox-gaming-router': '/setup/steam-deck-vpn',
+  // Guides Aliases
+  '/guides/block-lg-webos-liveplus-acr': '/guides/stop-lg-smart-tv-acr-spying',
+  '/guides/block-roku-os-smart-tv-telemetry': '/guides/stop-roku-vizio-firetv-spying',
+  '/guides/block-samsung-tizen-smart-hub-acr': '/guides/stop-samsung-smart-tv-acr-tracking',
+  '/guides/block-vizio-smartcast-inscape-acr': '/guides/stop-roku-vizio-firetv-spying',
+  '/guides/stop-isp-dns-hijacking-nxdomain': '/guides/fix-isp-dns-hijacking-and-throttling',
+  '/guides/block-samsung-tv-acr-tracking': '/guides/stop-samsung-smart-tv-acr-tracking',
+  '/guides/block-lg-webos-acr-tracking': '/guides/stop-lg-smart-tv-acr-spying',
+  '/guides/stop-isp-throttling-uk-broadband': '/guides/fix-isp-dns-hijacking-and-throttling',
+  // Competitor Brand Aliases
+  '/vs/pia-private-internet-access': '/vs/private-internet-access',
+  '/vs/surfshark-one': '/vs/surfshark',
+  '/vs/warp-plus-team': '/vs/cloudflare-warp-plus'
+};
+
+const SOL_SUFFIX_RE = /-(isp-throttling|remote-dev-ssh|p2p-port-forwarding|gaming-packet-loss|warzone-packet-loss|twitch-4k-buffering|teams-zoom-jitter|valorant-high-ping|cgnat-port-forwarding|iptv-isp-blocking|wifi-arp-spoofing-protection|voip-teams-zoom-jitter|uhd-streaming-buffering|discord-voice-drop|broadband-isp-throttling|mobile-hotspot-voip-teams-zoom-jitter|rural-fibre-gaming-packet-loss|campus-wifi-gaming-packet-loss)$/;
+
+const SORTED_SOLUTIONS_PREFIXES = [
+  { prefix: 'bt-broadband', target: '/solutions/bt-broadband-gaming-packet-loss' },
+  { prefix: 'virgin-media-ireland', target: '/solutions' },
+  { prefix: 'virgin-media', target: '/solutions/virgin-media-remote-dev-ssh' },
+  { prefix: 'sky-broadband', target: '/solutions/sky-broadband-gaming-packet-loss' },
+  { prefix: 'talktalk', target: '/solutions/talktalk-p2p-port-forwarding' },
+  { prefix: 'vodafone-ireland', target: '/solutions' },
+  { prefix: 'vodafone-uk', target: '/solutions/vodafone-uk-gaming-packet-loss' },
+  { prefix: 'eduroam-campus-wifi', target: '/solutions/eduroam-campus-wifi-gaming-packet-loss' },
+  { prefix: 'gigaclear-rural-fibre', target: '/solutions/gigaclear-rural-fibre-gaming-packet-loss' },
+  { prefix: 'comcast-xfinity', target: '/solutions/comcast-xfinity-broadband-isp-throttling' },
+  { prefix: 'rogers-ignite', target: '/solutions/rogers-ignite-canada-isp-throttling' },
+  { prefix: 'shaw-rogers', target: '/solutions/rogers-ignite-canada-isp-throttling' },
+  { prefix: 'zen-internet-uk', target: '/solutions/zen-internet-uk-isp-throttling' },
+  { prefix: 'ee-5g-mobile-hotspot', target: '/solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter' },
+  { prefix: 'ee-mobile-5g-uk', target: '/solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter' },
+  { prefix: 'three-5g-home-broadband', target: '/solutions/three-5g-home-broadband-uhd-streaming-buffering' },
+  { prefix: 'o2-uk-mobile-tethering', target: '/solutions/o2-uk-mobile-tethering-uhd-streaming-buffering' },
+  { prefix: 'nhs-guest-wifi', target: '/solutions/nhs-guest-wifi-voip-teams-zoom-jitter' },
+  { prefix: 'hotel-captive-portal-wifi', target: '/solutions/hotel-captive-portal-wifi-p2p-port-forwarding' },
+  { prefix: 'national-rail-train-wifi', target: '/solutions/national-rail-train-wifi-remote-dev-ssh' },
+  { prefix: 'youfibre-uk', target: '/solutions/youfibre-uk-wifi-arp-spoofing-protection' },
+  { prefix: 'toob-full-fibre-uk', target: '/solutions/toob-full-fibre-uk-voip-teams-zoom-jitter' },
+  { prefix: 'brsk-better-net-uk', target: '/solutions/brsk-better-net-uk-voip-teams-zoom-jitter' },
+  { prefix: 'community-fibre-london', target: '/solutions/community-fibre-london-p2p-port-forwarding' },
+  { prefix: 'hyperoptic-broadband', target: '/solutions/hyperoptic-broadband-isp-throttling' },
+  { prefix: 'starlink', target: '/solutions/starlink-satellite-uk-isp-throttling' },
+  { prefix: 't-mobile-5g-home', target: '/solutions/t-mobile-5g-home-internet-remote-dev-ssh' },
+  { prefix: 'telstra-nbn', target: '/solutions/telstra-nbn-australia-gaming-packet-loss' }
+].sort((a, b) => b.prefix.length - a.prefix.length);
+
+/**
+ * Resolves deterministic canonical 301 redirect targets for legacy,
+ * consolidated, and retired URLs in strictly 1 hop before static file lookup.
+ *
+ * @param {string} rawPath - Incoming req pathname
+ * @returns {string|null} - Redirect target path or null if route is active/unmatched
+ */
+export function resolveCanonical301(rawPath) {
+  if (!rawPath || typeof rawPath !== 'string') return null;
+
+  let pathname = rawPath;
+  try {
+    pathname = decodeURIComponent(rawPath);
+  } catch {}
+  pathname = pathname.toLowerCase().replace(/\/+$/, '') || '/';
+
+  if (CANONICAL_REDIRECTS[pathname]) return CANONICAL_REDIRECTS[pathname];
+  if (EXACT_CANONICAL_REDIRECTS[pathname]) return EXACT_CANONICAL_REDIRECTS[pathname];
+
+  const isHtml = pathname.endsWith('.html');
+  const cleanPath = isHtml ? pathname.slice(0, -5) : pathname;
+
+  if (isHtml) {
+    if (CANONICAL_REDIRECTS[cleanPath]) return CANONICAL_REDIRECTS[cleanPath];
+    if (EXACT_CANONICAL_REDIRECTS[cleanPath]) return EXACT_CANONICAL_REDIRECTS[cleanPath];
+  }
+
+  // Smart-TV ACR Pattern: Any /solutions/*-smart-tv-acr-blocking -> Samsung ACR guide
+  if (/^\/solutions\/[a-z0-9-]+-smart-tv-acr-blocking$/i.test(cleanPath)) {
+    return '/guides/stop-samsung-smart-tv-acr-tracking';
+  }
+
+  // /vs/{slug}: only 10 authoritative comparisons kept; /vs/totalvpn -> /alternatives/totalvpn; others -> /vs
+  const vsMatch = cleanPath.match(/^\/vs\/([a-z0-9-]+)$/i);
+  if (vsMatch) {
+    const slug = vsMatch[1];
+    if (slug === 'totalvpn') return '/alternatives/totalvpn';
+    if (RETIRED_VS_SLUGS.has(slug) || !AUTHORITATIVE_VS_PILLARS.has(slug)) {
+      return '/vs';
+    }
+    return isHtml ? cleanPath : null;
+  }
+
+  // /solutions/{slug}: specific map -> authoritative 24 -> prefix -> /solutions
+  const solMatch = cleanPath.match(/^\/solutions\/([a-z0-9-]+)$/i);
+  if (solMatch) {
+    const slug = solMatch[1];
+    if (SPECIFIC_SOLUTIONS_CANONICAL_MAP[slug]) return SPECIFIC_SOLUTIONS_CANONICAL_MAP[slug];
+    if (AUTHORITATIVE_SOLUTIONS_PILLARS.has(slug)) return isHtml ? cleanPath : null;
+    for (const { prefix, target } of SORTED_SOLUTIONS_PREFIXES) {
+      if (slug.startsWith(`${prefix}-`)) return target;
+    }
+    return '/solutions';
+  }
+
+  // /setup/{slug}: only 15 authoritative setups kept; retired hardware aliases -> 1-hop parent or /setup
+  const setupMatch = cleanPath.match(/^\/setup\/([a-z0-9-]+)$/i);
+  if (setupMatch) {
+    const slug = setupMatch[1];
+    if (AUTHORITATIVE_SETUP_PILLARS.has(slug)) return isHtml ? cleanPath : null;
+    if (slug.startsWith('gl-inet-')) return '/setup/gl-inet-travel-router';
+    if (/^(qnap|asustor|truenas|unraid)-/.test(slug)) return '/setup/synology-nas-docker-vpn';
+    if (/^(ubiquiti|unifi)-/.test(slug)) return '/setup/ubiquiti-unifi-dream-machine-wireguard';
+    if (/^(netgate|protectli)-/.test(slug)) return '/setup/pfsense-opnsense-router';
+    if (slug.startsWith('asus-rog-')) return '/setup/asuswrt-merlin-vpn-router';
+    if (/^(arch-linux|debian|fedora|alpinelinux|nixos|docker-gluetun)-/.test(slug)) return '/setup/linux-cli-wireguard';
+    if (slug.startsWith('wsl2-')) return '/setup/windows-11-wireguard-vpn';
+    if (/^(rog-ally|nintendo-switch|playstation-5|xbox-series-x|ps5-xbox)-/.test(slug)) return '/setup/steam-deck-vpn';
+    if (/^(casaos|zimaboard)-/.test(slug)) return '/setup/raspberry-pi-home-gateway';
+    return '/setup';
+  }
+
+  // /guides/{slug}: only 13 authoritative guides kept; retired guide variants -> 1-hop parent or /guides
+  const guideMatch = cleanPath.match(/^\/guides\/([a-z0-9-]+)$/i);
+  if (guideMatch) {
+    const slug = guideMatch[1];
+    if (AUTHORITATIVE_GUIDES_PILLARS.has(slug)) return isHtml ? cleanPath : null;
+    if (/^block-(hisense|panasonic|sharp|tcl)-/.test(slug)) return '/guides/stop-samsung-smart-tv-acr-tracking';
+    if (/^(fix-udp-bufferbloat|wireguard-mtu)-/.test(slug)) return '/guides/fix-wireguard-mtu-fragmentation-pppoe';
+    if (/^(stop-5g-hotspot|stop-isp-tcp-reset)-/.test(slug)) return '/guides/stop-isp-deep-packet-inspection-dpi';
+    if (slug.startsWith('stop-isp-dns-hijacking-')) return '/guides/fix-isp-dns-hijacking-and-throttling';
+    return '/guides';
+  }
+
+  // Strip .html for active tools
+  if (isHtml && /^\/tools\/[a-z0-9-]+$/i.test(cleanPath)) {
+    return cleanPath;
+  }
+
+  return null;
+}
 
 const ROUTE_ALIASES = {
   '/': 'index.html',
@@ -2438,7 +2777,6 @@ const ROUTE_ALIASES = {
   '/setup': 'setup.html',
   '/solutions': 'solutions.html',
   '/vs': 'vs.html',
-  '/vs/totalvpn': 'vs-totalvpn.html',
   '/alternatives/totalvpn': 'alternatives-totalvpn.html',
   '/tools/leak-test': 'leak-test.html',
   '/tools/isp-throttling-test': 'isp-throttling-test.html',
@@ -2447,7 +2785,6 @@ const ROUTE_ALIASES = {
   '/tools/smart-tv-acr-test': 'smart-tv-tracking-check.html',
   '/tools/whats-on-my-wifi': 'whats-on-my-wifi.html',
   '/tools/wireguard-config-generator': 'setup.html',
-  '/tools/mtu-calculator': 'isp-throttling-test.html',
   '/public-wifi': 'public-wifi.html',
   '/de/tools/leak-test': 'de-leak-test.html',
   '/pt-br/tools/leak-test': 'pt-br-leak-test.html',
@@ -2752,6 +3089,7 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
       <div class="font-extrabold text-emerald-900 flex items-center gap-1.5">ÃƒÂ°Ã…Â¸Ã¢â‚¬ÂºÃ‚Â¡ÃƒÂ¯Ã‚Â¸Ã‚Â Authenticode Signed &amp; Verified Windows Binary</div>
       <div><strong>Publisher:</strong> CN=Benjamin Cook, O=Benjamin Cook, L=Worthing, C=GB (SSL.com OV Code Signing)</div>
       <div class="break-all"><strong>SHA-256 (SWEEPRVPN.exe):</strong> <code class="text-[11px] bg-white px-1 py-0.5 rounded border border-emerald-100">1CADD45F8C875CAD864CDEFDA02CEBC527A12244F1081E079264C9200A0A728C</code></div>
+      <div class="pt-1"><a href="/warrant-canary" class="font-bold text-emerald-700 hover:text-emerald-900 underline">Verify Signed Release &amp; Cryptographic Warrant Canary &rarr;</a></div>
     </div>
     <div class="flex justify-center pt-4 border-t border-gray-100">
       <a href="/" class="btn btn-ghost w-full justify-center">Back to Home</a>
@@ -2773,6 +3111,8 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
         <a href="/vs" class="hover:text-emerald-600">VPN Comparisons</a>
         <span>&bull;</span>
         <a href="/support" class="hover:text-emerald-600">Support</a>
+        <span>&bull;</span>
+        <a href="/warrant-canary" class="hover:text-emerald-600 font-semibold text-gray-700">Cryptographic Warrant Canary</a>
       </div>
       <div class="flex flex-wrap justify-center gap-x-3 gap-y-1 text-[11px] text-gray-400">
         <a href="/setup/gl-inet-travel-router" class="hover:text-emerald-600">GL.iNet Router Setup</a>
@@ -3019,6 +3359,15 @@ const server = http.createServer(async (req, res) => {
   const urlObj = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
   let pathname = (urlObj.pathname.replace(/\/+$/, '') || '/').replace(/^\/api\/v1\//, '/api/');
 
+  // Reject TRACE/TRACK HTTP methods explicitly (defense-in-depth alongside Node HTTP parser)
+  if (req.method === 'TRACE' || req.method === 'TRACK') {
+    res.writeHead(405, {
+      'Allow': 'GET, POST, HEAD, OPTIONS',
+      ...COMMON_SECURITY_HEADERS
+    });
+    return res.end('Method Not Allowed');
+  }
+
   // Handle CORS preflight requests for API routes with strict origin allowlist
   if (req.method === 'OPTIONS') {
     res.writeHead(204, {
@@ -3042,15 +3391,17 @@ const server = http.createServer(async (req, res) => {
     res.writeHead(301, { Location: cleanTarget, ...COMMON_SECURITY_HEADERS });
     return res.end();
   }
-  if ((req.method === 'GET' || req.method === 'HEAD') && CANONICAL_REDIRECTS[pathname]) {
-    const target = CANONICAL_REDIRECTS[pathname] + (urlObj.search || '');
-    res.writeHead(301, { Location: target, ...COMMON_SECURITY_HEADERS });
-    return res.end();
-  }
-  if ((req.method === 'GET' || req.method === 'HEAD') && /^\/(solutions|setup|vs|guides)\/[a-z0-9-]+\.html$/i.test(pathname)) {
-    const target = pathname.replace(/\.html$/i, '') + (urlObj.search || '');
-    res.writeHead(301, { Location: target, ...COMMON_SECURITY_HEADERS });
-    return res.end();
+  if (req.method === 'GET' || req.method === 'HEAD') {
+    const redirectTarget = resolveCanonical301(pathname);
+    if (redirectTarget) {
+      const fullTarget = redirectTarget + (urlObj.search || '');
+      res.writeHead(301, {
+        Location: fullTarget,
+        'Cache-Control': 'public, max-age=3600',
+        ...COMMON_SECURITY_HEADERS
+      });
+      return res.end();
+    }
   }
 
   // Forward AI & Search crawler hits to central SWEEPR CRM SEO Intelligence (project: vpn)
@@ -3353,8 +3704,9 @@ self.addEventListener('fetch', e => {
       ? `${req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http'}://${req.headers.host}`
       : PUBLIC_URL;
 
-    // Search & AI crawlers (or explicit ?platform=picker): serve indexable HTML download page
-    if (BOT_UA_RE.test(ua) || requestedPlatform === 'picker') {
+    // Search & AI crawlers, non-browser programmatic clients, or explicit ?platform=picker: serve indexable HTML download page
+    const isCrawlerOrNonBrowser = BOT_UA_RE.test(ua) || !/Mozilla\/5\.0/i.test(ua);
+    if (isCrawlerOrNonBrowser || requestedPlatform === 'picker') {
       if (BOT_UA_RE.test(ua) && urlObj.search) {
         res.writeHead(301, { Location: '/download', ...COMMON_SECURITY_HEADERS });
         return res.end();
@@ -7923,6 +8275,8 @@ self.addEventListener('fetch', e => {
   });
 });
 
+const IS_MAIN_MODULE = Boolean(process.argv[1]) && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (IS_MAIN_MODULE) {
 server.listen(PORT, '0.0.0.0', () => {
   console.log(`SWEEPR VPN server running at http://0.0.0.0:${PORT} (Live Stripe: ${IS_LIVE_STRIPE})`);
   const bootSweepTimer = setTimeout(() => {
@@ -7934,3 +8288,5 @@ server.listen(PORT, '0.0.0.0', () => {
   }, 6 * 3600 * 1000);
   if (typeof periodicSweepInterval.unref === 'function') periodicSweepInterval.unref();
 });
+
+}

@@ -88,7 +88,6 @@ const CORE_STATIC_ROUTES = [
   { urlPath: '/de/tools/leak-test', file: 'de-leak-test.html', priority: '0.8', changefreq: 'weekly' },
   { urlPath: '/pt-br/tools/leak-test', file: 'pt-br-leak-test.html', priority: '0.8', changefreq: 'weekly' },
   { urlPath: '/sv/tools/leak-test', file: 'sv-leak-test.html', priority: '0.8', changefreq: 'weekly' },
-  { urlPath: '/vs/totalvpn', file: 'vs-totalvpn.html', priority: '0.8', changefreq: 'monthly' },
   { urlPath: '/alternatives/totalvpn', file: 'alternatives-totalvpn.html', priority: '0.8', changefreq: 'monthly' },
   { urlPath: '/support', file: 'support.html', priority: '0.6', changefreq: 'monthly' },
   { urlPath: '/refund', file: 'refund.html', priority: '0.5', changefreq: 'monthly' },
@@ -97,21 +96,6 @@ const CORE_STATIC_ROUTES = [
   { urlPath: '/terms', file: 'terms.html', priority: '0.5', changefreq: 'monthly' }
 ];
 
-// 9 Proven Google Search Console Top-10 Ranking /solutions/ Pages (Protected from Cartesian noindex)
-const RESTORED_GSC_SOLUTIONS_PILLARS = new Set([
-  '/solutions/comcast-xfinity-broadband-smart-tv-acr-blocking',
-  '/solutions/ee-5g-mobile-hotspot-wifi-arp-spoofing-protection',
-  '/solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter',
-  '/solutions/three-5g-home-broadband-uhd-streaming-buffering',
-  '/solutions/fibrus-full-fibre-smart-tv-acr-blocking',
-  '/solutions/nhs-guest-wifi-uhd-streaming-buffering',
-  '/solutions/nhs-guest-wifi-voip-teams-zoom-jitter',
-  '/solutions/o2-uk-mobile-tethering-uhd-streaming-buffering',
-  '/solutions/three-5g-home-broadband-voip-teams-zoom-jitter',
-  '/solutions/virgin-media-remote-dev-ssh',
-  '/solutions/t-mobile-5g-home-internet-remote-dev-ssh',
-  '/solutions/community-fibre-london-p2p-port-forwarding'
-]);
 
 // 24 Cannibalizing Duplicate & Non-Residential Smart-TV ACR Routes Consolidated via 301 + Canonical (Matches server.mjs CANONICAL_REDIRECTS)
 const CONSOLIDATED_CANNIBAL_MAP = {
@@ -126,8 +110,8 @@ const CONSOLIDATED_CANNIBAL_MAP = {
   '/setup/openwrt-travel-glinet-dropin': '/setup/gl-inet-travel-router',
   '/setup/opnsense-24-kernel-wireguard': '/setup/pfsense-opnsense-router',
   '/setup/pfsense-plus-wireguard-client': '/setup/pfsense-opnsense-router',
-  '/setup/firewalla-gold-plus-wireguard': '/setup/firewalla-gold-wireguard-vpn',
-  '/setup/draytek-vigor-2962-wireguard': '/setup/draytek-vigor-wireguard-client',
+  '/setup/firewalla-gold-plus-wireguard': '/setup',
+  '/setup/draytek-vigor-2962-wireguard': '/setup',
   '/setup/raspberry-pi-5-wireguard-gateway': '/setup/raspberry-pi-home-gateway',
   '/vs/pia-private-internet-access': '/vs/private-internet-access',
   '/vs/surfshark-one': '/vs/surfshark',
@@ -424,25 +408,7 @@ for (const dir of ['solutions', 'setup', 'vs', 'guides']) {
           consolidatedCannibalCount++;
         }
       }
-
-      // C. Restore the 9 proven Top-10 GSC-ranking /solutions/ pages (plus primary MTU & Gluetun pillar guides) to index,follow + self-referencing canonical
-      if (
-        RESTORED_GSC_SOLUTIONS_PILLARS.has(urlPath) ||
-        urlPath === '/guides/fix-wireguard-mtu-fragmentation-pppoe' ||
-        urlPath === '/setup/docker-gluetun-wireguard-compose'
-      ) {
-        const selfUrl = `https://sweeprvpn.com${urlPath}`;
-        const restoredContent = content
-          .replace(/<link\s+rel=["']canonical["']\s+href=["'][^"']*["']\s*\/?>/i, `<link rel="canonical" href="${selfUrl}" />`)
-          .replace(/<meta\s+name=["']robots["']\s+content=["'][^"']*["']\s*\/?>/i, '<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />')
-          .replace(/<meta\s+property=["']og:url["']\s+content=["'][^"']*["']\s*\/?>/i, `<meta property="og:url" content="${selfUrl}" />`)
-          .replace(/<meta\s+name=["']twitter:url["']\s+content=["'][^"']*["']\s*\/?>/i, `<meta name="twitter:url" content="${selfUrl}" />`);
-        if (restoredContent !== content) {
-          content = restoredContent;
-          preLoopModified = true;
-          restoredGscPillarCount++;
-        }
-      }
+      // Note: consolidated slugs stay permanently removed per turnaround plan (R4/F13).
 
       if (preLoopModified) {
         fs.writeFileSync(absPath, content, 'utf8');
@@ -498,70 +464,8 @@ for (const dir of ['solutions', 'setup', 'vs', 'guides']) {
         autoBackfilledGa4Count++;
       }
 
-      // 3. Enrich indexable /solutions/ pillar pages with 6-Workload Engineering Matrix Table (high information gain)
-      if (dir === 'solutions' && !content.includes('id="sweepr-isp-master-matrix"')) {
-        const whyMatch = content.match(/<h2>Why\s+(.+?)\s*\((AS\d+[^)]*)\)\s+Suffers From[^<]*<\/h2>/i);
-        const mtuMatch = content.match(/<code>MTU\s*=\s*(\d{4})<\/code>/i);
-        const netName = whyMatch ? whyMatch[1].trim() : slug.replace(/-/g, ' ');
-        const netAsn = whyMatch ? whyMatch[2].trim() : 'Tier-1 ASN';
-        const netMtu = mtuMatch ? mtuMatch[1] : '1420';
-        const matrixHtml = `
-    <h2 id="sweepr-isp-master-matrix">${netName} (${netAsn}) Complete 6-Workload Engineering Matrix</h2>
-    <p>Whether you are fixing evening streaming slowdowns, gaming packet loss, CGNAT port restrictions, VoIP jitter, or Smart-TV telemetry on <strong>${netName}</strong>, use the verified protocol parameters below:</p>
-    <table>
-      <thead>
-        <tr>
-          <th>Workload / Symptom on ${netName}</th>
-          <th>Root Cause (${netAsn})</th>
-          <th>SWEEPR WireGuard Fix &amp; Port</th>
-          <th>Verified Target Metric</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Evening ISP Speed Throttling</strong></td>
-          <td>Peak-hour DPI traffic shaping &amp; transit congestion</td>
-          <td>10Gbps WireGuard UDP <code>51820</code> &bull; <code>MTU ${netMtu}</code></td>
-          <td><strong>910+ Mbps Sustained</strong></td>
-        </tr>
-        <tr>
-          <td><strong>Gaming Packet Loss &amp; Ping Spikes</strong></td>
-          <td>Suboptimal retail BGP hops &amp; UDP queue drops</td>
-          <td>Direct Tier-1 LINX (<code>UK-LON-01</code> 4ms) / AMS-IX (8ms)</td>
-          <td><strong>0.0% Packet Loss &bull; &lt;9ms Ping</strong></td>
-        </tr>
-        <tr>
-          <td><strong>4K UHD Streaming Buffering</strong></td>
-          <td>SNI/CDN flow classification on long-lived video chunks</td>
-          <td>ChaCha20-Poly1305 tunnel blinds DPI classifiers</td>
-          <td><strong>88.5 Mbps 4K HDR10+</strong></td>
-        </tr>
-        <tr>
-          <td><strong>CGNAT &amp; P2P Port Blocking</strong></td>
-          <td>Shared IPv4 CGNAT (<code>100.64.x.x</code>) &amp; port caps</td>
-          <td>Dedicated WireGuard tunnel + <code>PersistentKeepalive=25</code></td>
-          <td><strong>94.2 MB/s Bulk Throughput</strong></td>
-        </tr>
-        <tr>
-          <td><strong>Teams, Zoom &amp; SSH Drops</strong></td>
-          <td>Aggressive UDP NAT state timeouts &amp; PMTUD blackholes</td>
-          <td>Clamped <code>MTU ${netMtu}</code> + 25s Keepalive heartbeats</td>
-          <td><strong>1.8ms Jitter &bull; 100% Uptime</strong></td>
-        </tr>
-        <tr>
-          <td><strong>Smart-TV ACR &amp; Wi-Fi Intruders</strong></td>
-          <td>Samsung/LG/Roku ACR uploads &amp; unknown LAN devices</td>
-          <td>Free 30s Wi-Fi ARP Scanner + In-Tunnel DNS <code>10.66.0.1</code></td>
-          <td><strong>0 ACR Uploads &bull; Full LAN Audit</strong></td>
-        </tr>
-      </tbody>
-    </table>\n\n    <h2>How SWEEPR VPN Solves This`;
-        if (content.includes('<h2>How SWEEPR VPN Solves This')) {
-          content = content.replace('<h2>How SWEEPR VPN Solves This', matrixHtml);
-          modified = true;
-        }
-      }
-
+      // Step 3 boilerplate table injection disabled per GSC turnaround plan (R2/F7).
+      
       // 4. Ensure internal links to top GSC Striking Distance pages in Related Guides list
       if (
         content.includes('<li><a href="/tools/leak-test"') &&
@@ -845,94 +749,6 @@ if (shouldFix && pseoFilesOnDisk.length > 0) {
     }
   }
 
-  // Also inject a compact collapsible HTML Hub Directory into index.html, pricing.html, leak-test.html & isp-throttling-test.html
-  // linking directly to all Setup Guides, Smart-TV Privacy Guides & Competitor Comparisons (1-click crawl depth from homepage)
-  const directoryLinks = [
-    ...byCluster.setup,
-    ...byCluster.guides,
-    ...byCluster.vs
-  ];
-  const directoryHtml = `    <details id="sweepr-seo-directory" class="max-w-5xl mx-auto mb-4 px-4 text-xs text-gray-400">
-      <summary class="cursor-pointer hover:text-emerald-600 font-semibold select-none">Browse All ${directoryLinks.length} WireGuard Router Setup Guides, Smart-TV Privacy Guides &amp; VPN Comparisons</summary>
-      <div class="flex flex-wrap justify-center gap-x-3 gap-y-1.5 mt-3 pt-3 border-t border-gray-100 text-[11px]">
-        ${directoryLinks.map((d) => `<a href="${d.urlPath}" class="hover:text-emerald-600 transition-colors">${d.h1}</a>`).join('\n        <span>&bull;</span>\n        ')}
-      </div>
-    </details>\n`;
-
-  for (const hubFile of ['index.html', 'pricing.html', 'leak-test.html', 'isp-throttling-test.html']) {
-    const hp = path.join(WEBSITE_DIR, hubFile);
-    if (!fs.existsSync(hp)) continue;
-    let hc = fs.readFileSync(hp, 'utf8');
-    let hubMod = false;
-    if (hc.includes('id="sweepr-seo-directory"')) {
-      const updatedHc = hc.replace(/<details id="sweepr-seo-directory"[\s\S]*?<\/details>\n?/i, directoryHtml);
-      if (updatedHc !== hc) {
-        hc = updatedHc;
-        hubMod = true;
-      }
-    } else if (hc.includes('<p>&copy; 2026 SWEEPR VPN Inc. All rights reserved.</p>')) {
-      hc = hc.replace(
-        /<p>&copy; 2026 SWEEPR VPN Inc\. All rights reserved\.<\/p>/i,
-        `${directoryHtml}    <p>&copy; 2026 SWEEPR VPN Inc. All rights reserved.</p>`
-      );
-      hubMod = true;
-    }
-    const rewrittenHc = rewriteCannibalHrefLinks(hc);
-    if (rewrittenHc !== hc) {
-      hc = rewrittenHc;
-      hubMod = true;
-    }
-    if (hubMod) {
-      fs.writeFileSync(hp, hc, 'utf8');
-    }
-  }
-
-  // Guard C: Automated Unindexed Crawl-Bridge Rotator on Depth-1 Authority Hubs (/tools/leak-test & /tools/isp-throttling-test)
-  // Drains GSC "Discovered - currently not indexed" queue by placing direct body-level links to unindexed /guides/* & /setup/* pillars
-  const gscSnapshotPathForBridge = path.join(WEBSITE_DIR, 'gsc-ga4-latest-snapshot.json');
-  let indexedGscPages = {};
-  if (fs.existsSync(gscSnapshotPathForBridge)) {
-    try {
-      indexedGscPages = JSON.parse(fs.readFileSync(gscSnapshotPathForBridge, 'utf8')).pages || {};
-    } catch {}
-  }
-  const unindexedPriorityCandidates = [...byCluster.guides, ...byCluster.setup].filter(
-    (d) => !indexedGscPages[d.urlPath] || !(indexedGscPages[d.urlPath].impressions28d > 0)
-  );
-  const rotatedBridgeLinks = unindexedPriorityCandidates.slice(0, 6);
-  if (rotatedBridgeLinks.length > 0) {
-    const bridgeHtml = `    <section id="sweepr-unindexed-guides-bridge" class="max-w-5xl mx-auto px-6 pb-6">
-      <div class="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-4 flex flex-wrap items-center gap-2 text-xs">
-        <span class="font-extrabold text-emerald-950">Deep-Dive Network &amp; Privacy Engineering Guides:</span>
-        ${rotatedBridgeLinks
-          .map(
-            (d) =>
-              `<a href="${d.urlPath}" class="px-2.5 py-1 rounded-lg bg-white border border-emerald-200 text-emerald-800 font-bold hover:bg-emerald-100 no-underline">${d.h1.replace(/:\s*High-Speed.*$/i, '').slice(0, 56)}</a>`
-          )
-          .join('\n        ')}
-        <a href="/warrant-canary" class="px-2.5 py-1 rounded-lg bg-slate-100 border border-slate-200 text-slate-700 font-bold hover:bg-slate-200 no-underline">Cryptographic Warrant Canary</a>
-      </div>
-    </section>`;
-    for (const toolFile of ['leak-test.html', 'isp-throttling-test.html']) {
-      const tp = path.join(WEBSITE_DIR, toolFile);
-      if (!fs.existsSync(tp)) continue;
-      let tc = fs.readFileSync(tp, 'utf8');
-      let toolMod = false;
-      if (tc.includes('id="sweepr-unindexed-guides-bridge"')) {
-        const updatedTc = tc.replace(/<section id="sweepr-unindexed-guides-bridge"[\s\S]*?<\/section>/i, bridgeHtml);
-        if (updatedTc !== tc) {
-          tc = updatedTc;
-          toolMod = true;
-        }
-      } else if (tc.includes('<section id="sweepr-share-diagnostic-badge"')) {
-        tc = tc.replace('<section id="sweepr-share-diagnostic-badge"', `${bridgeHtml}\n    <section id="sweepr-share-diagnostic-badge"`);
-        toolMod = true;
-      }
-      if (toolMod) {
-        fs.writeFileSync(tp, tc, 'utf8');
-      }
-    }
-  }
 
   // Generate/Synchronize the 4 Category Hub Pages (/solutions, /setup, /guides, /vs) so BreadcrumbList Position 2
   // and internal hub links resolve to rich, indexable Category Hubs with 1-click links to every pillar page.
@@ -944,6 +760,8 @@ if (shouldFix && pseoFilesOnDisk.length > 0) {
       title: `ISP Throttling, CGNAT, Gaming Ping & Smart-TV Fixes (${byCluster.solutions.length} ISP Guides • 2026) | SWEEPR VPN`,
       description: `Browse ${byCluster.solutions.length} verified ISP network engineering guides for Virgin Media, BT, Sky, TalkTalk, Eduroam, Three 5G, EE, Comcast & Rogers. Fix throttling, packet loss & CGNAT with 10Gbps WireGuard.`,
       badge: 'ISP & Network Engineering Hub • 10Gbps WireGuard • 2026',
+      telemetryLabel: `SOLUTIONS // ${byCluster.solutions.length} ISP & GAMING FIXES`,
+      filterPlaceholder: `Filter ${byCluster.solutions.length} ISP throttling & gaming fixes (e.g. TalkTalk, Eduroam, Rogers)...`,
       h1: 'ISP Throttling, Gaming Packet Loss & Network Engineering Hub',
       lead: `Direct 10Gbps RAM-only WireGuard configurations, calibrated MTU settings (1420 DHCP / 1412 PPPoE / 1380 5G), and ASN peering diagnostics for ${byCluster.solutions.length} UK, European, and North American broadband & mobile networks.`,
       items: byCluster.solutions,
@@ -965,6 +783,8 @@ if (shouldFix && pseoFilesOnDisk.length > 0) {
       title: `WireGuard Router, NAS, Linux & Gaming Console Setup Guides (${byCluster.setup.length} Tutorials • 2026) | SWEEPR VPN`,
       description: `Step-by-step 10Gbps WireGuard VPN setup guides for GL.iNet Beryl AX/Flint 2, OpenWrt, Asuswrt-Merlin, MikroTik, UniFi, pfSense, OPNsense, Synology NAS, Steam Deck & NVIDIA Shield TV.`,
       badge: 'Hardware & OS Configuration Library • Native WireGuard .conf',
+      telemetryLabel: `SETUP // ${byCluster.setup.length} ROUTER & CONSOLE GUIDES`,
+      filterPlaceholder: `Filter ${byCluster.setup.length} router & device guides (e.g. GL.iNet, Steam Deck, Synology)...`,
       h1: 'WireGuard Router, NAS, Linux & Console Setup Guides',
       lead: `Import standard SWEEPR VPN 10Gbps RAM-only WireGuard profiles (.conf) or run our ~680 KB native Windows/macOS/Linux app across ${byCluster.setup.length} routers, firewalls, NAS servers, and gaming devices.`,
       items: byCluster.setup,
@@ -986,6 +806,8 @@ if (shouldFix && pseoFilesOnDisk.length > 0) {
       title: `Smart-TV ACR Blocking, Home Wi-Fi Security & WireGuard Privacy Guides (${byCluster.guides.length} Guides) | SWEEPR VPN`,
       description: `Technical privacy & network security guides: block Samsung Tizen & LG webOS Smart-TV ACR spying, detect unknown devices on your home Wi-Fi in 30 seconds, optimize WireGuard MTU, and stop WebRTC leaks.`,
       badge: 'Home Wi-Fi Radar & Smart-TV Privacy Lab • Verified 2026',
+      telemetryLabel: `GUIDES // ${byCluster.guides.length} SMART-TV ACR BLOCKLISTS`,
+      filterPlaceholder: `Filter ${byCluster.guides.length} Smart-TV ACR & Wi-Fi guides (e.g. Samsung, LG, Roku)...`,
       h1: 'Smart-TV ACR Spying Blocklists & Home Wi-Fi Security Guides',
       lead: `Deep-dive engineering guides from the SWEEPR VPN Security Lab covering Smart-TV Automatic Content Recognition (ACR) domain blocklists, 30-second LAN ARP/mDNS device auditing, CGNAT port forwarding, and WireGuard cryptography.`,
       items: byCluster.guides,
@@ -1007,10 +829,11 @@ if (shouldFix && pseoFilesOnDisk.length > 0) {
       title: `SWEEPR VPN vs NordVPN, Mullvad, ProtonVPN & TotalVPN (${byCluster.vs.length + 1} Benchmarks • 2026) | SWEEPR VPN`,
       description: `Head-to-head 2026 technical VPN comparisons: see how SWEEPR VPN (native Rust + Tauri v2, 10Gbps RAM-only WireGuard, Free 30s Wi-Fi Scanner & £1.99 trial) compares against legacy VPNs.`,
       badge: '2026 Technical VPN Benchmarks • Speed, RAM Footprint & Price',
+      telemetryLabel: `BENCHMARKS // ${byCluster.vs.length + 1} COMPARISONS`,
+      filterPlaceholder: `Filter ${byCluster.vs.length + 1} provider comparisons (e.g. NordVPN, Mullvad, TotalVPN)...`,
       h1: 'SWEEPR VPN vs Legacy VPN Providers: 2026 Technical Comparisons',
       lead: `Compare installer footprint, background RAM usage, 10Gbps LINX/AMS-IX WireGuard throughput, Smart-TV ACR blocking, and renewal price transparency across ${byCluster.vs.length + 1} major VPN providers.`,
       items: [
-        { urlPath: '/vs/totalvpn', loc: 'https://sweeprvpn.com/vs/totalvpn', h1: 'SWEEPR VPN vs TotalVPN: Price Hike & Speed Comparison' },
         { urlPath: '/alternatives/totalvpn', loc: 'https://sweeprvpn.com/alternatives/totalvpn', h1: '5 Best TotalVPN Alternatives in 2026 (No Renewal Price Traps)' },
         ...byCluster.vs
       ],
@@ -1094,10 +917,10 @@ ${GA4_HEAD_SNIPPET}
   <script type="application/ld+json">${JSON.stringify(breadcrumbSchema)}</script>
   <script type="application/ld+json">${JSON.stringify(faqSchema)}</script>
   <style>
-    :root { --bg:#070b14; --card:#0f172a; --border:#1e293b; --text:#f8fafc; --muted:#94a3b8; --accent:#10b981; --accent2:#38bdf8; }
+    :root { --bg:#111315; --card:#181b1f; --border:#262b33; --text:#f3f4f6; --muted:#9ca3af; --accent:#10b981; --accent2:#34d399; }
     * { box-sizing:border-box; }
     body { margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; background:var(--bg); color:var(--text); line-height:1.68; }
-    header { border-bottom:1px solid var(--border); background:rgba(7,11,20,0.92); position:sticky; top:0; z-index:20; backdrop-filter:blur(10px); }
+    header { border-bottom:1px solid var(--border); background:rgba(17,19,21,0.95); position:sticky; top:0; z-index:20; backdrop-filter:blur(10px); }
     .nav { max-width:1100px; margin:0 auto; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
     .brand { font-weight:800; font-size:1.15rem; color:var(--text); text-decoration:none; }
     .brand span { color:var(--accent); }
@@ -1112,7 +935,7 @@ ${GA4_HEAD_SNIPPET}
     h2 { font-size:1.45rem; margin:34px 0 12px; color:#e2e8f0; }
     h3 { font-size:1.05rem; margin:0 0 6px; color:#f1f5f9; }
     .lead { font-size:1.12rem; color:var(--muted); max-width:880px; margin-bottom:26px; }
-    .cta-strip { background:linear-gradient(135deg,#0f172a,#064e3b); border:1px solid rgba(16,185,129,0.4); border-radius:14px; padding:22px; margin:26px 0; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; }
+    .cta-strip { background:#181b1f; border:1px solid #262b33; border-radius:14px; padding:22px; margin:26px 0; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; }
     .grid-cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(310px,1fr)); gap:14px; margin:20px 0; }
     .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:18px; transition:border-color 0.15s; }
     .card:hover { border-color:var(--accent); }
@@ -1123,6 +946,12 @@ ${GA4_HEAD_SNIPPET}
     .hub-tab.active { border-color:var(--accent); color:var(--accent); background:rgba(16,185,129,0.1); }
     footer { border-top:1px solid var(--border); padding:32px 20px; text-align:center; color:var(--muted); font-size:0.88rem; }
     footer a { color:var(--accent2); text-decoration:none; margin:0 8px; }
+    .hub-telemetry { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; padding:8px 13px; margin-bottom:18px; background:#181b1f; border:1px solid #262b33; border-radius:10px; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:0.76rem; color:var(--muted); font-variant-numeric:tabular-nums; }
+    .hub-led { width:7px; height:7px; border-radius:999px; background:#10b981; display:inline-block; margin-right:6px; box-shadow:0 0 0 2px rgba(16,185,129,0.2); }
+    .hub-filter-wrap { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:14px 0 6px; }
+    .hub-filter-input { flex:1; min-width:240px; padding:10px 14px; border-radius:10px; border:1px solid var(--border); background:#181b1f; color:var(--text); font-size:0.92rem; outline:none; }
+    .hub-filter-input:focus { border-color:var(--accent); }
+    .hub-filter-count { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:0.78rem; color:var(--muted); font-variant-numeric:tabular-nums; }
   </style>
 </head>
 <body>
@@ -1142,6 +971,10 @@ ${GA4_HEAD_SNIPPET}
     </nav>
   </header>
   <main>
+    <div class="hub-telemetry">
+      <span><span class="hub-led"></span>${hub.telemetryLabel}</span>
+      <span>10GBPS WIREGUARD &middot; RAM-ONLY TMPFS</span>
+    </div>
     <span class="badge">${hub.badge}</span>
     <h1>${hub.h1}</h1>
     <p class="lead">${hub.lead}</p>
@@ -1150,7 +983,7 @@ ${GA4_HEAD_SNIPPET}
       <a class="hub-tab${hub.dir === 'solutions' ? ' active' : ''}" href="/solutions">ISP &amp; Network Fixes (${byCluster.solutions.length})</a>
       <a class="hub-tab${hub.dir === 'setup' ? ' active' : ''}" href="/setup">Router, NAS &amp; Console Setup (${byCluster.setup.length})</a>
       <a class="hub-tab${hub.dir === 'guides' ? ' active' : ''}" href="/guides">Smart-TV &amp; Wi-Fi Security Guides (${byCluster.guides.length})</a>
-      <a class="hub-tab${hub.dir === 'vs' ? ' active' : ''}" href="/vs">VPN Technical Comparisons (${byCluster.vs.length + 2})</a>
+      <a class="hub-tab${hub.dir === 'vs' ? ' active' : ''}" href="/vs">VPN Technical Comparisons (${byCluster.vs.length + 1})</a>
       <a class="hub-tab" href="/tools/leak-test">Free IP/WebRTC Leak Test</a>
       <a class="hub-tab" href="/tools/isp-throttling-test">Free ISP Throttling Test</a>
     </div>
@@ -1167,6 +1000,10 @@ ${GA4_HEAD_SNIPPET}
     </div>
 
     <h2>All ${hub.items.length} Verified ${hub.h1}</h2>
+    <div class="hub-filter-wrap">
+      <input type="search" id="hubFilterInput" class="hub-filter-input" placeholder="${hub.filterPlaceholder}" aria-label="Filter hub articles" />
+      <span id="hubFilterCount" class="hub-filter-count"></span>
+    </div>
     <div class="grid-cards">
       ${hub.items
         .map(
@@ -1197,6 +1034,25 @@ ${GA4_HEAD_SNIPPET}
       <a href="/privacy">Privacy Policy</a>
     </p>
   </footer>
+  <script>
+    (function() {
+      const input = document.getElementById('hubFilterInput');
+      const countEl = document.getElementById('hubFilterCount');
+      const cards = Array.from(document.querySelectorAll('.grid-cards > .card'));
+      function update() {
+        const q = (input && input.value || '').trim().toLowerCase();
+        let shown = 0;
+        for (const c of cards) {
+          const hit = !q || c.textContent.toLowerCase().includes(q);
+          c.style.display = hit ? '' : 'none';
+          if (hit) shown++;
+        }
+        if (countEl) countEl.textContent = shown + ' / ' + cards.length + ' shown';
+      }
+      if (input) input.addEventListener('input', update);
+      update();
+    })();
+  </script>
 </body>
 </html>`;
 
@@ -1336,10 +1192,23 @@ for (const gscPath of Object.keys(GSC_STRIKING_DISTANCE_OVERRIDES)) {
 }
 
 let lastModUpdatedCount = 0;
+function extractSemanticMain(html) {
+  const m = String(html || '').match(/<main\b[^>]*>([\s\S]*?)<\/main>/i);
+  if (!m) return '';
+  return m[1].replace(/<!--[\s\S]*?-->/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
 function resolveContentHashLastMod(loc, absPath) {
   let hash = '';
   if (absPath && fs.existsSync(absPath)) {
-    hash = crypto.createHash('sha1').update(fs.readFileSync(absPath)).digest('hex').slice(0, 12);
+    if (absPath.toLowerCase().endsWith('.html')) {
+      const html = fs.readFileSync(absPath, 'utf8');
+      const semanticMain = extractSemanticMain(html);
+      const hashInput = semanticMain.length > 0 ? semanticMain : html;
+      hash = crypto.createHash('sha1').update(hashInput).digest('hex').slice(0, 12);
+    } else {
+      hash = crypto.createHash('sha1').update(fs.readFileSync(absPath)).digest('hex').slice(0, 12);
+    }
   }
   const prevRecord = dailyState.urlLastModHashes[loc];
   const prevSitemapDate = prevLastModMap.get(loc);
@@ -1708,12 +1577,18 @@ if (
   fail('crawlability', '301 Consolidation & Eduroam Hub Redirects (server.mjs)', 'Missing Eduroam or noindex->canonical 301 redirects in server.mjs');
 }
 
-// Guard A: Historical GSC URLs & CANONICAL_REDIRECTS 404 Verifier
+// Guard A: Historical GSC URLs & CANONICAL_REDIRECTS 404 Verifier (via resolveCanonical301)
+const { resolveCanonical301 } = await import('../website/server.mjs');
 const serverRedirectMap = {};
-const redirectBlockMatch = serverMjsSource.match(/const\s+CANONICAL_REDIRECTS\s*=\s*\{([\s\S]*?)\};/);
-if (redirectBlockMatch) {
-  for (const m of redirectBlockMatch[1].matchAll(/'([^']+)':\s*'([^']+)'/g)) {
-    serverRedirectMap[m[1]] = m[2];
+for (const blockRe of [
+  /const\s+CANONICAL_REDIRECTS\s*=\s*\{([\s\S]*?)\};/,
+  /export\s+const\s+EXACT_CANONICAL_REDIRECTS\s*=\s*\{([\s\S]*?)\};/
+]) {
+  const mBlock = serverMjsSource.match(blockRe);
+  if (mBlock) {
+    for (const m of mBlock[1].matchAll(/'([^']+)':\s*'([^']+)'/g)) {
+      serverRedirectMap[m[1]] = m[2];
+    }
   }
 }
 const canonicalRouteSet = new Set([
@@ -1742,19 +1617,17 @@ const brokenGscOrRedirectUrls = [];
 for (const u of gscUrlsToVerify) {
   const cleanU = u.replace(/\?.*$/, '');
   if (canonicalRouteSet.has(cleanU)) continue;
-  const redirectTarget = serverRedirectMap[cleanU] || serverRedirectMap[u];
-  if (redirectTarget && canonicalRouteSet.has(redirectTarget.replace(/\?.*$/, ''))) continue;
-  const diskHtmlPath = path.join(WEBSITE_DIR, cleanU.replace(/^\/+/, '') + '.html');
-  if (fs.existsSync(diskHtmlPath)) {
-    const diskHtml = fs.readFileSync(diskHtmlPath, 'utf8');
-    const canonM = diskHtml.match(/<link\s+rel=["']canonical["']\s+href=["']https?:\/\/sweeprvpn\.com(\/[^"']*)["']/i);
-    if (canonM && canonM[1] && canonicalRouteSet.has(canonM[1])) continue;
+  const resolved = resolveCanonical301(cleanU);
+  const redirectTarget = resolved || serverRedirectMap[cleanU] || serverRedirectMap[u];
+  if (redirectTarget) {
+    const cleanTarget = redirectTarget.replace(/\?.*$/, '');
+    if (canonicalRouteSet.has(cleanTarget) && !resolveCanonical301(cleanTarget)) continue;
   }
   brokenGscOrRedirectUrls.push(u);
 }
 for (const [srcRoute, dstRoute] of Object.entries(serverRedirectMap)) {
   const cleanDst = dstRoute.replace(/\?.*$/, '');
-  if (serverRedirectMap[cleanDst]) {
+  if (resolveCanonical301(cleanDst)) {
     brokenGscOrRedirectUrls.push(`${srcRoute}->${dstRoute} (multi-hop redirect chain)`);
   } else if (!canonicalRouteSet.has(cleanDst)) {
     brokenGscOrRedirectUrls.push(`${srcRoute}->${dstRoute} (missing target)`);
@@ -1764,7 +1637,7 @@ if (brokenGscOrRedirectUrls.length === 0) {
   pass(
     'crawlability',
     'Historical GSC URLs & 301 Redirect Target Guard',
-    `Verified ${gscUrlsToVerify.length} historical GSC URLs and ${Object.keys(serverRedirectMap).length} 301 rules (0 404s, 0 redirect chains)`
+    `Verified ${gscUrlsToVerify.length} historical GSC URLs and ${Object.keys(serverRedirectMap).length} 301 rules via resolveCanonical301 (0 404s, 0 redirect chains)`
   );
 } else {
   fail(

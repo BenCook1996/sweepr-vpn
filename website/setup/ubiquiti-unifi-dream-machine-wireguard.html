@@ -189,93 +189,17 @@
         <li><a href="/setup/nvidia-shield-tv-pro-wireguard" style="color:var(--accent2);">NVIDIA Shield TV Pro 4K &amp; GeForce NOW WireGuard VPN Setup Guide</a></li>
         <li><a href="/solutions/gigaclear-rural-fibre-gaming-packet-loss" style="color:var(--accent2);">Fix Gigaclear Rural Full Fibre UK Gaming Ping Spikes, CGNAT &amp; Packet Loss</a></li>
         <li><a href="/setup/steam-deck-vpn" style="color:var(--accent2);">SteamOS &amp; Steam Deck OLED Native WireGuard VPN Setup Guide</a></li>
-        <li class="sweepr-mesh-link"><a href="/setup/unifi-gateway-max-uxg-max" style="color:var(--accent2);">Ubiquiti UniFi Gateway Max (UXG-Max) 2.5G WireGuard Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a></li>
-        <li class="sweepr-mesh-link"><a href="/setup/unraid-wireguard-docker-tunnel" style="color:var(--accent2);">Unraid 6.12 WireGuard Client & Container VPN Routing Guide: High-Speed 10Gbps WireGuard VPN Setup Guide</a></li>
-        <li class="sweepr-mesh-link"><a href="/setup/wsl2-windows-subsystem-wireguard" style="color:var(--accent2);">WSL2 (Windows Subsystem for Linux 2) Native WireGuard Tunnel: High-Speed 10Gbps WireGuard VPN Setup Guide</a></li>
+        <li class="sweepr-mesh-link"><a href="/setup/almalinux-9-wireguard-gateway" style="color:var(--accent2);">AlmaLinux 9 &amp; Rocky Linux 9 Enterprise WireGuard Gateway: High-Speed 10Gbps WireGuard VPN Setup Guide</a></li>
+        <li class="sweepr-mesh-link"><a href="/setup/synology-nas-docker-vpn" style="color:var(--accent2);">WireGuard VPN Setup for Synology NAS &amp; Docker Gluetun WireGuard Container</a></li>
+        <li class="sweepr-mesh-link"><a href="/setup/windows-11-wireguard-vpn" style="color:var(--accent2);">WireGuard VPN Setup for Windows 10 &amp; 11 Native Kernel WireGuard</a></li>
         <li class="sweepr-mesh-link"><a href="/setup/asuswrt-merlin-vpn-router" style="color:var(--accent2);">WireGuard VPN Setup for ASUSWRT-Merlin &amp; ASUS VPN Fusion Routers</a></li>
         <li class="sweepr-mesh-link"><a href="/setup/steam-deck-vpn" style="color:var(--accent2);">Steam Deck (SteamOS 3.5+) Low-Ping WireGuard Gaming Guide: High-Speed 10Gbps WireGuard VPN Setup Guide</a></li>
-        <li class="sweepr-mesh-link"><a href="/guides/stop-5g-hotspot-carrier-throttling" style="color:var(--accent2);">How to Stop Mobile Carrier 5G Hotspot Throttling & DPI Tethering Caps</a></li>
+        <li class="sweepr-mesh-link"><a href="/guides/stop-isp-deep-packet-inspection-dpi" style="color:var(--accent2);">How to Stop Mobile Carrier 5G Hotspot Throttling & DPI Tethering Caps</a></li>
         <li><a href="/tools/leak-test" style="color:var(--accent2);">Free Browser IP, DNS &amp; WebRTC Leak Test</a></li>
         <li><a href="/tools/isp-throttling-test" style="color:var(--accent2);">Free ISP Evening Throttling &amp; Latency Checker</a></li>
         <li><a href="/download" style="color:var(--accent2);">Download SWEEPR VPN &amp; Free 30-Second Home Wi-Fi Scanner (~3.7 MB)</a></li>
       </ul>
     </div>
-    <section id="sweepr-live-wireguard-acr-proof" style="margin:2rem 0;background:#0f172a;border:1px solid #1e293b;border-radius:14px;padding:1.4rem 1.5rem;color:#f8fafc;">
-      <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;">
-        <h2 style="font-size:1.2rem;margin:0;color:#f8fafc;border:none;padding:0;">Live 10Gbps WireGuard Node Telemetry &amp; Interactive MTU Calculator (ubiquiti-unifi-dream-machine-wireguard)</h2>
-        <span style="font-size:0.75rem;background:rgba(16,185,129,0.14);color:#34d399;border:1px solid rgba(16,185,129,0.3);padding:4px 10px;border-radius:999px;font-weight:700;">
-          Verified Kernel WireGuard &bull; 25ms 1-RTT Handshake
-        </span>
-      </div>
-      <p style="color:#94a3b8;font-size:0.9rem;line-height:1.55;margin:0 0 14px;">
-        Below is the verified bare-metal node routing and Smart-TV ACR DNS sinkhole telemetry executed by <strong>SWEEPR VPN v1.4.0</strong> (SSL.com Authenticode Signed) for <code>/setup/ubiquiti-unifi-dream-machine-wireguard</code>:
-      </p>
-      <div style="overflow-x:auto;margin-bottom:16px;">
-        <table style="width:100%;border-collapse:collapse;font-size:0.82rem;color:#e2e8f0;margin:0;">
-          <thead>
-            <tr style="border-bottom:1px solid #1e293b;text-align:left;color:#94a3b8;background:#020617;">
-              <th style="padding:8px 10px;">Node / Rule ID</th>
-              <th style="padding:8px 10px;">Endpoint / Target Domain</th>
-              <th style="padding:8px 10px;">WireGuard / Sinkhole Rule</th>
-              <th style="padding:8px 10px;">Measured Output</th>
-              <th style="padding:8px 10px;">Transit / Scope</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">SE-STO-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">Stockholm Privacy Core (70.34.208.107)</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">WireGuard UDP 443 / 51820 | ChaCha20</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">16ms RTT | 915 Mbps Verified</td>
-              <td style="padding:8px 10px;color:#94a3b8;">AS20473 Netnod Stockholm</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">SG-SIN-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">Singapore Marina (SGIX) (149.28.157.142)</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">WireGuard UDP 443 / 51820 | ChaCha20</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">38ms RTT | 785 Mbps Verified</td>
-              <td style="padding:8px 10px;color:#94a3b8;">AS20473 SGIX APAC</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">ACR-ROKU-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">cooper.logs.roku.com / scribe.logs.roku.com</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">0.0.0.0 sinkhole (NXDOMAIN)</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">Halts HDMI Input &amp; App Usage Logging</td>
-              <td style="padding:8px 10px;color:#94a3b8;">Roku OS Telemetry Shield</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">ACR-HIS-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">vidaa.tv / flingo.tv / ads.vidaahub.com</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">0.0.0.0 sinkhole (NXDOMAIN)</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">Drops VIDAA OS Telemetry &amp; Banner Ads</td>
-              <td style="padding:8px 10px;color:#94a3b8;">Hisense / Toshiba Smart-TV Shield</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">DNS-DOH-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">Plaintext UDP/53 ISP Resolver Hijack</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">In-Tunnel DNS 10.66.66.1 (DNSSEC)</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">Prevents Transparent DNS Proxying</td>
-              <td style="padding:8px 10px;color:#94a3b8;">WFP / nftables Leak Lock</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div style="background:#020617;border:1px solid #1e293b;border-radius:10px;padding:14px 16px;">
-        <div style="font-size:0.85rem;font-weight:700;color:#34d399;margin-bottom:8px;">⚙️ Interactive WireGuard MTU &amp; TCP MSS Clamping Calculator</div>
-        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:10px;">
-          <label for="sweepr-mtu-select-ubiquiti-unifi-dream-machine-wireguard" style="font-size:0.8rem;color:#cbd5e1;">Select Uplink Encapsulation:</label>
-          <select id="sweepr-mtu-select-ubiquiti-unifi-dream-machine-wireguard" onchange="(function(el){var mtu=parseInt(el.value,10)||1420;var mss=mtu-40;var out=document.getElementById('sweepr-mtu-out-ubiquiti-unifi-dream-machine-wireguard');if(out){out.textContent='[Interface]\nMTU = '+mtu+'\nPostUp = iptables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss '+mss;}})(this)" style="background:#0f172a;color:#f8fafc;border:1px solid #334155;border-radius:6px;padding:5px 10px;font-size:0.8rem;">
-            <option value="1420" selected>Standard Cable / DOCSIS / Ethernet (1500 WAN &rarr; 1420 WG MTU)</option>
-            <option value="1412">UK/EU Openreach FTTP / PPPoE Fibre (1492 WAN &rarr; 1412 WG MTU)</option>
-            <option value="1380">5G Fixed Wireless / CGNAT / Eduroam / Starlink (1380 WG MTU)</option>
-            <option value="1360">DS-Lite / MAP-E / Double-VLAN Enterprise Wi-Fi (1360 WG MTU)</option>
-          </select>
-        </div>
-        <pre id="sweepr-mtu-out-ubiquiti-unifi-dream-machine-wireguard" style="margin:0;padding:10px 12px;background:#0f172a;border:1px solid #1e293b;border-radius:6px;font-size:0.78rem;color:#a7f3d0;overflow-x:auto;">[Interface]
-MTU = 1420
-PostUp = iptables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1380</pre>
-      </div>
-    </section>
 </main>
   <footer>
     <p>&copy; 2026 SWEEPR VPN Security Lab. Built in Rust + Tauri v2 with Audited Kernel WireGuard &amp; RAM-Only Servers.</p>

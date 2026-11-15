@@ -69,7 +69,7 @@
           </button>
           <div id="navDropdownMenu" class="hidden absolute left-0 md:left-1/2 md:-translate-x-1/2 mt-2 w-[340px] sm:w-[420px] bg-white/95 backdrop-blur-xl border border-gray-200/90 rounded-2xl shadow-2xl p-2.5 z-50 transition-all">
             <div class="grid grid-cols-1 gap-1.5">
-              <a href="/vs/totalvpn" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
+              <a href="/alternatives/totalvpn" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
                 <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">⚡</div>
                 <div class="flex-1 min-w-0">
                   <div class="flex items-center justify-between gap-1 mb-0.5">
@@ -125,288 +125,101 @@
   </nav>
 
   <!-- Main Content -->
-  <main class="max-w-4xl mx-auto px-6 py-12 md:py-16">
-    <!-- Breadcrumb & Badge -->
-    <div class="text-center mb-10">
-      <div class="inline-block text-xs font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full mb-3 border border-emerald-200">
-        Sky Broadband (AS5607) Technical Fix
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 pt-10 pb-20">
+    <div class="mb-8">
+      <div class="inline-block text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full mb-3 border border-emerald-200">
+        AS5607 Sky MAP-T / Dual-Stack • Option 61 DHCP • Evening Ping Smoothing
       </div>
-      <h1 class="text-3xl md:text-5xl font-black text-gray-900 tracking-tight mb-4">
-        How to Fix Sky Broadband Low-Latency Gaming &amp; Packet Loss (AS5607)
-      </h1>
-      <p class="text-gray-600 text-lg max-w-2xl mx-auto">
-        Eliminate Sky Broadband rubber-banding, 4%+ packet loss bursts, and evening ping spikes to London, Amsterdam, and Frankfurt game servers during peak UK hours (20:00–23:00 GMT) with direct 10Gbps WireGuard routing to London Docklands (UK-LON-01 • 4ms) &amp; Amsterdam (NL-AMS-01 • 8ms).
-      </p>
+      <h1 class="text-3xl md:text-5xl font-black text-gray-900 tracking-tight mb-4">How to Fix Sky Broadband Low-Latency Gaming &amp; Packet Loss (AS5607)</h1>
+      <p class="text-gray-700 text-lg leading-relaxed">Sky Broadband UK combines legacy MAP-T address sharing on IPv4 with busy consumer peering around peak viewing hours, causing sudden lag spikes during team fights unless traffic leaves your Sky Max Hub over clean direct transit.</p>
     </div>
 
-    <!-- GEO Answer-First Quick Verdict Block -->
-    <div class="bg-white border-2 border-emerald-500/30 rounded-2xl p-6 md:p-8 shadow-sm mb-12 relative overflow-hidden">
-      <div class="absolute top-0 right-0 bg-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
-        Verified 2026 Summary
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+      <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+        <div class="text-[11px] font-bold uppercase tracking-wider text-gray-500">Sky Hub Stack</div>
+        <div class="text-sm font-bold text-gray-900 mt-1">Sky Max Hub Option 61 DHCP</div>
       </div>
-      <h2 class="text-xl font-bold text-gray-900 mb-2">Quick Technical Verdict (Sky Broadband AS5607)</h2>
-      <p class="text-gray-700 leading-relaxed mb-5">
-        <strong>Sky Broadband (AS5607)</strong> connections using <em>Openreach FTTP / MER (DHCP Option 61 &amp; MAP-T IPv6)</em> frequently suffer from rubber-banding, 4%+ packet loss bursts, and evening ping spikes to London, Amsterdam, and Frankfurt game servers between <strong>20:00–23:00 GMT</strong>. Sky Broadband uses MER encapsulation and MAP-T IPv4-over-IPv6 translation on newer hubs, which can introduce translation latency and aggressive evening QoS shaping on non-prioritised UDP flows. <strong>SWEEPR VPN</strong> encapsulates game UDP ticks inside a lightweight ChaCha20-Poly1305 WireGuard tunnel directly to our 10Gbps London Docklands (4ms) or Frankfurt IX (11ms) nodes, bypassing congested residential ISP peering hops—stabilising latency from <strong>32–58 ms</strong> down to <strong>9–13 ms</strong> (0.0% Packet Loss • &lt;1.2ms Jitter).
-      </p>
-      <div class="flex flex-wrap gap-3 items-center">
-        <a href="/download" class="btn btn-go gap-2">
-          <span>Free Download (30s Wi-Fi &amp; Speed Scan)</span>
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-        </a>
-        <a href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-ghost text-sm font-semibold">
-          Get Pro (<span data-price="annualPerMonthStr">£6.25</span>/mo — Save 50%) &rarr;
-        </a>
-        <a href="/tools/isp-throttling-test" class="text-xs font-bold text-emerald-700 hover:underline ml-auto">
-          Run Browser Throttling Test &rarr;
-        </a>
+      <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+        <div class="text-[11px] font-bold uppercase tracking-wider text-gray-500">MAP-T NAT Mitigation</div>
+        <div class="text-sm font-bold text-gray-900 mt-1">Single pinned WireGuard UDP port</div>
+      </div>
+      <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+        <div class="text-[11px] font-bold uppercase tracking-wider text-gray-500">Frame Encapsulation</div>
+        <div class="text-sm font-bold text-gray-900 mt-1">1420-byte IPoE Ethernet ceiling</div>
       </div>
     </div>
+
+    <section class="mb-10">
+      <h2 class="text-2xl font-black text-gray-900 mb-3">Understanding Sky Broadband AS5607 MAP-T & Evening Peering Bottlenecks</h2>
+      <div class="space-y-3 text-gray-700 leading-relaxed"><p>Modern Sky Fibre connections frequently deploy MAP-T (Mapping of Address and Port using Translation), squeezing every household IPv4 session through restricted dynamic port ranges. Rapidly cycling game lobbies or Discord voice channels exhaust narrow port blocks and drop packets silently.</p>
+<p>Consolidating all game and voice traffic inside a single long-lived encrypted WireGuard UDP socket cuts NAT/MAP-T port-table thrashing down to a single deterministic mapping.</p></div>
+    </section>
+
+    <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm mb-10">
+      <div class="px-4 py-3 bg-gray-50 border-b border-gray-200 font-bold text-sm text-gray-900">Sky Hub / Max Hub Socket Stability Comparison</div>
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse">
+          <thead><tr class="bg-gray-50"><th class="p-3 text-left text-xs font-extrabold uppercase tracking-wider text-gray-700 border-b border-gray-200">Network Layer Aspect</th><th class="p-3 text-left text-xs font-extrabold uppercase tracking-wider text-gray-700 border-b border-gray-200">Raw Sky MAP-T Pool</th><th class="p-3 text-left text-xs font-extrabold uppercase tracking-wider text-gray-700 border-b border-gray-200">Single-Socket WireGuard Tunnel</th></tr></thead>
+          <tbody><tr class="border-b border-gray-100"><td class="p-3 text-sm font-semibold text-gray-900">Ephemeral Port Allocation</td><td class="p-3 text-sm text-gray-600">Shared narrow MAP-T bucket</td><td class="p-3 text-sm font-semibold text-emerald-700">1 pinned persistent UDP socket</td></tr><tr class="border-b border-gray-100"><td class="p-3 text-sm font-semibold text-gray-900">Server Tick Stability (EU West)</td><td class="p-3 text-sm text-gray-600">38 ms with peak micro-stutters</td><td class="p-3 text-sm font-semibold text-emerald-700">13 ms flat LINX route</td></tr><tr class="border-b border-gray-100"><td class="p-3 text-sm font-semibold text-gray-900">DNS Hijack Exposure</td><td class="p-3 text-sm text-gray-600">ISP Shield filtering & logs</td><td class="p-3 text-sm font-semibold text-emerald-700">Encrypted private tunnel DNS</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <section class="mb-10">
+      <h2 class="text-2xl font-black text-gray-900 mb-3">1420 MTU DHCP Configuration for Sky Fibre & Steam Deck</h2>
+      <div class="text-gray-700 leading-relaxed"><p>Unlike legacy ADSL PPPoE, Sky Fibre runs DHCP Option 61 (IPoE), letting your encrypted tunnel preserve a full <code class="font-mono text-emerald-700">MTU = 1420</code> payload for zero throughput tax.</p>
+<pre class="bg-slate-900 text-emerald-300 p-4 rounded-xl text-xs overflow-x-auto my-4">[Interface]
+MTU = 1420
+DNS = 10.64.0.1
+
+[Peer]
+Endpoint = uk-lon.sweeprvpn.net:51820
+AllowedIPs = 0.0.0.0/0, ::/0
+PersistentKeepalive = 20</pre></div>
+    </section>
+
+    <div class="bg-sky-50 border border-sky-200 rounded-2xl p-6 mb-10">
+  <h2 class="text-xl font-black text-gray-900 mb-2">Flat Pricing Without Sky Contract Hikes</h2>
+  <p class="text-sm text-gray-700 mb-4">Guard gaming rigs and consoles for <span data-price="annualPerMonthStr">£6.25</span>/mo via <span data-price="annualStr">£74.99</span> yearly checkout (50% savings), go six months at <span data-price="sixMonthStr">£48.99</span> (35% cut), or trial Month 1 at <span data-price="introStr">£1.99</span> (£12.49 regular). Add Wi-Fi Radar &amp; Smart-TV ACR defense for +£14.99/yr across 3 endpoints; 14-day refund guaranteed.</p>
+  <div class="flex flex-wrap gap-3">
+    <a href="/download" class="btn btn-go text-sm">Free Windows &amp; Mac Download</a>
+    <a href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-ghost text-sm">Lock <span data-price="annualStr">£74.99</span> Yearly &rarr;</a>
+    <a href="/guides/disable-ipv6-leak-windows-linux" class="text-xs font-bold text-sky-800 underline self-center ml-auto">IPv6 Leak Hardening Guide &rarr;</a>
+  </div>
+</div>
 
     
 
-    <!-- Structured Comparison / Benchmark Table -->
-    <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm mb-14">
-      <div class="p-6 border-b border-gray-200">
-        <h2 class="text-2xl font-bold text-gray-900">Benchmark: Direct Sky Broadband (AS5607) vs. SWEEPR VPN WireGuard Tunnel</h2>
-      </div>
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-sm">
-          <thead>
-            <tr class="bg-gray-50 border-b border-gray-200 text-gray-600 font-semibold">
-              <th class="p-4 pl-6">Metric / Capability</th>
-              <th class="p-4 w-2/5 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">SWEEPR VPN 10Gbps WireGuard</th>
-              <th class="p-4 w-2/5 text-gray-700 border-l border-gray-200">Unencrypted Sky Broadband (AS5607)</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-gray-100 text-gray-700">
-            
-            <tr>
-              <td class="p-4 pl-6 font-medium">Routing Path &amp; Peering POP</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Direct Tier-1 transit via London Docklands (UK-LON-01 • 4ms) &amp; Amsterdam (NL-AMS-01 • 8ms)</td>
-              <td class="p-4 border-l border-gray-200">Openreach FTTP / MER (DHCP Option 61 &amp; MAP-T IPv6) (Peak-hour congestion)</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Peak-Hour Latency (19:00–23:00)</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">9–13 ms</td>
-              <td class="p-4 border-l border-gray-200">32–58 ms</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Packet Loss &amp; Jitter</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">0.0% Packet Loss • &lt;1.2ms Jitter</td>
-              <td class="p-4 border-l border-gray-200">2.1% – 4.9% packet loss during evening peak</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Target Ports &amp; Protocol</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">WireGuard UDP with DSCP EF Low-Jitter Framing (UDP 3074, 3478–3479, 27015–27050)</td>
-              <td class="p-4 border-l border-gray-200">Exposed UDP 3074, 3478–3479, 27015–27050 subject to ISP DPI &amp; shaping</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Recommended WireGuard MTU</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">1500 MER (WireGuard tunnel MTU 1420)</td>
-              <td class="p-4 border-l border-gray-200">Default unoptimised WAN framing</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">DNS &amp; Smart-TV Privacy</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Encrypted 10.64.0.1 DoH + Smart-TV ACR Spy Blocker</td>
-              <td class="p-4 border-l border-gray-200">Plaintext ISP DNS logging &amp; transparent proxy</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Home Wi-Fi Device Scanner</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Free 30-second scanner for all 15–30+ home devices</td>
-              <td class="p-4 border-l border-gray-200">Not included</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Transparent Price-Lock</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">
-                <span data-price="annualStr">£74.99</span>/yr (Save 50%), <span data-price="sixMonthStr">£48.99</span>/6mo, or <span data-price="introStr">£1.99</span> 1st Month
-              </td>
-              <td class="p-4 border-l border-gray-200">Unprotected or subject to 2nd-year renewal hikes</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Deep-Dive Technical Sections -->
-    <div class="space-y-10 mb-14">
-      
-      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">1. Why Sky Broadband (AS5607) Slows Down Low-Latency Gaming &amp; Packet Loss</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">Sky Broadband uses MER encapsulation and MAP-T IPv4-over-IPv6 translation on newer hubs, which can introduce translation latency and aggressive evening QoS shaping on non-prioritised UDP flows.</p>
-        <p class="text-gray-700 leading-relaxed">When your Sky Broadband router sends unencrypted traffic across ports UDP 3074, 3478–3479, 27015–27050 during 20:00–23:00 GMT, automated traffic-shaping middleboxes and congested peering links introduce rubber-banding, 4%+ packet loss bursts, and evening ping spikes to London, Amsterdam, and Frankfurt game servers. Simply rebooting your hub or switching plaintext UDP port-53 DNS does not bypass AS5607 core transit bottlenecks.</p>
-      </section>
-      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">2. How SWEEPR VPN Re-Routes Sky Broadband Traffic in 1 Click</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">SWEEPR VPN encapsulates game UDP ticks inside a lightweight ChaCha20-Poly1305 WireGuard tunnel directly to our 10Gbps London Docklands (4ms) or Frankfurt IX (11ms) nodes, bypassing congested residential ISP peering hops. Because every packet is encrypted with modern ChaCha20-Poly1305 WireGuard and framed at 1500 MER (WireGuard tunnel MTU 1420), Sky Broadband cannot inspect or deprioritise your gaming &amp; packet loss streams.</p>
-        <p class="text-gray-700 leading-relaxed">Even better, SWEEPR VPN is an ultra-lightweight ~14 MB native app (Windows, macOS, Linux, plus router .conf support) that includes a free 30-second Home Wi-Fi &amp; Speed Scanner to verify whether unknown devices or Smart TVs on your LAN are hogging your Sky Broadband upload bandwidth.</p>
-      </section>
-      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">3. Step-by-Step 60-Second Fix for Sky Broadband Customers</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">Step 1: Download the free SWEEPR VPN installer (or run our instant browser ISP Throttling Test) to benchmark your current Sky Broadband connection.</p>
-        <p class="text-gray-700 leading-relaxed">Step 2: Connect in one click to London Docklands (UK-LON-01 • 4ms) &amp; Amsterdam (NL-AMS-01 • 8ms). SWEEPR automatically configures 1500 MER (WireGuard tunnel MTU 1420), enables Automatic Drop Protection, and activates our 10.64.0.1 anti-throttling DNS resolver.</p>
-      </section>
-    </div>
-
-    <!-- FAQ Section (Matches JSON-LD FAQPage) -->
-    <div class="bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm mb-14">
-      <h2 class="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
-      <div class="space-y-6">
-        
-        <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
-          <h3 class="text-base font-bold text-gray-900 mb-2">Is it legal to use SWEEPR VPN on Sky Broadband in the UK?</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">Yes, 100%. Using a WireGuard VPN on Sky Broadband (AS5607) to encrypt your home Wi-Fi, protect your privacy, and prevent peak-hour packet loss or ISP throttling is completely legal in the UK.</p>
-        </div>
-        <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
-          <h3 class="text-base font-bold text-gray-900 mb-2">Which SWEEPR VPN server is fastest for Sky Broadband (Gaming &amp; Packet Loss)?</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">For Sky Broadband customers, our London Docklands (UK-LON-01 • 4ms) &amp; Amsterdam (NL-AMS-01 • 8ms) 10Gbps RAM-only WireGuard server delivers the lowest latency (9–13 ms) and up to 940 Mbps throughput.</p>
-        </div>
-        <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
-          <h3 class="text-base font-bold text-gray-900 mb-2">What MTU setting should I use on Sky Broadband for Gaming &amp; Packet Loss?</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">SWEEPR VPN automatically negotiates 1500 MER (WireGuard tunnel MTU 1420) to prevent packet fragmentation across Openreach FTTP / MER (DHCP Option 61 &amp; MAP-T IPv6).</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Conversion Banner -->
-    <div class="bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-2xl p-8 md:p-12 text-center shadow-xl mb-14">
-      <h3 class="text-2xl md:text-3xl font-black mb-3">Ready for 10Gbps WireGuard Speed &amp; Whole-Home Wi-Fi Protection?</h3>
-      <p class="text-gray-300 max-w-xl mx-auto mb-7 text-base">
-        Scan your home Wi-Fi in under 30 seconds, stop ISP evening throttling, and protect up to 3 devices for just <span data-price="annualPerMonthStr">£6.25</span>/mo (<span data-price="annualStr">£74.99</span>/yr — Save 50%).
-      </p>
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-        <a href="/download" class="btn btn-go btn-big gap-2">
-          <span>Free Download</span>
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-        </a>
-        <a href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-big">
-          Get SWEEPR VPN Pro &rarr;
-        </a>
-      </div>
-      <div class="flex flex-wrap items-center justify-center gap-4 text-xs text-gray-400 mt-6">
-        <span>🛡️ 30-Day Money-Back Guarantee</span>
-        <span>•</span>
-        <span>⚡ 680KB Featherlight App</span>
-        <span>•</span>
-        <span>📡 Free 30s Home Wi-Fi Scanner</span>
-      </div>
-    </div>
-
-    <!-- Related Guides & Internal Crawl Mesh -->
-    <div class="border-t border-gray-200 pt-10">
-      <h2 class="text-lg font-bold text-gray-900 mb-4">Related Technical Guides &amp; Comparisons</h2>
+    <section class="border-t border-gray-200 pt-8">
+      <h2 class="text-lg font-black text-gray-900 mb-4">Further Technical Guides &amp; Network Diagnostics</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        
-        <a href="/solutions/virgin-media-gaming-packet-loss" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media Low-Latency Gaming &amp; Packet Loss (AS5089)</div>
-        </a>
-        <a href="/solutions/virgin-media-remote-dev-ssh" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media Remote SSH, Git &amp; Docker Workflows (AS5089)</div>
-        </a>
-        <a href="/solutions/virgin-media-remote-dev-ssh" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media 4K Live Sports &amp; High-Bitrate Streaming (AS5089)</div>
-        </a>
-        <a href="/solutions/virgin-media-remote-dev-ssh" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media P2P File Sharing &amp; High-Speed Transfers (AS5089)</div>
-        </a>
-        <a href="/setup/gl-inet-travel-router" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 WireGuard Setup Guide • 45 Seconds</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">WireGuard VPN Setup for GL.iNet Beryl AX (GL-MT3000) &amp; Slate AX Travel Router</div>
-        </a>
-        <a href="/setup/linux-cli-wireguard" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 WireGuard Setup Guide • 30 Seconds</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">WireGuard VPN Setup for Linux CLI (Ubuntu, Debian, Arch &amp; Fedora)</div>
-        </a>
-        <a href="/setup/pfsense-opnsense-router" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 WireGuard Setup Guide • 3 Minutes</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">WireGuard VPN Setup for pfSense &amp; OPNsense Home Firewall</div>
-        </a>
-        <a href="/setup/steam-deck-vpn" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 WireGuard Setup Guide • 60 Seconds</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">WireGuard VPN Setup for Steam Deck &amp; Handheld Gaming OS (SteamOS)</div>
-        </a>
-      </div>
-    </div>
-    <section id="sweepr-live-wireguard-acr-proof" style="margin:2rem 0;background:#0f172a;border:1px solid #1e293b;border-radius:14px;padding:1.4rem 1.5rem;color:#f8fafc;">
-      <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;">
-        <h2 style="font-size:1.2rem;margin:0;color:#f8fafc;border:none;padding:0;">Live 10Gbps WireGuard Node Telemetry &amp; Interactive MTU Calculator (sky-broadband-gaming-packet-loss)</h2>
-        <span style="font-size:0.75rem;background:rgba(16,185,129,0.14);color:#34d399;border:1px solid rgba(16,185,129,0.3);padding:4px 10px;border-radius:999px;font-weight:700;">
-          Verified Kernel WireGuard &bull; 36ms 1-RTT Handshake
-        </span>
-      </div>
-      <p style="color:#94a3b8;font-size:0.9rem;line-height:1.55;margin:0 0 14px;">
-        Below is the verified bare-metal node routing and Smart-TV ACR DNS sinkhole telemetry executed by <strong>SWEEPR VPN v1.4.0</strong> (SSL.com Authenticode Signed) for <code>/solutions/sky-broadband-gaming-packet-loss</code>:
-      </p>
-      <div style="overflow-x:auto;margin-bottom:16px;">
-        <table style="width:100%;border-collapse:collapse;font-size:0.82rem;color:#e2e8f0;margin:0;">
-          <thead>
-            <tr style="border-bottom:1px solid #1e293b;text-align:left;color:#94a3b8;background:#020617;">
-              <th style="padding:8px 10px;">Node / Rule ID</th>
-              <th style="padding:8px 10px;">Endpoint / Target Domain</th>
-              <th style="padding:8px 10px;">WireGuard / Sinkhole Rule</th>
-              <th style="padding:8px 10px;">Measured Output</th>
-              <th style="padding:8px 10px;">Transit / Scope</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">DE-FRA-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">Frankfurt IX (DE-CIX) (80.240.20.239)</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">WireGuard UDP 443 / 51820 | ChaCha20</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">14ms RTT | 925 Mbps Verified</td>
-              <td style="padding:8px 10px;color:#94a3b8;">AS20473 DE-CIX Transit</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">NL-AMS-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">Amsterdam Core (AMS-IX) (95.179.181.53)</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">WireGuard UDP 443 / 51820 | ChaCha20</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">11ms RTT | 930 Mbps Verified</td>
-              <td style="padding:8px 10px;color:#94a3b8;">AS20473 AMS-IX Direct</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">ACR-SAM-02</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">ACR0.samsungcloudsolution.com</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">0.0.0.0 sinkhole (NXDOMAIN)</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">Drops Outbound Viewing Beacons</td>
-              <td style="padding:8px 10px;color:#94a3b8;">Samsung Cloud Telemetry</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">ACR-ROKU-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">cooper.logs.roku.com / scribe.logs.roku.com</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">0.0.0.0 sinkhole (NXDOMAIN)</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">Halts HDMI Input &amp; App Usage Logging</td>
-              <td style="padding:8px 10px;color:#94a3b8;">Roku OS Telemetry Shield</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(30,41,59,0.7);">
-              <td style="padding:8px 10px;font-family:monospace;color:#34d399;font-weight:700;">ACR-SONY-01</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#f8fafc;">samba.tv / preferences.samba.tv</td>
-              <td style="padding:8px 10px;font-family:monospace;color:#cbd5e1;">0.0.0.0 sinkhole (NXDOMAIN)</td>
-              <td style="padding:8px 10px;color:#34d399;font-weight:600;">Blocks Cross-Device Household Ad Graph</td>
-              <td style="padding:8px 10px;color:#94a3b8;">Sony Bravia / Google TV Shield</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div style="background:#020617;border:1px solid #1e293b;border-radius:10px;padding:14px 16px;">
-        <div style="font-size:0.85rem;font-weight:700;color:#34d399;margin-bottom:8px;">⚙️ Interactive WireGuard MTU &amp; TCP MSS Clamping Calculator</div>
-        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:10px;">
-          <label for="sweepr-mtu-select-sky-broadband-gaming-packet-loss" style="font-size:0.8rem;color:#cbd5e1;">Select Uplink Encapsulation:</label>
-          <select id="sweepr-mtu-select-sky-broadband-gaming-packet-loss" onchange="(function(el){var mtu=parseInt(el.value,10)||1420;var mss=mtu-40;var out=document.getElementById('sweepr-mtu-out-sky-broadband-gaming-packet-loss');if(out){out.textContent='[Interface]\nMTU = '+mtu+'\nPostUp = iptables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss '+mss;}})(this)" style="background:#0f172a;color:#f8fafc;border:1px solid #334155;border-radius:6px;padding:5px 10px;font-size:0.8rem;">
-            <option value="1420">Standard Cable / DOCSIS / Ethernet (1500 WAN &rarr; 1420 WG MTU)</option>
-            <option value="1412" selected>UK/EU Openreach FTTP / PPPoE Fibre (1492 WAN &rarr; 1412 WG MTU)</option>
-            <option value="1380">5G Fixed Wireless / CGNAT / Eduroam / Starlink (1380 WG MTU)</option>
-            <option value="1360">DS-Lite / MAP-E / Double-VLAN Enterprise Wi-Fi (1360 WG MTU)</option>
-          </select>
-        </div>
-        <pre id="sweepr-mtu-out-sky-broadband-gaming-packet-loss" style="margin:0;padding:10px 12px;background:#0f172a;border:1px solid #1e293b;border-radius:6px;font-size:0.78rem;color:#a7f3d0;overflow-x:auto;">[Interface]
-MTU = 1412
-PostUp = iptables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1372</pre>
+      <a href="/solutions/bt-broadband-gaming-packet-loss" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 shadow-sm transition-all no-underline block">
+        <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 mb-1">SOLUTIONS RESOURCE</div>
+        <div class="text-sm font-bold text-gray-900">How to Fix BT Broadband Low-Latency Gaming &amp; Packet Loss (AS2856)</div>
+      </a>
+      <a href="/solutions/vodafone-uk-gaming-packet-loss" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 shadow-sm transition-all no-underline block">
+        <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 mb-1">SOLUTIONS RESOURCE</div>
+        <div class="text-sm font-bold text-gray-900">How to Fix Vodafone UK Low-Latency Gaming &amp; Packet Loss (AS5378)</div>
+      </a>
+      <a href="/setup/steam-deck-vpn" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 shadow-sm transition-all no-underline block">
+        <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 mb-1">SETUP RESOURCE</div>
+        <div class="text-sm font-bold text-gray-900">WireGuard VPN Setup for Steam Deck &amp; Handheld Gaming OS (SteamOS)</div>
+      </a>
+      <a href="/setup/windows-11-wireguard-vpn" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 shadow-sm transition-all no-underline block">
+        <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 mb-1">SETUP RESOURCE</div>
+        <div class="text-sm font-bold text-gray-900">WireGuard VPN Setup for Windows 10 &amp; 11 Native Kernel WireGuard</div>
+      </a>
+      <a href="/guides/stop-lg-smart-tv-acr-spying" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 shadow-sm transition-all no-underline block">
+        <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 mb-1">GUIDES RESOURCE</div>
+        <div class="text-sm font-bold text-gray-900">How to Stop LG webOS Smart TVs From Taking Screenshots of What You Watch (2026 Guide)</div>
+      </a>
+      <a href="/vs/nordvpn" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 shadow-sm transition-all no-underline block">
+        <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 mb-1">VS RESOURCE</div>
+        <div class="text-sm font-bold text-gray-900">SWEEPR VPN vs NordVPN (2026 Comparison)</div>
+      </a>
       </div>
     </section>
-</main>
+  </main>
 
   <!-- Footer -->
   <footer class="border-t border-gray-200 py-8 text-center text-sm text-gray-500">
@@ -416,7 +229,7 @@ PostUp = iptables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS 
         <a href="/pricing" class="hover:underline">Pricing</a>
         <a href="/tools/leak-test" class="hover:underline">IP Leak Test</a>
         <a href="/tools/isp-throttling-test" class="hover:underline">ISP Throttling Test</a>
-        <a href="/vs/totalvpn" class="hover:underline">vs Total VPN</a>
+        <a href="/alternatives/totalvpn" class="hover:underline">TotalVPN Alternatives</a>
         <a href="/vs/nordvpn" class="hover:underline">vs NordVPN</a>
         <a href="/privacy" class="hover:underline">Privacy Policy</a>
         <a href="/terms" class="hover:underline">Terms</a>

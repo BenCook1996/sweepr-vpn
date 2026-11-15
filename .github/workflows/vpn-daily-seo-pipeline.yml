@@ -46,12 +46,11 @@ jobs:
 
       - name: 3. Automated Keyword Discovery, 10-Assertion Quality Gate & Pre/Post Forecaster (05:00 Task B)
         run: |
-          node scripts/keyword-research-engine.mjs --discover --score --audit --apply --limit=2
+          node scripts/keyword-research-engine.mjs --discover --score --audit --apply --limit=0
 
-      - name: 4. GSC Winner Lock Consolidation & Live 10Gbps WireGuard/ACR Proof Injection (05:00 Task C)
+      - name: 4. GSC Winner Lock Consolidation (05:00 Task C)
         run: |
           node scripts/consolidate-and-optimize-gsc.mjs
-          node scripts/enrich-pillars-with-live-proof.mjs
 
       - name: 5. 100/100 Technical SEO, 301 Redirect, Historical GSC 404 Guard & PageSpeed Audit (06:00 Task)
         run: |
@@ -61,6 +60,52 @@ jobs:
       - name: 6. PAD 4.0 XML, CRM Backlink Verification & Delta IndexNow Sync (10:00 Task)
         run: |
           node scripts/vpn-seo-drip.mjs
+
+      - name: 6.5. CI Quality Gate Assertions (Sitemap <= 95, 0 Zombie Files, Overlap < 30%)
+        run: |
+          node --input-type=module << 'EOF'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          const sitemap = fs.readFileSync('website/sitemap.xml', 'utf8');
+          const locs = sitemap.match(/<loc>/g) || [];
+          if (locs.length > 95 || locs.length < 50) {
+            console.error(`CI Quality Gate failed: sitemap URL count ${locs.length} outside [50, 95]`);
+            process.exit(1);
+          }
+          const dirs = ['solutions', 'setup', 'guides', 'vs'];
+          const strip = (h) => h.replace(/<!--[\s\S]*?-->/g, ' ').replace(/<script[\s\S]*?<\/script>/gi, ' ').replace(/<style[\s\S]*?<\/style>/gi, ' ').replace(/<header[\s\S]*?<\/header>/gi, ' ').replace(/<footer[\s\S]*?<\/footer>/gi, ' ').replace(/<nav[\s\S]*?<\/nav>/gi, ' ').replace(/<details[\s\S]*?<\/details>/gi, ' ').replace(/<[^>]+>/g, ' ').replace(/&\w+;/g, ' ').replace(/\s+/g, ' ').trim().toLowerCase();
+          const solShingles = [];
+          for (const d of dirs) {
+            const p = path.join('website', d);
+            for (const f of fs.readdirSync(p).filter((x) => x.endsWith('.html'))) {
+              const raw = fs.readFileSync(path.join(p, f), 'utf8');
+              if (raw.includes('noindex')) {
+                console.error(`CI Quality Gate failed: zombie noindex found in website/${d}/${f}`);
+                process.exit(1);
+              }
+              if (d === 'solutions') {
+                const words = strip(raw).split(' ').filter(Boolean);
+                const s = new Set();
+                for (let i = 0; i <= words.length - 5; i++) s.add(words.slice(i, i + 5).join(' '));
+                solShingles.push({ f, s });
+              }
+            }
+          }
+          let maxOverlap = 0;
+          for (let i = 0; i < solShingles.length; i++) {
+            for (let j = i + 1; j < solShingles.length; j++) {
+              let inter = 0;
+              for (const g of solShingles[i].s) if (solShingles[j].s.has(g)) inter++;
+              const sim = (2 * inter / (solShingles[i].s.size + solShingles[j].s.size || 1)) * 100;
+              if (sim > maxOverlap) maxOverlap = sim;
+              if (sim >= 30.0) {
+                console.error(`CI Quality Gate failed: 5-gram overlap ${sim.toFixed(2)}% >= 30% (${solShingles[i].f} vs ${solShingles[j].f})`);
+                process.exit(1);
+              }
+            }
+          }
+          console.log(`CI Quality Gate passed: sitemap=${locs.length}/95, zombies=0, max_solutions_overlap=${maxOverlap.toFixed(2)}%`);
+          EOF
 
       - name: Commit & Push Cloud SEO Updates to Production (Railway Auto-Deploy)
         run: |
