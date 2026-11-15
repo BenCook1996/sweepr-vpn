@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>sweepr-vpn</id>
+    <version>2.5.0</version>
+    <packageSourceUrl>https://github.com/BenCook1996/sweepr-vpn/tree/main/chocolatey</packageSourceUrl>
+    <owners>Bcook96</owners>
+    <title>SWEEPR VPN</title>
+    <authors>Benjamin Cook</authors>
+    <projectUrl>https://sweeprvpn.com</projectUrl>
+    <iconUrl>https://cdn.jsdelivr.net/gh/BenCook1996/sweepr-vpn@main/play-store-icon-vpn-512.png</iconUrl>
+    <copyright>Copyright (c) 2026 Benjamin Cook. All rights reserved.</copyright>
+    <licenseUrl>https://sweeprvpn.com/terms</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <docsUrl>https://sweeprvpn.com/guides/</docsUrl>
+    <bugTrackerUrl>https://sweeprvpn.com/support</bugTrackerUrl>
+    <tags>sweepr vpn wireguard wifi-scanner network-security privacy windows-11 rust</tags>
+    <summary>Lightweight 10Gbps WireGuard VPN, free 30-second Home Wi-Fi device scanner, and Smart-TV ACR telemetry shield for Windows 10/11.</summary>
+    <description>SWEEPR VPN is an ultra-lightweight native Rust + Tauri v2 10Gbps RAM-only WireGuard VPN and Free 30-Second Home Wi-Fi Security Scanner for Windows 10 and Windows 11. Features zero-logs WireGuard tunnel encryption, public Wi-Fi packet protection, ISP bandwidth throttling defense, local LAN and Wi-Fi device discovery (ARP, mDNS, and SSDP), and optional Smart-TV ACR telemetry blocking with zero background bloatware.</description>
+    <releaseNotes>https://github.com/BenCook1996/sweepr-vpn/releases/tag/v2.5.0</releaseNotes>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

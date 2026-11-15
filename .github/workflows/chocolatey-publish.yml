@@ -1,0 +1,55 @@
+name: "Publish Chocolatey Package (sweepr-vpn)"
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (e.g. 2.5.0)"
+        required: false
+        default: "2.5.0"
+
+jobs:
+  publish-chocolatey:
+    runs-on: windows-latest
+    env:
+      CHOCOLATEY_API_KEY: ${{ secrets.CHOCOLATEY_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Determine Version
+        id: ver
+        shell: pwsh
+        env:
+          INPUT_VERSION: ${{ github.event.inputs.version }}
+          RELEASE_TAG_NAME: ${{ github.event.release.tag_name }}
+        run: |
+          $ver = "$env:INPUT_VERSION"
+          if ([string]::IsNullOrWhiteSpace($ver) -and -not [string]::IsNullOrWhiteSpace($env:RELEASE_TAG_NAME)) {
+            $ver = $env:RELEASE_TAG_NAME.TrimStart("v")
+          }
+          if ($ver -notmatch '^\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$') {
+            throw "Invalid semantic version: $ver"
+          }
+          "version=$ver" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+      - name: Pack Chocolatey Package
+        shell: pwsh
+        working-directory: ./chocolatey
+        env:
+          PKG_VERSION: ${{ steps.ver.outputs.version }}
+        run: |
+          choco pack sweepr-vpn.nuspec --version "$env:PKG_VERSION"
+          Get-Item "sweepr-vpn.$env:PKG_VERSION.nupkg" | Select-Object Name, Length
+
+      - name: Push Package to Chocolatey Community Repository
+        shell: pwsh
+        working-directory: ./chocolatey
+        env:
+          PKG_VERSION: ${{ steps.ver.outputs.version }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:CHOCOLATEY_API_KEY)) {
+            throw "CHOCOLATEY_API_KEY secret is not configured on BenCook1996/sweepr-vpn"
+          }
+          choco push "sweepr-vpn.$env:PKG_VERSION.nupkg" --source https://push.chocolatey.org/ --api-key $env:CHOCOLATEY_API_KEY
