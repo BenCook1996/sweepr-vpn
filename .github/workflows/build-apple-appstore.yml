@@ -90,7 +90,6 @@ jobs:
           fi
 
       - name: Archive, sign & upload iOS (.ipa) and macOS (.pkg) to App Store Connect
-        if: ${{ secrets.ASC_KEY_ID != '' && secrets.ASC_ISSUER_ID != '' && secrets.ASC_PRIVATE_KEY_P8 != '' && secrets.APPLE_DIST_CERT_P12_BASE64 != '' }}
         env:
           ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
@@ -104,6 +103,10 @@ jobs:
           MAC_TUNNEL_PROVISION_PROFILE_BASE64: ${{ secrets.MAC_TUNNEL_PROVISION_PROFILE_BASE64 }}
         run: |
           set -euo pipefail
+          if [ -z "${ASC_KEY_ID:-}" ] || [ -z "${ASC_ISSUER_ID:-}" ] || [ -z "${ASC_PRIVATE_KEY_P8:-}" ] || [ -z "${APPLE_DIST_CERT_P12_BASE64:-}" ]; then
+            echo "Skipping App Store Connect archive/upload because required Apple signing secrets are not set."
+            exit 0
+          fi
           KEYCHAIN_PATH="$RUNNER_TEMP/build.keychain-db"
           KEYCHAIN_PASS="$(openssl rand -hex 16)"
           P12_PATH="$RUNNER_TEMP/dist.p12"
