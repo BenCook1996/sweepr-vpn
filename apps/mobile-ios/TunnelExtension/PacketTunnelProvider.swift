@@ -103,16 +103,18 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
         var ptr: UnsafeMutablePointer<addrinfo>? = first
         var ipv4Fallback: String?
         while let current = ptr {
+            let info = current.pointee
             var hostBuf = [CChar](repeating: 0, count: Int(NI_MAXHOST))
-            if getnameinfo(current.ai_addr, socklen_t(current.ai_addrlen), &hostBuf, socklen_t(hostBuf.count), nil, 0, NI_NUMERICHOST) == 0 {
+            if let addr = info.ai_addr,
+               getnameinfo(addr, socklen_t(info.ai_addrlen), &hostBuf, socklen_t(hostBuf.count), nil, 0, NI_NUMERICHOST) == 0 {
                 let ip = String(cString: hostBuf)
-                if current.ai_family == AF_INET6 {
+                if info.ai_family == AF_INET6 {
                     return ip
-                } else if ipv4Fallback == nil && current.ai_family == AF_INET {
+                } else if ipv4Fallback == nil && info.ai_family == AF_INET {
                     ipv4Fallback = ip
                 }
             }
-            ptr = current.ai_next
+            ptr = info.ai_next
         }
         return ipv4Fallback
     }
