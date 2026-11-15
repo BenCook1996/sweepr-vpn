@@ -1,0 +1,206 @@
+name: Build & Upload SWEEPR VPN (Apple App Store & Mac App Store)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'apps/mobile-ios/**'
+      - '.github/workflows/build-apple-appstore.yml'
+
+jobs:
+  build-apple:
+    runs-on: macos-15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install XcodeGen & Go (required by WireGuardKitGo)
+        run: |
+          brew install xcodegen go
+          xcodebuild -version
+          xcodegen --version
+          go version
+
+      - name: Generate Xcode project with XcodeGen
+        working-directory: apps/mobile-ios
+        run: xcodegen generate
+
+      - name: Upload generated Xcode project artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sweepr-vpn-xcodeproj
+          path: apps/mobile-ios/SweeprVPN.xcodeproj
+
+      - name: Resolve Swift Package dependencies
+        run: |
+          xcodebuild -resolvePackageDependencies \
+            -project apps/mobile-ios/SweeprVPN.xcodeproj \
+            -scheme SweeprVPN
+
+      - name: Build iOS Simulator (unsigned CI verification)
+        run: |
+          xcodebuild build \
+            -project apps/mobile-ios/SweeprVPN.xcodeproj \
+            -scheme SweeprVPN \
+            -configuration Release \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Build macOS (unsigned CI verification)
+        run: |
+          xcodebuild build \
+            -project apps/mobile-ios/SweeprVPN.xcodeproj \
+            -scheme SweeprVPN \
+            -configuration Release \
+            -destination 'generic/platform=macOS' \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Smoke test launch in headless iOS Simulator
+        run: |
+          SIM_UDID=$(python3 - <<'PY'
+          import json, subprocess
+          data = json.loads(subprocess.check_output(['xcrun', 'simctl', 'list', 'devices', 'available', '-j']))
+          for runtime, devs in sorted(data.get('devices', {}).items(), reverse=True):
+            if 'iOS' not in runtime:
+              continue
+            for d in devs:
+              if d.get('isAvailable') and 'iPhone' in d.get('name', ''):
+                print(d['udid'])
+                raise SystemExit(0)
+          PY
+          )
+          if [ -n "$SIM_UDID" ]; then
+            echo "Booting iOS Simulator $SIM_UDID"
+            xcrun simctl boot "$SIM_UDID" || true
+            xcrun simctl bootstatus "$SIM_UDID" -b
+            xcodebuild build \
+              -project apps/mobile-ios/SweeprVPN.xcodeproj \
+              -scheme SweeprVPN \
+              -configuration Debug \
+              -destination "id=$SIM_UDID" \
+              -derivedDataPath build/sim \
+              CODE_SIGNING_ALLOWED=NO
+            APP_PATH=$(find build/sim/Build/Products/Debug-iphonesimulator -name "*.app" -maxdepth 1 | head -n 1)
+            if [ -n "$APP_PATH" ]; then
+              xcrun simctl install "$SIM_UDID" "$APP_PATH"
+              xcrun simctl launch "$SIM_UDID" com.sweepr.vpn
+            fi
+          fi
+
+      - name: Archive, sign & upload iOS (.ipa) and macOS (.pkg) to App Store Connect
+        if: ${{ secrets.ASC_KEY_ID != '' && secrets.ASC_ISSUER_ID != '' && secrets.ASC_PRIVATE_KEY_P8 != '' && secrets.APPLE_DIST_CERT_P12_BASE64 != '' }}
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_PRIVATE_KEY_P8: ${{ secrets.ASC_PRIVATE_KEY_P8 }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_DIST_CERT_P12_BASE64: ${{ secrets.APPLE_DIST_CERT_P12_BASE64 }}
+          APPLE_DIST_CERT_PASSWORD: ${{ secrets.APPLE_DIST_CERT_PASSWORD }}
+          IOS_APP_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_APP_PROVISION_PROFILE_BASE64 }}
+          IOS_TUNNEL_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_TUNNEL_PROVISION_PROFILE_BASE64 }}
+          MAC_APP_PROVISION_PROFILE_BASE64: ${{ secrets.MAC_APP_PROVISION_PROFILE_BASE64 }}
+          MAC_TUNNEL_PROVISION_PROFILE_BASE64: ${{ secrets.MAC_TUNNEL_PROVISION_PROFILE_BASE64 }}
+        run: |
+          set -euo pipefail
+          KEYCHAIN_PATH="$RUNNER_TEMP/build.keychain-db"
+          KEYCHAIN_PASS="$(openssl rand -hex 16)"
+          P12_PATH="$RUNNER_TEMP/dist.p12"
+          ASC_DIR="$HOME/.appstoreconnect/private_keys"
+          PROFILES_DIR="$HOME/Library/MobileDevice/Provisioning Profiles"
+          mkdir -p "$ASC_DIR" "$PROFILES_DIR" build/export-ios build/export-mac
+
+          cleanup() {
+            rm -f "$P12_PATH" "$ASC_DIR/AuthKey_${ASC_KEY_ID}.p8" || true
+            security delete-keychain "$KEYCHAIN_PATH" || true
+          }
+          trap cleanup EXIT
+
+          echo "$APPLE_DIST_CERT_P12_BASE64" | base64 --decode > "$P12_PATH"
+          security create-keychain -p "$KEYCHAIN_PASS" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASS" "$KEYCHAIN_PATH"
+          security import "$P12_PATH" -P "$APPLE_DIST_CERT_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
+          security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASS" "$KEYCHAIN_PATH"
+          security list-keychains -d user -s "$KEYCHAIN_PATH" login.keychain-db
+
+          install_profile() {
+            local b64="$1"
+            [ -z "$b64" ] && return 0
+            local tmp="$RUNNER_TEMP/tmp.mobileprovision"
+            echo "$b64" | base64 --decode > "$tmp"
+            local uuid
+            uuid=$(/usr/libexec/PlistBuddy -c 'Print :UUID' /dev/stdin <<< "$(security cms -D -i "$tmp")")
+            cp "$tmp" "$PROFILES_DIR/${uuid}.provisionprofile"
+            cp "$tmp" "$PROFILES_DIR/${uuid}.mobileprovision"
+            rm -f "$tmp"
+          }
+
+          install_profile "${IOS_APP_PROVISION_PROFILE_BASE64:-}"
+          install_profile "${IOS_TUNNEL_PROVISION_PROFILE_BASE64:-}"
+          install_profile "${MAC_APP_PROVISION_PROFILE_BASE64:-}"
+          install_profile "${MAC_TUNNEL_PROVISION_PROFILE_BASE64:-}"
+
+          printf '%s\n' "$ASC_PRIVATE_KEY_P8" > "$ASC_DIR/AuthKey_${ASC_KEY_ID}.p8"
+          chmod 600 "$ASC_DIR/AuthKey_${ASC_KEY_ID}.p8"
+
+          TEAM_ARG=""
+          if [ -n "${APPLE_TEAM_ID:-}" ]; then
+            TEAM_ARG="DEVELOPMENT_TEAM=$APPLE_TEAM_ID"
+          fi
+
+          cat > "$RUNNER_TEMP/ExportOptions.plist" <<EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key>
+            <string>app-store-connect</string>
+            <key>destination</key>
+            <string>export</string>
+          </dict>
+          </plist>
+          EOF
+
+          xcodebuild archive \
+            -project apps/mobile-ios/SweeprVPN.xcodeproj \
+            -scheme SweeprVPN \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -archivePath build/SweeprVPN-iOS.xcarchive \
+            $TEAM_ARG \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$ASC_DIR/AuthKey_${ASC_KEY_ID}.p8" \
+            -authenticationKeyID "$ASC_KEY_ID" \
+            -authenticationKeyIssuerID "$ASC_ISSUER_ID"
+
+          xcodebuild -exportArchive \
+            -archivePath build/SweeprVPN-iOS.xcarchive \
+            -exportPath build/export-ios \
+            -exportOptionsPlist "$RUNNER_TEMP/ExportOptions.plist"
+
+          IPA_FILE=$(find build/export-ios -name "*.ipa" | head -n 1)
+          xcrun altool --upload-app --type ios --file "$IPA_FILE" \
+            --apiKey "$ASC_KEY_ID" --apiIssuer "$ASC_ISSUER_ID"
+
+          xcodebuild archive \
+            -project apps/mobile-ios/SweeprVPN.xcodeproj \
+            -scheme SweeprVPN \
+            -configuration Release \
+            -destination 'generic/platform=macOS' \
+            -archivePath build/SweeprVPN-macOS.xcarchive \
+            $TEAM_ARG \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$ASC_DIR/AuthKey_${ASC_KEY_ID}.p8" \
+            -authenticationKeyID "$ASC_KEY_ID" \
+            -authenticationKeyIssuerID "$ASC_ISSUER_ID"
+
+          xcodebuild -exportArchive \
+            -archivePath build/SweeprVPN-macOS.xcarchive \
+            -exportPath build/export-mac \
+            -exportOptionsPlist "$RUNNER_TEMP/ExportOptions.plist"
+
+          PKG_FILE=$(find build/export-mac -name "*.pkg" | head -n 1)
+          xcrun altool --upload-app --type macos --file "$PKG_FILE" \
+            --apiKey "$ASC_KEY_ID" --apiIssuer "$ASC_ISSUER_ID"

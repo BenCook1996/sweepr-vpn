@@ -1,4 +1,4 @@
-﻿{
+{
   "images": [
     { "size": "20x20", "idiom": "iphone", "filename": "AppIcon-20@2x.png", "scale": "2x" },
     { "size": "20x20", "idiom": "iphone", "filename": "AppIcon-20@3x.png", "scale": "3x" },
@@ -8,9 +8,22 @@
     { "size": "40x40", "idiom": "iphone", "filename": "AppIcon-40@3x.png", "scale": "3x" },
     { "size": "60x60", "idiom": "iphone", "filename": "AppIcon-60@2x.png", "scale": "2x" },
     { "size": "60x60", "idiom": "iphone", "filename": "AppIcon-60@3x.png", "scale": "3x" },
+    { "size": "20x20", "idiom": "ipad", "filename": "AppIcon-20@2x.png", "scale": "2x" },
+    { "size": "29x29", "idiom": "ipad", "filename": "AppIcon-29@2x.png", "scale": "2x" },
+    { "size": "40x40", "idiom": "ipad", "filename": "AppIcon-40@2x.png", "scale": "2x" },
     { "size": "76x76", "idiom": "ipad", "filename": "AppIcon-76@2x.png", "scale": "2x" },
     { "size": "83.5x83.5", "idiom": "ipad", "filename": "AppIcon-83.5@2x.png", "scale": "2x" },
-    { "size": "1024x1024", "idiom": "ios-marketing", "filename": "AppIcon-1024.png", "scale": "1x" }
+    { "size": "1024x1024", "idiom": "ios-marketing", "filename": "AppIcon-1024.png", "scale": "1x" },
+    { "size": "16x16", "idiom": "mac", "filename": "AppIcon-Mac-16.png", "scale": "1x" },
+    { "size": "16x16", "idiom": "mac", "filename": "AppIcon-Mac-16@2x.png", "scale": "2x" },
+    { "size": "32x32", "idiom": "mac", "filename": "AppIcon-Mac-32.png", "scale": "1x" },
+    { "size": "32x32", "idiom": "mac", "filename": "AppIcon-Mac-32@2x.png", "scale": "2x" },
+    { "size": "128x128", "idiom": "mac", "filename": "AppIcon-Mac-128.png", "scale": "1x" },
+    { "size": "128x128", "idiom": "mac", "filename": "AppIcon-Mac-128@2x.png", "scale": "2x" },
+    { "size": "256x256", "idiom": "mac", "filename": "AppIcon-Mac-256.png", "scale": "1x" },
+    { "size": "256x256", "idiom": "mac", "filename": "AppIcon-Mac-256@2x.png", "scale": "2x" },
+    { "size": "512x512", "idiom": "mac", "filename": "AppIcon-Mac-512.png", "scale": "1x" },
+    { "size": "512x512", "idiom": "mac", "filename": "AppIcon-Mac-512@2x.png", "scale": "2x" }
   ],
   "info": { "version": 1, "author": "xcode" }
 }

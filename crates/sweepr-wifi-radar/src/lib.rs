@@ -185,7 +185,7 @@ fn detect_local_net() -> Result<LocalNet, String> {
         }
     }
 
-    // Fallback: find the outgoing address without sending anything.
+    // Fallback: find the outgoing IPv4 address without sending anything.
     let sock = std::net::UdpSocket::bind("0.0.0.0:0").map_err(|e| e.to_string())?;
     sock.connect("1.1.1.1:80").map_err(|e| e.to_string())?;
     match sock.local_addr().map_err(|e| e.to_string())?.ip() {
@@ -194,9 +194,85 @@ fn detect_local_net() -> Result<LocalNet, String> {
     }
 }
 
+fn build_self_device(ip_str: String, mac: Option<&str>) -> Device {
+    let self_name = dns_lookup::get_hostname().ok().map(|h| pretty_host(&h)).filter(|s| !s.is_empty());
+    let (self_os_name, self_os_kind) = if cfg!(target_os = "macos") {
+        ("macOS Desktop", DeviceKind::Macos)
+    } else if cfg!(target_os = "linux") {
+        ("Linux Desktop", DeviceKind::Linux)
+    } else {
+        ("Windows Desktop", DeviceKind::Windows)
+    };
+    Device {
+        ip: ip_str,
+        mac: mac.unwrap_or_default().to_string(),
+        name: self_os_name.into(),
+        vendor: mac.and_then(oui::lookup),
+        model: None,
+        kind: self_os_kind,
+        detail: match &self_name { Some(n) => format!("{n} · protected by SWEEPR"), None => "Protected by SWEEPR".into() },
+        is_router: false,
+        is_self: true,
+        private_address: false,
+        tracker_risk: false,
+        chip_translation: None,
+        camera_risk: false,
+        camera_ports: Vec::new(),
+        sources: vec!["self".into()],
+    }
+}
+
+fn detect_ipv6_fallback_addr() -> Option<(std::net::IpAddr, Option<String>)> {
+    if let Ok(iface) = netdev::get_default_interface() {
+        if let Some(v6) = iface.ipv6.first() {
+            let ip = v6.addr();
+            if !ip.is_loopback() {
+                let gw = iface.gateway.as_ref().and_then(|g| g.ipv6.first().map(|a| a.to_string()));
+                return Some((std::net::IpAddr::V6(ip), gw));
+            }
+        }
+    }
+    for iface in netdev::get_interfaces() {
+        if iface.is_loopback() {
+            continue;
+        }
+        if let Some(v6) = iface.ipv6.iter().find(|n| !n.addr().is_loopback()) {
+            let gw = iface.gateway.as_ref().and_then(|g| g.ipv6.first().map(|a| a.to_string()));
+            return Some((std::net::IpAddr::V6(v6.addr()), gw));
+        }
+    }
+    if let Ok(sock) = std::net::UdpSocket::bind("[::]:0") {
+        if sock.connect("[2606:4700:4700::1111]:80").is_ok() {
+            if let Ok(local) = sock.local_addr() {
+                return Some((local.ip(), None));
+            }
+        }
+    }
+    None
+}
+
+pub fn build_ipv6_only_fallback_report(local_ip: std::net::IpAddr, gateway_ip: Option<String>) -> ScanReport {
+    ScanReport {
+        local_ip: local_ip.to_string(),
+        gateway_ip,
+        network: "IPv6-Only LAN".into(),
+        scanned_at: SystemTime::now().duration_since(UNIX_EPOCH).map(|d| d.as_secs()).unwrap_or(0),
+        devices: vec![build_self_device(local_ip.to_string(), None)],
+    }
+}
+
 /// Scan the home network. Blocking; takes about 4 seconds.
+/// On IPv6-only networks (such as Apple App Review NAT64/DNS64 environments), returns a clean IPv6 report rather than failing.
 pub fn scan_network(opts: ScanOptions) -> Result<ScanReport, String> {
-    let net = detect_local_net()?;
+    let net = match detect_local_net() {
+        Ok(n) => n,
+        Err(err) => {
+            if let Some((v6_ip, gw)) = detect_ipv6_fallback_addr() {
+                return Ok(build_ipv6_only_fallback_report(v6_ip, gw));
+            }
+            return Err(err);
+        }
+    };
     let hosts = net.hosts();
 
     // Phase A (parallel): sweep + NetBIOS, SSDP, mDNS services.
@@ -244,31 +320,7 @@ pub fn scan_network(opts: ScanOptions) -> Result<ScanReport, String> {
     let mut devices: Vec<Device> = Vec::new();
 
     // This computer first.
-    let self_name = dns_lookup::get_hostname().ok().map(|h| pretty_host(&h)).filter(|s| !s.is_empty());
-    let (self_os_name, self_os_kind) = if cfg!(target_os = "macos") {
-        ("macOS Desktop", DeviceKind::Macos)
-    } else if cfg!(target_os = "linux") {
-        ("Linux Desktop", DeviceKind::Linux)
-    } else {
-        ("Windows Desktop", DeviceKind::Windows)
-    };
-    devices.push(Device {
-        ip: net.ip.to_string(),
-        mac: net.mac.clone().unwrap_or_default(),
-        name: self_os_name.into(),
-        vendor: net.mac.as_deref().and_then(oui::lookup),
-        model: None,
-        kind: self_os_kind,
-        detail: match &self_name { Some(n) => format!("{n} · protected by SWEEPR"), None => "Protected by SWEEPR".into() },
-        is_router: false,
-        is_self: true,
-        private_address: false,
-        tracker_risk: false,
-        chip_translation: None,
-        camera_risk: false,
-        camera_ports: Vec::new(),
-        sources: vec!["self".into()],
-    });
+    devices.push(build_self_device(net.ip.to_string(), net.mac.as_deref()));
 
     let mut mac_count: HashMap<String, usize> = HashMap::new();
     for (_, mac) in &table { *mac_count.entry(mac.clone()).or_default() += 1; }
@@ -582,5 +634,15 @@ mod tests {
         assert!(dev.camera_risk);
         assert_eq!(dev.camera_ports, vec![554]);
         assert!(dev.detail.contains("554"));
+    }
+
+    #[test]
+    fn builds_graceful_report_on_ipv6_only_network() {
+        let v6: std::net::IpAddr = "2001:db8::42".parse().unwrap();
+        let report = build_ipv6_only_fallback_report(v6, Some("fe80::1".into()));
+        assert_eq!(report.local_ip, "2001:db8::42");
+        assert_eq!(report.network, "IPv6-Only LAN");
+        assert_eq!(report.devices.len(), 1);
+        assert!(report.devices[0].is_self);
     }
 }

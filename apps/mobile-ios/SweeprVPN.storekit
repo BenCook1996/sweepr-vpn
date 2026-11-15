@@ -1,0 +1,134 @@
+{
+  "identifier" : "F4C71A09",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+
+  ],
+  "settings" : {
+    "_failTransactionsEnabled" : false,
+    "_locale" : "en_GB",
+    "_storefront" : "GBR",
+    "_storeKitErrors" : [
+
+    ]
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "sweepr_vpn_pro_group",
+      "localizations" : [
+
+      ],
+      "name" : "SWEEPR VPN Pro",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "74.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "sweepr_pro_annual_01",
+          "localizations" : [
+            {
+              "description" : "Full WireGuard VPN + Smart-TV DNS Shield (Save 50%)",
+              "displayName" : "SWEEPR VPN Pro — Yearly",
+              "locale" : "en_GB"
+            }
+          ],
+          "productID" : "com.sweepr.vpn.pro.annual",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "SWEEPR VPN Pro Yearly",
+          "subscriptionGroupID" : "sweepr_vpn_pro_group",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "48.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "sweepr_pro_sixmonth_01",
+          "localizations" : [
+            {
+              "description" : "6-Month WireGuard VPN + Smart-TV DNS Shield (Save 35%)",
+              "displayName" : "SWEEPR VPN Pro — 6 Months",
+              "locale" : "en_GB"
+            }
+          ],
+          "productID" : "com.sweepr.vpn.pro.sixmonth",
+          "recurringSubscriptionPeriod" : "P6M",
+          "referenceName" : "SWEEPR VPN Pro 6-Month",
+          "subscriptionGroupID" : "sweepr_vpn_pro_group",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "12.49",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "sweepr_pro_monthly_01",
+          "introductoryOffer" : {
+            "displayPrice" : "1.99",
+            "internalID" : "sweepr_monthly_intro_01",
+            "paymentMode" : "payUpFront",
+            "subscriptionPeriod" : "P1M"
+          },
+          "localizations" : [
+            {
+              "description" : "Flexible Monthly WireGuard VPN (1st-Month Intro Offer)",
+              "displayName" : "SWEEPR VPN Pro — Monthly",
+              "locale" : "en_GB"
+            }
+          ],
+          "productID" : "com.sweepr.vpn.pro.monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "SWEEPR VPN Pro Monthly",
+          "subscriptionGroupID" : "sweepr_vpn_pro_group",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "14.99",
+          "familyShareable" : false,
+          "groupNumber" : 2,
+          "internalID" : "sweepr_radar_annual_01",
+          "localizations" : [
+            {
+              "description" : "Smart-TV ACR Telemetry Blocker & Home Wi-Fi Shield",
+              "displayName" : "SWEEPR Wi-Fi Radar & TV Shield",
+              "locale" : "en_GB"
+            }
+          ],
+          "productID" : "com.sweepr.vpn.addon.radar.annual",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "SWEEPR Wi-Fi Radar Add-On",
+          "subscriptionGroupID" : "sweepr_vpn_pro_group",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}

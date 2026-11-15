@@ -583,6 +583,9 @@ pub fn verify_ed25519_license_token(token: &str) -> Result<(), String> {
         .map_err(|_| "Malformed license token header.".to_string())?;
     let header: serde_json::Value = serde_json::from_slice(&header_bytes)
         .map_err(|_| "Invalid license token header JSON.".to_string())?;
+    if header.get("alg").and_then(|v| v.as_str()) != Some("EdDSA") {
+        return Err("Unsupported license token algorithm.".into());
+    }
     let kid = header.get("kid").and_then(|v| v.as_str()).unwrap_or("ed25519-2026-01");
     let pub_key_b64 = match kid {
         "ed25519-2026-01" => SWEEPR_LICENSE_PUBLIC_KEY_B64URL, _ => return Err("Unknown signing key ID (kid).".into()),
@@ -1312,6 +1315,64 @@ pub fn connect(req: ConnectRequest) -> Result<TunnelStatus, String> {
     })
 }
 
+fn validate_wg_endpoint(endpoint: &str) -> Result<(), String> {
+    if endpoint.is_empty() || endpoint.bytes().any(|b| b <= 0x20 || b == 0x7f) {
+        return Err("Invalid server WireGuard endpoint address.".into());
+    }
+    if endpoint.parse::<std::net::SocketAddr>().is_ok() {
+        return Ok(());
+    }
+    let (host, port_str) = endpoint
+        .rsplit_once(':')
+        .ok_or_else(|| "Invalid server WireGuard endpoint address.".to_string())?;
+    let port: u16 = port_str
+        .parse()
+        .map_err(|_| "Invalid server WireGuard endpoint port.".to_string())?;
+    if port == 0 || host.is_empty() || host.len() > 253 {
+        return Err("Invalid server WireGuard endpoint address.".into());
+    }
+    let is_valid_host = host.split('.').all(|label| {
+        !label.is_empty()
+            && label.len() <= 63
+            && !label.starts_with('-')
+            && !label.ends_with('-')
+            && label.chars().all(|c| c.is_ascii_alphanumeric() || c == '-')
+    });
+    if !is_valid_host {
+        return Err("Invalid server WireGuard endpoint hostname.".into());
+    }
+    Ok(())
+}
+
+fn validate_cidr_list(cidrs: &str, err_label: &str) -> Result<(), String> {
+    let mut count = 0usize;
+    for token in cidrs.split(',') {
+        let tok = token.trim();
+        if tok.is_empty() {
+            return Err(format!("Invalid {err_label} CIDR entry."));
+        }
+        let (ip_str, pref_str) = tok
+            .split_once('/')
+            .ok_or_else(|| format!("Invalid {err_label} CIDR entry."))?;
+        let ip = ip_str
+            .parse::<std::net::IpAddr>()
+            .map_err(|_| format!("Invalid {err_label} IP address."))?;
+        let max_pref = if ip.is_ipv4() { 32 } else { 128 };
+        if pref_str
+            .parse::<u8>()
+            .map(|p| p > max_pref)
+            .unwrap_or(true)
+        {
+            return Err(format!("Invalid {err_label} prefix length."));
+        }
+        count += 1;
+    }
+    if count == 0 {
+        return Err(format!("Invalid {err_label} CIDR entry."));
+    }
+    Ok(())
+}
+
 fn validate_wg_conf_fields(
     server_pub: &str,
     endpoint: &str,
@@ -1327,50 +1388,34 @@ fn validate_wg_conf_fields(
     {
         return Err("Invalid server WireGuard public key.".into());
     }
-    if endpoint.parse::<std::net::SocketAddr>().is_err() {
-        return Err("Invalid server WireGuard endpoint address.".into());
-    }
-    let (addr_ip, addr_prefix) = address
-        .split_once('/')
-        .ok_or_else(|| "Invalid tunnel IPv4 CIDR address.".to_string())?;
-    if addr_ip.parse::<std::net::Ipv4Addr>().is_err()
-        || addr_prefix
-            .parse::<u8>()
-            .map(|p| p > 32)
-            .unwrap_or(true)
-    {
-        return Err("Invalid tunnel IPv4 CIDR address.".into());
-    }
+    validate_wg_endpoint(endpoint)?;
+    validate_cidr_list(address, "tunnel")?;
     for d in dns.split(',') {
         let dt = d.trim();
         if dt.is_empty() || dt.parse::<std::net::IpAddr>().is_err() {
-            return Err("Invalid tunnel DNS IPv4 address.".into());
+            return Err("Invalid tunnel DNS IP address.".into());
         }
     }
-    for token in allowed_ips.split(',') {
-        let tok = token.trim();
-        let (ip_str, pref_str) = tok
-            .split_once('/')
-            .ok_or_else(|| "Invalid AllowedIPs CIDR entry.".to_string())?;
-        let ip = ip_str
-            .parse::<std::net::IpAddr>()
-            .map_err(|_| "Invalid AllowedIPs IP address.".to_string())?;
-        let max_pref = if ip.is_ipv4() { 32 } else { 128 };
-        if pref_str
-            .parse::<u8>()
-            .map(|p| p > max_pref)
-            .unwrap_or(true)
-        {
-            return Err("Invalid AllowedIPs prefix length.".into());
-        }
-    }
+    validate_cidr_list(allowed_ips, "AllowedIPs")?;
     Ok(())
 }
 
 /// Measures physical network RTT (ms) to a VPN node endpoint using a bounded TCP handshake probe.
+/// Resolves both IP literals (IPv4/IPv6) and hostnames (including DNS64/NAT64 on IPv6-only networks).
 pub fn probe_endpoint_rtt_ms(endpoint: &str, timeout_ms: u64) -> Option<u32> {
-    let addr: std::net::SocketAddr = endpoint.parse().ok()?;
-    let probe_addr = std::net::SocketAddr::new(addr.ip(), 8787);
+    use std::net::ToSocketAddrs;
+    let resolved_addrs: Vec<std::net::SocketAddr> = if let Ok(addr) = endpoint.parse::<std::net::SocketAddr>() {
+        vec![std::net::SocketAddr::new(addr.ip(), 8787)]
+    } else {
+        let (host, _) = endpoint.rsplit_once(':')?;
+        let host_clean = host.trim_start_matches('[').trim_end_matches(']');
+        (host_clean, 8787)
+            .to_socket_addrs()
+            .ok()?
+            .map(|a| std::net::SocketAddr::new(a.ip(), 8787))
+            .collect()
+    };
+    let probe_addr = *resolved_addrs.first()?;
     let t0 = std::time::Instant::now();
     let _ = std::net::TcpStream::connect_timeout(
         &probe_addr,
@@ -1415,8 +1460,11 @@ mod tests {
         // Verify forged/unsigned token is rejected by Ed25519 verifier
         assert!(verify_ed25519_license_token("eyJhbGciOiJFZERTQSJ9.eyJzdGF0dXMiOiJhY3RpdmUifQ.AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA").is_err());
 
-        // Verify valid WireGuard config fields (including dual-stack IPv6 ::/0) pass and newline/PostUp injection is rejected
+        // Verify valid WireGuard config fields (including dual-stack IPv6 ::/0, hostname:port, and [IPv6]:port) pass and injection is rejected
         assert!(validate_wg_conf_fields(&kp.public_key, "78.141.205.68:51820", "10.64.0.2/32", "10.64.0.1", "0.0.0.0/0, ::/0").is_ok());
+        assert!(validate_wg_conf_fields(&kp.public_key, "uk-lon-01.wg.sweeprvpn.com:51820", "10.64.0.2/32, fd00::2/128", "1.1.1.2, 2606:4700:4700::1112", "0.0.0.0/0, ::/0").is_ok());
+        assert!(validate_wg_conf_fields(&kp.public_key, "[2001:db8::1]:51820", "10.64.0.2/32", "2606:4700:4700::1111", "0.0.0.0/0, ::/0").is_ok());
+        assert!(validate_wg_conf_fields(&kp.public_key, "uk-lon-01.wg.sweeprvpn.com\nPostUp = calc.exe:51820", "10.64.0.2/32", "1.1.1.1", "0.0.0.0/0").is_err());
         assert!(validate_wg_conf_fields(&kp.public_key, "78.141.205.68:51820", "10.64.0.2/32\nPostUp = calc.exe", "10.64.0.1", "0.0.0.0/0").is_err());
         assert!(validate_wg_conf_fields(&kp.public_key, "78.141.205.68:51820", "10.64.0.2/32", "10.64.0.1\nPostUp = id", "0.0.0.0/0").is_err());
 

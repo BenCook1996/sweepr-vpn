@@ -574,13 +574,12 @@
         <div id="wgIspScriptPreview" class="card" style="margin-top:10px;background:var(--card2);padding:11px 13px;font-size:12px;line-height:1.45;color:var(--ink3)"></div>
       </div>
 
-      <!-- Compact Bottom ISP Accountability Strip matching Mockup 1 -->
       <div class="card" id="ispBottomStrip" style="margin-top:12px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:var(--card2)">
         <div style="min-width:0;flex:1">
-          <div class="t" style="font-size:13px">ISP Accountability &amp; Speed-Drop Refund Proof</div>
-          <div class="s" id="ispStripSummary">Spectrum / Virgin Media 500 Mbps Plan ($85/mo) &bull; Evening drop detected (88 Mbps at 8:30 PM)</div>
+          <div class="t" style="font-size:13px">ISP Accountability &amp; Speed-Drop Diagnostics</div>
+          <div class="s" id="ispStripSummary">Run an ISP throughput test to measure live connection performance</div>
         </div>
-        <button class="btn-soft" style="font-size:12px;padding:7px 12px" onclick="setWifiGuardTab('isp')">Generate $35 ISP Refund Script &amp; PDF</button>
+        <button class="btn-soft" style="font-size:12px;padding:7px 12px" onclick="setWifiGuardTab('isp')">Open ISP Diagnostics</button>
       </div>
 
       <!-- Hidden Legacy Radar & Individual Toggles (Preserved for JS Compatibility) -->
@@ -670,8 +669,8 @@
         </div>
       </div>
 
-      <!-- Item 10: Product-Led Growth Referral Loop Card -->
-      <div class="card" style="margin-top:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+      <!-- Item 10: Product-Led Growth Referral Loop Card (Hidden on Apple App Store builds) -->
+      <div class="card" id="refLoopCard" style="margin-top:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
         <div class="grow">
           <div class="t"><span data-i18n="refTitle">Refer a friend — Give 50% off, get 1 free month</span> <span class="pill ok" style="padding:2px 8px;font-size:10.5px">Bonus</span></div>
           <div class="s" id="refLinkText">Share your invite link; every friend who joins adds 30 days to your plan.</div>
@@ -679,8 +678,9 @@
         <button class="btn-soft" id="copyRefBtn" onclick="copyReferralLink()">Copy Invite Link</button>
       </div>
 
-      <h3 class="sec"><span style="color:var(--ink);font-size:15px;font-weight:800" data-i18n="helpHeader">Need help?</span> <span style="color:var(--muted)" data-i18n="helpReply">We reply within 24 hours</span></h3>
+      <h3 class="sec"><span style="color:var(--ink);font-size:15px;font-weight:800" data-i18n="helpHeader">Need help?</span> <span style="color:var(--muted)" data-i18n="helpReply">support@sweeprvpn.com · 24h response</span></h3>
       <div class="card" style="display:flex;flex-direction:column;gap:10px">
+        <div class="s">Email us directly at <a href="mailto:support@sweeprvpn.com" style="color:var(--accent);font-weight:700;text-decoration:underline">support@sweeprvpn.com</a> or send a message below.</div>
         <div>
           <label class="field-lbl" for="supEmail">YOUR EMAIL ADDRESS</label>
           <input class="input" id="supEmail" type="email" placeholder="e.g. you@example.com" />
@@ -694,7 +694,25 @@
           <span class="s" id="supStatusText" style="font-weight:700;display:none"></span>
         </div>
       </div>
-      <div class="s" style="text-align:center;margin:14px 0 4px">SWEEPR VPN v2.5.0 · WireGuard® Engine · Up to date ✓</div>
+
+      <div class="card" id="deleteAccountCard" style="margin-top:12px;border-color:rgba(239,68,68,.28)">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+          <div class="grow">
+            <div class="t" style="color:#ef4444">Delete Account &amp; Data</div>
+            <div class="s">Permanently erase your SWEEPR VPN account record, linked device keys, and local credentials.</div>
+          </div>
+          <button type="button" class="btn-soft" id="delAccPromptBtn" style="color:#ef4444;border-color:rgba(239,68,68,.35)" onclick="requestAccountDeletionConfirm()">Delete Account</button>
+        </div>
+        <div id="delAccConfirmBox" class="hidden" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:8px">
+          <div class="s" style="color:#ef4444;font-weight:700">This will disconnect SWEEPR VPN, revoke all linked devices, and permanently delete your account record.</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button type="button" class="btn-soft" id="delAccConfirmBtn" style="background:#ef4444;color:#fff;border-color:#ef4444" onclick="executeAccountDeletion()">Confirm Permanent Deletion</button>
+            <button type="button" class="btn-soft" onclick="$('delAccConfirmBox').classList.add('hidden')">Cancel</button>
+          </div>
+          <div class="s" id="delAccStatusText" style="display:none;font-weight:700"></div>
+        </div>
+      </div>
+      <div class="s" style="text-align:center;margin:14px 0 4px">SWEEPR VPN v2.6.0 · WireGuard® Engine</div>
     </section>
   </main>
 
@@ -714,7 +732,7 @@
     <div class="timer hidden" id="timerBox" style="width:100%">
       <div class="k" data-i18n="lblSession">Protected session</div>
       <div class="n" id="timer">00:00:00</div>
-      <div class="spark-meta" id="liveThroughput">↓ 48.4 Mbps · ↑ 11.2 Mbps · 0.4 MB encrypted</div>
+      <div class="spark-meta" id="liveThroughput">WireGuard encrypted tunnel active</div>
       <div class="spark-bars" id="sparkBars"></div>
     </div>
     <div style="width:100%;max-width:260px;margin-top:24px;position:relative;z-index:2">
@@ -759,7 +777,7 @@
 
     <div class="s" id="mError" style="color:#ef4444;font-weight:700;display:none">Please enter a valid license key.</div>
 
-    <button class="plan on" data-plan="monthly" onclick="plan(this)"><span class="tag">POPULAR · £1.99 INTRO</span><div><div class="t">1st-Month Trial</div><div class="s">£1.99 first month, then £12.49/mo</div></div><div style="text-align:right"><div style="font-weight:700;font-size:16px;color:var(--accent)">£1.99</div><div class="s">today</div></div></button>
+    <button class="plan on" data-plan="monthly" onclick="plan(this)"><span class="tag">POPULAR · £1.99 INTRO</span><div><div class="t">1st-Month Intro Offer</div><div class="s">£1.99 first month, then £12.49/mo</div></div><div style="text-align:right"><div style="font-weight:700;font-size:16px;color:var(--accent)">£1.99</div><div class="s">today</div></div></button>
     <button class="plan" data-plan="annual" onclick="plan(this)"><div><div class="t">Yearly Plan</div><div class="s">£74.99 billed once a year · Save 50%</div></div><div style="text-align:right"><div style="font-weight:700;font-size:15px">£6.25</div><div class="s">/month</div></div></button>
     <button class="plan" data-plan="six_month" onclick="plan(this)"><div><div class="t">6-Month Plan</div><div class="s">£48.99 · Save 35%</div></div><div style="text-align:right"><div style="font-weight:700;font-size:15px">£8.17</div><div class="s">/month</div></div></button>
 
@@ -798,7 +816,7 @@
     <div style="display:flex;align-items:center;gap:12px">
       <svg style="width:40px;height:40px;flex-shrink:0"><use href="#logo"/></svg>
       <div class="grow">
-        <div style="font-size:17px;font-weight:700">iOS, Android &amp; macOS Tunnel Setup</div>
+        <div id="wgModalTitle" style="font-size:17px;font-weight:700">iOS, Android &amp; macOS Tunnel Setup</div>
         <div class="s" id="wgModalSub">Instant 10Gbps WireGuard profile, QR code, or Apple On-Demand profile</div>
       </div>
       <button onclick="closeMobileWireGuardModal()" aria-label="Close" style="font-size:18px;color:var(--muted);padding:4px 8px">✕</button>
@@ -828,7 +846,7 @@
       <button type="button" onclick="document.getElementById('wgConfText').classList.toggle('hidden')" style="font-size:11.5px;color:var(--muted);font-weight:700">Show technical WireGuard config ›</button>
     </div>
     <div class="wg-code-preview hidden" id="wgConfText">Loading configuration…</div>
-    <div class="s" style="line-height:1.45">
+    <div id="wgModalHowto" class="s" style="line-height:1.45">
       <strong>How to connect on iPhone / Android in 15 seconds:</strong><br>
       1. Install the free official <strong>WireGuard</strong> app (or tap <strong>iOS / macOS .mobileconfig</strong> on Apple devices).<br>
       2. Tap <strong>+</strong> &rarr; <strong>Create from QR code</strong> (or send the 1-Tap Setup Link to your phone).
@@ -1303,7 +1321,7 @@
     wgDevicePolicies = JSON.parse(localStorage.getItem('sweepr_wifi_guard_policies') || '{}') || {};
   } catch (e) { wgDevicePolicies = {}; }
 
-  let wgIspPlan = { ispName: 'Spectrum', promisedMbps: 500, monthlyCost: 85, measuredMbps: 88, dropPct: 82 };
+  let wgIspPlan = { ispName: '', promisedMbps: 0, monthlyCost: 0, measuredMbps: 0, dropPct: 0 };
   try {
     const savedIsp = JSON.parse(localStorage.getItem('sweepr_wifi_guard_isp') || 'null');
     if (savedIsp && savedIsp.ispName) wgIspPlan = Object.assign(wgIspPlan, savedIsp);
@@ -1557,17 +1575,18 @@
     renderDevices();
     try {
       if (!tauri && !isWebView2) {
-        // Provide realistic Plain-English Wi-Fi Guard Home preview in browser mode matching Mockup 1
-        await new Promise(r => setTimeout(r, 550));
-        devices = [
-          { name:"Neighbor's Unknown Android", ip:'192.168.1.49', mac:'Private MAC', kind:'android', detail:'Joined 4 mins ago · Guest Wi-Fi · Unrecognized device', tracker_risk:false, intruder_risk:true },
-          { name:"Emma's Nintendo Switch", ip:'192.168.1.31', mac:'Nintendo', kind:'console', detail:'Games Console · Kids Bedtime Schedule ready (' + formatBedtime12h(getBedtimeScheduleTime()) + ' – 7:00 AM)', tracker_risk:false },
-          { name:'Living Room Samsung TV', ip:'192.168.1.22', mac:'Samsung', kind:'tv', detail:'Smart-TV ACR Spying Blocked (142 trackers stopped)', tracker_risk:false },
-          { name:'Kitchen Echo Dot', ip:'192.168.1.35', mac:'24:6F:28:AA:11:04', kind:'speaker', detail:'Voice Assistant · Trusted Family Device', chip_translation:'Translated from Espressif IoT Chip', tracker_risk:false },
-          { name:'This Device', ip:'192.168.1.14', mac:'Local', kind:'computer', is_self:true, detail:'Protected by SWEEPR 10 Gbps WireGuard', tracker_risk:false },
-          { name:'Home Wi-Fi Router', ip:'192.168.1.1', mac:'Gateway', kind:'router', is_router:true, detail:'Your home internet box · UPnP & WAN ports verified safe', tracker_risk:false }
-        ];
-        lastScanAt = Date.now();
+        if (new URLSearchParams(location.search).get('mock') === '1') {
+          await new Promise(r => setTimeout(r, 350));
+          devices = [
+            { name:"Neighbor's Unknown Device", ip:'192.168.1.49', mac:'Private MAC', kind:'private', detail:'Joined recently · Guest Wi-Fi · Unrecognized device', tracker_risk:false, intruder_risk:true },
+            { name:'Living Room Samsung TV', ip:'192.168.1.22', mac:'Samsung', kind:'tv', detail:'Smart-TV ACR Telemetry Filtered', tracker_risk:false },
+            { name:'This Device', ip:'192.168.1.14', mac:'Local', kind:'computer', is_self:true, detail:'Protected by SWEEPR 10 Gbps WireGuard', tracker_risk:false },
+            { name:'Home Wi-Fi Router', ip:'192.168.1.1', mac:'Gateway', kind:'router', is_router:true, detail:'Local gateway reachable', tracker_risk:false }
+          ];
+          lastScanAt = Date.now();
+        } else {
+          devices = [];
+        }
       } else if (isWebView2 && !tauri) {
         const report = await invokeWebView2('scanNetwork', {}, 25000);
         devices = (report && report.devices) || [];
@@ -1908,7 +1927,9 @@
     try {
       let id = localStorage.getItem('sweepr_vpn_device_id');
       if (!id) {
-        const rand = Math.random().toString(16).slice(2, 10) + Date.now().toString(16).slice(-4);
+        const arr = new Uint8Array(6);
+        if (window.crypto && window.crypto.getRandomValues) window.crypto.getRandomValues(arr);
+        const rand = Array.from(arr, b => b.toString(16).padStart(2, '0')).join('') + Date.now().toString(16).slice(-4);
         id = 'dev_vpn_' + rand;
         localStorage.setItem('sweepr_vpn_device_id', id);
       }
@@ -2146,7 +2167,7 @@
     }).join('');
   }
   function extractCleanLicenseOrCode(raw) {
-    const rawStr = String(raw || '').trim();
+    const rawStr = String(raw || '').trim().slice(0, 256);
     const ptkMatch = rawStr.match(/ptk_[A-Za-z0-9_-]{12,64}/);
     if (ptkMatch) return ptkMatch[0];
     const str = rawStr.toUpperCase();
@@ -2154,8 +2175,8 @@
     if (keyMatch) return keyMatch[0].replace(/\s+/g, '').toUpperCase();
     const compact = str.replace(/[^A-Z0-9-]/g, '');
     if (/^\d{6}$/.test(compact)) return compact;
-    const sixDigitMatch = str.match(/(?:^|\D)(\d(?:\s*\d){5})(?:\D|$)/);
-    if (sixDigitMatch) return sixDigitMatch[1].replace(/\s+/g, '');
+    const digitsOnly = str.replace(/\D+/g, '');
+    if (digitsOnly.length === 6) return digitsOnly;
     return compact;
   }
   function handleKeyInputPaste(e) {
@@ -2218,11 +2239,7 @@
     btn.textContent = 'Sending…';
     btn.disabled = true;
     try {
-      const endpoints = [];
-      if ((location.protocol === 'http:' || location.protocol === 'https:') && location.hostname !== 'app.sweeprvpn.local') {
-        endpoints.push('/api/vpn/resend-key');
-      }
-      endpoints.push('https://sweeprvpn.com/api/vpn/resend-key', 'http://localhost:3090/api/vpn/resend-key', 'http://localhost:8080/api/vpn/resend-key');
+      const endpoints = getApiCandidateUrls('/api/vpn/resend-key');
       let errMsg = 'Could not reach the license server. Please check your connection and try again.';
       let successMsg = 'Sent! Check ' + email + ' for your license key.';
       let ok = false;
@@ -2249,6 +2266,68 @@
       btn.disabled = false;
     }
   }
+  const IS_APPLE_APP_STORE = Boolean(window.__SWEEPR_APP_STORE__ || new URLSearchParams(location.search || '').get('store') === 'apple');
+  function requestAccountDeletionConfirm() {
+    const box = $('delAccConfirmBox');
+    if (box) box.classList.remove('hidden');
+  }
+  async function executeAccountDeletion() {
+    const st = $('delAccStatusText');
+    const btn = $('delAccConfirmBtn');
+    const code = (state.activationCode || localStorage.getItem('sweepr_vpn_code') || localStorage.getItem('sweepr_vpn_license_key') || '').trim();
+    const email = (state.email || localStorage.getItem('sweepr_vpn_email') || ($('supEmail') && $('supEmail').value) || '').trim();
+    if (!code) {
+      if (st) { st.style.display = 'block'; st.style.color = '#ef4444'; st.textContent = 'No active license key is signed in on this device.'; }
+      return;
+    }
+    if (btn) btn.disabled = true;
+    try {
+      let deletedOk = false;
+      for (const u of getApiCandidateUrls('/api/vpn/account/delete')) {
+        try {
+          const r = await fetch(u, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ key: code, email, reason: 'desktop_in_app_deletion' })
+          });
+          const d = await r.json().catch(() => ({}));
+          if (r.ok && d && d.ok) { deletedOk = true; break; }
+        } catch (e) {}
+      }
+      if (state.on) {
+        try { toggleConnect(); } catch (e) {}
+      }
+      state.pro = false;
+      state.activationCode = '';
+      state.email = '';
+      ['sweepr_vpn_code', 'sweepr_vpn_license_key', 'sweepr_vpn_email', 'sweepr_vpn_token', 'sweepr_vpn_license_token', 'sweepr_vpn_plan'].forEach(k => {
+        try { localStorage.removeItem(k); } catch (e) {}
+      });
+      if ($('mCode')) $('mCode').value = '';
+      renderAll();
+      if (st) {
+        st.style.display = 'block';
+        st.style.color = '#059669';
+        st.textContent = deletedOk ? 'Account and local credentials permanently deleted.' : 'Local credentials cleared.';
+      }
+      toast('Account & local data deleted');
+    } finally {
+      if (btn) btn.disabled = false;
+    }
+  }
+  function applyAppleAppStoreUi() {
+    if (!IS_APPLE_APP_STORE) return;
+    const refCard = $('refLoopCard');
+    if (refCard) refCard.classList.add('hidden');
+    const cBtn = $('mCheckoutBtn');
+    if (cBtn) cBtn.classList.add('hidden');
+    document.querySelectorAll('#modal .plan').forEach(p => p.classList.add('hidden'));
+    const wgTitle = $('wgModalTitle');
+    if (wgTitle) wgTitle.textContent = 'iOS & macOS Tunnel Setup';
+    const wgHowto = $('wgModalHowto');
+    if (wgHowto) wgHowto.innerHTML = '<strong>How to connect on iPhone, iPad, or Mac:</strong><br>1. Open the <strong>SWEEPR VPN</strong> native app or tap <strong>iOS / macOS .mobileconfig</strong>.<br>2. Scan the QR code or click Connect.';
+  }
+
   function plan(btn) {
     btn.parentNode.querySelectorAll('.plan').forEach(p => p.classList.toggle('on', p === btn));
     selectedModalPlan = btn.getAttribute('data-plan') || 'annual';
@@ -2259,6 +2338,12 @@
     const typedKey = ($('mCode').value || '').trim();
     if (typedKey.length >= 6) {
       activateKeyOnly();
+      return;
+    }
+    if (IS_APPLE_APP_STORE) {
+      if ($('mKeySection')) $('mKeySection').classList.remove('hidden');
+      if ($('mCode')) $('mCode').focus();
+      toast('Please subscribe via the App Store or enter an existing SWEEPR license key.');
       return;
     }
     let checkoutUrl = 'https://sweeprvpn.com/order?plan=' + encodeURIComponent(selectedModalPlan || 'annual');
@@ -2282,6 +2367,8 @@
     const parts = token.trim().split('.');
     if (parts.length !== 3) return false;
     try {
+      const header = JSON.parse(new TextDecoder().decode(b64UrlToBytes(parts[0])));
+      if (!header || header.alg !== 'EdDSA') return false;
       const claims = JSON.parse(new TextDecoder().decode(b64UrlToBytes(parts[1])));
       if (claims.status !== 'active' && claims.status !== 'trialing') return false;
       if (claims.project_id && claims.project_id !== 'vpn') return false;
@@ -2325,17 +2412,7 @@
         return await tauri.core.invoke('activate_subscription', { email, code, apiUrl: null, deviceId: getOrCreateDesktopDeviceId() });
       } catch (e) {}
     }
-    const endpoints = [];
-    if ((location.protocol === 'http:' || location.protocol === 'https:') && location.hostname !== 'app.sweeprvpn.local') {
-      endpoints.push('/api/vpn/activate');
-    }
-    endpoints.push(
-      'https://sweeprvpn.com/api/vpn/activate',
-      'http://localhost:3090/api/vpn/activate',
-      'http://localhost:8080/api/vpn/activate',
-      'http://127.0.0.1:8788/api/vpn/activate',
-      'http://127.0.0.1:8080/api/vpn/activate'
-    );
+    const endpoints = getApiCandidateUrls('/api/vpn/activate');
     let lastMsg = 'No active paid subscription found for that license key.';
     for (const url of endpoints) {
       try {
@@ -2356,7 +2433,7 @@
         const d = await r.json().catch(() => ({}));
         if (r.ok && d.ok && d.valid) {
           const signedTok = d.token || d.license_token;
-          if (signedTok && !(await verifySignedLicenseToken(signedTok))) {
+          if (!signedTok || !(await verifySignedLicenseToken(signedTok))) {
             lastMsg = 'License response failed cryptographic Ed25519 signature check.';
             continue;
           }
@@ -2509,7 +2586,7 @@
     currentWgConf = data.config_text;
     currentWgFilename = data.filename || ('sweepr-' + s.code.toLowerCase() + '.conf');
     $('wgConfText').textContent = currentWgConf;
-    if (data.qr_svg) {
+    if (data.qr_svg && String(data.qr_svg).startsWith('<svg') && !/<script|onload|onerror|javascript:/i.test(String(data.qr_svg))) {
       $('wgQrBox').innerHTML = data.qr_svg + '<div class="s" style="color:#0f172a;font-weight:800">Scan with the WireGuard app on iOS or Android</div>';
     } else {
       $('wgQrBox').innerHTML = '<div class="s" style="color:#047857;font-weight:800;padding:12px;text-align:center">✓ WireGuard Peer Active (' + esc(data.address || '10.64.0.x') + ')<br>Tap "Download .conf Profile" below to import into WireGuard.</div>';
@@ -2625,16 +2702,7 @@
     }
 
     if (!sentOk) {
-      const urls = [
-        'http://127.0.0.1:8788/api/support/contact',
-        'http://localhost:8788/api/support/contact',
-        'http://127.0.0.1:8080/api/vpn/support',
-        'http://localhost:8080/api/vpn/support',
-        'https://sweeprvpn.com/api/vpn/support'
-      ];
-      if ((location.protocol === 'http:' || location.protocol === 'https:') && location.hostname !== 'app.sweeprvpn.local') {
-        urls.unshift('/api/vpn/support');
-      }
+      const urls = getApiCandidateUrls('/api/vpn/support');
       for (const u of urls) {
         try {
           const r = await fetch(u, {
@@ -3023,6 +3091,7 @@
     return l2 > c2;
   }
   async function checkAppUpdate() {
+    if (IS_APPLE_APP_STORE) return;
     try {
       let data = null;
       if (tauri && tauri.core) {
@@ -3078,10 +3147,13 @@
   }
 
   renderAll();
+  applyAppleAppStoreUi();
   verifySavedSubscription();
   refreshLiveServerStatus();
-  checkAppUpdate();
-  setInterval(checkAppUpdate, 4 * 60 * 60 * 1000);
+  if (!IS_APPLE_APP_STORE) {
+    checkAppUpdate();
+    setInterval(checkAppUpdate, 4 * 60 * 60 * 1000);
+  }
   scanWifi();
   setInterval(() => {
     if (state.view === 'wifi' || state.auto) silentRefreshWifi();

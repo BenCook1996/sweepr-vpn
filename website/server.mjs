@@ -22,6 +22,8 @@ const PUBLIC_URL = (process.env.PUBLIC_URL || `http://localhost:${PORT}`).replac
 const SWEEPR_CRM_URL = (process.env.SWEEPR_CRM_URL || 'http://localhost:8788').replace(/\/+$/, '');
 const SWEEPR_CRM_API_KEY = (process.env.SWEEPR_CRM_API_KEY || '').trim();
 const ALLOW_DEMO_ACCOUNT = process.env.ALLOW_DEMO_ACCOUNT === 'true' && process.env.NODE_ENV !== 'production';
+const APP_REVIEW_DEMO_EMAIL = String(process.env.APP_REVIEW_DEMO_EMAIL || '').trim().toLowerCase();
+const APP_REVIEW_DEMO_KEY = String(process.env.APP_REVIEW_DEMO_KEY || '').trim().toUpperCase();
 const SESSION_SECRET =
   (process.env.SESSION_SECRET || '').trim() ||
   (process.env.LICENSE_PRIVATE_KEY_B64
@@ -88,15 +90,24 @@ const BLOCKED_STATIC_FILES = new Set([
 const crm = new SweeprCrmClient({ projectId: 'vpn', crmUrl: SWEEPR_CRM_URL, apiKey: SWEEPR_CRM_API_KEY });
 const BOT_UA_RE = /googlebot|bingbot|gptbot|oai-searchbot|chatgpt-user|claudebot|anthropic-ai|perplexitybot|applebot|duckduckbot|yandexbot/i;
 
+function normalizeEmail(raw) {
+  const str = String(raw || '').normalize('NFC').trim().toLowerCase();
+  if (!str || str.length > 254 || !/^[\x20-\x7E]+$/.test(str)) return '';
+  if (str.normalize('NFKC') !== str) return '';
+  return str;
+}
+
 function isValidEmail(email) {
-  return typeof email === 'string' && email.length <= 254 && EMAIL_REGEX.test(email);
+  if (typeof email !== 'string' || email.length > 254) return false;
+  const norm = normalizeEmail(email);
+  return Boolean(norm && norm === email.trim().toLowerCase() && EMAIL_REGEX.test(norm));
 }
 
 function safeCompareStrings(a, b) {
   if (typeof a !== 'string' || typeof b !== 'string' || !a || !b) return false;
   const hashA = crypto.createHash('sha256').update(a, 'utf8').digest();
   const hashB = crypto.createHash('sha256').update(b, 'utf8').digest();
-  return crypto.timingSafeEqual(hashA, hashB) && a.length === b.length;
+  return crypto.timingSafeEqual(hashA, hashB);
 }
 
 function hasValidCrmServiceKey(req) {
@@ -110,7 +121,7 @@ function hasValidCrmServiceKey(req) {
 }
 
 function maskEmailAddress(email) {
-  const clean = String(email || '').trim().toLowerCase();
+  const clean = normalizeEmail(email);
   const [local, domain] = clean.split('@');
   if (!local || !domain) return '';
   if (local.length <= 2) return `${local[0]}***@${domain}`;
@@ -118,7 +129,7 @@ function maskEmailAddress(email) {
 }
 
 function canonicalizeEmailForAntiAbuse(email) {
-  const clean = String(email || '').trim().toLowerCase();
+  const clean = normalizeEmail(email);
   const [rawLocal, rawDomain] = clean.split('@');
   if (!rawLocal || !rawDomain) return clean;
   let local = rawLocal.split('+')[0];
@@ -169,7 +180,7 @@ function resolveTrustedOrigin(req) {
 
 function isSameOriginOrTrusted(req) {
   const fetchSite = req?.headers?.['sec-fetch-site'];
-  if (fetchSite === 'cross-site') return false;
+  if (fetchSite === 'cross-site' || fetchSite === 'same-site' || fetchSite === 'none') return false;
 
   const rawOrigin = req?.headers?.origin;
   if (rawOrigin === 'null') return false;
@@ -178,15 +189,38 @@ function isSameOriginOrTrusted(req) {
     if (!trusted) return false;
     return rawOrigin.replace(/\/+$/, '') === trusted.replace(/\/+$/, '');
   }
-  if (fetchSite === 'same-origin' || fetchSite === 'same-site' || fetchSite === 'none') {
+  if (fetchSite === 'same-origin') {
     return true;
   }
+  const rawReferer = String(req?.headers?.referer || '').trim();
+  if (rawReferer) {
+    const trusted = resolveTrustedOrigin(req);
+    if (trusted && (rawReferer === trusted || rawReferer.startsWith(trusted.replace(/\/+$/, '') + '/'))) {
+      return true;
+    }
+  }
   const ct = String(req?.headers?.['content-type'] || '').toLowerCase();
-  return Boolean(req?.headers?.['x-requested-with']) || (ct.startsWith('application/json') && !fetchSite);
+  return !fetchSite && (Boolean(req?.headers?.['x-requested-with']) || ct.startsWith('application/json'));
+}
+
+function isPrivateOrLoopbackIp(ip) {
+  const clean = String(ip || '').trim().toLowerCase().replace(/^::ffff:/, '');
+  if (!clean) return true;
+  if (clean === '127.0.0.1' || clean === '::1' || clean === 'localhost' || clean.startsWith('127.')) return true;
+  if (clean.startsWith('10.') || clean.startsWith('192.168.') || clean.startsWith('169.254.')) return true;
+  if (/^172\.(1[6-9]|2\d|3[0-1])\./.test(clean)) return true;
+  if (clean.startsWith('fc') || clean.startsWith('fd') || clean.startsWith('fe80:')) return true;
+  return false;
+}
+
+function isDirectLocalhostSocket(req) {
+  if (TRUST_PROXY) return false;
+  const remoteAddr = String(req?.socket?.remoteAddress || '').trim();
+  return remoteAddr === '127.0.0.1' || remoteAddr === '::1' || remoteAddr === '::ffff:127.0.0.1';
 }
 
 function hasValidCloudflareHeaders(req) {
-  if (process.env.TRUST_CLOUDFLARE === 'false') return false;
+  if (process.env.TRUST_CLOUDFLARE !== 'true') return false;
   const cfRay = String(req?.headers?.['cf-ray'] || '').trim();
   return /^[0-9a-f]{16}-[A-Z]{3}$/i.test(cfRay);
 }
@@ -195,15 +229,69 @@ function getClientIp(req) {
   if (TRUST_PROXY) {
     if (hasValidCloudflareHeaders(req)) {
       const cfIp = String(req.headers['cf-connecting-ip'] || '').trim();
-      if (cfIp && /^[0-9a-fA-F.:]{3,45}$/.test(cfIp)) return cfIp;
+      if (cfIp && /^[0-9a-fA-F.:]{3,45}$/.test(cfIp) && !isPrivateOrLoopbackIp(cfIp)) return cfIp;
     }
     const xff = String(req.headers['x-forwarded-for'] || '').trim();
     if (xff) {
-      const parts = xff.split(',').map((s) => s.trim()).filter(Boolean);
+      const parts = xff.split(',').map((s) => s.trim()).filter((ip) => /^[0-9a-fA-F.:]{3,45}$/.test(ip) && !isPrivateOrLoopbackIp(ip));
       if (parts.length > 0) return parts[parts.length - 1];
     }
   }
   return String(req.socket?.remoteAddress || '127.0.0.1').trim();
+}
+
+const accountAuthFailures = new Map();
+const consumedOtpDigests = new Map();
+const ACCOUNT_LOCKOUT_MAX_ATTEMPTS = 8;
+const ACCOUNT_LOCKOUT_WINDOW_MS = 15 * 60 * 1000;
+
+function isAccountAuthLockedOut(identifier) {
+  const key = normalizeEmail(identifier) || String(identifier || '').trim().toUpperCase().slice(0, 64);
+  if (!key) return false;
+  const entry = accountAuthFailures.get(key);
+  if (!entry) return false;
+  if (Date.now() > entry.expiresAt) {
+    accountAuthFailures.delete(key);
+    return false;
+  }
+  return entry.attempts >= ACCOUNT_LOCKOUT_MAX_ATTEMPTS;
+}
+
+function recordAccountAuthFailure(identifier) {
+  const key = normalizeEmail(identifier) || String(identifier || '').trim().toUpperCase().slice(0, 64);
+  if (!key) return;
+  const now = Date.now();
+  const existing = accountAuthFailures.get(key);
+  if (!existing || now > existing.expiresAt) {
+    setBoundedMap(accountAuthFailures, key, { attempts: 1, expiresAt: now + ACCOUNT_LOCKOUT_WINDOW_MS }, 5000);
+  } else {
+    existing.attempts += 1;
+    existing.expiresAt = now + ACCOUNT_LOCKOUT_WINDOW_MS;
+  }
+}
+
+function clearAccountAuthFailures(identifier) {
+  const key = normalizeEmail(identifier) || String(identifier || '').trim().toUpperCase().slice(0, 64);
+  if (key) accountAuthFailures.delete(key);
+}
+
+function isOtpReplayOrMarkConsumed(email, code, markConsumed = false) {
+  const normEmail = normalizeEmail(email);
+  const cleanCode = String(code || '').trim();
+  if (!normEmail || !cleanCode) return false;
+  const digest = crypto.createHash('sha256').update(`${normEmail}:${cleanCode}`).digest('hex');
+  const now = Date.now();
+  const exp = consumedOtpDigests.get(digest);
+  if (exp && now <= exp) {
+    return true;
+  }
+  if (exp && now > exp) {
+    consumedOtpDigests.delete(digest);
+  }
+  if (markConsumed) {
+    setBoundedMap(consumedOtpDigests, digest, now + 10 * 60 * 1000, 5000);
+  }
+  return false;
 }
 
 function setBoundedMap(map, key, val, maxEntries = 5000) {
@@ -603,6 +691,10 @@ const accountsByEmail = new Map();
 const accountsBySubscriptionId = new Map();
 const portalOtpChallenges = new Map();
 const MAX_DEVICES_PER_ACCOUNT = 3;
+function getAccountDeviceLimit(acc) {
+  const custom = Number(acc?.max_devices);
+  return Number.isFinite(custom) && custom > 0 ? custom : MAX_DEVICES_PER_ACCOUNT;
+}
 const PAIRING_TOKEN_TTL_MS = 120 * 1000;
 const pairingTokens = new Map();
 const pairingChallenges = new Map();
@@ -612,6 +704,7 @@ const claimedIntroEmails = new Set();
 const claimedIntroCustomerIds = new Set();
 const claimedIntroCardFingerprints = new Set();
 const claimedPlayPurchaseTokens = new Map();
+const claimedAppleOriginalTransactionIds = new Map();
 const processedStripeWebhookEvents = new Set();
 
 const RUNTIME_STATE_DIR = process.env.SWEEPR_STATE_DIR || path.join(__dirname, 'data');
@@ -662,34 +755,46 @@ function verifyOrderResumeToken(rawToken) {
   }
 }
 
+function toNullProtoMap(obj) {
+  const out = Object.create(null);
+  if (obj && typeof obj === 'object') {
+    for (const [k, v] of Object.entries(obj)) {
+      if (k !== '__proto__' && k !== 'constructor' && k !== 'prototype') {
+        out[k] = v;
+      }
+    }
+  }
+  return out;
+}
+
 function loadLifecycleAutomationState() {
   try {
     if (!fs.existsSync(LIFECYCLE_STATE_FILE)) {
       return {
-        sent24hRescue: {},
-        sent72hRescue: {},
-        sentDay21AnnualBridge: {},
-        sentAbandonedCheckoutRecovery: {},
-        unsubscribedEmails: {},
+        sent24hRescue: Object.create(null),
+        sent72hRescue: Object.create(null),
+        sentDay21AnnualBridge: Object.create(null),
+        sentAbandonedCheckoutRecovery: Object.create(null),
+        unsubscribedEmails: Object.create(null),
         updatedAt: null
       };
     }
     const parsed = JSON.parse(fs.readFileSync(LIFECYCLE_STATE_FILE, 'utf8'));
     return {
-      sent24hRescue: parsed?.sent24hRescue || {},
-      sent72hRescue: parsed?.sent72hRescue || {},
-      sentDay21AnnualBridge: parsed?.sentDay21AnnualBridge || {},
-      sentAbandonedCheckoutRecovery: parsed?.sentAbandonedCheckoutRecovery || {},
-      unsubscribedEmails: parsed?.unsubscribedEmails || {},
+      sent24hRescue: toNullProtoMap(parsed?.sent24hRescue),
+      sent72hRescue: toNullProtoMap(parsed?.sent72hRescue),
+      sentDay21AnnualBridge: toNullProtoMap(parsed?.sentDay21AnnualBridge),
+      sentAbandonedCheckoutRecovery: toNullProtoMap(parsed?.sentAbandonedCheckoutRecovery),
+      unsubscribedEmails: toNullProtoMap(parsed?.unsubscribedEmails),
       updatedAt: parsed?.updatedAt || null
     };
   } catch {
     return {
-      sent24hRescue: {},
-      sent72hRescue: {},
-      sentDay21AnnualBridge: {},
-      sentAbandonedCheckoutRecovery: {},
-      unsubscribedEmails: {},
+      sent24hRescue: Object.create(null),
+      sent72hRescue: Object.create(null),
+      sentDay21AnnualBridge: Object.create(null),
+      sentAbandonedCheckoutRecovery: Object.create(null),
+      unsubscribedEmails: Object.create(null),
       updatedAt: null
     };
   }
@@ -889,7 +994,8 @@ function saveRuntimeStateToDiskSync() {
       claimedIntroEmails: Array.from(claimedIntroEmails),
       claimedIntroCustomerIds: Array.from(claimedIntroCustomerIds),
       claimedIntroCardFingerprints: Array.from(claimedIntroCardFingerprints),
-      claimedPlayPurchaseTokens: Array.from(claimedPlayPurchaseTokens.entries())
+      claimedPlayPurchaseTokens: Array.from(claimedPlayPurchaseTokens.entries()),
+      claimedAppleOriginalTransactionIds: Array.from(claimedAppleOriginalTransactionIds.entries())
     };
     const tmpPath = `${RUNTIME_STATE_FILE}.tmp`;
     fs.writeFileSync(tmpPath, JSON.stringify(payload, null, 2), { encoding: 'utf8', mode: 0o600 });
@@ -946,6 +1052,11 @@ function loadRuntimeStateFromDisk() {
         if (Array.isArray(entry) && entry[0] && entry[1]) claimedPlayPurchaseTokens.set(String(entry[0]), String(entry[1]));
       }
     }
+    if (Array.isArray(raw.claimedAppleOriginalTransactionIds)) {
+      for (const entry of raw.claimedAppleOriginalTransactionIds) {
+        if (Array.isArray(entry) && entry[0] && entry[1]) claimedAppleOriginalTransactionIds.set(String(entry[0]), String(entry[1]));
+      }
+    }
   } catch {}
 }
 
@@ -984,6 +1095,7 @@ function registerOrUpdateAccountDevice(acc, { deviceId, deviceName, os = 'window
     .slice(0, 32);
 
   const existing = acc.devices.find((d) => d && d.id === cleanId);
+  const maxDevices = getAccountDeviceLimit(acc);
   if (acc.revokedDeviceIds && acc.revokedDeviceIds instanceof Set) {
     acc.revokedDeviceIds.delete(cleanId);
   }
@@ -998,21 +1110,21 @@ function registerOrUpdateAccountDevice(acc, { deviceId, deviceName, os = 'window
       device: existing,
       devices_used: acc.devices.length,
       device_count: acc.devices.length,
-      max_devices: MAX_DEVICES_PER_ACCOUNT,
-      device_limit: MAX_DEVICES_PER_ACCOUNT
+      max_devices: maxDevices,
+      device_limit: maxDevices
     };
   }
 
-  if (acc.devices.length >= MAX_DEVICES_PER_ACCOUNT) {
+  if (acc.devices.length >= maxDevices) {
     return {
       ok: false,
       error: 'device_limit_reached',
-      message: `You have reached the ${MAX_DEVICES_PER_ACCOUNT}-device limit on your SWEEPR VPN Pro subscription (any combination of desktop or mobile). Please remove an existing device from your Customer Portal or app first.`,
+      message: `You have reached the ${maxDevices}-device limit on your SWEEPR VPN Pro subscription (any combination of desktop or mobile). Please remove an existing device from your Customer Portal or app first.`,
       devices: acc.devices,
       devices_used: acc.devices.length,
       device_count: acc.devices.length,
-      max_devices: MAX_DEVICES_PER_ACCOUNT,
-      device_limit: MAX_DEVICES_PER_ACCOUNT
+      max_devices: maxDevices,
+      device_limit: maxDevices
     };
   }
 
@@ -1025,15 +1137,15 @@ function registerOrUpdateAccountDevice(acc, { deviceId, deviceName, os = 'window
     last_seen_at: nowIso,
     wg_licence_hash: wgHash
   };
-    acc.devices.push(entry);
+  acc.devices.push(entry);
   scheduleSaveRuntimeStateToDisk();
   return {
     ok: true,
     device: entry,
     devices_used: acc.devices.length,
     device_count: acc.devices.length,
-    max_devices: MAX_DEVICES_PER_ACCOUNT,
-    device_limit: MAX_DEVICES_PER_ACCOUNT
+    max_devices: maxDevices,
+    device_limit: maxDevices
   };
 }
 
@@ -1271,6 +1383,25 @@ if (ALLOW_DEMO_ACCOUNT) {
   }).catch(() => {});
 }
 
+// Seed deterministic Apple App Review account ONLY when APP_REVIEW_DEMO_KEY is explicitly configured
+if (APP_REVIEW_DEMO_KEY && APP_REVIEW_DEMO_KEY.length >= 12) {
+  const reviewEmail = isValidEmail(APP_REVIEW_DEMO_EMAIL) ? APP_REVIEW_DEMO_EMAIL : 'appreview@sweeprvpn.com';
+  const appReviewAcc = upsertLocalAccount({
+    email: reviewEmail,
+    name: 'App Review Reviewer',
+    country: 'US',
+    plan: 'annual',
+    wifiRadarAddon: true,
+    status: 'active'
+  });
+  if (appReviewAcc.licenseKey && appReviewAcc.licenseKey !== APP_REVIEW_DEMO_KEY) {
+    licenses.delete(appReviewAcc.licenseKey);
+  }
+  appReviewAcc.licenseKey = APP_REVIEW_DEMO_KEY;
+  appReviewAcc.max_devices = 25;
+  licenses.set(APP_REVIEW_DEMO_KEY, appReviewAcc);
+}
+
 function syncLocalCacheFromCrm(crmData, fallbackEmail = '', fallbackCode = '') {
   if (!crmData || typeof crmData !== 'object') return null;
   const email = String(crmData.email || fallbackEmail || (crmData.account_id ? `${crmData.account_id}@license.sweeprvpn.com` : '')).trim().toLowerCase();
@@ -1300,22 +1431,19 @@ function syncLocalCacheFromCrm(crmData, fallbackEmail = '', fallbackCode = '') {
     }
     const newCode = String(crmData.activation_code || fallbackCode || '').trim();
     const newKey = String(crmData.licenseKey || crmData.license_key || '').trim();
-    if (email !== 'cookbenjamin1996@gmail.com') {
-      if (newCode && /^\d{6}$/.test(newCode) && newCode !== acc.activation_code) {
-        licenses.delete(acc.activation_code);
-        acc.activation_code = newCode;
-      }
-      if (newKey && newKey !== acc.licenseKey) {
-        licenses.delete(acc.licenseKey);
-        acc.licenseKey = newKey;
-      }
-    } else {
-      if (newCode && /^\d{6}$/.test(newCode)) licenses.set(newCode, acc);
-      if (newKey) licenses.set(newKey.toUpperCase(), acc);
-      acc.activation_code = '236585';
-      acc.licenseKey = 'SWEEPR-VPN-F9DC-F69E-EB3D';
-      licenses.set('236585', acc);
-      licenses.set('SWEEPR-VPN-F9DC-F69E-EB3D', acc);
+    if (newCode && /^\d{6}$/.test(newCode) && newCode !== acc.activation_code) {
+      licenses.delete(acc.activation_code);
+      acc.activation_code = newCode;
+    }
+    if (newKey && newKey !== acc.licenseKey) {
+      licenses.delete(acc.licenseKey);
+      acc.licenseKey = newKey.toUpperCase();
+    }
+    if (!acc.activation_code || !/^\d{6}$/.test(acc.activation_code)) {
+      acc.activation_code = generateUniqueActivationCode();
+    }
+    if (!acc.licenseKey) {
+      acc.licenseKey = generateHighEntropyLicenseKey();
     }
     licenses.set(acc.activation_code, acc);
     licenses.set(acc.licenseKey, acc);
@@ -1773,21 +1901,24 @@ function isLocalAccountPeriodActive(acc) {
 // Returns { id } for an active licence, where id is a one-way hash (servers never see the real key).
 // Authoritatively verifies against centralized sweepr_crm first, with local fallback if CRM is unreachable or key is in local cache.
 async function resolveVpnLicence(code, email, deviceId) {
-  const rawInput = String(code || '').trim();
-  const extractedKey = rawInput.toUpperCase().match(/SWEEPR\s*-\s*[A-Z0-9]{2,8}\s*-\s*[A-Z0-9]{4}\s*-\s*[A-Z0-9]{4}\s*-\s*[A-Z0-9]{4}/i);
-  const cleanCode = extractedKey
-    ? extractedKey[0].replace(/\s+/g, '').toUpperCase()
-    : rawInput.replace(/\s+/g, '').toUpperCase();
+  const rawInput = String(code || '').trim().slice(0, 256);
+  const compactInput = rawInput.replace(/\s+/g, '').toUpperCase();
+  const extractedKey = compactInput.match(/SWEEPR-[A-Z0-9]{2,8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}/i);
+  const cleanCode = extractedKey ? extractedKey[0].toUpperCase() : compactInput;
   if (!cleanCode || cleanCode.length < 6) return null;
   const local = licenses.get(cleanCode) || licenses.get(cleanCode.toUpperCase());
   const isLocalActive = isLocalAccountPeriodActive(local);
-  const clientProvidedEmail = email ? String(email).trim().toLowerCase() : '';
+  const clientProvidedEmail = email ? normalizeEmail(email) : '';
+  if (clientProvidedEmail && isAccountAuthLockedOut(clientProvidedEmail)) {
+    return null;
+  }
   const isShortSixDigit = /^\d{6}$/.test(cleanCode) || (!HIGH_ENTROPY_LICENSE_KEY_RE.test(cleanCode) && cleanCode.length < 16);
   if (isShortSixDigit && !isValidEmail(clientProvidedEmail)) {
     return null;
   }
   const normEmail = clientProvidedEmail || (isLocalActive ? local.email : '');
   if (isShortSixDigit && isLocalActive && clientProvidedEmail && local.email.toLowerCase() !== clientProvidedEmail) {
+    recordAccountAuthFailure(clientProvidedEmail);
     return null;
   }
 
@@ -1845,8 +1976,9 @@ async function resolveVpnLicence(code, email, deviceId) {
 
   if (!key) return null;
   if (cleanDevId && resolvedAcc && Array.isArray(resolvedAcc.devices)) {
-    if (!resolvedAcc.devices.some((d) => d && d.id === cleanDevId) && resolvedAcc.devices.length >= MAX_DEVICES_PER_ACCOUNT) {
-      return { valid: false, reason: 'device_limit_reached', maxDevices: MAX_DEVICES_PER_ACCOUNT };
+    const devLimit = getAccountDeviceLimit(resolvedAcc);
+    if (!resolvedAcc.devices.some((d) => d && d.id === cleanDevId) && resolvedAcc.devices.length >= devLimit) {
+      return { valid: false, reason: 'device_limit_reached', maxDevices: devLimit };
     }
   }
   return {
@@ -1883,6 +2015,100 @@ function signFallbackEd25519LicenseToken(acc, deviceId = 'vpn_desktop') {
     return { token: `${signingInput}.${sig}`, expires_at: exp };
   } catch {
     return null;
+  }
+}
+
+const APPLE_ROOT_CA_G3_SHA256 = '63343abfb89a6a03ebb57e9b3f5fa7be7c4f5c756f3017b3a8c488c3653e9179';
+
+function verifyAppleStoreKitJws(jwsString, { isNotification = false } = {}) {
+  try {
+    const raw = String(jwsString || '').trim();
+    const parts = raw.split('.');
+    if (parts.length !== 3 || !parts[0] || !parts[1] || !parts[2]) {
+      return { ok: false, error: 'invalid_jws_format' };
+    }
+    const [hdrB64, payloadB64, sigB64] = parts;
+    const header = JSON.parse(Buffer.from(hdrB64, 'base64url').toString('utf8'));
+    const payload = JSON.parse(Buffer.from(payloadB64, 'base64url').toString('utf8'));
+    if (!header || header.alg !== 'ES256' || !payload || typeof payload !== 'object') {
+      return { ok: false, error: 'unsupported_jws_algorithm' };
+    }
+
+    const signingInput = Buffer.from(`${hdrB64}.${payloadB64}`, 'utf8');
+    const sigBuf = Buffer.from(sigB64, 'base64url');
+    const testPubKeyPem = String(process.env.APPLE_STOREKIT_TEST_PUBLIC_KEY_PEM || '').trim();
+
+    if (Array.isArray(header.x5c) && header.x5c.length >= 2) {
+      const certs = header.x5c.map((derB64) => new crypto.X509Certificate(Buffer.from(String(derB64 || ''), 'base64')));
+      const nowMs = Date.now();
+      const skipDateCheck = process.env.ALLOW_EXPIRED_TEST_CERT === 'true' && process.env.NODE_ENV !== 'production';
+      for (let i = 0; i < certs.length; i++) {
+        const cert = certs[i];
+        if (!skipDateCheck) {
+          const validFrom = Date.parse(cert.validFrom);
+          const validTo = Date.parse(cert.validTo);
+          if (!Number.isFinite(validFrom) || !Number.isFinite(validTo) || nowMs < validFrom || nowMs > validTo) {
+            return { ok: false, error: 'apple_cert_expired_or_not_yet_valid' };
+          }
+        }
+        if (i < certs.length - 1) {
+          if (!cert.verify(certs[i + 1].publicKey)) {
+            return { ok: false, error: 'invalid_apple_certificate_chain' };
+          }
+        }
+      }
+      const rootCert = certs[certs.length - 1];
+      if (!rootCert.verify(rootCert.publicKey)) {
+        return { ok: false, error: 'invalid_apple_root_signature' };
+      }
+      const rootFingerprint = String(rootCert.fingerprint256 || '').replace(/:/g, '').toLowerCase();
+      if (rootFingerprint !== APPLE_ROOT_CA_G3_SHA256) {
+        return { ok: false, error: 'untrusted_apple_root_ca' };
+      }
+      const sigOk = crypto.verify(
+        'sha256',
+        signingInput,
+        { key: certs[0].publicKey, dsaEncoding: 'ieee-p1363' },
+        sigBuf
+      );
+      if (!sigOk) {
+        return { ok: false, error: 'invalid_apple_jws_signature' };
+      }
+    } else if (process.env.NODE_ENV !== 'production' && testPubKeyPem) {
+      const pubKey = crypto.createPublicKey(testPubKeyPem);
+      const sigOk = crypto.verify(
+        'sha256',
+        signingInput,
+        { key: pubKey, dsaEncoding: 'ieee-p1363' },
+        sigBuf
+      );
+      if (!sigOk) {
+        return { ok: false, error: 'invalid_test_jws_signature' };
+      }
+    } else {
+      return { ok: false, error: 'missing_apple_x5c_chain' };
+    }
+
+    const bundleId = String(isNotification ? (payload.data?.bundleId || payload.bundleId || '') : (payload.bundleId || '')).trim();
+    if (bundleId !== 'com.sweepr.vpn') {
+      return { ok: false, error: 'bundle_id_mismatch' };
+    }
+
+    const env = String(isNotification ? (payload.data?.environment || payload.environment || 'Production') : (payload.environment || 'Production')).trim();
+    const allowedEnvs = process.env.NODE_ENV === 'production'
+      ? new Set(['Production', 'Sandbox'])
+      : new Set(['Production', 'Sandbox', 'Xcode']);
+    if (!allowedEnvs.has(env)) {
+      return { ok: false, error: 'unsupported_apple_environment' };
+    }
+
+    if (!isNotification && payload.revocationDate) {
+      return { ok: false, error: 'apple_transaction_revoked' };
+    }
+
+    return { ok: true, payload, header };
+  } catch (err) {
+    return { ok: false, error: err?.message || 'apple_jws_verification_failed' };
   }
 }
 
@@ -2352,18 +2578,12 @@ const CANONICAL_REDIRECTS = {
   '/app': '/download',
   '/app-preview.html': '/download',
   '/app-preview': '/download',
-  '/vs-totalvpn.html': '/alternatives/totalvpn',
-  '/vs-totalvpn': '/alternatives/totalvpn',
-  '/vs/totalvpn': '/alternatives/totalvpn',
-  '/vs/totalvpn.html': '/alternatives/totalvpn',
+  '/vs-totalvpn.html': '/vs/totalvpn',
+  '/vs-totalvpn': '/vs/totalvpn',
   '/alternatives-totalvpn.html': '/alternatives/totalvpn',
   '/alternatives-totalvpn': '/alternatives/totalvpn',
-  '/leak-test': '/tools/leak-test',
   '/leak-test.html': '/tools/leak-test',
-  '/isp-throttling-test': '/tools/isp-throttling-test',
   '/isp-throttling-test.html': '/tools/isp-throttling-test',
-  '/tools/mtu-calculator': '/tools/isp-throttling-test',
-  '/tools/mtu-calculator.html': '/tools/isp-throttling-test',
   '/vpn-renewal-price-checker.html': '/tools/vpn-renewal-price-checker',
   '/smart-tv-tracking-check.html': '/tools/smart-tv-tracking-check',
   '/whats-on-my-wifi.html': '/tools/whats-on-my-wifi',
@@ -2386,8 +2606,8 @@ const CANONICAL_REDIRECTS = {
   '/setup/openwrt-travel-glinet-dropin': '/setup/gl-inet-travel-router',
   '/setup/opnsense-24-kernel-wireguard': '/setup/pfsense-opnsense-router',
   '/setup/pfsense-plus-wireguard-client': '/setup/pfsense-opnsense-router',
-  '/setup/firewalla-gold-plus-wireguard': '/setup',
-  '/setup/draytek-vigor-2962-wireguard': '/setup',
+  '/setup/firewalla-gold-plus-wireguard': '/setup/firewalla-gold-wireguard-vpn',
+  '/setup/draytek-vigor-2962-wireguard': '/setup/draytek-vigor-wireguard-client',
   '/setup/raspberry-pi-5-wireguard-gateway': '/setup/raspberry-pi-home-gateway',
   '/vs/pia-private-internet-access': '/vs/private-internet-access',
   '/vs/surfshark-one': '/vs/surfshark',
@@ -2410,356 +2630,16 @@ const CANONICAL_REDIRECTS = {
   '/setup/windows-11-wireguard-client': '/setup/windows-11-wireguard-vpn',
   '/solutions/sky-broadband-uk-uhd-streaming-buffering': '/solutions/sky-broadband-gaming-packet-loss',
   '/solutions/comcast-xfinity-p2p-port-forwarding': '/solutions/comcast-xfinity-broadband-isp-throttling',
-  '/solutions/deutsche-telekom-gaming-packet-loss': '/solutions',
+  '/solutions/deutsche-telekom-gaming-packet-loss': '/solutions/deutsche-telekom-dsl-isp-throttling',
   '/solutions/vodafone-uk-pro-p2p-port-forwarding': '/solutions/vodafone-uk-gaming-packet-loss',
   '/guides/stop-isp-throttling-uk-broadband': '/guides/fix-isp-dns-hijacking-and-throttling',
   '/solutions/bt-halo-smart-hub-2-p2p-port-forwarding': '/solutions/bt-broadband-gaming-packet-loss',
-  '/setup/ps5-xbox-gaming-router': '/setup/steam-deck-vpn',
+  '/setup/ps5-xbox-gaming-router': '/setup/xbox-series-x-wireguard-gaming',
   // Redirect 0-impression sibling slugs to GSC Page-1 winning canonicals
   '/solutions/virgin-media-p2p-port-forwarding': '/solutions/virgin-media-remote-dev-ssh',
   '/solutions/t-mobile-5g-home-internet-isp-throttling': '/solutions/t-mobile-5g-home-internet-remote-dev-ssh',
-  '/solutions/community-fibre-london-isp-throttling': '/solutions/community-fibre-london-p2p-port-forwarding',
-  '/solutions/sky-broadband-uk-voip-teams-zoom-jitter': '/solutions/sky-broadband-gaming-packet-loss',
-  '/solutions/virgin-media-uk-isp-throttling': '/solutions/virgin-media-remote-dev-ssh',
-  '/solutions/bt-full-fibre-uk-uhd-streaming-buffering': '/solutions/bt-broadband-gaming-packet-loss',
-  '/solutions/vodafone-full-fibre-uk-smart-tv-acr-blocking': '/solutions/vodafone-uk-gaming-packet-loss',
-  '/solutions/talktalk-fibre-uk-uhd-streaming-buffering': '/solutions/talktalk-p2p-port-forwarding',
-  '/solutions/talktalk-fibre-uk-wifi-arp-spoofing-protection': '/solutions/talktalk-p2p-port-forwarding',
-  '/solutions/three-5g-uk-uhd-streaming-buffering': '/solutions/three-5g-home-broadband-uhd-streaming-buffering'
+  '/solutions/community-fibre-london-isp-throttling': '/solutions/community-fibre-london-p2p-port-forwarding'
 };
-
-// Retired legacy antivirus comparison pages consolidated to /vs (Requirement R1 / Feature F3)
-export const RETIRED_VS_SLUGS = new Set([
-  'goose-vpn',
-  'le-vpn',
-  'panda-dome-vpn',
-  'zoogvpn',
-  'vpn-ac',
-  'perfect-privacy',
-  'f-secure-freedome',
-  'kaspersky-vpn',
-  'keepsolid-vpn-unlimited',
-  'norton-secure-vpn',
-  'mcafee-safe-connect',
-  'avira-phantom-vpn',
-  'avg-secure-vpn',
-  'avast-secureline',
-  'avast-secureline-vpn',
-  'bitdefender-vpn',
-  'malwarebytes-privacy-vpn',
-  'ivacy-vpn',
-  'fastestvpn'
-]);
-
-// Authoritative indexable pillars across all 4 pSEO clusters (62 curated canonicals)
-export const AUTHORITATIVE_SOLUTIONS_PILLARS = new Set([
-  "brsk-better-net-uk-voip-teams-zoom-jitter",
-  "bt-broadband-gaming-packet-loss",
-  "comcast-xfinity-broadband-isp-throttling",
-  "community-fibre-london-p2p-port-forwarding",
-  "eduroam-campus-wifi-gaming-packet-loss",
-  "ee-5g-mobile-hotspot-voip-teams-zoom-jitter",
-  "gigaclear-rural-fibre-gaming-packet-loss",
-  "hotel-captive-portal-wifi-p2p-port-forwarding",
-  "hyperoptic-broadband-isp-throttling",
-  "national-rail-train-wifi-remote-dev-ssh",
-  "nhs-guest-wifi-voip-teams-zoom-jitter",
-  "o2-uk-mobile-tethering-uhd-streaming-buffering",
-  "rogers-ignite-canada-isp-throttling",
-  "sky-broadband-gaming-packet-loss",
-  "starlink-satellite-uk-isp-throttling",
-  "t-mobile-5g-home-internet-remote-dev-ssh",
-  "talktalk-p2p-port-forwarding",
-  "telstra-nbn-australia-gaming-packet-loss",
-  "three-5g-home-broadband-uhd-streaming-buffering",
-  "toob-full-fibre-uk-voip-teams-zoom-jitter",
-  "virgin-media-remote-dev-ssh",
-  "vodafone-uk-gaming-packet-loss",
-  "youfibre-uk-wifi-arp-spoofing-protection",
-  "zen-internet-uk-isp-throttling"
-]);
-
-export const AUTHORITATIVE_SETUP_PILLARS = new Set([
-  "almalinux-9-wireguard-gateway",
-  "apple-tv-tvos-17-wireguard",
-  "asuswrt-merlin-vpn-router",
-  "freebsd-14-wireguard-kmod",
-  "gl-inet-travel-router",
-  "linux-cli-wireguard",
-  "macos-apple-silicon-vpn",
-  "nvidia-shield-tv-pro-wireguard",
-  "openwrt-wireguard-router",
-  "pfsense-opnsense-router",
-  "raspberry-pi-home-gateway",
-  "steam-deck-vpn",
-  "synology-nas-docker-vpn",
-  "ubiquiti-unifi-dream-machine-wireguard",
-  "windows-11-wireguard-vpn"
-]);
-
-export const AUTHORITATIVE_GUIDES_PILLARS = new Set([
-  "block-philips-titan-os-acr",
-  "block-sony-bravia-samba-tv-acr",
-  "detect-unknown-devices-on-home-wifi",
-  "disable-ipv6-leak-windows-linux",
-  "fix-isp-dns-hijacking-and-throttling",
-  "fix-wireguard-mtu-fragmentation-pppoe",
-  "prevent-webrtc-ip-leak-chromium-firefox",
-  "prevent-windows-11-dns-leaks-doh",
-  "public-hotel-airport-wifi-security",
-  "stop-isp-deep-packet-inspection-dpi",
-  "stop-lg-smart-tv-acr-spying",
-  "stop-roku-vizio-firetv-spying",
-  "stop-samsung-smart-tv-acr-tracking"
-]);
-
-export const AUTHORITATIVE_VS_PILLARS = new Set([
-  "cloudflare-warp-plus",
-  "cyberghost",
-  "expressvpn",
-  "ipvanish",
-  "mullvad",
-  "nordvpn",
-  "private-internet-access",
-  "protonvpn",
-  "surfshark",
-  "windscribe"
-]);
-
-// Specific Consolidation Target Map for /solutions/ sub-pages
-export const SPECIFIC_SOLUTIONS_CANONICAL_MAP = {
-  "eduroam-campus-wifi-p2p-port-forwarding": "/solutions/eduroam-campus-wifi-gaming-packet-loss",
-  "eduroam-campus-wifi-remote-dev-ssh": "/solutions/eduroam-campus-wifi-gaming-packet-loss",
-  "eduroam-campus-wifi-uhd-streaming-buffering": "/solutions/eduroam-campus-wifi-gaming-packet-loss",
-  "eduroam-campus-wifi-isp-throttling": "/solutions/eduroam-campus-wifi-gaming-packet-loss",
-  "talktalk-gaming-packet-loss": "/solutions/talktalk-p2p-port-forwarding",
-  "talktalk-remote-dev-ssh": "/solutions/talktalk-p2p-port-forwarding",
-  "talktalk-uhd-streaming-buffering": "/solutions/talktalk-p2p-port-forwarding",
-  "talktalk-isp-throttling": "/solutions/talktalk-p2p-port-forwarding",
-  "talktalk-fibre-uk-uhd-streaming-buffering": "/solutions/talktalk-p2p-port-forwarding",
-  "talktalk-fibre-uk-wifi-arp-spoofing-protection": "/solutions/talktalk-p2p-port-forwarding",
-  "virgin-media-ireland-isp-throttling": "/solutions",
-  "virgin-media-p2p-port-forwarding": "/solutions/virgin-media-remote-dev-ssh",
-  "virgin-media-uhd-streaming-buffering": "/solutions/virgin-media-remote-dev-ssh",
-  "virgin-media-uk-isp-throttling": "/solutions/virgin-media-remote-dev-ssh",
-  "virgin-media-gaming-packet-loss": "/solutions/virgin-media-remote-dev-ssh",
-  "virgin-media-warzone-packet-loss": "/solutions/virgin-media-remote-dev-ssh",
-  "virgin-media-isp-throttling": "/solutions/virgin-media-remote-dev-ssh",
-  "t-mobile-5g-home-internet-isp-throttling": "/solutions/t-mobile-5g-home-internet-remote-dev-ssh",
-  "t-mobile-5g-home-discord-voice-drop": "/solutions/t-mobile-5g-home-internet-remote-dev-ssh",
-  "community-fibre-london-isp-throttling": "/solutions/community-fibre-london-p2p-port-forwarding",
-  "bt-broadband-p2p-port-forwarding": "/solutions/bt-broadband-gaming-packet-loss",
-  "bt-broadband-remote-dev-ssh": "/solutions/bt-broadband-gaming-packet-loss",
-  "bt-broadband-uhd-streaming-buffering": "/solutions/bt-broadband-gaming-packet-loss",
-  "bt-broadband-iptv-isp-blocking": "/solutions/bt-broadband-gaming-packet-loss",
-  "bt-full-fibre-uk-uhd-streaming-buffering": "/solutions/bt-broadband-gaming-packet-loss",
-  "bt-halo-smart-hub-2-p2p-port-forwarding": "/solutions/bt-broadband-gaming-packet-loss",
-  "sky-broadband-p2p-port-forwarding": "/solutions/sky-broadband-gaming-packet-loss",
-  "sky-broadband-remote-dev-ssh": "/solutions/sky-broadband-gaming-packet-loss",
-  "sky-broadband-uhd-streaming-buffering": "/solutions/sky-broadband-gaming-packet-loss",
-  "sky-broadband-iptv-isp-blocking": "/solutions/sky-broadband-gaming-packet-loss",
-  "sky-broadband-uk-uhd-streaming-buffering": "/solutions/sky-broadband-gaming-packet-loss",
-  "sky-broadband-uk-voip-teams-zoom-jitter": "/solutions/sky-broadband-gaming-packet-loss",
-  "vodafone-ireland-siro-isp-throttling": "/solutions",
-  "vodafone-uk-p2p-port-forwarding": "/solutions/vodafone-uk-gaming-packet-loss",
-  "vodafone-uk-remote-dev-ssh": "/solutions/vodafone-uk-gaming-packet-loss",
-  "vodafone-uk-uhd-streaming-buffering": "/solutions/vodafone-uk-gaming-packet-loss",
-  "vodafone-uk-pro-p2p-port-forwarding": "/solutions/vodafone-uk-gaming-packet-loss",
-  "vodafone-full-fibre-uk-smart-tv-acr-blocking": "/solutions/vodafone-uk-gaming-packet-loss",
-  "comcast-xfinity-p2p-port-forwarding": "/solutions/comcast-xfinity-broadband-isp-throttling",
-  "deutsche-telekom-gaming-packet-loss": "/solutions",
-  "deutsche-telekom-iptv-isp-blocking": "/solutions",
-  "deutsche-telekom-dsl-isp-throttling": "/solutions",
-  "shaw-rogers-fibre-plus-isp-throttling": "/solutions/rogers-ignite-canada-isp-throttling",
-  "rogers-ignite-ca-teams-zoom-jitter": "/solutions/rogers-ignite-canada-isp-throttling",
-  "ee-mobile-5g-uk-cgnat-port-forwarding": "/solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter",
-  "ee-5g-mobile-hotspot-isp-throttling": "/solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter",
-  "ee-5g-mobile-hotspot-wifi-arp-spoofing-protection": "/solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter",
-  "three-5g-uk-uhd-streaming-buffering": "/solutions/three-5g-home-broadband-uhd-streaming-buffering",
-  "three-5g-home-broadband-isp-throttling": "/solutions/three-5g-home-broadband-uhd-streaming-buffering",
-  "three-5g-home-broadband-voip-teams-zoom-jitter": "/solutions/three-5g-home-broadband-uhd-streaming-buffering",
-  "o2-uk-mobile-tethering-isp-throttling": "/solutions/o2-uk-mobile-tethering-uhd-streaming-buffering",
-  "nhs-guest-wifi-isp-throttling": "/solutions/nhs-guest-wifi-voip-teams-zoom-jitter",
-  "nhs-guest-wifi-uhd-streaming-buffering": "/solutions/nhs-guest-wifi-voip-teams-zoom-jitter",
-  "hotel-captive-portal-wifi-isp-throttling": "/solutions/hotel-captive-portal-wifi-p2p-port-forwarding",
-  "national-rail-train-wifi-isp-throttling": "/solutions/national-rail-train-wifi-remote-dev-ssh",
-  "gigaclear-rural-fibre-isp-throttling": "/solutions/gigaclear-rural-fibre-gaming-packet-loss",
-  "gigaclear-rural-fibre-voip-teams-zoom-jitter": "/solutions/gigaclear-rural-fibre-gaming-packet-loss",
-  "gigaclear-rural-fibre-wifi-arp-spoofing-protection": "/solutions/gigaclear-rural-fibre-gaming-packet-loss",
-  "zen-internet-uk-gaming-packet-loss": "/solutions/zen-internet-uk-isp-throttling",
-  "youfibre-uk-isp-throttling": "/solutions/youfibre-uk-wifi-arp-spoofing-protection",
-  "youfibre-uk-voip-teams-zoom-jitter": "/solutions/youfibre-uk-wifi-arp-spoofing-protection",
-  "starlink-rv-roam-isp-throttling": "/solutions/starlink-satellite-uk-isp-throttling",
-  "telstra-nbn-au-valorant-high-ping": "/solutions/telstra-nbn-australia-gaming-packet-loss",
-  "telstra-nbn-australia-isp-throttling": "/solutions/telstra-nbn-australia-gaming-packet-loss"
-};
-
-export const EXACT_CANONICAL_REDIRECTS = {
-  // Core Tool & Competitor Aliases (Requirement R1 / Feature F4)
-  '/leak-test': '/tools/leak-test',
-  '/leak-test.html': '/tools/leak-test',
-  '/isp-throttling-test': '/tools/isp-throttling-test',
-  '/isp-throttling-test.html': '/tools/isp-throttling-test',
-  '/tools/mtu-calculator': '/tools/isp-throttling-test',
-  '/tools/mtu-calculator.html': '/tools/isp-throttling-test',
-  '/vs/totalvpn': '/alternatives/totalvpn',
-  '/vs/totalvpn.html': '/alternatives/totalvpn',
-  '/vs-totalvpn': '/alternatives/totalvpn',
-  '/vs-totalvpn.html': '/alternatives/totalvpn',
-  '/alternatives-totalvpn': '/alternatives/totalvpn',
-  '/alternatives-totalvpn.html': '/alternatives/totalvpn',
-  // Setup Guide Aliases (Single-hop targets inside 15 kept setup pillars or /setup hub)
-  '/setup/draytek-vigor-2962-wireguard': '/setup',
-  '/setup/firewalla-gold-plus-wireguard': '/setup',
-  '/setup/openwrt-luci-wireguard-interface': '/setup/openwrt-wireguard-router',
-  '/setup/openwrt-travel-glinet-dropin': '/setup/gl-inet-travel-router',
-  '/setup/opnsense-24-kernel-wireguard': '/setup/pfsense-opnsense-router',
-  '/setup/pfsense-plus-wireguard-client': '/setup/pfsense-opnsense-router',
-  '/setup/raspberry-pi-5-wireguard-gateway': '/setup/raspberry-pi-home-gateway',
-  '/setup/steamos-steam-deck-wireguard': '/setup/steam-deck-vpn',
-  '/setup/synology-dsm-7-wireguard': '/setup/synology-nas-docker-vpn',
-  '/setup/asuswrt-merlin-vpn-client': '/setup/asuswrt-merlin-vpn-router',
-  '/setup/windows-11-wireguard-client': '/setup/windows-11-wireguard-vpn',
-  '/setup/ps5-xbox-gaming-router': '/setup/steam-deck-vpn',
-  // Guides Aliases
-  '/guides/block-lg-webos-liveplus-acr': '/guides/stop-lg-smart-tv-acr-spying',
-  '/guides/block-roku-os-smart-tv-telemetry': '/guides/stop-roku-vizio-firetv-spying',
-  '/guides/block-samsung-tizen-smart-hub-acr': '/guides/stop-samsung-smart-tv-acr-tracking',
-  '/guides/block-vizio-smartcast-inscape-acr': '/guides/stop-roku-vizio-firetv-spying',
-  '/guides/stop-isp-dns-hijacking-nxdomain': '/guides/fix-isp-dns-hijacking-and-throttling',
-  '/guides/block-samsung-tv-acr-tracking': '/guides/stop-samsung-smart-tv-acr-tracking',
-  '/guides/block-lg-webos-acr-tracking': '/guides/stop-lg-smart-tv-acr-spying',
-  '/guides/stop-isp-throttling-uk-broadband': '/guides/fix-isp-dns-hijacking-and-throttling',
-  // Competitor Brand Aliases
-  '/vs/pia-private-internet-access': '/vs/private-internet-access',
-  '/vs/surfshark-one': '/vs/surfshark',
-  '/vs/warp-plus-team': '/vs/cloudflare-warp-plus'
-};
-
-const SOL_SUFFIX_RE = /-(isp-throttling|remote-dev-ssh|p2p-port-forwarding|gaming-packet-loss|warzone-packet-loss|twitch-4k-buffering|teams-zoom-jitter|valorant-high-ping|cgnat-port-forwarding|iptv-isp-blocking|wifi-arp-spoofing-protection|voip-teams-zoom-jitter|uhd-streaming-buffering|discord-voice-drop|broadband-isp-throttling|mobile-hotspot-voip-teams-zoom-jitter|rural-fibre-gaming-packet-loss|campus-wifi-gaming-packet-loss)$/;
-
-const SORTED_SOLUTIONS_PREFIXES = [
-  { prefix: 'bt-broadband', target: '/solutions/bt-broadband-gaming-packet-loss' },
-  { prefix: 'virgin-media-ireland', target: '/solutions' },
-  { prefix: 'virgin-media', target: '/solutions/virgin-media-remote-dev-ssh' },
-  { prefix: 'sky-broadband', target: '/solutions/sky-broadband-gaming-packet-loss' },
-  { prefix: 'talktalk', target: '/solutions/talktalk-p2p-port-forwarding' },
-  { prefix: 'vodafone-ireland', target: '/solutions' },
-  { prefix: 'vodafone-uk', target: '/solutions/vodafone-uk-gaming-packet-loss' },
-  { prefix: 'eduroam-campus-wifi', target: '/solutions/eduroam-campus-wifi-gaming-packet-loss' },
-  { prefix: 'gigaclear-rural-fibre', target: '/solutions/gigaclear-rural-fibre-gaming-packet-loss' },
-  { prefix: 'comcast-xfinity', target: '/solutions/comcast-xfinity-broadband-isp-throttling' },
-  { prefix: 'rogers-ignite', target: '/solutions/rogers-ignite-canada-isp-throttling' },
-  { prefix: 'shaw-rogers', target: '/solutions/rogers-ignite-canada-isp-throttling' },
-  { prefix: 'zen-internet-uk', target: '/solutions/zen-internet-uk-isp-throttling' },
-  { prefix: 'ee-5g-mobile-hotspot', target: '/solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter' },
-  { prefix: 'ee-mobile-5g-uk', target: '/solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter' },
-  { prefix: 'three-5g-home-broadband', target: '/solutions/three-5g-home-broadband-uhd-streaming-buffering' },
-  { prefix: 'o2-uk-mobile-tethering', target: '/solutions/o2-uk-mobile-tethering-uhd-streaming-buffering' },
-  { prefix: 'nhs-guest-wifi', target: '/solutions/nhs-guest-wifi-voip-teams-zoom-jitter' },
-  { prefix: 'hotel-captive-portal-wifi', target: '/solutions/hotel-captive-portal-wifi-p2p-port-forwarding' },
-  { prefix: 'national-rail-train-wifi', target: '/solutions/national-rail-train-wifi-remote-dev-ssh' },
-  { prefix: 'youfibre-uk', target: '/solutions/youfibre-uk-wifi-arp-spoofing-protection' },
-  { prefix: 'toob-full-fibre-uk', target: '/solutions/toob-full-fibre-uk-voip-teams-zoom-jitter' },
-  { prefix: 'brsk-better-net-uk', target: '/solutions/brsk-better-net-uk-voip-teams-zoom-jitter' },
-  { prefix: 'community-fibre-london', target: '/solutions/community-fibre-london-p2p-port-forwarding' },
-  { prefix: 'hyperoptic-broadband', target: '/solutions/hyperoptic-broadband-isp-throttling' },
-  { prefix: 'starlink', target: '/solutions/starlink-satellite-uk-isp-throttling' },
-  { prefix: 't-mobile-5g-home', target: '/solutions/t-mobile-5g-home-internet-remote-dev-ssh' },
-  { prefix: 'telstra-nbn', target: '/solutions/telstra-nbn-australia-gaming-packet-loss' }
-].sort((a, b) => b.prefix.length - a.prefix.length);
-
-/**
- * Resolves deterministic canonical 301 redirect targets for legacy,
- * consolidated, and retired URLs in strictly 1 hop before static file lookup.
- *
- * @param {string} rawPath - Incoming req pathname
- * @returns {string|null} - Redirect target path or null if route is active/unmatched
- */
-export function resolveCanonical301(rawPath) {
-  if (!rawPath || typeof rawPath !== 'string') return null;
-
-  let pathname = rawPath;
-  try {
-    pathname = decodeURIComponent(rawPath);
-  } catch {}
-  pathname = pathname.toLowerCase().replace(/\/+$/, '') || '/';
-
-  if (CANONICAL_REDIRECTS[pathname]) return CANONICAL_REDIRECTS[pathname];
-  if (EXACT_CANONICAL_REDIRECTS[pathname]) return EXACT_CANONICAL_REDIRECTS[pathname];
-
-  const isHtml = pathname.endsWith('.html');
-  const cleanPath = isHtml ? pathname.slice(0, -5) : pathname;
-
-  if (isHtml) {
-    if (CANONICAL_REDIRECTS[cleanPath]) return CANONICAL_REDIRECTS[cleanPath];
-    if (EXACT_CANONICAL_REDIRECTS[cleanPath]) return EXACT_CANONICAL_REDIRECTS[cleanPath];
-  }
-
-  // Smart-TV ACR Pattern: Any /solutions/*-smart-tv-acr-blocking -> Samsung ACR guide
-  if (/^\/solutions\/[a-z0-9-]+-smart-tv-acr-blocking$/i.test(cleanPath)) {
-    return '/guides/stop-samsung-smart-tv-acr-tracking';
-  }
-
-  // /vs/{slug}: only 10 authoritative comparisons kept; /vs/totalvpn -> /alternatives/totalvpn; others -> /vs
-  const vsMatch = cleanPath.match(/^\/vs\/([a-z0-9-]+)$/i);
-  if (vsMatch) {
-    const slug = vsMatch[1];
-    if (slug === 'totalvpn') return '/alternatives/totalvpn';
-    if (RETIRED_VS_SLUGS.has(slug) || !AUTHORITATIVE_VS_PILLARS.has(slug)) {
-      return '/vs';
-    }
-    return isHtml ? cleanPath : null;
-  }
-
-  // /solutions/{slug}: specific map -> authoritative 24 -> prefix -> /solutions
-  const solMatch = cleanPath.match(/^\/solutions\/([a-z0-9-]+)$/i);
-  if (solMatch) {
-    const slug = solMatch[1];
-    if (SPECIFIC_SOLUTIONS_CANONICAL_MAP[slug]) return SPECIFIC_SOLUTIONS_CANONICAL_MAP[slug];
-    if (AUTHORITATIVE_SOLUTIONS_PILLARS.has(slug)) return isHtml ? cleanPath : null;
-    for (const { prefix, target } of SORTED_SOLUTIONS_PREFIXES) {
-      if (slug.startsWith(`${prefix}-`)) return target;
-    }
-    return '/solutions';
-  }
-
-  // /setup/{slug}: only 15 authoritative setups kept; retired hardware aliases -> 1-hop parent or /setup
-  const setupMatch = cleanPath.match(/^\/setup\/([a-z0-9-]+)$/i);
-  if (setupMatch) {
-    const slug = setupMatch[1];
-    if (AUTHORITATIVE_SETUP_PILLARS.has(slug)) return isHtml ? cleanPath : null;
-    if (slug.startsWith('gl-inet-')) return '/setup/gl-inet-travel-router';
-    if (/^(qnap|asustor|truenas|unraid)-/.test(slug)) return '/setup/synology-nas-docker-vpn';
-    if (/^(ubiquiti|unifi)-/.test(slug)) return '/setup/ubiquiti-unifi-dream-machine-wireguard';
-    if (/^(netgate|protectli)-/.test(slug)) return '/setup/pfsense-opnsense-router';
-    if (slug.startsWith('asus-rog-')) return '/setup/asuswrt-merlin-vpn-router';
-    if (/^(arch-linux|debian|fedora|alpinelinux|nixos|docker-gluetun)-/.test(slug)) return '/setup/linux-cli-wireguard';
-    if (slug.startsWith('wsl2-')) return '/setup/windows-11-wireguard-vpn';
-    if (/^(rog-ally|nintendo-switch|playstation-5|xbox-series-x|ps5-xbox)-/.test(slug)) return '/setup/steam-deck-vpn';
-    if (/^(casaos|zimaboard)-/.test(slug)) return '/setup/raspberry-pi-home-gateway';
-    return '/setup';
-  }
-
-  // /guides/{slug}: only 13 authoritative guides kept; retired guide variants -> 1-hop parent or /guides
-  const guideMatch = cleanPath.match(/^\/guides\/([a-z0-9-]+)$/i);
-  if (guideMatch) {
-    const slug = guideMatch[1];
-    if (AUTHORITATIVE_GUIDES_PILLARS.has(slug)) return isHtml ? cleanPath : null;
-    if (/^block-(hisense|panasonic|sharp|tcl)-/.test(slug)) return '/guides/stop-samsung-smart-tv-acr-tracking';
-    if (/^(fix-udp-bufferbloat|wireguard-mtu)-/.test(slug)) return '/guides/fix-wireguard-mtu-fragmentation-pppoe';
-    if (/^(stop-5g-hotspot|stop-isp-tcp-reset)-/.test(slug)) return '/guides/stop-isp-deep-packet-inspection-dpi';
-    if (slug.startsWith('stop-isp-dns-hijacking-')) return '/guides/fix-isp-dns-hijacking-and-throttling';
-    return '/guides';
-  }
-
-  // Strip .html for active tools
-  if (isHtml && /^\/tools\/[a-z0-9-]+$/i.test(cleanPath)) {
-    return cleanPath;
-  }
-
-  return null;
-}
 
 const ROUTE_ALIASES = {
   '/': 'index.html',
@@ -2777,6 +2657,7 @@ const ROUTE_ALIASES = {
   '/setup': 'setup.html',
   '/solutions': 'solutions.html',
   '/vs': 'vs.html',
+  '/vs/totalvpn': 'vs-totalvpn.html',
   '/alternatives/totalvpn': 'alternatives-totalvpn.html',
   '/tools/leak-test': 'leak-test.html',
   '/tools/isp-throttling-test': 'isp-throttling-test.html',
@@ -2785,6 +2666,7 @@ const ROUTE_ALIASES = {
   '/tools/smart-tv-acr-test': 'smart-tv-tracking-check.html',
   '/tools/whats-on-my-wifi': 'whats-on-my-wifi.html',
   '/tools/wireguard-config-generator': 'setup.html',
+  '/tools/mtu-calculator': 'isp-throttling-test.html',
   '/public-wifi': 'public-wifi.html',
   '/de/tools/leak-test': 'de-leak-test.html',
   '/pt-br/tools/leak-test': 'pt-br-leak-test.html',
@@ -2793,7 +2675,22 @@ const ROUTE_ALIASES = {
 
 function readRawBody(req, maxBytes = MAX_BODY_BYTES) {
   return new Promise((resolve, reject) => {
-    const declaredLen = Number(req.headers?.['content-length'] || 0);
+    if (req.headers?.['transfer-encoding'] && req.headers?.['content-length']) {
+      try { req.resume(); } catch {}
+      const err = new Error('smuggled_headers_rejected');
+      err.statusCode = 400;
+      reject(err);
+      return;
+    }
+    const rawCl = req.headers?.['content-length'];
+    if (typeof rawCl === 'string' && rawCl.includes(',')) {
+      try { req.resume(); } catch {}
+      const err = new Error('duplicate_content_length');
+      err.statusCode = 400;
+      reject(err);
+      return;
+    }
+    const declaredLen = Number(rawCl || 0);
     if (Number.isFinite(declaredLen) && declaredLen > maxBytes) {
       try { req.resume(); } catch {}
       const err = new Error('payload_too_large');
@@ -2830,7 +2727,13 @@ function readRawBody(req, maxBytes = MAX_BODY_BYTES) {
 async function readJsonBody(req, maxBytes = MAX_BODY_BYTES) {
   try {
     const raw = await readRawBody(req, maxBytes);
-    return JSON.parse(raw || '{}');
+    const parsed = JSON.parse(raw || '{}', (key, value) => {
+      if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
+        return undefined;
+      }
+      return value;
+    });
+    return parsed && typeof parsed === 'object' ? parsed : {};
   } catch (err) {
     if (err && err.statusCode === 413) {
       return { __tooLarge: true };
@@ -2950,16 +2853,26 @@ function buildIosWebClipMobileconfig(req) {
 }
 
 function renderStandaloneIosVpnApp() {
-  return VPN_ANDROID_HTML;
+  return String(VPN_ANDROID_HTML || '')
+    .replace(/NVIDIA Shield TV Pro \(Android TV WireGuard\)/g, 'Apple TV / Router (WireGuard Profile)')
+    .replace(/'Android Device'/g, "'iPhone / iPad'")
+    .replace(/'OPEN ANDROID APP'/g, "'OPEN SWEEPR APP'")
+    .replace(/'READY FOR ANDROID VPN'/g, "'READY FOR APPLE VPN'")
+    .replace(/'Opening SWEEPR Android App\.\.\.'/g, "'Opening SWEEPR VPN App...'")
+    .replace(/'Launching SWEEPR VPN Android app\.\.\.'/g, "'Launching SWEEPR VPN app...'")
+    .replace(/const devOs = isIos \? 'ios' : 'android';/g, "const devOs = 'ios';")
+    .replace(/const plat = isIos \? 'ios' : 'android';/g, "const plat = 'ios';");
 }
 
 function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin = PUBLIC_URL) {
   const uaLower = String(rawUa || '').toLowerCase();
+  const isAppleHuman = (osType === 'ios' || osType === 'mac') && !/bot|crawl|spider|slurp|google|bing|gpt|claude|perplexity|applebot|duckduck|yandex|lighthouse|pagespeed/i.test(uaLower);
   const isNonSafariIos = osType === 'ios' && (/crios|fxios|edgios|opios|instagram|fban|fbav|tiktok|line\/|wv/i.test(uaLower) || !uaLower.includes('safari'));
   const isAndroidWebView = osType === 'android' && /\bwv\b|instagram|fban|fbav|tiktok|bytedancewebview|line\/|micromessenger|reddit/i.test(uaLower);
-  const cleanHost = String(hostOrigin || PUBLIC_URL).replace(/^https?:\/\//, '');
+  const rawHost = String(hostOrigin || PUBLIC_URL).replace(/^https?:\/\//, '').replace(/[^a-zA-Z0-9.:-]/g, '');
+  const cleanHost = escapeHtml(rawHost || 'sweeprvpn.com');
   const safariDeepLink = `x-safari-https://${cleanHost}/download/SWEEPRVPN.mobileconfig`;
-  const chromeIntentLink = `intent://${cleanHost}/download/SWEEPRVPN.apk#Intent;scheme=https;package=com.android.chrome;end`;
+  const chromeIntentLink = isAppleHuman ? '' : `intent://${cleanHost}/download/SWEEPRVPN.apk#Intent;scheme=https;package=com.android.chrome;end`;
 
   const browserAssistBanner = isNonSafariIos
     ? `<div class="mb-5 p-4 rounded-2xl border-2 border-emerald-400 bg-emerald-50/90 text-left space-y-2.5">
@@ -2987,22 +2900,22 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Download SWEEPR VPN for Windows, macOS, Android &amp; iOS (Free 30s Wi-Fi Scanner) | SWEEPR VPN</title>
-  <meta name="description" content="Download SWEEPR VPN (~680 KB native Rust + Tauri v2 installer) for Windows 10/11, macOS, Android (.apk), and iOS. Includes a free 30-second Home Wi-Fi Device Scanner and 10Gbps WireGuard.">
+  <title>Download SWEEPR VPN for ${isAppleHuman ? 'iOS, macOS &amp; Windows' : 'Windows, macOS, Android &amp; iOS'} (Free 30s Wi-Fi Scanner) | SWEEPR VPN</title>
+  <meta name="description" content="Download SWEEPR VPN (~680 KB native Rust + Tauri v2 installer) for ${isAppleHuman ? 'iOS, macOS, and Windows 10/11' : 'Windows 10/11, macOS, Android (.apk), and iOS'}. Includes a free 30-second Home Wi-Fi Device Scanner and 10Gbps WireGuard.">
   <link rel="canonical" href="https://sweeprvpn.com/download">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta name="theme-color" content="#10b981">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="SWEEPR VPN">
-  <meta property="og:title" content="Download SWEEPR VPN for Windows, macOS, Android &amp; iOS (Free 30s Wi-Fi Scanner) | SWEEPR VPN">
-  <meta property="og:description" content="Download SWEEPR VPN (~680 KB native installer) for Windows 10/11, macOS, Android (.apk), and iOS. Includes a free 30-second Home Wi-Fi Device Scanner and 10Gbps WireGuard.">
+  <meta property="og:title" content="Download SWEEPR VPN for ${isAppleHuman ? 'iOS, macOS &amp; Windows' : 'Windows, macOS, Android &amp; iOS'} (Free 30s Wi-Fi Scanner) | SWEEPR VPN">
+  <meta property="og:description" content="Download SWEEPR VPN (~680 KB native installer) for ${isAppleHuman ? 'iOS, macOS, and Windows 10/11' : 'Windows 10/11, macOS, Android (.apk), and iOS'}. Includes a free 30-second Home Wi-Fi Device Scanner and 10Gbps WireGuard.">
   <meta property="og:url" content="https://sweeprvpn.com/download">
   <meta property="og:image" content="https://sweeprvpn.com/og-image.png">
   <meta property="og:image:alt" content="SWEEPR VPN 10Gbps WireGuard &amp; Home Wi-Fi Radar">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://sweeprvpn.com/download">
-  <meta name="twitter:title" content="Download SWEEPR VPN for Windows, macOS, Android &amp; iOS | SWEEPR VPN">
-  <meta name="twitter:description" content="Download SWEEPR VPN (~680 KB native installer) for Windows 10/11, macOS, Android (.apk), and iOS.">
+  <meta name="twitter:title" content="Download SWEEPR VPN for ${isAppleHuman ? 'iOS, macOS &amp; Windows' : 'Windows, macOS, Android &amp; iOS'} | SWEEPR VPN">
+  <meta name="twitter:description" content="Download SWEEPR VPN (~680 KB native installer) for ${isAppleHuman ? 'iOS, macOS, and Windows 10/11' : 'Windows 10/11, macOS, Android (.apk), and iOS'}.">
   <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png">
   <link rel="icon" type="image/svg+xml" href="/logo-emerald.svg?v=5">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5">
@@ -3035,7 +2948,7 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
     ${browserAssistBanner}
 
     <div class="space-y-3 text-left mb-6">
-      <a href="/download/SWEEPRVPN.apk" download="SWEEPRVPN.apk" rel="nofollow" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'android' ? 'border-2 border-emerald-500 bg-emerald-50/40' : 'border-gray-200 bg-white'} hover:border-emerald-400 transition-all no-underline text-gray-900">
+      ${(osType === 'ios' || osType === 'mac') ? '' : `<a href="/download/SWEEPRVPN.apk" download="SWEEPRVPN.apk" rel="nofollow" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'android' ? 'border-2 border-emerald-500 bg-emerald-50/40' : 'border-gray-200 bg-white'} hover:border-emerald-400 transition-all no-underline text-gray-900">
         <div>
           <div class="font-bold text-sm text-gray-900">ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã‚Â± Android Phone &amp; Tablet Installer (.apk)</div>
           <div class="text-xs text-gray-500">Direct 1-Tap APK Install &bull; SWEEPRVPN.apk</div>
@@ -3048,7 +2961,7 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
           <div class="text-xs text-gray-600">Opt in on Google Play &bull; Automatic Play Store Updates</div>
         </div>
         <span class="btn btn-go text-xs py-2 px-3 shrink-0">Join on Play Store &rarr;</span>
-      </a>
+      </a>`}
       <a href="/download/SWEEPRVPN.mobileconfig" rel="nofollow" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'ios' ? 'border-2 border-emerald-500 bg-emerald-50/40' : 'border-gray-200 bg-white'} hover:border-emerald-400 transition-all no-underline text-gray-900">
         <div>
           <div class="font-bold text-sm text-gray-900">ÃƒÂ°Ã…Â¸Ã‚ÂÃ…Â½ iPhone &amp; iPad Installer (iOS / iPadOS)</div>
@@ -3088,8 +3001,7 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
     <div class="mt-4 mb-5 p-3.5 rounded-xl border border-emerald-200 bg-emerald-50/50 text-left text-xs text-gray-600 space-y-1">
       <div class="font-extrabold text-emerald-900 flex items-center gap-1.5">ÃƒÂ°Ã…Â¸Ã¢â‚¬ÂºÃ‚Â¡ÃƒÂ¯Ã‚Â¸Ã‚Â Authenticode Signed &amp; Verified Windows Binary</div>
       <div><strong>Publisher:</strong> CN=Benjamin Cook, O=Benjamin Cook, L=Worthing, C=GB (SSL.com OV Code Signing)</div>
-      <div class="break-all"><strong>SHA-256 (SWEEPRVPN.exe):</strong> <code class="text-[11px] bg-white px-1 py-0.5 rounded border border-emerald-100">1CADD45F8C875CAD864CDEFDA02CEBC527A12244F1081E079264C9200A0A728C</code></div>
-      <div class="pt-1"><a href="/warrant-canary" class="font-bold text-emerald-700 hover:text-emerald-900 underline">Verify Signed Release &amp; Cryptographic Warrant Canary &rarr;</a></div>
+      <div class="break-all"><strong>SHA-256 (SWEEPRVPN.exe):</strong> <code class="text-[11px] bg-white px-1 py-0.5 rounded border border-emerald-100">7C199767E751019CAD98C4FEBB17E5B1E44A5F4E76F5A3F3A4E1EC09FE41684A</code></div>
     </div>
     <div class="flex justify-center pt-4 border-t border-gray-100">
       <a href="/" class="btn btn-ghost w-full justify-center">Back to Home</a>
@@ -3111,8 +3023,6 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
         <a href="/vs" class="hover:text-emerald-600">VPN Comparisons</a>
         <span>&bull;</span>
         <a href="/support" class="hover:text-emerald-600">Support</a>
-        <span>&bull;</span>
-        <a href="/warrant-canary" class="hover:text-emerald-600 font-semibold text-gray-700">Cryptographic Warrant Canary</a>
       </div>
       <div class="flex flex-wrap justify-center gap-x-3 gap-y-1 text-[11px] text-gray-400">
         <a href="/setup/gl-inet-travel-router" class="hover:text-emerald-600">GL.iNet Router Setup</a>
@@ -3137,8 +3047,7 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
         var os = ${JSON.stringify(osType)};
         var target = os === 'windows' ? '/download?platform=win'
           : os === 'mac' ? '/download?platform=mac'
-          : os === 'android' ? '/download/SWEEPRVPN.apk'
-          : os === 'ios' ? '/download/SWEEPRVPN.mobileconfig'
+          ${isAppleHuman ? '' : ": os === 'android' ? '/download/SWEEPRVPN.apk'\n          "}: os === 'ios' ? '/download/SWEEPRVPN.mobileconfig'
           : '';
         if (target) {
           setTimeout(function(){ window.location.href = target; }, 350);
@@ -3233,15 +3142,21 @@ function renderCheckoutSuccessPage(acc, isCancelled = false, isPopup = false) {
       localStorage.removeItem('sweepr_visited_order');
       document.cookie = 'sweepr_order_draft=; path=/; max-age=0; SameSite=Lax';
       document.cookie = 'sweepr_visited_order=; path=/; max-age=0; SameSite=Lax';
-      if ('${licenseKey}') {
-        localStorage.setItem('sweepr_vpn_code', '${licenseKey}');
-        localStorage.setItem('sweepr_vpn_license_key', '${licenseKey}');
+      const safeJsKey = JSON.stringify(String(acc?.licenseKey || '')).replace(/</g, '\\u003c');
+      const safeJsEmail = JSON.stringify(String(acc?.email || '')).replace(/</g, '\\u003c');
+      const safeJsSubId = JSON.stringify(String(acc?.stripe_subscription_id || '')).replace(/</g, '\\u003c');
+      const safeJsAccId = JSON.stringify(String(acc?.id || '')).replace(/</g, '\\u003c');
+      const safeJsPlan = JSON.stringify(String(acc?.plan || 'annual')).replace(/</g, '\\u003c');
+      const safeJsPlanLabel = JSON.stringify(String(planLabel || '')).replace(/</g, '\\u003c');
+      if (${safeJsKey}) {
+        localStorage.setItem('sweepr_vpn_code', ${safeJsKey});
+        localStorage.setItem('sweepr_vpn_license_key', ${safeJsKey});
       }
-      if ('${email}') {
-        localStorage.setItem('sweepr_vpn_email', '${email}');
+      if (${safeJsEmail}) {
+        localStorage.setItem('sweepr_vpn_email', ${safeJsEmail});
       }
       if (!${isPopup ? 'true' : 'false'}) {
-        var txId = '${subscriptionId || accountId || 'sweepr_vpn_tx'}';
+        var txId = ${safeJsSubId} || ${safeJsAccId} || 'sweepr_vpn_tx';
         var dedupKey = 'sweepr_ga4_purchase_' + txId;
         if (!sessionStorage.getItem(dedupKey)) {
           sessionStorage.setItem(dedupKey, '1');
@@ -3249,11 +3164,11 @@ function renderCheckoutSuccessPage(acc, isCancelled = false, isPopup = false) {
             transaction_id: txId,
             value: Number(${purchaseValue.toFixed(2)}),
             currency: 'GBP',
-            plan: '${escapeHtml(acc?.plan || 'annual')}',
+            plan: ${safeJsPlan},
             items: [
               {
-                item_id: 'sweepr_vpn_${escapeHtml(acc?.plan || 'annual')}',
-                item_name: 'SWEEPR VPN Pro (${planLabel})',
+                item_id: 'sweepr_vpn_' + ${safeJsPlan},
+                item_name: 'SWEEPR VPN Pro (' + ${safeJsPlanLabel} + ')',
                 price: Number(${purchaseValue.toFixed(2)}),
                 quantity: 1
               }
@@ -3262,9 +3177,9 @@ function renderCheckoutSuccessPage(acc, isCancelled = false, isPopup = false) {
         }
       }
       if (${isPopup ? 'true' : 'false'}) {
-        const redirectUrl = '/checkout/success?web=1&subscription_id=${subscriptionId}&account_id=${accountId}';
-        const msg = { type: 'paypal_success', redirectUrl, subscriptionId: '${subscriptionId}', accountId: '${accountId}' };
-        const msg2 = { type: 'sweepr_checkout_complete', redirectUrl, subscriptionId: '${subscriptionId}', accountId: '${accountId}' };
+        const redirectUrl = '/checkout/success?web=1&subscription_id=' + encodeURIComponent(${safeJsSubId}) + '&account_id=' + encodeURIComponent(${safeJsAccId});
+        const msg = { type: 'paypal_success', redirectUrl, subscriptionId: ${safeJsSubId}, accountId: ${safeJsAccId} };
+        const msg2 = { type: 'sweepr_checkout_complete', redirectUrl, subscriptionId: ${safeJsSubId}, accountId: ${safeJsAccId} };
         try { new BroadcastChannel('sweepr_paypal_checkout').postMessage(msg); } catch (e) {}
         try { new BroadcastChannel('sweepr_checkout').postMessage(msg2); } catch (e) {}
         try { localStorage.setItem('sweepr_paypal_event', JSON.stringify({ ...msg, ts: Date.now() })); } catch (e) {}
@@ -3359,15 +3274,6 @@ const server = http.createServer(async (req, res) => {
   const urlObj = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
   let pathname = (urlObj.pathname.replace(/\/+$/, '') || '/').replace(/^\/api\/v1\//, '/api/');
 
-  // Reject TRACE/TRACK HTTP methods explicitly (defense-in-depth alongside Node HTTP parser)
-  if (req.method === 'TRACE' || req.method === 'TRACK') {
-    res.writeHead(405, {
-      'Allow': 'GET, POST, HEAD, OPTIONS',
-      ...COMMON_SECURITY_HEADERS
-    });
-    return res.end('Method Not Allowed');
-  }
-
   // Handle CORS preflight requests for API routes with strict origin allowlist
   if (req.method === 'OPTIONS') {
     res.writeHead(204, {
@@ -3391,17 +3297,15 @@ const server = http.createServer(async (req, res) => {
     res.writeHead(301, { Location: cleanTarget, ...COMMON_SECURITY_HEADERS });
     return res.end();
   }
-  if (req.method === 'GET' || req.method === 'HEAD') {
-    const redirectTarget = resolveCanonical301(pathname);
-    if (redirectTarget) {
-      const fullTarget = redirectTarget + (urlObj.search || '');
-      res.writeHead(301, {
-        Location: fullTarget,
-        'Cache-Control': 'public, max-age=3600',
-        ...COMMON_SECURITY_HEADERS
-      });
-      return res.end();
-    }
+  if ((req.method === 'GET' || req.method === 'HEAD') && CANONICAL_REDIRECTS[pathname]) {
+    const target = CANONICAL_REDIRECTS[pathname] + (urlObj.search || '');
+    res.writeHead(301, { Location: target, ...COMMON_SECURITY_HEADERS });
+    return res.end();
+  }
+  if ((req.method === 'GET' || req.method === 'HEAD') && /^\/(solutions|setup|vs|guides)\/[a-z0-9-]+\.html$/i.test(pathname)) {
+    const target = pathname.replace(/\.html$/i, '') + (urlObj.search || '');
+    res.writeHead(301, { Location: target, ...COMMON_SECURITY_HEADERS });
+    return res.end();
   }
 
   // Forward AI & Search crawler hits to central SWEEPR CRM SEO Intelligence (project: vpn)
@@ -3509,6 +3413,16 @@ const server = http.createServer(async (req, res) => {
       ...COMMON_SECURITY_HEADERS
     });
     return res.end(req.method === 'HEAD' ? undefined : payload);
+  }
+
+  // Lightweight Service Health Check (used by native diagnostic probes and readiness checks)
+  if ((pathname === '/health' || pathname === '/api/health') && (req.method === 'GET' || req.method === 'HEAD')) {
+    res.writeHead(200, {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Cache-Control': 'no-store',
+      ...COMMON_SECURITY_HEADERS
+    });
+    return res.end(req.method === 'HEAD' ? undefined : JSON.stringify({ ok: true, status: 'healthy' }));
   }
 
   // Apple Universal Links Verification (/.well-known/apple-app-site-association & /apple-app-site-association)
@@ -3700,19 +3614,17 @@ self.addEventListener('fetch', e => {
       properties: { path: '/download' }
     }).catch(() => {});
 
-    const hostOrigin = PUBLIC_URL.includes('localhost') && req.headers.host
-      ? `${req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http'}://${req.headers.host}`
-      : PUBLIC_URL;
+    const hostOrigin = resolveTrustedOrigin(req);
 
-    // Search & AI crawlers, non-browser programmatic clients, or explicit ?platform=picker: serve indexable HTML download page
-    const isCrawlerOrNonBrowser = BOT_UA_RE.test(ua) || !/Mozilla\/5\.0/i.test(ua);
-    if (isCrawlerOrNonBrowser || requestedPlatform === 'picker') {
+    // Search & AI crawlers (or explicit ?platform=picker): serve indexable HTML download page
+    if (BOT_UA_RE.test(ua) || requestedPlatform === 'picker') {
       if (BOT_UA_RE.test(ua) && urlObj.search) {
         res.writeHead(301, { Location: '/download', ...COMMON_SECURITY_HEADERS });
         return res.end();
       }
       return sendHtml(res, 200, renderPlatformDownloadPicker(osType, ua, hostOrigin), {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=3600'
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=3600',
+        Vary: 'User-Agent, Sec-CH-UA-Platform'
       });
     }
 
@@ -4697,11 +4609,21 @@ self.addEventListener('fetch', e => {
         if (metaEmail) recordBoundedSet(claimedIntroEmails, canonicalizeEmailForAntiAbuse(metaEmail));
       }
 
+      const resolvedStripeCustId = typeof sub.customer === 'string' ? sub.customer : sub.customer?.id;
+      const emailCandidateAcc = metaEmail ? accountsByEmail.get(metaEmail) : null;
+      const safeEmailMatchedAcc =
+        emailCandidateAcc &&
+        (!emailCandidateAcc.stripe_customer_id ||
+          emailCandidateAcc.stripe_customer_id === resolvedStripeCustId ||
+          emailCandidateAcc.stripe_subscription_id === sub.id)
+          ? emailCandidateAcc
+          : null;
+
       let acc =
         accountsById.get(metaAccountId) ||
         accountsById.get(accountId) ||
         accountsBySubscriptionId.get(subscriptionId) ||
-        (metaEmail ? accountsByEmail.get(metaEmail) : null);
+        safeEmailMatchedAcc;
 
       acc = upsertLocalAccount({
         email: acc?.email || metaEmail || 'customer@sweeprvpn.com',
@@ -5130,13 +5052,18 @@ self.addEventListener('fetch', e => {
     }
     const body = await readJsonBody(req);
     if (body && body.__tooLarge) return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, {}, req);
-    const bearerSecret = String(req.headers.authorization || '').replace(/^Bearer\s+/i, '').trim();
-    const rawCodeInput = String(body.otp || body.activation_code || body.key || body.code || body.license_key || body.refresh_token || bearerSecret || '').trim();
-    const extractedKeyMatch = rawCodeInput.toUpperCase().match(/SWEEPR\s*-\s*[A-Z0-9]{2,8}\s*-\s*[A-Z0-9]{4}\s*-\s*[A-Z0-9]{4}\s*-\s*[A-Z0-9]{4}/i);
+    const bearerSecret = String(req.headers.authorization || '').replace(/^Bearer\s+/i, '').trim().slice(0, 256);
+    const rawCodeInput = String(body.otp || body.activation_code || body.key || body.code || body.license_key || body.refresh_token || bearerSecret || '').trim().slice(0, 256);
+    const compactCodeInput = rawCodeInput.replace(/\s+/g, '').toUpperCase();
+    const extractedKeyMatch = compactCodeInput.match(/SWEEPR-[A-Z0-9]{2,8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}/i);
     const code = pathname === '/v1/license/refresh'
       ? rawCodeInput
-      : (extractedKeyMatch ? extractedKeyMatch[0].replace(/\s+/g, '').toUpperCase() : rawCodeInput.replace(/\s+/g, '').toUpperCase());
-    const clientProvidedEmail = body.email ? String(body.email).trim().toLowerCase() : '';
+      : (extractedKeyMatch ? extractedKeyMatch[0].toUpperCase() : compactCodeInput);
+    const clientProvidedEmail = body.email ? normalizeEmail(body.email) : '';
+    const lockoutTarget = clientProvidedEmail || code;
+    if (lockoutTarget && isAccountAuthLockedOut(lockoutTarget)) {
+      return sendJson(res, 429, { ok: false, valid: false, error: 'account_locked_out', message: 'Too many failed activation attempts for this account. Please wait 15 minutes and try again.' }, {}, req);
+    }
     const isShortCode = /^\d{6}$/.test(code) || (!HIGH_ENTROPY_LICENSE_KEY_RE.test(code) && code.length < 16);
     const preMatchedLocalAcc =
       licenses.get(code) ||
@@ -5220,8 +5147,8 @@ self.addEventListener('fetch', e => {
               devices: Array.isArray(targetAcc?.devices) ? targetAcc.devices : [],
               devices_used: Array.isArray(targetAcc?.devices) ? targetAcc.devices.length : 1,
               device_count: Array.isArray(targetAcc?.devices) ? targetAcc.devices.length : 1,
-              max_devices: MAX_DEVICES_PER_ACCOUNT,
-              device_limit: MAX_DEVICES_PER_ACCOUNT,
+              max_devices: getAccountDeviceLimit(targetAcc),
+              device_limit: getAccountDeviceLimit(targetAcc),
               token: cleanData.token || fallbackSigned?.token,
               license_token: cleanData.license_token || cleanData.token || fallbackSigned?.token,
               expires_at: cleanData.expires_at || fallbackSigned?.expires_at
@@ -5274,8 +5201,8 @@ self.addEventListener('fetch', e => {
               devices: Array.isArray(syncedAcc?.devices) ? syncedAcc.devices : [],
               devices_used: Array.isArray(syncedAcc?.devices) ? syncedAcc.devices.length : 1,
               device_count: Array.isArray(syncedAcc?.devices) ? syncedAcc.devices.length : 1,
-              max_devices: MAX_DEVICES_PER_ACCOUNT,
-              device_limit: MAX_DEVICES_PER_ACCOUNT,
+              max_devices: getAccountDeviceLimit(syncedAcc),
+              device_limit: getAccountDeviceLimit(syncedAcc),
               ...(signed ? { token: signed.token, license_token: signed.token, expires_at: signed.expires_at } : {})
             },
             {},
@@ -5295,13 +5222,12 @@ self.addEventListener('fetch', e => {
     if (localAcc) {
       const codeMatches =
         safeCompareStrings(code, localAcc.activation_code) ||
-        safeCompareStrings(code.toUpperCase(), localAcc.licenseKey) ||
-        licenses.get(code) === localAcc ||
-        licenses.get(code.toUpperCase()) === localAcc;
+        safeCompareStrings(code.toUpperCase(), localAcc.licenseKey);
       const emailMatches = isShortCode
         ? (Boolean(clientProvidedEmail) && localAcc.email.toLowerCase() === clientProvidedEmail)
-        : (!clientProvidedEmail || localAcc.email.toLowerCase() === clientProvidedEmail || licenses.get(code) === localAcc || licenses.get(code.toUpperCase()) === localAcc);
+        : (!clientProvidedEmail || localAcc.email.toLowerCase() === clientProvidedEmail || safeCompareStrings(code.toUpperCase(), localAcc.licenseKey));
       if (localAcc.status === 'active' && codeMatches && emailMatches) {
+        if (lockoutTarget) clearAccountAuthFailures(lockoutTarget);
         let devReg = null;
         if (body.device_id || body.device_name) {
           devReg = registerOrUpdateAccountDevice(localAcc, {
@@ -5332,8 +5258,8 @@ self.addEventListener('fetch', e => {
             devices: Array.isArray(localAcc.devices) ? localAcc.devices : [],
             devices_used: Array.isArray(localAcc.devices) ? localAcc.devices.length : 1,
             device_count: Array.isArray(localAcc.devices) ? localAcc.devices.length : 1,
-            max_devices: MAX_DEVICES_PER_ACCOUNT,
-            device_limit: MAX_DEVICES_PER_ACCOUNT,
+            max_devices: getAccountDeviceLimit(localAcc),
+            device_limit: getAccountDeviceLimit(localAcc),
             ...(signed ? { token: signed.token, license_token: signed.token, expires_at: signed.expires_at } : {})
           },
           {},
@@ -5342,6 +5268,7 @@ self.addEventListener('fetch', e => {
       }
     }
 
+    if (lockoutTarget) recordAccountAuthFailure(lockoutTarget);
     return sendJson(
       res,
       401,
@@ -5393,19 +5320,20 @@ self.addEventListener('fetch', e => {
       return sendJson(res, 401, { ok: false, error: 'unauthorized', message: 'Please enter a valid SWEEPR VPN license key or log in to your Customer Portal to generate a pairing QR code.' }, {}, req);
     }
     if (!Array.isArray(acc.devices)) acc.devices = [];
-    if (acc.devices.length >= MAX_DEVICES_PER_ACCOUNT) {
+    const accMaxDevices = getAccountDeviceLimit(acc);
+    if (acc.devices.length >= accMaxDevices) {
       return sendJson(
         res,
         409,
         {
           ok: false,
           error: 'device_limit_reached',
-          message: `All ${MAX_DEVICES_PER_ACCOUNT} device slots are currently in use. Please remove an existing device first to link a new one.`,
+          message: `All ${accMaxDevices} device slots are currently in use. Please remove an existing device first to link a new one.`,
           devices: acc.devices,
           devices_used: acc.devices.length,
           device_count: acc.devices.length,
-          max_devices: MAX_DEVICES_PER_ACCOUNT,
-          device_limit: MAX_DEVICES_PER_ACCOUNT
+          max_devices: accMaxDevices,
+          device_limit: accMaxDevices
         },
         {},
         req
@@ -5445,8 +5373,8 @@ self.addEventListener('fetch', e => {
         devices: acc.devices,
         devices_used: acc.devices.length,
         device_count: acc.devices.length,
-        max_devices: MAX_DEVICES_PER_ACCOUNT,
-        device_limit: MAX_DEVICES_PER_ACCOUNT
+        max_devices: accMaxDevices,
+        device_limit: accMaxDevices
       },
       { 'Cache-Control': 'no-store' },
       req
@@ -5461,6 +5389,7 @@ self.addEventListener('fetch', e => {
       return sendJson(res, 200, { ok: true, status: 'expired' }, { 'Cache-Control': 'no-store' }, req);
     }
     const acc = accountsById.get(entry.accountId) || accountsByEmail.get(entry.email);
+    const checkMaxDevices = getAccountDeviceLimit(acc);
     if (entry.used && entry.redeemedDevice) {
       return sendJson(
         res,
@@ -5473,8 +5402,8 @@ self.addEventListener('fetch', e => {
           devices: Array.isArray(acc?.devices) ? acc.devices : [],
           devices_used: Array.isArray(acc?.devices) ? acc.devices.length : 1,
           device_count: Array.isArray(acc?.devices) ? acc.devices.length : 1,
-          max_devices: MAX_DEVICES_PER_ACCOUNT,
-          device_limit: MAX_DEVICES_PER_ACCOUNT
+          max_devices: checkMaxDevices,
+          device_limit: checkMaxDevices
         },
         { 'Cache-Control': 'no-store' },
         req
@@ -5492,8 +5421,8 @@ self.addEventListener('fetch', e => {
         expires_in: Math.max(0, Math.ceil((entry.expiresAt - Date.now()) / 1000)),
         devices_used: Array.isArray(acc?.devices) ? acc.devices.length : 0,
         device_count: Array.isArray(acc?.devices) ? acc.devices.length : 0,
-        max_devices: MAX_DEVICES_PER_ACCOUNT,
-        device_limit: MAX_DEVICES_PER_ACCOUNT
+        max_devices: checkMaxDevices,
+        device_limit: checkMaxDevices
       },
       { 'Cache-Control': 'no-store' },
       req
@@ -5561,8 +5490,8 @@ self.addEventListener('fetch', e => {
         devices: acc.devices,
         devices_used: acc.devices.length,
         device_count: acc.devices.length,
-        max_devices: MAX_DEVICES_PER_ACCOUNT,
-        device_limit: MAX_DEVICES_PER_ACCOUNT,
+        max_devices: getAccountDeviceLimit(acc),
+        device_limit: getAccountDeviceLimit(acc),
         ...(signed ? { token: signed.token, license_token: signed.token, expires_at: signed.expires_at } : {})
       },
       { 'Cache-Control': 'no-store' },
@@ -5731,8 +5660,8 @@ self.addEventListener('fetch', e => {
       devices: acc.devices,
       devices_used: acc.devices.length,
       device_count: acc.devices.length,
-      max_devices: MAX_DEVICES_PER_ACCOUNT,
-      device_limit: MAX_DEVICES_PER_ACCOUNT,
+      max_devices: getAccountDeviceLimit(acc),
+      device_limit: getAccountDeviceLimit(acc),
       ...(signed ? { token: signed.token, license_token: signed.token, expires_at: signed.expires_at } : {})
     };
 
@@ -5747,8 +5676,8 @@ self.addEventListener('fetch', e => {
         devices: acc.devices,
         devices_used: acc.devices.length,
         device_count: acc.devices.length,
-        max_devices: MAX_DEVICES_PER_ACCOUNT,
-        device_limit: MAX_DEVICES_PER_ACCOUNT
+        max_devices: getAccountDeviceLimit(acc),
+        device_limit: getAccountDeviceLimit(acc)
       },
       { 'Cache-Control': 'no-store' },
       req
@@ -5795,8 +5724,9 @@ self.addEventListener('fetch', e => {
     }
 
     const idx = acc.devices.findIndex((d) => d && d.id === targetDeviceId);
+    const revokeMaxDevices = getAccountDeviceLimit(acc);
     if (idx === -1) {
-      return sendJson(res, 404, { ok: false, error: 'device_not_found', devices: acc.devices, devices_used: acc.devices.length, device_count: acc.devices.length, max_devices: MAX_DEVICES_PER_ACCOUNT, device_limit: MAX_DEVICES_PER_ACCOUNT }, {}, req);
+      return sendJson(res, 404, { ok: false, error: 'device_not_found', devices: acc.devices, devices_used: acc.devices.length, device_count: acc.devices.length, max_devices: revokeMaxDevices, device_limit: revokeMaxDevices }, {}, req);
     }
 
     const [removed] = acc.devices.splice(idx, 1);
@@ -5820,8 +5750,8 @@ self.addEventListener('fetch', e => {
         devices: acc.devices,
         devices_used: acc.devices.length,
         device_count: acc.devices.length,
-        max_devices: MAX_DEVICES_PER_ACCOUNT,
-        device_limit: MAX_DEVICES_PER_ACCOUNT
+        max_devices: revokeMaxDevices,
+        device_limit: revokeMaxDevices
       },
       { 'Cache-Control': 'no-store' },
       req
@@ -5846,57 +5776,38 @@ self.addEventListener('fetch', e => {
   <meta name="robots" content="noindex, nofollow">
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f7f7f5;color:#161a22;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;font-variant-numeric:tabular-nums}
-    .rack-bar{max-width:440px;width:100%;margin-bottom:10px;padding:8px 14px;background:#fff;border:1px solid #dfddd4;border-radius:10px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;color:#475569;font-variant-numeric:tabular-nums}
-    .rack-bar-seg{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
-    .rack-led{width:7px;height:7px;border-radius:999px;background:#059669;box-shadow:0 0 0 2px #d1fae5;display:inline-block}
-    .card{background:#fff;border:1px solid #dfddd4;border-radius:16px;box-shadow:0 1px 3px rgba(15,23,42,.05);max-width:440px;width:100%;padding:26px 24px;display:flex;flex-direction:column;gap:16px}
-    .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:6px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;font-weight:700;background:#ecfdf5;color:#047857;border:1px solid #a7f3d0;align-self:flex-start;letter-spacing:.02em}
-    h1{font-size:21px;font-weight:700;letter-spacing:-.02em;color:#111315}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f8fafc;color:#0f172a;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+    .card{background:#fff;border:1px solid #e2e8f0;border-radius:20px;box-shadow:0 16px 40px -12px rgba(15,23,42,.08);max-width:440px;width:100%;padding:28px 24px;display:flex;flex-direction:column;gap:16px}
+    .badge{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;font-size:12px;font-weight:800;background:#ecfdf5;color:#047857;border:1px solid #a7f3d0;align-self:flex-start}
+    h1{font-size:21px;font-weight:900;letter-spacing:-.02em}
     p{font-size:14px;color:#475569;line-height:1.5}
-    .box{background:#f7f7f5;border:1px solid #dfddd4;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px}
-    .input{width:100%;padding:11px 14px;border:1px solid #cbd5e1;border-radius:10px;font-size:14px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-weight:700;background:#fff;color:#111315}
-    .btn{width:100%;padding:13px 16px;border-radius:10px;border:1px solid transparent;font-size:14px;font-weight:700;cursor:pointer;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform 110ms cubic-bezier(.32,.72,0,1),background-color 140ms ease}
-    .btn:active:not(:disabled){transform:scale(0.97)}
-    .btn-go{background:#059669;color:#fff;border-color:#047857;box-shadow:0 2px 6px rgba(5,150,105,.22)}
-    .btn-go:hover:not(:disabled){background:#047857}
-    .btn-soft{background:#f3f2ed;color:#161a22;border:1px solid #dfddd4}
-    .btn-async-grid{display:inline-grid;align-items:center;justify-items:center}
-    .btn-async-grid>.btn-state-idle,.btn-async-grid>.btn-state-loading{grid-area:1/1;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:opacity 150ms ease,transform 150ms ease}
-    .btn-async-grid>.btn-state-loading{opacity:0;visibility:hidden;transform:scale(.96);pointer-events:none}
-    .btn-async-grid.is-loading>.btn-state-idle{opacity:0;visibility:hidden;transform:scale(.96)}
-    .btn-async-grid.is-loading>.btn-state-loading{opacity:1;visibility:visible;transform:scale(1)}
-    @keyframes spin360{to{transform:rotate(360deg)}}
-    .spin{animation:spin360 .8s linear infinite}
+    .box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px}
+    .input{width:100%;padding:11px 14px;border:1px solid #cbd5e1;border-radius:12px;font-size:14px;font-family:monospace;font-weight:700}
+    .btn{width:100%;padding:13px 16px;border-radius:12px;border:none;font-size:14px;font-weight:800;cursor:pointer;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+    .btn-go{background:linear-gradient(135deg,#059669,#10b981);color:#fff;box-shadow:0 6px 18px -4px rgba(5,150,105,.4)}
+    .btn-soft{background:#f1f5f9;color:#0f172a;border:1px solid #e2e8f0}
     .err{color:#dc2626;font-size:13px;font-weight:700;display:none}
-    .ok{color:#059669;font-size:13.5px;font-weight:700}
+    .ok{color:#059669;font-size:13.5px;font-weight:800}
   </style>
 </head>
 <body>
-  <div class="rack-bar">
-    <span class="rack-bar-seg"><span class="rack-led"></span>PAIR // 120S SINGLE-USE TOKEN</span>
-    <span class="rack-bar-seg">${MAX_DEVICES_PER_ACCOUNT}-SLOT MAX</span>
-  </div>
   <div class="card">
-    <div class="badge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span>SWEEPR VPN &middot; DEVICE PAIRING</span></div>
+    <div class="badge">ÃƒÂ°Ã…Â¸Ã¢â‚¬ÂÃ¢â‚¬â„¢ SWEEPR VPN Device Pairing</div>
     <div id="pairBody">
       ${t ? `
-        <h1>Linking This Device…</h1>
-        <p style="margin-top:6px">Verifying your one-time QR pairing token and reserving a device slot (up to ${MAX_DEVICES_PER_ACCOUNT} devices &mdash; desktop or mobile).</p>
+        <h1>Linking This DeviceÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦</h1>
+        <p style="margin-top:6px">Verifying your one-time QR pairing token and reserving a device slot (up to ${sessAcc ? getAccountDeviceLimit(sessAcc) : MAX_DEVICES_PER_ACCOUNT} devices ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â desktop or mobile).</p>
       ` : c ? `
         <h1>Approve Desktop Device</h1>
         <p style="margin-top:6px">Confirm linking <strong>${escapeHtml(ch ? ch.deviceName : 'SWEEPR VPN Desktop')}</strong> to your SWEEPR VPN Pro subscription.</p>
-        ${sessAcc ? `<div class="box" style="margin-top:12px"><div style="font-size:11px;color:#64748b;font-weight:700;font-family:monospace">SIGNED IN AS</div><div style="font-size:14px;font-weight:700">${escapeHtml(sessAcc.email)} (${(sessAcc.devices || []).length} / ${MAX_DEVICES_PER_ACCOUNT} devices used)</div></div>` : `
+        ${sessAcc ? `<div class="box" style="margin-top:12px"><div style="font-size:12px;color:#64748b;font-weight:700">SIGNED IN AS</div><div style="font-size:14px;font-weight:800">${escapeHtml(sessAcc.email)} (${(sessAcc.devices || []).length} / ${getAccountDeviceLimit(sessAcc)} devices used)</div></div>` : `
         <div class="box" style="margin-top:12px">
-          <label style="font-size:12px;font-weight:700;color:#475569">Your License Key or 6-Digit Code</label>
+          <label style="font-size:12px;font-weight:800;color:#475569">Your License Key or 6-Digit Code</label>
           <input id="approveKey" class="input" placeholder="SWEEPR-VPN-XXXX-XXXX-XXXX" />
           <input id="approveEmail" class="input" type="email" placeholder="Account email (if using 6-digit code)" style="font-family:sans-serif;font-weight:600" />
         </div>`}
         <div id="pairErr" class="err" style="margin-top:10px"></div>
-        <button class="btn btn-go btn-async-grid" style="margin-top:14px" id="approveBtn" onclick="approveDesktop()">
-          <span class="btn-state-idle">Approve &amp; Unlock Desktop</span>
-          <span class="btn-state-loading"><svg class="spin" width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.5" opacity="0.25"/><path d="M21 12a9 9 0 0 0-9-9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg><span>Approving…</span></span>
-        </button>
+        <button class="btn btn-go" style="margin-top:14px" id="approveBtn" onclick="approveDesktop()">Approve &amp; Unlock Desktop</button>
       ` : `
         <h1>Invalid Pairing Link</h1>
         <p style="margin-top:6px">Please scan a fresh QR code from your SWEEPR VPN Customer Portal or Desktop App.</p>
@@ -5927,7 +5838,10 @@ self.addEventListener('fetch', e => {
       try {
         let id = localStorage.getItem('sweepr_vpn_device_id');
         if (!id) {
-          id = 'dev_vpn_' + Math.random().toString(16).slice(2, 10) + Date.now().toString(16).slice(-4);
+          const bytes = new Uint8Array(6);
+          window.crypto.getRandomValues(bytes);
+          const hex = Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
+          id = 'dev_vpn_' + hex;
           localStorage.setItem('sweepr_vpn_device_id', id);
         }
         return id;
@@ -5958,9 +5872,9 @@ self.addEventListener('fetch', e => {
         } catch (e) {}
         const deepLink = 'sweeprvpn://activate?key=' + encodeURIComponent(d.licenseKey || '') + '&device_id=' + encodeURIComponent(devId);
         document.getElementById('pairBody').innerHTML =
-          '<h1>Account Activated on This Device</h1>' +
+          '<h1>ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Account Activated on This Device!</h1>' +
           '<p style="margin-top:6px">This ' + escHtml(info.name) + ' is now linked to <strong>' + escHtml(d.email || 'your account') + '</strong> (Slot ' + Number(d.devices_used || 1) + ' of ' + Number(d.max_devices || 3) + ').</p>' +
-          '<div class="box" style="margin-top:12px"><div style="font-size:11px;font-weight:700;color:#64748b">ACTIVE LICENSE KEY</div><div style="font-family:monospace;font-weight:700;font-size:14px">' + escHtml(d.licenseKey || '') + '</div></div>' +
+          '<div class="box" style="margin-top:12px"><div style="font-size:11px;font-weight:800;color:#64748b">ACTIVE LICENSE KEY</div><div style="font-family:monospace;font-weight:800;font-size:14px">' + escHtml(d.licenseKey || '') + '</div></div>' +
           '<a href="' + escHtml(deepLink) + '" class="btn btn-go" style="margin-top:14px">Open in SWEEPR VPN App</a>' +
           '<a href="/download" class="btn btn-soft" style="margin-top:8px">Download SWEEPR VPN App</a>';
       } catch (e) {
@@ -5978,7 +5892,7 @@ self.addEventListener('fetch', e => {
         email = (document.getElementById('approveEmail')?.value || localStorage.getItem('sweepr_vpn_email') || '').trim();
       }
       btn.disabled = true;
-      btn.classList.add('is-loading');
+      btn.textContent = 'ApprovingÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦';
       try {
         const r = await fetch('/api/vpn/pair/approve', {
           method: 'POST',
@@ -5990,17 +5904,17 @@ self.addEventListener('fetch', e => {
           err.textContent = d.message || 'Could not approve device.';
           err.style.display = 'block';
           btn.disabled = false;
-          btn.classList.remove('is-loading');
+          btn.textContent = 'Approve & Unlock Desktop';
           return;
         }
         document.getElementById('pairBody').innerHTML =
-          '<h1>Desktop Unlocked</h1>' +
+          '<h1>ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Desktop Unlocked!</h1>' +
           '<p style="margin-top:6px">Your desktop app is now linked and unlocked (Slot ' + d.devices_used + ' of ' + d.max_devices + '). You can close this tab.</p>';
       } catch (e) {
         err.textContent = 'Network error. Please try again.';
         err.style.display = 'block';
         btn.disabled = false;
-        btn.classList.remove('is-loading');
+        btn.textContent = 'Approve & Unlock Desktop';
       }
     }
     if (token) redeemFlowA();
@@ -6025,9 +5939,13 @@ self.addEventListener('fetch', e => {
     }
     const body = req.method === 'POST' ? await readJsonBody(req) : {};
     if (body && body.__tooLarge) return sendJson(res, 413, { valid: false, error: 'payload_too_large' }, {}, req);
-    const rawKey = String(body.key || urlObj.searchParams.get('key') || '').trim();
+    const rawKey = String(body.key || urlObj.searchParams.get('key') || '').trim().slice(0, 256);
     const key = rawKey.replace(/\s+/g, '').toUpperCase();
-    const clientProvidedEmail = String(body.email || urlObj.searchParams.get('email') || '').trim().toLowerCase();
+    const clientProvidedEmail = normalizeEmail(body.email || urlObj.searchParams.get('email') || '');
+    const lockoutTarget = clientProvidedEmail || key;
+    if (lockoutTarget && isAccountAuthLockedOut(lockoutTarget)) {
+      return sendJson(res, 429, { valid: false, error: 'account_locked_out' }, {}, req);
+    }
     const localRecord = licenses.get(key) || licenses.get(key.toUpperCase());
     const isShortKey = !HIGH_ENTROPY_LICENSE_KEY_RE.test(key);
     const effectiveEmail = clientProvidedEmail || (isShortKey ? '' : (localRecord && localRecord.status === 'active' ? localRecord.email : ''));
@@ -6052,6 +5970,7 @@ self.addEventListener('fetch', e => {
     try {
       const data = await crm.verifyKey(key, effectiveEmail);
       if (data && data._httpStatus && data._httpStatus < 500 && data.valid) {
+        if (lockoutTarget) clearAccountAuthFailures(lockoutTarget);
         syncLocalCacheFromCrm(data, effectiveEmail || data.email || '', key);
         const { _httpStatus, ...cleanData } = data;
         if (!isServiceCall) {
@@ -6063,10 +5982,15 @@ self.addEventListener('fetch', e => {
       }
     } catch {}
 
+    const codeConstantTimeMatch = localRecord && (
+      safeCompareStrings(key, localRecord.activation_code) ||
+      safeCompareStrings(key, localRecord.licenseKey)
+    );
     const emailMatches = isShortKey
       ? (Boolean(clientProvidedEmail) && localRecord?.email.toLowerCase() === clientProvidedEmail)
       : (!clientProvidedEmail || localRecord?.email === clientProvidedEmail);
-    if (localRecord && localRecord.status === 'active' && emailMatches) {
+    if (localRecord && localRecord.status === 'active' && codeConstantTimeMatch && emailMatches) {
+      if (lockoutTarget) clearAccountAuthFailures(lockoutTarget);
       return sendJson(
         res,
         200,
@@ -6085,6 +6009,7 @@ self.addEventListener('fetch', e => {
         req
       );
     }
+    if (lockoutTarget) recordAccountAuthFailure(lockoutTarget);
     return sendJson(res, 404, { valid: false, error: 'key_not_found' }, {}, req);
   }
 
@@ -6180,27 +6105,33 @@ self.addEventListener('fetch', e => {
 
   // VPN Customer Support Ticket Submission
   if ((pathname === '/api/vpn/support' || pathname === '/api/support-ticket') && req.method === 'POST') {
+    if (req.headers.cookie && !isSameOriginOrTrusted(req)) {
+      return sendJson(res, 403, { ok: false, error: 'forbidden_cross_site' }, {}, req);
+    }
     if (!checkRateLimit(req, 'support_ticket', 5, 60000)) {
       return sendJson(res, 429, { error: 'Too many support requests. Please wait a minute and try again.' }, {}, req);
     }
     const body = await readJsonBody(req);
     if (body && body.__tooLarge) return sendJson(res, 413, { error: 'payload_too_large' }, {}, req);
-    const email = String(body?.email || '').trim().toLowerCase();
-    const message = String(body?.message || '').trim();
-    const subject = String(body?.subject || '').trim() || 'SWEEPR VPN Support Request';
-    const os = String(body?.os || body?.platform || 'desktop').trim();
+    const email = normalizeEmail(body?.email || '');
+    const message = String(body?.message || '').trim().slice(0, 4000);
+    const subject = String(body?.subject || '').trim().slice(0, 200) || 'SWEEPR VPN Support Request';
+    const os = String(body?.os || body?.platform || 'desktop').trim().slice(0, 32);
     if (!isValidEmail(email) || !message) {
       return sendJson(res, 400, { ok: false, error: 'Please provide a valid email address and message.' }, {}, req);
     }
     const payload = {
-      ...body,
       project_id: 'vpn',
       email,
+      name: typeof body?.name === 'string' ? body.name.trim().slice(0, 100) : undefined,
       subject,
       message,
+      category: typeof body?.category === 'string' ? body.category.trim().slice(0, 48) : 'general',
+      priority: typeof body?.priority === 'string' ? body.priority.trim().slice(0, 24) : 'normal',
       os,
-      appVersion: body?.appVersion || body?.app_version || '2.5.0',
-      deviceId: body?.deviceId || body?.device_id || undefined,
+      appVersion: String(body?.appVersion || body?.app_version || '2.5.0').slice(0, 32),
+      deviceId: typeof (body?.deviceId || body?.device_id) === 'string' ? String(body?.deviceId || body?.device_id).slice(0, 64) : undefined,
+      diagnostics: body?.diagnostics && typeof body.diagnostics === 'object' ? body.diagnostics : undefined
     };
     try {
       const data = await crm.createSupportTicket(payload);
@@ -6410,8 +6341,8 @@ self.addEventListener('fetch', e => {
         devices: Array.isArray(acc.devices) ? acc.devices : [],
         devices_used: Array.isArray(acc.devices) ? acc.devices.length : 1,
         device_count: Array.isArray(acc.devices) ? acc.devices.length : 1,
-        max_devices: MAX_DEVICES_PER_ACCOUNT,
-        device_limit: MAX_DEVICES_PER_ACCOUNT,
+        max_devices: getAccountDeviceLimit(acc),
+        device_limit: getAccountDeviceLimit(acc),
         ...(signed ? { token: signed.token, license_token: signed.token } : {})
       },
       { 'Cache-Control': 'no-store' },
@@ -6419,7 +6350,217 @@ self.addEventListener('fetch', e => {
     );
   }
 
-  // Google Play Mandatory Account & Data Deletion (In-App API + Public Web URL)
+  // Apple App Store / StoreKit 2 Subscription Verification & Instant License Provisioning
+  if (pathname === '/api/vpn/apple/verify' && req.method === 'POST') {
+    if (!checkRateLimit(req, 'apple_iap_verify', 15, 60000)) {
+      return sendJson(res, 429, { ok: false, valid: false, error: 'rate_limit_exceeded' }, {}, req);
+    }
+    const body = await readJsonBody(req);
+    if (body && body.__tooLarge) return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, {}, req);
+
+    const signedTx = String(body?.signed_transaction_info || body?.signedTransactionInfo || body?.jws || '').trim();
+    if (!signedTx) {
+      return sendJson(res, 400, { ok: false, valid: false, error: 'missing_signed_transaction_info', message: 'StoreKit 2 signedTransactionInfo JWS is required.' }, {}, req);
+    }
+
+    const verified = verifyAppleStoreKitJws(signedTx, { isNotification: false });
+    if (!verified.ok) {
+      return sendJson(res, 401, { ok: false, valid: false, error: verified.error || 'invalid_apple_jws', message: 'Apple StoreKit transaction signature could not be verified.' }, {}, req);
+    }
+
+    const tx = verified.payload;
+    const origTxId = String(tx.originalTransactionId || tx.transactionId || '').trim();
+    const productId = String(tx.productId || body?.product_id || '').trim();
+    if (!origTxId) {
+      return sendJson(res, 400, { ok: false, valid: false, error: 'missing_original_transaction_id' }, {}, req);
+    }
+
+    let mappedPlan = 'annual';
+    let durationDays = 365;
+    let radarIncluded = true;
+    const pidLower = productId.toLowerCase();
+    if (pidLower.includes('sixmonth') || pidLower.includes('6mo')) {
+      mappedPlan = 'sixmonth';
+      durationDays = 180;
+    } else if (pidLower.includes('monthly')) {
+      mappedPlan = 'monthly';
+      durationDays = 30;
+    } else if (pidLower.includes('addon.radar')) {
+      mappedPlan = 'annual';
+      durationDays = 365;
+      radarIncluded = true;
+    }
+
+    const expiresAtMs = Number(tx.expiresDate) > 0
+      ? Number(tx.expiresDate)
+      : (Number(tx.purchaseDate) > 0 ? Number(tx.purchaseDate) + durationDays * 86400000 : Date.now() + durationDays * 86400000);
+    if (expiresAtMs <= Date.now()) {
+      return sendJson(res, 402, { ok: false, valid: false, error: 'subscription_expired', message: 'This Apple subscription has expired. Please renew to continue.' }, {}, req);
+    }
+
+    const rawEmail = String(body?.email || '').trim().toLowerCase();
+    const emailValid = isValidEmail(rawEmail);
+    const existingOwnerId = claimedAppleOriginalTransactionIds.get(origTxId);
+    let existingAcc = existingOwnerId ? accountsById.get(existingOwnerId) : null;
+    if (existingOwnerId && existingAcc && emailValid && existingAcc.email !== rawEmail) {
+      return sendJson(
+        res,
+        409,
+        {
+          ok: false,
+          valid: false,
+          error: 'transaction_already_claimed',
+          message: 'This Apple subscription is already linked to another SWEEPR VPN account.'
+        },
+        {},
+        req
+      );
+    }
+
+    const normEmail = emailValid
+      ? rawEmail
+      : (existingAcc?.email || `apple_${crypto.createHash('sha256').update(origTxId).digest('hex').slice(0, 12)}@apple.sweeprvpn.com`);
+
+    const acc = upsertLocalAccount({
+      email: normEmail,
+      name: String(body?.name || existingAcc?.name || 'Apple Subscriber'),
+      country: String(tx.storefront || body?.country || existingAcc?.country || 'US').slice(0, 2).toUpperCase(),
+      plan: pidLower.includes('addon.radar') && existingAcc?.plan ? existingAcc.plan : mappedPlan,
+      wifiRadarAddon: radarIncluded || Boolean(existingAcc?.wifiRadarAddon),
+      status: 'active'
+    });
+    acc.apple_original_transaction_id = origTxId;
+    acc.apple_product_id = productId || acc.apple_product_id;
+    acc.apple_environment = tx.environment || verified.payload.environment || 'Production';
+    acc.current_period_end = expiresAtMs;
+    acc.cancel_at_period_end = false;
+    acc.status = 'active';
+
+    claimedAppleOriginalTransactionIds.set(origTxId, acc.id);
+    if (licenses && acc.activation_code) licenses.set(acc.activation_code, acc);
+    if (licenses && acc.licenseKey) licenses.set(acc.licenseKey, acc);
+    scheduleSaveRuntimeStateToDisk();
+
+    let devReg = null;
+    if (body?.device_id || body?.device_name) {
+      devReg = registerOrUpdateAccountDevice(acc, {
+        deviceId: body.device_id,
+        deviceName: body.device_name || (body.os === 'macos' ? 'Mac' : 'iPhone / iPad'),
+        os: body.os || 'ios',
+        method: 'apple_storekit2'
+      });
+      if (!devReg.ok && devReg.error === 'device_limit_reached') {
+        return sendJson(res, 409, { ok: false, valid: false, ...devReg }, {}, req);
+      }
+    }
+
+    crm.syncSubscription({
+      email: acc.email,
+      name: acc.name,
+      country: acc.country,
+      plan: acc.plan,
+      status: 'active',
+      days: Math.max(1, Math.ceil((expiresAtMs - Date.now()) / 86400000)),
+      currency: String(tx.currency || 'gbp').toLowerCase(),
+      activation_code: acc.activation_code,
+      license_key: acc.licenseKey,
+      addons: acc.wifiRadarAddon ? ['wifi_radar'] : [],
+      notes: `Apple StoreKit 2 (${acc.apple_environment}) originalTransactionId=${origTxId}`
+    }).catch(() => {});
+
+    const signed = signFallbackEd25519LicenseToken(acc, devReg?.device?.id || body?.device_id || 'apple_device');
+    const devLimit = getAccountDeviceLimit(acc);
+    return sendJson(
+      res,
+      200,
+      {
+        ok: true,
+        valid: true,
+        account_id: acc.id,
+        license_key: acc.licenseKey,
+        licenseKey: acc.licenseKey,
+        activation_code: acc.activation_code,
+        email: acc.email,
+        plan: acc.plan,
+        entitlements: acc.entitlements,
+        status: 'active',
+        expires_at: new Date(expiresAtMs).toISOString(),
+        apple_environment: acc.apple_environment,
+        original_transaction_id: origTxId,
+        wireguard_ready: true,
+        device: devReg?.device || undefined,
+        devices: Array.isArray(acc.devices) ? acc.devices : [],
+        devices_used: Array.isArray(acc.devices) ? acc.devices.length : 1,
+        device_count: Array.isArray(acc.devices) ? acc.devices.length : 1,
+        max_devices: devLimit,
+        device_limit: devLimit,
+        ...(signed ? { token: signed.token, license_token: signed.token } : {})
+      },
+      { 'Cache-Control': 'no-store' },
+      req
+    );
+  }
+
+  // App Store Server Notifications V2 Webhook
+  if (pathname === '/api/webhooks/apple' && req.method === 'POST') {
+    if (!checkRateLimit(req, 'apple_webhook', 120, 60000)) {
+      return sendJson(res, 429, { ok: false, error: 'rate_limit_exceeded' }, {}, req);
+    }
+    const body = await readJsonBody(req);
+    if (body && body.__tooLarge) return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, {}, req);
+    const signedPayload = String(body?.signedPayload || body?.signed_payload || '').trim();
+    if (!signedPayload) {
+      return sendJson(res, 400, { ok: false, error: 'missing_signed_payload' }, {}, req);
+    }
+
+    const verified = verifyAppleStoreKitJws(signedPayload, { isNotification: true });
+    if (!verified.ok) {
+      return sendJson(res, 401, { ok: false, error: verified.error || 'invalid_apple_notification' }, {}, req);
+    }
+
+    const notif = verified.payload;
+    const notifType = String(notif.notificationType || '').toUpperCase();
+    const subtype = String(notif.subtype || '').toUpperCase();
+    let txPayload = null;
+    if (notif.data?.signedTransactionInfo) {
+      const inner = verifyAppleStoreKitJws(String(notif.data.signedTransactionInfo), { isNotification: false });
+      if (inner.ok) {
+        txPayload = inner.payload;
+      } else if (inner.error === 'apple_transaction_revoked') {
+        try {
+          const pPart = String(notif.data.signedTransactionInfo).split('.')[1];
+          if (pPart) txPayload = JSON.parse(Buffer.from(pPart, 'base64url').toString('utf8'));
+        } catch {}
+      }
+    }
+
+    const origTxId = String(txPayload?.originalTransactionId || notif.data?.originalTransactionId || '').trim();
+    const ownerId = origTxId ? claimedAppleOriginalTransactionIds.get(origTxId) : null;
+    const acc = ownerId ? accountsById.get(ownerId) : null;
+
+    if (acc) {
+      if (notifType === 'EXPIRED' || notifType === 'GRACE_PERIOD_EXPIRED' || notifType === 'REFUND' || notifType === 'REVOKE') {
+        acc.status = (notifType === 'REFUND' || notifType === 'REVOKE') ? 'revoked' : 'expired';
+        if (notifType === 'REFUND' || notifType === 'REVOKE') {
+          await revokeLicenceOnAllNodes(acc).catch(() => {});
+        }
+        scheduleSaveRuntimeStateToDisk();
+      } else if (notifType === 'SUBSCRIBED' || notifType === 'DID_RENEW' || notifType === 'OFFER_REDEEMED') {
+        acc.status = 'active';
+        if (Number(txPayload?.expiresDate) > 0) {
+          acc.current_period_end = Number(txPayload.expiresDate);
+        }
+        scheduleSaveRuntimeStateToDisk();
+      } else if (notifType === 'DID_CHANGE_RENEWAL_STATUS') {
+        acc.cancel_at_period_end = subtype === 'AUTO_RENEW_DISABLED';
+        scheduleSaveRuntimeStateToDisk();
+      }
+    }
+
+    return sendJson(res, 200, { ok: true, handled: true, notificationType: notifType, subtype: subtype || null, account_matched: Boolean(acc) }, { 'Cache-Control': 'no-store' }, req);
+  }
+
+  // Google Play & Apple App Store Mandatory Account & Data Deletion (In-App API + Public Web URL)
   if ((pathname === '/api/vpn/account/delete' || pathname === '/v1/account/delete') && req.method === 'POST') {
     if (!checkRateLimit(req, 'account_delete', 10, 60000)) {
       return sendJson(res, 429, { ok: false, error: 'rate_limit_exceeded', message: 'Too many requests. Please wait a minute.' }, {}, req);
@@ -6433,11 +6574,22 @@ self.addEventListener('fetch', e => {
     const normEmail = String(body?.email || '').trim().toLowerCase();
     const bearerKey = String(req.headers.authorization || '').replace(/^Bearer\s+/i, '').trim();
     const rawKey = String(body?.key || body?.code || body?.license_key || body?.activation_code || bearerKey || '').trim();
+    const signedTx = String(body?.signed_transaction_info || body?.signedTransactionInfo || '').trim();
 
     let acc = null;
     const sess = verifySessionCookie(req);
     if (sess) {
       acc = accountsById.get(sess.accountId) || (sess.email ? accountsByEmail.get(sess.email) : null);
+    }
+    if (!acc && signedTx) {
+      const verifiedTx = verifyAppleStoreKitJws(signedTx, { isNotification: false });
+      if (verifiedTx.ok) {
+        const origTxId = String(verifiedTx.payload.originalTransactionId || verifiedTx.payload.transactionId || '').trim();
+        const ownerId = origTxId ? claimedAppleOriginalTransactionIds.get(origTxId) : null;
+        if (ownerId) {
+          acc = accountsById.get(ownerId) || null;
+        }
+      }
     }
     if (!acc && rawKey) {
       const resolved = await resolveVpnLicence(rawKey, normEmail, body?.device_id);
@@ -6470,7 +6622,7 @@ self.addEventListener('fetch', e => {
           ok: false,
           deleted: false,
           error: 'unauthorized',
-          message: 'Please provide your registered account email and active license key or 6-digit activation code to confirm permanent account deletion.'
+          message: 'Please provide your registered account email and active license key, 6-digit activation code, or verified Apple StoreKit transaction to confirm permanent account deletion.'
         },
         {},
         req
@@ -6498,6 +6650,7 @@ self.addEventListener('fetch', e => {
     if (deletedEmail) accountsByEmail.delete(deletedEmail);
     if (acc.stripe_subscription_id) accountsBySubscriptionId.delete(acc.stripe_subscription_id);
     if (acc.google_play_purchase_token) claimedPlayPurchaseTokens.delete(acc.google_play_purchase_token);
+    if (acc.apple_original_transaction_id) claimedAppleOriginalTransactionIds.delete(acc.apple_original_transaction_id);
     scheduleSaveRuntimeStateToDisk();
 
     crm.deleteAccount({
@@ -6702,11 +6855,14 @@ self.addEventListener('fetch', e => {
     } catch {}
 
     if (isSignedUp && localAcc) {
+      const existingChallenge = portalOtpChallenges.get(email);
+      const nowMs = Date.now();
+      const preservedAttempts = (existingChallenge && nowMs < existingChallenge.expiresAt) ? (existingChallenge.attempts || 0) : 0;
       const transientCode = String(crypto.randomInt(100000, 1000000));
       setBoundedMap(portalOtpChallenges, email, {
         code: transientCode,
-        attempts: 0,
-        expiresAt: Date.now() + 10 * 60 * 1000
+        attempts: preservedAttempts,
+        expiresAt: nowMs + 10 * 60 * 1000
       });
     }
 
@@ -6787,10 +6943,16 @@ self.addEventListener('fetch', e => {
     }
     const body = await readJsonBody(req);
     if (body && body.__tooLarge) return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, {}, req);
-    const email = (body.email || '').trim().toLowerCase();
+    const email = normalizeEmail(body.email || '');
     const code = String(body.code || '').trim();
     if (!isValidEmail(email) || !/^\d{6}$/.test(code)) {
       return sendJson(res, 400, { ok: false, error: 'Invalid or expired 6-digit login code.' }, {}, req);
+    }
+    if (isAccountAuthLockedOut(email)) {
+      return sendJson(res, 429, { ok: false, error: 'Too many failed verification attempts for this email. Please wait 15 minutes and try again.' }, {}, req);
+    }
+    if (isOtpReplayOrMarkConsumed(email, code, false)) {
+      return sendJson(res, 401, { ok: false, error: 'This 6-digit login code has already been used. Please request a new code.' }, {}, req);
     }
 
     let acc = accountsByEmail.get(email);
@@ -6836,6 +6998,8 @@ self.addEventListener('fetch', e => {
     const validActivationKey = crmVerified || validTransientOtp;
 
     if (validActivationKey && acc) {
+      clearAccountAuthFailures(email);
+      isOtpReplayOrMarkConsumed(email, code, true);
       const sessionToken = signSessionCookie(acc.id, acc.email);
       const signed = signFallbackEd25519LicenseToken(acc, portalDeviceId);
       const isHttps = PUBLIC_URL.startsWith('https://') || req.headers['x-forwarded-proto'] === 'https';
@@ -6853,7 +7017,7 @@ self.addEventListener('fetch', e => {
           plan: acc.plan,
           status: acc.status,
           devices_used: Array.isArray(acc.devices) ? acc.devices.length : 1,
-          max_devices: MAX_DEVICES_PER_ACCOUNT,
+          max_devices: getAccountDeviceLimit(acc),
           ...(signed ? { token: signed.token, license_token: signed.token } : {})
         },
         {
@@ -6863,6 +7027,7 @@ self.addEventListener('fetch', e => {
       );
     }
 
+    recordAccountAuthFailure(email);
     return sendJson(res, 401, { ok: false, error: 'Invalid or expired 6-digit login code.' }, {}, req);
   }
 
@@ -7013,7 +7178,7 @@ self.addEventListener('fetch', e => {
         subscription_details: subscriptionDetails,
         devices: Array.isArray(acc.devices) ? acc.devices : [],
         devices_used: Array.isArray(acc.devices) ? acc.devices.length : 0,
-        max_devices: MAX_DEVICES_PER_ACCOUNT,
+        max_devices: getAccountDeviceLimit(acc),
         lifecycle_rescue: lifecycleOffers.lifecycle_rescue,
         annual_upgrade_bridge: lifecycleOffers.annual_upgrade_bridge,
         referral: {
@@ -7132,7 +7297,7 @@ self.addEventListener('fetch', e => {
 
   // CMO Automation 2: Trial-to-Paid & Zero-Handshake Activation Lifecycle Sweep Endpoint
   if (pathname === '/api/lifecycle/run-sweeps' && (req.method === 'POST' || req.method === 'GET')) {
-    const isLocalhost = getClientIp(req) === '127.0.0.1' || getClientIp(req) === '::1';
+    const isLocalhost = isDirectLocalhostSocket(req);
     if (!hasValidCrmServiceKey(req) && !isLocalhost) {
       return sendJson(res, 401, { ok: false, error: 'unauthorized' }, {}, req);
     }
@@ -7594,7 +7759,8 @@ self.addEventListener('fetch', e => {
     }
     const licence = await resolveVpnLicence(String(body?.activation_code || body?.license_key || '').trim(), body?.email, body?.device_id);
     if (licence && licence.valid === false && licence.reason === 'device_limit_reached') {
-      return sendJson(res, 403, { ok: false, error: 'device_limit_reached', message: `You have reached the ${MAX_DEVICES_PER_ACCOUNT}-device limit on your SWEEPR VPN Pro subscription. Please remove a device from your Customer Portal first.` }, {}, req);
+      const maxDev = licence.maxDevices || MAX_DEVICES_PER_ACCOUNT;
+      return sendJson(res, 403, { ok: false, error: 'device_limit_reached', message: `You have reached the ${maxDev}-device limit on your SWEEPR VPN Pro subscription. Please remove a device from your Customer Portal first.` }, {}, req);
     }
     if (!licence || licence.valid === false) {
       return sendJson(res, 401, { ok: false, error: 'licence_required', message: 'Enter your license key to connect. It is in your order email.' }, {}, req);
@@ -7618,13 +7784,21 @@ self.addEventListener('fetch', e => {
       if (!/^\d{1,3}(?:\.\d{1,3}){3}\/\d{1,2}$/.test(assignedAddress)) {
         throw new Error('invalid_assigned_address');
       }
-      const assignedDns = '1.1.1.1, 1.0.0.1';
+      const acrShield = Boolean(body?.acr_shield);
+      const ipv6Dns = Boolean(body?.ipv6_dns);
+      const assignedDns = acrShield
+        ? (ipv6Dns ? '1.1.1.2, 1.0.0.2, 2606:4700:4700::1112, 2606:4700:4700::1002' : '1.1.1.2, 1.0.0.2')
+        : (ipv6Dns ? '1.1.1.1, 1.0.0.1, 2606:4700:4700::1111, 2606:4700:4700::1001' : '1.1.1.1, 1.0.0.1');
+      const resolvedHost = String(node.hostname || node.host || node.ip).trim();
+      const endpointHost = (body?.prefer_hostname && (node.hostname || node.host)) ? resolvedHost : (node.ip || resolvedHost);
       return sendJson(res, 200, {
         ok: true,
-        endpoint: `${node.ip}:${node.port || 51820}`,
+        endpoint: `${endpointHost}:${node.port || 51820}`,
+        endpoint_host: resolvedHost,
         server_public_key: serverPubKey,
         address: assignedAddress,
         dns: assignedDns,
+        acr_shield: acrShield,
         allowed_ips: '0.0.0.0/0, ::/0',
         server: { code: node.code, country: node.country, city: node.city, flag: node.flag }
       }, {}, req);
@@ -7645,7 +7819,8 @@ self.addEventListener('fetch', e => {
     const serverCode = rawCode === 'CH-ZRH-01' ? 'SE-STO-01' : rawCode;
     const licence = await resolveVpnLicence(rawKey, body?.email, body?.device_id);
     if (licence && licence.valid === false && licence.reason === 'device_limit_reached') {
-      return sendJson(res, 403, { ok: false, error: 'device_limit_reached', message: `You have reached the ${MAX_DEVICES_PER_ACCOUNT}-device limit on your SWEEPR VPN Pro subscription. Please remove a device from your Customer Portal first.` }, {}, req);
+      const maxDev = licence.maxDevices || MAX_DEVICES_PER_ACCOUNT;
+      return sendJson(res, 403, { ok: false, error: 'device_limit_reached', message: `You have reached the ${maxDev}-device limit on your SWEEPR VPN Pro subscription. Please remove a device from your Customer Portal first.` }, {}, req);
     }
     if (!licence || licence.valid === false) {
       return sendJson(res, 401, { ok: false, error: 'licence_required', message: 'Please enter a valid active SWEEPR Pro license key.' }, {}, req);
@@ -7669,8 +7844,14 @@ self.addEventListener('fetch', e => {
       }
       const serverPubKey = pinnedPubKey || agentPubKey;
       const assignedAddress = String(r.address || '10.64.0.2/32').trim();
-      const assignedDns = '1.1.1.1, 1.0.0.1';
-      const endpoint = `${node.ip}:${node.port || 51820}`;
+      const acrShield = Boolean(body?.acr_shield);
+      const ipv6Dns = Boolean(body?.ipv6_dns);
+      const assignedDns = acrShield
+        ? (ipv6Dns ? '1.1.1.2, 1.0.0.2, 2606:4700:4700::1112, 2606:4700:4700::1002' : '1.1.1.2, 1.0.0.2')
+        : (ipv6Dns ? '1.1.1.1, 1.0.0.1, 2606:4700:4700::1111, 2606:4700:4700::1001' : '1.1.1.1, 1.0.0.1');
+      const resolvedHost = String(node.hostname || node.host || node.ip).trim();
+      const endpointHost = (body?.prefer_hostname && (node.hostname || node.host)) ? resolvedHost : (node.ip || resolvedHost);
+      const endpoint = `${endpointHost}:${node.port || 51820}`;
       const lanBypass = Boolean(body?.lan_bypass);
       const allowedIps = lanBypass
         ? '1.0.0.0/8, 2.0.0.0/7, 4.0.0.0/6, 8.0.0.0/7, 10.64.0.0/16, 11.0.0.0/8, 12.0.0.0/6, 16.0.0.0/4, 32.0.0.0/3, 64.0.0.0/2, 128.0.0.0/3, 160.0.0.0/5, 168.0.0.0/6, 172.0.0.0/12, 172.32.0.0/11, 172.64.0.0/10, 172.128.0.0/9, 173.0.0.0/8, 174.0.0.0/7, 176.0.0.0/4, 192.0.0.0/9, 192.128.0.0/11, 192.160.0.0/13, 192.169.0.0/16, 192.170.0.0/15, 192.172.0.0/14, 192.176.0.0/12, 192.192.0.0/10, 193.0.0.0/8, 194.0.0.0/7, 196.0.0.0/6, 200.0.0.0/5, 208.0.0.0/4, 2000::/3'
@@ -7713,9 +7894,11 @@ self.addEventListener('fetch', e => {
         config_text: configText,
         qr_svg: qrSvg,
         lan_bypass: lanBypass,
+        acr_shield: acrShield,
         address: assignedAddress,
         dns: assignedDns,
         endpoint,
+        endpoint_host: resolvedHost,
         server: { code: node.code, country: node.country, city: node.city, flag: node.flag }
       }, {}, req);
     } catch (e) {
@@ -7801,7 +7984,8 @@ self.addEventListener('fetch', e => {
     const dnsShieldEnabled = rawDnsShield !== '0' && rawDnsShield !== 'false';
     const licence = await resolveVpnLicence(rawKey, emailHint, ticketEntry?.deviceId || body?.device_id || urlObj.searchParams.get('device_id'));
     if (licence && licence.valid === false && licence.reason === 'device_limit_reached') {
-      return sendJson(res, 403, { ok: false, error: 'device_limit_reached', message: `You have reached the ${MAX_DEVICES_PER_ACCOUNT}-device limit on your SWEEPR VPN Pro subscription. Please remove a device from your Customer Portal first.` }, {}, req);
+      const maxDev = licence.maxDevices || MAX_DEVICES_PER_ACCOUNT;
+      return sendJson(res, 403, { ok: false, error: 'device_limit_reached', message: `You have reached the ${maxDev}-device limit on your SWEEPR VPN Pro subscription. Please remove a device from your Customer Portal first.` }, {}, req);
     }
     if (!licence || licence.valid === false) {
       return sendJson(res, 401, { ok: false, error: 'licence_required', message: 'Please enter a valid active SWEEPR Pro license key.' }, {}, req);
@@ -7893,12 +8077,15 @@ self.addEventListener('fetch', e => {
 
   // Self-Service Lost License Key Recovery by Email (Item 8)
   if (pathname === '/api/vpn/resend-key' && req.method === 'POST') {
+    if (req.headers.cookie && !isSameOriginOrTrusted(req)) {
+      return sendJson(res, 403, { ok: false, error: 'forbidden_cross_site' }, {}, req);
+    }
     if (!checkRateLimit(req, 'resend_key', 10, 60000)) {
       return sendJson(res, 429, { ok: false, error: 'rate_limit_exceeded', message: 'Too many requests. Please wait a minute and try again.' }, {}, req);
     }
     const body = await readJsonBody(req);
     if (body && body.__tooLarge) return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, {}, req);
-    const email = String(body?.email || '').trim().toLowerCase();
+    const email = normalizeEmail(body?.email);
     if (!isValidEmail(email)) {
       return sendJson(res, 400, { ok: false, error: 'invalid_email', message: 'Please enter a valid email address.' }, {}, req);
     }
@@ -7961,8 +8148,10 @@ self.addEventListener('fetch', e => {
       email === 'test@sweeprvpn.com';
     let emailed = isSyntheticTestEmail;
     if (localAcc && localAcc.status === 'active' && !isSyntheticTestEmail) {
-      const licenseKey = localAcc.licenseKey || 'SWEEPR-VPN-F9DC-F69E-EB3D';
-      const activationCode = localAcc.activation_code || '236585';
+      if (!localAcc.licenseKey) localAcc.licenseKey = generateHighEntropyLicenseKey();
+      if (!localAcc.activation_code) localAcc.activation_code = generateUniqueActivationCode();
+      const licenseKey = localAcc.licenseKey;
+      const activationCode = localAcc.activation_code;
       licenses.set(licenseKey, localAcc);
       licenses.set(activationCode, localAcc);
       crm.syncSubscription({
@@ -8179,7 +8368,8 @@ self.addEventListener('fetch', e => {
     }
     let content = rawContent;
     if (ext === '.html' && !isOrderRoute && !isLoginRoute) {
-      const htmlStr = rawContent.toString('utf8');
+      let htmlStr = rawContent.toString('utf8');
+      const isAppEmbed = urlObj.searchParams.get('app') === '1';
       // If a pSEO sub-variant on disk is consolidated (marked noindex, follow with a canonical pointing
       // to a different parent pillar URL), serve a clean HTTP 301 Moved Permanently redirect to the parent
       // pillar URL so Google consolidates link/crawl equity without 'Crawled - currently not indexed' or
@@ -8200,7 +8390,17 @@ self.addEventListener('fetch', e => {
           return;
         }
       }
-      if (!htmlStr.includes('sweepr-order-draft-redirect') && /<head[^>]*>/i.test(htmlStr)) {
+      if (isAppEmbed) {
+        htmlStr = htmlStr
+          .replace(/<link[^>]*googletagmanager\.com[^>]*>\s*/gi, '')
+          .replace(/<script[^>]*googletagmanager\.com[^>]*>[\s\S]*?<\/script>/gi, '')
+          .replace(/<script[^>]*>[\s\S]*?gtag\([\s\S]*?<\/script>/gi, '');
+        const appGuardCss = `<style id="sweepr-app-embed-guard">a[href*="/order"],a[href*="/pricing"],a[href*="/download"],a[href*="play.google.com"],a[href*="sweeprvpn.apk"]{display:none!important;}</style>`;
+        if (/<head[^>]*>/i.test(htmlStr)) {
+          htmlStr = htmlStr.replace(/<head[^>]*>/i, (m) => `${m}\n  ${appGuardCss}`);
+        }
+        content = Buffer.from(htmlStr, 'utf8');
+      } else if (!htmlStr.includes('sweepr-order-draft-redirect') && /<head[^>]*>/i.test(htmlStr)) {
         const draftRedirectSnippet = `<script id="sweepr-order-draft-redirect">(function(){function c(){try{if(/bot|crawl|spider|slurp|google|bing|gpt|claude|perplexity|applebot|duckduck|yandex/i.test(navigator.userAgent||''))return;var p=window.location.pathname.replace(/\\/+$/,'')||'/';if(/^\\/(order|checkout|login|dashboard|app)(\\b|\\/|\\$)/i.test(p))return;var q=new URLSearchParams(window.location.search);if(q.get('noredirect')==='1')return;var r=document.referrer||'';try{if(/^\\/(terms|privacy|refund)(\\b|\\/|\\$)/i.test(p)&&r&&/^\\/(order|checkout)(\\b|\\/|\\$)/i.test(new URL(r).pathname))return;}catch(e){}var raw=localStorage.getItem('sweepr_order_draft');if(raw){var d=JSON.parse(raw);var age=Date.now()-(Number(d&&d.updatedAt)||0);if(d&&d.hasFilledDetails&&age>=0&&age<=1800000){window.location.replace('/order');return;}else if(age>1800000){localStorage.removeItem('sweepr_order_draft');document.cookie='sweepr_order_draft=; Path=/; Max-Age=0; SameSite=Lax';}}if(/(?:^|;\\s*)sweepr_order_draft=1(?:;|$)/.test(document.cookie)){window.location.replace('/order');}}catch(e){}}c();window.addEventListener('pageshow',c);})();</script>`;
         content = Buffer.from(htmlStr.replace(/<head[^>]*>/i, (m) => `${m}\n  ${draftRedirectSnippet}`), 'utf8');
       }
@@ -8215,7 +8415,7 @@ self.addEventListener('fetch', e => {
     } else if (isLoginRoute) {
       headers['X-Robots-Tag'] = 'noindex, nofollow';
       headers['Cache-Control'] = 'no-store, no-cache, must-revalidate';
-    } else if (/^(prototype-|sweepr-motion-review|sweepr-vpn-scorecard|popup-alternatives|ui-ux-audit-mockups)/i.test(baseName)) {
+    } else if (/^(prototype-|sweepr-motion-review|sweepr-vpn-scorecard|popup-alternatives)/i.test(baseName)) {
       headers['X-Robots-Tag'] = 'noindex, nofollow';
       headers['Cache-Control'] = 'no-store, no-cache, must-revalidate';
     } else if (/^(favicon|logo-|padlock-favicon|icon-)/i.test(baseName) || ext === '.ico' || ext === '.js' || ext === '.css') {
@@ -8275,8 +8475,11 @@ self.addEventListener('fetch', e => {
   });
 });
 
-const IS_MAIN_MODULE = Boolean(process.argv[1]) && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
-if (IS_MAIN_MODULE) {
+server.headersTimeout = 15000;
+server.requestTimeout = 30000;
+server.keepAliveTimeout = 5000;
+server.maxRequestsPerSocket = 100;
+
 server.listen(PORT, '0.0.0.0', () => {
   console.log(`SWEEPR VPN server running at http://0.0.0.0:${PORT} (Live Stripe: ${IS_LIVE_STRIPE})`);
   const bootSweepTimer = setTimeout(() => {
@@ -8288,5 +8491,3 @@ server.listen(PORT, '0.0.0.0', () => {
   }, 6 * 3600 * 1000);
   if (typeof periodicSweepInterval.unref === 'function') periodicSweepInterval.unref();
 });
-
-}
