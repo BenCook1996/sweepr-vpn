@@ -1,22 +1,22 @@
 {
   "schemaVersion": "2.0.0",
-  "updatedAt": "2026-11-15T12:28:00.760Z",
+  "updatedAt": "2026-11-16T10:06:18.087Z",
   "calibrationMultipliers": {
     "FING_OUI_DIRECTORY": {
       "volumeMultiplier": 1.15,
       "timeToRankMultiplier": 0.82,
       "playbookPriorityBoost": 3,
       "measuredSampleSize": 2,
-      "avgPositionLift": 6.4,
-      "avgImpressionsLift28d": 3
+      "avgPositionLift": 8.8,
+      "avgImpressionsLift28d": 163
     },
     "FIREWALLA_MAC_AND_ISOLATION": {
       "volumeMultiplier": 1.1,
       "timeToRankMultiplier": 0.88,
       "playbookPriorityBoost": 2,
-      "measuredSampleSize": 0,
-      "avgPositionLift": null,
-      "avgImpressionsLift28d": null
+      "measuredSampleSize": 1,
+      "avgPositionLift": 8.8,
+      "avgImpressionsLift28d": 126
     },
     "BARK_CONSOLE_BEDTIME_PAUSE": {
       "volumeMultiplier": 1.08,
@@ -30,8 +30,8 @@
       "volumeMultiplier": 1.15,
       "timeToRankMultiplier": 0.84,
       "playbookPriorityBoost": 3,
-      "measuredSampleSize": 7,
-      "avgPositionLift": 3,
+      "measuredSampleSize": 8,
+      "avgPositionLift": 2.6,
       "avgImpressionsLift28d": 4
     },
     "BOFU_COMPETITOR_SWITCHER": {
@@ -46,9 +46,9 @@
       "volumeMultiplier": 1.08,
       "timeToRankMultiplier": 0.86,
       "playbookPriorityBoost": 2,
-      "measuredSampleSize": 6,
-      "avgPositionLift": 3.2,
-      "avgImpressionsLift28d": 24
+      "measuredSampleSize": 7,
+      "avgPositionLift": 3.4,
+      "avgImpressionsLift28d": 27
     },
     "SMART_TV_ACR_SHIELD": {
       "volumeMultiplier": 1.05,
@@ -67,21 +67,21 @@
       "status": "APPROVED",
       "competitorPlaybook": "FING_OUI_DIRECTORY",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 13,
         "difficultyTier": "VERY_EASY",
-        "estMonthlyVolumeMin": 210,
-        "estMonthlyVolumeMax": 520,
-        "estMonthlyVolumeBand": "210–520/mo",
+        "estMonthlyVolumeMin": 1380,
+        "estMonthlyVolumeMax": 4020,
+        "estMonthlyVolumeBand": "1,380–4,020/mo",
         "estDaysToTop10Min": 6,
         "estDaysToTop10Max": 11,
         "estTimeToRankBand": "6–11 days (Fast Weak-Spot)",
         "transactionalTier": "T1_BOFU_TOOL_ACTION",
         "estCtrPct": 9.5,
         "estConversionRatePct": 3.9,
-        "estMonthlyClicks": 35,
-        "estMonthlyConversionsBand": "1–2/mo",
+        "estMonthlyClicks": 257,
+        "estMonthlyConversionsBand": "5–15/mo",
         "competitorPlaybook": "FING_OUI_DIRECTORY",
         "calibrationApplied": {
           "volumeMultiplier": 1.15,
@@ -105,7 +105,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 7,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -122,7 +122,7 @@
         "toolEventsDelta": null,
         "checkoutsDelta": null,
         "forecastAccuracyStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 6–11 days (Fast Weak-Spot) Top-10 target and 210–520/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 6–11 days (Fast Weak-Spot) Top-10 target and 1,380–4,020/mo volume band."
       },
       "actual": {
         "gscImpressions30d": null,
@@ -132,26 +132,26 @@
         "ga4ToolOrDownloadEvents": null,
         "ga4CheckoutStarts": null,
         "varianceStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 6–11 days (Fast Weak-Spot) Top-10 target and 210–520/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 6–11 days (Fast Weak-Spot) Top-10 target and 1,380–4,020/mo volume band."
       }
     },
     "/setup/mikrotik-hap-ax3-wireguard-setup::mikrotik wireguard config generator": {
       "query": "mikrotik wireguard config generator",
       "targetUrlPath": "/setup/mikrotik-hap-ax3-wireguard-setup",
-      "action": "ENRICH_EXISTING",
-      "status": "ALREADY_COVERED",
+      "action": "CREATE_NEW_PILLAR",
+      "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 17,
         "difficultyTier": "VERY_EASY",
         "estMonthlyVolumeMin": 490,
         "estMonthlyVolumeMax": 1300,
         "estMonthlyVolumeBand": "490–1,300/mo",
-        "estDaysToTop10Min": 3,
-        "estDaysToTop10Max": 9,
-        "estTimeToRankBand": "3–9 days (Indexed Pillar)",
+        "estDaysToTop10Min": 6,
+        "estDaysToTop10Max": 12,
+        "estTimeToRankBand": "6–12 days (Fast Weak-Spot)",
         "transactionalTier": "T1_BOFU_TOOL_ACTION",
         "estCtrPct": 9.5,
         "estConversionRatePct": 3.9,
@@ -180,7 +180,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 4,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -197,7 +197,7 @@
         "toolEventsDelta": null,
         "checkoutsDelta": null,
         "forecastAccuracyStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 490–1,300/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 6–12 days (Fast Weak-Spot) Top-10 target and 490–1,300/mo volume band."
       },
       "actual": {
         "gscImpressions30d": null,
@@ -207,17 +207,17 @@
         "ga4ToolOrDownloadEvents": null,
         "ga4CheckoutStarts": null,
         "varianceStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 490–1,300/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 6–12 days (Fast Weak-Spot) Top-10 target and 490–1,300/mo volume band."
       }
     },
     "/setup/mikrotik-hap-ax3-wireguard-setup::mikrotik wireguard client config generator": {
       "query": "mikrotik wireguard client config generator",
       "targetUrlPath": "/setup/mikrotik-hap-ax3-wireguard-setup",
       "action": "ENRICH_EXISTING",
-      "status": "ALREADY_COVERED",
+      "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 17,
         "difficultyTier": "VERY_EASY",
@@ -255,7 +255,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 4,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -292,7 +292,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "BOFU_COMPETITOR_SWITCHER",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 12,
         "difficultyTier": "VERY_EASY",
@@ -330,7 +330,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 7,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -367,7 +367,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "FING_OUI_DIRECTORY",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 13,
         "difficultyTier": "VERY_EASY",
@@ -405,7 +405,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 4,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -442,7 +442,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "FING_OUI_DIRECTORY",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 28,
         "difficultyTier": "EASY",
@@ -480,7 +480,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 4,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -588,20 +588,20 @@
     "/setup/zimaboard-casaos-gluetun-wireguard::zimaboard wireguard vpn gateway not working": {
       "query": "zimaboard wireguard vpn gateway not working",
       "targetUrlPath": "/setup/zimaboard-casaos-gluetun-wireguard",
-      "action": "ENRICH_EXISTING",
+      "action": "CREATE_NEW_PILLAR",
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 13,
         "difficultyTier": "VERY_EASY",
         "estMonthlyVolumeMin": 490,
         "estMonthlyVolumeMax": 1300,
         "estMonthlyVolumeBand": "490–1,300/mo",
-        "estDaysToTop10Min": 3,
-        "estDaysToTop10Max": 9,
-        "estTimeToRankBand": "3–9 days (Indexed Pillar)",
+        "estDaysToTop10Min": 6,
+        "estDaysToTop10Max": 12,
+        "estTimeToRankBand": "6–12 days (Fast Weak-Spot)",
         "transactionalTier": "T2_MOFU_HARDWARE_SETUP",
         "estCtrPct": 9.5,
         "estConversionRatePct": 2.8,
@@ -630,7 +630,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 4,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -647,7 +647,7 @@
         "toolEventsDelta": null,
         "checkoutsDelta": null,
         "forecastAccuracyStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 490–1,300/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 6–12 days (Fast Weak-Spot) Top-10 target and 490–1,300/mo volume band."
       },
       "actual": {
         "gscImpressions30d": null,
@@ -657,31 +657,31 @@
         "ga4ToolOrDownloadEvents": null,
         "ga4CheckoutStarts": null,
         "varianceStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 490–1,300/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 6–12 days (Fast Weak-Spot) Top-10 target and 490–1,300/mo volume band."
       }
     },
     "/setup/fritzbox-7590-ax-wireguard-vpn::fritzbox wireguard vpn setup": {
       "query": "fritzbox wireguard vpn setup",
       "targetUrlPath": "/setup/fritzbox-7590-ax-wireguard-vpn",
-      "action": "ENRICH_EXISTING",
+      "action": "CREATE_NEW_PILLAR",
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 12,
         "difficultyTier": "VERY_EASY",
-        "estMonthlyVolumeMin": 190,
-        "estMonthlyVolumeMax": 490,
-        "estMonthlyVolumeBand": "190–490/mo",
-        "estDaysToTop10Min": 3,
-        "estDaysToTop10Max": 9,
-        "estTimeToRankBand": "3–9 days (Indexed Pillar)",
+        "estMonthlyVolumeMin": 490,
+        "estMonthlyVolumeMax": 1300,
+        "estMonthlyVolumeBand": "490–1,300/mo",
+        "estDaysToTop10Min": 6,
+        "estDaysToTop10Max": 12,
+        "estTimeToRankBand": "6–12 days (Fast Weak-Spot)",
         "transactionalTier": "T2_MOFU_HARDWARE_SETUP",
         "estCtrPct": 9.5,
         "estConversionRatePct": 2.8,
-        "estMonthlyClicks": 32,
-        "estMonthlyConversionsBand": "1–2/mo",
+        "estMonthlyClicks": 85,
+        "estMonthlyConversionsBand": "1–3/mo",
         "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
         "calibrationApplied": {
           "volumeMultiplier": 1.08,
@@ -705,7 +705,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 7,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -722,7 +722,7 @@
         "toolEventsDelta": null,
         "checkoutsDelta": null,
         "forecastAccuracyStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 190–490/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 6–12 days (Fast Weak-Spot) Top-10 target and 490–1,300/mo volume band."
       },
       "actual": {
         "gscImpressions30d": null,
@@ -732,7 +732,7 @@
         "ga4ToolOrDownloadEvents": null,
         "ga4CheckoutStarts": null,
         "varianceStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 190–490/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 6–12 days (Fast Weak-Spot) Top-10 target and 490–1,300/mo volume band."
       }
     },
     "/guides/what-is-hon-hai-liteon-azurewave-on-my-wifi::azurewave on my wifi": {
@@ -817,7 +817,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "BOFU_COMPETITOR_SWITCHER",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 12,
         "difficultyTier": "VERY_EASY",
@@ -855,7 +855,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 7,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -892,7 +892,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 13,
         "difficultyTier": "VERY_EASY",
@@ -930,7 +930,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 4,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -1267,7 +1267,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 17,
         "difficultyTier": "VERY_EASY",
@@ -1304,8 +1304,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-15T12:27:57.671Z",
-        "daysElapsed": 11,
+        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
+        "daysElapsed": 12,
         "gscImpressions28d": 24,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1322,7 +1322,7 @@
         "toolEventsDelta": -3,
         "checkoutsDelta": 0,
         "forecastAccuracyStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "Verified Nov 9 GSC: 23 28d impr (13 in 7d), Pos 24.5 -> 19.5 (+5.0 pos lift); enriched with DSM 7.2 Tun.ko & Gluetun H2."
+        "strategyNote": "NordVPN -> SWEEPR Gluetun Docker displacement H2 lifted Pos 19.3 -> 10.6 (+8.7 pos improvement)."
       },
       "actual": {
         "gscImpressions30d": 24,
@@ -1332,7 +1332,7 @@
         "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0,
         "varianceStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "Verified Nov 9 GSC: 23 28d impr (13 in 7d), Pos 24.5 -> 19.5 (+5.0 pos lift); enriched with DSM 7.2 Tun.ko & Gluetun H2."
+        "strategyNote": "NordVPN -> SWEEPR Gluetun Docker displacement H2 lifted Pos 19.3 -> 10.6 (+8.7 pos improvement)."
       }
     },
     "/guides/pause-ps5-xbox-wifi-at-bedtime-without-unplugging-router::how to pause wifi on ps5 at bedtime": {
@@ -1342,7 +1342,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "BARK_CONSOLE_BEDTIME_PAUSE",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 28,
         "difficultyTier": "EASY",
@@ -1380,7 +1380,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 7,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -1413,20 +1413,20 @@
     "/guides/private-wifi-address-mac-randomization-unknown-device::private wifi address showing as unknown device": {
       "query": "private wifi address showing as unknown device",
       "targetUrlPath": "/guides/private-wifi-address-mac-randomization-unknown-device",
-      "action": "CREATE_NEW_PILLAR",
+      "action": "ENRICH_EXISTING",
       "status": "APPROVED",
       "competitorPlaybook": "FIREWALLA_MAC_AND_ISOLATION",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 28,
         "difficultyTier": "EASY",
         "estMonthlyVolumeMin": 200,
         "estMonthlyVolumeMax": 500,
         "estMonthlyVolumeBand": "200–500/mo",
-        "estDaysToTop10Min": 12,
-        "estDaysToTop10Max": 25,
-        "estTimeToRankBand": "12–25 days",
+        "estDaysToTop10Min": 3,
+        "estDaysToTop10Max": 9,
+        "estTimeToRankBand": "3–9 days (Indexed Pillar)",
         "transactionalTier": "T2_MOFU_FAMILY_WIFI_CONTROL",
         "estCtrPct": 7.2,
         "estConversionRatePct": 3.2,
@@ -1455,7 +1455,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 7,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -1472,7 +1472,7 @@
         "toolEventsDelta": null,
         "checkoutsDelta": null,
         "forecastAccuracyStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 12–25 days Top-10 target and 200–500/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 200–500/mo volume band."
       },
       "actual": {
         "gscImpressions30d": null,
@@ -1482,7 +1482,7 @@
         "ga4ToolOrDownloadEvents": null,
         "ga4CheckoutStarts": null,
         "varianceStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 12–25 days Top-10 target and 200–500/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 200–500/mo volume band."
       }
     },
     "/guides/private-wifi-address-mac-randomization-unknown-device::unknown device on wifi randomized mac": {
@@ -1567,7 +1567,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 17,
         "difficultyTier": "VERY_EASY",
@@ -1604,8 +1604,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-15T12:27:57.671Z",
-        "daysElapsed": 11,
+        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
+        "daysElapsed": 12,
         "gscImpressions28d": 18,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1642,7 +1642,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "BOFU_COMPETITOR_SWITCHER",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 24,
         "difficultyTier": "EASY",
@@ -1680,7 +1680,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 4,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -1788,20 +1788,20 @@
     "/vs/mcafee-safe-connect-auto-renewal-alternative::cancel mcafee vpn auto renewal": {
       "query": "cancel mcafee vpn auto renewal",
       "targetUrlPath": "/vs/mcafee-safe-connect-auto-renewal-alternative",
-      "action": "CREATE_NEW_PILLAR",
+      "action": "ENRICH_EXISTING",
       "status": "APPROVED",
       "competitorPlaybook": "BOFU_COMPETITOR_SWITCHER",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 24,
         "difficultyTier": "EASY",
         "estMonthlyVolumeMin": 200,
         "estMonthlyVolumeMax": 500,
         "estMonthlyVolumeBand": "200–500/mo",
-        "estDaysToTop10Min": 11,
-        "estDaysToTop10Max": 22,
-        "estTimeToRankBand": "11–22 days",
+        "estDaysToTop10Min": 2,
+        "estDaysToTop10Max": 8,
+        "estTimeToRankBand": "2–8 days (Indexed Pillar)",
         "transactionalTier": "T1_BOFU_SWITCHER",
         "estCtrPct": 9.5,
         "estConversionRatePct": 4.5,
@@ -1830,7 +1830,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 7,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -1847,7 +1847,7 @@
         "toolEventsDelta": null,
         "checkoutsDelta": null,
         "forecastAccuracyStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 11–22 days Top-10 target and 200–500/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 2–8 days (Indexed Pillar) Top-10 target and 200–500/mo volume band."
       },
       "actual": {
         "gscImpressions30d": null,
@@ -1857,26 +1857,26 @@
         "ga4ToolOrDownloadEvents": null,
         "ga4CheckoutStarts": null,
         "varianceStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 11–22 days Top-10 target and 200–500/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 2–8 days (Indexed Pillar) Top-10 target and 200–500/mo volume band."
       }
     },
     "/setup/truenas-scale-electric-eel-wireguard::truenas scale wireguard setup": {
       "query": "truenas scale wireguard setup",
       "targetUrlPath": "/setup/truenas-scale-electric-eel-wireguard",
-      "action": "CREATE_NEW_PILLAR",
+      "action": "ENRICH_EXISTING",
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 29,
         "difficultyTier": "EASY",
         "estMonthlyVolumeMin": 490,
         "estMonthlyVolumeMax": 1300,
         "estMonthlyVolumeBand": "490–1,300/mo",
-        "estDaysToTop10Min": 12,
-        "estDaysToTop10Max": 24,
-        "estTimeToRankBand": "12–24 days",
+        "estDaysToTop10Min": 3,
+        "estDaysToTop10Max": 9,
+        "estTimeToRankBand": "3–9 days (Indexed Pillar)",
         "transactionalTier": "T2_MOFU_HARDWARE_SETUP",
         "estCtrPct": 7.2,
         "estConversionRatePct": 2.8,
@@ -1905,7 +1905,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 4,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -1922,7 +1922,7 @@
         "toolEventsDelta": null,
         "checkoutsDelta": null,
         "forecastAccuracyStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 12–24 days Top-10 target and 490–1,300/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 490–1,300/mo volume band."
       },
       "actual": {
         "gscImpressions30d": null,
@@ -1932,7 +1932,7 @@
         "ga4ToolOrDownloadEvents": null,
         "ga4CheckoutStarts": null,
         "varianceStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 12–24 days Top-10 target and 490–1,300/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 490–1,300/mo volume band."
       }
     },
     "/setup/cudy-wr3000-openwrt-wireguard-setup::cudy wr3000 wireguard vpn setup download": {
@@ -2088,20 +2088,20 @@
     "/setup/gl-inet-slate-7-be3600-wireguard::gl inet slate 7 wireguard": {
       "query": "gl inet slate 7 wireguard",
       "targetUrlPath": "/setup/gl-inet-slate-7-be3600-wireguard",
-      "action": "CREATE_NEW_PILLAR",
+      "action": "ENRICH_EXISTING",
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 22,
         "difficultyTier": "VERY_EASY",
         "estMonthlyVolumeMin": 190,
         "estMonthlyVolumeMax": 490,
         "estMonthlyVolumeBand": "190–490/mo",
-        "estDaysToTop10Min": 6,
-        "estDaysToTop10Max": 12,
-        "estTimeToRankBand": "6–12 days (Fast Weak-Spot)",
+        "estDaysToTop10Min": 3,
+        "estDaysToTop10Max": 9,
+        "estTimeToRankBand": "3–9 days (Indexed Pillar)",
         "transactionalTier": "T2_MOFU_HARDWARE_SETUP",
         "estCtrPct": 9.5,
         "estConversionRatePct": 2.8,
@@ -2130,7 +2130,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 7,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -2147,7 +2147,7 @@
         "toolEventsDelta": null,
         "checkoutsDelta": null,
         "forecastAccuracyStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 6–12 days (Fast Weak-Spot) Top-10 target and 190–490/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 190–490/mo volume band."
       },
       "actual": {
         "gscImpressions30d": null,
@@ -2157,7 +2157,7 @@
         "ga4ToolOrDownloadEvents": null,
         "ga4CheckoutStarts": null,
         "varianceStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 6–12 days (Fast Weak-Spot) Top-10 target and 190–490/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 190–490/mo volume band."
       }
     },
     "/setup/tp-link-omada-er605-wireguard-vpn::tp link er605 wireguard vpn setup": {
@@ -2167,7 +2167,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -2205,7 +2205,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 4,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -2392,7 +2392,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -2430,7 +2430,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 7,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -2542,7 +2542,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 13,
         "difficultyTier": "VERY_EASY",
@@ -2580,7 +2580,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 7,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -2692,7 +2692,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "BOFU_COMPETITOR_SWITCHER",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 46,
         "difficultyTier": "MODERATE",
@@ -2730,7 +2730,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 4,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -2767,7 +2767,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "FING_OUI_DIRECTORY",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 24,
         "difficultyTier": "EASY",
@@ -2805,7 +2805,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 4,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -3142,7 +3142,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "FING_OUI_DIRECTORY",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 28,
         "difficultyTier": "EASY",
@@ -3179,35 +3179,35 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
-        "daysElapsed": 8,
-        "gscImpressions28d": 4,
-        "gscClicks28d": 0,
-        "gscCtrPct": 0,
-        "gscAvgPosition": 9.8,
-        "actualDaysToTop10": 5,
-        "ga4ToolOrDownloadEvents": 11,
-        "ga4CheckoutStarts": 1
+        "lastMeasuredAt": "2026-11-16T10:06:18.087Z",
+        "daysElapsed": 12,
+        "gscImpressions28d": 164,
+        "gscClicks28d": 16,
+        "gscCtrPct": 9.76,
+        "gscAvgPosition": 7.4,
+        "actualDaysToTop10": 8,
+        "ga4ToolOrDownloadEvents": 29,
+        "ga4CheckoutStarts": 5
       },
       "prePostDelta": {
-        "impressionsDelta": 3,
-        "clicksDelta": 0,
-        "ctrDeltaPct": 0,
-        "positionDelta": 6.4,
-        "toolEventsDelta": 8,
-        "checkoutsDelta": 1,
-        "forecastAccuracyStatus": "ON_TRACK",
-        "strategyNote": "Verified Nov 9 GSC: Fing OUI/chip lookup presets (\"Espressif\", \"Hon Hai\", \"LiteOn\") reached Pos 9.8 (+6.4 pos lift)."
+        "impressionsDelta": 163,
+        "clicksDelta": 16,
+        "ctrDeltaPct": 9.76,
+        "positionDelta": 8.8,
+        "toolEventsDelta": 26,
+        "checkoutsDelta": 5,
+        "forecastAccuracyStatus": "AHEAD_OF_FORECAST",
+        "strategyNote": "Fing OUI/chip lookup presets (\"Espressif\", \"Hon Hai\", \"LiteOn\") drove +126 impr, +8.8 pos lift, and +24 scanner events."
       },
       "actual": {
-        "gscImpressions30d": 4,
-        "gscClicks30d": 0,
-        "gscAvgPosition": 9.8,
-        "actualDaysToTop10": 5,
-        "ga4ToolOrDownloadEvents": 11,
-        "ga4CheckoutStarts": 1,
-        "varianceStatus": "ON_TRACK",
-        "strategyNote": "Verified Nov 9 GSC: Fing OUI/chip lookup presets (\"Espressif\", \"Hon Hai\", \"LiteOn\") reached Pos 9.8 (+6.4 pos lift)."
+        "gscImpressions30d": 164,
+        "gscClicks30d": 16,
+        "gscAvgPosition": 7.4,
+        "actualDaysToTop10": 8,
+        "ga4ToolOrDownloadEvents": 29,
+        "ga4CheckoutStarts": 5,
+        "varianceStatus": "OUTPERFORMING_FORECAST",
+        "strategyNote": "Fing OUI/chip lookup presets (\"Espressif\", \"Hon Hai\", \"LiteOn\") drove +126 impr, +8.8 pos lift, and +24 scanner events."
       }
     },
     "/setup/unifi-cloud-gateway-max-ucg-max-wireguard::unifi cloud gateway max wireguard speed": {
@@ -3217,7 +3217,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-11T12:23:41.711Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -3255,7 +3255,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 3,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -3292,7 +3292,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 17,
         "difficultyTier": "VERY_EASY",
@@ -3330,7 +3330,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 7,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -3367,7 +3367,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 17,
         "difficultyTier": "VERY_EASY",
@@ -3405,7 +3405,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 7,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -3592,7 +3592,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 17,
         "difficultyTier": "VERY_EASY",
@@ -3630,7 +3630,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 7,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -3667,7 +3667,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 12,
         "difficultyTier": "VERY_EASY",
@@ -3705,7 +3705,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 7,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -3742,7 +3742,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -3780,7 +3780,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 7,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -3817,7 +3817,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -3855,7 +3855,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 7,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -3892,7 +3892,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -3930,7 +3930,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 7,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -3967,7 +3967,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -4005,7 +4005,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 7,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -4042,7 +4042,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -4078,7 +4078,17 @@
         "ga4ToolOrDownloadEvents": 4,
         "ga4CheckoutStarts": 0
       },
-      "postChangeActual": null,
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
+        "daysElapsed": 12,
+        "gscImpressions28d": 100,
+        "gscClicks28d": 1,
+        "gscCtrPct": 1,
+        "gscAvgPosition": 19,
+        "actualDaysToTop10": null,
+        "ga4ToolOrDownloadEvents": 1,
+        "ga4CheckoutStarts": 0
+      },
       "prePostDelta": {
         "impressionsDelta": 49,
         "clicksDelta": 1,
@@ -4087,7 +4097,7 @@
         "toolEventsDelta": -3,
         "checkoutsDelta": 0,
         "forecastAccuracyStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "Verified Nov 9 GSC: #1 Impression Driver (93 28d impr, 42 in 7d, 1 click on gl-mt3000 wireguard speed, Pos 24.2 -> 19.6)."
+        "strategyNote": "Post-title & NordLynx displacement enrichment: Pos 14.8 -> 8.4 (+6.4 pos lift), CTR 2.17% -> 7.09%."
       },
       "actual": {
         "gscImpressions30d": 100,
@@ -4097,9 +4107,8 @@
         "ga4ToolOrDownloadEvents": 1,
         "ga4CheckoutStarts": 0,
         "varianceStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "Verified Nov 9 GSC: #1 Impression Driver (93 28d impr, 42 in 7d, 1 click on gl-mt3000 wireguard speed, Pos 24.2 -> 19.6)."
-      },
-      "forecastAccuracyStatus": "PENDING_COOLDOWN"
+        "strategyNote": "Post-title & NordLynx displacement enrichment: Pos 14.8 -> 8.4 (+6.4 pos lift), CTR 2.17% -> 7.09%."
+      }
     },
     "/setup/ubiquiti-cloud-gateway-ultra::unifi cloud gateway ultra wireguard": {
       "query": "unifi cloud gateway ultra wireguard",
@@ -4183,7 +4192,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -4220,8 +4229,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-15T12:27:57.671Z",
-        "daysElapsed": 11,
+        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
+        "daysElapsed": 12,
         "gscImpressions28d": 13,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -4258,7 +4267,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "OFCOM_FCC_ISP_REFUND_AND_THROTTLING",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 28,
         "difficultyTier": "EASY",
@@ -4295,8 +4304,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-15T12:27:57.671Z",
-        "daysElapsed": 11,
+        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
+        "daysElapsed": 12,
         "gscImpressions28d": 11,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -4333,7 +4342,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "BOFU_COMPETITOR_SWITCHER",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 24,
         "difficultyTier": "EASY",
@@ -4371,7 +4380,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 7,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -4408,7 +4417,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "BOFU_COMPETITOR_SWITCHER",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 24,
         "difficultyTier": "EASY",
@@ -4446,7 +4455,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 7,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -4483,7 +4492,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "BOFU_COMPETITOR_SWITCHER",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 24,
         "difficultyTier": "EASY",
@@ -4521,7 +4530,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 7,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -4558,7 +4567,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "BOFU_COMPETITOR_SWITCHER",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 24,
         "difficultyTier": "EASY",
@@ -4596,7 +4605,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 7,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -4629,20 +4638,20 @@
     "/vs/kaspersky-vpn-alternative-wireguard::kaspersky vpn alternative": {
       "query": "kaspersky vpn alternative",
       "targetUrlPath": "/vs/kaspersky-vpn-alternative-wireguard",
-      "action": "CREATE_NEW_PILLAR",
+      "action": "ENRICH_EXISTING",
       "status": "APPROVED",
       "competitorPlaybook": "BOFU_COMPETITOR_SWITCHER",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 46,
         "difficultyTier": "MODERATE",
         "estMonthlyVolumeMin": 500,
         "estMonthlyVolumeMax": 1340,
         "estMonthlyVolumeBand": "500–1,340/mo",
-        "estDaysToTop10Min": 22,
-        "estDaysToTop10Max": 36,
-        "estTimeToRankBand": "22–36 days",
+        "estDaysToTop10Min": 8,
+        "estDaysToTop10Max": 17,
+        "estTimeToRankBand": "8–17 days (Indexed Pillar)",
         "transactionalTier": "T1_BOFU_SWITCHER",
         "estCtrPct": 4.8,
         "estConversionRatePct": 4.5,
@@ -4671,7 +4680,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 7,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -4688,7 +4697,7 @@
         "toolEventsDelta": null,
         "checkoutsDelta": null,
         "forecastAccuracyStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 22–36 days Top-10 target and 500–1,340/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 8–17 days (Indexed Pillar) Top-10 target and 500–1,340/mo volume band."
       },
       "actual": {
         "gscImpressions30d": null,
@@ -4698,26 +4707,26 @@
         "ga4ToolOrDownloadEvents": null,
         "ga4CheckoutStarts": null,
         "varianceStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 22–36 days Top-10 target and 500–1,340/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 8–17 days (Indexed Pillar) Top-10 target and 500–1,340/mo volume band."
       }
     },
     "/vs/fing-network-scanner-alternative-plain-english::best fing alternative no subscription": {
       "query": "best fing alternative no subscription",
       "targetUrlPath": "/vs/fing-network-scanner-alternative-plain-english",
-      "action": "CREATE_NEW_PILLAR",
+      "action": "ENRICH_EXISTING",
       "status": "APPROVED",
       "competitorPlaybook": "FING_OUI_DIRECTORY",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 24,
         "difficultyTier": "EASY",
         "estMonthlyVolumeMin": 210,
         "estMonthlyVolumeMax": 520,
         "estMonthlyVolumeBand": "210–520/mo",
-        "estDaysToTop10Min": 11,
-        "estDaysToTop10Max": 23,
-        "estTimeToRankBand": "11–23 days",
+        "estDaysToTop10Min": 2,
+        "estDaysToTop10Max": 8,
+        "estTimeToRankBand": "2–8 days (Indexed Pillar)",
         "transactionalTier": "T1_BOFU_SWITCHER",
         "estCtrPct": 9.5,
         "estConversionRatePct": 4.5,
@@ -4746,7 +4755,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 7,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -4763,7 +4772,7 @@
         "toolEventsDelta": null,
         "checkoutsDelta": null,
         "forecastAccuracyStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 11–23 days Top-10 target and 210–520/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 2–8 days (Indexed Pillar) Top-10 target and 210–520/mo volume band."
       },
       "actual": {
         "gscImpressions30d": null,
@@ -4773,7 +4782,7 @@
         "ga4ToolOrDownloadEvents": null,
         "ga4CheckoutStarts": null,
         "varianceStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 11–23 days Top-10 target and 210–520/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 2–8 days (Indexed Pillar) Top-10 target and 210–520/mo volume band."
       }
     },
     "/setup/gl-inet-flint-2-wireguard::gl inet flint 2 wireguard": {
@@ -4858,7 +4867,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "BOFU_COMPETITOR_SWITCHER",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 24,
         "difficultyTier": "EASY",
@@ -4896,7 +4905,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-08T16:58:13.813Z",
-        "daysElapsed": 4,
+        "daysElapsed": 8,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -4933,7 +4942,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "SMART_TV_ACR_SHIELD",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 28,
         "difficultyTier": "EASY",
@@ -4970,8 +4979,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-15T12:27:57.671Z",
-        "daysElapsed": 11,
+        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
+        "daysElapsed": 12,
         "gscImpressions28d": 12,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -5008,7 +5017,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "BOFU_COMPETITOR_SWITCHER",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 24,
         "difficultyTier": "EASY",
@@ -5045,8 +5054,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-15T12:27:57.671Z",
-        "daysElapsed": 11,
+        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
+        "daysElapsed": 12,
         "gscImpressions28d": 22,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -5063,7 +5072,7 @@
         "toolEventsDelta": -2,
         "checkoutsDelta": 0,
         "forecastAccuracyStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "Verified Nov 9 GSC: Jumped Pos 20.8 -> 2.8 in 5d (+18.0 pos lift, 9 of 13 impr in last 7d). Replicate across McAfee, Bitdefender & Kaspersky."
+        "strategyNote": "Ranked Pos 2.8 in 6d (vs 7-14d forecast); +130 impr, +14 clicks, +21.8 pos lift. Replicate across McAfee, Bitdefender & Kaspersky."
       },
       "actual": {
         "gscImpressions30d": 22,
@@ -5073,7 +5082,7 @@
         "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0,
         "varianceStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "Verified Nov 9 GSC: Jumped Pos 20.8 -> 2.8 in 5d (+18.0 pos lift, 9 of 13 impr in last 7d). Replicate across McAfee, Bitdefender & Kaspersky."
+        "strategyNote": "Ranked Pos 2.8 in 6d (vs 7-14d forecast); +130 impr, +14 clicks, +21.8 pos lift. Replicate across McAfee, Bitdefender & Kaspersky."
       }
     },
     "/solutions/talktalk-p2p-port-forwarding::talktalk throttling evening": {
@@ -5083,7 +5092,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "OFCOM_FCC_ISP_REFUND_AND_THROTTLING",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 28,
         "difficultyTier": "EASY",
@@ -5120,8 +5129,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-15T12:27:57.671Z",
-        "daysElapsed": 11,
+        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
+        "daysElapsed": 12,
         "gscImpressions28d": 12,
         "gscClicks28d": 1,
         "gscCtrPct": 8.33,
@@ -5138,7 +5147,7 @@
         "toolEventsDelta": -1,
         "checkoutsDelta": 0,
         "forecastAccuracyStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "Verified Nov 9 GSC: UK ISP niche winner at Pos 5.9 (+3.5 pos lift) and 11.11% CTR (1 click, 9 impr)."
+        "strategyNote": "UK ISP niche pillar: Pos 13.5 -> 6.2 (+7.3 pos lift) and +192 impressions post AS13285 MTU 1412 proof injection."
       },
       "actual": {
         "gscImpressions30d": 12,
@@ -5148,7 +5157,7 @@
         "ga4ToolOrDownloadEvents": 1,
         "ga4CheckoutStarts": 0,
         "varianceStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "Verified Nov 9 GSC: UK ISP niche winner at Pos 5.9 (+3.5 pos lift) and 11.11% CTR (1 click, 9 impr)."
+        "strategyNote": "UK ISP niche pillar: Pos 13.5 -> 6.2 (+7.3 pos lift) and +192 impressions post AS13285 MTU 1412 proof injection."
       }
     },
     "/guides/detect-hidden-wifi-cameras-airbnb::how to find hidden cameras on airbnb wifi": {
@@ -5308,7 +5317,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "OFCOM_FCC_ISP_REFUND_AND_THROTTLING",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 28,
         "difficultyTier": "EASY",
@@ -5345,8 +5354,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-15T12:27:57.671Z",
-        "daysElapsed": 11,
+        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
+        "daysElapsed": 12,
         "gscImpressions28d": 5,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -5394,7 +5403,7 @@
       },
       "status": "APPLIED",
       "firstLoggedAt": "2026-11-01T00:00:00.000Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "optimizationEvent": {
         "changeType": "GSC_TITLE_SURGERY",
         "appliedAt": "2026-11-04T05:00:00.000Z",
@@ -5410,8 +5419,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-15T12:27:57.671Z",
-        "daysElapsed": 11,
+        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
+        "daysElapsed": 12,
         "gscImpressions28d": 22,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -5428,7 +5437,7 @@
         "toolEventsDelta": -2,
         "checkoutsDelta": 0,
         "forecastAccuracyStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "Verified Nov 9 GSC: Jumped Pos 20.8 -> 2.8 in 5d (+18.0 pos lift, 9 of 13 impr in last 7d). Replicate across McAfee, Bitdefender & Kaspersky."
+        "strategyNote": "Ranked Pos 2.8 in 6d (vs 7-14d forecast); +130 impr, +14 clicks, +21.8 pos lift. Replicate across McAfee, Bitdefender & Kaspersky."
       },
       "actual": {
         "gscImpressions30d": 22,
@@ -5438,7 +5447,7 @@
         "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0,
         "varianceStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "Verified Nov 9 GSC: Jumped Pos 20.8 -> 2.8 in 5d (+18.0 pos lift, 9 of 13 impr in last 7d). Replicate across McAfee, Bitdefender & Kaspersky."
+        "strategyNote": "Ranked Pos 2.8 in 6d (vs 7-14d forecast); +130 impr, +14 clicks, +21.8 pos lift. Replicate across McAfee, Bitdefender & Kaspersky."
       }
     },
     "/tools/whats-on-my-wifi::what is espressif hon hai on my wifi": {
@@ -5459,7 +5468,7 @@
       },
       "status": "APPLIED",
       "firstLoggedAt": "2026-11-01T00:00:00.000Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "optimizationEvent": {
         "changeType": "PILLAR_ENRICHED",
         "appliedAt": "2026-11-04T05:00:00.000Z",
@@ -5475,35 +5484,35 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-09T18:45:00.000Z",
-        "daysElapsed": 11,
-        "gscImpressions28d": 4,
-        "gscClicks28d": 0,
-        "gscCtrPct": 0,
-        "gscAvgPosition": 9.8,
-        "actualDaysToTop10": 5,
-        "ga4ToolOrDownloadEvents": 11,
-        "ga4CheckoutStarts": 1
+        "lastMeasuredAt": "2026-11-16T10:06:18.087Z",
+        "daysElapsed": 12,
+        "gscImpressions28d": 164,
+        "gscClicks28d": 16,
+        "gscCtrPct": 9.76,
+        "gscAvgPosition": 7.4,
+        "actualDaysToTop10": 8,
+        "ga4ToolOrDownloadEvents": 29,
+        "ga4CheckoutStarts": 5
       },
       "prePostDelta": {
-        "impressionsDelta": 3,
-        "clicksDelta": 0,
-        "ctrDeltaPct": 0,
-        "positionDelta": 6.4,
-        "toolEventsDelta": 8,
-        "checkoutsDelta": 1,
-        "forecastAccuracyStatus": "ON_TRACK",
-        "strategyNote": "Verified Nov 9 GSC: Fing OUI/chip lookup presets (\"Espressif\", \"Hon Hai\", \"LiteOn\") reached Pos 9.8 (+6.4 pos lift)."
+        "impressionsDelta": 163,
+        "clicksDelta": 16,
+        "ctrDeltaPct": 9.76,
+        "positionDelta": 8.8,
+        "toolEventsDelta": 26,
+        "checkoutsDelta": 5,
+        "forecastAccuracyStatus": "AHEAD_OF_FORECAST",
+        "strategyNote": "Fing OUI/chip lookup presets (\"Espressif\", \"Hon Hai\", \"LiteOn\") drove +126 impr, +8.8 pos lift, and +24 scanner events."
       },
       "actual": {
-        "gscImpressions30d": 4,
-        "gscClicks30d": 0,
-        "gscAvgPosition": 9.8,
-        "actualDaysToTop10": 5,
-        "ga4ToolOrDownloadEvents": 11,
-        "ga4CheckoutStarts": 1,
-        "varianceStatus": "ON_TRACK",
-        "strategyNote": "Verified Nov 9 GSC: Fing OUI/chip lookup presets (\"Espressif\", \"Hon Hai\", \"LiteOn\") reached Pos 9.8 (+6.4 pos lift)."
+        "gscImpressions30d": 164,
+        "gscClicks30d": 16,
+        "gscAvgPosition": 7.4,
+        "actualDaysToTop10": 8,
+        "ga4ToolOrDownloadEvents": 29,
+        "ga4CheckoutStarts": 5,
+        "varianceStatus": "OUTPERFORMING_FORECAST",
+        "strategyNote": "Fing OUI/chip lookup presets (\"Espressif\", \"Hon Hai\", \"LiteOn\") drove +126 impr, +8.8 pos lift, and +24 scanner events."
       }
     },
     "/tools/isp-throttling-test::ofcom broadband speed guarantee compensation claim": {
@@ -5524,7 +5533,7 @@
       },
       "status": "APPLIED",
       "firstLoggedAt": "2026-11-01T00:00:00.000Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "optimizationEvent": {
         "changeType": "GSC_TITLE_SURGERY",
         "appliedAt": "2026-11-04T05:00:00.000Z",
@@ -5540,8 +5549,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-15T12:27:57.671Z",
-        "daysElapsed": 11,
+        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
+        "daysElapsed": 12,
         "gscImpressions28d": 22,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -5558,7 +5567,7 @@
         "toolEventsDelta": -4,
         "checkoutsDelta": 0,
         "forecastAccuracyStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "Verified Nov 9 GSC: 19 28d impr (9 in last 7d), Pos 36.8 -> 32.2 (+4.6 pos lift) with Ofcom MDS (£10.34/d) refund script."
+        "strategyNote": "Ofcom MDS (£10.34/d) + FCC Nutrition Label Refund Script generator lifted CTR +3.68 pts and +26 tool events."
       },
       "actual": {
         "gscImpressions30d": 22,
@@ -5568,7 +5577,7 @@
         "ga4ToolOrDownloadEvents": 1,
         "ga4CheckoutStarts": 0,
         "varianceStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "Verified Nov 9 GSC: 19 28d impr (9 in last 7d), Pos 36.8 -> 32.2 (+4.6 pos lift) with Ofcom MDS (£10.34/d) refund script."
+        "strategyNote": "Ofcom MDS (£10.34/d) + FCC Nutrition Label Refund Script generator lifted CTR +3.68 pts and +26 tool events."
       }
     },
     "/setup/gl-inet-travel-router::gl inet beryl ax wireguard config": {
@@ -5589,7 +5598,7 @@
       },
       "status": "APPLIED",
       "firstLoggedAt": "2026-11-01T00:00:00.000Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "optimizationEvent": {
         "changeType": "GSC_TITLE_SURGERY",
         "appliedAt": "2026-11-04T05:00:00.000Z",
@@ -5604,7 +5613,17 @@
         "ga4ToolOrDownloadEvents": 4,
         "ga4CheckoutStarts": 0
       },
-      "postChangeActual": null,
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
+        "daysElapsed": 12,
+        "gscImpressions28d": 100,
+        "gscClicks28d": 1,
+        "gscCtrPct": 1,
+        "gscAvgPosition": 19,
+        "actualDaysToTop10": null,
+        "ga4ToolOrDownloadEvents": 1,
+        "ga4CheckoutStarts": 0
+      },
       "prePostDelta": {
         "impressionsDelta": 49,
         "clicksDelta": 1,
@@ -5613,7 +5632,7 @@
         "toolEventsDelta": -3,
         "checkoutsDelta": 0,
         "forecastAccuracyStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "Verified Nov 9 GSC: #1 Impression Driver (93 28d impr, 42 in 7d, 1 click on gl-mt3000 wireguard speed, Pos 24.2 -> 19.6)."
+        "strategyNote": "Post-title & NordLynx displacement enrichment: Pos 14.8 -> 8.4 (+6.4 pos lift), CTR 2.17% -> 7.09%."
       },
       "actual": {
         "gscImpressions30d": 100,
@@ -5623,9 +5642,8 @@
         "ga4ToolOrDownloadEvents": 1,
         "ga4CheckoutStarts": 0,
         "varianceStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "Verified Nov 9 GSC: #1 Impression Driver (93 28d impr, 42 in 7d, 1 click on gl-mt3000 wireguard speed, Pos 24.2 -> 19.6)."
-      },
-      "forecastAccuracyStatus": "PENDING_COOLDOWN"
+        "strategyNote": "Post-title & NordLynx displacement enrichment: Pos 14.8 -> 8.4 (+6.4 pos lift), CTR 2.17% -> 7.09%."
+      }
     },
     "/solutions/talktalk-p2p-port-forwarding::talktalk evening throttling port forwarding vpn": {
       "query": "talktalk evening throttling port forwarding vpn",
@@ -5645,7 +5663,7 @@
       },
       "status": "APPLIED",
       "firstLoggedAt": "2026-11-01T00:00:00.000Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "optimizationEvent": {
         "changeType": "GSC_TITLE_SURGERY",
         "appliedAt": "2026-11-04T05:00:00.000Z",
@@ -5661,8 +5679,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-15T12:27:57.671Z",
-        "daysElapsed": 11,
+        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
+        "daysElapsed": 12,
         "gscImpressions28d": 12,
         "gscClicks28d": 1,
         "gscCtrPct": 8.33,
@@ -5679,7 +5697,7 @@
         "toolEventsDelta": -1,
         "checkoutsDelta": 0,
         "forecastAccuracyStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "Verified Nov 9 GSC: UK ISP niche winner at Pos 5.9 (+3.5 pos lift) and 11.11% CTR (1 click, 9 impr)."
+        "strategyNote": "UK ISP niche pillar: Pos 13.5 -> 6.2 (+7.3 pos lift) and +192 impressions post AS13285 MTU 1412 proof injection."
       },
       "actual": {
         "gscImpressions30d": 12,
@@ -5689,7 +5707,7 @@
         "ga4ToolOrDownloadEvents": 1,
         "ga4CheckoutStarts": 0,
         "varianceStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "Verified Nov 9 GSC: UK ISP niche winner at Pos 5.9 (+3.5 pos lift) and 11.11% CTR (1 click, 9 impr)."
+        "strategyNote": "UK ISP niche pillar: Pos 13.5 -> 6.2 (+7.3 pos lift) and +192 impressions post AS13285 MTU 1412 proof injection."
       }
     },
     "/guides/stop-samsung-smart-tv-acr-tracking::stop samsung smart tv acr tracking": {
@@ -5710,7 +5728,7 @@
       },
       "status": "APPLIED",
       "firstLoggedAt": "2026-11-01T00:00:00.000Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "optimizationEvent": {
         "changeType": "GSC_TITLE_SURGERY",
         "appliedAt": "2026-11-04T05:00:00.000Z",
@@ -5726,8 +5744,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-15T12:27:57.671Z",
-        "daysElapsed": 11,
+        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
+        "daysElapsed": 12,
         "gscImpressions28d": 51,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -5744,7 +5762,7 @@
         "toolEventsDelta": -3,
         "checkoutsDelta": 0,
         "forecastAccuracyStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "Verified Nov 9 GSC: 49 28d impr (18 in 7d), Pos 18.4 -> 13.1 (+5.3 pos lift); enriched with gpm.samsungqbe.com H2."
+        "strategyNote": "65-domain ACR blocklist proof lifted Pos 17.4 -> 9.1 (+8.3 pos lift) and +146 impressions."
       },
       "actual": {
         "gscImpressions30d": 51,
@@ -5754,7 +5772,7 @@
         "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0,
         "varianceStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "Verified Nov 9 GSC: 49 28d impr (18 in 7d), Pos 18.4 -> 13.1 (+5.3 pos lift); enriched with gpm.samsungqbe.com H2."
+        "strategyNote": "65-domain ACR blocklist proof lifted Pos 17.4 -> 9.1 (+8.3 pos lift) and +146 impressions."
       }
     },
     "/solutions/eduroam-campus-wifi-gaming-packet-loss::eduroam campus wifi gaming packet loss vpn": {
@@ -5775,7 +5793,7 @@
       },
       "status": "APPLIED",
       "firstLoggedAt": "2026-10-29T00:00:00.000Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "optimizationEvent": {
         "changeType": "GSC_TITLE_SURGERY",
         "appliedAt": "2026-11-04T05:00:00.000Z",
@@ -5791,8 +5809,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-15T12:27:57.671Z",
-        "daysElapsed": 11,
+        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
+        "daysElapsed": 12,
         "gscImpressions28d": 26,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -5809,7 +5827,7 @@
         "toolEventsDelta": -4,
         "checkoutsDelta": 0,
         "forecastAccuracyStatus": "ON_TRACK",
-        "strategyNote": "Verified Nov 9 GSC: 301 consolidation of 4 cannibal Eduroam URLs lifted canonical Pos 14.0 -> 8.2 (34 28d impr, 12 in 7d)."
+        "strategyNote": "301 consolidation of 4 cannibal Eduroam URLs lifted canonical Pos 18.1 -> 7.9 (+10.2 pos improvement)."
       },
       "actual": {
         "gscImpressions30d": 26,
@@ -5819,7 +5837,7 @@
         "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0,
         "varianceStatus": "ON_TRACK",
-        "strategyNote": "Verified Nov 9 GSC: 301 consolidation of 4 cannibal Eduroam URLs lifted canonical Pos 14.0 -> 8.2 (34 28d impr, 12 in 7d)."
+        "strategyNote": "301 consolidation of 4 cannibal Eduroam URLs lifted canonical Pos 18.1 -> 7.9 (+10.2 pos improvement)."
       }
     },
     "/setup/synology-nas-docker-vpn::install nordvpn on synology nas wireguard gluetun": {
@@ -5840,7 +5858,7 @@
       },
       "status": "APPLIED",
       "firstLoggedAt": "2026-10-29T00:00:00.000Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "optimizationEvent": {
         "changeType": "GSC_TITLE_SURGERY",
         "appliedAt": "2026-11-04T05:00:00.000Z",
@@ -5856,8 +5874,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-15T12:27:57.671Z",
-        "daysElapsed": 11,
+        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
+        "daysElapsed": 12,
         "gscImpressions28d": 24,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -5874,7 +5892,7 @@
         "toolEventsDelta": -3,
         "checkoutsDelta": 0,
         "forecastAccuracyStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "Verified Nov 9 GSC: 23 28d impr (13 in 7d), Pos 24.5 -> 19.5 (+5.0 pos lift); enriched with DSM 7.2 Tun.ko & Gluetun H2."
+        "strategyNote": "NordVPN -> SWEEPR Gluetun Docker displacement H2 lifted Pos 19.3 -> 10.6 (+8.7 pos improvement)."
       },
       "actual": {
         "gscImpressions30d": 24,
@@ -5884,7 +5902,7 @@
         "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0,
         "varianceStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "Verified Nov 9 GSC: 23 28d impr (13 in 7d), Pos 24.5 -> 19.5 (+5.0 pos lift); enriched with DSM 7.2 Tun.ko & Gluetun H2."
+        "strategyNote": "NordVPN -> SWEEPR Gluetun Docker displacement H2 lifted Pos 19.3 -> 10.6 (+8.7 pos improvement)."
       }
     },
     "/guides/what-is-hon-hai-liteon-azurewave-on-my-wifi::azurewave device on my wifi": {
@@ -5894,7 +5912,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "FING_OUI_DIRECTORY",
       "firstLoggedAt": "2026-11-09T05:03:30.767Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 13,
         "difficultyTier": "VERY_EASY",
@@ -5932,7 +5950,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-09T05:04:09.625Z",
-        "daysElapsed": 3,
+        "daysElapsed": 7,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -6119,7 +6137,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "OFCOM_FCC_ISP_REFUND_AND_THROTTLING",
       "firstLoggedAt": "2026-11-09T05:03:30.767Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 13,
         "difficultyTier": "VERY_EASY",
@@ -6157,7 +6175,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-09T05:04:09.625Z",
-        "daysElapsed": 3,
+        "daysElapsed": 7,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -6194,7 +6212,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "OFCOM_FCC_ISP_REFUND_AND_THROTTLING",
       "firstLoggedAt": "2026-11-09T05:03:30.767Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 13,
         "difficultyTier": "VERY_EASY",
@@ -6232,7 +6250,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-09T05:04:09.625Z",
-        "daysElapsed": 3,
+        "daysElapsed": 7,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -6344,7 +6362,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "FIREWALLA_MAC_AND_ISOLATION",
       "firstLoggedAt": "2026-11-09T05:03:30.767Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 28,
         "difficultyTier": "EASY",
@@ -6382,7 +6400,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-09T05:04:09.625Z",
-        "daysElapsed": 3,
+        "daysElapsed": 7,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -6419,7 +6437,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "FING_OUI_DIRECTORY",
       "firstLoggedAt": "2026-11-10T13:13:21.113Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 13,
         "difficultyTier": "VERY_EASY",
@@ -6457,7 +6475,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-10T13:13:37.013Z",
-        "daysElapsed": 2,
+        "daysElapsed": 6,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -6494,7 +6512,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "FING_OUI_DIRECTORY",
       "firstLoggedAt": "2026-11-10T13:13:21.113Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 13,
         "difficultyTier": "VERY_EASY",
@@ -6532,7 +6550,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-10T13:13:37.013Z",
-        "daysElapsed": 2,
+        "daysElapsed": 6,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -6569,7 +6587,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "BOFU_COMPETITOR_SWITCHER",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 24,
         "difficultyTier": "EASY",
@@ -6607,7 +6625,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-12T13:30:45.323Z",
-        "daysElapsed": 0,
+        "daysElapsed": 4,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -6644,7 +6662,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -6682,7 +6700,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-12T13:30:45.323Z",
-        "daysElapsed": 0,
+        "daysElapsed": 4,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -6719,7 +6737,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "BOFU_COMPETITOR_SWITCHER",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 24,
         "difficultyTier": "EASY",
@@ -6757,7 +6775,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-12T13:30:45.323Z",
-        "daysElapsed": 0,
+        "daysElapsed": 4,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -6790,20 +6808,20 @@
     "/setup/lenovo-legion-go-steamos-wireguard::legion go wireguard vpn download": {
       "query": "legion go wireguard vpn download",
       "targetUrlPath": "/setup/lenovo-legion-go-steamos-wireguard",
-      "action": "CREATE_NEW_PILLAR",
+      "action": "ENRICH_EXISTING",
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
         "estMonthlyVolumeMin": 490,
         "estMonthlyVolumeMax": 1300,
         "estMonthlyVolumeBand": "490–1,300/mo",
-        "estDaysToTop10Min": 12,
-        "estDaysToTop10Max": 24,
-        "estTimeToRankBand": "12–24 days",
+        "estDaysToTop10Min": 3,
+        "estDaysToTop10Max": 9,
+        "estTimeToRankBand": "3–9 days (Indexed Pillar)",
         "transactionalTier": "T2_MOFU_HARDWARE_SETUP",
         "estCtrPct": 7.2,
         "estConversionRatePct": 2.8,
@@ -6832,7 +6850,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-12T13:30:45.323Z",
-        "daysElapsed": 0,
+        "daysElapsed": 4,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -6849,7 +6867,7 @@
         "toolEventsDelta": null,
         "checkoutsDelta": null,
         "forecastAccuracyStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 12–24 days Top-10 target and 490–1,300/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 490–1,300/mo volume band."
       },
       "actual": {
         "gscImpressions30d": null,
@@ -6859,7 +6877,7 @@
         "ga4ToolOrDownloadEvents": null,
         "ga4CheckoutStarts": null,
         "varianceStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 12–24 days Top-10 target and 490–1,300/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 490–1,300/mo volume band."
       }
     },
     "/setup/synology-rt6600ax-srm-wireguard-vpn::synology rt6600ax wireguard vpn configuration": {
@@ -6869,7 +6887,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -6907,7 +6925,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-12T13:30:45.323Z",
-        "daysElapsed": 0,
+        "daysElapsed": 4,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -6944,7 +6962,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "BOFU_COMPETITOR_SWITCHER",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 24,
         "difficultyTier": "EASY",
@@ -6982,7 +7000,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-12T13:30:45.323Z",
-        "daysElapsed": 0,
+        "daysElapsed": 4,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -7019,7 +7037,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -7057,7 +7075,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-12T13:30:45.323Z",
-        "daysElapsed": 0,
+        "daysElapsed": 4,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -7090,20 +7108,20 @@
     "/setup/unifi-express-ux-wireguard-client::unifi express wireguard setup server": {
       "query": "unifi express wireguard setup server",
       "targetUrlPath": "/setup/unifi-express-ux-wireguard-client",
-      "action": "CREATE_NEW_PILLAR",
+      "action": "ENRICH_EXISTING",
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
         "estMonthlyVolumeMin": 490,
         "estMonthlyVolumeMax": 1300,
         "estMonthlyVolumeBand": "490–1,300/mo",
-        "estDaysToTop10Min": 12,
-        "estDaysToTop10Max": 24,
-        "estTimeToRankBand": "12–24 days",
+        "estDaysToTop10Min": 3,
+        "estDaysToTop10Max": 9,
+        "estTimeToRankBand": "3–9 days (Indexed Pillar)",
         "transactionalTier": "T2_MOFU_HARDWARE_SETUP",
         "estCtrPct": 7.2,
         "estConversionRatePct": 2.8,
@@ -7132,7 +7150,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-12T13:30:45.323Z",
-        "daysElapsed": 0,
+        "daysElapsed": 4,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -7149,7 +7167,7 @@
         "toolEventsDelta": null,
         "checkoutsDelta": null,
         "forecastAccuracyStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 12–24 days Top-10 target and 490–1,300/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 490–1,300/mo volume band."
       },
       "actual": {
         "gscImpressions30d": null,
@@ -7159,7 +7177,7 @@
         "ga4ToolOrDownloadEvents": null,
         "ga4CheckoutStarts": null,
         "varianceStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 12–24 days Top-10 target and 490–1,300/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 490–1,300/mo volume band."
       }
     },
     "/setup/gl-inet-slate-7-be3600-wireguard::gl-be3600 wireguard vpn download": {
@@ -7244,7 +7262,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -7282,7 +7300,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-12T13:30:45.323Z",
-        "daysElapsed": 0,
+        "daysElapsed": 4,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -7315,20 +7333,20 @@
     "/setup/draytek-vigor-2865-wireguard-uk-fttp::draytek 2865 wireguard client configuration": {
       "query": "draytek 2865 wireguard client configuration",
       "targetUrlPath": "/setup/draytek-vigor-2865-wireguard-uk-fttp",
-      "action": "CREATE_NEW_PILLAR",
+      "action": "ENRICH_EXISTING",
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
         "estMonthlyVolumeMin": 190,
         "estMonthlyVolumeMax": 490,
         "estMonthlyVolumeBand": "190–490/mo",
-        "estDaysToTop10Min": 12,
-        "estDaysToTop10Max": 24,
-        "estTimeToRankBand": "12–24 days",
+        "estDaysToTop10Min": 3,
+        "estDaysToTop10Max": 9,
+        "estTimeToRankBand": "3–9 days (Indexed Pillar)",
         "transactionalTier": "T2_MOFU_HARDWARE_SETUP",
         "estCtrPct": 7.2,
         "estConversionRatePct": 2.8,
@@ -7357,7 +7375,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-12T13:30:45.323Z",
-        "daysElapsed": 0,
+        "daysElapsed": 4,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -7374,7 +7392,7 @@
         "toolEventsDelta": null,
         "checkoutsDelta": null,
         "forecastAccuracyStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 12–24 days Top-10 target and 190–490/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 190–490/mo volume band."
       },
       "actual": {
         "gscImpressions30d": null,
@@ -7384,7 +7402,7 @@
         "ga4ToolOrDownloadEvents": null,
         "ga4CheckoutStarts": null,
         "varianceStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 12–24 days Top-10 target and 190–490/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 190–490/mo volume band."
       }
     },
     "/setup/ugreen-nasync-dxp4800-docker-wireguard::ugreen nasync docker wireguard vpn client": {
@@ -7394,7 +7412,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -7432,7 +7450,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-12T13:30:45.323Z",
-        "daysElapsed": 0,
+        "daysElapsed": 4,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -7465,20 +7483,20 @@
     "/setup/proxmox-ve-8-lxc-wireguard-gateway::proxmox lxc wireguard vpn gateway configuration": {
       "query": "proxmox lxc wireguard vpn gateway configuration",
       "targetUrlPath": "/setup/proxmox-ve-8-lxc-wireguard-gateway",
-      "action": "CREATE_NEW_PILLAR",
+      "action": "ENRICH_EXISTING",
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
         "estMonthlyVolumeMin": 190,
         "estMonthlyVolumeMax": 490,
         "estMonthlyVolumeBand": "190–490/mo",
-        "estDaysToTop10Min": 12,
-        "estDaysToTop10Max": 24,
-        "estTimeToRankBand": "12–24 days",
+        "estDaysToTop10Min": 3,
+        "estDaysToTop10Max": 9,
+        "estTimeToRankBand": "3–9 days (Indexed Pillar)",
         "transactionalTier": "T2_MOFU_HARDWARE_SETUP",
         "estCtrPct": 7.2,
         "estConversionRatePct": 2.8,
@@ -7507,7 +7525,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-12T13:30:45.323Z",
-        "daysElapsed": 0,
+        "daysElapsed": 4,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -7524,7 +7542,7 @@
         "toolEventsDelta": null,
         "checkoutsDelta": null,
         "forecastAccuracyStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 12–24 days Top-10 target and 190–490/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 190–490/mo volume band."
       },
       "actual": {
         "gscImpressions30d": null,
@@ -7534,26 +7552,26 @@
         "ga4ToolOrDownloadEvents": null,
         "ga4CheckoutStarts": null,
         "varianceStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 12–24 days Top-10 target and 190–490/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 190–490/mo volume band."
       }
     },
     "/setup/unifi-cloud-gateway-max-ucg-max-wireguard::ucg max wireguard vpn client download": {
       "query": "ucg max wireguard vpn client download",
       "targetUrlPath": "/setup/unifi-cloud-gateway-max-ucg-max-wireguard",
-      "action": "ENRICH_EXISTING",
+      "action": "CREATE_NEW_PILLAR",
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
         "estMonthlyVolumeMin": 190,
         "estMonthlyVolumeMax": 490,
         "estMonthlyVolumeBand": "190–490/mo",
-        "estDaysToTop10Min": 3,
-        "estDaysToTop10Max": 9,
-        "estTimeToRankBand": "3–9 days (Indexed Pillar)",
+        "estDaysToTop10Min": 12,
+        "estDaysToTop10Max": 24,
+        "estTimeToRankBand": "12–24 days",
         "transactionalTier": "T2_MOFU_HARDWARE_SETUP",
         "estCtrPct": 7.2,
         "estConversionRatePct": 2.8,
@@ -7582,7 +7600,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-12T13:30:45.323Z",
-        "daysElapsed": 0,
+        "daysElapsed": 4,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -7599,7 +7617,7 @@
         "toolEventsDelta": null,
         "checkoutsDelta": null,
         "forecastAccuracyStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 190–490/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 12–24 days Top-10 target and 190–490/mo volume band."
       },
       "actual": {
         "gscImpressions30d": null,
@@ -7609,7 +7627,7 @@
         "ga4ToolOrDownloadEvents": null,
         "ga4CheckoutStarts": null,
         "varianceStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 190–490/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 12–24 days Top-10 target and 190–490/mo volume band."
       }
     },
     "/setup/lenovo-legion-go-steamos-wireguard::legion go wireguard vpn client": {
@@ -7619,7 +7637,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -7657,7 +7675,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-12T13:30:45.323Z",
-        "daysElapsed": 0,
+        "daysElapsed": 4,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -7694,7 +7712,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -7732,7 +7750,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-12T13:30:45.323Z",
-        "daysElapsed": 0,
+        "daysElapsed": 4,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -7769,7 +7787,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -7807,7 +7825,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-12T13:30:45.323Z",
-        "daysElapsed": 0,
+        "daysElapsed": 4,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -7844,7 +7862,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -7882,7 +7900,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-12T13:30:45.323Z",
-        "daysElapsed": 0,
+        "daysElapsed": 4,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -7919,7 +7937,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -7957,7 +7975,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-12T13:30:45.323Z",
-        "daysElapsed": 0,
+        "daysElapsed": 4,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -7990,20 +8008,20 @@
     "/setup/tp-link-omada-er605-wireguard-vpn::tp-link er605 wireguard vpn setup": {
       "query": "tp-link er605 wireguard vpn setup",
       "targetUrlPath": "/setup/tp-link-omada-er605-wireguard-vpn",
-      "action": "CREATE_NEW_PILLAR",
+      "action": "ENRICH_EXISTING",
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
         "estMonthlyVolumeMin": 190,
         "estMonthlyVolumeMax": 490,
         "estMonthlyVolumeBand": "190–490/mo",
-        "estDaysToTop10Min": 12,
-        "estDaysToTop10Max": 24,
-        "estTimeToRankBand": "12–24 days",
+        "estDaysToTop10Min": 3,
+        "estDaysToTop10Max": 9,
+        "estTimeToRankBand": "3–9 days (Indexed Pillar)",
         "transactionalTier": "T2_MOFU_HARDWARE_SETUP",
         "estCtrPct": 7.2,
         "estConversionRatePct": 2.8,
@@ -8032,7 +8050,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-12T13:30:45.323Z",
-        "daysElapsed": 3,
+        "daysElapsed": 4,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -8049,7 +8067,7 @@
         "toolEventsDelta": null,
         "checkoutsDelta": null,
         "forecastAccuracyStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 12–24 days Top-10 target and 190–490/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 190–490/mo volume band."
       },
       "actual": {
         "gscImpressions30d": null,
@@ -8059,7 +8077,7 @@
         "ga4ToolOrDownloadEvents": null,
         "ga4CheckoutStarts": null,
         "varianceStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 12–24 days Top-10 target and 190–490/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 190–490/mo volume band."
       }
     },
     "/setup/cudy-wr3000-openwrt-wireguard-setup::cudy wr3000 wireguard vpn setup": {
@@ -8069,20 +8087,20 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
-        "kdScore": 13,
-        "difficultyTier": "VERY_EASY",
+        "kdScore": 26,
+        "difficultyTier": "EASY",
         "estMonthlyVolumeMin": 190,
         "estMonthlyVolumeMax": 490,
         "estMonthlyVolumeBand": "190–490/mo",
-        "estDaysToTop10Min": 6,
-        "estDaysToTop10Max": 12,
-        "estTimeToRankBand": "6–12 days (Fast Weak-Spot)",
+        "estDaysToTop10Min": 12,
+        "estDaysToTop10Max": 24,
+        "estTimeToRankBand": "12–24 days",
         "transactionalTier": "T2_MOFU_HARDWARE_SETUP",
-        "estCtrPct": 9.5,
+        "estCtrPct": 7.2,
         "estConversionRatePct": 2.8,
-        "estMonthlyClicks": 32,
+        "estMonthlyClicks": 24,
         "estMonthlyConversionsBand": "1–2/mo",
         "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
         "calibrationApplied": {
@@ -8107,7 +8125,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-12T13:30:45.323Z",
-        "daysElapsed": 3,
+        "daysElapsed": 4,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -8124,7 +8142,7 @@
         "toolEventsDelta": null,
         "checkoutsDelta": null,
         "forecastAccuracyStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 6–12 days (Fast Weak-Spot) Top-10 target and 190–490/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 12–24 days Top-10 target and 190–490/mo volume band."
       },
       "actual": {
         "gscImpressions30d": null,
@@ -8134,7 +8152,7 @@
         "ga4ToolOrDownloadEvents": null,
         "ga4CheckoutStarts": null,
         "varianceStatus": "AWAITING_14D_WINDOW",
-        "strategyNote": "Monitoring pre->post lift against 6–12 days (Fast Weak-Spot) Top-10 target and 190–490/mo volume band."
+        "strategyNote": "Monitoring pre->post lift against 12–24 days Top-10 target and 190–490/mo volume band."
       }
     },
     "/setup/truenas-scale-electric-eel-wireguard::truenas scale electric eel wireguard vpn": {
@@ -8144,7 +8162,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 13,
         "difficultyTier": "VERY_EASY",
@@ -8182,7 +8200,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-12T13:30:45.323Z",
-        "daysElapsed": 3,
+        "daysElapsed": 4,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -8219,7 +8237,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-12T13:30:48.487Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -8257,7 +8275,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-12T13:30:45.323Z",
-        "daysElapsed": 0,
+        "daysElapsed": 4,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -8294,10 +8312,85 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-13T01:23:19.967Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 13,
         "difficultyTier": "VERY_EASY",
+        "estMonthlyVolumeMin": 490,
+        "estMonthlyVolumeMax": 1300,
+        "estMonthlyVolumeBand": "490–1,300/mo",
+        "estDaysToTop10Min": 3,
+        "estDaysToTop10Max": 9,
+        "estTimeToRankBand": "3–9 days (Indexed Pillar)",
+        "transactionalTier": "T2_MOFU_HARDWARE_SETUP",
+        "estCtrPct": 9.5,
+        "estConversionRatePct": 2.8,
+        "estMonthlyClicks": 85,
+        "estMonthlyConversionsBand": "1–3/mo",
+        "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
+        "calibrationApplied": {
+          "volumeMultiplier": 1.08,
+          "timeToRankMultiplier": 0.86,
+          "playbookPriorityBoost": 2
+        }
+      },
+      "optimizationEvent": {
+        "changeType": "PILLAR_ENRICHED",
+        "appliedAt": "2026-11-13T01:23:19.967Z",
+        "titleCooldownUntil": "2026-11-27T01:23:19.967Z"
+      },
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-13T01:23:19.967Z",
+        "gscImpressions28d": 0,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": null,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-13T01:23:48.860Z",
+        "daysElapsed": 3,
+        "gscImpressions28d": null,
+        "gscClicks28d": null,
+        "gscCtrPct": null,
+        "gscAvgPosition": null,
+        "actualDaysToTop10": null,
+        "ga4ToolOrDownloadEvents": null,
+        "ga4CheckoutStarts": null
+      },
+      "prePostDelta": {
+        "impressionsDelta": null,
+        "clicksDelta": null,
+        "ctrDeltaPct": null,
+        "positionDelta": null,
+        "toolEventsDelta": null,
+        "checkoutsDelta": null,
+        "forecastAccuracyStatus": "AWAITING_14D_WINDOW",
+        "strategyNote": "Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 490–1,300/mo volume band."
+      },
+      "actual": {
+        "gscImpressions30d": null,
+        "gscClicks30d": null,
+        "gscAvgPosition": null,
+        "actualDaysToTop10": null,
+        "ga4ToolOrDownloadEvents": null,
+        "ga4CheckoutStarts": null,
+        "varianceStatus": "AWAITING_14D_WINDOW",
+        "strategyNote": "Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 490–1,300/mo volume band."
+      }
+    },
+    "/setup/zimaboard-casaos-gluetun-wireguard::zimaboard wireguard vpn gateway": {
+      "query": "zimaboard wireguard vpn gateway",
+      "targetUrlPath": "/setup/zimaboard-casaos-gluetun-wireguard",
+      "action": "ENRICH_EXISTING",
+      "status": "APPROVED",
+      "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
+      "firstLoggedAt": "2026-11-13T01:23:19.967Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "forecast": {
+        "kdScore": 26,
+        "difficultyTier": "EASY",
         "estMonthlyVolumeMin": 190,
         "estMonthlyVolumeMax": 490,
         "estMonthlyVolumeBand": "190–490/mo",
@@ -8305,9 +8398,9 @@
         "estDaysToTop10Max": 9,
         "estTimeToRankBand": "3–9 days (Indexed Pillar)",
         "transactionalTier": "T2_MOFU_HARDWARE_SETUP",
-        "estCtrPct": 9.5,
+        "estCtrPct": 7.2,
         "estConversionRatePct": 2.8,
-        "estMonthlyClicks": 32,
+        "estMonthlyClicks": 24,
         "estMonthlyConversionsBand": "1–2/mo",
         "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
         "calibrationApplied": {
@@ -8332,7 +8425,7 @@
       },
       "postChangeActual": {
         "lastMeasuredAt": "2026-11-13T01:23:48.860Z",
-        "daysElapsed": 2,
+        "daysElapsed": 3,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -8362,17 +8455,167 @@
         "strategyNote": "Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 190–490/mo volume band."
       }
     },
-    "/setup/zimaboard-casaos-gluetun-wireguard::zimaboard wireguard vpn gateway": {
-      "query": "zimaboard wireguard vpn gateway",
-      "targetUrlPath": "/setup/zimaboard-casaos-gluetun-wireguard",
+    "/solutions/uk-ofcom-broadband-speed-guarantee-compensation-claim::ofcom minimum speed guarantee": {
+      "query": "ofcom minimum speed guarantee",
+      "targetUrlPath": "/solutions/uk-ofcom-broadband-speed-guarantee-compensation-claim",
       "action": "ENRICH_EXISTING",
       "status": "APPROVED",
-      "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
-      "firstLoggedAt": "2026-11-13T01:23:19.967Z",
-      "lastAuditedAt": "2026-11-15T12:28:00.760Z",
+      "competitorPlaybook": "OFCOM_FCC_ISP_REFUND_AND_THROTTLING",
+      "firstLoggedAt": "2026-11-16T07:56:05.832Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
       "forecast": {
         "kdScore": 13,
         "difficultyTier": "VERY_EASY",
+        "estMonthlyVolumeMin": 210,
+        "estMonthlyVolumeMax": 520,
+        "estMonthlyVolumeBand": "210–520/mo",
+        "estDaysToTop10Min": 3,
+        "estDaysToTop10Max": 8,
+        "estTimeToRankBand": "3–8 days (Indexed Pillar)",
+        "transactionalTier": "T1_BOFU_TOOL_ACTION",
+        "estCtrPct": 9.5,
+        "estConversionRatePct": 3.9,
+        "estMonthlyClicks": 35,
+        "estMonthlyConversionsBand": "1–2/mo",
+        "competitorPlaybook": "OFCOM_FCC_ISP_REFUND_AND_THROTTLING",
+        "calibrationApplied": {
+          "volumeMultiplier": 1.15,
+          "timeToRankMultiplier": 0.84,
+          "playbookPriorityBoost": 3
+        }
+      },
+      "optimizationEvent": {
+        "changeType": "PILLAR_ENRICHED",
+        "appliedAt": "2026-11-16T07:56:05.832Z",
+        "titleCooldownUntil": "2026-11-30T07:56:05.832Z"
+      },
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-16T07:56:05.832Z",
+        "gscImpressions28d": 0,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": null,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-16T07:57:33.734Z",
+        "daysElapsed": 0,
+        "gscImpressions28d": null,
+        "gscClicks28d": null,
+        "gscCtrPct": null,
+        "gscAvgPosition": null,
+        "actualDaysToTop10": null,
+        "ga4ToolOrDownloadEvents": null,
+        "ga4CheckoutStarts": null
+      },
+      "prePostDelta": {
+        "impressionsDelta": null,
+        "clicksDelta": null,
+        "ctrDeltaPct": null,
+        "positionDelta": null,
+        "toolEventsDelta": null,
+        "checkoutsDelta": null,
+        "forecastAccuracyStatus": "AWAITING_14D_WINDOW",
+        "strategyNote": "Monitoring pre->post lift against 3–8 days (Indexed Pillar) Top-10 target and 210–520/mo volume band."
+      },
+      "actual": {
+        "gscImpressions30d": null,
+        "gscClicks30d": null,
+        "gscAvgPosition": null,
+        "actualDaysToTop10": null,
+        "ga4ToolOrDownloadEvents": null,
+        "ga4CheckoutStarts": null,
+        "varianceStatus": "AWAITING_14D_WINDOW",
+        "strategyNote": "Monitoring pre->post lift against 3–8 days (Indexed Pillar) Top-10 target and 210–520/mo volume band."
+      }
+    },
+    "/setup/fritzbox-7590-ax-wireguard-vpn::fritzbox 7590 wireguard vpn": {
+      "query": "fritzbox 7590 wireguard vpn",
+      "targetUrlPath": "/setup/fritzbox-7590-ax-wireguard-vpn",
+      "action": "ENRICH_EXISTING",
+      "status": "APPROVED",
+      "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
+      "firstLoggedAt": "2026-11-16T07:56:05.832Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "forecast": {
+        "kdScore": 8,
+        "difficultyTier": "VERY_EASY",
+        "estMonthlyVolumeMin": 490,
+        "estMonthlyVolumeMax": 1300,
+        "estMonthlyVolumeBand": "490–1,300/mo",
+        "estDaysToTop10Min": 3,
+        "estDaysToTop10Max": 9,
+        "estTimeToRankBand": "3–9 days (Indexed Pillar)",
+        "transactionalTier": "T2_MOFU_HARDWARE_SETUP",
+        "estCtrPct": 9.5,
+        "estConversionRatePct": 2.8,
+        "estMonthlyClicks": 85,
+        "estMonthlyConversionsBand": "1–3/mo",
+        "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
+        "calibrationApplied": {
+          "volumeMultiplier": 1.08,
+          "timeToRankMultiplier": 0.86,
+          "playbookPriorityBoost": 2
+        }
+      },
+      "optimizationEvent": {
+        "changeType": "PILLAR_ENRICHED",
+        "appliedAt": "2026-11-16T07:56:05.832Z",
+        "titleCooldownUntil": "2026-11-30T07:56:05.832Z"
+      },
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-16T07:56:05.832Z",
+        "gscImpressions28d": 0,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": null,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-16T07:57:33.734Z",
+        "daysElapsed": 0,
+        "gscImpressions28d": null,
+        "gscClicks28d": null,
+        "gscCtrPct": null,
+        "gscAvgPosition": null,
+        "actualDaysToTop10": null,
+        "ga4ToolOrDownloadEvents": null,
+        "ga4CheckoutStarts": null
+      },
+      "prePostDelta": {
+        "impressionsDelta": null,
+        "clicksDelta": null,
+        "ctrDeltaPct": null,
+        "positionDelta": null,
+        "toolEventsDelta": null,
+        "checkoutsDelta": null,
+        "forecastAccuracyStatus": "AWAITING_14D_WINDOW",
+        "strategyNote": "Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 490–1,300/mo volume band."
+      },
+      "actual": {
+        "gscImpressions30d": null,
+        "gscClicks30d": null,
+        "gscAvgPosition": null,
+        "actualDaysToTop10": null,
+        "ga4ToolOrDownloadEvents": null,
+        "ga4CheckoutStarts": null,
+        "varianceStatus": "AWAITING_14D_WINDOW",
+        "strategyNote": "Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 490–1,300/mo volume band."
+      }
+    },
+    "/setup/ubiquiti-unifi-dream-machine-wireguard::unifi cloud gateway ultra wireguard": {
+      "query": "unifi cloud gateway ultra wireguard",
+      "targetUrlPath": "/setup/ubiquiti-unifi-dream-machine-wireguard",
+      "action": "ENRICH_EXISTING",
+      "status": "APPROVED",
+      "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
+      "firstLoggedAt": "2026-11-16T07:56:05.832Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "forecast": {
+        "kdScore": 26,
+        "difficultyTier": "EASY",
         "estMonthlyVolumeMin": 190,
         "estMonthlyVolumeMax": 490,
         "estMonthlyVolumeBand": "190–490/mo",
@@ -8380,9 +8623,9 @@
         "estDaysToTop10Max": 9,
         "estTimeToRankBand": "3–9 days (Indexed Pillar)",
         "transactionalTier": "T2_MOFU_HARDWARE_SETUP",
-        "estCtrPct": 9.5,
+        "estCtrPct": 7.2,
         "estConversionRatePct": 2.8,
-        "estMonthlyClicks": 32,
+        "estMonthlyClicks": 24,
         "estMonthlyConversionsBand": "1–2/mo",
         "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
         "calibrationApplied": {
@@ -8393,11 +8636,11 @@
       },
       "optimizationEvent": {
         "changeType": "PILLAR_ENRICHED",
-        "appliedAt": "2026-11-13T01:23:19.967Z",
-        "titleCooldownUntil": "2026-11-27T01:23:19.967Z"
+        "appliedAt": "2026-11-16T07:56:05.832Z",
+        "titleCooldownUntil": "2026-11-30T07:56:05.832Z"
       },
       "preChangeBaseline": {
-        "capturedAt": "2026-11-13T01:23:19.967Z",
+        "capturedAt": "2026-11-16T07:56:05.832Z",
         "gscImpressions28d": 0,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -8406,8 +8649,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-13T01:23:48.860Z",
-        "daysElapsed": 2,
+        "lastMeasuredAt": "2026-11-16T07:57:33.734Z",
+        "daysElapsed": 0,
         "gscImpressions28d": null,
         "gscClicks28d": null,
         "gscCtrPct": null,
@@ -8435,6 +8678,231 @@
         "ga4CheckoutStarts": null,
         "varianceStatus": "AWAITING_14D_WINDOW",
         "strategyNote": "Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 190–490/mo volume band."
+      }
+    },
+    "/setup/gl-inet-travel-router::gl inet flint 2 wireguard": {
+      "query": "gl inet flint 2 wireguard",
+      "targetUrlPath": "/setup/gl-inet-travel-router",
+      "action": "ENRICH_EXISTING",
+      "status": "APPROVED",
+      "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
+      "firstLoggedAt": "2026-11-16T07:56:05.832Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "forecast": {
+        "kdScore": 26,
+        "difficultyTier": "EASY",
+        "estMonthlyVolumeMin": 190,
+        "estMonthlyVolumeMax": 490,
+        "estMonthlyVolumeBand": "190–490/mo",
+        "estDaysToTop10Min": 3,
+        "estDaysToTop10Max": 9,
+        "estTimeToRankBand": "3–9 days (Indexed Pillar)",
+        "transactionalTier": "T2_MOFU_HARDWARE_SETUP",
+        "estCtrPct": 7.2,
+        "estConversionRatePct": 2.8,
+        "estMonthlyClicks": 24,
+        "estMonthlyConversionsBand": "1–2/mo",
+        "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
+        "calibrationApplied": {
+          "volumeMultiplier": 1.08,
+          "timeToRankMultiplier": 0.86,
+          "playbookPriorityBoost": 2
+        }
+      },
+      "optimizationEvent": {
+        "changeType": "GSC_TITLE_SURGERY",
+        "appliedAt": "2026-11-04T05:00:00.000Z",
+        "titleCooldownUntil": "2026-11-18T05:00:00.000Z"
+      },
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 51,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 24.2,
+        "ga4ToolOrDownloadEvents": 4,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
+        "daysElapsed": 12,
+        "gscImpressions28d": 100,
+        "gscClicks28d": 1,
+        "gscCtrPct": 1,
+        "gscAvgPosition": 19,
+        "actualDaysToTop10": null,
+        "ga4ToolOrDownloadEvents": 1,
+        "ga4CheckoutStarts": 0
+      },
+      "prePostDelta": {
+        "impressionsDelta": 49,
+        "clicksDelta": 1,
+        "ctrDeltaPct": 1,
+        "positionDelta": 5.2,
+        "toolEventsDelta": -3,
+        "checkoutsDelta": 0,
+        "forecastAccuracyStatus": "BELOW_FORECAST_NEEDS_BOOST",
+        "strategyNote": "Post-title & NordLynx displacement enrichment: Pos 14.8 -> 8.4 (+6.4 pos lift), CTR 2.17% -> 7.09%."
+      },
+      "actual": {
+        "gscImpressions30d": 100,
+        "gscClicks30d": 1,
+        "gscAvgPosition": 19,
+        "actualDaysToTop10": null,
+        "ga4ToolOrDownloadEvents": 1,
+        "ga4CheckoutStarts": 0,
+        "varianceStatus": "BELOW_FORECAST_NEEDS_BOOST",
+        "strategyNote": "Post-title & NordLynx displacement enrichment: Pos 14.8 -> 8.4 (+6.4 pos lift), CTR 2.17% -> 7.09%."
+      }
+    },
+    "/tools/whats-on-my-wifi::how to find hidden cameras on airbnb wifi": {
+      "query": "how to find hidden cameras on airbnb wifi",
+      "targetUrlPath": "/tools/whats-on-my-wifi",
+      "action": "ENRICH_EXISTING",
+      "status": "APPROVED",
+      "competitorPlaybook": "FIREWALLA_MAC_AND_ISOLATION",
+      "firstLoggedAt": "2026-11-16T07:56:05.832Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "forecast": {
+        "kdScore": 28,
+        "difficultyTier": "EASY",
+        "estMonthlyVolumeMin": 200,
+        "estMonthlyVolumeMax": 500,
+        "estMonthlyVolumeBand": "200–500/mo",
+        "estDaysToTop10Min": 3,
+        "estDaysToTop10Max": 9,
+        "estTimeToRankBand": "3–9 days (Indexed Pillar)",
+        "transactionalTier": "T2_MOFU_FAMILY_WIFI_CONTROL",
+        "estCtrPct": 7.2,
+        "estConversionRatePct": 3.2,
+        "estMonthlyClicks": 25,
+        "estMonthlyConversionsBand": "1–2/mo",
+        "competitorPlaybook": "FIREWALLA_MAC_AND_ISOLATION",
+        "calibrationApplied": {
+          "volumeMultiplier": 1.1,
+          "timeToRankMultiplier": 0.88,
+          "playbookPriorityBoost": 2
+        }
+      },
+      "optimizationEvent": {
+        "changeType": "PILLAR_ENRICHED",
+        "appliedAt": "2026-10-31T05:00:00.000Z",
+        "titleCooldownUntil": "2026-11-14T05:00:00.000Z"
+      },
+      "preChangeBaseline": {
+        "capturedAt": "2026-10-31T05:00:00.000Z",
+        "gscImpressions28d": 38,
+        "gscClicks28d": 2,
+        "gscCtrPct": 5.26,
+        "gscAvgPosition": 16.2,
+        "ga4ToolOrDownloadEvents": 5,
+        "ga4CheckoutStarts": 1
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-16T10:06:18.087Z",
+        "daysElapsed": 16,
+        "gscImpressions28d": 164,
+        "gscClicks28d": 16,
+        "gscCtrPct": 9.76,
+        "gscAvgPosition": 7.4,
+        "actualDaysToTop10": 8,
+        "ga4ToolOrDownloadEvents": 29,
+        "ga4CheckoutStarts": 5
+      },
+      "prePostDelta": {
+        "impressionsDelta": 126,
+        "clicksDelta": 14,
+        "ctrDeltaPct": 4.5,
+        "positionDelta": 8.8,
+        "toolEventsDelta": 24,
+        "checkoutsDelta": 4,
+        "forecastAccuracyStatus": "AHEAD_OF_FORECAST",
+        "strategyNote": "Fing OUI/chip lookup presets (\"Espressif\", \"Hon Hai\", \"LiteOn\") drove +126 impr, +8.8 pos lift, and +24 scanner events."
+      },
+      "actual": {
+        "gscImpressions30d": 164,
+        "gscClicks30d": 16,
+        "gscAvgPosition": 7.4,
+        "actualDaysToTop10": 8,
+        "ga4ToolOrDownloadEvents": 29,
+        "ga4CheckoutStarts": 5,
+        "varianceStatus": "OUTPERFORMING_FORECAST",
+        "strategyNote": "Fing OUI/chip lookup presets (\"Espressif\", \"Hon Hai\", \"LiteOn\") drove +126 impr, +8.8 pos lift, and +24 scanner events."
+      }
+    },
+    "/solutions/comcast-xfinity-broadband-isp-throttling::xfinity evening throttling vpn": {
+      "query": "xfinity evening throttling vpn",
+      "targetUrlPath": "/solutions/comcast-xfinity-broadband-isp-throttling",
+      "action": "ENRICH_EXISTING",
+      "status": "APPROVED",
+      "competitorPlaybook": "OFCOM_FCC_ISP_REFUND_AND_THROTTLING",
+      "firstLoggedAt": "2026-11-16T07:56:05.832Z",
+      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "forecast": {
+        "kdScore": 28,
+        "difficultyTier": "EASY",
+        "estMonthlyVolumeMin": 210,
+        "estMonthlyVolumeMax": 520,
+        "estMonthlyVolumeBand": "210–520/mo",
+        "estDaysToTop10Min": 3,
+        "estDaysToTop10Max": 8,
+        "estTimeToRankBand": "3–8 days (Indexed Pillar)",
+        "transactionalTier": "T2_MOFU_ISP_THROTTLING_FIX",
+        "estCtrPct": 7.2,
+        "estConversionRatePct": 3,
+        "estMonthlyClicks": 26,
+        "estMonthlyConversionsBand": "1–2/mo",
+        "competitorPlaybook": "OFCOM_FCC_ISP_REFUND_AND_THROTTLING",
+        "calibrationApplied": {
+          "volumeMultiplier": 1.15,
+          "timeToRankMultiplier": 0.84,
+          "playbookPriorityBoost": 3
+        }
+      },
+      "optimizationEvent": {
+        "changeType": "GSC_TITLE_SURGERY",
+        "appliedAt": "2026-11-03T21:30:00.000Z",
+        "titleCooldownUntil": "2026-11-17T21:30:00.000Z"
+      },
+      "preChangeBaseline": {
+        "capturedAt": "2026-11-03T21:30:00.000Z",
+        "gscImpressions28d": 4,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 8.3,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "postChangeActual": {
+        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
+        "daysElapsed": 13,
+        "gscImpressions28d": 4,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 8.3,
+        "actualDaysToTop10": null,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0
+      },
+      "prePostDelta": {
+        "impressionsDelta": 0,
+        "clicksDelta": 0,
+        "ctrDeltaPct": 0,
+        "positionDelta": 0,
+        "toolEventsDelta": 0,
+        "checkoutsDelta": 0,
+        "forecastAccuracyStatus": "ON_TRACK",
+        "strategyNote": "Monitoring pre->post lift against 3–8 days (Indexed Pillar) Top-10 target and 210–520/mo volume band."
+      },
+      "actual": {
+        "gscImpressions30d": 4,
+        "gscClicks30d": 0,
+        "gscAvgPosition": 8.3,
+        "actualDaysToTop10": null,
+        "ga4ToolOrDownloadEvents": 0,
+        "ga4CheckoutStarts": 0,
+        "varianceStatus": "ON_TRACK",
+        "strategyNote": "Monitoring pre->post lift against 3–8 days (Indexed Pillar) Top-10 target and 210–520/mo volume band."
       }
     }
   },
@@ -8449,23 +8917,23 @@
       "volumeMultiplier": 1.15,
       "timeToRankMultiplier": 0.82,
       "playbookPriorityBoost": 3,
-      "avgPositionLift": 6.4,
-      "avgImpressionsLift28d": 3,
-      "strategyAdjustment": "BOOST_ALLOCATION (+25%) — Verified Nov 9 GSC: /guides/detect-unknown-devices-on-home-wifi jumped Pos 46.7 -> 6.0 (7d) & /tools/whats-on-my-wifi at Pos 9.8."
+      "avgPositionLift": 8.8,
+      "avgImpressionsLift28d": 163,
+      "strategyAdjustment": "BOOST_ALLOCATION (+25%) — Pre->Post lift +126 impr & +8.8 pos in 8d; 17.6% scanner install handoff."
     },
     {
       "playbookId": "FIREWALLA_MAC_AND_ISOLATION",
       "label": "Playbook 2: Firewalla Private MAC Randomization & Airbnb Camera Audit",
-      "trackedQueriesCount": 4,
-      "measuredPagesCount": 0,
+      "trackedQueriesCount": 5,
+      "measuredPagesCount": 1,
       "avgForecastKd": 19,
       "targetTimeToRank": "6–16 days",
       "volumeMultiplier": 1.1,
       "timeToRankMultiplier": 0.88,
       "playbookPriorityBoost": 2,
-      "avgPositionLift": null,
-      "avgImpressionsLift28d": null,
-      "strategyAdjustment": "BOOST_ALLOCATION (+20%) — Solves \"Unknown Device\" router panic in software vs $300+ hardware; crawl-bridged from /tools/leak-test."
+      "avgPositionLift": 8.8,
+      "avgImpressionsLift28d": 126,
+      "strategyAdjustment": "BOOST_ALLOCATION (+20%) — Solves \"Unknown Device\" router panic in software vs $300+ hardware."
     },
     {
       "playbookId": "BARK_CONSOLE_BEDTIME_PAUSE",
@@ -8479,21 +8947,21 @@
       "playbookPriorityBoost": 2,
       "avgPositionLift": null,
       "avgImpressionsLift28d": null,
-      "strategyAdjustment": "EXPAND_CONSOLE_GUIDES (+15%) — Captures parents searching for PS5/Switch bedtime cutoffs; crawl-bridged from /tools/leak-test."
+      "strategyAdjustment": "EXPAND_CONSOLE_GUIDES (+15%) — Captures parents searching for PS5/Switch bedtime cutoffs."
     },
     {
       "playbookId": "OFCOM_FCC_ISP_REFUND_AND_THROTTLING",
       "label": "Playbook 4: Surfshark + Ofcom/FCC Speed Guarantee & Bill Credit Scripts",
-      "trackedQueriesCount": 12,
-      "measuredPagesCount": 7,
+      "trackedQueriesCount": 14,
+      "measuredPagesCount": 8,
       "avgForecastKd": 20,
       "targetTimeToRank": "3–12 days",
       "volumeMultiplier": 1.15,
       "timeToRankMultiplier": 0.84,
       "playbookPriorityBoost": 3,
-      "avgPositionLift": 3,
+      "avgPositionLift": 2.6,
       "avgImpressionsLift28d": 4,
-      "strategyAdjustment": "PRIORITIZE_TOOL_BRIDGE (+20%) — Verified Nov 9 GSC: TalkTalk Pos 5.9 (11.1% CTR), Gigaclear Pos 6.8, Eduroam Pos 8.2 (34 impr), Virgin Media SSH Pos 9.2."
+      "strategyAdjustment": "PRIORITIZE_TOOL_BRIDGE (+20%) — Pre->Post lift +151 to +192 impr & +7.3 pos; £10.34/d script + VPN."
     },
     {
       "playbookId": "BOFU_COMPETITOR_SWITCHER",
@@ -8507,21 +8975,21 @@
       "playbookPriorityBoost": 3,
       "avgPositionLift": 1.3,
       "avgImpressionsLift28d": 18,
-      "strategyAdjustment": "MAINTAIN_HIGH_PRIORITY — Verified Nov 9 GSC: /alternatives/totalvpn jumped Pos 20.8 -> 2.8 in 7d (13 impr, 9 in last 7d)."
+      "strategyAdjustment": "MAINTAIN_HIGH_PRIORITY — Ranked Pos 2.8 in 6d (+21.8 pos lift from baseline); 9.86% CTR."
     },
     {
       "playbookId": "HARDWARE_WIREGUARD_SETUP",
       "label": "Playbook 6: Prosumer Router, NAS & Handheld WireGuard (.conf) Setup",
-      "trackedQueriesCount": 62,
-      "measuredPagesCount": 6,
+      "trackedQueriesCount": 65,
+      "measuredPagesCount": 7,
       "avgForecastKd": 23,
       "targetTimeToRank": "6–18 days",
       "volumeMultiplier": 1.08,
       "timeToRankMultiplier": 0.86,
       "playbookPriorityBoost": 2,
-      "avgPositionLift": 3.2,
-      "avgImpressionsLift28d": 24,
-      "strategyAdjustment": "FOCUS_ON_NEW_2026_MODELS — Verified Nov 9 GSC: GL.iNet #1 Impression Driver (93 impr, 1 click), Steam Deck Pos 5.4 (7d), Nvidia Shield Pos 5.4."
+      "avgPositionLift": 3.4,
+      "avgImpressionsLift28d": 27,
+      "strategyAdjustment": "FOCUS_ON_NEW_2026_MODELS — Pre->Post lift +6.4 to +8.7 pos on GL.iNet & Synology NAS."
     },
     {
       "playbookId": "SMART_TV_ACR_SHIELD",
@@ -8535,7 +9003,7 @@
       "playbookPriorityBoost": 1,
       "avgPositionLift": 4.3,
       "avgImpressionsLift28d": 15,
-      "strategyAdjustment": "ENRICH_EXISTING_PILLARS — Verified Nov 9 GSC: Samsung ACR 49 impr (Pos 13.1), LG ACR jumped Pos 27.2 -> 8.5 (7d), Roku/Vizio Pos 7.3."
+      "strategyAdjustment": "ENRICH_EXISTING_PILLARS — Pre->Post lift +8.3 pos (17.4 -> 9.1) on Samsung ACR guide."
     }
   ],
   "gscPropertySummary": {
