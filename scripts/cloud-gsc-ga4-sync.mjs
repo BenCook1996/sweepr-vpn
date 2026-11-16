@@ -72,13 +72,25 @@ function resolveHtmlFileForRoute(urlPath) {
     '/tools/smart-tv-tracking-check': 'smart-tv-tracking-check.html',
     '/tools/whats-on-my-wifi': 'whats-on-my-wifi.html',
     '/public-wifi': 'public-wifi.html',
-    '/vs/totalvpn': 'vs-totalvpn.html',
+    '/de/tools/leak-test': 'de-leak-test.html',
+    '/pt-br/tools/leak-test': 'pt-br-leak-test.html',
+    '/sv/tools/leak-test': 'sv-leak-test.html',
     '/alternatives/totalvpn': 'alternatives-totalvpn.html',
     '/warrant-canary': 'warrant-canary.html'
   };
   if (coreMap[urlPath]) return path.join(WEBSITE_DIR, coreMap[urlPath]);
   if (/^\/(solutions|setup|guides|vs)\/[a-z0-9-]+$/i.test(urlPath)) {
-    return path.join(WEBSITE_DIR, `${urlPath.slice(1)}.html`);
+    const abs = path.join(WEBSITE_DIR, `${urlPath.slice(1)}.html`);
+    if (!fs.existsSync(abs)) return null;
+    try {
+      const html = fs.readFileSync(abs, 'utf8');
+      if (/<meta\s+name=["']robots["']\s+content=["'][^"']*noindex/i.test(html)) {
+        return null;
+      }
+    } catch {
+      return null;
+    }
+    return abs;
   }
   return null;
 }

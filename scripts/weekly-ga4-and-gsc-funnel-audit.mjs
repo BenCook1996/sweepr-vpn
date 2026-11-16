@@ -288,27 +288,42 @@ async function runWeeklyFunnelAndGscAudit() {
       headers: { 'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)' }
     });
     const dlHtml = dlRes.status === 200 ? await dlRes.text() : '';
-    const userWinRes = await fetchWithTimeout('https://sweeprvpn.com/download', {
+    const dlRobotsHdr = (dlRes.headers.get('x-robots-tag') || '').toLowerCase();
+    const userWinHtmlRes = await fetchWithTimeout('https://sweeprvpn.com/download', {
+      redirect: 'manual',
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36' }
+    });
+    const userWinHtml = userWinHtmlRes.status === 200 ? await userWinHtmlRes.text() : '';
+    const userWinRobotsHdr = (userWinHtmlRes.headers.get('x-robots-tag') || '').toLowerCase();
+    const exeBinRes = await fetchWithTimeout('https://sweeprvpn.com/download/SWEEPRVPN.exe', {
       method: 'HEAD',
       redirect: 'manual',
       headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36' }
     });
-    const winDisp = userWinRes.headers.get('content-disposition') || '';
+    const exeDisp = exeBinRes.headers.get('content-disposition') || '';
+    const exeLen = Number(exeBinRes.headers.get('content-length') || 0);
     const dlOk =
       dlRes.status === 200 &&
+      userWinHtmlRes.status === 200 &&
       dlHtml.includes('index, follow') &&
+      userWinHtml.includes('index, follow') &&
       !dlHtml.includes('noindex') &&
+      !userWinHtml.includes('noindex') &&
+      !dlRobotsHdr.includes('noindex') &&
+      !userWinRobotsHdr.includes('noindex') &&
       dlHtml.includes(EXPECTED_EXE_SHA256) &&
-      userWinRes.status === 200 &&
-      winDisp.includes('SWEEPRVPN.exe');
+      userWinHtml.includes(EXPECTED_EXE_SHA256) &&
+      exeBinRes.status === 200 &&
+      exeDisp.includes('SWEEPRVPN.exe') &&
+      exeLen === EXPECTED_EXE_SIZE;
     record(
       'Funnel B (Installer)',
-      'Live GET /download Direct OS Binary Delivery & Crawler Indexability',
+      'Live GET /download Zero-Cloaking Indexability & /download/SWEEPRVPN.exe Binary Delivery',
       dlOk,
-      `User-OS Direct=${winDisp || userWinRes.status} | Bot HTML=${dlRes.status} (SHA-256=${dlHtml.includes(EXPECTED_EXE_SHA256)})`
+      `Bot HTML=${dlRes.status} | Chrome HTML=${userWinHtmlRes.status} (SHA-256=${dlHtml.includes(EXPECTED_EXE_SHA256)}) | Binary=${exeDisp || exeBinRes.status} (${exeLen} bytes)`
     );
   } catch (err) {
-    record('Funnel B (Installer)', 'Live GET /download Direct OS Binary Delivery & Crawler Indexability', false, err.message);
+    record('Funnel B (Installer)', 'Live GET /download Zero-Cloaking Indexability & /download/SWEEPRVPN.exe Binary Delivery', false, err.message);
   }
 
   try {

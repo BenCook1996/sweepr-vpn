@@ -1193,9 +1193,29 @@ for (const gscPath of Object.keys(GSC_STRIKING_DISTANCE_OVERRIDES)) {
 
 let lastModUpdatedCount = 0;
 function extractSemanticMain(html) {
-  const m = String(html || '').match(/<main\b[^>]*>([\s\S]*?)<\/main>/i);
+  const normalized = String(html || '').replace(/\r\n/g, '\n');
+  const m = normalized.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i);
   if (!m) return '';
-  return m[1].replace(/<!--[\s\S]*?-->/g, ' ').replace(/\s+/g, ' ').trim();
+  return m[1]
+    .replace(/<!--[\s\S]*?-->/g, ' ')
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function extractSemanticFallback(html) {
+  return String(html || '')
+    .replace(/\r\n/g, '\n')
+    .replace(/<head\b[^>]*>[\s\S]*?<\/head>/gi, ' ')
+    .replace(/<nav\b[^>]*>[\s\S]*?<\/nav>/gi, ' ')
+    .replace(/<header\b[^>]*>[\s\S]*?<\/header>/gi, ' ')
+    .replace(/<footer\b[^>]*>[\s\S]*?<\/footer>/gi, ' ')
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<!--[\s\S]*?-->/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
 function resolveContentHashLastMod(loc, absPath) {
@@ -1204,7 +1224,7 @@ function resolveContentHashLastMod(loc, absPath) {
     if (absPath.toLowerCase().endsWith('.html')) {
       const html = fs.readFileSync(absPath, 'utf8');
       const semanticMain = extractSemanticMain(html);
-      const hashInput = semanticMain.length > 0 ? semanticMain : html;
+      const hashInput = semanticMain.length > 0 ? semanticMain : extractSemanticFallback(html);
       hash = crypto.createHash('sha1').update(hashInput).digest('hex').slice(0, 12);
     } else {
       hash = crypto.createHash('sha1').update(fs.readFileSync(absPath)).digest('hex').slice(0, 12);
