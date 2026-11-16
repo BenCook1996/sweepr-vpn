@@ -1,22 +1,22 @@
 {
   "schemaVersion": "2.0.0",
-  "updatedAt": "2026-11-16T10:06:18.087Z",
+  "updatedAt": "2026-11-16T13:20:33.575Z",
   "calibrationMultipliers": {
     "FING_OUI_DIRECTORY": {
       "volumeMultiplier": 1.15,
       "timeToRankMultiplier": 0.82,
       "playbookPriorityBoost": 3,
       "measuredSampleSize": 2,
-      "avgPositionLift": 8.8,
-      "avgImpressionsLift28d": 163
+      "avgPositionLift": 6.4,
+      "avgImpressionsLift28d": 3
     },
     "FIREWALLA_MAC_AND_ISOLATION": {
       "volumeMultiplier": 1.1,
       "timeToRankMultiplier": 0.88,
       "playbookPriorityBoost": 2,
       "measuredSampleSize": 1,
-      "avgPositionLift": 8.8,
-      "avgImpressionsLift28d": 126
+      "avgPositionLift": 6.4,
+      "avgImpressionsLift28d": 3
     },
     "BARK_CONSOLE_BEDTIME_PAUSE": {
       "volumeMultiplier": 1.08,
@@ -67,7 +67,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "FING_OUI_DIRECTORY",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 13,
         "difficultyTier": "VERY_EASY",
@@ -142,7 +142,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 17,
         "difficultyTier": "VERY_EASY",
@@ -217,7 +217,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 17,
         "difficultyTier": "VERY_EASY",
@@ -292,7 +292,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "BOFU_COMPETITOR_SWITCHER",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 12,
         "difficultyTier": "VERY_EASY",
@@ -367,7 +367,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "FING_OUI_DIRECTORY",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 13,
         "difficultyTier": "VERY_EASY",
@@ -442,7 +442,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "FING_OUI_DIRECTORY",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 28,
         "difficultyTier": "EASY",
@@ -592,7 +592,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 13,
         "difficultyTier": "VERY_EASY",
@@ -667,7 +667,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 12,
         "difficultyTier": "VERY_EASY",
@@ -817,7 +817,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "BOFU_COMPETITOR_SWITCHER",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 12,
         "difficultyTier": "VERY_EASY",
@@ -892,7 +892,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 13,
         "difficultyTier": "VERY_EASY",
@@ -1267,7 +1267,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 17,
         "difficultyTier": "VERY_EASY",
@@ -1304,7 +1304,7 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
+        "lastMeasuredAt": "2026-11-16T13:19:08.045Z",
         "daysElapsed": 12,
         "gscImpressions28d": 24,
         "gscClicks28d": 0,
@@ -1322,7 +1322,7 @@
         "toolEventsDelta": -3,
         "checkoutsDelta": 0,
         "forecastAccuracyStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "NordVPN -> SWEEPR Gluetun Docker displacement H2 lifted Pos 19.3 -> 10.6 (+8.7 pos improvement)."
+        "strategyNote": "Verified Nov 9 GSC: 23 28d impr (13 in 7d), Pos 24.5 -> 19.5 (+5.0 pos lift); enriched with DSM 7.2 Tun.ko & Gluetun H2."
       },
       "actual": {
         "gscImpressions30d": 24,
@@ -1332,7 +1332,7 @@
         "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0,
         "varianceStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "NordVPN -> SWEEPR Gluetun Docker displacement H2 lifted Pos 19.3 -> 10.6 (+8.7 pos improvement)."
+        "strategyNote": "Verified Nov 9 GSC: 23 28d impr (13 in 7d), Pos 24.5 -> 19.5 (+5.0 pos lift); enriched with DSM 7.2 Tun.ko & Gluetun H2."
       }
     },
     "/guides/pause-ps5-xbox-wifi-at-bedtime-without-unplugging-router::how to pause wifi on ps5 at bedtime": {
@@ -1342,7 +1342,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "BARK_CONSOLE_BEDTIME_PAUSE",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 28,
         "difficultyTier": "EASY",
@@ -1417,7 +1417,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "FIREWALLA_MAC_AND_ISOLATION",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 28,
         "difficultyTier": "EASY",
@@ -1567,7 +1567,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 17,
         "difficultyTier": "VERY_EASY",
@@ -1604,7 +1604,7 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
+        "lastMeasuredAt": "2026-11-16T13:19:08.045Z",
         "daysElapsed": 12,
         "gscImpressions28d": 18,
         "gscClicks28d": 0,
@@ -1642,7 +1642,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "BOFU_COMPETITOR_SWITCHER",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 24,
         "difficultyTier": "EASY",
@@ -1792,7 +1792,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "BOFU_COMPETITOR_SWITCHER",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 24,
         "difficultyTier": "EASY",
@@ -1867,7 +1867,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 29,
         "difficultyTier": "EASY",
@@ -2092,7 +2092,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 22,
         "difficultyTier": "VERY_EASY",
@@ -2167,7 +2167,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -2392,7 +2392,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -2542,7 +2542,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 13,
         "difficultyTier": "VERY_EASY",
@@ -2692,7 +2692,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "BOFU_COMPETITOR_SWITCHER",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 46,
         "difficultyTier": "MODERATE",
@@ -2767,7 +2767,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "FING_OUI_DIRECTORY",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 24,
         "difficultyTier": "EASY",
@@ -3142,7 +3142,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "FING_OUI_DIRECTORY",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 28,
         "difficultyTier": "EASY",
@@ -3179,35 +3179,35 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-16T10:06:18.087Z",
+        "lastMeasuredAt": "2026-11-16T13:20:33.575Z",
         "daysElapsed": 12,
-        "gscImpressions28d": 164,
-        "gscClicks28d": 16,
-        "gscCtrPct": 9.76,
-        "gscAvgPosition": 7.4,
-        "actualDaysToTop10": 8,
-        "ga4ToolOrDownloadEvents": 29,
-        "ga4CheckoutStarts": 5
+        "gscImpressions28d": 4,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 9.8,
+        "actualDaysToTop10": 5,
+        "ga4ToolOrDownloadEvents": 11,
+        "ga4CheckoutStarts": 1
       },
       "prePostDelta": {
-        "impressionsDelta": 163,
-        "clicksDelta": 16,
-        "ctrDeltaPct": 9.76,
-        "positionDelta": 8.8,
-        "toolEventsDelta": 26,
-        "checkoutsDelta": 5,
-        "forecastAccuracyStatus": "AHEAD_OF_FORECAST",
-        "strategyNote": "Fing OUI/chip lookup presets (\"Espressif\", \"Hon Hai\", \"LiteOn\") drove +126 impr, +8.8 pos lift, and +24 scanner events."
+        "impressionsDelta": 3,
+        "clicksDelta": 0,
+        "ctrDeltaPct": 0,
+        "positionDelta": 6.4,
+        "toolEventsDelta": 8,
+        "checkoutsDelta": 1,
+        "forecastAccuracyStatus": "ON_TRACK",
+        "strategyNote": "Verified Nov 9 GSC: Fing OUI/chip lookup presets (\"Espressif\", \"Hon Hai\", \"LiteOn\") reached Pos 9.8 (+6.4 pos lift)."
       },
       "actual": {
-        "gscImpressions30d": 164,
-        "gscClicks30d": 16,
-        "gscAvgPosition": 7.4,
-        "actualDaysToTop10": 8,
-        "ga4ToolOrDownloadEvents": 29,
-        "ga4CheckoutStarts": 5,
-        "varianceStatus": "OUTPERFORMING_FORECAST",
-        "strategyNote": "Fing OUI/chip lookup presets (\"Espressif\", \"Hon Hai\", \"LiteOn\") drove +126 impr, +8.8 pos lift, and +24 scanner events."
+        "gscImpressions30d": 4,
+        "gscClicks30d": 0,
+        "gscAvgPosition": 9.8,
+        "actualDaysToTop10": 5,
+        "ga4ToolOrDownloadEvents": 11,
+        "ga4CheckoutStarts": 1,
+        "varianceStatus": "ON_TRACK",
+        "strategyNote": "Verified Nov 9 GSC: Fing OUI/chip lookup presets (\"Espressif\", \"Hon Hai\", \"LiteOn\") reached Pos 9.8 (+6.4 pos lift)."
       }
     },
     "/setup/unifi-cloud-gateway-max-ucg-max-wireguard::unifi cloud gateway max wireguard speed": {
@@ -3217,7 +3217,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -3292,7 +3292,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 17,
         "difficultyTier": "VERY_EASY",
@@ -3367,7 +3367,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 17,
         "difficultyTier": "VERY_EASY",
@@ -3592,7 +3592,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 17,
         "difficultyTier": "VERY_EASY",
@@ -3667,7 +3667,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 12,
         "difficultyTier": "VERY_EASY",
@@ -3742,7 +3742,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -3817,7 +3817,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -3892,7 +3892,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -3967,7 +3967,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -4042,7 +4042,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -4078,17 +4078,7 @@
         "ga4ToolOrDownloadEvents": 4,
         "ga4CheckoutStarts": 0
       },
-      "postChangeActual": {
-        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
-        "daysElapsed": 12,
-        "gscImpressions28d": 100,
-        "gscClicks28d": 1,
-        "gscCtrPct": 1,
-        "gscAvgPosition": 19,
-        "actualDaysToTop10": null,
-        "ga4ToolOrDownloadEvents": 1,
-        "ga4CheckoutStarts": 0
-      },
+      "postChangeActual": null,
       "prePostDelta": {
         "impressionsDelta": 49,
         "clicksDelta": 1,
@@ -4097,7 +4087,7 @@
         "toolEventsDelta": -3,
         "checkoutsDelta": 0,
         "forecastAccuracyStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "Post-title & NordLynx displacement enrichment: Pos 14.8 -> 8.4 (+6.4 pos lift), CTR 2.17% -> 7.09%."
+        "strategyNote": "Verified Nov 9 GSC: #1 Impression Driver (93 28d impr, 42 in 7d, 1 click on gl-mt3000 wireguard speed, Pos 24.2 -> 19.6)."
       },
       "actual": {
         "gscImpressions30d": 100,
@@ -4107,8 +4097,9 @@
         "ga4ToolOrDownloadEvents": 1,
         "ga4CheckoutStarts": 0,
         "varianceStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "Post-title & NordLynx displacement enrichment: Pos 14.8 -> 8.4 (+6.4 pos lift), CTR 2.17% -> 7.09%."
-      }
+        "strategyNote": "Verified Nov 9 GSC: #1 Impression Driver (93 28d impr, 42 in 7d, 1 click on gl-mt3000 wireguard speed, Pos 24.2 -> 19.6)."
+      },
+      "forecastAccuracyStatus": "PENDING_COOLDOWN"
     },
     "/setup/ubiquiti-cloud-gateway-ultra::unifi cloud gateway ultra wireguard": {
       "query": "unifi cloud gateway ultra wireguard",
@@ -4192,7 +4183,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -4229,7 +4220,7 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
+        "lastMeasuredAt": "2026-11-16T13:19:08.045Z",
         "daysElapsed": 12,
         "gscImpressions28d": 13,
         "gscClicks28d": 0,
@@ -4267,7 +4258,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "OFCOM_FCC_ISP_REFUND_AND_THROTTLING",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 28,
         "difficultyTier": "EASY",
@@ -4304,7 +4295,7 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
+        "lastMeasuredAt": "2026-11-16T13:19:08.045Z",
         "daysElapsed": 12,
         "gscImpressions28d": 11,
         "gscClicks28d": 0,
@@ -4342,7 +4333,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "BOFU_COMPETITOR_SWITCHER",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 24,
         "difficultyTier": "EASY",
@@ -4417,7 +4408,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "BOFU_COMPETITOR_SWITCHER",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 24,
         "difficultyTier": "EASY",
@@ -4492,7 +4483,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "BOFU_COMPETITOR_SWITCHER",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 24,
         "difficultyTier": "EASY",
@@ -4567,7 +4558,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "BOFU_COMPETITOR_SWITCHER",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 24,
         "difficultyTier": "EASY",
@@ -4642,7 +4633,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "BOFU_COMPETITOR_SWITCHER",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 46,
         "difficultyTier": "MODERATE",
@@ -4717,7 +4708,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "FING_OUI_DIRECTORY",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 24,
         "difficultyTier": "EASY",
@@ -4867,7 +4858,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "BOFU_COMPETITOR_SWITCHER",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 24,
         "difficultyTier": "EASY",
@@ -4942,7 +4933,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "SMART_TV_ACR_SHIELD",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 28,
         "difficultyTier": "EASY",
@@ -4979,7 +4970,7 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
+        "lastMeasuredAt": "2026-11-16T13:19:08.045Z",
         "daysElapsed": 12,
         "gscImpressions28d": 12,
         "gscClicks28d": 0,
@@ -5017,7 +5008,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "BOFU_COMPETITOR_SWITCHER",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 24,
         "difficultyTier": "EASY",
@@ -5054,7 +5045,7 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
+        "lastMeasuredAt": "2026-11-16T13:19:08.045Z",
         "daysElapsed": 12,
         "gscImpressions28d": 22,
         "gscClicks28d": 0,
@@ -5072,7 +5063,7 @@
         "toolEventsDelta": -2,
         "checkoutsDelta": 0,
         "forecastAccuracyStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "Ranked Pos 2.8 in 6d (vs 7-14d forecast); +130 impr, +14 clicks, +21.8 pos lift. Replicate across McAfee, Bitdefender & Kaspersky."
+        "strategyNote": "Verified Nov 9 GSC: Jumped Pos 20.8 -> 2.8 in 5d (+18.0 pos lift, 9 of 13 impr in last 7d). Replicate across McAfee, Bitdefender & Kaspersky."
       },
       "actual": {
         "gscImpressions30d": 22,
@@ -5082,7 +5073,7 @@
         "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0,
         "varianceStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "Ranked Pos 2.8 in 6d (vs 7-14d forecast); +130 impr, +14 clicks, +21.8 pos lift. Replicate across McAfee, Bitdefender & Kaspersky."
+        "strategyNote": "Verified Nov 9 GSC: Jumped Pos 20.8 -> 2.8 in 5d (+18.0 pos lift, 9 of 13 impr in last 7d). Replicate across McAfee, Bitdefender & Kaspersky."
       }
     },
     "/solutions/talktalk-p2p-port-forwarding::talktalk throttling evening": {
@@ -5092,7 +5083,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "OFCOM_FCC_ISP_REFUND_AND_THROTTLING",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 28,
         "difficultyTier": "EASY",
@@ -5129,7 +5120,7 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
+        "lastMeasuredAt": "2026-11-16T13:19:08.045Z",
         "daysElapsed": 12,
         "gscImpressions28d": 12,
         "gscClicks28d": 1,
@@ -5147,7 +5138,7 @@
         "toolEventsDelta": -1,
         "checkoutsDelta": 0,
         "forecastAccuracyStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "UK ISP niche pillar: Pos 13.5 -> 6.2 (+7.3 pos lift) and +192 impressions post AS13285 MTU 1412 proof injection."
+        "strategyNote": "Verified Nov 9 GSC: UK ISP niche winner at Pos 5.9 (+3.5 pos lift) and 11.11% CTR (1 click, 9 impr)."
       },
       "actual": {
         "gscImpressions30d": 12,
@@ -5157,7 +5148,7 @@
         "ga4ToolOrDownloadEvents": 1,
         "ga4CheckoutStarts": 0,
         "varianceStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "UK ISP niche pillar: Pos 13.5 -> 6.2 (+7.3 pos lift) and +192 impressions post AS13285 MTU 1412 proof injection."
+        "strategyNote": "Verified Nov 9 GSC: UK ISP niche winner at Pos 5.9 (+3.5 pos lift) and 11.11% CTR (1 click, 9 impr)."
       }
     },
     "/guides/detect-hidden-wifi-cameras-airbnb::how to find hidden cameras on airbnb wifi": {
@@ -5317,7 +5308,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "OFCOM_FCC_ISP_REFUND_AND_THROTTLING",
       "firstLoggedAt": "2026-11-08T16:35:53.946Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 28,
         "difficultyTier": "EASY",
@@ -5354,7 +5345,7 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
+        "lastMeasuredAt": "2026-11-16T13:19:08.045Z",
         "daysElapsed": 12,
         "gscImpressions28d": 5,
         "gscClicks28d": 0,
@@ -5403,7 +5394,7 @@
       },
       "status": "APPLIED",
       "firstLoggedAt": "2026-11-01T00:00:00.000Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "optimizationEvent": {
         "changeType": "GSC_TITLE_SURGERY",
         "appliedAt": "2026-11-04T05:00:00.000Z",
@@ -5419,7 +5410,7 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
+        "lastMeasuredAt": "2026-11-16T13:19:08.045Z",
         "daysElapsed": 12,
         "gscImpressions28d": 22,
         "gscClicks28d": 0,
@@ -5437,7 +5428,7 @@
         "toolEventsDelta": -2,
         "checkoutsDelta": 0,
         "forecastAccuracyStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "Ranked Pos 2.8 in 6d (vs 7-14d forecast); +130 impr, +14 clicks, +21.8 pos lift. Replicate across McAfee, Bitdefender & Kaspersky."
+        "strategyNote": "Verified Nov 9 GSC: Jumped Pos 20.8 -> 2.8 in 5d (+18.0 pos lift, 9 of 13 impr in last 7d). Replicate across McAfee, Bitdefender & Kaspersky."
       },
       "actual": {
         "gscImpressions30d": 22,
@@ -5447,7 +5438,7 @@
         "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0,
         "varianceStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "Ranked Pos 2.8 in 6d (vs 7-14d forecast); +130 impr, +14 clicks, +21.8 pos lift. Replicate across McAfee, Bitdefender & Kaspersky."
+        "strategyNote": "Verified Nov 9 GSC: Jumped Pos 20.8 -> 2.8 in 5d (+18.0 pos lift, 9 of 13 impr in last 7d). Replicate across McAfee, Bitdefender & Kaspersky."
       }
     },
     "/tools/whats-on-my-wifi::what is espressif hon hai on my wifi": {
@@ -5468,7 +5459,7 @@
       },
       "status": "APPLIED",
       "firstLoggedAt": "2026-11-01T00:00:00.000Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "optimizationEvent": {
         "changeType": "PILLAR_ENRICHED",
         "appliedAt": "2026-11-04T05:00:00.000Z",
@@ -5484,35 +5475,35 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-16T10:06:18.087Z",
+        "lastMeasuredAt": "2026-11-16T13:20:33.575Z",
         "daysElapsed": 12,
-        "gscImpressions28d": 164,
-        "gscClicks28d": 16,
-        "gscCtrPct": 9.76,
-        "gscAvgPosition": 7.4,
-        "actualDaysToTop10": 8,
-        "ga4ToolOrDownloadEvents": 29,
-        "ga4CheckoutStarts": 5
+        "gscImpressions28d": 4,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 9.8,
+        "actualDaysToTop10": 5,
+        "ga4ToolOrDownloadEvents": 11,
+        "ga4CheckoutStarts": 1
       },
       "prePostDelta": {
-        "impressionsDelta": 163,
-        "clicksDelta": 16,
-        "ctrDeltaPct": 9.76,
-        "positionDelta": 8.8,
-        "toolEventsDelta": 26,
-        "checkoutsDelta": 5,
-        "forecastAccuracyStatus": "AHEAD_OF_FORECAST",
-        "strategyNote": "Fing OUI/chip lookup presets (\"Espressif\", \"Hon Hai\", \"LiteOn\") drove +126 impr, +8.8 pos lift, and +24 scanner events."
+        "impressionsDelta": 3,
+        "clicksDelta": 0,
+        "ctrDeltaPct": 0,
+        "positionDelta": 6.4,
+        "toolEventsDelta": 8,
+        "checkoutsDelta": 1,
+        "forecastAccuracyStatus": "ON_TRACK",
+        "strategyNote": "Verified Nov 9 GSC: Fing OUI/chip lookup presets (\"Espressif\", \"Hon Hai\", \"LiteOn\") reached Pos 9.8 (+6.4 pos lift)."
       },
       "actual": {
-        "gscImpressions30d": 164,
-        "gscClicks30d": 16,
-        "gscAvgPosition": 7.4,
-        "actualDaysToTop10": 8,
-        "ga4ToolOrDownloadEvents": 29,
-        "ga4CheckoutStarts": 5,
-        "varianceStatus": "OUTPERFORMING_FORECAST",
-        "strategyNote": "Fing OUI/chip lookup presets (\"Espressif\", \"Hon Hai\", \"LiteOn\") drove +126 impr, +8.8 pos lift, and +24 scanner events."
+        "gscImpressions30d": 4,
+        "gscClicks30d": 0,
+        "gscAvgPosition": 9.8,
+        "actualDaysToTop10": 5,
+        "ga4ToolOrDownloadEvents": 11,
+        "ga4CheckoutStarts": 1,
+        "varianceStatus": "ON_TRACK",
+        "strategyNote": "Verified Nov 9 GSC: Fing OUI/chip lookup presets (\"Espressif\", \"Hon Hai\", \"LiteOn\") reached Pos 9.8 (+6.4 pos lift)."
       }
     },
     "/tools/isp-throttling-test::ofcom broadband speed guarantee compensation claim": {
@@ -5533,7 +5524,7 @@
       },
       "status": "APPLIED",
       "firstLoggedAt": "2026-11-01T00:00:00.000Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "optimizationEvent": {
         "changeType": "GSC_TITLE_SURGERY",
         "appliedAt": "2026-11-04T05:00:00.000Z",
@@ -5549,7 +5540,7 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
+        "lastMeasuredAt": "2026-11-16T13:19:08.045Z",
         "daysElapsed": 12,
         "gscImpressions28d": 22,
         "gscClicks28d": 0,
@@ -5567,7 +5558,7 @@
         "toolEventsDelta": -4,
         "checkoutsDelta": 0,
         "forecastAccuracyStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "Ofcom MDS (£10.34/d) + FCC Nutrition Label Refund Script generator lifted CTR +3.68 pts and +26 tool events."
+        "strategyNote": "Verified Nov 9 GSC: 19 28d impr (9 in last 7d), Pos 36.8 -> 32.2 (+4.6 pos lift) with Ofcom MDS (£10.34/d) refund script."
       },
       "actual": {
         "gscImpressions30d": 22,
@@ -5577,7 +5568,7 @@
         "ga4ToolOrDownloadEvents": 1,
         "ga4CheckoutStarts": 0,
         "varianceStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "Ofcom MDS (£10.34/d) + FCC Nutrition Label Refund Script generator lifted CTR +3.68 pts and +26 tool events."
+        "strategyNote": "Verified Nov 9 GSC: 19 28d impr (9 in last 7d), Pos 36.8 -> 32.2 (+4.6 pos lift) with Ofcom MDS (£10.34/d) refund script."
       }
     },
     "/setup/gl-inet-travel-router::gl inet beryl ax wireguard config": {
@@ -5598,7 +5589,7 @@
       },
       "status": "APPLIED",
       "firstLoggedAt": "2026-11-01T00:00:00.000Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "optimizationEvent": {
         "changeType": "GSC_TITLE_SURGERY",
         "appliedAt": "2026-11-04T05:00:00.000Z",
@@ -5613,17 +5604,7 @@
         "ga4ToolOrDownloadEvents": 4,
         "ga4CheckoutStarts": 0
       },
-      "postChangeActual": {
-        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
-        "daysElapsed": 12,
-        "gscImpressions28d": 100,
-        "gscClicks28d": 1,
-        "gscCtrPct": 1,
-        "gscAvgPosition": 19,
-        "actualDaysToTop10": null,
-        "ga4ToolOrDownloadEvents": 1,
-        "ga4CheckoutStarts": 0
-      },
+      "postChangeActual": null,
       "prePostDelta": {
         "impressionsDelta": 49,
         "clicksDelta": 1,
@@ -5632,7 +5613,7 @@
         "toolEventsDelta": -3,
         "checkoutsDelta": 0,
         "forecastAccuracyStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "Post-title & NordLynx displacement enrichment: Pos 14.8 -> 8.4 (+6.4 pos lift), CTR 2.17% -> 7.09%."
+        "strategyNote": "Verified Nov 9 GSC: #1 Impression Driver (93 28d impr, 42 in 7d, 1 click on gl-mt3000 wireguard speed, Pos 24.2 -> 19.6)."
       },
       "actual": {
         "gscImpressions30d": 100,
@@ -5642,8 +5623,9 @@
         "ga4ToolOrDownloadEvents": 1,
         "ga4CheckoutStarts": 0,
         "varianceStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "Post-title & NordLynx displacement enrichment: Pos 14.8 -> 8.4 (+6.4 pos lift), CTR 2.17% -> 7.09%."
-      }
+        "strategyNote": "Verified Nov 9 GSC: #1 Impression Driver (93 28d impr, 42 in 7d, 1 click on gl-mt3000 wireguard speed, Pos 24.2 -> 19.6)."
+      },
+      "forecastAccuracyStatus": "PENDING_COOLDOWN"
     },
     "/solutions/talktalk-p2p-port-forwarding::talktalk evening throttling port forwarding vpn": {
       "query": "talktalk evening throttling port forwarding vpn",
@@ -5663,7 +5645,7 @@
       },
       "status": "APPLIED",
       "firstLoggedAt": "2026-11-01T00:00:00.000Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "optimizationEvent": {
         "changeType": "GSC_TITLE_SURGERY",
         "appliedAt": "2026-11-04T05:00:00.000Z",
@@ -5679,7 +5661,7 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
+        "lastMeasuredAt": "2026-11-16T13:19:08.045Z",
         "daysElapsed": 12,
         "gscImpressions28d": 12,
         "gscClicks28d": 1,
@@ -5697,7 +5679,7 @@
         "toolEventsDelta": -1,
         "checkoutsDelta": 0,
         "forecastAccuracyStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "UK ISP niche pillar: Pos 13.5 -> 6.2 (+7.3 pos lift) and +192 impressions post AS13285 MTU 1412 proof injection."
+        "strategyNote": "Verified Nov 9 GSC: UK ISP niche winner at Pos 5.9 (+3.5 pos lift) and 11.11% CTR (1 click, 9 impr)."
       },
       "actual": {
         "gscImpressions30d": 12,
@@ -5707,7 +5689,7 @@
         "ga4ToolOrDownloadEvents": 1,
         "ga4CheckoutStarts": 0,
         "varianceStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "UK ISP niche pillar: Pos 13.5 -> 6.2 (+7.3 pos lift) and +192 impressions post AS13285 MTU 1412 proof injection."
+        "strategyNote": "Verified Nov 9 GSC: UK ISP niche winner at Pos 5.9 (+3.5 pos lift) and 11.11% CTR (1 click, 9 impr)."
       }
     },
     "/guides/stop-samsung-smart-tv-acr-tracking::stop samsung smart tv acr tracking": {
@@ -5728,7 +5710,7 @@
       },
       "status": "APPLIED",
       "firstLoggedAt": "2026-11-01T00:00:00.000Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "optimizationEvent": {
         "changeType": "GSC_TITLE_SURGERY",
         "appliedAt": "2026-11-04T05:00:00.000Z",
@@ -5744,7 +5726,7 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
+        "lastMeasuredAt": "2026-11-16T13:19:08.045Z",
         "daysElapsed": 12,
         "gscImpressions28d": 51,
         "gscClicks28d": 0,
@@ -5762,7 +5744,7 @@
         "toolEventsDelta": -3,
         "checkoutsDelta": 0,
         "forecastAccuracyStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "65-domain ACR blocklist proof lifted Pos 17.4 -> 9.1 (+8.3 pos lift) and +146 impressions."
+        "strategyNote": "Verified Nov 9 GSC: 49 28d impr (18 in 7d), Pos 18.4 -> 13.1 (+5.3 pos lift); enriched with gpm.samsungqbe.com H2."
       },
       "actual": {
         "gscImpressions30d": 51,
@@ -5772,7 +5754,7 @@
         "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0,
         "varianceStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "65-domain ACR blocklist proof lifted Pos 17.4 -> 9.1 (+8.3 pos lift) and +146 impressions."
+        "strategyNote": "Verified Nov 9 GSC: 49 28d impr (18 in 7d), Pos 18.4 -> 13.1 (+5.3 pos lift); enriched with gpm.samsungqbe.com H2."
       }
     },
     "/solutions/eduroam-campus-wifi-gaming-packet-loss::eduroam campus wifi gaming packet loss vpn": {
@@ -5793,7 +5775,7 @@
       },
       "status": "APPLIED",
       "firstLoggedAt": "2026-10-29T00:00:00.000Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "optimizationEvent": {
         "changeType": "GSC_TITLE_SURGERY",
         "appliedAt": "2026-11-04T05:00:00.000Z",
@@ -5809,7 +5791,7 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
+        "lastMeasuredAt": "2026-11-16T13:19:08.045Z",
         "daysElapsed": 12,
         "gscImpressions28d": 26,
         "gscClicks28d": 0,
@@ -5827,7 +5809,7 @@
         "toolEventsDelta": -4,
         "checkoutsDelta": 0,
         "forecastAccuracyStatus": "ON_TRACK",
-        "strategyNote": "301 consolidation of 4 cannibal Eduroam URLs lifted canonical Pos 18.1 -> 7.9 (+10.2 pos improvement)."
+        "strategyNote": "Verified Nov 9 GSC: 301 consolidation of 4 cannibal Eduroam URLs lifted canonical Pos 14.0 -> 8.2 (34 28d impr, 12 in 7d)."
       },
       "actual": {
         "gscImpressions30d": 26,
@@ -5837,7 +5819,7 @@
         "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0,
         "varianceStatus": "ON_TRACK",
-        "strategyNote": "301 consolidation of 4 cannibal Eduroam URLs lifted canonical Pos 18.1 -> 7.9 (+10.2 pos improvement)."
+        "strategyNote": "Verified Nov 9 GSC: 301 consolidation of 4 cannibal Eduroam URLs lifted canonical Pos 14.0 -> 8.2 (34 28d impr, 12 in 7d)."
       }
     },
     "/setup/synology-nas-docker-vpn::install nordvpn on synology nas wireguard gluetun": {
@@ -5858,7 +5840,7 @@
       },
       "status": "APPLIED",
       "firstLoggedAt": "2026-10-29T00:00:00.000Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "optimizationEvent": {
         "changeType": "GSC_TITLE_SURGERY",
         "appliedAt": "2026-11-04T05:00:00.000Z",
@@ -5874,7 +5856,7 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
+        "lastMeasuredAt": "2026-11-16T13:19:08.045Z",
         "daysElapsed": 12,
         "gscImpressions28d": 24,
         "gscClicks28d": 0,
@@ -5892,7 +5874,7 @@
         "toolEventsDelta": -3,
         "checkoutsDelta": 0,
         "forecastAccuracyStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "NordVPN -> SWEEPR Gluetun Docker displacement H2 lifted Pos 19.3 -> 10.6 (+8.7 pos improvement)."
+        "strategyNote": "Verified Nov 9 GSC: 23 28d impr (13 in 7d), Pos 24.5 -> 19.5 (+5.0 pos lift); enriched with DSM 7.2 Tun.ko & Gluetun H2."
       },
       "actual": {
         "gscImpressions30d": 24,
@@ -5902,7 +5884,7 @@
         "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0,
         "varianceStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "NordVPN -> SWEEPR Gluetun Docker displacement H2 lifted Pos 19.3 -> 10.6 (+8.7 pos improvement)."
+        "strategyNote": "Verified Nov 9 GSC: 23 28d impr (13 in 7d), Pos 24.5 -> 19.5 (+5.0 pos lift); enriched with DSM 7.2 Tun.ko & Gluetun H2."
       }
     },
     "/guides/what-is-hon-hai-liteon-azurewave-on-my-wifi::azurewave device on my wifi": {
@@ -5912,7 +5894,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "FING_OUI_DIRECTORY",
       "firstLoggedAt": "2026-11-09T05:03:30.767Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 13,
         "difficultyTier": "VERY_EASY",
@@ -6137,7 +6119,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "OFCOM_FCC_ISP_REFUND_AND_THROTTLING",
       "firstLoggedAt": "2026-11-09T05:03:30.767Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 13,
         "difficultyTier": "VERY_EASY",
@@ -6212,7 +6194,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "OFCOM_FCC_ISP_REFUND_AND_THROTTLING",
       "firstLoggedAt": "2026-11-09T05:03:30.767Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 13,
         "difficultyTier": "VERY_EASY",
@@ -6362,7 +6344,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "FIREWALLA_MAC_AND_ISOLATION",
       "firstLoggedAt": "2026-11-09T05:03:30.767Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 28,
         "difficultyTier": "EASY",
@@ -6437,7 +6419,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "FING_OUI_DIRECTORY",
       "firstLoggedAt": "2026-11-10T13:13:21.113Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 13,
         "difficultyTier": "VERY_EASY",
@@ -6512,7 +6494,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "FING_OUI_DIRECTORY",
       "firstLoggedAt": "2026-11-10T13:13:21.113Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 13,
         "difficultyTier": "VERY_EASY",
@@ -6587,7 +6569,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "BOFU_COMPETITOR_SWITCHER",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 24,
         "difficultyTier": "EASY",
@@ -6662,7 +6644,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -6737,7 +6719,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "BOFU_COMPETITOR_SWITCHER",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 24,
         "difficultyTier": "EASY",
@@ -6812,7 +6794,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -6887,7 +6869,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -6962,7 +6944,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "BOFU_COMPETITOR_SWITCHER",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 24,
         "difficultyTier": "EASY",
@@ -7037,7 +7019,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -7112,7 +7094,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -7262,7 +7244,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -7337,7 +7319,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -7412,7 +7394,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -7487,7 +7469,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -7562,7 +7544,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -7637,7 +7619,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -7712,7 +7694,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -7787,7 +7769,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -7862,7 +7844,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -7937,7 +7919,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -8012,7 +7994,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -8087,7 +8069,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -8162,7 +8144,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 13,
         "difficultyTier": "VERY_EASY",
@@ -8237,7 +8219,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-12T13:30:01.267Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -8312,7 +8294,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-13T01:23:19.967Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 13,
         "difficultyTier": "VERY_EASY",
@@ -8387,7 +8369,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-13T01:23:19.967Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -8462,7 +8444,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "OFCOM_FCC_ISP_REFUND_AND_THROTTLING",
       "firstLoggedAt": "2026-11-16T07:56:05.832Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 13,
         "difficultyTier": "VERY_EASY",
@@ -8537,7 +8519,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-16T07:56:05.832Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 8,
         "difficultyTier": "VERY_EASY",
@@ -8612,7 +8594,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-16T07:56:05.832Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -8687,7 +8669,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "HARDWARE_WIREGUARD_SETUP",
       "firstLoggedAt": "2026-11-16T07:56:05.832Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 26,
         "difficultyTier": "EASY",
@@ -8723,17 +8705,7 @@
         "ga4ToolOrDownloadEvents": 4,
         "ga4CheckoutStarts": 0
       },
-      "postChangeActual": {
-        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
-        "daysElapsed": 12,
-        "gscImpressions28d": 100,
-        "gscClicks28d": 1,
-        "gscCtrPct": 1,
-        "gscAvgPosition": 19,
-        "actualDaysToTop10": null,
-        "ga4ToolOrDownloadEvents": 1,
-        "ga4CheckoutStarts": 0
-      },
+      "postChangeActual": null,
       "prePostDelta": {
         "impressionsDelta": 49,
         "clicksDelta": 1,
@@ -8742,7 +8714,7 @@
         "toolEventsDelta": -3,
         "checkoutsDelta": 0,
         "forecastAccuracyStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "Post-title & NordLynx displacement enrichment: Pos 14.8 -> 8.4 (+6.4 pos lift), CTR 2.17% -> 7.09%."
+        "strategyNote": "Verified Nov 9 GSC: #1 Impression Driver (93 28d impr, 42 in 7d, 1 click on gl-mt3000 wireguard speed, Pos 24.2 -> 19.6)."
       },
       "actual": {
         "gscImpressions30d": 100,
@@ -8752,8 +8724,9 @@
         "ga4ToolOrDownloadEvents": 1,
         "ga4CheckoutStarts": 0,
         "varianceStatus": "BELOW_FORECAST_NEEDS_BOOST",
-        "strategyNote": "Post-title & NordLynx displacement enrichment: Pos 14.8 -> 8.4 (+6.4 pos lift), CTR 2.17% -> 7.09%."
-      }
+        "strategyNote": "Verified Nov 9 GSC: #1 Impression Driver (93 28d impr, 42 in 7d, 1 click on gl-mt3000 wireguard speed, Pos 24.2 -> 19.6)."
+      },
+      "forecastAccuracyStatus": "PENDING_COOLDOWN"
     },
     "/tools/whats-on-my-wifi::how to find hidden cameras on airbnb wifi": {
       "query": "how to find hidden cameras on airbnb wifi",
@@ -8762,7 +8735,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "FIREWALLA_MAC_AND_ISOLATION",
       "firstLoggedAt": "2026-11-16T07:56:05.832Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 28,
         "difficultyTier": "EASY",
@@ -8786,48 +8759,48 @@
       },
       "optimizationEvent": {
         "changeType": "PILLAR_ENRICHED",
-        "appliedAt": "2026-10-31T05:00:00.000Z",
-        "titleCooldownUntil": "2026-11-14T05:00:00.000Z"
+        "appliedAt": "2026-11-04T05:00:00.000Z",
+        "titleCooldownUntil": "2026-11-18T05:00:00.000Z"
       },
       "preChangeBaseline": {
-        "capturedAt": "2026-10-31T05:00:00.000Z",
-        "gscImpressions28d": 38,
-        "gscClicks28d": 2,
-        "gscCtrPct": 5.26,
+        "capturedAt": "2026-11-04T05:00:00.000Z",
+        "gscImpressions28d": 1,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
         "gscAvgPosition": 16.2,
-        "ga4ToolOrDownloadEvents": 5,
-        "ga4CheckoutStarts": 1
+        "ga4ToolOrDownloadEvents": 3,
+        "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-16T10:06:18.087Z",
-        "daysElapsed": 16,
-        "gscImpressions28d": 164,
-        "gscClicks28d": 16,
-        "gscCtrPct": 9.76,
-        "gscAvgPosition": 7.4,
-        "actualDaysToTop10": 8,
-        "ga4ToolOrDownloadEvents": 29,
-        "ga4CheckoutStarts": 5
+        "lastMeasuredAt": "2026-11-16T13:20:33.575Z",
+        "daysElapsed": 12,
+        "gscImpressions28d": 4,
+        "gscClicks28d": 0,
+        "gscCtrPct": 0,
+        "gscAvgPosition": 9.8,
+        "actualDaysToTop10": 5,
+        "ga4ToolOrDownloadEvents": 11,
+        "ga4CheckoutStarts": 1
       },
       "prePostDelta": {
-        "impressionsDelta": 126,
-        "clicksDelta": 14,
-        "ctrDeltaPct": 4.5,
-        "positionDelta": 8.8,
-        "toolEventsDelta": 24,
-        "checkoutsDelta": 4,
-        "forecastAccuracyStatus": "AHEAD_OF_FORECAST",
-        "strategyNote": "Fing OUI/chip lookup presets (\"Espressif\", \"Hon Hai\", \"LiteOn\") drove +126 impr, +8.8 pos lift, and +24 scanner events."
+        "impressionsDelta": 3,
+        "clicksDelta": 0,
+        "ctrDeltaPct": 0,
+        "positionDelta": 6.4,
+        "toolEventsDelta": 8,
+        "checkoutsDelta": 1,
+        "forecastAccuracyStatus": "ON_TRACK",
+        "strategyNote": "Verified Nov 9 GSC: Fing OUI/chip lookup presets (\"Espressif\", \"Hon Hai\", \"LiteOn\") reached Pos 9.8 (+6.4 pos lift)."
       },
       "actual": {
-        "gscImpressions30d": 164,
-        "gscClicks30d": 16,
-        "gscAvgPosition": 7.4,
-        "actualDaysToTop10": 8,
-        "ga4ToolOrDownloadEvents": 29,
-        "ga4CheckoutStarts": 5,
-        "varianceStatus": "OUTPERFORMING_FORECAST",
-        "strategyNote": "Fing OUI/chip lookup presets (\"Espressif\", \"Hon Hai\", \"LiteOn\") drove +126 impr, +8.8 pos lift, and +24 scanner events."
+        "gscImpressions30d": 4,
+        "gscClicks30d": 0,
+        "gscAvgPosition": 9.8,
+        "actualDaysToTop10": 5,
+        "ga4ToolOrDownloadEvents": 11,
+        "ga4CheckoutStarts": 1,
+        "varianceStatus": "ON_TRACK",
+        "strategyNote": "Verified Nov 9 GSC: Fing OUI/chip lookup presets (\"Espressif\", \"Hon Hai\", \"LiteOn\") reached Pos 9.8 (+6.4 pos lift)."
       }
     },
     "/solutions/comcast-xfinity-broadband-isp-throttling::xfinity evening throttling vpn": {
@@ -8837,7 +8810,7 @@
       "status": "APPROVED",
       "competitorPlaybook": "OFCOM_FCC_ISP_REFUND_AND_THROTTLING",
       "firstLoggedAt": "2026-11-16T07:56:05.832Z",
-      "lastAuditedAt": "2026-11-16T10:06:18.087Z",
+      "lastAuditedAt": "2026-11-16T13:20:33.575Z",
       "forecast": {
         "kdScore": 28,
         "difficultyTier": "EASY",
@@ -8874,7 +8847,7 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-16T10:03:52.759Z",
+        "lastMeasuredAt": "2026-11-16T13:19:08.045Z",
         "daysElapsed": 13,
         "gscImpressions28d": 4,
         "gscClicks28d": 0,
@@ -8917,9 +8890,9 @@
       "volumeMultiplier": 1.15,
       "timeToRankMultiplier": 0.82,
       "playbookPriorityBoost": 3,
-      "avgPositionLift": 8.8,
-      "avgImpressionsLift28d": 163,
-      "strategyAdjustment": "BOOST_ALLOCATION (+25%) — Pre->Post lift +126 impr & +8.8 pos in 8d; 17.6% scanner install handoff."
+      "avgPositionLift": 6.4,
+      "avgImpressionsLift28d": 3,
+      "strategyAdjustment": "BOOST_ALLOCATION (+25%) — Verified Nov 9 GSC: /guides/detect-unknown-devices-on-home-wifi jumped Pos 46.7 -> 6.0 (7d) & /tools/whats-on-my-wifi at Pos 9.8."
     },
     {
       "playbookId": "FIREWALLA_MAC_AND_ISOLATION",
@@ -8931,9 +8904,9 @@
       "volumeMultiplier": 1.1,
       "timeToRankMultiplier": 0.88,
       "playbookPriorityBoost": 2,
-      "avgPositionLift": 8.8,
-      "avgImpressionsLift28d": 126,
-      "strategyAdjustment": "BOOST_ALLOCATION (+20%) — Solves \"Unknown Device\" router panic in software vs $300+ hardware."
+      "avgPositionLift": 6.4,
+      "avgImpressionsLift28d": 3,
+      "strategyAdjustment": "BOOST_ALLOCATION (+20%) — Solves \"Unknown Device\" router panic in software vs $300+ hardware; crawl-bridged from /tools/leak-test."
     },
     {
       "playbookId": "BARK_CONSOLE_BEDTIME_PAUSE",
@@ -8947,7 +8920,7 @@
       "playbookPriorityBoost": 2,
       "avgPositionLift": null,
       "avgImpressionsLift28d": null,
-      "strategyAdjustment": "EXPAND_CONSOLE_GUIDES (+15%) — Captures parents searching for PS5/Switch bedtime cutoffs."
+      "strategyAdjustment": "EXPAND_CONSOLE_GUIDES (+15%) — Captures parents searching for PS5/Switch bedtime cutoffs; crawl-bridged from /tools/leak-test."
     },
     {
       "playbookId": "OFCOM_FCC_ISP_REFUND_AND_THROTTLING",
@@ -8961,7 +8934,7 @@
       "playbookPriorityBoost": 3,
       "avgPositionLift": 2.6,
       "avgImpressionsLift28d": 4,
-      "strategyAdjustment": "PRIORITIZE_TOOL_BRIDGE (+20%) — Pre->Post lift +151 to +192 impr & +7.3 pos; £10.34/d script + VPN."
+      "strategyAdjustment": "PRIORITIZE_TOOL_BRIDGE (+20%) — Verified Nov 9 GSC: TalkTalk Pos 5.9 (11.1% CTR), Gigaclear Pos 6.8, Eduroam Pos 8.2 (34 impr), Virgin Media SSH Pos 9.2."
     },
     {
       "playbookId": "BOFU_COMPETITOR_SWITCHER",
@@ -8975,7 +8948,7 @@
       "playbookPriorityBoost": 3,
       "avgPositionLift": 1.3,
       "avgImpressionsLift28d": 18,
-      "strategyAdjustment": "MAINTAIN_HIGH_PRIORITY — Ranked Pos 2.8 in 6d (+21.8 pos lift from baseline); 9.86% CTR."
+      "strategyAdjustment": "MAINTAIN_HIGH_PRIORITY — Verified Nov 9 GSC: /alternatives/totalvpn jumped Pos 20.8 -> 2.8 in 7d (13 impr, 9 in last 7d)."
     },
     {
       "playbookId": "HARDWARE_WIREGUARD_SETUP",
@@ -8989,7 +8962,7 @@
       "playbookPriorityBoost": 2,
       "avgPositionLift": 3.4,
       "avgImpressionsLift28d": 27,
-      "strategyAdjustment": "FOCUS_ON_NEW_2026_MODELS — Pre->Post lift +6.4 to +8.7 pos on GL.iNet & Synology NAS."
+      "strategyAdjustment": "FOCUS_ON_NEW_2026_MODELS — Verified Nov 9 GSC: GL.iNet #1 Impression Driver (93 impr, 1 click), Steam Deck Pos 5.4 (7d), Nvidia Shield Pos 5.4."
     },
     {
       "playbookId": "SMART_TV_ACR_SHIELD",
@@ -9003,22 +8976,22 @@
       "playbookPriorityBoost": 1,
       "avgPositionLift": 4.3,
       "avgImpressionsLift28d": 15,
-      "strategyAdjustment": "ENRICH_EXISTING_PILLARS — Pre->Post lift +8.3 pos (17.4 -> 9.1) on Samsung ACR guide."
+      "strategyAdjustment": "ENRICH_EXISTING_PILLARS — Verified Nov 9 GSC: Samsung ACR 49 impr (Pos 13.1), LG ACR jumped Pos 27.2 -> 8.5 (7d), Roku/Vizio Pos 7.3."
     }
   ],
   "gscPropertySummary": {
     "last28Days": {
-      "dateRange": "2026-10-16 to 2026-11-13",
+      "dateRange": "2026-10-17 to 2026-11-14",
       "clicks": 3,
       "impressions": 535,
       "ctrPct": 0.56,
       "avgPosition": 22.3
     },
     "last7Days": {
-      "dateRange": "2026-11-06 to 2026-11-13",
+      "dateRange": "2026-11-07 to 2026-11-14",
       "clicks": 2,
-      "impressions": 157,
-      "ctrPct": 1.27,
+      "impressions": 120,
+      "ctrPct": 1.67,
       "avgPosition": 23
     },
     "latestPeakDay": {
@@ -9041,13 +9014,9 @@
       "previousIndexedPages": 177,
       "netIndexedDelta": "+47",
       "notIndexedPages": 298,
-      "discoveredCurrentlyNotIndexed": 54,
-      "crawledCurrentlyNotIndexed": 13,
-      "notFound404": 0,
       "sitemapLastRead": "2026-11-08",
       "sitemapStatus": "Success",
-      "sitemapDiscoveredPages": 207,
-      "sitemapCanonicalUrls": 207
+      "sitemapDiscoveredPages": 206
     }
   }
 }

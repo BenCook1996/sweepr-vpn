@@ -34835,7 +34835,7 @@
     "dailyNewPillarCap": 2
   },
   "auditSummary": {
-    "auditedAt": "2026-11-16T10:06:18.113Z",
+    "auditedAt": "2026-11-16T13:20:33.578Z",
     "assertionsPassed": "10/10 PASS",
     "autoRepairsApplied": 0,
     "repairLog": []
@@ -34850,16 +34850,16 @@
         "timeToRankMultiplier": 0.82,
         "playbookPriorityBoost": 3,
         "measuredSampleSize": 2,
-        "avgPositionLift": 8.8,
-        "avgImpressionsLift28d": 163
+        "avgPositionLift": 6.4,
+        "avgImpressionsLift28d": 3
       },
       "FIREWALLA_MAC_AND_ISOLATION": {
         "volumeMultiplier": 1.1,
         "timeToRankMultiplier": 0.88,
         "playbookPriorityBoost": 2,
         "measuredSampleSize": 1,
-        "avgPositionLift": 8.8,
-        "avgImpressionsLift28d": 126
+        "avgPositionLift": 6.4,
+        "avgImpressionsLift28d": 3
       },
       "BARK_CONSOLE_BEDTIME_PAUSE": {
         "volumeMultiplier": 1.08,
@@ -34913,9 +34913,9 @@
         "volumeMultiplier": 1.15,
         "timeToRankMultiplier": 0.82,
         "playbookPriorityBoost": 3,
-        "avgPositionLift": 8.8,
-        "avgImpressionsLift28d": 163,
-        "strategyAdjustment": "BOOST_ALLOCATION (+25%) — Pre->Post lift +126 impr & +8.8 pos in 8d; 17.6% scanner install handoff."
+        "avgPositionLift": 6.4,
+        "avgImpressionsLift28d": 3,
+        "strategyAdjustment": "BOOST_ALLOCATION (+25%) — Verified Nov 9 GSC: /guides/detect-unknown-devices-on-home-wifi jumped Pos 46.7 -> 6.0 (7d) & /tools/whats-on-my-wifi at Pos 9.8."
       },
       {
         "playbookId": "FIREWALLA_MAC_AND_ISOLATION",
@@ -34927,9 +34927,9 @@
         "volumeMultiplier": 1.1,
         "timeToRankMultiplier": 0.88,
         "playbookPriorityBoost": 2,
-        "avgPositionLift": 8.8,
-        "avgImpressionsLift28d": 126,
-        "strategyAdjustment": "BOOST_ALLOCATION (+20%) — Solves \"Unknown Device\" router panic in software vs $300+ hardware."
+        "avgPositionLift": 6.4,
+        "avgImpressionsLift28d": 3,
+        "strategyAdjustment": "BOOST_ALLOCATION (+20%) — Solves \"Unknown Device\" router panic in software vs $300+ hardware; crawl-bridged from /tools/leak-test."
       },
       {
         "playbookId": "BARK_CONSOLE_BEDTIME_PAUSE",
@@ -34943,7 +34943,7 @@
         "playbookPriorityBoost": 2,
         "avgPositionLift": null,
         "avgImpressionsLift28d": null,
-        "strategyAdjustment": "EXPAND_CONSOLE_GUIDES (+15%) — Captures parents searching for PS5/Switch bedtime cutoffs."
+        "strategyAdjustment": "EXPAND_CONSOLE_GUIDES (+15%) — Captures parents searching for PS5/Switch bedtime cutoffs; crawl-bridged from /tools/leak-test."
       },
       {
         "playbookId": "OFCOM_FCC_ISP_REFUND_AND_THROTTLING",
@@ -34957,7 +34957,7 @@
         "playbookPriorityBoost": 3,
         "avgPositionLift": 2.6,
         "avgImpressionsLift28d": 4,
-        "strategyAdjustment": "PRIORITIZE_TOOL_BRIDGE (+20%) — Pre->Post lift +151 to +192 impr & +7.3 pos; £10.34/d script + VPN."
+        "strategyAdjustment": "PRIORITIZE_TOOL_BRIDGE (+20%) — Verified Nov 9 GSC: TalkTalk Pos 5.9 (11.1% CTR), Gigaclear Pos 6.8, Eduroam Pos 8.2 (34 impr), Virgin Media SSH Pos 9.2."
       },
       {
         "playbookId": "BOFU_COMPETITOR_SWITCHER",
@@ -34971,7 +34971,7 @@
         "playbookPriorityBoost": 3,
         "avgPositionLift": 1.3,
         "avgImpressionsLift28d": 18,
-        "strategyAdjustment": "MAINTAIN_HIGH_PRIORITY — Ranked Pos 2.8 in 6d (+21.8 pos lift from baseline); 9.86% CTR."
+        "strategyAdjustment": "MAINTAIN_HIGH_PRIORITY — Verified Nov 9 GSC: /alternatives/totalvpn jumped Pos 20.8 -> 2.8 in 7d (13 impr, 9 in last 7d)."
       },
       {
         "playbookId": "HARDWARE_WIREGUARD_SETUP",
@@ -34985,7 +34985,7 @@
         "playbookPriorityBoost": 2,
         "avgPositionLift": 3.4,
         "avgImpressionsLift28d": 27,
-        "strategyAdjustment": "FOCUS_ON_NEW_2026_MODELS — Pre->Post lift +6.4 to +8.7 pos on GL.iNet & Synology NAS."
+        "strategyAdjustment": "FOCUS_ON_NEW_2026_MODELS — Verified Nov 9 GSC: GL.iNet #1 Impression Driver (93 impr, 1 click), Steam Deck Pos 5.4 (7d), Nvidia Shield Pos 5.4."
       },
       {
         "playbookId": "SMART_TV_ACR_SHIELD",
@@ -34999,7 +34999,7 @@
         "playbookPriorityBoost": 1,
         "avgPositionLift": 4.3,
         "avgImpressionsLift28d": 15,
-        "strategyAdjustment": "ENRICH_EXISTING_PILLARS — Pre->Post lift +8.3 pos (17.4 -> 9.1) on Samsung ACR guide."
+        "strategyAdjustment": "ENRICH_EXISTING_PILLARS — Verified Nov 9 GSC: Samsung ACR 49 impr (Pos 13.1), LG ACR jumped Pos 27.2 -> 8.5 (7d), Roku/Vizio Pos 7.3."
       }
     ]
   }

@@ -921,7 +921,7 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 ### Executive Summary
 - **Overall Scores**: Crawlability **100/100**, Technical SEO **100/100**, PageSpeed & CWV **100/100** across **83 Canonical Pages**.
 - **Auto-Optimizations Executed**:
-  - Synchronized sitemap.xml with 84 canonical URLs (content-hash <lastmod>: 0 modified today)
+  - Synchronized sitemap.xml with 84 canonical URLs (content-hash <lastmod>: 2 modified today)
   - Synchronized llms.txt & llms-full.txt with all 62 pSEO guides and live 04:00 AM WireGuard/ACR telemetry for GEO AI citations
 
 ### Category Scorecards & Verifications
@@ -929,7 +929,7 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 #### 1. Crawlability & Indexability (100/100)
 - **Sitemap Completeness & Content-Hash Freshness**: PASS — 84 canonical URLs registered (0 thin/duplicate variants consolidated via 301/noindex)
 - **GEO / LLM Discovery Manifests (llms.txt & llms-full.txt)**: PASS — Updated both manifests with 83 canonical URLs and live WireGuard/ACR proof
-- **Search Engine Indexing Queue (Delta-Only)**: PASS — 16 un-pinged/modified delta URLs queued (out of 83 total canonical URLs)
+- **Search Engine Indexing Queue (Delta-Only)**: PASS — 19 un-pinged/modified delta URLs queued (out of 83 total canonical URLs)
 - **robots.txt Sitemap Directive**: PASS — Valid sitemap directive points to https://sweeprvpn.com/sitemap.xml
 - **robots.txt AI Crawler Allowances (GEO)**: PASS — All 7 major AI search bots explicitly permitted
 - **robots.txt Crawl-Budget Protections**: PASS — Internal APIs, user portals, qr-setup and CRO studios disallowed
@@ -969,7 +969,7 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 - **Static Cache-Control Architecture**: PASS — Explicit caching headers configured for HTML (0s), static media (300s/3600s), and XML/TXT (3600s/86400s)
 
 ### Compression Benchmark Results
-- **order.html** (130.1 KB raw) &rarr; Gzip: **29.4 KB** (77% reduction) | Brotli: **27.2 KB** (79% reduction)
-- **index.html** (66.6 KB raw) &rarr; Gzip: **14.2 KB** (79% reduction) | Brotli: **13.2 KB** (80% reduction)
-- **sitemap.xml** (15.2 KB raw) &rarr; Gzip: **1.3 KB** (91% reduction) | Brotli: **1.3 KB** (92% reduction)
+- **order.html** (127.7 KB raw) &rarr; Gzip: **29.3 KB** (77% reduction) | Brotli: **27.1 KB** (79% reduction)
+- **index.html** (65.7 KB raw) &rarr; Gzip: **14.2 KB** (78% reduction) | Brotli: **13.2 KB** (80% reduction)
+- **sitemap.xml** (15.2 KB raw) &rarr; Gzip: **1.4 KB** (91% reduction) | Brotli: **1.3 KB** (92% reduction)
 
