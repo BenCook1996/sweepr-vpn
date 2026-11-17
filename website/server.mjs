@@ -3268,7 +3268,7 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
   </script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://sweeprvpn.com/"},{"@type":"ListItem","position":2,"name":"Download SWEEPR VPN","item":"https://sweeprvpn.com/download"}]}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"SWEEPR VPN","operatingSystem":"Windows 10, Windows 11, macOS, Linux, iOS, Android, OpenWrt","applicationCategory":"SecurityApplication","downloadUrl":"https://sweeprvpn.com/SWEEPRVPN.exe","fileSize":"680KB","offers":{"@type":"AggregateOffer","priceCurrency":"GBP","lowPrice":"1.99","highPrice":"74.99","offerCount":"3"},"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","ratingCount":"8420","bestRating":"5","worstRating":"1"}}</script>
-  <script src="https://cdn.tailwindcss.com/3.4.5"></script>
+  <link rel="stylesheet" href="/tailwind.min.css?v=1">
   <link rel="stylesheet" href="/style.css">
   <script src="/pricing-config.js?v=3" defer></script>
   <script src="/nav.js" defer></script>
@@ -3410,7 +3410,7 @@ function renderCheckoutSuccessPage(acc, isCancelled = false, isPopup = false) {
   <link rel="icon" type="image/svg+xml" href="/logo-emerald.svg?v=5">
   <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png?v=5">
   <link rel="shortcut icon" href="/favicon.ico?v=5">
-  <script src="https://cdn.tailwindcss.com/3.4.5"></script>
+  <link rel="stylesheet" href="/tailwind.min.css?v=1">
   ${
     isPopup
       ? `<script>
@@ -3465,7 +3465,7 @@ function renderCheckoutSuccessPage(acc, isCancelled = false, isPopup = false) {
   <link rel="icon" type="image/svg+xml" href="/logo-emerald.svg?v=5">
   <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png?v=5">
   <link rel="shortcut icon" href="/favicon.ico?v=5">
-  <script src="https://cdn.tailwindcss.com/3.4.5"></script>
+  <link rel="stylesheet" href="/tailwind.min.css?v=1">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
   <script>
     window.dataLayer = window.dataLayer || [];

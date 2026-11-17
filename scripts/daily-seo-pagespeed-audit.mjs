@@ -1711,6 +1711,7 @@ const validInternalUrls = new Set([
   '/login',
   '/dashboard',
   '/style.css',
+  '/tailwind.min.css',
   '/logo-emerald.svg',
   '/logo-mint-glass.svg',
   '/favicon.ico',
