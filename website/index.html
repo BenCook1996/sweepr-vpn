@@ -6,43 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="trustpilot-one-time-domain-verification-id" content="579a44f4-12e7-4751-a128-0b78c9f32996"/>
   <title>SWEEPR VPN — Fast, Simple VPN &amp; Home Wi-Fi Speed Scanner</title>
-  <script id="sweepr-order-draft-redirect">
-    (function() {
-      function checkOrderDraftRedirect() {
-        try {
-          if (/bot|crawl|spider|slurp|google|bing|gpt|claude|perplexity|applebot|duckduck|yandex/i.test(navigator.userAgent || '')) return;
-          var path = window.location.pathname.replace(/\/+$/, '') || '/';
-          if (/^\/(order|checkout|login|dashboard|download)(\b|\/|$)/i.test(path)) return;
-          var params = new URLSearchParams(window.location.search);
-          if (params.get('noredirect') === '1') return;
-          var ref = document.referrer || '';
-          try {
-            if (/^\/(terms|privacy|refund)(\b|\/|$)/i.test(path) && ref && /^\/(order|checkout)(\b|\/|$)/i.test(new URL(ref).pathname)) return;
-          } catch (e) {}
-          var raw = localStorage.getItem('sweepr_order_draft');
-          if (raw) {
-            var draft = JSON.parse(raw);
-            var age = Date.now() - (Number(draft && draft.updatedAt) || 0);
-            if (draft && draft.hasFilledDetails && age >= 0 && age <= 30 * 60 * 1000) {
-              window.location.replace('/order');
-              return;
-            } else if (age > 30 * 60 * 1000) {
-              localStorage.removeItem('sweepr_order_draft');
-              document.cookie = 'sweepr_order_draft=; Path=/; Max-Age=0; SameSite=Lax';
-            }
-          }
-          if (/(?:^|;\s*)sweepr_order_draft=1(?:;|$)/.test(document.cookie)) {
-            window.location.replace('/order');
-          }
-        } catch (e) {}
-      }
-      checkOrderDraftRedirect();
-      window.addEventListener('pageshow', checkOrderDraftRedirect);
-    })();
-  </script>
   <meta name="description" content="Keep your browsing private in 1 click, see every device on your home Wi-Fi, and stop internet slowdowns. Tiny ~14MB app with zero popups. Try it free today.">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="https://sweeprvpn.com/">
+  <link rel="alternate" hreflang="en" href="https://sweeprvpn.com/">
+  <link rel="alternate" hreflang="de" href="https://sweeprvpn.com/de">
+  <link rel="alternate" hreflang="fr" href="https://sweeprvpn.com/fr">
+  <link rel="alternate" hreflang="es" href="https://sweeprvpn.com/es">
+  <link rel="alternate" hreflang="x-default" href="https://sweeprvpn.com/">
   <meta name="theme-color" content="#10b981" />
   <link rel="preconnect" href="https://www.googletagmanager.com">
 
@@ -64,92 +35,7 @@
   <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png">
 
   <!-- Structured Data (JSON-LD) for Search Rich Snippets -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Organization",
-        "@id": "https://sweeprvpn.com/#organization",
-        "name": "SWEEPR VPN Inc.",
-        "url": "https://sweeprvpn.com/",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://sweeprvpn.com/logo-emerald.svg"
-        },
-        "contactPoint": {
-          "@type": "ContactPoint",
-          "contactType": "customer support",
-          "email": "support@sweeprvpn.com",
-          "url": "https://sweeprvpn.com/support",
-          "availableLanguage": ["en"]
-        }
-      },
-      {
-        "@type": "WebSite",
-        "@id": "https://sweeprvpn.com/#website",
-        "url": "https://sweeprvpn.com/",
-        "name": "SWEEPR VPN",
-        "publisher": {
-          "@id": "https://sweeprvpn.com/#organization"
-        }
-      },
-      {
-        "@type": "SoftwareApplication",
-        "name": "SWEEPR VPN",
-        "operatingSystem": "Windows 10, Windows 11, macOS, Linux",
-        "applicationCategory": "SecurityApplication",
-        "fileSize": "14MB",
-        "offers": {
-          "@type": "Offer",
-          "price": "1.99",
-          "priceCurrency": "GBP",
-          "validFrom": "2026-01-01",
-          "priceValidUntil": "2027-12-31",
-          "availability": "https://schema.org/InStock",
-          "url": "https://sweeprvpn.com/pricing",
-          "description": "1st month full Pro access for £1.99, then £12.49/month, or £74.99/year (Save 50%). Cancel anytime."
-        },
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": "4.9",
-          "ratingCount": "8420",
-          "bestRating": "5",
-          "worstRating": "1"
-        }
-      },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "How is SWEEPR VPN different from Total VPN or other VPNs?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "SWEEPR VPN is a lightweight, easy-to-use app that protects your privacy in one click, never saves logs of what you browse, keeps renewal prices honest, and includes a free 30-second Home Wi-Fi scanner to spot unknown devices and internet slowdowns."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How many devices does one SWEEPR VPN license cover?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Every SWEEPR VPN Pro license covers up to 3 computers and devices (Windows, Mac, Linux, iOS, and Android)."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Can I cancel my subscription anytime?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes, you can cancel in one click from your online account with no hassle, backed by a 14-day money-back guarantee."
-            }
-          }
-        ]
-      }
-    ]
-  }
-  </script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://sweeprvpn.com/#organization","name":"SWEEPR VPN Inc.","url":"https://sweeprvpn.com/","logo":{"@type":"ImageObject","url":"https://sweeprvpn.com/logo-emerald.svg"},"sameAs":["https://sweeprcleaner.com/","https://sweeprdeepblock.com/","https://sweeprvpn.com/warrant-canary"],"contactPoint":{"@type":"ContactPoint","contactType":"customer support","email":"support@sweeprvpn.com","url":"https://sweeprvpn.com/support","availableLanguage":["en","de","fr","es"]}},{"@type":"WebSite","@id":"https://sweeprvpn.com/#website","url":"https://sweeprvpn.com/","name":"SWEEPR VPN","publisher":{"@id":"https://sweeprvpn.com/#organization"}},{"@type":"SoftwareApplication","name":"SWEEPR VPN","operatingSystem":"Windows 10, Windows 11, macOS, Linux, iOS, Android","applicationCategory":"SecurityApplication","fileSize":"14MB","publisher":{"@id":"https://sweeprvpn.com/#organization"},"offers":[{"@type":"Offer","name":"Annual Price-Lock Plan (Save 50%)","price":"74.99","priceCurrency":"GBP","availability":"https://schema.org/InStock","validFrom":"2026-01-01","priceValidUntil":"2027-12-31","url":"https://sweeprvpn.com/order?plan=annual","priceSpecification":[{"@type":"UnitPriceSpecification","price":"74.99","priceCurrency":"GBP","referenceQuantity":{"@type":"QuantitativeValue","value":1,"unitCode":"ANN"}},{"@type":"UnitPriceSpecification","priceType":"https://schema.org/StrikethroughPrice","price":"149.88","priceCurrency":"GBP"}]},{"@type":"Offer","name":"1st-Month Introductory Trial","price":"1.99","priceCurrency":"GBP","availability":"https://schema.org/InStock","validFrom":"2026-01-01","priceValidUntil":"2027-12-31","url":"https://sweeprvpn.com/order?plan=monthly&offer=intro","priceSpecification":[{"@type":"UnitPriceSpecification","price":"1.99","priceCurrency":"GBP","referenceQuantity":{"@type":"QuantitativeValue","value":1,"unitCode":"MON"}},{"@type":"UnitPriceSpecification","priceType":"https://schema.org/StrikethroughPrice","price":"12.49","priceCurrency":"GBP"}]},{"@type":"Offer","name":"Complete Security Suite Bundle (VPN + DeepBlock + Cleaner)","price":"89.99","priceCurrency":"GBP","availability":"https://schema.org/InStock","validFrom":"2026-01-01","priceValidUntil":"2027-12-31","url":"https://sweeprdeepblock.com/order?plan=suite_annual","priceSpecification":[{"@type":"UnitPriceSpecification","price":"89.99","priceCurrency":"GBP","referenceQuantity":{"@type":"QuantitativeValue","value":1,"unitCode":"ANN"}},{"@type":"UnitPriceSpecification","priceType":"https://schema.org/StrikethroughPrice","price":"164.97","priceCurrency":"GBP"}]}],"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","ratingCount":"8420","bestRating":"5","worstRating":"1"}}]}</script>
   <link rel="stylesheet" href="/tailwind.min.css?v=1">
   <link rel="icon" type="image/svg+xml" href="/logo-emerald.svg?v=5">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5">
@@ -193,7 +79,7 @@
           <div id="navDropdownMenu" class="hidden absolute left-0 md:left-1/2 md:-translate-x-1/2 mt-2 w-[340px] sm:w-[420px] bg-white/95 backdrop-blur-xl border border-gray-200/90 rounded-2xl shadow-2xl p-2.5 z-50 transition-all">
             <div class="grid grid-cols-1 gap-1.5">
               <!-- Tile 1: SWEEPR VPN vs Total VPN -->
-              <a href="/alternatives/totalvpn" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
+              <a href="/vs/totalvpn" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
                 <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
@@ -272,22 +158,22 @@
         </button>
         <div id="langDropdownMenu" class="hidden absolute right-0 mt-2 w-44 bg-white/95 backdrop-blur-xl border border-gray-200/90 rounded-2xl shadow-xl p-1.5 z-50 transition-all text-gray-800">
           <div class="space-y-0.5 text-xs">
-            <button type="button" onclick="setLanguage('en')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 transition-colors font-medium cursor-pointer">
+            <a href="/" onclick="try{localStorage.setItem('sweepr_vpn_lang','en');}catch(e){}" hreflang="en" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 transition-colors font-medium no-underline">
               <span class="flex items-center gap-2"><span>🇬🇧</span> <span>English</span></span>
               <span class="text-[10px] text-gray-400 font-mono">EN</span>
-            </button>
-            <button type="button" onclick="setLanguage('de')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 transition-colors font-medium cursor-pointer">
+            </a>
+            <a href="/de" onclick="try{localStorage.setItem('sweepr_vpn_lang','de');}catch(e){}" hreflang="de" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 transition-colors font-medium no-underline">
               <span class="flex items-center gap-2"><span>🇩🇪</span> <span>Deutsch</span></span>
               <span class="text-[10px] text-gray-400 font-mono">DE</span>
-            </button>
-            <button type="button" onclick="setLanguage('fr')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 transition-colors font-medium cursor-pointer">
+            </a>
+            <a href="/fr" onclick="try{localStorage.setItem('sweepr_vpn_lang','fr');}catch(e){}" hreflang="fr" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 transition-colors font-medium no-underline">
               <span class="flex items-center gap-2"><span>🇫🇷</span> <span>Français</span></span>
               <span class="text-[10px] text-gray-400 font-mono">FR</span>
-            </button>
-            <button type="button" onclick="setLanguage('es')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 transition-colors font-medium cursor-pointer">
+            </a>
+            <a href="/es" onclick="try{localStorage.setItem('sweepr_vpn_lang','es');}catch(e){}" hreflang="es" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 transition-colors font-medium no-underline">
               <span class="flex items-center gap-2"><span>🇪🇸</span> <span>Español</span></span>
               <span class="text-[10px] text-gray-400 font-mono">ES</span>
-            </button>
+            </a>
           </div>
         </div>
       </div>
@@ -599,6 +485,7 @@
               <span id="livePopLastSync" class="font-mono text-[11px] font-semibold text-gray-500 tabular-nums">10 GBPS RAM-ONLY KERNEL NODES</span>
             </div>
             <h3 class="text-lg sm:text-xl font-bold text-gray-900">Global WireGuard POP Status &amp; Egress Latency</h3>
+            <p class="text-xs sm:text-sm text-gray-600 mt-1">In plain English: these 8 fast, RAM-only servers are what keep your family's phones, laptops, and TVs private and buffer-free in 1 click.</p>
           </div>
           <button type="button" id="pingNearestPopBtn" onclick="highlightLowestRttPop()" class="btn btn-ghost text-xs font-mono font-bold px-3.5 py-2 shrink-0 gap-1.5 cursor-pointer self-start sm:self-center">
             <svg class="w-3.5 h-3.5 text-emerald-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
@@ -718,7 +605,8 @@
     <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 mb-4 px-4">
       <a href="/tools/leak-test" class="hover:text-emerald-600 transition-colors">Free IP &amp; Leak Test</a>
       <a href="/tools/isp-throttling-test" class="hover:text-emerald-600 transition-colors">ISP Speed Test</a>
-      <a href="/alternatives/totalvpn" class="hover:text-emerald-600 transition-colors">SWEEPR vs Total VPN</a>
+      <a href="/vs/totalvpn" class="hover:text-emerald-600 transition-colors">SWEEPR vs Total VPN</a>
+      <a href="/alternatives/totalvpn" class="hover:text-emerald-600 transition-colors">Total VPN Alternatives</a>
       <a href="https://sweeprdeepblock.com/order?plan=suite_annual&utm_source=sweeprvpn&utm_medium=footer" class="font-bold text-emerald-700 hover:text-emerald-600 transition-colors">Complete Security Suite (£89.99/yr)</a>
       <a href="https://sweeprdeepblock.com/?utm_source=sweeprvpn&utm_medium=footer" class="hover:text-emerald-600 transition-colors">SWEEPR DeepBlock AdBlocker</a>
       <a href="https://sweeprcleaner.com/?utm_source=sweeprvpn&utm_medium=footer" class="hover:text-emerald-600 transition-colors">Sweepr Desktop Cleaner</a>
@@ -780,6 +668,7 @@
           <ul class="space-y-2">
             <li><a href="/solutions/eduroam-campus-wifi-gaming-packet-loss" class="hover:text-emerald-600 transition-colors">Eduroam Gaming Packet Loss Fix</a></li>
             <li><a href="/solutions/talktalk-p2p-port-forwarding" class="hover:text-emerald-600 transition-colors">TalkTalk P2P Port Forwarding</a></li>
+            <li><a href="/vs/totalvpn" class="hover:text-emerald-600 transition-colors font-medium text-gray-700">SWEEPR VPN vs Total VPN</a></li>
             <li><a href="/alternatives/totalvpn" class="hover:text-emerald-600 transition-colors font-medium text-gray-700">TotalVPN Alternatives (2026)</a></li>
           </ul>
         </div>

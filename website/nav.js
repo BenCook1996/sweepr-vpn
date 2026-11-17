@@ -720,4 +720,22 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   } catch {}
+
+  // AI Search Text-Fragment Arrival Attribution (#:~:text= from Google AI Overviews / Perplexity / ChatGPT)
+  try {
+    const rawHash = String(window.location.hash || '');
+    const navEntry = typeof performance !== 'undefined' && performance.getEntriesByType
+      ? performance.getEntriesByType('navigation')[0]
+      : null;
+    const navUrl = navEntry && typeof navEntry.name === 'string' ? navEntry.name : '';
+    const rawFragment = rawHash.includes(':~:text=')
+      ? rawHash.split(':~:text=')[1]
+      : (navUrl.includes(':~:text=') ? navUrl.split(':~:text=')[1] : '');
+    if (rawFragment && typeof window.sweeprTrack === 'function') {
+      window.sweeprTrack('ai_text_fragment_arrival', {
+        fragment_text: decodeURIComponent(rawFragment.split('&')[0]).slice(0, 120),
+        referrer_host: document.referrer ? new URL(document.referrer).hostname : ''
+      });
+    }
+  } catch {}
 });

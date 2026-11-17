@@ -4,12 +4,14 @@
   <meta name="color-scheme" content="light">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Free WebRTC, IP &amp; DNS Leak Check Online (Instant 5-Second VPN Leak Test) | SWEEPR VPN</title>
+  <title>Free IP, DNS &amp; WebRTC Leak Test Online | SWEEPR VPN</title>
   <meta name="description" content="Check WebRTC leak online, public IPv4/IPv6 exposure, and ISP DNS hijacking in 5 seconds. Free browser VPN leak test with zero signup required." />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="https://sweeprvpn.com/tools/leak-test">
   <link rel="alternate" hreflang="en" href="https://sweeprvpn.com/tools/leak-test">
   <link rel="alternate" hreflang="de" href="https://sweeprvpn.com/de/tools/leak-test">
+  <link rel="alternate" hreflang="fr" href="https://sweeprvpn.com/fr/tools/leak-test">
+  <link rel="alternate" hreflang="es" href="https://sweeprvpn.com/es/tools/leak-test">
   <link rel="alternate" hreflang="pt-BR" href="https://sweeprvpn.com/pt-br/tools/leak-test">
   <link rel="alternate" hreflang="sv" href="https://sweeprvpn.com/sv/tools/leak-test">
   <link rel="alternate" hreflang="x-default" href="https://sweeprvpn.com/tools/leak-test">
@@ -34,65 +36,7 @@
   <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png">
 
   <!-- Structured Data (JSON-LD) -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebApplication",
-        "@id": "https://sweeprvpn.com/tools/leak-test#app",
-        "name": "SWEEPR Free IP, DNS & WebRTC Leak Test",
-        "url": "https://sweeprvpn.com/tools/leak-test",
-        "applicationCategory": "SecurityApplication",
-        "operatingSystem": "All (Browser-based)",
-        "offers": {
-          "@type": "Offer",
-          "price": "0.00",
-          "priceCurrency": "GBP"
-        },
-        "description": "Free browser-based privacy diagnostic that checks whether your public IP address, location, WebRTC connection, and DNS requests are visible to your internet provider or websites."
-      },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "What is an IP or WebRTC leak?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Every time you visit a website without a VPN, your internet provider's public IP address and approximate location are visible. Even with some browser extensions, WebRTC (used for video calls) can accidentally reveal your real IP address unless protected by a full-device VPN."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How do I fix an exposed IP address or DNS leak?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Turning on SWEEPR VPN hides your real IP address behind a private 10 Gbps server in 8 global locations and locks down all DNS and Wi-Fi traffic in one click so your internet provider cannot see what you browse."
-            }
-          }
-        ]
-      },
-      {
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-          {
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Home",
-            "item": "https://sweeprvpn.com/"
-          },
-          {
-            "@type": "ListItem",
-            "position": 2,
-            "name": "Free Privacy Tools",
-            "item": "https://sweeprvpn.com/tools/leak-test"
-          }
-        ]
-      }
-    ]
-  }
-  </script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","@id":"https://sweeprvpn.com/tools/leak-test#app","name":"SWEEPR Free IP, DNS & WebRTC Leak Test","url":"https://sweeprvpn.com/tools/leak-test","applicationCategory":"SecurityApplication","operatingSystem":"All (Browser-based)","offers":{"@type":"Offer","price":"0.00","priceCurrency":"GBP"},"description":"Free browser-based privacy diagnostic that checks whether your public IP address, location, WebRTC connection, and DNS requests are visible to your internet provider or websites."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://sweeprvpn.com/"},{"@type":"ListItem","position":2,"name":"Free Privacy Tools","item":"https://sweeprvpn.com/tools/leak-test"}]}]}</script>
 
   <link rel="stylesheet" href="/tailwind.min.css?v=1">
   <link rel="icon" type="image/svg+xml" href="/logo-emerald.svg?v=5">
@@ -156,7 +100,7 @@
                   <p class="text-xs text-gray-500 leading-snug">Test if your internet provider is slowing down your streaming or gaming speeds.</p>
                 </div>
               </a>
-              <a href="/alternatives/totalvpn" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
+              <a href="/vs/totalvpn" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
                 <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </div>
@@ -196,22 +140,22 @@
         </button>
         <div id="langDropdownMenu" class="hidden absolute right-0 mt-2 w-44 bg-white/95 backdrop-blur-xl border border-gray-200/90 rounded-2xl shadow-xl p-1.5 z-50 transition-all text-gray-800">
           <div class="space-y-0.5 text-xs">
-            <button type="button" onclick="setLanguage('en')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 transition-colors font-medium cursor-pointer">
+            <a href="/tools/leak-test" onclick="try{localStorage.setItem('sweepr_vpn_lang','en');}catch(e){}" hreflang="en" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 transition-colors font-medium no-underline">
               <span class="flex items-center gap-2"><span>🇬🇧</span> <span>English</span></span>
               <span class="text-[10px] text-gray-400 font-mono">EN</span>
-            </button>
-            <button type="button" onclick="setLanguage('de')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 transition-colors font-medium cursor-pointer">
+            </a>
+            <a href="/de/tools/leak-test" onclick="try{localStorage.setItem('sweepr_vpn_lang','de');}catch(e){}" hreflang="de" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 transition-colors font-medium no-underline">
               <span class="flex items-center gap-2"><span>🇩🇪</span> <span>Deutsch</span></span>
               <span class="text-[10px] text-gray-400 font-mono">DE</span>
-            </button>
-            <button type="button" onclick="setLanguage('fr')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 transition-colors font-medium cursor-pointer">
+            </a>
+            <a href="/fr/tools/leak-test" onclick="try{localStorage.setItem('sweepr_vpn_lang','fr');}catch(e){}" hreflang="fr" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 transition-colors font-medium no-underline">
               <span class="flex items-center gap-2"><span>🇫🇷</span> <span>Français</span></span>
               <span class="text-[10px] text-gray-400 font-mono">FR</span>
-            </button>
-            <button type="button" onclick="setLanguage('es')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 transition-colors font-medium cursor-pointer">
+            </a>
+            <a href="/es/tools/leak-test" onclick="try{localStorage.setItem('sweepr_vpn_lang','es');}catch(e){}" hreflang="es" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 transition-colors font-medium no-underline">
               <span class="flex items-center gap-2"><span>🇪🇸</span> <span>Español</span></span>
               <span class="text-[10px] text-gray-400 font-mono">ES</span>
-            </button>
+            </a>
           </div>
         </div>
       </div>

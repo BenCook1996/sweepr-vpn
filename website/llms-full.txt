@@ -118,9 +118,15 @@ PersistentKeepalive = 25
 - **Canonical Guide**: https://sweeprvpn.com/guides/private-wifi-address-mac-randomization-unknown-device
 - **Answer**: No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons.
 
-## 7. Complete Canonical Index (83 Pages)
+## 7. Complete Canonical Index (92 Pages)
 - https://sweeprvpn.com/
+- https://sweeprvpn.com/de
+- https://sweeprvpn.com/fr
+- https://sweeprvpn.com/es
 - https://sweeprvpn.com/pricing
+- https://sweeprvpn.com/de/pricing
+- https://sweeprvpn.com/fr/pricing
+- https://sweeprvpn.com/es/pricing
 - https://sweeprvpn.com/solutions
 - https://sweeprvpn.com/setup
 - https://sweeprvpn.com/guides
@@ -132,6 +138,8 @@ PersistentKeepalive = 25
 - https://sweeprvpn.com/tools/whats-on-my-wifi
 - https://sweeprvpn.com/public-wifi
 - https://sweeprvpn.com/de/tools/leak-test
+- https://sweeprvpn.com/fr/tools/leak-test
+- https://sweeprvpn.com/es/tools/leak-test
 - https://sweeprvpn.com/pt-br/tools/leak-test
 - https://sweeprvpn.com/sv/tools/leak-test
 - https://sweeprvpn.com/alternatives/totalvpn
@@ -188,6 +196,7 @@ PersistentKeepalive = 25
 - https://sweeprvpn.com/vs/private-internet-access
 - https://sweeprvpn.com/vs/protonvpn
 - https://sweeprvpn.com/vs/surfshark
+- https://sweeprvpn.com/vs/totalvpn
 - https://sweeprvpn.com/vs/windscribe
 - https://sweeprvpn.com/guides/block-philips-titan-os-acr
 - https://sweeprvpn.com/guides/block-sony-bravia-samba-tv-acr

@@ -74,7 +74,13 @@ console.log('\n[Phase 1] Auditing Sitemap, Disk Manifest & Auto-Optimizing Pages
 
 const CORE_STATIC_ROUTES = [
   { urlPath: '/', file: 'index.html', priority: '1.0', changefreq: 'weekly' },
+  { urlPath: '/de', file: 'de-index.html', priority: '0.9', changefreq: 'weekly' },
+  { urlPath: '/fr', file: 'fr-index.html', priority: '0.9', changefreq: 'weekly' },
+  { urlPath: '/es', file: 'es-index.html', priority: '0.9', changefreq: 'weekly' },
   { urlPath: '/pricing', file: 'pricing.html', priority: '0.9', changefreq: 'weekly' },
+  { urlPath: '/de/pricing', file: 'de-pricing.html', priority: '0.8', changefreq: 'weekly' },
+  { urlPath: '/fr/pricing', file: 'fr-pricing.html', priority: '0.8', changefreq: 'weekly' },
+  { urlPath: '/es/pricing', file: 'es-pricing.html', priority: '0.8', changefreq: 'weekly' },
   { urlPath: '/solutions', file: 'solutions.html', priority: '0.9', changefreq: 'weekly' },
   { urlPath: '/setup', file: 'setup.html', priority: '0.9', changefreq: 'weekly' },
   { urlPath: '/guides', file: 'guides.html', priority: '0.9', changefreq: 'weekly' },
@@ -86,6 +92,8 @@ const CORE_STATIC_ROUTES = [
   { urlPath: '/tools/whats-on-my-wifi', file: 'whats-on-my-wifi.html', priority: '0.8', changefreq: 'weekly' },
   { urlPath: '/public-wifi', file: 'public-wifi.html', priority: '0.8', changefreq: 'weekly' },
   { urlPath: '/de/tools/leak-test', file: 'de-leak-test.html', priority: '0.8', changefreq: 'weekly' },
+  { urlPath: '/fr/tools/leak-test', file: 'fr-leak-test.html', priority: '0.8', changefreq: 'weekly' },
+  { urlPath: '/es/tools/leak-test', file: 'es-leak-test.html', priority: '0.8', changefreq: 'weekly' },
   { urlPath: '/pt-br/tools/leak-test', file: 'pt-br-leak-test.html', priority: '0.8', changefreq: 'weekly' },
   { urlPath: '/sv/tools/leak-test', file: 'sv-leak-test.html', priority: '0.8', changefreq: 'weekly' },
   { urlPath: '/alternatives/totalvpn', file: 'alternatives-totalvpn.html', priority: '0.8', changefreq: 'monthly' },
@@ -131,83 +139,83 @@ const CONSOLIDATED_CANNIBAL_MAP = {
 // High-CTR Title & Meta Description Overrides for Top Google Search Console "Striking Distance" Pages
 const GSC_STRIKING_DISTANCE_OVERRIDES = {
   '/solutions/talktalk-p2p-port-forwarding': {
-    title: 'TalkTalk P2P Throttling & Port Forwarding Fix (2026 AS13285 Guide) | SWEEPR VPN',
+    title: 'TalkTalk P2P Throttling & Port Fix | SWEEPR VPN',
     description: 'Fix TalkTalk (AS13285) P2P bandwidth throttling, CGNAT port blocking & slow bulk transfers in 30 seconds. Copy-paste 1420 MTU WireGuard config + 4ms UK-LON-01 server.'
   },
   '/setup/gl-inet-travel-router': {
-    title: 'GL.iNet Beryl AX (GL-MT3000), Slate AX & Flint 2 WireGuard VPN Setup Guide (2026) | SWEEPR VPN',
+    title: 'GL.iNet Router WireGuard Setup (MTU 1420) | SWEEPR VPN',
     description: '45-second GL.iNet Travel Router (Beryl AX, Slate AX, Flint 2) WireGuard .conf setup guide. Includes MTU 1420/1380 hotel captive-portal settings & 10Gbps endpoints.'
   },
   '/guides/stop-samsung-smart-tv-acr-tracking': {
-    title: 'Block Samsung Smart TV ACR Tracking (gpm.samsungqbe.com & samsungacr.com) — 2026 Guide | SWEEPR VPN',
+    title: 'Block Samsung Smart TV ACR Tracking | SWEEPR VPN',
     description: 'Stop Samsung Tizen Smart TVs from sending ACR screenshots & viewing logs to gpm.samsungqbe.com, samsungacr.com & samsungads.com without breaking 4K Netflix or iPlayer.'
   },
   '/tools/leak-test': {
-    title: 'Free WebRTC, IP & DNS Leak Check Online (Instant 5-Second VPN Leak Test) | SWEEPR VPN',
+    title: 'Free IP, DNS & WebRTC Leak Test Online | SWEEPR VPN',
     description: 'Check WebRTC leak online, public IPv4/IPv6 exposure, and ISP DNS hijacking in 5 seconds. Free browser VPN leak test with zero signup required.'
   },
   '/solutions/eduroam-campus-wifi-gaming-packet-loss': {
-    title: 'Eduroam WireGuard VPN & Gaming Fix: Bypass Campus UDP Port Blocks (Stealth 443) | SWEEPR VPN',
+    title: 'Eduroam WireGuard Gaming & Port 443 Fix | SWEEPR VPN',
     description: 'Fix Eduroam campus Wi-Fi gaming packet loss, blocked Steam/Discord UDP ports & high ping (AS786 Jisc Janet) using SWEEPR VPN WireGuard Stealth UDP 443 (MTU 1400).'
   },
   '/alternatives/totalvpn': {
-    title: '5 Best TotalVPN Alternatives in 2026 (No Renewal Price Hikes or Bloatware) | SWEEPR VPN',
+    title: '5 Best TotalVPN Alternatives (2026) — No Renewal Hikes',
     description: 'Cancelled TotalVPN over surprise renewal price hikes or slow evening speeds? Compare the 5 best lightweight WireGuard VPN alternatives in 2026 (starting at £1.99).'
   },
   '/setup/nvidia-shield-tv-pro-wireguard': {
-    title: 'NVIDIA Shield TV Pro 4K & GeForce NOW WireGuard VPN Setup Guide (2026) | SWEEPR VPN',
-    description: 'Step-by-step NVIDIA Shield TV Pro 4K & Android TV WireGuard VPN setup guide. Configure 10Gbps RAM-only UK/EU endpoints, MTU 1420, and Smart-TV ACR ad blocking.'
+    title: 'NVIDIA Shield TV Pro WireGuard Setup (MTU 1412) | SWEEPR',
+    description: 'Step-by-step NVIDIA Shield TV Pro 4K & Android TV WireGuard VPN setup guide. Configure 10Gbps RAM-only UK/EU endpoints, MTU 1412, and Smart-TV ACR ad blocking.'
   },
   '/solutions/gigaclear-rural-fibre-gaming-packet-loss': {
-    title: 'Gigaclear Rural Fibre UK: Fix Gaming Packet Loss, CGNAT & Ping Spikes (AS51048) | SWEEPR VPN',
+    title: 'Gigaclear Rural Fibre UK: Fix Gaming Ping | SWEEPR VPN',
     description: 'Eliminate Gigaclear Rural Full Fibre UK (AS51048) CGNAT gaming packet loss, rubber-banding & evening jitter via 4ms London Docklands 10Gbps WireGuard routing (MTU 1420).'
   },
   '/setup/synology-nas-docker-vpn': {
-    title: 'Synology NAS & Docker Gluetun WireGuard VPN Setup Guide (DSM 7.2 • 2026) | SWEEPR VPN',
+    title: 'Synology NAS Docker WireGuard Guide | SWEEPR VPN',
     description: '90-second Synology NAS (DSM 7.2) & Docker Gluetun WireGuard container setup guide. Includes docker-compose.yml, kill-switch firewall rules, and 10Gbps .conf profile.'
   },
   '/guides/stop-lg-smart-tv-acr-spying': {
-    title: 'Block LG webOS Smart TV ACR Spying (Live Plus & lgtvcommon.com) — 2026 Guide | SWEEPR VPN',
+    title: 'Block LG webOS Smart TV LivePlus ACR | SWEEPR VPN',
     description: 'Stop LG webOS Smart TVs ("Live Plus" ACR) from capturing HDMI screenshots and calling lgtvcommon.com, ibs.lgappstv.com & ad.lgappstv.com at the DNS/tunnel layer.'
   },
   '/solutions/hotel-captive-portal-wifi-p2p-port-forwarding': {
-    title: 'Hotel Wi-Fi VPN Fix (Premier Inn, Travelodge, Hilton): Bypass Captive Portal & Port Blocks | SWEEPR VPN',
+    title: 'Hotel Wi-Fi VPN Fix: Bypass Captive Portals | SWEEPR VPN',
     description: 'Bypass hotel captive-portal Wi-Fi throttling, blocked UDP ports & CGNAT at Premier Inn, Travelodge & Hilton using SWEEPR VPN WireGuard UDP 443 (MTU 1380).'
   },
   '/tools/isp-throttling-test': {
-    title: 'Free Internet Throttling Test & ISP Speed Slowdown Checker (10-Second Diagnostic) | SWEEPR VPN',
+    title: 'Free ISP Speed & Throttling Test (10s Check) | SWEEPR VPN',
     description: 'Run a free 10-second internet throttling test in your browser. Detect if Virgin Media, BT, Sky, TalkTalk, Rogers, or Comcast is throttling your streaming & gaming.'
   },
   '/solutions/rogers-ignite-canada-isp-throttling': {
-    title: 'Rogers Ignite Canada ISP Throttling Fix: Stop Evening Speed Drops & Buffering (AS812) | SWEEPR VPN',
+    title: 'Rogers Ignite Canada ISP Throttling Fix | SWEEPR VPN',
     description: 'Stop Rogers Ignite Broadband Canada (AS812) evening speed throttling, DOCSIS 3.1 bufferbloat & IPTV/4K streaming slowdowns with 10Gbps WireGuard (MTU 1420).'
   },
   '/setup/steam-deck-vpn': {
-    title: 'SteamOS & Steam Deck OLED WireGuard VPN Setup Guide (Desktop & Gaming Mode • 2026) | SWEEPR VPN',
+    title: 'Steam Deck & SteamOS WireGuard Setup | SWEEPR VPN',
     description: '60-second SteamOS & Steam Deck WireGuard VPN setup guide. Import a native .conf profile into NetworkManager for low-ping handheld gaming on campus & hotel Wi-Fi.'
   },
   '/solutions/comcast-xfinity-broadband-smart-tv-acr-blocking': {
-    title: 'Comcast Xfinity Smart-TV ACR Spying Blocker & Home Wi-Fi Device Scanner (AS7922) | SWEEPR VPN',
+    title: 'Comcast Xfinity Smart-TV ACR Blocker Guide | SWEEPR VPN',
     description: 'Block Samsung, LG, Roku & Fire TV ACR screenshot uploads on Comcast Xfinity Broadband (AS7922) and scan your home Wi-Fi for unknown devices in 30 seconds.'
   },
   '/solutions/ee-5g-mobile-hotspot-wifi-arp-spoofing-protection': {
-    title: 'EE 5G & 4G Mobile Hotspot Security: Stop Wi-Fi Sniffing, ARP Spoofing & CGNAT Drops | SWEEPR VPN',
+    title: 'EE 5G Hotspot Security & CGNAT Fix | SWEEPR VPN',
     description: 'Protect laptops & phones on EE 5G & 4G Mobile Hotspot UK (AS12576) with 1380 MTU 10Gbps WireGuard encryption, in-tunnel DNS (10.66.0.1) & 30s LAN device scanner.'
   },
   '/solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter': {
-    title: 'Fix Microsoft Teams, Zoom & VoIP Call Dropouts on EE 5G Mobile Hotspot UK (AS12576) | SWEEPR VPN',
+    title: 'EE 5G Hotspot: Fix Teams & Zoom Jitter | SWEEPR VPN',
     description: 'Stop robotic audio, frozen video & WebRTC UDP packet drops on EE 5G Mobile Hotspot UK using SWEEPR VPN 4ms London WireGuard peering (MTU 1380).'
   },
   '/solutions/three-5g-home-broadband-uhd-streaming-buffering': {
-    title: 'Three 5G Home Broadband UK: Stop 4K UHD Streaming Buffering & Evening Slowdowns (AS206067) | SWEEPR VPN',
+    title: 'Three 5G Home Broadband UK: Stop Buffering | SWEEPR VPN',
     description: 'Eliminate Three 5G Home Broadband (AS206067) evening 4K streaming buffering, CGNAT throttling & IPTV drops with calibrated 1380 MTU 10Gbps WireGuard routing.'
   },
   '/solutions/fibrus-full-fibre-smart-tv-acr-blocking': {
-    title: 'Fibrus Full Fibre Broadband: Block Smart-TV ACR Spying & Scan Your Home Wi-Fi (AS208294) | SWEEPR VPN',
+    title: 'Fibrus Full Fibre: Block Smart-TV ACR Tracking | SWEEPR',
     description: 'Audit every connected device on your Fibrus Full Fibre router (NI & Cumbria AS208294) in 30 seconds and block Smart-TV ACR telemetry with 10Gbps WireGuard.'
   },
   '/guides/stop-roku-vizio-firetv-spying': {
-    title: 'Block Roku, Vizio Inscape & Fire TV ACR Spying (2026 Router & DNS Guide) | SWEEPR VPN',
+    title: 'Block Roku, Vizio & Fire TV ACR | SWEEPR VPN',
     description: 'Stop Roku OS, Vizio SmartCast (Inscape) & Amazon Fire TV from capturing ACR screenshots and uploading viewing telemetry over your home Wi-Fi.'
   }
 };
@@ -372,7 +380,6 @@ for (const dir of ['solutions', 'setup', 'vs', 'guides']) {
   for (const file of fs.readdirSync(dirAbs).sort()) {
     if (!file.endsWith('.html')) continue;
     const slug = file.replace(/\.html$/, '');
-    if (dir === 'vs' && slug === 'totalvpn') continue;
     const urlPath = `/${dir}/${slug}`;
     const absPath = path.join(dirAbs, file);
     let content = fs.readFileSync(absPath, 'utf8');
@@ -757,7 +764,7 @@ if (shouldFix && pseoFilesOnDisk.length > 0) {
       dir: 'solutions',
       file: 'solutions.html',
       urlPath: '/solutions',
-      title: `ISP Throttling, CGNAT, Gaming Ping & Smart-TV Fixes (${byCluster.solutions.length} ISP Guides • 2026) | SWEEPR VPN`,
+      title: `ISP Throttling, CGNAT & Gaming Fixes (2026) | SWEEPR VPN`,
       description: `Browse ${byCluster.solutions.length} verified ISP network engineering guides for Virgin Media, BT, Sky, TalkTalk, Eduroam, Three 5G, EE, Comcast & Rogers. Fix throttling, packet loss & CGNAT with 10Gbps WireGuard.`,
       badge: 'ISP & Network Engineering Hub • 10Gbps WireGuard • 2026',
       telemetryLabel: `SOLUTIONS // ${byCluster.solutions.length} ISP & GAMING FIXES`,
@@ -780,7 +787,7 @@ if (shouldFix && pseoFilesOnDisk.length > 0) {
       dir: 'setup',
       file: 'setup.html',
       urlPath: '/setup',
-      title: `WireGuard Router, NAS, Linux & Gaming Console Setup Guides (${byCluster.setup.length} Tutorials • 2026) | SWEEPR VPN`,
+      title: `WireGuard Router, NAS & Console Setup Guides | SWEEPR VPN`,
       description: `Step-by-step 10Gbps WireGuard VPN setup guides for GL.iNet Beryl AX/Flint 2, OpenWrt, Asuswrt-Merlin, MikroTik, UniFi, pfSense, OPNsense, Synology NAS, Steam Deck & NVIDIA Shield TV.`,
       badge: 'Hardware & OS Configuration Library • Native WireGuard .conf',
       telemetryLabel: `SETUP // ${byCluster.setup.length} ROUTER & CONSOLE GUIDES`,
@@ -803,7 +810,7 @@ if (shouldFix && pseoFilesOnDisk.length > 0) {
       dir: 'guides',
       file: 'guides.html',
       urlPath: '/guides',
-      title: `Smart-TV ACR Blocking, Home Wi-Fi Security & WireGuard Privacy Guides (${byCluster.guides.length} Guides) | SWEEPR VPN`,
+      title: `Smart-TV ACR & WireGuard Privacy Guides (2026) | SWEEPR`,
       description: `Technical privacy & network security guides: block Samsung Tizen & LG webOS Smart-TV ACR spying, detect unknown devices on your home Wi-Fi in 30 seconds, optimize WireGuard MTU, and stop WebRTC leaks.`,
       badge: 'Home Wi-Fi Radar & Smart-TV Privacy Lab • Verified 2026',
       telemetryLabel: `GUIDES // ${byCluster.guides.length} SMART-TV ACR BLOCKLISTS`,
@@ -826,7 +833,7 @@ if (shouldFix && pseoFilesOnDisk.length > 0) {
       dir: 'vs',
       file: 'vs.html',
       urlPath: '/vs',
-      title: `SWEEPR VPN vs NordVPN, Mullvad, ProtonVPN & TotalVPN (${byCluster.vs.length + 1} Benchmarks • 2026) | SWEEPR VPN`,
+      title: `SWEEPR VPN vs NordVPN, Mullvad & TotalVPN | SWEEPR VPN`,
       description: `Head-to-head 2026 technical VPN comparisons: see how SWEEPR VPN (native Rust + Tauri v2, 10Gbps RAM-only WireGuard, Free 30s Wi-Fi Scanner & £1.99 trial) compares against legacy VPNs.`,
       badge: '2026 Technical VPN Benchmarks • Speed, RAM Footprint & Price',
       telemetryLabel: `BENCHMARKS // ${byCluster.vs.length + 1} COMPARISONS`,
@@ -844,7 +851,7 @@ if (shouldFix && pseoFilesOnDisk.length > 0) {
         },
         {
           q: 'Does SWEEPR VPN increase prices on renewal like TotalVPN or NordVPN?',
-          a: 'No. SWEEPR VPN offers transparent price-locked plans: £1.99 1st-Month Trial (then £12.49/mo), £48.99 / 6 months (£8.17/mo — Save 35%), or £74.99 / year (£6.25/mo — Save 50%) backed by a 30-day money-back guarantee.'
+          a: 'No. SWEEPR VPN offers transparent price-locked plans: £1.99 1st-Month Trial (then £12.49/mo), £48.99 / 6 months (£8.17/mo — Save 35%), or £74.99 / year (£6.25/mo — Save 50%) backed by a 14-day money-back guarantee.'
         }
       ]
     }
@@ -877,15 +884,6 @@ if (shouldFix && pseoFilesOnDisk.length > 0) {
         { '@type': 'ListItem', position: 2, name: hub.h1, item: canonicalUrl }
       ]
     };
-    const faqSchema = {
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: hub.faqs.map((f) => ({
-        '@type': 'Question',
-        name: f.q,
-        acceptedAnswer: { '@type': 'Answer', text: f.a }
-      }))
-    };
 
     const hubHtml = `<!DOCTYPE html>
 <html lang="en-GB">
@@ -915,7 +913,6 @@ if (shouldFix && pseoFilesOnDisk.length > 0) {
 ${GA4_HEAD_SNIPPET}
   <script type="application/ld+json">${JSON.stringify(collectionSchema)}</script>
   <script type="application/ld+json">${JSON.stringify(breadcrumbSchema)}</script>
-  <script type="application/ld+json">${JSON.stringify(faqSchema)}</script>
   <style>
     :root { --bg:#111315; --card:#181b1f; --border:#262b33; --text:#f3f4f6; --muted:#9ca3af; --accent:#10b981; --accent2:#34d399; }
     * { box-sizing:border-box; }
@@ -1247,19 +1244,55 @@ function resolveContentHashLastMod(loc, absPath) {
   return newDate;
 }
 
+const HREFLANG_CLUSTERS = {
+  home: [
+    { hreflang: 'en', href: 'https://sweeprvpn.com/' },
+    { hreflang: 'de', href: 'https://sweeprvpn.com/de' },
+    { hreflang: 'fr', href: 'https://sweeprvpn.com/fr' },
+    { hreflang: 'es', href: 'https://sweeprvpn.com/es' },
+    { hreflang: 'x-default', href: 'https://sweeprvpn.com/' }
+  ],
+  pricing: [
+    { hreflang: 'en', href: 'https://sweeprvpn.com/pricing' },
+    { hreflang: 'de', href: 'https://sweeprvpn.com/de/pricing' },
+    { hreflang: 'fr', href: 'https://sweeprvpn.com/fr/pricing' },
+    { hreflang: 'es', href: 'https://sweeprvpn.com/es/pricing' },
+    { hreflang: 'x-default', href: 'https://sweeprvpn.com/pricing' }
+  ],
+  leakTest: [
+    { hreflang: 'en', href: 'https://sweeprvpn.com/tools/leak-test' },
+    { hreflang: 'de', href: 'https://sweeprvpn.com/de/tools/leak-test' },
+    { hreflang: 'fr', href: 'https://sweeprvpn.com/fr/tools/leak-test' },
+    { hreflang: 'es', href: 'https://sweeprvpn.com/es/tools/leak-test' },
+    { hreflang: 'pt-BR', href: 'https://sweeprvpn.com/pt-br/tools/leak-test' },
+    { hreflang: 'sv', href: 'https://sweeprvpn.com/sv/tools/leak-test' },
+    { hreflang: 'x-default', href: 'https://sweeprvpn.com/tools/leak-test' }
+  ]
+};
+
+function getXhtmlLinksForLoc(loc) {
+  let group = null;
+  if (/^https:\/\/sweeprvpn\.com\/(|de|fr|es)$/.test(loc)) group = HREFLANG_CLUSTERS.home;
+  else if (/^https:\/\/sweeprvpn\.com\/(pricing|(de|fr|es)\/pricing)$/.test(loc)) group = HREFLANG_CLUSTERS.pricing;
+  else if (/\/tools\/leak-test$/.test(loc)) group = HREFLANG_CLUSTERS.leakTest;
+  if (!group) return '';
+  return '\n' + group.map((a) => `    <xhtml:link rel="alternate" hreflang="${a.hreflang}" href="${a.href}" />`).join('\n');
+}
+
 const sitemapEntries = [
   ...allCanonicalPages,
   { canonicalLoc: 'https://sweeprvpn.com/download', changefreq: 'weekly', priority: '0.9', absPath: path.join(WEBSITE_DIR, 'SWEEPRVPN.exe') }
 ];
 const newSitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${sitemapEntries
   .map(
     (u) => `  <url>
     <loc>${u.canonicalLoc}</loc>
     <lastmod>${resolveContentHashLastMod(u.canonicalLoc, u.absPath)}</lastmod>
     <changefreq>${u.changefreq}</changefreq>
-    <priority>${u.priority}</priority>
+    <priority>${u.priority}</priority>${getXhtmlLinksForLoc(u.canonicalLoc)}
   </url>`
   )
   .join('\n')}
@@ -1283,12 +1316,12 @@ const llmsContent = `# SWEEPR VPN & SWEEPR Wi-Fi Radar (sweeprvpn.com)
   - Instant on-screen alerts whenever an unknown device joins your home Wi-Fi network.
   - 1-click speed booster to stop peak-hour streaming buffering.
   - Automatic Smart-TV spy blocker sinking ACR (Automatic Content Recognition) telemetry domains from Samsung Tizen, LG webOS, Roku, Vizio Inscape, and Amazon Fire TV.
-- **Transparent Price-Lock Subscription Plans (Covers up to 3 Devices)**:
+- **Transparent Price-Lock Subscription Plans (Covers up to 3 Simultaneous Devices + Router)**:
   - **Yearly Plan (Most Popular — Save 50%)**: £74.99/year (£6.25/mo) | $95.99 USD ($8.00/mo) | €89.99 EUR (€7.50/mo) | CA$131.99 CAD | A$149.99 AUD | CHF 83.99 | ¥14,999 JPY
   - **6-Monthly Plan (Save 35%)**: £48.99/6 months (£8.17/mo) | $61.99 USD | €58.99 EUR | CA$85.99 CAD | A$97.99 AUD | CHF 54.99 | ¥9,799 JPY
   - **Monthly Plan**: £12.49/month (or £1.99 1st-Month Introductory Offer) | $15.99 USD | €14.99 EUR | CA$21.99 CAD | A$24.99 AUD | CHF 13.99 | ¥2,499 JPY
   - **SWEEPR Wi-Fi Radar & Smart-TV Shield Add-On**: +£14.99/yr | +£9.99/6mo | +£1.99/mo
-  - **Refund Policy**: 30-day 100% money-back guarantee and 1-click self-service portal cancellation.
+  - **Refund Policy**: 14-day 100% money-back guarantee and 1-click self-service portal cancellation.
 
 ## Core Storefront & Free Diagnostic Tools
 - Homepage & Free Home Wi-Fi Scanner: https://sweeprvpn.com/

@@ -186,15 +186,35 @@
     ja: { flag: '🇯🇵', code: 'JA', label: '日本語' }
   };
 
+  function getLocalizedRoutesForPath(pathname) {
+    const p = String(pathname || '/').replace(/\/+$/, '') || '/';
+    if (p === '/' || p === '/de' || p === '/fr' || p === '/es' || /^\/(index|de-index|fr-index|es-index)\.html$/i.test(p)) {
+      return { en: '/', de: '/de', fr: '/fr', es: '/es' };
+    }
+    if (p === '/pricing' || /^\/(de|fr|es)\/pricing$/i.test(p) || /^\/(pricing|de-pricing|fr-pricing|es-pricing)\.html$/i.test(p)) {
+      return { en: '/pricing', de: '/de/pricing', fr: '/fr/pricing', es: '/es/pricing' };
+    }
+    if (p === '/tools/leak-test' || /^\/(de|fr|es|pt-br|sv)\/tools\/leak-test$/i.test(p) || /^\/(leak-test|de-leak-test|fr-leak-test|es-leak-test|pt-br-leak-test|sv-leak-test)\.html$/i.test(p)) {
+      return { en: '/tools/leak-test', de: '/de/tools/leak-test', fr: '/fr/tools/leak-test', es: '/es/tools/leak-test' };
+    }
+    return { en: '/', de: '/de', fr: '/fr', es: '/es' };
+  }
+
   function getActiveLanguage() {
     try {
+      const p = (window.location.pathname || '/').toLowerCase();
+      if (p === '/de' || p.startsWith('/de/')) return 'de';
+      if (p === '/fr' || p.startsWith('/fr/')) return 'fr';
+      if (p === '/es' || p.startsWith('/es/')) return 'es';
+      const docLang = (document.documentElement.getAttribute('lang') || '').toLowerCase().slice(0, 2);
+      if (docLang && LANG_FLAGS[docLang]) return docLang;
       const saved = localStorage.getItem('sweepr_vpn_lang') || localStorage.getItem('deepblock_lang');
       if (saved && LANG_FLAGS[saved]) return saved;
     } catch (e) {}
     return 'en';
   }
 
-  function setLanguage(langCode) {
+  function setLanguage(langCode, navigateIfDifferent = false) {
     if (!LANG_FLAGS[langCode]) langCode = 'en';
     const chosen = LANG_FLAGS[langCode] || LANG_FLAGS.en;
     try {
@@ -214,6 +234,15 @@
     if (langMenu) langMenu.classList.add('hidden');
     if (langBtn) langBtn.setAttribute('aria-expanded', 'false');
     if (langChevron) langChevron.classList.remove('rotate-180');
+
+    if (navigateIfDifferent) {
+      const routes = getLocalizedRoutesForPath(window.location.pathname);
+      const targetUrl = routes[langCode];
+      const curPath = (window.location.pathname || '/').replace(/\/+$/, '') || '/';
+      if (targetUrl && targetUrl !== curPath) {
+        window.location.href = targetUrl;
+      }
+    }
   }
 
   window.setLanguage = setLanguage;
@@ -285,6 +314,7 @@
         : 'btn btn-ghost text-sm flex items-center gap-1.5 px-2.5 py-1.5 cursor-pointer font-medium text-gray-700 hover:text-emerald-600 transition-colors';
       const chevronColor = isDarkHeader ? 'text-gray-300' : 'text-gray-400';
 
+      const routes = getLocalizedRoutesForPath(window.location.pathname);
       mount.innerHTML = `
         <div class="relative inline-block text-left" id="langDropdownContainer">
           <button type="button" id="langDropdownBtn" class="${btnClasses}" aria-expanded="false" aria-label="Select Language">
@@ -297,22 +327,22 @@
 
           <div id="langDropdownMenu" class="hidden absolute right-0 mt-2 w-44 bg-white/95 backdrop-blur-xl border border-gray-200/90 rounded-2xl shadow-xl p-1.5 z-50 transition-all text-gray-800">
             <div class="space-y-0.5 text-xs">
-              <button type="button" onclick="setLanguage('en')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 transition-colors font-medium cursor-pointer">
+              <a href="${routes.en}" onclick="setLanguage('en')" hreflang="en" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 transition-colors font-medium no-underline">
                 <span class="flex items-center gap-2"><span>🇬🇧</span> <span>English</span></span>
                 <span class="text-[10px] text-gray-400 font-mono">EN</span>
-              </button>
-              <button type="button" onclick="setLanguage('de')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 transition-colors font-medium cursor-pointer">
+              </a>
+              <a href="${routes.de}" onclick="setLanguage('de')" hreflang="de" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 transition-colors font-medium no-underline">
                 <span class="flex items-center gap-2"><span>🇩🇪</span> <span>Deutsch</span></span>
                 <span class="text-[10px] text-gray-400 font-mono">DE</span>
-              </button>
-              <button type="button" onclick="setLanguage('fr')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 transition-colors font-medium cursor-pointer">
+              </a>
+              <a href="${routes.fr}" onclick="setLanguage('fr')" hreflang="fr" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 transition-colors font-medium no-underline">
                 <span class="flex items-center gap-2"><span>🇫🇷</span> <span>Français</span></span>
                 <span class="text-[10px] text-gray-400 font-mono">FR</span>
-              </button>
-              <button type="button" onclick="setLanguage('es')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 transition-colors font-medium cursor-pointer">
+              </a>
+              <a href="${routes.es}" onclick="setLanguage('es')" hreflang="es" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 transition-colors font-medium no-underline">
                 <span class="flex items-center gap-2"><span>🇪🇸</span> <span>Español</span></span>
                 <span class="text-[10px] text-gray-400 font-mono">ES</span>
-              </button>
+              </a>
             </div>
           </div>
         </div>

@@ -605,3 +605,11 @@ button.btn-ghost,
   color: #ffffff;
   border: 1px solid var(--accent-border);
 }
+
+@media (max-width: 768px) {
+  .hero-srv-pill,
+  #langDropdownBtn {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}

@@ -788,15 +788,22 @@ function renderPseoHtmlPage(page, allPages) {
     '@context': 'https://schema.org',
     '@graph': [
       {
-        '@type': 'Article',
+        '@type': 'TechArticle',
         '@id': `${canonicalUrl}#article`,
         headline: page.h1,
         description: page.metaDesc,
         datePublished: '2026-10-21',
-        dateModified: '2026-10-21',
+        dateModified: '2026-11-17',
         author: {
+          '@type': 'Person',
+          name: 'Benjamin Cook',
+          jobTitle: 'Principal Network Architect',
+          url: 'https://sweeprvpn.com/warrant-canary',
+          worksFor: { '@type': 'Organization', name: 'SWEEPR VPN Inc.' }
+        },
+        reviewedBy: {
           '@type': 'Organization',
-          name: 'SWEEPR VPN Inc.',
+          name: 'SWEEPR Security Engineering Lab',
           url: 'https://sweeprvpn.com/'
         },
         publisher: {
@@ -818,7 +825,7 @@ function renderPseoHtmlPage(page, allPages) {
           '@type': 'Offer',
           price: '74.99',
           priceCurrency: 'GBP',
-          description: 'Annual Plan (£6.25/mo equivalent — Save 50%) with 30-Day Money-Back Guarantee'
+          description: 'Annual Plan (£6.25/mo equivalent — Save 50%) with 14-Day Money-Back Guarantee'
         },
         aggregateRating: {
           '@type': 'AggregateRating',
@@ -827,17 +834,6 @@ function renderPseoHtmlPage(page, allPages) {
           bestRating: '5',
           worstRating: '1'
         }
-      },
-      {
-        '@type': 'FAQPage',
-        mainEntity: page.faqs.map((f) => ({
-          '@type': 'Question',
-          name: f.q,
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: f.a
-          }
-        }))
       },
       {
         '@type': 'BreadcrumbList',
@@ -1105,7 +1101,7 @@ ${JSON.stringify(schemaGraph, null, 2)}
     <div class="bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-2xl p-8 md:p-12 text-center shadow-xl mb-14">
       <h3 class="text-2xl md:text-3xl font-black mb-3">Ready for 10Gbps WireGuard Speed &amp; Whole-Home Wi-Fi Protection?</h3>
       <p class="text-gray-300 max-w-xl mx-auto mb-7 text-base">
-        Scan your home Wi-Fi in under 30 seconds, stop ISP evening throttling, and protect up to 10 devices for just <span data-price="annualPerMonthStr">£6.25</span>/mo (<span data-price="annualStr">£74.99</span>/yr — Save 50%).
+        Scan your home Wi-Fi in under 30 seconds, stop ISP evening throttling, and protect up to 3 simultaneous devices (+ router) for just <span data-price="annualPerMonthStr">£6.25</span>/mo (<span data-price="annualStr">£74.99</span>/yr — Save 50%).
       </p>
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
         <a href="/download" class="btn btn-go btn-big gap-2">
@@ -1117,7 +1113,7 @@ ${JSON.stringify(schemaGraph, null, 2)}
         </a>
       </div>
       <div class="flex flex-wrap items-center justify-center gap-4 text-xs text-gray-400 mt-6">
-        <span>🛡️ 30-Day Money-Back Guarantee</span>
+        <span>🛡️ 14-Day Money-Back Guarantee</span>
         <span>•</span>
         <span>⚡ 14 MB Lightweight App</span>
         <span>•</span>
@@ -1205,7 +1201,6 @@ if (action === 'matrix') {
     for (const file of fs.readdirSync(dirAbs).sort()) {
       if (!file.endsWith('.html')) continue;
       const slug = file.replace(/\.html$/, '');
-      if (dir === 'vs' && slug === 'totalvpn') continue;
       const urlPath = `/${dir}/${slug}`;
       const absPath = path.join(dirAbs, file);
       const htmlContent = fs.readFileSync(absPath, 'utf8');
@@ -1273,12 +1268,12 @@ ${allSitemapEntries
   - Instant alerts on your screen whenever a stranger or new device joins your home Wi-Fi.
   - 1-click speed booster to stop peak-hour streaming buffering.
   - Automatic Smart-TV spy blocker that stops LG webOS, Samsung Tizen, Roku, Vizio Inscape, and Fire TV sets from secretly taking ACR screenshots of what you watch.
-- **Transparent Price-Lock Subscription Plans (Covers up to 10 Devices)**:
+- **Transparent Price-Lock Subscription Plans (Covers up to 3 Simultaneous Devices + Router)**:
   - **Yearly Plan (Most Popular — Save 50%)**: £74.99/year (£6.25/mo) | $95.99 USD ($8.00/mo) | €89.99 EUR (€7.50/mo) | CA$131.99 CAD | A$149.99 AUD | CHF 83.99 | ¥14,999 JPY
   - **6-Monthly Plan (Save 35%)**: £48.99/6 months (£8.17/mo) | $61.99 USD | €58.99 EUR | CA$85.99 CAD | A$97.99 AUD | CHF 54.99 | ¥9,799 JPY
   - **Monthly Plan**: £12.49/month (or £1.99 1st-Month Introductory Offer) | $15.99 USD | €14.99 EUR | CA$21.99 CAD | A$24.99 AUD | CHF 13.99 | ¥2,499 JPY
   - **SWEEPR Wi-Fi Radar & Smart-TV Shield Add-On**: +£14.99/yr | +£9.99/6mo | +£1.99/mo
-  - **Refund Policy**: 30-day 100% money-back guarantee and 1-click self-service portal cancellation.
+  - **Refund Policy**: 14-day 100% money-back guarantee and 1-click self-service portal cancellation.
 
 ## Core Storefront & Free Diagnostic Tools
 - Homepage & Free Home Wi-Fi Scanner: https://sweeprvpn.com/
@@ -1322,9 +1317,11 @@ ${allPseoPagesOnDisk.map((p) => `- [${p.h1}](${p.loc})`).join('\n')}
   for (const page of indexablePillarsToValidate) {
     const content = page.content;
     const hasCanonical = new RegExp(`<link\\s+rel=["']canonical["']\\s+href=["']https://sweeprvpn\\.com${page.urlPath}["']\\s*/?>`, 'i').test(content);
+    const hasDeprecatedSchema = /"@type"\s*:\s*"(FAQPage|HowTo)"/i.test(content);
     const hasSchema =
-      (content.includes('"@type": "FAQPage"') || content.includes('"@type":"FAQPage"')) &&
-      (content.includes('"@type": "SoftwareApplication"') || content.includes('"@type":"SoftwareApplication"') || content.includes('"@type": "TechArticle"') || content.includes('"@type":"TechArticle"'));
+      !hasDeprecatedSchema &&
+      (content.includes('"@type": "TechArticle"') || content.includes('"@type":"TechArticle"') || content.includes('"@type": "SoftwareApplication"') || content.includes('"@type":"SoftwareApplication"')) &&
+      (content.includes('"@type": "BreadcrumbList"') || content.includes('"@type":"BreadcrumbList"'));
     const hasPricingInfo = content.includes('74.99') || content.includes('data-price="annualStr"');
     const hasNavJs = content.includes('/nav.js');
     if (hasCanonical && hasSchema && hasPricingInfo && hasNavJs) {

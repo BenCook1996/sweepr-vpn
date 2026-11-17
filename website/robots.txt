@@ -13,6 +13,9 @@ Disallow: /prototype-mockup-a
 Disallow: /prototype-mockup-b
 Disallow: /sweepr-motion-review
 Disallow: /sweepr-vpn-scorecard
+Disallow: /*?currency=*
+Disallow: /*?picker=*
+Disallow: /*?noredirect=*
 
 # Explicitly permit AI Search and Answer Engines for LLM citations (GEO/AEO)
 User-agent: GPTBot
