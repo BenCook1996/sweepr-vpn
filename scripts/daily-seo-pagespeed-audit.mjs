@@ -34,7 +34,7 @@ const INDEXING_QUEUE_PATH = path.join(WEBSITE_DIR, 'indexing-queue.json');
 const DAILY_STATE_PATH = path.join(WEBSITE_DIR, 'daily-seo-pages-state.json');
 const SERVER_PATH = path.join(WEBSITE_DIR, 'server.mjs');
 const AUDIT_LOG_PATH = path.join(VPN_ROOT, 'TECHNICAL_SEO_AUDIT_LOG.md');
-const INDEXNOW_KEY = '8f9a2b4c6d1e3f5a7b9c0d2e4f6a8b0c';
+const INDEXNOW_KEY = 'e159f60b7cbd19abe8a6c1c8d84bb2b7';
 
 const shouldFix = !process.argv.includes('--no-fix'); // Auto-optimize by default
 const shouldPing = process.argv.includes('--ping') || process.env.INDEXNOW_PING === 'true';

@@ -35,7 +35,7 @@ const LLMS_PATH = path.join(WEBSITE_DIR, 'llms.txt');
 const INDEXING_QUEUE_PATH = path.join(WEBSITE_DIR, 'indexing-queue.json');
 const DAILY_STATE_PATH = path.join(WEBSITE_DIR, 'daily-seo-pages-state.json');
 const VALIDATOR_PATH = path.join(VPN_ROOT, '.agents', 'skills', 'vpn-seo-and-geo', 'scripts', 'pseo_and_seo_validator.mjs');
-const INDEXNOW_KEY = '8f9a2b4c6d1e3f5a7b9c0d2e4f6a8b0c';
+const INDEXNOW_KEY = 'e159f60b7cbd19abe8a6c1c8d84bb2b7';
 
 const NETWORKS_AND_ISPS = [
   { slug: 'hyperoptic-broadband', name: 'Hyperoptic 1Gbps Full Fibre', asn: 'AS56595', tech: 'FTTP / Ethernet CGNAT', mtu: 1420, peakHours: '19:30–23:00 UK', throttlingType: 'CGNAT session table saturation and transit peering congestion during evening peak hours' },

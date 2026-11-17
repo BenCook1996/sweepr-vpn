@@ -44,7 +44,7 @@ const CENTRAL_CRM_SEED_PATH = 'C:/Users/Benjamin/Downloads/sweepr_crm/src/outrea
 const SITEMAP_PATH = path.join(WEBSITE_DIR, 'sitemap.xml');
 const PAD_PATH = path.join(WEBSITE_DIR, 'pad.xml');
 const INDEXING_QUEUE_PATH = path.join(WEBSITE_DIR, 'indexing-queue.json');
-const INDEXNOW_KEY = '8f9a2b4c6d1e3f5a7b9c0d2e4f6a8b0c';
+const INDEXNOW_KEY = 'e159f60b7cbd19abe8a6c1c8d84bb2b7';
 const LOCAL_CRM_DB_PATH = 'C:\\Users\\Benjamin\\Downloads\\sweepr_crm\\data\\sweepr-crm.db';
 let localCrmDb = null;
 if (fs.existsSync(LOCAL_CRM_DB_PATH)) {
