@@ -11,11 +11,6 @@
     "https://sweeprvpn.com/es/tools/leak-test",
     "https://sweeprvpn.com/vs/totalvpn"
   ],
-  "bing_requested": [],
-  "directory_forms_submitted": [],
-  "last_indexnow_ping": "2026-11-17T14:04:14.890Z",
-  "last_sitemap_ping": "2026-11-17T14:04:14.890Z",
-  "pending_urls": [],
   "indexnow_submitted_at": {
     "https://sweeprvpn.com/solutions/talktalk-p2p-port-forwarding": "2026-11-17T10:14:37.370Z",
     "https://sweeprvpn.com/setup/gl-inet-travel-router": "2026-11-17T10:14:37.370Z",
@@ -421,6 +416,10 @@
     "https://sweeprvpn.com/solutions/bt-broadband-uhd-streaming-buffering": "2026-11-10T13:13:41.797Z",
     "https://sweeprvpn.com/solutions/brsk-better-net-uk-voip-teams-zoom-jitter": "2026-11-10T13:13:41.797Z"
   },
+  "bing_requested": [],
+  "directory_forms_submitted": [],
+  "last_indexnow_ping": "2026-11-17T10:14:37.370Z",
+  "last_sitemap_ping": "2026-11-17T10:14:37.370Z",
   "gsc_requested": [
     "https://sweeprvpn.com/solutions/virgin-media-remote-dev-ssh",
     "https://sweeprvpn.com/tools/smart-tv-tracking-check",
@@ -463,10 +462,6 @@
     "https://sweeprvpn.com/solutions/hotel-captive-portal-wifi-p2p-port-forwarding",
     "https://sweeprvpn.com/solutions/community-fibre-london-p2p-port-forwarding"
   ],
-  "bing_requested": [],
-  "directory_forms_submitted": [],
-  "last_indexnow_ping": "2026-11-17T10:14:37.370Z",
-  "last_sitemap_ping": "2026-11-17T10:14:37.370Z",
   "last_daily_50_batch": {
     "date": "2026-11-12",
     "newCount": 0,
@@ -476,7 +471,7 @@
   },
   "last_audit": {
     "date": "2026-11-17",
-    "totalUrls": 83,
-    "pendingDeltaUrls": 12
+    "totalUrls": 92,
+    "pendingDeltaUrls": 9
   }
 }

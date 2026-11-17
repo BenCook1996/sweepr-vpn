@@ -191,7 +191,7 @@ function resolveCanonicalForConsolidatedSolution(slug) {
 // 2. Consolidate `/solutions/` and `/vs/` & Rewrite Internal Links to Canonicals
 // ============================================================================
 const rewriteLinkMap = new Map([
-  ['/vs/totalvpn', '/alternatives/totalvpn'],
+  ['/vs-totalvpn', '/vs/totalvpn'],
   ['/guides/fix-udp-bufferbloat-wireguard-gaming', '/guides/fix-wireguard-mtu-fragmentation-pppoe'],
   ['/guides/stop-5g-hotspot-carrier-throttling', '/guides/stop-isp-deep-packet-inspection-dpi'],
   ...Object.entries(SPECIFIC_SOLUTIONS_CANONICAL_MAP).map(([s, t]) => [`/solutions/${s}`, t])

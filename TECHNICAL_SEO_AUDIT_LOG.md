@@ -976,17 +976,17 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 ## 2026-11-17 — Daily Technical SEO, Crawlability & PageSpeed Audit & Auto-Optimization Pass
 
 ### Executive Summary
-- **Overall Scores**: Crawlability **100/100**, Technical SEO **100/100**, PageSpeed & CWV **100/100** across **83 Canonical Pages**.
+- **Overall Scores**: Crawlability **100/100**, Technical SEO **100/100**, PageSpeed & CWV **100/100** across **92 Canonical Pages**.
 - **Auto-Optimizations Executed**:
-  - Synchronized sitemap.xml with 84 canonical URLs (content-hash <lastmod>: 0 modified today)
-  - Synchronized llms.txt & llms-full.txt with all 62 pSEO guides and live 04:00 AM WireGuard/ACR telemetry for GEO AI citations
+  - Synchronized sitemap.xml with 93 canonical URLs (content-hash <lastmod>: 0 modified today)
+  - Synchronized llms.txt & llms-full.txt with all 63 pSEO guides and live 04:00 AM WireGuard/ACR telemetry for GEO AI citations
 
 ### Category Scorecards & Verifications
 
 #### 1. Crawlability & Indexability (100/100)
-- **Sitemap Completeness & Content-Hash Freshness**: PASS — 84 canonical URLs registered (0 thin/duplicate variants consolidated via 301/noindex)
-- **GEO / LLM Discovery Manifests (llms.txt & llms-full.txt)**: PASS — Updated both manifests with 83 canonical URLs and live WireGuard/ACR proof
-- **Search Engine Indexing Queue (Delta-Only)**: PASS — 12 un-pinged/modified delta URLs queued (out of 83 total canonical URLs)
+- **Sitemap Completeness & Content-Hash Freshness**: PASS — 93 canonical URLs registered (0 thin/duplicate variants consolidated via 301/noindex)
+- **GEO / LLM Discovery Manifests (llms.txt & llms-full.txt)**: PASS — Updated both manifests with 92 canonical URLs and live WireGuard/ACR proof
+- **Search Engine Indexing Queue (Delta-Only)**: PASS — 9 un-pinged/modified delta URLs queued (out of 92 total canonical URLs)
 - **robots.txt Sitemap Directive**: PASS — Valid sitemap directive points to https://sweeprvpn.com/sitemap.xml
 - **robots.txt AI Crawler Allowances (GEO)**: PASS — All 7 major AI search bots explicitly permitted
 - **robots.txt Crawl-Budget Protections**: PASS — Internal APIs, user portals, qr-setup and CRO studios disallowed
@@ -994,24 +994,24 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 - **PAD 4.0 XML Feed**: PASS — Valid PAD 4.0 metadata for software directory syndication
 - **Public Smart-TV ACR Blocklist Asset**: PASS — smart-tv-acr-blocklist.txt verified for Pi-hole/AdGuard Home & GEO citations
 - **301 Consolidation & Eduroam Hub Redirects (server.mjs)**: PASS — All consolidated noindex variants and Eduroam duplicate slugs 301-redirected to canonical hubs
-- **Historical GSC URLs & 301 Redirect Target Guard**: PASS — Verified 76 historical GSC URLs and 78 301 rules via resolveCanonical301 (0 404s, 0 redirect chains)
+- **Historical GSC URLs & 301 Redirect Target Guard**: PASS — Verified 76 historical GSC URLs and 94 301 rules via resolveCanonical301 (0 404s, 0 redirect chains)
 
 #### 2. Technical SEO & Rich Schemas (100/100)
-- **Page Titles**: PASS — All 83 pages have valid, descriptive <title> tags
-- **Meta Descriptions**: PASS — All 83 pages have compelling, search-optimized meta descriptions
-- **Canonical URLs**: PASS — All 83 pages have exact self-referencing canonical tags
-- **Robots Snippet Controls**: PASS — All 83 pages specify max-image-preview:large for search & Discover snippets
-- **JSON-LD Structured Data**: PASS — All 83 pages inject verified Schema.org JSON-LD structured data
-- **H1 Heading Hierarchy**: PASS — All 83 pages have exactly 1 descriptive <h1> heading
-- **OpenGraph Social Metadata**: PASS — All 83 pages include complete OpenGraph tags (title, desc, url, og:image)
-- **Twitter Card Metadata**: PASS — All 83 pages include complete summary_large_image Twitter card tags
-- **Mobile Theme-Color Support**: PASS — All 83 pages declare theme-color for mobile chrome styling
-- **Google Analytics 4 (G-7D28EEMNXX) Coverage**: PASS — All 83 canonical pages include active GA4 telemetry
-- **Internal Link Integrity**: PASS — All internal links across 83 pages resolve to valid routes (0 broken links)
-- **HTML Template Corruption & Duplicate Link Guard**: PASS — All 83 pages verified free of >NaN<, >undefined<, &amp;amp;, and duplicate related-guide links
+- **Page Titles**: PASS — All 92 pages have valid, descriptive <title> tags
+- **Meta Descriptions**: PASS — All 92 pages have compelling, search-optimized meta descriptions
+- **Canonical URLs**: PASS — All 92 pages have exact self-referencing canonical tags
+- **Robots Snippet Controls**: PASS — All 92 pages specify max-image-preview:large for search & Discover snippets
+- **JSON-LD Structured Data**: PASS — All 92 pages inject verified Schema.org JSON-LD structured data
+- **H1 Heading Hierarchy**: PASS — All 92 pages have exactly 1 descriptive <h1> heading
+- **OpenGraph Social Metadata**: PASS — All 92 pages include complete OpenGraph tags (title, desc, url, og:image)
+- **Twitter Card Metadata**: PASS — All 92 pages include complete summary_large_image Twitter card tags
+- **Mobile Theme-Color Support**: PASS — All 92 pages declare theme-color for mobile chrome styling
+- **Google Analytics 4 (G-7D28EEMNXX) Coverage**: PASS — All 92 canonical pages include active GA4 telemetry
+- **Internal Link Integrity**: PASS — All internal links across 92 pages resolve to valid routes (0 broken links)
+- **HTML Template Corruption & Duplicate Link Guard**: PASS — All 92 pages verified free of >NaN<, >undefined<, &amp;amp;, and duplicate related-guide links
 - **Server Canonical 301 Architecture**: PASS — Legacy .html and alias routes seamlessly 301 redirected to clean URLs
 - **Anti-Cannibalization & Title Cooldown Guard**: PASS — 0 consolidated cannibal slugs in sitemap.xml; all 20 GSC Top-20 pillars protected by 14-day title lock
-- **Ad-Platform Policy Compliance Guard (AGENTS.md Principle 2)**: PASS — 0 geo-unblocking, copyright circumvention, or piracy phrases across all 83 indexable pages
+- **Ad-Platform Policy Compliance Guard (AGENTS.md Principle 2)**: PASS — 0 geo-unblocking, copyright circumvention, or piracy phrases across all 92 indexable pages
 
 #### 3. PageSpeed & Core Web Vitals (100/100)
 - **Image Optimization (<100KB)**: PASS — All 12 website image assets are under 100 KB
@@ -1026,7 +1026,7 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 - **Static Cache-Control Architecture**: PASS — Explicit caching headers configured for HTML (0s), static media (300s/3600s), and XML/TXT (3600s/86400s)
 
 ### Compression Benchmark Results
-- **order.html** (127.7 KB raw) &rarr; Gzip: **29.3 KB** (77% reduction) | Brotli: **27.1 KB** (79% reduction)
-- **index.html** (65.6 KB raw) &rarr; Gzip: **14.1 KB** (78% reduction) | Brotli: **13.2 KB** (80% reduction)
-- **sitemap.xml** (15.2 KB raw) &rarr; Gzip: **1.4 KB** (91% reduction) | Brotli: **1.3 KB** (92% reduction)
+- **order.html** (130.0 KB raw) &rarr; Gzip: **29.4 KB** (77% reduction) | Brotli: **27.2 KB** (79% reduction)
+- **index.html** (65.6 KB raw) &rarr; Gzip: **13.6 KB** (79% reduction) | Brotli: **12.7 KB** (81% reduction)
+- **sitemap.xml** (24.1 KB raw) &rarr; Gzip: **1.6 KB** (93% reduction) | Brotli: **1.5 KB** (94% reduction)
 

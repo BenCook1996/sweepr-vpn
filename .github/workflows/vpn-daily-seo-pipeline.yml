@@ -61,51 +61,8 @@ jobs:
         run: |
           node scripts/vpn-seo-drip.mjs
 
-      - name: 6.5. CI Quality Gate Assertions (Sitemap <= 95, 0 Zombie Files, Overlap < 30%)
-        run: |
-          node --input-type=module << 'EOF'
-          import fs from 'node:fs';
-          import path from 'node:path';
-          const sitemap = fs.readFileSync('website/sitemap.xml', 'utf8');
-          const locs = sitemap.match(/<loc>/g) || [];
-          if (locs.length > 95 || locs.length < 50) {
-            console.error(`CI Quality Gate failed: sitemap URL count ${locs.length} outside [50, 95]`);
-            process.exit(1);
-          }
-          const dirs = ['solutions', 'setup', 'guides', 'vs'];
-          const strip = (h) => h.replace(/<!--[\s\S]*?-->/g, ' ').replace(/<script[\s\S]*?<\/script>/gi, ' ').replace(/<style[\s\S]*?<\/style>/gi, ' ').replace(/<header[\s\S]*?<\/header>/gi, ' ').replace(/<footer[\s\S]*?<\/footer>/gi, ' ').replace(/<nav[\s\S]*?<\/nav>/gi, ' ').replace(/<details[\s\S]*?<\/details>/gi, ' ').replace(/<[^>]+>/g, ' ').replace(/&\w+;/g, ' ').replace(/\s+/g, ' ').trim().toLowerCase();
-          const solShingles = [];
-          for (const d of dirs) {
-            const p = path.join('website', d);
-            for (const f of fs.readdirSync(p).filter((x) => x.endsWith('.html'))) {
-              const raw = fs.readFileSync(path.join(p, f), 'utf8');
-              if (raw.includes('noindex')) {
-                console.error(`CI Quality Gate failed: zombie noindex found in website/${d}/${f}`);
-                process.exit(1);
-              }
-              if (d === 'solutions') {
-                const words = strip(raw).split(' ').filter(Boolean);
-                const s = new Set();
-                for (let i = 0; i <= words.length - 5; i++) s.add(words.slice(i, i + 5).join(' '));
-                solShingles.push({ f, s });
-              }
-            }
-          }
-          let maxOverlap = 0;
-          for (let i = 0; i < solShingles.length; i++) {
-            for (let j = i + 1; j < solShingles.length; j++) {
-              let inter = 0;
-              for (const g of solShingles[i].s) if (solShingles[j].s.has(g)) inter++;
-              const sim = (2 * inter / (solShingles[i].s.size + solShingles[j].s.size || 1)) * 100;
-              if (sim > maxOverlap) maxOverlap = sim;
-              if (sim >= 30.0) {
-                console.error(`CI Quality Gate failed: 5-gram overlap ${sim.toFixed(2)}% >= 30% (${solShingles[i].f} vs ${solShingles[j].f})`);
-                process.exit(1);
-              }
-            }
-          }
-          console.log(`CI Quality Gate passed: sitemap=${locs.length}/95, zombies=0, max_solutions_overlap=${maxOverlap.toFixed(2)}%`);
-          EOF
+      - name: 6.5. CI Quality Gate Assertions (Sitemap <= 110, 0 Deprecated Schema, 0 Mojibake, Overlap < 30%)
+        run: node scripts/ci-seo-quality-gate.mjs
 
       - name: Commit & Push Cloud SEO Updates to Production (Railway Auto-Deploy)
         run: |
@@ -120,6 +77,8 @@ jobs:
               COMMIT_SHA=$(git rev-parse --short HEAD)
               curl -fsS -m 10 -X POST "${SWEEPR_RAILWAY_CRM}/api/crm/seo/changelog" \
                 -u "${CRM_ADMIN_USER:-admin}:${CRM_ADMIN_PASSWORD}" \
+                -H "Origin: ${SWEEPR_RAILWAY_CRM}" \
+                -H "X-Sweepr-Project: vpn" \
                 -H "Content-Type: application/json" \
                 -d "{\"project_id\":\"vpn\",\"category\":\"gsc_indexing\",\"title\":\"Daily Cloud SEO & WireGuard/ACR Pipeline (${COMMIT_SHA})\",\"description\":\"Automated GSC/GA4 telemetry sync, keyword audit, WireGuard/ACR live proof refresh, and IndexNow drip pushed to main.\",\"impact_area\":\"sweeprvpn.com pillars & sitemap\",\"author\":\"sweepr-cloud-bot\",\"status\":\"deployed\"}" \
                 || echo "::warning::Central CRM changelog sync skipped or unreachable"

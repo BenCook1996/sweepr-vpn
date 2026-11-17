@@ -174,13 +174,24 @@ async function verifyAndProbePadXml() {
 
 const GSC_PRIORITY_URLS = new Set([
   'https://sweeprvpn.com/',
+  'https://sweeprvpn.com/de',
+  'https://sweeprvpn.com/fr',
+  'https://sweeprvpn.com/es',
   'https://sweeprvpn.com/pricing',
+  'https://sweeprvpn.com/de/pricing',
+  'https://sweeprvpn.com/fr/pricing',
+  'https://sweeprvpn.com/es/pricing',
   'https://sweeprvpn.com/download',
   'https://sweeprvpn.com/solutions',
   'https://sweeprvpn.com/setup',
   'https://sweeprvpn.com/guides',
   'https://sweeprvpn.com/vs',
   'https://sweeprvpn.com/tools/leak-test',
+  'https://sweeprvpn.com/de/tools/leak-test',
+  'https://sweeprvpn.com/fr/tools/leak-test',
+  'https://sweeprvpn.com/es/tools/leak-test',
+  'https://sweeprvpn.com/pt-br/tools/leak-test',
+  'https://sweeprvpn.com/sv/tools/leak-test',
   'https://sweeprvpn.com/tools/isp-throttling-test',
   'https://sweeprvpn.com/tools/whats-on-my-wifi',
   'https://sweeprvpn.com/tools/smart-tv-tracking-check',
@@ -528,8 +539,8 @@ async function runVpnDrip(targetCount = 300) {
 
   console.log(`[SWEEPR VPN Drip ${runTag}] Published, logged & verified ${completed} new dofollow backlinks. Total VPN CRM outreach entries: ${vpnSeed.length}`);
 
-  // Submit delta-only newly created/modified URLs (max 25 per 6h run, 14-day cooldown) to Bing IndexNow API
-  // Prevents Bing Webmaster Tools full-sitemap anti-spam throttling while steadily indexing all 1,100+ URLs
+  // Submit delta-only newly created/modified URLs (max 25 per run, 14-day cooldown) to Bing IndexNow API
+  // Prioritizes pending queue + localized DE/FR/ES & /vs/totalvpn priority URLs before crawling the remaining sitemap
   let indexStatus = { sitemapUrls: 0, deltaSubmitted: 0, bingRes: 'N/A', indexNowRes: 'N/A', yandexRes: 'N/A' };
   try {
     let queue = {
@@ -558,6 +569,7 @@ async function runVpnDrip(targetCount = 300) {
     const FOURTEEN_DAYS_MS = 14 * 24 * 60 * 60 * 1000;
     const candidatePool = [
       ...(Array.isArray(queue.pending_urls) ? queue.pending_urls : []),
+      ...Array.from(GSC_PRIORITY_URLS).filter((u) => sitemapUrls.includes(u)),
       ...sitemapUrls.slice().reverse()
     ];
     const seen = new Set();

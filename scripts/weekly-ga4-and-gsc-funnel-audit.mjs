@@ -6,7 +6,7 @@
  * 1. Funnel A (Direct Web Checkout): /api/checkout-config, /order, /pricing, and GA4 ecommerce instrumentation
  * 2. Funnel B (Freemium Installer): /download HTML (200 OK, index, follow), /SWEEPRVPN.exe Authenticode binary & SHA-256
  * 3. Interactive Lead-Magnet Tools & Ecosystem Cross-Promo: /tools/leak-test, /tools/isp-throttling-test, sweeprcleaner.com
- * 4. Search Console Consolidation & Sitemap Hygiene: sitemap.xml (195 canonical URLs), 14-day title cooldown state, delta indexing queue
+ * 4. Search Console Consolidation & Sitemap Hygiene: sitemap.xml (50–110 canonical URLs + xmlns:xhtml hreflang), 14-day title cooldown state, delta indexing queue
  *
  * Persists a weekly audit scorecard to GA4_AND_GSC_WEEKLY_AUDIT_LOG.md.
  */
@@ -64,7 +64,8 @@ async function runWeeklyFunnelAndGscAudit() {
     'add_payment_info',
     'leak_test_completed',
     'throttling_test_completed',
-    'diagnostic_badge_copied'
+    'diagnostic_badge_copied',
+    'ai_text_fragment_arrival'
   ];
   const combinedClientJs = navJs + '\n' + pricingJs;
   const missingClientEvents = requiredEvents.filter((ev) => !combinedClientJs.includes(`'${ev}'`));
@@ -118,11 +119,23 @@ async function runWeeklyFunnelAndGscAudit() {
 
   const sitemapXml = fs.readFileSync(path.join(WEBSITE_DIR, 'sitemap.xml'), 'utf8');
   const sitemapUrlCount = (sitemapXml.match(/<loc>/g) || []).length;
+  const hasSitemapXhtml = sitemapXml.includes('xmlns:xhtml="http://www.w3.org/1999/xhtml"');
+  const hasLocalizedPricingInSitemap =
+    sitemapXml.includes('https://sweeprvpn.com/de/pricing') &&
+    sitemapXml.includes('https://sweeprvpn.com/fr/pricing') &&
+    sitemapXml.includes('https://sweeprvpn.com/es/pricing');
+  const hasTotalVpnSplitInSitemap =
+    sitemapXml.includes('https://sweeprvpn.com/vs/totalvpn') &&
+    sitemapXml.includes('https://sweeprvpn.com/alternatives/totalvpn');
   record(
     'GSC Consolidation',
-    'Canonical Sitemap Budget (website/sitemap.xml)',
-    sitemapUrlCount >= 195 && sitemapUrlCount <= 350,
-    `${sitemapUrlCount} canonical indexable URLs registered in sitemap.xml`
+    'Canonical Sitemap Budget, Hreflang & TotalVPN Split (website/sitemap.xml)',
+    sitemapUrlCount >= 50 &&
+      sitemapUrlCount <= 110 &&
+      hasSitemapXhtml &&
+      hasLocalizedPricingInSitemap &&
+      hasTotalVpnSplitInSitemap,
+    `${sitemapUrlCount} canonical indexable URLs (threshold [50, 110]) | xmlns:xhtml=${hasSitemapXhtml} | DE/FR/ES pricing=${hasLocalizedPricingInSitemap} | TotalVPN split=${hasTotalVpnSplitInSitemap}`
   );
 
   // Verify Keyword Research Engine & 9-Assertion Quality Gate State + 28 Pillar Templates
@@ -185,7 +198,7 @@ async function runWeeklyFunnelAndGscAudit() {
       : 'One or more PLG Automation 5-8 hooks missing in server.mjs / dashboard.html / nav.js / order.html'
   );
 
-  // Verify 5 Interactive Lead-Magnet Tools, 3 Localized Leak Tests, /public-wifi & /llms-full.txt
+  // Verify Interactive Lead-Magnet Tools, Localized DE/FR/ES/PT-BR/SV Hubs, /vs/totalvpn & /llms-full.txt
   const requiredGrowthFiles = [
     'leak-test.html',
     'isp-throttling-test.html',
@@ -193,9 +206,19 @@ async function runWeeklyFunnelAndGscAudit() {
     'smart-tv-tracking-check.html',
     'whats-on-my-wifi.html',
     'public-wifi.html',
+    'de/index.html',
+    'fr/index.html',
+    'es/index.html',
+    'de/pricing.html',
+    'fr/pricing.html',
+    'es/pricing.html',
     'de-leak-test.html',
+    'fr-leak-test.html',
+    'es-leak-test.html',
     'pt-br-leak-test.html',
     'sv-leak-test.html',
+    'vs/totalvpn.html',
+    'alternatives-totalvpn.html',
     'llms-full.txt'
   ];
   const missingGrowthFiles = requiredGrowthFiles.filter((f) => !fs.existsSync(path.join(WEBSITE_DIR, f)));
@@ -341,6 +364,42 @@ async function runWeeklyFunnelAndGscAudit() {
     );
   } catch (err) {
     record('GSC Consolidation', 'Live HTTP 301 Consolidation Redirects', false, err.message);
+  }
+
+  try {
+    const [vsRes, altRes, legacyRedirRes, deRes, frRes, esRes] = await Promise.all([
+      fetchWithTimeout('https://sweeprvpn.com/vs/totalvpn'),
+      fetchWithTimeout('https://sweeprvpn.com/alternatives/totalvpn'),
+      fetchWithTimeout('https://sweeprvpn.com/vs-totalvpn', { redirect: 'manual' }),
+      fetchWithTimeout('https://sweeprvpn.com/de'),
+      fetchWithTimeout('https://sweeprvpn.com/fr'),
+      fetchWithTimeout('https://sweeprvpn.com/es')
+    ]);
+    const [vsHtml, altHtml, deHtml, frHtml, esHtml] = await Promise.all([
+      vsRes.text(),
+      altRes.text(),
+      deRes.text(),
+      frRes.text(),
+      esRes.text()
+    ]);
+    const vsCanonOk = vsRes.status === 200 && vsHtml.includes('rel="canonical" href="https://sweeprvpn.com/vs/totalvpn"');
+    const altCanonOk = altRes.status === 200 && altHtml.includes('rel="canonical" href="https://sweeprvpn.com/alternatives/totalvpn"');
+    const legacy301Ok = legacyRedirRes.status === 301 && (legacyRedirRes.headers.get('location') || '').includes('/vs/totalvpn');
+    const i18nOk =
+      deRes.status === 200 &&
+      frRes.status === 200 &&
+      esRes.status === 200 &&
+      deHtml.includes('hreflang="x-default"') &&
+      frHtml.includes('hreflang="x-default"') &&
+      esHtml.includes('hreflang="x-default"');
+    record(
+      'International & Intent Split',
+      'Live /vs/totalvpn vs /alternatives/totalvpn & Localized DE/FR/ES Hreflang',
+      vsCanonOk && altCanonOk && legacy301Ok && i18nOk,
+      `/vs/totalvpn=${vsRes.status} (canon=${vsCanonOk}) | /alternatives/totalvpn=${altRes.status} (canon=${altCanonOk}) | /vs-totalvpn=${legacyRedirRes.status} | DE/FR/ES=${deRes.status}/${frRes.status}/${esRes.status}`
+    );
+  } catch (err) {
+    record('International & Intent Split', 'Live /vs/totalvpn vs /alternatives/totalvpn & Localized DE/FR/ES Hreflang', false, err.message);
   }
 
   try {

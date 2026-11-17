@@ -11,9 +11,9 @@
  *     - `/setup/{router-nas-console-os}` (GL.iNet, MikroTik, UniFi, Synology, Proxmox, Docker Gluetun, PS5, WSL2, etc.)
  *     - `/vs/{competitor}` (Technical WireGuard + LAN Scanner + Anchor Pricing comparisons)
  *     - `/guides/{security-guide}` (Smart-TV ACR domain blocklists, Airbnb camera Wi-Fi scanning, MTU optimization, IPv6 leak fixes)
- *  3. Renders 50 full-length (650–950+ word) HTML5 pages with unique `<title>`, `<meta name="description">`,
- *     self-referencing `<link rel="canonical">`, OpenGraph tags, JSON-LD `FAQPage` + `SoftwareApplication` schemas,
- *     technical benchmark tables, and internal links to `/download`, `/pricing`, `/tools/leak-test`, and `/tools/isp-throttling-test`.
+ *  3. Renders full-length (650–950+ word) HTML5 pages with concise <=65-char `<title>`, `<meta name="description">`,
+ *     self-referencing `<link rel="canonical">`, OpenGraph tags, JSON-LD `SoftwareApplication` + `TechArticle` (`Benjamin Cook`) + `BreadcrumbList` schemas,
+ *     a 40–60 word `#direct-answer` block + Tool-Hook CTA, technical benchmark tables, and internal links to `/download`, `/pricing`, `/tools/leak-test`, and `/tools/isp-throttling-test`.
  *  4. Appends all 50 new URLs to `website/sitemap.xml`, `website/llms.txt`, and `website/indexing-queue.json`.
  *  5. Runs `pseo_and_seo_validator.mjs` and pings Bing IndexNow (`www.bing.com/indexnow` & `api.indexnow.org/indexnow`).
  *
@@ -1279,16 +1279,49 @@ function buildCandidatePool() {
   return pool;
 }
 
-function renderLayout({ title, description, canonicalUrl, badge, h1, lead, bodyHtml, faqs, relatedLinks }) {
-  const faqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faqs.map((f) => ({
-      '@type': 'Question',
-      name: f.q,
-      acceptedAnswer: { '@type': 'Answer', text: f.a }
-    }))
-  };
+function capSeoTitle(rawTitle) {
+  const clean = String(rawTitle || '').replace(/\s+/g, ' ').trim();
+  if (clean.length <= 65) return clean;
+  const suffix = ' | SWEEPR VPN';
+  const base = clean.replace(/\s*\|\s*SWEEPR(\s+VPN)?$/i, '').trim();
+  if (base.length + suffix.length <= 65) return `${base}${suffix}`;
+  const trimmed = base
+    .slice(0, Math.max(12, 65 - suffix.length))
+    .replace(/\s+\S*$/, '')
+    .replace(/[\s\-:—,|]+$/, '')
+    .trim();
+  const candidate = `${trimmed}${suffix}`;
+  return candidate.length <= 65 ? candidate : candidate.slice(0, 65).trim();
+}
+
+function normalizeDirectAnswer40To60(rawText) {
+  let words = String(rawText || '')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
+  const padSentence =
+    'SWEEPR VPN provides zero-log 10Gbps WireGuard endpoints with calibrated MTU, in-tunnel DNS at 10.66.0.1, a 30-second Home Wi-Fi Scanner, 3 simultaneous devices (+ unlimited behind a router), and a 14-day money-back guarantee.';
+  const padWords = padSentence.split(/\s+/);
+  let i = 0;
+  while (words.length < 44 && i < padWords.length) {
+    words.push(padWords[i++]);
+  }
+  if (words.length > 58) {
+    words = words.slice(0, 56);
+    const last = words[words.length - 1];
+    if (!/[.!?]$/.test(last)) {
+      words[words.length - 1] = last.replace(/[,;:]+$/, '') + '.';
+    }
+  }
+  return words.join(' ');
+}
+
+function renderLayout({ title, description, canonicalUrl, badge, h1, lead, directAnswer, bodyHtml, faqs, relatedLinks }) {
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const safeTitle = capSeoTitle(title);
+  const safeDirectAnswer = normalizeDirectAnswer40To60(directAnswer || lead);
 
   const appSchema = {
     '@context': 'https://schema.org',
@@ -1312,15 +1345,24 @@ function renderLayout({ title, description, canonicalUrl, badge, h1, lead, bodyH
     '@type': 'TechArticle',
     headline: h1.replace(/&amp;/g, '&'),
     description: description.replace(/&amp;/g, '&'),
+    datePublished: todayStr,
+    dateModified: todayStr,
     proficiencyLevel: 'Beginner to Expert',
     author: {
+      '@type': 'Person',
+      name: 'Benjamin Cook',
+      jobTitle: 'Principal Network Architect',
+      url: 'https://sweeprvpn.com/warrant-canary',
+      worksFor: { '@type': 'Organization', name: 'SWEEPR VPN Inc.' }
+    },
+    reviewedBy: {
       '@type': 'Organization',
-      name: 'SWEEPR VPN Security & Network Engineering Lab',
+      name: 'SWEEPR Security Engineering Lab',
       url: 'https://sweeprvpn.com/'
     },
     publisher: {
       '@type': 'Organization',
-      name: 'SWEEPR VPN',
+      name: 'SWEEPR VPN Inc.',
       logo: { '@type': 'ImageObject', url: 'https://sweeprvpn.com/logo-emerald.svg' }
     },
     mainEntityOfPage: canonicalUrl
@@ -1357,12 +1399,12 @@ function renderLayout({ title, description, canonicalUrl, badge, h1, lead, bodyH
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${title}</title>
+  <title>${safeTitle}</title>
   <meta name="description" content="${description}" />
   <link rel="canonical" href="${canonicalUrl}" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta property="og:type" content="article" />
-  <meta property="og:title" content="${title}" />
+  <meta property="og:title" content="${safeTitle}" />
   <meta property="og:description" content="${description}" />
   <meta property="og:url" content="${canonicalUrl}" />
   <meta property="og:site_name" content="SWEEPR VPN" />
@@ -1370,7 +1412,7 @@ function renderLayout({ title, description, canonicalUrl, badge, h1, lead, bodyH
   <meta property="og:image:alt" content="SWEEPR VPN 10Gbps WireGuard &amp; Home Wi-Fi Radar" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:url" content="${canonicalUrl}" />
-  <meta name="twitter:title" content="${title}" />
+  <meta name="twitter:title" content="${safeTitle}" />
   <meta name="twitter:description" content="${description}" />
   <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png" />
   <meta name="theme-color" content="#070b14" />
@@ -1387,7 +1429,6 @@ function renderLayout({ title, description, canonicalUrl, badge, h1, lead, bodyH
     gtag('js', new Date());
     gtag('config', 'G-7D28EEMNXX');
   </script>
-  <script type="application/ld+json">${JSON.stringify(faqSchema)}</script>
   <script type="application/ld+json">${JSON.stringify(appSchema)}</script>
   <script type="application/ld+json">${JSON.stringify(techArticleSchema)}</script>
   <script type="application/ld+json">${JSON.stringify(breadcrumbSchema)}</script>
@@ -1444,7 +1485,23 @@ function renderLayout({ title, description, canonicalUrl, badge, h1, lead, bodyH
   <main>
     <span class="badge">${badge}</span>
     <h1>${h1}</h1>
+    <div id="eeat-author-byline" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:0.84rem;color:var(--muted);margin-bottom:14px;">
+      <span>By <strong style="color:var(--text);">Benjamin Cook</strong>, Principal Network Architect &middot; SWEEPR VPN Inc.</span>
+      <span>&bull;</span>
+      <span>Updated ${todayStr}</span>
+      <span>&bull;</span>
+      <a href="/warrant-canary" style="color:var(--accent);font-weight:600;text-decoration:none;">Verified via Cryptographic Warrant Canary &rarr;</a>
+    </div>
     <p class="lead">${lead}</p>
+
+    <div id="direct-answer" style="margin:0 0 24px;padding:18px 20px;border-radius:12px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.35);">
+      <div style="font-size:0.75rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent);margin-bottom:6px;">Direct Answer</div>
+      <p style="margin:0 0 12px;font-size:0.97rem;line-height:1.65;color:var(--text);">${safeDirectAnswer}</p>
+      <div style="display:flex;flex-wrap:wrap;gap:14px;padding-top:10px;border-top:1px solid rgba(16,185,129,0.22);font-size:0.84rem;font-weight:700;">
+        <a href="/tools/leak-test" style="color:var(--accent2);text-decoration:underline;">Run Free IP, DNS &amp; WebRTC Leak Test &rarr;</a>
+        <a href="/tools/isp-throttling-test" style="color:var(--accent2);text-decoration:underline;">Check ISP Speed &amp; Throttling Now &rarr;</a>
+      </div>
+    </div>
 
     <div class="cta-strip">
       <div>
@@ -1459,7 +1516,7 @@ function renderLayout({ title, description, canonicalUrl, badge, h1, lead, bodyH
 
     ${bodyHtml}
 
-    <h2>Transparent Anchor Pricing &amp; 30-Day Money-Back Guarantee</h2>
+    <h2>Transparent Anchor Pricing &amp; 14-Day Money-Back Guarantee</h2>
     <p>Unlike legacy VPNs that trap you in 24-month renewals or 250 MB bloated installers, SWEEPR VPN offers straightforward pricing with an instant free 30-second Home Wi-Fi Device Scanner:</p>
     <table>
       <thead>
@@ -1475,7 +1532,7 @@ function renderLayout({ title, description, canonicalUrl, badge, h1, lead, bodyH
           <td><strong>Yearly Plan (Core Cash Cow — Save 50%)</strong></td>
           <td>£74.99 / year ($95.99 USD | €89.99 EUR)</td>
           <td><strong>£6.25 / mo</strong></td>
-          <td>10Gbps RAM-Only WireGuard (UK, NL, DE, SE, CH, US), 3 Devices, Kernel Kill-Switch, 30-Day Guarantee</td>
+          <td>10Gbps RAM-Only WireGuard (UK, NL, DE, SE, CH, US), 3 Simultaneous Devices (+ Router), Kernel Kill-Switch, 14-Day Guarantee</td>
         </tr>
         <tr>
           <td><strong>6-Monthly Plan (Mid-Tier Anchor — Save 35%)</strong></td>
@@ -1691,7 +1748,7 @@ PersistentKeepalive = 25</code></pre>`;
         : []),
       {
         q: `Can I run ${guide.name} alongside the SWEEPR VPN desktop app?`,
-        a: `Yes. Every SWEEPR VPN plan supports up to 3 simultaneous WireGuard peers across routers, NAS appliances, Linux servers, Windows, macOS, iOS, and Android.`
+        a: `Yes. Every SWEEPR VPN plan covers 3 simultaneous devices (+ unlimited peers when installed on a WireGuard router) across Windows, macOS, Linux, iOS, and Android.`
       },
       {
         q: `What DNS server should I use on ${guide.name}?`,
@@ -1724,7 +1781,7 @@ PersistentKeepalive = 25</code></pre>`;
 
   if (candidate.cluster === 'vs') {
     const { comp } = candidate;
-    const title = `SWEEPR VPN vs ${comp.name} (2026 Technical Benchmark & Price Comparison)`;
+    const title = capSeoTitle(`SWEEPR VPN vs ${comp.name} (2026 Speed & Price)`);
     const description = `Compare SWEEPR VPN (~680 KB Rust + Tauri v2, 10Gbps WireGuard, Free 30s Wi-Fi Scanner) vs ${comp.name} (${comp.installerSize}, ${comp.price}).`;
     const h1 = `SWEEPR VPN vs ${comp.name}: 2026 Speed, Footprint & Privacy Comparison`;
     const lead = `Comparing SWEEPR VPN against ${comp.name}? See how our featherlight ~680 KB native Rust + Tauri v2 client, 10Gbps RAM-only WireGuard infrastructure, and built-in 30-second Home Wi-Fi Device Scanner stack up against ${comp.name}.`;
@@ -1754,7 +1811,7 @@ PersistentKeepalive = 25</code></pre>`;
     <ol>
       <li><strong>No 200 MB Background Bloatware:</strong> ${comp.name} installs ${comp.installerSize} of background services consuming ${comp.ramUsage} of RAM. SWEEPR VPN is compiled in native Rust (~680 KB installer, ~18 MB RAM) with zero telemetry SDKs.</li>
       <li><strong>Built-In Home Wi-Fi Scanner &amp; Smart-TV ACR Blocker:</strong> Standard VPNs only encrypt a single laptop while leaving 15–30 Smart TVs, cameras, and IoT devices on your home Wi-Fi unmonitored. SWEEPR VPN scans your entire home Wi-Fi in 30 seconds for free.</li>
-      <li><strong>Honest Pricing Without Renewal Traps:</strong> Try SWEEPR VPN for £1.99 in your first month, or lock in £48.99 / 6 months (Save 35%) or £74.99 / year (Save 50%) with a 30-day money-back guarantee.</li>
+      <li><strong>Honest Pricing Without Renewal Traps:</strong> Try SWEEPR VPN for £1.99 in your first month, or lock in £48.99 / 6 months (Save 35%) or £74.99 / year (Save 50%) with a 14-day money-back guarantee.</li>
     </ol>`;
 
     const faqs = [
@@ -1967,7 +2024,13 @@ async function runDaily50Pages(targetCount = 3, force = false) {
   // Rebuild website/sitemap.xml & website/llms.txt strictly from indexable (non-noindex) pSEO HTML pillar files on disk
   const baseUrls = [
     { loc: 'https://sweeprvpn.com/', priority: '1.0', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'index.html') },
+    { loc: 'https://sweeprvpn.com/de', priority: '0.9', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'de', 'index.html') },
+    { loc: 'https://sweeprvpn.com/fr', priority: '0.9', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'fr', 'index.html') },
+    { loc: 'https://sweeprvpn.com/es', priority: '0.9', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'es', 'index.html') },
     { loc: 'https://sweeprvpn.com/pricing', priority: '0.9', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'pricing.html') },
+    { loc: 'https://sweeprvpn.com/de/pricing', priority: '0.8', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'de', 'pricing.html') },
+    { loc: 'https://sweeprvpn.com/fr/pricing', priority: '0.8', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'fr', 'pricing.html') },
+    { loc: 'https://sweeprvpn.com/es/pricing', priority: '0.8', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'es', 'pricing.html') },
     { loc: 'https://sweeprvpn.com/solutions', priority: '0.9', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'solutions.html') },
     { loc: 'https://sweeprvpn.com/setup', priority: '0.9', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'setup.html') },
     { loc: 'https://sweeprvpn.com/guides', priority: '0.9', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'guides.html') },
@@ -1979,9 +2042,10 @@ async function runDaily50Pages(targetCount = 3, force = false) {
     { loc: 'https://sweeprvpn.com/tools/whats-on-my-wifi', priority: '0.8', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'whats-on-my-wifi.html') },
     { loc: 'https://sweeprvpn.com/public-wifi', priority: '0.8', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'public-wifi.html') },
     { loc: 'https://sweeprvpn.com/de/tools/leak-test', priority: '0.8', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'de-leak-test.html') },
+    { loc: 'https://sweeprvpn.com/fr/tools/leak-test', priority: '0.8', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'fr-leak-test.html') },
+    { loc: 'https://sweeprvpn.com/es/tools/leak-test', priority: '0.8', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'es-leak-test.html') },
     { loc: 'https://sweeprvpn.com/pt-br/tools/leak-test', priority: '0.8', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'pt-br-leak-test.html') },
     { loc: 'https://sweeprvpn.com/sv/tools/leak-test', priority: '0.8', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'sv-leak-test.html') },
-    { loc: 'https://sweeprvpn.com/vs/totalvpn', priority: '0.8', changefreq: 'monthly', absPath: path.join(WEBSITE_DIR, 'vs-totalvpn.html') },
     { loc: 'https://sweeprvpn.com/alternatives/totalvpn', priority: '0.8', changefreq: 'monthly', absPath: path.join(WEBSITE_DIR, 'alternatives-totalvpn.html') },
     { loc: 'https://sweeprvpn.com/support', priority: '0.6', changefreq: 'monthly', absPath: path.join(WEBSITE_DIR, 'support.html') },
     { loc: 'https://sweeprvpn.com/refund', priority: '0.5', changefreq: 'monthly', absPath: path.join(WEBSITE_DIR, 'refund.html') },
@@ -1989,6 +2053,38 @@ async function runDaily50Pages(targetCount = 3, force = false) {
     { loc: 'https://sweeprvpn.com/warrant-canary', priority: '0.6', changefreq: 'monthly', absPath: path.join(WEBSITE_DIR, 'warrant-canary.html') },
     { loc: 'https://sweeprvpn.com/terms', priority: '0.5', changefreq: 'monthly', absPath: path.join(WEBSITE_DIR, 'terms.html') }
   ];
+
+  const HREFLANG_CLUSTERS = [
+    [
+      { hreflang: 'en', href: 'https://sweeprvpn.com/' },
+      { hreflang: 'de', href: 'https://sweeprvpn.com/de' },
+      { hreflang: 'fr', href: 'https://sweeprvpn.com/fr' },
+      { hreflang: 'es', href: 'https://sweeprvpn.com/es' },
+      { hreflang: 'x-default', href: 'https://sweeprvpn.com/' }
+    ],
+    [
+      { hreflang: 'en', href: 'https://sweeprvpn.com/pricing' },
+      { hreflang: 'de', href: 'https://sweeprvpn.com/de/pricing' },
+      { hreflang: 'fr', href: 'https://sweeprvpn.com/fr/pricing' },
+      { hreflang: 'es', href: 'https://sweeprvpn.com/es/pricing' },
+      { hreflang: 'x-default', href: 'https://sweeprvpn.com/pricing' }
+    ],
+    [
+      { hreflang: 'en', href: 'https://sweeprvpn.com/tools/leak-test' },
+      { hreflang: 'de', href: 'https://sweeprvpn.com/de/tools/leak-test' },
+      { hreflang: 'fr', href: 'https://sweeprvpn.com/fr/tools/leak-test' },
+      { hreflang: 'es', href: 'https://sweeprvpn.com/es/tools/leak-test' },
+      { hreflang: 'pt-BR', href: 'https://sweeprvpn.com/pt-br/tools/leak-test' },
+      { hreflang: 'sv', href: 'https://sweeprvpn.com/sv/tools/leak-test' },
+      { hreflang: 'x-default', href: 'https://sweeprvpn.com/tools/leak-test' }
+    ]
+  ];
+  const hreflangMap = new Map();
+  for (const cluster of HREFLANG_CLUSTERS) {
+    for (const item of cluster) {
+      hreflangMap.set(item.href, cluster);
+    }
+  }
 
   // Parse existing <lastmod> dates from sitemap.xml so unchanged URLs keep their true modification date
   const prevLastModMap = new Map();
@@ -2060,7 +2156,6 @@ async function runDaily50Pages(targetCount = 3, force = false) {
     for (const file of fs.readdirSync(dirAbs).sort()) {
       if (!file.endsWith('.html')) continue;
       const slug = file.replace(/\.html$/, '');
-      if (dir === 'vs' && slug === 'totalvpn') continue;
       const urlPath = `/${dir}/${slug}`;
       const absPath = path.join(dirAbs, file);
       const htmlContent = fs.readFileSync(absPath, 'utf8');
@@ -2094,16 +2189,21 @@ async function runDaily50Pages(targetCount = 3, force = false) {
   ];
 
   const rebuiltSitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${allSitemapEntries
-  .map(
-    (u) => `  <url>
+  .map((u) => {
+    const alternates = hreflangMap.get(u.loc) || [];
+    const xhtmlLines = alternates
+      .map((a) => `    <xhtml:link rel="alternate" hreflang="${a.hreflang}" href="${a.href}" />`)
+      .join('\n');
+    return `  <url>
     <loc>${u.loc}</loc>
     <lastmod>${getAccurateLastMod(u.loc, u.absPath)}</lastmod>
     <changefreq>${u.changefreq}</changefreq>
-    <priority>${u.priority}</priority>
-  </url>`
-  )
+    <priority>${u.priority}</priority>${xhtmlLines ? '\n' + xhtmlLines : ''}
+  </url>`;
+  })
   .join('\n')}
 </urlset>
 `;
@@ -2121,12 +2221,12 @@ ${allSitemapEntries
   - Instant on-screen alerts whenever an unknown device joins your home Wi-Fi network.
   - 1-click speed booster to stop peak-hour streaming buffering.
   - Automatic Smart-TV spy blocker sinking ACR (Automatic Content Recognition) telemetry domains from Samsung Tizen, LG webOS, Roku, Vizio Inscape, and Amazon Fire TV.
-- **Transparent Price-Lock Subscription Plans (Covers up to 3 Devices)**:
+- **Transparent Price-Lock Subscription Plans (3 Simultaneous Devices + Router)**:
   - **Yearly Plan (Most Popular — Save 50%)**: £74.99/year (£6.25/mo) | $95.99 USD ($8.00/mo) | €89.99 EUR (€7.50/mo) | CA$131.99 CAD | A$149.99 AUD | CHF 83.99 | ¥14,999 JPY
   - **6-Monthly Plan (Save 35%)**: £48.99/6 months (£8.17/mo) | $61.99 USD | €58.99 EUR | CA$85.99 CAD | A$97.99 AUD | CHF 54.99 | ¥9,799 JPY
   - **Monthly Plan**: £12.49/month (or £1.99 1st-Month Introductory Offer) | $15.99 USD | €14.99 EUR | CA$21.99 CAD | A$24.99 AUD | CHF 13.99 | ¥2,499 JPY
   - **SWEEPR Wi-Fi Radar & Smart-TV Shield Add-On**: +£14.99/yr | +£9.99/6mo | +£1.99/mo
-  - **Refund Policy**: 30-day 100% money-back guarantee and 1-click self-service portal cancellation.
+  - **Refund Policy**: 14-day 100% money-back guarantee and 1-click self-service portal cancellation.
 
 ## Core Storefront & Free Diagnostic Tools
 - Homepage & Free Home Wi-Fi Scanner: https://sweeprvpn.com/
@@ -2167,13 +2267,15 @@ ${allPseoPagesOnDisk.map((p) => `- [${p.h1}](${p.loc})`).join('\n')}
     const hasTitle = /<title>.+?<\/title>/is.test(p.htmlContent);
     const hasDesc = /<meta\s+name="description"\s+content=".+?"/is.test(p.htmlContent);
     const hasCanonical = p.htmlContent.includes(`href="${p.loc}"`);
-    const hasFaqSchema = p.htmlContent.includes('"@type":"FAQPage"') || p.htmlContent.includes('"@type": "FAQPage"');
+    const hasDeprecatedSchema = /"@type"\s*:\s*"(?:FAQPage|HowTo)"/i.test(p.htmlContent);
+    const hasTechArticleSchema = /"@type"\s*:\s*"TechArticle"/i.test(p.htmlContent);
     const hasAppSchema = p.htmlContent.includes('"@type":"SoftwareApplication"') || p.htmlContent.includes('"@type": "SoftwareApplication"');
-    if (hasTitle && hasDesc && hasCanonical && hasFaqSchema && hasAppSchema) {
+    const hasDirectAnswer = /id=["']direct-answer["']/i.test(p.htmlContent);
+    if (hasTitle && hasDesc && hasCanonical && !hasDeprecatedSchema && hasTechArticleSchema && hasAppSchema && hasDirectAnswer) {
       validCount++;
     } else {
       invalidCount++;
-      console.error(`[INVALID SEO PAGE] ${p.urlPath}`);
+      console.error(`[INVALID SEO PAGE] ${p.urlPath} (deprecated=${hasDeprecatedSchema}, tech=${hasTechArticleSchema}, app=${hasAppSchema}, direct=${hasDirectAnswer})`);
     }
   }
 

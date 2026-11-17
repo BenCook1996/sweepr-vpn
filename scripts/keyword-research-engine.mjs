@@ -14,7 +14,7 @@
  *              SWEEPR Product Fit (P_score, 0–100), and Master OpportunityScore (0–100).
  *  - Module 3: Semantic Anti-Cannibalization Guard against all canonical URLs in website/sitemap.xml
  *              and all 301/noindex consolidated slugs, routing candidates into:
- *                1. ENRICH_EXISTING (H2 + FAQPage JSON-LD injection on existing canonical pillar)
+ *                1. ENRICH_EXISTING (H2 + visible FAQ / TechArticle update on existing canonical pillar)
  *                2. CREATE_NEW_PILLAR (Max 2/day, 10/week; >=40% unique structured technical data)
  *                3. CTR_TITLE_UPGRADE (Respecting 14-day GSC Top-20 title cooldown lock)
  *                4. REJECT_OR_DEFER (Red-Ocean media walls, zero-volume Cartesian, or low intent)
@@ -2151,6 +2151,7 @@ export const GSC_PROTECTED_TOP_URLS = new Set([
   '/guides/stop-samsung-smart-tv-acr-tracking',
   '/tools/leak-test',
   '/solutions/eduroam-campus-wifi-gaming-packet-loss',
+  '/vs/totalvpn',
   '/alternatives/totalvpn',
   '/setup/nvidia-shield-tv-pro-wireguard',
   '/solutions/gigaclear-rural-fibre-gaming-packet-loss',
@@ -2215,7 +2216,13 @@ export function extractNamedEntities(text) {
 
 const STATIC_ROUTE_FILE_MAP = {
   '/': 'index.html',
+  '/de': 'de/index.html',
+  '/fr': 'fr/index.html',
+  '/es': 'es/index.html',
   '/pricing': 'pricing.html',
+  '/de/pricing': 'de/pricing.html',
+  '/fr/pricing': 'fr/pricing.html',
+  '/es/pricing': 'es/pricing.html',
   '/solutions': 'solutions.html',
   '/setup': 'setup.html',
   '/guides': 'guides.html',
@@ -2227,13 +2234,16 @@ const STATIC_ROUTE_FILE_MAP = {
   '/tools/whats-on-my-wifi': 'whats-on-my-wifi.html',
   '/public-wifi': 'public-wifi.html',
   '/de/tools/leak-test': 'de-leak-test.html',
+  '/fr/tools/leak-test': 'fr-leak-test.html',
+  '/es/tools/leak-test': 'es-leak-test.html',
   '/pt-br/tools/leak-test': 'pt-br-leak-test.html',
   '/sv/tools/leak-test': 'sv-leak-test.html',
-  '/vs/totalvpn': 'vs-totalvpn.html',
+  '/vs/totalvpn': 'vs/totalvpn.html',
   '/alternatives/totalvpn': 'alternatives-totalvpn.html',
   '/support': 'support.html',
   '/refund': 'refund.html',
   '/privacy': 'privacy.html',
+  '/warrant-canary': 'warrant-canary.html',
   '/terms': 'terms.html'
 };
 
@@ -2331,7 +2341,10 @@ export function computeCannibalizationMatch(candidateKeyword, candidateSeed, cor
   }
 
   if (retainsSeedEntity && candidateSeed?.canonicalTarget) {
-    const directPage = corpusPages.find((p) => p.urlPath === candidateSeed.canonicalTarget);
+    const isVsComparisonQuery =
+      candidateSeed.id === 'comp_totalvpn' && /\b(vs|versus|compare|comparison)\b/i.test(candidateKeyword);
+    const effectiveTarget = isVsComparisonQuery ? '/vs/totalvpn' : candidateSeed.canonicalTarget;
+    const directPage = corpusPages.find((p) => p.urlPath === effectiveTarget);
     if (directPage) {
       return {
         maxSimilarity: 0.88,
@@ -2564,9 +2577,9 @@ const HARDWARE_PLATFORM_DETAILS = {
 };
 
 /**
- * Generates an Answer-First H2 + FAQPage JSON-LD Enrichment Brief for Route 1 (ENRICH_EXISTING).
+ * Generates an Answer-First H2 + Visible FAQ / TechArticle Enrichment Brief for Route 1 (ENRICH_EXISTING).
  * Automatically detects cross-entity Competitor x Hardware/ISP queries and frames them as
- * Competitor-Displacement Comparisons with zero double-parentheticals!
+ * Competitor-Displacement Comparisons with zero double-parentheticals and zero deprecated FAQPage schema!
  */
 export function buildEnrichmentBrief(keyword, seed, targetUrlPath) {
   const subSlug = keyword
@@ -2632,7 +2645,7 @@ export function buildEnrichmentBrief(keyword, seed, targetUrlPath) {
       subSlug,
       framingType: 'BOFU_COMPETITOR_SWITCHER',
       generatedH2: `2026 ${entityLabel} Renewal Price Hike & Cancellation Comparison (${formattedHeadingTopic})`,
-      answerFirstSummary: `Users searching for "${keyword}" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 30-day money-back guarantee.`,
+      answerFirstSummary: `Users searching for "${keyword}" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 14-day money-back guarantee.`,
       technicalConfigSnippet: `SWEEPR Price-Lock Guarantee: £74.99/yr (£6.25/mo) • Zero Renewal Hike\nInstaller Footprint: ~680 KB Native Rust + Tauri v2 (vs 200+ MB Antivirus Bloat)\nIncluded Free Tool: 30-Second Home Wi-Fi Device & Smart-TV ACR Scanner`,
       faqQuestion,
       faqAnswer: `SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner.`
@@ -2674,10 +2687,62 @@ export function buildEnrichmentBrief(keyword, seed, targetUrlPath) {
   };
 }
 
+function stripDeprecatedSchemaAndRefreshTechArticle(html) {
+  const todayStr = new Date().toISOString().slice(0, 10);
+  return html.replace(
+    /<script\s+type=["']application\/ld\+json["']>\s*([\s\S]*?)\s*<\/script>\s*/gi,
+    (fullMatch, jsonInner) => {
+      try {
+        const parsed = JSON.parse(jsonInner);
+        if (parsed && (parsed['@type'] === 'FAQPage' || parsed['@type'] === 'HowTo')) {
+          return '';
+        }
+        if (parsed && Array.isArray(parsed['@graph'])) {
+          const origLen = parsed['@graph'].length;
+          parsed['@graph'] = parsed['@graph'].filter(
+            (n) => n && n['@type'] !== 'FAQPage' && n['@type'] !== 'HowTo'
+          );
+          let graphChanged = parsed['@graph'].length !== origLen;
+          for (const node of parsed['@graph']) {
+            if (node && node['@type'] === 'TechArticle') {
+              if (!node.author || node.author['@type'] !== 'Person' || node.author.name !== 'Benjamin Cook') {
+                node.author = {
+                  '@type': 'Person',
+                  name: 'Benjamin Cook',
+                  jobTitle: 'Principal Network Architect',
+                  url: 'https://sweeprvpn.com/warrant-canary',
+                  worksFor: { '@type': 'Organization', name: 'SWEEPR VPN Inc.' }
+                };
+                node.dateModified = todayStr;
+                graphChanged = true;
+              }
+            }
+          }
+          if (parsed['@graph'].length === 0) return '';
+          if (graphChanged) return `<script type="application/ld+json">${JSON.stringify(parsed)}</script>\n  `;
+        } else if (parsed && parsed['@type'] === 'TechArticle') {
+          if (!parsed.author || parsed.author['@type'] !== 'Person' || parsed.author.name !== 'Benjamin Cook') {
+            parsed.author = {
+              '@type': 'Person',
+              name: 'Benjamin Cook',
+              jobTitle: 'Principal Network Architect',
+              url: 'https://sweeprvpn.com/warrant-canary',
+              worksFor: { '@type': 'Organization', name: 'SWEEPR VPN Inc.' }
+            };
+            parsed.dateModified = todayStr;
+            return `<script type="application/ld+json">${JSON.stringify(parsed)}</script>`;
+          }
+        }
+      } catch {}
+      return fullMatch;
+    }
+  );
+}
+
 /**
  * Applies an ENRICH_EXISTING brief idempotently to an existing canonical HTML file on disk.
- * If an older enrichment block or FAQPage JSON-LD entry exists with outdated H2/FAQ phrasing,
- * upgrades it in-place automatically.
+ * Strips deprecated FAQPage/HowTo JSON-LD if present, ensures TechArticle author (Benjamin Cook),
+ * and appends visible FAQ copy rather than deprecated FAQPage JSON-LD.
  */
 export function applyEnrichmentToHtmlFile(absPath, enrichmentBrief, previousFaqQuestion = null) {
   if (!fs.existsSync(absPath) || !enrichmentBrief) return false;
@@ -2715,63 +2780,26 @@ export function applyEnrichmentToHtmlFile(absPath, enrichmentBrief, previousFaqQ
     }
   }
 
-  // Also append or heal FAQPage JSON-LD entry (healing double parentheticals or outdated questions in-place)
-  if (faqQuestion && faqAnswer) {
-    const updatedFaqHtml = html.replace(
-      /<script\s+type=["']application\/ld\+json["']>([\s\S]*?)<\/script>/gi,
-      (fullMatch, jsonInner) => {
-        try {
-          const parsed = JSON.parse(jsonInner);
-          if (parsed && parsed['@type'] === 'FAQPage' && Array.isArray(parsed.mainEntity)) {
-            let faqChanged = false;
-            // Remove any off-topic subtitle FAQ or heal old FAQ question/answer in-place
-            parsed.mainEntity = parsed.mainEntity.filter((q) => {
-              const qText = `${q?.name || ''} ${q?.acceptedAnswer?.text || ''}`;
-              if (/\b(subtitles|closed\s+caption)\b/i.test(qText)) {
-                faqChanged = true;
-                return false;
-              }
-              return true;
-            });
+  // Strip deprecated FAQPage/HowTo JSON-LD and keep TechArticle author E-E-A-T current
+  const schemaCleaned = stripDeprecatedSchemaAndRefreshTechArticle(html);
+  if (schemaCleaned !== html) {
+    html = schemaCleaned;
+    modified = true;
+  }
 
-            const existingIdx = parsed.mainEntity.findIndex(
-              (q) =>
-                q.name === faqQuestion ||
-                (previousFaqQuestion && q.name === previousFaqQuestion) ||
-                /\)\s*\(/i.test(`${q.name || ''} ${q.acceptedAnswer?.text || ''}`) ||
-                /compare for Cancel/i.test(q.name || '') ||
-                /Steamos Install/i.test(q.name || '')
-            );
-
-            if (existingIdx !== -1) {
-              const curr = parsed.mainEntity[existingIdx];
-              if (curr.name !== faqQuestion || curr.acceptedAnswer?.text !== faqAnswer) {
-                parsed.mainEntity[existingIdx] = {
-                  '@type': 'Question',
-                  name: faqQuestion,
-                  acceptedAnswer: { '@type': 'Answer', text: faqAnswer }
-                };
-                faqChanged = true;
-              }
-            } else if (parsed.mainEntity.length < 8) {
-              parsed.mainEntity.push({
-                '@type': 'Question',
-                name: faqQuestion,
-                acceptedAnswer: { '@type': 'Answer', text: faqAnswer }
-              });
-              faqChanged = true;
-            }
-
-            if (faqChanged) {
-              return `<script type="application/ld+json">${JSON.stringify(parsed)}</script>`;
-            }
-          }
-        } catch {}
-        return fullMatch;
-      }
-    );
-    if (updatedFaqHtml !== html) {
-      html = updatedFaqHtml;
+  // Add visible HTML FAQ card if page has an FAQ heading and doesn't yet render this Q&A
+  if (
+    faqQuestion &&
+    faqAnswer &&
+    html.includes('<h2>Frequently Asked Questions</h2>') &&
+    !html.includes(faqQuestion) &&
+    (!previousFaqQuestion || !html.includes(previousFaqQuestion)) &&
+    html.includes('<h2>Related Technical Guides')
+  ) {
+    const faqCardHtml = `<div class="card"><h3>${faqQuestion}</h3><p>${faqAnswer}</p></div>\n\n    <h2>Related Technical Guides`;
+    const withVisibleFaq = html.replace('<h2>Related Technical Guides', faqCardHtml);
+    if (withVisibleFaq !== html) {
+      html = withVisibleFaq;
       modified = true;
     }
   }
@@ -2913,11 +2941,13 @@ export function auditAndHealOpportunities(opportunitiesPayload, corpusPages, dai
         pageChanged = true;
       }
 
-      // Normalize legacy 10 devices / 14 MB claims and heal any non-canonical acronym casing inside enriched H2/FAQ tags
+      // Normalize legacy 10 devices / 14 MB / 30-day claims and heal non-canonical acronym casing on disk
       const normalizedClaimsHtml = html
-        .replace(/\bUp to 10 Devices\b/g, 'Up to 3 Devices')
-        .replace(/\bup to 10 devices\b/g, 'up to 3 devices')
+        .replace(/\bUp to 10 Devices\b/g, '3 Simultaneous Devices (+ Router)')
+        .replace(/\bup to 10 devices\b/g, '3 simultaneous devices (+ router)')
         .replace(/\b10 device slots\b/g, '3 device slots')
+        .replace(/\b30-Day Money-Back Guarantee\b/g, '14-Day Money-Back Guarantee')
+        .replace(/\b30-day money-back guarantee\b/g, '14-day money-back guarantee')
         .replace(/\b14 MB Lightweight App\b/g, '680KB Featherlight App')
         .replace(/\bSynology Vpn Server Setup\b/g, 'Synology VPN Server Setup')
         .replace(/\bMikroTik Hap Ax3\b/g, 'MikroTik hAP ax3')
@@ -2927,47 +2957,14 @@ export function auditAndHealOpportunities(opportunitiesPayload, corpusPages, dai
         pageChanged = true;
       }
 
-      if (/\)\s*\(|\bsubtitles\b|compare for Cancel|Steamos Install|MikroTik Hap Ax3|Synology Vpn/i.test(html)) {
-        const healedJsonLd = html.replace(
-          /<script\s+type=["']application\/ld\+json["']>([\s\S]*?)<\/script>/gi,
-          (full, inner) => {
-            try {
-              const parsed = JSON.parse(inner);
-              if (parsed && parsed['@type'] === 'FAQPage' && Array.isArray(parsed.mainEntity)) {
-                parsed.mainEntity = parsed.mainEntity
-                  .filter((q) => !/\bsubtitles\b/i.test(`${q.name || ''} ${q.acceptedAnswer?.text || ''}`))
-                  .map((q) => ({
-                    ...q,
-                    name: String(q.name || '')
-                      .replace(/Synology NAS \(DSM 7 & Gluetun Docker\)/g, 'Synology NAS')
-                      .replace(/GL\.iNet Travel Routers \(Beryl AX \/ Slate AX\)/g, 'GL.iNet Travel Router')
-                      .replace(/How does SWEEPR VPN compare for Cancel TotalVPN\?/g, "How do I cancel TotalVPN and switch to SWEEPR VPN's flat-rate price lock?")
-                      .replace(/Steamos Install WireGuard/g, 'SteamOS WireGuard')
-                      .replace(/MikroTik Hap Ax3/g, 'MikroTik hAP ax3')
-                      .replace(/Synology Vpn/g, 'Synology VPN'),
-                    acceptedAnswer: {
-                      ...(q.acceptedAnswer || {}),
-                      text: String(q.acceptedAnswer?.text || '')
-                        .replace(/Synology NAS \(DSM 7 & Gluetun Docker\) \(including [^)]+\)/g, 'Synology NAS via DSM 7 & Gluetun Docker')
-                        .replace(/GL\.iNet Travel Routers \(Beryl AX \/ Slate AX\) \(including [^)]+\)/g, 'GL.iNet Travel Router via GL.iNet Admin 4.x')
-                        .replace(/\b10 device slots\b/g, '3 device slots')
-                        .replace(/\bup to 10 devices\b/gi, 'up to 3 devices')
-                    }
-                  }));
-                return `<script type="application/ld+json">${JSON.stringify(parsed)}</script>`;
-              }
-            } catch {}
-            return full;
-          }
-        );
-        if (healedJsonLd !== html) {
-          html = healedJsonLd;
-          pageChanged = true;
-        }
+      const strippedHtml = stripDeprecatedSchemaAndRefreshTechArticle(html);
+      if (strippedHtml !== html) {
+        html = strippedHtml;
+        pageChanged = true;
       }
       if (pageChanged) {
         fs.writeFileSync(page.absPath, html, 'utf8');
-        repairLog.push(`Cleaned legacy FAQ/enrichment copy in ${page.urlPath}`);
+        repairLog.push(`Normalized claims & schema in ${page.urlPath}`);
       }
     }
   }
@@ -4030,9 +4027,10 @@ export async function runKeywordResearchPipeline(options = {}) {
             formattedKeyword: formatQueryForHeading(cand.keyword),
             siblingKeywords: [],
             serpWeakSpots: (serpRes.serpSignals?.weakSpotCitations || []).slice(0, 3),
-            title: isVsCluster
-              ? `${tpl.name}: 2026 WireGuard Speed & Price-Lock Comparison | SWEEPR VPN`
-              : `${tpl.name} WireGuard VPN Setup Guide (MTU 1420 .conf • 2026) | SWEEPR VPN`,
+            title: (isVsCluster
+              ? `${tpl.name}: 2026 WireGuard & Price Comparison | SWEEPR VPN`
+              : `${tpl.name} WireGuard Setup (2026) | SWEEPR VPN`
+            ).slice(0, 65),
             description: truncateMetaDescriptionClean(tpl.summary, 156),
             h1: tpl.h1,
             summary: tpl.summary,

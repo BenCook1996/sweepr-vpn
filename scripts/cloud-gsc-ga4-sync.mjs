@@ -72,9 +72,18 @@ function resolveHtmlFileForRoute(urlPath) {
     '/tools/smart-tv-tracking-check': 'smart-tv-tracking-check.html',
     '/tools/whats-on-my-wifi': 'whats-on-my-wifi.html',
     '/public-wifi': 'public-wifi.html',
+    '/de': 'de/index.html',
+    '/fr': 'fr/index.html',
+    '/es': 'es/index.html',
+    '/de/pricing': 'de/pricing.html',
+    '/fr/pricing': 'fr/pricing.html',
+    '/es/pricing': 'es/pricing.html',
     '/de/tools/leak-test': 'de-leak-test.html',
+    '/fr/tools/leak-test': 'fr-leak-test.html',
+    '/es/tools/leak-test': 'es-leak-test.html',
     '/pt-br/tools/leak-test': 'pt-br-leak-test.html',
     '/sv/tools/leak-test': 'sv-leak-test.html',
+    '/vs/totalvpn': 'vs/totalvpn.html',
     '/alternatives/totalvpn': 'alternatives-totalvpn.html',
     '/warrant-canary': 'warrant-canary.html'
   };
@@ -96,6 +105,8 @@ function resolveHtmlFileForRoute(urlPath) {
 }
 
 function buildQueryMatchedTitleAndDesc(urlPath, topQuery, currentTitle, currentDesc) {
+  // Never overwrite localized DE/FR/ES/PT-BR/SV pages with English Strike-Zone templates
+  if (/^\/(de|fr|es|pt-br|sv)(\/|$)/i.test(urlPath)) return null;
   const cleanQuery = String(topQuery || '').trim();
   if (!cleanQuery || FORBIDDEN_COMPLIANCE_RE.test(cleanQuery)) return null;
   const titleCasedQuery = cleanQuery
@@ -118,8 +129,13 @@ function buildQueryMatchedTitleAndDesc(urlPath, topQuery, currentTitle, currentD
   } else if (urlPath.startsWith('/vs/')) {
     candidateTitle = `${titleCasedQuery}: 2026 Speed & Price Comparison | SWEEPR VPN`;
   }
-  if (candidateTitle.length > 64) {
-    candidateTitle = `${titleCasedQuery.slice(0, 40).trim()} (2026 Guide) | SWEEPR VPN`;
+  const compactSuffix = ' (2026 Guide) | SWEEPR VPN';
+  if (candidateTitle.length > 65) {
+    const maxQueryLen = Math.max(10, 65 - compactSuffix.length);
+    candidateTitle = `${titleCasedQuery.slice(0, maxQueryLen).trim()}${compactSuffix}`;
+  }
+  if (candidateTitle.length > 65) {
+    candidateTitle = candidateTitle.slice(0, 65).trim();
   }
   if (candidateTitle.length < 30 || candidateTitle === currentTitle) return null;
 
