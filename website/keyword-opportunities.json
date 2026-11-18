@@ -2644,7 +2644,7 @@
         "subSlug": "mullvad-port-forwarding-alternative",
         "framingType": "BOFU_COMPETITOR_SWITCHER",
         "generatedH2": "2026 Mullvad Renewal Price Hike & Cancellation Comparison (Mullvad Port Forwarding Alternative)",
-        "answerFirstSummary": "Users searching for \"mullvad port forwarding alternative\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 30-day money-back guarantee.",
+        "answerFirstSummary": "Users searching for \"mullvad port forwarding alternative\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 14-day money-back guarantee.",
         "technicalConfigSnippet": "SWEEPR Price-Lock Guarantee: £74.99/yr (£6.25/mo) • Zero Renewal Hike\nInstaller Footprint: ~680 KB Native Rust + Tauri v2 (vs 200+ MB Antivirus Bloat)\nIncluded Free Tool: 30-Second Home Wi-Fi Device & Smart-TV ACR Scanner",
         "faqQuestion": "How does SWEEPR VPN compare as a Mullvad alternative in 2026?",
         "faqAnswer": "SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner."
@@ -3470,7 +3470,7 @@
         "subSlug": "protonvpn-wireguard-router",
         "framingType": "BOFU_COMPETITOR_SWITCHER",
         "generatedH2": "2026 ProtonVPN Renewal Price Hike & Cancellation Comparison (ProtonVPN WireGuard Router)",
-        "answerFirstSummary": "Users searching for \"protonvpn wireguard router\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 30-day money-back guarantee.",
+        "answerFirstSummary": "Users searching for \"protonvpn wireguard router\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 14-day money-back guarantee.",
         "technicalConfigSnippet": "SWEEPR Price-Lock Guarantee: £74.99/yr (£6.25/mo) • Zero Renewal Hike\nInstaller Footprint: ~680 KB Native Rust + Tauri v2 (vs 200+ MB Antivirus Bloat)\nIncluded Free Tool: 30-Second Home Wi-Fi Device & Smart-TV ACR Scanner",
         "faqQuestion": "How does SWEEPR VPN compare as a ProtonVPN alternative in 2026?",
         "faqAnswer": "SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner."
@@ -5348,7 +5348,7 @@
         "faqAnswer": "Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT."
       },
       "ctrUpgradeBrief": {
-        "isLockedByGsc14DayCooldown": true,
+        "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": "2026-11-17T21:30:00.000Z"
       },
       "createdAt": "2026-11-16T07:56:05.832Z",
@@ -7270,7 +7270,7 @@
         "faqAnswer": "Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT."
       },
       "ctrUpgradeBrief": {
-        "isLockedByGsc14DayCooldown": true,
+        "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": "2026-11-17T21:30:00.000Z"
       },
       "createdAt": "2026-11-16T07:56:05.832Z",
@@ -7500,7 +7500,7 @@
         "subSlug": "does-bitdefender-vpn-use-wireguard",
         "framingType": "BOFU_COMPETITOR_SWITCHER",
         "generatedH2": "2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Does Bitdefender VPN Use WireGuard)",
-        "answerFirstSummary": "Users searching for \"does bitdefender vpn use wireguard\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 30-day money-back guarantee.",
+        "answerFirstSummary": "Users searching for \"does bitdefender vpn use wireguard\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 14-day money-back guarantee.",
         "technicalConfigSnippet": "SWEEPR Price-Lock Guarantee: £74.99/yr (£6.25/mo) • Zero Renewal Hike\nInstaller Footprint: ~680 KB Native Rust + Tauri v2 (vs 200+ MB Antivirus Bloat)\nIncluded Free Tool: 30-Second Home Wi-Fi Device & Smart-TV ACR Scanner",
         "faqQuestion": "How does SWEEPR VPN compare as a Bitdefender VPN Renewal Alternative alternative in 2026?",
         "faqAnswer": "SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner."
@@ -8883,7 +8883,7 @@
         "subSlug": "cost-of-bitdefender-vpn",
         "framingType": "BOFU_COMPETITOR_SWITCHER",
         "generatedH2": "2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Cost of Bitdefender VPN)",
-        "answerFirstSummary": "Users searching for \"cost of bitdefender vpn\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 30-day money-back guarantee.",
+        "answerFirstSummary": "Users searching for \"cost of bitdefender vpn\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 14-day money-back guarantee.",
         "technicalConfigSnippet": "SWEEPR Price-Lock Guarantee: £74.99/yr (£6.25/mo) • Zero Renewal Hike\nInstaller Footprint: ~680 KB Native Rust + Tauri v2 (vs 200+ MB Antivirus Bloat)\nIncluded Free Tool: 30-Second Home Wi-Fi Device & Smart-TV ACR Scanner",
         "faqQuestion": "How does SWEEPR VPN compare to Bitdefender VPN Renewal Alternative's Year-2 renewal price?",
         "faqAnswer": "SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner."
@@ -10310,7 +10310,7 @@
         "subSlug": "bitdefender-vpn-renewal-price-alternatives",
         "framingType": "BOFU_COMPETITOR_SWITCHER",
         "generatedH2": "2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Bitdefender VPN Renewal Price Alternatives)",
-        "answerFirstSummary": "Users searching for \"bitdefender vpn renewal price alternatives\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 30-day money-back guarantee.",
+        "answerFirstSummary": "Users searching for \"bitdefender vpn renewal price alternatives\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 14-day money-back guarantee.",
         "technicalConfigSnippet": "SWEEPR Price-Lock Guarantee: £74.99/yr (£6.25/mo) • Zero Renewal Hike\nInstaller Footprint: ~680 KB Native Rust + Tauri v2 (vs 200+ MB Antivirus Bloat)\nIncluded Free Tool: 30-Second Home Wi-Fi Device & Smart-TV ACR Scanner",
         "faqQuestion": "How does SWEEPR VPN compare to Bitdefender VPN Renewal Alternative's Year-2 renewal price?",
         "faqAnswer": "SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner."
@@ -10424,7 +10424,7 @@
         "subSlug": "mcafee-safe-connect-alternatives",
         "framingType": "BOFU_COMPETITOR_SWITCHER",
         "generatedH2": "2026 McAfee Safe Connect Auto Renewal Alternative Renewal Price Hike & Cancellation Comparison (McAfee Safe Connect Alternatives)",
-        "answerFirstSummary": "Users searching for \"mcafee safe connect alternatives\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 30-day money-back guarantee.",
+        "answerFirstSummary": "Users searching for \"mcafee safe connect alternatives\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 14-day money-back guarantee.",
         "technicalConfigSnippet": "SWEEPR Price-Lock Guarantee: £74.99/yr (£6.25/mo) • Zero Renewal Hike\nInstaller Footprint: ~680 KB Native Rust + Tauri v2 (vs 200+ MB Antivirus Bloat)\nIncluded Free Tool: 30-Second Home Wi-Fi Device & Smart-TV ACR Scanner",
         "faqQuestion": "How does SWEEPR VPN compare as a McAfee Safe Connect Auto Renewal Alternative alternative in 2026?",
         "faqAnswer": "SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner."
@@ -11348,7 +11348,7 @@
         "subSlug": "how-much-does-bitdefender-vpn-cost",
         "framingType": "BOFU_COMPETITOR_SWITCHER",
         "generatedH2": "2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (How Much Does Bitdefender VPN Cost)",
-        "answerFirstSummary": "Users searching for \"how much does bitdefender vpn cost\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 30-day money-back guarantee.",
+        "answerFirstSummary": "Users searching for \"how much does bitdefender vpn cost\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 14-day money-back guarantee.",
         "technicalConfigSnippet": "SWEEPR Price-Lock Guarantee: £74.99/yr (£6.25/mo) • Zero Renewal Hike\nInstaller Footprint: ~680 KB Native Rust + Tauri v2 (vs 200+ MB Antivirus Bloat)\nIncluded Free Tool: 30-Second Home Wi-Fi Device & Smart-TV ACR Scanner",
         "faqQuestion": "How does SWEEPR VPN compare to Bitdefender VPN Renewal Alternative's Year-2 renewal price?",
         "faqAnswer": "SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner."
@@ -11461,7 +11461,7 @@
         "subSlug": "bitdefender-vpn-renewal-price-alternative",
         "framingType": "BOFU_COMPETITOR_SWITCHER",
         "generatedH2": "2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Bitdefender VPN Renewal Price Alternative)",
-        "answerFirstSummary": "Users searching for \"bitdefender vpn renewal price alternative\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 30-day money-back guarantee.",
+        "answerFirstSummary": "Users searching for \"bitdefender vpn renewal price alternative\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 14-day money-back guarantee.",
         "technicalConfigSnippet": "SWEEPR Price-Lock Guarantee: £74.99/yr (£6.25/mo) • Zero Renewal Hike\nInstaller Footprint: ~680 KB Native Rust + Tauri v2 (vs 200+ MB Antivirus Bloat)\nIncluded Free Tool: 30-Second Home Wi-Fi Device & Smart-TV ACR Scanner",
         "faqQuestion": "How does SWEEPR VPN compare to Bitdefender VPN Renewal Alternative's Year-2 renewal price?",
         "faqAnswer": "SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner."
@@ -11575,7 +11575,7 @@
         "subSlug": "cancel-mcafee-vpn-auto-renewal",
         "framingType": "BOFU_COMPETITOR_SWITCHER",
         "generatedH2": "2026 McAfee Safe Connect Auto Renewal Alternative Renewal Price Hike & Cancellation Comparison (Cancel McAfee VPN Auto Renewal)",
-        "answerFirstSummary": "Users searching for \"cancel mcafee vpn auto renewal\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 30-day money-back guarantee.",
+        "answerFirstSummary": "Users searching for \"cancel mcafee vpn auto renewal\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 14-day money-back guarantee.",
         "technicalConfigSnippet": "SWEEPR Price-Lock Guarantee: £74.99/yr (£6.25/mo) • Zero Renewal Hike\nInstaller Footprint: ~680 KB Native Rust + Tauri v2 (vs 200+ MB Antivirus Bloat)\nIncluded Free Tool: 30-Second Home Wi-Fi Device & Smart-TV ACR Scanner",
         "faqQuestion": "How do I cancel McAfee Safe Connect Auto Renewal Alternative and switch to SWEEPR VPN's flat-rate price lock?",
         "faqAnswer": "SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner."
@@ -13757,7 +13757,7 @@
         "subSlug": "is-bitdefender-vpn-worth-it",
         "framingType": "BOFU_COMPETITOR_SWITCHER",
         "generatedH2": "2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Is Bitdefender VPN Worth It)",
-        "answerFirstSummary": "Users searching for \"is bitdefender vpn worth it\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 30-day money-back guarantee.",
+        "answerFirstSummary": "Users searching for \"is bitdefender vpn worth it\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 14-day money-back guarantee.",
         "technicalConfigSnippet": "SWEEPR Price-Lock Guarantee: £74.99/yr (£6.25/mo) • Zero Renewal Hike\nInstaller Footprint: ~680 KB Native Rust + Tauri v2 (vs 200+ MB Antivirus Bloat)\nIncluded Free Tool: 30-Second Home Wi-Fi Device & Smart-TV ACR Scanner",
         "faqQuestion": "How does SWEEPR VPN compare as a Bitdefender VPN Renewal Alternative alternative in 2026?",
         "faqAnswer": "SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner."
@@ -16338,7 +16338,7 @@
       },
       "ctrUpgradeBrief": {
         "isLockedByGsc14DayCooldown": true,
-        "cooldownExpiresAt": "2026-11-17T21:30:00.000Z"
+        "cooldownExpiresAt": "2026-12-02T13:38:24.253Z"
       },
       "createdAt": "2026-11-16T07:56:05.832Z",
       "appliedAt": null
@@ -16513,7 +16513,7 @@
         "faqAnswer": "Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT."
       },
       "ctrUpgradeBrief": {
-        "isLockedByGsc14DayCooldown": true,
+        "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": "2026-11-17T21:30:00.000Z"
       },
       "createdAt": "2026-11-16T07:56:05.832Z",
@@ -17775,7 +17775,7 @@
         "faqAnswer": "Connect to SWEEPR VPN's 10Gbps RAM-only WireGuard endpoint on UDP port 51820 (or Stealth UDP 443 on restricted networks) with MTU 1412/1380 and a 25-second PersistentKeepalive."
       },
       "ctrUpgradeBrief": {
-        "isLockedByGsc14DayCooldown": true,
+        "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": "2026-11-17T21:30:00.000Z"
       },
       "createdAt": "2026-11-16T07:56:05.832Z",
@@ -17856,7 +17856,7 @@
         "subSlug": "nordvpn-renewal-price",
         "framingType": "BOFU_COMPETITOR_SWITCHER",
         "generatedH2": "2026 NordVPN Renewal Price Hike & Cancellation Comparison (NordVPN Renewal Price)",
-        "answerFirstSummary": "Users searching for \"nordvpn renewal price\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 30-day money-back guarantee.",
+        "answerFirstSummary": "Users searching for \"nordvpn renewal price\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 14-day money-back guarantee.",
         "technicalConfigSnippet": "SWEEPR Price-Lock Guarantee: £74.99/yr (£6.25/mo) • Zero Renewal Hike\nInstaller Footprint: ~680 KB Native Rust + Tauri v2 (vs 200+ MB Antivirus Bloat)\nIncluded Free Tool: 30-Second Home Wi-Fi Device & Smart-TV ACR Scanner",
         "faqQuestion": "How does SWEEPR VPN compare to NordVPN's Year-2 renewal price?",
         "faqAnswer": "SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner."
@@ -17943,7 +17943,7 @@
         "subSlug": "surfshark-renewal-price",
         "framingType": "BOFU_COMPETITOR_SWITCHER",
         "generatedH2": "2026 Surfshark Renewal Price Hike & Cancellation Comparison (Surfshark Renewal Price)",
-        "answerFirstSummary": "Users searching for \"surfshark renewal price\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 30-day money-back guarantee.",
+        "answerFirstSummary": "Users searching for \"surfshark renewal price\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 14-day money-back guarantee.",
         "technicalConfigSnippet": "SWEEPR Price-Lock Guarantee: £74.99/yr (£6.25/mo) • Zero Renewal Hike\nInstaller Footprint: ~680 KB Native Rust + Tauri v2 (vs 200+ MB Antivirus Bloat)\nIncluded Free Tool: 30-Second Home Wi-Fi Device & Smart-TV ACR Scanner",
         "faqQuestion": "How does SWEEPR VPN compare to Surfshark's Year-2 renewal price?",
         "faqAnswer": "SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner."
@@ -18030,7 +18030,7 @@
         "subSlug": "expressvpn-renewal-price",
         "framingType": "BOFU_COMPETITOR_SWITCHER",
         "generatedH2": "2026 ExpressVPN Renewal Price Hike & Cancellation Comparison (ExpressVPN Renewal Price)",
-        "answerFirstSummary": "Users searching for \"expressvpn renewal price\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 30-day money-back guarantee.",
+        "answerFirstSummary": "Users searching for \"expressvpn renewal price\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 14-day money-back guarantee.",
         "technicalConfigSnippet": "SWEEPR Price-Lock Guarantee: £74.99/yr (£6.25/mo) • Zero Renewal Hike\nInstaller Footprint: ~680 KB Native Rust + Tauri v2 (vs 200+ MB Antivirus Bloat)\nIncluded Free Tool: 30-Second Home Wi-Fi Device & Smart-TV ACR Scanner",
         "faqQuestion": "How does SWEEPR VPN compare to ExpressVPN's Year-2 renewal price?",
         "faqAnswer": "SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner."
@@ -18117,7 +18117,7 @@
         "subSlug": "cyberghost-renewal-price",
         "framingType": "BOFU_COMPETITOR_SWITCHER",
         "generatedH2": "2026 CyberGhost Renewal Price Hike & Cancellation Comparison (CyberGhost Renewal Price)",
-        "answerFirstSummary": "Users searching for \"cyberghost renewal price\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 30-day money-back guarantee.",
+        "answerFirstSummary": "Users searching for \"cyberghost renewal price\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 14-day money-back guarantee.",
         "technicalConfigSnippet": "SWEEPR Price-Lock Guarantee: £74.99/yr (£6.25/mo) • Zero Renewal Hike\nInstaller Footprint: ~680 KB Native Rust + Tauri v2 (vs 200+ MB Antivirus Bloat)\nIncluded Free Tool: 30-Second Home Wi-Fi Device & Smart-TV ACR Scanner",
         "faqQuestion": "How does SWEEPR VPN compare to CyberGhost's Year-2 renewal price?",
         "faqAnswer": "SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner."
@@ -18223,7 +18223,7 @@
         "subSlug": "kaspersky-vpn-alternative",
         "framingType": "BOFU_COMPETITOR_SWITCHER",
         "generatedH2": "2026 Kaspersky VPN Alternative WireGuard Renewal Price Hike & Cancellation Comparison (Kaspersky VPN Alternative)",
-        "answerFirstSummary": "Users searching for \"kaspersky vpn alternative\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 30-day money-back guarantee.",
+        "answerFirstSummary": "Users searching for \"kaspersky vpn alternative\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 14-day money-back guarantee.",
         "technicalConfigSnippet": "SWEEPR Price-Lock Guarantee: £74.99/yr (£6.25/mo) • Zero Renewal Hike\nInstaller Footprint: ~680 KB Native Rust + Tauri v2 (vs 200+ MB Antivirus Bloat)\nIncluded Free Tool: 30-Second Home Wi-Fi Device & Smart-TV ACR Scanner",
         "faqQuestion": "How does SWEEPR VPN compare as a Kaspersky VPN Alternative WireGuard alternative in 2026?",
         "faqAnswer": "SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner."
@@ -18337,7 +18337,7 @@
         "subSlug": "best-fing-alternative-no-subscription",
         "framingType": "BOFU_COMPETITOR_SWITCHER",
         "generatedH2": "2026 Fing Network Scanner Alternative Plain English Renewal Price Hike & Cancellation Comparison (Best Fing Alternative No Subscription)",
-        "answerFirstSummary": "Users searching for \"best fing alternative no subscription\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 30-day money-back guarantee.",
+        "answerFirstSummary": "Users searching for \"best fing alternative no subscription\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 14-day money-back guarantee.",
         "technicalConfigSnippet": "SWEEPR Price-Lock Guarantee: £74.99/yr (£6.25/mo) • Zero Renewal Hike\nInstaller Footprint: ~680 KB Native Rust + Tauri v2 (vs 200+ MB Antivirus Bloat)\nIncluded Free Tool: 30-Second Home Wi-Fi Device & Smart-TV ACR Scanner",
         "faqQuestion": "How does SWEEPR VPN compare as a Fing Network Scanner Alternative Plain English alternative in 2026?",
         "faqAnswer": "SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner."
@@ -18891,7 +18891,7 @@
       },
       "ctrUpgradeBrief": {
         "isLockedByGsc14DayCooldown": true,
-        "cooldownExpiresAt": "2026-11-17T21:30:00.000Z"
+        "cooldownExpiresAt": "2026-12-02T13:38:24.253Z"
       },
       "createdAt": "2026-11-16T07:56:05.832Z",
       "appliedAt": null
@@ -19002,7 +19002,7 @@
         "subSlug": "how-to-install-kaspersky-vpn-on-router",
         "framingType": "BOFU_COMPETITOR_SWITCHER",
         "generatedH2": "2026 Kaspersky VPN Alternative WireGuard Renewal Price Hike & Cancellation Comparison (Kaspersky VPN on Router)",
-        "answerFirstSummary": "Users searching for \"how to install kaspersky vpn on router\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 30-day money-back guarantee.",
+        "answerFirstSummary": "Users searching for \"how to install kaspersky vpn on router\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 14-day money-back guarantee.",
         "technicalConfigSnippet": "SWEEPR Price-Lock Guarantee: £74.99/yr (£6.25/mo) • Zero Renewal Hike\nInstaller Footprint: ~680 KB Native Rust + Tauri v2 (vs 200+ MB Antivirus Bloat)\nIncluded Free Tool: 30-Second Home Wi-Fi Device & Smart-TV ACR Scanner",
         "faqQuestion": "How does SWEEPR VPN compare as a Kaspersky VPN Alternative WireGuard alternative in 2026?",
         "faqAnswer": "SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner."
@@ -20836,7 +20836,7 @@
         "faqAnswer": "No. SWEEPR VPN's Smart-TV ACR Shield strictly safelists all video playback CDNs (nflxvideo.net, bbci.co.uk, googlevideo.com, bamgrid.com) while sinking only background ACR screenshot and ad-tracking beacons."
       },
       "ctrUpgradeBrief": {
-        "isLockedByGsc14DayCooldown": true,
+        "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": "2026-11-18T00:00:00.000Z"
       },
       "createdAt": "2026-11-16T07:56:05.832Z",
@@ -21146,13 +21146,13 @@
         "subSlug": "totalvpn-renewal",
         "framingType": "BOFU_COMPETITOR_SWITCHER",
         "generatedH2": "2026 TotalVPN Renewal Price Hike & Cancellation Comparison (TotalVPN Renewal)",
-        "answerFirstSummary": "Users searching for \"totalvpn renewal\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 30-day money-back guarantee.",
+        "answerFirstSummary": "Users searching for \"totalvpn renewal\" frequently report Year-2 auto-renewal price jumps up to £79.99–£99.99/year. Unlike legacy VPN bundles that hike renewal rates by 140%–250%, SWEEPR VPN locks in transparent pricing (£1.99 1st-Month Trial, £48.99/6mo, or £74.99/year — Save 50%) with 1-click self-service portal cancellation and a 14-day money-back guarantee.",
         "technicalConfigSnippet": "SWEEPR Price-Lock Guarantee: £74.99/yr (£6.25/mo) • Zero Renewal Hike\nInstaller Footprint: ~680 KB Native Rust + Tauri v2 (vs 200+ MB Antivirus Bloat)\nIncluded Free Tool: 30-Second Home Wi-Fi Device & Smart-TV ACR Scanner",
         "faqQuestion": "How does SWEEPR VPN compare to TotalVPN's Year-2 renewal price?",
         "faqAnswer": "SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner."
       },
       "ctrUpgradeBrief": {
-        "isLockedByGsc14DayCooldown": true,
+        "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": "2026-11-17T21:30:00.000Z"
       },
       "createdAt": "2026-11-16T07:56:05.832Z",
@@ -21762,7 +21762,7 @@
         "faqAnswer": "Connect to SWEEPR VPN's 10Gbps RAM-only WireGuard endpoint on UDP port 51820 (or Stealth UDP 443 on restricted networks) with MTU 1412/1380 and a 25-second PersistentKeepalive."
       },
       "ctrUpgradeBrief": {
-        "isLockedByGsc14DayCooldown": true,
+        "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": "2026-11-17T21:30:00.000Z"
       },
       "createdAt": "2026-11-16T07:56:05.832Z",
@@ -22484,7 +22484,7 @@
         "faqAnswer": "Connect to SWEEPR VPN's 10Gbps RAM-only WireGuard endpoint on UDP port 51820 (or Stealth UDP 443 on restricted networks) with MTU 1412/1380 and a 25-second PersistentKeepalive."
       },
       "ctrUpgradeBrief": {
-        "isLockedByGsc14DayCooldown": true,
+        "isLockedByGsc14DayCooldown": false,
         "cooldownExpiresAt": "2026-11-18T00:00:00.000Z"
       },
       "createdAt": "2026-11-16T07:56:05.832Z",
@@ -34827,7 +34827,7 @@
   ],
   "lastUpdatedAt": "2026-11-16T07:57:33.273Z",
   "corpusSummary": {
-    "canonicalSitemapUrls": 83,
+    "canonicalSitemapUrls": 87,
     "consolidatedCannibalUrlsBlocked": 28,
     "gscTitleCooldownLockedUrls": 20,
     "rolling7DayNewPillarsCreated": 0,
@@ -34835,10 +34835,30 @@
     "dailyNewPillarCap": 2
   },
   "auditSummary": {
-    "auditedAt": "2026-11-17T14:04:12.454Z",
+    "auditedAt": "2026-11-18T13:39:24.923Z",
     "assertionsPassed": "10/10 PASS",
-    "autoRepairsApplied": 0,
-    "repairLog": []
+    "autoRepairsApplied": 19,
+    "repairLog": [
+      "Healed enrichment H2/FAQ on \"mullvad port forwarding alternative\" (/vs/mullvad): \"2026 Mullvad Renewal Price Hike & Cancellation Comparison (Mullvad Port Forwarding Alternative)\" -> \"2026 Mullvad Renewal Price Hike & Cancellation Comparison (Mullvad Port Forwarding Alternative)\"",
+      "Healed enrichment H2/FAQ on \"protonvpn wireguard router\" (/vs/protonvpn): \"2026 ProtonVPN Renewal Price Hike & Cancellation Comparison (ProtonVPN WireGuard Router)\" -> \"2026 ProtonVPN Renewal Price Hike & Cancellation Comparison (ProtonVPN WireGuard Router)\"",
+      "Healed enrichment H2/FAQ on \"does bitdefender vpn use wireguard\" (/vs/bitdefender-vpn-renewal-alternative): \"2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Does Bitdefender VPN Use WireGuard)\" -> \"2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Does Bitdefender VPN Use WireGuard)\"",
+      "Healed enrichment H2/FAQ on \"cost of bitdefender vpn\" (/vs/bitdefender-vpn-renewal-alternative): \"2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Cost of Bitdefender VPN)\" -> \"2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Cost of Bitdefender VPN)\"",
+      "Healed enrichment H2/FAQ on \"bitdefender vpn renewal price alternatives\" (/vs/bitdefender-vpn-renewal-alternative): \"2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Bitdefender VPN Renewal Price Alternatives)\" -> \"2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Bitdefender VPN Renewal Price Alternatives)\"",
+      "Healed enrichment H2/FAQ on \"mcafee safe connect alternatives\" (/vs/mcafee-safe-connect-auto-renewal-alternative): \"2026 McAfee Safe Connect Auto Renewal Alternative Renewal Price Hike & Cancellation Comparison (McAfee Safe Connect Alternatives)\" -> \"2026 McAfee Safe Connect Auto Renewal Alternative Renewal Price Hike & Cancellation Comparison (McAfee Safe Connect Alternatives)\"",
+      "Healed enrichment H2/FAQ on \"how much does bitdefender vpn cost\" (/vs/bitdefender-vpn-renewal-alternative): \"2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (How Much Does Bitdefender VPN Cost)\" -> \"2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (How Much Does Bitdefender VPN Cost)\"",
+      "Healed enrichment H2/FAQ on \"bitdefender vpn renewal price alternative\" (/vs/bitdefender-vpn-renewal-alternative): \"2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Bitdefender VPN Renewal Price Alternative)\" -> \"2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Bitdefender VPN Renewal Price Alternative)\"",
+      "Healed enrichment H2/FAQ on \"cancel mcafee vpn auto renewal\" (/vs/mcafee-safe-connect-auto-renewal-alternative): \"2026 McAfee Safe Connect Auto Renewal Alternative Renewal Price Hike & Cancellation Comparison (Cancel McAfee VPN Auto Renewal)\" -> \"2026 McAfee Safe Connect Auto Renewal Alternative Renewal Price Hike & Cancellation Comparison (Cancel McAfee VPN Auto Renewal)\"",
+      "Healed enrichment H2/FAQ on \"is bitdefender vpn worth it\" (/vs/bitdefender-vpn-renewal-alternative): \"2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Is Bitdefender VPN Worth It)\" -> \"2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Is Bitdefender VPN Worth It)\"",
+      "Healed enrichment H2/FAQ on \"nordvpn renewal price\" (/vs/nordvpn): \"2026 NordVPN Renewal Price Hike & Cancellation Comparison (NordVPN Renewal Price)\" -> \"2026 NordVPN Renewal Price Hike & Cancellation Comparison (NordVPN Renewal Price)\"",
+      "Healed enrichment H2/FAQ on \"surfshark renewal price\" (/vs/surfshark): \"2026 Surfshark Renewal Price Hike & Cancellation Comparison (Surfshark Renewal Price)\" -> \"2026 Surfshark Renewal Price Hike & Cancellation Comparison (Surfshark Renewal Price)\"",
+      "Healed enrichment H2/FAQ on \"expressvpn renewal price\" (/vs/expressvpn): \"2026 ExpressVPN Renewal Price Hike & Cancellation Comparison (ExpressVPN Renewal Price)\" -> \"2026 ExpressVPN Renewal Price Hike & Cancellation Comparison (ExpressVPN Renewal Price)\"",
+      "Healed enrichment H2/FAQ on \"cyberghost renewal price\" (/vs/cyberghost): \"2026 CyberGhost Renewal Price Hike & Cancellation Comparison (CyberGhost Renewal Price)\" -> \"2026 CyberGhost Renewal Price Hike & Cancellation Comparison (CyberGhost Renewal Price)\"",
+      "Healed enrichment H2/FAQ on \"kaspersky vpn alternative\" (/vs/kaspersky-vpn-alternative-wireguard): \"2026 Kaspersky VPN Alternative WireGuard Renewal Price Hike & Cancellation Comparison (Kaspersky VPN Alternative)\" -> \"2026 Kaspersky VPN Alternative WireGuard Renewal Price Hike & Cancellation Comparison (Kaspersky VPN Alternative)\"",
+      "Healed enrichment H2/FAQ on \"best fing alternative no subscription\" (/vs/fing-network-scanner-alternative-plain-english): \"2026 Fing Network Scanner Alternative Plain English Renewal Price Hike & Cancellation Comparison (Best Fing Alternative No Subscription)\" -> \"2026 Fing Network Scanner Alternative Plain English Renewal Price Hike & Cancellation Comparison (Best Fing Alternative No Subscription)\"",
+      "Healed enrichment H2/FAQ on \"how to install kaspersky vpn on router\" (/vs/kaspersky-vpn-alternative-wireguard): \"2026 Kaspersky VPN Alternative WireGuard Renewal Price Hike & Cancellation Comparison (Kaspersky VPN on Router)\" -> \"2026 Kaspersky VPN Alternative WireGuard Renewal Price Hike & Cancellation Comparison (Kaspersky VPN on Router)\"",
+      "Healed enrichment H2/FAQ on \"totalvpn renewal\" (/alternatives/totalvpn): \"2026 TotalVPN Renewal Price Hike & Cancellation Comparison (TotalVPN Renewal)\" -> \"2026 TotalVPN Renewal Price Hike & Cancellation Comparison (TotalVPN Renewal)\"",
+      "Normalized claims & schema in /vs/totalvpn"
+    ]
   },
   "strategyLedgerSummary": {
     "ledgerPath": "website/seo-strategy-performance-ledger.json",
