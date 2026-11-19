@@ -1,4 +1,6 @@
 -keep class com.sweepr.vpn.** { *; }
+-keep class com.wireguard.** { *; }
+-dontwarn com.wireguard.**
 -keep class com.android.billingclient.** { *; }
 -dontwarn com.android.billingclient.**
 -keep class com.google.android.play.core.appupdate.** { *; }

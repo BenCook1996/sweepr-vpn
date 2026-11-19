@@ -1099,7 +1099,7 @@ namespace SweeprVpnApp
                     if (File.Exists(switchCmdCheckPath))
                     {
                         string swTxt = File.ReadAllText(switchCmdCheckPath, Encoding.UTF8);
-                        hasModernSwitchTask = swTxt.Contains("DisableSmartNameResolution") && swTxt.Contains("SWEEPR_VPN_Block_DNS_Leak_UDP");
+                        hasModernSwitchTask = swTxt.Contains("DisableSmartNameResolution") && swTxt.Contains("findstr /C:\"10.64.0.0/16\"");
                     }
                 }
                 catch { }
@@ -1201,11 +1201,33 @@ namespace SweeprVpnApp
                 CleanupKillSwitchFirewallRules();
                 int scCode;
                 RunProcessCapture("sc.exe", "stop \"WireGuardTunnel$sweepr0\"", out scCode);
-                RunProcessCapture("schtasks.exe", "/Run /TN \"SWEEPRVPN_Disconnect\"", out scCode);
+                int discTaskCode;
+                RunProcessCapture("schtasks.exe", "/Run /TN \"SWEEPRVPN_Disconnect\"", out discTaskCode);
                 for (int i = 0; i < 20; i++)
                 {
                     if (!IsTunnelServiceRunning()) break;
                     Thread.Sleep(200);
+                }
+                // Verify DNS/IPv6 firewall guards were actually cleaned up; if scheduled task lacked ACLs on an older install, clean up via elevated disconnect so user's ISP/Wi-Fi DNS is never left blocked
+                if (discTaskCode != 0)
+                {
+                    int fwCheckCode;
+                    string fwCheck = RunProcessCapture("netsh.exe", "advfirewall firewall show rule name=\"SWEEPR_VPN_Block_DNS_Leak_UDP\"", out fwCheckCode);
+                    if (fwCheckCode == 0 && fwCheck != null && fwCheck.Contains("SWEEPR_VPN_Block_DNS_Leak_UDP"))
+                    {
+                        try
+                        {
+                            ProcessStartInfo psi = new ProcessStartInfo(Application.ExecutablePath, "--elevated-disconnect");
+                            psi.Verb = "runas";
+                            psi.UseShellExecute = true;
+                            psi.WindowStyle = ProcessWindowStyle.Hidden;
+                            using (Process p = Process.Start(psi))
+                            {
+                                if (p != null) p.WaitForExit(15000);
+                            }
+                        }
+                        catch { }
+                    }
                 }
                 RunProcessCapture("ipconfig.exe", "/flushdns", out scCode);
 
@@ -2819,18 +2841,26 @@ namespace SweeprVpnApp
                 Thread.Sleep(2500);
                 // Re-apply ACL after WireGuard service startup so subsequent server switches can update sweepr0.conf without UAC
                 RunHelperCmd("icacls.exe", "\"" + secureConfPath + "\" /inheritance:r /grant:r \"SYSTEM:(F)\" \"Administrators:(F)\"");
-                // Block ISP IPv6 leak & non-tunnel DNS leaks (including Windows SMHNR racing local router DNS) so streaming CDNs always resolve in the VPN exit country
+                // Block ISP IPv6 leak & disable Windows SMHNR (Smart Multi-Homed Name Resolution) so streaming CDNs always resolve in the VPN exit country.
+                // Note: When AllowedIPs = 0.0.0.0/0 (default), WireGuardNT's native WFP firewall already blocks all non-tunnel DNS traffic cleanly;
+                // only add explicit port-53 firewall rules when LAN Bypass is enabled, and always clean them up on disconnect.
+                string confContentsForFw = "";
+                try { confContentsForFw = File.ReadAllText(secureConfPath, Encoding.UTF8); } catch { }
+                bool isLanBypassConf = confContentsForFw.Contains("10.64.0.0/16");
                 string dnsBlockRanges = "0.0.0.0-1.0.0.0,1.0.0.3-1.1.1.0,1.1.1.3-10.64.0.0,10.64.0.2-126.255.255.255,128.0.0.0-255.255.255.255";
                 RunHelperCmd("reg.exe", "add \"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\DNSClient\" /v DisableSmartNameResolution /t REG_DWORD /d 1 /f");
                 RunHelperCmd("netsh.exe", "advfirewall firewall delete rule name=\"SWEEPR_VPN_Block_IPv6\"");
                 RunHelperCmd("netsh.exe", "advfirewall firewall add rule name=\"SWEEPR_VPN_Block_IPv6\" dir=out action=block protocol=any remoteip=2000::/3");
                 RunHelperCmd("netsh.exe", "advfirewall firewall delete rule name=\"SWEEPR_VPN_Block_DNS_Leak_UDP\"");
-                RunHelperCmd("netsh.exe", "advfirewall firewall add rule name=\"SWEEPR_VPN_Block_DNS_Leak_UDP\" dir=out action=block protocol=UDP remoteport=53 remoteip=" + dnsBlockRanges);
                 RunHelperCmd("netsh.exe", "advfirewall firewall delete rule name=\"SWEEPR_VPN_Block_DNS_Leak_TCP\"");
-                RunHelperCmd("netsh.exe", "advfirewall firewall add rule name=\"SWEEPR_VPN_Block_DNS_Leak_TCP\" dir=out action=block protocol=TCP remoteport=53 remoteip=" + dnsBlockRanges);
+                if (isLanBypassConf)
+                {
+                    RunHelperCmd("netsh.exe", "advfirewall firewall add rule name=\"SWEEPR_VPN_Block_DNS_Leak_UDP\" dir=out action=block protocol=UDP remoteport=53 remoteip=" + dnsBlockRanges);
+                    RunHelperCmd("netsh.exe", "advfirewall firewall add rule name=\"SWEEPR_VPN_Block_DNS_Leak_TCP\" dir=out action=block protocol=TCP remoteport=53 remoteip=" + dnsBlockRanges);
+                }
                 RunHelperCmd("ipconfig.exe", "/flushdns");
 
-                // Register zero-UAC SYSTEM helper tasks for subsequent country switches and disconnects
+                // Register zero-UAC SYSTEM helper tasks for subsequent country switches and disconnects (with COM Task Scheduler ACLs so standard users can invoke them)
                 try
                 {
                     string switchCmdPath = Path.Combine(pfWgDir, "sweepr_switch.cmd");
@@ -2845,16 +2875,18 @@ namespace SweeprVpnApp
                         "netsh.exe advfirewall firewall delete rule name=\"SWEEPR_VPN_Block_IPv6\" >nul 2>&1\r\n" +
                         "netsh.exe advfirewall firewall add rule name=\"SWEEPR_VPN_Block_IPv6\" dir=out action=block protocol=any remoteip=2000::/3 >nul 2>&1\r\n" +
                         "netsh.exe advfirewall firewall delete rule name=\"SWEEPR_VPN_Block_DNS_Leak_UDP\" >nul 2>&1\r\n" +
-                        "netsh.exe advfirewall firewall add rule name=\"SWEEPR_VPN_Block_DNS_Leak_UDP\" dir=out action=block protocol=UDP remoteport=53 remoteip=" + dnsBlockRanges + " >nul 2>&1\r\n" +
                         "netsh.exe advfirewall firewall delete rule name=\"SWEEPR_VPN_Block_DNS_Leak_TCP\" >nul 2>&1\r\n" +
-                        "netsh.exe advfirewall firewall add rule name=\"SWEEPR_VPN_Block_DNS_Leak_TCP\" dir=out action=block protocol=TCP remoteport=53 remoteip=" + dnsBlockRanges + " >nul 2>&1\r\n" +
+                        "findstr /C:\"10.64.0.0/16\" \"" + secureConfPath + "\" >nul 2>&1 && (\r\n" +
+                        "  netsh.exe advfirewall firewall add rule name=\"SWEEPR_VPN_Block_DNS_Leak_UDP\" dir=out action=block protocol=UDP remoteport=53 remoteip=" + dnsBlockRanges + " >nul 2>&1\r\n" +
+                        "  netsh.exe advfirewall firewall add rule name=\"SWEEPR_VPN_Block_DNS_Leak_TCP\" dir=out action=block protocol=TCP remoteport=53 remoteip=" + dnsBlockRanges + " >nul 2>&1\r\n" +
+                        ")\r\n" +
                         "sc.exe start \"WireGuardTunnel$sweepr0\" >nul 2>&1\r\n" +
                         "ipconfig.exe /flushdns >nul 2>&1\r\n";
                     File.WriteAllText(switchCmdPath, switchCmdBody, new UTF8Encoding(false));
                     RunHelperCmd("icacls.exe", "\"" + switchCmdPath + "\" /setowner \"SYSTEM\"");
                     RunHelperCmd("icacls.exe", "\"" + switchCmdPath + "\" /inheritance:r /grant:r \"SYSTEM:(F)\" \"Administrators:(F)\" \"*S-1-5-32-545:(RX)\"");
                     RunHelperCmd("schtasks.exe", "/Create /TN \"SWEEPRVPN_Switch\" /TR \"\\\"" + switchCmdPath + "\\\"\" /SC ONCE /ST 00:00 /RU \"SYSTEM\" /RL HIGHEST /F");
-                    RunHelperCmd("icacls.exe", @"C:\Windows\System32\Tasks\SWEEPRVPN_Switch /grant ""*S-1-5-32-545:(RX)""");
+                    GrantScheduledTaskExecuteToUsers("SWEEPRVPN_Switch");
 
                     string discCmdPath = Path.Combine(pfWgDir, "sweepr_disconnect.cmd");
                     string discCmdBody =
@@ -2869,7 +2901,7 @@ namespace SweeprVpnApp
                     RunHelperCmd("icacls.exe", "\"" + discCmdPath + "\" /setowner \"SYSTEM\"");
                     RunHelperCmd("icacls.exe", "\"" + discCmdPath + "\" /inheritance:r /grant:r \"SYSTEM:(F)\" \"Administrators:(F)\" \"*S-1-5-32-545:(RX)\"");
                     RunHelperCmd("schtasks.exe", "/Create /TN \"SWEEPRVPN_Disconnect\" /TR \"\\\"" + discCmdPath + "\\\"\" /SC ONCE /ST 00:00 /RU \"SYSTEM\" /RL HIGHEST /F");
-                    RunHelperCmd("icacls.exe", @"C:\Windows\System32\Tasks\SWEEPRVPN_Disconnect /grant ""*S-1-5-32-545:(RX)""");
+                    GrantScheduledTaskExecuteToUsers("SWEEPRVPN_Disconnect");
                 }
                 catch { }
                 diag.AppendLine("Service query:");
@@ -2885,6 +2917,23 @@ namespace SweeprVpnApp
                 try { File.WriteAllText(logPath, diag.ToString(), Encoding.UTF8); } catch { }
                 return 1;
             }
+        }
+
+        private static void GrantScheduledTaskExecuteToUsers(string taskName)
+        {
+            try
+            {
+                RunHelperCmd("icacls.exe", @"C:\Windows\System32\Tasks\" + taskName + @" /grant ""*S-1-5-32-545:(RX)""");
+                Type svcType = Type.GetTypeFromProgID("Schedule.Service");
+                if (svcType == null) return;
+                object svc = Activator.CreateInstance(svcType);
+                svcType.InvokeMember("Connect", BindingFlags.InvokeMethod, null, svc, new object[] { });
+                object root = svcType.InvokeMember("GetFolder", BindingFlags.InvokeMethod, null, svc, new object[] { @"\" });
+                object task = root.GetType().InvokeMember("GetTask", BindingFlags.InvokeMethod, null, root, new object[] { taskName });
+                // Grant Read & Execute to Authenticated Users (AU) while keeping Full Control restricted to SYSTEM (SY) and Administrators (BA)
+                task.GetType().InvokeMember("SetSecurityDescriptor", BindingFlags.InvokeMethod, null, task, new object[] { "D:(A;;FA;;;SY)(A;;FA;;;BA)(A;;GRGX;;;AU)", 0 });
+            }
+            catch { }
         }
 
         private static int RunElevatedDisconnect()

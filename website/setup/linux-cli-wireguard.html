@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Linux CLI WireGuard VPN Setup | SWEEPR VPN</title>
-  <meta name="description" content="Step-by-step Linux CLI (Ubuntu, Debian, Arch &amp; Fedora) WireGuard VPN setup guide (30 Seconds). Copy-paste .conf config, MTU 1420 settings, and 4ms 10Gbps RAM-only servers.">
+  <meta name="description" content="Step-by-step Linux CLI (Ubuntu, Debian, Arch &amp; Fedora) WireGuard VPN setup guide (30 Seconds). Copy-paste .conf config, MTU 1380 settings, and 4ms 10Gbps RAM-only servers.">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="https://sweeprvpn.com/setup/linux-cli-wireguard">
   <meta name="theme-color" content="#10b981">
@@ -17,18 +17,18 @@
   <meta property="og:locale" content="en_GB">
   <meta property="og:url" content="https://sweeprvpn.com/setup/linux-cli-wireguard">
   <meta property="og:title" content="Linux CLI WireGuard VPN Setup | SWEEPR VPN" />
-  <meta property="og:description" content="Step-by-step Linux CLI (Ubuntu, Debian, Arch &amp; Fedora) WireGuard VPN setup guide (30 Seconds). Copy-paste .conf config, MTU 1420 settings, and 4ms 10Gbps RAM-only servers.">
+  <meta property="og:description" content="Step-by-step Linux CLI (Ubuntu, Debian, Arch &amp; Fedora) WireGuard VPN setup guide (30 Seconds). Copy-paste .conf config, MTU 1380 settings, and 4ms 10Gbps RAM-only servers.">
   <meta property="og:image" content="https://sweeprvpn.com/og-image.png">
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://sweeprvpn.com/setup/linux-cli-wireguard">
   <meta name="twitter:title" content="Linux CLI WireGuard VPN Setup | SWEEPR VPN" />
-  <meta name="twitter:description" content="Step-by-step Linux CLI (Ubuntu, Debian, Arch &amp; Fedora) WireGuard VPN setup guide (30 Seconds). Copy-paste .conf config, MTU 1420 settings, and 4ms 10Gbps RAM-only servers.">
+  <meta name="twitter:description" content="Step-by-step Linux CLI (Ubuntu, Debian, Arch &amp; Fedora) WireGuard VPN setup guide (30 Seconds). Copy-paste .conf config, MTU 1380 settings, and 4ms 10Gbps RAM-only servers.">
   <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png">
 
   <!-- Schema Markup (TechArticle + SoftwareApplication + BreadcrumbList) -->
-  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","@id":"https://sweeprvpn.com/setup/linux-cli-wireguard#article","headline":"Linux CLI WireGuard VPN Setup | SWEEPR VPN","description":"Step-by-step Linux CLI (Ubuntu, Debian, Arch & Fedora) WireGuard VPN setup guide (30 Seconds). Copy-paste .conf config, MTU 1420 settings, and 4ms 10Gbps RAM-only servers.","datePublished":"2026-10-21","dateModified":"2026-11-17","author":{"@type":"Person","name":"Benjamin Cook","jobTitle":"Principal Network Architect","url":"https://sweeprvpn.com/warrant-canary","worksFor":{"@type":"Organization","name":"SWEEPR VPN Inc."}},"publisher":{"@type":"Organization","name":"SWEEPR VPN Inc.","logo":{"@type":"ImageObject","url":"https://sweeprvpn.com/logo-emerald.svg"}},"mainEntityOfPage":"https://sweeprvpn.com/setup/linux-cli-wireguard","reviewedBy":{"@type":"Organization","name":"SWEEPR Security Engineering Lab","url":"https://sweeprvpn.com/"}},{"@type":"SoftwareApplication","name":"SWEEPR VPN Pro","applicationCategory":"SecurityApplication","operatingSystem":"Windows 10, Windows 11, macOS, Linux, iOS, Android, OpenWrt, GL.iNet, pfSense","offers":{"@type":"Offer","price":"74.99","priceCurrency":"GBP","description":"Annual Plan (£6.25/mo equivalent — Save 50%) with 14-Day Money-Back Guarantee"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://sweeprvpn.com/"},{"@type":"ListItem","position":2,"name":"Router & Device Setup Guides","item":"https://sweeprvpn.com/setup"},{"@type":"ListItem","position":3,"name":"WireGuard VPN Setup for Linux CLI (Ubuntu, Debian, Arch & Fedora)","item":"https://sweeprvpn.com/setup/linux-cli-wireguard"}]}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","@id":"https://sweeprvpn.com/setup/linux-cli-wireguard#article","headline":"Linux CLI WireGuard VPN Setup | SWEEPR VPN","description":"Step-by-step Linux CLI (Ubuntu, Debian, Arch & Fedora) WireGuard VPN setup guide (30 Seconds). Copy-paste .conf config, MTU 1380 settings, and 4ms 10Gbps RAM-only servers.","datePublished":"2026-10-21","dateModified":"2026-11-17","author":{"@type":"Person","name":"Benjamin Cook","jobTitle":"Principal Network Architect","url":"https://sweeprvpn.com/warrant-canary","worksFor":{"@type":"Organization","name":"SWEEPR VPN Inc."}},"publisher":{"@type":"Organization","name":"SWEEPR VPN Inc.","logo":{"@type":"ImageObject","url":"https://sweeprvpn.com/logo-emerald.svg"}},"mainEntityOfPage":"https://sweeprvpn.com/setup/linux-cli-wireguard","reviewedBy":{"@type":"Organization","name":"SWEEPR Security Engineering Lab","url":"https://sweeprvpn.com/"}},{"@type":"SoftwareApplication","name":"SWEEPR VPN Pro","applicationCategory":"SecurityApplication","operatingSystem":"Windows 10, Windows 11, macOS, Linux, iOS, Android, OpenWrt, GL.iNet, pfSense","offers":{"@type":"Offer","price":"74.99","priceCurrency":"GBP","description":"Annual Plan (£6.25/mo equivalent — Save 50%) with 14-Day Money-Back Guarantee"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://sweeprvpn.com/"},{"@type":"ListItem","position":2,"name":"Router & Device Setup Guides","item":"https://sweeprvpn.com/setup"},{"@type":"ListItem","position":3,"name":"WireGuard VPN Setup for Linux CLI (Ubuntu, Debian, Arch & Fedora)","item":"https://sweeprvpn.com/setup/linux-cli-wireguard"}]}]}</script>
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="icon" type="image/png" href="/favicon.png" media="(prefers-color-scheme: light)">
@@ -46,6 +46,8 @@
     gtag('js', new Date());
     gtag('config', 'G-7D28EEMNXX');
   </script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5" />
+  <link rel="manifest" href="/manifest.webmanifest" />
 </head>
 <body class="text-gray-800 bg-[#fafafa]">
 
@@ -115,7 +117,7 @@
     </div>
     <div class="flex gap-2 md:gap-3 items-center">
       <div id="currencySelectorMount"></div>
-      <a href="/login" class="btn btn-ghost text-sm">Login</a>
+      <a rel="nofollow" href="/login" class="btn btn-ghost text-sm">Login</a>
       <a href="/download" class="btn btn-go gap-2 text-sm">
         <span>Get SWEEPR VPN</span>
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
@@ -140,7 +142,7 @@
     </div>
     <div id="direct-answer" class="mb-8 p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-gray-800">
       <div class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 mb-1.5">Direct Answer</div>
-      <p class="text-sm sm:text-base leading-relaxed">Configure this hardware using native WireGuard (WireGuard VPN Setup for pfSense & OPNsense Home Firewall with WireGuard VPN Setup for Steam Deck & Handheld Gaming OS (SteamOS)) from your SWEEPR VPN dashboard to encrypt connected devices without CPU bottlenecks. Using a pre-generated .conf profile enables leak-free DNS (10.66.0.1), Smart-TV ACR blocking, and up to 940 Mbps.</p>
+      <p class="text-sm sm:text-base leading-relaxed">Configure this hardware using native WireGuard (WireGuard VPN Setup for pfSense & OPNsense Home Firewall with WireGuard VPN Setup for Steam Deck & Handheld Gaming OS (SteamOS)) from your SWEEPR VPN dashboard to encrypt connected devices without CPU bottlenecks. Using a pre-generated .conf profile enables leak-free DNS (10.64.0.1), Smart-TV ACR blocking, and up to 940 Mbps.</p>
       <div class="mt-3 pt-3 border-t border-emerald-200/80 text-xs font-bold">
         <a href="/tools/leak-test" class="text-emerald-800 hover:text-emerald-950 underline">Verify Your Connection with Free IP &amp; WebRTC Leak Test &rarr;</a>
       </div>
@@ -153,14 +155,14 @@
       </div>
       <h2 class="text-xl font-bold text-gray-900 mb-2">Quick Setup Summary (Linux CLI &amp; Desktop)</h2>
       <p class="text-gray-700 leading-relaxed mb-5">
-        Run SWEEPR VPN on Ubuntu, Debian, Arch, or Fedora using either our &lt;14 MB native Tauri v2 desktop client or pure kernel-space WireGuard (`wg-quick`) with nftables kill-switch rules and zero Electron bloat. Engineered for <strong>Linux Kernel 5.6+ In-Tree WireGuard (`wg-quick` &amp; NetworkManager)</strong> with recommended MTU <strong>1420</strong> and direct 10Gbps peering via <strong>UK-LON-01 (London) / SE-STO-01 (Stockholm)</strong>.
+        Run SWEEPR VPN on Ubuntu, Debian, Arch, or Fedora using either our &lt;14 MB native Tauri v2 desktop client or pure kernel-space WireGuard (`wg-quick`) with nftables kill-switch rules and zero Electron bloat. Engineered for <strong>Linux Kernel 5.6+ In-Tree WireGuard (`wg-quick` &amp; NetworkManager)</strong> with recommended MTU <strong>1380</strong> and direct 10Gbps peering via <strong>UK-LON-01 (London) / SE-STO-01 (Stockholm)</strong>.
       </p>
       <div class="flex flex-wrap gap-3 items-center">
         <a href="/download" class="btn btn-go gap-2">
           <span>Free Download (30s Wi-Fi &amp; Speed Scan)</span>
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
-        <a href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-ghost text-sm font-semibold">
+        <a rel="nofollow" href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-ghost text-sm font-semibold">
           Get Pro (<span data-price="annualPerMonthStr">£6.25</span>/mo — Save 50%) &rarr;
         </a>
         <a href="/tools/isp-throttling-test" class="text-xs font-bold text-emerald-700 hover:underline ml-auto">
@@ -210,7 +212,7 @@ sudo wg show sweepr0</code></pre>
             </tr>
             <tr>
               <td class="p-4 pl-6 font-medium">Recommended Tunnel MTU</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">1420</td>
+              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">1380</td>
               <td class="p-4 border-l border-gray-200">Fixed 1500 MTU (causes packet fragmentation)</td>
             </tr>
             <tr>
@@ -249,8 +251,8 @@ sudo wg show sweepr0</code></pre>
         <p class="text-gray-700 leading-relaxed">Uses in-tree Linux kernel WireGuard module for near-line-rate 10Gbps throughput. Zero Electron or background telemetry daemons—under 14 MB RAM footprint.</p>
       </section>
       <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">2. Optimal MTU (1420) &amp; Keepalive Settings</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">When running WireGuard on Linux Kernel 5.6+ In-Tree WireGuard (`wg-quick` &amp; NetworkManager), setting your interface MTU to 1420 with a 25-second PersistentKeepalive ensures zero packet fragmentation over PPPoE, DOCSIS, and CGNAT broadband links.</p>
+        <h2 class="text-2xl font-bold text-gray-900 mb-3">2. Optimal MTU (1380) &amp; Keepalive Settings</h2>
+        <p class="text-gray-700 leading-relaxed mb-3">When running WireGuard on Linux Kernel 5.6+ In-Tree WireGuard (`wg-quick` &amp; NetworkManager), setting your interface MTU to 1380 with a 25-second PersistentKeepalive ensures zero packet fragmentation over PPPoE, DOCSIS, and CGNAT broadband links.</p>
         <p class="text-gray-700 leading-relaxed">Includes nftables kill-switch rules to block IPv6/DNS leaks outside the tunnel. All traffic resolves through SWEEPR’s private 10.64.0.1 DNS shield with zero activity logs.</p>
       </section>
       <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
@@ -267,7 +269,7 @@ sudo wg show sweepr0</code></pre>
         
         <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
           <h3 class="text-base font-bold text-gray-900 mb-2">How long does it take to set up SWEEPR VPN on Linux CLI &amp; Desktop?</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">Setup takes approximately 30 Seconds using either the native SWEEPR client or our standard WireGuard configuration parameters (1420).</p>
+          <p class="text-sm text-gray-600 leading-relaxed">Setup takes approximately 30 Seconds using either the native SWEEPR client or our standard WireGuard configuration parameters (1380).</p>
         </div>
         <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
           <h3 class="text-base font-bold text-gray-900 mb-2">Does running SWEEPR VPN on a router count as 1 device or multiple devices?</h3>
@@ -291,7 +293,7 @@ sudo wg show sweepr0</code></pre>
           <span>Free Download</span>
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
-        <a href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-big">
+        <a rel="nofollow" href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-big">
           Get SWEEPR VPN Pro &rarr;
         </a>
       </div>

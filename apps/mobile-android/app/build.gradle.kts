@@ -29,8 +29,8 @@ android {
         applicationId = "com.sweepr.vpn"
         minSdk = 26
         targetSdk = 36
-        versionCode = 16
-        versionName = "2.5.0"
+        versionCode = 17
+        versionName = "2.5.1"
 
         resourceConfigurations += listOf("en", "de", "fr", "ja")
     }
@@ -94,6 +94,7 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material:material-icons-extended")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
+    implementation("com.wireguard.android:tunnel:1.0.20260102")
     implementation("com.android.billingclient:billing-ktx:8.0.0")
     implementation("com.google.android.play:app-update-ktx:2.1.0")
 }

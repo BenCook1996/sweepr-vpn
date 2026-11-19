@@ -939,6 +939,10 @@ final class SweeprVpnViewModel: ObservableObject {
             try await mgr.saveToPreferences()
             try await mgr.loadFromPreferences()
             tunnelManager = mgr
+            if mgr.connection.status == .connected || mgr.connection.status == .connecting || mgr.connection.status == .reasserting {
+                mgr.connection.stopVPNTunnel()
+                try? await Task.sleep(nanoseconds: 400_000_000)
+            }
             try mgr.connection.startVPNTunnel()
 
             let selected = nodes.first { $0.code == selectedNodeCode }

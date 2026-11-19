@@ -28,7 +28,7 @@ Address = 10.64.0.1/16
 ListenPort = ${WG_PORT}
 PrivateKey = $(cat /etc/wireguard/server.key)
 MTU = 1380
-PostUp = ip link set dev wg0 txqueuelen 1000
+PostUp = ip link set dev wg0 txqueuelen 1000; tc qdisc replace dev wg0 root fq_codel || true
 SaveConfig = false
 EOF
 chmod 600 /etc/wireguard/wg0.conf
@@ -68,6 +68,7 @@ table inet sweepr {
     ip protocol icmp accept
     tcp dport 22 accept
     udp dport ${WG_PORT} accept
+    udp dport 443 accept
     ip saddr ${CONTROL_PLANE_CIDR} tcp dport ${AGENT_PORT} accept
     iifname "wg0" udp dport 53 accept
     iifname "wg0" tcp dport 53 accept
@@ -75,8 +76,8 @@ table inet sweepr {
   chain forward {
     type filter hook forward priority 0; policy drop;
     ip daddr 169.254.169.254 drop
-    oifname "wg0" tcp flags syn / syn,rst tcp option maxseg size set rt mtu
-    iifname "wg0" tcp flags syn / syn,rst tcp option maxseg size set rt mtu
+    oifname "wg0" tcp flags syn / syn,rst tcp option maxseg size 1341-65535 tcp option maxseg size set 1340
+    iifname "wg0" tcp flags syn / syn,rst tcp option maxseg size 1341-65535 tcp option maxseg size set 1340
     ct state established,related accept
     iifname "wg0" oifname "${WAN}" accept
   }
@@ -86,6 +87,10 @@ table inet sweepr {
   }
 }
 table ip sweepr_nat {
+  chain prerouting {
+    type nat hook prerouting priority -100;
+    iifname "${WAN}" udp dport 443 redirect to :${WG_PORT}
+  }
   chain postrouting {
     type nat hook postrouting priority 100;
     ip saddr 10.64.0.0/16 oifname "${WAN}" masquerade

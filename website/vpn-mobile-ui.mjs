@@ -546,7 +546,7 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
   <main id="view-home" class="view active">
     <div class="mono" style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 11px;margin-bottom:12px;border:1px solid var(--border);background:var(--card-sub);border-radius:10px;font-size:10.5px;color:var(--muted)">
       <span style="display:inline-flex;align-items:center;gap:6px;color:var(--text-sub);font-weight:700"><span style="width:7px;height:7px;border-radius:999px;background:#059669;display:inline-block"></span>TUNNEL // WIREGUARD 10GBPS</span>
-      <span>ACR SINKHOLE 10.66.0.1</span>
+      <span>ACR SINKHOLE 10.64.0.1</span>
     </div>
     <div class="c3-status-header">
       <div id="statusPill" class="c3-status-pill">TAP ORB TO PROTECT</div>

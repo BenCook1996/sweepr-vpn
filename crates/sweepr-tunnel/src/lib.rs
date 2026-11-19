@@ -995,11 +995,14 @@ fn bring_tunnel_up(conf: &Path) -> Result<(), String> {
         let dns_block_ranges = "0.0.0.0-1.0.0.0,1.0.0.3-1.1.1.0,1.1.1.3-10.64.0.0,10.64.0.2-126.255.255.255,128.0.0.0-255.255.255.255";
         let sys_root = std::env::var("SystemRoot").unwrap_or_else(|_| "C:\\Windows".to_string());
         let reg_bin = Path::new(&sys_root).join("System32\\reg.exe");
+        let safe_conf = conf
+            .to_string_lossy()
+            .replace(['\'', '"', '`', '$', ';', '&', '|', '\r', '\n'], "");
         let ps = format!(
             "Start-Process -FilePath '{}' -ArgumentList '/c','\"\"{}\" /installtunnelservice \"{}\" & \"{}\" add \"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\DNSClient\" /v DisableSmartNameResolution /t REG_DWORD /d 1 /f >nul 2>&1 & \"{}\" advfirewall firewall delete rule name=SWEEPR_VPN_Block_IPv6 >nul 2>&1 & \"{}\" advfirewall firewall add rule name=SWEEPR_VPN_Block_IPv6 dir=out action=block protocol=any remoteip=2000::/3 >nul 2>&1 & \"{}\" advfirewall firewall delete rule name=SWEEPR_VPN_Block_DNS_Leak_UDP >nul 2>&1 & \"{}\" advfirewall firewall add rule name=SWEEPR_VPN_Block_DNS_Leak_UDP dir=out action=block protocol=UDP remoteport=53 remoteip={} >nul 2>&1 & \"{}\" advfirewall firewall delete rule name=SWEEPR_VPN_Block_DNS_Leak_TCP >nul 2>&1 & \"{}\" advfirewall firewall add rule name=SWEEPR_VPN_Block_DNS_Leak_TCP dir=out action=block protocol=TCP remoteport=53 remoteip={} >nul 2>&1 & \"{}\" /flushdns >nul 2>&1\"' -Verb RunAs -WindowStyle Hidden -Wait",
             cmd_bin().display(),
             wg_exe.display(),
-            conf.to_string_lossy().replace('\'', "").replace('"', "").replace('\\', "").replace('`', "").replace('$', ""),
+            safe_conf,
             reg_bin.display(),
             netsh_bin().display(),
             netsh_bin().display(),
@@ -1029,10 +1032,13 @@ fn bring_tunnel_up(conf: &Path) -> Result<(), String> {
     }
     #[cfg(target_os = "macos")]
     {
+        let safe_conf = conf
+            .to_string_lossy()
+            .replace(['\'', '"', '\\', '`', '$', ';', '&', '|', '\r', '\n'], "");
         let script = format!(
-            "do shell script \"export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH; wg-quick down '{}' >/dev/null 2>&1 || true; wg-quick up '{}'; networksetup -setv6off Wi-Fi >/dev/null 2>&1 || true; dscacheutil -flushcache >/dev/null 2>&1 || true; killall -HUP mDNSResponder >/dev/null 2>&1 || true\" with administrator privileges",
-            conf.to_string_lossy().replace('\'', "").replace('"', "").replace('\\', "").replace('`', "").replace('$', ""),
-            conf.to_string_lossy().replace('\'', "").replace('"', "").replace('\\', "").replace('`', "").replace('$', "")
+            "do shell script \"export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH; wg-quick down '{}' >/dev/null 2>&1 || true; wg-quick up '{}'; networksetup -listallnetworkservices | tail -n +2 | grep -v '^[*]' | while IFS= read -r svc; do networksetup -setv6off \\\"$svc\\\" >/dev/null 2>&1 || true; done; dscacheutil -flushcache >/dev/null 2>&1 || true; killall -HUP mDNSResponder >/dev/null 2>&1 || true\" with administrator privileges",
+            safe_conf,
+            safe_conf
         );
         let status = Command::new("osascript")
             .args(["-e", &script])
@@ -1046,10 +1052,14 @@ fn bring_tunnel_up(conf: &Path) -> Result<(), String> {
     }
     #[cfg(not(any(target_os = "windows", target_os = "macos")))]
     {
+        let safe_conf = conf
+            .to_string_lossy()
+            .replace(['\'', '"', '\\', '`', '$', ';', '&', '|', '\r', '\n'], "");
         let cmd = format!(
-            "wg-quick down '{}' >/dev/null 2>&1 || true; wg-quick up '{}' && (sysctl -w net.ipv6.conf.all.disable_ipv6=1 >/dev/null 2>&1 || true) && (resolvectl flush-caches >/dev/null 2>&1 || true)",
-            conf.to_string_lossy().replace('\'', "").replace('"', "").replace('\\', "").replace('`', "").replace('$', ""),
-            conf.to_string_lossy().replace('\'', "").replace('"', "").replace('\\', "").replace('`', "").replace('$', "")
+            "wg-quick down '{}' >/dev/null 2>&1 || true; wg-quick up '{}' && (sysctl -w net.ipv6.conf.all.disable_ipv6=1 >/dev/null 2>&1 || true) && (sysctl -w net.ipv6.conf.default.disable_ipv6=1 >/dev/null 2>&1 || true) && (command -v resolvectl >/dev/null 2>&1 && resolvectl domain {} '~.' >/dev/null 2>&1 || true) && (resolvectl flush-caches >/dev/null 2>&1 || systemd-resolve --flush-caches >/dev/null 2>&1 || true) && (nscd -i hosts >/dev/null 2>&1 || true)",
+            safe_conf,
+            safe_conf,
+            TUNNEL_NAME
         );
         let status = Command::new("pkexec")
             .args(["sh", "-c", &cmd])
@@ -1114,14 +1124,17 @@ pub fn bring_tunnel_down() -> Result<(), String> {
     {
         let c = conf_path();
         if c.exists() {
+            let safe_conf = c
+                .to_string_lossy()
+                .replace(['\'', '"', '\\', '`', '$', ';', '&', '|', '\r', '\n'], "");
             let ipv6_restore = if ks_active {
                 ""
             } else {
-                " networksetup -setv6automatic Wi-Fi >/dev/null 2>&1 || true;"
+                " networksetup -listallnetworkservices | tail -n +2 | grep -v '^[*]' | while IFS= read -r svc; do networksetup -setv6automatic \\\"$svc\\\" >/dev/null 2>&1 || true; done;"
             };
             let script = format!(
                 "do shell script \"export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH; wg-quick down '{}' >/dev/null 2>&1 || true;{} dscacheutil -flushcache >/dev/null 2>&1 || true; killall -HUP mDNSResponder >/dev/null 2>&1 || true\" with administrator privileges",
-                c.to_string_lossy().replace('\'', "").replace('"', "").replace('\\', "").replace('`', "").replace('$', ""),
+                safe_conf,
                 ipv6_restore
             );
             let _ = Command::new("osascript").args(["-e", &script]).status();
@@ -1132,14 +1145,17 @@ pub fn bring_tunnel_down() -> Result<(), String> {
     {
         let c = conf_path();
         if c.exists() {
+            let safe_conf = c
+                .to_string_lossy()
+                .replace(['\'', '"', '\\', '`', '$', ';', '&', '|', '\r', '\n'], "");
             let ipv6_restore = if ks_active {
                 ""
             } else {
-                " sysctl -w net.ipv6.conf.all.disable_ipv6=0 >/dev/null 2>&1 || true;"
+                " sysctl -w net.ipv6.conf.all.disable_ipv6=0 >/dev/null 2>&1 || true; sysctl -w net.ipv6.conf.default.disable_ipv6=0 >/dev/null 2>&1 || true;"
             };
             let cmd = format!(
-                "wg-quick down '{}' >/dev/null 2>&1 || true;{} resolvectl flush-caches >/dev/null 2>&1 || true",
-                c.to_string_lossy().replace('\'', "").replace('"', "").replace('\\', "").replace('`', "").replace('$', ""),
+                "wg-quick down '{}' >/dev/null 2>&1 || true;{} (resolvectl flush-caches >/dev/null 2>&1 || systemd-resolve --flush-caches >/dev/null 2>&1 || true) && (nscd -i hosts >/dev/null 2>&1 || true)",
+                safe_conf,
                 ipv6_restore
             );
             let _ = Command::new("pkexec")

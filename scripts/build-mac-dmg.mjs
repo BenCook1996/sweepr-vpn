@@ -163,6 +163,8 @@ def handle_ipc(cmd, args):
         srv = args.get("serverCode") or args.get("server_code") or "UK-LON-01"
         code = (args.get("activationCode") or args.get("activation_code") or "").strip()
         email = (args.get("email") or "").strip()
+        lan_bypass = bool(args.get("lanBypass") if "lanBypass" in args else args.get("lan_bypass", False))
+        dns_shield = bool(args.get("dnsShield") if "dnsShield" in args else args.get("dns_shield", True))
         req = urllib.request.Request(
             f"{API_URL}/api/vpn/wireguard-config",
             data=json.dumps({
@@ -170,7 +172,8 @@ def handle_ipc(cmd, args):
                 "activation_code": code,
                 "license_key": code,
                 "email": email,
-                "lan_bypass": False,
+                "lan_bypass": lan_bypass,
+                "dns_shield": dns_shield,
                 "device_id": args.get("deviceId") or "mac_desktop"
             }).encode("utf-8"),
             headers={"Content-Type": "application/json"},
@@ -182,12 +185,56 @@ def handle_ipc(cmd, args):
             conf_text = data.get("config_text") or ""
             if not conf_text or "[Interface]" not in conf_text:
                 return {"connected": False, "error": data.get("message") or "Invalid WireGuard config"}
+            # Normalize MTU = 1380, in-tunnel DNS = 10.64.0.1, and IPv4-only AllowedIPs with 10.64.0.0/16 when LAN bypass is on
+            target_dns = "10.64.0.1, 1.1.1.2" if dns_shield else "10.64.0.1, 1.1.1.1"
+            lan_bypass_ips = "1.0.0.0/8, 2.0.0.0/7, 4.0.0.0/6, 8.0.0.0/7, 10.64.0.0/16, 11.0.0.0/8, 12.0.0.0/6, 16.0.0.0/4, 32.0.0.0/3, 64.0.0.0/2, 128.0.0.0/3, 160.0.0.0/5, 168.0.0.0/6, 172.0.0.0/12, 172.32.0.0/11, 172.64.0.0/10, 172.128.0.0/9, 173.0.0.0/8, 174.0.0.0/7, 176.0.0.0/4, 192.0.0.0/9, 192.128.0.0/11, 192.160.0.0/13, 192.169.0.0/16, 192.170.0.0/15, 192.172.0.0/14, 192.176.0.0/12, 192.192.0.0/10, 193.0.0.0/8, 194.0.0.0/7, 196.0.0.0/6, 200.0.0.0/5, 208.0.0.0/4"
+            norm_lines = []
+            saw_mtu = False
+            saw_dns = False
+            in_iface = False
+            for raw_ln in conf_text.splitlines():
+                t = raw_ln.strip()
+                if t.startswith("["):
+                    if in_iface and not saw_dns:
+                        norm_lines.append(f"DNS = {target_dns}")
+                        saw_dns = True
+                    if in_iface and not saw_mtu:
+                        norm_lines.append("MTU = 1380")
+                        saw_mtu = True
+                    in_iface = (t.lower() == "[interface]")
+                    norm_lines.append(raw_ln)
+                    continue
+                low = t.lower()
+                if in_iface and low.startswith("mtu"):
+                    if not saw_mtu:
+                        norm_lines.append("MTU = 1380")
+                        saw_mtu = True
+                    continue
+                if in_iface and low.startswith("dns"):
+                    if not saw_dns:
+                        norm_lines.append(f"DNS = {target_dns}")
+                        saw_dns = True
+                    continue
+                if not in_iface and low.startswith("allowedips"):
+                    norm_lines.append(f"AllowedIPs = {lan_bypass_ips if lan_bypass else '0.0.0.0/0'}")
+                    continue
+                norm_lines.append(raw_ln)
+            conf_text = "\\n".join(norm_lines) + "\\n"
             conf_path = DATA_DIR / "sweepr0.conf"
             conf_path.write_text(conf_text, "utf-8")
             os.chmod(conf_path, 0o600)
-            osa = f'do shell script "export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH; wg-quick down \'{conf_path}\' >/dev/null 2>&1 || true; wg-quick up \'{conf_path}\'; networksetup -setv6off Wi-Fi >/dev/null 2>&1 || true; dscacheutil -flushcache >/dev/null 2>&1 || true; killall -HUP mDNSResponder >/dev/null 2>&1 || true" with administrator privileges'
+            sh_cmd = (
+                f"export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH; "
+                f"wg-quick down '{conf_path}' >/dev/null 2>&1 || true; "
+                f"wg-quick up '{conf_path}'; "
+                "networksetup -listallnetworkservices | tail -n +2 | grep -v '^[*]' | "
+                'while IFS= read -r svc; do networksetup -setv6off "$svc" >/dev/null 2>&1 || true; done; '
+                "dscacheutil -flushcache >/dev/null 2>&1 || true; "
+                "killall -HUP mDNSResponder >/dev/null 2>&1 || true"
+            )
+            osa = "do shell script " + json.dumps(sh_cmd) + " with administrator privileges"
             subprocess.run(["/usr/bin/osascript", "-e", osa], check=True)
-            state = {"connected": True, "server_code": srv, "address": data.get("address", "10.64.0.2/32"), "endpoint": data.get("endpoint", "")}
+            state = {"connected": True, "server_code": srv, "address": data.get("address", "10.64.0.2/32"), "endpoint": data.get("endpoint", ""), "dns": target_dns}
             (DATA_DIR / "tunnel_state.json").write_text(json.dumps(state), "utf-8")
             return state
         except Exception as e:
@@ -195,7 +242,15 @@ def handle_ipc(cmd, args):
     if cmd == "disconnect_vpn":
         conf_path = DATA_DIR / "sweepr0.conf"
         if conf_path.exists():
-            osa = f'do shell script "export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH; wg-quick down \'{conf_path}\' >/dev/null 2>&1 || true; networksetup -setv6automatic Wi-Fi >/dev/null 2>&1 || true; dscacheutil -flushcache >/dev/null 2>&1 || true; killall -HUP mDNSResponder >/dev/null 2>&1 || true" with administrator privileges'
+            sh_cmd = (
+                f"export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH; "
+                f"wg-quick down '{conf_path}' >/dev/null 2>&1 || true; "
+                "networksetup -listallnetworkservices | tail -n +2 | grep -v '^[*]' | "
+                'while IFS= read -r svc; do networksetup -setv6automatic "$svc" >/dev/null 2>&1 || true; done; '
+                "dscacheutil -flushcache >/dev/null 2>&1 || true; "
+                "killall -HUP mDNSResponder >/dev/null 2>&1 || true"
+            )
+            osa = "do shell script " + json.dumps(sh_cmd) + " with administrator privileges"
             subprocess.run(["/usr/bin/osascript", "-e", osa], check=False)
         state = {"connected": False, "server_code": None, "address": None}
         (DATA_DIR / "tunnel_state.json").write_text(json.dumps(state), "utf-8")

@@ -73,7 +73,7 @@ data class WifiDiagnosticsReport(
     val transportLabel: String = "Wi-Fi",
     val localIp: String = "Detecting…",
     val gatewayIp: String = "Detecting…",
-    val dnsServers: String = "1.1.1.1, 1.0.0.1",
+    val dnsServers: String = "10.64.0.1, 1.1.1.2",
     val captivePortalStatus: String = "Validated HTTPS (No Captive Portal)",
     val riskAssessment: String = "Encrypted & Protected",
     val isUntrustedPublicWifi: Boolean = false
@@ -477,6 +477,7 @@ fun SweeprVpnScreen(
                     put("license_key", licenseKey)
                     put("email", userEmail)
                     put("lan_bypass", lanBypass)
+                    put("dns_shield", smartTvDnsShield)
                     put("device_id", deviceId)
                 }
                 OutputStreamWriter(conn.outputStream, Charsets.UTF_8).use { it.write(payload.toString()) }
@@ -508,7 +509,8 @@ fun SweeprVpnScreen(
             if (confText.isBlank()) {
                 val cachedConf = prefs.getString("wg_cached_config_${targetSrv.code}", "") ?: ""
                 val cachedAddr = prefs.getString("wg_cached_addr_${targetSrv.code}", "10.64.0.2/32") ?: "10.64.0.2/32"
-                if (cachedConf.contains("PrivateKey")) {
+                // Only fall back to cached config if it already matches upgraded MTU 1380 + in-tunnel 10.64.0.1 DNS
+                if (cachedConf.contains("PrivateKey") && cachedConf.contains("MTU = 1380") && cachedConf.contains("10.64.0.1")) {
                     confText = cachedConf
                     assignedAddr = cachedAddr
                 }
@@ -1612,7 +1614,7 @@ fun SweeprVpnScreen(
                                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                         Text("DNS SHIELD", style = MaterialTheme.typography.labelSmall, color = Color(0xFF94A3B8))
                                         Text(
-                                            if (smartTvDnsShield) "1.1.1.2 ✓" else "1.1.1.1",
+                                            if (smartTvDnsShield) "10.64.0.1 ✓" else "10.64.0.1",
                                             style = MaterialTheme.typography.bodyMedium,
                                             fontWeight = FontWeight.Bold,
                                             color = Color(0xFF34D399)
@@ -1880,7 +1882,7 @@ fun SweeprVpnScreen(
                                 Column(modifier = Modifier.weight(1f)) {
                                     Text("Smart-TV & Tracker DNS Shield", fontWeight = FontWeight.Bold, color = Color.White)
                                     Text(
-                                        "Routes DNS via 1.1.1.2 / 1.0.0.2 to sinkhole malware, phishing & ACR telemetry",
+                                        "Routes DNS via encrypted 10.64.0.1 in-tunnel resolver to block malware, phishing & Smart-TV ACR telemetry",
                                         style = MaterialTheme.typography.bodySmall,
                                         color = Color(0xFF94A3B8)
                                     )
@@ -1891,9 +1893,9 @@ fun SweeprVpnScreen(
                                         smartTvDnsShield = enabled
                                         prefs.edit().putBoolean("smart_tv_dns_shield", enabled).apply()
                                         statusBanner = if (enabled) {
-                                            "Smart-TV & Malware DNS Shield enabled (1.1.1.2)"
+                                            "Smart-TV & Malware DNS Shield enabled (10.64.0.1 + 1.1.1.2)"
                                         } else {
-                                            "Standard Cloudflare DNS enabled (1.1.1.1)"
+                                            "Private in-tunnel DNS enabled (10.64.0.1 + 1.1.1.1)"
                                         }
                                         if (isConnected) {
                                             requestConnectWithDisclosureCheck(selectedServerCode, forceReconnect = true)

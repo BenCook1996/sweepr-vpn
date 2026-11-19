@@ -248,33 +248,24 @@ fn set_kill_switch(enabled: bool) -> Result<serde_json::Value, String> {
     #[cfg(target_os = "macos")]
     {
         let v6_mode = if enabled { "-setv6off" } else { "-setv6automatic" };
-        let status = std::process::Command::new("networksetup")
-            .args([v6_mode, "Wi-Fi"])
-            .status();
-        if !status.map(|s| s.success()).unwrap_or(false) {
-            let script = format!(
-                "do shell script \"networksetup {} Wi-Fi >/dev/null 2>&1 || true; dscacheutil -flushcache >/dev/null 2>&1 || true\" with administrator privileges",
-                v6_mode
-            );
-            let _ = std::process::Command::new("osascript").args(["-e", &script]).status();
-        }
-        let _ = std::process::Command::new("dscacheutil")
-            .args(["-flushcache"])
-            .status();
+        let script = format!(
+            "do shell script \"networksetup -listallnetworkservices | tail -n +2 | grep -v '^[*]' | while IFS= read -r svc; do networksetup {} \\\"$svc\\\" >/dev/null 2>&1 || true; done; dscacheutil -flushcache >/dev/null 2>&1 || true; killall -HUP mDNSResponder >/dev/null 2>&1 || true\" with administrator privileges",
+            v6_mode
+        );
+        let _ = std::process::Command::new("osascript").args(["-e", &script]).status();
     }
     #[cfg(target_os = "linux")]
     {
-        let sysctl_val = if enabled {
-            "net.ipv6.conf.all.disable_ipv6=1"
-        } else {
-            "net.ipv6.conf.all.disable_ipv6=0"
-        };
-        let status = std::process::Command::new("sysctl")
-            .args(["-w", sysctl_val])
+        let v = if enabled { "1" } else { "0" };
+        let cmd = format!(
+            "sysctl -w net.ipv6.conf.all.disable_ipv6={v} >/dev/null 2>&1 || true; sysctl -w net.ipv6.conf.default.disable_ipv6={v} >/dev/null 2>&1 || true"
+        );
+        let status = std::process::Command::new("sh")
+            .args(["-c", &cmd])
             .status();
         if !status.map(|s| s.success()).unwrap_or(false) {
             let _ = std::process::Command::new("pkexec")
-                .args(["sysctl", "-w", sysctl_val])
+                .args(["sh", "-c", &cmd])
                 .status();
         }
     }
@@ -441,16 +432,11 @@ fn set_smart_tv_shields(
     #[cfg(target_os = "macos")]
     {
         if tunnel_active {
-            let st = std::process::Command::new("networksetup")
-                .args(["-setdnsservers", "Wi-Fi", primary_dns, secondary_dns])
-                .status();
-            if !st.map(|s| s.success()).unwrap_or(false) {
-                let script = format!(
-                    "do shell script \"networksetup -setdnsservers Wi-Fi {} {} >/dev/null 2>&1 || true; dscacheutil -flushcache >/dev/null 2>&1 || true\" with administrator privileges",
-                    primary_dns, secondary_dns
-                );
-                let _ = std::process::Command::new("osascript").args(["-e", &script]).status();
-            }
+            let script = format!(
+                "do shell script \"networksetup -listallnetworkservices | tail -n +2 | grep -v '^[*]' | while IFS= read -r svc; do networksetup -setdnsservers \\\"$svc\\\" {} {} >/dev/null 2>&1 || true; done; dscacheutil -flushcache >/dev/null 2>&1 || true; killall -HUP mDNSResponder >/dev/null 2>&1 || true\" with administrator privileges",
+                primary_dns, secondary_dns
+            );
+            let _ = std::process::Command::new("osascript").args(["-e", &script]).status();
         }
         let _ = std::process::Command::new("dscacheutil")
             .args(["-flushcache"])
@@ -462,9 +448,16 @@ fn set_smart_tv_shields(
             let st = std::process::Command::new("resolvectl")
                 .args(["dns", "sweepr0", primary_dns, secondary_dns])
                 .status();
+            let _ = std::process::Command::new("resolvectl")
+                .args(["domain", "sweepr0", "~."])
+                .status();
             if !st.map(|s| s.success()).unwrap_or(false) {
+                let cmd = format!(
+                    "resolvectl dns sweepr0 {} {} >/dev/null 2>&1 || true; resolvectl domain sweepr0 '~.' >/dev/null 2>&1 || true; resolvectl flush-caches >/dev/null 2>&1 || true",
+                    primary_dns, secondary_dns
+                );
                 let _ = std::process::Command::new("pkexec")
-                    .args(["resolvectl", "dns", "sweepr0", primary_dns, secondary_dns])
+                    .args(["sh", "-c", &cmd])
                     .status();
             }
         }
