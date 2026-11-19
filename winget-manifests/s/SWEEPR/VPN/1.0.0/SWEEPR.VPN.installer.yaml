@@ -13,6 +13,6 @@ ReleaseDate: 2026-11-15
 Installers:
   - Architecture: x64
     InstallerUrl: https://sweeprvpn.com/SWEEPRVPN.exe
-    InstallerSha256: 1CADD45F8C875CAD864CDEFDA02CEBC527A12244F1081E079264C9200A0A728C
+    InstallerSha256: EEE1C1A4BC972DE4E1405AB782BEC426C263A31DB0548E75A5C4EED47699A8FB
 ManifestType: installer
 ManifestVersion: 1.6.0

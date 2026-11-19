@@ -10,12 +10,12 @@ The portable GUI executable is downloaded directly from the official vendor doma
    https://sweeprvpn.com/SWEEPRVPN.exe
    (Exact release mirror: https://github.com/BenCook1996/sweepr-vpn/releases/download/v2.5.0/SWEEPRVPN.exe)
 
-5. Checksum Verification (731,408 bytes):
+5. Checksum Verification (741,136 bytes):
    Obtain the cryptographic checksum using PowerShell:
    Get-FileHash -Path SWEEPRVPN.exe -Algorithm SHA256
 
    Checksum Type: sha256
-   Checksum: 1CADD45F8C875CAD864CDEFDA02CEBC527A12244F1081E079264C9200A0A728C
+   Checksum: EEE1C1A4BC972DE4E1405AB782BEC426C263A31DB0548E75A5C4EED47699A8FB
 
 6. Microsoft Authenticode Signature Verification:
    The binary is digitally signed with a verified Microsoft Authenticode certificate.

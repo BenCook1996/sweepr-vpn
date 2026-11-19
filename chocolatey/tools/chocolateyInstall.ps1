@@ -7,7 +7,7 @@ $fileArgs = @{
   packageName    = if ($env:ChocolateyPackageName) { $env:ChocolateyPackageName } else { 'sweepr-vpn' }
   fileFullPath   = $exePath
   url64bit       = 'https://sweeprvpn.com/SWEEPRVPN.exe'
-  checksum64     = '1CADD45F8C875CAD864CDEFDA02CEBC527A12244F1081E079264C9200A0A728C'
+  checksum64     = 'EEE1C1A4BC972DE4E1405AB782BEC426C263A31DB0548E75A5C4EED47699A8FB'
   checksumType64 = 'sha256'
 }
 
