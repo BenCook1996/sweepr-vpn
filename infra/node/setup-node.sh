@@ -1,6 +1,6 @@
 #!/bin/bash
 # SWEEPR VPN node setup (Ubuntu 24.04). Run once as root on a fresh server.
-# Used as Hetzner/Vultr/UpCloud cloud-init "user data"; __AGENT_SECRET__ is filled in by the provisioning script.
+# Used as Hetzner/Vultr/UpCloud cloud-init "user data"; the agent secret is filled in by the provisioning script.
 set -euxo pipefail
 export DEBIAN_FRONTEND=noninteractive
 
@@ -27,6 +27,8 @@ cat > /etc/wireguard/wg0.conf <<EOF
 Address = 10.64.0.1/16
 ListenPort = ${WG_PORT}
 PrivateKey = $(cat /etc/wireguard/server.key)
+MTU = 1380
+PostUp = ip link set dev wg0 txqueuelen 1000
 SaveConfig = false
 EOF
 chmod 600 /etc/wireguard/wg0.conf
@@ -39,10 +41,20 @@ net.core.default_qdisc = fq
 net.ipv4.tcp_congestion_control = bbr
 net.core.rmem_max = 67108864
 net.core.wmem_max = 67108864
+net.core.rmem_default = 4194304
+net.core.wmem_default = 4194304
+net.core.optmem_max = 2097152
+net.core.netdev_max_backlog = 16384
+net.ipv4.udp_rmem_min = 16384
+net.ipv4.udp_wmem_min = 16384
+net.ipv4.tcp_rmem = 4096 87380 67108864
+net.ipv4.tcp_wmem = 4096 65536 67108864
+net.ipv4.tcp_mtu_probing = 1
+net.ipv4.tcp_slow_start_after_idle = 0
 EOF
 sysctl --system >/dev/null || true
 
-# ---------------------------------------------------------------- Firewall + NAT
+# ---------------------------------------------------------------- Firewall + NAT + MSS Clamping
 WAN=$(ip -4 route show default | awk '{print $5; exit}')
 CONTROL_PLANE_CIDR="${SWEEPR_CONTROL_PLANE_CIDR:-0.0.0.0/0}"
 cat > /etc/nftables.conf <<EOF
@@ -62,10 +74,16 @@ table inet sweepr {
   }
   chain forward {
     type filter hook forward priority 0; policy drop;
+    ip daddr 169.254.169.254 drop
+    oifname "wg0" tcp flags syn / syn,rst tcp option maxseg size set rt mtu
+    iifname "wg0" tcp flags syn / syn,rst tcp option maxseg size set rt mtu
     ct state established,related accept
     iifname "wg0" oifname "${WAN}" accept
   }
-  chain output { type filter hook output priority 0; policy accept; }
+  chain output {
+    type filter hook output priority 0; policy accept;
+    meta skuid != 0 ip daddr 169.254.169.254 drop
+  }
 }
 table ip sweepr_nat {
   chain postrouting {
@@ -128,6 +146,17 @@ cat > /etc/unbound/unbound.conf.d/sweepr.conf <<'EOF'
 server:
   interface: 10.64.0.1
   ip-freebind: yes
+  do-ip4: yes
+  do-ip6: no
+  do-udp: yes
+  do-tcp: yes
+  num-threads: 1
+  so-reuseport: yes
+  msg-cache-size: 32m
+  rrset-cache-size: 64m
+  cache-min-ttl: 60
+  serve-expired: yes
+  serve-expired-ttl: 3600
   access-control: 0.0.0.0/0 refuse
   access-control: 10.64.0.0/16 allow
   verbosity: 0
@@ -143,17 +172,23 @@ server:
   harden-dnssec-stripped: yes
   prefetch: yes
   include: "/etc/unbound/sweepr-blocklist.conf"
+forward-zone:
+  name: "."
+  forward-first: yes
+  forward-addr: 1.1.1.1
+  forward-addr: 1.0.0.1
 EOF
 
+mkdir -p /etc/systemd/system/unbound.service.d
+printf '[Unit]\nAfter=wg-quick@wg0.service\nWants=wg-quick@wg0.service\n' > /etc/systemd/system/unbound.service.d/sweepr.conf
+systemctl daemon-reload
+systemctl enable --now unbound || true
 systemctl restart unbound || true
 
 mkdir -p /etc/systemd/journald.conf.d
 printf '[Journal]\nStorage=volatile\nRuntimeMaxUse=16M\n' > /etc/systemd/journald.conf.d/sweepr.conf
 systemctl restart systemd-journald || true
 
-# NODE-NEW-03: Block non-root processes & forwarded VPN peers from querying cloud metadata (169.254.169.254)
-iptables -C OUTPUT -d 169.254.169.254/32 -m owner ! --uid-owner 0 -j DROP 2>/dev/null || iptables -I OUTPUT 1 -d 169.254.169.254/32 -m owner ! --uid-owner 0 -j DROP
-iptables -C FORWARD -d 169.254.169.254/32 -j DROP 2>/dev/null || iptables -I FORWARD 1 -d 169.254.169.254/32 -j DROP
 # Purge cloud-init user-data cache containing bootstrap secrets after setup completes
 rm -f /var/lib/cloud/instance/user-data.txt /var/lib/cloud/instance/user-data.txt.i /var/lib/cloud/seed/nocloud-net/user-data 2>/dev/null || true
 

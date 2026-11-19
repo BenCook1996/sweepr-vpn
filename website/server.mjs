@@ -3105,13 +3105,52 @@ function sendJson(res, status, payload, extraHeaders = {}, req = null) {
   res.end(JSON.stringify(payload));
 }
 
-function sendHtml(res, statusCode, html, extraHeaders = {}) {
-  res.writeHead(statusCode, {
+function sendHtml(res, statusCode, html, extraHeaders = {}, req = null) {
+  const buf = Buffer.isBuffer(html) ? html : Buffer.from(String(html || ''), 'utf8');
+  const headers = {
     'Content-Type': 'text/html; charset=utf-8',
     ...COMMON_SECURITY_HEADERS,
     ...extraHeaders
-  });
-  res.end(html);
+  };
+  if (req && statusCode === 200 && buf.length > 512) {
+    const etag = `W/"${buf.length.toString(16)}-${crypto.createHash('md5').update(buf).digest('hex').slice(0, 16)}"`;
+    headers['ETag'] = etag;
+    const ifNoneMatch = req.headers?.['if-none-match'];
+    if (ifNoneMatch && (ifNoneMatch === etag || ifNoneMatch === '*' || ifNoneMatch.includes(etag))) {
+      res.writeHead(304, headers);
+      return res.end();
+    }
+    const existingVary = headers['Vary'] ? `${headers['Vary']}, ` : '';
+    if (!/\bAccept-Encoding\b/i.test(existingVary)) {
+      headers['Vary'] = `${existingVary}Accept-Encoding`;
+    }
+    const acceptEncoding = String(req.headers?.['accept-encoding'] || '');
+    const isHead = req.method === 'HEAD';
+    if (/\bbr\b/i.test(acceptEncoding)) {
+      try {
+        const compressed = zlib.brotliCompressSync(buf, {
+          params: { [zlib.constants.BROTLI_PARAM_QUALITY]: 5 }
+        });
+        headers['Content-Encoding'] = 'br';
+        headers['Content-Length'] = compressed.length;
+        res.writeHead(statusCode, headers);
+        return res.end(isHead ? undefined : compressed);
+      } catch {}
+    } else if (/\bgzip\b/i.test(acceptEncoding)) {
+      try {
+        const compressed = zlib.gzipSync(buf, { level: 6 });
+        headers['Content-Encoding'] = 'gzip';
+        headers['Content-Length'] = compressed.length;
+        res.writeHead(statusCode, headers);
+        return res.end(isHead ? undefined : compressed);
+      } catch {}
+    }
+    headers['Content-Length'] = buf.length;
+    res.writeHead(statusCode, headers);
+    return res.end(isHead ? undefined : buf);
+  }
+  res.writeHead(statusCode, headers);
+  res.end(req?.method === 'HEAD' ? undefined : buf);
 }
 
 function buildIosWebClipMobileconfig(req) {
@@ -3303,6 +3342,8 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
   <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5">
   <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png?v=5">
   <link rel="shortcut icon" href="/favicon.ico?v=5">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5">
+  <link rel="manifest" href="/manifest.webmanifest">
   <link rel="preconnect" href="https://www.googletagmanager.com">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
   <script>
@@ -3337,7 +3378,8 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
   <script src="/nav.js" defer></script>
 </head>
 <body class="text-gray-800 flex flex-col items-center justify-center min-h-screen p-4 overflow-x-hidden">
-  <div class="glass-card p-6 sm:p-10 w-full max-w-lg text-center">
+  <main class="w-full max-w-lg">
+  <div class="glass-card p-6 sm:p-10 w-full text-center">
     <a href="/" class="inline-flex items-center gap-2 text-inherit no-underline mb-4">
       <div class="logo-box">S</div>
       <span class="font-extrabold text-xl tracking-tight text-gray-900">SWEEPR <span class="text-emerald-600">VPN</span></span>
@@ -3447,24 +3489,7 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
       </div>
     </div>
   </div>
-  <script>
-    (function(){
-      try {
-        var ua = navigator.userAgent || '';
-        if (/bot|crawl|spider|slurp|google|inspectiontool|googleother|adsbot|bing|gpt|claude|perplexity|applebot|duckduck|yandex|lighthouse|pagespeed|headless/i.test(ua)) return;
-        var q = new URLSearchParams(window.location.search);
-        if (q.get('direct') !== '1' || q.get('picker') === '1' || q.get('noredirect') === '1') return;
-        var os = ${JSON.stringify(osType)};
-        var target = os === 'windows' ? '/download/SWEEPRVPN.exe'
-          : os === 'mac' ? '/download/SWEEPRVPN.dmg'
-          ${isAppleHuman ? '' : ": os === 'android' ? '/download/SWEEPRVPN.apk'\n          "}: os === 'ios' ? '/download/SWEEPRVPN.mobileconfig'
-          : '';
-        if (target) {
-          setTimeout(function(){ window.location.href = target; }, 350);
-        }
-      } catch (e) {}
-    })();
-  </script>
+  </main>
 </body>
 </html>`;
 }
@@ -3880,9 +3905,11 @@ const server = http.createServer(async (req, res) => {
         background_color: '#0b1220',
         theme_color: '#047857',
         icons: [
-          { src: '/favicon.svg?v=5', sizes: 'any', type: 'image/svg+xml', purpose: 'any maskable' },
-          { src: '/favicon.png?v=5', sizes: '64x64', type: 'image/png' },
-          { src: '/apple-touch-icon.png?v=5', sizes: '180x180', type: 'image/png' }
+          { src: '/favicon.svg?v=5', sizes: 'any', type: 'image/svg+xml', purpose: 'any' },
+          { src: '/favicon.png?v=5', sizes: '64x64', type: 'image/png', purpose: 'any' },
+          { src: '/apple-touch-icon.png?v=5', sizes: '180x180', type: 'image/png', purpose: 'any' },
+          { src: '/icon-192.png?v=5', sizes: '192x192', type: 'image/png', purpose: 'any' },
+          { src: '/icon-512.png?v=5', sizes: '512x512', type: 'image/png', purpose: 'any' }
         ]
       },
       { 'Content-Type': 'application/manifest+json; charset=utf-8', 'Cache-Control': 'public, max-age=3600' },
@@ -3958,9 +3985,15 @@ self.addEventListener('fetch', e => {
   }
 
   if (pathname === '/ios-app' && (req.method === 'GET' || req.method === 'HEAD')) {
-    return sendHtml(res, 200, renderStandaloneIosVpnApp(), {
-      'X-Robots-Tag': 'noindex, nofollow'
-    });
+    return sendHtml(
+      res,
+      200,
+      renderStandaloneIosVpnApp(),
+      {
+        'X-Robots-Tag': 'noindex, nofollow'
+      },
+      req
+    );
   }
 
   const streamInstallerBinary = (filename, contentType) => {
@@ -3974,6 +4007,7 @@ self.addEventListener('fetch', e => {
       'Cache-Control': 'no-store, no-cache, must-revalidate',
       'Pragma': 'no-cache',
       'X-Robots-Tag': 'noindex, nofollow',
+      Vary: 'User-Agent, Sec-CH-UA-Platform',
       ...COMMON_SECURITY_HEADERS
     });
     if (req.method === 'HEAD') {
@@ -3997,6 +4031,7 @@ self.addEventListener('fetch', e => {
       'Content-Disposition': 'attachment; filename="SWEEPRVPN.mobileconfig"',
       'Cache-Control': 'no-store',
       'X-Robots-Tag': 'noindex, nofollow',
+      Vary: 'User-Agent, Sec-CH-UA-Platform',
       ...COMMON_SECURITY_HEADERS
     });
     return res.end(req.method === 'HEAD' ? '' : xml);
@@ -4018,10 +4053,11 @@ self.addEventListener('fetch', e => {
     return sendIosMobileconfig();
   }
 
-  // Handle /download route (zero User-Agent cloaking: indexable HTML for all UAs; ?direct=1 or /download/SWEEPRVPN.* for binaries)
+  // Handle /download route: detect visitor OS automatically and stream the appropriate installer directly.
+  // The HTML platform picker is only rendered when explicitly requested via ?platform=picker or ?picker=1.
   if (pathname === '/download' && (req.method === 'GET' || req.method === 'HEAD')) {
     const requestedPlatform = (urlObj.searchParams.get('platform') || '').toLowerCase();
-    const directBinary = urlObj.searchParams.get('direct') === '1';
+    const showPicker = requestedPlatform === 'picker' || urlObj.searchParams.get('picker') === '1';
     const uaLower = ua.toLowerCase();
     const chPlatform = String(req.headers['sec-ch-ua-platform'] || '').toLowerCase();
     const chMobile = String(req.headers['sec-ch-ua-mobile'] || '').toLowerCase();
@@ -4033,11 +4069,11 @@ self.addEventListener('fetch', e => {
     }
 
     let osType = 'windows';
-    if (requestedPlatform === 'mac' || requestedPlatform === 'macos') osType = 'mac';
+    if (requestedPlatform === 'mac' || requestedPlatform === 'macos' || requestedPlatform === 'dmg') osType = 'mac';
     else if (requestedPlatform === 'linux') osType = 'linux';
     else if (requestedPlatform === 'ios') osType = 'ios';
     else if (requestedPlatform === 'android' || requestedPlatform === 'apk') osType = 'android';
-    else if (requestedPlatform === 'win' || requestedPlatform === 'windows') osType = 'windows';
+    else if (requestedPlatform === 'win' || requestedPlatform === 'windows' || requestedPlatform === 'exe') osType = 'windows';
     else if (/iphone|ipad|ipod/.test(uaLower) || chPlatform.includes('ios')) osType = 'ios';
     else if (uaLower.includes('android') || chPlatform.includes('android') || (chMobile === '?1' && uaLower.includes('linux')) || /mobile|iemobile|opera mini/.test(uaLower)) osType = 'android';
     else if (uaLower.includes('mac os') || uaLower.includes('macintosh') || chPlatform.includes('mac')) osType = 'mac';
@@ -4046,23 +4082,23 @@ self.addEventListener('fetch', e => {
     crm.reportTelemetryEvent({
       event_name: 'installer_downloaded',
       category: 'funnel',
-      os: requestedPlatform || osType,
-      properties: { path: '/download' }
+      os: osType,
+      properties: { path: '/download', direct: !showPicker }
     }).catch(() => {});
 
-    const hostOrigin = resolveTrustedOrigin(req);
-
-    // Uniform HTML response across all crawlers & browsers (zero UA cloaking); direct binaries require ?direct=1 or /download/SWEEPRVPN.*
-    if (!directBinary) {
-      if (BOT_UA_RE.test(ua) && urlObj.search) {
-        res.writeHead(301, { Location: '/download', ...COMMON_SECURITY_HEADERS });
-        return res.end();
-      }
-      return sendHtml(res, 200, renderPlatformDownloadPicker(osType, ua, hostOrigin), {
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=3600',
-        ...(urlObj.search ? { 'X-Robots-Tag': 'noindex, follow' } : {}),
-        Vary: 'User-Agent, Sec-CH-UA-Platform'
-      });
+    if (showPicker) {
+      const hostOrigin = resolveTrustedOrigin(req);
+      return sendHtml(
+        res,
+        200,
+        renderPlatformDownloadPicker(osType, ua, hostOrigin),
+        {
+          'Cache-Control': 'no-store',
+          'X-Robots-Tag': 'noindex, follow',
+          Vary: 'User-Agent, Sec-CH-UA-Platform'
+        },
+        req
+      );
     }
 
     if (osType === 'android' && streamInstallerBinary('SWEEPRVPN.apk', 'application/vnd.android.package-archive')) {
@@ -4071,9 +4107,18 @@ self.addEventListener('fetch', e => {
     if (osType === 'ios') {
       return sendIosMobileconfig();
     }
-    const forceMacDmg = requestedPlatform === 'mac' || requestedPlatform === 'macos' || requestedPlatform === 'dmg';
-    if ((forceMacDmg || osType === 'mac') && streamInstallerBinary('SWEEPRVPN.dmg', 'application/x-apple-diskimage')) {
+    if (osType === 'mac' && streamInstallerBinary('SWEEPRVPN.dmg', 'application/x-apple-diskimage')) {
       return;
+    }
+    if (osType === 'linux') {
+      res.writeHead(302, {
+        Location: '/setup/linux-cli-wireguard',
+        'Cache-Control': 'no-store',
+        'X-Robots-Tag': 'noindex, follow',
+        Vary: 'User-Agent, Sec-CH-UA-Platform',
+        ...COMMON_SECURITY_HEADERS
+      });
+      return res.end();
     }
     if (streamInstallerBinary('SWEEPRVPN.exe', 'application/vnd.microsoft.portable-executable')) {
       return;
@@ -5179,6 +5224,14 @@ self.addEventListener('fetch', e => {
             } else {
               revokeLicenceOnAllNodes(acc).catch(() => {});
             }
+            const cancelAtPeriodEnd = Boolean(subObj.cancel_at_period_end);
+            const canceledAtSec = subObj.canceled_at ?? subObj.ended_at ?? undefined;
+            const cancelReason =
+              subObj.cancellation_details?.comment ||
+              subObj.cancellation_details?.feedback ||
+              subObj.cancellation_details?.reason ||
+              undefined;
+            const isCancelOrSchedule = subStatus === 'canceled' || cancelAtPeriodEnd;
             crm.syncSubscription({
               email: acc.email,
               name: acc.name || undefined,
@@ -5190,9 +5243,47 @@ self.addEventListener('fetch', e => {
               activation_code: acc.activation_code,
               license_key: acc.licenseKey,
               addons: acc.wifiRadarAddon ? ['wifi_radar'] : [],
+              cancel_at_period_end: cancelAtPeriodEnd,
+              canceled_at: isCancelOrSchedule ? canceledAtSec : undefined,
+              cancel_reason: cancelReason,
+              skip_invoice: isCancelOrSchedule,
               ref: subObj.metadata?.ref || acc.ref || undefined,
               notes: `Stripe Webhook ${event.type} (${subObj.id})`
             }).catch(() => {});
+            if (event.type === 'customer.subscription.deleted' || subStatus === 'canceled') {
+              crm.reportBillingEvent({
+                email: acc.email,
+                account_id: acc.id,
+                stripe_customer_id: acc.stripe_customer_id,
+                event_type: 'cancellation_completed',
+                provider: 'stripe',
+                source: 'service_bridge',
+                external_event_id: `stripe_sub_canceled_${subObj.id}`,
+                external_subscription_id: subObj.id,
+                plan: acc.plan,
+                cancel_at_period_end: false,
+                effective_at: canceledAtSec || Math.floor(Date.now() / 1000),
+                reason: cancelReason || 'subscription_deleted',
+                actor: 'stripe_webhook',
+              }).catch(() => {});
+            } else if (cancelAtPeriodEnd) {
+              const capSec = subObj.cancel_at || subObj.current_period_end || Math.floor(Date.now() / 1000);
+              crm.reportBillingEvent({
+                email: acc.email,
+                account_id: acc.id,
+                stripe_customer_id: acc.stripe_customer_id,
+                event_type: 'cancellation_scheduled',
+                provider: 'stripe',
+                source: 'service_bridge',
+                external_event_id: `stripe_sub_cap_${subObj.id}_${capSec}`,
+                external_subscription_id: subObj.id,
+                plan: acc.plan,
+                cancel_at_period_end: true,
+                effective_at: capSec,
+                reason: cancelReason || 'cancel_at_period_end',
+                actor: 'stripe_webhook',
+              }).catch(() => {});
+            }
           }
         }
       } else if (event.type === 'invoice.upcoming') {
@@ -5242,27 +5333,80 @@ self.addEventListener('fetch', e => {
           }).catch(() => {});
         }
       } else if (event.type === 'charge.refunded' || event.type === 'charge.dispute.created') {
+        const isDispute = event.type === 'charge.dispute.created';
         const custId = typeof obj.customer === 'string' ? obj.customer : obj.customer?.id;
-        const chargeEmail = (obj.billing_details?.email || obj.receipt_email || '').trim().toLowerCase();
+        const chargeEmail = (
+          obj.billing_details?.email ||
+          obj.receipt_email ||
+          obj.evidence_details?.customer_email_address ||
+          ''
+        ).trim().toLowerCase();
         const targetAcc =
           (chargeEmail ? accountsByEmail.get(chargeEmail) : null) ||
           Array.from(accountsById.values()).find((a) => custId && a.stripe_customer_id === custId);
-        if (targetAcc) {
+        const chargeAmountCents = Number(obj.amount || 0);
+        const totalRefundedCents = isDispute ? Number(obj.amount || 0) : Number(obj.amount_refunded || 0);
+        const isFullRefund = isDispute || (chargeAmountCents > 0 ? totalRefundedCents >= chargeAmountCents : true);
+        if (targetAcc && isFullRefund) {
           targetAcc.status = 'canceled';
           licenses.delete(targetAcc.activation_code);
           licenses.delete(targetAcc.licenseKey);
           revokeLicenceOnAllNodes(targetAcc).catch(() => {});
         }
+        const latestRefund = Array.isArray(obj.refunds?.data) ? obj.refunds.data[0] : null;
+        const addonMeta = String(obj.metadata?.addon || '').trim() || undefined;
+        const chargeId = isDispute
+          ? (typeof obj.charge === 'string' ? obj.charge : obj.charge?.id)
+          : obj.id;
+        crm.reportBillingEvent({
+          email: targetAcc?.email || chargeEmail || undefined,
+          account_id: targetAcc?.id,
+          stripe_customer_id: custId || targetAcc?.stripe_customer_id,
+          event_type: isDispute
+            ? 'dispute_created'
+            : addonMeta
+              ? 'refund_addon'
+              : isFullRefund
+                ? 'refund_full'
+                : 'refund_partial',
+          provider: 'stripe',
+          source: 'service_bridge',
+          external_event_id: isDispute
+            ? `stripe_dispute_${obj.id}`
+            : latestRefund?.id
+              ? `stripe_refund_${latestRefund.id}`
+              : `stripe_charge_refund_${chargeId}_${totalRefundedCents}`,
+          external_charge_id: chargeId,
+          external_refund_id: isDispute ? obj.id : latestRefund?.id,
+          external_invoice_id: typeof obj.invoice === 'string' ? obj.invoice : obj.invoice?.id,
+          plan: targetAcc?.plan,
+          amount_cents: isDispute ? Number(obj.amount || 0) : Number(latestRefund?.amount || totalRefundedCents || 0),
+          charge_amount_cents: chargeAmountCents || undefined,
+          total_refunded_cents: isDispute ? undefined : totalRefundedCents,
+          addon: addonMeta,
+          currency: obj.currency,
+          reason: isDispute ? obj.reason || 'dispute_created' : latestRefund?.reason || 'refunded',
+          actor: 'stripe_webhook',
+        }).catch(() => {});
       }
-      // Forward raw webhook to central sweepr-crm if reachable
-      fetch(`${SWEEPR_CRM_URL}/api/webhooks/stripe/vpn`, {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-          ...(sig ? { 'stripe-signature': sig } : {})
-        },
-        body: rawBody
-      }).catch(() => {});
+      // Forward raw webhook to central sweepr-crm if reachable (with 1 retry)
+      (async () => {
+        for (let attempt = 0; attempt < 2; attempt++) {
+          try {
+            const fwdRes = await fetch(`${SWEEPR_CRM_URL}/api/webhooks/stripe/vpn`, {
+              method: 'POST',
+              headers: {
+                'content-type': 'application/json',
+                ...(sig ? { 'stripe-signature': sig } : {})
+              },
+              signal: AbortSignal.timeout(8000),
+              body: rawBody
+            });
+            if (fwdRes.ok) return;
+          } catch {}
+          if (attempt === 0) await new Promise((r) => setTimeout(r, 1500));
+        }
+      })();
     } catch (err) {
       console.error('[webhooks/stripe] handler error:', err.message);
     }
@@ -6979,13 +7123,24 @@ self.addEventListener('fetch', e => {
     if (acc.apple_original_transaction_id) claimedAppleOriginalTransactionIds.delete(acc.apple_original_transaction_id);
     scheduleSaveRuntimeStateToDisk();
 
-    crm.deleteAccount({
+    const deletionReason = String(body?.reason || 'user_requested_deletion').slice(0, 120);
+    crm.reportBillingEvent({
       email: deletedEmail,
       account_id: deletedAccountId,
-      license_key: deletedKey,
-      reason: String(body?.reason || 'user_requested_deletion').slice(0, 120)
-    }).catch(() => {});
-    crm.portalCancel({ email: deletedEmail, key: deletedKey }, true).catch(() => {});
+      event_type: 'account_deleted_cancel',
+      provider: 'portal',
+      source: 'account_deletion',
+      external_event_id: `vpn_del_${deletedAccountId || deletedEmail || Date.now()}`,
+      reason: deletionReason,
+      actor: 'user',
+    }).catch(() => {}).finally(() => {
+      crm.deleteAccount({
+        email: deletedEmail,
+        account_id: deletedAccountId,
+        license_key: deletedKey,
+        reason: deletionReason
+      }).catch(() => {});
+    });
 
     const isHttps = PUBLIC_URL.startsWith('https://') || req.headers['x-forwarded-proto'] === 'https';
     return sendJson(
@@ -7763,8 +7918,30 @@ self.addEventListener('fetch', e => {
       country: acc.country || 'GB',
       plan: acc.plan || 'annual',
       status: acc.status,
+      stripe_customer_id: acc.stripe_customer_id,
+      stripe_subscription_id: acc.stripe_subscription_id,
+      cancel_at_period_end: true,
+      cancel_reason: reason,
+      skip_invoice: true,
       addons: acc.wifiRadarAddon ? ['wifi_radar'] : [],
       notes: `Scheduled cancellation at period end (${reason})`
+    }).catch(() => {});
+    crm.reportBillingEvent({
+      email: acc.email,
+      account_id: acc.id,
+      stripe_customer_id: acc.stripe_customer_id,
+      event_type: 'cancellation_scheduled',
+      provider: 'portal',
+      source: 'customer_portal',
+      external_event_id: `vpn_portal_cancel_${acc.id || acc.email}_${Math.floor(Date.now() / 60000)}`,
+      external_subscription_id: acc.stripe_subscription_id,
+      plan: acc.plan || 'annual',
+      cancel_at_period_end: true,
+      effective_at: acc.current_period_end
+        ? Math.floor(acc.current_period_end / 1000)
+        : Math.floor(Date.now() / 1000),
+      reason,
+      actor: 'user',
     }).catch(() => {});
 
     return sendJson(
@@ -8109,10 +8286,11 @@ self.addEventListener('fetch', e => {
         throw new Error('invalid_assigned_address');
       }
       const acrShield = Boolean(body?.acr_shield);
-      const ipv6Dns = Boolean(body?.ipv6_dns);
+      const nodeHasIpv6 = Boolean(node.ipv6);
+      const ipv6Dns = Boolean(body?.ipv6_dns) && nodeHasIpv6;
       const assignedDns = acrShield
-        ? (ipv6Dns ? '1.1.1.2, 1.0.0.2, 2606:4700:4700::1112, 2606:4700:4700::1002' : '1.1.1.2, 1.0.0.2')
-        : (ipv6Dns ? '1.1.1.1, 1.0.0.1, 2606:4700:4700::1111, 2606:4700:4700::1001' : '1.1.1.1, 1.0.0.1');
+        ? (ipv6Dns ? '10.64.0.1, 1.1.1.2, 2606:4700:4700::1112' : '10.64.0.1, 1.1.1.2')
+        : (ipv6Dns ? '10.64.0.1, 1.1.1.1, 2606:4700:4700::1111' : '10.64.0.1, 1.1.1.1');
       const resolvedHost = String(node.hostname || node.host || node.ip).trim();
       const endpointHost = (body?.prefer_hostname && (node.hostname || node.host)) ? resolvedHost : (node.ip || resolvedHost);
       return sendJson(res, 200, {
@@ -8122,8 +8300,9 @@ self.addEventListener('fetch', e => {
         server_public_key: serverPubKey,
         address: assignedAddress,
         dns: assignedDns,
+        mtu: 1380,
         acr_shield: acrShield,
-        allowed_ips: '0.0.0.0/0, ::/0',
+        allowed_ips: nodeHasIpv6 ? '0.0.0.0/0, ::/0' : '0.0.0.0/0',
         server: { code: node.code, country: node.country, city: node.city, flag: node.flag }
       }, {}, req);
     } catch (e) {
@@ -8169,24 +8348,25 @@ self.addEventListener('fetch', e => {
       const serverPubKey = pinnedPubKey || agentPubKey;
       const assignedAddress = String(r.address || '10.64.0.2/32').trim();
       const acrShield = Boolean(body?.acr_shield);
-      const ipv6Dns = Boolean(body?.ipv6_dns);
+      const nodeHasIpv6 = Boolean(node.ipv6);
+      const ipv6Dns = Boolean(body?.ipv6_dns) && nodeHasIpv6;
       const assignedDns = acrShield
-        ? (ipv6Dns ? '1.1.1.2, 1.0.0.2, 2606:4700:4700::1112, 2606:4700:4700::1002' : '1.1.1.2, 1.0.0.2')
-        : (ipv6Dns ? '1.1.1.1, 1.0.0.1, 2606:4700:4700::1111, 2606:4700:4700::1001' : '1.1.1.1, 1.0.0.1');
+        ? (ipv6Dns ? '10.64.0.1, 1.1.1.2, 2606:4700:4700::1112' : '10.64.0.1, 1.1.1.2')
+        : (ipv6Dns ? '10.64.0.1, 1.1.1.1, 2606:4700:4700::1111' : '10.64.0.1, 1.1.1.1');
       const resolvedHost = String(node.hostname || node.host || node.ip).trim();
       const endpointHost = (body?.prefer_hostname && (node.hostname || node.host)) ? resolvedHost : (node.ip || resolvedHost);
       const endpoint = `${endpointHost}:${node.port || 51820}`;
       const lanBypass = Boolean(body?.lan_bypass);
       const allowedIps = lanBypass
-        ? '1.0.0.0/8, 2.0.0.0/7, 4.0.0.0/6, 8.0.0.0/7, 10.64.0.0/16, 11.0.0.0/8, 12.0.0.0/6, 16.0.0.0/4, 32.0.0.0/3, 64.0.0.0/2, 128.0.0.0/3, 160.0.0.0/5, 168.0.0.0/6, 172.0.0.0/12, 172.32.0.0/11, 172.64.0.0/10, 172.128.0.0/9, 173.0.0.0/8, 174.0.0.0/7, 176.0.0.0/4, 192.0.0.0/9, 192.128.0.0/11, 192.160.0.0/13, 192.169.0.0/16, 192.170.0.0/15, 192.172.0.0/14, 192.176.0.0/12, 192.192.0.0/10, 193.0.0.0/8, 194.0.0.0/7, 196.0.0.0/6, 200.0.0.0/5, 208.0.0.0/4, 2000::/3'
-        : '0.0.0.0/0, ::/0';
+        ? ('1.0.0.0/8, 2.0.0.0/7, 4.0.0.0/6, 8.0.0.0/7, 10.64.0.0/16, 11.0.0.0/8, 12.0.0.0/6, 16.0.0.0/4, 32.0.0.0/3, 64.0.0.0/2, 128.0.0.0/3, 160.0.0.0/5, 168.0.0.0/6, 172.0.0.0/12, 172.32.0.0/11, 172.64.0.0/10, 172.128.0.0/9, 173.0.0.0/8, 174.0.0.0/7, 176.0.0.0/4, 192.0.0.0/9, 192.128.0.0/11, 192.160.0.0/13, 192.169.0.0/16, 192.170.0.0/15, 192.172.0.0/14, 192.176.0.0/12, 192.192.0.0/10, 193.0.0.0/8, 194.0.0.0/7, 196.0.0.0/6, 200.0.0.0/5, 208.0.0.0/4' + (nodeHasIpv6 ? ', 2000::/3' : ''))
+        : (nodeHasIpv6 ? '0.0.0.0/0, ::/0' : '0.0.0.0/0');
 
       const configText = [
         '[Interface]',
         `PrivateKey = ${clientPrivateKey}`,
         `Address = ${assignedAddress}`,
         `DNS = ${assignedDns}`,
-        'MTU = 1280',
+        'MTU = 1380',
         '',
         '[Peer]',
         `PublicKey = ${serverPubKey}`,
@@ -8201,11 +8381,11 @@ self.addEventListener('fetch', e => {
         `PrivateKey = ${clientPrivateKey}`,
         `Address = ${assignedAddress}`,
         `DNS = ${assignedDns}`,
-        'MTU = 1280',
+        'MTU = 1380',
         '',
         '[Peer]',
         `PublicKey = ${serverPubKey}`,
-        'AllowedIPs = 0.0.0.0/0, ::/0',
+        `AllowedIPs = ${nodeHasIpv6 ? '0.0.0.0/0, ::/0' : '0.0.0.0/0'}`,
         `Endpoint = ${endpoint}`,
         'PersistentKeepalive = 25',
         ''
@@ -8327,9 +8507,9 @@ self.addEventListener('fetch', e => {
       const r = await callNodeAgent(node, 'POST', '/peers', { public_key: clientPublicKey, licence: licence.id });
       const serverPubKey = String(node.public_key || r.public_key || '').trim();
       const assignedAddress = String(r.address || '10.64.0.2/32').trim();
-      const assignedDns = dnsShieldEnabled ? '1.1.1.2, 1.0.0.2' : '1.1.1.1, 1.0.0.1';
+      const assignedDns = dnsShieldEnabled ? '10.64.0.1, 1.1.1.2' : '10.64.0.1, 1.1.1.1';
       const endpoint = `${node.ip}:${node.port || 51820}`;
-      const wgConf = `[Interface]\nPrivateKey = ${clientPrivateKey}\nAddress = ${assignedAddress}\nDNS = ${assignedDns}\nMTU = 1280\n\n[Peer]\nPublicKey = ${serverPubKey}\nAllowedIPs = 0.0.0.0/0, ::/0\nEndpoint = ${endpoint}\nPersistentKeepalive = 25`;
+      const wgConf = `[Interface]\nPrivateKey = ${clientPrivateKey}\nAddress = ${assignedAddress}\nDNS = ${assignedDns}\nMTU = 1380\n\n[Peer]\nPublicKey = ${serverPubKey}\nAllowedIPs = ${node.ipv6 ? '0.0.0.0/0, ::/0' : '0.0.0.0/0'}\nEndpoint = ${endpoint}\nPersistentKeepalive = 25`;
       const uuidProfile = crypto.randomUUID().toUpperCase();
       const uuidVpn = crypto.randomUUID().toUpperCase();
       const xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -8725,7 +8905,7 @@ self.addEventListener('fetch', e => {
     } else if (isLoginRoute) {
       headers['X-Robots-Tag'] = 'noindex, nofollow';
       headers['Cache-Control'] = 'no-store, no-cache, must-revalidate';
-    } else if (/^(prototype-|sweepr-motion-review|sweepr-vpn-scorecard|popup-alternatives)/i.test(baseName)) {
+    } else if (/^(prototype-|sweepr-motion-review|sweepr-vpn-scorecard|popup-alternatives|ui-ux-audit-mockups)/i.test(baseName)) {
       headers['X-Robots-Tag'] = 'noindex, nofollow';
       headers['Cache-Control'] = 'no-store, no-cache, must-revalidate';
     } else if (/^(favicon|logo-|padlock-favicon|icon-)/i.test(baseName) || ext === '.ico' || ext === '.js' || ext === '.css') {

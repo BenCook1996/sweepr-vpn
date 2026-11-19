@@ -45,6 +45,7 @@ data class VpnTunnelState(
     val connectedSinceMs: Long = 0L,
     val dnsShieldEnabled: Boolean = true,
     val killSwitchEnabled: Boolean = false,
+    val lanBypassEnabled: Boolean = false,
     val lastError: String? = null
 )
 
@@ -162,6 +163,7 @@ class SweeprWireGuardVpnService : VpnService() {
                 connectedSinceMs = now,
                 dnsShieldEnabled = dnsShield,
                 killSwitchEnabled = killSwitch,
+                lanBypassEnabled = lanBypass,
                 lastError = null
             )
             startTunPacketLoop(established)
@@ -196,30 +198,36 @@ class SweeprWireGuardVpnService : VpnService() {
                 .map { it.trim() }
                 .filter { it.matches(Regex("^\\d{1,3}(\\.\\d{1,3}){3}$")) }
                 .ifEmpty {
-                    if (dnsShield) listOf("1.1.1.2", "1.0.0.2") else listOf("1.1.1.1", "1.0.0.1")
+                    if (dnsShield) listOf("10.64.0.1", "1.1.1.2") else listOf("10.64.0.1", "1.1.1.1")
                 }
 
             val builder = Builder()
                 .setSession("SWEEPR VPN ($serverName)")
-                .setMtu(1420)
+                .setMtu(1380)
                 .addAddress(cleanIp, prefix)
 
-            // Route internal WireGuard mesh subnet and configured DNS servers through TUN
+            // Route internal WireGuard mesh subnet and IPv4 DNS servers through TUN (omit unreachable IPv6 DNS so queries resolve immediately without Happy Eyeballs stalls)
             builder.addRoute("10.64.0.0", 16)
-            val ipv6DnsList = if (dnsShield) listOf("2606:4700:4700::1112", "2606:4700:4700::1002") else listOf("2606:4700:4700::1111", "2606:4700:4700::1001")
-            for (ipv6Dns in ipv6DnsList) {
-                try {
-                    builder.addDnsServer(java.net.InetAddress.getByName(ipv6Dns))
-                    builder.addRoute(java.net.InetAddress.getByName(ipv6Dns), 128)
-                } catch (_: Exception) {}
-            }
             for (dnsIp in dnsList) {
                 try {
                     builder.addDnsServer(dnsIp)
                     builder.addRoute(dnsIp, 32)
                 } catch (_: Exception) {}
             }
-            if (!lanBypass) {
+            if (!killSwitch) {
+                try {
+                    builder.allowBypass()
+                } catch (_: Exception) {}
+            }
+            if (lanBypass) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    for ((netIp, pref) in listOf("192.168.0.0" to 16, "172.16.0.0" to 12, "169.254.0.0" to 16)) {
+                        try {
+                            builder.excludeRoute(android.net.IpPrefix(InetAddress.getByName(netIp), pref))
+                        } catch (_: Exception) {}
+                    }
+                }
+            } else {
                 try {
                     builder.addRoute("198.18.0.0", 15)
                 } catch (_: Exception) {}
@@ -407,16 +415,17 @@ class SweeprWireGuardVpnService : VpnService() {
         statsJob?.cancel()
         statsJob = serviceScope.launch {
             while (isActive && vpnInterface != null) {
-                delay(1000L)
                 val tunRx = tunnelRxBytes.get().coerceAtLeast(0L)
                 val tunTx = tunnelTxBytes.get().coerceAtLeast(0L)
                 val cur = _tunnelState.value
-                if (cur.isConnected) {
+                val changed = tunRx != cur.rxBytes || tunTx != cur.txBytes
+                if (cur.isConnected && changed) {
                     _tunnelState.value = cur.copy(
                         rxBytes = tunRx,
                         txBytes = tunTx
                     )
                 }
+                delay(if (changed) 1000L else 3000L)
             }
         }
     }

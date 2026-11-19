@@ -1001,7 +1001,12 @@ function switchTab(tab) {
 function getDeviceId() {
   let id = localStorage.getItem('sweepr_and_id');
   if (!id) {
-    id = 'mob_' + Math.random().toString(36).slice(2, 12) + Date.now().toString(36);
+    const arr = new Uint8Array(6);
+    if (typeof window !== 'undefined' && window.crypto && window.crypto.getRandomValues) {
+      window.crypto.getRandomValues(arr);
+    }
+    const rand = Array.from(arr, b => b.toString(16).padStart(2, '0')).join('');
+    id = 'mob_' + rand + Date.now().toString(36);
     localStorage.setItem('sweepr_and_id', id);
   }
   return id;

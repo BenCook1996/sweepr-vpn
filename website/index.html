@@ -41,6 +41,8 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5">
   <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png?v=5">
   <link rel="shortcut icon" href="/favicon.ico?v=5">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5" />
+  <link rel="manifest" href="/manifest.webmanifest" />
   <link rel="stylesheet" href="/style.css">
   <script src="/pricing-config.js?v=3" defer></script>
   <script src="/nav.js" defer></script>
@@ -816,10 +818,18 @@
         var btn = document.getElementById('downloadBtn');
         if (isMobile) {
           if (el) el.textContent = 'Install Now';
-          if (btn) btn.setAttribute('href', isIos ? '/download?platform=ios&direct=1' : '/download?platform=android&direct=1');
-        } else if (el) {
-          if (ua.indexOf('mac os') !== -1 || ua.indexOf('macintosh') !== -1) el.textContent = 'Free Download';
-          else if (ua.indexOf('linux') !== -1) el.textContent = 'Free Download';
+          if (btn) {
+            btn.setAttribute('href', isIos ? '/download/SWEEPRVPN.mobileconfig' : '/download/SWEEPRVPN.apk');
+            if (!isIos) btn.setAttribute('download', 'SWEEPRVPN.apk');
+          }
+        } else {
+          var isMac = ua.indexOf('mac os') !== -1 || ua.indexOf('macintosh') !== -1;
+          var isLinux = ua.indexOf('linux') !== -1;
+          if (btn) {
+            btn.setAttribute('href', isMac ? '/download/SWEEPRVPN.dmg' : isLinux ? '/setup/linux-cli-wireguard' : '/download/SWEEPRVPN.exe');
+            if (!isLinux) btn.setAttribute('download', isMac ? 'SWEEPRVPN.dmg' : 'SWEEPRVPN.exe');
+          }
+          if (el) el.textContent = isMac ? 'Free Download (.dmg)' : isLinux ? 'Linux Setup Guide' : 'Free Download (.exe)';
         }
       } catch (e) {}
     })();

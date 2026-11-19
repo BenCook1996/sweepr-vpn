@@ -224,7 +224,7 @@ fn set_kill_switch(enabled: bool) -> Result<serde_json::Value, String> {
         let del_cmd = format!("\"{netsh_cmd}\" advfirewall firewall delete rule name=SWEEPR_VPN_KillSwitch_IPv6 >nul 2>&1 & \"{netsh_cmd}\" advfirewall firewall delete rule name=SweeprVPN_KillSwitch_Block_IPv6 >nul 2>&1 & \"{netsh_cmd}\" advfirewall firewall delete rule name=SWEEPR_VPN_KillSwitch_DNS >nul 2>&1 & \"{netsh_cmd}\" advfirewall firewall delete rule name=SWEEPR_VPN_KillSwitch_Clearnet >nul 2>&1 & \"{netsh_cmd}\" advfirewall firewall delete rule name=SWEEPR_VPN_KillSwitch_Clearnet_TCP53 >nul 2>&1");
         let full_cmd = if enabled {
             format!(
-                "{del_cmd} & \"{netsh_cmd}\" advfirewall firewall add rule name=SWEEPR_VPN_KillSwitch_IPv6 dir=out action=block protocol=IPV6 >nul 2>&1 & \"{netsh_cmd}\" advfirewall firewall add rule name=SWEEPR_VPN_KillSwitch_DNS dir=out action=allow protocol=UDP remoteport=53 remoteip=1.1.1.1,1.0.0.1,1.1.1.2,1.0.0.2,9.9.9.9 >nul 2>&1 & \"{netsh_cmd}\" advfirewall firewall add rule name=SWEEPR_VPN_KillSwitch_Clearnet dir=out action=block protocol=UDP remoteport=53 remoteip=0.0.0.0-1.0.0.0,1.0.0.3-1.1.1.0,1.1.1.3-9.9.9.8,9.9.9.10-10.63.255.255,10.65.0.0-255.255.255.255 >nul 2>&1 & \"{netsh_cmd}\" advfirewall firewall add rule name=SWEEPR_VPN_KillSwitch_Clearnet_TCP53 dir=out action=block protocol=TCP remoteport=53 remoteip=0.0.0.0-1.0.0.0,1.0.0.3-1.1.1.0,1.1.1.3-9.9.9.8,9.9.9.10-10.63.255.255,10.65.0.0-255.255.255.255 >nul 2>&1"
+                "{del_cmd} & \"{netsh_cmd}\" advfirewall firewall add rule name=SWEEPR_VPN_KillSwitch_IPv6 dir=out action=block protocol=IPV6 >nul 2>&1 & \"{netsh_cmd}\" advfirewall firewall add rule name=SWEEPR_VPN_KillSwitch_DNS dir=out action=allow protocol=UDP remoteport=53 remoteip=10.64.0.1,1.1.1.1,1.0.0.1,1.1.1.2,1.0.0.2,9.9.9.9 >nul 2>&1 & \"{netsh_cmd}\" advfirewall firewall add rule name=SWEEPR_VPN_KillSwitch_Clearnet dir=out action=block protocol=UDP remoteport=53 remoteip=0.0.0.0-1.0.0.0,1.0.0.3-1.1.1.0,1.1.1.3-9.9.9.8,9.9.9.10-10.64.0.0,10.64.0.2-255.255.255.255 >nul 2>&1 & \"{netsh_cmd}\" advfirewall firewall add rule name=SWEEPR_VPN_KillSwitch_Clearnet_TCP53 dir=out action=block protocol=TCP remoteport=53 remoteip=0.0.0.0-1.0.0.0,1.0.0.3-1.1.1.0,1.1.1.3-9.9.9.8,9.9.9.10-10.64.0.0,10.64.0.2-255.255.255.255 >nul 2>&1"
             )
         } else {
             del_cmd
@@ -324,9 +324,9 @@ fn set_smart_tv_shields(
 
     let any_enabled = eff_tv_acr || eff_streaming_ads;
     let active_dns = if any_enabled {
-        "1.1.1.2, 1.0.0.2"
+        "10.64.0.1, 1.1.1.2"
     } else {
-        "1.1.1.1, 1.0.0.1"
+        "10.64.0.1, 1.1.1.1"
     };
 
     let mut blocked_domains: Vec<&str> = Vec::new();
@@ -391,8 +391,8 @@ fn set_smart_tv_shields(
         }
     }
 
-    let primary_dns = if any_enabled { "1.1.1.2" } else { "1.1.1.1" };
-    let secondary_dns = if any_enabled { "1.0.0.2" } else { "1.0.0.1" };
+    let primary_dns = "10.64.0.1";
+    let secondary_dns = if any_enabled { "1.1.1.2" } else { "1.1.1.1" };
     let tunnel_active = sweepr_tunnel::is_tunnel_active();
 
     #[cfg(target_os = "windows")]

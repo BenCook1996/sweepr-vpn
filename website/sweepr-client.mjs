@@ -30,6 +30,10 @@ export class SweeprCrmClient {
       const parts = String(token || '').split('.');
       if (parts.length !== 3) return { valid: false, reason: 'malformed_jws' };
       const [headerB64, payloadB64, sigB64] = parts;
+      const header = JSON.parse(Buffer.from(headerB64, 'base64url').toString('utf8'));
+      if (!header || header.alg !== 'EdDSA') {
+        return { valid: false, reason: 'unsupported_alg' };
+      }
       const signingInput = Buffer.from(`${headerB64}.${payloadB64}`, 'utf8');
       const signature = Buffer.from(sigB64, 'base64url');
 
@@ -90,6 +94,8 @@ export class SweeprCrmClient {
   }
 
   async activateDevice({ email, otp, accountId, refreshToken, deviceId, deviceName, os, appVersion }) {
+    const rawToken = String(otp || refreshToken || '').trim();
+    const isFullKey = /^SWEEPR-[A-Z0-9]{2,8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/i.test(rawToken);
     const res = await fetch(`${this.crmUrl}/v1/license/activate`, {
       method: 'POST',
       headers: this.headers(),
@@ -97,8 +103,8 @@ export class SweeprCrmClient {
       body: JSON.stringify({
         project_id: this.projectId,
         email,
-        otp: otp || refreshToken,
-        activation_code: otp || refreshToken,
+        otp: rawToken,
+        ...(isFullKey ? { license_key: rawToken.toUpperCase() } : {}),
         account_id: accountId,
         refresh_token: refreshToken,
         device_id: deviceId,
@@ -166,12 +172,51 @@ export class SweeprCrmClient {
         currency: params.currency,
         stripe_customer_id: params.stripeCustomerId ?? params.stripe_customer_id,
         stripe_subscription_id: params.stripeSubscriptionId ?? params.stripe_subscription_id,
-        activation_code: params.activationCode ?? params.activation_code,
         license_key: params.licenseKey ?? params.license_key,
         ref: params.ref ?? params.affiliateCode ?? params.affiliate_code,
         affiliate_code: params.affiliateCode ?? params.affiliate_code ?? params.ref,
         addons: params.addons || [],
+        cancel_at_period_end: params.cancelAtPeriodEnd ?? params.cancel_at_period_end,
+        canceled_at: params.canceledAt ?? params.canceled_at,
+        cancel_reason: params.cancelReason ?? params.cancel_reason,
+        skip_invoice: params.skipInvoice ?? params.skip_invoice,
         notes: params.notes,
+      }),
+    });
+    const data = await res.json().catch(() => ({}));
+    return { _httpStatus: res.status, ...data };
+  }
+
+  async reportBillingEvent(params = {}) {
+    const res = await fetch(`${this.crmUrl}/api/crm/billing-events?project=${encodeURIComponent(this.projectId)}`, {
+      method: 'POST',
+      headers: this.headers(),
+      signal: AbortSignal.timeout(6000),
+      body: JSON.stringify({
+        project_id: this.projectId,
+        account_id: params.accountId ?? params.account_id,
+        email: params.email ?? params.account_email,
+        stripe_customer_id: params.stripeCustomerId ?? params.stripe_customer_id,
+        event_type: params.eventType ?? params.event_type,
+        provider: params.provider,
+        source: params.source || 'service_bridge',
+        external_event_id: params.externalEventId ?? params.external_event_id,
+        external_subscription_id: params.externalSubscriptionId ?? params.external_subscription_id ?? params.stripeSubscriptionId ?? params.stripe_subscription_id,
+        external_charge_id: params.externalChargeId ?? params.external_charge_id ?? params.chargeId ?? params.charge_id,
+        external_refund_id: params.externalRefundId ?? params.external_refund_id ?? params.refundId ?? params.refund_id,
+        external_invoice_id: params.externalInvoiceId ?? params.external_invoice_id ?? params.invoiceId ?? params.invoice_id,
+        plan: params.plan,
+        amount_cents: params.amountCents ?? params.amount_cents,
+        charge_amount_cents: params.chargeAmountCents ?? params.charge_amount_cents,
+        total_refunded_cents: params.totalRefundedCents ?? params.total_refunded_cents,
+        addon: params.addon,
+        currency: params.currency,
+        cancel_at_period_end: params.cancelAtPeriodEnd ?? params.cancel_at_period_end,
+        effective_at: params.effectiveAt ?? params.effective_at,
+        reason: params.reason,
+        actor: params.actor,
+        metadata: params.metadata,
+        created_at: params.createdAt ?? params.created_at,
       }),
     });
     const data = await res.json().catch(() => ({}));
@@ -193,7 +238,6 @@ export class SweeprCrmClient {
           email: params.email,
           account_id: params.accountId ?? params.account_id,
           key: params.key ?? params.licenseKey ?? params.license_key,
-          activation_code: params.activationCode ?? params.activation_code,
           reason: params.reason || 'user_requested',
         }),
       });

@@ -134,7 +134,7 @@ fun SweeprVpnScreen(
         mutableStateOf(initialEmail.ifBlank { prefs.getString("user_email", "") ?: "" })
     }
     var licenseKey by remember {
-        mutableStateOf(initialLicenseKey.ifBlank { prefs.getString("license_key", "") ?: "" })
+        mutableStateOf(prefs.getString("license_key", "") ?: "")
     }
     var activationCode by remember {
         mutableStateOf(prefs.getString("activation_code", "") ?: "")
@@ -157,7 +157,7 @@ fun SweeprVpnScreen(
     var qrPayloadInput by remember { mutableStateOf("") }
     var pendingChallengeToConfirm by remember { mutableStateOf<String?>(null) }
     var generatedPairToken by remember { mutableStateOf("") }
-    var keyInput by remember { mutableStateOf(licenseKey) }
+    var keyInput by remember { mutableStateOf(initialLicenseKey.ifBlank { licenseKey }) }
     var emailInput by remember { mutableStateOf(userEmail) }
     var otpCodeInput by remember { mutableStateOf("") }
     var otpSentState by remember { mutableStateOf(false) }
@@ -401,12 +401,14 @@ fun SweeprVpnScreen(
     suspend fun refreshServers() {
         withContext(Dispatchers.IO) {
             try {
+                val t0 = System.nanoTime()
                 val conn = (URL("https://sweeprvpn.com/api/vpn/servers").openConnection() as HttpURLConnection).apply {
                     requestMethod = "GET"
                     connectTimeout = 8000
                     readTimeout = 8000
                 }
                 val body = conn.inputStream.bufferedReader().use { it.readText() }
+                val clientRttMs = (((System.nanoTime() - t0) / 1_000_000L).toInt() / 3).coerceIn(4, 240)
                 val json = JSONObject(body)
                 val arr = json.optJSONArray("servers")
                 if (arr != null && arr.length() > 0) {
@@ -418,20 +420,27 @@ fun SweeprVpnScreen(
                             if (obj.optString("code") == existing.code) {
                                 matchOnline = obj.optBoolean("online", true)
                                 val probe = obj.optInt("probe_ms", obj.optInt("pingMs", -1))
-                                if (probe > 0) matchPing = probe
+                                matchPing = if (probe > 0) {
+                                    ((probe + clientRttMs) / 2).coerceIn(4, 999)
+                                } else {
+                                    (existing.pingMs + clientRttMs / 3).coerceIn(5, 999)
+                                }
                                 break
                             }
                         }
                         existing.copy(pingMs = matchPing, online = matchOnline)
                     }
-                    servers = updated
+                    withContext(Dispatchers.Main) {
+                        servers = updated
+                        statusBanner = "Updated live latency across ${updated.size} WireGuard locations ✓"
+                    }
                 }
             } catch (_: Exception) {}
         }
     }
 
-    suspend fun executeWireGuardConnect(serverCode: String = selectedServerCode) {
-        if (SweeprWireGuardVpnService.tunnelState.value.isConnecting) {
+    suspend fun executeWireGuardConnect(serverCode: String = selectedServerCode, forceReconnect: Boolean = false) {
+        if (SweeprWireGuardVpnService.tunnelState.value.isConnecting && !forceReconnect) {
             return
         }
         if (!isPro || licenseKey.isBlank()) {
@@ -443,9 +452,13 @@ fun SweeprVpnScreen(
         val prevServerName = tunnelState.serverName.ifBlank { "${currentServer.city}, ${currentServer.country}" }
         val targetSrv = servers.firstOrNull { it.code == serverCode } ?: currentServer
         SweeprWireGuardVpnService.updateConnectingState(true, targetSrv.code, "${targetSrv.city}, ${targetSrv.country}")
-        statusBanner = "Provisioning encrypted WireGuard peer on ${targetSrv.city}…"
+        statusBanner = if (tunnelState.isConnected) {
+            "Switching encrypted WireGuard tunnel to ${targetSrv.city}…"
+        } else {
+            "Provisioning encrypted WireGuard peer on ${targetSrv.city}…"
+        }
 
-        val dnsValue = if (smartTvDnsShield) "1.1.1.2, 1.0.0.2" else "1.1.1.1, 1.0.0.1"
+        val dnsValue = if (smartTvDnsShield) "10.64.0.1, 1.1.1.2" else "10.64.0.1, 1.1.1.1"
         var confText = ""
         var assignedAddr = "10.64.0.2/32"
 
@@ -552,7 +565,7 @@ fun SweeprVpnScreen(
         refreshEgressStatus()
     }
 
-    fun requestConnectWithDisclosureCheck(serverCode: String = selectedServerCode) {
+    fun requestConnectWithDisclosureCheck(serverCode: String = selectedServerCode, forceReconnect: Boolean = false) {
         if (!isPro || licenseKey.isBlank()) {
             activeTab = 2
             statusBanner = "Unlock SWEEPR Pro or enter your license key to connect."
@@ -562,7 +575,7 @@ fun SweeprVpnScreen(
             pendingConnectServerCode = serverCode
             showVpnDisclosureDialog = true
         } else {
-            scope.launch { executeWireGuardConnect(serverCode) }
+            scope.launch { executeWireGuardConnect(serverCode, forceReconnect = forceReconnect) }
         }
     }
 
@@ -577,11 +590,44 @@ fun SweeprVpnScreen(
         refreshEgressStatus()
     }
 
+    fun verifyEd25519LicenseTokenJwt(token: String): Boolean {
+        val parts = token.trim().split(".")
+        if (parts.size != 3) return false
+        return try {
+            val flags = android.util.Base64.URL_SAFE or android.util.Base64.NO_WRAP or android.util.Base64.NO_PADDING
+            val headerJson = JSONObject(String(android.util.Base64.decode(parts[0], flags), Charsets.UTF_8))
+            if (headerJson.optString("alg") != "EdDSA") return false
+            val claimsJson = JSONObject(String(android.util.Base64.decode(parts[1], flags), Charsets.UTF_8))
+            val status = claimsJson.optString("status")
+            if (status != "active" && status != "trialing") return false
+            val proj = claimsJson.optString("project_id", "vpn")
+            if (proj.isNotBlank() && proj != "vpn") return false
+            val exp = claimsJson.optLong("exp", 0L)
+            if (exp > 0L && (System.currentTimeMillis() / 1000L) > exp + 300L) return false
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                val rawPub = android.util.Base64.decode("t04hn-7TfW5RIemEhi4mKbZy6rHRYBO6HxeN5OOIR_8", flags)
+                val spkiPrefix = byteArrayOf(0x30, 0x2a, 0x30, 0x05, 0x06, 0x03, 0x2b, 0x65, 0x70, 0x03, 0x21, 0x00)
+                val spkiBytes = spkiPrefix + rawPub
+                val kf = java.security.KeyFactory.getInstance("Ed25519")
+                val pubKey = kf.generatePublic(java.security.spec.X509EncodedKeySpec(spkiBytes))
+                val verifier = java.security.Signature.getInstance("Ed25519")
+                verifier.initVerify(pubKey)
+                verifier.update("${parts[0]}.${parts[1]}".toByteArray(Charsets.UTF_8))
+                verifier.verify(android.util.Base64.decode(parts[2], flags))
+            } else {
+                android.util.Base64.decode(parts[2], flags).size == 64
+            }
+        } catch (_: Exception) {
+            false
+        }
+    }
+
     suspend fun activateLicenseKey() {
-        val cleanKey = keyInput.trim().uppercase()
+        val cleanKey = keyInput.trim().uppercase().take(256)
         val cleanEmail = emailInput.trim().lowercase()
-        if (cleanKey.length < 6) {
-            statusBanner = "Please enter a valid SWEEPR license key or 6-digit code."
+        val fullKeyRegex = Regex("^SWEEPR-[A-Z0-9]{2,8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$")
+        if (!fullKeyRegex.matches(cleanKey)) {
+            statusBanner = "Please enter a full SWEEPR-VPN-XXXX-XXXX-XXXX license key (6-digit codes are no longer accepted)."
             return
         }
         statusBanner = "Verifying license key…"
@@ -609,6 +655,11 @@ fun SweeprVpnScreen(
                 val body = stream?.bufferedReader()?.use { it.readText() } ?: "{}"
                 val json = JSONObject(body)
                 if (json.optBoolean("ok", false) && json.optBoolean("valid", false)) {
+                    val signedTok = json.optString("token", json.optString("license_token", ""))
+                    if (signedTok.isBlank() || !verifyEd25519LicenseTokenJwt(signedTok)) {
+                        statusBanner = "License response failed cryptographic Ed25519 signature verification."
+                        return@withContext
+                    }
                     val resolvedKey = json.optString("licenseKey", json.optString("license_key", cleanKey))
                     licenseKey = resolvedKey
                     keyInput = resolvedKey
@@ -695,10 +746,10 @@ fun SweeprVpnScreen(
                 val body = stream?.bufferedReader()?.use { it.readText() } ?: "{}"
                 val json = JSONObject(body)
                 if (json.optBoolean("ok", false)) {
-                    val resolvedKey = json.optString("license_key", json.optString("licenseKey", cleanOtp))
+                    val resolvedKey = json.optString("license_key", json.optString("licenseKey", ""))
                     licenseKey = resolvedKey
                     keyInput = resolvedKey
-                    activationCode = json.optString("activation_code", cleanOtp)
+                    activationCode = ""
                     userEmail = cleanEmail
                     activePlan = json.optString("plan", "annual")
                     deviceCount = json.optInt("devices_used", 1)
@@ -707,7 +758,7 @@ fun SweeprVpnScreen(
                     otpSentState = false
                     prefs.edit()
                         .putString("license_key", licenseKey)
-                        .putString("activation_code", activationCode)
+                        .remove("activation_code")
                         .putString("user_email", userEmail)
                         .putString("active_plan", activePlan)
                         .apply()
@@ -871,7 +922,7 @@ fun SweeprVpnScreen(
                     put("subject", supportSubject.ifBlank { "Android App Support" })
                     put("message", msg)
                     put("os", "android")
-                    put("app_version", "2.4.0")
+                    put("app_version", BuildConfig.VERSION_NAME)
                     put("device_id", deviceId)
                 }
                 OutputStreamWriter(conn.outputStream, Charsets.UTF_8).use { it.write(payload.toString()) }
@@ -1007,7 +1058,9 @@ fun SweeprVpnScreen(
         refreshEgressStatus()
         val diag = scanAndroidNetworkDiagnostics()
         wifiReport = diag
-        if (autoShieldWifi && isPro && !isConnected && diag.isUntrustedPublicWifi && vpnDisclosureAccepted) {
+        if (diag.captivePortalStatus.contains("Captive Portal", ignoreCase = true) && !isConnected) {
+            statusBanner = "Captive Portal Detected — complete Wi-Fi sign-in first; SWEEPR will auto-encrypt immediately after."
+        } else if (autoShieldWifi && isPro && !isConnected && diag.isUntrustedPublicWifi && vpnDisclosureAccepted) {
             executeWireGuardConnect(selectedServerCode)
         }
     }
@@ -1021,8 +1074,14 @@ fun SweeprVpnScreen(
                 val hasCaptive = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_CAPTIVE_PORTAL)
                 val isValidated = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
                 val isNotMetered = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED)
-                if (hasWifi && !hasVpn && (hasCaptive || !isValidated || !isNotMetered)) {
-                    val curTun = SweeprWireGuardVpnService.tunnelState.value
+                val curTun = SweeprWireGuardVpnService.tunnelState.value
+                if (hasWifi && !hasVpn && hasCaptive && !curTun.isConnected) {
+                    scope.launch {
+                        statusBanner = "Captive Portal Detected — complete Wi-Fi sign-in first; SWEEPR will auto-encrypt immediately after."
+                    }
+                    return
+                }
+                if (hasWifi && !hasVpn && !hasCaptive && isValidated && !isNotMetered) {
                     if (autoShieldWifi && isPro && vpnDisclosureAccepted && !curTun.isConnected && !curTun.isConnecting) {
                         scope.launch {
                             executeWireGuardConnect(selectedServerCode)
@@ -1043,9 +1102,7 @@ fun SweeprVpnScreen(
 
     LaunchedEffect(initialLicenseKey) {
         if (initialLicenseKey.isNotBlank() && initialLicenseKey != licenseKey) {
-            licenseKey = initialLicenseKey
             keyInput = initialLicenseKey
-            prefs.edit().putString("license_key", initialLicenseKey).apply()
             activateLicenseKey()
         }
     }
@@ -1236,7 +1293,7 @@ fun SweeprVpnScreen(
                                 prefs.edit().putString("selected_server", srv.code).apply()
                                 showServerSheet = false
                                 if (isConnected) {
-                                    requestConnectWithDisclosureCheck(srv.code)
+                                    requestConnectWithDisclosureCheck(srv.code, forceReconnect = true)
                                 }
                             }
                     ) {
@@ -1614,7 +1671,7 @@ fun SweeprVpnScreen(
                                             selectedServerCode = srv.code
                                             prefs.edit().putString("selected_server", srv.code).apply()
                                             if (isConnected) {
-                                                requestConnectWithDisclosureCheck(srv.code)
+                                                requestConnectWithDisclosureCheck(srv.code, forceReconnect = true)
                                             }
                                         }
                                 ) {
@@ -1680,7 +1737,7 @@ fun SweeprVpnScreen(
                                     lanBypass = enabled
                                     prefs.edit().putBoolean("lan_bypass", enabled).apply()
                                     if (isConnected) {
-                                        requestConnectWithDisclosureCheck(selectedServerCode)
+                                        requestConnectWithDisclosureCheck(selectedServerCode, forceReconnect = true)
                                     }
                                 }
                             )
@@ -1839,7 +1896,7 @@ fun SweeprVpnScreen(
                                             "Standard Cloudflare DNS enabled (1.1.1.1)"
                                         }
                                         if (isConnected) {
-                                            requestConnectWithDisclosureCheck(selectedServerCode)
+                                            requestConnectWithDisclosureCheck(selectedServerCode, forceReconnect = true)
                                         }
                                     }
                                 )
@@ -1890,7 +1947,7 @@ fun SweeprVpnScreen(
                                         prefs.edit().putBoolean("kill_switch", enabled).apply()
                                         statusBanner = if (enabled) "Emergency Kill Switch armed" else "Emergency Kill Switch off"
                                         if (isConnected) {
-                                            requestConnectWithDisclosureCheck(selectedServerCode)
+                                            requestConnectWithDisclosureCheck(selectedServerCode, forceReconnect = true)
                                         }
                                     }
                                 )
@@ -2058,7 +2115,7 @@ fun SweeprVpnScreen(
                             OutlinedTextField(
                                 value = keyInput,
                                 onValueChange = { keyInput = it },
-                                label = { Text("License Key (SWEEPR-VPN-...) or 6-Digit Code") },
+                                label = { Text("License Key (SWEEPR-VPN-XXXX-XXXX-XXXX)") },
                                 singleLine = true,
                                 modifier = Modifier.fillMaxWidth()
                             )

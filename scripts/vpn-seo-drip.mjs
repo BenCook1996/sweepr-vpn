@@ -36,6 +36,7 @@ const LOCAL_CRM_BASE = process.env.SWEEPR_LOCAL_CRM || 'http://localhost:8787';
 
 const CRM_USER = process.env.CRM_ADMIN_USER || 'admin';
 const CRM_PASS = (process.env.CRM_ADMIN_PASSWORD || '').trim();
+const CRM_API_KEY = (process.env.SWEEPR_CRM_API_KEY || '').trim();
 const AUTH_HEADER = CRM_PASS ? ('Basic ' + Buffer.from(`${CRM_USER}:${CRM_PASS}`).toString('base64')) : '';
 
 const VPN_SEED_PATH = path.join(WEBSITE_DIR, 'outreach-seed.json');
@@ -104,17 +105,39 @@ const LANGUAGES = [
   }
 ];
 
-// Initial verified browser directory form submissions (Strictly Web Forms Only)
+// Verified live directory listings & portal submissions (Strictly Web Forms Only)
 const VERIFIED_DIRECTORY_SUBMISSIONS = [
   {
     project_id: 'vpn',
     who: 'SaaSHub Software Directory',
     website: 'saashub.com',
-    url: 'https://www.saashub.com/sweepr-vpn/added',
-    how: 'Web Submit Form (HTTP POST)',
+    url: 'https://www.saashub.com/sweepr-vpn',
+    how: 'Web Submit Form (Verified Listing)',
     category: '[SWEEPR VPN] Listed in VPN, Network Security, Cybersecurity & Privacy vs 11 Competitors -> https://sweeprvpn.com',
-    status: 'submitted',
+    status: 'listed',
     message_id: 'portal-vpn-saashub-com',
+    reached_out_at: Math.floor(Date.now() / 1000)
+  },
+  {
+    project_id: 'vpn',
+    who: 'DevHunt Developer & Privacy Tools',
+    website: 'devhunt.org',
+    url: 'https://devhunt.org/tool/sweepr-vpn',
+    how: 'Web Portal Submission (Free)',
+    category: 'DR 71 · Developer & Network Utility Launchpad -> https://sweeprvpn.com',
+    status: 'listed',
+    message_id: 'portal-vpn-devhunt-org',
+    reached_out_at: Math.floor(Date.now() / 1000)
+  },
+  {
+    project_id: 'vpn',
+    who: 'Wellfound (AngelList Talent) Company Profile',
+    website: 'wellfound.com',
+    url: 'https://wellfound.com/company/sweepr-vpn',
+    how: 'Web Portal Company Profile (Free)',
+    category: 'DR 88 · Tech Company Directory -> https://sweeprvpn.com',
+    status: 'listed',
+    message_id: 'portal-vpn-wellfound-com',
     reached_out_at: Math.floor(Date.now() / 1000)
   },
   {
@@ -126,17 +149,6 @@ const VERIFIED_DIRECTORY_SUBMISSIONS = [
     category: '[SWEEPR VPN] Startup Submission Form -> https://sweeprvpn.com',
     status: 'submitted',
     message_id: 'portal-vpn-launchingnext-com',
-    reached_out_at: Math.floor(Date.now() / 1000)
-  },
-  {
-    project_id: 'vpn',
-    who: 'SitePatent AI & Tech Directory',
-    website: 'sitepatent.com',
-    url: 'https://sitepatent.com/site/sweeprvpn.com',
-    how: 'Web Submit Portal (Verified Listing)',
-    category: '[SWEEPR VPN] Verified Cybersecurity & Smart-TV ACR Blocker Listing -> https://sweeprvpn.com',
-    status: 'listed',
-    message_id: 'portal-vpn-sitepatent-com',
     reached_out_at: Math.floor(Date.now() / 1000)
   }
 ];
@@ -181,7 +193,6 @@ const GSC_PRIORITY_URLS = new Set([
   'https://sweeprvpn.com/de/pricing',
   'https://sweeprvpn.com/fr/pricing',
   'https://sweeprvpn.com/es/pricing',
-  'https://sweeprvpn.com/download',
   'https://sweeprvpn.com/solutions',
   'https://sweeprvpn.com/setup',
   'https://sweeprvpn.com/guides',
@@ -263,6 +274,18 @@ function loadTargetItemsFromSitemap() {
 
 // Mass pastebin functions (Telegraph / Catbox / DPaste) permanently removed to comply with Google Search Spam Policies.
 
+function buildCrmHeaders(baseUrl) {
+  let origin = baseUrl;
+  try { origin = new URL(baseUrl).origin; } catch {}
+  return {
+    'Content-Type': 'application/json',
+    'X-Sweepr-Project': 'vpn',
+    Origin: origin,
+    ...(CRM_API_KEY ? { 'x-crm-api-key': CRM_API_KEY, 'x-sweepr-api-key': CRM_API_KEY } : {}),
+    ...(AUTH_HEADER ? { Authorization: AUTH_HEADER } : {})
+  };
+}
+
 async function syncEntryToCrm(entry, sourceUrl) {
   if (localCrmDb) {
     try {
@@ -273,6 +296,7 @@ async function syncEntryToCrm(entry, sourceUrl) {
           url = COALESCE(excluded.url, outreach_logs.url),
           how = excluded.how,
           category = COALESCE(excluded.category, outreach_logs.category),
+          status = CASE WHEN excluded.status = 'listed' THEN 'listed' ELSE outreach_logs.status END,
           updated_at = excluded.updated_at
       `);
       const now = entry.reached_out_at || Math.floor(Date.now() / 1000);
@@ -292,51 +316,52 @@ async function syncEntryToCrm(entry, sourceUrl) {
     }
   }
 
-  const crmHeaders = {
-    'Content-Type': 'application/json',
-    Authorization: AUTH_HEADER,
-    'X-Sweepr-Project': 'vpn'
-  };
   const payload = JSON.stringify({ project_id: 'vpn', ...entry });
-  const backlinkPayload = JSON.stringify({ project_id: 'vpn', source_url: sourceUrl });
+  const backlinkPayload = sourceUrl ? JSON.stringify({ project_id: 'vpn', source_url: sourceUrl }) : null;
 
-  await Promise.all([
+  const dispatches = [
     fetch(`${RAILWAY_CRM_BASE}/api/crm/outreach?project=vpn`, {
       method: 'POST',
-      headers: crmHeaders,
+      headers: buildCrmHeaders(RAILWAY_CRM_BASE),
       body: payload,
-      signal: AbortSignal.timeout(10000)
-    }).catch(() => {}),
-    fetch(`${RAILWAY_CRM_BASE}/api/crm/seo/backlinks?project=vpn`, {
-      method: 'POST',
-      headers: crmHeaders,
-      body: backlinkPayload,
       signal: AbortSignal.timeout(10000)
     }).catch(() => {}),
     fetch(`${CLEANER_CRM_BASE}/api/crm/outreach?project=vpn`, {
       method: 'POST',
-      headers: crmHeaders,
+      headers: buildCrmHeaders(CLEANER_CRM_BASE),
       body: payload,
-      signal: AbortSignal.timeout(10000)
-    }).catch(() => {}),
-    fetch(`${CLEANER_CRM_BASE}/api/crm/seo/backlinks?project=vpn`, {
-      method: 'POST',
-      headers: crmHeaders,
-      body: backlinkPayload,
       signal: AbortSignal.timeout(10000)
     }).catch(() => {}),
     fetch(`${LOCAL_CRM_BASE}/api/crm/outreach?project=vpn`, {
       method: 'POST',
-      headers: crmHeaders,
+      headers: buildCrmHeaders(LOCAL_CRM_BASE),
       body: payload,
       signal: AbortSignal.timeout(10000)
     }).catch(() => {})
-  ]);
+  ];
+  if (backlinkPayload) {
+    dispatches.push(
+      fetch(`${RAILWAY_CRM_BASE}/api/crm/seo/backlinks?project=vpn`, {
+        method: 'POST',
+        headers: buildCrmHeaders(RAILWAY_CRM_BASE),
+        body: backlinkPayload,
+        signal: AbortSignal.timeout(10000)
+      }).catch(() => {}),
+      fetch(`${CLEANER_CRM_BASE}/api/crm/seo/backlinks?project=vpn`, {
+        method: 'POST',
+        headers: buildCrmHeaders(CLEANER_CRM_BASE),
+        body: backlinkPayload,
+        signal: AbortSignal.timeout(10000)
+      }).catch(() => {})
+    );
+  }
+  await Promise.all(dispatches);
 }
 
 async function fetchExistingCrmState(localSeed = []) {
   const crmHeaders = {
-    Authorization: AUTH_HEADER,
+    ...(AUTH_HEADER ? { Authorization: AUTH_HEADER } : {}),
+    ...(CRM_API_KEY ? { 'x-crm-api-key': CRM_API_KEY, 'x-sweepr-api-key': CRM_API_KEY } : {}),
     'X-Sweepr-Project': 'vpn'
   };
   const [railwayOutreach, railwayBacklinks, cleanerOutreach] = await Promise.all([
@@ -465,7 +490,7 @@ async function runVpnDrip(targetCount = 300) {
     `[CRM Deduplication Check (project=vpn)] Live CRM Rows: ${crmState.crmTotalRows} | Already Tracked URLs: ${crmState.postedUrls.size} | Already Posted Combos: ${crmState.postedCombos.size} | Submitted Directories: ${[...crmState.postedDirectoryDomains].join(', ') || 'none'}`
   );
 
-  // Ensure verified browser directory submissions (SaaSHub, LaunchingNext) are synced only if not already in CRM
+  // Ensure verified live directory listings (SaaSHub, DevHunt, Wellfound) & LaunchingNext are synced cleanly
   const existingMsgIds = new Set(vpnSeed.map((e) => e.message_id));
   for (const dirSub of VERIFIED_DIRECTORY_SUBMISSIONS) {
     if (!existingMsgIds.has(dirSub.message_id)) {
@@ -474,12 +499,20 @@ async function runVpnDrip(targetCount = 300) {
       if (Array.isArray(centralSeed)) centralSeed.push(dirSub);
     } else {
       const found = vpnSeed.find((e) => e.message_id === dirSub.message_id);
-      if (found) found.how = dirSub.how;
+      if (found) {
+        found.url = dirSub.url;
+        found.how = dirSub.how;
+        if (dirSub.status === 'listed') found.status = 'listed';
+      }
     }
     if (!crmState.postedUrls.has(dirSub.url)) {
-      await syncEntryToCrm(dirSub, dirSub.url);
+      await syncEntryToCrm(dirSub, dirSub.status === 'listed' ? dirSub.url : null);
       crmState.postedUrls.add(dirSub.url);
     }
+  }
+  const staleSitePatent = vpnSeed.find((e) => e?.message_id === 'portal-vpn-sitepatent-com');
+  if (staleSitePatent && staleSitePatent.status === 'listed') {
+    staleSitePatent.status = 'pending';
   }
 
   // Normalize any prior seed items (ensure 'how' never contains the word 'email' and each 'who' is unique)
@@ -520,18 +553,17 @@ async function runVpnDrip(targetCount = 300) {
   }
 
   // Trigger CRM Backlink Verification on both Railway Multi-Project CRM & Cleaner CRM
-  const verifyHeaders = { 'Content-Type': 'application/json', Authorization: AUTH_HEADER, 'X-Sweepr-Project': 'vpn' };
   const verifyBody = JSON.stringify({ project_id: 'vpn', only: 'unchecked', limit: 1000 });
   await Promise.all([
     fetch(`${RAILWAY_CRM_BASE}/api/crm/seo/backlinks/verify?project=vpn`, {
       method: 'POST',
-      headers: verifyHeaders,
+      headers: buildCrmHeaders(RAILWAY_CRM_BASE),
       body: verifyBody,
       signal: AbortSignal.timeout(10000)
     }).catch(() => {}),
     fetch(`${CLEANER_CRM_BASE}/api/crm/seo/backlinks/verify?project=vpn`, {
       method: 'POST',
-      headers: verifyHeaders,
+      headers: buildCrmHeaders(CLEANER_CRM_BASE),
       body: verifyBody,
       signal: AbortSignal.timeout(10000)
     }).catch(() => {})

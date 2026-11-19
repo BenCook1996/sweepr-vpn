@@ -2184,8 +2184,7 @@ async function runDaily50Pages(targetCount = 3, force = false) {
       priority: '0.8',
       changefreq: 'weekly',
       absPath: p.absPath
-    })),
-    { loc: 'https://sweeprvpn.com/download', priority: '0.9', changefreq: 'weekly', absPath: path.join(WEBSITE_DIR, 'SWEEPRVPN.exe') }
+    }))
   ];
 
   const rebuiltSitemap = `<?xml version="1.0" encoding="UTF-8"?>

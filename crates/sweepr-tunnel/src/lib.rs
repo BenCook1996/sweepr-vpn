@@ -698,8 +698,8 @@ pub fn verify_subscription_with_device(
         .filter(|c| !c.is_whitespace())
         .collect::<String>()
         .to_ascii_uppercase();
-    if clean_code.len() < 6 {
-        return Err("Please enter the license key from your order.".into());
+    if !clean_code.starts_with("SWEEPR-") || clean_code.len() < 16 {
+        return Err("Please enter your full SWEEPR-VPN-XXXX-XXXX-XXXX license key from your order.".into());
     }
 
     let candidates = default_api_candidates(api_url);
@@ -992,13 +992,23 @@ fn bring_tunnel_up(conf: &Path) -> Result<(), String> {
         use std::os::windows::process::CommandExt;
         let wg_exe = ensure_wireguard_windows()?;
         let _ = bring_tunnel_down();
+        let dns_block_ranges = "0.0.0.0-1.0.0.0,1.0.0.3-1.1.1.0,1.1.1.3-10.64.0.0,10.64.0.2-126.255.255.255,128.0.0.0-255.255.255.255";
+        let sys_root = std::env::var("SystemRoot").unwrap_or_else(|_| "C:\\Windows".to_string());
+        let reg_bin = Path::new(&sys_root).join("System32\\reg.exe");
         let ps = format!(
-            "Start-Process -FilePath '{}' -ArgumentList '/c','\"\"{}\" /installtunnelservice \"{}\" & \"{}\" advfirewall firewall delete rule name=SWEEPR_VPN_Block_IPv6 >nul 2>&1 & \"{}\" advfirewall firewall add rule name=SWEEPR_VPN_Block_IPv6 dir=out action=block protocol=any remoteip=2000::/3 >nul 2>&1 & \"{}\" /flushdns >nul 2>&1\"' -Verb RunAs -WindowStyle Hidden -Wait",
+            "Start-Process -FilePath '{}' -ArgumentList '/c','\"\"{}\" /installtunnelservice \"{}\" & \"{}\" add \"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\DNSClient\" /v DisableSmartNameResolution /t REG_DWORD /d 1 /f >nul 2>&1 & \"{}\" advfirewall firewall delete rule name=SWEEPR_VPN_Block_IPv6 >nul 2>&1 & \"{}\" advfirewall firewall add rule name=SWEEPR_VPN_Block_IPv6 dir=out action=block protocol=any remoteip=2000::/3 >nul 2>&1 & \"{}\" advfirewall firewall delete rule name=SWEEPR_VPN_Block_DNS_Leak_UDP >nul 2>&1 & \"{}\" advfirewall firewall add rule name=SWEEPR_VPN_Block_DNS_Leak_UDP dir=out action=block protocol=UDP remoteport=53 remoteip={} >nul 2>&1 & \"{}\" advfirewall firewall delete rule name=SWEEPR_VPN_Block_DNS_Leak_TCP >nul 2>&1 & \"{}\" advfirewall firewall add rule name=SWEEPR_VPN_Block_DNS_Leak_TCP dir=out action=block protocol=TCP remoteport=53 remoteip={} >nul 2>&1 & \"{}\" /flushdns >nul 2>&1\"' -Verb RunAs -WindowStyle Hidden -Wait",
             cmd_bin().display(),
             wg_exe.display(),
             conf.to_string_lossy().replace('\'', "").replace('"', "").replace('\\', "").replace('`', "").replace('$', ""),
+            reg_bin.display(),
             netsh_bin().display(),
             netsh_bin().display(),
+            netsh_bin().display(),
+            netsh_bin().display(),
+            dns_block_ranges,
+            netsh_bin().display(),
+            netsh_bin().display(),
+            dns_block_ranges,
             ipconfig_bin().display()
         );
         let status = Command::new(powershell_bin())
@@ -1072,10 +1082,18 @@ pub fn bring_tunnel_down() -> Result<(), String> {
             return Ok(());
         }
         if let Some(wg_exe) = find_wireguard_exe() {
+            let sys_root = std::env::var("SystemRoot").unwrap_or_else(|_| "C:\\Windows".to_string());
+            let reg_bin = Path::new(&sys_root).join("System32\\reg.exe");
             let ipv6_cleanup = if ks_active {
                 "".to_string()
             } else {
-                format!(" & \"{}\" advfirewall firewall delete rule name=SWEEPR_VPN_Block_IPv6 >nul 2>&1", netsh_bin().display())
+                format!(
+                    " & \"{}\" advfirewall firewall delete rule name=SWEEPR_VPN_Block_IPv6 >nul 2>&1 & \"{}\" advfirewall firewall delete rule name=SWEEPR_VPN_Block_DNS_Leak_UDP >nul 2>&1 & \"{}\" advfirewall firewall delete rule name=SWEEPR_VPN_Block_DNS_Leak_TCP >nul 2>&1 & \"{}\" delete \"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\DNSClient\" /v DisableSmartNameResolution /f >nul 2>&1",
+                    netsh_bin().display(),
+                    netsh_bin().display(),
+                    netsh_bin().display(),
+                    reg_bin.display()
+                )
             };
             let ps = format!(
                 "Start-Process -FilePath '{}' -ArgumentList '/c','\"\"{}\" /uninstalltunnelservice {}{} & \"{}\" /flushdns >nul 2>&1\"' -Verb RunAs -WindowStyle Hidden -Wait",
@@ -1197,10 +1215,10 @@ pub fn status() -> Result<TunnelStatus, String> {
 }
 
 pub fn connect(req: ConnectRequest) -> Result<TunnelStatus, String> {
-    let code = req.activation_code.as_deref().unwrap_or("").trim();
-    if code.len() < 6 {
+    let code = req.activation_code.as_deref().unwrap_or("").trim().to_ascii_uppercase();
+    if !code.starts_with("SWEEPR-") || code.len() < 16 {
         return Err(
-            "An active paid SWEEPR Pro subscription is required. Please enter your activation code or upgrade."
+            "An active paid SWEEPR Pro subscription is required. Please enter your full SWEEPR-VPN-... license key or upgrade."
                 .into(),
         );
     }
@@ -1262,7 +1280,7 @@ pub fn connect(req: ConnectRequest) -> Result<TunnelStatus, String> {
             let tv_acr = val.get("tv_acr").and_then(|v| v.as_bool()).unwrap_or(true);
             let streaming_ads = val.get("streaming_ads").and_then(|v| v.as_bool()).unwrap_or(true);
             if tv_acr || streaming_ads {
-                Some("1.1.1.2, 1.0.0.2".to_string())
+                Some("10.64.0.1, 1.1.1.2".to_string())
             } else {
                 None
             }
@@ -1272,20 +1290,20 @@ pub fn connect(req: ConnectRequest) -> Result<TunnelStatus, String> {
             .as_deref()
             .map(str::trim)
             .filter(|s| !s.is_empty())
-            .unwrap_or("1.1.1.1, 1.0.0.1")
+            .unwrap_or("10.64.0.1, 1.1.1.1")
             .to_string()
     });
     let lan_bypass = req.lan_bypass.unwrap_or(false);
     let allowed_ips = if lan_bypass {
-        "1.0.0.0/8, 2.0.0.0/7, 4.0.0.0/6, 8.0.0.0/7, 10.64.0.0/16, 11.0.0.0/8, 12.0.0.0/6, 16.0.0.0/4, 32.0.0.0/3, 64.0.0.0/2, 128.0.0.0/3, 160.0.0.0/5, 168.0.0.0/6, 172.0.0.0/12, 172.32.0.0/11, 172.64.0.0/10, 172.128.0.0/9, 173.0.0.0/8, 174.0.0.0/7, 176.0.0.0/4, 192.0.0.0/9, 192.128.0.0/11, 192.160.0.0/13, 192.169.0.0/16, 192.170.0.0/15, 192.172.0.0/14, 192.176.0.0/12, 192.192.0.0/10, 193.0.0.0/8, 194.0.0.0/7, 196.0.0.0/6, 200.0.0.0/5, 208.0.0.0/4, 2000::/3".to_string()
+        "1.0.0.0/8, 2.0.0.0/7, 4.0.0.0/6, 8.0.0.0/7, 10.64.0.0/16, 11.0.0.0/8, 12.0.0.0/6, 16.0.0.0/4, 32.0.0.0/3, 64.0.0.0/2, 128.0.0.0/3, 160.0.0.0/5, 168.0.0.0/6, 172.0.0.0/12, 172.32.0.0/11, 172.64.0.0/10, 172.128.0.0/9, 173.0.0.0/8, 174.0.0.0/7, 176.0.0.0/4, 192.0.0.0/9, 192.128.0.0/11, 192.160.0.0/13, 192.169.0.0/16, 192.170.0.0/15, 192.172.0.0/14, 192.176.0.0/12, 192.192.0.0/10, 193.0.0.0/8, 194.0.0.0/7, 196.0.0.0/6, 200.0.0.0/5, 208.0.0.0/4".to_string()
     } else {
-        "0.0.0.0/0, ::/0".to_string()
+        "0.0.0.0/0".to_string()
     };
 
     validate_wg_conf_fields(&server_pub, &endpoint, &address, &dns, &allowed_ips)?;
 
     let wg_conf = format!(
-        "[Interface]\nPrivateKey = {}\nAddress = {}\nDNS = {}\nMTU = 1280\n\n[Peer]\nPublicKey = {}\nEndpoint = {}\nAllowedIPs = {}\nPersistentKeepalive = 25\n",
+        "[Interface]\nPrivateKey = {}\nAddress = {}\nDNS = {}\nMTU = 1380\n\n[Peer]\nPublicKey = {}\nEndpoint = {}\nAllowedIPs = {}\nPersistentKeepalive = 25\n",
         st.private_key, address, dns, server_pub, endpoint, allowed_ips
     );
 

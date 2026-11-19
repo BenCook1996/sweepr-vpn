@@ -15,13 +15,13 @@ const SITEMAP_PATH = path.join(WEBSITE_DIR, 'sitemap.xml');
 
 const ROUTE_TO_HTML = {
   '/': 'index.html',
-  '/de': 'de/index.html',
-  '/fr': 'fr/index.html',
-  '/es': 'es/index.html',
+  '/de': 'de-index.html',
+  '/fr': 'fr-index.html',
+  '/es': 'es-index.html',
   '/pricing': 'pricing.html',
-  '/de/pricing': 'de/pricing.html',
-  '/fr/pricing': 'fr/pricing.html',
-  '/es/pricing': 'es/pricing.html',
+  '/de/pricing': 'de-pricing.html',
+  '/fr/pricing': 'fr-pricing.html',
+  '/es/pricing': 'es-pricing.html',
   '/solutions': 'solutions.html',
   '/setup': 'setup.html',
   '/guides': 'guides.html',
@@ -274,8 +274,13 @@ if (serverSrc.includes('sweepr-order-draft-redirect')) {
 if (/<iframe[^>]*src=["']\/download\/SWEEPRVPN\.apk/i.test(serverSrc)) {
   fail('Hidden SWEEPRVPN.apk auto-download <iframe> found in website/server.mjs');
 }
-if (!serverSrc.includes("q.get('direct') !== '1'")) {
-  fail("Missing q.get('direct') !== '1' explicit download click gate in website/server.mjs");
+if (!serverSrc.includes("const showPicker = requestedPlatform === 'picker'")) {
+  fail('Missing direct OS-detected binary download gate (showPicker) in website/server.mjs — /download and /download?platform=win must stream binaries directly');
+}
+const navJsPath = path.join(WEBSITE_DIR, 'nav.js');
+const navJsSrc = fs.existsSync(navJsPath) ? fs.readFileSync(navJsPath, 'utf8') : '';
+if (!navJsSrc.includes("'/download/SWEEPRVPN.exe'") || !navJsSrc.includes("'/download/SWEEPRVPN.dmg'")) {
+  fail('website/nav.js must map visitor OS directly to /download/SWEEPRVPN.exe / .dmg / .apk / .mobileconfig');
 }
 
 if (errors.length > 0) {

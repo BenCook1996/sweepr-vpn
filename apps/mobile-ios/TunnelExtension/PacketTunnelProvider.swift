@@ -43,20 +43,27 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
         // Fallback network settings when compiling skeleton without WireGuardKit package linked yet
         let rawAddr = (configMap["address"] as? String) ?? "10.64.0.2/32"
         let clientIp = rawAddr.split(separator: "/").first.map(String.init) ?? "10.64.0.2"
-        let dnsCsv = (configMap["dns"] as? String) ?? "1.1.1.1, 1.0.0.1"
+        let dnsCsv = (configMap["dns"] as? String) ?? "10.64.0.1, 1.1.1.1"
         let dnsServers = dnsCsv.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
 
         let settings = NEPacketTunnelNetworkSettings(tunnelRemoteAddress: (configMap["endpoint"] as? String)?.split(separator: ":").first.map(String.init) ?? "127.0.0.1")
+        let lanBypass = (configMap["lanBypass"] as? Bool) ?? true
         let ipv4 = NEIPv4Settings(addresses: [clientIp], subnetMasks: ["255.255.255.255"])
         ipv4.includedRoutes = [NEIPv4Route.default()]
+        if lanBypass {
+            ipv4.excludedRoutes = [
+                NEIPv4Route(destinationAddress: "192.168.0.0", subnetMask: "255.255.0.0"),
+                NEIPv4Route(destinationAddress: "10.0.0.0", subnetMask: "255.192.0.0"),
+                NEIPv4Route(destinationAddress: "10.128.0.0", subnetMask: "255.128.0.0"),
+                NEIPv4Route(destinationAddress: "172.16.0.0", subnetMask: "255.240.0.0")
+            ]
+        }
         settings.ipv4Settings = ipv4
 
-        let ipv6 = NEIPv6Settings(addresses: ["fd00::2"], networkPrefixLengths: [128])
-        ipv6.includedRoutes = [NEIPv6Route.default()]
-        settings.ipv6Settings = ipv6
-
-        settings.dnsSettings = NEDNSSettings(servers: dnsServers)
-        settings.mtu = NSNumber(value: 1280)
+        let dnsSettings = NEDNSSettings(servers: dnsServers)
+        dnsSettings.matchDomains = [""]
+        settings.dnsSettings = dnsSettings
+        settings.mtu = NSNumber(value: 1380)
         setTunnelNetworkSettings(settings, completionHandler: completionHandler)
         #endif
     }

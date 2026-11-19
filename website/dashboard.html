@@ -118,21 +118,17 @@
         </div>
       </div>
 
-      <!-- Instant Activation Code & License Key Card -->
+      <!-- Pro License Key Card -->
       <div class="rack-card glass-card p-5 sm:p-6 bg-white shadow-sm rounded-2xl border border-gray-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <div class="text-xs font-bold uppercase tracking-wider text-gray-400">6-Digit App Activation Code</div>
+          <div class="text-xs font-bold uppercase tracking-wider text-gray-400">Pro License Key</div>
           <div class="flex items-center gap-3 mt-1">
-            <span id="activationCodeText" class="font-mono text-2xl sm:text-3xl font-bold text-emerald-700 tracking-widest tabular-nums">------</span>
+            <span id="licenseKeyText" class="font-mono text-lg sm:text-2xl font-bold text-emerald-700 tracking-wider tabular-nums">SWEEPR-VPN-PRO</span>
             <button type="button" id="copyCodeBtn" class="copy-spring-btn">
-              <span class="copy-icon-stack"><svg class="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="copy-label">Copy Code</span>
+              <span class="copy-icon-stack"><svg class="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="copy-label">Copy Key</span>
             </button>
           </div>
-          <p class="text-xs text-gray-500 mt-1">Enter your email and this 6-digit code inside the SWEEPR VPN app to unlock Pro on up to 3 devices (any combination of desktop or mobile).</p>
-        </div>
-        <div class="text-left sm:text-right border-t sm:border-t-0 border-gray-100 pt-3 sm:pt-0 w-full sm:w-auto">
-          <div class="text-xs font-bold uppercase tracking-wider text-gray-400">Pro License Key</div>
-          <div id="licenseKeyText" class="font-mono text-xs sm:text-sm font-bold text-gray-800 bg-gray-100 px-3 py-1.5 rounded-lg mt-1 inline-block">SWEEPR-VPN-PRO</div>
+          <p class="text-xs text-gray-500 mt-1">Enter your full <code>SWEEPR-VPN-XXXX-XXXX-XXXX</code> license key inside the SWEEPR VPN app to unlock Pro on up to 3 devices (any combination of desktop or mobile).</p>
         </div>
       </div>
 
@@ -217,13 +213,13 @@
           <h3 class="font-bold text-lg mb-2">Need the app on another device?</h3>
           <p class="text-sm text-gray-500 mb-5">Download the latest version of SWEEPR VPN on your separate device, then use the QR code on the left to activate your account.</p>
           <div class="grid grid-cols-2 gap-2.5 w-full max-w-sm">
-            <a href="/download?platform=win" class="btn btn-go justify-center gap-2 text-xs sm:text-sm py-3 no-underline">
+            <a href="/download/SWEEPRVPN.exe" download="SWEEPRVPN.exe" class="btn btn-go justify-center gap-2 text-xs sm:text-sm py-3 no-underline">
               <span>Windows (.exe)</span>
             </a>
-            <a href="/download?platform=mac" class="btn btn-go justify-center gap-2 text-xs sm:text-sm py-3 no-underline" style="background:#111315;border-color:#262b33;">
+            <a href="/download/SWEEPRVPN.dmg" download="SWEEPRVPN.dmg" class="btn btn-go justify-center gap-2 text-xs sm:text-sm py-3 no-underline" style="background:#111315;border-color:#262b33;">
               <span>macOS (.dmg)</span>
             </a>
-            <a href="/SWEEPRVPN.apk" class="btn btn-go justify-center gap-2 text-xs sm:text-sm py-3 no-underline" style="background:#047857;border-color:#065f46;">
+            <a href="/download/SWEEPRVPN.apk" download="SWEEPRVPN.apk" class="btn btn-go justify-center gap-2 text-xs sm:text-sm py-3 no-underline" style="background:#047857;border-color:#065f46;">
               <span>Android (.apk)</span>
             </a>
             <a href="/api/vpn/apple-mobileconfig" id="iosProfileLink" class="btn btn-go justify-center gap-2 text-xs sm:text-sm py-3 no-underline" style="background:#1c2128;border-color:#2d343f;">
@@ -437,17 +433,14 @@
           if (subBtn) subBtn.classList.add('hidden');
         }
 
-        const codeEl = document.getElementById('activationCodeText');
-        const keyEl = document.getElementById('licenseKeyText');
+        const keyEl = document.getElementById('licenseKeyText') || document.getElementById('activationCodeText');
         const copyBtn = document.getElementById('copyCodeBtn');
-        if (codeEl && data.activation_code) {
-          codeEl.textContent = data.activation_code;
+        const fullKey = data.licenseKey || data.license_key || '';
+        if (keyEl && fullKey) {
+          keyEl.textContent = fullKey;
         }
-        if (keyEl && data.licenseKey) {
-          keyEl.textContent = data.licenseKey;
-        }
-        if (copyBtn && data.activation_code) {
-          copyBtn.onclick = () => portalSpringCopy(copyBtn, data.activation_code, 'Copy Code');
+        if (copyBtn && fullKey) {
+          copyBtn.onclick = () => portalSpringCopy(copyBtn, fullKey, 'Copy Key');
         }
 
         if (data.has_stripe) {

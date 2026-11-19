@@ -475,7 +475,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Automatic OS & Device Detection for All /download Links (Desktop + Mobile)
+  // Automatic OS & Device Detection for All /download Links (Direct Platform-Specific Binary Download)
   try {
     const ua = (navigator.userAgent || '').toLowerCase();
     const isIpadOs = navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
@@ -483,24 +483,38 @@ document.addEventListener('DOMContentLoaded', () => {
     const isAndroid = ua.includes('android') || (ua.includes('linux') && navigator.maxTouchPoints > 0);
     const isOtherMobile = /mobile|iemobile|opera mini/.test(ua);
     const isMacDesktop = !isIos && (ua.includes('mac os') || ua.includes('macintosh'));
-    const detectedPlatform = isIos ? 'ios' : (isAndroid || isOtherMobile) ? 'android' : isMacDesktop ? 'mac' : 'win';
+    const isLinuxDesktop = !isAndroid && !isOtherMobile && ua.includes('linux');
+    const detectedPlatform = isIos ? 'ios' : (isAndroid || isOtherMobile) ? 'android' : isMacDesktop ? 'mac' : isLinuxDesktop ? 'linux' : 'win';
+
+    const platformDirectMap = {
+      win: { href: '/download/SWEEPRVPN.exe', filename: 'SWEEPRVPN.exe' },
+      windows: { href: '/download/SWEEPRVPN.exe', filename: 'SWEEPRVPN.exe' },
+      mac: { href: '/download/SWEEPRVPN.dmg', filename: 'SWEEPRVPN.dmg' },
+      macos: { href: '/download/SWEEPRVPN.dmg', filename: 'SWEEPRVPN.dmg' },
+      android: { href: '/download/SWEEPRVPN.apk', filename: 'SWEEPRVPN.apk' },
+      apk: { href: '/download/SWEEPRVPN.apk', filename: 'SWEEPRVPN.apk' },
+      ios: { href: '/download/SWEEPRVPN.mobileconfig', filename: '' },
+      linux: { href: '/setup/linux-cli-wireguard', filename: '' }
+    };
 
     document.querySelectorAll('a[href="/download"], a[href^="/download?"]').forEach((a) => {
       const rawHref = a.getAttribute('href') || '/download';
       try {
         const u = new URL(rawHref, window.location.origin);
-        if (!u.searchParams.get('platform')) {
-          u.searchParams.set('platform', detectedPlatform);
+        const explicitPlat = (u.searchParams.get('platform') || '').toLowerCase();
+        if (explicitPlat === 'picker' || explicitPlat === 'qr' || u.searchParams.get('picker') === '1') {
+          return;
         }
-        if (isIos || isAndroid || isOtherMobile) {
-          u.searchParams.set('direct', '1');
+        const resolved = platformDirectMap[explicitPlat] || platformDirectMap[detectedPlatform] || platformDirectMap.win;
+        a.setAttribute('href', resolved.href);
+        if (resolved.filename) {
+          a.setAttribute('download', resolved.filename);
         }
-        a.setAttribute('href', u.pathname + u.search);
       } catch {}
     });
 
     if (isIos || isAndroid || isOtherMobile) {
-      const targetHref = isIos ? '/download?platform=ios&direct=1' : '/download?platform=android&direct=1';
+      const targetHref = isIos ? '/download/SWEEPRVPN.mobileconfig' : '/download/SWEEPRVPN.apk';
 
       const showMobileInstallSheet = () => {
         let sheet = document.getElementById('mobileInstallHelperSheet');

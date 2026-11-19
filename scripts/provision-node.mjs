@@ -197,19 +197,23 @@ async function pickVultrPlan(region) {
   return 'vc2-1c-1gb';
 }
 
+const forceUpgrade = args.includes('--upgrade');
+
 async function provisionOne(code) {
-  if (registry.some((n) => n.code === code)) {
-    console.log(`[${code}] Already registered in ${REGISTRY}, skipping creation.`);
+  const existingRegIdx = registry.findIndex((n) => n.code === code);
+  if (existingRegIdx >= 0 && !forceUpgrade) {
+    console.log(`[${code}] Already registered in ${REGISTRY}, skipping creation (use --upgrade to reinstall with latest setup-node.sh).`);
     return;
   }
   const loc = LOCATIONS[code];
-  const agentSecret = randomBytes(32).toString('hex');
-  const userData = setupTemplate
-    .replace('__AGENT_SECRET__', agentSecret)
-    .replace('__AGENT_PY__', agentPy);
+  let agentSecret =
+    (existingRegIdx >= 0 && registry[existingRegIdx].agent_secret && registry[existingRegIdx].agent_secret !== '__AGENT_SECRET__')
+      ? registry[existingRegIdx].agent_secret
+      : randomBytes(32).toString('hex');
 
   let ip = '';
   let instanceId = '';
+  let prevPubKey = existingRegIdx >= 0 ? registry[existingRegIdx].public_key : '';
 
   if (provider === 'vultr') {
     const label = `sweepr-${code.toLowerCase()}`;
@@ -218,7 +222,17 @@ async function provisionOne(code) {
     if (existing) {
       instanceId = String(existing.id);
       ip = existing.main_ip;
-      console.log(`[${code}] Updating user_data (LF) & reinstalling existing Vultr server ${ip} (${instanceId})…`);
+      try {
+        const ud = await vultr('GET', `/instances/${instanceId}/user-data`);
+        const decoded = Buffer.from(ud.user_data?.data || '', 'base64').toString('utf8');
+        const m = decoded.match(/AGENT_SECRET="([^"]+)"/);
+        if (m && m[1] && m[1] !== '__AGENT_SECRET__') agentSecret = m[1];
+      } catch {}
+      const userData = setupTemplate
+        .replaceAll('__AGENT_SECRET__', agentSecret)
+        .replace('__AGENT_PY__', agentPy);
+      if (userData.includes('__AGENT_SECRET__')) throw new Error('Unreplaced agent secret placeholder');
+      console.log(`[${code}] Updating user_data (MTU=1380 + MSS clamping + LFN tuning) & reinstalling ${ip} (${instanceId})…`);
       await vultr('PATCH', `/instances/${instanceId}`, {
         user_data: Buffer.from(userData, 'utf8').toString('base64')
       });
@@ -226,6 +240,10 @@ async function provisionOne(code) {
         hostname: label
       });
     } else {
+      const userData = setupTemplate
+        .replaceAll('__AGENT_SECRET__', agentSecret)
+        .replace('__AGENT_PY__', agentPy);
+      if (userData.includes('__AGENT_SECRET__')) throw new Error('Unreplaced agent secret placeholder');
       const osId = await getVultrUbuntuId();
       const plan = await pickVultrPlan(loc.vultr);
       console.log(`[${code}] Creating ${loc.city} (${loc.vultr}, plan ${plan}) on Vultr…`);
@@ -247,6 +265,10 @@ async function provisionOne(code) {
       }
     }
   } else if (provider === 'upcloud') {
+    const userData = setupTemplate
+      .replaceAll('__AGENT_SECRET__', agentSecret)
+      .replace('__AGENT_PY__', agentPy);
+    if (userData.includes('__AGENT_SECRET__')) throw new Error('Unreplaced agent secret placeholder');
     const TOKEN = process.env.UPCLOUD_TOKEN;
     if (!TOKEN) throw new Error('Set UPCLOUD_TOKEN.');
     const plan = arg('--plan') || '1xCPU-1GB';
@@ -281,6 +303,10 @@ async function provisionOne(code) {
     const pubIface = (data.server.networking?.interfaces?.interface || []).find((i) => i.type === 'public');
     ip = pubIface?.ip_addresses?.ip_address?.[0]?.address || '';
   } else {
+    const userData = setupTemplate
+      .replaceAll('__AGENT_SECRET__', agentSecret)
+      .replace('__AGENT_PY__', agentPy);
+    if (userData.includes('__AGENT_SECRET__')) throw new Error('Unreplaced agent secret placeholder');
     const TOKEN = process.env.HETZNER_API_TOKEN;
     if (!TOKEN) throw new Error('Set HETZNER_API_TOKEN.');
     console.log(`[${code}] Creating ${loc.city} (${loc.hetzner}) on Hetzner Cloud…`);
@@ -303,18 +329,27 @@ async function provisionOne(code) {
   }
 
   console.log(`[${code}] Server IP is ${ip}. Waiting for WireGuard & Unbound DNS setup (2–4 mins)…`);
+  if (forceUpgrade) {
+    // Wait 30s for reinstall to actually tear down the old OS before polling /health
+    await new Promise((r) => setTimeout(r, 30000));
+  }
 
   let health = null;
-  for (let i = 0; i < 80 && !health; i++) {
+  for (let i = 0; i < 90 && !health; i++) {
     await new Promise((r) => setTimeout(r, 5000));
     try {
       const r = await fetch(`http://${ip}:8787/health`, { signal: AbortSignal.timeout(4000) });
-      if (r.ok) health = await r.json();
+      if (r.ok) {
+        const cand = await r.json();
+        if (cand && cand.ok && cand.public_key && (!forceUpgrade || cand.public_key !== prevPubKey || i >= 18)) {
+          health = cand;
+        }
+      }
     } catch {}
   }
   if (!health) throw new Error(`[${code}] Setup did not finish at ${ip}.`);
 
-  registry.push({
+  const record = {
     code,
     country: loc.country,
     city: loc.city,
@@ -327,7 +362,12 @@ async function provisionOne(code) {
     agent_secret: agentSecret,
     instance_id: instanceId,
     created: new Date().toISOString()
-  });
+  };
+  if (existingRegIdx >= 0) {
+    registry[existingRegIdx] = record;
+  } else {
+    registry.push(record);
+  }
   saveRegistry();
   console.log(`[${code}] LIVE at ${ip}:51820 (WireGuard key: ${health.public_key})`);
 }

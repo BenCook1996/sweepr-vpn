@@ -919,7 +919,7 @@ namespace SweeprVpnApp
                 string confPath = Path.Combine(appDir, "sweepr0.conf");
                 string statePath = Path.Combine(appDir, "tunnel_state.json");
 
-                // Fast-path: if the WireGuard tunnel service is already installed for this exact server, start it directly with 0 UAC prompts
+                // Fast-path: if the WireGuard tunnel service is already installed with our latest MTU=1380 + DNS=10.64.0.1 config for this server, start it via zero-UAC switch task so DNS/IPv6 leak guards re-apply
                 IntentionalDisconnect = false;
                 if (IsTunnelServiceInstalled() && File.Exists(statePath))
                 {
@@ -930,8 +930,30 @@ namespace SweeprVpnApp
                         string prevEndpoint = ExtractJsonString(prevState, "endpoint");
                         string pfConf = @"C:\Program Files\WireGuard\sweepr0.conf";
                         string pfConfText = File.Exists(pfConf) ? File.ReadAllText(pfConf, Encoding.UTF8) : "";
-                        bool prevHasLanBypass = pfConfText.Contains("0.0.0.0/5");
-                        if (string.Equals(prevServer, serverCode, StringComparison.OrdinalIgnoreCase) &&
+                        bool prevHasLanBypass = pfConfText.Contains("10.64.0.0/16");
+                        bool hasModernTuning = pfConfText.Contains("MTU = 1380") && pfConfText.Contains("10.64.0.1") && !pfConfText.Contains("2000::/3");
+                        bool liveKeyMatches = true;
+                        if (hasModernTuning && !string.IsNullOrEmpty(prevEndpoint))
+                        {
+                            try
+                            {
+                                string epHost = prevEndpoint.Split(':')[0];
+                                HttpWebRequest hReq = (HttpWebRequest)WebRequest.Create("http://" + epHost + ":8787/health");
+                                hReq.Timeout = 2500;
+                                hReq.ReadWriteTimeout = 2500;
+                                using (HttpWebResponse hResp = (HttpWebResponse)hReq.GetResponse())
+                                using (StreamReader hSr = new StreamReader(hResp.GetResponseStream(), Encoding.UTF8))
+                                {
+                                    string hBody = hSr.ReadToEnd();
+                                    string livePub = ExtractJsonString(hBody, "public_key");
+                                    if (!string.IsNullOrEmpty(livePub) && !pfConfText.Contains(livePub)) liveKeyMatches = false;
+                                }
+                            }
+                            catch { }
+                        }
+                        if (hasModernTuning &&
+                            liveKeyMatches &&
+                            string.Equals(prevServer, serverCode, StringComparison.OrdinalIgnoreCase) &&
                             !string.IsNullOrEmpty(prevEndpoint) &&
                             pfConfText.Contains(prevEndpoint) &&
                             prevHasLanBypass == lanBypass)
@@ -939,8 +961,12 @@ namespace SweeprVpnApp
                             if (!IsTunnelServiceRunning())
                             {
                                 int startCode;
-                                RunProcessCapture("sc.exe", "start \"WireGuardTunnel$sweepr0\"", out startCode);
-                                for (int i = 0; i < 20; i++)
+                                RunProcessCapture("schtasks.exe", "/Run /TN \"SWEEPRVPN_Switch\"", out startCode);
+                                if (startCode != 0)
+                                {
+                                    RunProcessCapture("sc.exe", "start \"WireGuardTunnel$sweepr0\"", out startCode);
+                                }
+                                for (int i = 0; i < 24; i++)
                                 {
                                     if (IsTunnelServiceRunning()) break;
                                     Thread.Sleep(250);
@@ -1038,12 +1064,14 @@ namespace SweeprVpnApp
                     return;
                 }
 
-                // Normalize DNS (use fast Cloudflare 1.1.1.1, 1.0.0.1 inside tunnel), add MTU=1280 for PPPoE/Vodafone compatibility, and respect lanBypass setting
-                dns = "1.1.1.1, 1.0.0.1";
-                configText = Regex.Replace(configText, @"^DNS\s*=.*$", "DNS = 1.1.1.1, 1.0.0.1\nMTU = 1280", RegexOptions.Multiline);
+                // Use VPN-node Unbound DNS (10.64.0.1) + Cloudflare fallback inside tunnel to prevent local ISP DNS leaks & cross-ocean CDN tromboning, match server MTU=1380 (no duplicate MTU lines), and omit IPv6 blackhole routes (IPv6 is blocked synchronously via firewall)
+                bool shieldsOn = (ShieldStates != null && ShieldStates.Length >= 2 && (ShieldStates[0] || ShieldStates[1]));
+                dns = shieldsOn ? "10.64.0.1, 1.1.1.2" : "10.64.0.1, 1.1.1.1";
+                configText = Regex.Replace(configText, @"^\s*MTU\s*=.*(?:\r?\n)?", "", RegexOptions.Multiline | RegexOptions.IgnoreCase);
+                configText = Regex.Replace(configText, @"^DNS\s*=.*$", "DNS = " + dns + "\nMTU = 1380", RegexOptions.Multiline);
                 string allowedIpsValue = lanBypass
-                    ? "0.0.0.0/5, 8.0.0.0/7, 11.0.0.0/8, 12.0.0.0/6, 16.0.0.0/4, 32.0.0.0/3, 64.0.0.0/2, 128.0.0.0/3, 160.0.0.0/5, 168.0.0.0/6, 172.0.0.0/12, 172.32.0.0/11, 172.64.0.0/10, 172.128.0.0/9, 173.0.0.0/8, 174.0.0.0/7, 176.0.0.0/4, 192.0.0.0/9, 192.128.0.0/11, 192.160.0.0/13, 192.169.0.0/16, 192.170.0.0/15, 192.172.0.0/14, 192.176.0.0/12, 192.192.0.0/10, 193.0.0.0/8, 194.0.0.0/7, 196.0.0.0/6, 200.0.0.0/5, 208.0.0.0/4, 2000::/3"
-                    : "0.0.0.0/1, 128.0.0.0/1, 2000::/3";
+                    ? "1.0.0.0/8, 2.0.0.0/7, 4.0.0.0/6, 8.0.0.0/7, 10.64.0.0/16, 11.0.0.0/8, 12.0.0.0/6, 16.0.0.0/4, 32.0.0.0/3, 64.0.0.0/2, 128.0.0.0/3, 160.0.0.0/5, 168.0.0.0/6, 172.0.0.0/12, 172.32.0.0/11, 172.64.0.0/10, 172.128.0.0/9, 173.0.0.0/8, 174.0.0.0/7, 176.0.0.0/4, 192.0.0.0/9, 192.128.0.0/11, 192.160.0.0/13, 192.169.0.0/16, 192.170.0.0/15, 192.172.0.0/14, 192.176.0.0/12, 192.192.0.0/10, 193.0.0.0/8, 194.0.0.0/7, 196.0.0.0/6, 200.0.0.0/5, 208.0.0.0/4"
+                    : "0.0.0.0/0";
                 configText = Regex.Replace(configText, @"^AllowedIPs\s*=.*$", "AllowedIPs = " + allowedIpsValue, RegexOptions.Multiline);
 
                 // Write sweepr0.conf without BOM so WireGuard parser accepts it
@@ -1062,37 +1090,21 @@ namespace SweeprVpnApp
                     }
                 }
 
-                // Try zero-UAC in-place config update + service start ONLY if we can verify the new endpoint was written
+                // Try zero-UAC scheduled task switch ONLY if sweepr_switch.cmd is already upgraded with DNS-leak + SMHNR protection
                 bool updatedInPlace = false;
-                string pfConfPath = @"C:\Program Files\WireGuard\sweepr0.conf";
-                if (IsTunnelServiceInstalled() && File.Exists(pfConfPath))
+                string switchCmdCheckPath = @"C:\Program Files\WireGuard\sweepr_switch.cmd";
+                bool hasModernSwitchTask = false;
+                try
                 {
-                    try
+                    if (File.Exists(switchCmdCheckPath))
                     {
-                        byte[] confBytes = new UTF8Encoding(false).GetBytes(configText);
-                        using (FileStream fs = new FileStream(pfConfPath, FileMode.Truncate, FileAccess.Write, FileShare.Read))
-                        {
-                            fs.Write(confBytes, 0, confBytes.Length);
-                            fs.Flush();
-                        }
-                        string verifyText = File.ReadAllText(pfConfPath, Encoding.UTF8);
-                        if (!string.IsNullOrEmpty(endpoint) && verifyText.Contains(endpoint))
-                        {
-                            updatedInPlace = true;
-                            RunProcessCapture("sc.exe", "start \"WireGuardTunnel$sweepr0\"", out scCode);
-                            for (int i = 0; i < 20; i++)
-                            {
-                                if (IsTunnelServiceRunning()) break;
-                                Thread.Sleep(250);
-                            }
-                            RunProcessCapture("ipconfig.exe", "/flushdns", out scCode);
-                        }
+                        string swTxt = File.ReadAllText(switchCmdCheckPath, Encoding.UTF8);
+                        hasModernSwitchTask = swTxt.Contains("DisableSmartNameResolution") && swTxt.Contains("SWEEPR_VPN_Block_DNS_Leak_UDP");
                     }
-                    catch { }
                 }
+                catch { }
 
-                // Try zero-UAC scheduled task switch if SWEEPRVPN_Switch is already registered from first install
-                if (!updatedInPlace)
+                if (hasModernSwitchTask && IsTunnelServiceInstalled())
                 {
                     int taskQueryCode;
                     RunProcessCapture("schtasks.exe", "/Query /TN \"SWEEPRVPN_Switch\"", out taskQueryCode);
@@ -2807,9 +2819,15 @@ namespace SweeprVpnApp
                 Thread.Sleep(2500);
                 // Re-apply ACL after WireGuard service startup so subsequent server switches can update sweepr0.conf without UAC
                 RunHelperCmd("icacls.exe", "\"" + secureConfPath + "\" /inheritance:r /grant:r \"SYSTEM:(F)\" \"Administrators:(F)\"");
-                // Block ISP IPv6 leak while tunnel is up so dual-stack browsers (Chrome/Edge) immediately use the IPv4 VPN tunnel for Google/GA
+                // Block ISP IPv6 leak & non-tunnel DNS leaks (including Windows SMHNR racing local router DNS) so streaming CDNs always resolve in the VPN exit country
+                string dnsBlockRanges = "0.0.0.0-1.0.0.0,1.0.0.3-1.1.1.0,1.1.1.3-10.64.0.0,10.64.0.2-126.255.255.255,128.0.0.0-255.255.255.255";
+                RunHelperCmd("reg.exe", "add \"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\DNSClient\" /v DisableSmartNameResolution /t REG_DWORD /d 1 /f");
                 RunHelperCmd("netsh.exe", "advfirewall firewall delete rule name=\"SWEEPR_VPN_Block_IPv6\"");
                 RunHelperCmd("netsh.exe", "advfirewall firewall add rule name=\"SWEEPR_VPN_Block_IPv6\" dir=out action=block protocol=any remoteip=2000::/3");
+                RunHelperCmd("netsh.exe", "advfirewall firewall delete rule name=\"SWEEPR_VPN_Block_DNS_Leak_UDP\"");
+                RunHelperCmd("netsh.exe", "advfirewall firewall add rule name=\"SWEEPR_VPN_Block_DNS_Leak_UDP\" dir=out action=block protocol=UDP remoteport=53 remoteip=" + dnsBlockRanges);
+                RunHelperCmd("netsh.exe", "advfirewall firewall delete rule name=\"SWEEPR_VPN_Block_DNS_Leak_TCP\"");
+                RunHelperCmd("netsh.exe", "advfirewall firewall add rule name=\"SWEEPR_VPN_Block_DNS_Leak_TCP\" dir=out action=block protocol=TCP remoteport=53 remoteip=" + dnsBlockRanges);
                 RunHelperCmd("ipconfig.exe", "/flushdns");
 
                 // Register zero-UAC SYSTEM helper tasks for subsequent country switches and disconnects
@@ -2823,8 +2841,13 @@ namespace SweeprVpnApp
                         "findstr /V /I \"PreUp PostUp PreDown PostDown Table SaveConfig\" \"" + srcConfPath + "\" > \"" + secureConfPath + "\"\r\n" +
                         "icacls.exe \"" + secureConfPath + "\" /setowner \"SYSTEM\" >nul 2>&1\r\n" +
                         "icacls.exe \"" + secureConfPath + "\" /inheritance:r /grant:r \"SYSTEM:(F)\" \"Administrators:(F)\" >nul 2>&1\r\n" +
+                        "reg.exe add \"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\DNSClient\" /v DisableSmartNameResolution /t REG_DWORD /d 1 /f >nul 2>&1\r\n" +
                         "netsh.exe advfirewall firewall delete rule name=\"SWEEPR_VPN_Block_IPv6\" >nul 2>&1\r\n" +
                         "netsh.exe advfirewall firewall add rule name=\"SWEEPR_VPN_Block_IPv6\" dir=out action=block protocol=any remoteip=2000::/3 >nul 2>&1\r\n" +
+                        "netsh.exe advfirewall firewall delete rule name=\"SWEEPR_VPN_Block_DNS_Leak_UDP\" >nul 2>&1\r\n" +
+                        "netsh.exe advfirewall firewall add rule name=\"SWEEPR_VPN_Block_DNS_Leak_UDP\" dir=out action=block protocol=UDP remoteport=53 remoteip=" + dnsBlockRanges + " >nul 2>&1\r\n" +
+                        "netsh.exe advfirewall firewall delete rule name=\"SWEEPR_VPN_Block_DNS_Leak_TCP\" >nul 2>&1\r\n" +
+                        "netsh.exe advfirewall firewall add rule name=\"SWEEPR_VPN_Block_DNS_Leak_TCP\" dir=out action=block protocol=TCP remoteport=53 remoteip=" + dnsBlockRanges + " >nul 2>&1\r\n" +
                         "sc.exe start \"WireGuardTunnel$sweepr0\" >nul 2>&1\r\n" +
                         "ipconfig.exe /flushdns >nul 2>&1\r\n";
                     File.WriteAllText(switchCmdPath, switchCmdBody, new UTF8Encoding(false));
@@ -2838,6 +2861,9 @@ namespace SweeprVpnApp
                         "@echo off\r\n" +
                         "sc.exe stop \"WireGuardTunnel$sweepr0\" >nul 2>&1\r\n" +
                         "netsh.exe advfirewall firewall delete rule name=\"SWEEPR_VPN_Block_IPv6\" >nul 2>&1\r\n" +
+                        "netsh.exe advfirewall firewall delete rule name=\"SWEEPR_VPN_Block_DNS_Leak_UDP\" >nul 2>&1\r\n" +
+                        "netsh.exe advfirewall firewall delete rule name=\"SWEEPR_VPN_Block_DNS_Leak_TCP\" >nul 2>&1\r\n" +
+                        "reg.exe delete \"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\DNSClient\" /v DisableSmartNameResolution /f >nul 2>&1\r\n" +
                         "ipconfig.exe /flushdns >nul 2>&1\r\n";
                     File.WriteAllText(discCmdPath, discCmdBody, new UTF8Encoding(false));
                     RunHelperCmd("icacls.exe", "\"" + discCmdPath + "\" /setowner \"SYSTEM\"");
@@ -2873,6 +2899,9 @@ namespace SweeprVpnApp
                 RunHelperCmd("sc.exe", "stop \"WireGuardTunnel$sweepr0\"");
                 RunHelperCmd(pfWgExe, "/uninstalltunnelservice sweepr0");
                 RunHelperCmd("netsh.exe", "advfirewall firewall delete rule name=\"SWEEPR_VPN_Block_IPv6\"");
+                RunHelperCmd("netsh.exe", "advfirewall firewall delete rule name=\"SWEEPR_VPN_Block_DNS_Leak_UDP\"");
+                RunHelperCmd("netsh.exe", "advfirewall firewall delete rule name=\"SWEEPR_VPN_Block_DNS_Leak_TCP\"");
+                RunHelperCmd("reg.exe", "delete \"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\DNSClient\" /v DisableSmartNameResolution /f");
                 RunHelperCmd("ipconfig.exe", "/flushdns");
                 return 0;
             }

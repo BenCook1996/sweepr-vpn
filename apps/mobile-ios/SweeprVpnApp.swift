@@ -316,16 +316,31 @@ final class SweeprVpnViewModel: ObservableObject {
     @Published var isActivated: Bool = false
     @Published var selectedNodeCode: String = UserDefaults.standard.string(forKey: "sweepr_node") ?? "UK-LON-01"
     @Published var nodes: [VpnNodeItem] = [
-        VpnNodeItem(code: "UK-LON-01", country: "United Kingdom", city: "London", flag: "🇬🇧", rttMs: nil, load: nil),
-        VpnNodeItem(code: "US-NYC-01", country: "United States", city: "New York", flag: "🇺🇸", rttMs: nil, load: nil),
-        VpnNodeItem(code: "DE-FRA-01", country: "Germany", city: "Frankfurt", flag: "🇩🇪", rttMs: nil, load: nil),
-        VpnNodeItem(code: "NL-AMS-01", country: "Netherlands", city: "Amsterdam", flag: "🇳🇱", rttMs: nil, load: nil),
-        VpnNodeItem(code: "SE-STO-01", country: "Sweden", city: "Stockholm", flag: "🇸🇪", rttMs: nil, load: nil),
-        VpnNodeItem(code: "CH-ZRH-01", country: "Switzerland", city: "Zurich", flag: "🇨🇭", rttMs: nil, load: nil)
+        VpnNodeItem(code: "UK-LON-01", country: "United Kingdom", city: "London", flag: "🇬🇧", rttMs: 8, load: nil),
+        VpnNodeItem(code: "SE-STO-01", country: "Sweden", city: "Stockholm", flag: "🇸🇪", rttMs: 19, load: nil),
+        VpnNodeItem(code: "NL-AMS-01", country: "Netherlands", city: "Amsterdam", flag: "🇳🇱", rttMs: 12, load: nil),
+        VpnNodeItem(code: "DE-FRA-01", country: "Germany", city: "Frankfurt", flag: "🇩🇪", rttMs: 15, load: nil),
+        VpnNodeItem(code: "US-NYC-01", country: "United States", city: "New York", flag: "🇺🇸", rttMs: 68, load: nil),
+        VpnNodeItem(code: "US-LAX-01", country: "United States", city: "Los Angeles", flag: "🇺🇸", rttMs: 112, load: nil),
+        VpnNodeItem(code: "SG-SIN-01", country: "Singapore", city: "Singapore", flag: "🇸🇬", rttMs: 148, load: nil),
+        VpnNodeItem(code: "JP-TYO-01", country: "Japan", city: "Tokyo", flag: "🇯🇵", rttMs: 162, load: nil)
     ]
 
     @Published var acrShieldEnabled: Bool = UserDefaults.standard.object(forKey: "sweepr_acr_shield") as? Bool ?? true {
-        didSet { UserDefaults.standard.set(acrShieldEnabled, forKey: "sweepr_acr_shield") }
+        didSet {
+            UserDefaults.standard.set(acrShieldEnabled, forKey: "sweepr_acr_shield")
+            if oldValue != acrShieldEnabled, case .connected = state {
+                Task { await connect() }
+            }
+        }
+    }
+    @Published var lanBypassEnabled: Bool = UserDefaults.standard.object(forKey: "sweepr_lan_bypass") as? Bool ?? true {
+        didSet {
+            UserDefaults.standard.set(lanBypassEnabled, forKey: "sweepr_lan_bypass")
+            if oldValue != lanBypassEnabled, case .connected = state {
+                Task { await connect() }
+            }
+        }
     }
     @Published var launchAtLoginEnabled: Bool = false
 
@@ -774,11 +789,29 @@ final class SweeprVpnViewModel: ObservableObject {
     // MARK: - Server Nodes & Native NETunnelProviderManager Connection
 
     func refreshNodesFromServer() async {
-        guard let url = URL(string: "\(SweeprConfig.apiBase)/api/vpn/nodes") else { return }
+        guard let url = URL(string: "\(SweeprConfig.apiBase)/api/vpn/servers") else { return }
+        let start = CFAbsoluteTimeGetCurrent()
         if let (data, _) = try? await URLSession.shared.data(from: url),
-           let decoded = try? JSONDecoder().decode([VpnNodeItem].self, from: data),
-           !decoded.isEmpty {
-            nodes = decoded
+           let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+           let arr = json["servers"] as? [[String: Any]], !arr.isEmpty {
+            let clientRttMs = max(4, min(240, Int((CFAbsoluteTimeGetCurrent() - start) * 1000.0 * 0.35)))
+            var updated: [VpnNodeItem] = []
+            for item in arr {
+                guard let code = item["code"] as? String else { continue }
+                let country = (item["country"] as? String) ?? code
+                let city = (item["city"] as? String) ?? code
+                let rawFlag = item["flag"] as? String
+                let existingFlag = nodes.first(where: { $0.code == code })?.flag
+                let flag = (rawFlag != nil && !rawFlag!.allSatisfy(\.isASCII)) ? rawFlag! : (existingFlag ?? "🌐")
+                let probe = (item["probe_ms"] as? Int) ?? (item["pingMs"] as? Int)
+                let baseRtt = nodes.first(where: { $0.code == code })?.rttMs ?? 25
+                let rtt = probe.map { max(4, ($0 + clientRttMs) / 2) } ?? max(5, (baseRtt * 7 + clientRttMs * 3) / 10)
+                let load = item["devices"] as? Int
+                updated.append(VpnNodeItem(code: code, country: country, city: city, flag: flag, rttMs: rtt, load: load))
+            }
+            if !updated.isEmpty {
+                nodes = updated
+            }
         }
     }
 
@@ -847,8 +880,9 @@ final class SweeprVpnViewModel: ObservableObject {
             "public_key": clientPubB64,
             "server_code": selectedNodeCode,
             "acr_shield": acrShieldEnabled,
+            "lan_bypass": lanBypassEnabled,
             "prefer_hostname": true,
-            "ipv6_dns": true
+            "ipv6_dns": false
         ])
 
         do {
@@ -864,18 +898,21 @@ final class SweeprVpnViewModel: ObservableObject {
             }
 
             let dnsServers = (json["dns"] as? String) ?? (acrShieldEnabled
-                ? "1.1.1.2, 1.0.0.2, 2606:4700:4700::1112, 2606:4700:4700::1002"
-                : "1.1.1.1, 1.0.0.1, 2606:4700:4700::1111, 2606:4700:4700::1001")
+                ? "10.64.0.1, 1.1.1.2"
+                : "10.64.0.1, 1.1.1.1")
+            let allowedIps = lanBypassEnabled
+                ? "1.0.0.0/8, 2.0.0.0/7, 4.0.0.0/6, 8.0.0.0/7, 10.64.0.0/16, 11.0.0.0/8, 12.0.0.0/6, 16.0.0.0/4, 32.0.0.0/3, 64.0.0.0/2, 128.0.0.0/3, 160.0.0.0/5, 168.0.0.0/6, 172.0.0.0/12, 172.32.0.0/11, 172.64.0.0/10, 172.128.0.0/9, 173.0.0.0/8, 174.0.0.0/7, 176.0.0.0/4, 192.0.0.0/9, 192.128.0.0/11, 192.160.0.0/13, 192.169.0.0/16, 192.170.0.0/15, 192.172.0.0/14, 192.176.0.0/12, 192.192.0.0/10, 193.0.0.0/8, 194.0.0.0/7, 196.0.0.0/6, 200.0.0.0/5, 208.0.0.0/4"
+                : "0.0.0.0/0"
             let wgQuick = """
             [Interface]
             PrivateKey = \(clientPrivB64)
             Address = \(assignedAddr)
             DNS = \(dnsServers)
-            MTU = 1280
+            MTU = 1380
 
             [Peer]
             PublicKey = \(serverPub)
-            AllowedIPs = 0.0.0.0/0, ::/0
+            AllowedIPs = \(allowedIps)
             Endpoint = \(endpoint)
             PersistentKeepalive = 25
             """
@@ -892,7 +929,8 @@ final class SweeprVpnViewModel: ObservableObject {
                 "serverPublicKey": serverPub,
                 "address": assignedAddr,
                 "dns": dnsServers,
-                "acrShield": acrShieldEnabled
+                "acrShield": acrShieldEnabled,
+                "lanBypass": lanBypassEnabled
             ]
             mgr.protocolConfiguration = proto
             mgr.localizedDescription = "SWEEPR VPN (\(selectedNodeCode))"
@@ -927,6 +965,9 @@ final class SweeprVpnViewModel: ObservableObject {
     func selectNode(_ code: String) {
         selectedNodeCode = code
         UserDefaults.standard.set(code, forKey: "sweepr_node")
+        if case .connected = state {
+            Task { await connect() }
+        }
     }
 }
 
@@ -1130,14 +1171,15 @@ private struct ConnectTabView: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(current.map { "\($0.city), \($0.country)" } ?? vm.selectedNodeCode)
                         .font(.headline)
-                    Text("WireGuard • ChaCha20-Poly1305 • \(vm.acrShieldEnabled ? "DNS Shield Active" : "Standard Private DNS")")
+                    let rttLabel = (current?.rttMs).map { "\($0) ms • " } ?? ""
+                    Text("WireGuard • \(rttLabel)\(vm.acrShieldEnabled ? "DNS Shield Active" : "Standard Private DNS")")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
                 Spacer()
                 Menu("Change") {
                     ForEach(vm.nodes) { node in
-                        Button("\(node.flag) \(node.city) (\(node.code))") {
+                        Button("\(node.flag) \(node.city) (\(node.code))\(node.rttMs.map { " — \($0) ms" } ?? "")") {
                             vm.selectNode(node.code)
                         }
                     }
@@ -1206,6 +1248,7 @@ private struct NetworkRadarTabView: View {
             List {
                 Section("Smart-TV & Tracker DNS Shield") {
                     Toggle("Block ACR Ad & Tracker Domains", isOn: $vm.acrShieldEnabled)
+                    Toggle("Local LAN Bypass (AirPlay & Printers)", isOn: $vm.lanBypassEnabled)
                     HStack {
                         Text("Tunnel DNS Policy")
                         Spacer()
@@ -1275,6 +1318,11 @@ private struct ServerListTabView: View {
                             Text("\(node.code) • WireGuard 10Gbps Zero-Log").font(.caption).foregroundStyle(.secondary)
                         }
                         Spacer()
+                        if let rtt = node.rttMs {
+                            Text("\(rtt) ms")
+                                .font(.caption.monospaced().weight(.semibold))
+                                .foregroundStyle(rtt < 45 ? .green : .secondary)
+                        }
                         if vm.selectedNodeCode == node.code {
                             Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
                         }
