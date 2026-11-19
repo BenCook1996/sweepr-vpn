@@ -1,21 +1,19 @@
 package com.sweepr.vpn
 
-import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
-import androidx.core.content.ContextCompat
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.appupdate.AppUpdateOptions
@@ -31,9 +29,9 @@ private val SweeprDarkColors = darkColorScheme(
     primaryContainer = Color(0xFF064E3B),
     onPrimaryContainer = Color(0xFFA7F3D0),
     secondary = Color(0xFF38BDF8),
-    background = Color(0xFF0B1120),
-    surface = Color(0xFF111827),
-    surfaceVariant = Color(0xFF1E293B),
+    background = Color(0xFF111315),
+    surface = Color(0xFF181B1F),
+    surfaceVariant = Color(0xFF242931),
     onBackground = Color(0xFFF8FAFC),
     onSurface = Color(0xFFF1F5F9),
     onSurfaceVariant = Color(0xFF94A3B8),
@@ -44,7 +42,7 @@ class MainActivity : ComponentActivity() {
 
     private var deepLinkPairPayload by mutableStateOf<String?>(null)
     private var deepLinkLicenseKey by mutableStateOf<String?>(null)
-    private var resumeTick by mutableStateOf(0)
+    private var resumeTick by mutableIntStateOf(0)
     private var backendForceUpdate by mutableStateOf(false)
     private lateinit var appUpdateManager: AppUpdateManager
 
@@ -56,24 +54,19 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private val notificationPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { _ -> }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
+            navigationBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)
+        )
 
         appUpdateManager = AppUpdateManagerFactory.create(this)
         try {
             appUpdateManager.registerListener(installStateListener)
         } catch (_: Exception) {}
         checkPlayStoreInAppUpdate(resumeOnly = false)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-            }
-        }
 
         val prefs = getSharedPreferences("sweepr_vpn_prefs", Context.MODE_PRIVATE)
         var deviceId = prefs.getString("device_id", null)

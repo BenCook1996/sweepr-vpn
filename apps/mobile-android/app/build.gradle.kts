@@ -29,10 +29,10 @@ android {
         applicationId = "com.sweepr.vpn"
         minSdk = 26
         targetSdk = 36
-        versionCode = 17
-        versionName = "2.5.1"
+        versionCode = 18
+        versionName = "2.5.2"
 
-        resourceConfigurations += listOf("en", "de", "fr", "ja")
+        resourceConfigurations += listOf("en")
     }
 
     signingConfigs {
@@ -97,6 +97,8 @@ dependencies {
     implementation("com.wireguard.android:tunnel:1.0.20260102")
     implementation("com.android.billingclient:billing-ktx:8.0.0")
     implementation("com.google.android.play:app-update-ktx:2.1.0")
+    implementation("com.google.android.play:review-ktx:2.0.2")
+    implementation("com.google.android.gms:play-services-code-scanner:16.1.0")
 }
 
 configurations.all {

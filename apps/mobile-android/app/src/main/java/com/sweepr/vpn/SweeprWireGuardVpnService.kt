@@ -26,6 +26,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.io.BufferedReader
+import java.io.File
 import java.io.StringReader
 
 data class VpnTunnelState(
@@ -40,7 +41,6 @@ data class VpnTunnelState(
     val txBytes: Long = 0L,
     val connectedSinceMs: Long = 0L,
     val dnsShieldEnabled: Boolean = true,
-    val killSwitchEnabled: Boolean = false,
     val lanBypassEnabled: Boolean = false,
     val lastError: String? = null
 )
@@ -58,7 +58,6 @@ class SweeprWireGuardVpnService : VpnService() {
         const val EXTRA_ADDRESS = "address"
         const val EXTRA_DNS = "dns"
         const val EXTRA_DNS_SHIELD = "dns_shield"
-        const val EXTRA_KILL_SWITCH = "kill_switch"
         const val EXTRA_LAN_BYPASS = "lan_bypass"
 
         private const val CHANNEL_ID = "sweepr_vpn_tunnel_channel"
@@ -84,6 +83,42 @@ class SweeprWireGuardVpnService : VpnService() {
                 lastError = error
             )
         }
+
+        fun reconnectFromSavedConfig(context: Context) {
+            val appCtx = context.applicationContext
+            val prefs = appCtx.getSharedPreferences("sweepr_vpn_prefs", Context.MODE_PRIVATE)
+            val savedKey = prefs.getString("license_key", "").orEmpty()
+            val confFile = File(appCtx.filesDir, "sweepr0.conf")
+            val savedConf = try {
+                if (confFile.exists()) confFile.readText(Charsets.UTF_8) else ""
+            } catch (_: Exception) {
+                ""
+            }
+            if (savedKey.isBlank() || !savedConf.contains("PrivateKey")) return
+            val serverCode = prefs.getString("selected_server", "UK-LON-01") ?: "UK-LON-01"
+            val serverName = prefs.getString("selected_server_label", serverCode) ?: serverCode
+            val rawAddress = prefs.getString("wg_cached_addr_$serverCode", null) ?: "10.64.0.2/32"
+            val dnsShield = prefs.getBoolean("smart_tv_dns_shield", true)
+            val lanBypass = prefs.getBoolean("lan_bypass", false)
+            val dnsValue = if (dnsShield) "10.64.0.1, 1.1.1.2" else "10.64.0.1, 1.1.1.1"
+            val intent = Intent(appCtx, SweeprWireGuardVpnService::class.java).apply {
+                action = ACTION_CONNECT
+                putExtra(EXTRA_WG_CONFIG, savedConf)
+                putExtra(EXTRA_SERVER_CODE, serverCode)
+                putExtra(EXTRA_SERVER_NAME, serverName)
+                putExtra(EXTRA_ADDRESS, rawAddress)
+                putExtra(EXTRA_DNS, dnsValue)
+                putExtra(EXTRA_DNS_SHIELD, dnsShield)
+                putExtra(EXTRA_LAN_BYPASS, lanBypass)
+            }
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    appCtx.startForegroundService(intent)
+                } else {
+                    appCtx.startService(intent)
+                }
+            } catch (_: Exception) {}
+        }
     }
 
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
@@ -107,33 +142,19 @@ class SweeprWireGuardVpnService : VpnService() {
     }
 
     private fun getOrCreateBackend(): GoBackend {
-        return backend ?: GoBackend(applicationContext).also { backend = it }
+        return backend ?: GoBackend(applicationContext).also { go ->
+            try {
+                GoBackend.setAlwaysOnCallback {
+                    reconnectFromSavedConfig(applicationContext)
+                }
+            } catch (_: Exception) {}
+            backend = go
+        }
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val action = intent?.action ?: ACTION_CONNECT
-        if (action == ACTION_DISCONNECT || action == ACTION_STOP_LEGACY) {
-            serviceScope.launch {
-                teardownTunnel()
-                stopSelf()
-            }
-            return START_NOT_STICKY
-        }
-
-        val wgConfig = intent?.getStringExtra(EXTRA_WG_CONFIG).orEmpty()
-        val serverCode = intent?.getStringExtra(EXTRA_SERVER_CODE) ?: "UK-LON-01"
-        val serverName = intent?.getStringExtra(EXTRA_SERVER_NAME) ?: serverCode
-        val rawAddress = intent?.getStringExtra(EXTRA_ADDRESS) ?: parseConfField(wgConfig, "Address") ?: "10.64.0.2/32"
-        val dnsShield = intent?.getBooleanExtra(EXTRA_DNS_SHIELD, true) ?: true
-        val killSwitch = intent?.getBooleanExtra(EXTRA_KILL_SWITCH, false) ?: false
-        val lanBypass = intent?.getBooleanExtra(EXTRA_LAN_BYPASS, false) ?: false
-        val rawDns = intent?.getStringExtra(EXTRA_DNS)
-            ?.takeIf { it.contains("10.64.0.1") }
-            ?: if (dnsShield) "10.64.0.1, 1.1.1.2" else "10.64.0.1, 1.1.1.1"
-        val endpoint = parseConfField(wgConfig, "Endpoint").orEmpty()
-
+    private fun promoteForegroundNotification(serverName: String, rawAddress: String, isConnecting: Boolean) {
         ensureNotificationChannel()
-        val notification = buildForegroundNotification(serverName, rawAddress)
+        val notification = buildForegroundNotification(serverName, rawAddress, isConnecting)
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                 startForeground(
@@ -147,6 +168,69 @@ class SweeprWireGuardVpnService : VpnService() {
         } catch (_: Exception) {
             // Continue establishing tunnel if foreground promotion is restricted
         }
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        if (intent == null) {
+            val prefs = getSharedPreferences("sweepr_vpn_prefs", Context.MODE_PRIVATE)
+            val savedKey = prefs.getString("license_key", "").orEmpty()
+            val confFile = File(filesDir, "sweepr0.conf")
+            val savedConf = try {
+                if (confFile.exists()) confFile.readText(Charsets.UTF_8) else ""
+            } catch (_: Exception) {
+                ""
+            }
+            if (savedKey.isBlank() || !savedConf.contains("PrivateKey")) {
+                stopSelf()
+                return START_NOT_STICKY
+            }
+            val serverCode = prefs.getString("selected_server", "UK-LON-01") ?: "UK-LON-01"
+            val serverName = prefs.getString("selected_server_label", serverCode) ?: serverCode
+            val rawAddress = prefs.getString("wg_cached_addr_$serverCode", null)
+                ?: parseConfField(savedConf, "Address")
+                ?: "10.64.0.2/32"
+            val dnsShield = prefs.getBoolean("smart_tv_dns_shield", true)
+            val lanBypass = prefs.getBoolean("lan_bypass", false)
+            val rawDns = if (dnsShield) "10.64.0.1, 1.1.1.2" else "10.64.0.1, 1.1.1.1"
+            val endpoint = parseConfField(savedConf, "Endpoint").orEmpty()
+
+            promoteForegroundNotification(serverName, rawAddress, isConnecting = true)
+            serviceScope.launch {
+                establishWireGuardTunnel(
+                    wgConfig = savedConf,
+                    serverCode = serverCode,
+                    serverName = serverName,
+                    rawAddress = rawAddress,
+                    rawDns = rawDns,
+                    endpoint = endpoint,
+                    dnsShield = dnsShield,
+                    lanBypass = lanBypass
+                )
+            }
+            return START_STICKY
+        }
+
+        val action = intent.action ?: ACTION_CONNECT
+        if (action == ACTION_DISCONNECT || action == ACTION_STOP_LEGACY) {
+            serviceScope.launch {
+                teardownTunnel()
+                stopSelf()
+            }
+            return START_NOT_STICKY
+        }
+
+        val wgConfig = intent.getStringExtra(EXTRA_WG_CONFIG).orEmpty()
+        val serverCode = intent.getStringExtra(EXTRA_SERVER_CODE) ?: "UK-LON-01"
+        val serverName = intent.getStringExtra(EXTRA_SERVER_NAME) ?: serverCode
+        val rawAddress = intent.getStringExtra(EXTRA_ADDRESS) ?: parseConfField(wgConfig, "Address") ?: "10.64.0.2/32"
+        val dnsShield = intent.getBooleanExtra(EXTRA_DNS_SHIELD, true)
+        val lanBypass = intent.getBooleanExtra(EXTRA_LAN_BYPASS, false)
+        val rawDns = intent.getStringExtra(EXTRA_DNS)
+            ?.takeIf { it.contains("10.64.0.1") }
+            ?: if (dnsShield) "10.64.0.1, 1.1.1.2" else "10.64.0.1, 1.1.1.1"
+        val endpoint = parseConfField(wgConfig, "Endpoint").orEmpty()
+
+        promoteForegroundNotification(serverName, rawAddress, isConnecting = true)
 
         serviceScope.launch {
             establishWireGuardTunnel(
@@ -157,7 +241,6 @@ class SweeprWireGuardVpnService : VpnService() {
                 rawDns = rawDns,
                 endpoint = endpoint,
                 dnsShield = dnsShield,
-                killSwitch = killSwitch,
                 lanBypass = lanBypass
             )
         }
@@ -172,7 +255,6 @@ class SweeprWireGuardVpnService : VpnService() {
         rawDns: String,
         endpoint: String,
         dnsShield: Boolean,
-        killSwitch: Boolean,
         lanBypass: Boolean
     ) {
         tunnelMutex.withLock {
@@ -221,16 +303,21 @@ class SweeprWireGuardVpnService : VpnService() {
                     txBytes = 0L,
                     connectedSinceMs = now,
                     dnsShieldEnabled = dnsShield,
-                    killSwitchEnabled = killSwitch,
                     lanBypassEnabled = lanBypass,
                     lastError = null
                 )
+                // Only show "Connected" notification once WireGuard GoBackend reaches UP state
+                try {
+                    val mgr = getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
+                    mgr?.notify(NOTIFICATION_ID, buildForegroundNotification(serverName, rawAddress, isConnecting = false))
+                } catch (_: Exception) {}
+
                 startTrafficStatsLoop()
             } catch (e: Exception) {
                 _tunnelState.value = _tunnelState.value.copy(
                     isConnected = false,
                     isConnecting = false,
-                    lastError = "WireGuard tunnel error: ${e.message ?: "Unable to establish encrypted tunnel."}"
+                    lastError = "Unable to connect: ${e.message ?: "WireGuard tunnel error."}"
                 )
                 try {
                     stopForeground(STOP_FOREGROUND_REMOVE)
@@ -429,17 +516,21 @@ class SweeprWireGuardVpnService : VpnService() {
             val mgr = getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager ?: return
             val channel = NotificationChannel(
                 CHANNEL_ID,
-                "SWEEPR WireGuard VPN Status",
+                "SWEEPR VPN Status",
                 NotificationManager.IMPORTANCE_LOW
             ).apply {
-                description = "Shows active SWEEPR WireGuard VPN connection and quick disconnect action"
+                description = "Shows active SWEEPR VPN tunnel connection and quick disconnect action"
                 setShowBadge(false)
             }
             mgr.createNotificationChannel(channel)
         }
     }
 
-    private fun buildForegroundNotification(serverName: String, assignedAddress: String): Notification {
+    private fun buildForegroundNotification(
+        serverName: String,
+        assignedAddress: String,
+        isConnecting: Boolean
+    ): Notification {
         val openIntent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
         }
@@ -467,10 +558,21 @@ class SweeprWireGuardVpnService : VpnService() {
             Notification.Builder(this)
         }
 
+        val title = if (isConnecting) {
+            "SWEEPR VPN • Connecting to $serverName…"
+        } else {
+            "SWEEPR VPN • Connected to $serverName"
+        }
+        val text = if (isConnecting) {
+            "Establishing encrypted WireGuard® tunnel…"
+        } else {
+            "Protected (${assignedAddress.substringBefore("/")}) • Private DNS 10.64.0.1"
+        }
+
         return builder
             .setSmallIcon(android.R.drawable.ic_lock_lock)
-            .setContentTitle("SWEEPR WireGuard VPN • Connected to $serverName")
-            .setContentText("Encrypted Tunnel Active (${assignedAddress.substringBefore("/")}) • In-Tunnel DNS 10.64.0.1")
+            .setContentTitle(title)
+            .setContentText(text)
             .setContentIntent(openPending)
             .setOngoing(true)
             .addAction(

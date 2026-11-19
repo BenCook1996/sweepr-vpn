@@ -5,3 +5,9 @@
 -dontwarn com.android.billingclient.**
 -keep class com.google.android.play.core.appupdate.** { *; }
 -dontwarn com.google.android.play.core.appupdate.**
+-keep class com.google.android.play.core.review.** { *; }
+-dontwarn com.google.android.play.core.review.**
+-keep class com.google.mlkit.** { *; }
+-dontwarn com.google.mlkit.**
+-keep class com.google.android.gms.common.moduleinstall.** { *; }
+-dontwarn com.google.android.gms.common.moduleinstall.**

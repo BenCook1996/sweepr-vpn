@@ -7048,6 +7048,7 @@ self.addEventListener('fetch', e => {
     const bearerKey = String(req.headers.authorization || '').replace(/^Bearer\s+/i, '').trim();
     const rawKey = String(body?.key || body?.code || body?.license_key || body?.activation_code || bearerKey || '').trim();
     const signedTx = String(body?.signed_transaction_info || body?.signedTransactionInfo || '').trim();
+    const playToken = String(body?.purchase_token || body?.google_play_purchase_token || '').trim();
 
     let acc = null;
     const sess = verifySessionCookie(req);
@@ -7061,6 +7062,15 @@ self.addEventListener('fetch', e => {
         const ownerId = origTxId ? claimedAppleOriginalTransactionIds.get(origTxId) : null;
         if (ownerId) {
           acc = accountsById.get(ownerId) || null;
+        }
+      }
+    }
+    if (!acc && playToken) {
+      const ownerId = claimedPlayPurchaseTokens.get(playToken);
+      if (ownerId) {
+        const candidate = accountsById.get(ownerId) || null;
+        if (candidate && (!normEmail || String(candidate.email || '').toLowerCase() === normEmail)) {
+          acc = candidate;
         }
       }
     }
@@ -8236,6 +8246,7 @@ self.addEventListener('fetch', e => {
         city: n.city,
         flag: n.flag,
         online: Boolean(h),
+        public_key: String(n.public_key || '').trim() || undefined,
         devices: h ? h.devices : null,
         probe_ms: h?.probeMs ?? null,
         p99_ms: h?.p99Ms ?? null
@@ -8285,7 +8296,7 @@ self.addEventListener('fetch', e => {
       if (!/^\d{1,3}(?:\.\d{1,3}){3}\/\d{1,2}$/.test(assignedAddress)) {
         throw new Error('invalid_assigned_address');
       }
-      const acrShield = Boolean(body?.acr_shield);
+      const acrShield = body?.acr_shield !== undefined ? Boolean(body?.acr_shield) : Boolean(body?.dns_shield);
       const nodeHasIpv6 = Boolean(node.ipv6);
       const ipv6Dns = Boolean(body?.ipv6_dns) && nodeHasIpv6;
       const assignedDns = acrShield
@@ -8347,7 +8358,7 @@ self.addEventListener('fetch', e => {
       }
       const serverPubKey = pinnedPubKey || agentPubKey;
       const assignedAddress = String(r.address || '10.64.0.2/32').trim();
-      const acrShield = Boolean(body?.acr_shield);
+      const acrShield = body?.acr_shield !== undefined ? Boolean(body?.acr_shield) : Boolean(body?.dns_shield);
       const nodeHasIpv6 = Boolean(node.ipv6);
       const ipv6Dns = Boolean(body?.ipv6_dns) && nodeHasIpv6;
       const assignedDns = acrShield

@@ -2,6 +2,8 @@ package com.sweepr.vpn
 
 import android.app.Activity
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClientStateListener
@@ -16,6 +18,8 @@ import com.android.billingclient.api.QueryPurchasesParams
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.lang.ref.WeakReference
+import kotlin.math.roundToInt
 
 data class PlayPlanListing(
     val planKey: String,
@@ -24,12 +28,18 @@ data class PlayPlanListing(
     val subtitle: String,
     val formattedPrice: String,
     val badge: String,
-    val productDetails: ProductDetails? = null
+    val productDetails: ProductDetails
 )
 
 class BillingHelper(
     context: Context,
-    private val onPurchaseVerified: (productId: String, purchaseToken: String, orderId: String?, planKey: String) -> Unit,
+    private val onPurchaseVerified: (
+        productId: String,
+        purchaseToken: String,
+        orderId: String?,
+        planKey: String,
+        isAcknowledged: Boolean
+    ) -> Unit,
     private val onBillingMessage: (String) -> Unit
 ) : PurchasesUpdatedListener {
 
@@ -38,37 +48,22 @@ class BillingHelper(
         const val PRODUCT_SIX_MONTH = "sweepr_vpn_6month"
         const val PRODUCT_ANNUAL = "sweepr_vpn_annual"
 
-        val DEFAULT_PLANS = listOf(
-            PlayPlanListing(
-                planKey = "monthly",
-                productId = PRODUCT_MONTHLY,
-                title = "Monthly Plan (Intro Offer)",
-                subtitle = "£1.99 first month, then £12.49/mo • Up to 3 devices",
-                formattedPrice = "£1.99",
-                badge = "POPULAR • £1.99 INTRO"
-            ),
-            PlayPlanListing(
-                planKey = "annual",
-                productId = PRODUCT_ANNUAL,
-                title = "Annual Pro Plan",
-                subtitle = "£74.99/yr (£6.25/mo) • Save 50% • Up to 3 devices",
-                formattedPrice = "£74.99/yr",
-                badge = "BEST VALUE • SAVE 50%"
-            ),
-            PlayPlanListing(
-                planKey = "six_month",
-                productId = PRODUCT_SIX_MONTH,
-                title = "6-Month Pro Plan",
-                subtitle = "£48.99 every 6 months • Save 35% • Up to 3 devices",
-                formattedPrice = "£48.99/6mo",
-                badge = "SAVE 35%"
-            )
+        private val PLAN_ORDER = listOf(
+            PRODUCT_ANNUAL to "annual",
+            PRODUCT_MONTHLY to "monthly",
+            PRODUCT_SIX_MONTH to "six_month"
         )
     }
 
     private val appContext = context.applicationContext
-    private val _plans = MutableStateFlow(DEFAULT_PLANS)
+    private val _plans = MutableStateFlow<List<PlayPlanListing>>(emptyList())
     val plans: StateFlow<List<PlayPlanListing>> = _plans.asStateFlow()
+
+    private val _isLoadingPlans = MutableStateFlow(true)
+    val isLoadingPlans: StateFlow<Boolean> = _isLoadingPlans.asStateFlow()
+
+    private val _billingUnavailable = MutableStateFlow(false)
+    val billingUnavailable: StateFlow<Boolean> = _billingUnavailable.asStateFlow()
 
     private val _isBillingReady = MutableStateFlow(false)
     val isBillingReady: StateFlow<Boolean> = _isBillingReady.asStateFlow()
@@ -84,23 +79,37 @@ class BillingHelper(
         .build()
 
     private var pendingManualRestore: Boolean = false
-    private var pendingPurchaseRequest: Pair<java.lang.ref.WeakReference<Activity>, String>? = null
-    private val mainHandler = android.os.Handler(android.os.Looper.getMainLooper())
+    private var pendingPurchaseRequest: Pair<WeakReference<Activity>, String>? = null
+    private val mainHandler = Handler(Looper.getMainLooper())
 
     private fun postBillingMessage(msg: String) {
-        if (android.os.Looper.myLooper() == android.os.Looper.getMainLooper()) {
+        if (Looper.myLooper() == Looper.getMainLooper()) {
             onBillingMessage(msg)
         } else {
             mainHandler.post { onBillingMessage(msg) }
         }
     }
 
-    private fun postPurchaseVerified(productId: String, purchaseToken: String, orderId: String?, planKey: String) {
-        if (android.os.Looper.myLooper() == android.os.Looper.getMainLooper()) {
-            onPurchaseVerified(productId, purchaseToken, orderId, planKey)
+    private fun postPurchaseVerified(
+        productId: String,
+        purchaseToken: String,
+        orderId: String?,
+        planKey: String,
+        isAcknowledged: Boolean
+    ) {
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            onPurchaseVerified(productId, purchaseToken, orderId, planKey, isAcknowledged)
         } else {
-            mainHandler.post { onPurchaseVerified(productId, purchaseToken, orderId, planKey) }
+            mainHandler.post {
+                onPurchaseVerified(productId, purchaseToken, orderId, planKey, isAcknowledged)
+            }
         }
+    }
+
+    fun retryConnection() {
+        _isLoadingPlans.value = true
+        _billingUnavailable.value = false
+        startConnection()
     }
 
     fun startConnection() {
@@ -115,11 +124,13 @@ class BillingHelper(
             }
             return
         }
+        _isLoadingPlans.value = true
         try {
             billingClient.startConnection(object : BillingClientStateListener {
                 override fun onBillingSetupFinished(result: BillingResult) {
                     if (result.responseCode == BillingClient.BillingResponseCode.OK) {
                         _isBillingReady.value = true
+                        _billingUnavailable.value = false
                         querySubscriptionProducts()
                         if (pendingManualRestore) {
                             pendingManualRestore = false
@@ -129,11 +140,15 @@ class BillingHelper(
                         }
                     } else {
                         _isBillingReady.value = false
+                        _isLoadingPlans.value = false
+                        _billingUnavailable.value = true
                         val failedPurchase = pendingPurchaseRequest
                         pendingPurchaseRequest = null
                         if (pendingManualRestore || failedPurchase != null) {
                             pendingManualRestore = false
-                            postBillingMessage("Google Play Store is unavailable on this device. You can also subscribe at sweeprvpn.com/order.")
+                            postBillingMessage(
+                                "Google Play Store billing is unavailable on this device. Please ensure you are signed in to Google Play and try again."
+                            )
                         }
                     }
                 }
@@ -144,6 +159,8 @@ class BillingHelper(
             })
         } catch (_: Exception) {
             _isBillingReady.value = false
+            _isLoadingPlans.value = false
+            _billingUnavailable.value = true
         }
     }
 
@@ -152,7 +169,7 @@ class BillingHelper(
             .setProductType(BillingClient.ProductType.SUBS)
             .build()
         billingClient.queryPurchasesAsync(params) { result, purchases ->
-            if (result.responseCode == BillingClient.BillingResponseCode.OK && !purchases.isNullOrEmpty()) {
+            if (result.responseCode == BillingClient.BillingResponseCode.OK && purchases.isNotEmpty()) {
                 for (purchase in purchases) {
                     if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
                         handlePurchase(purchase)
@@ -162,8 +179,59 @@ class BillingHelper(
         }
     }
 
+    /**
+     * Deterministically selects the best eligible offer for a subscription product:
+     * prefers an eligible promotional/intro offer (lowest upfront phase price), falling
+     * back to the base plan (`offerId == null`) or first available offer.
+     */
+    private fun selectBestOffer(details: ProductDetails): ProductDetails.SubscriptionOfferDetails? {
+        val offers = details.subscriptionOfferDetails.orEmpty()
+        if (offers.isEmpty()) return null
+        val promoOffers = offers.filter { !it.offerId.isNullOrBlank() }
+        if (promoOffers.isNotEmpty()) {
+            return promoOffers.minByOrNull { offer ->
+                offer.pricingPhases.pricingPhaseList.firstOrNull()?.priceAmountMicros ?: Long.MAX_VALUE
+            }
+        }
+        return offers.firstOrNull { it.offerId.isNullOrBlank() } ?: offers.firstOrNull()
+    }
+
+    private fun formatBillingPeriod(isoPeriod: String): String {
+        return when (isoPeriod.uppercase()) {
+            "P1W" -> "week"
+            "P2W" -> "2 weeks"
+            "P1M" -> "month"
+            "P3M" -> "3 months"
+            "P6M" -> "6 months"
+            "P1Y" -> "year"
+            else -> {
+                val body = isoPeriod.uppercase().removePrefix("P")
+                when {
+                    body.endsWith("D") -> {
+                        val n = body.dropLast(1).toIntOrNull() ?: 1
+                        if (n == 1) "day" else "$n days"
+                    }
+                    body.endsWith("W") -> {
+                        val n = body.dropLast(1).toIntOrNull() ?: 1
+                        if (n == 1) "week" else "$n weeks"
+                    }
+                    body.endsWith("M") -> {
+                        val n = body.dropLast(1).toIntOrNull() ?: 1
+                        if (n == 1) "month" else "$n months"
+                    }
+                    body.endsWith("Y") -> {
+                        val n = body.dropLast(1).toIntOrNull() ?: 1
+                        if (n == 1) "year" else "$n years"
+                    }
+                    else -> "period"
+                }
+            }
+        }
+    }
+
     private fun querySubscriptionProducts() {
-        val productList = listOf(PRODUCT_MONTHLY, PRODUCT_ANNUAL, PRODUCT_SIX_MONTH).map { prodId ->
+        _isLoadingPlans.value = true
+        val productList = PLAN_ORDER.map { (prodId, _) ->
             QueryProductDetailsParams.Product.newBuilder()
                 .setProductId(prodId)
                 .setProductType(BillingClient.ProductType.SUBS)
@@ -177,41 +245,82 @@ class BillingHelper(
             val detailsList = queryProductDetailsResult.productDetailsList
             if (result.responseCode == BillingClient.BillingResponseCode.OK && detailsList.isNotEmpty()) {
                 val byId = detailsList.associateBy { it.productId }
-                _plans.value = DEFAULT_PLANS.map { item ->
-                    val match = byId[item.productId]
-                    val phases = match?.subscriptionOfferDetails
-                        ?.firstOrNull()
-                        ?.pricingPhases
-                        ?.pricingPhaseList
-                        .orEmpty()
-                    val firstPhase = phases.firstOrNull()
-                    val lastPhase = phases.lastOrNull()
-                    val periodLabel = when (item.planKey) {
-                        "monthly" -> "month"
-                        "six_month" -> "6 months"
-                        else -> "year"
+                val monthlyBaseMicros = byId[PRODUCT_MONTHLY]
+                    ?.let { selectBestOffer(it) }
+                    ?.pricingPhases
+                    ?.pricingPhaseList
+                    ?.lastOrNull()
+                    ?.priceAmountMicros
+                    ?: 0L
+
+                val mappedPlans = PLAN_ORDER.mapNotNull { (prodId, planKey) ->
+                    val match = byId[prodId] ?: return@mapNotNull null
+                    val bestOffer = selectBestOffer(match) ?: return@mapNotNull null
+                    val phases = bestOffer.pricingPhases.pricingPhaseList
+                    val firstPhase = phases.firstOrNull() ?: return@mapNotNull null
+                    val lastPhase = phases.lastOrNull() ?: firstPhase
+
+                    val firstPeriod = formatBillingPeriod(firstPhase.billingPeriod)
+                    val recurringPeriod = formatBillingPeriod(lastPhase.billingPeriod)
+
+                    val title = when (planKey) {
+                        "annual" -> "Annual Pro Plan"
+                        "six_month" -> "6-Month Pro Plan"
+                        else -> if (phases.size >= 2) "Monthly Pro (Intro Offer)" else "Monthly Pro Plan"
                     }
-                    val dynamicSubtitle = when {
-                        phases.size >= 2 && firstPhase != null && lastPhase != null ->
-                            "${firstPhase.formattedPrice} first period, then ${lastPhase.formattedPrice}/$periodLabel • Up to 3 devices"
-                        firstPhase != null ->
-                            "${firstPhase.formattedPrice} billed every $periodLabel • Cancel anytime • Up to 3 devices"
-                        else -> item.subtitle
+
+                    val subtitle = when {
+                        phases.size >= 2 && firstPhase.priceAmountMicros == 0L ->
+                            "Free for $firstPeriod, then ${lastPhase.formattedPrice}/$recurringPeriod • Up to 3 devices"
+                        phases.size >= 2 ->
+                            "${firstPhase.formattedPrice} first $firstPeriod, then ${lastPhase.formattedPrice}/$recurringPeriod • Up to 3 devices"
+                        else ->
+                            "${lastPhase.formattedPrice} per $recurringPeriod • Cancel anytime • Up to 3 devices"
                     }
-                    val dynamicBadge = if (phases.size >= 2 && firstPhase != null) {
-                        "POPULAR • ${firstPhase.formattedPrice} INTRO"
-                    } else {
-                        item.badge
+
+                    val savingsPct: Int = if (monthlyBaseMicros > 0L && lastPhase.priceAmountMicros > 0L) {
+                        val monthsInPlan = when (planKey) {
+                            "annual" -> 12.0
+                            "six_month" -> 6.0
+                            else -> 1.0
+                        }
+                        if (monthsInPlan > 1.0) {
+                            val baselineMicros = monthlyBaseMicros * monthsInPlan
+                            (((baselineMicros - lastPhase.priceAmountMicros) / baselineMicros) * 100.0)
+                                .roundToInt()
+                                .coerceIn(0, 90)
+                        } else 0
+                    } else 0
+
+                    val badge = when {
+                        phases.size >= 2 && firstPhase.priceAmountMicros == 0L -> "FREE TRIAL"
+                        phases.size >= 2 -> "INTRO • ${firstPhase.formattedPrice}"
+                        planKey == "annual" && savingsPct > 0 -> "BEST VALUE • SAVE $savingsPct%"
+                        planKey == "annual" -> "BEST VALUE"
+                        planKey == "six_month" && savingsPct > 0 -> "SAVE $savingsPct%"
+                        planKey == "six_month" -> "6 MONTHS"
+                        else -> "FLEXIBLE"
                     }
-                    item.copy(
-                        subtitle = dynamicSubtitle,
-                        formattedPrice = firstPhase?.formattedPrice ?: item.formattedPrice,
-                        badge = dynamicBadge,
+
+                    val ctaPrice = if (firstPhase.priceAmountMicros == 0L) "Start Trial" else firstPhase.formattedPrice
+
+                    PlayPlanListing(
+                        planKey = planKey,
+                        productId = prodId,
+                        title = title,
+                        subtitle = subtitle,
+                        formattedPrice = ctaPrice,
+                        badge = badge,
                         productDetails = match
                     )
                 }
+
+                _plans.value = mappedPlans
+                _isLoadingPlans.value = false
+                _billingUnavailable.value = mappedPlans.isEmpty()
+
                 val queued = pendingPurchaseRequest
-                if (queued != null) {
+                if (queued != null && mappedPlans.isNotEmpty()) {
                     pendingPurchaseRequest = null
                     val act = queued.first.get()
                     if (act != null && !act.isFinishing && !act.isDestroyed) {
@@ -221,27 +330,33 @@ class BillingHelper(
                     }
                 }
             } else {
+                _plans.value = emptyList()
+                _isLoadingPlans.value = false
+                _billingUnavailable.value = true
                 val failedReq = pendingPurchaseRequest
                 pendingPurchaseRequest = null
                 if (failedReq != null) {
-                    postBillingMessage("Google Play subscription offers could not be loaded on this device. You can also subscribe at sweeprvpn.com/order.")
+                    postBillingMessage(
+                        "Google Play subscription plans could not be loaded. Please check your Google Play connection and try again."
+                    )
                 }
             }
         }
     }
 
     fun launchPurchase(activity: Activity, planKey: String): Boolean {
-        val plan = _plans.value.firstOrNull { it.planKey == planKey } ?: _plans.value.first()
-        val details = plan.productDetails
-        if (!billingClient.isReady || details == null) {
-            pendingPurchaseRequest = java.lang.ref.WeakReference(activity) to planKey
-            startConnection()
-            postBillingMessage("Connecting to Google Play Billing… If Play Store is not signed in on this device, you can also complete checkout at sweeprvpn.com/order.")
+        val currentPlans = _plans.value
+        val plan = currentPlans.firstOrNull { it.planKey == planKey } ?: currentPlans.firstOrNull()
+        if (!billingClient.isReady || plan == null) {
+            pendingPurchaseRequest = WeakReference(activity) to planKey
+            retryConnection()
+            postBillingMessage("Connecting to Google Play Store…")
             return false
         }
-        val offerToken = details.subscriptionOfferDetails?.firstOrNull()?.offerToken
+        val details = plan.productDetails
+        val offerToken = selectBestOffer(details)?.offerToken
         if (offerToken.isNullOrBlank()) {
-            postBillingMessage("Subscription offer unavailable in Play Store for this region.")
+            postBillingMessage("This subscription offer is currently unavailable in Google Play for your region.")
             return false
         }
         val productDetailsParams = BillingFlowParams.ProductDetailsParams.newBuilder()
@@ -298,7 +413,7 @@ class BillingHelper(
                 postBillingMessage("Google Play checkout cancelled.")
             }
             else -> {
-                postBillingMessage("Google Play Billing message: ${result.debugMessage.ifBlank { "Could not complete purchase." }}")
+                postBillingMessage("Google Play Billing: ${result.debugMessage.ifBlank { "Could not complete purchase." }}")
             }
         }
     }
@@ -306,19 +421,33 @@ class BillingHelper(
     private fun handlePurchase(purchase: Purchase) {
         val productId = purchase.products.firstOrNull() ?: PRODUCT_ANNUAL
         val planKey = when {
-            productId.contains("month", ignoreCase = true) && !productId.contains("6", ignoreCase = true) -> "monthly"
             productId.contains("6", ignoreCase = true) || productId.contains("six", ignoreCase = true) -> "six_month"
+            productId.contains("month", ignoreCase = true) -> "monthly"
             else -> "annual"
         }
-        if (!purchase.isAcknowledged) {
-            val ackParams = AcknowledgePurchaseParams.newBuilder()
-                .setPurchaseToken(purchase.purchaseToken)
-                .build()
-            billingClient.acknowledgePurchase(ackParams) {
-                postPurchaseVerified(productId, purchase.purchaseToken, purchase.orderId, planKey)
-            }
-        } else {
-            postPurchaseVerified(productId, purchase.purchaseToken, purchase.orderId, planKey)
+        postPurchaseVerified(
+            productId = productId,
+            purchaseToken = purchase.purchaseToken,
+            orderId = purchase.orderId,
+            planKey = planKey,
+            isAcknowledged = purchase.isAcknowledged
+        )
+    }
+
+    /**
+     * Acknowledge a Google Play purchase ONLY after SWEEPR backend verification succeeds.
+     */
+    fun acknowledgePurchase(purchaseToken: String, onDone: (Boolean) -> Unit = {}) {
+        if (!billingClient.isReady || purchaseToken.isBlank()) {
+            mainHandler.post { onDone(false) }
+            return
+        }
+        val ackParams = AcknowledgePurchaseParams.newBuilder()
+            .setPurchaseToken(purchaseToken)
+            .build()
+        billingClient.acknowledgePurchase(ackParams) { result ->
+            val ok = result.responseCode == BillingClient.BillingResponseCode.OK
+            mainHandler.post { onDone(ok) }
         }
     }
 
