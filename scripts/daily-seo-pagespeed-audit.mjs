@@ -1525,11 +1525,11 @@ const topQaOpps = (kwOppsDoc.opportunities || [])
 
 const exePathForManifest = path.join(WEBSITE_DIR, 'SWEEPRVPN.exe');
 const exeBufForManifest = fs.existsSync(exePathForManifest) ? fs.readFileSync(exePathForManifest) : null;
-const exeBytesForManifest = exeBufForManifest ? exeBufForManifest.length : 741136;
+const exeBytesForManifest = exeBufForManifest ? exeBufForManifest.length : 740112;
 const exeKbForManifest = Math.round(exeBytesForManifest / 1024);
 const exeSha256ForManifest = exeBufForManifest
   ? crypto.createHash('sha256').update(exeBufForManifest).digest('hex').toUpperCase()
-  : 'EEE1C1A4BC972DE4E1405AB782BEC426C263A31DB0548E75A5C4EED47699A8FB';
+  : 'B2D1A295FE0E96709787D52865028D0867663F3B69262368524C20DF8C4DAE1D';
 
 const llmsFullContent = `# SWEEPR VPN & SWEEPR Wi-Fi Radar — Comprehensive Technical & GEO Reference (llms-full.txt)
 

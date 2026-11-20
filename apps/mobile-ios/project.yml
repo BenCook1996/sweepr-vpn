@@ -6,8 +6,7 @@ options:
     macOS: "13.0"
 packages:
   WireGuardKit:
-    url: https://github.com/WireGuard/wireguard-apple.git
-    branch: master
+    path: Vendor/wireguard-apple
 targets:
   SweeprVPN:
     type: application
