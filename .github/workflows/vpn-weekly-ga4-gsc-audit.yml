@@ -57,11 +57,9 @@ jobs:
         run: |
           git config user.name "sweepr-cloud-bot"
           git config user.email "bot@sweeprvpn.com"
-          git add website/gsc-ga4-latest-snapshot.json website/seo-strategy-performance-ledger.json website/pillar-enrichment-state.json website/indexing-queue.json GA4_AND_GSC_WEEKLY_AUDIT_LOG.md KEYWORD_OPPORTUNITIES_AUDIT_LOG.md
+          git add website/gsc-ga4-latest-snapshot.json website/seo-strategy-performance-ledger.json website/pillar-enrichment-state.json website/indexing-queue.json website/keyword-opportunities.json GA4_AND_GSC_WEEKLY_AUDIT_LOG.md KEYWORD_OPPORTUNITIES_AUDIT_LOG.md
           if ! git diff --staged --quiet; then
             git commit -m "chore(analytics): weekly cloud GA4 funnel & GSC recovery scorecard"
-            git pull --rebase -X ours origin main
-            git push origin HEAD:main
-          else
-            echo "No weekly analytics changes to commit."
           fi
+          git pull --rebase --autostash -X ours origin main
+          git push origin HEAD:main || echo "No weekly analytics commits ahead of origin/main."
