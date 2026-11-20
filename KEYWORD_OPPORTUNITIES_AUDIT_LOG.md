@@ -1,13 +1,13 @@
 # SWEEPR VPN — Automated Keyword Opportunities, Competitor SEO & Pre/Post Forecast Audit Log
 
-- **Last Audited**: `2026-11-18T13:39:24.923Z`
+- **Last Audited**: `2026-11-20T05:34:17.726Z`
 - **Canonical Sitemap Corpus**: `87` URLs (`28` consolidated cannibal slugs blocked)
 - **Total Candidate Queries Evaluated**: `372`
 - **Approved / Applied `CREATE_NEW_PILLAR`**: `26` (Caps: `2/day`, `10/week` | Rolling 7-Day Post-Consolidation Created: `0`)
 - **Approved / Applied `ENRICH_EXISTING`**: `57`
 - **Filtered / Rejected (`REJECT_OR_DEFER`)**: `196`
 - **Pre/Post Strategy Ledger**: `website/seo-strategy-performance-ledger.json` (`119` tracked entries; live input from `website/gsc-ga4-latest-snapshot.json`)
-- **Quality Gate Status**: **`10/10 PASS`** (`19` automated self-healing repairs applied)
+- **Quality Gate Status**: **`10/10 PASS`** (`0` automated self-healing repairs applied)
 
 ## 1. 10-Assertion Automated Quality Gate Scorecard
 
@@ -22,7 +22,7 @@
 | `7. GSC_14DAY_TITLE_COOLDOWN_LOCK` | **PASS** | All 24 Top GSC URLs protected by unified 14-day title cooldown lock |
 | `8. NEW_PILLAR_40PCT_STRUCTURED_DATA` | **PASS** | All CREATE_NEW_PILLAR briefs >= 48% unique structured CLI/benchmark data |
 | `9. COPY_FLUENCY_AND_NO_DOUBLE_PARENS` | **PASS** | 0 double parentheticals, 0 duplicate mid-query verbs, and natural FAQ questions |
-| `10. PRE_POST_LEDGER_AND_CALIBRATION` | **PASS** | 116 entries tracked with ground-truth GSC telemetry (535 28d property impr, 0 synthetic inflation) & bounded calibrationMultipliers [0.75, 1.35] |
+| `10. PRE_POST_LEDGER_AND_CALIBRATION` | **PASS** | 116 entries tracked with ground-truth GSC telemetry (534 28d property impr, 0 synthetic inflation) & bounded calibrationMultipliers [0.75, 1.35] |
 
 ## 2. Approved / Applied `CREATE_NEW_PILLAR` Queue (With Calibrated KD, Volume, Time-to-Rank & Transactional Forecast)
 
@@ -111,22 +111,4 @@
 
 ## 6. Automated Self-Healing Repair Log
 
-- Healed enrichment H2/FAQ on "mullvad port forwarding alternative" (/vs/mullvad): "2026 Mullvad Renewal Price Hike & Cancellation Comparison (Mullvad Port Forwarding Alternative)" -> "2026 Mullvad Renewal Price Hike & Cancellation Comparison (Mullvad Port Forwarding Alternative)"
-- Healed enrichment H2/FAQ on "protonvpn wireguard router" (/vs/protonvpn): "2026 ProtonVPN Renewal Price Hike & Cancellation Comparison (ProtonVPN WireGuard Router)" -> "2026 ProtonVPN Renewal Price Hike & Cancellation Comparison (ProtonVPN WireGuard Router)"
-- Healed enrichment H2/FAQ on "does bitdefender vpn use wireguard" (/vs/bitdefender-vpn-renewal-alternative): "2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Does Bitdefender VPN Use WireGuard)" -> "2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Does Bitdefender VPN Use WireGuard)"
-- Healed enrichment H2/FAQ on "cost of bitdefender vpn" (/vs/bitdefender-vpn-renewal-alternative): "2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Cost of Bitdefender VPN)" -> "2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Cost of Bitdefender VPN)"
-- Healed enrichment H2/FAQ on "bitdefender vpn renewal price alternatives" (/vs/bitdefender-vpn-renewal-alternative): "2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Bitdefender VPN Renewal Price Alternatives)" -> "2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Bitdefender VPN Renewal Price Alternatives)"
-- Healed enrichment H2/FAQ on "mcafee safe connect alternatives" (/vs/mcafee-safe-connect-auto-renewal-alternative): "2026 McAfee Safe Connect Auto Renewal Alternative Renewal Price Hike & Cancellation Comparison (McAfee Safe Connect Alternatives)" -> "2026 McAfee Safe Connect Auto Renewal Alternative Renewal Price Hike & Cancellation Comparison (McAfee Safe Connect Alternatives)"
-- Healed enrichment H2/FAQ on "how much does bitdefender vpn cost" (/vs/bitdefender-vpn-renewal-alternative): "2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (How Much Does Bitdefender VPN Cost)" -> "2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (How Much Does Bitdefender VPN Cost)"
-- Healed enrichment H2/FAQ on "bitdefender vpn renewal price alternative" (/vs/bitdefender-vpn-renewal-alternative): "2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Bitdefender VPN Renewal Price Alternative)" -> "2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Bitdefender VPN Renewal Price Alternative)"
-- Healed enrichment H2/FAQ on "cancel mcafee vpn auto renewal" (/vs/mcafee-safe-connect-auto-renewal-alternative): "2026 McAfee Safe Connect Auto Renewal Alternative Renewal Price Hike & Cancellation Comparison (Cancel McAfee VPN Auto Renewal)" -> "2026 McAfee Safe Connect Auto Renewal Alternative Renewal Price Hike & Cancellation Comparison (Cancel McAfee VPN Auto Renewal)"
-- Healed enrichment H2/FAQ on "is bitdefender vpn worth it" (/vs/bitdefender-vpn-renewal-alternative): "2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Is Bitdefender VPN Worth It)" -> "2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Is Bitdefender VPN Worth It)"
-- Healed enrichment H2/FAQ on "nordvpn renewal price" (/vs/nordvpn): "2026 NordVPN Renewal Price Hike & Cancellation Comparison (NordVPN Renewal Price)" -> "2026 NordVPN Renewal Price Hike & Cancellation Comparison (NordVPN Renewal Price)"
-- Healed enrichment H2/FAQ on "surfshark renewal price" (/vs/surfshark): "2026 Surfshark Renewal Price Hike & Cancellation Comparison (Surfshark Renewal Price)" -> "2026 Surfshark Renewal Price Hike & Cancellation Comparison (Surfshark Renewal Price)"
-- Healed enrichment H2/FAQ on "expressvpn renewal price" (/vs/expressvpn): "2026 ExpressVPN Renewal Price Hike & Cancellation Comparison (ExpressVPN Renewal Price)" -> "2026 ExpressVPN Renewal Price Hike & Cancellation Comparison (ExpressVPN Renewal Price)"
-- Healed enrichment H2/FAQ on "cyberghost renewal price" (/vs/cyberghost): "2026 CyberGhost Renewal Price Hike & Cancellation Comparison (CyberGhost Renewal Price)" -> "2026 CyberGhost Renewal Price Hike & Cancellation Comparison (CyberGhost Renewal Price)"
-- Healed enrichment H2/FAQ on "kaspersky vpn alternative" (/vs/kaspersky-vpn-alternative-wireguard): "2026 Kaspersky VPN Alternative WireGuard Renewal Price Hike & Cancellation Comparison (Kaspersky VPN Alternative)" -> "2026 Kaspersky VPN Alternative WireGuard Renewal Price Hike & Cancellation Comparison (Kaspersky VPN Alternative)"
-- Healed enrichment H2/FAQ on "best fing alternative no subscription" (/vs/fing-network-scanner-alternative-plain-english): "2026 Fing Network Scanner Alternative Plain English Renewal Price Hike & Cancellation Comparison (Best Fing Alternative No Subscription)" -> "2026 Fing Network Scanner Alternative Plain English Renewal Price Hike & Cancellation Comparison (Best Fing Alternative No Subscription)"
-- Healed enrichment H2/FAQ on "how to install kaspersky vpn on router" (/vs/kaspersky-vpn-alternative-wireguard): "2026 Kaspersky VPN Alternative WireGuard Renewal Price Hike & Cancellation Comparison (Kaspersky VPN on Router)" -> "2026 Kaspersky VPN Alternative WireGuard Renewal Price Hike & Cancellation Comparison (Kaspersky VPN on Router)"
-- Healed enrichment H2/FAQ on "totalvpn renewal" (/alternatives/totalvpn): "2026 TotalVPN Renewal Price Hike & Cancellation Comparison (TotalVPN Renewal)" -> "2026 TotalVPN Renewal Price Hike & Cancellation Comparison (TotalVPN Renewal)"
-- Normalized claims & schema in /vs/totalvpn
+- Zero repairs needed on this run (100% clean).

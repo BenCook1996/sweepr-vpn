@@ -1095,10 +1095,7 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 ### Executive Summary
 - **Overall Scores**: Crawlability **100/100**, Technical SEO **100/100**, PageSpeed & CWV **100/100** across **92 Canonical Pages**.
 - **Auto-Optimizations Executed**:
-  - Auto-optimized 25 core static pages with brand mobile theme-color (#10b981) & nofollow checkout guards
-  - Auto-optimized 52 pSEO pages with BreadcrumbList + TechArticle JSON-LD, GA4 (G-7D28EEMNXX) & manifest/nofollow guards
-  - Shielded 1 internal prototype/review pages with <meta name="robots" content="noindex, nofollow">
-  - Synchronized sitemap.xml with 92 canonical URLs (content-hash <lastmod>: 32 modified today)
+  - Synchronized sitemap.xml with 92 canonical URLs (content-hash <lastmod>: 0 modified today)
   - Synchronized llms.txt & llms-full.txt with all 63 pSEO guides and live 04:00 AM WireGuard/ACR telemetry for GEO AI citations
 
 ### Category Scorecards & Verifications
@@ -1146,7 +1143,7 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 - **Static Cache-Control Architecture**: PASS — Explicit caching headers configured for HTML (300s/3600s SWR), JS/CSS (ETag must-revalidate), static media (300s/3600s), and XML/TXT (3600s/86400s)
 
 ### Compression Benchmark Results
-- **order.html** (130.0 KB raw) &rarr; Gzip: **29.4 KB** (77% reduction) | Brotli: **27.2 KB** (79% reduction)
-- **index.html** (66.1 KB raw) &rarr; Gzip: **13.8 KB** (79% reduction) | Brotli: **12.8 KB** (81% reduction)
+- **order.html** (127.7 KB raw) &rarr; Gzip: **29.3 KB** (77% reduction) | Brotli: **27.1 KB** (79% reduction)
+- **index.html** (65.3 KB raw) &rarr; Gzip: **13.7 KB** (79% reduction) | Brotli: **12.8 KB** (80% reduction)
 - **sitemap.xml** (23.9 KB raw) &rarr; Gzip: **1.7 KB** (93% reduction) | Brotli: **1.5 KB** (94% reduction)
 

@@ -1,14 +1,14 @@
 {
-  "lastRunAt": "2026-11-18T13:38:23.206Z",
+  "lastRunAt": "2026-11-20T05:33:53.648Z",
   "liveSiteReachable": true,
   "liveHttpStatus": 200,
-  "liveSiteRttMs": 301,
+  "liveSiteRttMs": 332,
   "liveVpnServersEndpointReachable": true,
   "liveVpnFleetSummary": {
     "totalServers": 8,
     "onlineServers": 8,
-    "totalConnectedDevices": 20,
-    "apiLatencyMs": 600
+    "totalConnectedDevices": 8,
+    "apiLatencyMs": 689
   },
   "liveVpnServers": [
     {
@@ -17,9 +17,12 @@
       "city": "Stockholm",
       "flag": "SE",
       "online": true,
+      "endpoint": "70.34.208.107:51820",
+      "endpoint_host": "70.34.208.107",
+      "public_key": "ct1BAFzi8DpqWKh7P+vsxF9i+EZXwynwY0oQeGVXgkc=",
       "devices": 1,
-      "probe_ms": 185,
-      "p99_ms": 247
+      "probe_ms": 210,
+      "p99_ms": 210
     },
     {
       "code": "UK-LON-01",
@@ -27,9 +30,12 @@
       "city": "London",
       "flag": "GB",
       "online": true,
-      "devices": 7,
-      "probe_ms": 161,
-      "p99_ms": 161
+      "endpoint": "78.141.205.68:51820",
+      "endpoint_host": "78.141.205.68",
+      "public_key": "q6ks6F8CH/5XNM4GfjcDq6cCravVDQpqo+oHxsPqamI=",
+      "devices": 1,
+      "probe_ms": 157,
+      "p99_ms": 157
     },
     {
       "code": "DE-FRA-01",
@@ -37,9 +43,12 @@
       "city": "Frankfurt",
       "flag": "DE",
       "online": true,
+      "endpoint": "80.240.20.239:51820",
+      "endpoint_host": "80.240.20.239",
+      "public_key": "HCw1A7oSzYRKHyiVWwPYLHcxfnyr6jcm8o04Vcr9HVY=",
       "devices": 1,
-      "probe_ms": 177,
-      "p99_ms": 196
+      "probe_ms": 188,
+      "p99_ms": 188
     },
     {
       "code": "US-LAX-01",
@@ -47,9 +56,12 @@
       "city": "Los Angeles",
       "flag": "US",
       "online": true,
+      "endpoint": "45.32.85.162:51820",
+      "endpoint_host": "45.32.85.162",
+      "public_key": "8CEzDZ+HKzVVmGfL8bFJ8D5jpZV1deHXXvFRzAu6WAU=",
       "devices": 1,
-      "probe_ms": 122,
-      "p99_ms": 136
+      "probe_ms": 148,
+      "p99_ms": 148
     },
     {
       "code": "NL-AMS-01",
@@ -57,9 +69,12 @@
       "city": "Amsterdam",
       "flag": "NL",
       "online": true,
+      "endpoint": "95.179.181.53:51820",
+      "endpoint_host": "95.179.181.53",
+      "public_key": "WONzcBn2/a4RAwUeFSEu/p/Tld8OQ71Wd666/PnlpCo=",
       "devices": 1,
-      "probe_ms": 185,
-      "p99_ms": 205
+      "probe_ms": 183,
+      "p99_ms": 183
     },
     {
       "code": "US-NYC-01",
@@ -67,9 +82,12 @@
       "city": "New York",
       "flag": "US",
       "online": true,
-      "devices": 5,
-      "probe_ms": 18,
-      "p99_ms": 20
+      "endpoint": "45.77.109.112:51820",
+      "endpoint_host": "45.77.109.112",
+      "public_key": "72v4iEmv1Goqbkb99qxeam+Znu7vnbnYKpOW+I0KsBQ=",
+      "devices": 1,
+      "probe_ms": 17,
+      "p99_ms": 17
     },
     {
       "code": "JP-TYO-01",
@@ -77,9 +95,12 @@
       "city": "Tokyo",
       "flag": "JP",
       "online": true,
+      "endpoint": "104.156.239.162:51820",
+      "endpoint_host": "104.156.239.162",
+      "public_key": "3JDINvFBQNxcxoxVJKVSXj8KSYoE17JLzHFGkXw7OmM=",
       "devices": 1,
-      "probe_ms": 324,
-      "p99_ms": 344
+      "probe_ms": 317,
+      "p99_ms": 317
     },
     {
       "code": "SG-SIN-01",
@@ -87,9 +108,12 @@
       "city": "Singapore",
       "flag": "SG",
       "online": true,
-      "devices": 3,
-      "probe_ms": 458,
-      "p99_ms": 512
+      "endpoint": "149.28.157.142:51820",
+      "endpoint_host": "149.28.157.142",
+      "public_key": "XgLImPsOZpmcixSdtdlIf7Az+sDvsNNMqVVhyb96aWE=",
+      "devices": 1,
+      "probe_ms": 451,
+      "p99_ms": 451
     }
   ],
   "wireguardFleetCount": 6,

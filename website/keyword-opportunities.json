@@ -17775,8 +17775,8 @@
         "faqAnswer": "Connect to SWEEPR VPN's 10Gbps RAM-only WireGuard endpoint on UDP port 51820 (or Stealth UDP 443 on restricted networks) with MTU 1412/1380 and a 25-second PersistentKeepalive."
       },
       "ctrUpgradeBrief": {
-        "isLockedByGsc14DayCooldown": false,
-        "cooldownExpiresAt": "2026-11-17T21:30:00.000Z"
+        "isLockedByGsc14DayCooldown": true,
+        "cooldownExpiresAt": "2026-12-04T05:33:54.810Z"
       },
       "createdAt": "2026-11-16T07:56:05.832Z",
       "appliedAt": null
@@ -34835,30 +34835,10 @@
     "dailyNewPillarCap": 2
   },
   "auditSummary": {
-    "auditedAt": "2026-11-18T13:39:24.923Z",
+    "auditedAt": "2026-11-20T05:34:17.726Z",
     "assertionsPassed": "10/10 PASS",
-    "autoRepairsApplied": 19,
-    "repairLog": [
-      "Healed enrichment H2/FAQ on \"mullvad port forwarding alternative\" (/vs/mullvad): \"2026 Mullvad Renewal Price Hike & Cancellation Comparison (Mullvad Port Forwarding Alternative)\" -> \"2026 Mullvad Renewal Price Hike & Cancellation Comparison (Mullvad Port Forwarding Alternative)\"",
-      "Healed enrichment H2/FAQ on \"protonvpn wireguard router\" (/vs/protonvpn): \"2026 ProtonVPN Renewal Price Hike & Cancellation Comparison (ProtonVPN WireGuard Router)\" -> \"2026 ProtonVPN Renewal Price Hike & Cancellation Comparison (ProtonVPN WireGuard Router)\"",
-      "Healed enrichment H2/FAQ on \"does bitdefender vpn use wireguard\" (/vs/bitdefender-vpn-renewal-alternative): \"2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Does Bitdefender VPN Use WireGuard)\" -> \"2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Does Bitdefender VPN Use WireGuard)\"",
-      "Healed enrichment H2/FAQ on \"cost of bitdefender vpn\" (/vs/bitdefender-vpn-renewal-alternative): \"2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Cost of Bitdefender VPN)\" -> \"2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Cost of Bitdefender VPN)\"",
-      "Healed enrichment H2/FAQ on \"bitdefender vpn renewal price alternatives\" (/vs/bitdefender-vpn-renewal-alternative): \"2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Bitdefender VPN Renewal Price Alternatives)\" -> \"2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Bitdefender VPN Renewal Price Alternatives)\"",
-      "Healed enrichment H2/FAQ on \"mcafee safe connect alternatives\" (/vs/mcafee-safe-connect-auto-renewal-alternative): \"2026 McAfee Safe Connect Auto Renewal Alternative Renewal Price Hike & Cancellation Comparison (McAfee Safe Connect Alternatives)\" -> \"2026 McAfee Safe Connect Auto Renewal Alternative Renewal Price Hike & Cancellation Comparison (McAfee Safe Connect Alternatives)\"",
-      "Healed enrichment H2/FAQ on \"how much does bitdefender vpn cost\" (/vs/bitdefender-vpn-renewal-alternative): \"2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (How Much Does Bitdefender VPN Cost)\" -> \"2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (How Much Does Bitdefender VPN Cost)\"",
-      "Healed enrichment H2/FAQ on \"bitdefender vpn renewal price alternative\" (/vs/bitdefender-vpn-renewal-alternative): \"2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Bitdefender VPN Renewal Price Alternative)\" -> \"2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Bitdefender VPN Renewal Price Alternative)\"",
-      "Healed enrichment H2/FAQ on \"cancel mcafee vpn auto renewal\" (/vs/mcafee-safe-connect-auto-renewal-alternative): \"2026 McAfee Safe Connect Auto Renewal Alternative Renewal Price Hike & Cancellation Comparison (Cancel McAfee VPN Auto Renewal)\" -> \"2026 McAfee Safe Connect Auto Renewal Alternative Renewal Price Hike & Cancellation Comparison (Cancel McAfee VPN Auto Renewal)\"",
-      "Healed enrichment H2/FAQ on \"is bitdefender vpn worth it\" (/vs/bitdefender-vpn-renewal-alternative): \"2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Is Bitdefender VPN Worth It)\" -> \"2026 Bitdefender VPN Renewal Alternative Renewal Price Hike & Cancellation Comparison (Is Bitdefender VPN Worth It)\"",
-      "Healed enrichment H2/FAQ on \"nordvpn renewal price\" (/vs/nordvpn): \"2026 NordVPN Renewal Price Hike & Cancellation Comparison (NordVPN Renewal Price)\" -> \"2026 NordVPN Renewal Price Hike & Cancellation Comparison (NordVPN Renewal Price)\"",
-      "Healed enrichment H2/FAQ on \"surfshark renewal price\" (/vs/surfshark): \"2026 Surfshark Renewal Price Hike & Cancellation Comparison (Surfshark Renewal Price)\" -> \"2026 Surfshark Renewal Price Hike & Cancellation Comparison (Surfshark Renewal Price)\"",
-      "Healed enrichment H2/FAQ on \"expressvpn renewal price\" (/vs/expressvpn): \"2026 ExpressVPN Renewal Price Hike & Cancellation Comparison (ExpressVPN Renewal Price)\" -> \"2026 ExpressVPN Renewal Price Hike & Cancellation Comparison (ExpressVPN Renewal Price)\"",
-      "Healed enrichment H2/FAQ on \"cyberghost renewal price\" (/vs/cyberghost): \"2026 CyberGhost Renewal Price Hike & Cancellation Comparison (CyberGhost Renewal Price)\" -> \"2026 CyberGhost Renewal Price Hike & Cancellation Comparison (CyberGhost Renewal Price)\"",
-      "Healed enrichment H2/FAQ on \"kaspersky vpn alternative\" (/vs/kaspersky-vpn-alternative-wireguard): \"2026 Kaspersky VPN Alternative WireGuard Renewal Price Hike & Cancellation Comparison (Kaspersky VPN Alternative)\" -> \"2026 Kaspersky VPN Alternative WireGuard Renewal Price Hike & Cancellation Comparison (Kaspersky VPN Alternative)\"",
-      "Healed enrichment H2/FAQ on \"best fing alternative no subscription\" (/vs/fing-network-scanner-alternative-plain-english): \"2026 Fing Network Scanner Alternative Plain English Renewal Price Hike & Cancellation Comparison (Best Fing Alternative No Subscription)\" -> \"2026 Fing Network Scanner Alternative Plain English Renewal Price Hike & Cancellation Comparison (Best Fing Alternative No Subscription)\"",
-      "Healed enrichment H2/FAQ on \"how to install kaspersky vpn on router\" (/vs/kaspersky-vpn-alternative-wireguard): \"2026 Kaspersky VPN Alternative WireGuard Renewal Price Hike & Cancellation Comparison (Kaspersky VPN on Router)\" -> \"2026 Kaspersky VPN Alternative WireGuard Renewal Price Hike & Cancellation Comparison (Kaspersky VPN on Router)\"",
-      "Healed enrichment H2/FAQ on \"totalvpn renewal\" (/alternatives/totalvpn): \"2026 TotalVPN Renewal Price Hike & Cancellation Comparison (TotalVPN Renewal)\" -> \"2026 TotalVPN Renewal Price Hike & Cancellation Comparison (TotalVPN Renewal)\"",
-      "Normalized claims & schema in /vs/totalvpn"
-    ]
+    "autoRepairsApplied": 0,
+    "repairLog": []
   },
   "strategyLedgerSummary": {
     "ledgerPath": "website/seo-strategy-performance-ledger.json",

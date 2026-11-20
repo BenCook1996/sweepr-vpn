@@ -7,11 +7,11 @@
     "/alternatives/totalvpn": "2026-11-03T21:30:00.000Z",
     "/vs/totalvpn": "2026-11-03T21:30:00.000Z",
     "/setup/synology-nas-docker-vpn": "2026-11-03T21:30:00.000Z",
-    "/solutions/gigaclear-rural-fibre-gaming-packet-loss": "2026-11-03T21:30:00.000Z",
+    "/solutions/gigaclear-rural-fibre-gaming-packet-loss": "2026-11-20T05:33:54.810Z",
     "/setup/steam-deck-vpn": "2026-11-03T21:30:00.000Z",
     "/solutions/talktalk-p2p-port-forwarding": "2026-11-03T21:30:00.000Z",
     "/guides/stop-samsung-smart-tv-acr-tracking": "2026-11-18T13:38:24.253Z",
-    "/guides/stop-lg-smart-tv-acr-spying": "2026-11-03T21:30:00.000Z",
+    "/guides/stop-lg-smart-tv-acr-spying": "2026-11-20T05:33:54.810Z",
     "/guides/detect-unknown-devices-on-home-wifi": "2026-11-03T21:30:00.000Z",
     "/solutions/comcast-xfinity-broadband-isp-throttling": "2026-11-03T21:30:00.000Z",
     "/solutions/virgin-media-p2p-port-forwarding": "2026-11-03T21:30:00.000Z",
@@ -25,7 +25,8 @@
     "/setup/nvidia-shield-tv-pro-wireguard": "2026-11-03T21:30:00.000Z",
     "/setup/asuswrt-merlin-vpn-router": "2026-11-03T21:30:00.000Z",
     "/setup/pfsense-opnsense-router": "2026-11-03T21:30:00.000Z",
-    "/guides/fix-isp-dns-hijacking-and-throttling": "2026-11-03T21:30:00.000Z"
+    "/guides/fix-isp-dns-hijacking-and-throttling": "2026-11-03T21:30:00.000Z",
+    "/solutions/hotel-captive-portal-wifi-p2p-port-forwarding": "2026-11-20T05:33:54.810Z"
   },
   "proofUpdatedAt": {
     "/setup/almalinux-9-wireguard-gateway": "2026-11-08T05:03:12.553Z",

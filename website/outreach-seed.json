@@ -1,12 +1,34 @@
 [
   {
     "project_id": "vpn",
+    "who": "Wellfound (AngelList Talent) Company Profile",
+    "website": "wellfound.com",
+    "url": "https://wellfound.com/company/sweepr-vpn",
+    "how": "Web Portal Company Profile (Free)",
+    "category": "DR 88 · Tech Company Directory -> https://sweeprvpn.com",
+    "status": "listed",
+    "message_id": "portal-vpn-wellfound-com",
+    "reached_out_at": 1795152857
+  },
+  {
+    "project_id": "vpn",
+    "who": "DevHunt Developer & Privacy Tools",
+    "website": "devhunt.org",
+    "url": "https://devhunt.org/tool/sweepr-vpn",
+    "how": "Web Portal Submission (Free)",
+    "category": "DR 71 · Developer & Network Utility Launchpad -> https://sweeprvpn.com",
+    "status": "listed",
+    "message_id": "portal-vpn-devhunt-org",
+    "reached_out_at": 1795152857
+  },
+  {
+    "project_id": "vpn",
     "who": "SitePatent AI & Tech Directory",
     "website": "sitepatent.com",
     "url": "https://sitepatent.com/site/sweeprvpn.com",
     "how": "Web Submit Portal (Verified Listing)",
     "category": "[SWEEPR VPN] Verified Cybersecurity & Smart-TV ACR Blocker Listing -> https://sweeprvpn.com",
-    "status": "listed",
+    "status": "pending",
     "message_id": "portal-vpn-sitepatent-com",
     "reached_out_at": 1793786752
   },
@@ -25,10 +47,10 @@
     "project_id": "vpn",
     "who": "SaaSHub Software Directory",
     "website": "saashub.com",
-    "url": "https://www.saashub.com/sweepr-vpn/added",
-    "how": "Web Submit Form (HTTP POST)",
+    "url": "https://www.saashub.com/sweepr-vpn",
+    "how": "Web Submit Form (Verified Listing)",
     "category": "[SWEEPR VPN] Listed in VPN, Network Security, Cybersecurity & Privacy vs 11 Competitors -> https://sweeprvpn.com",
-    "status": "submitted",
+    "status": "listed",
     "message_id": "portal-vpn-saashub-com",
     "reached_out_at": 1792617603
   },

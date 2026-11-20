@@ -1,19 +1,19 @@
 {
-  "capturedAt": "2026-11-18T13:38:24.253Z",
+  "capturedAt": "2026-11-20T05:33:54.810Z",
   "windowDays": 28,
   "property": "sc-domain:sweeprvpn.com",
   "gscSummary": {
     "last28Days": {
-      "dateRange": "2026-10-19 to 2026-11-16",
+      "dateRange": "2026-10-21 to 2026-11-18",
       "clicks": 3,
-      "impressions": 535,
+      "impressions": 534,
       "ctrPct": 0.56,
-      "avgPosition": 22.3
+      "avgPosition": 22.4
     },
     "last7Days": {
-      "dateRange": "2026-11-09 to 2026-11-16",
+      "dateRange": "2026-11-11 to 2026-11-18",
       "clicks": 0,
-      "impressions": 2,
+      "impressions": 0,
       "ctrPct": 0,
       "avgPosition": 23
     },
@@ -64,8 +64,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 100,
         "gscClicks28d": 1,
         "gscCtrPct": 1,
@@ -83,7 +83,7 @@
       "avgPosition": 68.5,
       "avgPosition7d": 60.4,
       "topQuery": "check webrtc leak online",
-      "ga4Sessions": 4,
+      "ga4Sessions": 3,
       "ga4Conversions": 1,
       "appliedAt": "2026-11-04T05:00:00.000Z",
       "preChangeBaseline": {
@@ -96,8 +96,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 60,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -128,8 +128,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 51,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -160,8 +160,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 10,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -192,8 +192,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 24,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -204,14 +204,14 @@
       "changeType": "GSC_TITLE_SURGERY"
     },
     "/": {
-      "impressions28d": 2,
+      "impressions28d": 1,
       "impressions7d": 16,
       "clicks28d": 0,
       "ctrPct": 0,
-      "avgPosition": 2.5,
+      "avgPosition": 4,
       "avgPosition7d": 58.6,
       "topQuery": "sweepr vpn",
-      "ga4Sessions": 155,
+      "ga4Sessions": 149,
       "ga4Conversions": 2,
       "appliedAt": "2026-11-04T05:00:00.000Z",
       "preChangeBaseline": {
@@ -224,12 +224,12 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
-        "gscImpressions28d": 2,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
+        "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
-        "gscAvgPosition": 2.5,
+        "gscAvgPosition": 4,
         "ga4ToolOrDownloadEvents": 2,
         "ga4CheckoutStarts": 0
       },
@@ -256,8 +256,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 22,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -288,8 +288,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 6,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -320,8 +320,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 18,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -352,8 +352,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 26,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -384,8 +384,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 22,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -416,8 +416,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 12,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -448,8 +448,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 5,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -480,8 +480,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 13,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -512,8 +512,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 8,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -544,8 +544,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 5,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -563,7 +563,7 @@
       "avgPosition": 15.5,
       "avgPosition7d": 5,
       "topQuery": "adguard home keenetic",
-      "ga4Sessions": 10,
+      "ga4Sessions": 9,
       "ga4Conversions": 1,
       "appliedAt": "2026-11-04T05:00:00.000Z",
       "preChangeBaseline": {
@@ -576,8 +576,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 10,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -608,8 +608,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 11,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -640,8 +640,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 12,
         "gscClicks28d": 1,
         "gscCtrPct": 8.33,
@@ -672,8 +672,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 5,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -691,7 +691,7 @@
       "avgPosition": 3.3,
       "avgPosition7d": 5,
       "topQuery": "sweepr vpn download",
-      "ga4Sessions": 5,
+      "ga4Sessions": 6,
       "ga4Conversions": 2,
       "appliedAt": "2026-11-04T05:00:00.000Z",
       "preChangeBaseline": {
@@ -704,8 +704,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 3,
         "gscClicks28d": 1,
         "gscCtrPct": 33.33,
@@ -735,8 +735,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -765,8 +765,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 3,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -795,8 +795,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 3,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -825,8 +825,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -855,8 +855,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -885,8 +885,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -915,8 +915,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 3,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -945,8 +945,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -975,8 +975,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 3,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1005,8 +1005,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1035,8 +1035,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 15,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1065,8 +1065,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1095,8 +1095,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1125,8 +1125,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 15,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1156,8 +1156,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1186,8 +1186,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1216,8 +1216,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1246,8 +1246,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1276,8 +1276,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1306,8 +1306,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 15,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 4,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1336,8 +1336,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 6,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1366,8 +1366,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1396,8 +1396,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 7,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1426,8 +1426,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 8,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1456,8 +1456,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 3,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1486,8 +1486,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 3,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1516,8 +1516,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 4,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1546,8 +1546,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1576,8 +1576,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1606,8 +1606,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1636,8 +1636,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1666,8 +1666,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1696,8 +1696,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1726,8 +1726,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1756,8 +1756,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1786,8 +1786,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1816,8 +1816,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1846,8 +1846,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1876,8 +1876,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1906,8 +1906,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1936,8 +1936,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1966,8 +1966,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1996,8 +1996,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2026,8 +2026,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 15,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2056,8 +2056,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2086,8 +2086,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 5,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2116,8 +2116,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2146,8 +2146,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2176,8 +2176,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2206,8 +2206,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2236,8 +2236,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 15,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 5,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2266,8 +2266,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2297,8 +2297,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2327,8 +2327,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2357,8 +2357,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-18T13:38:24.253Z",
-        "daysElapsed": 14,
+        "lastMeasuredAt": "2026-11-20T05:33:54.810Z",
+        "daysElapsed": 16,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2370,24 +2370,24 @@
   },
   "historicalGscRedirectedUrls": [],
   "ga4Summary": {
-    "capturedAt": "2026-11-18T13:38:24.253Z",
+    "capturedAt": "2026-11-20T05:33:54.810Z",
     "propertyId": "559903365",
-    "activeUsers": 157,
-    "sessions": 181,
-    "engagedSessions": 60,
-    "engagementRate": 33.15,
-    "totalEvents": 1044,
+    "activeUsers": 149,
+    "sessions": 173,
+    "engagedSessions": 57,
+    "engagementRate": 32.95,
+    "totalEvents": 1009,
     "events": {
+      "file_download": {
+        "count": 14,
+        "users": 3
+      },
       "begin_checkout": {
         "count": 12,
         "users": 11
       },
-      "file_download": {
-        "count": 9,
-        "users": 3
-      },
       "installer_download": {
-        "count": 7,
+        "count": 11,
         "users": 3
       },
       "view_pricing": {
@@ -2399,5 +2399,34 @@
         "users": 1
       }
     }
+  },
+  "lastCrmSync": {
+    "syncedAt": "2026-11-20T05:33:54.810Z",
+    "cloudSync": {
+      "url": "https://sweepr-crm-production.up.railway.app/api/crm/seo/gsc/cloud-sync",
+      "status": 200,
+      "ok": true,
+      "body": "{\"ok\":true,\"mode\":\"cloud_ingest\",\"project_id\":\"vpn\",\"ingested\":73,\"keywords_added\":25,\"total_rows\":116,\"latest_date\":\"2026-11-18\"}"
+    },
+    "telemetry": {
+      "url": "https://sweepr-crm-production.up.railway.app/v1/telemetry/event",
+      "status": 200,
+      "ok": true,
+      "body": "{\"ok\":true,\"project_id\":\"vpn\"}"
+    },
+    "changelog": [
+      {
+        "url": "https://sweepr-crm-production.up.railway.app/api/crm/seo/changelog",
+        "status": 200,
+        "ok": true,
+        "body": "{\"ok\":true,\"id\":110,\"entry\":{\"id\":110,\"project_id\":\"vpn\",\"date\":\"2026-11-20\",\"category\":\"technical_seo\",\"title\":\"[VPN] Cloud GSC Strike-Zone CTR Surgery (3 pillars)\",\"description\":\"Rewrote titles/meta"
+      },
+      {
+        "url": "https://sweeprcleaner.com/api/crm/seo/changelog",
+        "status": 200,
+        "ok": true,
+        "body": "{\"ok\":true,\"id\":76,\"entry\":{\"id\":76,\"project_id\":\"vpn\",\"date\":\"2026-11-20\",\"category\":\"technical_seo\",\"title\":\"[VPN] Cloud GSC Strike-Zone CTR Surgery (3 pillars)\",\"description\":\"Rewrote titles/meta o"
+      }
+    ]
   }
 }
