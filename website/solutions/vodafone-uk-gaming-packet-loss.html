@@ -46,6 +46,8 @@
     gtag('js', new Date());
     gtag('config', 'G-7D28EEMNXX');
   </script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5" />
+  <link rel="manifest" href="/manifest.webmanifest" />
 </head>
 <body class="text-gray-800 bg-[#fafafa]">
 
@@ -115,7 +117,7 @@
     </div>
     <div class="flex gap-2 md:gap-3 items-center">
       <div id="currencySelectorMount"></div>
-      <a href="/login" class="btn btn-ghost text-sm">Login</a>
+      <a rel="nofollow" href="/login" class="btn btn-ghost text-sm">Login</a>
       <a href="/download" class="btn btn-go gap-2 text-sm">
         <span>Get SWEEPR VPN</span>
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
@@ -192,7 +194,7 @@ PersistentKeepalive = 25</pre></div>
   <p class="text-sm text-gray-700 mb-4">Cut annual cost by half to <span data-price="annualStr">£74.99</span>/yr (<span data-price="annualPerMonthStr">£6.25</span>/mo), pick <span data-price="sixMonthStr">£48.99</span> per 6 months (35% lower), or try Month 1 for <span data-price="introStr">£1.99</span> (£12.49 monthly thereafter). Optional +£14.99/yr LAN Radar &amp; Smart-TV defense; backed by a 14-day guarantee.</p>
   <div class="flex flex-wrap gap-3">
     <a href="/download" class="btn btn-go text-sm">Download Gaming App</a>
-    <a href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-ghost text-sm">Start Yearly (<span data-price="annualStr">£74.99</span>) &rarr;</a>
+    <a rel="nofollow" href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-ghost text-sm">Start Yearly (<span data-price="annualStr">£74.99</span>) &rarr;</a>
     <a href="/guides/fix-wireguard-mtu-fragmentation-pppoe" class="text-xs font-bold text-rose-800 underline self-center ml-auto">PPPoE MTU Technical Reference &rarr;</a>
   </div>
 </div>

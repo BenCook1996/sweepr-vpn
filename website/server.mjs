@@ -2857,7 +2857,11 @@ export const EXACT_CANONICAL_REDIRECTS = {
   // Competitor Brand Aliases
   '/vs/pia-private-internet-access': '/vs/private-internet-access',
   '/vs/surfshark-one': '/vs/surfshark',
-  '/vs/warp-plus-team': '/vs/cloudflare-warp-plus'
+  '/vs/warp-plus-team': '/vs/cloudflare-warp-plus',
+  // P0 Tracked Keyword & Legacy Aliases
+  '/guides/isp-throttling': '/guides/fix-isp-dns-hijacking-and-throttling',
+  '/tools/dns-leak-test': '/tools/leak-test',
+  '/vpn/windows': '/setup/windows-11-wireguard-vpn'
 };
 
 const SOL_SUFFIX_RE = /-(isp-throttling|remote-dev-ssh|p2p-port-forwarding|gaming-packet-loss|warzone-packet-loss|twitch-4k-buffering|teams-zoom-jitter|valorant-high-ping|cgnat-port-forwarding|iptv-isp-blocking|wifi-arp-spoofing-protection|voip-teams-zoom-jitter|uhd-streaming-buffering|discord-voice-drop|broadband-isp-throttling|mobile-hotspot-voip-teams-zoom-jitter|rural-fibre-gaming-packet-loss|campus-wifi-gaming-packet-loss)$/;
@@ -3322,21 +3326,21 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Download SWEEPR VPN (Windows, macOS, Android &amp; iOS)</title>
-  <meta name="description" content="Download official SWEEPR VPN v2.5.0 installers by SWEEPR VPN Inc. for Windows 10/11 (.exe), macOS (.dmg), Android (.apk), and iOS with verified SHA-256 checksums.">
+  <meta name="description" content="Download official SWEEPR VPN v2.6.0 installers by SWEEPR VPN Inc. for Windows 10/11 (.exe), macOS (.dmg), Android (.apk), and iOS with verified SHA-256 checksums.">
   <link rel="canonical" href="https://sweeprvpn.com/download">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta name="theme-color" content="#10b981">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="SWEEPR VPN">
   <meta property="og:title" content="Download SWEEPR VPN (Windows, macOS, Android &amp; iOS)">
-  <meta property="og:description" content="Download official SWEEPR VPN v2.5.0 installers for Windows 10/11, macOS, Android, and iOS with free 30s Home Wi-Fi Device Scanner and SHA-256 verification.">
+  <meta property="og:description" content="Download official SWEEPR VPN v2.6.0 installers for Windows 10/11, macOS, Android, and iOS with free 30s Home Wi-Fi Device Scanner and SHA-256 verification.">
   <meta property="og:url" content="https://sweeprvpn.com/download">
   <meta property="og:image" content="https://sweeprvpn.com/og-image.png">
   <meta property="og:image:alt" content="SWEEPR VPN 10Gbps WireGuard &amp; Home Wi-Fi Radar">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://sweeprvpn.com/download">
   <meta name="twitter:title" content="Download SWEEPR VPN (Windows, macOS, Android &amp; iOS)">
-  <meta name="twitter:description" content="Official SWEEPR VPN v2.5.0 installers with SHA-256 checksums and Free 30-Second Home Wi-Fi Scanner.">
+  <meta name="twitter:description" content="Official SWEEPR VPN v2.6.0 installers with SHA-256 checksums and Free 30-Second Home Wi-Fi Scanner.">
   <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png">
   <link rel="icon" type="image/svg+xml" href="/logo-emerald.svg?v=5">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5">
@@ -3364,7 +3368,7 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
     name: 'SWEEPR VPN',
-    softwareVersion: '2.5.0',
+    softwareVersion: '2.6.0',
     operatingSystem: 'Windows 10, Windows 11, macOS, Linux, iOS, Android, OpenWrt',
     applicationCategory: 'SecurityApplication',
     downloadUrl: 'https://sweeprvpn.com/download/SWEEPRVPN.exe',
@@ -3384,7 +3388,7 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
       <div class="logo-box">S</div>
       <span class="font-extrabold text-xl tracking-tight text-gray-900">SWEEPR <span class="text-emerald-600">VPN</span></span>
     </a>
-    <h1 class="text-2xl font-black text-gray-900 mb-2">Download SWEEPR VPN (v2.5.0)</h1>
+    <h1 class="text-2xl font-black text-gray-900 mb-2">Download SWEEPR VPN (v2.6.0)</h1>
     <p class="text-sm text-gray-600 mb-5 leading-relaxed">Select your device below to manually download and install the official SWEEPR VPN client by <strong>SWEEPR VPN Inc.</strong> (native Rust + Tauri v2 client with Free 30-Second Home Wi-Fi Device Scanner). No downloads start automatically without your explicit click.</p>
 
     ${browserAssistBanner}
@@ -3393,7 +3397,7 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
       ${(osType === 'ios' || osType === 'mac') ? '' : `<a href="/download/SWEEPRVPN.apk" download="SWEEPRVPN.apk" rel="nofollow" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'android' ? 'border-2 border-emerald-500 bg-emerald-50/40' : 'border-gray-200 bg-white'} hover:border-emerald-400 transition-all no-underline text-gray-900">
         <div>
           <div class="font-bold text-sm text-gray-900">📱 Android Phone &amp; Tablet Installer (.apk)</div>
-          <div class="text-xs text-gray-500">v2.5.0 &bull; ${apkMeta.sizeLabel} &bull; SWEEPRVPN.apk</div>
+          <div class="text-xs text-gray-500">v2.6.0 &bull; ${apkMeta.sizeLabel} &bull; SWEEPRVPN.apk</div>
         </div>
         <span class="btn btn-go text-xs py-2 px-3 shrink-0">Download .apk</span>
       </a>
@@ -3407,21 +3411,21 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
       <a href="/download/SWEEPRVPN.mobileconfig" rel="nofollow" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'ios' ? 'border-2 border-emerald-500 bg-emerald-50/40' : 'border-gray-200 bg-white'} hover:border-emerald-400 transition-all no-underline text-gray-900">
         <div>
           <div class="font-bold text-sm text-gray-900">🍎 iPhone &amp; iPad Installer (iOS / iPadOS)</div>
-          <div class="text-xs text-gray-500">v2.5.0 &bull; ${mobileconfigMeta.sizeLabel} &bull; Encrypted DNS &amp; App Profile</div>
+          <div class="text-xs text-gray-500">v2.6.0 &bull; ${mobileconfigMeta.sizeLabel} &bull; Encrypted DNS &amp; App Profile</div>
         </div>
         <span class="btn btn-go text-xs py-2 px-3 shrink-0">Install on iOS</span>
       </a>
       <a href="/download/SWEEPRVPN.exe" download="SWEEPRVPN.exe" rel="nofollow" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'windows' ? 'border-2 border-emerald-500 bg-emerald-50/40' : 'border-gray-200 bg-white'} hover:border-emerald-400 transition-all no-underline text-gray-900">
         <div>
           <div class="font-bold text-sm text-gray-900">💻 Windows 10 &amp; 11 Desktop Installer (.exe)</div>
-          <div class="text-xs text-gray-500">v2.5.0 &bull; ${exeMeta.sizeLabel} &bull; Authenticode Signed</div>
+          <div class="text-xs text-gray-500">v2.6.0 &bull; ${exeMeta.sizeLabel} &bull; Authenticode Signed</div>
         </div>
         <span class="btn btn-go text-xs py-2 px-3 shrink-0">Download .exe</span>
       </a>
       <a href="/download/SWEEPRVPN.dmg" download="SWEEPRVPN.dmg" rel="nofollow" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'mac' ? 'border-2 border-emerald-500 bg-emerald-50/40' : 'border-gray-200 bg-white'} hover:border-emerald-400 transition-all no-underline text-gray-900">
         <div>
           <div class="font-bold text-sm text-gray-900">🍏 macOS 12+ Universal Desktop Installer (.dmg)</div>
-          <div class="text-xs text-gray-500">v2.5.0 &bull; ${dmgMeta.sizeLabel} &bull; Apple Silicon &amp; Intel</div>
+          <div class="text-xs text-gray-500">v2.6.0 &bull; ${dmgMeta.sizeLabel} &bull; Apple Silicon &amp; Intel</div>
         </div>
         <span class="btn btn-go text-xs py-2 px-3 shrink-0">Download .dmg</span>
       </a>
@@ -3441,7 +3445,7 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
       </a>
     </div>
     <details open class="mt-4 mb-5 p-3.5 rounded-xl border border-emerald-200 bg-emerald-50/50 text-left text-xs text-gray-700 space-y-2">
-      <summary class="font-extrabold text-emerald-900 cursor-pointer flex items-center gap-1.5">🛡️ Publisher Identity, SHA-256 Checksums &amp; Uninstallation (v2.5.0)</summary>
+      <summary class="font-extrabold text-emerald-900 cursor-pointer flex items-center gap-1.5">🛡️ Publisher Identity, SHA-256 Checksums &amp; Uninstallation (v2.6.0)</summary>
       <div><strong>Publisher:</strong> SWEEPR VPN Inc. (SSL.com OV Code Signing: CN=Benjamin Cook, O=Benjamin Cook, L=Worthing, C=GB)</div>
       <div class="space-y-1.5 pt-1">
         <div class="break-all"><strong>Windows (.exe) — ${exeMeta.sizeLabel}:</strong><br><code class="text-[11px] bg-white px-1 py-0.5 rounded border border-emerald-100">${exeMeta.sha256}</code></div>
@@ -4053,11 +4057,13 @@ self.addEventListener('fetch', e => {
     return sendIosMobileconfig();
   }
 
-  // Handle /download route: detect visitor OS automatically and stream the appropriate installer directly.
-  // The HTML platform picker is only rendered when explicitly requested via ?platform=picker or ?picker=1.
+  // Handle /download route: serve the indexable HTML download hub on bare GET /download
+  // (and ?platform=picker / ?picker=1), while streaming direct binaries only for ?direct=1 or explicit ?platform=<os>.
   if (pathname === '/download' && (req.method === 'GET' || req.method === 'HEAD')) {
     const requestedPlatform = (urlObj.searchParams.get('platform') || '').toLowerCase();
-    const showPicker = requestedPlatform === 'picker' || urlObj.searchParams.get('picker') === '1';
+    const directPlatforms = new Set(['win', 'windows', 'exe', 'mac', 'macos', 'dmg', 'android', 'apk', 'ios', 'mobileconfig', 'ipa', 'linux']);
+    const wantsDirectBinary = urlObj.searchParams.get('direct') === '1' || directPlatforms.has(requestedPlatform);
+    const showPicker = !wantsDirectBinary;
     const uaLower = ua.toLowerCase();
     const chPlatform = String(req.headers['sec-ch-ua-platform'] || '').toLowerCase();
     const chMobile = String(req.headers['sec-ch-ua-mobile'] || '').toLowerCase();
@@ -4071,20 +4077,13 @@ self.addEventListener('fetch', e => {
     let osType = 'windows';
     if (requestedPlatform === 'mac' || requestedPlatform === 'macos' || requestedPlatform === 'dmg') osType = 'mac';
     else if (requestedPlatform === 'linux') osType = 'linux';
-    else if (requestedPlatform === 'ios') osType = 'ios';
+    else if (requestedPlatform === 'ios' || requestedPlatform === 'mobileconfig' || requestedPlatform === 'ipa') osType = 'ios';
     else if (requestedPlatform === 'android' || requestedPlatform === 'apk') osType = 'android';
     else if (requestedPlatform === 'win' || requestedPlatform === 'windows' || requestedPlatform === 'exe') osType = 'windows';
     else if (/iphone|ipad|ipod/.test(uaLower) || chPlatform.includes('ios')) osType = 'ios';
     else if (uaLower.includes('android') || chPlatform.includes('android') || (chMobile === '?1' && uaLower.includes('linux')) || /mobile|iemobile|opera mini/.test(uaLower)) osType = 'android';
     else if (uaLower.includes('mac os') || uaLower.includes('macintosh') || chPlatform.includes('mac')) osType = 'mac';
     else if (uaLower.includes('linux') || chPlatform.includes('linux')) osType = 'linux';
-
-    crm.reportTelemetryEvent({
-      event_name: 'installer_downloaded',
-      category: 'funnel',
-      os: osType,
-      properties: { path: '/download', direct: !showPicker }
-    }).catch(() => {});
 
     if (showPicker) {
       const hostOrigin = resolveTrustedOrigin(req);
@@ -4093,13 +4092,19 @@ self.addEventListener('fetch', e => {
         200,
         renderPlatformDownloadPicker(osType, ua, hostOrigin),
         {
-          'Cache-Control': 'no-store',
-          'X-Robots-Tag': 'noindex, follow',
+          'Cache-Control': 'public, max-age=300, stale-while-revalidate=3600',
           Vary: 'User-Agent, Sec-CH-UA-Platform'
         },
         req
       );
     }
+
+    crm.reportTelemetryEvent({
+      event_name: 'installer_downloaded',
+      category: 'funnel',
+      os: osType,
+      properties: { path: '/download', direct: true }
+    }).catch(() => {});
 
     if (osType === 'android' && streamInstallerBinary('SWEEPRVPN.apk', 'application/vnd.android.package-archive')) {
       return;

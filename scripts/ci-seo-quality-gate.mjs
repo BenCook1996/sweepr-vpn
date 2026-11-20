@@ -274,8 +274,8 @@ if (serverSrc.includes('sweepr-order-draft-redirect')) {
 if (/<iframe[^>]*src=["']\/download\/SWEEPRVPN\.apk/i.test(serverSrc)) {
   fail('Hidden SWEEPRVPN.apk auto-download <iframe> found in website/server.mjs');
 }
-if (!serverSrc.includes("const showPicker = requestedPlatform === 'picker'")) {
-  fail('Missing direct OS-detected binary download gate (showPicker) in website/server.mjs — /download and /download?platform=win must stream binaries directly');
+if (!serverSrc.includes('wantsDirectBinary') || !serverSrc.includes('renderPlatformDownloadPicker')) {
+  fail('Missing indexable /download HTML hub & explicit wantsDirectBinary gate (?direct=1 / ?platform=*) in website/server.mjs');
 }
 const navJsPath = path.join(WEBSITE_DIR, 'nav.js');
 const navJsSrc = fs.existsSync(navJsPath) ? fs.readFileSync(navJsPath, 'utf8') : '';

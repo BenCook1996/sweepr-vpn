@@ -46,6 +46,8 @@
     gtag('js', new Date());
     gtag('config', 'G-7D28EEMNXX');
   </script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5" />
+  <link rel="manifest" href="/manifest.webmanifest" />
 </head>
 <body class="text-gray-800 bg-[#fafafa]">
 
@@ -115,7 +117,7 @@
     </div>
     <div class="flex gap-2 md:gap-3 items-center">
       <div id="currencySelectorMount"></div>
-      <a href="/login" class="btn btn-ghost text-sm">Login</a>
+      <a rel="nofollow" href="/login" class="btn btn-ghost text-sm">Login</a>
       <a href="/download" class="btn btn-go gap-2 text-sm">
         <span>Get SWEEPR VPN</span>
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
@@ -192,7 +194,7 @@ PersistentKeepalive = 15</pre></div>
   <p class="text-sm text-slate-300 mb-4">Cut yearly overhead 50% at <span data-price="annualStr">£74.99</span>/yr (<span data-price="annualPerMonthStr">£6.25</span>/mo), pick six-month flexibility at <span data-price="sixMonthStr">£48.99</span> (35% savings), or start for <span data-price="introStr">£1.99</span> month one before £12.49 renewals. Optional +£14.99/yr LAN Radar; 3 dev machines protected under a 14-day refund pledge.</p>
   <div class="flex flex-wrap gap-3">
     <a href="/download" class="btn btn-go text-sm">Download Native Client</a>
-    <a href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-ghost text-sm text-white border-slate-500">Activate <span data-price="annualStr">£74.99</span>/yr &rarr;</a>
+    <a rel="nofollow" href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-ghost text-sm text-white border-slate-500">Activate <span data-price="annualStr">£74.99</span>/yr &rarr;</a>
     <a href="/setup/linux-cli-wireguard" class="text-xs font-bold text-emerald-400 underline self-center ml-auto">Linux wg-quick Setup &rarr;</a>
   </div>
 </div>

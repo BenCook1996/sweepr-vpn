@@ -35,10 +35,20 @@ import {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const VPN_ROOT = path.resolve(__dirname, '..');
+const rootEnvPath = path.join(VPN_ROOT, '.env');
+if (typeof process.loadEnvFile === 'function' && fs.existsSync(rootEnvPath)) {
+  try { process.loadEnvFile(rootEnvPath); } catch {}
+}
 const WEBSITE_DIR = path.join(VPN_ROOT, 'website');
 const SNAPSHOT_PATH = path.join(WEBSITE_DIR, 'gsc-ga4-latest-snapshot.json');
 const PILLAR_STATE_PATH = path.join(WEBSITE_DIR, 'pillar-enrichment-state.json');
 const INDEXING_QUEUE_PATH = path.join(WEBSITE_DIR, 'indexing-queue.json');
+
+const RAILWAY_CRM_BASE = (process.env.SWEEPR_RAILWAY_CRM || process.env.SWEEPR_CRM_URL || 'https://sweepr-crm-production.up.railway.app').replace(/\/+$/, '');
+const CLEANER_CRM_BASE = (process.env.SWEEPR_CRM_BASE || 'https://sweeprcleaner.com').replace(/\/+$/, '');
+const CRM_USER = process.env.CRM_ADMIN_USER || 'admin';
+const CRM_PASS = (process.env.CRM_ADMIN_PASSWORD || '').trim();
+const CRM_API_KEY = (process.env.SWEEPR_CRM_API_KEY || '').trim();
 
 const GSC_SITE_URL = process.env.GSC_SITE_URL || 'sc-domain:sweeprvpn.com';
 const GA4_PROPERTY_ID = process.env.GA4_PROPERTY_ID || '559903365';
@@ -72,12 +82,12 @@ function resolveHtmlFileForRoute(urlPath) {
     '/tools/smart-tv-tracking-check': 'smart-tv-tracking-check.html',
     '/tools/whats-on-my-wifi': 'whats-on-my-wifi.html',
     '/public-wifi': 'public-wifi.html',
-    '/de': 'de/index.html',
-    '/fr': 'fr/index.html',
-    '/es': 'es/index.html',
-    '/de/pricing': 'de/pricing.html',
-    '/fr/pricing': 'fr/pricing.html',
-    '/es/pricing': 'es/pricing.html',
+    '/de': 'de-index.html',
+    '/fr': 'fr-index.html',
+    '/es': 'es-index.html',
+    '/de/pricing': 'de-pricing.html',
+    '/fr/pricing': 'fr-pricing.html',
+    '/es/pricing': 'es-pricing.html',
     '/de/tools/leak-test': 'de-leak-test.html',
     '/fr/tools/leak-test': 'fr-leak-test.html',
     '/es/tools/leak-test': 'es-leak-test.html',
@@ -105,44 +115,90 @@ function resolveHtmlFileForRoute(urlPath) {
 }
 
 function buildQueryMatchedTitleAndDesc(urlPath, topQuery, currentTitle, currentDesc) {
-  // Never overwrite localized DE/FR/ES/PT-BR/SV pages with English Strike-Zone templates
+  // Never overwrite localized DE/FR/ES/PT-BR/SV pages or core conversion/tool/hub pages with generic English pillar templates
   if (/^\/(de|fr|es|pt-br|sv)(\/|$)/i.test(urlPath)) return null;
-  const cleanQuery = String(topQuery || '').trim();
-  if (!cleanQuery || FORBIDDEN_COMPLIANCE_RE.test(cleanQuery)) return null;
-  const titleCasedQuery = cleanQuery
-    .split(/\s+/)
-    .map((w) => {
-      if (/^wireguard$/i.test(w)) return 'WireGuard';
-      if (/^macos$/i.test(w)) return 'macOS';
-      if (/^ios$/i.test(w)) return 'iOS';
+  if (!/^\/(solutions|setup|guides|vs)\/[a-z0-9-]+$/i.test(urlPath)) return null;
+  const cleanQuery = String(topQuery || '')
+    .replace(/["'`[\]()]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  if (!cleanQuery || cleanQuery.length < 4 || /\b(site|inurl|intitle):/i.test(cleanQuery) || FORBIDDEN_COMPLIANCE_RE.test(cleanQuery)) return null;
+
+  // On /vs/[competitor], reject mismatched competitor queries (e.g., "nordvpn" leaking onto /vs/totalvpn)
+  if (urlPath.startsWith('/vs/')) {
+    const slugTokens = urlPath.replace(/^\/vs\//, '').split('-').filter((t) => t.length >= 3);
+    const qLower = cleanQuery.toLowerCase();
+    if (slugTokens.length > 0 && !slugTokens.some((t) => qLower.includes(t))) return null;
+  }
+
+  // Skip if currentTitle already covers every significant token of cleanQuery
+  const currentLower = String(currentTitle || '').toLowerCase();
+  const sigTokens = cleanQuery.toLowerCase().split(/\s+/).filter((t) => t.length >= 2 && !['to', 'on', 'in', 'for', 'of', 'the', 'and', 'or', 'my', 'a'].includes(t));
+  if (sigTokens.length > 0 && sigTokens.every((t) => currentLower.includes(t))) {
+    return null;
+  }
+
+  const LOWER_MID = new Set(['to', 'on', 'in', 'for', 'of', 'the', 'and', 'or', 'with', 'via', 'vs']);
+  const words = cleanQuery.split(/\s+/);
+  const titleCasedQuery = words
+    .map((w, idx) => {
+      const lw = w.toLowerCase();
+      if (lw === 'wireguard') return 'WireGuard';
+      if (lw === 'steamos') return 'SteamOS';
+      if (lw === 'macos') return 'macOS';
+      if (lw === 'ios') return 'iOS';
+      if (lw === 'nvidia') return 'NVIDIA';
+      if (lw === 'opnsense') return 'OPNsense';
+      if (lw === 'pfsense') return 'pfSense';
+      if (lw === 'openwrt') return 'OpenWrt';
       if (/^gl\.?inet$/i.test(w)) return 'GL.iNet';
-      if (/^(vpn|isp|dns|mtu|ssh|p2p|acr|uk|us|5g|4k|uhd|lan|tv|os|cli|nas)$/i.test(w)) return w.toUpperCase();
+      if (/^(vpn|isp|dns|mtu|ssh|p2p|acr|uk|us|5g|4k|uhd|lan|tv|os|cli|nas|lg|bt|ee|o2|tcp|udp|ip|ipv6|doh|nat|cgnat|pppoe)$/i.test(w)) return w.toUpperCase();
+      if (lw === 'wifi' || lw === 'wi-fi') return 'Wi-Fi';
+      if (idx > 0 && idx < words.length - 1 && LOWER_MID.has(lw)) return lw;
       return w.charAt(0).toUpperCase() + w.slice(1);
     })
     .join(' ');
 
-  let candidateTitle = `${titleCasedQuery}: 2026 10Gbps WireGuard Fix | SWEEPR VPN`;
+  const hasWg = /\bwireguard\b/i.test(titleCasedQuery);
+  const hasVpn = /\bvpn\b/i.test(titleCasedQuery);
+  let candidateTitle = hasWg
+    ? `${titleCasedQuery} (2026 10Gbps Fix) | SWEEPR VPN`
+    : `${titleCasedQuery}: 2026 10Gbps WireGuard Fix | SWEEPR VPN`;
   if (urlPath.startsWith('/setup/')) {
-    candidateTitle = `${titleCasedQuery} — 2026 WireGuard .conf Guide | SWEEPR VPN`;
+    candidateTitle = hasWg
+      ? `${titleCasedQuery} — 2026 .conf Setup Guide | SWEEPR VPN`
+      : `${titleCasedQuery} — 2026 WireGuard .conf Guide | SWEEPR VPN`;
   } else if (urlPath.startsWith('/guides/')) {
-    candidateTitle = `${titleCasedQuery} (2026 Router & DNS Guide) | SWEEPR VPN`;
+    candidateTitle = /^how to\b/i.test(titleCasedQuery)
+      ? `${titleCasedQuery} (2026 Guide) | SWEEPR VPN`
+      : `${titleCasedQuery} (2026 DNS & Router Guide) | SWEEPR VPN`;
   } else if (urlPath.startsWith('/vs/')) {
-    candidateTitle = `${titleCasedQuery}: 2026 Speed & Price Comparison | SWEEPR VPN`;
+    candidateTitle = hasVpn
+      ? `${titleCasedQuery}: 2026 Speed & Price Comparison | SWEEPR`
+      : `${titleCasedQuery} VPN: 2026 Speed & Price Guide | SWEEPR`;
   }
-  const compactSuffix = ' (2026 Guide) | SWEEPR VPN';
+  const compactSuffix = urlPath.startsWith('/solutions/') ? ' (2026 Fix) | SWEEPR VPN' : ' (2026 Guide) | SWEEPR VPN';
   if (candidateTitle.length > 65) {
-    const maxQueryLen = Math.max(10, 65 - compactSuffix.length);
-    candidateTitle = `${titleCasedQuery.slice(0, maxQueryLen).trim()}${compactSuffix}`;
+    const withCompact = `${titleCasedQuery}${compactSuffix}`;
+    if (withCompact.length <= 65) {
+      candidateTitle = withCompact;
+    } else if (`${titleCasedQuery} | SWEEPR VPN`.length <= 65) {
+      candidateTitle = `${titleCasedQuery} | SWEEPR VPN`;
+    } else {
+      const maxQueryLen = Math.max(10, 65 - compactSuffix.length);
+      let trimmedQuery = titleCasedQuery.slice(0, maxQueryLen).replace(/\s+\S*$/, '').trim();
+      if (trimmedQuery.length < 10) trimmedQuery = titleCasedQuery.slice(0, maxQueryLen).trim();
+      trimmedQuery = trimmedQuery.replace(/\b(on|for|with|using|and|to|in|of|over|via|vs)$/i, '').trim();
+      candidateTitle = `${trimmedQuery}${compactSuffix}`;
+    }
   }
   if (candidateTitle.length > 65) {
     candidateTitle = candidateTitle.slice(0, 65).trim();
   }
   if (candidateTitle.length < 30 || candidateTitle === currentTitle) return null;
 
-  let candidateDesc = `Looking for ${cleanQuery}? Follow our verified 2026 10Gbps WireGuard configuration guide (MTU 1420/1412/1380) and free 30-second Home Wi-Fi diagnostic scanner.`;
-  if (candidateDesc.length > 160) {
-    candidateDesc = candidateDesc.slice(0, 157).replace(/\s+\S*$/, '') + '...';
-  }
+  const shortQ = cleanQuery.length > 42 ? cleanQuery.slice(0, 42).replace(/\s+\S*$/, '').trim() : cleanQuery;
+  const candidateDesc = `Guide for ${shortQ}: verified 2026 10Gbps WireGuard setup (MTU 1420/1412/1380), encrypted DNS 10.66.0.1, and 30s Home Wi-Fi scanner.`;
   return { title: candidateTitle, description: candidateDesc };
 }
 
@@ -159,9 +215,150 @@ function applyHtmlHeadRewrite(html, newTitle, newDesc) {
   return out;
 }
 
+function buildCrmHeaders(baseUrl) {
+  let origin = baseUrl;
+  try { origin = new URL(baseUrl).origin; } catch {}
+  return {
+    'Content-Type': 'application/json',
+    'X-Sweepr-Project': 'vpn',
+    Origin: origin,
+    ...(CRM_API_KEY ? { 'x-crm-api-key': CRM_API_KEY, 'x-sweepr-api-key': CRM_API_KEY } : {}),
+    ...(CRM_PASS ? { Authorization: 'Basic ' + Buffer.from(`${CRM_USER}:${CRM_PASS}`).toString('base64') } : {})
+  };
+}
+
+async function postJsonSafe(url, headers, payload) {
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(10000)
+    });
+    const text = await res.text();
+    return { url, status: res.status, ok: res.ok, body: text.slice(0, 200) };
+  } catch (err) {
+    return { url, status: 0, ok: false, error: err.message };
+  }
+}
+
+async function syncVpnGscGa4ToCentralCrm({ snapshot, gscIngestRows, appliedCtrRewrites, inspectedCount, nowIso }) {
+  const results = {
+    syncedAt: nowIso,
+    cloudSync: null,
+    telemetry: null,
+    changelog: []
+  };
+
+  const rowsPayload = (gscIngestRows && gscIngestRows.length > 0
+    ? gscIngestRows
+    : Object.entries(snapshot.pages || {})
+        .filter(([, stats]) => stats && stats.topQuery && Number(stats.avgPosition || 0) > 0)
+        .map(([urlPath, stats]) => ({
+          date: nowIso.slice(0, 10),
+          query: String(stats.topQuery).trim().toLowerCase(),
+          page: `https://sweeprvpn.com${urlPath === '/' ? '/' : urlPath}`,
+          clicks: Number(stats.clicks28d || 0),
+          impressions: Number(stats.impressions28d || 0),
+          ctr: Number(stats.ctrPct || 0) / 100,
+          position: Number(stats.avgPosition || 0)
+        }))
+  ).slice(0, 500);
+
+  if (CRM_API_KEY || CRM_PASS) {
+    results.cloudSync = await postJsonSafe(
+      `${RAILWAY_CRM_BASE}/api/crm/seo/gsc/cloud-sync`,
+      buildCrmHeaders(RAILWAY_CRM_BASE),
+      {
+        project_id: 'vpn',
+        site_url: GSC_SITE_URL,
+        rows: rowsPayload,
+        gsc_summary: snapshot.gscSummary || {},
+        ga4_summary: snapshot.ga4Summary || {},
+        inspected_urls_count: inspectedCount,
+        ctr_rewrites_count: appliedCtrRewrites.length
+      }
+    );
+    if (!results.cloudSync.ok) {
+      console.warn(`[Cloud CRM GSC Sync] Notice (${results.cloudSync.status}): ${results.cloudSync.error || results.cloudSync.body}`);
+    } else {
+      console.log(`[Cloud CRM GSC Sync] Synced ${rowsPayload.length} GSC rows to ${RAILWAY_CRM_BASE} (HTTP ${results.cloudSync.status}).`);
+    }
+  } else {
+    console.log('[Cloud CRM GSC Sync] Skipped protected /api/crm/seo/gsc/cloud-sync (CRM_ADMIN_PASSWORD / SWEEPR_CRM_API_KEY not configured).');
+  }
+
+  results.telemetry = await postJsonSafe(
+    `${RAILWAY_CRM_BASE}/v1/telemetry/event`,
+    {
+      'Content-Type': 'application/json',
+      'X-Sweepr-Project': 'vpn',
+      ...(CRM_API_KEY ? { 'x-crm-api-key': CRM_API_KEY, 'x-sweepr-api-key': CRM_API_KEY } : {})
+    },
+    {
+      project_id: 'vpn',
+      event_name: 'gsc_ga4_cloud_sync_completed',
+      category: 'seo_audit',
+      os: 'server',
+      properties: {
+        gscSummary: snapshot.gscSummary || {},
+        ga4Summary: snapshot.ga4Summary || {},
+        ctrRewritesCount: appliedCtrRewrites.length,
+        inspectedUrlsCount: inspectedCount,
+        rankingPagesCount: Object.keys(snapshot.pages || {}).length
+      }
+    }
+  );
+
+  const shouldLogChangelog =
+    (appliedCtrRewrites.length > 0 || process.argv.includes('--log-changelog')) &&
+    Boolean(CRM_API_KEY || CRM_PASS);
+
+  if (shouldLogChangelog) {
+    const impr28d = snapshot.gscSummary?.last28Days?.impressions ?? 0;
+    const clicks28d = snapshot.gscSummary?.last28Days?.clicks ?? 0;
+    const changelogPayload = {
+      project_id: 'vpn',
+      date: nowIso.slice(0, 10),
+      category: appliedCtrRewrites.length > 0 ? 'technical_seo' : 'gsc_indexing',
+      title: appliedCtrRewrites.length > 0
+        ? `[VPN] Cloud GSC Strike-Zone CTR Surgery (${appliedCtrRewrites.length} pillar${appliedCtrRewrites.length === 1 ? '' : 's'})`
+        : `[VPN] Cloud GSC & GA4 Telemetry Sync (${nowIso.slice(0, 10)})`,
+      description: appliedCtrRewrites.length > 0
+        ? `Rewrote titles/meta on ${appliedCtrRewrites.map((r) => `${r.urlPath} (query="${r.query}", pos ${r.avgPosition})`).join(', ')}. 28d GSC: ${impr28d} impressions, ${clicks28d} clicks.`
+        : `Automated GSC & GA4 snapshot sync completed (${rowsPayload.length} rows, ${inspectedCount} URL inspections). 28d GSC: ${impr28d} impressions, ${clicks28d} clicks.`,
+      impact: `GSC 28d: ${impr28d} impr / ${clicks28d} clicks; CTR rewrites: ${appliedCtrRewrites.length}`,
+      impact_area: 'sweeprvpn.com pillars & GSC Strike-Zone CTR',
+      author: 'sweepr-cloud-bot',
+      status: 'deployed',
+      target_urls: appliedCtrRewrites.map((r) => `https://sweeprvpn.com${r.urlPath === '/' ? '/' : r.urlPath}`),
+      metadata: {
+        inspectedCount,
+        gscSummary: snapshot.gscSummary || {},
+        ga4Summary: snapshot.ga4Summary || {},
+        rewrites: appliedCtrRewrites
+      }
+    };
+
+    const crmTargets = [...new Set([RAILWAY_CRM_BASE, CLEANER_CRM_BASE].filter(Boolean))];
+    for (const base of crmTargets) {
+      const cRes = await postJsonSafe(`${base}/api/crm/seo/changelog`, buildCrmHeaders(base), changelogPayload);
+      results.changelog.push(cRes);
+      if (!cRes.ok) {
+        console.warn(`[Cloud CRM Changelog] Notice for ${base} (${cRes.status}): ${cRes.error || cRes.body}`);
+      }
+    }
+  }
+
+  return results;
+}
+
 async function runCloudGscGa4Sync() {
   const dryRun = process.argv.includes('--dry-run');
+  const skipCrm = process.argv.includes('--skip-crm');
   const nowIso = new Date().toISOString();
+  let gscIngestRows = [];
+  let inspectedCount = 0;
 
   let snapshot = {
     capturedAt: nowIso,
@@ -198,10 +395,11 @@ async function runCloudGscGa4Sync() {
     const start7d = formatIsoDateDaysAgo(9);
 
     try {
-      const [rows28dPage, rows7dPage, rows28dQueryPage] = await Promise.all([
+      const [rows28dPage, rows7dPage, rows28dQueryPage, rows28dDailyQueryPage] = await Promise.all([
         fetchGscSearchAnalytics({ siteUrl: GSC_SITE_URL, startDate: start28d, endDate, dimensions: ['page'], rowLimit: 500 }),
         fetchGscSearchAnalytics({ siteUrl: GSC_SITE_URL, startDate: start7d, endDate, dimensions: ['page'], rowLimit: 500 }),
-        fetchGscSearchAnalytics({ siteUrl: GSC_SITE_URL, startDate: start28d, endDate, dimensions: ['query', 'page'], rowLimit: 1000 })
+        fetchGscSearchAnalytics({ siteUrl: GSC_SITE_URL, startDate: start28d, endDate, dimensions: ['query', 'page'], rowLimit: 1000 }),
+        fetchGscSearchAnalytics({ siteUrl: GSC_SITE_URL, startDate: start28d, endDate, dimensions: ['date', 'query', 'page'], rowLimit: 5000 })
       ]);
 
       const page7dMap = new Map();
@@ -223,6 +421,31 @@ async function runCloudGscGa4Sync() {
           topQueryByPage.set(urlPath, { query, impressions: Number(r.impressions || 0), position: Number(r.position || 0) });
         }
       }
+
+      const dailySourceRows =
+        Array.isArray(rows28dDailyQueryPage) && rows28dDailyQueryPage.length > 0
+          ? rows28dDailyQueryPage.map((r) => ({
+              date: String(r.keys?.[0] || endDate).trim(),
+              query: String(r.keys?.[1] || '').trim().toLowerCase(),
+              page: String(r.keys?.[2] || '').trim(),
+              clicks: Math.max(0, Number(r.clicks || 0)),
+              impressions: Math.max(0, Number(r.impressions || 0)),
+              ctr: Number(r.ctr || 0),
+              position: Number(r.position || 0)
+            }))
+          : rows28dQueryPage.map((r) => ({
+              date: endDate,
+              query: String(r.keys?.[0] || '').trim().toLowerCase(),
+              page: String(r.keys?.[1] || '').trim(),
+              clicks: Math.max(0, Number(r.clicks || 0)),
+              impressions: Math.max(0, Number(r.impressions || 0)),
+              ctr: Number(r.ctr || 0),
+              position: Number(r.position || 0)
+            }));
+
+      gscIngestRows = dailySourceRows
+        .filter((r) => r.date && r.query && r.page && r.position > 0)
+        .sort((a, b) => b.impressions - a.impressions);
 
       let clicks28d = 0;
       let impr28d = 0;
@@ -320,6 +543,7 @@ async function runCloudGscGa4Sync() {
         inspectedNow.push({ url: u, ...res, inspectedAt: nowIso });
       }
       if (inspectedNow.length > 0) {
+        inspectedCount = inspectedNow.length;
         indexingQueue.gsc_requested = [
           ...inspectedNow.map((x) => x.url),
           ...(indexingQueue.gsc_requested || [])
@@ -362,6 +586,7 @@ async function runCloudGscGa4Sync() {
 
   // Deterministic Strike-Zone CTR Optimizer (Positions 3.0–30.0, CTR < 3%, Strictly Respecting 14-Day Cooldown)
   let ctrRewritesCount = 0;
+  const appliedCtrRewrites = [];
   const candidateEntries = Object.entries(snapshot.pages || {})
     .filter(([urlPath, stats]) => {
       const pos = Number(stats.avgPosition || 99);
@@ -402,11 +627,30 @@ async function runCloudGscGa4Sync() {
         ];
       }
       ctrRewritesCount++;
+      appliedCtrRewrites.push({
+        urlPath,
+        query: stats.topQuery,
+        oldTitle: currentTitle,
+        newTitle: rewrite.title,
+        impressions28d: stats.impressions28d,
+        avgPosition: stats.avgPosition
+      });
       console.log(`✨ [Cloud CTR Rewrite] ${urlPath} (Pos ${stats.avgPosition}, ${stats.impressions28d} impr, query="${stats.topQuery}") -> "${rewrite.title}"`);
     }
   }
 
   snapshot.capturedAt = nowIso;
+  if (!dryRun && !skipCrm) {
+    snapshot.lastCrmSync = await syncVpnGscGa4ToCentralCrm({
+      snapshot,
+      gscIngestRows,
+      appliedCtrRewrites,
+      inspectedCount,
+      nowIso
+    });
+  } else if (dryRun || skipCrm) {
+    console.log(`[Cloud CRM GSC Sync] Skipped (${dryRun ? '--dry-run' : '--skip-crm'}). Would sync ${gscIngestRows.length || Object.keys(snapshot.pages || {}).length} candidate GSC page/query records and ${appliedCtrRewrites.length} CTR rewrites.`);
+  }
   if (!dryRun) {
     fs.writeFileSync(SNAPSHOT_PATH, JSON.stringify(snapshot, null, 2) + '\n', 'utf8');
     fs.writeFileSync(PILLAR_STATE_PATH, JSON.stringify(pillarState, null, 2) + '\n', 'utf8');

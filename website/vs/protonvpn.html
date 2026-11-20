@@ -46,6 +46,8 @@
     gtag('js', new Date());
     gtag('config', 'G-7D28EEMNXX');
   </script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5" />
+  <link rel="manifest" href="/manifest.webmanifest" />
 </head>
 <body class="text-gray-800 bg-[#fafafa]">
 
@@ -115,7 +117,7 @@
     </div>
     <div class="flex gap-2 md:gap-3 items-center">
       <div id="currencySelectorMount"></div>
-      <a href="/login" class="btn btn-ghost text-sm">Login</a>
+      <a rel="nofollow" href="/login" class="btn btn-ghost text-sm">Login</a>
       <a href="/download" class="btn btn-go gap-2 text-sm">
         <span>Get SWEEPR VPN</span>
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
@@ -160,7 +162,7 @@
           <span>Free Download (30s Wi-Fi &amp; Speed Scan)</span>
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
-        <a href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-ghost text-sm font-semibold">
+        <a rel="nofollow" href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-ghost text-sm font-semibold">
           Get Pro (<span data-price="annualPerMonthStr">£6.25</span>/mo — Save 50%) &rarr;
         </a>
         <a href="/tools/isp-throttling-test" class="text-xs font-bold text-emerald-700 hover:underline ml-auto">
@@ -290,7 +292,7 @@
           <span>Free Download</span>
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
-        <a href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-big">
+        <a rel="nofollow" href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-big">
           Get SWEEPR VPN Pro &rarr;
         </a>
       </div>

@@ -306,7 +306,31 @@ async function runWeeklyFunnelAndGscAudit() {
   }
 
   try {
-    const winRes = await fetchWithTimeout('https://sweeprvpn.com/download', {
+    const botRes = await fetchWithTimeout('https://sweeprvpn.com/download', {
+      method: 'GET',
+      redirect: 'manual',
+      headers: {
+        'User-Agent':
+          'Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'
+      }
+    });
+    const botCt = (botRes.headers.get('content-type') || '').toLowerCase();
+    const botXrt = (botRes.headers.get('x-robots-tag') || '').toLowerCase();
+    const botHtml = await botRes.text();
+    const botOk =
+      botRes.status === 200 &&
+      botCt.includes('text/html') &&
+      !botXrt.includes('noindex') &&
+      botHtml.includes('SWEEPRVPN.exe') &&
+      botHtml.includes('SHA-256');
+    record(
+      'Funnel B (Installer)',
+      'Indexable HTML Download Hub on Bare GET /download (Googlebot Smartphone)',
+      botOk,
+      `status=${botRes.status} ct=${botCt || 'none'} xrt=${botXrt || 'none'}`
+    );
+
+    const winRes = await fetchWithTimeout('https://sweeprvpn.com/download?direct=1', {
       method: 'HEAD',
       redirect: 'manual',
       headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36' }
@@ -316,17 +340,17 @@ async function runWeeklyFunnelAndGscAudit() {
       redirect: 'manual',
       headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36' }
     });
-    const macRes = await fetchWithTimeout('https://sweeprvpn.com/download', {
+    const macRes = await fetchWithTimeout('https://sweeprvpn.com/download?direct=1', {
       method: 'HEAD',
       redirect: 'manual',
       headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 14_6) AppleWebKit/605.1.15 Safari/605.1.15' }
     });
-    const andRes = await fetchWithTimeout('https://sweeprvpn.com/download', {
+    const andRes = await fetchWithTimeout('https://sweeprvpn.com/download?direct=1', {
       method: 'HEAD',
       redirect: 'manual',
       headers: { 'User-Agent': 'Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 Chrome/131.0.0.0 Mobile Safari/537.36' }
     });
-    const iosRes = await fetchWithTimeout('https://sweeprvpn.com/download', {
+    const iosRes = await fetchWithTimeout('https://sweeprvpn.com/download?direct=1', {
       method: 'HEAD',
       redirect: 'manual',
       headers: { 'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Mobile/15E148 Safari/604.1' }
@@ -338,6 +362,7 @@ async function runWeeklyFunnelAndGscAudit() {
     const iosDisp = iosRes.headers.get('content-disposition') || '';
     const exeLen = Number(winRes.headers.get('content-length') || 0);
     const dlOk =
+      botOk &&
       winRes.status === 200 &&
       winDisp.includes('SWEEPRVPN.exe') &&
       winParamRes.status === 200 &&
@@ -351,12 +376,12 @@ async function runWeeklyFunnelAndGscAudit() {
       exeLen > 100000;
     record(
       'Funnel B (Installer)',
-      'Live OS-Detected Direct Binary Delivery (/download & /download?platform=win)',
+      'Live OS-Detected Direct Binary Delivery (/download?direct=1 & /download?platform=win)',
       dlOk,
       `Win=${winDisp || winRes.status} (${exeLen} B) | ?platform=win=${winParamDisp || winParamRes.status} | Mac=${macDisp || macRes.status} | Android=${andDisp || andRes.status} | iOS=${iosDisp || iosRes.status}`
     );
   } catch (err) {
-    record('Funnel B (Installer)', 'Live OS-Detected Direct Binary Delivery (/download & /download?platform=win)', false, err.message);
+    record('Funnel B (Installer)', 'Live OS-Detected Direct Binary Delivery (/download?direct=1 & /download?platform=win)', false, err.message);
   }
 
   try {
