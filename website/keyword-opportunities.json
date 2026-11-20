@@ -34827,7 +34827,7 @@
   ],
   "lastUpdatedAt": "2026-11-16T07:57:33.273Z",
   "corpusSummary": {
-    "canonicalSitemapUrls": 87,
+    "canonicalSitemapUrls": 93,
     "consolidatedCannibalUrlsBlocked": 28,
     "gscTitleCooldownLockedUrls": 20,
     "rolling7DayNewPillarsCreated": 0,
@@ -34835,7 +34835,7 @@
     "dailyNewPillarCap": 2
   },
   "auditSummary": {
-    "auditedAt": "2026-11-20T05:34:17.726Z",
+    "auditedAt": "2026-11-20T06:23:43.476Z",
     "assertionsPassed": "10/10 PASS",
     "autoRepairsApplied": 0,
     "repairLog": []

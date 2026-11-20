@@ -1,7 +1,7 @@
 # SWEEPR VPN — Automated Keyword Opportunities, Competitor SEO & Pre/Post Forecast Audit Log
 
-- **Last Audited**: `2026-11-20T05:34:17.726Z`
-- **Canonical Sitemap Corpus**: `87` URLs (`28` consolidated cannibal slugs blocked)
+- **Last Audited**: `2026-11-20T06:23:43.476Z`
+- **Canonical Sitemap Corpus**: `93` URLs (`28` consolidated cannibal slugs blocked)
 - **Total Candidate Queries Evaluated**: `372`
 - **Approved / Applied `CREATE_NEW_PILLAR`**: `26` (Caps: `2/day`, `10/week` | Rolling 7-Day Post-Consolidation Created: `0`)
 - **Approved / Applied `ENRICH_EXISTING`**: `57`

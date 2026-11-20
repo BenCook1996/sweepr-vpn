@@ -155,3 +155,41 @@ Tracks weekly conversion funnel health, GA4 Key Events, ecosystem referrals, and
 | `/guides/stop-roku-vizio-firetv-spying` | `PILLAR_ENRICHED` | 3 impr / Pos 11.2 / 0% | **12 impr / Pos 8 / 0%** | **+9 impr / +3.2 pos / +0%** | **`AHEAD_OF_FORECAST`** (5d vs 3–9 days (Indexed Pillar)) |
 | `/alternatives/totalvpn` | `NEW_PILLAR_CREATED` | 4 impr / Pos 20.8 / 0% | **13 impr / Pos 2.8 / 0%** | **+9 impr / +18 pos / +0%** | **`AHEAD_OF_FORECAST`** (5d vs 2–8 days (Indexed Pillar)) |
 
+## 2026-11-20 — Weekly GA4 Funnel, Checkout Health & GSC Recovery Audit
+
+- **Timestamp**: `2026-11-20T06:23:43.540Z`
+- **Synthetic Health Score**: **18/18 Checks Passed**
+- **Canonical Sitemap Size**: **93 URLs** (`27` GSC titles in 14-day cooldown, `312` pillars enriched with live WireGuard/ACR proof)
+
+### Synthetic Funnel & Telemetry Checks
+- **PASS** [`GA4 Telemetry`] **Client Funnel & Key Events Instrumentation**: All 13 GA4 funnel events wired in nav.js & pricing-config.js
+- **PASS** [`GA4 Telemetry`] **Server Checkout Success Purchase Event**: Deduplicated GA4 purchase event active in server.mjs (/checkout/success)
+- **PASS** [`GA4 Telemetry`] **Headless Bot & Internal Dev Traffic Filter**: HeadlessChrome/webdriver suppression + traffic_type=internal tagging active
+- **PASS** [`Funnel B (Installer)`] **Local Authenticode Binary Integrity (website/SWEEPRVPN.exe)**: Size=740112 bytes, SHA256=B2D1A295FE0E9670...
+- **PASS** [`GSC Consolidation`] **Canonical Sitemap Budget, Hreflang & TotalVPN Split (website/sitemap.xml)**: 93 canonical indexable URLs (threshold [50, 110]) | xmlns:xhtml=true | DE/FR/ES pricing=true | TotalVPN split=true
+- **PASS** [`Keyword Opportunity Engine`] **Automated 9-Assertion Keyword Quality Gate & Runway Templates (website/keyword-opportunities.json)**: Templates=31 | Evaluated=372 | AuditGate=10/10 PASS | Repairs=0
+- **PASS** [`CMO Live Proof Telemetry`] **Live Proof [data-live-proof] Hydration Across Funnel & Diagnostic Tools**: All 8 core funnel & diagnostic tool pages contain [data-live-proof] telemetry badges
+- **PASS** [`CMO PLG Automations 5-8`] **Viral Referral Loop, Abandoned Checkout Recovery, Diagnostic Export & Review Velocity Engine**: Automations 5 (30d Referral), 6 (Abandoned Cart Resume/Unsubscribe), 7 (Diagnostic Runbook/Banner), and 8 (5-Star Review +7d Bonus) active
+- **PASS** [`CMO Lead Magnets & GEO`] **Interactive Tools, Localized Leak Tests, Competitor Price Matrix & llms-full.txt**: All 20 interactive tools/hubs/GEO files & 12-competitor renewal matrix verified
+- **PASS** [`GSC Consolidation`] **Pillar Enrichment & 14-Day Title Cooldown State**: 27 GSC Striking-Distance titles protected by 14-day cooldown | 312 pillars enriched with live WireGuard/ACR proof
+- **PASS** [`SEO Pre/Post Forecaster Ledger`] **Forecast-vs-Actual Strategy Ledger & Closed-Loop Calibration (website/seo-strategy-performance-ledger.json)**: Tracked=116 | MeasuredPrePostPages=19 | CalibratedPlaybooks=7
+- **PASS** [`GSC Page-1 Winner Lock & 404 Guard`] **Promoted Page-1 Winners Indexable, Warrant Canary Live & 0 GSC Not-Found (404)**: WarrantCanary=OK | PromotedWinnersIndexable=3/3 | GSC_404s=0
+- **PASS** [`Funnel A (Checkout)`] **Live /api/checkout-config Endpoint**: HTTP 200 OK | Currency=usd | Elements=true
+- **PASS** [`Funnel B (Installer)`] **Indexable HTML Download Hub on Bare GET /download (Googlebot Smartphone)**: status=200 ct=text/html; charset=utf-8 xrt=none
+- **PASS** [`Funnel B (Installer)`] **Live OS-Detected Direct Binary Delivery (/download?direct=1 & /download?platform=win)**: Win=attachment; filename="SWEEPRVPN.exe" (740112 B) | ?platform=win=attachment; filename="SWEEPRVPN.exe" | Mac=attachment; filename="SWEEPRVPN.dmg" | Android=attachment; filename="SWEEPRVPN.apk" | iOS=attachment; filename="SWEEPRVPN.mobileconfig"
+- **PASS** [`GSC Consolidation`] **Live HTTP 301 Consolidation Redirects**: HTTP 301 -> /solutions/eduroam-campus-wifi-gaming-packet-loss
+- **PASS** [`International & Intent Split`] **Live /vs/totalvpn vs /alternatives/totalvpn & Localized DE/FR/ES Hreflang**: /vs/totalvpn=200 (canon=true) | /alternatives/totalvpn=200 (canon=true) | /vs-totalvpn=301 | DE/FR/ES=200/200/200
+- **PASS** [`Ecosystem Cross-Promo`] **Live sweeprcleaner.com -> sweeprvpn.com Cross-Promo Link**: Active UTM-tagged cross-promotion link verified on live sweeprcleaner.com
+
+### Pre- vs. Post-Change SEO Forecast Accuracy & Playbook Lift Summary
+| Canonical URL | Change Type | Pre-Change (28d Impr / Pos / CTR) | Post-Change (28d Impr / Pos / CTR) | Net Pre->Post Lift (Δ Impr / Δ Pos / Δ CTR) | Forecast Status |
+|---|---|---|---|---|---|
+| `/setup/synology-nas-docker-vpn` | `GSC_TITLE_SURGERY` | 10 impr / Pos 24.5 / 0% | **24 impr / Pos 20.2 / 0%** | **+14 impr / +4.3 pos / +0%** | **`BELOW_FORECAST_NEEDS_BOOST`** (nulld vs 3–9 days (Indexed Pillar)) |
+| `/setup/steam-deck-vpn` | `GSC_TITLE_SURGERY` | 6 impr / Pos 11.7 / 0% | **18 impr / Pos 11.6 / 0%** | **+12 impr / +0.1 pos / +0%** | **`ON_TRACK`** (nulld vs 3–9 days (Indexed Pillar)) |
+| `/tools/whats-on-my-wifi` | `PILLAR_ENRICHED` | 1 impr / Pos 16.2 / 0% | **4 impr / Pos 9.8 / 0%** | **+3 impr / +6.4 pos / +0%** | **`ON_TRACK`** (5d vs 2–8 days (Indexed Pillar)) |
+| `/setup/nvidia-shield-tv-pro-wireguard` | `GSC_TITLE_SURGERY` | 10 impr / Pos 5.4 / 0% | **13 impr / Pos 5.6 / 0%** | **+3 impr / +-0.2 pos / +0%** | **`ON_TRACK`** (nulld vs 3–9 days (Indexed Pillar)) |
+| `/solutions/gigaclear-rural-fibre-gaming-packet-loss` | `GSC_TITLE_SURGERY` | 7 impr / Pos 8.2 / 0% | **11 impr / Pos 6.7 / 0%** | **+4 impr / +1.5 pos / +0%** | **`ON_TRACK`** (nulld vs 3–8 days (Indexed Pillar)) |
+| `/guides/stop-roku-vizio-firetv-spying` | `GSC_TITLE_SURGERY` | 3 impr / Pos 11.2 / 0% | **12 impr / Pos 8.2 / 0%** | **+9 impr / +3 pos / +0%** | **`ON_TRACK`** (nulld vs 3–9 days (Indexed Pillar)) |
+| `/alternatives/totalvpn` | `GSC_TITLE_SURGERY` | 4 impr / Pos 20.8 / 0% | **22 impr / Pos 19.5 / 0%** | **+18 impr / +1.3 pos / +0%** | **`BELOW_FORECAST_NEEDS_BOOST`** (nulld vs 2–8 days (Indexed Pillar)) |
+| `/solutions/talktalk-p2p-port-forwarding` | `GSC_TITLE_SURGERY` | 7 impr / Pos 9.4 / 0% | **12 impr / Pos 26.8 / 8.33%** | **+5 impr / +-17.4 pos / +8.33%** | **`BELOW_FORECAST_NEEDS_BOOST`** (nulld vs 3–8 days (Indexed Pillar)) |
+
