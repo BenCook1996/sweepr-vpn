@@ -350,7 +350,7 @@ async function run() {
       body: JSON.stringify({ activation_code: skJson.license_key, email: 'applebuyer@example.com', public_key: clientPubB64, server_code: 'UK-LON-01' })
     })).json();
     assert.equal(defConn.ok, true);
-    assert.equal(defConn.dns, '1.1.1.1, 1.0.0.1');
+    assert.equal(defConn.dns, '10.64.0.1, 1.1.1.1');
     assert.equal(defConn.endpoint, '127.0.0.1:51820');
 
     const shieldConn = await (await fetch(`${baseUrl}/api/vpn/connect`, {
@@ -367,7 +367,7 @@ async function run() {
       })
     })).json();
     assert.equal(shieldConn.ok, true);
-    assert.equal(shieldConn.dns, '1.1.1.2, 1.0.0.2, 2606:4700:4700::1112, 2606:4700:4700::1002');
+    assert.equal(shieldConn.dns, '10.64.0.1, 1.1.1.2');
     assert.equal(shieldConn.endpoint, 'uk-lon-01.wg.sweeprvpn.com:51820');
 
     // 4e. StoreKit-authenticated permanent account deletion frees originalTransactionId

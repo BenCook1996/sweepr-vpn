@@ -1,6 +1,6 @@
 [package]
 name = "sweepr-vpn"
-version = "2.5.0"
+version = "2.6.0"
 description = "SWEEPR VPN: easy privacy and home Wi-Fi protection"
 edition = "2021"
 rust-version = "1.77"

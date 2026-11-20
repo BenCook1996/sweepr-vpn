@@ -28,44 +28,60 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
         let resolvedWgQuick = resolveEndpointForDns64IfNeeded(wgQuickConfig)
 
         #if canImport(WireGuardKit)
-        do {
-            let tunnelConfig = try TunnelConfiguration(fromWgQuickConfig: resolvedWgQuick, called: "SWEEPR VPN")
-            adapter.start(tunnelConfiguration: tunnelConfig) { error in
-                if let error {
-                    self.log.error("WireGuardKit start failed: \(error.localizedDescription, privacy: .public)")
-                }
-                completionHandler(error)
+        let privateKeyB64 = (configMap["privateKey"] as? String) ?? extractWgField("PrivateKey", in: resolvedWgQuick) ?? ""
+        let serverPubB64 = (configMap["serverPublicKey"] as? String) ?? extractWgField("PublicKey", in: resolvedWgQuick) ?? ""
+        let addressStr = (configMap["address"] as? String) ?? extractWgField("Address", in: resolvedWgQuick) ?? ""
+        let dnsCsv = (configMap["dns"] as? String) ?? extractWgField("DNS", in: resolvedWgQuick) ?? "10.64.0.1, 1.1.1.1"
+        let allowedIpsCsv = (configMap["allowedIps"] as? String) ?? extractWgField("AllowedIPs", in: resolvedWgQuick) ?? "0.0.0.0/0"
+        let endpointStr = extractWgField("Endpoint", in: resolvedWgQuick) ?? (configMap["endpoint"] as? String) ?? ""
+
+        guard let privKey = PrivateKey(base64Key: privateKeyB64),
+              let pubKey = PublicKey(base64Key: serverPubB64),
+              let endpoint = Endpoint(from: endpointStr) else {
+            completionHandler(NSError(domain: "com.sweepr.vpn.tunnel", code: -3, userInfo: [NSLocalizedDescriptionKey: "Invalid WireGuard keys or endpoint configuration."]))
+            return
+        }
+
+        var iface = InterfaceConfiguration(privateKey: privKey)
+        iface.addresses = addressStr.split(separator: ",").compactMap { IPAddressRange(from: $0.trimmingCharacters(in: .whitespaces)) }
+        iface.dns = dnsCsv.split(separator: ",").compactMap { DNSServer(from: $0.trimmingCharacters(in: .whitespaces)) }
+        iface.mtu = 1380
+
+        guard !iface.addresses.isEmpty else {
+            completionHandler(NSError(domain: "com.sweepr.vpn.tunnel", code: -4, userInfo: [NSLocalizedDescriptionKey: "Missing WireGuard interface address."]))
+            return
+        }
+
+        var peer = PeerConfiguration(publicKey: pubKey)
+        peer.endpoint = endpoint
+        peer.allowedIPs = allowedIpsCsv.split(separator: ",").compactMap { IPAddressRange(from: $0.trimmingCharacters(in: .whitespaces)) }
+        peer.persistentKeepAlive = 25
+
+        let tunnelConfig = TunnelConfiguration(name: "SWEEPR VPN", interface: iface, peers: [peer])
+        adapter.start(tunnelConfiguration: tunnelConfig) { error in
+            if let error {
+                self.log.error("WireGuardKit start failed: \(error.localizedDescription, privacy: .public)")
             }
-        } catch {
             completionHandler(error)
         }
         #else
-        // Fallback network settings when compiling skeleton without WireGuardKit package linked yet
-        let rawAddr = (configMap["address"] as? String) ?? "10.64.0.2/32"
-        let clientIp = rawAddr.split(separator: "/").first.map(String.init) ?? "10.64.0.2"
-        let dnsCsv = (configMap["dns"] as? String) ?? "10.64.0.1, 1.1.1.1"
-        let dnsServers = dnsCsv.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
-
-        let settings = NEPacketTunnelNetworkSettings(tunnelRemoteAddress: (configMap["endpoint"] as? String)?.split(separator: ":").first.map(String.init) ?? "127.0.0.1")
-        let lanBypass = (configMap["lanBypass"] as? Bool) ?? true
-        let ipv4 = NEIPv4Settings(addresses: [clientIp], subnetMasks: ["255.255.255.255"])
-        ipv4.includedRoutes = [NEIPv4Route.default()]
-        if lanBypass {
-            ipv4.excludedRoutes = [
-                NEIPv4Route(destinationAddress: "192.168.0.0", subnetMask: "255.255.0.0"),
-                NEIPv4Route(destinationAddress: "10.0.0.0", subnetMask: "255.192.0.0"),
-                NEIPv4Route(destinationAddress: "10.128.0.0", subnetMask: "255.128.0.0"),
-                NEIPv4Route(destinationAddress: "172.16.0.0", subnetMask: "255.240.0.0")
-            ]
-        }
-        settings.ipv4Settings = ipv4
-
-        let dnsSettings = NEDNSSettings(servers: dnsServers)
-        dnsSettings.matchDomains = [""]
-        settings.dnsSettings = dnsSettings
-        settings.mtu = NSNumber(value: 1380)
-        setTunnelNetworkSettings(settings, completionHandler: completionHandler)
+        log.error("WireGuardKit framework is not linked; refusing unencrypted tunnel stub.")
+        completionHandler(NSError(domain: "com.sweepr.vpn.tunnel", code: -2, userInfo: [NSLocalizedDescriptionKey: "WireGuardKit is not linked in this build."]))
         #endif
+    }
+
+    private func extractWgField(_ fieldName: String, in wgQuick: String) -> String? {
+        let target = fieldName.lowercased()
+        for line in wgQuick.components(separatedBy: .newlines) {
+            let trimmed = line.trimmingCharacters(in: .whitespaces)
+            guard let eqIdx = trimmed.firstIndex(of: "=") else { continue }
+            let key = trimmed[..<eqIdx].trimmingCharacters(in: .whitespaces).lowercased()
+            if key == target {
+                let val = trimmed[trimmed.index(after: eqIdx)...].trimmingCharacters(in: .whitespaces)
+                if !val.isEmpty { return val }
+            }
+        }
+        return nil
     }
 
     override func stopTunnel(with reason: NEProviderStopReason, completionHandler: @escaping () -> Void) {

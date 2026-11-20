@@ -5648,6 +5648,7 @@ self.addEventListener('fetch', e => {
               device_count: Array.isArray(targetAcc?.devices) ? targetAcc.devices.length : 1,
               max_devices: getAccountDeviceLimit(targetAcc),
               device_limit: getAccountDeviceLimit(targetAcc),
+              referral_code: targetAcc?.referral_code || generateAccountReferralCode(targetAcc?.id || cleanData.account_id || '', targetAcc?.email || effectiveEmail || ''),
               token: cleanData.token || fallbackSigned?.token,
               license_token: cleanData.license_token || cleanData.token || fallbackSigned?.token,
               expires_at: cleanData.expires_at || fallbackSigned?.expires_at
@@ -5702,6 +5703,7 @@ self.addEventListener('fetch', e => {
               device_count: Array.isArray(syncedAcc?.devices) ? syncedAcc.devices.length : 1,
               max_devices: getAccountDeviceLimit(syncedAcc),
               device_limit: getAccountDeviceLimit(syncedAcc),
+              referral_code: syncedAcc?.referral_code || generateAccountReferralCode(syncedAcc?.id || vData.account_id || '', syncedAcc?.email || vData.email || effectiveEmail || ''),
               ...(signed ? { token: signed.token, license_token: signed.token, expires_at: signed.expires_at } : {})
             },
             {},
@@ -5755,6 +5757,7 @@ self.addEventListener('fetch', e => {
             device_count: Array.isArray(localAcc.devices) ? localAcc.devices.length : 1,
             max_devices: getAccountDeviceLimit(localAcc),
             device_limit: getAccountDeviceLimit(localAcc),
+            referral_code: localAcc.referral_code || generateAccountReferralCode(localAcc.id, localAcc.email),
             ...(signed ? { token: signed.token, license_token: signed.token, expires_at: signed.expires_at } : {})
           },
           {},
@@ -5989,6 +5992,7 @@ self.addEventListener('fetch', e => {
         device_count: acc.devices.length,
         max_devices: getAccountDeviceLimit(acc),
         device_limit: getAccountDeviceLimit(acc),
+        referral_code: acc.referral_code || generateAccountReferralCode(acc.id, acc.email),
         ...(signed ? { token: signed.token, license_token: signed.token, expires_at: signed.expires_at } : {})
       },
       { 'Cache-Control': 'no-store' },
@@ -6161,6 +6165,7 @@ self.addEventListener('fetch', e => {
       device_count: acc.devices.length,
       max_devices: getAccountDeviceLimit(acc),
       device_limit: getAccountDeviceLimit(acc),
+      referral_code: acc.referral_code || generateAccountReferralCode(acc.id, acc.email),
       ...(signed ? { token: signed.token, license_token: signed.token, expires_at: signed.expires_at } : {})
     };
 
@@ -8246,6 +8251,8 @@ self.addEventListener('fetch', e => {
         city: n.city,
         flag: n.flag,
         online: Boolean(h),
+        endpoint: n.ip ? `${n.ip}:${n.port || 51820}` : undefined,
+        endpoint_host: String(n.hostname || n.host || n.ip || '').trim() || undefined,
         public_key: String(n.public_key || '').trim() || undefined,
         devices: h ? h.devices : null,
         probe_ms: h?.probeMs ?? null,
@@ -8366,7 +8373,9 @@ self.addEventListener('fetch', e => {
         : (ipv6Dns ? '10.64.0.1, 1.1.1.1, 2606:4700:4700::1111' : '10.64.0.1, 1.1.1.1');
       const resolvedHost = String(node.hostname || node.host || node.ip).trim();
       const endpointHost = (body?.prefer_hostname && (node.hostname || node.host)) ? resolvedHost : (node.ip || resolvedHost);
-      const endpoint = `${endpointHost}:${node.port || 51820}`;
+      const useStealth443 = Boolean(body?.stealth_443 || body?.stealth);
+      const wgPort = useStealth443 ? 443 : (node.port || 51820);
+      const endpoint = `${endpointHost}:${wgPort}`;
       const lanBypass = Boolean(body?.lan_bypass);
       const allowedIps = lanBypass
         ? ('1.0.0.0/8, 2.0.0.0/7, 4.0.0.0/6, 8.0.0.0/7, 10.64.0.0/16, 11.0.0.0/8, 12.0.0.0/6, 16.0.0.0/4, 32.0.0.0/3, 64.0.0.0/2, 128.0.0.0/3, 160.0.0.0/5, 168.0.0.0/6, 172.0.0.0/12, 172.32.0.0/11, 172.64.0.0/10, 172.128.0.0/9, 173.0.0.0/8, 174.0.0.0/7, 176.0.0.0/4, 192.0.0.0/9, 192.128.0.0/11, 192.160.0.0/13, 192.169.0.0/16, 192.170.0.0/15, 192.172.0.0/14, 192.176.0.0/12, 192.192.0.0/10, 193.0.0.0/8, 194.0.0.0/7, 196.0.0.0/6, 200.0.0.0/5, 208.0.0.0/4' + (nodeHasIpv6 ? ', 2000::/3' : ''))
@@ -8410,6 +8419,7 @@ self.addEventListener('fetch', e => {
         qr_svg: qrSvg,
         lan_bypass: lanBypass,
         acr_shield: acrShield,
+        stealth_443: useStealth443,
         address: assignedAddress,
         dns: assignedDns,
         endpoint,
@@ -8451,6 +8461,7 @@ self.addEventListener('fetch', e => {
       deviceId: String(body?.device_id || '').trim(),
       serverCode: String(body?.server_code || 'UK-LON-01').trim().toUpperCase(),
       dnsShield: body?.dns_shield,
+      stealth443: Boolean(body?.stealth_443 || body?.stealth),
       expiresAt: Date.now() + 60 * 1000
     });
     return sendJson(
@@ -8497,6 +8508,7 @@ self.addEventListener('fetch', e => {
     const serverCode = rawCode === 'CH-ZRH-01' ? 'SE-STO-01' : rawCode;
     const rawDnsShield = String(ticketEntry?.dnsShield ?? body?.dns_shield ?? urlObj.searchParams.get('dns_shield') ?? '1').trim().toLowerCase();
     const dnsShieldEnabled = rawDnsShield !== '0' && rawDnsShield !== 'false';
+    const useStealth443 = Boolean(ticketEntry?.stealth443 || body?.stealth_443 || body?.stealth || urlObj.searchParams.get('stealth_443') === '1');
     const licence = await resolveVpnLicence(rawKey, emailHint, ticketEntry?.deviceId || body?.device_id || urlObj.searchParams.get('device_id'));
     if (licence && licence.valid === false && licence.reason === 'device_limit_reached') {
       const maxDev = licence.maxDevices || MAX_DEVICES_PER_ACCOUNT;
@@ -8519,7 +8531,7 @@ self.addEventListener('fetch', e => {
       const serverPubKey = String(node.public_key || r.public_key || '').trim();
       const assignedAddress = String(r.address || '10.64.0.2/32').trim();
       const assignedDns = dnsShieldEnabled ? '10.64.0.1, 1.1.1.2' : '10.64.0.1, 1.1.1.1';
-      const endpoint = `${node.ip}:${node.port || 51820}`;
+      const endpoint = `${node.ip}:${useStealth443 ? 443 : (node.port || 51820)}`;
       const wgConf = `[Interface]\nPrivateKey = ${clientPrivateKey}\nAddress = ${assignedAddress}\nDNS = ${assignedDns}\nMTU = 1380\n\n[Peer]\nPublicKey = ${serverPubKey}\nAllowedIPs = ${node.ipv6 ? '0.0.0.0/0, ::/0' : '0.0.0.0/0'}\nEndpoint = ${endpoint}\nPersistentKeepalive = 25`;
       const uuidProfile = crypto.randomUUID().toUpperCase();
       const uuidVpn = crypto.randomUUID().toUpperCase();

@@ -1,5 +1,73 @@
 use tauri::{LogicalSize, Manager};
 
+static DOORBELL_ENABLED: std::sync::atomic::AtomicBool =
+    std::sync::atomic::AtomicBool::new(false);
+
+/// Probes actual TCP connect RTT against VPN endpoints in parallel.
+#[tauri::command]
+async fn probe_server_latencies(
+    targets: Vec<(String, String)>,
+) -> Result<std::collections::HashMap<String, u32>, String> {
+    tauri::async_runtime::spawn_blocking(move || {
+        let results: Vec<(String, Option<u32>)> = std::thread::scope(|s| {
+            let handles: Vec<_> = targets
+                .into_iter()
+                .map(|(code, endpoint)| {
+                    s.spawn(move || {
+                        let rtt = sweepr_tunnel::probe_endpoint_rtt_ms(&endpoint, 1500);
+                        (code, rtt)
+                    })
+                })
+                .collect();
+            handles
+                .into_iter()
+                .filter_map(|h| h.join().ok())
+                .collect()
+        });
+        let mut map = std::collections::HashMap::new();
+        for (code, rtt) in results {
+            if let Some(ms) = rtt {
+                map.insert(code, ms);
+            }
+        }
+        map
+    })
+    .await
+    .map_err(|e| e.to_string())
+}
+
+#[cfg(target_os = "macos")]
+fn read_sweepr_endpoint_from_conf(conf_file: &std::path::Path) -> Option<(String, String)> {
+    let raw = std::fs::read_to_string(conf_file).ok()?;
+    for line in raw.lines() {
+        let trimmed = line.trim();
+        if trimmed.to_ascii_lowercase().starts_with("endpoint") {
+            if let Some((_, val)) = trimmed.split_once('=') {
+                let v = val.trim();
+                if let Some((host, port)) = v.rsplit_once(':') {
+                    let h = host.trim_matches(|c| c == '[' || c == ']').trim();
+                    let p = port.trim();
+                    if !h.is_empty() && !p.is_empty() && p.chars().all(|c| c.is_ascii_digit()) {
+                        if h.parse::<std::net::IpAddr>().is_ok() {
+                            return Some((h.to_string(), p.to_string()));
+                        }
+                        if let Ok(port_num) = p.parse::<u16>() {
+                            if let Ok(mut addrs) =
+                                std::net::ToSocketAddrs::to_socket_addrs(&(h, port_num))
+                            {
+                                if let Some(sa) = addrs.next() {
+                                    return Some((sa.ip().to_string(), p.to_string()));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    None
+}
+
 /// Scans the home network and names every device (takes about 4 seconds).
 #[tauri::command]
 async fn scan_network() -> Result<sweepr_wifi_radar::ScanReport, String> {
@@ -198,7 +266,8 @@ fn set_kill_switch(enabled: bool) -> Result<serde_json::Value, String> {
     let dir = app_config_dir();
     let _ = std::fs::create_dir_all(&dir);
     let ks_path = dir.join("kill_switch.json");
-    let state_json = serde_json::json!({
+    let mut state_json = serde_json::json!({
+        "ok": true,
         "enabled": enabled,
         "updated_at": std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
@@ -239,20 +308,55 @@ fn set_kill_switch(enabled: bool) -> Result<serde_json::Value, String> {
                 cmd_path.replace("'", "''"),
                 full_cmd.replace("\"", "`\"")
             );
-            let _ = std::process::Command::new(&ps_path)
+            let elevated = std::process::Command::new(&ps_path)
                 .args(["-NoProfile", "-WindowStyle", "Hidden", "-Command", &ps])
                 .creation_flags(0x08000000)
                 .status();
+            if !elevated.map(|s| s.success()).unwrap_or(false) {
+                state_json["ok"] = serde_json::json!(false);
+                state_json["error"] = serde_json::json!("Administrator permission is required to update Kill Switch rules.");
+            }
         }
     }
     #[cfg(target_os = "macos")]
     {
-        let v6_mode = if enabled { "-setv6off" } else { "-setv6automatic" };
-        let script = format!(
-            "do shell script \"networksetup -listallnetworkservices | tail -n +2 | grep -v '^[*]' | while IFS= read -r svc; do networksetup {} \\\"$svc\\\" >/dev/null 2>&1 || true; done; dscacheutil -flushcache >/dev/null 2>&1 || true; killall -HUP mDNSResponder >/dev/null 2>&1 || true\" with administrator privileges",
-            v6_mode
+        let endpoint_rule = read_sweepr_endpoint_from_conf(&dir.join("sweepr0.conf"))
+            .map(|(ip, port)| format!("pass out quick proto udp to {ip} port {port}\\n"))
+            .unwrap_or_default();
+        let pf_rules = format!(
+            "pass quick on lo0 all\\n\
+pass out quick to {{ 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, 169.254.0.0/16 }}\\n\
+pass out quick proto udp from any port 68 to any port 67\\n\
+{endpoint_rule}\
+block return out all\\n"
         );
-        let _ = std::process::Command::new("osascript").args(["-e", &script]).status();
+        let script = if enabled {
+            let pf_conf_escaped = pf_rules.replace('"', "\\\"");
+            format!(
+                "do shell script \"printf '%s' \\\"{pf_conf_escaped}\\\" > /tmp/sweepr-pf.conf; \
+UTUN=$(cat /var/run/wireguard/sweepr0.name 2>/dev/null || true); \
+if [ -n \\\"$UTUN\\\" ]; then printf 'pass quick on %s all\\n%s' \\\"$UTUN\\\" \\\"$(cat /tmp/sweepr-pf.conf)\\\" > /tmp/sweepr-pf.conf; fi; \
+(cat /etc/pf.conf; printf '\\nanchor \\\"com.sweepr.vpn\\\"\\n') | pfctl -f - >/dev/null 2>&1; \
+pfctl -a com.sweepr.vpn -f /tmp/sweepr-pf.conf && (pfctl -E >/dev/null 2>&1 || true); \
+networksetup -listallnetworkservices | tail -n +2 | grep -v '^[*]' | while IFS= read -r svc; do networksetup -setv6off \\\"$svc\\\" >/dev/null 2>&1 || true; done; \
+dscacheutil -flushcache >/dev/null 2>&1 || true; killall -HUP mDNSResponder >/dev/null 2>&1 || true\" with administrator privileges"
+            )
+        } else {
+            "do shell script \"pfctl -a com.sweepr.vpn -F all >/dev/null 2>&1 || true; \
+rm -f /tmp/sweepr-pf.conf; \
+pfctl -f /etc/pf.conf >/dev/null 2>&1 || true; \
+networksetup -listallnetworkservices | tail -n +2 | grep -v '^[*]' | while IFS= read -r svc; do networksetup -setv6automatic \\\"$svc\\\" >/dev/null 2>&1 || true; done; \
+dscacheutil -flushcache >/dev/null 2>&1 || true; killall -HUP mDNSResponder >/dev/null 2>&1 || true\" with administrator privileges".to_string()
+        };
+        let status = std::process::Command::new("osascript").args(["-e", &script]).status();
+        if !status.map(|s| s.success()).unwrap_or(false) {
+            state_json["ok"] = serde_json::json!(false);
+            state_json["error"] = serde_json::json!("Administrator permission is required to configure the macOS Kill Switch.");
+            let _ = std::fs::write(
+                &ks_path,
+                serde_json::to_string_pretty(&serde_json::json!({ "enabled": !enabled })).unwrap_or_default(),
+            );
+        }
     }
     #[cfg(target_os = "linux")]
     {
@@ -272,9 +376,9 @@ fn set_kill_switch(enabled: bool) -> Result<serde_json::Value, String> {
     Ok(state_json)
 }
 
-/// Applies or removes Smart-TV ACR telemetry & streaming tracker sinkhole entries.
+/// Applies or removes Smart-TV ACR telemetry & streaming tracker sinkhole entries and probes the local router gateway.
 #[tauri::command]
-fn set_smart_tv_shields(
+async fn set_smart_tv_shields(
     tv_acr: Option<bool>,
     streaming_ads: Option<bool>,
     router_check: Option<bool>,
@@ -339,6 +443,48 @@ fn set_smart_tv_shields(
         ]);
     }
 
+    let (gateway_ip, open_ports) = if eff_router_check {
+        tauri::async_runtime::spawn_blocking(|| {
+            let gw = sweepr_wifi_radar::detect_gateway_ipv4();
+            let mut open: Vec<u16> = Vec::new();
+            if let Some(ip) = gw {
+                for port in [21u16, 23, 7547] {
+                    let addr = std::net::SocketAddr::new(std::net::IpAddr::V4(ip), port);
+                    if std::net::TcpStream::connect_timeout(
+                        &addr,
+                        std::time::Duration::from_millis(300),
+                    )
+                    .is_ok()
+                    {
+                        open.push(port);
+                    }
+                }
+            }
+            (gw, open)
+        })
+        .await
+        .unwrap_or((None, Vec::new()))
+    } else {
+        (sweepr_wifi_radar::detect_gateway_ipv4(), Vec::new())
+    };
+
+    let router_checked = eff_router_check && gateway_ip.is_some();
+    let router_safe = open_ports.is_empty();
+    let router_summary = if !eff_router_check {
+        "Home router safety check paused".to_string()
+    } else if let Some(gw) = gateway_ip {
+        if open_ports.is_empty() {
+            format!("Router gateway {gw} checked — Telnet/FTP/TR-069 remote-admin ports closed ✓")
+        } else {
+            format!(
+                "Router {gw} has open port(s) {:?} — review remote admin settings",
+                open_ports
+            )
+        }
+    } else {
+        "No local router gateway detected to probe".to_string()
+    };
+
     current = serde_json::json!({
         "ok": true,
         "tv_acr": eff_tv_acr,
@@ -347,13 +493,11 @@ fn set_smart_tv_shields(
         "active_dns": active_dns,
         "blocked_domains": blocked_domains,
         "router": {
-            "checked": eff_router_check,
-            "safe": true,
-            "summary": if eff_router_check {
-                "Home router gateway verified — UPnP/WAN exposure checks passed ✓"
-            } else {
-                "Home router safety check paused"
-            }
+            "checked": router_checked,
+            "safe": router_safe,
+            "gateway_ip": gateway_ip.map(|ip| ip.to_string()),
+            "open_ports": open_ports,
+            "summary": router_summary
         }
     });
 
@@ -431,13 +575,7 @@ fn set_smart_tv_shields(
     }
     #[cfg(target_os = "macos")]
     {
-        if tunnel_active {
-            let script = format!(
-                "do shell script \"networksetup -listallnetworkservices | tail -n +2 | grep -v '^[*]' | while IFS= read -r svc; do networksetup -setdnsservers \\\"$svc\\\" {} {} >/dev/null 2>&1 || true; done; dscacheutil -flushcache >/dev/null 2>&1 || true; killall -HUP mDNSResponder >/dev/null 2>&1 || true\" with administrator privileges",
-                primary_dns, secondary_dns
-            );
-            let _ = std::process::Command::new("osascript").args(["-e", &script]).status();
-        }
+        let _ = tunnel_active;
         let _ = std::process::Command::new("dscacheutil")
             .args(["-flushcache"])
             .status();
@@ -563,6 +701,7 @@ fn set_wifi_guard_device_policy(
 /// Toggles "Doorbell Mode for Wi-Fi" (instant alert when a new unrecognized device joins the Wi-Fi).
 #[tauri::command]
 fn set_doorbell_mode(enabled: bool) -> Result<serde_json::Value, String> {
+    DOORBELL_ENABLED.store(enabled, std::sync::atomic::Ordering::Relaxed);
     let mut state = load_wifi_guard_json();
     if let Some(obj) = state.as_object_mut() {
         obj.insert("doorbell_mode".into(), serde_json::Value::Bool(enabled));
@@ -670,7 +809,8 @@ pub fn run() {
             set_wifi_guard_device_policy,
             set_doorbell_mode,
             log_isp_speed_sample,
-            get_wifi_guard_state
+            get_wifi_guard_state,
+            probe_server_latencies
         ])
         .on_window_event(|window, event| {
             if let tauri::WindowEvent::CloseRequested { api, .. } = event {
@@ -693,6 +833,50 @@ pub fn run() {
                     let _ = w.minimize();
                 }
             }
+            let initial_doorbell = load_wifi_guard_json()
+                .get("doorbell_mode")
+                .and_then(|v| v.as_bool())
+                .unwrap_or(false);
+            DOORBELL_ENABLED.store(initial_doorbell, std::sync::atomic::Ordering::Relaxed);
+            let app_handle = app.handle().clone();
+            std::thread::spawn(move || {
+                let mut known_macs: std::collections::HashSet<String> =
+                    std::collections::HashSet::new();
+                let mut seeded = false;
+                loop {
+                    std::thread::sleep(std::time::Duration::from_secs(90));
+                    if !DOORBELL_ENABLED.load(std::sync::atomic::Ordering::Relaxed) {
+                        continue;
+                    }
+                    if let Ok(report) = sweepr_wifi_radar::scan_network(Default::default()) {
+                        if !seeded {
+                            for d in &report.devices {
+                                if !d.mac.is_empty() {
+                                    known_macs.insert(d.mac.to_lowercase());
+                                }
+                            }
+                            seeded = true;
+                            continue;
+                        }
+                        for d in &report.devices {
+                            let mac_key = d.mac.to_lowercase();
+                            if mac_key.is_empty() || d.is_self || d.is_router {
+                                continue;
+                            }
+                            if known_macs.insert(mac_key) {
+                                if let Some(win) = app_handle.get_webview_window("main") {
+                                    if let Ok(payload) = serde_json::to_string(d) {
+                                        let js = format!(
+                                            "window.onNativeIntruderAlert && window.onNativeIntruderAlert({payload});"
+                                        );
+                                        let _ = win.eval(&js);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            });
             Ok(())
         })
         .run(tauri::generate_context!())

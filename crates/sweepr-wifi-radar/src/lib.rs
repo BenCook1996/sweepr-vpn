@@ -194,6 +194,10 @@ fn detect_local_net() -> Result<LocalNet, String> {
     }
 }
 
+pub fn detect_gateway_ipv4() -> Option<Ipv4Addr> {
+    detect_local_net().ok().and_then(|net| net.gateway)
+}
+
 fn build_self_device(ip_str: String, mac: Option<&str>) -> Device {
     let self_name = dns_lookup::get_hostname().ok().map(|h| pretty_host(&h)).filter(|s| !s.is_empty());
     let (self_os_name, self_os_kind) = if cfg!(target_os = "macos") {
@@ -418,7 +422,7 @@ fn build_device(ip: Ipv4Addr, mac: &str, h: &Hints, is_router: bool, shared_mac:
                     (DeviceKind::Linux, _) => "Linux Desktop".into(),
                     (DeviceKind::Iphone, _) => "iPhone".into(),
                     (DeviceKind::Android, _) => "Android Mobile Device".into(),
-                    (DeviceKind::Private, _) => "iPhone".into(),
+                    (DeviceKind::Private, _) => "Phone / Tablet (Private MAC)".into(),
                     (k, Some(v)) => format!("{v} {}", kind_noun(k)),
                     (k, None) => kind_label(k).into(),
                 }
@@ -542,7 +546,7 @@ fn strip_hex_prefix(n: &str) -> String {
 
 const ACR_BRANDS: &[&str] = &["samsung", "lg", "webos", "vizio", "roku", "hisense", "tcl", "tizen"];
 
-fn classify(s: &str, mac: &str, has_netbios: bool, anonymous_private: bool) -> DeviceKind {
+fn classify(s: &str, _mac: &str, has_netbios: bool, anonymous_private: bool) -> DeviceKind {
     let has = |words: &[&str]| words.iter().any(|w| s.contains(w));
     if has(&["tv", "bravia", "webos", "tizen", "roku", "fire tv", "firetv", "chromecast", "googlecast", "apple tv", "appletv", "shield", "vizio", "hisense", "tcl", "freeview", "sky q", "youview", "mediarenderer", "dial-multiscreen"]) { return DeviceKind::Tv; }
     if has(&["xbox", "playstation", "ps4", "ps5", "nintendo", "steam deck"]) { return DeviceKind::Console; }
@@ -556,17 +560,16 @@ fn classify(s: &str, mac: &str, has_netbios: bool, anonymous_private: bool) -> D
     if has_netbios || has(&["desktop", "laptop", "pc", "windows", "_smb", "_workstation", "dell", "lenovo", "asus", "acer", "hp ", "surface", "intel", "thinkpad", "realtek", "mediatek", "micro-star", "msi", "gigabyte"]) { return DeviceKind::Windows; }
     if has(&["apple"]) { return DeviceKind::Iphone; }
     if anonymous_private {
-        let nibble = mac.chars().nth(1).map(|c| c.to_ascii_uppercase()).unwrap_or('2');
-        return if nibble == 'A' || nibble == 'E' { DeviceKind::Android } else { DeviceKind::Iphone };
+        return DeviceKind::Private;
     }
-    DeviceKind::Windows
+    DeviceKind::Other
 }
 
 fn kind_noun(k: &DeviceKind) -> &'static str {
-    match k { DeviceKind::Router => "Router", DeviceKind::Extender => "Wi-Fi Extender", DeviceKind::Windows => "Desktop", DeviceKind::Macos => "Desktop", DeviceKind::Linux => "Desktop", DeviceKind::Iphone => "iPhone", DeviceKind::Android => "Mobile Device", DeviceKind::Computer => "Desktop", DeviceKind::Tv => "Smart TV", DeviceKind::Speaker => "Speaker", DeviceKind::Printer => "Printer", DeviceKind::Camera => "Camera", DeviceKind::Console => "Games Console", DeviceKind::SmartHome => "Smart Home Device", DeviceKind::Private => "Mobile Device", DeviceKind::Other => "Desktop" }
+    match k { DeviceKind::Router => "Router", DeviceKind::Extender => "Wi-Fi Extender", DeviceKind::Windows => "Desktop", DeviceKind::Macos => "Desktop", DeviceKind::Linux => "Desktop", DeviceKind::Iphone => "iPhone", DeviceKind::Android => "Mobile Device", DeviceKind::Computer => "Desktop", DeviceKind::Tv => "Smart TV", DeviceKind::Speaker => "Speaker", DeviceKind::Printer => "Printer", DeviceKind::Camera => "Camera", DeviceKind::Console => "Games Console", DeviceKind::SmartHome => "Smart Home Device", DeviceKind::Private => "Private MAC Device", DeviceKind::Other => "Wi-Fi Device" }
 }
 fn kind_label(k: &DeviceKind) -> &'static str {
-    match k { DeviceKind::Router => "Home Wi-Fi Router", DeviceKind::Extender => "Wi-Fi Extender", DeviceKind::Windows => "Windows Desktop", DeviceKind::Macos => "macOS Desktop", DeviceKind::Linux => "Linux Desktop", DeviceKind::Iphone => "iPhone", DeviceKind::Android => "Android Mobile Device", DeviceKind::Computer => "Windows Desktop", DeviceKind::Tv => "Smart TV", DeviceKind::Speaker => "Speaker", DeviceKind::Printer => "Printer", DeviceKind::Camera => "Camera", DeviceKind::Console => "Games Console", DeviceKind::SmartHome => "Smart Home Device", DeviceKind::Private => "iPhone", DeviceKind::Other => "Windows Desktop" }
+    match k { DeviceKind::Router => "Home Wi-Fi Router", DeviceKind::Extender => "Wi-Fi Extender", DeviceKind::Windows => "Windows Desktop", DeviceKind::Macos => "macOS Desktop", DeviceKind::Linux => "Linux Desktop", DeviceKind::Iphone => "iPhone", DeviceKind::Android => "Android Mobile Device", DeviceKind::Computer => "Windows Desktop", DeviceKind::Tv => "Smart TV", DeviceKind::Speaker => "Speaker", DeviceKind::Printer => "Printer", DeviceKind::Camera => "Camera", DeviceKind::Console => "Games Console", DeviceKind::SmartHome => "Smart Home Device", DeviceKind::Private => "Phone / Tablet (Private MAC)", DeviceKind::Other => "Unidentified Wi-Fi Device" }
 }
 
 fn useful_name(n: &str) -> bool {
@@ -644,5 +647,17 @@ mod tests {
         assert_eq!(report.network, "IPv6-Only LAN");
         assert_eq!(report.devices.len(), 1);
         assert!(report.devices[0].is_self);
+    }
+
+    #[test]
+    fn classifies_anonymous_private_mac_and_unidentified_standard_mac_honestly() {
+        let h = Hints::default();
+        let priv_dev = build_device(Ipv4Addr::new(192, 168, 1, 77), "da:a1:19:00:11:22", &h, false, false);
+        assert_eq!(priv_dev.kind, DeviceKind::Private);
+        assert_eq!(priv_dev.name, "Phone / Tablet (Private MAC)");
+
+        let unk_dev = build_device(Ipv4Addr::new(192, 168, 1, 78), "04:00:00:11:22:33", &h, false, false);
+        assert_eq!(unk_dev.kind, DeviceKind::Other);
+        assert_eq!(unk_dev.name, "Unidentified Wi-Fi Device");
     }
 }

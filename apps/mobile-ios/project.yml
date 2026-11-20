@@ -4,9 +4,10 @@ options:
   deploymentTarget:
     iOS: "16.0"
     macOS: "13.0"
-# Note: Attach a prebuilt WireGuardKit.xcframework (from https://git.zx2c4.com/wireguard-apple)
-# to TunnelExtension & TunnelExtensionMac dependencies when archiving signed release builds.
-# PacketTunnelProvider.swift compiles cleanly via `#if canImport(WireGuardKit)` without it in unsigned CI.
+packages:
+  WireGuardKit:
+    url: https://github.com/WireGuard/wireguard-apple.git
+    branch: master
 targets:
   SweeprVPN:
     type: application
@@ -46,8 +47,13 @@ targets:
         INFOPLIST_FILE: TunnelExtension/Info.plist
         GENERATE_INFOPLIST_FILE: NO
         SWIFT_VERSION: "5.9"
+        LIBRARY_SEARCH_PATHS:
+          - "$(inherited)"
+          - "$(SRCROOT)/Vendor/wg-libs/$(PLATFORM_NAME)"
     entitlements:
       path: TunnelExtension/TunnelExtension.entitlements
+    dependencies:
+      - package: WireGuardKit
   SweeprVPNMac:
     type: application
     platform: macOS
@@ -86,8 +92,13 @@ targets:
         INFOPLIST_FILE: TunnelExtension/Info.plist
         GENERATE_INFOPLIST_FILE: NO
         SWIFT_VERSION: "5.9"
+        LIBRARY_SEARCH_PATHS:
+          - "$(inherited)"
+          - "$(SRCROOT)/Vendor/wg-libs/$(PLATFORM_NAME)"
     entitlements:
       path: TunnelExtension/TunnelExtensionMac.entitlements
+    dependencies:
+      - package: WireGuardKit
 schemes:
   SweeprVPN:
     build:

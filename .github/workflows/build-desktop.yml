@@ -8,7 +8,6 @@ on:
     paths:
       - 'apps/desktop-tauri/**'
       - 'crates/**'
-      - 'scripts/build-mac-dmg.mjs'
       - '.github/workflows/build-desktop.yml'
     tags:
       - 'v*'
@@ -69,19 +68,64 @@ jobs:
           APPIMAGE_EXTRACT_AND_RUN: "1"
         run: npx tauri build ${{ matrix.args }}
 
-      - name: Package signed macOS UDIF DMG with custom Volume Icon & commit to website
+      - name: Package signed macOS UDIF DMG with bundled WireGuard tools & commit to website
         if: matrix.os_name == 'macos'
+        env:
+          MACOS_CERT_P12_BASE64: ${{ secrets.MACOS_CERT_P12_BASE64 }}
+          MACOS_CERT_PASSWORD: ${{ secrets.MACOS_CERT_PASSWORD }}
+          APPLE_NOTARY_KEY_ID: ${{ secrets.APPLE_NOTARY_KEY_ID }}
+          APPLE_NOTARY_ISSUER_ID: ${{ secrets.APPLE_NOTARY_ISSUER_ID }}
+          APPLE_NOTARY_KEY_P8: ${{ secrets.APPLE_NOTARY_KEY_P8 }}
         run: |
           APP_BUNDLE=$(find apps/desktop-tauri/src-tauri/target -name "SWEEPR VPN.app" -type d | head -n 1)
           if [ -n "$APP_BUNDLE" ]; then
-            codesign --force --deep --sign - "$APP_BUNDLE"
+            brew install wireguard-tools wireguard-go bash
+            BIN_DEST="$APP_BUNDLE/Contents/Resources/bin"
+            mkdir -p "$BIN_DEST"
+            for bin in "$(which wg)" "$(which wg-quick)" "$(which wireguard-go)" "$(brew --prefix bash)/bin/bash"; do
+              [ -f "$bin" ] && cp "$bin" "$BIN_DEST/"
+            done
+            if [ -f "$BIN_DEST/wg-quick" ]; then
+              sed -i '' '1s|^#!.*bash|#!/usr/bin/env bash|' "$BIN_DEST/wg-quick" || true
+            fi
+            chmod +x "$BIN_DEST"/* || true
+
             STAGE_DIR=$(mktemp -d)
             cp -R "$APP_BUNDLE" "$STAGE_DIR/"
             ln -s /Applications "$STAGE_DIR/Applications"
             cp apps/desktop-tauri/src-tauri/icons/icon.icns "$STAGE_DIR/.VolumeIcon.icns"
             SetFile -c icnC "$STAGE_DIR/.VolumeIcon.icns" || true
             SetFile -a C "$STAGE_DIR" || true
-            hdiutil create -volname "SWEEPR VPN" -srcfolder "$STAGE_DIR" -ov -format UDZO website/SWEEPRVPN.dmg
+
+            if [ -n "${MACOS_CERT_P12_BASE64:-}" ] && [ -n "${MACOS_CERT_PASSWORD:-}" ]; then
+              KEYCHAIN_PATH="$RUNNER_TEMP/mac-signing.keychain-db"
+              KEYCHAIN_PASS="$(openssl rand -hex 16)"
+              P12_PATH="$RUNNER_TEMP/dev-id.p12"
+              echo "$MACOS_CERT_P12_BASE64" | base64 --decode > "$P12_PATH"
+              security create-keychain -p "$KEYCHAIN_PASS" "$KEYCHAIN_PATH"
+              security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+              security unlock-keychain -p "$KEYCHAIN_PASS" "$KEYCHAIN_PATH"
+              security import "$P12_PATH" -k "$KEYCHAIN_PATH" -P "$MACOS_CERT_PASSWORD" -T /usr/bin/codesign
+              security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASS" "$KEYCHAIN_PATH"
+              security list-keychains -d user -s "$KEYCHAIN_PATH" $(security list-keychains -d user | tr -d '"')
+              IDENTITY=$(security find-identity -v -p codesigning "$KEYCHAIN_PATH" | grep "Developer ID Application" | head -n 1 | sed -n 's/.*"\(.*\)"/\1/p')
+              codesign --force --deep --options runtime --timestamp --sign "$IDENTITY" "$STAGE_DIR/SWEEPR VPN.app"
+              hdiutil create -volname "SWEEPR VPN" -srcfolder "$STAGE_DIR" -ov -format UDZO website/SWEEPRVPN.dmg
+              codesign --force --timestamp --sign "$IDENTITY" website/SWEEPRVPN.dmg || true
+              if [ -n "${APPLE_NOTARY_KEY_ID:-}" ] && [ -n "${APPLE_NOTARY_ISSUER_ID:-}" ] && [ -n "${APPLE_NOTARY_KEY_P8:-}" ]; then
+                NOTARY_KEY_PATH="$RUNNER_TEMP/AuthKey_${APPLE_NOTARY_KEY_ID}.p8"
+                printf "%s\n" "$APPLE_NOTARY_KEY_P8" > "$NOTARY_KEY_PATH"
+                xcrun notarytool submit website/SWEEPRVPN.dmg --key "$NOTARY_KEY_PATH" --key-id "$APPLE_NOTARY_KEY_ID" --issuer "$APPLE_NOTARY_ISSUER_ID" --wait
+                xcrun stapler staple website/SWEEPRVPN.dmg || true
+                rm -f "$NOTARY_KEY_PATH"
+              fi
+              security delete-keychain "$KEYCHAIN_PATH" || true
+              rm -f "$P12_PATH"
+            else
+              codesign --force --deep --sign - "$STAGE_DIR/SWEEPR VPN.app"
+              hdiutil create -volname "SWEEPR VPN" -srcfolder "$STAGE_DIR" -ov -format UDZO website/SWEEPRVPN.dmg
+            fi
+
             if [ "${{ github.ref_name }}" = "main" ]; then
               git config user.name "github-actions[bot]"
               git config user.email "github-actions[bot]@users.noreply.github.com"

@@ -157,6 +157,7 @@ struct VpnNodeItem: Identifiable, Decodable {
     let flag: String
     let rttMs: Int?
     let load: Int?
+    let online: Bool
     var id: String { code }
 }
 
@@ -192,7 +193,7 @@ final class SweeprStoreKitManager: ObservableObject {
     @Published var purchasedProductIds: Set<String> = []
     @Published var latestSignedTransactionJws: String? = SweeprKeychain.load(key: "apple_signed_tx_jws")
 
-    var onVerifiedSubscription: ((_ jws: String, _ productId: String) async -> Void)?
+    var onVerifiedSubscription: ((_ jws: String, _ productId: String) async -> Bool)?
 
     private var updatesTask: Task<Void, Never>?
 
@@ -261,7 +262,10 @@ final class SweeprStoreKitManager: ObservableObject {
                     purchasedProductIds.insert(tx.productID)
                     SweeprKeychain.save(key: "apple_signed_tx_jws", value: result.jwsRepresentation)
                     latestSignedTransactionJws = result.jwsRepresentation
-                    await onVerifiedSubscription?(result.jwsRepresentation, tx.productID)
+                    let ok = await onVerifiedSubscription?(result.jwsRepresentation, tx.productID) ?? false
+                    if ok {
+                        await tx.finish()
+                    }
                 }
             }
             if !foundAny {
@@ -289,8 +293,12 @@ final class SweeprStoreKitManager: ObservableObject {
             let jws = result.jwsRepresentation
             SweeprKeychain.save(key: "apple_signed_tx_jws", value: jws)
             latestSignedTransactionJws = jws
-            await onVerifiedSubscription?(jws, tx.productID)
-            await tx.finish()
+            let ok = await onVerifiedSubscription?(jws, tx.productID) ?? false
+            if ok {
+                await tx.finish()
+            } else {
+                storeError = "Subscription verification failed with SWEEPR server. Please tap Restore Purchases once online."
+            }
         case .unverified(_, let err):
             storeError = "Apple receipt could not be verified: \(err.localizedDescription)"
         }
@@ -316,14 +324,14 @@ final class SweeprVpnViewModel: ObservableObject {
     @Published var isActivated: Bool = false
     @Published var selectedNodeCode: String = UserDefaults.standard.string(forKey: "sweepr_node") ?? "UK-LON-01"
     @Published var nodes: [VpnNodeItem] = [
-        VpnNodeItem(code: "UK-LON-01", country: "United Kingdom", city: "London", flag: "🇬🇧", rttMs: 8, load: nil),
-        VpnNodeItem(code: "SE-STO-01", country: "Sweden", city: "Stockholm", flag: "🇸🇪", rttMs: 19, load: nil),
-        VpnNodeItem(code: "NL-AMS-01", country: "Netherlands", city: "Amsterdam", flag: "🇳🇱", rttMs: 12, load: nil),
-        VpnNodeItem(code: "DE-FRA-01", country: "Germany", city: "Frankfurt", flag: "🇩🇪", rttMs: 15, load: nil),
-        VpnNodeItem(code: "US-NYC-01", country: "United States", city: "New York", flag: "🇺🇸", rttMs: 68, load: nil),
-        VpnNodeItem(code: "US-LAX-01", country: "United States", city: "Los Angeles", flag: "🇺🇸", rttMs: 112, load: nil),
-        VpnNodeItem(code: "SG-SIN-01", country: "Singapore", city: "Singapore", flag: "🇸🇬", rttMs: 148, load: nil),
-        VpnNodeItem(code: "JP-TYO-01", country: "Japan", city: "Tokyo", flag: "🇯🇵", rttMs: 162, load: nil)
+        VpnNodeItem(code: "UK-LON-01", country: "United Kingdom", city: "London", flag: "🇬🇧", rttMs: nil, load: nil, online: true),
+        VpnNodeItem(code: "SE-STO-01", country: "Sweden", city: "Stockholm", flag: "🇸🇪", rttMs: nil, load: nil, online: true),
+        VpnNodeItem(code: "NL-AMS-01", country: "Netherlands", city: "Amsterdam", flag: "🇳🇱", rttMs: nil, load: nil, online: true),
+        VpnNodeItem(code: "DE-FRA-01", country: "Germany", city: "Frankfurt", flag: "🇩🇪", rttMs: nil, load: nil, online: true),
+        VpnNodeItem(code: "US-NYC-01", country: "United States", city: "New York", flag: "🇺🇸", rttMs: nil, load: nil, online: true),
+        VpnNodeItem(code: "US-LAX-01", country: "United States", city: "Los Angeles", flag: "🇺🇸", rttMs: nil, load: nil, online: true),
+        VpnNodeItem(code: "SG-SIN-01", country: "Singapore", city: "Singapore", flag: "🇸🇬", rttMs: nil, load: nil, online: true),
+        VpnNodeItem(code: "JP-TYO-01", country: "Japan", city: "Tokyo", flag: "🇯🇵", rttMs: nil, load: nil, online: true)
     ]
 
     @Published var acrShieldEnabled: Bool = UserDefaults.standard.object(forKey: "sweepr_acr_shield") as? Bool ?? true {
@@ -365,8 +373,8 @@ final class SweeprVpnViewModel: ObservableObject {
     @Published var isScanningLan: Bool = false
     @Published var discoveredLanDevices: [DiscoveredLanDevice] = []
     @Published var linkedDevices: [LinkedDeviceItem] = []
-    @Published var devicesUsed: Int = 0
-    @Published var maxDevices: Int = 3
+    @Published var devicesUsed: Int = UserDefaults.standard.integer(forKey: "sweepr_devices_used")
+    @Published var maxDevices: Int = (UserDefaults.standard.object(forKey: "sweepr_max_devices") as? Int) ?? 3
 
     // In-App Support ticket form state
     @Published var supportSubject: String = ""
@@ -383,7 +391,7 @@ final class SweeprVpnViewModel: ObservableObject {
     private var tunnelManager: NETunnelProviderManager?
     private var vpnObserver: Any?
     private var pathMonitor: NWPathMonitor?
-    private var bonjourBrowser: NWBrowser?
+    private var bonjourBrowsers: [NWBrowser] = []
 
     private var deviceOsSlug: String {
         #if os(iOS)
@@ -403,7 +411,7 @@ final class SweeprVpnViewModel: ObservableObject {
 
     init() {
         storeKit.onVerifiedSubscription = { [weak self] jws, productId in
-            await self?.verifyStoreKitPurchaseWithBackend(signedTransactionInfo: jws, productId: productId)
+            await self?.verifyStoreKitPurchaseWithBackend(signedTransactionInfo: jws, productId: productId) ?? false
         }
         restoreCachedEntitlement()
         startNetworkPathMonitor()
@@ -425,7 +433,7 @@ final class SweeprVpnViewModel: ObservableObject {
     deinit {
         if let obs = vpnObserver { NotificationCenter.default.removeObserver(obs) }
         pathMonitor?.cancel()
-        bonjourBrowser?.cancel()
+        bonjourBrowsers.forEach { $0.cancel() }
     }
 
     // MARK: - Network Path & Live Diagnostic (Rule #5 Real Telemetry)
@@ -479,31 +487,42 @@ final class SweeprVpnViewModel: ObservableObject {
         }
 
         // 2. Real Bonjour / mDNS LAN discovery via Apple Network.framework NWBrowser (only real devices discovered on user's LAN)
-        bonjourBrowser?.cancel()
-        let descriptor = NWBrowser.Descriptor.bonjour(type: "_airplay._tcp", domain: "local.")
-        let params = NWParameters()
-        params.includePeerToPeer = false
-        let browser = NWBrowser(for: descriptor, using: params)
-        browser.browseResultsChangedHandler = { [weak self] results, _ in
-            let mapped: [DiscoveredLanDevice] = results.compactMap { res in
-                guard case let .service(name, type, domain, _) = res.endpoint else { return nil }
-                return DiscoveredLanDevice(
-                    id: "\(name)|\(type)|\(domain)",
-                    name: name,
-                    detail: "\(type) on \(domain)",
-                    serviceType: type
-                )
+        bonjourBrowsers.forEach { $0.cancel() }
+        bonjourBrowsers.removeAll()
+        let serviceTypes = ["_airplay._tcp", "_googlecast._tcp", "_ipp._tcp", "_hap._tcp", "_smb._tcp"]
+        let bonjourQueue = DispatchQueue(label: "com.sweepr.vpn.bonjour")
+        let startedBrowsers: [NWBrowser] = serviceTypes.map { serviceType in
+            let descriptor = NWBrowser.Descriptor.bonjour(type: serviceType, domain: "local.")
+            let params = NWParameters()
+            params.includePeerToPeer = false
+            let browser = NWBrowser(for: descriptor, using: params)
+            browser.browseResultsChangedHandler = { [weak self] results, _ in
+                let mapped: [DiscoveredLanDevice] = results.compactMap { res in
+                    guard case let .service(name, type, domain, _) = res.endpoint else { return nil }
+                    return DiscoveredLanDevice(
+                        id: "\(name)|\(type)|\(domain)",
+                        name: name,
+                        detail: "\(type) on \(domain)",
+                        serviceType: type
+                    )
+                }
+                Task { @MainActor [weak self] in
+                    guard let self else { return }
+                    var existingById = Dictionary(uniqueKeysWithValues: self.discoveredLanDevices.map { ($0.id, $0) })
+                    for item in mapped {
+                        existingById[item.id] = item
+                    }
+                    self.discoveredLanDevices = existingById.values.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+                }
             }
-            Task { @MainActor [weak self] in
-                self?.discoveredLanDevices = mapped
-            }
+            browser.start(queue: bonjourQueue)
+            return browser
         }
-        browser.start(queue: DispatchQueue(label: "com.sweepr.vpn.bonjour"))
-        bonjourBrowser = browser
+        bonjourBrowsers = startedBrowsers
 
         Task {
             try? await Task.sleep(nanoseconds: 4_000_000_000)
-            browser.cancel()
+            startedBrowsers.forEach { $0.cancel() }
             isScanningLan = false
         }
     }
@@ -535,20 +554,47 @@ final class SweeprVpnViewModel: ObservableObject {
     // MARK: - Auth & StoreKit 2 Verification
 
     private func restoreCachedEntitlement() {
+        let savedKey = SweeprKeychain.load(key: "license_key") ?? ""
+        let savedEmail = SweeprKeychain.load(key: "account_email") ?? ""
         if let token = SweeprKeychain.load(key: "license_token"),
            let claims = SweeprEd25519Verifier.verifyToken(token),
            claims.status == "active" {
             isActivated = true
             accountPlan = (claims.plan ?? "annual").uppercased()
+            if !savedKey.isEmpty {
+                Task { await refreshAccountStatusQuietly(key: savedKey, email: savedEmail) }
+            }
             return
         }
-        if let key = SweeprKeychain.load(key: "license_key"), !key.isEmpty {
-            Task { await validateLicenseWithServer(key: key, email: SweeprKeychain.load(key: "account_email") ?? "") }
+        if !savedKey.isEmpty {
+            Task { await validateLicenseWithServer(key: savedKey, email: savedEmail) }
         }
     }
 
-    func verifyStoreKitPurchaseWithBackend(signedTransactionInfo: String, productId: String) async {
-        guard let url = URL(string: "\(SweeprConfig.apiBase)/api/vpn/apple/verify") else { return }
+    private func refreshAccountStatusQuietly(key: String, email: String) async {
+        guard let url = URL(string: "\(SweeprConfig.apiBase)/api/vpn/activate") else { return }
+        var req = URLRequest(url: url)
+        req.httpMethod = "POST"
+        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        req.httpBody = try? JSONSerialization.data(withJSONObject: [
+            "code": key,
+            "email": email.trimmingCharacters(in: .whitespacesAndNewlines).lowercased(),
+            "device_id": deviceId,
+            "device_name": deviceDisplayName,
+            "os": deviceOsSlug,
+            "app_version": "2.6.0"
+        ])
+        if let (data, resp) = try? await URLSession.shared.data(for: req),
+           let http = resp as? HTTPURLResponse,
+           (200..<300).contains(http.statusCode),
+           let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+           json["ok"] as? Bool == true {
+            applyAuthenticatedJson(json, fallbackKey: key, fallbackEmail: email)
+        }
+    }
+
+    func verifyStoreKitPurchaseWithBackend(signedTransactionInfo: String, productId: String) async -> Bool {
+        guard let url = URL(string: "\(SweeprConfig.apiBase)/api/vpn/apple/verify") else { return false }
         isVerifying = true
         defer { isVerifying = false }
 
@@ -568,19 +614,26 @@ final class SweeprVpnViewModel: ObservableObject {
         req.httpBody = try? JSONSerialization.data(withJSONObject: payload)
 
         do {
-            let (data, _) = try await URLSession.shared.data(for: req)
-            guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else { return }
+            let (data, resp) = try await URLSession.shared.data(for: req)
+            guard let http = resp as? HTTPURLResponse,
+                  (200..<300).contains(http.statusCode),
+                  let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+                statusMessage = "Server rejected App Store verification response."
+                return false
+            }
             if json["ok"] as? Bool == true {
                 applyAuthenticatedJson(json)
                 showPaywallSheet = false
                 showLoginSheet = false
                 statusMessage = "SWEEPR Pro activated via App Store."
+                return true
             } else if let msg = json["message"] as? String {
                 statusMessage = msg
             }
         } catch {
             statusMessage = "Could not verify Apple subscription with server: \(error.localizedDescription)"
         }
+        return false
     }
 
     func validateLicenseWithServer(key: String, email: String) async {
@@ -677,7 +730,9 @@ final class SweeprVpnViewModel: ObservableObject {
         accountPlan = plan.uppercased()
         isActivated = true
         devicesUsed = (json["devices_used"] as? Int) ?? devicesUsed
-        maxDevices = (json["max_devices"] as? Int) ?? 3
+        maxDevices = (json["max_devices"] as? Int) ?? maxDevices
+        UserDefaults.standard.set(devicesUsed, forKey: "sweepr_devices_used")
+        UserDefaults.standard.set(maxDevices, forKey: "sweepr_max_devices")
         if let devs = json["devices"] as? [[String: Any]],
            let devData = try? JSONSerialization.data(withJSONObject: devs),
            let decoded = try? JSONDecoder().decode([LinkedDeviceItem].self, from: devData) {
@@ -685,7 +740,30 @@ final class SweeprVpnViewModel: ObservableObject {
         }
     }
 
-    // MARK: - Permanent In-App Account & Data Deletion (Guideline 5.1.1(v))
+    // MARK: - Sign Out & Permanent In-App Account Deletion (Guideline 5.1.1(v))
+
+    func signOutLocally() {
+        if case .connected = state {
+            tunnelManager?.connection.stopVPNTunnel()
+        }
+        SweeprKeychain.delete(key: "license_key")
+        SweeprKeychain.delete(key: "account_email")
+        SweeprKeychain.delete(key: "license_token")
+        SweeprKeychain.delete(key: "apple_signed_tx_jws")
+        UserDefaults.standard.removeObject(forKey: "sweepr_plan")
+        UserDefaults.standard.removeObject(forKey: "sweepr_devices_used")
+        UserDefaults.standard.removeObject(forKey: "sweepr_max_devices")
+
+        licenseKey = ""
+        accountEmail = ""
+        accountPlan = "Free Tier"
+        isActivated = false
+        linkedDevices = []
+        devicesUsed = 0
+        maxDevices = 3
+        state = .disconnected
+        statusMessage = "Signed out on this device. Your subscription and other devices remain active."
+    }
 
     func deleteAccountAndData() async {
         isVerifying = true
@@ -695,7 +773,9 @@ final class SweeprVpnViewModel: ObservableObject {
             tunnelManager?.connection.stopVPNTunnel()
         }
 
-        if let url = URL(string: "\(SweeprConfig.apiBase)/api/vpn/account/delete") {
+        let jws = storeKit.latestSignedTransactionJws ?? SweeprKeychain.load(key: "apple_signed_tx_jws")
+        let hasServerCreds = !licenseKey.isEmpty || (jws?.isEmpty == false)
+        if hasServerCreds, let url = URL(string: "\(SweeprConfig.apiBase)/api/vpn/account/delete") {
             var req = URLRequest(url: url)
             req.httpMethod = "POST"
             req.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -705,11 +785,22 @@ final class SweeprVpnViewModel: ObservableObject {
             ]
             if !licenseKey.isEmpty { payload["key"] = licenseKey }
             if !accountEmail.isEmpty { payload["email"] = accountEmail }
-            if let jws = storeKit.latestSignedTransactionJws ?? SweeprKeychain.load(key: "apple_signed_tx_jws"), !jws.isEmpty {
+            if let jws, !jws.isEmpty {
                 payload["signed_transaction_info"] = jws
             }
             req.httpBody = try? JSONSerialization.data(withJSONObject: payload)
-            _ = try? await URLSession.shared.data(for: req)
+            do {
+                let (data, resp) = try await URLSession.shared.data(for: req)
+                let httpOk = (resp as? HTTPURLResponse).map { (200..<300).contains($0.statusCode) } ?? false
+                let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any]
+                if !httpOk || json?["ok"] as? Bool != true {
+                    statusMessage = (json?["message"] as? String) ?? "Could not delete your account on the server right now. Please try again or email \(SweeprConfig.supportEmail)."
+                    return
+                }
+            } catch {
+                statusMessage = "Network error while deleting your account: \(error.localizedDescription)"
+                return
+            }
         }
 
         if let manager = tunnelManager {
@@ -722,6 +813,8 @@ final class SweeprVpnViewModel: ObservableObject {
         SweeprKeychain.delete(key: "license_token")
         SweeprKeychain.delete(key: "apple_signed_tx_jws")
         UserDefaults.standard.removeObject(forKey: "sweepr_plan")
+        UserDefaults.standard.removeObject(forKey: "sweepr_devices_used")
+        UserDefaults.standard.removeObject(forKey: "sweepr_max_devices")
 
         licenseKey = ""
         accountEmail = ""
@@ -729,6 +822,7 @@ final class SweeprVpnViewModel: ObservableObject {
         isActivated = false
         linkedDevices = []
         devicesUsed = 0
+        maxDevices = 3
         state = .disconnected
         statusMessage = "Your SWEEPR VPN account credentials and local configuration have been permanently removed."
     }
@@ -790,11 +884,9 @@ final class SweeprVpnViewModel: ObservableObject {
 
     func refreshNodesFromServer() async {
         guard let url = URL(string: "\(SweeprConfig.apiBase)/api/vpn/servers") else { return }
-        let start = CFAbsoluteTimeGetCurrent()
         if let (data, _) = try? await URLSession.shared.data(from: url),
            let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
            let arr = json["servers"] as? [[String: Any]], !arr.isEmpty {
-            let clientRttMs = max(4, min(240, Int((CFAbsoluteTimeGetCurrent() - start) * 1000.0 * 0.35)))
             var updated: [VpnNodeItem] = []
             for item in arr {
                 guard let code = item["code"] as? String else { continue }
@@ -803,11 +895,9 @@ final class SweeprVpnViewModel: ObservableObject {
                 let rawFlag = item["flag"] as? String
                 let existingFlag = nodes.first(where: { $0.code == code })?.flag
                 let flag = (rawFlag != nil && !rawFlag!.allSatisfy(\.isASCII)) ? rawFlag! : (existingFlag ?? "🌐")
-                let probe = (item["probe_ms"] as? Int) ?? (item["pingMs"] as? Int)
-                let baseRtt = nodes.first(where: { $0.code == code })?.rttMs ?? 25
-                let rtt = probe.map { max(4, ($0 + clientRttMs) / 2) } ?? max(5, (baseRtt * 7 + clientRttMs * 3) / 10)
                 let load = item["devices"] as? Int
-                updated.append(VpnNodeItem(code: code, country: country, city: city, flag: flag, rttMs: rtt, load: load))
+                let online = (item["online"] as? Bool) ?? true
+                updated.append(VpnNodeItem(code: code, country: country, city: city, flag: flag, rttMs: nil, load: load, online: online))
             }
             if !updated.isEmpty {
                 nodes = updated
@@ -825,9 +915,22 @@ final class SweeprVpnViewModel: ObservableObject {
         guard let session = tunnelManager?.connection else { return }
         let selected = nodes.first { $0.code == selectedNodeCode }
         let label = selected.map { "\($0.city), \($0.country)" } ?? selectedNodeCode
+        let endpointLabel = (tunnelManager?.protocolConfiguration as? NETunnelProviderProtocol)?.serverAddress ?? selectedNodeCode
+        let wasConnected: Bool = {
+            if case .connected = state { return true }
+            return false
+        }()
         switch session.status {
         case .connected:
-            state = .connected(serverCity: label, endpoint: selectedNodeCode)
+            state = .connected(serverCity: label, endpoint: endpointLabel)
+            if !wasConnected {
+                pendingSuccessfulConnections += 1
+                UserDefaults.standard.set(pendingSuccessfulConnections, forKey: "sweepr_connect_count")
+                if pendingSuccessfulConnections >= 3 && !hasRequestedReview {
+                    hasRequestedReview = true
+                    shouldPromptAppStoreReview = true
+                }
+            }
         case .connecting, .reasserting:
             state = .connecting
         case .disconnecting:
@@ -924,10 +1027,12 @@ final class SweeprVpnViewModel: ObservableObject {
             proto.serverAddress = endpoint
             proto.providerConfiguration = [
                 "wgQuickConfig": wgQuick,
+                "privateKey": clientPrivB64,
                 "serverCode": selectedNodeCode,
                 "endpoint": endpoint,
                 "serverPublicKey": serverPub,
                 "address": assignedAddr,
+                "allowedIps": allowedIps,
                 "dns": dnsServers,
                 "acrShield": acrShieldEnabled,
                 "lanBypass": lanBypassEnabled
@@ -943,18 +1048,9 @@ final class SweeprVpnViewModel: ObservableObject {
                 mgr.connection.stopVPNTunnel()
                 try? await Task.sleep(nanoseconds: 400_000_000)
             }
+            state = .connecting
             try mgr.connection.startVPNTunnel()
-
-            let selected = nodes.first { $0.code == selectedNodeCode }
-            let label = selected.map { "\($0.city), \($0.country)" } ?? selectedNodeCode
-            state = .connected(serverCity: label, endpoint: endpoint)
-
-            pendingSuccessfulConnections += 1
-            UserDefaults.standard.set(pendingSuccessfulConnections, forKey: "sweepr_connect_count")
-            if pendingSuccessfulConnections >= 3 && !hasRequestedReview {
-                hasRequestedReview = true
-                shouldPromptAppStoreReview = true
-            }
+            syncFromManagerStatus()
         } catch {
             state = .error("System VPN permission is required to activate WireGuard encryption: \(error.localizedDescription)")
         }
@@ -1256,11 +1352,11 @@ private struct NetworkRadarTabView: View {
                     HStack {
                         Text("Tunnel DNS Policy")
                         Spacer()
-                        Text(vm.acrShieldEnabled ? "1.1.1.2 (Filtered + IPv6)" : "1.1.1.1 (Zero-Log + IPv6)")
+                        Text(vm.acrShieldEnabled ? "10.64.0.1 + 1.1.1.2 (Filtered)" : "10.64.0.1 + 1.1.1.1 (Zero-Log)")
                             .font(.caption.monospaced())
                             .foregroundStyle(.secondary)
                     }
-                    Text("When connected, this setting configures the WireGuard tunnel DNS resolvers inside Apple Network Extension to drop smart-TV telemetry and tracking lookups before they leave your device.")
+                    Text("When connected, this setting configures the WireGuard tunnel DNS resolvers on this device to sinkhole known tracker and telemetry domains for traffic routed through the VPN.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -1285,7 +1381,7 @@ private struct NetworkRadarTabView: View {
                 Section("Discovered Bonjour Services on LAN") {
                     if vm.discoveredLanDevices.isEmpty {
                         Text(vm.isScanningLan
-                             ? "Listening for local AirPlay / mDNS responders..."
+                             ? "Listening for local AirPlay, Chromecast, HomeKit & printer mDNS responders..."
                              : "Tap \"Run Network & Bonjour Check\" above to discover real Bonjour devices broadcasting on your Wi-Fi.")
                             .font(.caption)
                             .foregroundStyle(.secondary)
@@ -1319,19 +1415,29 @@ private struct ServerListTabView: View {
                         Text(node.flag).font(.title2)
                         VStack(alignment: .leading, spacing: 2) {
                             Text("\(node.city), \(node.country)").font(.headline)
-                            Text("\(node.code) • WireGuard 10Gbps Zero-Log").font(.caption).foregroundStyle(.secondary)
+                            Text("\(node.code) • WireGuard · Zero-Log").font(.caption).foregroundStyle(.secondary)
                         }
                         Spacer()
-                        if let rtt = node.rttMs {
+                        if !node.online {
+                            Text("Offline")
+                                .font(.caption2.weight(.semibold))
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 3)
+                                .background(Color.orange.opacity(0.16))
+                                .foregroundStyle(.orange)
+                                .clipShape(Capsule())
+                        } else if let rtt = node.rttMs {
                             Text("\(rtt) ms")
                                 .font(.caption.monospaced().weight(.semibold))
                                 .foregroundStyle(rtt < 45 ? .green : .secondary)
                         }
-                        if vm.selectedNodeCode == node.code {
+                        if node.online && vm.selectedNodeCode == node.code {
                             Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
                         }
                     }
                 }
+                .disabled(!node.online)
+                .opacity(node.online ? 1.0 : 0.5)
                 .foregroundStyle(.primary)
             }
             .navigationTitle("Server Locations")
@@ -1368,6 +1474,11 @@ private struct AccountSupportTabView: View {
                         #else
                         openURL(SweeprConfig.manageSubscriptionsMacURL)
                         #endif
+                    }
+                    if vm.isActivated || !vm.accountEmail.isEmpty {
+                        Button("Sign Out on This Device") {
+                            vm.signOutLocally()
+                        }
                     }
                 }
 
@@ -1533,46 +1644,25 @@ private struct SweeprPaywallSheet: View {
     }
 
     private var fallbackPlanSummaryCards: some View {
-        VStack(spacing: 10) {
-            staticPreviewCard(
-                badge: "BEST VALUE — SAVE 50%",
-                title: "Yearly Plan (Core Pro + Wi-Fi Shield)",
-                price: "£74.99 / year (£6.25/mo equiv.)",
-                subtitle: "Billed yearly via Apple App Store • Auto-renews annually"
-            )
-            staticPreviewCard(
-                badge: "SAVE 35%",
-                title: "6-Monthly Plan",
-                price: "£48.99 / 6 months (£8.17/mo equiv.)",
-                subtitle: "Billed every 6 months via Apple App Store"
-            )
-            staticPreviewCard(
-                badge: "FLEXIBLE",
-                title: "Monthly Plan (1st-Month Intro Offer)",
-                price: "£1.99 1st month, then £12.49 / month",
-                subtitle: "Introductory offer via Apple App Store • Auto-renews monthly"
-            )
+        VStack(alignment: .leading, spacing: 12) {
+            VStack(alignment: .leading, spacing: 6) {
+                Text("App Store Plans Temporarily Unavailable")
+                    .font(.headline)
+                Text("Local App Store pricing could not be fetched right now. Connect to the internet or sign in with your Apple ID and retry to view live pricing in your local currency.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(14)
+            .background(Color.secondary.opacity(0.08))
+            .clipShape(RoundedRectangle(cornerRadius: 14))
+
             Button("Retry Loading App Store Prices") {
                 Task { await storeKit.loadProducts() }
             }
             .buttonStyle(.borderedProminent)
             .frame(maxWidth: .infinity)
         }
-    }
-
-    private func staticPreviewCard(badge: String, title: String, price: String, subtitle: String) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(badge)
-                .font(.caption2.weight(.bold))
-                .foregroundStyle(.green)
-            Text(title).font(.headline)
-            Text(price).font(.subheadline.weight(.semibold))
-            Text(subtitle).font(.caption).foregroundStyle(.secondary)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(14)
-        .background(Color.secondary.opacity(0.08))
-        .clipShape(RoundedRectangle(cornerRadius: 14))
     }
 }
 
@@ -1581,10 +1671,12 @@ private struct StoreKitProductCard: View {
     let isBusy: Bool
     let onBuy: () -> Void
 
+    @State private var isIntroEligible = false
+
     private var badgeText: String? {
         if product.id.contains("annual") && !product.id.contains("addon") { return "CORE PRO — SAVE 50%" }
         if product.id.contains("sixmonth") { return "MID-TIER ANCHOR — SAVE 35%" }
-        if product.id.contains("monthly") { return "1ST-MONTH INTRO OFFER" }
+        if product.id.contains("monthly") { return isIntroEligible ? "1ST-MONTH INTRO OFFER" : "FLEXIBLE MONTHLY" }
         if product.id.contains("addon.radar") { return "NETWORK SHIELD ADD-ON" }
         return nil
     }
@@ -1613,6 +1705,13 @@ private struct StoreKitProductCard: View {
         }
         .buttonStyle(.plain)
         .disabled(isBusy)
+        .task(id: product.id) {
+            if let sub = product.subscription {
+                isIntroEligible = await sub.isEligibleForIntroOffer
+            } else {
+                isIntroEligible = false
+            }
+        }
     }
 }
 
@@ -1639,7 +1738,7 @@ private struct VpnConsentDisclosureSheet: View {
                     )
                     disclosureRow(
                         icon: "network",
-                        text: "Encrypted routing through a private tunnel IP (10.64.0.x) and selected zero-log DNS resolvers (1.1.1.1 / 1.1.1.2)."
+                        text: "Encrypted routing through a private tunnel IP (10.64.0.x) and zero-log DNS resolvers (10.64.0.1 / 1.1.1.1 / 1.1.1.2)."
                     )
                     disclosureRow(
                         icon: "eye.slash.fill",
@@ -1684,7 +1783,7 @@ private struct LicenseLoginSheet: View {
         NavigationStack {
             Form {
                 Section("Activate with License Key or 6-Digit Code") {
-                    TextField("SWEEPR-VPN-XXXX-XXXX-XXXX or 6-digit code", text: $vm.activationCodeInput)
+                    TextField("SWPR-XXXX-XXXX-XXXX or SWEEPR-XXXX", text: $vm.activationCodeInput)
                         .autocorrectionDisabled()
                     TextField("Account email", text: $vm.emailInput)
                         .autocorrectionDisabled()

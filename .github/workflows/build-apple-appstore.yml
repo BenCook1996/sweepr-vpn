@@ -16,11 +16,72 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set up Go & XcodeGen
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
       - name: Install XcodeGen
         run: |
           brew install xcodegen
           xcodebuild -version
           xcodegen --version
+          go version
+
+      - name: Build libwg-go static libraries for iOS, iOS Simulator, and macOS
+        run: |
+          set -euo pipefail
+          rm -rf apps/mobile-ios/Vendor
+          git clone --depth 1 https://github.com/WireGuard/wireguard-apple.git apps/mobile-ios/Vendor/wireguard-apple
+          GO_DIR="apps/mobile-ios/Vendor/wireguard-apple/Sources/WireGuardKitGo"
+          python3 - "$GO_DIR/Makefile" <<'PY'
+          import sys
+          p = sys.argv[1]
+          src = open(p).read()
+          src = src.replace("GOOS_iphoneos := ios", "GOOS_iphoneos := ios\nGOOS_iphonesimulator := ios")
+          # Ensure patched GOROOT works across Go 1.22+ even if line numbers shifted
+          old = "\tcat goruntime-*.diff | patch -p1 -f -N -r- -d \"$(GOROOT)\""
+          new = (
+              "\t(cat goruntime-*.diff | patch -p1 -f -N -r- -d \"$(GOROOT)\") || "
+              "python3 -c \"import pathlib; "
+              "[p.write_text(p.read_text().replace('mach_absolute_time', 'mach_continuous_time')) "
+              "for p in pathlib.Path('$(GOROOT)/src/runtime').glob('sys_darwin*')]\""
+          )
+          assert old in src, "Expected patch rule not found in WireGuardKitGo Makefile"
+          open(p, "w").write(src.replace(old, new))
+          PY
+
+          mkdir -p apps/mobile-ios/Vendor/wg-libs/{macosx,iphoneos,iphonesimulator}
+
+          # macOS universal (x86_64 + arm64)
+          make -C "$GO_DIR" \
+            PLATFORM_NAME=macosx \
+            ARCHS="x86_64 arm64" \
+            MACOSX_DEPLOYMENT_TARGET=13.0 \
+            DEPLOYMENT_TARGET_CLANG_FLAG_NAME=mmacosx-version-min \
+            DEPLOYMENT_TARGET_CLANG_ENV_NAME=MACOSX_DEPLOYMENT_TARGET \
+            CONFIGURATION_BUILD_DIR="$(pwd)/apps/mobile-ios/Vendor/wg-libs/macosx" \
+            CONFIGURATION_TEMP_DIR="$(pwd)/apps/mobile-ios/Vendor/tmp-macosx"
+
+          # iOS device (arm64)
+          make -C "$GO_DIR" \
+            PLATFORM_NAME=iphoneos \
+            ARCHS="arm64" \
+            IPHONEOS_DEPLOYMENT_TARGET=16.0 \
+            DEPLOYMENT_TARGET_CLANG_FLAG_NAME=miphoneos-version-min \
+            DEPLOYMENT_TARGET_CLANG_ENV_NAME=IPHONEOS_DEPLOYMENT_TARGET \
+            CONFIGURATION_BUILD_DIR="$(pwd)/apps/mobile-ios/Vendor/wg-libs/iphoneos" \
+            CONFIGURATION_TEMP_DIR="$(pwd)/apps/mobile-ios/Vendor/tmp-iphoneos"
+
+          # iOS Simulator (x86_64 + arm64)
+          make -C "$GO_DIR" \
+            PLATFORM_NAME=iphonesimulator \
+            ARCHS="x86_64 arm64" \
+            IPHONEOS_DEPLOYMENT_TARGET=16.0 \
+            DEPLOYMENT_TARGET_CLANG_FLAG_NAME=mios-simulator-version-min \
+            DEPLOYMENT_TARGET_CLANG_ENV_NAME=IPHONEOS_DEPLOYMENT_TARGET \
+            CONFIGURATION_BUILD_DIR="$(pwd)/apps/mobile-ios/Vendor/wg-libs/iphonesimulator" \
+            CONFIGURATION_TEMP_DIR="$(pwd)/apps/mobile-ios/Vendor/tmp-iphonesimulator"
 
       - name: Generate Xcode project with XcodeGen
         working-directory: apps/mobile-ios

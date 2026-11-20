@@ -60,6 +60,14 @@ pub struct SubscriptionStatus {
     pub wifi_radar: bool,
     pub license_key: Option<String>,
     pub activation_code: Option<String>,
+    #[serde(default)]
+    pub referral_code: Option<String>,
+    #[serde(default)]
+    pub devices_used: Option<u32>,
+    #[serde(default)]
+    pub max_devices: Option<u32>,
+    #[serde(default)]
+    pub devices: Option<Vec<serde_json::Value>>,
     pub message: String,
 }
 
@@ -73,6 +81,14 @@ struct ApiActivateResponse {
     license_key: Option<String>,
     activation_code: Option<String>,
     entitlements: Option<serde_json::Value>,
+    #[serde(default)]
+    referral_code: Option<String>,
+    #[serde(default)]
+    devices_used: Option<u32>,
+    #[serde(default)]
+    max_devices: Option<u32>,
+    #[serde(default)]
+    devices: Option<Vec<serde_json::Value>>,
     token: Option<String>,
     license_token: Option<String>,
     message: Option<String>,
@@ -535,7 +551,7 @@ fn call_activate_api(
         "device_id": resolved_device_id,
         "device_name": default_device_name(),
         "os": std::env::consts::OS,
-        "app_version": "2.5.0"
+        "app_version": "2.6.0"
     })
     .to_string();
 
@@ -765,6 +781,10 @@ pub fn verify_subscription_with_device(
         wifi_radar,
         license_key: resp.license_key,
         activation_code: resp.activation_code.or_else(|| Some(clean_code.to_string())),
+        referral_code: resp.referral_code,
+        devices_used: resp.devices_used,
+        max_devices: resp.max_devices,
+        devices: resp.devices,
         message: "Active SWEEPR Pro subscription verified".into(),
     })
 }
@@ -957,6 +977,39 @@ fn ensure_wireguard_windows() -> Result<PathBuf, String> {
     })
 }
 
+#[cfg(target_os = "macos")]
+fn macos_utun_name() -> Option<String> {
+    let raw = fs::read_to_string(format!("/var/run/wireguard/{TUNNEL_NAME}.name")).ok()?;
+    let trimmed = raw.trim();
+    if trimmed.is_empty()
+        || !trimmed
+            .chars()
+            .all(|c| c.is_ascii_alphanumeric() || c == '_' || c == '-')
+    {
+        return None;
+    }
+    Some(trimmed.to_string())
+}
+
+#[cfg(target_os = "macos")]
+fn macos_bundled_bin_dir() -> String {
+    if let Ok(exe) = std::env::current_exe() {
+        if let Some(macos_dir) = exe.parent() {
+            let bin_dir = macos_dir.join("../Resources/bin");
+            if bin_dir.exists() {
+                let resolved = fs::canonicalize(&bin_dir).unwrap_or(bin_dir);
+                let safe = resolved
+                    .to_string_lossy()
+                    .replace(['\'', '"', '\\', '`', '$', ';', '&', '|', '\r', '\n', ':'], "");
+                if !safe.is_empty() {
+                    return format!("{safe}:");
+                }
+            }
+        }
+    }
+    String::new()
+}
+
 pub fn is_tunnel_active() -> bool {
     #[cfg(target_os = "windows")]
     {
@@ -974,6 +1027,14 @@ pub fn is_tunnel_active() -> bool {
     }
     #[cfg(target_os = "macos")]
     {
+        if let Some(utun) = macos_utun_name() {
+            if let Ok(out) = Command::new("ifconfig").arg(&utun).output() {
+                if out.status.success() {
+                    let text = String::from_utf8_lossy(&out.stdout);
+                    return text.contains("10.64.");
+                }
+            }
+        }
         if let Ok(out) = Command::new("ifconfig").output() {
             let text = String::from_utf8_lossy(&out.stdout);
             return text.contains("10.64.");
@@ -1035,8 +1096,10 @@ fn bring_tunnel_up(conf: &Path) -> Result<(), String> {
         let safe_conf = conf
             .to_string_lossy()
             .replace(['\'', '"', '\\', '`', '$', ';', '&', '|', '\r', '\n'], "");
+        let bundled_path = macos_bundled_bin_dir();
         let script = format!(
-            "do shell script \"export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH; wg-quick down '{}' >/dev/null 2>&1 || true; wg-quick up '{}'; networksetup -listallnetworkservices | tail -n +2 | grep -v '^[*]' | while IFS= read -r svc; do networksetup -setv6off \\\"$svc\\\" >/dev/null 2>&1 || true; done; dscacheutil -flushcache >/dev/null 2>&1 || true; killall -HUP mDNSResponder >/dev/null 2>&1 || true\" with administrator privileges",
+            "do shell script \"export PATH={}/opt/homebrew/bin:/usr/local/bin:/usr/sbin:/sbin:$PATH WG_QUICK_USERSPACE_IMPLEMENTATION=wireguard-go; wg-quick down '{}' >/dev/null 2>&1 || true; wg-quick up '{}'; networksetup -listallnetworkservices | tail -n +2 | grep -v '^[*]' | while IFS= read -r svc; do networksetup -setv6off \\\"$svc\\\" >/dev/null 2>&1 || true; done; dscacheutil -flushcache >/dev/null 2>&1 || true; killall -HUP mDNSResponder >/dev/null 2>&1 || true\" with administrator privileges",
+            bundled_path,
             safe_conf,
             safe_conf
         );
@@ -1127,13 +1190,15 @@ pub fn bring_tunnel_down() -> Result<(), String> {
             let safe_conf = c
                 .to_string_lossy()
                 .replace(['\'', '"', '\\', '`', '$', ';', '&', '|', '\r', '\n'], "");
+            let bundled_path = macos_bundled_bin_dir();
             let ipv6_restore = if ks_active {
                 ""
             } else {
                 " networksetup -listallnetworkservices | tail -n +2 | grep -v '^[*]' | while IFS= read -r svc; do networksetup -setv6automatic \\\"$svc\\\" >/dev/null 2>&1 || true; done;"
             };
             let script = format!(
-                "do shell script \"export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH; wg-quick down '{}' >/dev/null 2>&1 || true;{} dscacheutil -flushcache >/dev/null 2>&1 || true; killall -HUP mDNSResponder >/dev/null 2>&1 || true\" with administrator privileges",
+                "do shell script \"export PATH={}/opt/homebrew/bin:/usr/local/bin:/usr/sbin:/sbin:$PATH WG_QUICK_USERSPACE_IMPLEMENTATION=wireguard-go; wg-quick down '{}' >/dev/null 2>&1 || true; pfctl -a com.sweepr.vpn -F all >/dev/null 2>&1 || true; pfctl -f /etc/pf.conf >/dev/null 2>&1 || true;{} dscacheutil -flushcache >/dev/null 2>&1 || true; killall -HUP mDNSResponder >/dev/null 2>&1 || true\" with administrator privileges",
+                bundled_path,
                 safe_conf,
                 ipv6_restore
             );
@@ -1170,7 +1235,51 @@ pub fn bring_tunnel_down() -> Result<(), String> {
 // Public API exposed to Tauri commands
 // ---------------------------------------------------------------------------
 
+#[cfg(any(target_os = "macos", test))]
+fn parse_macos_netstat_bytes(text: &str) -> (Option<u64>, Option<u64>) {
+    let mut lines = text.lines().filter(|l| !l.trim().is_empty());
+    let Some(header_line) = lines.next() else {
+        return (None, None);
+    };
+    let headers: Vec<&str> = header_line.split_whitespace().collect();
+    let Some(i_pos) = headers.iter().position(|&c| c == "Ibytes") else {
+        return (None, None);
+    };
+    let Some(o_pos) = headers.iter().position(|&c| c == "Obytes") else {
+        return (None, None);
+    };
+    let i_from_end = headers.len() - i_pos;
+    let o_from_end = headers.len() - o_pos;
+    for line in lines {
+        if !line.contains("<Link#") {
+            continue;
+        }
+        let parts: Vec<&str> = line.split_whitespace().collect();
+        if parts.len() >= i_from_end.max(o_from_end) {
+            let rx = parts[parts.len() - i_from_end].parse::<u64>().ok();
+            let tx = parts[parts.len() - o_from_end].parse::<u64>().ok();
+            if rx.is_some() || tx.is_some() {
+                return (rx, tx);
+            }
+        }
+    }
+    (None, None)
+}
+
 fn query_tunnel_transfer_bytes() -> (Option<u64>, Option<u64>) {
+    #[cfg(target_os = "macos")]
+    {
+        if let Some(utun) = macos_utun_name() {
+            if let Ok(out) = Command::new("netstat").args(["-I", &utun, "-b"]).output() {
+                if out.status.success() {
+                    let parsed = parse_macos_netstat_bytes(&String::from_utf8_lossy(&out.stdout));
+                    if parsed.0.is_some() || parsed.1.is_some() {
+                        return parsed;
+                    }
+                }
+            }
+        }
+    }
     let mut wg_candidates = vec![PathBuf::from("wg")];
     #[cfg(target_os = "windows")]
     {
@@ -1510,5 +1619,12 @@ mod tests {
         assert!(!is_allowed_api_url("https://sweeprvpn.com.attacker.com", false));
         assert!(!is_allowed_api_url("http://127.0.0.1:8080", false));
         assert!(is_allowed_api_url("http://127.0.0.1:8080", true));
+
+        let netstat_sample = "\
+Name  Mtu   Network       Address            Ipkts Ierrs     Ibytes    Opkts Oerrs     Obytes  Coll
+utun4 1380  <Link#18>                          123     0      45678      234     0      98765     0
+utun4 1380  10.64.0.2/32  10.64.0.2            123     -      45678      234     -      98765     -
+";
+        assert_eq!(parse_macos_netstat_bytes(netstat_sample), (Some(45678), Some(98765)));
     }
 }

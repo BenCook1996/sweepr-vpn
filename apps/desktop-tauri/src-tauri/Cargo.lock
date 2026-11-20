@@ -3480,7 +3480,7 @@ dependencies = [
 
 [[package]]
 name = "sweepr-vpn"
-version = "2.5.0"
+version = "2.6.0"
 dependencies = [
  "serde",
  "serde_json",

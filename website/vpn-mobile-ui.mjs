@@ -545,8 +545,8 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
        ======================================================================== -->
   <main id="view-home" class="view active">
     <div class="mono" style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 11px;margin-bottom:12px;border:1px solid var(--border);background:var(--card-sub);border-radius:10px;font-size:10.5px;color:var(--muted)">
-      <span style="display:inline-flex;align-items:center;gap:6px;color:var(--text-sub);font-weight:700"><span style="width:7px;height:7px;border-radius:999px;background:#059669;display:inline-block"></span>TUNNEL // WIREGUARD 10GBPS</span>
-      <span>ACR SINKHOLE 10.64.0.1</span>
+      <span style="display:inline-flex;align-items:center;gap:6px;color:var(--text-sub);font-weight:700"><span style="width:7px;height:7px;border-radius:999px;background:#059669;display:inline-block"></span>TUNNEL // WIREGUARD ZERO-LOG</span>
+      <span id="mobDnsBadge">DNS FILTER READY</span>
     </div>
     <div class="c3-status-header">
       <div id="statusPill" class="c3-status-pill">TAP ORB TO PROTECT</div>
@@ -581,15 +581,15 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
         <span class="c3-change-pill">Change</span>
       </button>
 
-      <!-- 2-Column Speed & Ping Bar -->
+      <!-- 2-Column Transport & Status Bar -->
       <div class="c3-metrics-row">
-        <div class="c3-metric-box" style="cursor:pointer" onclick="toggleStealthMode()" title="Tap to switch between 10 Gbps WG and Stealth UDP-443 (Campus/eduroam/Hotel)">
-          <span style="color:var(--muted)">Tunnel</span>
-          <span id="tunnelMetric" class="mono" style="color:var(--accent-fg)">10 Gbps WG</span>
+        <div class="c3-metric-box" style="cursor:pointer" onclick="toggleStealthMode()" title="Tap to switch between standard WireGuard UDP-51820 and Stealth UDP-443">
+          <span style="color:var(--muted)">Port Mode</span>
+          <span id="tunnelMetric" class="mono" style="color:var(--accent-fg)">UDP 51820</span>
         </div>
         <div class="c3-metric-box">
-          <span style="color:var(--muted)">Ping</span>
-          <span id="pingMetric" class="mono" style="color:var(--accent-fg)">11 ms</span>
+          <span style="color:var(--muted)">Gateway</span>
+          <span id="pingMetric" class="mono" style="color:var(--accent-fg)">Online</span>
         </div>
       </div>
     </div>
@@ -601,139 +601,58 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
   <section id="view-servers" class="view">
     <div class="card">
       <div style="font-size:17px;font-weight:700;margin-bottom:4px">Select Country</div>
-      <p style="font-size:12.5px;color:var(--muted);margin-bottom:14px">10 Gbps RAM-only WireGuard gateways with full IPv4, IPv6 &amp; DNS leak protection.</p>
+      <p style="font-size:12.5px;color:var(--muted);margin-bottom:14px">Zero-log RAM-only WireGuard gateways with encrypted DNS and IPv6 leak protection.</p>
       <div id="fullSrvList"></div>
     </div>
   </section>
 
   <!-- ========================================================================
-       TAB 3: WI-FI GUARD HOME & PRIVACY SHIELDS (Plain-English Scanner, Airbnb Camera Check, 1-Tap Kids Bedtime Pause & ISP Refund Proof)
+       TAB 3: TUNNEL DNS SHIELD & LIVE NETWORK CHECK
        ======================================================================== -->
   <section id="view-shields" class="view">
-    <!-- Card 1: Plain-English Wi-Fi Guard, Doorbell Mode & Airbnb Camera Scanner -->
     <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px">
-        <div style="font-size:17px;font-weight:700">Wi-Fi Guard Home</div>
-        <span id="mobWifiGuardBadge" class="badge">1 Unknown Flagged</span>
-      </div>
-      <p style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.4">Translates cryptic <code>Espressif</code> &amp; <code>Tuya</code> chips into plain English, spots Airbnb hidden cameras, and pauses kids' consoles at bedtime.</p>
-
-      <!-- @Memorisely Rule #5 (2B): Single Primary CTA + Secondary Outline Button -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
-        <button class="btn-primary" style="margin-top:0;padding:10px;font-size:12px;border-radius:12px" onclick="runMobileWifiGuardScan(false)">5-Sec Wi-Fi Scan</button>
-        <button class="btn-secondary" style="padding:10px;font-size:12px" onclick="runMobileWifiGuardScan(true)">Scan Airbnb Cameras</button>
-      </div>
-
-      <!-- @Memorisely Rule #4 (2B): De-Boxed Doorbell Mode Row using Whitespace + Hairline Dividers -->
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:10px">
-        <div style="display:flex;align-items:center;gap:10px">
-          <div class="mob-anchor-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
-          <div>
-            <div style="font-size:13px;font-weight:800">Doorbell Mode for Wi-Fi</div>
-            <div style="font-size:11px;color:var(--muted)">Alert when a new device or guest connects</div>
-          </div>
-        </div>
-        <button id="shieldBtnDoorbell" class="c3-change-pill" style="border:none;cursor:pointer;font-size:11px;font-weight:700" onclick="toggleMobileShield('doorbell')">ACTIVE</button>
-      </div>
-
-      <!-- Plain-English Device List -->
-      <div id="mobPlainDeviceList" style="display:flex;flex-direction:column;gap:8px"></div>
-    </div>
-
-    <!-- Card 2: ISP Speed-Drop Refund Proof + 1-Tap VPN Fix (De-Boxed + Single Primary CTA) -->
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <div style="font-size:16px;font-weight:700">ISP Speed-Drop Refund Proof</div>
-        <span class="mono" style="font-size:11px;font-weight:700;color:#ef4444" id="mobIspDropPill">-82% Evening Drop</span>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:12px">
-        <div>
-          <div style="font-size:10.5px;font-weight:800;color:var(--muted);text-transform:uppercase">Your ISP Plan</div>
-          <div style="font-size:16px;font-weight:700;margin-top:2px" id="mobIspPlanLabel">$85/mo &middot; 500 Mbps</div>
-          <div style="font-size:11px;color:var(--muted)" id="mobIspProviderLabel">Spectrum / Xfinity / Virgin</div>
-        </div>
-        <div style="text-align:right">
-          <div style="font-size:10.5px;font-weight:800;color:var(--muted);text-transform:uppercase">Evening Speed</div>
-          <div style="font-size:16px;font-weight:700;color:#ef4444;margin-top:2px" id="mobIspMeasuredLabel">89 Mbps</div>
-          <div style="font-size:11px;font-weight:700;color:var(--accent-fg)">Eligible: $35 Bill Credit</div>
-        </div>
-      </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn-primary" style="flex:1.2;margin-top:0;padding:11px;font-size:12.5px;border-radius:12px" onclick="switchTab('home'); toggleTunnel()">Bypass ISP Throttling</button>
-        <button class="btn-secondary" style="flex:1;width:auto;padding:11px;font-size:12px" onclick="copyMobileIspRefundScript()">Copy $35 Script</button>
-      </div>
-    </div>
-
-    <!-- Card 3: Core Tunnel & Smart-TV Privacy Shields (2C: Uber Visual Anchoring Icons) -->
-    <div class="card">
-      <div style="font-size:16px;font-weight:700;margin-bottom:4px">Tunnel &amp; Smart-TV Shields</div>
-      <p style="font-size:12px;color:var(--muted);margin-bottom:8px">Automatic protection against IP leaks, hotel Wi-Fi snooping, and Smart-TV ACR trackers.</p>
+      <div style="font-size:16px;font-weight:700;margin-bottom:4px">Tunnel Protocol &amp; DNS Filter</div>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:8px">Applied when generating your WireGuard / Apple VPN configuration profile.</p>
 
       <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--border);gap:10px">
-        <div style="display:flex;align-items:center;gap:10px">
-          <div class="mob-anchor-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-          <div>
-            <div style="font-size:14px;font-weight:800">Internet Kill Switch</div>
-            <div style="font-size:11.5px;color:var(--muted)">Blocks traffic if the VPN tunnel drops</div>
-          </div>
-        </div>
-        <button id="shieldBtnKillSwitch" class="c3-change-pill" style="border:none;cursor:pointer;font-size:11.5px;font-weight:700" onclick="toggleMobileShield('killSwitch')">ACTIVE</button>
-      </div>
-
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--border);gap:10px">
-        <div style="display:flex;align-items:center;gap:10px">
-          <div class="mob-anchor-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg></div>
-          <div>
-            <div style="font-size:14px;font-weight:800">Untrusted Wi-Fi Auto-Shield</div>
-            <div style="font-size:11.5px;color:var(--muted)">Secures airport, cafe &amp; hotel Wi-Fi</div>
-          </div>
-        </div>
-        <button id="shieldBtnAutoWifi" class="c3-change-pill" style="border:none;cursor:pointer;font-size:11.5px;font-weight:700" onclick="toggleMobileShield('autoWifi')">ACTIVE</button>
-      </div>
-
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 0;gap:10px">
         <div style="display:flex;align-items:center;gap:10px">
           <div class="mob-anchor-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="17 2 12 7 7 2"/></svg></div>
           <div>
-            <div style="font-size:14px;font-weight:800">Smart-TV &amp; WebRTC Leak Block</div>
-            <div style="font-size:11.5px;color:var(--muted)">Masks real UK/local IP from analytics</div>
+            <div style="font-size:14px;font-weight:800">Tracker &amp; Malware DNS Filter</div>
+            <div style="font-size:11.5px;color:var(--muted)">Routes tunnel DNS via 10.64.0.1 + 1.1.1.2 malware-blocking resolver</div>
           </div>
         </div>
         <button id="shieldBtnDnsShield" class="c3-change-pill" style="border:none;cursor:pointer;font-size:11.5px;font-weight:700" onclick="toggleMobileShield('dnsShield')">ACTIVE</button>
       </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 0;gap:10px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="mob-anchor-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <div>
+            <div style="font-size:14px;font-weight:800">Stealth WireGuard Port (UDP 443)</div>
+            <div style="font-size:11.5px;color:var(--muted)">Uses UDP port 443 to traverse strict campus &amp; hotel Wi-Fi firewalls</div>
+          </div>
+        </div>
+        <button id="shieldBtnStealth443" class="c3-change-pill" style="border:none;cursor:pointer;font-size:11.5px;font-weight:700" onclick="toggleStealthMode()">OFF</button>
+      </div>
     </div>
 
-    <details class="card" style="padding:14px 16px">
-      <summary style="cursor:pointer;font-size:13.5px;font-weight:800;display:flex;justify-content:space-between;align-items:center;list-style:none">
-        <span>Smart-TV ACR Telemetry Sinkhole Rules</span>
-        <span class="mono" style="font-size:11px;color:var(--accent-fg)">6 Active ▾</span>
-      </summary>
-      <div class="mono" style="margin-top:10px;font-size:11.5px;color:var(--muted);display:flex;flex-direction:column;gap:5px;line-height:1.4">
-        <div>• gpm.samsungqbe.com (Samsung Tizen ACR)</div>
-        <div>• acr0.samsungcloudsolution.com (Samsung Ads)</div>
-        <div>• lgtvcommon.com / ibis.lgappstv.com (LG webOS)</div>
-        <div>• logs.roku.com / scribe.logs.roku.com (Roku OS)</div>
-        <div>• tvinteractive.tv (Vizio SmartCast ACR)</div>
-        <div>• device-metrics-us.amazon.com (FireTV Telemetry)</div>
+    <div class="card">
+      <div style="font-size:16px;font-weight:700;margin-bottom:4px">Public Exit IP &amp; Connection Check</div>
+      <p style="font-size:12px;color:var(--muted);line-height:1.4">Checks your current public exit IP, country, and whether your connection exits through a SWEEPR WireGuard server.</p>
+      <button class="btn-primary" style="margin-top:10px;padding:11px" onclick="runInAppLeakCheck()">Check Public IP &amp; VPN Status</button>
+      <div id="inAppDiagOut" class="mono" style="font-size:11.5px;margin-top:10px;color:var(--text-sub);line-height:1.5"></div>
+      <div id="momentOfProofPaywall" style="display:none;margin-top:10px;padding:12px;border-radius:14px;background:var(--accent-soft);border:1px solid var(--accent-border)">
+        <div style="font-size:11.5px;font-weight:700;color:var(--accent-fg);margin-bottom:4px">Your Real Public IP Is Visible</div>
+        <p id="momentOfProofText" style="font-size:11.5px;color:var(--text-sub);line-height:1.4;margin-bottom:8px">Connect via SWEEPR VPN to encrypt your traffic and mask your IP address.</p>
+        <a href="/order?plan=annual&amp;utm_source=inapp_scanner&amp;utm_medium=plg_moment_of_proof&amp;utm_content=exit_check" class="btn-primary" style="display:block;text-align:center;text-decoration:none;padding:9px;font-size:12px">Get SWEEPR VPN Pro</a>
       </div>
-    </details>
+    </div>
 
-    <details class="card" style="padding:14px 16px">
-      <summary style="cursor:pointer;font-size:13.5px;font-weight:800;display:flex;justify-content:space-between;align-items:center;list-style:none">
-        <span>ISP Throttling, P2P Port &amp; Leak Check</span>
-        <span class="mono" style="font-size:11px;color:var(--accent-fg)">Test ▾</span>
-      </summary>
-      <div style="margin-top:10px">
-        <p style="font-size:12px;color:var(--muted);line-height:1.4">Test your connection for ISP throttling (Virgin Media, TalkTalk, Sky, BT, Comcast) and DNS/WebRTC leaks.</p>
-        <button class="btn-primary" style="margin-top:10px;padding:11px" onclick="runInAppLeakCheck()">Run Live ISP &amp; Leak Diagnostic</button>
-        <div id="inAppDiagOut" class="mono" style="font-size:11.5px;margin-top:8px;color:var(--text-sub);line-height:1.45"></div>
-        <div id="momentOfProofPaywall" style="display:none;margin-top:10px;padding:12px;border-radius:14px;background:var(--accent-soft);border:1px solid var(--accent-border)">
-          <div style="font-size:11.5px;font-weight:700;color:var(--accent-fg);margin-bottom:4px">Moment of Proof: Unencrypted ISP &amp; Smart-TV ACR Detected</div>
-          <p id="momentOfProofText" style="font-size:11.5px;color:var(--text-sub);line-height:1.4;margin-bottom:8px">Your connection is exposed to ISP throttling and Smart-TV ACR beacons (gpm.samsungqbe.com). Lock your tunnel + Wi-Fi Radar now.</p>
-          <a href="/order?plan=annual&amp;utm_source=inapp_scanner&amp;utm_medium=plg_moment_of_proof&amp;utm_content=acr_shield" class="btn-primary" style="display:block;text-align:center;text-decoration:none;padding:9px;font-size:12px">Unlock Pro + Smart-TV Shield (£1.99 1st Mo)</a>
-        </div>
-      </div>
-    </details>
+    <div class="card">
+      <div style="font-size:15px;font-weight:700;margin-bottom:4px">Home Wi-Fi Device Scanner</div>
+      <p style="font-size:12px;color:var(--muted);line-height:1.45">Mobile web browsers cannot scan LAN ARP tables directly. Use the <strong>SWEEPR VPN Desktop app</strong> (Windows/macOS) on your home Wi-Fi to discover local devices and inspect open RTSP/ONVIF camera ports.</p>
+    </div>
   </section>
 
   <!-- ========================================================================
@@ -755,31 +674,14 @@ const VPN_ANDROID_HTML = `<!DOCTYPE html>
 
     <details class="card" style="padding:14px 16px">
       <summary style="cursor:pointer;font-size:14px;font-weight:800;display:flex;justify-content:space-between;align-items:center;list-style:none">
-        <span>Router, TV &amp; Steam Deck WireGuard (.conf)</span>
+        <span>Standard WireGuard .conf Export (Routers &amp; TVs)</span>
         <span class="mono" style="font-size:11px;color:var(--accent-fg)">Export ▾</span>
       </summary>
       <div style="margin-top:10px">
-        <p style="font-size:12px;color:var(--muted);line-height:1.4">Generate a pre-tuned WireGuard <code>.conf</code> file (MTU 1380 + Smart-TV ACR DNS) for your router, NAS, handheld, or streaming box:</p>
-        <select id="wgPresetSelect" class="input" style="font-weight:700">
-          <option value="gl-inet">GL.iNet Travel Router (Slate / Beryl / Flint)</option>
-          <option value="shield-tv">NVIDIA Shield TV Pro (Android TV WireGuard)</option>
-          <option value="steam-deck">Steam Deck (SteamOS Desktop / Game Mode)</option>
-          <option value="synology">Synology NAS (DSM 7 / Docker Gluetun)</option>
-          <option value="openwrt">OpenWrt / Asuswrt-Merlin / pfSense Router</option>
-        </select>
+        <p style="font-size:12px;color:var(--muted);line-height:1.4">Generate a standard WireGuard <code>.conf</code> file (MTU 1380 + tunnel DNS) compatible with GL.iNet, OpenWrt, Synology NAS, Steam Deck, or smart streaming devices:</p>
         <button class="btn-primary" style="margin-top:10px;padding:11px" onclick="exportRouterWgConf()">Download WireGuard .conf</button>
       </div>
     </details>
-
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
-        <div>
-          <div style="font-size:14px;font-weight:800">Kids Bedtime Pause Schedule</div>
-          <div style="font-size:12px;color:var(--muted)">Daily pause start time for kids' consoles &amp; tablets</div>
-        </div>
-        <input id="mobBedtimeInput" type="time" class="input" style="width:124px;margin-top:0;padding:8px 10px;font-weight:800" value="22:00" onchange="setMobBedtimeTime(this.value)" aria-label="Kids Bedtime Pause start time" />
-      </div>
-    </div>
 
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center">
@@ -827,130 +729,47 @@ const FLAGS = {
   JP: '<svg viewBox="0 0 60 40"><rect width="60" height="40" fill="#fff"/><circle cx="30" cy="20" r="11" fill="#BC002D"/></svg>'
 };
 
-const SERVERS = [
-  { code: 'UK-LON-01', flag: 'GB', country: 'United Kingdom', city: 'London', ping: '11 ms', ip: '185.212.164.42' },
-  { code: 'US-NYC-01', flag: 'US', country: 'United States', city: 'New York', ping: '64 ms', ip: '104.28.194.112' },
-  { code: 'US-LAX-01', flag: 'US', country: 'United States', city: 'Los Angeles', ping: '108 ms', ip: '104.28.210.84' },
-  { code: 'DE-FRA-01', flag: 'DE', country: 'Germany', city: 'Frankfurt', ping: '16 ms', ip: '193.32.126.19' },
-  { code: 'NL-AMS-01', flag: 'NL', country: 'Netherlands', city: 'Amsterdam', ping: '14 ms', ip: '185.107.56.91' },
-  { code: 'SE-STO-01', flag: 'SE', country: 'Sweden', city: 'Stockholm', ping: '22 ms', ip: '194.187.249.33' },
-  { code: 'SG-SIN-01', flag: 'SG', country: 'Singapore', city: 'Central', ping: '145 ms', ip: '103.253.41.18' },
-  { code: 'JP-TYO-01', flag: 'JP', country: 'Japan', city: 'Tokyo', ping: '158 ms', ip: '138.199.21.74' }
+let SERVERS = [
+  { code: 'UK-LON-01', flag: 'GB', country: 'United Kingdom', city: 'London', online: true },
+  { code: 'US-NYC-01', flag: 'US', country: 'United States', city: 'New York', online: true },
+  { code: 'US-LAX-01', flag: 'US', country: 'United States', city: 'Los Angeles', online: true },
+  { code: 'DE-FRA-01', flag: 'DE', country: 'Germany', city: 'Frankfurt', online: true },
+  { code: 'NL-AMS-01', flag: 'NL', country: 'Netherlands', city: 'Amsterdam', online: true },
+  { code: 'SE-STO-01', flag: 'SE', country: 'Sweden', city: 'Stockholm', online: true },
+  { code: 'SG-SIN-01', flag: 'SG', country: 'Singapore', city: 'Singapore', online: true },
+  { code: 'JP-TYO-01', flag: 'JP', country: 'Japan', city: 'Tokyo', online: true }
 ];
 
 let selectedCode = localStorage.getItem('sweepr_srv') || 'UK-LON-01';
 let connected = false;
 const mobileShields = {
-  killSwitch: localStorage.getItem('sweepr_mob_killswitch') !== '0',
-  autoWifi: localStorage.getItem('sweepr_mob_autowifi') !== '0',
-  dnsShield: localStorage.getItem('sweepr_mob_dnsshield') !== '0',
-  doorbell: localStorage.getItem('sweepr_mob_doorbell') !== '0'
+  dnsShield: localStorage.getItem('sweepr_mob_dnsshield') !== '0'
 };
 
-const mobDevices = [
-  { name: "Neighbor's Roku Stick", sub: 'Streaming 4K on Guest Wi-Fi • Unrecognized', state: 'intruder', blocked: false },
-  { name: "Jake's PS5 Console", sub: 'Kids Bedtime Schedule', state: 'kid', paused: true },
-  { name: 'Kitchen Smart Plug', sub: 'Translated from Tuya IoT Chip • Trusted', state: 'trusted' },
-  { name: 'Living Room Echo Dot', sub: 'Translated from Espressif IoT Chip • Trusted', state: 'trusted' }
-];
-
-function getMobBedtimeTime() {
-  try { return localStorage.getItem('sweepr_bedtime_time') || '22:00'; } catch (e) { return '22:00'; }
-}
-function formatMobBedtime12h(hhmm) {
-  const parts = String(hhmm || '22:00').split(':');
-  let h = parseInt(parts[0], 10);
-  const m = parts[1] || '00';
-  if (isNaN(h)) return '10:00 PM';
-  const ampm = h >= 12 ? 'PM' : 'AM';
-  h = h % 12 || 12;
-  return h + ':' + m + ' ' + ampm;
-}
-function setMobBedtimeTime(val) {
-  const clean = String(val || '22:00').trim() || '22:00';
-  try { localStorage.setItem('sweepr_bedtime_time', clean); } catch (e) {}
-  renderMobilePlainDevices();
-  showToast('Bedtime Pause schedule set to ' + formatMobBedtime12h(clean));
-}
-
-function renderMobilePlainDevices() {
-  const box = document.getElementById('mobPlainDeviceList');
-  if (!box) return;
-  const btFormatted = formatMobBedtime12h(getMobBedtimeTime());
-  box.innerHTML = mobDevices.map((d, i) => {
-    if (d.state === 'intruder') {
-      return '<div style="padding:11px 12px;border-radius:14px;border:1.5px solid ' + (d.blocked ? 'var(--border)' : '#f59e0b') + ';background:' + (d.blocked ? 'var(--card-sub)' : 'rgba(245,158,11,0.1)') + ';display:flex;justify-content:space-between;align-items:center;gap:8px">' +
-        '<div><div style="font-size:13px;font-weight:800">' + escHtml(d.name) + '</div><div style="font-size:11px;color:var(--muted)">' + escHtml(d.blocked ? 'Blocked from Guest Wi-Fi ✓' : d.sub) + '</div></div>' +
-        '<button class="c3-change-pill" style="border:none;cursor:pointer;min-height:38px;background:' + (d.blocked ? 'var(--accent-soft)' : '#f59e0b') + ';color:' + (d.blocked ? 'var(--accent-fg)' : '#fff') + '" onclick="toggleMobIntruder(' + i + ')">' + (d.blocked ? 'Blocked ✓' : 'Kick Off') + '</button></div>';
-    }
-    if (d.state === 'kid') {
-      return '<div style="padding:11px 12px;border-radius:14px;border:1px solid var(--border);background:var(--card-sub);display:flex;justify-content:space-between;align-items:center;gap:8px">' +
-        '<div><div style="font-size:13px;font-weight:800">' + escHtml(d.name) + '</div><div style="font-size:11px;color:var(--muted)">' + escHtml(d.paused ? ('Bedtime Pause Active (' + btFormatted + ' – 7:00 AM)') : 'Online • Tap to pause for bedtime') + '</div></div>' +
-        '<button class="c3-change-pill" style="border:none;cursor:pointer;min-height:38px" onclick="toggleMobBedtime(' + i + ')">' + (d.paused ? 'Paused' : 'Bedtime Pause') + '</button></div>';
-    }
-    return '<div style="padding:10px 12px;border-radius:14px;border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:8px">' +
-      '<div><div style="font-size:13px;font-weight:800">' + escHtml(d.name) + '</div><div style="font-size:11px;color:var(--muted)">' + escHtml(d.sub) + '</div></div>' +
-      '<span class="badge" style="font-size:10px">Trusted</span></div>';
-  }).join('');
-}
-
-function toggleMobIntruder(i) {
-  if (!mobDevices[i]) return;
-  mobDevices[i].blocked = !mobDevices[i].blocked;
-  const badge = document.getElementById('mobWifiGuardBadge');
-  if (badge) badge.textContent = mobDevices[i].blocked ? 'All Clear ✓' : '1 Unknown Flagged';
-  renderMobilePlainDevices();
-  showToast(mobDevices[i].blocked ? "Blocked Neighbor's Roku Stick ✓" : "Unblocked device");
-}
-
-function toggleMobBedtime(i) {
-  if (!mobDevices[i]) return;
-  mobDevices[i].paused = !mobDevices[i].paused;
-  renderMobilePlainDevices();
-  showToast(mobDevices[i].paused ? "Bedtime Pause enabled for " + mobDevices[i].name : "Resumed internet for " + mobDevices[i].name);
-}
-
-function runMobileWifiGuardScan(cameraMode) {
-  showToast(cameraMode ? 'Scanning Airbnb Wi-Fi for hidden RTSP/ONVIF cameras...' : 'Scanning Wi-Fi & translating IoT chips into plain English...');
-  setTimeout(() => {
-    renderMobilePlainDevices();
-    showToast(cameraMode ? 'Airbnb Scan Clear: 0 hidden cameras found' : 'Found 4 devices in plain English');
-  }, 450);
-}
-
-function copyMobileIspRefundScript() {
-  const script = 'Hi, I am calling regarding my 500 Mbps internet plan ($85/mo). Independent SWEEPR Wi-Fi Guard speed logs show my evening speeds dropped to 89 Mbps (82% below my contracted 500 Mbps rate). Under FCC/Ofcom broadband service accountability rules, I am requesting a $35 service credit on this month\'s bill.';
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(script).then(() => showToast('Copied $35 ISP Refund Script ✓')).catch(() => showToast('Script ready to paste'));
-  } else {
-    showToast('Copied $35 ISP Refund Script ✓');
-  }
-}
-
 function renderMobileShields() {
-  const map = [
-    ['shieldBtnKillSwitch', mobileShields.killSwitch],
-    ['shieldBtnAutoWifi', mobileShields.autoWifi],
-    ['shieldBtnDnsShield', mobileShields.dnsShield],
-    ['shieldBtnDoorbell', mobileShields.doorbell]
-  ];
-  map.forEach(([id, on]) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.textContent = on ? 'ACTIVE' : 'OFF';
-    el.style.color = on ? 'var(--accent-fg)' : 'var(--muted)';
-    el.style.opacity = on ? '1' : '0.65';
-  });
-  renderMobilePlainDevices();
+  const dnsBtn = document.getElementById('shieldBtnDnsShield');
+  if (dnsBtn) {
+    dnsBtn.textContent = mobileShields.dnsShield ? 'ACTIVE' : 'OFF';
+    dnsBtn.style.color = mobileShields.dnsShield ? 'var(--accent-fg)' : 'var(--muted)';
+    dnsBtn.style.opacity = mobileShields.dnsShield ? '1' : '0.65';
+  }
+  const badge = document.getElementById('mobDnsBadge');
+  if (badge) badge.textContent = mobileShields.dnsShield ? 'DNS FILTER ON (10.64.0.1)' : 'STANDARD DNS (10.64.0.1)';
+  const stealthBtn = document.getElementById('shieldBtnStealth443');
+  if (stealthBtn) {
+    stealthBtn.textContent = stealthMode ? 'ACTIVE' : 'OFF';
+    stealthBtn.style.color = stealthMode ? 'var(--accent-fg)' : 'var(--muted)';
+  }
+  const metric = document.getElementById('tunnelMetric');
+  if (metric) metric.textContent = stealthMode ? 'Stealth 443' : 'UDP 51820';
 }
 
 function toggleMobileShield(key) {
-  mobileShields[key] = !mobileShields[key];
-  const storageKey = key === 'killSwitch' ? 'sweepr_mob_killswitch' : key === 'autoWifi' ? 'sweepr_mob_autowifi' : key === 'doorbell' ? 'sweepr_mob_doorbell' : 'sweepr_mob_dnsshield';
-  localStorage.setItem(storageKey, mobileShields[key] ? '1' : '0');
-  if (document.getElementById('mobBedtimeInput')) document.getElementById('mobBedtimeInput').value = getMobBedtimeTime();
+  if (key !== 'dnsShield') return;
+  mobileShields.dnsShield = !mobileShields.dnsShield;
+  localStorage.setItem('sweepr_mob_dnsshield', mobileShields.dnsShield ? '1' : '0');
   renderMobileShields();
-  showToast((mobileShields[key] ? 'Enabled ' : 'Paused ') + (key === 'killSwitch' ? 'Kill Switch' : key === 'autoWifi' ? 'Wi-Fi Auto-Shield' : key === 'doorbell' ? 'Doorbell Mode for Wi-Fi' : 'Smart-TV DNS Shield'));
+  showToast(mobileShields.dnsShield ? 'Enabled Tracker & Malware DNS Filter (10.64.0.1 + 1.1.1.2)' : 'Switched to standard zero-log DNS (10.64.0.1 + 1.1.1.1)');
 }
 
 function showToast(msg) {
@@ -1016,29 +835,51 @@ function renderServers() {
   const cur = SERVERS.find(s => s.code === selectedCode) || SERVERS[0];
   document.getElementById('curFlag').innerHTML = FLAGS[cur.flag] || FLAGS.GB;
   document.getElementById('curLoc').textContent = cur.country + ' \\u00b7 ' + cur.city;
-  document.getElementById('pingMetric').textContent = cur.ping;
+  document.getElementById('pingMetric').textContent = cur.online === false ? 'Offline' : 'Online';
 
   const list = document.getElementById('fullSrvList');
   list.innerHTML = SERVERS.map(s => \`
-    <button class="srv-btn \${s.code === selectedCode ? 'active' : ''}" onclick="pickServer('\${s.code}')">
+    <button class="srv-btn \${s.code === selectedCode ? 'active' : ''}" \${s.online === false ? 'disabled style="opacity:0.5;cursor:not-allowed"' : ''} onclick="pickServer('\${s.code}')">
       <div style="display:flex;align-items:center;gap:12px">
         <span class="flag-box">\${FLAGS[s.flag] || ''}</span>
         <div>
-          <div style="font-size:14px;font-weight:800">\${s.country} &middot; \${s.city}</div>
-          <div class="mono" style="font-size:11px;color:var(--muted)">\${s.code} &bull; 10 Gbps WireGuard</div>
+          <div style="font-size:14px;font-weight:800">\${escHtml(s.country)} &middot; \${escHtml(s.city)}</div>
+          <div class="mono" style="font-size:11px;color:var(--muted)">\${escHtml(s.code)} &bull; WireGuard Zero-Log</div>
         </div>
       </div>
-      <span class="mono" style="font-size:12px;font-weight:800;color:var(--accent-fg)">\${s.ping}</span>
+      <span class="mono" style="font-size:12px;font-weight:800;color:\${s.online === false ? 'var(--muted)' : 'var(--accent-fg)'}">\${s.online === false ? 'Offline' : 'Online'}</span>
     </button>
   \`).join('');
 }
 
+async function fetchLiveMobileServers() {
+  try {
+    const r = await fetch('/api/vpn/servers', { cache: 'no-store' });
+    const d = await r.json().catch(() => ({}));
+    if (r.ok && d && Array.isArray(d.servers) && d.servers.length) {
+      d.servers.forEach(live => {
+        const match = SERVERS.find(s => s.code === live.code);
+        if (match) {
+          match.online = live.online !== false;
+          if (live.country) match.country = live.country;
+          if (live.city) match.city = live.city;
+        }
+      });
+      renderServers();
+    }
+  } catch (e) {}
+}
+
 function pickServer(code) {
+  const s = SERVERS.find(x => x.code === code) || SERVERS[0];
+  if (s.online === false) {
+    showToast(s.city + ' gateway is currently offline');
+    return;
+  }
   selectedCode = code;
   localStorage.setItem('sweepr_srv', code);
   renderServers();
   switchTab('home');
-  const s = SERVERS.find(x => x.code === code) || SERVERS[0];
   showToast('Selected ' + s.country + ' (' + s.city + ')');
   if (connected) {
     connected = false;
@@ -1126,10 +967,10 @@ async function toggleTunnel() {
   if (isIos) {
     lbl.textContent = 'INSTALL PROFILE';
     pill.textContent = 'PROFILE DOWNLOADING';
-    head.textContent = 'Install iOS VPN Profile in Settings';
-    sub.textContent = 'Approve profile in iOS Settings -> General -> VPN & Device Management';
-    showToast('Downloading iOS WireGuard profile...');
-    fetch('/api/vpn/apple-mobileconfig-ticket', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key, email, server_code: selectedCode, device_id: getDeviceId(), dns_shield: dnsFlag }) }).then(r => r.json()).then(td => { if (td && td.url) window.location.href = td.url; else showToast('Could not verify license for iOS profile'); }).catch(() => showToast('Network error'));
+    head.textContent = 'Install iOS VPN Profile & WireGuard App';
+    sub.textContent = 'Requires the free WireGuard App Store app + Settings -> General -> VPN & Device Management';
+    showToast('Downloading Apple WireGuard configuration profile...');
+    fetch('/api/vpn/apple-mobileconfig-ticket', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key, email, server_code: selectedCode, device_id: getDeviceId(), dns_shield: dnsFlag, stealth_443: stealthMode }) }).then(r => r.json()).then(td => { if (td && td.url) window.location.href = td.url; else showToast('Could not verify license for iOS profile'); }).catch(() => showToast('Network error'));
     return;
   }
 
@@ -1139,26 +980,6 @@ async function toggleTunnel() {
   sub.textContent = 'Gateway: ' + cur.city + ' (' + cur.country + ')';
   showToast('Launching SWEEPR VPN Android app...');
   window.location.href = 'sweeprvpn://activate?key=' + encodeURIComponent(key) + '&email=' + encodeURIComponent(email);
-}
-
-async function checkMobileWebUpdate() {
-  try {
-    const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent || '');
-    const plat = isIos ? 'ios' : 'android';
-    const r = await fetch('/api/vpn/version?platform=' + plat + '&current_version=2.4.0');
-    const d = await r.json().catch(() => ({}));
-    if (r.ok && d && (d.force_update || d.update_available)) {
-      const targetUrl = isIos ? '/ios-app?update=' + encodeURIComponent(d.latest_version || 'latest') : (d.play_store_url || 'https://play.google.com/store/apps/details?id=com.sweepr.vpn');
-      if (d.force_update) {
-        const modal = document.createElement('div');
-        modal.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(11,17,32,0.92);display:flex;align-items:center;justify-content:center;padding:20px';
-        modal.innerHTML = '<div class="card" style="max-width:360px;width:100%;text-align:center"><div style="font-size:18px;font-weight:700;margin-bottom:8px">Mandatory Update Required</div><p style="font-size:13px;color:var(--muted);margin-bottom:16px">' + escHtml(d.notes || 'Please update SWEEPR VPN to the latest version.') + '</p><a href="' + escHtml(targetUrl) + '" class="btn-primary" style="display:block;text-decoration:none;text-align:center">Update Now</a></div>';
-        document.body.appendChild(modal);
-      } else {
-        showToast('SWEEPR VPN v' + (d.latest_version || '') + ' update available');
-      }
-    }
-  } catch (e) {}
 }
 
 
@@ -1174,45 +995,40 @@ function escHtml(s) {
 function toggleStealthMode() {
   stealthMode = !stealthMode;
   localStorage.setItem('sweepr_stealth_443', stealthMode ? '1' : '0');
-  const el = document.getElementById('tunnelMetric');
-  if (el) el.textContent = stealthMode ? 'Stealth 443' : '10 Gbps WG';
-  showToast(stealthMode ? 'Stealth UDP-443 Enabled (Campus/eduroam/Hotel)' : 'Standard 10 Gbps WireGuard Active');
+  renderMobileShields();
+  showToast(stealthMode ? 'Stealth UDP-443 Enabled (Firewall bypass)' : 'Standard WireGuard UDP-51820 Active');
 }
 async function runInAppLeakCheck() {
   const out = document.getElementById('inAppDiagOut');
   const mop = document.getElementById('momentOfProofPaywall');
   const mopText = document.getElementById('momentOfProofText');
   if (!out) return;
-  out.textContent = 'Testing ISP routing, P2P UDP port & DNS/WebRTC leak state...';
+  out.textContent = 'Checking your current public exit IP & routing...';
   try {
     const t0 = performance.now();
-    const r = await fetch('/api/tools/network-check');
+    const r = await fetch('/api/tools/network-check', { cache: 'no-store' });
     const d = await r.json();
-    const rtt = Math.max(4, Math.round(performance.now() - t0));
-    const hasKey = Boolean(localStorage.getItem('sweepr_key'));
-    out.innerHTML = '• Exit IP: <strong>' + escHtml(d.ip || 'Protected') + '</strong> (' + escHtml(d.country || 'GB') + ')<br>• Transit: ' + escHtml(d.isp || 'WireGuard Gateway') + '<br>• P2P Port Forwarding &amp; UDP-443: <strong style="color:var(--accent-fg)">OPEN (' + rtt + ' ms)</strong><br>• Smart-TV ACR &amp; WebRTC Leak: <strong style="color:var(--accent-fg)">' + (hasKey || d.encrypted ? '0 LEAKS DETECTED' : '6 ACR DOMAINS READY TO SINKHOLE') + '</strong>';
-    if (!hasKey && !d.encrypted && mop) {
+    const rtt = Math.max(1, Math.round(performance.now() - t0));
+    if (!r.ok || !d || !d.ok) throw new Error('check_failed');
+    out.innerHTML = '• Exit IP: <strong>' + escHtml(d.ip || 'Unknown') + '</strong> (' + escHtml(d.country || 'Unknown') + ')<br>• Network / ISP: ' + escHtml(d.isp || 'Detected') + '<br>• Tunnel Exit Match: <strong style="color:' + (d.encrypted ? 'var(--accent-fg)' : '#ef4444') + '">' + (d.encrypted ? 'PROTECTED ON SWEEPR VPN' : 'NOT ROUTING THROUGH SWEEPR NODE') + '</strong><br>• API Round-Trip: ' + rtt + ' ms';
+    if (!d.encrypted && mop) {
       mop.style.display = 'block';
       if (mopText) {
-        mopText.textContent = 'Detected unencrypted transit on ' + (d.isp || 'your ISP') + ' (' + rtt + ' ms). Enable SWEEPR Pro to sinkhole gpm.samsungqbe.com & 5 other Smart-TV ACR trackers automatically.';
+        mopText.textContent = 'Traffic from this browser is currently exiting via ' + (d.isp || 'your ISP') + ' (' + (d.country || '') + '). Activate SWEEPR VPN to encrypt your connection.';
       }
-      fetch('/api/tools/telemetry', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tool: 'inapp_moment_of_proof', segment: 'unactivated_scan_completed', country: d.country || 'GB', rtt_ms: rtt })
-      }).catch(() => {});
+    } else if (mop) {
+      mop.style.display = 'none';
     }
   } catch (e) {
-    out.textContent = '• WireGuard DNS & WebRTC Shield: ACTIVE (Zero Leaks)';
+    out.textContent = '• Could not reach network check server — please verify your internet connection.';
   }
 }
 async function exportRouterWgConf() {
-  const preset = (document.getElementById('wgPresetSelect') || {}).value || 'gl-inet';
   const cur = SERVERS.find(s => s.code === selectedCode) || SERVERS[0];
   const key = localStorage.getItem('sweepr_key') || (document.getElementById('codeInput')?.value || '').trim();
   const email = localStorage.getItem('sweepr_email') || (document.getElementById('emailInput')?.value || '').trim();
   if (!key) {
-    showToast('Activate your Pro key first to export a router config');
+    showToast('Activate your Pro key first to export a WireGuard config');
     switchTab('account');
     return;
   }
@@ -1224,32 +1040,31 @@ async function exportRouterWgConf() {
         license_key: key,
         email,
         server_code: cur.code,
-        device_id: getDeviceId() + '_router_' + preset
+        dns_shield: mobileShields.dnsShield,
+        stealth_443: stealthMode,
+        device_id: getDeviceId() + '_router'
       })
     });
     const d = await r.json().catch(() => ({}));
     if (!r.ok || !d.ok || !d.config_text) {
-      showToast(d.message || 'Could not generate router WireGuard config');
+      showToast(d.message || 'Could not generate WireGuard config');
       return;
     }
-    const conf = '# SWEEPR VPN Router Config — Preset: ' + preset.toUpperCase() + '\n' + d.config_text;
+    const conf = d.config_text;
     const blob = new Blob([conf], { type: 'text/plain;charset=utf-8' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = 'sweepr-' + preset + '-' + cur.code.toLowerCase() + '.conf';
+    a.download = d.filename || ('sweepr-' + cur.code.toLowerCase() + '.conf');
     document.body.appendChild(a);
     a.click();
     a.remove();
     showToast('Downloaded ' + a.download);
   } catch (e) {
-    showToast('Network error generating router config');
+    showToast('Network error generating WireGuard config');
   }
 }
 
 (function init() {
-  if (stealthMode && document.getElementById('tunnelMetric')) {
-    document.getElementById('tunnelMetric').textContent = 'Stealth 443';
-  }
   const savedTheme = localStorage.getItem('sweepr_vpn_theme') || 'light';
   applyTheme(savedTheme);
   const savedKey = localStorage.getItem('sweepr_key') || '';
@@ -1259,7 +1074,7 @@ async function exportRouterWgConf() {
   }
   renderMobileShields();
   renderServers();
-  checkMobileWebUpdate();
+  fetchLiveMobileServers();
 })();
 </script>
 </body>

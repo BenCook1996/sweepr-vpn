@@ -444,8 +444,8 @@
     <section id="view-home">
       <div class="desktop-telemetry-bar">
         <div class="desktop-telemetry-left">
-          <span style="display:inline-flex;align-items:center;gap:6px;color:var(--ink3);font-weight:700"><span class="desk-led"></span>TUNNEL // WIREGUARD 10GBPS</span>
-          <span id="deskTelemetryNode">UK-LON-01 &middot; 8 ms &middot; STANDBY</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;color:var(--ink3);font-weight:700"><span class="desk-led"></span>TUNNEL // WIREGUARD ZERO-LOG</span>
+          <span id="deskTelemetryNode">UK-LON-01 &middot; STANDBY</span>
         </div>
         <div class="desktop-telemetry-chips">
           <button type="button" class="desk-chip" id="deskKillChip" onclick="toggleKillSwitch()"><span class="desk-chip-dot"></span><span>KILL SWITCH</span></button>
@@ -460,13 +460,13 @@
       <div id="recBlock">
         <h3 class="sec" style="margin-top:4px" data-i18n="recommended">Quick pick</h3>
         <div class="rec-grid">
-          <button class="rec on" id="rec-fast" onclick="pick('UK-LON-01')"><div class="ic"><svg width="18" height="18"><use href="#i-bolt"/></svg></div><div class="nm"><span class="flag xl" data-flag="GB"></span>United Kingdom</div><div class="ds">Fastest · 8 ms</div></button>
-          <button class="rec" id="rec-private" onclick="pick('SE-STO-01')"><div class="ic"><svg width="18" height="18"><use href="#i-shield"/></svg></div><div class="nm"><span class="flag xl" data-flag="SE"></span>Sweden</div><div class="ds">Privacy hub · 19 ms</div></button>
+          <button class="rec on" id="rec-fast" onclick="pick('UK-LON-01')"><div class="ic"><svg width="18" height="18"><use href="#i-bolt"/></svg></div><div class="nm"><span class="flag xl" data-flag="GB"></span>United Kingdom</div><div class="ds">London gateway</div></button>
+          <button class="rec" id="rec-private" onclick="pick('SE-STO-01')"><div class="ic"><svg width="18" height="18"><use href="#i-shield"/></svg></div><div class="nm"><span class="flag xl" data-flag="SE"></span>Sweden</div><div class="ds">Stockholm privacy hub</div></button>
         </div>
         <div class="alert" id="tvAlert">
           <div class="ico a"><svg width="19" height="19"><use href="#i-tv"/></svg></div>
-          <div class="grow"><div class="t" id="tvAlertTitle">Your Samsung TV is tracking what you watch</div><div class="s" id="tvAlertSub">Turn on the TV Shield to block it</div></div>
-          <button class="pill solid" id="tvAlertBtn" onclick="blockTv()">Block</button>
+          <div class="grow"><div class="t" id="tvAlertTitle">Tracker &amp; Malware DNS Shield</div><div class="s" id="tvAlertSub">Filters known tracker &amp; ad domains via private tunnel DNS (10.64.0.1 + 1.1.1.2) on this device</div></div>
+          <button class="pill solid" id="tvAlertBtn" onclick="blockTv()">Enable</button>
         </div>
       </div>
 
@@ -497,90 +497,41 @@
       </div>
     </section>
 
-    <!-- WI-FI GUARD HOME (Consolidated: Plain-English Device Translator, Doorbell Mode, 1-Tap Kids Bedtime Pause, Airbnb Camera Check & ISP Refund Proof) -->
+    <!-- WI-FI GUARD HOME (Local LAN Discovery, Doorbell Mode Alerts & Open Camera Port Check) -->
     <section id="view-wifi" class="hidden">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap">
         <div>
-          <h1 class="view-title"><span id="devCountTitle">4</span> <span data-i18n="wifiTitle">devices on Wi-Fi</span></h1>
-          <div class="view-sub" id="lastChecked">Checked just now</div>
-          <div style="display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:6px;background:var(--sel);border:1px solid rgba(5,150,105,.35);color:var(--accent);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;font-weight:700;margin-top:6px"><span style="width:6px;height:6px;border-radius:999px;background:currentColor;display:inline-block"></span>10.66.0.1 ACR SINKHOLE ACTIVE</div>
+          <h1 class="view-title"><span id="devCountTitle">0</span> <span data-i18n="wifiTitle">devices on Wi-Fi</span></h1>
+          <div class="view-sub" id="lastChecked">Not checked yet</div>
+          <div id="dnsShieldBadge" style="display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:6px;background:var(--card2);border:1px solid var(--line);color:var(--muted);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;font-weight:700;margin-top:6px"><span style="width:6px;height:6px;border-radius:999px;background:currentColor;display:inline-block"></span>DNS SHIELD STANDBY</div>
         </div>
         <div style="display:flex;gap:6px;flex-wrap:wrap">
-          <button class="btn-soft" onclick="runAirbnbCameraScan()" id="airbnbScanBtn" title="Check Wi-Fi for hidden RTSP/ONVIF network cameras"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg><span>Airbnb Camera Scan</span></button>
+          <button class="btn-soft" onclick="runAirbnbCameraScan()" id="airbnbScanBtn" title="Check Wi-Fi for hidden RTSP/ONVIF network cameras"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg><span>Camera Port Scan</span></button>
           <button class="btn-soft" onclick="scanWifi()" id="scanBtn" data-i18n="scanBtn">Scan Wi-Fi</button>
         </div>
       </div>
 
-      <!-- 4-Way Segmented Sub-Navigation matching Mockup 1 -->
+      <!-- 2 Real Wi-Fi Guard Sub-Tabs -->
       <div class="filter-tabs" role="tablist" aria-label="Wi-Fi Guard Home Modes" style="margin-top:12px;flex-wrap:wrap">
         <button class="ftab on" id="wgtab-all" onclick="setWifiGuardTab('all')">Who's on My Wi-Fi</button>
-        <button class="ftab" id="wgtab-bedtime" onclick="setWifiGuardTab('bedtime')">Kids Bedtime Pause</button>
-        <button class="ftab" id="wgtab-isp" onclick="setWifiGuardTab('isp')">ISP Refund Proof</button>
-        <button class="ftab" id="wgtab-camera" onclick="setWifiGuardTab('camera')">Airbnb Camera Scan</button>
+        <button class="ftab" id="wgtab-camera" onclick="setWifiGuardTab('camera')">Camera Port Scan</button>
       </div>
 
-      <!-- Doorbell Mode for Wi-Fi + Smart-TV Master Shield Card -->
+      <!-- Doorbell Mode for Wi-Fi + Device DNS Filter Card -->
       <div class="card" style="margin-top:10px;padding:13px 16px">
         <div class="set-row" style="padding:0" onclick="toggleAuto()">
           <div class="ico e"><svg width="19" height="19"><use href="#i-shield"/></svg></div>
           <div class="grow">
-            <div class="t"><span data-i18n="intruderTitle">New Device Alerts &amp; Smart-TV Protection</span> <span class="pro-tag">PRO</span></div>
-            <div class="s" data-i18n="intruderSub">Alerts you when an unknown device connects + stops Samsung, LG &amp; Roku TV tracking</div>
+            <div class="t"><span data-i18n="intruderTitle">New Device Alerts &amp; Tracker DNS Shield</span> <span class="pro-tag">PRO</span></div>
+            <div class="s" data-i18n="intruderSub">Alerts you when a new MAC joins Wi-Fi + enables tracker-blocking tunnel DNS on this device (Smart TVs require router VPN setup)</div>
           </div>
-          <button class="toggle" id="autoToggle" role="switch" aria-checked="false" aria-label="Doorbell Mode for Wi-Fi and Smart-TV Shield" onclick="event.stopPropagation();toggleAuto()"><i></i></button>
+          <button class="toggle" id="autoToggle" role="switch" aria-checked="false" aria-label="New Device Alerts and Tracker DNS Shield" onclick="event.stopPropagation();toggleAuto()"><i></i></button>
         </div>
       </div>
 
       <!-- Plain-English Device List -->
       <div style="margin-top:12px" id="devList"></div>
-
-      <!-- ISP Speed-Drop Refund Proof & Anti-Throttling Panel (Shown in 'isp' tab or when expanded from bottom strip) -->
-      <div id="ispRefundFullCard" class="card hidden" style="margin-top:12px;border:1.5px solid var(--e500)">
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
-          <div>
-            <div class="t" style="font-size:15px">ISP Speed-Drop Refund Proof &amp; Bill Credit Generator</div>
-            <div class="s">Log evening slowdowns against your promised ISP speed to claim a $20–$40 (£20–£35) bill credit — or bypass DPI throttling with 1-Click VPN.</div>
-          </div>
-          <span class="pill warn" id="ispDropBadge">Evening Audit Ready</span>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:8px;margin-top:12px">
-          <div>
-            <label class="s" style="font-size:11px;font-weight:800;display:block;margin-bottom:3px">Internet Provider</label>
-            <select id="wgIspName" class="input" style="padding:8px 10px;font-size:12.5px" onchange="saveIspPlanConfig()">
-              <option value="Spectrum">Spectrum</option>
-              <option value="Comcast Xfinity">Comcast Xfinity</option>
-              <option value="AT&T Fiber">AT&amp;T Fiber</option>
-              <option value="Virgin Media">Virgin Media (UK)</option>
-              <option value="BT Broadband">BT Broadband (UK)</option>
-              <option value="Sky Broadband">Sky Broadband (UK)</option>
-              <option value="TalkTalk">TalkTalk (UK)</option>
-              <option value="Rogers">Rogers (CA)</option>
-            </select>
-          </div>
-          <div>
-            <label class="s" style="font-size:11px;font-weight:800;display:block;margin-bottom:3px">Promised Speed (Mbps)</label>
-            <input id="wgIspPromised" type="number" class="input" value="500" min="10" max="10000" style="padding:8px 10px;font-size:12.5px" onchange="saveIspPlanConfig()" />
-          </div>
-          <div>
-            <label class="s" style="font-size:11px;font-weight:800;display:block;margin-bottom:3px">Monthly Bill ($ / £)</label>
-            <input id="wgIspCost" type="number" class="input" value="85" min="10" max="500" style="padding:8px 10px;font-size:12.5px" onchange="saveIspPlanConfig()" />
-          </div>
-        </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
-          <button class="btn-soft" onclick="runDesktopIspAudit()" id="wgRunSpeedBtn">Test Speed vs. Contract Now</button>
-          <button class="btn-soft" onclick="copyDesktopIspRefundScript()" id="wgCopyScriptBtn">Copy $35 ISP Refund Script</button>
-          <button class="btn-soft" onclick="toggleConnect(true)">Bypass ISP Throttling with VPN</button>
-        </div>
-        <div id="wgIspScriptPreview" class="card" style="margin-top:10px;background:var(--card2);padding:11px 13px;font-size:12px;line-height:1.45;color:var(--ink3)"></div>
-      </div>
-
-      <div class="card" id="ispBottomStrip" style="margin-top:12px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:var(--card2)">
-        <div style="min-width:0;flex:1">
-          <div class="t" style="font-size:13px">ISP Accountability &amp; Speed-Drop Diagnostics</div>
-          <div class="s" id="ispStripSummary">Run an ISP throughput test to measure live connection performance</div>
-        </div>
-        <button class="btn-soft" style="font-size:12px;padding:7px 12px" onclick="setWifiGuardTab('isp')">Open ISP Diagnostics</button>
-      </div>
+      <div class="s" style="margin-top:8px;font-size:11.5px;color:var(--muted)">Note: Trust tags save locally on this computer. To remove an unrecognized device from your Wi-Fi network, block its MAC address in your home router settings.</div>
 
       <!-- Hidden Legacy Radar & Individual Toggles (Preserved for JS Compatibility) -->
       <div class="radar off hidden" id="radar">
@@ -625,6 +576,7 @@
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
           <button class="btn-go" style="flex:1;font-size:14px;padding:12px" onclick="openActivate()" id="accBtn">Enter license key or upgrade</button>
           <button class="btn-soft" style="font-size:13px;padding:10px 14px" onclick="openDesktopPairOutQr()" id="accPairBtn"><svg width="15" height="15"><use href="#i-qr"/></svg>Link Phone via QR</button>
+          <button class="btn-soft hidden" style="font-size:13px;padding:10px 14px" onclick="signOutDesktop()" id="accSignOutBtn">Sign Out</button>
         </div>
         <div id="accPairDrawer" class="hidden" style="margin-top:12px;padding:14px;border-radius:12px;background:var(--card2);border:1px solid var(--line);text-align:center">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
@@ -650,11 +602,6 @@
         <div class="set-row" onclick="toggleLanBypass()"><div class="set-anchor-ico"><svg width="17" height="17"><use href="#i-printer"/></svg></div><div class="grow"><div class="t"><span data-i18n="lanTitle">Local LAN bypass (Printers &amp; AirPlay)</span> <span class="pro-tag">PRO</span></div><div class="s" data-i18n="lanSub">Keep home printers, NAS drives &amp; Smart TVs reachable while connected</div></div><button class="toggle" id="lanBypassToggle" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleLanBypass()"><i></i></button></div>
         <div class="set-row" onclick="toggleTheme()"><div class="set-anchor-ico"><svg width="17" height="17"><use href="#i-moon"/></svg></div><div class="grow"><div class="t" data-i18n="darkTitle">Dark mode</div><div class="s" data-i18n="darkSub">Easier on the eyes in low light</div></div><button class="toggle" id="darkToggle" role="switch" aria-checked="false" onclick="event.stopPropagation();toggleTheme()"><i></i></button></div>
         <div class="set-row" style="cursor:default">
-          <div class="set-anchor-ico"><svg width="17" height="17"><use href="#i-bell"/></svg></div>
-          <div class="grow"><div class="t" data-i18n="bedtimeTitle">Kids Bedtime Pause schedule</div><div class="s" data-i18n="bedtimeSub">Daily pause start time for kids' consoles, tablets &amp; TVs</div></div>
-          <input id="bedtimeTimeInput" type="time" class="input" style="width:136px;padding:7px 10px;font-weight:800" value="22:00" onchange="setBedtimeScheduleTime(this.value)" aria-label="Kids Bedtime Pause start time" />
-        </div>
-        <div class="set-row" style="cursor:default">
           <div class="set-anchor-ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
           <div class="grow"><div class="t" data-i18n="langTitle">Language</div><div class="s" data-i18n="langSub">App display language</div></div>
           <div class="lang-chip-group" role="group" aria-label="Language">
@@ -672,8 +619,8 @@
       <!-- Item 10: Product-Led Growth Referral Loop Card (Hidden on Apple App Store builds) -->
       <div class="card" id="refLoopCard" style="margin-top:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
         <div class="grow">
-          <div class="t"><span data-i18n="refTitle">Refer a friend — Give 50% off, get 1 free month</span> <span class="pill ok" style="padding:2px 8px;font-size:10.5px">Bonus</span></div>
-          <div class="s" id="refLinkText">Share your invite link; every friend who joins adds 30 days to your plan.</div>
+          <div class="t"><span data-i18n="refTitle">Refer a friend — Give 30 free days, get 30 free days</span> <span class="pill ok" style="padding:2px 8px;font-size:10.5px">Bonus</span></div>
+          <div class="s" id="refLinkText">Share your personal invite link; every friend who subscribes adds 30 bonus days to both accounts.</div>
         </div>
         <button class="btn-soft" id="copyRefBtn" onclick="copyReferralLink()">Copy Invite Link</button>
       </div>
@@ -722,18 +669,18 @@
     <svg class="plogo"><use href="#logo"/></svg>
     <button class="mini-btn desktop-only" onclick="setCompact(true)" title="Mini window" aria-label="Mini window"><svg width="15" height="15"><use href="#i-min"/></svg></button>
     <div class="h-big" id="headline"><span class="g">Connect</span><br>to stay private</div>
-    <div class="panel-meta-line" id="panelMetaLine">London, UK &bull; 8 ms &bull; 4 Wi-Fi devices safe</div>
+    <div class="panel-meta-line" id="panelMetaLine">London, UK &bull; Wi-Fi scan ready</div>
     <div class="info hidden">
       <div><div class="v" id="infoWhere">London, UK</div><div class="k" data-i18n="lblWhere">Virtual location</div></div>
       <div class="r"><div class="v warnc" id="infoHome">Exposed</div><div class="k" data-i18n="lblIp">Your IP &amp; location</div></div>
-      <div><div class="v okc" id="infoSpeed">Instant (&lt;15 ms)</div><div class="k" data-i18n="lblSpeed">Route speed</div></div>
-      <div class="r"><div class="v" id="infoDevices">4 devices</div><div class="k" data-i18n="lblWifi">On your Wi-Fi</div></div>
+      <div><div class="v okc" id="infoSpeed">WireGuard</div><div class="k" data-i18n="lblSpeed">Route protocol</div></div>
+      <div class="r"><div class="v" id="infoDevices">Ready to scan</div><div class="k" data-i18n="lblWifi">On your Wi-Fi</div></div>
     </div>
     <div class="timer hidden" id="timerBox" style="width:100%">
       <div class="k" data-i18n="lblSession">Protected session</div>
       <div class="n" id="timer">00:00:00</div>
       <div class="spark-meta" id="liveThroughput">WireGuard encrypted tunnel active</div>
-      <div class="spark-bars" id="sparkBars"></div>
+      <div class="spark-bars hidden" id="sparkBars"></div>
     </div>
     <div style="width:100%;max-width:260px;margin-top:24px;position:relative;z-index:2">
       <button class="connect-row hidden" id="panelLocBtn" onclick="changeCountry()" aria-label="Change server country">
@@ -752,7 +699,7 @@
     <div style="display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px"><svg style="width:26px;height:26px"><use href="#logo"/></svg>SWEEPR <span style="color:var(--accent)">VPN</span></div>
     <button class="btn-soft" onclick="setCompact(false)"><svg width="13" height="13"><use href="#i-max"/></svg>Full app</button>
   </div>
-  <div style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:10.5px;color:var(--muted);text-align:center;margin-top:8px;letter-spacing:.03em;font-variant-numeric:tabular-nums">TRAY // WIREGUARD 10GBPS &middot; ACR SHIELD</div>
+  <div style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:10.5px;color:var(--muted);text-align:center;margin-top:8px;letter-spacing:.03em;font-variant-numeric:tabular-nums">TRAY // WIREGUARD ZERO-LOG &middot; DNS SHIELD</div>
   <div style="text-align:center;margin-top:10px"><span class="pill warn" id="cStatus">● Not protected</span></div>
   <div class="c-city" id="cCity">London</div>
   <div style="text-align:center;color:var(--muted);font-size:13.5px" id="cCountry">United Kingdom</div>
@@ -760,7 +707,7 @@
     <button class="powerbtn off" id="cPower" onclick="toggleConnect()" aria-label="Connect or pause protection"><svg width="36" height="36"><use href="#i-power"/></svg></button>
     <div class="c-pills">
       <div class="c-pill-box"><div class="t" style="justify-content:center" id="cHome">Exposed</div><div class="s">Your IP &amp; location</div></div>
-      <div class="c-pill-box"><div class="t" style="justify-content:center" id="cStream">Instant · 4K</div><div class="s">Route quality</div></div>
+      <div class="c-pill-box"><div class="t" style="justify-content:center" id="cStream">WireGuard</div><div class="s">Route status</div></div>
     </div>
   </div>
   <div class="c-list" id="cList"></div>
@@ -777,9 +724,9 @@
 
     <div class="s" id="mError" style="color:#ef4444;font-weight:700;display:none">Please enter a valid license key.</div>
 
-    <button class="plan on" data-plan="monthly" onclick="plan(this)"><span class="tag">POPULAR · £1.99 INTRO</span><div><div class="t">1st-Month Intro Offer</div><div class="s">£1.99 first month, then £12.49/mo</div></div><div style="text-align:right"><div style="font-weight:700;font-size:16px;color:var(--accent)">£1.99</div><div class="s">today</div></div></button>
-    <button class="plan" data-plan="annual" onclick="plan(this)"><div><div class="t">Yearly Plan</div><div class="s">£74.99 billed once a year · Save 50%</div></div><div style="text-align:right"><div style="font-weight:700;font-size:15px">£6.25</div><div class="s">/month</div></div></button>
-    <button class="plan" data-plan="six_month" onclick="plan(this)"><div><div class="t">6-Month Plan</div><div class="s">£48.99 · Save 35%</div></div><div style="text-align:right"><div style="font-weight:700;font-size:15px">£8.17</div><div class="s">/month</div></div></button>
+    <button class="plan on" data-plan="monthly" onclick="plan(this)"><span class="tag" id="planTagMonthly">POPULAR · £1.99 INTRO</span><div><div class="t">1st-Month Intro Offer</div><div class="s" id="planSubMonthly">£1.99 first month, then £12.49/mo</div></div><div style="text-align:right"><div style="font-weight:700;font-size:16px;color:var(--accent)" id="planPriceMonthly">£1.99</div><div class="s">today</div></div></button>
+    <button class="plan" data-plan="annual" onclick="plan(this)"><div><div class="t">Yearly Plan</div><div class="s" id="planSubAnnual">£74.99 billed once a year · Save 50%</div></div><div style="text-align:right"><div style="font-weight:700;font-size:15px" id="planPriceAnnual">£6.25</div><div class="s">/month</div></div></button>
+    <button class="plan" data-plan="six_month" onclick="plan(this)"><div><div class="t">6-Month Plan</div><div class="s" id="planSubSixMonth">£48.99 · Save 35%</div></div><div style="text-align:right"><div style="font-weight:700;font-size:15px" id="planPriceSixMonth">£8.17</div><div class="s">/month</div></div></button>
 
     <button class="btn-go" id="mCheckoutBtn" onclick="checkoutSelectedPlan()">Continue — £1.99 (1st Month)</button>
 
@@ -817,7 +764,7 @@
       <svg style="width:40px;height:40px;flex-shrink:0"><use href="#logo"/></svg>
       <div class="grow">
         <div id="wgModalTitle" style="font-size:17px;font-weight:700">iOS, Android &amp; macOS Tunnel Setup</div>
-        <div class="s" id="wgModalSub">Instant 10Gbps WireGuard profile, QR code, or Apple On-Demand profile</div>
+        <div class="s" id="wgModalSub">WireGuard profile, QR code, or Apple On-Demand profile</div>
       </div>
       <button onclick="closeMobileWireGuardModal()" aria-label="Close" style="font-size:18px;color:var(--muted);padding:4px 8px">✕</button>
     </div>
@@ -888,21 +835,23 @@
   }
 
   /* ---------- Server Data ---------- */
+  const APP_VERSION = '2.6.0';
   const SERVERS = [
-    { code:'UK-LON-01', flag:'GB', country:'United Kingdom', short:'UK',  city:'London',      desc:'Fastest for you', calls:'Instant', stream:'4K', rating:'Great', ping:8 },
-    { code:'SE-STO-01', flag:'SE', country:'Sweden',         short:'SE',  city:'Stockholm',   desc:'Most private',    calls:'Instant', stream:'4K', rating:'Great', ping:19 },
-    { code:'NL-AMS-01', flag:'NL', country:'Netherlands',    short:'NL',  city:'Amsterdam',   desc:'Super fast',      calls:'Instant', stream:'4K', rating:'Great', ping:12 },
-    { code:'DE-FRA-01', flag:'DE', country:'Germany',        short:'DE',  city:'Frankfurt',   desc:'Super fast',      calls:'Instant', stream:'4K', rating:'Great', ping:15 },
-    { code:'US-NYC-01', flag:'US', country:'United States',  short:'USA', city:'New York',    desc:'East Coast 10G',  calls:'Smooth',  stream:'4K', rating:'Great', ping:68 },
-    { code:'US-LAX-01', flag:'US', country:'United States',  short:'USA', city:'Los Angeles', desc:'West Coast HD',   calls:'Smooth',  stream:'HD', rating:'Good',  ping:112 },
-    { code:'SG-SIN-01', flag:'SG', country:'Singapore',      short:'SG',  city:'Singapore',   desc:'Asia-Pacific',    calls:'Smooth',  stream:'HD', rating:'Good',  ping:148 },
-    { code:'JP-TYO-01', flag:'JP', country:'Japan',          short:'JP',  city:'Tokyo',       desc:'Low-latency Asia',calls:'Smooth',  stream:'HD', rating:'Good',  ping:162 }
+    { code:'UK-LON-01', flag:'GB', country:'United Kingdom', short:'UK',  city:'London',      desc:'London gateway',   ping:null, online:true, endpoint:'' },
+    { code:'SE-STO-01', flag:'SE', country:'Sweden',         short:'SE',  city:'Stockholm',   desc:'Stockholm privacy',ping:null, online:true, endpoint:'' },
+    { code:'NL-AMS-01', flag:'NL', country:'Netherlands',    short:'NL',  city:'Amsterdam',   desc:'Amsterdam node',   ping:null, online:true, endpoint:'' },
+    { code:'DE-FRA-01', flag:'DE', country:'Germany',        short:'DE',  city:'Frankfurt',   desc:'Frankfurt node',   ping:null, online:true, endpoint:'' },
+    { code:'US-NYC-01', flag:'US', country:'United States',  short:'USA', city:'New York',    desc:'East Coast USA',   ping:null, online:true, endpoint:'' },
+    { code:'US-LAX-01', flag:'US', country:'United States',  short:'USA', city:'Los Angeles', desc:'West Coast USA',   ping:null, online:true, endpoint:'' },
+    { code:'SG-SIN-01', flag:'SG', country:'Singapore',      short:'SG',  city:'Singapore',   desc:'Asia-Pacific',     ping:null, online:true, endpoint:'' },
+    { code:'JP-TYO-01', flag:'JP', country:'Japan',          short:'JP',  city:'Tokyo',       desc:'Tokyo gateway',    ping:null, online:true, endpoint:'' }
   ];
+  const fmtServerPing = s => (s && s.online === false) ? 'Offline' : ((typeof s.ping === 'number' && s.ping > 0) ? (s.ping + ' ms') : 'Online');
 
   let devices = [];
   let scanning = false;
   let lastScanAt = 0;
-  const ICONS = { windows:'i-windows', macos:'i-mac', linux:'i-linux', iphone:'i-apple', ipad:'i-apple', android:'i-android', router:'i-wifi', extender:'i-wifi', computer:'i-windows', tv:'i-tv', speaker:'i-speaker', printer:'i-printer', camera:'i-camera', console:'i-game', smart_home:'i-bulb', private:'i-apple', other:'i-android' };
+  const ICONS = { windows:'i-windows', macos:'i-mac', linux:'i-linux', iphone:'i-apple', ipad:'i-apple', android:'i-android', router:'i-wifi', extender:'i-wifi', computer:'i-windows', tv:'i-tv', speaker:'i-speaker', printer:'i-printer', camera:'i-camera', console:'i-game', smart_home:'i-bulb', private:'i-apple', other:'i-dev' };
   function resolveDeviceIcon(d) {
     const k = String((d && d.kind) || '').toLowerCase();
     const nm = String((d && d.name) || '').toLowerCase();
@@ -917,18 +866,18 @@
       if (/linux/i.test(ua)) return 'i-linux';
       return 'i-windows';
     }
-    return ICONS[k] || 'i-windows';
+    return ICONS[k] || 'i-dev';
   }
   function resolveDeviceDisplayName(d) {
-    if (!d) return 'Windows Desktop';
+    if (!d) return 'Unidentified Wi-Fi Device';
     const raw = String(d.name || '').trim();
     if (d.is_self) {
       const ua = navigator.userAgent || '';
       const selfOs = /mac/i.test(ua) ? 'macOS Desktop' : (/linux/i.test(ua) ? 'Linux Desktop' : 'Windows Desktop');
       return (raw && raw.toLowerCase() !== 'this computer' && raw.toLowerCase() !== 'this device' ? raw : selfOs) + ' (This Device)';
     }
-    if (!raw || raw === 'Home Wi-Fi Device' || raw === 'Unknown device') return 'Windows Desktop';
-    if (raw === 'Phone / Tablet (Private Wi-Fi Address)' || raw === 'Private device') return 'iPhone';
+    if (!raw || raw === 'Home Wi-Fi Device' || raw === 'Unknown device') return 'Unidentified Wi-Fi Device';
+    if (raw === 'Private device') return 'Phone / Tablet (Private MAC)';
     return raw;
   }
   const tauri = window.__TAURI__;
@@ -941,7 +890,7 @@
     if (Array.isArray(rawFavs)) savedFavs = rawFavs;
   } catch (e) {}
 
-  const state = { view:'home', code:'UK-LON-01', filter:'all', connected:false, connecting:false, pro:false, email:'', activationCode:'', auto:false, startup:false, killSwitch:false, lanBypass:true, shields:[true, true, true], seconds:0, mbTransferred:0.4, spark:[42,58,50,68,62,76,64,82,70,88,78,92], lang:'en' };
+  const state = { view:'home', code:'UK-LON-01', filter:'all', connected:false, connecting:false, pro:false, email:'', activationCode:'', referralCode:'', auto:false, startup:false, killSwitch:false, lanBypass:true, shields:[true, true, true], seconds:0, mbTransferred:0, spark:[0,0,0,0,0,0,0,0,0,0,0,0], hasLiveCounters:false, lang:'en' };
   let timerHandle = null;
   const cur = () => SERVERS.find(s => s.code === state.code) || SERVERS[0];
   const $ = id => document.getElementById(id);
@@ -1048,10 +997,12 @@
 
   function locRow(s, compact) {
     const on = s.code === state.code;
-    const right = on && state.connected ? '<span class="pill ok">Connected ✓</span>'
-      : '<span class="ping-badge"><span class="ping-dot"></span>' + s.ping + ' ms</span>';
-    return '<div class="loc-wrap' + (on ? ' on' : '') + '" data-code="' + esc(s.code) + '" oncontextmenu="showLocCtx(event, \'' + esc(s.code) + '\')">' +
-      '<button class="loc" onclick="pick(\'' + esc(s.code) + '\')">' +
+    const isOff = s.online === false;
+    const right = isOff ? '<span class="pill warn">Offline</span>'
+      : (on && state.connected ? '<span class="pill ok">Connected ✓</span>'
+      : '<span class="ping-badge"><span class="ping-dot"></span>' + fmtServerPing(s) + '</span>');
+    return '<div class="loc-wrap' + (on ? ' on' : '') + (isOff ? ' offline' : '') + '" data-code="' + esc(s.code) + '" oncontextmenu="showLocCtx(event, \'' + esc(s.code) + '\')">' +
+      '<button class="loc"' + (isOff ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + ' onclick="pick(\'' + esc(s.code) + '\')">' +
       '<span class="flag" data-flag="' + esc(s.flag) + '"></span>' +
       '<div class="grow"><div class="t">' + esc(s.country) + '</div></div>' + right + '</button></div>';
   }
@@ -1060,7 +1011,12 @@
     const q = ($('search').value || '').trim().toLowerCase();
     let items = SERVERS.filter(s => !q || (s.country + ' ' + s.city + ' ' + (s.short || '')).toLowerCase().includes(q));
     if (state.filter === 'fast') {
-      items = items.slice().sort((a, b) => a.ping - b.ping);
+      items = items.slice().sort((a, b) => {
+        if ((a.online === false) !== (b.online === false)) return a.online === false ? 1 : -1;
+        const ap = (typeof a.ping === 'number' && a.ping > 0) ? a.ping : 99999;
+        const bp = (typeof b.ping === 'number' && b.ping > 0) ? b.ping : 99999;
+        return ap - bp;
+      });
     } else if (state.filter === 'fav') {
       items = items.filter(s => savedFavs.includes(s.code));
     }
@@ -1071,6 +1027,11 @@
   }
 
   async function pick(code) {
+    const target = SERVERS.find(s => s.code === code);
+    if (target && target.online === false) {
+      toast(target.city + ' gateway is currently offline — please select an online location.');
+      return;
+    }
     state.code = code;
     try { localStorage.setItem('sweepr_vpn_server_code', code); } catch (e) {}
     $('search').value = '';
@@ -1244,6 +1205,8 @@
   function renderSparkBars() {
     const box = $('sparkBars');
     if (!box) return;
+    box.classList.toggle('hidden', !state.hasLiveCounters);
+    if (!state.hasLiveCounters) return;
     box.innerHTML = state.spark.map(v => '<div class="spark-bar" style="height:' + Math.max(4, Math.min(22, Math.round(v * 0.22))) + 'px"></div>').join('');
   }
   let prevRxBytes = null;
@@ -1254,52 +1217,51 @@
     state.seconds++;
     const h = String(Math.floor(state.seconds / 3600)).padStart(2,'0'), m = String(Math.floor(state.seconds % 3600 / 60)).padStart(2,'0'), s = String(state.seconds % 60).padStart(2,'0');
     $('timer').textContent = h + ':' + m + ':' + s;
-    let downMbps = null;
-    let upMbps = null;
-    if (tauri && state.connected) {
-      try {
-        const st = await tauri.core.invoke('vpn_status');
-        if (st && typeof st.rx_bytes === 'number' && typeof st.tx_bytes === 'number') {
-          if (prevRxBytes !== null && st.rx_bytes >= prevRxBytes && st.tx_bytes >= prevTxBytes) {
-            downMbps = (((st.rx_bytes - prevRxBytes) * 8) / 1000000).toFixed(1);
-            upMbps = (((st.tx_bytes - prevTxBytes) * 8) / 1000000).toFixed(1);
-            lastDownMbps = downMbps;
-            lastUpMbps = upMbps;
-          }
-          prevRxBytes = st.rx_bytes;
-          prevTxBytes = st.tx_bytes;
-          state.mbTransferred = (st.rx_bytes + st.tx_bytes) / (1024 * 1024);
-        }
-      } catch (e) {}
-    }
-    if (downMbps === null || upMbps === null) {
+    let st = null;
+    if (state.connected) {
       if (tauri) {
-        downMbps = lastDownMbps || '0.0';
-        upMbps = lastUpMbps || '0.0';
-      } else {
-        const baseMbps = cur().ping <= 25 ? 64 : 38;
-        downMbps = (baseMbps + Math.sin(state.seconds * 0.9) * 14 + (state.seconds % 5) * 2.1).toFixed(1);
-        upMbps = (baseMbps * 0.24 + Math.cos(state.seconds * 0.7) * 3.2).toFixed(1);
-        if (prevRxBytes === null) {
-          state.mbTransferred += (parseFloat(downMbps) + parseFloat(upMbps)) * 0.045;
-        }
+        try { st = await tauri.core.invoke('vpn_status'); } catch (e) {}
+      } else if (isWebView2) {
+        try { st = await invokeWebView2('vpnStatus', {}, 4000); } catch (e) {}
       }
     }
-    state.spark.shift();
-    state.spark.push(Math.max(25, Math.min(98, Math.round((parseFloat(downMbps) / 85) * 100))));
-    if ($('liveThroughput')) {
-      $('liveThroughput').textContent = '↓ ' + downMbps + ' Mbps · ↑ ' + upMbps + ' Mbps · ' + state.mbTransferred.toFixed(1) + ' MB encrypted';
+    if (st && typeof st.rx_bytes === 'number' && typeof st.tx_bytes === 'number') {
+      state.hasLiveCounters = true;
+      let downMbps = lastDownMbps;
+      let upMbps = lastUpMbps;
+      if (prevRxBytes !== null && st.rx_bytes >= prevRxBytes && st.tx_bytes >= prevTxBytes) {
+        downMbps = (((st.rx_bytes - prevRxBytes) * 8) / 1000000).toFixed(1);
+        upMbps = (((st.tx_bytes - prevTxBytes) * 8) / 1000000).toFixed(1);
+        lastDownMbps = downMbps;
+        lastUpMbps = upMbps;
+      }
+      prevRxBytes = st.rx_bytes;
+      prevTxBytes = st.tx_bytes;
+      state.mbTransferred = (st.rx_bytes + st.tx_bytes) / (1024 * 1024);
+      state.spark.shift();
+      state.spark.push(Math.max(18, Math.min(98, Math.round((parseFloat(downMbps) / 85) * 100))));
+      if ($('liveThroughput')) {
+        $('liveThroughput').textContent = '↓ ' + downMbps + ' Mbps · ↑ ' + upMbps + ' Mbps · ' + state.mbTransferred.toFixed(1) + ' MB encrypted';
+      }
+    } else {
+      state.hasLiveCounters = false;
+      if ($('liveThroughput')) {
+        $('liveThroughput').textContent = 'WireGuard encrypted tunnel active';
+      }
     }
     renderSparkBars();
   }
 
   function blockTv() {
-    if (!requirePro('Unlock SWEEPR Pro to block Smart-TV tracking across your home.')) return;
+    if (!requirePro('Unlock SWEEPR Pro to enable the Tracker & Malware DNS Shield on this device.')) return;
+    state.shields[0] = true;
+    state.shields[1] = true;
+    try { localStorage.setItem('sweepr_vpn_shields', JSON.stringify(state.shields)); } catch (e) {}
     go('home');
     if (!state.connected) {
       toggleConnect(true);
     } else {
-      toast('Smart-TV tracker blocking is active on SWEEPR DNS (10.64.0.1)');
+      syncHouseholdShieldsToNative('Tracker-blocking DNS enabled on SWEEPR tunnel (10.64.0.1 + 1.1.1.2)');
     }
   }
 
@@ -1321,25 +1283,16 @@
     wgDevicePolicies = JSON.parse(localStorage.getItem('sweepr_wifi_guard_policies') || '{}') || {};
   } catch (e) { wgDevicePolicies = {}; }
 
-  let wgIspPlan = { ispName: '', promisedMbps: 0, monthlyCost: 0, measuredMbps: 0, dropPct: 0 };
-  try {
-    const savedIsp = JSON.parse(localStorage.getItem('sweepr_wifi_guard_isp') || 'null');
-    if (savedIsp && savedIsp.ispName) wgIspPlan = Object.assign(wgIspPlan, savedIsp);
-  } catch (e) {}
-
   function getDevicePolicyKey(d) {
     return String((d && (d.mac || d.ip || d.name)) || 'dev').toLowerCase();
   }
 
   function setWifiGuardTab(tab) {
-    wgCurrentTab = tab || 'all';
-    ['all','bedtime','isp','camera'].forEach(k => {
+    wgCurrentTab = (tab === 'camera') ? 'camera' : 'all';
+    ['all','camera'].forEach(k => {
       const btn = $('wgtab-' + k);
       if (btn) btn.classList.toggle('on', k === wgCurrentTab);
     });
-    const ispCard = $('ispRefundFullCard');
-    if (ispCard) ispCard.classList.toggle('hidden', wgCurrentTab !== 'isp');
-    updateIspRefundPreview();
     renderDevices();
   }
 
@@ -1349,57 +1302,15 @@
     const key = getDevicePolicyKey(d);
     const curPol = wgDevicePolicies[key] || {};
     const curName = curPol.customName || resolveDeviceDisplayName(d);
-    const next = window.prompt('Enter a plain-English name for this device (e.g. "Kitchen Echo Dot", "Emma\'s Nintendo Switch"):', curName);
+    const next = window.prompt('Enter a plain-English name for this device (e.g. "Living Room TV", "Office Printer"):', curName);
     if (!next || !next.trim()) return;
     const clean = next.trim().slice(0, 48);
     wgDevicePolicies[key] = Object.assign({}, curPol, { customName: clean, trustState: 'trusted' });
     try { localStorage.setItem('sweepr_wifi_guard_policies', JSON.stringify(wgDevicePolicies)); } catch (e) {}
     if (tauri) {
-      try { tauri.core.invoke('set_wifi_guard_device_policy', { mac: key, customName: clean, trustState: 'trusted', paused: !!curPol.paused, bedtimeSchedule: curPol.bedtimeSchedule || null }).catch(() => {}); } catch (e) {}
+      try { tauri.core.invoke('set_wifi_guard_device_policy', { mac: key, customName: clean, trustState: 'trusted', paused: false, bedtimeSchedule: null }).catch(() => {}); } catch (e) {}
     }
     toast('Renamed to "' + clean + '" ✓');
-    renderDevices();
-  }
-
-  function getBedtimeScheduleTime() {
-    try {
-      return localStorage.getItem('sweepr_bedtime_time') || '22:00';
-    } catch (e) { return '22:00'; }
-  }
-  function formatBedtime12h(hhmm) {
-    const parts = String(hhmm || '22:00').split(':');
-    let h = parseInt(parts[0], 10);
-    const m = parts[1] || '00';
-    if (isNaN(h)) return '10:00 PM';
-    const ampm = h >= 12 ? 'PM' : 'AM';
-    h = h % 12 || 12;
-    return h + ':' + m + ' ' + ampm;
-  }
-  function setBedtimeScheduleTime(val) {
-    const clean = String(val || '22:00').trim() || '22:00';
-    try { localStorage.setItem('sweepr_bedtime_time', clean); } catch (e) {}
-    if ($('bedtimeTimeInput') && $('bedtimeTimeInput').value !== clean) {
-      $('bedtimeTimeInput').value = clean;
-    }
-    toast('Kids Bedtime Pause time set to ' + formatBedtime12h(clean));
-    renderDevices();
-  }
-
-  function toggleDeviceBedtimePause(idx) {
-    const d = devices[idx];
-    if (!d) return;
-    const key = getDevicePolicyKey(d);
-    const curPol = wgDevicePolicies[key] || {};
-    const nextPaused = !curPol.paused;
-    const btLabel = formatBedtime12h(getBedtimeScheduleTime());
-    const sched = nextPaused ? ('Paused ' + btLabel + ' – 7:00 AM (Bedtime Schedule)') : '';
-    wgDevicePolicies[key] = Object.assign({}, curPol, { paused: nextPaused, bedtimeSchedule: sched });
-    try { localStorage.setItem('sweepr_wifi_guard_policies', JSON.stringify(wgDevicePolicies)); } catch (e) {}
-    if (tauri) {
-      try { tauri.core.invoke('set_wifi_guard_device_policy', { mac: key, customName: curPol.customName || null, trustState: curPol.trustState || null, paused: nextPaused, bedtimeSchedule: sched }).catch(() => {}); } catch (e) {}
-    }
-    const label = curPol.customName || resolveDeviceDisplayName(d);
-    toast(nextPaused ? ('Bedtime Pause active for ' + label + ' (' + btLabel + ' – 7:00 AM)') : ('Internet resumed for ' + label));
     renderDevices();
   }
 
@@ -1408,15 +1319,15 @@
     if (!d) return;
     const key = getDevicePolicyKey(d);
     const curPol = wgDevicePolicies[key] || {};
-    const isFlagged = curPol.trustState === 'flagged';
+    const isFlagged = curPol.trustState === 'flagged' || (!!d.intruder_risk && curPol.trustState !== 'trusted');
     const nextTrust = isFlagged ? 'trusted' : 'flagged';
     wgDevicePolicies[key] = Object.assign({}, curPol, { trustState: nextTrust });
     try { localStorage.setItem('sweepr_wifi_guard_policies', JSON.stringify(wgDevicePolicies)); } catch (e) {}
     if (tauri) {
-      try { tauri.core.invoke('set_wifi_guard_device_policy', { mac: key, customName: curPol.customName || null, trustState: nextTrust, paused: !!curPol.paused, bedtimeSchedule: curPol.bedtimeSchedule || null }).catch(() => {}); } catch (e) {}
+      try { tauri.core.invoke('set_wifi_guard_device_policy', { mac: key, customName: curPol.customName || null, trustState: nextTrust, paused: false, bedtimeSchedule: null }).catch(() => {}); } catch (e) {}
     }
     const label = curPol.customName || resolveDeviceDisplayName(d);
-    toast(nextTrust === 'flagged' ? ('Flagged ' + label + ' as unrecognized device') : ('Marked ' + label + ' as Trusted Family Device'));
+    toast(nextTrust === 'flagged' ? ('Flagged ' + label + ' as unrecognized') : ('Marked ' + label + ' as Trusted'));
     renderDevices();
   }
 
@@ -1425,101 +1336,22 @@
     await scanWifi();
     const cams = devices.filter(d => d.camera_risk || d.kind === 'camera');
     if (cams.length === 0) {
-      toast('Airbnb Camera Check Complete: 0 hidden RTSP/ONVIF cameras detected on this Wi-Fi');
+      toast('Camera Port Scan Complete: 0 open RTSP/ONVIF camera ports detected on this Wi-Fi');
     } else {
-      toast('Camera Check: ' + cams.length + ' network camera device(s) found — inspect list below');
+      toast('Camera Port Scan: ' + cams.length + ' network camera device(s) found — inspect list below');
     }
-  }
-
-  function buildIspRefundScriptText() {
-    const isp = ($('wgIspName') && $('wgIspName').value) || wgIspPlan.ispName || 'Spectrum';
-    const promised = Number(($('wgIspPromised') && $('wgIspPromised').value) || wgIspPlan.promisedMbps || 500);
-    const cost = Number(($('wgIspCost') && $('wgIspCost').value) || wgIspPlan.monthlyCost || 85);
-    const measured = Number(wgIspPlan.measuredMbps || Math.max(45, Math.round(promised * 0.18)));
-    const dropPct = Math.max(10, Math.min(95, Math.round(((promised - measured) / Math.max(promised, 1)) * 100)));
-    const isUk = /virgin|bt |sky|talktalk/i.test(isp);
-    const sym = isUk ? '£' : '$';
-    const credit = Math.max(15, Math.min(45, Math.round(cost * (dropPct / 100) * 0.5)));
-    const regRef = isUk ? 'Ofcom Voluntary Code of Practice on Broadband Speeds' : 'FCC Broadband Consumer Label & Service Level Accountability rules';
-    return '1-Click ' + isp + ' Bill Credit Script (Claim ' + sym + credit + ' Credit):\n' +
-      '"Hi, I am calling regarding my ' + isp + ' ' + promised + ' Mbps internet plan (' + sym + cost + '/mo). Independent SWEEPR Wi-Fi Guard speed logs show my evening line rate dropped to ' + measured + ' Mbps (' + dropPct + '% below my contracted ' + promised + ' Mbps speed). Under the ' + regRef + ', I am requesting a ' + sym + credit + ' service-level credit on this month\'s statement and a line provisioning reset."';
-  }
-
-  function updateIspRefundPreview() {
-    const isp = ($('wgIspName') && $('wgIspName').value) || wgIspPlan.ispName || 'Spectrum';
-    const promised = Number(($('wgIspPromised') && $('wgIspPromised').value) || wgIspPlan.promisedMbps || 500);
-    const cost = Number(($('wgIspCost') && $('wgIspCost').value) || wgIspPlan.monthlyCost || 85);
-    const measured = Number(wgIspPlan.measuredMbps || Math.max(45, Math.round(promised * 0.18)));
-    const dropPct = Math.max(10, Math.min(95, Math.round(((promised - measured) / Math.max(promised, 1)) * 100)));
-    const isUk = /virgin|bt |sky|talktalk/i.test(isp);
-    const sym = isUk ? '£' : '$';
-    const credit = Math.max(15, Math.min(45, Math.round(cost * (dropPct / 100) * 0.5)));
-    if ($('ispStripSummary')) {
-      $('ispStripSummary').textContent = isp + ' ' + promised + ' Mbps Plan (' + sym + cost + '/mo) • Logged drop to ' + measured + ' Mbps (-' + dropPct + '%) • Claim ' + sym + credit + ' credit';
-    }
-    if ($('ispDropBadge')) {
-      $('ispDropBadge').textContent = measured + ' Mbps vs ' + promised + ' Mbps (-' + dropPct + '%)';
-    }
-    if ($('wgIspScriptPreview')) {
-      $('wgIspScriptPreview').innerText = buildIspRefundScriptText();
-    }
-  }
-
-  function saveIspPlanConfig() {
-    wgIspPlan.ispName = ($('wgIspName') && $('wgIspName').value) || 'Spectrum';
-    wgIspPlan.promisedMbps = Number(($('wgIspPromised') && $('wgIspPromised').value) || 500);
-    wgIspPlan.monthlyCost = Number(($('wgIspCost') && $('wgIspCost').value) || 85);
-    try { localStorage.setItem('sweepr_wifi_guard_isp', JSON.stringify(wgIspPlan)); } catch (e) {}
-    updateIspRefundPreview();
-  }
-
-  async function runDesktopIspAudit() {
-    const btn = $('wgRunSpeedBtn');
-    if (btn) btn.textContent = 'Testing Line Rate…';
-    const t0 = performance.now();
-    try {
-      await fetch('/api/proof/live-stats', { cache: 'no-store' });
-    } catch (e) {}
-    const rtt = Math.max(6, Math.round(performance.now() - t0));
-    const promised = Number(($('wgIspPromised') && $('wgIspPromised').value) || 500);
-    const measured = state.connected ? Math.round(promised * 0.94) : Math.max(48, Math.round(promised * 0.18));
-    wgIspPlan.measuredMbps = measured;
-    saveIspPlanConfig();
-    if (tauri) {
-      try {
-        await tauri.core.invoke('log_isp_speed_sample', {
-          ispName: wgIspPlan.ispName,
-          promisedMbps: wgIspPlan.promisedMbps,
-          monthlyCost: wgIspPlan.monthlyCost,
-          currency: /virgin|bt |sky|talktalk/i.test(wgIspPlan.ispName) ? 'GBP' : 'USD',
-          measuredMbps: measured,
-          pingMs: rtt
-        });
-      } catch (e) {}
-    }
-    if (btn) btn.textContent = 'Test Speed vs. Contract Now';
-    toast('ISP Audit Logged: ' + measured + ' Mbps measured (' + rtt + ' ms ping)');
-  }
-
-  function copyDesktopIspRefundScript() {
-    const txt = buildIspRefundScriptText();
-    navigator.clipboard.writeText(txt).then(() => {
-      toast('Copied ISP Refund Claim Script to clipboard ✓');
-    }).catch(() => {});
   }
 
   function renderDevices() {
     const list = devices;
     const warn = list.filter(d => d.tracker_risk || d.camera_risk || d.intruder_risk);
-    $('devCountTitle').textContent = list.length || '…';
+    $('devCountTitle').textContent = list.length || '0';
     $('infoDevices').textContent = list.length ? list.length + ' devices' : 'Ready to scan';
     $('blips').innerHTML = layout(list).map(d =>
       '<div class="blip' + (d.tracker_risk ? ' warn' : '') + '" style="left:' + d.x.toFixed(1) + '%;top:' + d.y.toFixed(1) + '%" title="' + esc(resolveDeviceDisplayName(d) + ' · ' + d.ip) + '"><div class="b"><svg width="17" height="17"><use href="#' + resolveDeviceIcon(d) + '"/></svg></div><div class="l">' + esc(shortLabel(resolveDeviceDisplayName(d))) + '</div></div>').join('');
 
     let filtered = list.map((d, idx) => ({ d, idx }));
-    if (wgCurrentTab === 'bedtime') {
-      filtered = filtered.filter(item => !item.d.is_router && !item.d.is_self && ['console','tv','iphone','android','ipad','speaker','other','windows','macos'].includes(String(item.d.kind || '').toLowerCase()));
-    } else if (wgCurrentTab === 'camera') {
+    if (wgCurrentTab === 'camera') {
       filtered = filtered.filter(item => item.d.camera_risk || item.d.kind === 'camera' || item.d.intruder_risk);
     }
 
@@ -1527,25 +1359,19 @@
       const key = getDevicePolicyKey(d);
       const pol = wgDevicePolicies[key] || {};
       const displayName = pol.customName || resolveDeviceDisplayName(d);
-      const isPaused = !!pol.paused;
       const isFlagged = pol.trustState === 'flagged' || (!!d.intruder_risk && pol.trustState !== 'trusted');
-      const isKidDevice = ['console','tv','iphone','android','ipad'].includes(String(d.kind || '').toLowerCase()) && !d.is_self && !d.is_router;
-      const camBadge = d.camera_risk ? ' <span class="pill warn" style="font-size:10px;padding:2px 7px">Camera Check</span>' : '';
-      const subText = isPaused
-        ? 'Kids Bedtime Schedule: Paused ' + formatBedtime12h(getBedtimeScheduleTime()) + ' – 7:00 AM · ' + d.ip
-        : (String(d.detail || '').includes(d.ip) ? d.detail : (d.detail + (d.ip ? ' · ' + d.ip : '')));
+      const camBadge = d.camera_risk ? ' <span class="pill warn" style="font-size:10px;padding:2px 7px">Open Camera Port</span>' : '';
+      const subText = String(d.detail || '').includes(d.ip) ? d.detail : (d.detail + (d.ip ? ' · ' + d.ip : ''));
 
       let actions = '<button class="btn-soft" style="padding:4px 9px;min-height:28px;font-size:11px" onclick="renameWifiDevice(' + idx + ')" title="Give this device a custom household name">Rename</button>';
-      if (isKidDevice || wgCurrentTab === 'bedtime') {
-        actions += '<button class="pill ' + (isPaused ? 'warn' : 'ok') + '" style="cursor:pointer" onclick="toggleDeviceBedtimePause(' + idx + ')">' + (isPaused ? 'Paused' : 'Bedtime Pause') + '</button>';
-      } else if (d.tracker_risk) {
-        actions += '<button class="pill solid" onclick="blockTv()">Block TV Tracking</button>';
+      if (d.tracker_risk) {
+        actions += '<button class="pill solid" onclick="blockTv()">DNS Info</button>';
       } else if (isFlagged) {
-        actions += '<button class="pill warn" style="cursor:pointer" onclick="toggleDeviceIntruderFlag(' + idx + ')">Block / Trust</button>';
+        actions += '<button class="pill warn" style="cursor:pointer" onclick="toggleDeviceIntruderFlag(' + idx + ')">Mark Trusted</button>';
       } else if (!d.is_self && !d.is_router) {
         actions += '<button class="pill ok" style="cursor:pointer" onclick="toggleDeviceIntruderFlag(' + idx + ')">Trusted ✓</button>';
       } else {
-        actions += '<span class="pill ok">Safe ✓</span>';
+        actions += '<span class="pill ok">Local ✓</span>';
       }
 
       const rowWarn = d.tracker_risk || isFlagged || d.camera_risk;
@@ -1555,16 +1381,23 @@
         '<div style="display:flex;gap:6px;align-items:center;flex-shrink:0">' + actions + '</div></div>';
     }).join('') : '<div class="card s" style="text-align:center">' +
       (wgCurrentTab === 'camera'
-        ? '<strong>Airbnb &amp; Guest Wi-Fi Camera Scan Clear:</strong> 0 hidden RTSP/ONVIF cameras detected on this network'
-        : (scanning ? 'Scanning your local Wi-Fi network in plain English…' : 'Tap "Scan Wi-Fi" to identify every connected device in plain English.')) +
+        ? '<strong>Camera Port Scan Clear:</strong> 0 open RTSP/ONVIF camera ports detected on this network'
+        : (scanning ? 'Scanning your local Wi-Fi network…' : 'Tap "Scan Wi-Fi" to inspect devices connected to your local network.')) +
       '</div>';
 
-    updateIspRefundPreview();
     $('wifiDot').classList.toggle('hidden', warn.length === 0);
-    $('tvAlert').classList.toggle('ok', warn.length === 0);
-    $('tvAlertTitle').textContent = warn.length ? (warn.length === 1 ? 'Your ' + warn[0].name + ' may be tracking what you watch' : warn.length + ' devices need your attention on Wi-Fi') : (list.length ? 'No TVs or unknown cameras are tracking you' : 'Smart-TV ACR & Wi-Fi Guard Shield');
-    $('tvAlertSub').textContent = warn.length ? 'Plain-English Wi-Fi Guard flagged Smart-TV ACR trackers or unrecognized devices' : (list.length ? list.length + ' devices on your Wi-Fi translated into plain English ✓' : 'Blocks Samsung, LG & Roku tracking beacons + alerts on unknown Wi-Fi devices');
-    $('tvAlertBtn').classList.toggle('hidden', warn.length === 0 && list.length > 0);
+    $('tvAlert').classList.toggle('ok', warn.length === 0 && state.connected);
+    if (warn.length > 0) {
+      $('tvAlertTitle').textContent = warn.length === 1 ? (resolveDeviceDisplayName(warn[0]) + ' flagged on local Wi-Fi') : (warn.length + ' devices flagged on local Wi-Fi');
+      $('tvAlertSub').textContent = 'Review discovered devices under Wi-Fi & TV (router WireGuard setup required for Smart-TV filtering)';
+      $('tvAlertBtn').classList.add('hidden');
+    } else {
+      $('tvAlertTitle').textContent = 'Tracker & Malware DNS Shield';
+      $('tvAlertSub').textContent = state.connected
+        ? 'Active on your WireGuard tunnel (10.64.0.1 + 1.1.1.2) for traffic from this computer'
+        : 'Connect VPN to route this computer through private tracker-filtering DNS (10.64.0.1 + 1.1.1.2)';
+      $('tvAlertBtn').classList.toggle('hidden', state.connected);
+    }
   }
 
   async function scanWifi() {
@@ -1580,7 +1413,7 @@
           devices = [
             { name:"Neighbor's Unknown Device", ip:'192.168.1.49', mac:'Private MAC', kind:'private', detail:'Joined recently · Guest Wi-Fi · Unrecognized device', tracker_risk:false, intruder_risk:true },
             { name:'Living Room Samsung TV', ip:'192.168.1.22', mac:'Samsung', kind:'tv', detail:'Smart-TV ACR Telemetry Filtered', tracker_risk:false },
-            { name:'This Device', ip:'192.168.1.14', mac:'Local', kind:'computer', is_self:true, detail:'Protected by SWEEPR 10 Gbps WireGuard', tracker_risk:false },
+            { name:'This Device', ip:'192.168.1.14', mac:'Local', kind:'computer', is_self:true, detail:'Protected by SWEEPR WireGuard', tracker_risk:false },
             { name:'Home Wi-Fi Router', ip:'192.168.1.1', mac:'Gateway', kind:'router', is_router:true, detail:'Local gateway reachable', tracker_risk:false }
           ];
           lastScanAt = Date.now();
@@ -1644,10 +1477,13 @@
     state.auto = !state.auto;
     state.shields = [state.auto, state.auto, state.auto];
     try { localStorage.setItem('sweepr_vpn_auto_radar', state.auto ? '1' : '0'); } catch (e) {}
-    syncSwitchAria($('autoToggle'), state.auto); if ($('bedtimeTimeInput')) $('bedtimeTimeInput').value = getBedtimeScheduleTime();
+    syncSwitchAria($('autoToggle'), state.auto);
     [0, 1, 2].forEach(i => syncSwitchAria($('sh-' + i), state.pro && state.shields[i]));
     $('radar').classList.add('off');
-    syncHouseholdShieldsToNative(state.auto ? "Full Home & Smart-TV Shield enabled (DNS 1.1.1.2 + Wi-Fi monitoring)" : 'Home & Smart-TV shields paused');
+    if (tauri) {
+      try { tauri.core.invoke('set_doorbell_mode', { enabled: state.auto }).catch(() => {}); } catch (e) {}
+    }
+    syncHouseholdShieldsToNative(state.auto ? "Tracker DNS Filter (10.64.0.1 + 1.1.1.2) & Wi-Fi Doorbell Alerts enabled" : 'Tracker DNS Filter & Wi-Fi Doorbell Alerts paused');
     postNative('toggleRadar', state.auto);
   }
   async function syncHouseholdShieldsToNative(toastFallback) {
@@ -1709,15 +1545,25 @@
   }
   async function toggleKillSwitch() {
     if (!requirePro('Unlock SWEEPR Pro to enable the Emergency Kill Switch.')) return;
-    state.killSwitch = !state.killSwitch;
+    const nextKs = !state.killSwitch;
+    if (isWebView2 && !tauri) {
+      try {
+        const ksRes = await invokeWebView2('setKillSwitch', { enabled: nextKs }, 6000);
+        if (ksRes && ksRes.ok === false) {
+          toast(ksRes.error || 'Connect VPN once to authorize Windows Kill Switch firewall rules.');
+          return;
+        }
+      } catch (e) {
+        toast('Could not update Windows Kill Switch firewall rules.');
+        return;
+      }
+    } else {
+      postNative('setKillSwitch', nextKs);
+    }
+    state.killSwitch = nextKs;
     try { localStorage.setItem('sweepr_vpn_killswitch', state.killSwitch ? '1' : '0'); } catch (e) {}
     syncSwitchAria($('killToggle'), state.killSwitch);
     if ($('deskKillChip')) $('deskKillChip').classList.toggle('on', !!state.killSwitch);
-    if (isWebView2 && !tauri) {
-      try { await invokeWebView2('setKillSwitch', { enabled: state.killSwitch }, 6000); } catch (e) {}
-    } else {
-      postNative('setKillSwitch', state.killSwitch);
-    }
     toast(state.killSwitch ? 'Emergency Kill Switch enabled — non-VPN leaks blocked' : 'Emergency Kill Switch turned off');
   }
   function toggleLanBypass() {
@@ -1732,8 +1578,14 @@
     }
   }
   function copyReferralLink() {
-    const seed = (state.activationCode || state.email || 'PRO').replace(/[^A-Z0-9]/gi, '').slice(-6).toUpperCase() || 'FRIEND';
-    const url = 'https://sweeprvpn.com/order?ref=SWP-' + seed;
+    if (!requirePro('Activate SWEEPR Pro first to get your personal 30-day referral link.')) return;
+    const refCode = (state.referralCode || '').trim();
+    if (!refCode) {
+      toast('Refreshing your referral code — try again in a moment.');
+      verifySavedSubscription();
+      return;
+    }
+    const url = 'https://sweeprvpn.com/order?ref=' + encodeURIComponent(refCode);
     navigator.clipboard.writeText(url).then(() => {
       if ($('copyRefBtn')) $('copyRefBtn').textContent = 'Invite Copied ✓';
       toast('Referral link copied: ' + url);
@@ -1761,12 +1613,12 @@
       home:'VPN', wifi:'Wi-Fi & TV', account:'Account', welcome:'Select a Location',
       homeSub:'Choose a Country', recommended:'Quick pick',
       allCountries:'Available locations', protect:'Connect', pause:'Connected ✓',
-      wifiTitle:'devices on Wi-Fi', scanBtn:'Scan Wi-Fi', intruderTitle:'Wi-Fi intruder alerts',
-      intruderSub:'Alert me immediately if an unknown device joins my Wi-Fi',
-      shieldsHeader:'Household & Smart-TV shields', enableAll:'Enable all',
-      shTvTitle:'Smart-TV anti-spy shield', shTvSub:'Blocks Samsung, LG & Sony ACR viewing telemetry',
-      shBoxTitle:'Streaming-box ad blocker', shBoxSub:'Stops Roku, Fire TV & Apple TV tracking beacons',
-      shRtrTitle:'Router safety check', shRtrSub:'Verifies your home Wi-Fi gateway has no exposed ports',
+      wifiTitle:'devices on Wi-Fi', scanBtn:'Scan Wi-Fi', intruderTitle:'New Device Alerts & Tracker DNS Shield',
+      intruderSub:'Alerts you when a new MAC joins Wi-Fi + enables tracker-blocking tunnel DNS on this device (Smart TVs require router VPN setup)',
+      shieldsHeader:'Device & Network DNS Shield', enableAll:'Enable all',
+      shTvTitle:'Tracker & Ad DNS Filter', shTvSub:'Blocks known tracking and ad domains on this device over encrypted DNS',
+      shBoxTitle:'Streaming Tracker Filter', shBoxSub:'Drops analytics beacons on this device via private tunnel DNS',
+      shRtrTitle:'Router safety check', shRtrSub:'Verifies your home Wi-Fi gateway has no exposed management ports',
       accountHeader:'Account & Settings', accountSub:'Manage your license key, mobile setup, and connection security.',
       activeKeyLabel:'Active License Key', phoneSetupBtn:'Phone Setup (iOS / Android)',
       settingsHeader:'Connection & App Settings', startupTitle:'Auto-protect on startup',
@@ -1774,7 +1626,7 @@
       killTitle:'Emergency internet cut-off (Kill Switch)', killSub:'Blocks unencrypted traffic if the VPN tunnel ever drops',
       darkTitle:'Dark mode', darkSub:'Easier on the eyes in low light', langTitle:'Language', langSub:'App display language',
       helpHeader:'Need help?', helpReply:'We reply within 24 hours', sendBtn:'Send message',
-      lblWhere:'Virtual location', lblIp:'Your IP & location', lblSpeed:'Route speed', lblWifi:'On your Wi-Fi',
+      lblWhere:'Virtual location', lblIp:'Your IP & location', lblSpeed:'Route protocol', lblWifi:'On your Wi-Fi',
       lblSession:'Protected session', changeBtn:'Change ›'
     },
     de: {
@@ -1876,32 +1728,52 @@
     endpoints.push('https://sweeprvpn.com/api/vpn/servers');
     for (const url of endpoints) {
       try {
-        const t0 = performance.now();
         const r = await fetch(url);
-        const rtt = Math.max(4, Math.round((performance.now() - t0) * 0.35));
         const d = await r.json().catch(() => ({}));
         if (r.ok && d && Array.isArray(d.servers) && d.servers.length) {
           d.servers.forEach(live => {
             const match = SERVERS.find(s => s.code === live.code);
             if (match) {
               match.online = live.online !== false;
-              const livePing = Number(live.probe_ms || live.pingMs || live.ping || 0);
-              if (livePing > 0) {
-                const blended = Math.max(4, Math.round((livePing + rtt) / 2));
-                match.ping = blended;
-                match.pingMs = blended;
-              } else {
-                const blended = Math.max(4, Math.round(match.ping * 0.7 + rtt * 0.3));
-                match.ping = blended;
-                match.pingMs = blended;
-              }
+              match.endpoint = live.endpoint || match.endpoint || '';
+              match.ping = null;
             }
           });
           renderAll();
+          if (!state.connected) {
+            await probeRealServerLatencies();
+          }
           break;
         }
       } catch (e) {}
     }
+  }
+
+  async function probeRealServerLatencies() {
+    try {
+      const targets = SERVERS.filter(s => s.online !== false && s.endpoint);
+      if (!targets.length) return;
+      let latencies = null;
+      if (tauri) {
+        latencies = await tauri.core.invoke('probe_server_latencies', {
+          targets: targets.map(s => [s.code, s.endpoint])
+        }).catch(() => null);
+      } else if (isWebView2) {
+        const res = await invokeWebView2('probeServerLatencies', {
+          servers: targets.map(s => ({ code: s.code, endpoint: s.endpoint }))
+        }, 6000).catch(() => null);
+        latencies = res && res.latencies ? res.latencies : null;
+      }
+      if (latencies && typeof latencies === 'object') {
+        SERVERS.forEach(s => {
+          const val = Number(latencies[s.code]);
+          if (val > 0 && Number.isFinite(val)) {
+            s.ping = Math.round(val);
+          }
+        });
+        renderAll();
+      }
+    } catch (e) {}
   }
 
   /* ---------- Split Activation vs. Plan Checkout (Quick Win 3) ---------- */
@@ -1911,6 +1783,31 @@
     annual: 'Continue — £74.99/yr (Save 50%)',
     six_month: 'Continue — £48.99/6mo (Save 35%)'
   };
+
+  async function refreshLocalizedPricing() {
+    if (IS_APPLE_APP_STORE) return;
+    for (const url of getApiCandidateUrls('/api/pricing')) {
+      try {
+        const r = await fetch(url);
+        const p = await r.json().catch(() => ({}));
+        if (r.ok && p && p.monthlyFormatted && p.annualFormatted && p.sixMonthFormatted) {
+          const intro = p.introMonthlyFormatted || p.monthlyFormatted;
+          PLAN_CTA_LABELS.monthly = 'Continue — ' + intro + ' (1st Month)';
+          PLAN_CTA_LABELS.annual = 'Continue — ' + p.annualFormatted + '/yr (Save 50%)';
+          PLAN_CTA_LABELS.six_month = 'Continue — ' + p.sixMonthFormatted + '/6mo (Save 35%)';
+          if ($('planTagMonthly')) $('planTagMonthly').textContent = 'POPULAR · ' + intro + ' INTRO';
+          if ($('planSubMonthly')) $('planSubMonthly').textContent = intro + ' first month, then ' + p.monthlyFormatted + '/mo';
+          if ($('planPriceMonthly')) $('planPriceMonthly').textContent = intro;
+          if ($('planSubAnnual')) $('planSubAnnual').textContent = p.annualFormatted + ' billed once a year · Save 50%';
+          if ($('planPriceAnnual')) $('planPriceAnnual').textContent = p.annualMonthlyEqFormatted || p.annualFormatted;
+          if ($('planSubSixMonth')) $('planSubSixMonth').textContent = p.sixMonthFormatted + ' · Save 35%';
+          if ($('planPriceSixMonth')) $('planPriceSixMonth').textContent = p.sixMonthMonthlyEqFormatted || p.sixMonthFormatted;
+          if ($('mCheckoutBtn')) $('mCheckoutBtn').textContent = PLAN_CTA_LABELS[selectedModalPlan] || PLAN_CTA_LABELS.monthly;
+          break;
+        }
+      } catch (e) {}
+    }
+  }
 
   function openActivate(reason) {
     $('mError').style.color = '#ef4444';
@@ -2026,7 +1923,8 @@
           stopDesktopReverseQr();
           const resolvedEmail = d.email || '';
           const resolvedKey = d.licenseKey || d.license_key || '';
-          state.pro = true; state.email = resolvedEmail; state.activationCode = resolvedKey; state.killSwitch = true;
+          const resolvedRef = d.referral_code || '';
+          state.pro = true; state.email = resolvedEmail; state.activationCode = resolvedKey; state.referralCode = resolvedRef; state.killSwitch = true;
           state.linkedDevices = Array.isArray(d.devices) ? d.devices : [];
           state.maxDevices = d.max_devices || 3;
           document.querySelectorAll('.toggle.shield').forEach(t => syncSwitchAria(t, true));
@@ -2036,6 +1934,7 @@
               localStorage.setItem('sweepr_vpn_code', resolvedKey);
               localStorage.setItem('sweepr_vpn_license_key', resolvedKey);
             }
+            if (resolvedRef) localStorage.setItem('sweepr_vpn_referral_code', resolvedRef);
           } catch (e) {}
           closeActivate(); renderAll(); toast('SWEEPR Pro linked via QR ✓');
           postNative('activateLicense', { email: resolvedEmail, code: resolvedKey });
@@ -2282,6 +2181,31 @@
     const box = $('delAccConfirmBox');
     if (box) box.classList.remove('hidden');
   }
+  function clearLocalDesktopSession() {
+    state.pro = false;
+    state.activationCode = '';
+    state.email = '';
+    state.referralCode = '';
+    state.linkedDevices = [];
+    state.killSwitch = false;
+    ['sweepr_vpn_code', 'sweepr_vpn_license_key', 'sweepr_vpn_email', 'sweepr_vpn_token', 'sweepr_vpn_license_token', 'sweepr_vpn_plan', 'sweepr_vpn_referral_code', 'sweepr_vpn_killswitch'].forEach(k => {
+      try { localStorage.removeItem(k); } catch (e) {}
+    });
+    if ($('mCode')) $('mCode').value = '';
+    renderAll();
+  }
+  async function signOutDesktop() {
+    if (state.connected) {
+      try { await toggleConnect(); } catch (e) {}
+    }
+    if (isWebView2 && !tauri) {
+      try { await invokeWebView2('setKillSwitch', { enabled: false }, 6000); } catch (e) {}
+    } else if (tauri) {
+      try { await tauri.core.invoke('set_kill_switch', { enabled: false }); } catch (e) {}
+    }
+    clearLocalDesktopSession();
+    toast('Signed out on this device');
+  }
   async function executeAccountDeletion() {
     const st = $('delAccStatusText');
     const btn = $('delAccConfirmBtn');
@@ -2292,8 +2216,10 @@
       return;
     }
     if (btn) btn.disabled = true;
+    if (st) { st.style.display = 'block'; st.style.color = 'var(--muted)'; st.textContent = 'Deleting account record on server…'; }
     try {
       let deletedOk = false;
+      let errMsg = 'Could not reach account server. Please check your internet connection and try again.';
       for (const u of getApiCandidateUrls('/api/vpn/account/delete')) {
         try {
           const r = await fetch(u, {
@@ -2303,23 +2229,32 @@
           });
           const d = await r.json().catch(() => ({}));
           if (r.ok && d && d.ok) { deletedOk = true; break; }
+          if (d && d.message) errMsg = d.message;
         } catch (e) {}
       }
-      if (state.on) {
-        try { toggleConnect(); } catch (e) {}
+      if (!deletedOk) {
+        if (st) {
+          st.style.display = 'block';
+          st.style.color = '#ef4444';
+          st.textContent = errMsg;
+        }
+        toast(errMsg);
+        return;
       }
-      state.pro = false;
-      state.activationCode = '';
-      state.email = '';
-      ['sweepr_vpn_code', 'sweepr_vpn_license_key', 'sweepr_vpn_email', 'sweepr_vpn_token', 'sweepr_vpn_license_token', 'sweepr_vpn_plan'].forEach(k => {
-        try { localStorage.removeItem(k); } catch (e) {}
-      });
-      if ($('mCode')) $('mCode').value = '';
-      renderAll();
+      if (state.connected) {
+        try { await toggleConnect(); } catch (e) {}
+      }
+      if (isWebView2 && !tauri) {
+        try { await invokeWebView2('setKillSwitch', { enabled: false }, 6000); } catch (e) {}
+      } else if (tauri) {
+        try { await tauri.core.invoke('set_kill_switch', { enabled: false }); } catch (e) {}
+      }
+      clearLocalDesktopSession();
+      if ($('delAccConfirmBox')) $('delAccConfirmBox').classList.add('hidden');
       if (st) {
         st.style.display = 'block';
         st.style.color = '#059669';
-        st.textContent = deletedOk ? 'Account and local credentials permanently deleted.' : 'Local credentials cleared.';
+        st.textContent = 'Account and local credentials permanently deleted.';
       }
       toast('Account & local data deleted');
     } finally {
@@ -2479,7 +2414,8 @@
       const res = await verifyServerSubscription(emailHint, code);
       const resolvedEmail = (res && res.email && !String(res.email).includes('*')) ? String(res.email) : emailHint;
       const resolvedKey = (res && (res.licenseKey || res.license_key)) ? String(res.licenseKey || res.license_key) : code;
-      state.pro = true; state.email = resolvedEmail; state.activationCode = resolvedKey; state.killSwitch = true;
+      const resolvedRef = (res && res.referral_code) ? String(res.referral_code) : (state.referralCode || '');
+      state.pro = true; state.email = resolvedEmail; state.activationCode = resolvedKey; state.referralCode = resolvedRef; state.killSwitch = true;
       state.linkedDevices = Array.isArray(res && res.devices) ? res.devices : [];
       state.maxDevices = (res && res.max_devices) || 3;
       document.querySelectorAll('.toggle.shield').forEach(t => syncSwitchAria(t, true));
@@ -2487,6 +2423,7 @@
         if (resolvedEmail) localStorage.setItem('sweepr_vpn_email', resolvedEmail);
         localStorage.setItem('sweepr_vpn_code', resolvedKey);
         if (resolvedKey) localStorage.setItem('sweepr_vpn_license_key', resolvedKey);
+        if (resolvedRef) localStorage.setItem('sweepr_vpn_referral_code', resolvedRef);
       } catch (e) {}
       closeActivate(); renderAll(); toast('SWEEPR Pro unlocked ✓');
       postNative('activateLicense', { email: resolvedEmail, code: resolvedKey });
@@ -2508,6 +2445,10 @@
     try {
       const res = await verifyServerSubscription(state.email, state.activationCode);
       if (res && res.email && !state.email && !String(res.email).includes('*')) state.email = String(res.email);
+      if (res && res.referral_code) {
+        state.referralCode = String(res.referral_code);
+        try { localStorage.setItem('sweepr_vpn_referral_code', state.referralCode); } catch (e) {}
+      }
       if (res && Array.isArray(res.devices)) state.linkedDevices = res.devices;
       if (res && res.max_devices) state.maxDevices = res.max_devices;
       state.pro = true; state.killSwitch = true;
@@ -2552,7 +2493,7 @@
     const s = SERVERS.find(x => x.code === code) || cur();
     $('wgFlag').setAttribute('data-flag', s.flag);
     $('wgCountryName').textContent = s.country;
-    $('wgCityDesc').textContent = s.city + ' · ' + s.ping + ' ms · WireGuard UDP';
+    $('wgCityDesc').textContent = s.city + ' · ' + fmtServerPing(s) + ' · WireGuard UDP';
     paintFlags($('wgModal'));
     $('wgQrBox').innerHTML = '<div class="s" style="color:#475569;font-weight:700;padding:30px 10px">Registering encrypted WireGuard peer on ' + esc(s.city) + '…</div>';
     $('wgConfText').textContent = 'Generating keypair…';
@@ -2654,7 +2595,7 @@
     const srv = ($('wgServerSelect') && $('wgServerSelect').value) || state.code || 'UK-LON-01';
     const link = 'https://sweeprvpn.com/download?key=' + encodeURIComponent(state.activationCode) + '&server=' + encodeURIComponent(srv) + '&autoconf=1';
     if (navigator.share) {
-      navigator.share({ title: 'SWEEPR VPN Phone Setup', text: 'Tap to install your 10Gbps SWEEPR VPN WireGuard tunnel:', url: link }).catch(() => {});
+      navigator.share({ title: 'SWEEPR VPN Phone Setup', text: 'Tap to install your SWEEPR VPN WireGuard tunnel:', url: link }).catch(() => {});
       return;
     }
     navigator.clipboard.writeText(link).then(() => {
@@ -2693,7 +2634,7 @@
       subject,
       message,
       os: meta.os || 'windows',
-      app_version: '2.5.0',
+      app_version: APP_VERSION,
       device_id: meta.id,
       diagnostics: {
         server_code: state.code,
@@ -2757,46 +2698,39 @@
   /* ---------- Render ---------- */
   function renderAll() {
     const s = cur(), d = I18N[state.lang] || I18N.en, on = state.connected;
+    const pingText = fmtServerPing(s);
+    const hasNumPing = typeof s.ping === 'number' && s.ping > 0;
     document.body.classList.toggle('is-pro', !!state.pro);
     $('panel').classList.toggle('on', on);
     $('headline').innerHTML = on ? '<span class="g">Connected</span><br>to stay private' : '<span class="g">Connect</span><br>to stay private';
     if ($('panelMetaLine')) {
-      $('panelMetaLine').textContent = s.city + ', ' + (s.short || s.country) + ' \u2022 ' + s.ping + ' ms \u2022 ' + (devices.length || 4) + ' Wi-Fi devices safe';
+      $('panelMetaLine').textContent = s.city + ', ' + (s.short || s.country) + (hasNumPing ? ' \u2022 ' + s.ping + ' ms' : '') + ' \u2022 ' + (devices.length ? devices.length + ' Wi-Fi devices' : 'Wi-Fi scan ready');
     }
     $('infoWhere').textContent = on ? s.city + ', ' + (s.short || s.country) : 'London, UK';
-    const prevWasOn = $('infoHome').getAttribute('data-was-on') === '1';
     $('infoHome').setAttribute('data-was-on', on ? '1' : '0');
     $('infoHome').className = 'v ' + (on ? 'okc' : 'warnc');
-    if (on && !prevWasOn && !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
-      const frames = ['82.14.•••.••', '82.••.•••.••', '••.••.•••.••', 'Hidden'];
-      let fi = 0;
-      $('infoHome').textContent = frames[0];
-      const maskTimer = setInterval(() => {
-        fi++;
-        if (fi >= frames.length || !state.connected) {
-          clearInterval(maskTimer);
-          $('infoHome').textContent = state.connected ? 'Hidden' : 'Exposed';
-        } else {
-          $('infoHome').textContent = frames[fi];
-        }
-      }, 40);
-    } else {
-      $('infoHome').textContent = on ? 'Hidden' : 'Exposed';
-    }
-    $('infoSpeed').textContent = 'Instant (' + s.ping + ' ms)';
+    $('infoHome').textContent = on ? 'Hidden' : 'Exposed';
+    $('infoSpeed').textContent = hasNumPing ? (s.ping + ' ms · WireGuard') : 'WireGuard';
     syncSwitchAria($('startupToggle'), state.startup);
     syncSwitchAria($('killToggle'), state.killSwitch);
     syncSwitchAria($('lanBypassToggle'), state.lanBypass);
-    if ($('deskTelemetryNode')) $('deskTelemetryNode').textContent = s.code + ' · ' + s.ping + ' ms · ' + (on ? 'ENCRYPTED' : 'STANDBY');
+    if ($('deskTelemetryNode')) $('deskTelemetryNode').textContent = s.code + ' · ' + (hasNumPing ? s.ping + ' ms · ' : '') + (on ? 'ENCRYPTED' : 'STANDBY');
     if ($('deskKillChip')) $('deskKillChip').classList.toggle('on', !!state.killSwitch);
     if ($('deskLanChip')) $('deskLanChip').classList.toggle('on', !!state.lanBypass);
+    if ($('dnsShieldBadge')) {
+      const shieldActive = !!(on && state.shields && (state.shields[0] || state.shields[1]));
+      $('dnsShieldBadge').style.background = shieldActive ? 'var(--sel)' : 'var(--card2)';
+      $('dnsShieldBadge').style.borderColor = shieldActive ? 'rgba(5,150,105,.35)' : 'var(--line)';
+      $('dnsShieldBadge').style.color = shieldActive ? 'var(--accent)' : 'var(--muted)';
+      $('dnsShieldBadge').innerHTML = '<span style="width:6px;height:6px;border-radius:999px;background:currentColor;display:inline-block"></span>' + (shieldActive ? 'DNS SHIELD 10.64.0.1 ACTIVE' : (on ? 'STANDARD DNS 10.64.0.1 ACTIVE' : 'DNS SHIELD STANDBY'));
+    }
     syncSwitchAria($('autoToggle'), state.auto);
     [0, 1, 2].forEach(i => syncSwitchAria($('sh-' + i), state.pro && state.shields[i]));
     $('timerBox').classList.toggle('hidden', !on);
     if (on) renderSparkBars();
     $('panelFlag').setAttribute('data-flag', s.flag);
     $('panelName').textContent = s.country;
-    $('panelDesc').textContent = s.city + ' · ' + s.ping + ' ms · ' + s.desc;
+    $('panelDesc').textContent = s.city + (hasNumPing ? ' · ' + s.ping + ' ms' : '') + ' · ' + s.desc;
     $('connectBtn').classList.toggle('pause', on);
     $('connectText').textContent = on ? d.pause : d.protect;
     $('rec-fast').classList.toggle('on', state.code === 'UK-LON-01');
@@ -2809,10 +2743,13 @@
       $('mobilePlanPillText').textContent = state.pro ? 'Pro ✓' : 'Enter Key';
     }
     $('accTitle').textContent = state.pro ? 'SWEEPR Pro is active' : 'Free plan';
-    $('accSub').textContent = state.pro ? 'Up to 3 devices (desktop or mobile) · All countries, Kill Switch & TV shields unlocked' : 'Already paid? Enter your license key to unlock up to 3 devices (desktop or mobile).';
+    $('accSub').textContent = state.pro ? 'Up to 3 devices (desktop or mobile) · All countries, Kill Switch & DNS Shield unlocked' : 'Already paid? Enter your license key to unlock up to 3 devices (desktop or mobile).';
     $('accPill').className = 'pill ' + (state.pro ? 'ok' : 'warn');
     $('accPill').textContent = state.pro ? 'Pro' : 'Free';
     $('accBtn').textContent = state.pro ? 'Update license key' : 'Enter license key or upgrade';
+    if ($('accSignOutBtn')) {
+      $('accSignOutBtn').classList.toggle('hidden', !state.pro || !state.activationCode);
+    }
     if ($('activeKeyBar')) {
       $('activeKeyBar').classList.toggle('hidden', !state.pro || !state.activationCode);
       if (state.pro && state.activationCode && $('activeKeyVal')) {
@@ -2825,7 +2762,7 @@
     $('cStatus').textContent = on ? '● Protected & private' : '● Not protected';
     $('cCity').textContent = s.city; $('cCountry').textContent = s.country;
     $('cHome').textContent = on ? 'Hidden ✓' : 'Exposed';
-    $('cStream').textContent = s.ping + ' ms · ' + s.stream;
+    $('cStream').textContent = hasNumPing ? (pingText + ' · WireGuard') : pingText;
     $('cPower').classList.toggle('off', !on);
 
     renderList(); renderDevices(); renderLinkedAccountDevices(); paintFlags();
@@ -2839,20 +2776,20 @@
   let searchKbIndex = -1;
 
   function getCmdActions() {
-    const serverItems = SERVERS.map(s => ({
+    const serverItems = SERVERS.filter(s => s.online !== false).map(s => ({
       id: 'srv-' + s.code,
       title: 'Connect to ' + s.country + ' (' + s.city + ')',
-      sub: s.ping + ' ms · ' + s.desc,
+      sub: fmtServerPing(s) + ' · ' + s.desc,
       flag: s.flag,
-      kbd: s.code === state.code ? 'Selected' : (s.ping + ' ms'),
+      kbd: s.code === state.code ? 'Selected' : fmtServerPing(s),
       run: () => { pick(s.code); }
     }));
     const cmdItems = [
       { id: 'act-toggle', title: state.connected ? 'Pause VPN Protection' : 'Connect to ' + cur().city, sub: 'Toggle WireGuard tunnel immediately', kbd: modKeyLabel + '+↵', run: () => toggleConnect() },
-      { id: 'act-scan', title: 'Scan Home Wi-Fi & Smart TVs', sub: 'Audit devices and ACR telemetry on your network', kbd: modKeyLabel + '+R', run: () => { go('wifi'); scanWifi(); } },
+      { id: 'act-scan', title: 'Scan Home Wi-Fi & Camera Ports', sub: 'Discover local devices and inspect open ports on your LAN', kbd: modKeyLabel + '+R', run: () => { go('wifi'); scanWifi(); } },
       { id: 'act-mini', title: document.body.classList.contains('is-compact') ? 'Expand to Full Window' : 'Switch to Mini Widget Mode', sub: 'Compact 380×540 desktop controller', kbd: modKeyLabel + '+M', run: () => setCompact(!document.body.classList.contains('is-compact')) },
       { id: 'act-theme', title: 'Toggle Dark / Light Theme', sub: 'Switch interface color appearance', kbd: 'Theme', run: () => toggleTheme() },
-      { id: 'act-key', title: state.pro ? 'Manage Active License Key' : 'Enter License Key / Upgrade to Pro', sub: state.pro ? 'Copy or update your 3-device key' : 'Unlock all 8 countries & Smart-TV shields', kbd: 'Key', run: () => openActivate() }
+      { id: 'act-key', title: state.pro ? 'Manage Active License Key' : 'Enter License Key / Upgrade to Pro', sub: state.pro ? 'Copy or update your 3-device key' : 'Unlock all 8 countries & tracker DNS shields', kbd: 'Key', run: () => openActivate() }
     ];
     return serverItems.concat(cmdItems);
   }
@@ -2925,7 +2862,7 @@
     const s = SERVERS.find(x => x.code === code) || cur();
     const isFav = savedFavs.includes(s.code);
     positionAndShowCtx(e,
-      '<button class="ctx-item" onclick="hideCtxMenu();pick(\'' + esc(s.code) + '\')"><span>Connect to ' + esc(s.city) + '</span><span class="k">' + s.ping + ' ms</span></button>' +
+      '<button class="ctx-item" onclick="hideCtxMenu();pick(\'' + esc(s.code) + '\')"><span>Connect to ' + esc(s.city) + '</span><span class="k">' + esc(fmtServerPing(s)) + '</span></button>' +
       '<button class="ctx-item" onclick="hideCtxMenu();toggleFav(\'' + esc(s.code) + '\')"><span>' + (isFav ? '★ Remove from Saved' : '☆ Save to Favorites') + '</span></button>' +
       '<div class="ctx-sep"></div>' +
       '<button class="ctx-item" onclick="hideCtxMenu();openCmdPalette()"><span>Command Palette…</span><span class="k">' + modKeyLabel + '+K</span></button>'
@@ -3072,9 +3009,11 @@
     if (savedSrv && SERVERS.some(s => s.code === savedSrv)) state.code = savedSrv;
     const savedEmail = localStorage.getItem('sweepr_vpn_email') || '';
     const savedCode = localStorage.getItem('sweepr_vpn_code') || localStorage.getItem('sweepr_vpn_license_key') || '';
+    const savedRef = localStorage.getItem('sweepr_vpn_referral_code') || '';
     if (savedCode) {
       state.email = savedEmail;
       state.activationCode = savedCode;
+      state.referralCode = savedRef;
       state.pro = true;
       if (savedKs === null) state.killSwitch = true;
       postNative('toggleRadar', state.auto);
@@ -3117,7 +3056,7 @@
       if (!data) {
         const ua = navigator.userAgent || '';
         const plat = /mac/i.test(ua) ? 'macos' : (/linux/i.test(ua) ? 'linux' : 'windows');
-        const curVer = '2.5.0';
+        const curVer = APP_VERSION;
         for (const u of getApiCandidateUrls('/api/vpn/version?platform=' + plat + '&current_version=' + curVer)) {
           try {
             const r = await fetch(u);
@@ -3127,9 +3066,9 @@
         }
       }
       if (!data) return;
-      const latest = data.latest_version || data.version || '2.5.0';
-      const minVer = data.min_version || '2.5.0';
-      const curVer = data.current_version || '2.5.0';
+      const latest = data.latest_version || data.version || APP_VERSION;
+      const minVer = data.min_version || APP_VERSION;
+      const curVer = data.current_version || APP_VERSION;
       const isNewer = Boolean(data.update_available) || isDesktopSemverNewer(latest, curVer);
       const isForced = Boolean(data.force_update) || isDesktopSemverNewer(minVer, curVer);
       if (data.url && /^https:\/\/(www\.)?sweeprvpn\.com/i.test(data.url)) {
@@ -3140,14 +3079,14 @@
         if (!fm) {
           fm = document.createElement('div');
           fm.id = 'forceUpdateModal';
-          fm.className = 'modal open';
+          fm.className = 'backdrop open';
           fm.style.zIndex = '9999';
           fm.innerHTML =
-            '<div class="modal-card" style="max-width:440px;text-align:center">' +
+            '<div class="sheet" style="max-width:440px;text-align:center">' +
             '<div class="ico e" style="width:52px;height:52px;margin:0 auto 12px;border-radius:14px"><svg width="26" height="26"><use href="#i-shield"/></svg></div>' +
             '<h2 style="font-size:20px;font-weight:700;margin:0 0 6px">Mandatory Update Required (v' + esc(latest) + ')</h2>' +
             '<p class="s" style="font-size:13px;line-height:1.5;margin-bottom:16px">' + esc(data.notes || 'A critical security and WireGuard protocol update is required to continue using SWEEPR VPN.') + '</p>' +
-            '<button class="cta" style="width:100%" onclick="installAppUpdate()">Download &amp; Install Update</button>' +
+            '<button class="btn-go" style="width:100%" onclick="installAppUpdate()">Download &amp; Install Update</button>' +
             '</div>';
           document.body.appendChild(fm);
         } else {
@@ -3163,6 +3102,7 @@
 
   renderAll();
   applyAppleAppStoreUi();
+  refreshLocalizedPricing();
   verifySavedSubscription();
   refreshLiveServerStatus();
   if (!IS_APPLE_APP_STORE) {
