@@ -13,6 +13,8 @@ on:
 jobs:
   publish-chocolatey:
     runs-on: windows-latest
+    permissions:
+      contents: read
     env:
       CHOCOLATEY_API_KEY: ${{ secrets.CHOCOLATEY_API_KEY }}
     steps:
@@ -32,7 +34,11 @@ jobs:
           if ($ver -notmatch '^\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$') {
             throw "Invalid semantic version: $ver"
           }
+          [xml]$nuspecXml = Get-Content -Raw 'chocolatey/sweepr-vpn.nuspec'
+          $nuspecVer = "$($nuspecXml.package.metadata.version)".Trim()
+          $isBackfill = ($ver -ne $nuspecVer).ToString().ToLowerInvariant()
           "version=$ver" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          "is_backfill=$isBackfill" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
 
       - name: Setup Node.js 22
         uses: actions/setup-node@v4
@@ -40,8 +46,57 @@ jobs:
           node-version: "22"
 
       - name: Verify Release Manifest & Checksum Parity
+        if: steps.ver.outputs.is_backfill != 'true'
         shell: pwsh
         run: node scripts/verify-release-manifests.mjs
+
+      - name: Prepare Backfill Release Manifest
+        if: steps.ver.outputs.is_backfill == 'true'
+        shell: pwsh
+        env:
+          PKG_VERSION: ${{ steps.ver.outputs.version }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          if (Test-Path 'chocolatey/tools/VERIFICATION.txt') {
+            throw 'chocolatey/tools/VERIFICATION.txt must not exist for download-installer packages'
+          }
+          $relJson = gh release view "v$env:PKG_VERSION" --repo "$env:GITHUB_REPOSITORY" --json assets
+          if ($LASTEXITCODE -ne 0) {
+            throw "Failed to inspect GitHub release v$env:PKG_VERSION"
+          }
+          $rel = $relJson | ConvertFrom-Json
+          $exeAsset = $rel.assets | Where-Object { $_.name -eq 'SWEEPRVPN.exe' } | Select-Object -First 1
+          if (-not $exeAsset) {
+            throw "SWEEPRVPN.exe asset not found on release v$env:PKG_VERSION"
+          }
+          $assetUrl = "$($exeAsset.url)".Trim()
+          if ($assetUrl -notmatch "/releases/download/v$([regex]::Escape($env:PKG_VERSION))/SWEEPRVPN\.exe$") {
+            throw "Unexpected versioned asset URL: $assetUrl"
+          }
+          $sha256 = ("$($exeAsset.digest)" -replace '^sha256:', '').Trim().ToUpperInvariant()
+          if ($sha256 -notmatch '^[0-9A-F]{64}$') {
+            throw "Missing or invalid SHA-256 digest on release v$env:PKG_VERSION SWEEPRVPN.exe: $($exeAsset.digest)"
+          }
+
+          $ps1Path = 'chocolatey/tools/chocolateyInstall.ps1'
+          $ps1 = Get-Content -Raw $ps1Path
+          $ps1 = [regex]::Replace($ps1, "url64bit\s*=\s*'[^']+'", "url64bit       = '$assetUrl'")
+          $ps1 = [regex]::Replace($ps1, "checksum64\s*=\s*'[0-9A-Fa-f]{64}'", "checksum64     = '$sha256'")
+          if (-not $ps1.Contains($assetUrl) -or -not $ps1.Contains($sha256)) {
+            throw "Failed to patch $ps1Path for backfill version $env:PKG_VERSION"
+          }
+          Set-Content -Path $ps1Path -Value $ps1 -NoNewline
+
+          $nuspecPath = 'chocolatey/sweepr-vpn.nuspec'
+          $nuspec = Get-Content -Raw $nuspecPath
+          $notesUrl = "https://github.com/$($env:GITHUB_REPOSITORY)/releases/tag/v$($env:PKG_VERSION)"
+          $nuspec = [regex]::Replace($nuspec, "<releaseNotes>[^<]+</releaseNotes>", "<releaseNotes>$notesUrl</releaseNotes>")
+          if (-not $nuspec.Contains("<releaseNotes>$notesUrl</releaseNotes>")) {
+            throw "Failed to patch $nuspecPath releaseNotes for $env:PKG_VERSION"
+          }
+          Set-Content -Path $nuspecPath -Value $nuspec -NoNewline
+          Write-Host "Prepared backfill manifest for v$env:PKG_VERSION ($assetUrl | SHA256 $sha256)"
 
       - name: Pack Chocolatey Package
         shell: pwsh

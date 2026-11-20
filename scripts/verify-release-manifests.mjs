@@ -5,7 +5,7 @@
  * Verifies local parity across:
  *   - website/SWEEPRVPN.exe & website/SWEEPRVPN.dmg (computed actual SHA-256 & byte sizes)
  *   - website/pad.xml (<Program_Version>, <File_Size_Bytes>)
- *   - chocolatey/sweepr-vpn.nuspec, chocolatey/tools/chocolateyInstall.ps1, chocolatey/tools/VERIFICATION.txt
+ *   - chocolatey/sweepr-vpn.nuspec, chocolatey/tools/chocolateyInstall.ps1 (VERIFICATION.txt must remain absent)
  *   - scripts/cloud-security-audit.mjs & scripts/weekly-ga4-and-gsc-funnel-audit.mjs
  *
  * With `--check-remote`, also fetches live raw manifests from BenCook1996/scoop-sweepr
@@ -72,18 +72,17 @@ async function main() {
 
   const chocoPs1 = read('chocolatey/tools/chocolateyInstall.ps1');
   const chocoSha = (chocoPs1.match(/checksum64\s*=\s*'([0-9A-Fa-f]{64})'/) || [])[1]?.toUpperCase() || '';
-  const chocoUrlOk = chocoPs1.includes(`/v${padVer}/SWEEPRVPN.exe`) || chocoPs1.includes('sweeprvpn.com/SWEEPRVPN.exe');
+  const chocoUrlOk = chocoPs1.includes(`/releases/download/v${padVer}/SWEEPRVPN.exe`);
   if (chocoSha !== exe.sha256 || !chocoUrlOk) {
     fail('chocolatey/tools/chocolateyInstall.ps1', `checksum64=${chocoSha} expected=${exe.sha256} urlOk=${chocoUrlOk}`);
   } else {
     pass('chocolatey/tools/chocolateyInstall.ps1', `SHA-256 parity verified (${chocoSha.slice(0, 12)}...)`);
   }
 
-  const verTxt = read('chocolatey/tools/VERIFICATION.txt');
-  if (!verTxt.includes(`Version: ${padVer}`) || !verTxt.toUpperCase().includes(exe.sha256)) {
-    fail('chocolatey/tools/VERIFICATION.txt', `Must contain Version: ${padVer} and SHA-256 ${exe.sha256}`);
+  if (fs.existsSync(path.join(ROOT, 'chocolatey/tools/VERIFICATION.txt'))) {
+    fail('chocolatey/tools/VERIFICATION.txt', 'Must not exist for external download-installer packages (Chocolatey moderation rule)');
   } else {
-    pass('chocolatey/tools/VERIFICATION.txt', `Version ${padVer} & EXE SHA-256 verified`);
+    pass('chocolatey/tools/VERIFICATION.txt', 'Correctly absent (download-installer package)');
   }
 
   // 3. Audit script constants parity
