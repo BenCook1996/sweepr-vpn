@@ -52,6 +52,18 @@ const auditResults = {
   benchmarks: []
 };
 
+function writeFileIfChanged(filePath, content) {
+  if (fs.existsSync(filePath)) {
+    try {
+      if (fs.readFileSync(filePath, 'utf8') === content) return false;
+    } catch {}
+  }
+  const tmpPath = `${filePath}.tmp.${process.pid}`;
+  fs.writeFileSync(tmpPath, content, 'utf8');
+  fs.renameSync(tmpPath, filePath);
+  return true;
+}
+
 function pass(category, title, detail = '') {
   auditResults[category].passed++;
   auditResults[category].checks.push({ status: 'PASS', title, detail });
@@ -140,7 +152,7 @@ const CONSOLIDATED_CANNIBAL_MAP = {
 const GSC_STRIKING_DISTANCE_OVERRIDES = {
   '/solutions/talktalk-p2p-port-forwarding': {
     title: 'TalkTalk P2P Throttling & Port Fix | SWEEPR VPN',
-    description: 'Fix TalkTalk (AS13285) P2P bandwidth throttling, CGNAT port blocking & slow bulk transfers in 30 seconds. Copy-paste 1420 MTU WireGuard config + 4ms UK-LON-01 server.'
+    description: 'Fix TalkTalk (AS13285) P2P throttling, CGNAT port blocks & slow transfers in 30s. Copy-paste 1420 MTU WireGuard config + 4ms UK-LON-01 server.'
   },
   '/setup/gl-inet-travel-router': {
     title: 'GL.iNet Router WireGuard Setup (MTU 1420) | SWEEPR VPN',
@@ -248,17 +260,64 @@ function decodeHtmlEntities(str) {
     .trim();
 }
 
+function setHeadMetaTag(html, attrName, attrValue, newContent) {
+  const esc = decodeHtmlEntities(newContent).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+  const pat = new RegExp(`<meta\\s+${attrName}=["']${attrValue}["']\\s+content=(?:"[^"]*"|'[^']*')\\s*\\/?>`, 'i');
+  return html.replace(pat, `<meta ${attrName}="${attrValue}" content="${esc}" />`);
+}
+
 function applyHeadMetaOverride(html, newTitle, newDesc) {
   let out = html;
   const escTitle = decodeHtmlEntities(newTitle).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
-  const escDesc = decodeHtmlEntities(newDesc).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
   out = out.replace(/<title[^>]*>[\s\S]*?<\/title>/i, `<title>${escTitle}</title>`);
-  out = out.replace(/<meta\s+name=["']description["']\s+content="[^"]*"\s*\/?>/i, `<meta name="description" content="${escDesc}" />`);
-  out = out.replace(/<meta\s+property=["']og:title["']\s+content="[^"]*"\s*\/?>/i, `<meta property="og:title" content="${escTitle}" />`);
-  out = out.replace(/<meta\s+property=["']og:description["']\s+content="[^"]*"\s*\/?>/i, `<meta property="og:description" content="${escDesc}" />`);
-  out = out.replace(/<meta\s+name=["']twitter:title["']\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:title" content="${escTitle}" />`);
-  out = out.replace(/<meta\s+name=["']twitter:description["']\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:description" content="${escDesc}" />`);
+  out = setHeadMetaTag(out, 'name', 'description', newDesc);
+  out = setHeadMetaTag(out, 'property', 'og:title', newTitle);
+  out = setHeadMetaTag(out, 'property', 'og:description', newDesc);
+  out = setHeadMetaTag(out, 'name', 'twitter:title', newTitle);
+  out = setHeadMetaTag(out, 'name', 'twitter:description', newDesc);
   return out;
+}
+
+function tightenMetaDescription(rawDesc) {
+  let d = String(rawDesc || '')
+    .replace(/`/g, '')
+    .replace(/\b(WireGuard|Setup|Container)\s+\1\b/gi, '$1')
+    .replace(/\s*\.\.\.$/, ' with SWEEPR VPN 10Gbps WireGuard & Smart-TV Shield.')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+  if (decodeHtmlEntities(d).length <= 165) return d;
+
+  const trimPatterns = [
+    /^Comparing\s+SWEEPR\s+VPN\s+vs\s+[^?]+\?\s+/i,
+    /\s*Free 30-second Home Wi-Fi scanner and 10Gbps WireGuard telemetry blocklist guide\.?$/i,
+    /\s*Tested \d+ MTU WireGuard config, 4ms London 10Gbps RAM-only routing (?:&amp;|&) free 30s Wi-Fi scanner\.?$/i,
+    /\s*Configure 10Gbps RAM-only endpoints, optimal MTU, in-tunnel DNS \(10\.66\.0\.1\), and kill-switch routing\.?$/i
+  ];
+  for (const pat of trimPatterns) {
+    const stripped = d.replace(pat, '').trim();
+    if (stripped.length >= 70) {
+      d = stripped;
+      if (decodeHtmlEntities(d).length <= 165) return /[.!?]$/.test(d) ? d : `${d}.`;
+    }
+  }
+
+  const decoded = decodeHtmlEntities(d);
+  if (decoded.length <= 165) return d;
+
+  const firstSentenceMatch = decoded.match(/^(.{70,164}?[.!?])(?:\s|$)/);
+  if (firstSentenceMatch) {
+    return firstSentenceMatch[1].replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+  }
+
+  let cut = decoded.slice(0, 159);
+  const lastSpace = cut.lastIndexOf(' ');
+  if (lastSpace > 80) cut = cut.slice(0, lastSpace);
+  cut = cut.replace(/[,;:\-–—]+$/, '').trim();
+  while (/\s+(and|or|the|to|with|of|a|an|in|for|on|by|via|using|including|plus|&)$/i.test(cut)) {
+    cut = cut.replace(/\s+(and|or|the|to|with|of|a|an|in|for|on|by|via|using|including|plus|&)$/i, '').replace(/[,;:\-–—]+$/, '').trim();
+  }
+  if (!/[.!?]$/.test(cut)) cut += '.';
+  return cut.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
 }
 
 function rewriteCannibalHrefLinks(html) {
@@ -501,21 +560,23 @@ for (const dir of ['solutions', 'setup', 'vs', 'guides']) {
       } else {
         // Only collapse directly adjacent duplicated words (never strip valid distant keywords in titles or descriptions)
         const tMatch = content.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
-        const dMatch = content.match(/<meta\s+name=["']description["']\s+content="([^"]*)"/i);
+        const dMatch =
+          content.match(/<meta\s+name=["']description["']\s+content="([^"]*)"/i) ||
+          content.match(/<meta\s+name=["']description["']\s+content='([^']*)'/i);
         let curTitle = tMatch ? tMatch[1].trim() : '';
         let curDesc = dMatch ? dMatch[1].trim() : '';
         let cleanedTitle = curTitle
           .replace(/\b(WireGuard|Setup|Container)\s+\1\b/gi, '$1')
           .replace(/\s{2,}/g, ' ')
           .trim();
-        let cleanedDesc = curDesc
-          .replace(/`/g, '')
-          .replace(/\b(WireGuard|Setup|Container)\s+\1\b/gi, '$1')
-          .replace(/\s*\.\.\.$/, ' with SWEEPR VPN 10Gbps WireGuard & Smart-TV Shield.')
-          .replace(/\s{2,}/g, ' ')
-          .trim();
-        if (cleanedTitle && cleanedDesc && (cleanedTitle !== curTitle || cleanedDesc !== curDesc)) {
+        let cleanedDesc = tightenMetaDescription(curDesc);
+        if (cleanedTitle !== curTitle && cleanedTitle && cleanedDesc) {
           content = applyHeadMetaOverride(content, cleanedTitle, cleanedDesc);
+          modified = true;
+        } else if (cleanedDesc && cleanedDesc !== curDesc) {
+          content = setHeadMetaTag(content, 'name', 'description', cleanedDesc);
+          content = setHeadMetaTag(content, 'property', 'og:description', cleanedDesc);
+          content = setHeadMetaTag(content, 'name', 'twitter:description', cleanedDesc);
           modified = true;
         }
       }
@@ -864,7 +925,7 @@ if (shouldFix && pseoFilesOnDisk.length > 0) {
       file: 'solutions.html',
       urlPath: '/solutions',
       title: `ISP Throttling, CGNAT & Gaming Fixes (2026) | SWEEPR VPN`,
-      description: `Browse ${byCluster.solutions.length} verified ISP network engineering guides for Virgin Media, BT, Sky, TalkTalk, Eduroam, Three 5G, EE, Comcast & Rogers. Fix throttling, packet loss & CGNAT with 10Gbps WireGuard.`,
+      description: `Browse ${byCluster.solutions.length} ISP network engineering guides for Virgin Media, BT, Sky, TalkTalk, Eduroam, EE, Comcast & Rogers. Fix throttling & CGNAT with WireGuard.`,
       badge: 'ISP & Network Engineering Hub • 10Gbps WireGuard • 2026',
       telemetryLabel: `SOLUTIONS // ${byCluster.solutions.length} ISP & GAMING FIXES`,
       filterPlaceholder: `Filter ${byCluster.solutions.length} ISP throttling & gaming fixes (e.g. TalkTalk, Eduroam, Rogers)...`,
@@ -887,7 +948,7 @@ if (shouldFix && pseoFilesOnDisk.length > 0) {
       file: 'setup.html',
       urlPath: '/setup',
       title: `WireGuard Router, NAS & Console Setup Guides | SWEEPR VPN`,
-      description: `Step-by-step 10Gbps WireGuard VPN setup guides for GL.iNet Beryl AX/Flint 2, OpenWrt, Asuswrt-Merlin, MikroTik, UniFi, pfSense, OPNsense, Synology NAS, Steam Deck & NVIDIA Shield TV.`,
+      description: `10Gbps WireGuard setup guides for GL.iNet Beryl AX/Flint 2, OpenWrt, Asuswrt-Merlin, UniFi, pfSense, OPNsense, Synology NAS, Steam Deck & Nvidia Shield.`,
       badge: 'Hardware & OS Configuration Library • Native WireGuard .conf',
       telemetryLabel: `SETUP // ${byCluster.setup.length} ROUTER & CONSOLE GUIDES`,
       filterPlaceholder: `Filter ${byCluster.setup.length} router & device guides (e.g. GL.iNet, Steam Deck, Synology)...`,
@@ -910,7 +971,7 @@ if (shouldFix && pseoFilesOnDisk.length > 0) {
       file: 'guides.html',
       urlPath: '/guides',
       title: `Smart-TV ACR & WireGuard Privacy Guides (2026) | SWEEPR`,
-      description: `Technical privacy & network security guides: block Samsung Tizen & LG webOS Smart-TV ACR spying, detect unknown devices on your home Wi-Fi in 30 seconds, optimize WireGuard MTU, and stop WebRTC leaks.`,
+      description: `Technical privacy guides: block Samsung Tizen & LG webOS Smart-TV ACR spying, scan home Wi-Fi in 30s, optimize WireGuard MTU, and stop WebRTC/IPv6 leaks.`,
       badge: 'Home Wi-Fi Radar & Smart-TV Privacy Lab • Verified 2026',
       telemetryLabel: `GUIDES // ${byCluster.guides.length} SMART-TV ACR BLOCKLISTS`,
       filterPlaceholder: `Filter ${byCluster.guides.length} Smart-TV ACR & Wi-Fi guides (e.g. Samsung, LG, Roku)...`,
@@ -933,7 +994,7 @@ if (shouldFix && pseoFilesOnDisk.length > 0) {
       file: 'vs.html',
       urlPath: '/vs',
       title: `SWEEPR VPN vs NordVPN, Mullvad & TotalVPN | SWEEPR VPN`,
-      description: `Head-to-head 2026 technical VPN comparisons: see how SWEEPR VPN (native Rust + Tauri v2, 10Gbps RAM-only WireGuard, Free 30s Wi-Fi Scanner & £1.99 trial) compares against legacy VPNs.`,
+      description: `2026 technical VPN comparisons: SWEEPR VPN (Rust + Tauri v2, 10Gbps RAM-only WireGuard, free 30s Wi-Fi Scanner & £1.99 trial) vs legacy VPN providers.`,
       badge: '2026 Technical VPN Benchmarks • Speed, RAM Footprint & Price',
       telemetryLabel: `BENCHMARKS // ${byCluster.vs.length + 1} COMPARISONS`,
       filterPlaceholder: `Filter ${byCluster.vs.length + 1} provider comparisons (e.g. NordVPN, Mullvad, TotalVPN)...`,
@@ -1439,9 +1500,9 @@ ${sitemapEntries
   .join('\n')}
 </urlset>
 `;
-fs.writeFileSync(SITEMAP_PATH, newSitemapXml, 'utf8');
+writeFileIfChanged(SITEMAP_PATH, newSitemapXml);
 dailyState.totalGenerated = pseoFilesOnDisk.length;
-fs.writeFileSync(DAILY_STATE_PATH, JSON.stringify(dailyState, null, 2), 'utf8');
+writeFileIfChanged(DAILY_STATE_PATH, JSON.stringify(dailyState, null, 2));
 auditResults.autoOptimizations.push(`Synchronized sitemap.xml with ${sitemapEntries.length} canonical URLs (content-hash <lastmod>: ${lastModUpdatedCount} modified today)`);
 pass('crawlability', 'Sitemap Completeness & Content-Hash Freshness', `${sitemapEntries.length} canonical URLs registered (${consolidatedNoIndexPseoCount} thin/duplicate variants consolidated via 301/noindex)`);
 
@@ -1468,7 +1529,6 @@ const llmsContent = `# SWEEPR VPN & SWEEPR Wi-Fi Radar (sweeprvpn.com)
 - Homepage & Free Home Wi-Fi Scanner: https://sweeprvpn.com/
 - Official Installers & SHA-256 Checksums Hub: https://sweeprvpn.com/download
 - Pricing & Plan Comparison: https://sweeprvpn.com/pricing
-- Interactive Live Desktop App Preview: https://sweeprvpn.com/app
 - Free Instant IP, DNS & WebRTC Leak Test: https://sweeprvpn.com/tools/leak-test
 - Free ISP Speed Slowdown & Streaming Throttling Checker: https://sweeprvpn.com/tools/isp-throttling-test
 - Free 2026 VPN Renewal Price-Hike Calculator: https://sweeprvpn.com/tools/vpn-renewal-price-checker
@@ -1482,7 +1542,7 @@ const llmsContent = `# SWEEPR VPN & SWEEPR Wi-Fi Radar (sweeprvpn.com)
 ## Programmatic SEO Technical Library (${pseoFilesOnDisk.length} Indexed Guides & Comparisons)
 ${pseoFilesOnDisk.map((p) => `- [${p.h1}](${p.loc})`).join('\n')}
 `;
-fs.writeFileSync(LLMS_PATH, llmsContent, 'utf8');
+writeFileIfChanged(LLMS_PATH, llmsContent);
 
 // CMO Automation 1: Generate website/llms-full.txt with Live WireGuard POP Telemetry, ACR Blocklist Stats,
 // 7-Currency Price-Lock Matrix vs Competitor Renewal Hikes, and Audited Keyword Q&A
@@ -1624,14 +1684,13 @@ PersistentKeepalive = 25
 ## 6. High-Intent Technical FAQ Knowledge Base
 ${topQaOpps.map((o) => `### Q: ${o.enrichmentBrief.faqQuestion}\n- **Canonical Guide**: https://sweeprvpn.com${o.targetUrlPath}\n- **Answer**: ${o.enrichmentBrief.faqAnswer}`).join('\n\n')}
 
-## 7. Complete Canonical Index (${allCanonicalPages.length} Pages)
-${allCanonicalPages.map((p) => `- ${p.canonicalLoc}`).join('\n')}
+## 7. Complete Canonical Index (${sitemapEntries.length} Pages)
+${sitemapEntries.map((p) => `- ${p.canonicalLoc}`).join('\n')}
 `;
-fs.writeFileSync(LLMS_FULL_PATH, llmsFullContent, 'utf8');
+writeFileIfChanged(LLMS_FULL_PATH, llmsFullContent);
 const validLlmsPaths = new Set([
   ...canonicalPathSet,
   '/download',
-  '/app',
   '/smart-tv-acr-blocklist.txt',
   '/llms.txt',
   '/llms-full.txt',
@@ -1650,7 +1709,7 @@ for (const docText of [llmsContent, llmsFullContent]) {
 }
 auditResults.autoOptimizations.push(`Synchronized llms.txt & llms-full.txt with all ${pseoFilesOnDisk.length} pSEO guides and live 04:00 AM WireGuard/ACR telemetry for GEO AI citations`);
 if (nonCanonicalLlmsLinks.length === 0) {
-  pass('crawlability', 'GEO / LLM Discovery Manifests (llms.txt & llms-full.txt)', `Updated both manifests with ${allCanonicalPages.length} canonical URLs, ${topQaOpps.length} canonical FAQs, and live WireGuard/ACR proof (0 non-canonical links)`);
+  pass('crawlability', 'GEO / LLM Discovery Manifests (llms.txt & llms-full.txt)', `Updated both manifests with ${sitemapEntries.length} canonical URLs, ${topQaOpps.length} canonical FAQs, and live WireGuard/ACR proof (0 non-canonical links)`);
 } else {
   fail('crawlability', 'GEO / LLM Discovery Manifests (llms.txt & llms-full.txt)', `Found ${nonCanonicalLlmsLinks.length} non-canonical URLs in llms manifests: ${nonCanonicalLlmsLinks.slice(0, 5).join(', ')}`);
 }
@@ -1663,15 +1722,16 @@ if (fs.existsSync(INDEXING_QUEUE_PATH)) {
 if (!indexingQueue.indexnow_submitted_at || typeof indexingQueue.indexnow_submitted_at !== 'object') {
   indexingQueue.indexnow_submitted_at = {};
 }
-const allCanonicalLocs = allCanonicalPages.map((p) => p.canonicalLoc);
+const allCanonicalLocs = sitemapEntries.map((p) => p.canonicalLoc);
 const nowMs = Date.now();
 const FOURTEEN_DAYS_MS = 14 * 24 * 60 * 60 * 1000;
 
-// Priority order: 14 GSC Striking Distance pages -> Core pages -> Newest un-pinged pSEO pages
+// Priority order: 14 GSC Striking Distance pages -> Core pages + /download -> Newest un-pinged pSEO pages
 const gscPriorityLocs = Object.keys(GSC_STRIKING_DISTANCE_OVERRIDES).map((u) => `https://sweeprvpn.com${u}`);
 const orderedCandidates = [
   ...gscPriorityLocs.filter((u) => allCanonicalLocs.includes(u)),
   ...allCanonicalPages.filter((p) => p.isCore).map((p) => p.canonicalLoc),
+  'https://sweeprvpn.com/download',
   ...allCanonicalLocs.slice().reverse()
 ];
 const seenCandidates = new Set();
@@ -1687,9 +1747,9 @@ for (const url of orderedCandidates) {
 }
 
 indexingQueue.pending_urls = unpingedOrStaleUrls;
-indexingQueue.last_audit = { date: todayStr, totalUrls: allCanonicalPages.length, pendingDeltaUrls: unpingedOrStaleUrls.length };
-fs.writeFileSync(INDEXING_QUEUE_PATH, JSON.stringify(indexingQueue, null, 2), 'utf8');
-pass('crawlability', 'Search Engine Indexing Queue (Delta-Only)', `${unpingedOrStaleUrls.length} un-pinged/modified delta URLs queued (out of ${allCanonicalPages.length} total canonical URLs)`);
+indexingQueue.last_audit = { date: todayStr, totalUrls: sitemapEntries.length, pendingDeltaUrls: unpingedOrStaleUrls.length };
+writeFileIfChanged(INDEXING_QUEUE_PATH, JSON.stringify(indexingQueue, null, 2));
+pass('crawlability', 'Search Engine Indexing Queue (Delta-Only)', `${unpingedOrStaleUrls.length} un-pinged/modified delta URLs queued (out of ${sitemapEntries.length} total canonical URLs)`);
 
 // Optional Bing & IndexNow live ping dispatch (strictly capped to max 25 delta URLs per run to prevent Bing IndexNow throttling)
 if (shouldPing) {
@@ -1722,7 +1782,7 @@ if (shouldPing) {
       }
       indexingQueue.pending_urls = unpingedOrStaleUrls.slice(deltaBatch.length);
       indexingQueue.last_indexnow_ping = pingIso;
-      fs.writeFileSync(INDEXING_QUEUE_PATH, JSON.stringify(indexingQueue, null, 2), 'utf8');
+      writeFileIfChanged(INDEXING_QUEUE_PATH, JSON.stringify(indexingQueue, null, 2));
       pass('crawlability', 'IndexNow Delta Ping Broadcast', `Pinged ${deltaBatch.length} delta URLs to Bing & IndexNow (${indexingQueue.pending_urls.length} remaining in rolling queue)`);
     } else {
       pass('crawlability', 'IndexNow Delta Ping Broadcast', '0 new/modified URLs needed pinging (14-day anti-throttle window active)');
@@ -1816,6 +1876,7 @@ if (
 
 // Guard A: Historical GSC URLs & CANONICAL_REDIRECTS 404 Verifier (via resolveCanonical301)
 const { resolveCanonical301 } = await import('../website/server.mjs');
+const serverRedirectRules = [];
 const serverRedirectMap = {};
 for (const blockRe of [
   /const\s+CANONICAL_REDIRECTS\s*=\s*\{([\s\S]*?)\};/,
@@ -1824,6 +1885,7 @@ for (const blockRe of [
   const mBlock = serverMjsSource.match(blockRe);
   if (mBlock) {
     for (const m of mBlock[1].matchAll(/'([^']+)':\s*'([^']+)'/g)) {
+      serverRedirectRules.push([m[1], m[2]]);
       serverRedirectMap[m[1]] = m[2];
     }
   }
@@ -1862,12 +1924,17 @@ for (const u of gscUrlsToVerify) {
   }
   brokenGscOrRedirectUrls.push(u);
 }
-for (const [srcRoute, dstRoute] of Object.entries(serverRedirectMap)) {
-  const cleanDst = dstRoute.replace(/\?.*$/, '');
+for (const [srcRoute] of serverRedirectRules) {
+  const resolvedDst = resolveCanonical301(srcRoute);
+  if (!resolvedDst) {
+    brokenGscOrRedirectUrls.push(`${srcRoute} (unmatched by resolveCanonical301)`);
+    continue;
+  }
+  const cleanDst = resolvedDst.replace(/\?.*$/, '');
   if (resolveCanonical301(cleanDst)) {
-    brokenGscOrRedirectUrls.push(`${srcRoute}->${dstRoute} (multi-hop redirect chain)`);
+    brokenGscOrRedirectUrls.push(`${srcRoute}->${resolvedDst} (multi-hop redirect chain)`);
   } else if (!canonicalRouteSet.has(cleanDst)) {
-    brokenGscOrRedirectUrls.push(`${srcRoute}->${dstRoute} (missing target)`);
+    brokenGscOrRedirectUrls.push(`${srcRoute}->${resolvedDst} (missing target)`);
   }
 }
 if (brokenGscOrRedirectUrls.length === 0) {
@@ -2024,13 +2091,16 @@ for (const page of allCanonicalPages) {
     seenTitles.set(decodedTitle, page.urlPath);
   }
 
-  // 2. Meta description check (non-empty, >= 60 chars, unique, no abrupt mid-sentence truncation)
+  // 2. Meta description check (non-empty, 60..165 chars, unique, no abrupt mid-sentence truncation)
   const descMatch = content.match(/<meta\s+name=["']description["']\s+content="([^"]*)"/is) ||
     content.match(/<meta\s+name=["']description["']\s+content='([^']*)'/is);
   const decodedDesc = decodeHtmlEntities(descMatch ? descMatch[1] : '');
   if (!decodedDesc || decodedDesc.length < 60) {
     descIssues++;
     failingPages.desc.push(page.file);
+  } else if (decodedDesc.length > 165) {
+    descIssues++;
+    failingPages.desc.push(`${page.file} (desc ${decodedDesc.length} > 165 chars)`);
   } else {
     const isEnglishPage = !/^(de|fr|es|pt-br|sv)-/i.test(page.file);
     if (
@@ -2161,6 +2231,31 @@ if (h1Issues === 0) {
   pass('technicalSeo', 'H1 Heading Hierarchy', `All ${allCanonicalPages.length} pages have exactly 1 descriptive <h1> heading`);
 } else {
   fail('technicalSeo', 'H1 Heading Hierarchy', `${h1Issues} pages with missing <h1> tags: ${failingPages.h1.join(', ')}`);
+}
+
+// Document landmarks (<html lang>, <main>) & heading-level continuity check
+let a11yLandmarkIssues = 0;
+const failingLandmarkPages = [];
+for (const page of allCanonicalPages) {
+  const c = fs.readFileSync(page.absPath, 'utf8');
+  if (!/<html[^>]*\blang=/i.test(c) || !/<main\b/i.test(c)) {
+    a11yLandmarkIssues++;
+    failingLandmarkPages.push(`${page.file} (missing lang/main)`);
+    continue;
+  }
+  const levels = [...c.matchAll(/<h([1-6])\b[^>]*>/gi)].map((m) => Number(m[1]));
+  for (let idx = 1; idx < levels.length; idx++) {
+    if (levels[idx] - levels[idx - 1] > 1) {
+      a11yLandmarkIssues++;
+      failingLandmarkPages.push(`${page.file} (h${levels[idx - 1]}->h${levels[idx]})`);
+      break;
+    }
+  }
+}
+if (a11yLandmarkIssues === 0) {
+  pass('technicalSeo', 'Document Landmarks & Heading Continuity', `All ${allCanonicalPages.length} pages declare <html lang>, <main>, and sequential heading levels`);
+} else {
+  warn('technicalSeo', 'Document Landmarks & Heading Continuity', `${a11yLandmarkIssues} pages with landmark/heading issues: ${failingLandmarkPages.slice(0, 5).join(', ')}`);
 }
 
 if (ogIssues === 0) {
@@ -2298,6 +2393,20 @@ if (missingImgAlt === 0) {
   warn('pageSpeed', 'Image Accessibility & Alt-Text', `${missingImgAlt} <img> tags missing alt attributes`);
 }
 
+let missingAsyncDecoding = 0;
+for (const page of allCanonicalPages) {
+  const content = fs.readFileSync(page.absPath, 'utf8');
+  const lazyImgs = content.match(/<img[^>]*loading=["']lazy["'][^>]*>/gi) || [];
+  for (const imgTag of lazyImgs) {
+    if (!/decoding=["']async["']/i.test(imgTag)) missingAsyncDecoding++;
+  }
+}
+if (missingAsyncDecoding === 0) {
+  pass('pageSpeed', 'Async Image Decoding', 'All lazy-loaded <img> tags specify decoding="async"');
+} else {
+  warn('pageSpeed', 'Async Image Decoding', `${missingAsyncDecoding} lazy-loaded <img> tags missing decoding="async"`);
+}
+
 // Check for PWA Manifest, Touch Icons & Favicons in HTML heads
 const hasAppleTouchIcon = fs.existsSync(path.join(WEBSITE_DIR, 'apple-touch-icon.png'));
 const hasFaviconPng = fs.existsSync(path.join(WEBSITE_DIR, 'favicon.png'));
@@ -2379,6 +2488,9 @@ const hasWebpMime = serverCode.includes("'.webp': 'image/webp'");
 const hasAvifMime = serverCode.includes("'.avif': 'image/avif'");
 const hasWoff2Mime = serverCode.includes("'.woff2': 'font/woff2'");
 const hasXmlCacheControl = serverCode.includes("ext === '.xml' || ext === '.txt'");
+const hasImmutableVersionCache = serverCode.includes("max-age=31536000, immutable");
+const hasStaticHeadParity = serverCode.includes("const isHead = req.method === 'HEAD'");
+const hasPwaStartUrlDownload = serverCode.includes("start_url: '/download'");
 
 if (hasZlib && hasBrotli && hasGzip && hasSendHtmlCompression) {
   pass('pageSpeed', 'Server-Side Compression (Brotli + Gzip)', 'Built-in node:zlib Brotli and Gzip transparently enabled across static assets & dynamic HTML (/download)');
@@ -2398,10 +2510,10 @@ if (hasWebpMime && hasAvifMime && hasWoff2Mime) {
   fail('pageSpeed', 'Modern MIME Types & Static Serving', 'Missing modern media MIME types in server.mjs');
 }
 
-if (hasXmlCacheControl) {
-  pass('pageSpeed', 'Static Cache-Control Architecture', 'Explicit caching headers configured for HTML (300s/3600s SWR), JS/CSS (ETag must-revalidate), static media (300s/3600s), and XML/TXT (3600s/86400s)');
+if (hasXmlCacheControl && hasImmutableVersionCache && hasStaticHeadParity && hasPwaStartUrlDownload) {
+  pass('pageSpeed', 'Static Cache-Control & HEAD Parity', 'Versioned (?v=) assets served 1yr immutable; HTML 300s/3600s SWR; XML/TXT 3600s/86400s; HEAD parity & PWA /download start_url verified');
 } else {
-  warn('pageSpeed', 'Static Cache-Control Architecture', 'Explicit caching headers could be missing for .xml or .txt');
+  warn('pageSpeed', 'Static Cache-Control & HEAD Parity', 'Missing immutable versioned cache-control, HEAD empty-body parity, or canonical PWA start_url in server.mjs');
 }
 
 // Benchmark compression savings on key pages
@@ -2516,7 +2628,7 @@ ${auditResults.benchmarks.map((b) => `- **${b.file}** (${b.rawKb} KB raw) &rarr;
     currentLog = currentLog.trimEnd() + '\n' + markdownSection + '\n';
   }
 
-  fs.writeFileSync(AUDIT_LOG_PATH, currentLog, 'utf8');
+  writeFileIfChanged(AUDIT_LOG_PATH, currentLog);
   console.log(`\n📝 Persisted daily audit report to ${path.relative(VPN_ROOT, AUDIT_LOG_PATH)}`);
 }
 

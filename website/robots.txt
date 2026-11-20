@@ -9,10 +9,12 @@ Disallow: /checkout/
 Disallow: /ios-app
 Disallow: /qr-setup
 Disallow: /popup-alternatives
+Disallow: /prototype-
 Disallow: /prototype-mockup-a
 Disallow: /prototype-mockup-b
 Disallow: /sweepr-motion-review
 Disallow: /sweepr-vpn-scorecard
+Disallow: /ui-ux-audit-mockups
 Disallow: /*?currency=*
 Disallow: /*?picker=*
 Disallow: /*?noredirect=*

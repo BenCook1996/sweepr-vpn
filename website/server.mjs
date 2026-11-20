@@ -3323,6 +3323,7 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="color-scheme" content="light">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Download SWEEPR VPN (Windows, macOS, Android &amp; iOS)</title>
@@ -3894,7 +3895,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   // Installable PWA Web App Manifest & Service Worker (Item 5)
-  if (pathname === '/manifest.webmanifest' && req.method === 'GET') {
+  if (pathname === '/manifest.webmanifest' && (req.method === 'GET' || req.method === 'HEAD')) {
     return sendJson(
       res,
       200,
@@ -3902,7 +3903,7 @@ const server = http.createServer(async (req, res) => {
         name: 'SWEEPR VPN — Easy Privacy & Home Wi-Fi Shield',
         short_name: 'SWEEPR VPN',
         description: '1-Click WireGuard VPN, Smart-TV ACR Telemetry Blocker, and Home Wi-Fi Device Radar.',
-        start_url: '/app',
+        start_url: '/download',
         scope: '/',
         display: 'standalone',
         orientation: 'portrait-primary',
@@ -3921,9 +3922,9 @@ const server = http.createServer(async (req, res) => {
     );
   }
 
-  if (pathname === '/sw.js' && req.method === 'GET') {
-    const swScript = `const CACHE = 'sweepr-vpn-pwa-v2.5';
-const ASSETS = ['/app', '/favicon.svg?v=5', '/logo-emerald.svg?v=5'];
+  if (pathname === '/sw.js' && (req.method === 'GET' || req.method === 'HEAD')) {
+    const swScript = `const CACHE = 'sweepr-vpn-pwa-v2.6';
+const ASSETS = ['/download', '/favicon.svg?v=5', '/logo-emerald.svg?v=5'];
 self.addEventListener('install', e => {
   self.skipWaiting();
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).catch(() => {}));
@@ -3934,7 +3935,7 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET' || e.request.url.includes('/api/')) return;
   e.respondWith(fetch(e.request).then(res => {
-    if (res && res.status === 200 && (e.request.url.endsWith('/app') || e.request.url.includes('favicon'))) {
+    if (res && res.status === 200 && (e.request.url.endsWith('/download') || e.request.url.includes('favicon'))) {
       const clone = res.clone();
       caches.open(CACHE).then(c => c.put(e.request, clone)).catch(() => {});
     }
@@ -3947,7 +3948,7 @@ self.addEventListener('fetch', e => {
       'Cache-Control': 'no-cache',
       ...COMMON_SECURITY_HEADERS
     });
-    return res.end(swScript);
+    return res.end(req.method === 'HEAD' ? undefined : swScript);
   }
 
   // 30-Minute Order Draft Redirect: if visitor filled out any details on /order in the last 30 mins
@@ -8873,6 +8874,10 @@ self.addEventListener('fetch', e => {
         'X-Robots-Tag': 'noindex, nofollow',
         ...COMMON_SECURITY_HEADERS
       });
+      if (req.method === 'HEAD') {
+        res.end();
+        return;
+      }
       const exeStream = fs.createReadStream(filePath);
       req.on('close', () => exeStream.destroy());
       exeStream.on('error', () => { if (!res.headersSent) res.writeHead(500); res.end(); });
@@ -8936,6 +8941,8 @@ self.addEventListener('fetch', e => {
     } else if (/^(prototype-|sweepr-motion-review|sweepr-vpn-scorecard|popup-alternatives|ui-ux-audit-mockups)/i.test(baseName)) {
       headers['X-Robots-Tag'] = 'noindex, nofollow';
       headers['Cache-Control'] = 'no-store, no-cache, must-revalidate';
+    } else if (urlObj.searchParams.has('v') && ['.css', '.js', '.svg', '.png', '.webp', '.avif', '.ico', '.woff2', '.woff', '.ttf'].includes(ext)) {
+      headers['Cache-Control'] = 'public, max-age=31536000, immutable';
     } else if (/^(favicon|logo-|padlock-favicon|icon-)/i.test(baseName) || ext === '.ico' || ext === '.js' || ext === '.css') {
       headers['Cache-Control'] = 'public, max-age=0, must-revalidate';
     } else if (['.svg', '.png', '.webp', '.avif', '.woff2', '.woff', '.ttf'].includes(ext)) {
@@ -8959,6 +8966,7 @@ self.addEventListener('fetch', e => {
     }
 
     // Transparent Brotli & Gzip compression for compressible static assets
+    const isHead = req.method === 'HEAD';
     const compressible = /^(text\/|application\/(javascript|json|xml)|image\/svg\+xml)/i.test(headers['Content-Type'] || '');
     const acceptEncoding = String(req.headers['accept-encoding'] || '');
 
@@ -8972,7 +8980,7 @@ self.addEventListener('fetch', e => {
           headers['Content-Encoding'] = 'br';
           headers['Content-Length'] = compressed.length;
           res.writeHead(200, headers);
-          res.end(compressed);
+          res.end(isHead ? undefined : compressed);
           return;
         } catch {}
       } else if (/\bgzip\b/i.test(acceptEncoding)) {
@@ -8981,7 +8989,7 @@ self.addEventListener('fetch', e => {
           headers['Content-Encoding'] = 'gzip';
           headers['Content-Length'] = compressed.length;
           res.writeHead(200, headers);
-          res.end(compressed);
+          res.end(isHead ? undefined : compressed);
           return;
         } catch {}
       }
@@ -8989,7 +8997,7 @@ self.addEventListener('fetch', e => {
 
     headers['Content-Length'] = content.length;
     res.writeHead(200, headers);
-    res.end(content);
+    res.end(isHead ? undefined : content);
   });
 });
 

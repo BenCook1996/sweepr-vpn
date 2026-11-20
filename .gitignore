@@ -32,3 +32,8 @@ scripts/test_*.mjs
 *.service-account.json
 sweepr-*.json
 
+# Local YouTube technical demo generator artifacts & deps
+scripts/youtube-demo-pipeline/node_modules/
+scripts/youtube-demo-pipeline/output/
+
+

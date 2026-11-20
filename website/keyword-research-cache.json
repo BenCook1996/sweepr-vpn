@@ -1,9 +1,9 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-11-13T01:27:51.853Z",
+  "updatedAt": "2026-11-20T05:05:32.317Z",
   "entries": {
     "ddg:en-GB:gl inet slate 7 wireguard": {
-      "fetchedAt": 1794490201331,
+      "fetchedAt": 1795151101673,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -18,7 +18,7 @@
       ]
     },
     "google:en-GB:gl inet slate 7 wireguard": {
-      "fetchedAt": 1794490201331,
+      "fetchedAt": 1795151101673,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": [
@@ -26,15 +26,11 @@
         "gl inet slate 7 wireguard speed",
         "gl inet wireguard setup",
         "install wireguard server",
-        "wireguard internet not working",
-        "gl inet slate 7 wireguard configuration",
-        "gl inet slate 7 wireguard config",
-        "gl inet slate 7 wireguard client",
-        "gl inet slate 7 wireguard vpn"
+        "wireguard internet not working"
       ]
     },
     "bing:en-GB:gl inet slate 7 wireguard": {
-      "fetchedAt": 1793831679286,
+      "fetchedAt": 1794891966576,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -50,24 +46,23 @@
       ]
     },
     "google:en-GB:gl-be3600 wireguard vpn": {
-      "fetchedAt": 1794490201990,
+      "fetchedAt": 1795151102487,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": [
-        "gl-be3600 wireguard vpn configuration",
-        "gl-be3600 wireguard vpn client",
         "gl-be3600 wireguard vpn download",
-        "gl-be3600 wireguard vpn setup"
+        "gl-be3600 wireguard vpn configuration",
+        "gl-be3600 wireguard vpn client"
       ]
     },
     "bing:en-GB:gl-be3600 wireguard vpn": {
-      "fetchedAt": 1793831680322,
+      "fetchedAt": 1794815771456,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": []
     },
     "ddg:en-GB:gl-be3600 wireguard vpn": {
-      "fetchedAt": 1794490201990,
+      "fetchedAt": 1795151102487,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": []
@@ -987,7 +982,7 @@
       ]
     },
     "ddg:en-GB:unifi cloud gateway max wireguard": {
-      "fetchedAt": 1794490223293,
+      "fetchedAt": 1795151103200,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -1002,7 +997,7 @@
       ]
     },
     "bing:en-GB:unifi cloud gateway max wireguard": {
-      "fetchedAt": 1793833983150,
+      "fetchedAt": 1794815772453,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -1019,7 +1014,7 @@
       ]
     },
     "google:en-GB:unifi cloud gateway max wireguard": {
-      "fetchedAt": 1794490223293,
+      "fetchedAt": 1795151103200,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": [
@@ -1027,24 +1022,17 @@
         "unifi cloud gateway max wireguard speed",
         "ubiquiti cloud gateway max wireguard",
         "unifi security gateway release date",
-        "unifi limit wifi speed",
-        "unifi cloud gateway max wireguard setup",
-        "unifi cloud gateway max wireguard vpn",
-        "unifi cloud gateway max wireguard client",
-        "unifi cloud gateway max wireguard configuration"
+        "unifi limit wifi speed"
       ]
     },
     "google:en-GB:ucg max wireguard vpn client": {
-      "fetchedAt": 1794490223661,
+      "fetchedAt": 1795151103835,
       "locale": "en-GB",
       "engine": "google",
-      "suggestions": [
-        "ucg max wireguard vpn client download",
-        "ucg max wireguard vpn clients"
-      ]
+      "suggestions": []
     },
     "ddg:en-GB:ucg max wireguard vpn client": {
-      "fetchedAt": 1794490223661,
+      "fetchedAt": 1795151103835,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -1059,7 +1047,7 @@
       ]
     },
     "bing:en-GB:ucg max wireguard vpn client": {
-      "fetchedAt": 1793833984222,
+      "fetchedAt": 1794815774063,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -1076,7 +1064,7 @@
       ]
     },
     "bing:en-GB:legion go wireguard vpn": {
-      "fetchedAt": 1793833984752,
+      "fetchedAt": 1794815774713,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -1093,18 +1081,13 @@
       ]
     },
     "google:en-GB:legion go wireguard vpn": {
-      "fetchedAt": 1794490202617,
+      "fetchedAt": 1795151104476,
       "locale": "en-GB",
       "engine": "google",
-      "suggestions": [
-        "legion go wireguard vpn download",
-        "legion go wireguard vpn client",
-        "legion go wireguard vpn server",
-        "legion go wireguard vpn not working"
-      ]
+      "suggestions": []
     },
     "ddg:en-GB:legion go wireguard vpn": {
-      "fetchedAt": 1794490202617,
+      "fetchedAt": 1795151104476,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -1119,7 +1102,7 @@
       ]
     },
     "bing:en-GB:lenovo legion go steamos vpn": {
-      "fetchedAt": 1793833985316,
+      "fetchedAt": 1794815775356,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -1136,7 +1119,7 @@
       ]
     },
     "ddg:en-GB:lenovo legion go steamos vpn": {
-      "fetchedAt": 1794490203219,
+      "fetchedAt": 1795151105142,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -1151,16 +1134,13 @@
       ]
     },
     "google:en-GB:lenovo legion go steamos vpn": {
-      "fetchedAt": 1794490203219,
+      "fetchedAt": 1795151105142,
       "locale": "en-GB",
       "engine": "google",
-      "suggestions": [
-        "lenovo legion go steamos vpn download",
-        "lenovo legion go steamos vpn not working"
-      ]
+      "suggestions": []
     },
     "ddg:en-GB:fritzbox wireguard vpn setup": {
-      "fetchedAt": 1794490224077,
+      "fetchedAt": 1795151105697,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -1175,7 +1155,7 @@
       ]
     },
     "google:en-GB:fritzbox wireguard vpn setup": {
-      "fetchedAt": 1794490224077,
+      "fetchedAt": 1795151105697,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": [
@@ -1184,11 +1164,11 @@
         "fritzbox vpn setup",
         "wireguard vpn setup",
         "fritzbox wireguard vpn setup download",
-        "fritzbox wireguard vpn setup server"
+        "fritzbox wireguard vpn setup guide"
       ]
     },
     "bing:en-GB:fritzbox wireguard vpn setup": {
-      "fetchedAt": 1793833985953,
+      "fetchedAt": 1794815776202,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -1205,13 +1185,13 @@
       ]
     },
     "google:en-GB:fritzbox 7590 wireguard config": {
-      "fetchedAt": 1794490224679,
+      "fetchedAt": 1795151106369,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": []
     },
     "ddg:en-GB:fritzbox 7590 wireguard config": {
-      "fetchedAt": 1794490224679,
+      "fetchedAt": 1795151106369,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -1226,7 +1206,7 @@
       ]
     },
     "bing:en-GB:fritzbox 7590 wireguard config": {
-      "fetchedAt": 1793833986533,
+      "fetchedAt": 1794815778638,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -1243,7 +1223,7 @@
       ]
     },
     "bing:en-GB:mikrotik hap ax3 wireguard": {
-      "fetchedAt": 1793833987168,
+      "fetchedAt": 1794815779180,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -1260,7 +1240,7 @@
       ]
     },
     "google:en-GB:mikrotik hap ax3 wireguard": {
-      "fetchedAt": 1794490225239,
+      "fetchedAt": 1795151106977,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": [
@@ -1270,7 +1250,7 @@
       ]
     },
     "ddg:en-GB:mikrotik hap ax3 wireguard": {
-      "fetchedAt": 1794490225239,
+      "fetchedAt": 1795151106977,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -1285,7 +1265,7 @@
       ]
     },
     "ddg:en-GB:mikrotik wireguard client config": {
-      "fetchedAt": 1794490225687,
+      "fetchedAt": 1795151107469,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -1300,7 +1280,7 @@
       ]
     },
     "bing:en-GB:mikrotik wireguard client config": {
-      "fetchedAt": 1793833987797,
+      "fetchedAt": 1794815779855,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -1317,7 +1297,7 @@
       ]
     },
     "google:en-GB:mikrotik wireguard client config": {
-      "fetchedAt": 1794490225687,
+      "fetchedAt": 1795151107469,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": [
@@ -1334,7 +1314,7 @@
       ]
     },
     "ddg:en-GB:unifi express wireguard vpn client": {
-      "fetchedAt": 1794490203771,
+      "fetchedAt": 1795151108085,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -1349,13 +1329,13 @@
       ]
     },
     "google:en-GB:unifi express wireguard vpn client": {
-      "fetchedAt": 1794490203771,
+      "fetchedAt": 1795151108085,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": []
     },
     "bing:en-GB:unifi express wireguard vpn client": {
-      "fetchedAt": 1793837893201,
+      "fetchedAt": 1794815780454,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -1372,7 +1352,7 @@
       ]
     },
     "google:en-GB:unifi express wireguard setup": {
-      "fetchedAt": 1794490204337,
+      "fetchedAt": 1795151108682,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": [
@@ -1380,7 +1360,7 @@
       ]
     },
     "ddg:en-GB:unifi express wireguard setup": {
-      "fetchedAt": 1794490204337,
+      "fetchedAt": 1795151108682,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -1395,7 +1375,7 @@
       ]
     },
     "bing:en-GB:unifi express wireguard setup": {
-      "fetchedAt": 1793837894397,
+      "fetchedAt": 1794815781165,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -1412,7 +1392,7 @@
       ]
     },
     "ddg:en-GB:tp-link er605 wireguard vpn setup": {
-      "fetchedAt": 1794490204862,
+      "fetchedAt": 1795151109220,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -1427,7 +1407,7 @@
       ]
     },
     "google:en-GB:tp-link er605 wireguard vpn setup": {
-      "fetchedAt": 1794490204862,
+      "fetchedAt": 1795151109220,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": [
@@ -1437,7 +1417,7 @@
       ]
     },
     "bing:en-GB:tp-link er605 wireguard vpn setup": {
-      "fetchedAt": 1793837895071,
+      "fetchedAt": 1794815781903,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -1454,7 +1434,7 @@
       ]
     },
     "bing:en-GB:omada er605 wireguard client": {
-      "fetchedAt": 1793837895666,
+      "fetchedAt": 1794815782665,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -1471,7 +1451,7 @@
       ]
     },
     "google:en-GB:omada er605 wireguard client": {
-      "fetchedAt": 1794490205448,
+      "fetchedAt": 1795151109895,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": [
@@ -1479,7 +1459,7 @@
       ]
     },
     "ddg:en-GB:omada er605 wireguard client": {
-      "fetchedAt": 1794490205448,
+      "fetchedAt": 1795151109895,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -1494,13 +1474,13 @@
       ]
     },
     "google:en-GB:cudy wr3000 wireguard vpn setup": {
-      "fetchedAt": 1794490205985,
+      "fetchedAt": 1795151110531,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": []
     },
     "ddg:en-GB:cudy wr3000 wireguard vpn setup": {
-      "fetchedAt": 1794490205985,
+      "fetchedAt": 1795151110531,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -1515,7 +1495,7 @@
       ]
     },
     "bing:en-GB:cudy wr3000 wireguard vpn setup": {
-      "fetchedAt": 1793837896280,
+      "fetchedAt": 1794815783454,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -1532,13 +1512,15 @@
       ]
     },
     "google:en-GB:cudy tr3000 wireguard config": {
-      "fetchedAt": 1794490206557,
+      "fetchedAt": 1795151111085,
       "locale": "en-GB",
       "engine": "google",
-      "suggestions": []
+      "suggestions": [
+        "cudy tr3000 wireguard configuration"
+      ]
     },
     "ddg:en-GB:cudy tr3000 wireguard config": {
-      "fetchedAt": 1794490206557,
+      "fetchedAt": 1795151111085,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -1553,7 +1535,7 @@
       ]
     },
     "bing:en-GB:cudy tr3000 wireguard config": {
-      "fetchedAt": 1793837896861,
+      "fetchedAt": 1794815784061,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -1570,17 +1552,13 @@
       ]
     },
     "google:en-GB:synology rt6600ax wireguard vpn": {
-      "fetchedAt": 1794490206876,
+      "fetchedAt": 1795151111775,
       "locale": "en-GB",
       "engine": "google",
-      "suggestions": [
-        "synology rt6600ax wireguard vpn configuration",
-        "synology rt6600ax wireguard vpn setup",
-        "synology rt6600ax wireguard vpn client"
-      ]
+      "suggestions": []
     },
     "ddg:en-GB:synology rt6600ax wireguard vpn": {
-      "fetchedAt": 1794490206876,
+      "fetchedAt": 1795151111775,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -1590,7 +1568,7 @@
       ]
     },
     "bing:en-GB:synology rt6600ax wireguard vpn": {
-      "fetchedAt": 1793837897521,
+      "fetchedAt": 1794815784749,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -1600,17 +1578,13 @@
       ]
     },
     "google:en-GB:synology srm wireguard client setup": {
-      "fetchedAt": 1794490207444,
+      "fetchedAt": 1795151112349,
       "locale": "en-GB",
       "engine": "google",
-      "suggestions": [
-        "synology srm wireguard client setup guide",
-        "synology srm wireguard client setup download",
-        "synology srm wireguard client setup guide download"
-      ]
+      "suggestions": []
     },
     "ddg:en-GB:synology srm wireguard client setup": {
-      "fetchedAt": 1794490207444,
+      "fetchedAt": 1795151112349,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -1625,7 +1599,7 @@
       ]
     },
     "bing:en-GB:synology srm wireguard client setup": {
-      "fetchedAt": 1793837898135,
+      "fetchedAt": 1794815785265,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -1642,7 +1616,7 @@
       ]
     },
     "bing:en-GB:draytek vigor 2865 wireguard vpn setup": {
-      "fetchedAt": 1793837898808,
+      "fetchedAt": 1794815786102,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -1659,13 +1633,13 @@
       ]
     },
     "google:en-GB:draytek vigor 2865 wireguard vpn setup": {
-      "fetchedAt": 1794490207927,
+      "fetchedAt": 1795151113004,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": []
     },
     "ddg:en-GB:draytek vigor 2865 wireguard vpn setup": {
-      "fetchedAt": 1794490207927,
+      "fetchedAt": 1795151113004,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -1680,15 +1654,13 @@
       ]
     },
     "google:en-GB:draytek 2865 wireguard client config": {
-      "fetchedAt": 1794490208447,
+      "fetchedAt": 1795151113671,
       "locale": "en-GB",
       "engine": "google",
-      "suggestions": [
-        "draytek 2865 wireguard client configuration"
-      ]
+      "suggestions": []
     },
     "ddg:en-GB:draytek 2865 wireguard client config": {
-      "fetchedAt": 1794490208447,
+      "fetchedAt": 1795151113671,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -1703,7 +1675,7 @@
       ]
     },
     "bing:en-GB:draytek 2865 wireguard client config": {
-      "fetchedAt": 1793837899518,
+      "fetchedAt": 1794815786868,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -1720,7 +1692,7 @@
       ]
     },
     "bing:en-GB:asus rt-be96u wireguard vpn setup": {
-      "fetchedAt": 1793837900185,
+      "fetchedAt": 1794815787600,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -1737,7 +1709,7 @@
       ]
     },
     "ddg:en-GB:asus rt-be96u wireguard vpn setup": {
-      "fetchedAt": 1794490208933,
+      "fetchedAt": 1795151114217,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -1752,13 +1724,13 @@
       ]
     },
     "google:en-GB:asus rt-be96u wireguard vpn setup": {
-      "fetchedAt": 1794490208933,
+      "fetchedAt": 1795151114217,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": []
     },
     "bing:en-GB:asus vpn fusion wireguard config": {
-      "fetchedAt": 1793837900776,
+      "fetchedAt": 1794815788687,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -1775,13 +1747,13 @@
       ]
     },
     "google:en-GB:asus vpn fusion wireguard config": {
-      "fetchedAt": 1794490209472,
+      "fetchedAt": 1795151114758,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": []
     },
     "ddg:en-GB:asus vpn fusion wireguard config": {
-      "fetchedAt": 1794490209472,
+      "fetchedAt": 1795151114758,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -1796,7 +1768,7 @@
       ]
     },
     "ddg:en-GB:ugreen nasync docker wireguard vpn": {
-      "fetchedAt": 1794490210048,
+      "fetchedAt": 1795151115356,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -1811,7 +1783,7 @@
       ]
     },
     "bing:en-GB:ugreen nasync docker wireguard vpn": {
-      "fetchedAt": 1793837901463,
+      "fetchedAt": 1794815789194,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -1828,24 +1800,19 @@
       ]
     },
     "google:en-GB:ugreen nasync docker wireguard vpn": {
-      "fetchedAt": 1794490210048,
+      "fetchedAt": 1795151115356,
       "locale": "en-GB",
       "engine": "google",
-      "suggestions": [
-        "ugreen nasync docker wireguard vpn client",
-        "ugreen nasync docker wireguard vpn setup",
-        "ugreen nasync docker wireguard vpn configuration",
-        "ugreen nasync docker wireguard vpn server"
-      ]
+      "suggestions": []
     },
     "google:en-GB:ugreen dxp4800 gluetun wireguard": {
-      "fetchedAt": 1794490210535,
+      "fetchedAt": 1795151115995,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": []
     },
     "bing:en-GB:ugreen dxp4800 gluetun wireguard": {
-      "fetchedAt": 1793837902170,
+      "fetchedAt": 1794815790058,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -1862,7 +1829,7 @@
       ]
     },
     "ddg:en-GB:ugreen dxp4800 gluetun wireguard": {
-      "fetchedAt": 1794490210535,
+      "fetchedAt": 1795151115995,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -1877,7 +1844,7 @@
       ]
     },
     "bing:en-GB:terramaster tos 6 wireguard vpn": {
-      "fetchedAt": 1793837902843,
+      "fetchedAt": 1794815790953,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -1885,13 +1852,13 @@
       ]
     },
     "google:en-GB:terramaster tos 6 wireguard vpn": {
-      "fetchedAt": 1794490210864,
+      "fetchedAt": 1795151116641,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": []
     },
     "ddg:en-GB:terramaster tos 6 wireguard vpn": {
-      "fetchedAt": 1794490210864,
+      "fetchedAt": 1795151116641,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -1899,7 +1866,7 @@
       ]
     },
     "ddg:en-GB:terramaster f4-424 docker wireguard": {
-      "fetchedAt": 1794490211384,
+      "fetchedAt": 1795151117323,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -1914,13 +1881,13 @@
       ]
     },
     "google:en-GB:terramaster f4-424 docker wireguard": {
-      "fetchedAt": 1794490211384,
+      "fetchedAt": 1795151117323,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": []
     },
     "bing:en-GB:terramaster f4-424 docker wireguard": {
-      "fetchedAt": 1793837903392,
+      "fetchedAt": 1794815791870,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -1937,7 +1904,7 @@
       ]
     },
     "ddg:en-GB:zimaboard wireguard vpn gateway": {
-      "fetchedAt": 1794490226099,
+      "fetchedAt": 1795151117771,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -1945,16 +1912,13 @@
       ]
     },
     "google:en-GB:zimaboard wireguard vpn gateway": {
-      "fetchedAt": 1794490226099,
+      "fetchedAt": 1795151117771,
       "locale": "en-GB",
       "engine": "google",
-      "suggestions": [
-        "zimaboard wireguard vpn gateway not working",
-        "zimaboard wireguard vpn gateway download"
-      ]
+      "suggestions": []
     },
     "bing:en-GB:zimaboard wireguard vpn gateway": {
-      "fetchedAt": 1793837904123,
+      "fetchedAt": 1794815792681,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -1962,13 +1926,16 @@
       ]
     },
     "google:en-GB:casaos gluetun wireguard setup": {
-      "fetchedAt": 1794490226614,
+      "fetchedAt": 1795151118352,
       "locale": "en-GB",
       "engine": "google",
-      "suggestions": []
+      "suggestions": [
+        "casaos gluetun wireguard setup guide",
+        "casaos gluetun wireguard setup guide pdf"
+      ]
     },
     "bing:en-GB:casaos gluetun wireguard setup": {
-      "fetchedAt": 1793837904788,
+      "fetchedAt": 1794815793267,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -1976,7 +1943,7 @@
       ]
     },
     "ddg:en-GB:casaos gluetun wireguard setup": {
-      "fetchedAt": 1794490226614,
+      "fetchedAt": 1795151118352,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -1984,16 +1951,13 @@
       ]
     },
     "google:en-GB:proxmox lxc wireguard vpn gateway": {
-      "fetchedAt": 1794490211996,
+      "fetchedAt": 1795151119002,
       "locale": "en-GB",
       "engine": "google",
-      "suggestions": [
-        "proxmox lxc wireguard vpn gateway configuration",
-        "proxmox lxc wireguard vpn gateway not working"
-      ]
+      "suggestions": []
     },
     "ddg:en-GB:proxmox lxc wireguard vpn gateway": {
-      "fetchedAt": 1794490211996,
+      "fetchedAt": 1795151119002,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -2008,7 +1972,7 @@
       ]
     },
     "bing:en-GB:proxmox lxc wireguard vpn gateway": {
-      "fetchedAt": 1793837905465,
+      "fetchedAt": 1794815793788,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -2025,16 +1989,16 @@
       ]
     },
     "google:en-GB:proxmox ve 8 wireguard client setup": {
-      "fetchedAt": 1794490212531,
+      "fetchedAt": 1795151119552,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": [
-        "proxmox ve 8 wireguard client setup guide",
-        "proxmox ve 8 wireguard client setup download"
+        "proxmox ve 8 wireguard client setup download",
+        "proxmox ve 8 wireguard client setup guide"
       ]
     },
     "bing:en-GB:proxmox ve 8 wireguard client setup": {
-      "fetchedAt": 1793837906167,
+      "fetchedAt": 1794815794378,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -2051,7 +2015,7 @@
       ]
     },
     "ddg:en-GB:proxmox ve 8 wireguard client setup": {
-      "fetchedAt": 1794490212531,
+      "fetchedAt": 1795151119552,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -2066,7 +2030,7 @@
       ]
     },
     "bing:en-GB:truenas scale electric eel wireguard vpn": {
-      "fetchedAt": 1793837906814,
+      "fetchedAt": 1794815794868,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -2076,7 +2040,7 @@
       ]
     },
     "ddg:en-GB:truenas scale electric eel wireguard vpn": {
-      "fetchedAt": 1794490212994,
+      "fetchedAt": 1795151120261,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -2086,13 +2050,13 @@
       ]
     },
     "google:en-GB:truenas scale electric eel wireguard vpn": {
-      "fetchedAt": 1794490212994,
+      "fetchedAt": 1795151120261,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": []
     },
     "ddg:en-GB:truenas scale gluetun wireguard setup": {
-      "fetchedAt": 1794490213458,
+      "fetchedAt": 1795151120859,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -2107,15 +2071,13 @@
       ]
     },
     "google:en-GB:truenas scale gluetun wireguard setup": {
-      "fetchedAt": 1794490213458,
+      "fetchedAt": 1795151120859,
       "locale": "en-GB",
       "engine": "google",
-      "suggestions": [
-        "truenas scale gluetun wireguard setup server"
-      ]
+      "suggestions": []
     },
     "bing:en-GB:truenas scale gluetun wireguard setup": {
-      "fetchedAt": 1793837907547,
+      "fetchedAt": 1794815796816,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -2132,13 +2094,13 @@
       ]
     },
     "google:en-GB:asustor adm 4 wireguard vpn setup": {
-      "fetchedAt": 1794490214076,
+      "fetchedAt": 1795151121460,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": []
     },
     "ddg:en-GB:asustor adm 4 wireguard vpn setup": {
-      "fetchedAt": 1794490214076,
+      "fetchedAt": 1795151121460,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -2153,7 +2115,7 @@
       ]
     },
     "bing:en-GB:asustor adm 4 wireguard vpn setup": {
-      "fetchedAt": 1793837908244,
+      "fetchedAt": 1794815797403,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -2170,7 +2132,7 @@
       ]
     },
     "bing:en-GB:asustor nas wireguard client": {
-      "fetchedAt": 1793837909087,
+      "fetchedAt": 1794815798020,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -2187,7 +2149,7 @@
       ]
     },
     "ddg:en-GB:asustor nas wireguard client": {
-      "fetchedAt": 1794490214548,
+      "fetchedAt": 1795151121938,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -2202,13 +2164,13 @@
       ]
     },
     "google:en-GB:asustor nas wireguard client": {
-      "fetchedAt": 1794490214548,
+      "fetchedAt": 1795151121938,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": []
     },
     "ddg:en-GB:msi claw wireguard gaming vpn": {
-      "fetchedAt": 1794490215118,
+      "fetchedAt": 1795151122492,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -2223,13 +2185,13 @@
       ]
     },
     "google:en-GB:msi claw wireguard gaming vpn": {
-      "fetchedAt": 1794490215118,
+      "fetchedAt": 1795151122492,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": []
     },
     "bing:en-GB:msi claw wireguard gaming vpn": {
-      "fetchedAt": 1793837909751,
+      "fetchedAt": 1794815798727,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -2246,7 +2208,7 @@
       ]
     },
     "bing:en-GB:msi claw 8 ai vpn setup": {
-      "fetchedAt": 1793837910387,
+      "fetchedAt": 1794815799352,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -2263,13 +2225,16 @@
       ]
     },
     "google:en-GB:msi claw 8 ai vpn setup": {
-      "fetchedAt": 1794490215487,
+      "fetchedAt": 1795151123164,
       "locale": "en-GB",
       "engine": "google",
-      "suggestions": []
+      "suggestions": [
+        "msi claw 8 ai vpn setup guide",
+        "msi claw 8 ai vpn setup reddit"
+      ]
     },
     "ddg:en-GB:msi claw 8 ai vpn setup": {
-      "fetchedAt": 1794490215487,
+      "fetchedAt": 1795151123164,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -2284,13 +2249,13 @@
       ]
     },
     "google:en-GB:bazzite os wireguard vpn setup": {
-      "fetchedAt": 1794490216034,
+      "fetchedAt": 1795151123749,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": []
     },
     "ddg:en-GB:bazzite os wireguard vpn setup": {
-      "fetchedAt": 1794490216034,
+      "fetchedAt": 1795151123749,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -2305,7 +2270,7 @@
       ]
     },
     "bing:en-GB:bazzite os wireguard vpn setup": {
-      "fetchedAt": 1793837910981,
+      "fetchedAt": 1794815800599,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -2322,7 +2287,7 @@
       ]
     },
     "ddg:en-GB:bazzite handheld wireguard config": {
-      "fetchedAt": 1794490216544,
+      "fetchedAt": 1795151124362,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -2330,7 +2295,7 @@
       ]
     },
     "bing:en-GB:bazzite handheld wireguard config": {
-      "fetchedAt": 1793837911566,
+      "fetchedAt": 1794815801647,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -2338,19 +2303,22 @@
       ]
     },
     "google:en-GB:bazzite handheld wireguard config": {
-      "fetchedAt": 1794490216544,
+      "fetchedAt": 1795151124362,
       "locale": "en-GB",
       "engine": "google",
-      "suggestions": []
+      "suggestions": [
+        "bazzite handheld wireguard configuration",
+        "bazzite handheld wireguard config file"
+      ]
     },
     "google:en-GB:google tv streamer 4k wireguard vpn": {
-      "fetchedAt": 1794490217019,
+      "fetchedAt": 1795151124853,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": []
     },
     "ddg:en-GB:google tv streamer 4k wireguard vpn": {
-      "fetchedAt": 1794490217019,
+      "fetchedAt": 1795151124853,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -2365,7 +2333,7 @@
       ]
     },
     "bing:en-GB:google tv streamer 4k wireguard vpn": {
-      "fetchedAt": 1793837912275,
+      "fetchedAt": 1794815803829,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -2382,7 +2350,7 @@
       ]
     },
     "bing:en-GB:chromecast 4k wireguard setup": {
-      "fetchedAt": 1793837912950,
+      "fetchedAt": 1794815805237,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -2399,7 +2367,7 @@
       ]
     },
     "ddg:en-GB:chromecast 4k wireguard setup": {
-      "fetchedAt": 1794490217522,
+      "fetchedAt": 1795151125520,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -2414,7 +2382,7 @@
       ]
     },
     "google:en-GB:chromecast 4k wireguard setup": {
-      "fetchedAt": 1794490217522,
+      "fetchedAt": 1795151125520,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": [
@@ -2422,7 +2390,7 @@
       ]
     },
     "ddg:en-GB:kaspersky vpn alternative": {
-      "fetchedAt": 1794490218086,
+      "fetchedAt": 1795151126066,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -2430,7 +2398,7 @@
       ]
     },
     "bing:en-GB:kaspersky vpn alternative": {
-      "fetchedAt": 1793837913513,
+      "fetchedAt": 1794815805901,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -2438,7 +2406,7 @@
       ]
     },
     "google:en-GB:kaspersky vpn alternative": {
-      "fetchedAt": 1794490218086,
+      "fetchedAt": 1795151126066,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": [
@@ -2448,7 +2416,7 @@
       ]
     },
     "ddg:en-GB:replace kaspersky vpn wireguard": {
-      "fetchedAt": 1794490218593,
+      "fetchedAt": 1795151126775,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -2463,13 +2431,13 @@
       ]
     },
     "google:en-GB:replace kaspersky vpn wireguard": {
-      "fetchedAt": 1794490218593,
+      "fetchedAt": 1795151126775,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": []
     },
     "bing:en-GB:replace kaspersky vpn wireguard": {
-      "fetchedAt": 1793837914232,
+      "fetchedAt": 1794815808199,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -2486,7 +2454,7 @@
       ]
     },
     "bing:en-GB:bitdefender vpn renewal price alternative": {
-      "fetchedAt": 1793837915130,
+      "fetchedAt": 1794815808875,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -2503,7 +2471,7 @@
       ]
     },
     "ddg:en-GB:bitdefender vpn renewal price alternative": {
-      "fetchedAt": 1794490219115,
+      "fetchedAt": 1795151127446,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -2518,15 +2486,13 @@
       ]
     },
     "google:en-GB:bitdefender vpn renewal price alternative": {
-      "fetchedAt": 1794490219115,
+      "fetchedAt": 1795151127446,
       "locale": "en-GB",
       "engine": "google",
-      "suggestions": [
-        "bitdefender vpn renewal price alternatives"
-      ]
+      "suggestions": []
     },
     "ddg:en-GB:bitdefender vpn wireguard config": {
-      "fetchedAt": 1794490219720,
+      "fetchedAt": 1795151128129,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -2541,7 +2507,7 @@
       ]
     },
     "bing:en-GB:bitdefender vpn wireguard config": {
-      "fetchedAt": 1793837915866,
+      "fetchedAt": 1794815809552,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -2558,17 +2524,19 @@
       ]
     },
     "google:en-GB:bitdefender vpn wireguard config": {
-      "fetchedAt": 1794490219720,
+      "fetchedAt": 1795151128129,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": [
         "bitdefender vpn wireguard config",
         "does nordvpn work with bitdefender",
-        "how to use wireguard vpn on windows"
+        "how to use wireguard vpn on windows",
+        "bitdefender vpn wireguard configuration",
+        "bitdefender vpn wireguard config file"
       ]
     },
     "bing:en-GB:cancel mcafee vpn auto renewal": {
-      "fetchedAt": 1793837916505,
+      "fetchedAt": 1794815810270,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -2583,7 +2551,7 @@
       ]
     },
     "ddg:en-GB:cancel mcafee vpn auto renewal": {
-      "fetchedAt": 1794490220141,
+      "fetchedAt": 1795151128820,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -2598,13 +2566,13 @@
       ]
     },
     "google:en-GB:cancel mcafee vpn auto renewal": {
-      "fetchedAt": 1794490220141,
+      "fetchedAt": 1795151128820,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": []
     },
     "bing:en-GB:mcafee safe connect alternative": {
-      "fetchedAt": 1793837917197,
+      "fetchedAt": 1794815810752,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -2621,7 +2589,7 @@
       ]
     },
     "ddg:en-GB:mcafee safe connect alternative": {
-      "fetchedAt": 1794490220678,
+      "fetchedAt": 1795151129363,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -2636,7 +2604,7 @@
       ]
     },
     "google:en-GB:mcafee safe connect alternative": {
-      "fetchedAt": 1794490220678,
+      "fetchedAt": 1795151129363,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": [
@@ -2645,7 +2613,7 @@
       ]
     },
     "bing:en-GB:stop tcl smart tv tracking": {
-      "fetchedAt": 1793837917809,
+      "fetchedAt": 1794815811513,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -2662,15 +2630,16 @@
       ]
     },
     "google:en-GB:stop tcl smart tv tracking": {
-      "fetchedAt": 1794490221302,
+      "fetchedAt": 1795151129922,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": [
+        "stop tcl smart tv tracking problem",
         "stop tcl smart tv trackinging"
       ]
     },
     "ddg:en-GB:stop tcl smart tv tracking": {
-      "fetchedAt": 1794490221302,
+      "fetchedAt": 1795151129922,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -2685,13 +2654,13 @@
       ]
     },
     "google:en-GB:disable tcl google tv acr telemetry": {
-      "fetchedAt": 1794490221750,
+      "fetchedAt": 1795151130503,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": []
     },
     "bing:en-GB:disable tcl google tv acr telemetry": {
-      "fetchedAt": 1793837918476,
+      "fetchedAt": 1794815812054,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -2708,7 +2677,7 @@
       ]
     },
     "ddg:en-GB:disable tcl google tv acr telemetry": {
-      "fetchedAt": 1794490221750,
+      "fetchedAt": 1795151130503,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -2723,13 +2692,13 @@
       ]
     },
     "google:en-GB:stop philips smart tv tracking": {
-      "fetchedAt": 1794490222345,
+      "fetchedAt": 1795151131102,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": []
     },
     "bing:en-GB:stop philips smart tv tracking": {
-      "fetchedAt": 1793837919068,
+      "fetchedAt": 1794815812837,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -2742,7 +2711,7 @@
       ]
     },
     "ddg:en-GB:stop philips smart tv tracking": {
-      "fetchedAt": 1794490222345,
+      "fetchedAt": 1795151131102,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -2755,13 +2724,13 @@
       ]
     },
     "google:en-GB:disable philips titan os acr ads": {
-      "fetchedAt": 1794490222902,
+      "fetchedAt": 1795151131627,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": []
     },
     "ddg:en-GB:disable philips titan os acr ads": {
-      "fetchedAt": 1794490222902,
+      "fetchedAt": 1795151131627,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -2769,7 +2738,7 @@
       ]
     },
     "bing:en-GB:disable philips titan os acr ads": {
-      "fetchedAt": 1793837919616,
+      "fetchedAt": 1794815813527,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -2777,7 +2746,7 @@
       ]
     },
     "google:en-GB:what is espressif on my wifi": {
-      "fetchedAt": 1793959372039,
+      "fetchedAt": 1794815814373,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": [
@@ -2794,7 +2763,7 @@
       ]
     },
     "bing:en-GB:what is espressif on my wifi": {
-      "fetchedAt": 1793959372039,
+      "fetchedAt": 1794815814373,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -2811,7 +2780,7 @@
       ]
     },
     "ddg:en-GB:what is espressif on my wifi": {
-      "fetchedAt": 1793959372039,
+      "fetchedAt": 1794815814373,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -2826,7 +2795,7 @@
       ]
     },
     "bing:en-GB:what is tuya device on wifi": {
-      "fetchedAt": 1793959372927,
+      "fetchedAt": 1794815815363,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -2843,7 +2812,7 @@
       ]
     },
     "ddg:en-GB:what is tuya device on wifi": {
-      "fetchedAt": 1793959372927,
+      "fetchedAt": 1794815815363,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -2858,7 +2827,7 @@
       ]
     },
     "google:en-GB:what is tuya device on wifi": {
-      "fetchedAt": 1793959372927,
+      "fetchedAt": 1794815815363,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": [
@@ -2868,13 +2837,11 @@
         "what is tuya wifi",
         "can tuya work without internet",
         "how to connect tuya smart to wifi",
-        "how to share tuya smart device",
-        "what is tuya device on wifi connection",
-        "what is tuya device on wifi network"
+        "how to share tuya smart device"
       ]
     },
     "ddg:en-GB:murata manufacturing on my wifi": {
-      "fetchedAt": 1793959373613,
+      "fetchedAt": 1794815816080,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -2889,7 +2856,7 @@
       ]
     },
     "google:en-GB:murata manufacturing on my wifi": {
-      "fetchedAt": 1793959373613,
+      "fetchedAt": 1794815816080,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": [
@@ -2898,11 +2865,14 @@
         "murata manufacturing co ltd on my wifi",
         "murata manufacturing connected to my wifi",
         "how to make wifi with magnet",
-        "how to control devices on wifi"
+        "how to control devices on wifi",
+        "murata manufacturing on my wifi router",
+        "murata manufacturing on my wifi what should i do",
+        "murata manufacturing on my wifi network"
       ]
     },
     "bing:en-GB:murata manufacturing on my wifi": {
-      "fetchedAt": 1793959373613,
+      "fetchedAt": 1794815816080,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -2919,13 +2889,13 @@
       ]
     },
     "google:en-GB:how to pause wifi on ps5 at bedtime": {
-      "fetchedAt": 1793959374248,
+      "fetchedAt": 1794815816834,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": []
     },
     "bing:en-GB:how to pause wifi on ps5 at bedtime": {
-      "fetchedAt": 1793959374248,
+      "fetchedAt": 1794815816834,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -2938,7 +2908,7 @@
       ]
     },
     "ddg:en-GB:how to pause wifi on ps5 at bedtime": {
-      "fetchedAt": 1793959374248,
+      "fetchedAt": 1794815816834,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -2951,7 +2921,7 @@
       ]
     },
     "bing:en-GB:turn off kids xbox wifi at night": {
-      "fetchedAt": 1793959374822,
+      "fetchedAt": 1794815819914,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -2964,13 +2934,13 @@
       ]
     },
     "google:en-GB:turn off kids xbox wifi at night": {
-      "fetchedAt": 1793959374822,
+      "fetchedAt": 1794815819914,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": []
     },
     "ddg:en-GB:turn off kids xbox wifi at night": {
-      "fetchedAt": 1793959374822,
+      "fetchedAt": 1794815819914,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -2983,13 +2953,13 @@
       ]
     },
     "google:en-GB:best fing alternative no subscription": {
-      "fetchedAt": 1793959375427,
+      "fetchedAt": 1794815822407,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": []
     },
     "ddg:en-GB:best fing alternative no subscription": {
-      "fetchedAt": 1793959375427,
+      "fetchedAt": 1794815822407,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -3001,7 +2971,7 @@
       ]
     },
     "bing:en-GB:best fing alternative no subscription": {
-      "fetchedAt": 1793959375427,
+      "fetchedAt": 1794815822407,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -3013,7 +2983,7 @@
       ]
     },
     "bing:en-GB:fing alternative plain english wifi scanner": {
-      "fetchedAt": 1793959376040,
+      "fetchedAt": 1794815823010,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -3027,13 +2997,13 @@
       ]
     },
     "google:en-GB:fing alternative plain english wifi scanner": {
-      "fetchedAt": 1793959376040,
+      "fetchedAt": 1794815823010,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": []
     },
     "ddg:en-GB:fing alternative plain english wifi scanner": {
-      "fetchedAt": 1793959376040,
+      "fetchedAt": 1794815823010,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -3047,7 +3017,7 @@
       ]
     },
     "google:en-GB:what is hon hai on my wifi": {
-      "fetchedAt": 1794200611354,
+      "fetchedAt": 1794815823656,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": [
@@ -3059,7 +3029,7 @@
       ]
     },
     "ddg:en-GB:what is hon hai on my wifi": {
-      "fetchedAt": 1794200611354,
+      "fetchedAt": 1794815823656,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -3074,7 +3044,7 @@
       ]
     },
     "bing:en-GB:what is hon hai on my wifi": {
-      "fetchedAt": 1794200611354,
+      "fetchedAt": 1794815823656,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -3091,7 +3061,7 @@
       ]
     },
     "google:en-GB:liteon technology on my wifi": {
-      "fetchedAt": 1794200612520,
+      "fetchedAt": 1794815824265,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": [
@@ -3101,11 +3071,14 @@
         "what is liteon on my wifi",
         "what is this liteon technology device on my wireless network",
         "what is internet wifi switch",
-        "devices won't connect to wifi"
+        "devices won't connect to wifi",
+        "liteon technology on my wifi driver",
+        "liteon technology on my wifi not working",
+        "liteon technology on my wifi network"
       ]
     },
     "bing:en-GB:liteon technology on my wifi": {
-      "fetchedAt": 1794200612520,
+      "fetchedAt": 1794815824265,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -3122,7 +3095,7 @@
       ]
     },
     "ddg:en-GB:liteon technology on my wifi": {
-      "fetchedAt": 1794200612520,
+      "fetchedAt": 1794815824265,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -3137,7 +3110,7 @@
       ]
     },
     "bing:en-GB:azurewave on my wifi": {
-      "fetchedAt": 1794200613151,
+      "fetchedAt": 1794815824769,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -3154,7 +3127,7 @@
       ]
     },
     "google:en-GB:azurewave on my wifi": {
-      "fetchedAt": 1794200613151,
+      "fetchedAt": 1794815824769,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": [
@@ -3169,7 +3142,7 @@
       ]
     },
     "ddg:en-GB:azurewave on my wifi": {
-      "fetchedAt": 1794200613151,
+      "fetchedAt": 1794815824769,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -3184,25 +3157,25 @@
       ]
     },
     "bing:en-GB:private wifi address showing as unknown device": {
-      "fetchedAt": 1794200613819,
+      "fetchedAt": 1794815825550,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": []
     },
     "google:en-GB:private wifi address showing as unknown device": {
-      "fetchedAt": 1794200613819,
+      "fetchedAt": 1794815825550,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": []
     },
     "ddg:en-GB:private wifi address showing as unknown device": {
-      "fetchedAt": 1794200613819,
+      "fetchedAt": 1794815825550,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": []
     },
     "bing:en-GB:unknown device on wifi randomized mac": {
-      "fetchedAt": 1794200614380,
+      "fetchedAt": 1794815826362,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -3219,7 +3192,7 @@
       ]
     },
     "ddg:en-GB:unknown device on wifi randomized mac": {
-      "fetchedAt": 1794200614380,
+      "fetchedAt": 1794815826362,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -3234,7 +3207,7 @@
       ]
     },
     "google:en-GB:unknown device on wifi randomized mac": {
-      "fetchedAt": 1794200614380,
+      "fetchedAt": 1794815826362,
       "locale": "en-GB",
       "engine": "google",
       "suggestions": [
@@ -3243,13 +3216,15 @@
       ]
     },
     "google:en-GB:ofcom broadband speed guarantee compensation": {
-      "fetchedAt": 1794200615043,
+      "fetchedAt": 1794815827001,
       "locale": "en-GB",
       "engine": "google",
-      "suggestions": []
+      "suggestions": [
+        "ofcom broadband speed guarantee compensation philippines"
+      ]
     },
     "bing:en-GB:ofcom broadband speed guarantee compensation": {
-      "fetchedAt": 1794200615043,
+      "fetchedAt": 1794815827001,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -3266,7 +3241,7 @@
       ]
     },
     "ddg:en-GB:ofcom broadband speed guarantee compensation": {
-      "fetchedAt": 1794200615043,
+      "fetchedAt": 1794815827001,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -3281,7 +3256,7 @@
       ]
     },
     "ddg:en-GB:virgin media minimum guaranteed speed claim": {
-      "fetchedAt": 1794200615750,
+      "fetchedAt": 1794815827782,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [
@@ -3296,13 +3271,15 @@
       ]
     },
     "google:en-GB:virgin media minimum guaranteed speed claim": {
-      "fetchedAt": 1794200615750,
+      "fetchedAt": 1794815827782,
       "locale": "en-GB",
       "engine": "google",
-      "suggestions": []
+      "suggestions": [
+        "virgin media minimum guaranteed speed claims"
+      ]
     },
     "bing:en-GB:virgin media minimum guaranteed speed claim": {
-      "fetchedAt": 1794200615750,
+      "fetchedAt": 1794815827782,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -3319,16 +3296,13 @@
       ]
     },
     "google:en-GB:bt broadband slow speed bill credit": {
-      "fetchedAt": 1794200616382,
+      "fetchedAt": 1794815828432,
       "locale": "en-GB",
       "engine": "google",
-      "suggestions": [
-        "bt broadband slow speed bill credit card",
-        "bt broadband slow speed bill credits"
-      ]
+      "suggestions": []
     },
     "bing:en-GB:bt broadband slow speed bill credit": {
-      "fetchedAt": 1794200616382,
+      "fetchedAt": 1794815828432,
       "locale": "en-GB",
       "engine": "bing",
       "suggestions": [
@@ -3345,7 +3319,7 @@
       ]
     },
     "ddg:en-GB:bt broadband slow speed bill credit": {
-      "fetchedAt": 1794200616382,
+      "fetchedAt": 1794815828432,
       "locale": "en-GB",
       "engine": "ddg",
       "suggestions": [

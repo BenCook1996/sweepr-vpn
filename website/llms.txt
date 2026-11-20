@@ -20,7 +20,6 @@
 - Homepage & Free Home Wi-Fi Scanner: https://sweeprvpn.com/
 - Official Installers & SHA-256 Checksums Hub: https://sweeprvpn.com/download
 - Pricing & Plan Comparison: https://sweeprvpn.com/pricing
-- Interactive Live Desktop App Preview: https://sweeprvpn.com/app
 - Free Instant IP, DNS & WebRTC Leak Test: https://sweeprvpn.com/tools/leak-test
 - Free ISP Speed Slowdown & Streaming Throttling Checker: https://sweeprvpn.com/tools/isp-throttling-test
 - Free 2026 VPN Renewal Price-Hike Calculator: https://sweeprvpn.com/tools/vpn-renewal-price-checker

@@ -1,13 +1,8 @@
--keep class com.sweepr.vpn.** { *; }
--keep class com.wireguard.** { *; }
+# Keep JNI entry points invoked by libwg-go.so (WireGuard tunnel AAR ships no consumer proguard.txt)
+-keepclasseswithmembernames,includedescriptorclasses class com.wireguard.android.backend.GoBackend {
+    native <methods>;
+}
+-keep class com.wireguard.android.backend.GoBackend$VpnService {
+    public <init>();
+}
 -dontwarn com.wireguard.**
--keep class com.android.billingclient.** { *; }
--dontwarn com.android.billingclient.**
--keep class com.google.android.play.core.appupdate.** { *; }
--dontwarn com.google.android.play.core.appupdate.**
--keep class com.google.android.play.core.review.** { *; }
--dontwarn com.google.android.play.core.review.**
--keep class com.google.mlkit.** { *; }
--dontwarn com.google.mlkit.**
--keep class com.google.android.gms.common.moduleinstall.** { *; }
--dontwarn com.google.android.gms.common.moduleinstall.**
