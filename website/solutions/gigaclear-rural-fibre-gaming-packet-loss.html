@@ -82,7 +82,7 @@
         <a href="/pricing">Pricing (£1.99 Trial)</a>
         <a href="/tools/leak-test">IP &amp; DNS Leak Test</a>
         <a href="/tools/isp-throttling-test">ISP Speed Checker</a>
-        <a class="btn" href="/download">Download (~3.7 MB)</a>
+        <a class="btn" href="/download">Download (~740 KB)</a>
       </div>
     </nav>
   </header>
@@ -93,7 +93,7 @@
     <p class="lead">Gigaclear supplies rapid symmetrical fibre across rural English villages, yet standard residential addresses sit inside CGNAT pools routed out via congested regional aggregators that cause erratic tick-rate hiccups in competitive shooters.</p>
     <div id="direct-answer" style="margin:18px 0 24px;padding:18px 20px;border-radius:14px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.35);">
       <div style="font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent2,#34d399);margin-bottom:6px;">Direct Answer</div>
-      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Eliminate Gigaclear Rural Full Fibre UK Gaming Packet Loss, High Ping & Rubberbanding throttling and jitter by wrapping traffic in SWEEPR VPN's 10 Gbps RAM-only WireGuard tunnel (LINX London transit optimization, 1420-byte IPv4 DHCP tunnel). Because ChaCha20-encrypted datagrams conceal packet signatures from ISP deep packet inspection, evening streaming and gaming maintain steady low latency across 3.</p>
+      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Eliminate Gigaclear rural full-fibre CGNAT packet loss and evening tick-rate jitter by wrapping traffic in SWEEPR VPN's 10 Gbps RAM-only WireGuard tunnel over AS51048 LINX London peering. Using fq_codel queue discipline, MTU 1420, and explicit TCPMSS 1340 clamping prevents fragmentation while protecting up to 3 simultaneous devices and routers cleanly.</p>
       <div style="padding-top:10px;border-top:1px solid rgba(16,185,129,0.22);font-size:0.84rem;font-weight:700;">
         <a href="/tools/isp-throttling-test" style="color:var(--accent2,#34d399);text-decoration:underline;">Run Free 10s ISP Throttling &amp; Latency Test &rarr;</a>
       </div>
@@ -142,6 +142,14 @@ PersistentKeepalive = 25</code></pre>
     </div>
 
     
+
+    
+    <section id="gigaclear-faq" class="card" style="margin-top:20px;">
+      <h2>Gigaclear Rural Fibre WireGuard Questions</h2>
+      <p><strong>Why does Gigaclear experience evening gaming spikes despite 900 Mbps sync speeds?</strong> Shared residential CGNAT pools on AS51048 can route UDP gaming flows via congested intermediate exchanges; locking an encrypted WireGuard tunnel directly into London Docklands (UK-LON-01) bypasses multi-hop transit variance.</p>
+      <p><strong>Should I set MTU 1420 or 1412 on a Linksys SPNMX56 Velop?</strong> Gigaclear uses standard IPv4 DHCP rather than PPPoE, so <code>MTU = 1420</code> with server-side <code>fq_codel</code> and <code>TCPMSS = 1340</code> maximizes payload efficiency without silent ICMP blackholes.</p>
+      <p><strong>Does SWEEPR cover consoles on Gigaclear?</strong> Every subscription includes native clients for 3 devices plus router <code>.conf</code> exports covering PlayStation, Xbox, and Nintendo Switch hardware simultaneously.</p>
+    </section>
 
     <h2>Cross-Cluster Engineering Manuals</h2>
     <ul>

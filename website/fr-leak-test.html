@@ -114,6 +114,32 @@
         </div>
       </div>
     </div>
+
+    <section id="leak-test-guide-fr" class="bg-white border border-gray-200 rounded-3xl p-6 sm:p-8 shadow-sm mb-8 text-left space-y-6">
+      <div>
+        <h2 class="text-2xl font-bold text-gray-900 mb-2">Que vérifie ce test gratuit de fuite IP, DNS et WebRTC ?</h2>
+        <p class="text-sm text-gray-600 leading-relaxed">De nombreuses extensions de navigateur laissent échapper votre véritable adresse IPv4/IPv6 ou les résolutions DNS de votre fournisseur d’accès (Orange, Free, SFR, Bouygues Telecom) via des requêtes WebRTC STUN en arrière-plan. Cet outil vérifie instantanément ce que les sites web peuvent identifier.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-4 text-sm">
+        <div class="p-4 rounded-2xl bg-gray-50 border border-gray-200">
+          <h3 class="font-bold text-gray-900 mb-1">Visibilité IPv4 &amp; IPv6</h3>
+          <p class="text-gray-600 leading-relaxed">Affiche l’adresse IP publique détectée côté serveur. Avec le tunnel WireGuard 10 Gbps de SWEEPR VPN, seule l’IP de notre nœud sans disque en mémoire RAM est exposée.</p>
+        </div>
+        <div class="p-4 rounded-2xl bg-gray-50 border border-gray-200">
+          <h3 class="font-bold text-gray-900 mb-1">Protection WebRTC STUN</h3>
+          <p class="text-gray-600 leading-relaxed">Chrome et Firefox utilisent WebRTC pour la voix/vidéo, ce qui peut divulguer votre IP locale ou publique réelle. SWEEPR encapsule l’intégralité du trafic UDP au niveau noyau.</p>
+        </div>
+        <div class="p-4 rounded-2xl bg-gray-50 border border-gray-200">
+          <h3 class="font-bold text-gray-900 mb-1">DNS Chiffré &amp; Wi-Fi Radar</h3>
+          <p class="text-gray-600 leading-relaxed">Force toutes vos requêtes vers notre résolveur chiffré interne (<code>10.66.0.1</code>) et inclut un scanner Wi-Fi domestique gratuit en 30 secondes.</p>
+        </div>
+      </div>
+      <div class="border-t border-gray-200 pt-5 space-y-3 text-sm text-gray-700">
+        <h3 class="text-lg font-bold text-gray-900">Questions fréquentes</h3>
+        <p><strong>Comment corriger une fuite WebRTC ou IPv6 ?</strong> Utilisez l’application native SWEEPR VPN (~740 Ko sur Windows) ou un profil WireGuard routeur configuré avec <code>AllowedIPs = 0.0.0.0/0, ::/0</code>.</p>
+        <p><strong>Ce diagnostic conserve-t-il mon adresse IP ?</strong> Non. L’inspection WebRTC s’exécute localement dans votre navigateur sans aucun journal de navigation.</p>
+      </div>
+    </section>
   </main>
 
   <footer class="border-t border-gray-200 py-8 text-center text-sm text-gray-500">

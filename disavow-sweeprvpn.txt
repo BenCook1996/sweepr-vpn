@@ -1,0 +1,6 @@
+# Google Search Console Disavow File for sweeprvpn.com
+# Generated 2026-11-20 after DataForSEO Backlinks & Anchor audit
+# Reason: Unsolicited low-quality link-farm placement (Spam Score 60) with commercial anchor text
+domain:otorented.com
+# Monitoring (do not disavow unless confirmed harmful in GSC Links):
+# domain:rankvance.com

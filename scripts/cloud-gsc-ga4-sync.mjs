@@ -178,27 +178,30 @@ function buildQueryMatchedTitleAndDesc(urlPath, topQuery, currentTitle, currentD
       : `${titleCasedQuery} VPN: 2026 Speed & Price Guide | SWEEPR`;
   }
   const compactSuffix = urlPath.startsWith('/solutions/') ? ' (2026 Fix) | SWEEPR VPN' : ' (2026 Guide) | SWEEPR VPN';
-  if (candidateTitle.length > 65) {
+  if (candidateTitle.length > 60) {
     const withCompact = `${titleCasedQuery}${compactSuffix}`;
-    if (withCompact.length <= 65) {
+    if (withCompact.length <= 60) {
       candidateTitle = withCompact;
-    } else if (`${titleCasedQuery} | SWEEPR VPN`.length <= 65) {
+    } else if (`${titleCasedQuery} | SWEEPR VPN`.length <= 60) {
       candidateTitle = `${titleCasedQuery} | SWEEPR VPN`;
     } else {
-      const maxQueryLen = Math.max(10, 65 - compactSuffix.length);
+      const maxQueryLen = Math.max(10, 60 - compactSuffix.length);
       let trimmedQuery = titleCasedQuery.slice(0, maxQueryLen).replace(/\s+\S*$/, '').trim();
       if (trimmedQuery.length < 10) trimmedQuery = titleCasedQuery.slice(0, maxQueryLen).trim();
       trimmedQuery = trimmedQuery.replace(/\b(on|for|with|using|and|to|in|of|over|via|vs)$/i, '').trim();
       candidateTitle = `${trimmedQuery}${compactSuffix}`;
     }
   }
-  if (candidateTitle.length > 65) {
-    candidateTitle = candidateTitle.slice(0, 65).trim();
+  if (candidateTitle.length > 60) {
+    candidateTitle = candidateTitle.slice(0, 60).trim();
   }
   if (candidateTitle.length < 30 || candidateTitle === currentTitle) return null;
 
-  const shortQ = cleanQuery.length > 42 ? cleanQuery.slice(0, 42).replace(/\s+\S*$/, '').trim() : cleanQuery;
-  const candidateDesc = `Guide for ${shortQ}: verified 2026 10Gbps WireGuard setup (MTU 1420/1412/1380), encrypted DNS 10.66.0.1, and 30s Home Wi-Fi scanner.`;
+  const shortQ = cleanQuery.length > 34 ? cleanQuery.slice(0, 34).replace(/\s+\S*$/, '').trim() : cleanQuery;
+  let candidateDesc = `Fix ${shortQ} with 2026 10Gbps WireGuard (MTU 1420/1412/1380), encrypted DNS 10.66.0.1 & free 30s Home Wi-Fi scanner.`;
+  if (candidateDesc.length > 155) {
+    candidateDesc = candidateDesc.slice(0, 152).replace(/\s+\S*$/, '').trim() + '.';
+  }
   return { title: candidateTitle, description: candidateDesc };
 }
 
@@ -356,6 +359,7 @@ async function syncVpnGscGa4ToCentralCrm({ snapshot, gscIngestRows, appliedCtrRe
 async function runCloudGscGa4Sync() {
   const dryRun = process.argv.includes('--dry-run');
   const skipCrm = process.argv.includes('--skip-crm');
+  const noCtrRewrite = process.argv.includes('--no-ctr-rewrite');
   const nowIso = new Date().toISOString();
   let gscIngestRows = [];
   let inspectedCount = 0;
@@ -600,7 +604,10 @@ async function runCloudGscGa4Sync() {
     })
     .sort((a, b) => Number(b[1].impressions28d || 0) - Number(a[1].impressions28d || 0));
 
-  for (const [urlPath, stats] of candidateEntries) {
+  if (noCtrRewrite) {
+    console.log('ℹ️  [Cloud GSC/GA4 Sync] --no-ctr-rewrite set — skipping HTML title/meta surgery (telemetry-only mode).');
+  }
+  for (const [urlPath, stats] of (noCtrRewrite ? [] : candidateEntries)) {
     if (ctrRewritesCount >= MAX_CTR_REWRITES_PER_RUN) break;
     const absFile = resolveHtmlFileForRoute(urlPath);
     if (!absFile || !fs.existsSync(absFile)) continue;

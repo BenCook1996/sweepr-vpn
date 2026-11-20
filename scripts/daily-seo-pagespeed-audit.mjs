@@ -164,35 +164,35 @@ const GSC_STRIKING_DISTANCE_OVERRIDES = {
   },
   '/setup/nvidia-shield-tv-pro-wireguard': {
     title: 'NVIDIA Shield TV Pro WireGuard Setup (MTU 1412) | SWEEPR',
-    description: 'Step-by-step NVIDIA Shield TV Pro 4K & Android TV WireGuard VPN setup guide. Configure 10Gbps RAM-only UK/EU endpoints, MTU 1412, and Smart-TV ACR ad blocking.'
+    description: 'NVIDIA Shield TV Pro WireGuard setup guide (2026): configure 10Gbps RAM-only nodes, MTU 1412, fq_codel routing, and Smart-TV ACR blocking in 2 mins.'
   },
   '/solutions/gigaclear-rural-fibre-gaming-packet-loss': {
     title: 'Gigaclear Rural Fibre UK: Fix Gaming Ping | SWEEPR VPN',
-    description: 'Eliminate Gigaclear Rural Full Fibre UK (AS51048) CGNAT gaming packet loss, rubber-banding & evening jitter via 4ms London Docklands 10Gbps WireGuard routing (MTU 1420).'
+    description: 'Eliminate Gigaclear Rural Full Fibre UK (AS51048) CGNAT gaming packet loss & jitter via 4ms London Docklands 10Gbps WireGuard routing (MTU 1420).'
   },
   '/setup/synology-nas-docker-vpn': {
     title: 'Synology NAS Docker WireGuard Guide | SWEEPR VPN',
-    description: '90-second Synology NAS (DSM 7.2) & Docker Gluetun WireGuard container setup guide. Includes docker-compose.yml, kill-switch firewall rules, and 10Gbps .conf profile.'
+    description: '90-second Synology NAS (DSM 7.2) & Docker Gluetun WireGuard setup guide. Includes docker-compose.yml, kill-switch firewall rules & 10Gbps .conf profile.'
   },
   '/guides/stop-lg-smart-tv-acr-spying': {
     title: 'Block LG webOS Smart TV LivePlus ACR | SWEEPR VPN',
-    description: 'Stop LG webOS Smart TVs ("Live Plus" ACR) from capturing HDMI screenshots and calling lgtvcommon.com, ibs.lgappstv.com & ad.lgappstv.com at the DNS/tunnel layer.'
+    description: 'Stop LG webOS Smart TVs (Live Plus ACR) from capturing screenshots and calling lgtvcommon.com, ibs.lgappstv.com & ad.lgappstv.com at the DNS/tunnel layer.'
   },
   '/solutions/hotel-captive-portal-wifi-p2p-port-forwarding': {
     title: 'Hotel Wi-Fi VPN Fix: Bypass Captive Portals | SWEEPR VPN',
-    description: 'Bypass hotel captive-portal Wi-Fi throttling, blocked UDP ports & CGNAT at Premier Inn, Travelodge & Hilton using SWEEPR VPN WireGuard UDP 443 (MTU 1380).'
+    description: 'Bypass hotel captive-portal Wi-Fi throttling, blocked UDP ports & CGNAT at Premier Inn, Travelodge & Hilton using SWEEPR WireGuard UDP 443 (MTU 1380).'
   },
   '/tools/isp-throttling-test': {
     title: 'Free ISP Speed & Throttling Test (10s Check) | SWEEPR VPN',
-    description: 'Run a free 10-second internet throttling test in your browser. Detect if Virgin Media, BT, Sky, TalkTalk, Rogers, or Comcast is throttling your streaming & gaming.'
+    description: 'Run a free 10-second ISP throttling test in your browser. Detect evening speed shaping on Virgin Media, BT, Sky, TalkTalk, Comcast, or Rogers instantly.'
   },
   '/solutions/rogers-ignite-canada-isp-throttling': {
     title: 'Rogers Ignite Canada ISP Throttling Fix | SWEEPR VPN',
-    description: 'Stop Rogers Ignite Broadband Canada (AS812) evening speed throttling, DOCSIS 3.1 bufferbloat & IPTV/4K streaming slowdowns with 10Gbps WireGuard (MTU 1420).'
+    description: 'Stop Rogers Ignite Canada (AS812) evening speed throttling, DOCSIS 3.1 bufferbloat & 4K streaming slowdowns with 10Gbps WireGuard (MTU 1420).'
   },
   '/setup/steam-deck-vpn': {
     title: 'Steam Deck & SteamOS WireGuard Setup | SWEEPR VPN',
-    description: '60-second SteamOS & Steam Deck WireGuard VPN setup guide. Import a native .conf profile into NetworkManager for low-ping handheld gaming on campus & hotel Wi-Fi.'
+    description: '60-second Steam Deck & SteamOS WireGuard VPN guide. Import a .conf profile into NetworkManager for low-ping handheld gaming on campus & hotel Wi-Fi.'
   },
   '/solutions/comcast-xfinity-broadband-smart-tv-acr-blocking': {
     title: 'Comcast Xfinity Smart-TV ACR Blocker Guide | SWEEPR VPN',
@@ -1388,8 +1388,41 @@ function getXhtmlLinksForLoc(loc) {
   return '\n' + group.map((a) => `    <xhtml:link rel="alternate" hreflang="${a.hreflang}" href="${a.href}" />`).join('\n');
 }
 
+function resolveDownloadLastMod(loc) {
+  const prevSitemapDate = prevLastModMap.get(loc);
+  const serverPath = path.join(WEBSITE_DIR, 'server.mjs');
+  const exePath = path.join(WEBSITE_DIR, 'SWEEPRVPN.exe');
+  const serverSrc = fs.existsSync(serverPath) ? fs.readFileSync(serverPath, 'utf8') : '';
+  const pickerSlice = (serverSrc.match(/function renderPlatformDownloadPicker[\s\S]*?\n\}\n/) || [''])[0];
+  const exeHash = fs.existsSync(exePath) ? crypto.createHash('sha1').update(fs.readFileSync(exePath)).digest('hex') : '';
+  const dlHash = pickerSlice ? crypto.createHash('sha1').update(`${pickerSlice}\n${exeHash}`).digest('hex').slice(0, 12) : '';
+  const prevRec = dailyState.urlLastModHashes[loc];
+  if (dlHash && prevRec && prevRec.hash === dlHash && prevRec.lastmod) {
+    return prevRec.lastmod;
+  }
+  if (dlHash && !prevRec && prevSitemapDate) {
+    dailyState.urlLastModHashes[loc] = { hash: dlHash, lastmod: prevSitemapDate };
+    return prevSitemapDate;
+  }
+  const newDate = todayStr;
+  if (dlHash) {
+    dailyState.urlLastModHashes[loc] = { hash: dlHash, lastmod: newDate };
+    lastModUpdatedCount++;
+  }
+  return newDate;
+}
+
 const sitemapEntries = [
-  ...allCanonicalPages
+  ...allCanonicalPages,
+  {
+    urlPath: '/download',
+    loc: 'https://sweeprvpn.com/download',
+    canonicalLoc: 'https://sweeprvpn.com/download',
+    priority: '0.9',
+    changefreq: 'weekly',
+    absPath: null,
+    customLastMod: resolveDownloadLastMod('https://sweeprvpn.com/download')
+  }
 ];
 const newSitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -1398,7 +1431,7 @@ ${sitemapEntries
   .map(
     (u) => `  <url>
     <loc>${u.canonicalLoc}</loc>
-    <lastmod>${resolveContentHashLastMod(u.canonicalLoc, u.absPath)}</lastmod>
+    <lastmod>${u.customLastMod || resolveContentHashLastMod(u.canonicalLoc, u.absPath)}</lastmod>
     <changefreq>${u.changefreq}</changefreq>
     <priority>${u.priority}</priority>${getXhtmlLinksForLoc(u.canonicalLoc)}
   </url>`
@@ -1415,7 +1448,7 @@ pass('crawlability', 'Sitemap Completeness & Content-Hash Freshness', `${sitemap
 // Rebuild website/llms.txt & website/llms-full.txt for Generative Engine Optimization (GEO / AI citation)
 const llmsContent = `# SWEEPR VPN & SWEEPR Wi-Fi Radar (sweeprvpn.com)
 
-> SWEEPR VPN is an ultra-lightweight (~680 KB), fast, and easy-to-use 10Gbps WireGuard VPN and Free 30-Second Home Wi-Fi Scanner for Windows 10/11, macOS, Linux, and routers. Built by the team behind SWEEPR Cleaner, it combines 1-click 10Gbps private browsing with a free 30-second Home Wi-Fi & Speed Scanner and a Smart-TV ACR spy blocker.
+> SWEEPR VPN is an ultra-lightweight (~740 KB), fast, and easy-to-use 10Gbps WireGuard VPN and Free 30-Second Home Wi-Fi Scanner for Windows 10/11, macOS, Linux, and routers. Built by the team behind SWEEPR Cleaner, it combines 1-click 10Gbps private browsing with a free 30-second Home Wi-Fi & Speed Scanner and a Smart-TV ACR spy blocker.
 
 ## Core Capabilities & Technical Differentiators
 - **1-Click Private Browsing & Streaming Speed Booster**: Eliminates ISP evening traffic shaping (Virgin Media, BT, Sky, TalkTalk, Vodafone, Eduroam) on 4K streaming, gaming, and remote SSH/Docker workflows. Strict zero-logs policy on diskless RAM-only 10Gbps servers.
@@ -1433,6 +1466,7 @@ const llmsContent = `# SWEEPR VPN & SWEEPR Wi-Fi Radar (sweeprvpn.com)
 
 ## Core Storefront & Free Diagnostic Tools
 - Homepage & Free Home Wi-Fi Scanner: https://sweeprvpn.com/
+- Official Installers & SHA-256 Checksums Hub: https://sweeprvpn.com/download
 - Pricing & Plan Comparison: https://sweeprvpn.com/pricing
 - Interactive Live Desktop App Preview: https://sweeprvpn.com/app
 - Free Instant IP, DNS & WebRTC Leak Test: https://sweeprvpn.com/tools/leak-test

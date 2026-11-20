@@ -4,18 +4,18 @@ Verification is intended to assist the Chocolatey moderators and community in ve
 The portable GUI executable is downloaded directly from the official vendor domain and can be verified as follows:
 
 1. Software Title: SWEEPR VPN
-2. Version: 2.5.0
+2. Version: 2.6.0
 3. Official Homepage: https://sweeprvpn.com
 4. Official Direct Download URL:
-   https://sweeprvpn.com/SWEEPRVPN.exe
-   (Exact release mirror: https://github.com/BenCook1996/sweepr-vpn/releases/download/v2.5.0/SWEEPRVPN.exe)
+   https://github.com/BenCook1996/sweepr-vpn/releases/download/v2.6.0/SWEEPRVPN.exe
+   (Exact release mirror: https://github.com/BenCook1996/sweepr-vpn/releases/download/v2.6.0/SWEEPRVPN.exe)
 
-5. Checksum Verification (741,136 bytes):
+5. Checksum Verification (740,112 bytes):
    Obtain the cryptographic checksum using PowerShell:
    Get-FileHash -Path SWEEPRVPN.exe -Algorithm SHA256
 
    Checksum Type: sha256
-   Checksum: EEE1C1A4BC972DE4E1405AB782BEC426C263A31DB0548E75A5C4EED47699A8FB
+   Checksum: B2D1A295FE0E96709787D52865028D0867663F3B69262368524C20DF8C4DAE1D
 
 6. Microsoft Authenticode Signature Verification:
    The binary is digitally signed with a verified Microsoft Authenticode certificate.

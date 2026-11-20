@@ -27,9 +27,9 @@
   </Company_Info>
   <Program_Info>
     <Program_Name>SWEEPR VPN</Program_Name>
-    <Program_Version>2.5.0</Program_Version>
+    <Program_Version>2.6.0</Program_Version>
     <Program_Release_Month>11</Program_Release_Month>
-    <Program_Release_Day>19</Program_Release_Day>
+    <Program_Release_Day>20</Program_Release_Day>
     <Program_Release_Year>2026</Program_Release_Year>
     <Program_Cost_Dollars>15.99</Program_Cost_Dollars>
     <Program_Type>Freemium</Program_Type>
@@ -38,8 +38,8 @@
     <Program_OS_Support>Win10,Win10 x64,Win11,Mac OS X,Linux</Program_OS_Support>
     <Program_Language>English,French,German,Spanish,Italian,Portuguese,Dutch,Japanese</Program_Language>
     <File_Info>
-      <File_Size_Bytes>741136</File_Size_Bytes>
-      <File_Size_K>724</File_Size_K>
+      <File_Size_Bytes>740112</File_Size_Bytes>
+      <File_Size_K>723</File_Size_K>
       <File_Size_MB>0.71</File_Size_MB>
     </File_Info>
     <Expire_Info>
@@ -55,19 +55,19 @@
       <Keywords>vpn, wireguard vpn, home wifi scanner, isp throttling fix, smart tv acr blocker, no logs vpn, gaming vpn low ping, public wifi encryption, sweepr vpn</Keywords>
       <Char_Desc_45>Fast 10Gbps WireGuard VPN &amp; Wi-Fi Scanner.</Char_Desc_45>
       <Char_Desc_80>Lightweight 10Gbps WireGuard VPN, free 30s Home Wi-Fi scanner &amp; Smart-TV shield.</Char_Desc_80>
-      <Char_Desc_250>SWEEPR VPN is an ultra-lightweight (~3.7 MB installer) 10Gbps WireGuard VPN and Free 30-Second Home Wi-Fi Scanner for Windows 10/11, macOS, and Linux. Stops ISP evening throttling, detects unknown Wi-Fi devices, and blocks Smart-TV ACR spying.</Char_Desc_250>
+      <Char_Desc_250>SWEEPR VPN is an ultra-lightweight (~740 KB Authenticode-signed installer) 10Gbps WireGuard VPN and Free 30-Second Home Wi-Fi Scanner for Windows 10/11, macOS, and Linux. Stops ISP evening throttling, detects unknown Wi-Fi devices, and blocks Smart-TV ACR spying.</Char_Desc_250>
       <Char_Desc_450>SWEEPR VPN is a fast, lightweight WireGuard VPN and Home Wi-Fi Security Scanner built by the team behind SWEEPR Cleaner. It installs in seconds with zero bloatware, never logs what you browse, and includes a free 30-second Home Wi-Fi &amp; Speed Scanner that lists all 15-30+ devices on your network. Upgrade to Pro to unlock 10Gbps global servers, 1-click ISP throttling protection, stranger Wi-Fi alerts, and Smart-TV ACR screenshot blocking.</Char_Desc_450>
       <Char_Desc_2000>SWEEPR VPN is an ultra-lightweight, memory-safe Rust + Tauri v2 Virtual Private Network (VPN) and Home Wi-Fi Security Scanner for Windows 10, Windows 11, macOS, Linux, and WireGuard routers.
 
 Built for everyday users, remote workers, and gamers who are tired of bloated 150 MB+ VPN apps and surprise 3x second-year renewal price hikes, SWEEPR VPN combines 10Gbps RAM-only WireGuard encryption with whole-home Wi-Fi visibility.
 
 Key Features:
-- Featherlight Native App (~3.7 MB Installer): Opens instantaneously and runs in kernel-space with virtually zero CPU or battery drain.
+- Featherlight Native App (~740 KB Authenticode-Signed Executable): Opens instantaneously and runs in kernel-space with virtually zero CPU or battery drain.
 - Free 30-Second Home Wi-Fi &amp; Speed Scanner: Scans your local home Wi-Fi in 30 seconds using ARP, mDNS, and SSDP discovery to identify all 15 to 30+ connected devices, flag unknown hardware, check router ports, and benchmark ISP DNS throttling.
 - 10Gbps RAM-Only WireGuard Servers: Ultra-low-latency endpoints in London Docklands (4ms), Amsterdam (8ms), Frankfurt IX (11ms), Stockholm (14ms), New York, Los Angeles, Singapore, and Tokyo.
 - 1-Click ISP Speed Booster: Prevents UK and global broadband providers (Virgin Media, BT, Sky, TalkTalk, Vodafone, Eduroam) from throttling evening 4K streaming, gaming packets, or SSH workflows.
 - SWEEPR Wi-Fi Radar &amp; Smart-TV Shield: Alerts you the instant a new or unknown device joins your home Wi-Fi and blocks LG webOS, Samsung Tizen, Roku, Vizio Inscape, and Fire TV sets from secretly capturing ACR screenshots of what you watch.
-- Honest Price-Lock Guarantee: Covers up to 10 devices per license at £74.99/year (Save 50%), £48.99/6-months (Save 35%), or £1.99 for your first month, backed by a 30-day money-back guarantee and 1-click cancellation.</Char_Desc_2000>
+- Honest Price-Lock Guarantee: Covers up to 3 simultaneous devices (+ unlimited via WireGuard router) at £74.99/year (Save 50%), £48.99/6-months (Save 35%), or £1.99 for your first month, backed by a 14-day money-back guarantee and 1-click cancellation.</Char_Desc_2000>
     </English>
   </Program_Descriptions>
   <Web_Info>

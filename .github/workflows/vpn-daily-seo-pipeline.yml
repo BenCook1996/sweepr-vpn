@@ -20,6 +20,7 @@ jobs:
     env:
       GCP_SERVICE_ACCOUNT_JSON: ${{ secrets.GCP_SERVICE_ACCOUNT_JSON }}
       CRM_ADMIN_PASSWORD: ${{ secrets.CRM_ADMIN_PASSWORD }}
+      SWEEPR_CRM_API_KEY: ${{ secrets.SWEEPR_CRM_API_KEY }}
       SWEEPR_RAILWAY_CRM: ${{ secrets.SWEEPR_RAILWAY_CRM || 'https://sweepr-crm-production.up.railway.app' }}
       CRM_ADMIN_USER: ${{ secrets.CRM_ADMIN_USER || 'admin' }}
       GSC_SITE_URL: "sc-domain:sweeprvpn.com"
@@ -64,10 +65,18 @@ jobs:
       - name: 6.5. CI Quality Gate Assertions (Sitemap <= 110, 0 Deprecated Schema, 0 Mojibake, Overlap < 30%)
         run: node scripts/ci-seo-quality-gate.mjs
 
-      - name: Commit & Push Cloud SEO Updates to Production (Railway Auto-Deploy)
+      - name: Commit & Push Cloud SEO Updates to Production (Material Content Changes or force_run)
         run: |
           git config user.name "sweepr-cloud-bot"
           git config user.email "bot@sweeprvpn.com"
+          MATERIAL_DIFF=$(git status --porcelain -- \
+            'website/*.html' 'website/guides/' 'website/setup/' 'website/solutions/' 'website/vs/' \
+            'website/sitemap.xml' 'website/llms.txt' 'website/llms-full.txt' 'website/smart-tv-acr-blocklist.txt' \
+            'website/indexing-queue.json' 'website/pillar-enrichment-state.json' 'website/pad.xml')
+          if [ -z "$MATERIAL_DIFF" ] && [ "${{ github.event.inputs.force_run }}" != "true" ]; then
+            echo "Telemetry synced cleanly to CRM with zero material website content changes — skipping redundant Railway container rebuild."
+            exit 0
+          fi
           git add website/ KEYWORD_OPPORTUNITIES_AUDIT_LOG.md TECHNICAL_SEO_AUDIT_LOG.md WIREGUARD_AND_ACR_DAILY_AUDIT_LOG.md
           if ! git diff --staged --quiet; then
             git commit -m "chore(seo): automated cloud GSC/GA4 sync, WireGuard/ACR proof & sitemap audit"

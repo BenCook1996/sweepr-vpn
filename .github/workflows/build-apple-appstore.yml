@@ -33,6 +33,14 @@ jobs:
           set -euo pipefail
           rm -rf apps/mobile-ios/Vendor
           git clone --depth 1 https://github.com/WireGuard/wireguard-apple.git apps/mobile-ios/Vendor/wireguard-apple
+          python3 - apps/mobile-ios/Vendor/wireguard-apple/Sources/WireGuardKitC/WireGuardKitC.h <<'PY'
+          import sys
+          p = sys.argv[1]
+          src = open(p).read()
+          if "#include <sys/types.h>" not in src:
+            src = "#include <sys/types.h>\n" + src
+            open(p, "w").write(src)
+          PY
           python3 - apps/mobile-ios/Vendor/wireguard-apple/Package.swift <<'PY'
           import sys
           p = sys.argv[1]

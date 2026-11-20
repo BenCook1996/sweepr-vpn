@@ -101,10 +101,10 @@
       <div class="rack-card glass-card p-8">
         <div class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center mb-4"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
         <h3 class="text-xl font-bold mb-2 text-gray-900">Contact Support</h3>
-        <p class="text-gray-600 mb-3 text-sm">Send a message directly to our support team for technical assistance, billing inquiries, or refund requests, or email us directly at <a href="mailto:support@sweeprvpn.com" class="font-semibold text-emerald-700 underline hover:text-emerald-800">support@sweeprvpn.com</a>.</p>
+        <p class="text-gray-600 mb-3 text-sm">Send a message directly to our support team for technical assistance, billing inquiries, or refund requests, or email us directly at <!--email_off--><a href="mailto:support@sweeprvpn.com" class="font-semibold text-emerald-700 underline hover:text-emerald-800">support@sweeprvpn.com</a><!--/email_off-->.</p>
         <div class="mb-4 inline-flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50/70 px-3 py-1.5 text-xs font-semibold text-emerald-900">
           <span>Direct Support Desk:</span>
-          <a href="mailto:support@sweeprvpn.com" class="underline hover:text-emerald-700">support@sweeprvpn.com</a>
+          <!--email_off--><a href="mailto:support@sweeprvpn.com" class="underline hover:text-emerald-700">support@sweeprvpn.com</a><!--/email_off-->
         </div>
         <form id="supportForm" class="space-y-3" onsubmit="submitSupportForm(event)">
           <div>
@@ -133,6 +133,29 @@
         <a rel="nofollow" href="/login" class="text-emerald-600 font-semibold hover:text-emerald-700 transition-colors">Go to Portal &rarr;</a>
       </div>
     </div>
+
+    <section id="support-faq" class="mt-12 text-left bg-white/90 border border-gray-200 rounded-2xl p-6 md:p-8 shadow-sm">
+      <h2 class="text-2xl font-bold text-gray-900 mb-2">Quick Troubleshooting &amp; Self-Service Answers</h2>
+      <p class="text-sm text-gray-600 mb-6">Common solutions for WireGuard connections, Stealth UDP 443 firewalls, local Home Wi-Fi Radar permissions, and billing across Web, Apple App Store, and Google Play.</p>
+      <div class="grid md:grid-cols-2 gap-5 text-sm text-gray-700">
+        <div class="p-4 rounded-xl bg-gray-50 border border-gray-200">
+          <h3 class="font-bold text-gray-900 mb-1.5">1. WireGuard Timeout or Campus/Hotel Firewalls</h3>
+          <p class="leading-relaxed">If standard <code>UDP 51820</code> is blocked on university eduroam, NHS guest Wi-Fi, or hotel networks, switch to our <strong>Stealth UDP 443</strong> endpoint inside the SWEEPR VPN client or set interface <code>MTU = 1380</code> (use <code>1412</code> on UK PPPoE fibre and <code>1420</code> on Ethernet).</p>
+        </div>
+        <div class="p-4 rounded-xl bg-gray-50 border border-gray-200">
+          <h3 class="font-bold text-gray-900 mb-1.5">2. Activating Pro &amp; Syncing 3 Devices + Routers</h3>
+          <p class="leading-relaxed">Open the Customer Portal via <a rel="nofollow" href="/login" class="text-emerald-700 font-semibold underline">/login</a> using your purchase email OTP to view your <code>SWEEPR-VPN-XXXX-XXXX-XXXX</code> license key, generate a mobile QR activation code, or export native <code>.conf</code> profiles for GL.iNet, OpenWrt, pfSense, and Synology NAS routers.</p>
+        </div>
+        <div class="p-4 rounded-xl bg-gray-50 border border-gray-200">
+          <h3 class="font-bold text-gray-900 mb-1.5">3. Local Home Wi-Fi Device Radar Permissions</h3>
+          <p class="leading-relaxed">Your Free 30-Second Home Wi-Fi Device Scanner discovers hardware strictly on your local LAN via ARP, mDNS, and SSDP. On Windows 10/11, ensure your current Wi-Fi network profile is set to <strong>Private</strong>; on macOS, allow <strong>Local Network</strong> access under Privacy &amp; Security.</p>
+        </div>
+        <div class="p-4 rounded-xl bg-gray-50 border border-gray-200">
+          <h3 class="font-bold text-gray-900 mb-1.5">4. Refunds, Cancellations &amp; App Store Billing</h3>
+          <p class="leading-relaxed">Web subscriptions carry a <strong>14-day 100% money-back guarantee</strong> with 1-click self-service cancellation in your portal (<a href="/refund" class="text-emerald-700 font-semibold underline">/refund</a>). Subscriptions purchased via Google Play or Apple App Store are billed and restored directly through your Apple ID or Google Play account.</p>
+        </div>
+      </div>
+    </section>
   </main>
 
   <script>

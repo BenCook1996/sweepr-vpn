@@ -6,8 +6,8 @@ $exePath  = Join-Path $toolsDir 'SWEEPRVPN.exe'
 $fileArgs = @{
   packageName    = if ($env:ChocolateyPackageName) { $env:ChocolateyPackageName } else { 'sweepr-vpn' }
   fileFullPath   = $exePath
-  url64bit       = 'https://sweeprvpn.com/SWEEPRVPN.exe'
-  checksum64     = 'EEE1C1A4BC972DE4E1405AB782BEC426C263A31DB0548E75A5C4EED47699A8FB'
+  url64bit       = 'https://github.com/BenCook1996/sweepr-vpn/releases/download/v2.6.0/SWEEPRVPN.exe'
+  checksum64     = 'B2D1A295FE0E96709787D52865028D0867663F3B69262368524C20DF8C4DAE1D'
   checksumType64 = 'sha256'
 }
 

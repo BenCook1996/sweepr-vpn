@@ -6,9 +6,9 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Release version (e.g. 2.5.0)"
+        description: "Release version (e.g. 2.6.0)"
         required: false
-        default: "2.5.0"
+        default: "2.6.0"
 
 jobs:
   publish-chocolatey:
@@ -33,6 +33,15 @@ jobs:
             throw "Invalid semantic version: $ver"
           }
           "version=$ver" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Verify Release Manifest & Checksum Parity
+        shell: pwsh
+        run: node scripts/verify-release-manifests.mjs
 
       - name: Pack Chocolatey Package
         shell: pwsh

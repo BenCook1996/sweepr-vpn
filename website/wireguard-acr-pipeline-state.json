@@ -1,14 +1,14 @@
 {
-  "lastRunAt": "2026-11-20T05:33:53.648Z",
+  "lastRunAt": "2026-11-20T06:14:35.384Z",
   "liveSiteReachable": true,
   "liveHttpStatus": 200,
-  "liveSiteRttMs": 332,
+  "liveSiteRttMs": 1037,
   "liveVpnServersEndpointReachable": true,
   "liveVpnFleetSummary": {
     "totalServers": 8,
     "onlineServers": 8,
     "totalConnectedDevices": 8,
-    "apiLatencyMs": 689
+    "apiLatencyMs": 1154
   },
   "liveVpnServers": [
     {
@@ -21,8 +21,8 @@
       "endpoint_host": "70.34.208.107",
       "public_key": "ct1BAFzi8DpqWKh7P+vsxF9i+EZXwynwY0oQeGVXgkc=",
       "devices": 1,
-      "probe_ms": 210,
-      "p99_ms": 210
+      "probe_ms": 200,
+      "p99_ms": 249
     },
     {
       "code": "UK-LON-01",
@@ -34,8 +34,8 @@
       "endpoint_host": "78.141.205.68",
       "public_key": "q6ks6F8CH/5XNM4GfjcDq6cCravVDQpqo+oHxsPqamI=",
       "devices": 1,
-      "probe_ms": 157,
-      "p99_ms": 157
+      "probe_ms": 156,
+      "p99_ms": 158
     },
     {
       "code": "DE-FRA-01",
@@ -60,8 +60,8 @@
       "endpoint_host": "45.32.85.162",
       "public_key": "8CEzDZ+HKzVVmGfL8bFJ8D5jpZV1deHXXvFRzAu6WAU=",
       "devices": 1,
-      "probe_ms": 148,
-      "p99_ms": 148
+      "probe_ms": 117,
+      "p99_ms": 117
     },
     {
       "code": "NL-AMS-01",
@@ -73,8 +73,8 @@
       "endpoint_host": "95.179.181.53",
       "public_key": "WONzcBn2/a4RAwUeFSEu/p/Tld8OQ71Wd666/PnlpCo=",
       "devices": 1,
-      "probe_ms": 183,
-      "p99_ms": 183
+      "probe_ms": 188,
+      "p99_ms": 188
     },
     {
       "code": "US-NYC-01",
@@ -86,8 +86,8 @@
       "endpoint_host": "45.77.109.112",
       "public_key": "72v4iEmv1Goqbkb99qxeam+Znu7vnbnYKpOW+I0KsBQ=",
       "devices": 1,
-      "probe_ms": 17,
-      "p99_ms": 17
+      "probe_ms": 15,
+      "p99_ms": 15
     },
     {
       "code": "JP-TYO-01",
@@ -99,8 +99,8 @@
       "endpoint_host": "104.156.239.162",
       "public_key": "3JDINvFBQNxcxoxVJKVSXj8KSYoE17JLzHFGkXw7OmM=",
       "devices": 1,
-      "probe_ms": 317,
-      "p99_ms": 317
+      "probe_ms": 309,
+      "p99_ms": 315
     },
     {
       "code": "SG-SIN-01",
@@ -112,40 +112,26 @@
       "endpoint_host": "149.28.157.142",
       "public_key": "XgLImPsOZpmcixSdtdlIf7Az+sDvsNNMqVVhyb96aWE=",
       "devices": 1,
-      "probe_ms": 451,
-      "p99_ms": 451
+      "probe_ms": 459,
+      "p99_ms": 478
     }
   ],
-  "wireguardFleetCount": 6,
+  "wireguardFleetCount": 8,
   "wireguardNodes": [
     {
       "id": "UK-LON-01",
-      "city": "London Docklands (Telehouse North)",
+      "city": "London Docklands",
       "country": "GB",
-      "endpoint": "lon01.wg.sweeprvpn.com",
+      "endpoint": "78.141.205.68",
+      "hostname": "lon01.wg.sweeprvpn.com",
       "ports": [
         51820,
         443
       ],
       "capacityGbps": 10,
       "baselineRttMs": 4.1,
-      "mtuPresets": {
-        "standard": 1420,
-        "pppoe": 1412,
-        "cgnat": 1380
-      }
-    },
-    {
-      "id": "UK-MAN-02",
-      "city": "Manchester (Equinix MA1)",
-      "country": "GB",
-      "endpoint": "man02.wg.sweeprvpn.com",
-      "ports": [
-        51820,
-        443
-      ],
-      "capacityGbps": 10,
-      "baselineRttMs": 6.4,
+      "aqm": "fq_codel",
+      "tcpmss": 1340,
       "mtuPresets": {
         "standard": 1420,
         "pppoe": 1412,
@@ -154,15 +140,18 @@
     },
     {
       "id": "NL-AMS-01",
-      "city": "Amsterdam (Equinix AM7)",
+      "city": "Amsterdam",
       "country": "NL",
-      "endpoint": "ams01.wg.sweeprvpn.com",
+      "endpoint": "95.179.181.53",
+      "hostname": "ams01.wg.sweeprvpn.com",
       "ports": [
         51820,
         443
       ],
       "capacityGbps": 10,
-      "baselineRttMs": 11.2,
+      "baselineRttMs": 8.4,
+      "aqm": "fq_codel",
+      "tcpmss": 1340,
       "mtuPresets": {
         "standard": 1420,
         "pppoe": 1412,
@@ -171,15 +160,18 @@
     },
     {
       "id": "DE-FRA-01",
-      "city": "Frankfurt (DE-CIX Interconnect)",
+      "city": "Frankfurt",
       "country": "DE",
-      "endpoint": "fra01.wg.sweeprvpn.com",
+      "endpoint": "80.240.20.239",
+      "hostname": "fra01.wg.sweeprvpn.com",
       "ports": [
         51820,
         443
       ],
       "capacityGbps": 10,
-      "baselineRttMs": 14.3,
+      "baselineRttMs": 11.2,
+      "aqm": "fq_codel",
+      "tcpmss": 1340,
       "mtuPresets": {
         "standard": 1420,
         "pppoe": 1412,
@@ -187,16 +179,19 @@
       }
     },
     {
-      "id": "CH-ZRH-01",
-      "city": "Zurich (SwissIX Privacy Core)",
-      "country": "CH",
-      "endpoint": "zrh01.wg.sweeprvpn.com",
+      "id": "SE-STO-01",
+      "city": "Stockholm",
+      "country": "SE",
+      "endpoint": "70.34.208.107",
+      "hostname": "sto01.wg.sweeprvpn.com",
       "ports": [
         51820,
         443
       ],
       "capacityGbps": 10,
-      "baselineRttMs": 17.8,
+      "baselineRttMs": 14.1,
+      "aqm": "fq_codel",
+      "tcpmss": 1340,
       "mtuPresets": {
         "standard": 1420,
         "pppoe": 1412,
@@ -205,15 +200,78 @@
     },
     {
       "id": "US-NYC-01",
-      "city": "New York / Secaucus (NY4)",
+      "city": "New York",
       "country": "US",
-      "endpoint": "nyc01.wg.sweeprvpn.com",
+      "endpoint": "45.77.109.112",
+      "hostname": "nyc01.wg.sweeprvpn.com",
       "ports": [
         51820,
         443
       ],
       "capacityGbps": 10,
       "baselineRttMs": 68.4,
+      "aqm": "fq_codel",
+      "tcpmss": 1340,
+      "mtuPresets": {
+        "standard": 1420,
+        "pppoe": 1412,
+        "cgnat": 1380
+      }
+    },
+    {
+      "id": "US-LAX-01",
+      "city": "Los Angeles",
+      "country": "US",
+      "endpoint": "45.32.85.162",
+      "hostname": "lax01.wg.sweeprvpn.com",
+      "ports": [
+        51820,
+        443
+      ],
+      "capacityGbps": 10,
+      "baselineRttMs": 128,
+      "aqm": "fq_codel",
+      "tcpmss": 1340,
+      "mtuPresets": {
+        "standard": 1420,
+        "pppoe": 1412,
+        "cgnat": 1380
+      }
+    },
+    {
+      "id": "JP-TYO-01",
+      "city": "Tokyo",
+      "country": "JP",
+      "endpoint": "104.156.239.162",
+      "hostname": "tyo01.wg.sweeprvpn.com",
+      "ports": [
+        51820,
+        443
+      ],
+      "capacityGbps": 10,
+      "baselineRttMs": 198.5,
+      "aqm": "fq_codel",
+      "tcpmss": 1340,
+      "mtuPresets": {
+        "standard": 1420,
+        "pppoe": 1412,
+        "cgnat": 1380
+      }
+    },
+    {
+      "id": "SG-SIN-01",
+      "city": "Singapore",
+      "country": "SG",
+      "endpoint": "149.28.157.142",
+      "hostname": "sin01.wg.sweeprvpn.com",
+      "ports": [
+        51820,
+        443
+      ],
+      "capacityGbps": 10,
+      "baselineRttMs": 152,
+      "aqm": "fq_codel",
+      "tcpmss": 1340,
       "mtuPresets": {
         "standard": 1420,
         "pppoe": 1412,
@@ -225,7 +283,7 @@
     "path": "/smart-tv-acr-blocklist.txt",
     "totalDomains": 65,
     "categoriesCount": 8,
-    "sha1": "9526d5e56139",
+    "sha1": "cd2066c8a7c0",
     "updatedThisRun": false,
     "streamingSafelistEnforced": true,
     "streamingSafelistDomainsCount": 43,

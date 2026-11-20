@@ -192,6 +192,12 @@
       </p>
     </div>
 
+
+    <div id="direct-answer" class="max-w-3xl mx-auto mb-8 p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-gray-800 text-left">
+      <div class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 mb-1.5">Direct Answer</div>
+      <p class="text-sm sm:text-base leading-relaxed">To check for a WebRTC, IP, or DNS leak online, run our 5-second browser probe before and after connecting to a VPN. If your residential ISP IPv4/IPv6 address or STUN ICE candidates still appear instead of our 10 Gbps RAM-only WireGuard node, enforce system-wide tunnel routing and internal DNS 10.66.0.1.</p>
+    </div>
+
     <!-- Interactive Live Diagnostic Dashboard -->
     <div class="rack-card glass-card p-6 sm:p-8 mb-8">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-gray-100">
@@ -389,6 +395,16 @@
           <span class="copy-btn-label">Copy Tool Link</span>
         </button>
     </div>
+
+    <section id="leak-test-faq" class="max-w-4xl mx-auto mb-10 bg-white border border-gray-200 rounded-2xl p-6 sm:p-8 shadow-sm text-left space-y-4">
+      <h2 class="text-2xl font-bold text-gray-900">IP, DNS &amp; WebRTC Leak Test FAQ</h2>
+      <div class="grid md:grid-cols-2 gap-4 text-sm text-gray-700">
+        <div class="p-4 rounded-xl bg-gray-50 border border-gray-200"><h3 class="font-bold text-gray-900 mb-1">What is a WebRTC leak in Chrome, Edge, or Firefox?</h3><p>WebRTC opens direct UDP peer sockets via STUN servers that can bypass browser HTTP extensions and expose your true local LAN or public ISP IP address.</p></div>
+        <div class="p-4 rounded-xl bg-gray-50 border border-gray-200"><h3 class="font-bold text-gray-900 mb-1">How do I pass a DNS and IPv6 leak check?</h3><p>Ensure your VPN routes both <code>0.0.0.0/0</code> and <code>::/0</code> inside the kernel tunnel and sets <code>DNS = 10.66.0.1</code> so queries never fall back to Windows Smart Multi-Homed Name Resolution.</p></div>
+        <div class="p-4 rounded-xl bg-gray-50 border border-gray-200"><h3 class="font-bold text-gray-900 mb-1">Is this WebRTC leak check safe without signing up?</h3><p>Yes. ICE candidate inspection executes strictly client-side in your browser session with zero account registration and zero traffic logging.</p></div>
+        <div class="p-4 rounded-xl bg-gray-50 border border-gray-200"><h3 class="font-bold text-gray-900 mb-1">Does SWEEPR VPN stop leaks on routers too?</h3><p>Exporting a SWEEPR WireGuard <code>.conf</code> profile for GL.iNet, OpenWrt, or pfSense protects phones, consoles, and Smart TVs automatically at the gateway layer.</p></div>
+      </div>
+    </section>
   </main>
 
     <section id="sweepr-share-diagnostic-badge" class="max-w-5xl mx-auto px-6 pb-8">

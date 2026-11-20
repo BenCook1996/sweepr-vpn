@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gratis IP-, DNS- &amp; WebRTC-Läckagetest | SWEEPR VPN</title>
-  <meta name="description" content="Kontrollera gratis på 5 sekunder om din riktiga IP-adress, internetleverantör eller WebRTC/DNS-förfrågningar läcker i webbläsaren. 10 Gbps WireGuard i Stockholm." />
+  <meta name="description" content="Gratis IP-, DNS- &amp; WebRTC-läckagetest på 5 sekunder. Kontrollera om Telia, Tele2, Bahnhof eller WebRTC avslöjar din riktiga IP-adress." />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="https://sweeprvpn.com/sv/tools/leak-test">
   <link rel="alternate" hreflang="en" href="https://sweeprvpn.com/tools/leak-test">
@@ -33,7 +33,7 @@
   <meta name="twitter:description" content="Kontrollera på 5 sekunder om din IP-adress, DNS eller WebRTC exponeras." />
   <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png">
 
-  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","@id":"https://sweeprvpn.com/sv/tools/leak-test#app","name":"SWEEPR Gratis IP-, DNS- & WebRTC-Läckagetest (Svenska)","url":"https://sweeprvpn.com/sv/tools/leak-test","inLanguage":"sv","applicationCategory":"SecurityApplication","operatingSystem":"All","offers":{"@type":"Offer","price":"0.00","priceCurrency":"EUR","validFrom":"2026-01-01"},"description":"Kostnadsfritt integritetstest i webbläsaren för att upptäcka IPv4-, IPv6-, DNS- och WebRTC-läckor med 10 Gbps WireGuard-gateway i Stockholm (SE-STO-01)."}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","@id":"https://sweeprvpn.com/sv/tools/leak-test#app","name":"SWEEPR Gratis IP-, DNS- & WebRTC-Läckagetest (Svenska)","url":"https://sweeprvpn.com/sv/tools/leak-test","inLanguage":"sv","applicationCategory":"SecurityApplication","operatingSystem":"All","offers":{"@type":"Offer","price":"0.00","priceCurrency":"EUR","validFrom":"2026-01-01"},"description":"Kostnadsfritt integritetstest i webbläsaren för att upptäcka IPv4-, IPv6-, DNS- och WebRTC-läckor med 10 Gbps WireGuard-gateway i Stockholm (SE-STO-01)."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Hem","item":"https://sweeprvpn.com/"},{"@type":"ListItem","position":2,"name":"IP- & DNS-Läckagetest","item":"https://sweeprvpn.com/sv/tools/leak-test"}]}]}</script>
 
   <link rel="stylesheet" href="/tailwind.min.css?v=1">
   <link rel="icon" type="image/svg+xml" href="/logo-emerald.svg?v=5">
@@ -114,6 +114,32 @@
         </div>
       </div>
     </div>
+
+    <section id="leak-test-guide-sv" class="bg-white border border-gray-200 rounded-3xl p-6 sm:p-8 shadow-sm mb-8 text-left space-y-6">
+      <div>
+        <h2 class="text-2xl font-bold text-gray-900 mb-2">Vad kontrollerar vårt kostnadsfria IP-, DNS- &amp; WebRTC-test?</h2>
+        <p class="text-sm text-gray-600 leading-relaxed">Även när du använder ett proxy-tillägg kan webbläsare som Chrome och Edge läcka din verkliga IPv4-, IPv6- eller lokala nätverksadress via WebRTC STUN-anrop och din operatörs DNS-servrar (Telia, Tele2, Telenor, Bahnhof). Testet körs direkt i webbläsaren på under fem sekunder utan inloggning.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-4 text-sm">
+        <div class="p-4 rounded-2xl bg-gray-50 border border-gray-200">
+          <h3 class="font-bold text-gray-900 mb-1">Publik IPv4 &amp; IPv6-kontroll</h3>
+          <p class="text-gray-600 leading-relaxed">Visar vilken publik IP och stad webbplatser ser just nu. När SWEEPR VPN är ansluten till vår RAM-only-nod i Stockholm (<code>SE-STO-01</code>) visas enbart tunnelns utgångsadress.</p>
+        </div>
+        <div class="p-4 rounded-2xl bg-gray-50 border border-gray-200">
+          <h3 class="font-bold text-gray-900 mb-1">WebRTC STUN-skydd</h3>
+          <p class="text-gray-600 leading-relaxed">WebRTC används för videosamtal men kan avslöja din riktiga IP utanför webbläsarproxyn. SWEEPR styr all UDP- och STUN-trafik genom kärnbaserad WireGuard.</p>
+        </div>
+        <div class="p-4 rounded-2xl bg-gray-50 border border-gray-200">
+          <h3 class="font-bold text-gray-900 mb-1">Krypterad DNS i tunneln</h3>
+          <p class="text-gray-600 leading-relaxed">Stoppar operatörens DNS-loggning och filtrering med vår interna DNS (<code>10.66.0.1</code>) samt inbyggd skanner för okända enheter på ditt hemma-Wi-Fi.</p>
+        </div>
+      </div>
+      <div class="border-t border-gray-200 pt-5 space-y-3 text-sm text-gray-700">
+        <h3 class="text-lg font-bold text-gray-900">Vanliga frågor om läckagetestet</h3>
+        <p><strong>Hur stoppar jag en upptäckt DNS- eller WebRTC-läcka?</strong> Använd den inbyggda SWEEPR VPN-klienten (~740 KB på Windows) eller exportera en WireGuard-konfiguration för din router med <code>AllowedIPs = 0.0.0.0/0, ::/0</code> och <code>MTU = 1420</code>.</p>
+        <p><strong>Sparas min IP-adress när jag kör testet?</strong> Nej. WebRTC-kontrollen sker lokalt i din webbläsare och SWEEPR VPN sparar inga användarloggar.</p>
+      </div>
+    </section>
   </main>
 
   <footer class="border-t border-gray-200 py-8 text-center text-sm text-gray-500">

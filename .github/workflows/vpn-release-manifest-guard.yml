@@ -1,0 +1,31 @@
+name: "SWEEPR VPN — Release Manifest & Checksum Parity Guard"
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'website/SWEEPRVPN.*'
+      - 'website/pad.xml'
+      - 'chocolatey/**'
+      - 'scripts/verify-release-manifests.mjs'
+      - '.github/workflows/vpn-release-manifest-guard.yml'
+
+jobs:
+  verify-release-manifests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout SWEEPR VPN Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Verify Local & External Package Manager Manifest Parity
+        run: node scripts/verify-release-manifests.mjs --check-remote

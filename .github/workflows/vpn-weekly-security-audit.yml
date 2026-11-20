@@ -24,6 +24,7 @@ jobs:
       - name: Run Full-System Security & Authenticode Code-Signing Audit
         run: |
           node scripts/cloud-security-audit.mjs
+          node scripts/verify-release-manifests.mjs
 
       - name: Commit Security Audit Report
         run: |

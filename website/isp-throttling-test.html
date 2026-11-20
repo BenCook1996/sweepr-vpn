@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Free ISP Speed &amp; Throttling Test (10s Check) | SWEEPR VPN</title>
-  <meta name="description" content="Run a free 10-second internet throttling test in your browser. Detect if Virgin Media, BT, Sky, TalkTalk, Rogers, or Comcast is throttling your streaming &amp; gaming." />
+  <meta name="description" content="Run a free 10-second ISP throttling test in your browser. Detect evening speed shaping on Virgin Media, BT, Sky, TalkTalk, Comcast, or Rogers instantly." />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="https://sweeprvpn.com/tools/isp-throttling-test">
   <meta name="theme-color" content="#10b981" />
@@ -17,7 +17,7 @@
   <meta property="og:locale" content="en_GB">
   <meta property="og:url" content="https://sweeprvpn.com/tools/isp-throttling-test">
   <meta property="og:title" content="Free ISP Speed &amp; Throttling Test (10s Check) | SWEEPR VPN" />
-  <meta property="og:description" content="Run a free 10-second internet throttling test in your browser. Detect if Virgin Media, BT, Sky, TalkTalk, Rogers, or Comcast is throttling your streaming &amp; gaming." />
+  <meta property="og:description" content="Run a free 10-second ISP throttling test in your browser. Detect evening speed shaping on Virgin Media, BT, Sky, TalkTalk, Comcast, or Rogers instantly." />
   <meta property="og:image" content="https://sweeprvpn.com/og-image.png">
   <meta property="og:image:alt" content="SWEEPR VPN Free ISP Speed Slowdown Checker">
 
@@ -25,7 +25,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://sweeprvpn.com/tools/isp-throttling-test">
   <meta name="twitter:title" content="Free ISP Speed &amp; Throttling Test (10s Check) | SWEEPR VPN" />
-  <meta name="twitter:description" content="Run a free 10-second internet throttling test in your browser. Detect if Virgin Media, BT, Sky, TalkTalk, Rogers, or Comcast is throttling your streaming &amp; gaming." />
+  <meta name="twitter:description" content="Run a free 10-second ISP throttling test in your browser. Detect evening speed shaping on Virgin Media, BT, Sky, TalkTalk, Comcast, or Rogers instantly." />
   <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png">
 
   <!-- Structured Data (JSON-LD) -->
@@ -183,6 +183,12 @@
       <p class="text-base sm:text-lg text-gray-600 leading-relaxed">
         Check your connection responsiveness, ping stability, and whether your internet provider can inspect and slow down your evening 4K video streaming or gaming.
       </p>
+    </div>
+
+
+    <div id="direct-answer" class="max-w-3xl mx-auto mb-8 p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-gray-800 text-left">
+      <div class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 mb-1.5">Direct Answer</div>
+      <p class="text-sm sm:text-base leading-relaxed">An ISP throttling test measures latency variance, jitter spikes, and unencrypted TLS probe responsiveness to reveal peak-hour broadband shaping on Virgin Media, BT, Sky, TalkTalk, Comcast, or Rogers. Wrapping traffic inside SWEEPR VPN's 10 Gbps ChaCha20 WireGuard tunnel prevents deep packet inspection from slowing streaming or gaming traffic.</p>
     </div>
 
     <!-- Interactive Throttling & Latency Probe Card -->
@@ -426,6 +432,16 @@
           <span class="copy-btn-label">Copy Tool Link</span>
         </button>
     </div>
+
+    <section id="throttling-faq" class="max-w-4xl mx-auto mb-10 bg-white border border-gray-200 rounded-2xl p-6 sm:p-8 shadow-sm text-left space-y-4">
+      <h2 class="text-2xl font-bold text-gray-900">ISP Throttling &amp; Speed Shaping FAQ</h2>
+      <div class="grid md:grid-cols-2 gap-4 text-sm text-gray-700">
+        <div class="p-4 rounded-xl bg-gray-50 border border-gray-200"><h3 class="font-bold text-gray-900 mb-1">How do ISPs detect and throttle 4K streams?</h3><p>Broadband providers inspect unencrypted DNS lookups, TLS SNI hostnames, and high-bitrate UDP signatures during 18:00–23:00 peak hours to deprioritize video, P2P, and gaming flows.</p></div>
+        <div class="p-4 rounded-xl bg-gray-50 border border-gray-200"><h3 class="font-bold text-gray-900 mb-1">Does WireGuard really bypass bandwidth shaping?</h3><p>When all DNS queries and payloads travel inside an encrypted WireGuard interface with <code>fq_codel</code> pacing and Stealth UDP 443 fallback, your ISP sees only opaque UDP packets.</p></div>
+        <div class="p-4 rounded-xl bg-gray-50 border border-gray-200"><h3 class="font-bold text-gray-900 mb-1">Why run two tests (unencrypted vs VPN)?</h3><p>Compare your ping and throughput first on raw broadband and again immediately after connecting to SWEEPR VPN — a jitter drop proves middlebox DPI prioritization was active.</p></div>
+        <div class="p-4 rounded-xl bg-gray-50 border border-gray-200"><h3 class="font-bold text-gray-900 mb-1">Which MTU stops bufferbloat during uploads?</h3><p>Set <code>MTU = 1412</code> on PPPoE fibre (BT/Sky/Plusnet), <code>1420</code> on DOCSIS/DHCP cable (Virgin Media), or <code>1380</code> on 5G/Starlink CGNAT.</p></div>
+      </div>
+    </section>
   </main>
 
     <section id="sweepr-share-diagnostic-badge" class="max-w-5xl mx-auto px-6 pb-8">

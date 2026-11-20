@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kostenloser IP-, DNS- &amp; WebRTC-Leak-Test | SWEEPR VPN</title>
-  <meta name="description" content="Prüfen Sie in 5 Sekunden kostenlos, ob Ihre echte IP-Adresse, Ihr Standort (Telekom, Vodafone DS-Lite, 1&1, O2) oder WebRTC/DNS-Anfragen im Browser sichtbar sind." />
+  <meta name="description" content="Kostenloser IP-, DNS- &amp; WebRTC-Leak-Test (5 Sek.). Prüfen Sie Telekom-, Vodafone-DS-Lite- &amp; 1&amp;1-IPv6-Lecks ohne Anmeldung im Browser." />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="https://sweeprvpn.com/de/tools/leak-test">
   <link rel="alternate" hreflang="en" href="https://sweeprvpn.com/tools/leak-test">
@@ -114,6 +114,32 @@
         </div>
       </div>
     </div>
+
+    <section id="leak-test-guide-de" class="bg-white border border-gray-200 rounded-3xl p-6 sm:p-8 shadow-sm mb-8 text-left space-y-6">
+      <div>
+        <h2 class="text-2xl font-bold text-gray-900 mb-2">Was prüft dieser kostenlose IP-, DNS- &amp; WebRTC-Leak-Test?</h2>
+        <p class="text-sm text-gray-600 leading-relaxed">Viele Browser-Erweiterungen und Standard-VPNs schützen zwar HTTP-Anfragen, leaken jedoch Ihre echte IPv4/IPv6-Adresse oder lokale Netzwerkanfragen über WebRTC-STUN-Sockets und unverschlüsselte ISP-DNS-Resolver. Bei deutschen Dual-Stack-Lite-Anschlüssen (Vodafone Kabel, Deutsche Telekom, 1&amp;1, O2) wird häufig eine ungeschützte IPv6-Verbindung am VPN vorbei direkt ins Internet geleitet.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-4 text-sm">
+        <div class="p-4 rounded-2xl bg-gray-50 border border-gray-200">
+          <h3 class="font-bold text-gray-900 mb-1">IPv4- &amp; IPv6-Sichtbarkeit</h3>
+          <p class="text-gray-600 leading-relaxed">Zeigt sofort die öffentliche IP-Adresse und den Standort Ihres Internetanbieters. Mit aktivem SWEEPR WireGuard-Tunnel erscheint hier ausschließlich unser RAM-Only-Knoten in Frankfurt (<code>DE-FRA-01</code>).</p>
+        </div>
+        <div class="p-4 rounded-2xl bg-gray-50 border border-gray-200">
+          <h3 class="font-bold text-gray-900 mb-1">WebRTC ICE/STUN-Schutz</h3>
+          <p class="text-gray-600 leading-relaxed">Chrome, Edge und Firefox können über WebRTC-Peer-Verbindungen Ihre lokale NAT- oder echte Provider-IP preisgeben. SWEEPR klemmt den gesamten UDP-STUN-Verkehr auf Kernel-Ebene ins WireGuard-Interface.</p>
+        </div>
+        <div class="p-4 rounded-2xl bg-gray-50 border border-gray-200">
+          <h3 class="font-bold text-gray-900 mb-1">DNS-Hijacking &amp; Smart-TV</h3>
+          <p class="text-gray-600 leading-relaxed">Verhindert ISP-DNS-Logging durch unseren eigenen verschlüsselten In-Tunnel-DNS-Resolver (<code>10.66.0.1</code>) inklusive automatischer Smart-TV-ACR-Tracker-Blockade.</p>
+        </div>
+      </div>
+      <div class="border-t border-gray-200 pt-5 space-y-3 text-sm text-gray-700">
+        <h3 class="text-lg font-bold text-gray-900">Häufige Fragen zum Leak-Test</h3>
+        <p><strong>Wie behebe ich einen erkannten IP- oder WebRTC-Leak?</strong> Installieren Sie die native SWEEPR VPN Desktop-App (~740 KB unter Windows) oder importieren Sie unser WireGuard-Profil in Ihre FRITZ!Box bzw. Ihren GL.iNet-Router mit <code>AllowedIPs = 0.0.0.0/0, ::/0</code>.</p>
+        <p><strong>Speichert dieser Browser-Test meine IP-Adresse?</strong> Nein. Alle WebRTC-Kandidaten werden lokal in Ihrem Browser ermittelt und die Statusabfrage wird weder gespeichert noch an Dritte verkauft.</p>
+      </div>
+    </section>
   </main>
 
   <footer class="border-t border-gray-200 py-8 text-center text-sm text-gray-500">

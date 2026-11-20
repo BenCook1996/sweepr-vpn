@@ -634,10 +634,10 @@ Daily automated operational verification for the SWEEPR WireGuard 10Gbps server 
 
 ## 2026-11-20 — Daily WireGuard Node Health & Smart-TV ACR Blocklist Audit
 
-- **Timestamp**: `2026-11-20T05:33:53.648Z`
+- **Timestamp**: `2026-11-20T06:14:35.384Z`
 - **WireGuard Production Fleet Health**: **8/8 POPs Online (100%)** | Active Devices: `8`
-- **Storefront Reachability**: HTTP `200` (`332ms` RTT)
-- **Smart-TV ACR Sinkhole Blocklist**: `65` Verified Domains across `8` OS families (SHA-1: `9526d5e56139`)
+- **Storefront Reachability**: HTTP `200` (`1037ms` RTT)
+- **Smart-TV ACR Sinkhole Blocklist**: `65` Verified Domains across `8` OS families (SHA-1: `cd2066c8a7c0`)
 - **Strict Compliance Rules**:
   - `NEVER BLOCK STREAMING PLAYBACK CDNs`: **PASS** (0 false positives; Netflix, BBC, ITV, Channel 4, YouTube, Disney+, Prime Video unblocked)
   - `DO NOT SEND EMAILS`: **PASS** (0 emails dispatched)
@@ -645,24 +645,26 @@ Daily automated operational verification for the SWEEPR WireGuard 10Gbps server 
 ### Live WireGuard Production POPs
 | POP Code | City | Country | Online Status | Probe Latency | p99 Latency | Connected Devices |
 |:---|:---|:---:|:---:|:---:|:---:|:---:|
-| **SE-STO-01** | Stockholm | Sweden (SE) | 🟢 Online | `210ms` | `210ms` | `1` |
-| **UK-LON-01** | London | United Kingdom (GB) | 🟢 Online | `157ms` | `157ms` | `1` |
+| **SE-STO-01** | Stockholm | Sweden (SE) | 🟢 Online | `200ms` | `249ms` | `1` |
+| **UK-LON-01** | London | United Kingdom (GB) | 🟢 Online | `156ms` | `158ms` | `1` |
 | **DE-FRA-01** | Frankfurt | Germany (DE) | 🟢 Online | `188ms` | `188ms` | `1` |
-| **US-LAX-01** | Los Angeles | United States (US) | 🟢 Online | `148ms` | `148ms` | `1` |
-| **NL-AMS-01** | Amsterdam | Netherlands (NL) | 🟢 Online | `183ms` | `183ms` | `1` |
-| **US-NYC-01** | New York | United States (US) | 🟢 Online | `17ms` | `17ms` | `1` |
-| **JP-TYO-01** | Tokyo | Japan (JP) | 🟢 Online | `317ms` | `317ms` | `1` |
-| **SG-SIN-01** | Singapore | Singapore (SG) | 🟢 Online | `451ms` | `451ms` | `1` |
+| **US-LAX-01** | Los Angeles | United States (US) | 🟢 Online | `117ms` | `117ms` | `1` |
+| **NL-AMS-01** | Amsterdam | Netherlands (NL) | 🟢 Online | `188ms` | `188ms` | `1` |
+| **US-NYC-01** | New York | United States (US) | 🟢 Online | `15ms` | `15ms` | `1` |
+| **JP-TYO-01** | Tokyo | Japan (JP) | 🟢 Online | `309ms` | `315ms` | `1` |
+| **SG-SIN-01** | Singapore | Singapore (SG) | 🟢 Online | `459ms` | `478ms` | `1` |
 
 ### Core Bare-Metal 10Gbps Reference Configurations & MTU Presets
 | POP ID | City | Endpoint | Ports | Capacity | Baseline RTT | MTU Presets (Std / PPPoE / CGNAT) |
 |:---|:---|:---|:---:|:---:|:---:|:---:|
-| **UK-LON-01** | London Docklands (Telehouse North) | `lon01.wg.sweeprvpn.com` | `51820, 443` | 10 Gbps | `4.1ms` | `1420` / `1412` / `1380` |
-| **UK-MAN-02** | Manchester (Equinix MA1) | `man02.wg.sweeprvpn.com` | `51820, 443` | 10 Gbps | `6.4ms` | `1420` / `1412` / `1380` |
-| **NL-AMS-01** | Amsterdam (Equinix AM7) | `ams01.wg.sweeprvpn.com` | `51820, 443` | 10 Gbps | `11.2ms` | `1420` / `1412` / `1380` |
-| **DE-FRA-01** | Frankfurt (DE-CIX Interconnect) | `fra01.wg.sweeprvpn.com` | `51820, 443` | 10 Gbps | `14.3ms` | `1420` / `1412` / `1380` |
-| **CH-ZRH-01** | Zurich (SwissIX Privacy Core) | `zrh01.wg.sweeprvpn.com` | `51820, 443` | 10 Gbps | `17.8ms` | `1420` / `1412` / `1380` |
-| **US-NYC-01** | New York / Secaucus (NY4) | `nyc01.wg.sweeprvpn.com` | `51820, 443` | 10 Gbps | `68.4ms` | `1420` / `1412` / `1380` |
+| **UK-LON-01** | London Docklands | `78.141.205.68` | `51820, 443` | 10 Gbps | `4.1ms` | `1420` / `1412` / `1380` |
+| **NL-AMS-01** | Amsterdam | `95.179.181.53` | `51820, 443` | 10 Gbps | `8.4ms` | `1420` / `1412` / `1380` |
+| **DE-FRA-01** | Frankfurt | `80.240.20.239` | `51820, 443` | 10 Gbps | `11.2ms` | `1420` / `1412` / `1380` |
+| **SE-STO-01** | Stockholm | `70.34.208.107` | `51820, 443` | 10 Gbps | `14.1ms` | `1420` / `1412` / `1380` |
+| **US-NYC-01** | New York | `45.77.109.112` | `51820, 443` | 10 Gbps | `68.4ms` | `1420` / `1412` / `1380` |
+| **US-LAX-01** | Los Angeles | `45.32.85.162` | `51820, 443` | 10 Gbps | `128ms` | `1420` / `1412` / `1380` |
+| **JP-TYO-01** | Tokyo | `104.156.239.162` | `51820, 443` | 10 Gbps | `198.5ms` | `1420` / `1412` / `1380` |
+| **SG-SIN-01** | Singapore | `149.28.157.142` | `51820, 443` | 10 Gbps | `152ms` | `1420` / `1412` / `1380` |
 
 ### Smart-TV ACR & IoT Telemetry Categories Verified
 1. **Samsung Tizen SmartHub & ACR Frame Fingerprinting** (`gpm.samsungqbe.com`, `ACR0.samsungcloudsolution.com`, etc.)

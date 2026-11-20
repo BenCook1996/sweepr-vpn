@@ -150,6 +150,50 @@ const VERIFIED_DIRECTORY_SUBMISSIONS = [
     status: 'submitted',
     message_id: 'portal-vpn-launchingnext-com',
     reached_out_at: Math.floor(Date.now() / 1000)
+  },
+  {
+    project_id: 'vpn',
+    who: 'GitHub Official Repository (SWEEPR VPN)',
+    website: 'github.com',
+    url: 'https://github.com/BenCook1996/sweepr-vpn',
+    how: 'Public GitHub Repository',
+    category: 'DR 96 · Source, Smart-TV ACR Blocklist & Releases -> https://sweeprvpn.com/',
+    status: 'listed',
+    message_id: 'portal-vpn-github-repo',
+    reached_out_at: Math.floor(Date.now() / 1000)
+  },
+  {
+    project_id: 'vpn',
+    who: 'Scoop Package Bucket (scoop-sweepr)',
+    website: 'github.com',
+    url: 'https://github.com/BenCook1996/scoop-sweepr',
+    how: 'Windows Scoop Manifest',
+    category: 'DR 96 · Windows Package Manager Bucket -> https://sweeprvpn.com/',
+    status: 'listed',
+    message_id: 'portal-vpn-scoop-bucket',
+    reached_out_at: Math.floor(Date.now() / 1000)
+  },
+  {
+    project_id: 'vpn',
+    who: 'Homebrew Tap (homebrew-sweepr)',
+    website: 'github.com',
+    url: 'https://github.com/BenCook1996/homebrew-sweepr',
+    how: 'macOS Homebrew Cask',
+    category: 'DR 96 · macOS Package Manager Tap -> https://sweeprvpn.com/',
+    status: 'listed',
+    message_id: 'portal-vpn-homebrew-tap',
+    reached_out_at: Math.floor(Date.now() / 1000)
+  },
+  {
+    project_id: 'vpn',
+    who: 'Chocolatey Community Repository',
+    website: 'community.chocolatey.org',
+    url: 'https://community.chocolatey.org/packages/sweepr-vpn',
+    how: 'Windows Chocolatey Package',
+    category: 'DR 82 · Windows Package Registry -> https://sweeprvpn.com',
+    status: 'listed',
+    message_id: 'portal-vpn-chocolatey-org',
+    reached_out_at: Math.floor(Date.now() / 1000)
   }
 ];
 
@@ -220,11 +264,11 @@ const GSC_PRIORITY_URLS = new Set([
   'https://sweeprvpn.com/solutions/hotel-captive-portal-wifi-p2p-port-forwarding',
   'https://sweeprvpn.com/solutions/rogers-ignite-canada-isp-throttling',
   'https://sweeprvpn.com/setup/steam-deck-vpn',
-  'https://sweeprvpn.com/solutions/comcast-xfinity-broadband-smart-tv-acr-blocking',
-  'https://sweeprvpn.com/solutions/ee-5g-mobile-hotspot-wifi-arp-spoofing-protection',
+  'https://sweeprvpn.com/download',
+  'https://sweeprvpn.com/vs/protonvpn',
+  'https://sweeprvpn.com/guides/stop-roku-vizio-firetv-spying',
   'https://sweeprvpn.com/solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter',
   'https://sweeprvpn.com/solutions/three-5g-home-broadband-uhd-streaming-buffering',
-  'https://sweeprvpn.com/solutions/fibrus-full-fibre-smart-tv-acr-blocking',
   'https://sweeprvpn.com/warrant-canary',
   'https://sweeprvpn.com/solutions/virgin-media-remote-dev-ssh',
   'https://sweeprvpn.com/solutions/t-mobile-5g-home-internet-remote-dev-ssh',
@@ -552,22 +596,14 @@ async function runVpnDrip(targetCount = 300) {
     } catch {}
   }
 
-  // Trigger CRM Backlink Verification on both Railway Multi-Project CRM & Cleaner CRM
+  // Trigger CRM Backlink Verification on Railway Multi-Project CRM (project=vpn)
   const verifyBody = JSON.stringify({ project_id: 'vpn', only: 'unchecked', limit: 1000 });
-  await Promise.all([
-    fetch(`${RAILWAY_CRM_BASE}/api/crm/seo/backlinks/verify?project=vpn`, {
-      method: 'POST',
-      headers: buildCrmHeaders(RAILWAY_CRM_BASE),
-      body: verifyBody,
-      signal: AbortSignal.timeout(10000)
-    }).catch(() => {}),
-    fetch(`${CLEANER_CRM_BASE}/api/crm/seo/backlinks/verify?project=vpn`, {
-      method: 'POST',
-      headers: buildCrmHeaders(CLEANER_CRM_BASE),
-      body: verifyBody,
-      signal: AbortSignal.timeout(10000)
-    }).catch(() => {})
-  ]);
+  await fetch(`${RAILWAY_CRM_BASE}/api/crm/seo/backlinks/verify?project=vpn`, {
+    method: 'POST',
+    headers: buildCrmHeaders(RAILWAY_CRM_BASE),
+    body: verifyBody,
+    signal: AbortSignal.timeout(10000)
+  }).catch(() => {});
 
   console.log(`[SWEEPR VPN Drip ${runTag}] Published, logged & verified ${completed} new dofollow backlinks. Total VPN CRM outreach entries: ${vpnSeed.length}`);
 
@@ -676,7 +712,7 @@ async function runVpnDrip(targetCount = 300) {
   console.log('\n==========================================================================');
   console.log('  DAILY SWEEPR VPN DIRECTORY, PAD XML & DELTA INDEXING SUMMARY');
   console.log('==========================================================================');
-  console.log(`✓ PAD XML Specification: v${padInfo?.version || '1.4.0'} (${padInfo?.sizeBytes || '715264'} bytes, HTTPS live probe checked)`);
+  console.log(`✓ PAD XML Specification: v${padInfo?.version || '2.6.0'} (${padInfo?.sizeBytes || '740112'} bytes, HTTPS live probe checked)`);
   console.log(`✓ Verified Directory Submissions Synced: ${VERIFIED_DIRECTORY_SUBMISSIONS.length} authority listings (Pastebin spam disabled: ${completed})`);
   console.log(`✓ Search Indexing (Delta-Only): ${indexStatus.deltaSubmitted} delta URLs submitted via IndexNow (out of ${indexStatus.sitemapUrls} canonical URLs)`);
   console.log(`✓ CRM Database Sync: Upserted to Railway Multi-Project CRM, Cleaner CRM, and local SQLite (Total VPN entries: ${vpnSeed.length})`);

@@ -33,7 +33,7 @@
   <meta name="twitter:description" content="Verifique em 5 segundos se o seu endereço IP real, DNS ou WebRTC estão expostos." />
   <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png">
 
-  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","@id":"https://sweeprvpn.com/pt-br/tools/leak-test#app","name":"SWEEPR Teste Gratuito de Vazamento de IP, DNS e WebRTC","url":"https://sweeprvpn.com/pt-br/tools/leak-test","inLanguage":"pt-BR","applicationCategory":"SecurityApplication","operatingSystem":"All","offers":{"@type":"Offer","price":"0.00","priceCurrency":"USD","validFrom":"2026-01-01"},"description":"Diagnóstico gratuito de privacidade no navegador para detectar vazamentos de IPv4, IPv6, DNS e WebRTC STUN."}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","@id":"https://sweeprvpn.com/pt-br/tools/leak-test#app","name":"SWEEPR Teste Gratuito de Vazamento de IP, DNS e WebRTC","url":"https://sweeprvpn.com/pt-br/tools/leak-test","inLanguage":"pt-BR","applicationCategory":"SecurityApplication","operatingSystem":"All","offers":{"@type":"Offer","price":"0.00","priceCurrency":"USD","validFrom":"2026-01-01"},"description":"Diagnóstico gratuito de privacidade no navegador para detectar vazamentos de IPv4, IPv6, DNS e WebRTC STUN."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://sweeprvpn.com/"},{"@type":"ListItem","position":2,"name":"Teste de Vazamento IP & DNS","item":"https://sweeprvpn.com/pt-br/tools/leak-test"}]}]}</script>
 
   <link rel="stylesheet" href="/tailwind.min.css?v=1">
   <link rel="icon" type="image/svg+xml" href="/logo-emerald.svg?v=5">
@@ -114,6 +114,32 @@
         </div>
       </div>
     </div>
+
+    <section id="leak-test-guide-ptbr" class="bg-white border border-gray-200 rounded-3xl p-6 sm:p-8 shadow-sm mb-8 text-left space-y-6">
+      <div>
+        <h2 class="text-2xl font-bold text-gray-900 mb-2">O que este teste gratuito de vazamento de IP, DNS e WebRTC verifica?</h2>
+        <p class="text-sm text-gray-600 leading-relaxed">Extensões comuns de navegador e VPNs antigas frequentemente deixam vazar seu endereço IPv4/IPv6 verdadeiro ou consultas DNS da operadora (Vivo, Claro, TIM, Oi) através de conexões WebRTC STUN. Em menos de 5 segundos, esta página mostra exatamente o que qualquer site consegue detectar sobre sua rede.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-4 text-sm">
+        <div class="p-4 rounded-2xl bg-gray-50 border border-gray-200">
+          <h3 class="font-bold text-gray-900 mb-1">Verificação IPv4 e IPv6</h3>
+          <p class="text-gray-600 leading-relaxed">Exibe o IP público visível e sua localização aproximada. Com o túnel WireGuard de 10 Gbps da SWEEPR VPN ativo, apenas o IP do servidor RAM-only aparece online.</p>
+        </div>
+        <div class="p-4 rounded-2xl bg-gray-50 border border-gray-200">
+          <h3 class="font-bold text-gray-900 mb-1">Bloqueio de WebRTC STUN</h3>
+          <p class="text-gray-600 leading-relaxed">Chamadas de áudio e vídeo no Chrome ou Firefox podem expor candidatos de rede fora de proxies HTTP. Nosso cliente encapsula todo tráfego UDP direto no kernel.</p>
+        </div>
+        <div class="p-4 rounded-2xl bg-gray-50 border border-gray-200">
+          <h3 class="font-bold text-gray-900 mb-1">DNS Criptografado Interno</h3>
+          <p class="text-gray-600 leading-relaxed">Impede o registro DNS pelo provedor com nosso resolvedor interno (<code>10.66.0.1</code>) e inclui scanner gratuito de rede Wi-Fi em 30 segundos.</p>
+        </div>
+      </div>
+      <div class="border-t border-gray-200 pt-5 space-y-3 text-sm text-gray-700">
+        <h3 class="text-lg font-bold text-gray-900">Perguntas frequentes</h3>
+        <p><strong>Como corrigir um vazamento de IP ou WebRTC?</strong> Baixe o cliente nativo SWEEPR VPN (~740 KB no Windows) ou importe o perfil WireGuard com <code>AllowedIPs = 0.0.0.0/0, ::/0</code> e kill-switch automático.</p>
+        <p><strong>Meus dados de IP ficam armazenados após o teste?</strong> Não. A verificação WebRTC ocorre localmente no navegador sob política rigorosa sem logs.</p>
+      </div>
+    </section>
   </main>
 
   <footer class="border-t border-gray-200 py-8 text-center text-sm text-gray-500">

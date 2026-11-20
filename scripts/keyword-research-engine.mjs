@@ -2216,13 +2216,13 @@ export function extractNamedEntities(text) {
 
 const STATIC_ROUTE_FILE_MAP = {
   '/': 'index.html',
-  '/de': 'de/index.html',
-  '/fr': 'fr/index.html',
-  '/es': 'es/index.html',
+  '/de': 'de-index.html',
+  '/fr': 'fr-index.html',
+  '/es': 'es-index.html',
   '/pricing': 'pricing.html',
-  '/de/pricing': 'de/pricing.html',
-  '/fr/pricing': 'fr/pricing.html',
-  '/es/pricing': 'es/pricing.html',
+  '/de/pricing': 'de-pricing.html',
+  '/fr/pricing': 'fr-pricing.html',
+  '/es/pricing': 'es-pricing.html',
   '/solutions': 'solutions.html',
   '/setup': 'setup.html',
   '/guides': 'guides.html',
@@ -4230,23 +4230,9 @@ export async function runKeywordResearchPipeline(options = {}) {
       Math.min(applyLimit, DAILY_NEW_PILLAR_CAP, WEEKLY_NEW_PILLAR_CAP - rolling7DayNewPillarsCreated, createApproved.length)
     );
 
-    // Step 3A: Invoke daily-50-seo-pages.mjs FIRST so new pillar HTML files exist on disk before ENRICH_EXISTING runs
+    // Step 3A: Mass pSEO generation retired under canonical sitemap <= 110 policy
     if (cappedNewPillarCount > 0) {
-      try {
-        execFileSync(
-          process.execPath,
-          [path.join(__dirname, 'daily-50-seo-pages.mjs'), String(cappedNewPillarCount), '--force'],
-          { cwd: VPN_ROOT, stdio: 'inherit' }
-        );
-        newPillarsCreatedCount = cappedNewPillarCount;
-        // Reload opportunitiesPayload in case daily-50-seo-pages.mjs updated status = 'APPLIED' on created pillars
-        const reloadedOpps = loadJsonCache(OPPORTUNITIES_PATH, opportunitiesPayload);
-        if (Array.isArray(reloadedOpps.opportunities) && reloadedOpps.opportunities.length > 0) {
-          opportunitiesPayload.opportunities = reloadedOpps.opportunities;
-        }
-      } catch (err) {
-        console.error('[Keyword Engine -> daily-50-seo-pages.mjs Error]', err?.message || err);
-      }
+      console.log(`[Keyword Engine] Skipping creation of ${cappedNewPillarCount} new pSEO pages: mass generation (daily-50-seo-pages.mjs) is retired to preserve canonical sitemap <= 110.`);
     }
 
     // Refresh corpusPages so newly created pillars are discoverable by ENRICH_EXISTING

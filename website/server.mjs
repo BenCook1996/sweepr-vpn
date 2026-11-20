@@ -3326,7 +3326,7 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Download SWEEPR VPN (Windows, macOS, Android &amp; iOS)</title>
-  <meta name="description" content="Download official SWEEPR VPN v2.6.0 installers by SWEEPR VPN Inc. for Windows 10/11 (.exe), macOS (.dmg), Android (.apk), and iOS with verified SHA-256 checksums.">
+  <meta name="description" content="Download official SWEEPR VPN v2.6.0 installers for Windows 10/11 (.exe), macOS (.dmg), Android (.apk) &amp; iOS with verified SHA-256 checksums.">
   <link rel="canonical" href="https://sweeprvpn.com/download">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta name="theme-color" content="#10b981">

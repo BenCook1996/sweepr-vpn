@@ -15,6 +15,9 @@ jobs:
     env:
       GCP_SERVICE_ACCOUNT_JSON: ${{ secrets.GCP_SERVICE_ACCOUNT_JSON }}
       CRM_ADMIN_PASSWORD: ${{ secrets.CRM_ADMIN_PASSWORD }}
+      SWEEPR_CRM_API_KEY: ${{ secrets.SWEEPR_CRM_API_KEY }}
+      SWEEPR_RAILWAY_CRM: ${{ secrets.SWEEPR_RAILWAY_CRM || 'https://sweepr-crm-production.up.railway.app' }}
+      CRM_ADMIN_USER: ${{ secrets.CRM_ADMIN_USER || 'admin' }}
       GSC_SITE_URL: "sc-domain:sweeprvpn.com"
       GA4_PROPERTY_ID: "559903365"
     steps:
@@ -26,9 +29,9 @@ jobs:
         with:
           node-version: "22"
 
-      - name: 1. Pull Live 7d/28d GSC & GA4 Telemetry via Google Cloud Service Account
+      - name: 1. Pull Live 7d/28d GSC & GA4 Telemetry (Read-Only HTML)
         run: |
-          node scripts/cloud-gsc-ga4-sync.mjs
+          node scripts/cloud-gsc-ga4-sync.mjs --no-ctr-rewrite
 
       - name: 2. Recalculate Pre/Post Strategy Performance Ledger & Calibration Multipliers
         run: |
@@ -38,13 +41,27 @@ jobs:
         run: |
           node scripts/weekly-ga4-and-gsc-funnel-audit.mjs
 
+      - name: 4. Trigger Free Central CRM Live Site Crawler (project=vpn)
+        if: env.CRM_ADMIN_PASSWORD != ''
+        run: |
+          curl -fsS -m 120 -X POST "${SWEEPR_RAILWAY_CRM}/api/crm/seo/audit/run?source=live&project=vpn&wait=1" \
+            -u "${CRM_ADMIN_USER}:${CRM_ADMIN_PASSWORD}" \
+            -H "Origin: ${SWEEPR_RAILWAY_CRM}" \
+            -H "X-Sweepr-Project: vpn" \
+            -H "Content-Type: application/json" \
+            -d '{"project_id":"vpn","source":"live","max_pages":120}' \
+            | head -c 500 \
+            || echo "::warning::Free CRM live site audit skipped or timed out"
+
       - name: Commit & Push Weekly GA4 + GSC Scorecard
         run: |
           git config user.name "sweepr-cloud-bot"
           git config user.email "bot@sweeprvpn.com"
-          git add website/gsc-ga4-latest-snapshot.json website/seo-strategy-performance-ledger.json website/pillar-enrichment-state.json GA4_AND_GSC_WEEKLY_AUDIT_LOG.md KEYWORD_OPPORTUNITIES_AUDIT_LOG.md
+          git add website/gsc-ga4-latest-snapshot.json website/seo-strategy-performance-ledger.json website/pillar-enrichment-state.json website/indexing-queue.json GA4_AND_GSC_WEEKLY_AUDIT_LOG.md KEYWORD_OPPORTUNITIES_AUDIT_LOG.md
           if ! git diff --staged --quiet; then
             git commit -m "chore(analytics): weekly cloud GA4 funnel & GSC recovery scorecard"
             git pull --rebase -X ours origin main
             git push origin HEAD:main
+          else
+            echo "No weekly analytics changes to commit."
           fi
