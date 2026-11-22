@@ -1,14 +1,14 @@
 {
-  "lastRunAt": "2026-11-20T06:14:35.384Z",
+  "lastRunAt": "2026-11-22T01:16:04.975Z",
   "liveSiteReachable": true,
   "liveHttpStatus": 200,
-  "liveSiteRttMs": 1037,
+  "liveSiteRttMs": 290,
   "liveVpnServersEndpointReachable": true,
   "liveVpnFleetSummary": {
     "totalServers": 8,
     "onlineServers": 8,
-    "totalConnectedDevices": 8,
-    "apiLatencyMs": 1154
+    "totalConnectedDevices": 9,
+    "apiLatencyMs": 642
   },
   "liveVpnServers": [
     {
@@ -21,8 +21,8 @@
       "endpoint_host": "70.34.208.107",
       "public_key": "ct1BAFzi8DpqWKh7P+vsxF9i+EZXwynwY0oQeGVXgkc=",
       "devices": 1,
-      "probe_ms": 200,
-      "p99_ms": 249
+      "probe_ms": 230,
+      "p99_ms": 237
     },
     {
       "code": "UK-LON-01",
@@ -34,8 +34,8 @@
       "endpoint_host": "78.141.205.68",
       "public_key": "q6ks6F8CH/5XNM4GfjcDq6cCravVDQpqo+oHxsPqamI=",
       "devices": 1,
-      "probe_ms": 156,
-      "p99_ms": 158
+      "probe_ms": 161,
+      "p99_ms": 161
     },
     {
       "code": "DE-FRA-01",
@@ -47,8 +47,8 @@
       "endpoint_host": "80.240.20.239",
       "public_key": "HCw1A7oSzYRKHyiVWwPYLHcxfnyr6jcm8o04Vcr9HVY=",
       "devices": 1,
-      "probe_ms": 188,
-      "p99_ms": 188
+      "probe_ms": 186,
+      "p99_ms": 199
     },
     {
       "code": "US-LAX-01",
@@ -60,8 +60,8 @@
       "endpoint_host": "45.32.85.162",
       "public_key": "8CEzDZ+HKzVVmGfL8bFJ8D5jpZV1deHXXvFRzAu6WAU=",
       "devices": 1,
-      "probe_ms": 117,
-      "p99_ms": 117
+      "probe_ms": 123,
+      "p99_ms": 124
     },
     {
       "code": "NL-AMS-01",
@@ -73,8 +73,8 @@
       "endpoint_host": "95.179.181.53",
       "public_key": "WONzcBn2/a4RAwUeFSEu/p/Tld8OQ71Wd666/PnlpCo=",
       "devices": 1,
-      "probe_ms": 188,
-      "p99_ms": 188
+      "probe_ms": 169,
+      "p99_ms": 205
     },
     {
       "code": "US-NYC-01",
@@ -85,9 +85,9 @@
       "endpoint": "45.77.109.112:51820",
       "endpoint_host": "45.77.109.112",
       "public_key": "72v4iEmv1Goqbkb99qxeam+Znu7vnbnYKpOW+I0KsBQ=",
-      "devices": 1,
+      "devices": 2,
       "probe_ms": 15,
-      "p99_ms": 15
+      "p99_ms": 16
     },
     {
       "code": "JP-TYO-01",
@@ -99,8 +99,8 @@
       "endpoint_host": "104.156.239.162",
       "public_key": "3JDINvFBQNxcxoxVJKVSXj8KSYoE17JLzHFGkXw7OmM=",
       "devices": 1,
-      "probe_ms": 309,
-      "p99_ms": 315
+      "probe_ms": 313,
+      "p99_ms": 355
     },
     {
       "code": "SG-SIN-01",
@@ -112,8 +112,8 @@
       "endpoint_host": "149.28.157.142",
       "public_key": "XgLImPsOZpmcixSdtdlIf7Az+sDvsNNMqVVhyb96aWE=",
       "devices": 1,
-      "probe_ms": 459,
-      "p99_ms": 478
+      "probe_ms": 481,
+      "p99_ms": 1468
     }
   ],
   "wireguardFleetCount": 8,
@@ -283,7 +283,7 @@
     "path": "/smart-tv-acr-blocklist.txt",
     "totalDomains": 65,
     "categoriesCount": 8,
-    "sha1": "cd2066c8a7c0",
+    "sha1": "9526d5e56139",
     "updatedThisRun": false,
     "streamingSafelistEnforced": true,
     "streamingSafelistDomainsCount": 43,

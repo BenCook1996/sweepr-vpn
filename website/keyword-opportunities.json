@@ -12698,8 +12698,8 @@
         "faqAnswer": "Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT."
       },
       "ctrUpgradeBrief": {
-        "isLockedByGsc14DayCooldown": true,
-        "cooldownExpiresAt": "2026-12-02T06:05:28.044Z"
+        "isLockedByGsc14DayCooldown": false,
+        "cooldownExpiresAt": "2026-11-17T21:30:00.000Z"
       },
       "createdAt": "2026-11-20T05:05:01.540Z",
       "appliedAt": null
@@ -14470,7 +14470,7 @@
       },
       "ctrUpgradeBrief": {
         "isLockedByGsc14DayCooldown": true,
-        "cooldownExpiresAt": "2026-12-02T05:06:48.427Z"
+        "cooldownExpiresAt": "2026-12-02T13:38:24.253Z"
       },
       "createdAt": "2026-11-20T05:05:01.540Z",
       "appliedAt": null
@@ -15392,7 +15392,7 @@
       },
       "ctrUpgradeBrief": {
         "isLockedByGsc14DayCooldown": true,
-        "cooldownExpiresAt": "2026-12-03T08:55:21.433Z"
+        "cooldownExpiresAt": "2026-12-04T05:33:54.810Z"
       },
       "createdAt": "2026-11-20T05:05:01.540Z",
       "appliedAt": null
@@ -16393,7 +16393,7 @@
       },
       "ctrUpgradeBrief": {
         "isLockedByGsc14DayCooldown": true,
-        "cooldownExpiresAt": "2026-12-02T05:06:48.427Z"
+        "cooldownExpiresAt": "2026-12-02T13:38:24.253Z"
       },
       "createdAt": "2026-11-20T05:05:01.540Z",
       "appliedAt": null
@@ -18251,8 +18251,8 @@
         "faqAnswer": "SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner."
       },
       "ctrUpgradeBrief": {
-        "isLockedByGsc14DayCooldown": true,
-        "cooldownExpiresAt": "2026-12-02T06:05:28.044Z"
+        "isLockedByGsc14DayCooldown": false,
+        "cooldownExpiresAt": "2026-11-17T21:30:00.000Z"
       },
       "createdAt": "2026-11-20T05:05:01.540Z",
       "appliedAt": null
@@ -31876,7 +31876,7 @@
     "dailyNewPillarCap": 2
   },
   "auditSummary": {
-    "auditedAt": "2026-11-20T10:27:19.938Z",
+    "auditedAt": "2026-11-22T01:16:09.839Z",
     "assertionsPassed": "10/10 PASS",
     "autoRepairsApplied": 0,
     "repairLog": []
@@ -31915,16 +31915,16 @@
         "timeToRankMultiplier": 0.84,
         "playbookPriorityBoost": 3,
         "measuredSampleSize": 8,
-        "avgPositionLift": 2.6,
-        "avgImpressionsLift28d": 4
+        "avgPositionLift": 2.8,
+        "avgImpressionsLift28d": 3
       },
       "BOFU_COMPETITOR_SWITCHER": {
         "volumeMultiplier": 1.12,
         "timeToRankMultiplier": 0.8,
         "playbookPriorityBoost": 3,
         "measuredSampleSize": 2,
-        "avgPositionLift": 1.3,
-        "avgImpressionsLift28d": 18
+        "avgPositionLift": 17.7,
+        "avgImpressionsLift28d": 14
       },
       "HARDWARE_WIREGUARD_SETUP": {
         "volumeMultiplier": 1.08,
@@ -31996,8 +31996,8 @@
         "volumeMultiplier": 1.15,
         "timeToRankMultiplier": 0.84,
         "playbookPriorityBoost": 3,
-        "avgPositionLift": 2.6,
-        "avgImpressionsLift28d": 4,
+        "avgPositionLift": 2.8,
+        "avgImpressionsLift28d": 3,
         "strategyAdjustment": "PRIORITIZE_TOOL_BRIDGE (+20%) — Verified Nov 9 GSC: TalkTalk Pos 5.9 (11.1% CTR), Gigaclear Pos 6.8, Eduroam Pos 8.2 (34 impr), Virgin Media SSH Pos 9.2."
       },
       {
@@ -32010,8 +32010,8 @@
         "volumeMultiplier": 1.12,
         "timeToRankMultiplier": 0.8,
         "playbookPriorityBoost": 3,
-        "avgPositionLift": 1.3,
-        "avgImpressionsLift28d": 18,
+        "avgPositionLift": 17.7,
+        "avgImpressionsLift28d": 14,
         "strategyAdjustment": "MAINTAIN_HIGH_PRIORITY — Verified Nov 9 GSC: /alternatives/totalvpn jumped Pos 20.8 -> 2.8 in 7d (13 impr, 9 in last 7d)."
       },
       {

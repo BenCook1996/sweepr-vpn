@@ -1,6 +1,50 @@
 [
   {
     "project_id": "vpn",
+    "who": "Chocolatey Community Repository",
+    "website": "community.chocolatey.org",
+    "url": "https://community.chocolatey.org/packages/sweepr-vpn",
+    "how": "Windows Chocolatey Package",
+    "category": "DR 82 · Windows Package Registry -> https://sweeprvpn.com",
+    "status": "listed",
+    "message_id": "portal-vpn-chocolatey-org",
+    "reached_out_at": 1795310169
+  },
+  {
+    "project_id": "vpn",
+    "who": "Homebrew Tap (homebrew-sweepr)",
+    "website": "github.com",
+    "url": "https://github.com/BenCook1996/homebrew-sweepr",
+    "how": "macOS Homebrew Cask",
+    "category": "DR 96 · macOS Package Manager Tap -> https://sweeprvpn.com/",
+    "status": "listed",
+    "message_id": "portal-vpn-homebrew-tap",
+    "reached_out_at": 1795310169
+  },
+  {
+    "project_id": "vpn",
+    "who": "Scoop Package Bucket (scoop-sweepr)",
+    "website": "github.com",
+    "url": "https://github.com/BenCook1996/scoop-sweepr",
+    "how": "Windows Scoop Manifest",
+    "category": "DR 96 · Windows Package Manager Bucket -> https://sweeprvpn.com/",
+    "status": "listed",
+    "message_id": "portal-vpn-scoop-bucket",
+    "reached_out_at": 1795310169
+  },
+  {
+    "project_id": "vpn",
+    "who": "GitHub Official Repository (SWEEPR VPN)",
+    "website": "github.com",
+    "url": "https://github.com/BenCook1996/sweepr-vpn",
+    "how": "Public GitHub Repository",
+    "category": "DR 96 · Source, Smart-TV ACR Blocklist & Releases -> https://sweeprvpn.com/",
+    "status": "listed",
+    "message_id": "portal-vpn-github-repo",
+    "reached_out_at": 1795310169
+  },
+  {
+    "project_id": "vpn",
     "who": "Wellfound (AngelList Talent) Company Profile",
     "website": "wellfound.com",
     "url": "https://wellfound.com/company/sweepr-vpn",

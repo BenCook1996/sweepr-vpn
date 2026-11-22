@@ -17,14 +17,14 @@
 | `DE-FRA-01` | Frankfurt, Germany | 10 Gbps | 8% | 1 | 11 ms | Yes (tmpfs) |
 | `US-LAX-01` | Los Angeles, United States | 10 Gbps | 8% | 1 | 128 ms | Yes (tmpfs) |
 | `NL-AMS-01` | Amsterdam, Netherlands | 10 Gbps | 8% | 1 | 8 ms | Yes (tmpfs) |
-| `US-NYC-01` | New York, United States | 10 Gbps | 8% | 1 | 68 ms | Yes (tmpfs) |
+| `US-NYC-01` | New York, United States | 10 Gbps | 8% | 2 | 68 ms | Yes (tmpfs) |
 | `JP-TYO-01` | Tokyo, Japan | 10 Gbps | 8% | 1 | 199 ms | Yes (tmpfs) |
 | `SG-SIN-01` | Singapore, Singapore | 10 Gbps | 8% | 1 | 152 ms | Yes (tmpfs) |
 
 ## 3. Smart-TV ACR Telemetry Sinkhole & Home Wi-Fi Radar Proof
 - **In-Tunnel Encrypted DNS Resolver**: `10.66.0.1`
 - **Verified Blocked ACR & Ad-Beacon Domains**: `65` domains across 8 Smart-TV OS families (Samsung Tizen Smart Hub, LG webOS LivePlus, Roku OS Cooper/Scribe, Vizio SmartCast Inscape, Sony Bravia Samba TV, Amazon Fire TV OS, Hisense VIDAA, Philips/Panasonic HbbTV).
-- **Public Open-Source Blocklist**: https://sweeprvpn.com/smart-tv-acr-blocklist.txt (SHA-1: `cd2066c8a7c0`)
+- **Public Open-Source Blocklist**: https://sweeprvpn.com/smart-tv-acr-blocklist.txt (SHA-1: `9526d5e56139`)
 - **4K HDR Streaming Playback Safelist**: 100% safelisted video delivery CDNs (`nflxvideo.net`, `bbci.co.uk`, `googlevideo.com`, `bamgrid.com`, `aiv-cdn.net`, `ttvnw.net`).
 
 ## 4. Transparent Price-Lock Architecture vs. Competitor Year-2 Renewal Hikes

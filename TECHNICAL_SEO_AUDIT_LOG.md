@@ -1208,9 +1208,7 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 ### Executive Summary
 - **Overall Scores**: Crawlability **100/100**, Technical SEO **100/100**, PageSpeed & CWV **100/100** across **92 Canonical Pages**.
 - **Auto-Optimizations Executed**:
-  - Auto-optimized 1 pSEO pages with BreadcrumbList + TechArticle JSON-LD, GA4 (G-7D28EEMNXX) & manifest/nofollow guards
-  - Upgraded high-CTR <title> & <meta name="description"> snippets across 1 Google Search Console Striking-Distance pages
-  - Synchronized sitemap.xml with 93 canonical URLs (content-hash <lastmod>: 10 modified today)
+  - Synchronized sitemap.xml with 93 canonical URLs (content-hash <lastmod>: 1 modified today)
   - Synchronized llms.txt & llms-full.txt with all 63 pSEO guides and live 04:00 AM WireGuard/ACR telemetry for GEO AI citations
 
 ### Category Scorecards & Verifications
@@ -1260,7 +1258,7 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 - **Static Cache-Control & HEAD Parity**: PASS — Versioned (?v=) assets served 1yr immutable; HTML 300s/3600s SWR; XML/TXT 3600s/86400s; HEAD parity & PWA /download start_url verified
 
 ### Compression Benchmark Results
-- **order.html** (130.0 KB raw) &rarr; Gzip: **29.4 KB** (77% reduction) | Brotli: **27.2 KB** (79% reduction)
+- **order.html** (127.7 KB raw) &rarr; Gzip: **29.3 KB** (77% reduction) | Brotli: **27.1 KB** (79% reduction)
 - **index.html** (67.2 KB raw) &rarr; Gzip: **14.4 KB** (79% reduction) | Brotli: **13.3 KB** (80% reduction)
 - **sitemap.xml** (24.1 KB raw) &rarr; Gzip: **1.7 KB** (93% reduction) | Brotli: **1.5 KB** (94% reduction)
 
