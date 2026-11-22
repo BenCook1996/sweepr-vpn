@@ -74,7 +74,7 @@
   function detectClientPlatform(href) {
     const h = String(href || '').toLowerCase();
     if (h.includes('platform=macos') || h.includes('.dmg')) return 'macos';
-    if (h.includes('platform=android') || h.includes('.apk')) return 'android';
+    if (h.includes('platform=android') || h.includes('.apk') || h.includes('play.google.com')) return 'android';
     if (h.includes('platform=ios') || h.includes('.mobileconfig') || h.includes('/ios-app')) return 'ios';
     if (h.includes('platform=linux')) return 'linux';
     if (h.includes('platform=windows') || h.includes('.exe')) return 'windows';
@@ -216,9 +216,11 @@
           href.includes('SWEEPRVPN.dmg') ||
           href.includes('SWEEPRVPN.apk') ||
           href.includes('SWEEPRVPN.mobileconfig') ||
+          href.includes('play.google.com/store/apps/details?id=com.sweepr.vpn') ||
           target.id === 'downloadBtn'
         ) {
-          const platform = detectClientPlatform(href);
+          const isPlayStore = href.includes('play.google.com');
+          const platform = isPlayStore ? 'android' : detectClientPlatform(href);
           const extMap = { windows: 'exe', macos: 'dmg', android: 'apk', ios: 'mobileconfig', linux: 'conf' };
           const fileMap = {
             windows: 'SWEEPRVPN.exe',
@@ -228,8 +230,8 @@
             linux: 'sweepr-wg0.conf'
           };
           window.sweeprTrack('file_download', {
-            file_name: fileMap[platform] || 'SWEEPRVPN.exe',
-            file_extension: extMap[platform] || 'exe',
+            file_name: isPlayStore ? 'google-play-com.sweepr.vpn' : (fileMap[platform] || 'SWEEPRVPN.exe'),
+            file_extension: isPlayStore ? 'play_store' : (extMap[platform] || 'exe'),
             link_url: href || '/download',
             link_text: text,
             platform: platform,
@@ -486,12 +488,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const isLinuxDesktop = !isAndroid && !isOtherMobile && ua.includes('linux');
     const detectedPlatform = isIos ? 'ios' : (isAndroid || isOtherMobile) ? 'android' : isMacDesktop ? 'mac' : isLinuxDesktop ? 'linux' : 'win';
 
+    const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.sweepr.vpn';
     const platformDirectMap = {
       win: { href: '/download/SWEEPRVPN.exe', filename: 'SWEEPRVPN.exe' },
       windows: { href: '/download/SWEEPRVPN.exe', filename: 'SWEEPRVPN.exe' },
       mac: { href: '/download/SWEEPRVPN.dmg', filename: 'SWEEPRVPN.dmg' },
       macos: { href: '/download/SWEEPRVPN.dmg', filename: 'SWEEPRVPN.dmg' },
-      android: { href: '/download/SWEEPRVPN.apk', filename: 'SWEEPRVPN.apk' },
+      android: { href: PLAY_STORE_URL, filename: '', external: true },
       apk: { href: '/download/SWEEPRVPN.apk', filename: 'SWEEPRVPN.apk' },
       ios: { href: '/download/SWEEPRVPN.mobileconfig', filename: '' },
       linux: { href: '/setup/linux-cli-wireguard', filename: '' }
@@ -507,14 +510,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const resolved = platformDirectMap[explicitPlat] || platformDirectMap[detectedPlatform] || platformDirectMap.win;
         a.setAttribute('href', resolved.href);
-        if (resolved.filename) {
+        if (resolved.external) {
+          a.setAttribute('target', '_blank');
+          a.setAttribute('rel', 'noopener');
+          a.removeAttribute('download');
+        } else if (resolved.filename) {
           a.setAttribute('download', resolved.filename);
+        }
+        if (!explicitPlat || explicitPlat === 'android' || explicitPlat === 'ios') {
+          a.dataset.sweeprMobileTarget = resolved.href;
         }
       } catch {}
     });
 
     if (isIos || isAndroid || isOtherMobile) {
-      const targetHref = isIos ? '/download/SWEEPRVPN.mobileconfig' : '/download/SWEEPRVPN.apk';
+      const targetHref = isIos ? '/download/SWEEPRVPN.mobileconfig' : PLAY_STORE_URL;
 
       const showMobileInstallSheet = () => {
         let sheet = document.getElementById('mobileInstallHelperSheet');
@@ -548,17 +558,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="flex items-center justify-between">
                   <div class="inline-flex items-center gap-2 font-bold text-sm text-gray-900">
                     <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                    <span>Downloading SWEEPRVPN.apk...</span>
+                    <span>Install SWEEPR VPN on Android</span>
                   </div>
                   <button type="button" id="closeMobileInstallSheet" class="text-xs font-bold text-gray-400 hover:text-gray-700 px-2 py-1 cursor-pointer">&#10005;</button>
                 </div>
                 <p class="text-xs text-gray-600 leading-relaxed">
-                  Your Android installer (<strong>SWEEPRVPN.apk</strong>) is downloading now. Tap <strong>Open</strong> in your browser notification bar to install, or launch directly below:
+                  Install from the official Google Play Store for automatic updates, or sideload the verified direct APK below:
                 </p>
                 <div class="grid grid-cols-1 gap-2 pt-1">
-                  <a href="https://play.google.com/apps/testing/com.sweepr.vpn" target="_blank" rel="noopener" class="btn btn-go w-full justify-center py-2.5 text-xs font-bold">Join Official Google Play Beta (Get 30 Days Pro Free)</a>
-                  <a href="/download/SWEEPRVPN.apk" download="SWEEPRVPN.apk" class="flex items-center justify-center rounded-xl border border-emerald-300 bg-emerald-50 text-emerald-900 w-full py-2 text-xs font-bold no-underline">Download SWEEPRVPN.apk Again</a>
-                  <a href="/ios-app" class="flex items-center justify-center rounded-xl border border-gray-200 bg-gray-50 text-gray-800 w-full py-2 text-xs font-semibold no-underline">Open SWEEPR VPN Mobile App Now</a>
+                  <a href="https://play.google.com/store/apps/details?id=com.sweepr.vpn" target="_blank" rel="noopener" class="btn btn-go w-full justify-center py-2.5 text-xs font-bold">Get it on Google Play &rarr;</a>
+                  <a href="/download/SWEEPRVPN.apk" download="SWEEPRVPN.apk" class="flex items-center justify-center rounded-xl border border-emerald-300 bg-emerald-50 text-emerald-900 w-full py-2 text-xs font-bold no-underline">Direct APK Fallback (SWEEPRVPN.apk)</a>
                 </div>
               </div>`;
           document.body.appendChild(sheet);
@@ -571,16 +580,51 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       };
 
-      document.querySelectorAll('a[href^="/download"], a[href="/SWEEPRVPN.apk"]').forEach((a) => {
-        a.setAttribute('href', targetHref);
-        a.addEventListener('click', () => {
+      const attachSheetTrigger = (el) => {
+        if (!el || el.dataset.sweeprSheetBound) return;
+        el.dataset.sweeprSheetBound = '1';
+        el.addEventListener('click', () => {
           setTimeout(showMobileInstallSheet, 150);
         });
-      });
+      };
+
+      if (isIos) {
+        document.querySelectorAll('a[data-sweepr-mobile-target], a[href="/download"]').forEach((a) => {
+          const curHref = a.getAttribute('href') || '';
+          if (curHref.includes('picker') || /SWEEPRVPN\.(exe|dmg|apk)/i.test(curHref)) return;
+          a.setAttribute('href', targetHref);
+          a.removeAttribute('download');
+          attachSheetTrigger(a);
+        });
+      } else {
+        document
+          .querySelectorAll(
+            'a[data-sweepr-mobile-target], a[href="/download"], a[href^="/download?platform=android"], a[href^="https://play.google.com/store/apps/details?id=com.sweepr.vpn"]'
+          )
+          .forEach((a) => {
+            const curHref = a.getAttribute('href') || '';
+            if (curHref.includes('picker') || /SWEEPRVPN\.(exe|dmg|apk|mobileconfig)/i.test(curHref)) return;
+            a.setAttribute('href', PLAY_STORE_URL);
+            a.setAttribute('target', '_blank');
+            a.setAttribute('rel', 'noopener');
+            a.removeAttribute('download');
+            attachSheetTrigger(a);
+          });
+      }
 
       const osBtnLbl = document.getElementById('osDownloadText');
       if (osBtnLbl) {
-        osBtnLbl.textContent = 'Install Now';
+        if (isIos) {
+          osBtnLbl.textContent = 'Install Now';
+        } else {
+          const pageLang = (document.documentElement.lang || '').slice(0, 2).toLowerCase();
+          const playLabelMap = {
+            de: 'Jetzt bei Google Play',
+            fr: 'Disponible sur Google Play',
+            es: 'Disponible en Google Play'
+          };
+          osBtnLbl.textContent = playLabelMap[pageLang] || 'Get it on Google Play';
+        }
       }
     }
   } catch {}

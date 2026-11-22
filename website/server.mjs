@@ -2599,8 +2599,8 @@ const CANONICAL_REDIRECTS = {
   '/setup/openwrt-travel-glinet-dropin': '/setup/gl-inet-travel-router',
   '/setup/opnsense-24-kernel-wireguard': '/setup/pfsense-opnsense-router',
   '/setup/pfsense-plus-wireguard-client': '/setup/pfsense-opnsense-router',
-  '/setup/firewalla-gold-plus-wireguard': '/setup/firewalla-gold-wireguard-vpn',
-  '/setup/draytek-vigor-2962-wireguard': '/setup/draytek-vigor-wireguard-client',
+  '/setup/firewalla-gold-plus-wireguard': '/setup',
+  '/setup/draytek-vigor-2962-wireguard': '/setup',
   '/setup/raspberry-pi-5-wireguard-gateway': '/setup/raspberry-pi-home-gateway',
   '/vs/pia-private-internet-access': '/vs/private-internet-access',
   '/vs/surfshark-one': '/vs/surfshark',
@@ -3311,11 +3311,12 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
       </div>`
     : isAndroidWebView
     ? `<div class="mb-5 p-4 rounded-2xl border-2 border-emerald-400 bg-emerald-50/90 text-left space-y-2.5">
-        <div class="font-extrabold text-sm text-emerald-950">📱 Android Detected — Ready to Install SWEEPRVPN.apk</div>
-        <p class="text-xs text-emerald-900 leading-relaxed">If your current in-app browser blocks direct APK installation, tap below to open in Chrome or download directly:</p>
+        <div class="font-extrabold text-sm text-emerald-950">📱 Android Detected — Install SWEEPR VPN</div>
+        <p class="text-xs text-emerald-900 leading-relaxed">Install directly from the official Google Play Store for automatic updates, or open in Chrome to sideload the verified APK:</p>
         <div class="grid grid-cols-1 gap-2 pt-1">
-          <a href="${chromeIntentLink}" class="btn btn-go w-full justify-center py-2.5 text-xs font-extrabold">🌐 Open in Chrome &amp; Install APK</a>
-          <a href="/download/SWEEPRVPN.apk" download="SWEEPRVPN.apk" class="btn btn-ghost bg-white border border-emerald-300 w-full justify-center py-2.5 text-xs font-extrabold text-emerald-900">⬇️ Direct Download SWEEPRVPN.apk</a>
+          <a href="https://play.google.com/store/apps/details?id=com.sweepr.vpn" target="_blank" rel="noopener" class="btn btn-go w-full justify-center py-2.5 text-xs font-extrabold">Get it on Google Play</a>
+          <a href="${chromeIntentLink}" class="btn btn-ghost bg-white border border-emerald-300 w-full justify-center py-2.5 text-xs font-extrabold text-emerald-900">🌐 Open in Chrome &amp; Install APK</a>
+          <a href="/download/SWEEPRVPN.apk" download="SWEEPRVPN.apk" class="btn btn-ghost bg-white border border-gray-200 w-full justify-center py-2 text-xs font-bold text-gray-700">⬇️ Direct Download SWEEPRVPN.apk</a>
         </div>
       </div>`
     : '';
@@ -3395,19 +3396,22 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
     ${browserAssistBanner}
 
     <div class="space-y-3 text-left mb-6">
-      ${(osType === 'ios' || osType === 'mac') ? '' : `<a href="/download/SWEEPRVPN.apk" download="SWEEPRVPN.apk" rel="nofollow" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'android' ? 'border-2 border-emerald-500 bg-emerald-50/40' : 'border-gray-200 bg-white'} hover:border-emerald-400 transition-all no-underline text-gray-900">
+      ${(osType === 'ios' || osType === 'mac') ? '' : `<a href="https://play.google.com/store/apps/details?id=com.sweepr.vpn" target="_blank" rel="noopener" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'android' ? 'border-2 border-emerald-500 bg-emerald-50/60' : 'border-emerald-300 bg-emerald-50/40'} hover:border-emerald-500 transition-all no-underline text-gray-900">
+        <div class="flex items-center gap-3">
+          <svg width="18" height="18" viewBox="0 0 24 24" class="shrink-0 text-emerald-600" fill="currentColor" aria-hidden="true"><path d="M3.609 1.814L13.792 12 3.61 22.186a1.75 1.75 0 0 1-.61-1.335V3.149c0-.517.224-.998.609-1.335zM14.853 13.061l2.893 2.893-10.22 5.839 7.327-8.732zm3.922-2.24l2.444 1.396a1.25 1.25 0 0 1 0 2.166l-2.444 1.396-3.164-3.164 3.164-1.794zM7.526 2.207l10.22 5.839-2.893 2.893-7.327-8.732z"/></svg>
+          <div>
+            <div class="font-extrabold text-sm text-gray-900">Get it on Google Play (Android)</div>
+            <div class="text-xs text-gray-600">Official Play Store Release &bull; Automatic Updates &amp; Play Protect</div>
+          </div>
+        </div>
+        <span class="btn btn-go text-xs py-2 px-3 shrink-0">Google Play &rarr;</span>
+      </a>
+      <a href="/download/SWEEPRVPN.apk" download="SWEEPRVPN.apk" rel="nofollow" class="flex items-center justify-between gap-3 p-4 rounded-xl border border-gray-200 bg-white hover:border-emerald-400 transition-all no-underline text-gray-900">
         <div>
-          <div class="font-bold text-sm text-gray-900">📱 Android Phone &amp; Tablet Installer (.apk)</div>
-          <div class="text-xs text-gray-500">v2.6.0 &bull; ${apkMeta.sizeLabel} &bull; SWEEPRVPN.apk</div>
+          <div class="font-bold text-sm text-gray-900">Direct Android Sideload (.apk)</div>
+          <div class="text-xs text-gray-500">v2.6.0 &bull; ${apkMeta.sizeLabel} &bull; SWEEPRVPN.apk (SHA-256 verified)</div>
         </div>
         <span class="btn btn-go text-xs py-2 px-3 shrink-0">Download .apk</span>
-      </a>
-      <a href="https://play.google.com/apps/testing/com.sweepr.vpn" target="_blank" rel="noopener" class="flex items-center justify-between gap-3 p-4 rounded-xl border border-emerald-300 bg-emerald-50/60 hover:border-emerald-500 transition-all no-underline text-gray-900">
-        <div>
-          <div class="font-extrabold text-sm text-gray-900">▶️ Join Official Google Play Beta</div>
-          <div class="text-xs text-gray-600">Opt in on Google Play &bull; Automatic Play Store Updates</div>
-        </div>
-        <span class="btn btn-go text-xs py-2 px-3 shrink-0">Join on Play Store &rarr;</span>
       </a>`}
       <a href="/download/SWEEPRVPN.mobileconfig" rel="nofollow" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'ios' ? 'border-2 border-emerald-500 bg-emerald-50/40' : 'border-gray-200 bg-white'} hover:border-emerald-400 transition-all no-underline text-gray-900">
         <div>
