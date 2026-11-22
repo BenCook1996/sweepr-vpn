@@ -1,14 +1,14 @@
 {
-  "lastRunAt": "2026-11-22T01:16:04.975Z",
+  "lastRunAt": "2026-11-22T13:00:58.058Z",
   "liveSiteReachable": true,
   "liveHttpStatus": 200,
-  "liveSiteRttMs": 290,
+  "liveSiteRttMs": 395,
   "liveVpnServersEndpointReachable": true,
   "liveVpnFleetSummary": {
     "totalServers": 8,
     "onlineServers": 8,
     "totalConnectedDevices": 9,
-    "apiLatencyMs": 642
+    "apiLatencyMs": 579
   },
   "liveVpnServers": [
     {
@@ -21,8 +21,8 @@
       "endpoint_host": "70.34.208.107",
       "public_key": "ct1BAFzi8DpqWKh7P+vsxF9i+EZXwynwY0oQeGVXgkc=",
       "devices": 1,
-      "probe_ms": 230,
-      "p99_ms": 237
+      "probe_ms": 203,
+      "p99_ms": 229
     },
     {
       "code": "UK-LON-01",
@@ -47,8 +47,8 @@
       "endpoint_host": "80.240.20.239",
       "public_key": "HCw1A7oSzYRKHyiVWwPYLHcxfnyr6jcm8o04Vcr9HVY=",
       "devices": 1,
-      "probe_ms": 186,
-      "p99_ms": 199
+      "probe_ms": 185,
+      "p99_ms": 195
     },
     {
       "code": "US-LAX-01",
@@ -60,8 +60,8 @@
       "endpoint_host": "45.32.85.162",
       "public_key": "8CEzDZ+HKzVVmGfL8bFJ8D5jpZV1deHXXvFRzAu6WAU=",
       "devices": 1,
-      "probe_ms": 123,
-      "p99_ms": 124
+      "probe_ms": 115,
+      "p99_ms": 135
     },
     {
       "code": "NL-AMS-01",
@@ -73,8 +73,8 @@
       "endpoint_host": "95.179.181.53",
       "public_key": "WONzcBn2/a4RAwUeFSEu/p/Tld8OQ71Wd666/PnlpCo=",
       "devices": 1,
-      "probe_ms": 169,
-      "p99_ms": 205
+      "probe_ms": 183,
+      "p99_ms": 204
     },
     {
       "code": "US-NYC-01",
@@ -86,7 +86,7 @@
       "endpoint_host": "45.77.109.112",
       "public_key": "72v4iEmv1Goqbkb99qxeam+Znu7vnbnYKpOW+I0KsBQ=",
       "devices": 2,
-      "probe_ms": 15,
+      "probe_ms": 14,
       "p99_ms": 16
     },
     {
@@ -99,8 +99,8 @@
       "endpoint_host": "104.156.239.162",
       "public_key": "3JDINvFBQNxcxoxVJKVSXj8KSYoE17JLzHFGkXw7OmM=",
       "devices": 1,
-      "probe_ms": 313,
-      "p99_ms": 355
+      "probe_ms": 350,
+      "p99_ms": 351
     },
     {
       "code": "SG-SIN-01",
@@ -112,8 +112,8 @@
       "endpoint_host": "149.28.157.142",
       "public_key": "XgLImPsOZpmcixSdtdlIf7Az+sDvsNNMqVVhyb96aWE=",
       "devices": 1,
-      "probe_ms": 481,
-      "p99_ms": 1468
+      "probe_ms": 456,
+      "p99_ms": 502
     }
   ],
   "wireguardFleetCount": 8,

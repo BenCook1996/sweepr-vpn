@@ -678,9 +678,9 @@ Daily automated operational verification for the SWEEPR WireGuard 10Gbps server 
 
 ## 2026-11-22 — Daily WireGuard Node Health & Smart-TV ACR Blocklist Audit
 
-- **Timestamp**: `2026-11-22T01:16:04.975Z`
+- **Timestamp**: `2026-11-22T13:00:58.058Z`
 - **WireGuard Production Fleet Health**: **8/8 POPs Online (100%)** | Active Devices: `9`
-- **Storefront Reachability**: HTTP `200` (`290ms` RTT)
+- **Storefront Reachability**: HTTP `200` (`395ms` RTT)
 - **Smart-TV ACR Sinkhole Blocklist**: `65` Verified Domains across `8` OS families (SHA-1: `9526d5e56139`)
 - **Strict Compliance Rules**:
   - `NEVER BLOCK STREAMING PLAYBACK CDNs`: **PASS** (0 false positives; Netflix, BBC, ITV, Channel 4, YouTube, Disney+, Prime Video unblocked)
@@ -689,14 +689,14 @@ Daily automated operational verification for the SWEEPR WireGuard 10Gbps server 
 ### Live WireGuard Production POPs
 | POP Code | City | Country | Online Status | Probe Latency | p99 Latency | Connected Devices |
 |:---|:---|:---:|:---:|:---:|:---:|:---:|
-| **SE-STO-01** | Stockholm | Sweden (SE) | 🟢 Online | `230ms` | `237ms` | `1` |
+| **SE-STO-01** | Stockholm | Sweden (SE) | 🟢 Online | `203ms` | `229ms` | `1` |
 | **UK-LON-01** | London | United Kingdom (GB) | 🟢 Online | `161ms` | `161ms` | `1` |
-| **DE-FRA-01** | Frankfurt | Germany (DE) | 🟢 Online | `186ms` | `199ms` | `1` |
-| **US-LAX-01** | Los Angeles | United States (US) | 🟢 Online | `123ms` | `124ms` | `1` |
-| **NL-AMS-01** | Amsterdam | Netherlands (NL) | 🟢 Online | `169ms` | `205ms` | `1` |
-| **US-NYC-01** | New York | United States (US) | 🟢 Online | `15ms` | `16ms` | `2` |
-| **JP-TYO-01** | Tokyo | Japan (JP) | 🟢 Online | `313ms` | `355ms` | `1` |
-| **SG-SIN-01** | Singapore | Singapore (SG) | 🟢 Online | `481ms` | `1468ms` | `1` |
+| **DE-FRA-01** | Frankfurt | Germany (DE) | 🟢 Online | `185ms` | `195ms` | `1` |
+| **US-LAX-01** | Los Angeles | United States (US) | 🟢 Online | `115ms` | `135ms` | `1` |
+| **NL-AMS-01** | Amsterdam | Netherlands (NL) | 🟢 Online | `183ms` | `204ms` | `1` |
+| **US-NYC-01** | New York | United States (US) | 🟢 Online | `14ms` | `16ms` | `2` |
+| **JP-TYO-01** | Tokyo | Japan (JP) | 🟢 Online | `350ms` | `351ms` | `1` |
+| **SG-SIN-01** | Singapore | Singapore (SG) | 🟢 Online | `456ms` | `502ms` | `1` |
 
 ### Core Bare-Metal 10Gbps Reference Configurations & MTU Presets
 | POP ID | City | Endpoint | Ports | Capacity | Baseline RTT | MTU Presets (Std / PPPoE / CGNAT) |
