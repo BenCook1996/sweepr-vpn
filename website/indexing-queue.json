@@ -1,5 +1,5 @@
 {
-  "pending_urls": [],
+  "indexnow_key": "e159f60b7cbd19abe8a6c1c8d84bb2b7",
   "gsc_requested": [
     "https://sweeprvpn.com/de/tools/leak-test",
     "https://sweeprvpn.com/pt-br/tools/leak-test",
@@ -54,11 +54,11 @@
     "https://sweeprvpn.com/solutions/hotel-captive-portal-wifi-p2p-port-forwarding",
     "https://sweeprvpn.com/solutions/community-fibre-london-p2p-port-forwarding"
   ],
-  "indexnow_key": "e159f60b7cbd19abe8a6c1c8d84bb2b7",
   "bing_requested": [],
   "directory_forms_submitted": [],
   "last_indexnow_ping": "2026-11-20T05:34:19.904Z",
-  "last_sitemap_ping": "2026-11-22T13:01:05.708Z",
+  "last_sitemap_ping": "2026-11-23T15:38:44.089Z",
+  "pending_urls": [],
   "indexnow_submitted_at": {
     "https://sweeprvpn.com/solutions/talktalk-p2p-port-forwarding": "2026-11-17T10:14:37.370Z",
     "https://sweeprvpn.com/setup/gl-inet-travel-router": "2026-11-17T10:14:37.370Z",
@@ -480,7 +480,7 @@
     "totalSitemapUrls": 223
   },
   "last_audit": {
-    "date": "2026-11-22",
+    "date": "2026-11-23",
     "totalUrls": 93,
     "pendingDeltaUrls": 0
   }

@@ -1,14 +1,14 @@
 {
-  "lastRunAt": "2026-11-22T13:00:58.058Z",
+  "lastRunAt": "2026-11-23T15:38:37.429Z",
   "liveSiteReachable": true,
   "liveHttpStatus": 200,
-  "liveSiteRttMs": 395,
+  "liveSiteRttMs": 243,
   "liveVpnServersEndpointReachable": true,
   "liveVpnFleetSummary": {
     "totalServers": 8,
     "onlineServers": 8,
-    "totalConnectedDevices": 9,
-    "apiLatencyMs": 579
+    "totalConnectedDevices": 1,
+    "apiLatencyMs": 557
   },
   "liveVpnServers": [
     {
@@ -20,9 +20,9 @@
       "endpoint": "70.34.208.107:51820",
       "endpoint_host": "70.34.208.107",
       "public_key": "ct1BAFzi8DpqWKh7P+vsxF9i+EZXwynwY0oQeGVXgkc=",
-      "devices": 1,
-      "probe_ms": 203,
-      "p99_ms": 229
+      "devices": 0,
+      "probe_ms": 218,
+      "p99_ms": 249
     },
     {
       "code": "UK-LON-01",
@@ -33,9 +33,9 @@
       "endpoint": "78.141.205.68:51820",
       "endpoint_host": "78.141.205.68",
       "public_key": "q6ks6F8CH/5XNM4GfjcDq6cCravVDQpqo+oHxsPqamI=",
-      "devices": 1,
-      "probe_ms": 161,
-      "p99_ms": 161
+      "devices": 0,
+      "probe_ms": 156,
+      "p99_ms": 192
     },
     {
       "code": "DE-FRA-01",
@@ -46,9 +46,9 @@
       "endpoint": "80.240.20.239:51820",
       "endpoint_host": "80.240.20.239",
       "public_key": "HCw1A7oSzYRKHyiVWwPYLHcxfnyr6jcm8o04Vcr9HVY=",
-      "devices": 1,
-      "probe_ms": 185,
-      "p99_ms": 195
+      "devices": 0,
+      "probe_ms": 197,
+      "p99_ms": 198
     },
     {
       "code": "US-LAX-01",
@@ -59,9 +59,9 @@
       "endpoint": "45.32.85.162:51820",
       "endpoint_host": "45.32.85.162",
       "public_key": "8CEzDZ+HKzVVmGfL8bFJ8D5jpZV1deHXXvFRzAu6WAU=",
-      "devices": 1,
+      "devices": 0,
       "probe_ms": 115,
-      "p99_ms": 135
+      "p99_ms": 142
     },
     {
       "code": "NL-AMS-01",
@@ -72,9 +72,9 @@
       "endpoint": "95.179.181.53:51820",
       "endpoint_host": "95.179.181.53",
       "public_key": "WONzcBn2/a4RAwUeFSEu/p/Tld8OQ71Wd666/PnlpCo=",
-      "devices": 1,
-      "probe_ms": 183,
-      "p99_ms": 204
+      "devices": 0,
+      "probe_ms": 167,
+      "p99_ms": 202
     },
     {
       "code": "US-NYC-01",
@@ -85,9 +85,9 @@
       "endpoint": "45.77.109.112:51820",
       "endpoint_host": "45.77.109.112",
       "public_key": "72v4iEmv1Goqbkb99qxeam+Znu7vnbnYKpOW+I0KsBQ=",
-      "devices": 2,
-      "probe_ms": 14,
-      "p99_ms": 16
+      "devices": 1,
+      "probe_ms": 15,
+      "p99_ms": 17
     },
     {
       "code": "JP-TYO-01",
@@ -98,9 +98,9 @@
       "endpoint": "104.156.239.162:51820",
       "endpoint_host": "104.156.239.162",
       "public_key": "3JDINvFBQNxcxoxVJKVSXj8KSYoE17JLzHFGkXw7OmM=",
-      "devices": 1,
-      "probe_ms": 350,
-      "p99_ms": 351
+      "devices": 0,
+      "probe_ms": 307,
+      "p99_ms": 365
     },
     {
       "code": "SG-SIN-01",
@@ -111,9 +111,9 @@
       "endpoint": "149.28.157.142:51820",
       "endpoint_host": "149.28.157.142",
       "public_key": "XgLImPsOZpmcixSdtdlIf7Az+sDvsNNMqVVhyb96aWE=",
-      "devices": 1,
-      "probe_ms": 456,
-      "p99_ms": 502
+      "devices": 0,
+      "probe_ms": 500,
+      "p99_ms": 500
     }
   ],
   "wireguardFleetCount": 8,

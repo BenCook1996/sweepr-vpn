@@ -31876,7 +31876,7 @@
     "dailyNewPillarCap": 2
   },
   "auditSummary": {
-    "auditedAt": "2026-11-22T15:51:54.829Z",
+    "auditedAt": "2026-11-23T15:38:42.683Z",
     "assertionsPassed": "10/10 PASS",
     "autoRepairsApplied": 0,
     "repairLog": []
@@ -31923,15 +31923,15 @@
         "timeToRankMultiplier": 0.8,
         "playbookPriorityBoost": 3,
         "measuredSampleSize": 2,
-        "avgPositionLift": 17.7,
-        "avgImpressionsLift28d": 14
+        "avgPositionLift": 17.8,
+        "avgImpressionsLift28d": 13
       },
       "HARDWARE_WIREGUARD_SETUP": {
         "volumeMultiplier": 1.08,
         "timeToRankMultiplier": 0.86,
         "playbookPriorityBoost": 2,
         "measuredSampleSize": 7,
-        "avgPositionLift": 3.4,
+        "avgPositionLift": 4.1,
         "avgImpressionsLift28d": 27
       },
       "SMART_TV_ACR_SHIELD": {
@@ -31939,8 +31939,8 @@
         "timeToRankMultiplier": 0.92,
         "playbookPriorityBoost": 1,
         "measuredSampleSize": 2,
-        "avgPositionLift": 4.3,
-        "avgImpressionsLift28d": 15
+        "avgPositionLift": 4.1,
+        "avgImpressionsLift28d": 13
       }
     },
     "playbookSummaries": [
@@ -32010,8 +32010,8 @@
         "volumeMultiplier": 1.12,
         "timeToRankMultiplier": 0.8,
         "playbookPriorityBoost": 3,
-        "avgPositionLift": 17.7,
-        "avgImpressionsLift28d": 14,
+        "avgPositionLift": 17.8,
+        "avgImpressionsLift28d": 13,
         "strategyAdjustment": "MAINTAIN_HIGH_PRIORITY — Verified Nov 9 GSC: /alternatives/totalvpn jumped Pos 20.8 -> 2.8 in 7d (13 impr, 9 in last 7d)."
       },
       {
@@ -32024,7 +32024,7 @@
         "volumeMultiplier": 1.08,
         "timeToRankMultiplier": 0.86,
         "playbookPriorityBoost": 2,
-        "avgPositionLift": 3.4,
+        "avgPositionLift": 4.1,
         "avgImpressionsLift28d": 27,
         "strategyAdjustment": "FOCUS_ON_NEW_2026_MODELS — Verified Nov 9 GSC: GL.iNet #1 Impression Driver (93 impr, 1 click), Steam Deck Pos 5.4 (7d), Nvidia Shield Pos 5.4."
       },
@@ -32038,8 +32038,8 @@
         "volumeMultiplier": 1.05,
         "timeToRankMultiplier": 0.92,
         "playbookPriorityBoost": 1,
-        "avgPositionLift": 4.3,
-        "avgImpressionsLift28d": 15,
+        "avgPositionLift": 4.1,
+        "avgImpressionsLift28d": 13,
         "strategyAdjustment": "ENRICH_EXISTING_PILLARS — Verified Nov 9 GSC: Samsung ACR 49 impr (Pos 13.1), LG ACR jumped Pos 27.2 -> 8.5 (7d), Roku/Vizio Pos 7.3."
       }
     ]
