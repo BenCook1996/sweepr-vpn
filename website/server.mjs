@@ -2861,6 +2861,8 @@ export const EXACT_CANONICAL_REDIRECTS = {
   // P0 Tracked Keyword & Legacy Aliases
   '/guides/isp-throttling': '/guides/fix-isp-dns-hijacking-and-throttling',
   '/tools/dns-leak-test': '/tools/leak-test',
+  '/tools/smart-tv-acr-test': '/tools/smart-tv-tracking-check',
+  '/tools/wireguard-config-generator': '/setup',
   '/vpn/windows': '/setup/windows-11-wireguard-vpn'
 };
 
@@ -2897,6 +2899,45 @@ const SORTED_SOLUTIONS_PREFIXES = [
   { prefix: 'telstra-nbn', target: '/solutions/telstra-nbn-australia-gaming-packet-loss' }
 ].sort((a, b) => b.prefix.length - a.prefix.length);
 
+const NON_INDEXABLE_ROUTE_ALIASES = new Set(['/order', '/checkout', '/login', '/dashboard']);
+
+const ROUTE_ALIASES = {
+  '/': 'index.html',
+  '/de': 'de-index.html',
+  '/fr': 'fr-index.html',
+  '/es': 'es-index.html',
+  '/pricing': 'pricing.html',
+  '/de/pricing': 'de-pricing.html',
+  '/fr/pricing': 'fr-pricing.html',
+  '/es/pricing': 'es-pricing.html',
+  '/order': 'order.html',
+  '/checkout': 'order.html',
+  '/login': 'login.html',
+  '/dashboard': 'dashboard.html',
+  '/refund': 'refund.html',
+  '/terms': 'terms.html',
+  '/privacy': 'privacy.html',
+  '/warrant-canary': 'warrant-canary.html',
+  '/support': 'support.html',
+  '/guides': 'guides.html',
+  '/setup': 'setup.html',
+  '/solutions': 'solutions.html',
+  '/vs': 'vs.html',
+  '/vs/totalvpn': 'vs/totalvpn.html',
+  '/alternatives/totalvpn': 'alternatives-totalvpn.html',
+  '/tools/leak-test': 'leak-test.html',
+  '/tools/isp-throttling-test': 'isp-throttling-test.html',
+  '/tools/vpn-renewal-price-checker': 'vpn-renewal-price-checker.html',
+  '/tools/smart-tv-tracking-check': 'smart-tv-tracking-check.html',
+  '/tools/whats-on-my-wifi': 'whats-on-my-wifi.html',
+  '/public-wifi': 'public-wifi.html',
+  '/de/tools/leak-test': 'de-leak-test.html',
+  '/fr/tools/leak-test': 'fr-leak-test.html',
+  '/es/tools/leak-test': 'es-leak-test.html',
+  '/pt-br/tools/leak-test': 'pt-br-leak-test.html',
+  '/sv/tools/leak-test': 'sv-leak-test.html'
+};
+
 /**
  * Resolves deterministic canonical 301 redirect targets for legacy,
  * consolidated, and retired URLs in strictly 1 hop before static file lookup.
@@ -2922,6 +2963,10 @@ export function resolveCanonical301(rawPath) {
   if (isHtml) {
     if (CANONICAL_REDIRECTS[cleanPath]) return CANONICAL_REDIRECTS[cleanPath];
     if (EXACT_CANONICAL_REDIRECTS[cleanPath]) return EXACT_CANONICAL_REDIRECTS[cleanPath];
+    if (cleanPath === '/download') return '/download';
+    if (ROUTE_ALIASES[cleanPath] && cleanPath !== '/' && !NON_INDEXABLE_ROUTE_ALIASES.has(cleanPath)) {
+      return cleanPath;
+    }
   }
 
   // Smart-TV ACR Pattern: Any /solutions/*-smart-tv-acr-blocking -> Samsung ACR guide
@@ -2987,45 +3032,6 @@ export function resolveCanonical301(rawPath) {
 
   return null;
 }
-
-const ROUTE_ALIASES = {
-  '/': 'index.html',
-  '/de': 'de-index.html',
-  '/fr': 'fr-index.html',
-  '/es': 'es-index.html',
-  '/pricing': 'pricing.html',
-  '/de/pricing': 'de-pricing.html',
-  '/fr/pricing': 'fr-pricing.html',
-  '/es/pricing': 'es-pricing.html',
-  '/order': 'order.html',
-  '/checkout': 'order.html',
-  '/login': 'login.html',
-  '/dashboard': 'dashboard.html',
-  '/refund': 'refund.html',
-  '/terms': 'terms.html',
-  '/privacy': 'privacy.html',
-  '/warrant-canary': 'warrant-canary.html',
-  '/support': 'support.html',
-  '/guides': 'guides.html',
-  '/setup': 'setup.html',
-  '/solutions': 'solutions.html',
-  '/vs': 'vs.html',
-  '/vs/totalvpn': 'vs/totalvpn.html',
-  '/alternatives/totalvpn': 'alternatives-totalvpn.html',
-  '/tools/leak-test': 'leak-test.html',
-  '/tools/isp-throttling-test': 'isp-throttling-test.html',
-  '/tools/vpn-renewal-price-checker': 'vpn-renewal-price-checker.html',
-  '/tools/smart-tv-tracking-check': 'smart-tv-tracking-check.html',
-  '/tools/smart-tv-acr-test': 'smart-tv-tracking-check.html',
-  '/tools/whats-on-my-wifi': 'whats-on-my-wifi.html',
-  '/tools/wireguard-config-generator': 'setup.html',
-  '/public-wifi': 'public-wifi.html',
-  '/de/tools/leak-test': 'de-leak-test.html',
-  '/fr/tools/leak-test': 'fr-leak-test.html',
-  '/es/tools/leak-test': 'es-leak-test.html',
-  '/pt-br/tools/leak-test': 'pt-br-leak-test.html',
-  '/sv/tools/leak-test': 'sv-leak-test.html'
-};
 
 function readRawBody(req, maxBytes = MAX_BODY_BYTES) {
   return new Promise((resolve, reject) => {
@@ -3161,13 +3167,7 @@ function buildIosWebClipMobileconfig(req) {
   const baseOrigin = PUBLIC_URL.includes('localhost') && req?.headers?.host
     ? `${req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http'}://${req.headers.host}`
     : PUBLIC_URL;
-  let iconBase64 = '';
-  try {
-    const iconPath = path.join(__dirname, 'favicon.png');
-    if (fs.existsSync(iconPath)) {
-      iconBase64 = fs.readFileSync(iconPath).toString('base64');
-    }
-  } catch {}
+  const iconBase64 = getCachedFaviconBase64();
   return `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -3258,6 +3258,43 @@ function renderStandaloneIosVpnApp() {
 }
 
 const INSTALLER_SHA256_CACHE = new Map();
+const STATIC_ASSET_VERSION_CACHE = new Map();
+const FAVICON_B64_CACHE = { mtimeMs: 0, b64: '' };
+const MOBILECONFIG_META_CACHE = new Map();
+const STATIC_COMPRESSED_CACHE = new Map();
+const MAX_STATIC_COMPRESSED_CACHE = 160;
+
+function getStaticAssetVersion(filename) {
+  const abs = path.join(__dirname, filename);
+  try {
+    const stat = fs.statSync(abs);
+    const cached = STATIC_ASSET_VERSION_CACHE.get(filename);
+    if (cached && cached.mtimeMs === stat.mtimeMs && cached.size === stat.size) {
+      return cached.v;
+    }
+    const v = crypto.createHash('sha1').update(fs.readFileSync(abs)).digest('hex').slice(0, 8);
+    STATIC_ASSET_VERSION_CACHE.set(filename, { mtimeMs: stat.mtimeMs, size: stat.size, v });
+    return v;
+  } catch {
+    return '1';
+  }
+}
+
+function getCachedFaviconBase64() {
+  try {
+    const iconPath = path.join(__dirname, 'favicon.png');
+    if (!fs.existsSync(iconPath)) return '';
+    const stat = fs.statSync(iconPath);
+    if (FAVICON_B64_CACHE.b64 && FAVICON_B64_CACHE.mtimeMs === stat.mtimeMs) {
+      return FAVICON_B64_CACHE.b64;
+    }
+    FAVICON_B64_CACHE.b64 = fs.readFileSync(iconPath).toString('base64');
+    FAVICON_B64_CACHE.mtimeMs = stat.mtimeMs;
+    return FAVICON_B64_CACHE.b64;
+  } catch {
+    return '';
+  }
+}
 
 function getBinaryMeta(filename) {
   const cached = INSTALLER_SHA256_CACHE.get(filename);
@@ -3292,13 +3329,23 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
   const exeMeta = getBinaryMeta('SWEEPRVPN.exe');
   const dmgMeta = getBinaryMeta('SWEEPRVPN.dmg');
   const apkMeta = getBinaryMeta('SWEEPRVPN.apk');
-  const mobileconfigBuf = Buffer.from(buildIosWebClipMobileconfig({ headers: { host: rawHost || 'sweeprvpn.com', 'x-forwarded-proto': 'https' } }), 'utf8');
-  const mobileconfigMeta = {
-    filename: 'SWEEPRVPN.mobileconfig',
-    bytes: mobileconfigBuf.length,
-    sha256: crypto.createHash('sha256').update(mobileconfigBuf).digest('hex'),
-    sizeLabel: `${(mobileconfigBuf.length / 1024).toFixed(1)} KB (${mobileconfigBuf.length.toLocaleString('en-US')} bytes)`
-  };
+  getCachedFaviconBase64();
+  const mcfgCacheKey = `${rawHost || 'sweeprvpn.com'}:${FAVICON_B64_CACHE.mtimeMs}`;
+  let mobileconfigMeta = MOBILECONFIG_META_CACHE.get(mcfgCacheKey);
+  if (!mobileconfigMeta) {
+    const mobileconfigBuf = Buffer.from(buildIosWebClipMobileconfig({ headers: { host: rawHost || 'sweeprvpn.com', 'x-forwarded-proto': 'https' } }), 'utf8');
+    mobileconfigMeta = {
+      filename: 'SWEEPRVPN.mobileconfig',
+      bytes: mobileconfigBuf.length,
+      sha256: crypto.createHash('sha256').update(mobileconfigBuf).digest('hex'),
+      sizeLabel: `${(mobileconfigBuf.length / 1024).toFixed(1)} KB (${mobileconfigBuf.length.toLocaleString('en-US')} bytes)`
+    };
+    setBoundedMap(MOBILECONFIG_META_CACHE, mcfgCacheKey, mobileconfigMeta, 64);
+  }
+  const twVer = getStaticAssetVersion('tailwind.min.css');
+  const cssVer = getStaticAssetVersion('style.css');
+  const pricingVer = getStaticAssetVersion('pricing-config.js');
+  const navVer = getStaticAssetVersion('nav.js');
 
   const browserAssistBanner = isNonSafariIos
     ? `<div class="mb-5 p-4 rounded-2xl border-2 border-emerald-400 bg-emerald-50/90 text-left space-y-2.5">
@@ -3378,10 +3425,10 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
     publisher: { '@type': 'Organization', name: 'SWEEPR VPN Inc.', url: 'https://sweeprvpn.com/' },
     offers: { '@type': 'AggregateOffer', priceCurrency: 'GBP', lowPrice: '1.99', highPrice: '74.99', offerCount: '3' }
   })}</script>
-  <link rel="stylesheet" href="/tailwind.min.css?v=1">
-  <link rel="stylesheet" href="/style.css">
-  <script src="/pricing-config.js?v=3" defer></script>
-  <script src="/nav.js" defer></script>
+  <link rel="stylesheet" href="/tailwind.min.css?v=${twVer}">
+  <link rel="stylesheet" href="/style.css?v=${cssVer}">
+  <script src="/pricing-config.js?v=${pricingVer}" defer></script>
+  <script src="/nav.js?v=${navVer}" defer></script>
 </head>
 <body class="text-gray-800 flex flex-col items-center justify-center min-h-screen p-4 overflow-x-hidden">
   <main class="w-full max-w-lg">
@@ -3472,6 +3519,12 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
         <span>&bull;</span>
         <a href="/tools/isp-throttling-test" class="hover:text-emerald-600">Free ISP Speed Checker</a>
         <span>&bull;</span>
+        <a href="/tools/smart-tv-tracking-check" class="hover:text-emerald-600">Smart-TV ACR Checker</a>
+        <span>&bull;</span>
+        <a href="/tools/whats-on-my-wifi" class="hover:text-emerald-600">What's on My Wi-Fi?</a>
+        <span>&bull;</span>
+        <a href="/tools/vpn-renewal-price-checker" class="hover:text-emerald-600">Renewal Price Calculator</a>
+        <span>&bull;</span>
         <a href="/setup" class="hover:text-emerald-600">Router &amp; Device Setup</a>
         <span>&bull;</span>
         <a href="/guides" class="hover:text-emerald-600">Privacy Guides</a>
@@ -3514,7 +3567,7 @@ function renderCheckoutSuccessPage(acc, isCancelled = false, isPopup = false) {
   <link rel="icon" type="image/svg+xml" href="/logo-emerald.svg?v=5">
   <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png?v=5">
   <link rel="shortcut icon" href="/favicon.ico?v=5">
-  <link rel="stylesheet" href="/tailwind.min.css?v=1">
+  <link rel="stylesheet" href="/tailwind.min.css?v=${getStaticAssetVersion('tailwind.min.css')}">
   ${
     isPopup
       ? `<script>
@@ -3569,7 +3622,7 @@ function renderCheckoutSuccessPage(acc, isCancelled = false, isPopup = false) {
   <link rel="icon" type="image/svg+xml" href="/logo-emerald.svg?v=5">
   <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png?v=5">
   <link rel="shortcut icon" href="/favicon.ico?v=5">
-  <link rel="stylesheet" href="/tailwind.min.css?v=1">
+  <link rel="stylesheet" href="/tailwind.min.css?v=${getStaticAssetVersion('tailwind.min.css')}">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -3751,6 +3804,31 @@ const server = http.createServer(async (req, res) => {
         ...COMMON_SECURITY_HEADERS
       });
       return res.end();
+    }
+    const isNonApiWebPath =
+      !pathname.startsWith('/api/') &&
+      !pathname.startsWith('/.well-known/') &&
+      !/SWEEPRVPN\.(exe|dmg|apk|mobileconfig)$/i.test(pathname);
+    if (isNonApiWebPath) {
+      const lowerPath = pathname.toLowerCase();
+      const hasTrailingSlash = urlObj.pathname.length > 1 && urlObj.pathname.endsWith('/');
+      const hasUppercase = lowerPath !== pathname;
+      if (hasTrailingSlash || hasUppercase) {
+        const htmlCandidate = !path.extname(lowerPath) ? path.resolve(__dirname, '.' + lowerPath + '.html') : '';
+        const isKnownActiveRoute =
+          lowerPath === '/download' ||
+          lowerPath === '/ios-app' ||
+          Boolean(ROUTE_ALIASES[lowerPath]) ||
+          Boolean(htmlCandidate && htmlCandidate.startsWith(SAFE_STATIC_ROOT) && fs.existsSync(htmlCandidate));
+        if (isKnownActiveRoute) {
+          res.writeHead(301, {
+            Location: lowerPath + (urlObj.search || ''),
+            'Cache-Control': 'public, max-age=3600',
+            ...COMMON_SECURITY_HEADERS
+          });
+          return res.end();
+        }
+      }
     }
   }
 
@@ -8890,29 +8968,57 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  fs.readFile(filePath, (err, rawContent) => {
-    if (err) {
+  fs.stat(filePath, (statErr, stats) => {
+    if (statErr || !stats.isFile()) {
       res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8', 'X-Robots-Tag': 'noindex, nofollow', ...COMMON_SECURITY_HEADERS });
       res.end('<h1>404 - Page Not Found</h1><p><a href="/">Return to SWEEPR VPN Home</a></p>');
       return;
     }
-    let content = rawContent;
-    if (ext === '.html' && !isOrderRoute && !isLoginRoute) {
-      let htmlStr = rawContent.toString('utf8');
-      const isAppEmbed = urlObj.searchParams.get('app') === '1';
-      // If a pSEO sub-variant on disk is consolidated (marked noindex, follow with a canonical pointing
-      // to a different parent pillar URL), serve a clean HTTP 301 Moved Permanently redirect to the parent
-      // pillar URL so Google consolidates link/crawl equity without 'Crawled - currently not indexed' or
-      // conflicting noindex + rel="canonical" signals.
-      if (
-        /^\/(solutions|setup|vs|guides)\//i.test(pathname) &&
-        /<meta\s+name=["']robots["']\s+content=["'][^"']*noindex/i.test(htmlStr)
-      ) {
-        const canonMatch = htmlStr.match(/<link\s+rel=["']canonical["']\s+href=["']https?:\/\/sweeprvpn\.com(\/[^"']*)["']/i);
-        const reqClean = pathname.replace(/\.html$/i, '');
-        if (canonMatch && canonMatch[1] && canonMatch[1] !== reqClean) {
+
+    const isAppEmbed = ext === '.html' && !isOrderRoute && !isLoginRoute && urlObj.searchParams.get('app') === '1';
+    const cacheKey = `${filePath}:${stats.mtimeMs}:${stats.size}`;
+
+    const serveBuffer = (rawBuf, cacheEntry = null) => {
+      let content = rawBuf;
+      let redirectLocation = cacheEntry?.redirect301 ?? null;
+
+      if (ext === '.html' && !isOrderRoute && !isLoginRoute) {
+        if (!cacheEntry || isAppEmbed) {
+          let htmlStr = rawBuf.toString('utf8');
+          if (
+            /^\/(solutions|setup|vs|guides)\//i.test(pathname) &&
+            /<meta\s+name=["']robots["']\s+content=["'][^"']*noindex/i.test(htmlStr)
+          ) {
+            const canonMatch = htmlStr.match(/<link\s+rel=["']canonical["']\s+href=["']https?:\/\/sweeprvpn\.com(\/[^"']*)["']/i);
+            const reqClean = pathname.replace(/\.html$/i, '');
+            if (canonMatch && canonMatch[1] && canonMatch[1] !== reqClean) {
+              redirectLocation = canonMatch[1];
+              if (cacheEntry) cacheEntry.redirect301 = redirectLocation;
+            }
+          }
+          if (redirectLocation) {
+            res.writeHead(301, {
+              Location: redirectLocation,
+              'Cache-Control': 'public, max-age=3600',
+              ...COMMON_SECURITY_HEADERS
+            });
+            res.end();
+            return;
+          }
+          if (isAppEmbed) {
+            htmlStr = htmlStr
+              .replace(/<link[^>]*googletagmanager\.com[^>]*>\s*/gi, '')
+              .replace(/<script[^>]*googletagmanager\.com[^>]*>[\s\S]*?<\/script>/gi, '')
+              .replace(/<script[^>]*>[\s\S]*?gtag\([\s\S]*?<\/script>/gi, '');
+            const appGuardCss = `<style id="sweepr-app-embed-guard">a[href*="/order"],a[href*="/pricing"],a[href*="/download"],a[href*="play.google.com"],a[href*="sweeprvpn.apk"]{display:none!important;}</style>`;
+            if (/<head[^>]*>/i.test(htmlStr)) {
+              htmlStr = htmlStr.replace(/<head[^>]*>/i, (m) => `${m}\n  ${appGuardCss}`);
+            }
+            content = Buffer.from(htmlStr, 'utf8');
+          }
+        } else if (redirectLocation) {
           res.writeHead(301, {
-            Location: canonMatch[1],
+            Location: redirectLocation,
             'Cache-Control': 'public, max-age=3600',
             ...COMMON_SECURITY_HEADERS
           });
@@ -8920,88 +9026,121 @@ self.addEventListener('fetch', e => {
           return;
         }
       }
+
+      const headers = {
+        'Content-Type': MIME_TYPES[ext] || 'application/octet-stream',
+        ...COMMON_SECURITY_HEADERS
+      };
       if (isAppEmbed) {
-        htmlStr = htmlStr
-          .replace(/<link[^>]*googletagmanager\.com[^>]*>\s*/gi, '')
-          .replace(/<script[^>]*googletagmanager\.com[^>]*>[\s\S]*?<\/script>/gi, '')
-          .replace(/<script[^>]*>[\s\S]*?gtag\([\s\S]*?<\/script>/gi, '');
-        const appGuardCss = `<style id="sweepr-app-embed-guard">a[href*="/order"],a[href*="/pricing"],a[href*="/download"],a[href*="play.google.com"],a[href*="sweeprvpn.apk"]{display:none!important;}</style>`;
-        if (/<head[^>]*>/i.test(htmlStr)) {
-          htmlStr = htmlStr.replace(/<head[^>]*>/i, (m) => `${m}\n  ${appGuardCss}`);
+        headers['X-Robots-Tag'] = 'noindex, nofollow';
+        headers['Cache-Control'] = 'no-store, no-cache, must-revalidate';
+      } else if (isOrderRoute) {
+        headers['X-Robots-Tag'] = 'noindex, follow';
+        headers['Cache-Control'] = 'no-store, no-cache, must-revalidate';
+      } else if (isLoginRoute) {
+        headers['X-Robots-Tag'] = 'noindex, nofollow';
+        headers['Cache-Control'] = 'no-store, no-cache, must-revalidate';
+      } else if (/^(prototype-|sweepr-motion-review|sweepr-vpn-scorecard|popup-alternatives|ui-ux-audit-mockups)/i.test(baseName)) {
+        headers['X-Robots-Tag'] = 'noindex, nofollow';
+        headers['Cache-Control'] = 'no-store, no-cache, must-revalidate';
+      } else if (urlObj.searchParams.has('v') && ['.css', '.js', '.svg', '.png', '.webp', '.avif', '.ico', '.woff2', '.woff', '.ttf'].includes(ext)) {
+        headers['Cache-Control'] = 'public, max-age=31536000, immutable';
+      } else if (/^(favicon|logo-|padlock-favicon|icon-)/i.test(baseName) || ext === '.ico' || ext === '.js' || ext === '.css') {
+        headers['Cache-Control'] = 'public, max-age=0, must-revalidate';
+      } else if (['.svg', '.png', '.webp', '.avif', '.woff2', '.woff', '.ttf'].includes(ext)) {
+        headers['Cache-Control'] = 'public, max-age=300, stale-while-revalidate=3600';
+      } else if (ext === '.xml' || ext === '.txt') {
+        headers['Cache-Control'] = 'public, max-age=3600, stale-while-revalidate=86400';
+        if (baseName === 'pad.xml') headers['X-Robots-Tag'] = 'noindex, follow';
+      } else if (ext === '.html') {
+        headers['Cache-Control'] = 'public, max-age=300, stale-while-revalidate=3600';
+      }
+
+      // Conditional HTTP ETag (304 Not Modified)
+      const etag =
+        (!isAppEmbed && cacheEntry?.etag) ||
+        `W/"${content.length.toString(16)}-${crypto.createHash('md5').update(content).digest('hex').slice(0, 16)}"`;
+      if (!isAppEmbed && cacheEntry && !cacheEntry.etag) cacheEntry.etag = etag;
+      headers['ETag'] = etag;
+
+      const ifNoneMatch = req.headers['if-none-match'];
+      if (ifNoneMatch && (ifNoneMatch === etag || ifNoneMatch === '*' || ifNoneMatch.includes(etag))) {
+        res.writeHead(304, headers);
+        res.end();
+        return;
+      }
+
+      // Transparent Brotli & Gzip compression (cached per file version for sub-millisecond TTFB)
+      const isHead = req.method === 'HEAD';
+      const compressible = /^(text\/|application\/(javascript|json|xml)|image\/svg\+xml)/i.test(headers['Content-Type'] || '');
+      const acceptEncoding = String(req.headers['accept-encoding'] || '');
+
+      if (compressible && content.length > 512) {
+        headers['Vary'] = 'Accept-Encoding';
+        if (/\bbr\b/i.test(acceptEncoding)) {
+          try {
+            let compressed = !isAppEmbed ? cacheEntry?.br : null;
+            if (!compressed) {
+              compressed = zlib.brotliCompressSync(content, {
+                params: { [zlib.constants.BROTLI_PARAM_QUALITY]: 9 }
+              });
+              if (!isAppEmbed && cacheEntry) cacheEntry.br = compressed;
+            }
+            headers['Content-Encoding'] = 'br';
+            headers['Content-Length'] = compressed.length;
+            res.writeHead(200, headers);
+            res.end(isHead ? undefined : compressed);
+            return;
+          } catch {}
+        } else if (/\bgzip\b/i.test(acceptEncoding)) {
+          try {
+            let compressed = !isAppEmbed ? cacheEntry?.gz : null;
+            if (!compressed) {
+              compressed = zlib.gzipSync(content, { level: 6 });
+              if (!isAppEmbed && cacheEntry) cacheEntry.gz = compressed;
+            }
+            headers['Content-Encoding'] = 'gzip';
+            headers['Content-Length'] = compressed.length;
+            res.writeHead(200, headers);
+            res.end(isHead ? undefined : compressed);
+            return;
+          } catch {}
         }
-        content = Buffer.from(htmlStr, 'utf8');
       }
-    }
-    const headers = {
-      'Content-Type': MIME_TYPES[ext] || 'application/octet-stream',
-      ...COMMON_SECURITY_HEADERS
+
+      headers['Content-Length'] = content.length;
+      res.writeHead(200, headers);
+      res.end(isHead ? undefined : content);
     };
-    if (isOrderRoute) {
-      headers['X-Robots-Tag'] = 'noindex, follow';
-      headers['Cache-Control'] = 'no-store, no-cache, must-revalidate';
-    } else if (isLoginRoute) {
-      headers['X-Robots-Tag'] = 'noindex, nofollow';
-      headers['Cache-Control'] = 'no-store, no-cache, must-revalidate';
-    } else if (/^(prototype-|sweepr-motion-review|sweepr-vpn-scorecard|popup-alternatives|ui-ux-audit-mockups)/i.test(baseName)) {
-      headers['X-Robots-Tag'] = 'noindex, nofollow';
-      headers['Cache-Control'] = 'no-store, no-cache, must-revalidate';
-    } else if (urlObj.searchParams.has('v') && ['.css', '.js', '.svg', '.png', '.webp', '.avif', '.ico', '.woff2', '.woff', '.ttf'].includes(ext)) {
-      headers['Cache-Control'] = 'public, max-age=31536000, immutable';
-    } else if (/^(favicon|logo-|padlock-favicon|icon-)/i.test(baseName) || ext === '.ico' || ext === '.js' || ext === '.css') {
-      headers['Cache-Control'] = 'public, max-age=0, must-revalidate';
-    } else if (['.svg', '.png', '.webp', '.avif', '.woff2', '.woff', '.ttf'].includes(ext)) {
-      headers['Cache-Control'] = 'public, max-age=300, stale-while-revalidate=3600';
-    } else if (ext === '.xml' || ext === '.txt') {
-      headers['Cache-Control'] = 'public, max-age=3600, stale-while-revalidate=86400';
-      if (baseName === 'pad.xml') headers['X-Robots-Tag'] = 'noindex, follow';
-    } else if (ext === '.html') {
-      headers['Cache-Control'] = 'public, max-age=300, stale-while-revalidate=3600';
+
+    const existingEntry = STATIC_COMPRESSED_CACHE.get(cacheKey);
+    if (existingEntry) {
+      return serveBuffer(existingEntry.raw, existingEntry);
     }
 
-    // Conditional HTTP ETag (304 Not Modified)
-    const etag = `W/"${content.length.toString(16)}-${crypto.createHash('md5').update(content).digest('hex').slice(0, 16)}"`;
-    headers['ETag'] = etag;
-
-    const ifNoneMatch = req.headers['if-none-match'];
-    if (ifNoneMatch && (ifNoneMatch === etag || ifNoneMatch === '*' || ifNoneMatch.includes(etag))) {
-      res.writeHead(304, headers);
-      res.end();
-      return;
-    }
-
-    // Transparent Brotli & Gzip compression for compressible static assets
-    const isHead = req.method === 'HEAD';
-    const compressible = /^(text\/|application\/(javascript|json|xml)|image\/svg\+xml)/i.test(headers['Content-Type'] || '');
-    const acceptEncoding = String(req.headers['accept-encoding'] || '');
-
-    if (compressible && content.length > 512) {
-      headers['Vary'] = 'Accept-Encoding';
-      if (/\bbr\b/i.test(acceptEncoding)) {
-        try {
-          const compressed = zlib.brotliCompressSync(content, {
-            params: { [zlib.constants.BROTLI_PARAM_QUALITY]: 5 }
-          });
-          headers['Content-Encoding'] = 'br';
-          headers['Content-Length'] = compressed.length;
-          res.writeHead(200, headers);
-          res.end(isHead ? undefined : compressed);
-          return;
-        } catch {}
-      } else if (/\bgzip\b/i.test(acceptEncoding)) {
-        try {
-          const compressed = zlib.gzipSync(content, { level: 6 });
-          headers['Content-Encoding'] = 'gzip';
-          headers['Content-Length'] = compressed.length;
-          res.writeHead(200, headers);
-          res.end(isHead ? undefined : compressed);
-          return;
-        } catch {}
+    fs.readFile(filePath, (err, rawContent) => {
+      if (err) {
+        res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8', 'X-Robots-Tag': 'noindex, nofollow', ...COMMON_SECURITY_HEADERS });
+        res.end('<h1>404 - Page Not Found</h1><p><a href="/">Return to SWEEPR VPN Home</a></p>');
+        return;
       }
-    }
-
-    headers['Content-Length'] = content.length;
-    res.writeHead(200, headers);
-    res.end(isHead ? undefined : content);
+      const entry = { raw: rawContent, etag: '', br: null, gz: null, redirect301: null };
+      if (
+        ext === '.html' &&
+        !isOrderRoute &&
+        !isLoginRoute &&
+        /^\/(solutions|setup|vs|guides)\//i.test(pathname) &&
+        /<meta\s+name=["']robots["']\s+content=["'][^"']*noindex/i.test(rawContent.toString('utf8'))
+      ) {
+        const canonMatch = rawContent.toString('utf8').match(/<link\s+rel=["']canonical["']\s+href=["']https?:\/\/sweeprvpn\.com(\/[^"']*)["']/i);
+        const reqClean = pathname.replace(/\.html$/i, '');
+        if (canonMatch && canonMatch[1] && canonMatch[1] !== reqClean) {
+          entry.redirect301 = canonMatch[1];
+        }
+      }
+      setBoundedMap(STATIC_COMPRESSED_CACHE, cacheKey, entry, MAX_STATIC_COMPRESSED_CACHE);
+      serveBuffer(rawContent, entry);
+    });
   });
 });
 

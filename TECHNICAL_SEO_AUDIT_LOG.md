@@ -1278,12 +1278,13 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 - **Search Engine Indexing Queue (Delta-Only)**: PASS — 0 un-pinged/modified delta URLs queued (out of 93 total canonical URLs)
 - **robots.txt Sitemap Directive**: PASS — Valid sitemap directive points to https://sweeprvpn.com/sitemap.xml
 - **robots.txt AI Crawler Allowances (GEO)**: PASS — All 7 major AI search bots explicitly permitted
-- **robots.txt Crawl-Budget Protections**: PASS — Internal APIs, user portals, qr-setup and CRO studios disallowed
+- **robots.txt Crawl-Budget Protections**: PASS — Internal APIs, user portals, qr-setup, CRO studios & ?app=1 webview embeds disallowed
 - **Utility & Prototype Pages Noindex Guard**: PASS — All 16 internal utility and prototype pages properly shielded with noindex
 - **PAD 4.0 XML Feed**: PASS — Valid PAD 4.0 metadata for software directory syndication
 - **Public Smart-TV ACR Blocklist Asset**: PASS — smart-tv-acr-blocklist.txt verified for Pi-hole/AdGuard Home & GEO citations
 - **301 Consolidation & Eduroam Hub Redirects (server.mjs)**: PASS — All consolidated noindex variants and Eduroam duplicate slugs 301-redirected to canonical hubs
-- **Historical GSC URLs & 301 Redirect Target Guard**: PASS — Verified 76 historical GSC URLs and 97 301 rules via resolveCanonical301 (0 404s, 0 redirect chains)
+- **Historical GSC URLs & 301 Redirect Target Guard**: PASS — Verified 76 historical GSC URLs, 99 301 rules, and 92 .html canonical variants via resolveCanonical301 (0 404s, 0 redirect chains)
+- **Internal Link Equity & Click-Depth Distribution**: PASS — All 92 pages passed (0 orphans, min inlinks=5, avg=20.7, max depth=2; tools=leak-test:81/54, isp-throttling-test:78/61, smart-tv-tracking-check:30/27, whats-on-my-wifi:30/27, vpn-renewal-price-checker:28/26)
 
 #### 2. Technical SEO & Rich Schemas (100/100)
 - **Page Titles**: PASS — All 92 pages have valid, descriptive <title> tags
@@ -1293,12 +1294,12 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 - **JSON-LD Structured Data**: PASS — All 92 pages inject verified Schema.org JSON-LD structured data
 - **H1 Heading Hierarchy**: PASS — All 92 pages have exactly 1 descriptive <h1> heading
 - **Document Landmarks & Heading Continuity**: PASS — All 92 pages declare <html lang>, <main>, and sequential heading levels
-- **OpenGraph Social Metadata**: PASS — All 92 pages include complete OpenGraph tags (title, desc, url, og:image)
+- **OpenGraph Social Metadata**: PASS — All 92 pages include complete OpenGraph tags (title, desc, url, og:image, og:image:alt, og:locale)
 - **Twitter Card Metadata**: PASS — All 92 pages include complete summary_large_image Twitter card tags
 - **Mobile Theme-Color Support**: PASS — All 92 pages declare theme-color for mobile chrome styling
 - **Google Analytics 4 (G-7D28EEMNXX) Coverage**: PASS — All 92 canonical pages include active GA4 telemetry
 - **Internal Link Integrity**: PASS — All internal links across 92 pages resolve to valid routes (0 broken links)
-- **HTML Template Corruption & Duplicate Link Guard**: PASS — All 92 pages verified free of >NaN<, >undefined<, &amp;amp;, and duplicate related-guide links
+- **HTML Template Corruption & Duplicate Link Guard**: PASS — All 92 pages verified free of >NaN<, >undefined<, &amp;amp;, malformed <a> markup, and duplicate <main>/related-guide links
 - **Server Canonical 301 Architecture**: PASS — Legacy .html and alias routes seamlessly 301 redirected to clean URLs
 - **Anti-Cannibalization & Title Cooldown Guard**: PASS — 0 consolidated cannibal slugs in sitemap.xml; all 20 GSC Top-20 pillars protected by 14-day title lock
 - **Ad-Platform Policy Compliance Guard (AGENTS.md Principle 2)**: PASS — 0 geo-unblocking, copyright circumvention, or piracy phrases across all 92 indexable pages
@@ -1311,13 +1312,14 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 - **PWA Manifest & Touch Icons**: PASS — 180x180 apple-touch-icon.png, 192x192/512x512 PWA icons, favicon.png and /manifest.webmanifest linked across all 92 pages
 - **Network Preconnect Efficiency**: PASS — Zero unused preconnects to Google Fonts found across all pages
 - **Render-Blocking Script Elimination**: PASS — All external JavaScript resources across 92 static pages & /download use defer or async attributes (0 runtime Tailwind JIT)
+- **Immutable Asset Cache-Busting (?v=)**: PASS — All CSS/JS tags (/style.css, /tailwind.min.css, /nav.js, /pricing-config.js) across 92 pages & /download carry content-hashed ?v= tokens
 - **Server-Side Compression (Brotli + Gzip)**: PASS — Built-in node:zlib Brotli and Gzip transparently enabled across static assets & dynamic HTML (/download)
 - **HTTP ETag & 304 Not Modified Caching**: PASS — Conditional request validation implemented in server.mjs
 - **Modern MIME Types & Static Serving**: PASS — .webp, .avif, .woff2, .woff, .ttf supported in server.mjs
-- **Static Cache-Control & HEAD Parity**: PASS — Versioned (?v=) assets served 1yr immutable; HTML 300s/3600s SWR; XML/TXT 3600s/86400s; HEAD parity & PWA /download start_url verified
+- **Static Cache-Control, Compression Cache & HEAD Parity**: PASS — Versioned (?v=) assets served 1yr immutable from mtime compression cache; trailing-slash/case 301s, ?app=1 noindex header, HEAD parity & PWA /download start_url verified
 
 ### Compression Benchmark Results
-- **order.html** (127.7 KB raw) &rarr; Gzip: **29.3 KB** (77% reduction) | Brotli: **27.1 KB** (79% reduction)
-- **index.html** (67.2 KB raw) &rarr; Gzip: **14.4 KB** (79% reduction) | Brotli: **13.3 KB** (80% reduction)
+- **order.html** (130.0 KB raw) &rarr; Gzip: **29.4 KB** (77% reduction) | Brotli: **26.5 KB** (80% reduction)
+- **index.html** (77.8 KB raw) &rarr; Gzip: **15.7 KB** (80% reduction) | Brotli: **14.2 KB** (82% reduction)
 - **sitemap.xml** (24.1 KB raw) &rarr; Gzip: **1.7 KB** (93% reduction) | Brotli: **1.5 KB** (94% reduction)
 

@@ -389,6 +389,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <span class="text-[10px] font-extrabold uppercase text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full shrink-0">Free</span>
               </a>
+              <a href="/tools/smart-tv-tracking-check" class="mobile-nav-link flex items-center justify-between p-3 rounded-xl bg-white hover:bg-emerald-50 border border-gray-200 text-gray-900 no-underline">
+                <div>
+                  <div class="text-sm font-bold">Smart-TV ACR Tracker Check</div>
+                  <div class="text-xs text-gray-500">Audit Samsung, LG, Roku &amp; Fire TV telemetry</div>
+                </div>
+                <span class="text-[10px] font-extrabold uppercase text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full shrink-0">Free</span>
+              </a>
+              <a href="/tools/whats-on-my-wifi" class="mobile-nav-link flex items-center justify-between p-3 rounded-xl bg-white hover:bg-emerald-50 border border-gray-200 text-gray-900 no-underline">
+                <div>
+                  <div class="text-sm font-bold">What's on My Wi-Fi? Translator</div>
+                  <div class="text-xs text-gray-500">Identify unknown devices &amp; hidden cameras</div>
+                </div>
+                <span class="text-[10px] font-extrabold uppercase text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full shrink-0">Free</span>
+              </a>
+              <a href="/tools/vpn-renewal-price-checker" class="mobile-nav-link flex items-center justify-between p-3 rounded-xl bg-white hover:bg-emerald-50 border border-gray-200 text-gray-900 no-underline">
+                <div>
+                  <div class="text-sm font-bold">VPN Renewal Price Calculator</div>
+                  <div class="text-xs text-gray-500">Compare Year-2 renewal price hikes</div>
+                </div>
+                <span class="text-[10px] font-extrabold uppercase text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full shrink-0">Free</span>
+              </a>
             </div>
           </div>
 
@@ -396,13 +417,23 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="text-[11px] font-extrabold uppercase tracking-wider text-gray-400 px-1 mb-1.5">Comparisons &amp; Guides</div>
             <div class="grid grid-cols-1 gap-1.5">
               <a href="/alternatives/totalvpn" class="mobile-nav-link flex items-center justify-between px-3 py-2.5 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 text-xs font-bold text-gray-800 no-underline">
-                <span>Total VPN Alternatives &amp; Comparison</span>
+                <span>Best Total VPN Alternatives (2026 Guide)</span>
                 <span class="text-emerald-600">&rarr;</span>
               </a>
-              <a href="/alternatives/totalvpn" class="mobile-nav-link flex items-center justify-between px-3 py-2.5 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 text-xs font-bold text-gray-800 no-underline">
-                <span>Best Total VPN Alternatives (2026)</span>
-                <span class="text-emerald-600">&rarr;</span>
-              </a>
+              <div class="grid grid-cols-2 gap-1.5">
+                <a href="/solutions" class="mobile-nav-link flex items-center justify-between px-3 py-2 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 text-xs font-bold text-gray-800 no-underline">
+                  <span>ISP Solutions</span><span class="text-emerald-600">&rarr;</span>
+                </a>
+                <a href="/setup" class="mobile-nav-link flex items-center justify-between px-3 py-2 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 text-xs font-bold text-gray-800 no-underline">
+                  <span>Router Setups</span><span class="text-emerald-600">&rarr;</span>
+                </a>
+                <a href="/guides" class="mobile-nav-link flex items-center justify-between px-3 py-2 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 text-xs font-bold text-gray-800 no-underline">
+                  <span>Privacy Guides</span><span class="text-emerald-600">&rarr;</span>
+                </a>
+                <a href="/vs" class="mobile-nav-link flex items-center justify-between px-3 py-2 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 text-xs font-bold text-gray-800 no-underline">
+                  <span>Comparisons</span><span class="text-emerald-600">&rarr;</span>
+                </a>
+              </div>
             </div>
           </div>
 

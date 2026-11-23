@@ -31,16 +31,16 @@
   <!-- Structured Data (JSON-LD) -->
   <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","@id":"https://sweeprvpn.com/tools/isp-throttling-test#app","name":"SWEEPR Free ISP Speed Slowdown & Throttling Checker","url":"https://sweeprvpn.com/tools/isp-throttling-test","applicationCategory":"UtilitiesApplication","operatingSystem":"All (Browser-based)","offers":{"@type":"Offer","price":"0.00","priceCurrency":"GBP"},"description":"Free interactive browser tool that measures ping, jitter, and streaming throughput to detect whether your internet provider is slowing down video streaming or gaming traffic."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://sweeprvpn.com/"},{"@type":"ListItem","position":2,"name":"Free ISP Speed Slowdown Checker","item":"https://sweeprvpn.com/tools/isp-throttling-test"}]}]}</script>
 
-  <link rel="stylesheet" href="/tailwind.min.css?v=1">
+  <link rel="stylesheet" href="/tailwind.min.css?v=fbbf784c">
   <link rel="icon" type="image/svg+xml" href="/logo-emerald.svg?v=5">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5">
   <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png?v=5">
   <link rel="shortcut icon" href="/favicon.ico?v=5">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5" />
   <link rel="manifest" href="/manifest.webmanifest" />
-  <link rel="stylesheet" href="/style.css">
-  <script src="/pricing-config.js?v=3" defer></script>
-  <script src="/nav.js" defer></script>
+  <link rel="stylesheet" href="/style.css?v=ed321090">
+  <script src="/pricing-config.js?v=7b9c5702" defer></script>
+  <script src="/nav.js?v=02bccc22" defer></script>
   <!-- Google tag (gtag.js) - Sweepr VPN -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
   <script>
@@ -442,6 +442,62 @@
         <div class="p-4 rounded-xl bg-gray-50 border border-gray-200"><h3 class="font-bold text-gray-900 mb-1">Which MTU stops bufferbloat during uploads?</h3><p>Set <code>MTU = 1412</code> on PPPoE fibre (BT/Sky/Plusnet), <code>1420</code> on DOCSIS/DHCP cable (Virgin Media), or <code>1380</code> on 5G/Starlink CGNAT.</p></div>
       </div>
     </section>
+
+    <section id="isp-remediation-guides-mesh" class="max-w-4xl mx-auto mb-10 bg-white border border-gray-200 rounded-2xl p-6 sm:p-8 shadow-sm text-left">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+        <h2 class="text-xl font-bold text-gray-900">ISP-Specific Throttling &amp; Packet-Loss Remediation Guides</h2>
+        <a href="/solutions" class="text-xs font-bold text-emerald-700 hover:underline">All ISP Solutions &rarr;</a>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+        <a href="/solutions/starlink-satellite-uk-isp-throttling" class="p-3 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 hover:border-emerald-300 no-underline text-gray-900">
+          <div class="font-bold">Starlink UK CGNAT &amp; Throttling</div>
+          <div class="text-gray-500 mt-0.5">1400 MTU handoff stabilization</div>
+        </a>
+        <a href="/solutions/zen-internet-uk-isp-throttling" class="p-3 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 hover:border-emerald-300 no-underline text-gray-900">
+          <div class="font-bold">Zen Internet UK PPPoE Shaping Fix</div>
+          <div class="text-gray-500 mt-0.5">Calibrated 1412 MTU &amp; LINX peering</div>
+        </a>
+        <a href="/solutions/sky-broadband-gaming-packet-loss" class="p-3 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 hover:border-emerald-300 no-underline text-gray-900">
+          <div class="font-bold">Sky Broadband UK Gaming Fix</div>
+          <div class="text-gray-500 mt-0.5">Eliminate evening MAP-T packet loss</div>
+        </a>
+        <a href="/solutions/brsk-better-net-uk-voip-teams-zoom-jitter" class="p-3 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 hover:border-emerald-300 no-underline text-gray-900">
+          <div class="font-bold">Brsk BetterNet VoIP &amp; Teams Jitter</div>
+          <div class="text-gray-500 mt-0.5">Fix full-fibre CGNAT WebRTC drops</div>
+        </a>
+        <a href="/solutions/telstra-nbn-australia-gaming-packet-loss" class="p-3 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 hover:border-emerald-300 no-underline text-gray-900">
+          <div class="font-bold">Telstra NBN Gaming Packet Loss</div>
+          <div class="text-gray-500 mt-0.5">Stabilize APAC gaming &amp; evening routing</div>
+        </a>
+        <a href="/solutions/virgin-media-remote-dev-ssh" class="p-3 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 hover:border-emerald-300 no-underline text-gray-900">
+          <div class="font-bold">Virgin Media Hub Shaping &amp; SSH</div>
+          <div class="text-gray-500 mt-0.5">Bypass DOCSIS 3.1 PUMA latency</div>
+        </a>
+        <a href="/solutions/bt-broadband-gaming-packet-loss" class="p-3 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 hover:border-emerald-300 no-underline text-gray-900">
+          <div class="font-bold">BT Halo / Smart Hub Gaming Ping</div>
+          <div class="text-gray-500 mt-0.5">1412 MTU PPPoE route optimization</div>
+        </a>
+        <a href="/solutions/talktalk-p2p-port-forwarding" class="p-3 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 hover:border-emerald-300 no-underline text-gray-900">
+          <div class="font-bold">TalkTalk P2P &amp; Throttling Fix</div>
+          <div class="text-gray-500 mt-0.5">AS13285 4K &amp; port-block bypass</div>
+        </a>
+      </div>
+      <div class="mt-3 pt-3 border-t border-gray-100 flex flex-wrap gap-3 text-xs font-bold">
+        <span class="text-gray-500">More Free Tools:</span>
+        <a href="/tools/smart-tv-tracking-check" class="text-emerald-700 hover:underline">Smart-TV ACR Tracker Checker</a>
+        <a href="/tools/whats-on-my-wifi" class="text-emerald-700 hover:underline">What's on My Wi-Fi?</a>
+        <a href="/tools/vpn-renewal-price-checker" class="text-emerald-700 hover:underline">VPN Renewal Price Calculator</a>
+      </div>
+    </section>
+
+    <div id="throttle-leak-langs" class="max-w-4xl mx-auto px-4 mt-4 mb-6 text-center text-xs text-gray-500">
+      International Browser Leak Diagnostics:
+      <a href="/de/tools/leak-test" class="text-emerald-700 font-semibold hover:underline mx-1">Deutsch</a> ·
+      <a href="/fr/tools/leak-test" class="text-emerald-700 font-semibold hover:underline mx-1">Fran&ccedil;ais</a> ·
+      <a href="/es/tools/leak-test" class="text-emerald-700 font-semibold hover:underline mx-1">Espa&ntilde;ol</a> ·
+      <a href="/pt-br/tools/leak-test" class="text-emerald-700 font-semibold hover:underline mx-1">Portugu&ecirc;s</a> ·
+      <a href="/sv/tools/leak-test" class="text-emerald-700 font-semibold hover:underline mx-1">Svenska</a>
+    </div>
   </main>
 
     <section id="sweepr-share-diagnostic-badge" class="max-w-5xl mx-auto px-6 pb-8">

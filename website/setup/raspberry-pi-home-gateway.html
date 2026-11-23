@@ -19,6 +19,7 @@
   <meta property="og:title" content="Raspberry Pi 5 Whole-Home Gateway &amp; TV Shield | SWEEPR VPN" />
   <meta property="og:description" content="Step-by-step Raspberry Pi 5 Whole-Home Gateway &amp; TV Shield WireGuard VPN setup guide (2 Minutes)." />
   <meta property="og:image" content="https://sweeprvpn.com/og-image.png">
+  <meta property="og:image:alt" content="SWEEPR VPN 10Gbps WireGuard &amp; Home Wi-Fi Radar" />
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
@@ -28,16 +29,16 @@
   <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png">
 
   <!-- Schema Markup (TechArticle + SoftwareApplication + BreadcrumbList) -->
-  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","@id":"https://sweeprvpn.com/setup/raspberry-pi-home-gateway#article","headline":"Raspberry Pi 5 Whole-Home Gateway & TV Shield | SWEEPR VPN","description":"Step-by-step Raspberry Pi 5 Whole-Home Gateway & TV Shield WireGuard VPN setup guide (2 Minutes). Copy-paste .conf config, MTU 1420 settings, and 4ms 10Gbps RAM-only servers.","datePublished":"2026-10-21","dateModified":"2026-11-17","author":{"@type":"Person","name":"Benjamin Cook","jobTitle":"Principal Network Architect","url":"https://sweeprvpn.com/warrant-canary","worksFor":{"@type":"Organization","name":"SWEEPR VPN Inc."}},"publisher":{"@type":"Organization","name":"SWEEPR VPN Inc.","logo":{"@type":"ImageObject","url":"https://sweeprvpn.com/logo-emerald.svg"}},"mainEntityOfPage":"https://sweeprvpn.com/setup/raspberry-pi-home-gateway","reviewedBy":{"@type":"Organization","name":"SWEEPR Security Engineering Lab","url":"https://sweeprvpn.com/"}},{"@type":"SoftwareApplication","name":"SWEEPR VPN Pro","applicationCategory":"SecurityApplication","operatingSystem":"Windows 10, Windows 11, macOS, Linux, iOS, Android, OpenWrt, GL.iNet, pfSense","offers":{"@type":"Offer","price":"74.99","priceCurrency":"GBP","description":"Annual Plan (£6.25/mo equivalent — Save 50%) with 14-Day Money-Back Guarantee"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://sweeprvpn.com/"},{"@type":"ListItem","position":2,"name":"Router & Device Setup Guides","item":"https://sweeprvpn.com/setup"},{"@type":"ListItem","position":3,"name":"WireGuard VPN Setup for Raspberry Pi 5 Whole-Home WireGuard Gateway & TV Shield","item":"https://sweeprvpn.com/setup/raspberry-pi-home-gateway"}]}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","@id":"https://sweeprvpn.com/setup/raspberry-pi-home-gateway#article","headline":"Raspberry Pi 5 Whole-Home Gateway & TV Shield | SWEEPR VPN","description":"Step-by-step Raspberry Pi 5 Whole-Home Gateway & TV Shield WireGuard VPN setup guide (2 Minutes). Copy-paste .conf config, MTU 1420 settings, and 4ms 10Gbps RAM-only servers.","datePublished":"2026-10-21","dateModified":"2026-11-17","author":{"@type":"Person","name":"Benjamin Cook","jobTitle":"Principal Network Architect","url":"https://sweeprvpn.com/warrant-canary","worksFor":{"@type":"Organization","name":"SWEEPR VPN Inc."}},"publisher":{"@type":"Organization","name":"SWEEPR VPN Inc.","logo":{"@type":"ImageObject","url":"https://sweeprvpn.com/logo-emerald.svg"}},"mainEntityOfPage":"https://sweeprvpn.com/setup/raspberry-pi-home-gateway","reviewedBy":{"@type":"Organization","name":"SWEEPR Security Engineering Lab","url":"https://sweeprvpn.com/"},"image":"https://sweeprvpn.com/og-image.png"},{"@type":"SoftwareApplication","name":"SWEEPR VPN Pro","applicationCategory":"SecurityApplication","operatingSystem":"Windows 10, Windows 11, macOS, Linux, iOS, Android, OpenWrt, GL.iNet, pfSense","offers":{"@type":"Offer","price":"74.99","priceCurrency":"GBP","description":"Annual Plan (£6.25/mo equivalent — Save 50%) with 14-Day Money-Back Guarantee"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://sweeprvpn.com/"},{"@type":"ListItem","position":2,"name":"Router & Device Setup Guides","item":"https://sweeprvpn.com/setup"},{"@type":"ListItem","position":3,"name":"WireGuard VPN Setup for Raspberry Pi 5 Whole-Home WireGuard Gateway & TV Shield","item":"https://sweeprvpn.com/setup/raspberry-pi-home-gateway"}]}]}</script>
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="icon" type="image/png" href="/favicon.png" media="(prefers-color-scheme: light)">
   <link rel="icon" type="image/png" href="/favicon-dark.png" media="(prefers-color-scheme: dark)">
   <link rel="shortcut icon" href="/favicon.ico">
-  <link rel="stylesheet" href="/tailwind.min.css?v=1">
-  <link rel="stylesheet" href="/style.css">
-  <script src="/pricing-config.js" defer></script>
-  <script src="/nav.js" defer></script>
+  <link rel="stylesheet" href="/tailwind.min.css?v=fbbf784c">
+  <link rel="stylesheet" href="/style.css?v=ed321090">
+  <script src="/pricing-config.js?v=7b9c5702" defer></script>
+  <script src="/nav.js?v=02bccc22" defer></script>
   <!-- Google tag (gtag.js) - Sweepr VPN -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
   <script>
@@ -257,7 +258,7 @@ sudo nft add rule ip nat postrouting oifname &quot;sweepr0&quot; masquerade</cod
       </section>
       <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
         <h2 class="text-2xl font-bold text-gray-900 mb-3">3. Testing Your Tunnel &amp; Leak Protection</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">Once connected to UK-LON-01 (London 4ms), open SWEEPR’s free IP, DNS &amp; WebRTC Leak Test (/tools/leak-test) or ISP Speed &amp; Throttling Checker (/tools/isp-throttling-test) to confirm your public IPv4/IPv6 and DNS resolvers are 100% encrypted.</p>
+        <p class="text-gray-700 leading-relaxed mb-3">Once connected to UK-LON-01 (London 4ms), open SWEEPR’s free <a href="/tools/leak-test" class="text-emerald-700 font-semibold underline hover:text-emerald-900">IP, DNS &amp; WebRTC Leak Test</a> or <a href="/tools/isp-throttling-test" class="text-emerald-700 font-semibold underline hover:text-emerald-900">ISP Speed &amp; Throttling Checker</a> to confirm your public IPv4/IPv6 and DNS resolvers are 100% encrypted.</p>
         <p class="text-gray-700 leading-relaxed">Every SWEEPR VPN Pro plan covers up to 3 devices simultaneously and is backed by our 14-Day Money-Back Guarantee.</p>
       </section>
     </div>
@@ -310,38 +311,41 @@ sudo nft add rule ip nat postrouting oifname &quot;sweepr0&quot; masquerade</cod
     <div class="border-t border-gray-200 pt-10">
       <h2 class="text-lg font-bold text-gray-900 mb-4">Related Technical Guides &amp; Comparisons</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        
-        <a href="/setup/gl-inet-travel-router" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+<a href="/setup/gl-inet-travel-router" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
           <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 WireGuard Setup Guide • 45 Seconds</div>
           <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">WireGuard VPN Setup for GL.iNet Beryl AX (GL-MT3000) &amp; Slate AX Travel Router</div>
         </a>
-        <a href="/setup/linux-cli-wireguard" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+<a href="/setup/linux-cli-wireguard" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
           <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 WireGuard Setup Guide • 30 Seconds</div>
           <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">WireGuard VPN Setup for Linux CLI (Ubuntu, Debian, Arch &amp; Fedora)</div>
         </a>
-        <a href="/setup/pfsense-opnsense-router" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+<a href="/setup/pfsense-opnsense-router" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
           <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 WireGuard Setup Guide • 3 Minutes</div>
           <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">WireGuard VPN Setup for pfSense &amp; OPNsense Home Firewall</div>
         </a>
-        <a href="/setup/steam-deck-vpn" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+<a href="/setup/steam-deck-vpn" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
           <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 WireGuard Setup Guide • 60 Seconds</div>
           <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">WireGuard VPN Setup for Steam Deck &amp; Handheld Gaming OS (SteamOS)</div>
         </a>
-        <a href="/solutions/virgin-media-remote-dev-ssh" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+<a href="/solutions/virgin-media-remote-dev-ssh" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
           <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
           <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media Low-Latency Gaming &amp; Packet Loss (AS5089)</div>
         </a>
-        <a href="/solutions/virgin-media-remote-dev-ssh" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media Remote SSH, Git &amp; Docker Workflows (AS5089)</div>
+        <a href="/tools/smart-tv-tracking-check" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">FREE SMART-TV TOOL</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Free Smart-TV ACR Tracker & Ad-Domain Exposure Checker</div>
         </a>
-        <a href="/solutions/virgin-media-remote-dev-ssh" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media 4K Live Sports &amp; High-Bitrate Streaming (AS5089)</div>
+        <a href="/tools/whats-on-my-wifi" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">FREE WI-FI DIAGNOSTIC</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">What's on My Wi-Fi? Free Unknown Device & Spy Check</div>
         </a>
-        <a href="/solutions/virgin-media-remote-dev-ssh" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media P2P File Sharing &amp; High-Speed Transfers (AS5089)</div>
+        <a href="/setup/almalinux-9-wireguard-gateway" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">WIREGUARD SETUP GUIDE</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">AlmaLinux 9 & Rocky Linux 9 Enterprise WireGuard Gateway: High-Speed 10Gbps WireGuard VPN Setup Guide</div>
+        </a>
+        <a href="/setup/freebsd-14-wireguard-kmod" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">WIREGUARD SETUP GUIDE</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">FreeBSD 14.1 Kernel WireGuard (if_wg) & pf Firewall Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</div>
         </a>
       </div>
     </div>

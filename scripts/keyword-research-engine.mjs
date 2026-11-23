@@ -2689,6 +2689,47 @@ export function buildEnrichmentBrief(keyword, seed, targetUrlPath) {
 
 function stripDeprecatedSchemaAndRefreshTechArticle(html) {
   const todayStr = new Date().toISOString().slice(0, 10);
+  const refreshTechArticleNode = (node) => {
+    if (!node || typeof node !== 'object') return false;
+    const types = Array.isArray(node['@type']) ? node['@type'] : [node['@type']];
+    if (!types.includes('TechArticle')) return false;
+    let changed = false;
+    if (!node.author || node.author['@type'] !== 'Person' || node.author.name !== 'Benjamin Cook') {
+      node.author = {
+        '@type': 'Person',
+        name: 'Benjamin Cook',
+        jobTitle: 'Principal Network Architect',
+        url: 'https://sweeprvpn.com/warrant-canary',
+        worksFor: { '@type': 'Organization', name: 'SWEEPR VPN Inc.' }
+      };
+      node.dateModified = todayStr;
+      changed = true;
+    }
+    if (!node.image) {
+      node.image = 'https://sweeprvpn.com/og-image.png';
+      changed = true;
+    }
+    if (!node.datePublished) {
+      node.datePublished = node.dateModified || todayStr;
+      changed = true;
+    }
+    if (!node.dateModified) {
+      node.dateModified = node.datePublished;
+      changed = true;
+    }
+    if (!node.publisher || typeof node.publisher !== 'object') {
+      node.publisher = {
+        '@type': 'Organization',
+        name: 'SWEEPR VPN',
+        logo: { '@type': 'ImageObject', url: 'https://sweeprvpn.com/logo-emerald.svg' }
+      };
+      changed = true;
+    } else if (!node.publisher.logo) {
+      node.publisher.logo = { '@type': 'ImageObject', url: 'https://sweeprvpn.com/logo-emerald.svg' };
+      changed = true;
+    }
+    return changed;
+  };
   return html.replace(
     /<script\s+type=["']application\/ld\+json["']>\s*([\s\S]*?)\s*<\/script>\s*/gi,
     (fullMatch, jsonInner) => {
@@ -2704,34 +2745,12 @@ function stripDeprecatedSchemaAndRefreshTechArticle(html) {
           );
           let graphChanged = parsed['@graph'].length !== origLen;
           for (const node of parsed['@graph']) {
-            if (node && node['@type'] === 'TechArticle') {
-              if (!node.author || node.author['@type'] !== 'Person' || node.author.name !== 'Benjamin Cook') {
-                node.author = {
-                  '@type': 'Person',
-                  name: 'Benjamin Cook',
-                  jobTitle: 'Principal Network Architect',
-                  url: 'https://sweeprvpn.com/warrant-canary',
-                  worksFor: { '@type': 'Organization', name: 'SWEEPR VPN Inc.' }
-                };
-                node.dateModified = todayStr;
-                graphChanged = true;
-              }
-            }
+            if (refreshTechArticleNode(node)) graphChanged = true;
           }
           if (parsed['@graph'].length === 0) return '';
           if (graphChanged) return `<script type="application/ld+json">${JSON.stringify(parsed)}</script>\n  `;
-        } else if (parsed && parsed['@type'] === 'TechArticle') {
-          if (!parsed.author || parsed.author['@type'] !== 'Person' || parsed.author.name !== 'Benjamin Cook') {
-            parsed.author = {
-              '@type': 'Person',
-              name: 'Benjamin Cook',
-              jobTitle: 'Principal Network Architect',
-              url: 'https://sweeprvpn.com/warrant-canary',
-              worksFor: { '@type': 'Organization', name: 'SWEEPR VPN Inc.' }
-            };
-            parsed.dateModified = todayStr;
-            return `<script type="application/ld+json">${JSON.stringify(parsed)}</script>`;
-          }
+        } else if (refreshTechArticleNode(parsed)) {
+          return `<script type="application/ld+json">${JSON.stringify(parsed)}</script>`;
         }
       } catch {}
       return fullMatch;

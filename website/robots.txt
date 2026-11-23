@@ -18,6 +18,7 @@ Disallow: /ui-ux-audit-mockups
 Disallow: /*?currency=*
 Disallow: /*?picker=*
 Disallow: /*?noredirect=*
+Disallow: /*?app=1*
 
 # Explicitly permit AI Search and Answer Engines for LLM citations (GEO/AEO)
 User-agent: GPTBot

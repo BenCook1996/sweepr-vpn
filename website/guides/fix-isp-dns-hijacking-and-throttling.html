@@ -19,6 +19,7 @@
   <meta property="og:title" content="Fix UK ISP DNS Hijacking &amp; Evening Throttling | SWEEPR VPN" />
   <meta property="og:description" content="Changing Windows or router DNS to 1.1.1.1 over UDP 53 cannot stop UK ISP transparent DNS proxies. Encrypt lookups inside a WireGuard tunnel (10.66.0.1).">
   <meta property="og:image" content="https://sweeprvpn.com/og-image.png">
+  <meta property="og:image:alt" content="SWEEPR VPN 10Gbps WireGuard &amp; Home Wi-Fi Radar" />
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
@@ -28,16 +29,16 @@
   <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png">
 
   <!-- Schema Markup (TechArticle + SoftwareApplication + BreadcrumbList) -->
-  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","@id":"https://sweeprvpn.com/guides/fix-isp-dns-hijacking-and-throttling#article","headline":"Fix UK ISP DNS Hijacking &amp; Evening Throttling | SWEEPR VPN","description":"Changing Windows or router DNS to 1.1.1.1 over UDP 53 cannot stop UK ISP transparent DNS proxies. Encrypt lookups inside a WireGuard tunnel (10.66.0.1).","datePublished":"2026-10-21","dateModified":"2026-11-17","author":{"@type":"Person","name":"Benjamin Cook","jobTitle":"Principal Network Architect","url":"https://sweeprvpn.com/warrant-canary","worksFor":{"@type":"Organization","name":"SWEEPR VPN Inc."}},"publisher":{"@type":"Organization","name":"SWEEPR VPN Inc.","logo":{"@type":"ImageObject","url":"https://sweeprvpn.com/logo-emerald.svg"}},"mainEntityOfPage":"https://sweeprvpn.com/guides/fix-isp-dns-hijacking-and-throttling","reviewedBy":{"@type":"Organization","name":"SWEEPR Security Engineering Lab","url":"https://sweeprvpn.com/"}},{"@type":"SoftwareApplication","name":"SWEEPR VPN Pro","applicationCategory":"SecurityApplication","operatingSystem":"Windows 10, Windows 11, macOS, Linux, iOS, Android, OpenWrt, GL.iNet, pfSense","offers":{"@type":"Offer","price":"74.99","priceCurrency":"GBP","description":"Annual Plan (£6.25/mo equivalent — Save 50%) with 14-Day Money-Back Guarantee"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://sweeprvpn.com/"},{"@type":"ListItem","position":2,"name":"Smart-TV & Wi-Fi Privacy Guides","item":"https://sweeprvpn.com/guides"},{"@type":"ListItem","position":3,"name":"How UK ISPs Use DNS Inspection to Throttle Evening Speeds (And How to Fix It)","item":"https://sweeprvpn.com/guides/fix-isp-dns-hijacking-and-throttling"}]}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","@id":"https://sweeprvpn.com/guides/fix-isp-dns-hijacking-and-throttling#article","headline":"Fix UK ISP DNS Hijacking &amp; Evening Throttling | SWEEPR VPN","description":"Changing Windows or router DNS to 1.1.1.1 over UDP 53 cannot stop UK ISP transparent DNS proxies. Encrypt lookups inside a WireGuard tunnel (10.66.0.1).","datePublished":"2026-10-21","dateModified":"2026-11-17","author":{"@type":"Person","name":"Benjamin Cook","jobTitle":"Principal Network Architect","url":"https://sweeprvpn.com/warrant-canary","worksFor":{"@type":"Organization","name":"SWEEPR VPN Inc."}},"publisher":{"@type":"Organization","name":"SWEEPR VPN Inc.","logo":{"@type":"ImageObject","url":"https://sweeprvpn.com/logo-emerald.svg"}},"mainEntityOfPage":"https://sweeprvpn.com/guides/fix-isp-dns-hijacking-and-throttling","reviewedBy":{"@type":"Organization","name":"SWEEPR Security Engineering Lab","url":"https://sweeprvpn.com/"},"image":"https://sweeprvpn.com/og-image.png"},{"@type":"SoftwareApplication","name":"SWEEPR VPN Pro","applicationCategory":"SecurityApplication","operatingSystem":"Windows 10, Windows 11, macOS, Linux, iOS, Android, OpenWrt, GL.iNet, pfSense","offers":{"@type":"Offer","price":"74.99","priceCurrency":"GBP","description":"Annual Plan (£6.25/mo equivalent — Save 50%) with 14-Day Money-Back Guarantee"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://sweeprvpn.com/"},{"@type":"ListItem","position":2,"name":"Smart-TV & Wi-Fi Privacy Guides","item":"https://sweeprvpn.com/guides"},{"@type":"ListItem","position":3,"name":"How UK ISPs Use DNS Inspection to Throttle Evening Speeds (And How to Fix It)","item":"https://sweeprvpn.com/guides/fix-isp-dns-hijacking-and-throttling"}]}]}</script>
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="icon" type="image/png" href="/favicon.png" media="(prefers-color-scheme: light)">
   <link rel="icon" type="image/png" href="/favicon-dark.png" media="(prefers-color-scheme: dark)">
   <link rel="shortcut icon" href="/favicon.ico">
-  <link rel="stylesheet" href="/tailwind.min.css?v=1">
-  <link rel="stylesheet" href="/style.css">
-  <script src="/pricing-config.js" defer></script>
-  <script src="/nav.js" defer></script>
+  <link rel="stylesheet" href="/tailwind.min.css?v=fbbf784c">
+  <link rel="stylesheet" href="/style.css?v=ed321090">
+  <script src="/pricing-config.js?v=7b9c5702" defer></script>
+  <script src="/nav.js?v=02bccc22" defer></script>
   <!-- Google tag (gtag.js) - Sweepr VPN -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
   <script>
@@ -275,20 +276,103 @@
         <div class="border-t border-gray-200 pt-10">
       <h2 class="text-lg font-bold text-gray-900 mb-4">Recommended Diagnostic &amp; Solution Guides</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <a href="/tools/leak-test" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-teal-400 no-underline">
+<a href="/tools/leak-test" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-teal-400 no-underline">
           <div class="text-xs font-bold text-teal-600 mb-1">Leak Diagnostic</div>
           <div class="text-sm font-bold text-gray-900">IP, DNS &amp; WebRTC Leak Diagnostic</div>
           <div class="text-xs text-gray-500 mt-1">Verify zero unencrypted DNS queries escape your tunnel.</div>
         </a>
-        <a href="/tools/isp-throttling-test" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-teal-400 no-underline">
-          <div class="text-xs font-bold text-teal-600 mb-1">Speed Diagnostic</div>
-          <div class="text-sm font-bold text-gray-900">Broadband Throttling &amp; Bufferbloat Test</div>
-          <div class="text-xs text-gray-500 mt-1">Measure evening packet shaping across video streams.</div>
-        </a>
-        <a href="/solutions/eduroam-campus-wifi-gaming-packet-loss" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-teal-400 no-underline">
+<a href="/solutions/eduroam-campus-wifi-gaming-packet-loss" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-teal-400 no-underline">
           <div class="text-xs font-bold text-teal-600 mb-1">Campus Solutions</div>
           <div class="text-sm font-bold text-gray-900">Fix Eduroam Campus Wi-Fi Gaming Packet Loss</div>
           <div class="text-xs text-gray-500 mt-1">Bypass university firewall restrictions with WireGuard.</div>
+        </a>
+        <a href="/tools/smart-tv-tracking-check" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">FREE SMART-TV TOOL</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Free Smart-TV ACR Tracker & Ad-Domain Exposure Checker</div>
+        </a>
+        <a href="/tools/vpn-renewal-price-checker" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">FREE RENEWAL CALCULATOR</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Free 3-Year VPN Renewal Price-Hike Calculator</div>
+        </a>
+        <a href="/solutions/brsk-better-net-uk-voip-teams-zoom-jitter" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">ISP & NETWORK FIX</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Microsoft Teams, Zoom & VoIP Jitter on Brsk BetterNet 1Gbps Fibre UK Using Low-Latency WireGuard</div>
+        </a>
+        <a href="/solutions/comcast-xfinity-broadband-isp-throttling" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">ISP & NETWORK FIX</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Stop Comcast Xfinity Cable Broadband Speed Throttling & DPI Traffic Shaping</div>
+        </a>
+        <a href="/solutions/community-fibre-london-p2p-port-forwarding" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">ISP & NETWORK FIX</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Bypass Community Fibre London CGNAT & P2P Bandwidth Throttling</div>
+        </a>
+        <a href="/solutions/hyperoptic-broadband-isp-throttling" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">ISP & NETWORK FIX</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Stop Hyperoptic 1Gbps Full Fibre Speed Throttling & DPI Traffic Shaping</div>
+        </a>
+        <a href="/solutions/national-rail-train-wifi-remote-dev-ssh" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">ISP & NETWORK FIX</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Fix Dropping SSH, Kubernetes & Git Sessions on UK Train Wi-Fi (LNER, GWR, Avanti) With Persistent WireGuard</div>
+        </a>
+        <a href="/solutions/o2-uk-mobile-tethering-uhd-streaming-buffering" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">ISP & NETWORK FIX</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Eliminate O2 UK 5G & Mobile Tethering 4K UHD Streaming Buffering & CDN Throttling</div>
+        </a>
+        <a href="/solutions/rogers-ignite-canada-isp-throttling" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">ISP & NETWORK FIX</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Stop Rogers Ignite Broadband Canada Speed Throttling & DPI Traffic Shaping</div>
+        </a>
+        <a href="/solutions/sky-broadband-gaming-packet-loss" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">ISP & NETWORK FIX</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Sky Broadband Low-Latency Gaming &amp; Packet Loss (AS5607)</div>
+        </a>
+        <a href="/solutions/starlink-satellite-uk-isp-throttling" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">ISP & NETWORK FIX</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Stop Starlink LEO Satellite Internet Speed Throttling & DPI Traffic Shaping</div>
+        </a>
+        <a href="/solutions/t-mobile-5g-home-internet-remote-dev-ssh" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">ISP & NETWORK FIX</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Fix Dropping SSH, Kubernetes & Git Sessions on T-Mobile 5G Home Internet With Persistent WireGuard</div>
+        </a>
+        <a href="/solutions/talktalk-p2p-port-forwarding" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">ISP & NETWORK FIX</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix TalkTalk P2P File Sharing &amp; High-Speed Transfers (AS13285)</div>
+        </a>
+        <a href="/solutions/telstra-nbn-australia-gaming-packet-loss" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">ISP & NETWORK FIX</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Telstra NBN Australia Gaming Packet Loss, High Ping & Rubberbanding</div>
+        </a>
+        <a href="/solutions/three-5g-home-broadband-uhd-streaming-buffering" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">ISP & NETWORK FIX</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Eliminate Three 5G Home Broadband UK 4K UHD Streaming Buffering & CDN Throttling</div>
+        </a>
+        <a href="/solutions/toob-full-fibre-uk-voip-teams-zoom-jitter" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">ISP & NETWORK FIX</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Microsoft Teams, Zoom & VoIP Jitter on toob 900Mbps Full Fibre UK Using Low-Latency WireGuard</div>
+        </a>
+        <a href="/solutions/vodafone-uk-gaming-packet-loss" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">ISP & NETWORK FIX</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Vodafone UK Low-Latency Gaming &amp; Packet Loss (AS5378)</div>
+        </a>
+        <a href="/solutions/youfibre-uk-wifi-arp-spoofing-protection" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">ISP & NETWORK FIX</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Protect Your Devices on YouFibre UK 1Gbps–8Gbps Full Fibre From ARP Spoofing, Sniffing & Unknown Intruders</div>
+        </a>
+        <a href="/solutions/zen-internet-uk-isp-throttling" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">ISP & NETWORK FIX</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Stop Zen Internet UK Speed Throttling & DPI Traffic Shaping</div>
+        </a>
+        <a href="/setup/ubiquiti-unifi-dream-machine-wireguard" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">WIREGUARD SETUP GUIDE</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Ubiquiti UniFi Dream Machine (UDM-Pro / UDM-SE / UDR): High-Speed 10Gbps WireGuard VPN Setup Guide</div>
+        </a>
+        <a href="/vs/ipvanish" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 COMPARISON</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">SWEEPR VPN vs IPVanish (2026 Comparison)</div>
+        </a>
+        <a href="/guides/disable-ipv6-leak-windows-linux" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">NETWORK SECURITY GUIDE</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Prevent Silent IPv6 Tunnel Leaks on Dual-Stack Residential Broadband</div>
         </a>
       </div>
     </div>

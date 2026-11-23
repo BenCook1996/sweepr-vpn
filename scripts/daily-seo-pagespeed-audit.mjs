@@ -39,6 +39,28 @@ const INDEXNOW_KEY = 'e159f60b7cbd19abe8a6c1c8d84bb2b7';
 const shouldFix = !process.argv.includes('--no-fix'); // Auto-optimize by default
 const shouldPing = process.argv.includes('--ping') || process.env.INDEXNOW_PING === 'true';
 
+const todayStr = new Date().toISOString().slice(0, 10);
+const prevSitemapXml = fs.existsSync(SITEMAP_PATH) ? fs.readFileSync(SITEMAP_PATH, 'utf8') : '';
+const prevLastModMap = new Map();
+for (const m of prevSitemapXml.matchAll(/<url>\s*<loc>([^<]+)<\/loc>\s*<lastmod>([^<]+)<\/lastmod>/g)) {
+  prevLastModMap.set(m[1].trim(), m[2].trim());
+}
+
+const VERSIONED_ASSETS = ['style.css', 'tailwind.min.css', 'nav.js', 'pricing-config.js'];
+const ASSET_VERSION_HASHES = Object.fromEntries(
+  VERSIONED_ASSETS.map((name) => {
+    const p = path.join(WEBSITE_DIR, name);
+    const h = fs.existsSync(p)
+      ? crypto.createHash('sha1').update(fs.readFileSync(p)).digest('hex').slice(0, 8)
+      : '1';
+    return [name, h];
+  })
+);
+const EXE_PATH = path.join(WEBSITE_DIR, 'SWEEPRVPN.exe');
+const EXE_FILESIZE_KB = fs.existsSync(EXE_PATH)
+  ? Math.round(fs.statSync(EXE_PATH).size / 1024)
+  : 723;
+
 console.log('='.repeat(78));
 console.log('SWEEPR VPN (sweeprvpn.com) — Technical SEO, Crawlability & PageSpeed Audit');
 console.log(`Execution Timestamp: ${new Date().toISOString()} | Node ${process.version}`);
@@ -328,6 +350,118 @@ function rewriteCannibalHrefLinks(html) {
   return out;
 }
 
+function resolveOgLocaleForPath(urlPath) {
+  if (/^\/de(?:\/|$)/.test(urlPath)) return 'de_DE';
+  if (/^\/fr(?:\/|$)/.test(urlPath)) return 'fr_FR';
+  if (/^\/es(?:\/|$)/.test(urlPath)) return 'es_ES';
+  if (/^\/pt-br(?:\/|$)/.test(urlPath)) return 'pt_BR';
+  if (/^\/sv(?:\/|$)/.test(urlPath)) return 'sv_SE';
+  return 'en_GB';
+}
+
+function versionStaticAssetTags(html) {
+  let out = html.replace(
+    /(<link\b[^>]*\bhref=["'])\/(style\.css|tailwind\.min\.css)(?:\?[^"']*)?(["'][^>]*>)/gi,
+    (_, pre, asset, post) => `${pre}/${asset}?v=${ASSET_VERSION_HASHES[asset]}${post}`
+  );
+  out = out.replace(
+    /(<script\b[^>]*\bsrc=["'])\/(nav\.js|pricing-config\.js)(?:\?[^"']*)?(["'][^>]*>)/gi,
+    (_, pre, asset, post) => `${pre}/${asset}?v=${ASSET_VERSION_HASHES[asset]}${post}`
+  );
+  return out;
+}
+
+function applyNonVisualHeadAndSchemaFixes(html, urlPath) {
+  let out = versionStaticAssetTags(html);
+
+  if (!/<meta\s+[^>]*property=["']og:locale["']/i.test(out)) {
+    const localeVal = resolveOgLocaleForPath(urlPath);
+    const ogLocaleTag = `<meta property="og:locale" content="${localeVal}" />`;
+    const anchor =
+      out.match(/([ \t]*)<meta\s+[^>]*property=["']og:type["'][^>]*>/i) ||
+      out.match(/([ \t]*)<meta\s+[^>]*property=["']og:site_name["'][^>]*>/i) ||
+      out.match(/([ \t]*)<meta\s+[^>]*property=["']og:url["'][^>]*>/i) ||
+      out.match(/([ \t]*)<meta\s+[^>]*property=["']og:title["'][^>]*>/i);
+    if (anchor) {
+      out = out.replace(anchor[0], `${anchor[0]}\n${anchor[1]}${ogLocaleTag}`);
+    } else if (/<\/head>/i.test(out)) {
+      out = out.replace(/<\/head>/i, `  ${ogLocaleTag}\n</head>`);
+    }
+  }
+
+  if (!/<meta\s+[^>]*property=["']og:image:alt["']/i.test(out)) {
+    const ogImageMatch = out.match(/([ \t]*)<meta\s+[^>]*property=["']og:image["'][^>]*>/i);
+    if (ogImageMatch) {
+      out = out.replace(
+        ogImageMatch[0],
+        `${ogImageMatch[0]}\n${ogImageMatch[1]}<meta property="og:image:alt" content="SWEEPR VPN 10Gbps WireGuard &amp; Home Wi-Fi Radar" />`
+      );
+    }
+  }
+
+  const fallbackDate = prevLastModMap.get(`https://sweeprvpn.com${urlPath}`) || '2026-10-26';
+  const normalizeLdNode = (node) => {
+    if (!node || typeof node !== 'object') return false;
+    let changed = false;
+    const types = Array.isArray(node['@type']) ? node['@type'] : [node['@type']];
+    if (types.includes('TechArticle')) {
+      if (!node.image) {
+        node.image = 'https://sweeprvpn.com/og-image.png';
+        changed = true;
+      }
+      if (!node.datePublished) {
+        node.datePublished = node.dateModified || fallbackDate;
+        changed = true;
+      }
+      if (!node.dateModified) {
+        node.dateModified = node.datePublished;
+        changed = true;
+      }
+      if (!node.publisher || typeof node.publisher !== 'object') {
+        node.publisher = {
+          '@type': 'Organization',
+          name: 'SWEEPR VPN',
+          logo: { '@type': 'ImageObject', url: 'https://sweeprvpn.com/logo-emerald.svg' }
+        };
+        changed = true;
+      } else if (!node.publisher.logo) {
+        node.publisher.logo = { '@type': 'ImageObject', url: 'https://sweeprvpn.com/logo-emerald.svg' };
+        changed = true;
+      }
+    }
+    if (types.includes('SoftwareApplication') || types.includes('WebApplication')) {
+      if (typeof node.fileSize === 'string' && /^(?:3\.7\s*MB|14\s*MB)$/i.test(node.fileSize.trim())) {
+        node.fileSize = `${EXE_FILESIZE_KB}KB`;
+        changed = true;
+      }
+    }
+    return changed;
+  };
+
+  out = out.replace(
+    /<script\s+type=["']application\/ld\+json["']>([\s\S]*?)<\/script>/gi,
+    (fullMatch, jsonInner) => {
+      try {
+        const parsed = JSON.parse(jsonInner);
+        let blockChanged = false;
+        if (Array.isArray(parsed['@graph'])) {
+          for (const node of parsed['@graph']) {
+            if (normalizeLdNode(node)) blockChanged = true;
+          }
+        } else if (normalizeLdNode(parsed)) {
+          blockChanged = true;
+        }
+        if (blockChanged) {
+          return `<script type="application/ld+json">${JSON.stringify(parsed)}</script>`;
+        }
+      } catch {}
+      return fullMatch;
+    }
+  );
+
+  return out;
+}
+
 // Load pillar-enrichment-state.json so GSC_STRIKING_DISTANCE_OVERRIDES never clobbers a custom GSC title edit within its 14-day cooldown
 const PILLAR_STATE_PATH = path.join(WEBSITE_DIR, 'pillar-enrichment-state.json');
 let pillarEnrichmentState = { titleUpdatedAt: {} };
@@ -436,15 +570,15 @@ if (shouldFix) {
       content = strippedDeadFunnel;
       modified = true;
     }
-    // Ensure /nav.js is loaded on core pages that render .glass-nav
+    // Ensure /nav.js is loaded on core pages that render .glass-nav & apply non-visual asset versioning / OG / schema fixes
     if (content.includes('class="glass-nav') && !content.includes('/nav.js') && /<\/head>/i.test(content)) {
       if (content.includes('/pricing-config.js')) {
         content = content.replace(
           /(<script[^>]+src=["']\/pricing-config\.js[^"']*["'][^>]*><\/script>)/i,
-          '$1\n  <script src="/nav.js" defer></script>'
+          `$1\n  <script src="/nav.js?v=${ASSET_VERSION_HASHES['nav.js']}" defer></script>`
         );
       } else {
-        content = content.replace(/<\/head>/i, '  <script src="/nav.js" defer></script>\n</head>');
+        content = content.replace(/<\/head>/i, `  <script src="/nav.js?v=${ASSET_VERSION_HASHES['nav.js']}" defer></script>\n</head>`);
       }
       modified = true;
     }
@@ -469,6 +603,11 @@ if (shouldFix) {
       }
       modified = true;
     }
+    const nonVisualFixedCore = applyNonVisualHeadAndSchemaFixes(content, r.urlPath);
+    if (nonVisualFixedCore !== content) {
+      content = nonVisualFixedCore;
+      modified = true;
+    }
     if (modified) {
       fs.writeFileSync(p, content, 'utf8');
       autoOptimizedCoreCount++;
@@ -477,7 +616,7 @@ if (shouldFix) {
 }
 if (autoOptimizedCoreCount > 0) {
   auditResults.autoOptimizations.push(
-    `Auto-optimized ${autoOptimizedCoreCount} core static pages with brand mobile theme-color (#10b981) & nofollow checkout guards`
+    `Auto-optimized ${autoOptimizedCoreCount} core static pages (theme-color #10b981, ?v= asset cache-busting, OpenGraph/schema metadata & nofollow checkout guards)`
   );
 }
 
@@ -727,11 +866,15 @@ for (const dir of ['solutions', 'setup', 'vs', 'guides']) {
         !content.includes('"@type": "Article"') &&
         !content.includes('"@type":"Article"')
       ) {
+        const pubDate = prevLastModMap.get(`https://sweeprvpn.com${urlPath}`) || todayStr;
         const techArticleLd = `<script type="application/ld+json">${JSON.stringify({
           '@context': 'https://schema.org',
           '@type': 'TechArticle',
           headline: rawH1,
           description: rawDesc,
+          image: 'https://sweeprvpn.com/og-image.png',
+          datePublished: pubDate,
+          dateModified: pubDate,
           proficiencyLevel: 'Beginner to Expert',
           author: {
             '@type': 'Organization',
@@ -800,7 +943,7 @@ for (const dir of ['solutions', 'setup', 'vs', 'guides']) {
 
       // 8. Ensure <script src="/nav.js" defer></script>, favicons, manifest, touch icon & nofollow checkout links on pSEO pages
       if (!content.includes('/nav.js') && /<\/body>/i.test(content)) {
-        content = content.replace(/<\/body>/i, '  <script src="/nav.js" defer></script>\n</body>');
+        content = content.replace(/<\/body>/i, `  <script src="/nav.js?v=${ASSET_VERSION_HASHES['nav.js']}" defer></script>\n</body>`);
         modified = true;
       }
       if (!/<link\s+[^>]*rel=["'](?:icon|shortcut icon)["']/i.test(content) && /<\/head>/i.test(content)) {
@@ -825,6 +968,12 @@ for (const dir of ['solutions', 'setup', 'vs', 'guides']) {
       );
       if (nofollowedPseo !== content) {
         content = nofollowedPseo;
+        modified = true;
+      }
+
+      const nonVisualFixedPseo = applyNonVisualHeadAndSchemaFixes(content, urlPath);
+      if (nonVisualFixedPseo !== content) {
+        content = nonVisualFixedPseo;
         modified = true;
       }
 
@@ -858,7 +1007,15 @@ for (const dir of ['solutions', 'setup', 'vs', 'guides']) {
 // Deterministic Cross-Cluster & Ring Internal Link Mesh across all indexable pSEO pillar pages (Eliminates 100% of Orphan Pages)
 let meshUpdatedCount = 0;
 if (shouldFix && pseoFilesOnDisk.length > 0) {
-  const indexableUrlSet = new Set(pseoFilesOnDisk.map((p) => p.urlPath));
+  const indexableUrlSet = new Set([
+    ...pseoFilesOnDisk.map((p) => p.urlPath),
+    '/alternatives/totalvpn',
+    '/tools/leak-test',
+    '/tools/isp-throttling-test',
+    '/tools/smart-tv-tracking-check',
+    '/tools/whats-on-my-wifi',
+    '/tools/vpn-renewal-price-checker'
+  ]);
   const byCluster = {
     solutions: pseoFilesOnDisk.filter((p) => p.dir === 'solutions'),
     setup: pseoFilesOnDisk.filter((p) => p.dir === 'setup'),
@@ -882,19 +1039,36 @@ if (shouldFix && pseoFilesOnDisk.length > 0) {
     for (const offset of [1, 2, 5, 13]) {
       if (cLen > 1) {
         const target = clusterArr[(cIdx + offset) % cLen];
-        if (target && target.urlPath !== page.urlPath && !picks.some((p) => p.urlPath === target.urlPath)) {
+        if (
+          target &&
+          target.urlPath !== page.urlPath &&
+          !picks.some((p) => p.urlPath === target.urlPath) &&
+          !page.content.includes(`href="${target.urlPath}"`)
+        ) {
           picks.push(target);
         }
       }
     }
     if (byCluster.setup.length > 0) {
       const sTarget = byCluster.setup[i % byCluster.setup.length];
-      if (sTarget.urlPath !== page.urlPath && !picks.some((p) => p.urlPath === sTarget.urlPath)) picks.push(sTarget);
+      if (
+        sTarget.urlPath !== page.urlPath &&
+        !picks.some((p) => p.urlPath === sTarget.urlPath) &&
+        !page.content.includes(`href="${sTarget.urlPath}"`)
+      ) {
+        picks.push(sTarget);
+      }
     }
     const crossPool = page.dir === 'guides' ? byCluster.vs : byCluster.guides;
     if (crossPool.length > 0) {
       const gTarget = crossPool[i % crossPool.length];
-      if (gTarget.urlPath !== page.urlPath && !picks.some((p) => p.urlPath === gTarget.urlPath)) picks.push(gTarget);
+      if (
+        gTarget.urlPath !== page.urlPath &&
+        !picks.some((p) => p.urlPath === gTarget.urlPath) &&
+        !page.content.includes(`href="${gTarget.urlPath}"`)
+      ) {
+        picks.push(gTarget);
+      }
     }
 
     if (picks.length > 0 && page.content.includes('<li><a href="/tools/leak-test"')) {
@@ -935,7 +1109,7 @@ if (shouldFix && pseoFilesOnDisk.length > 0) {
       faqs: [
         {
           q: 'How do I know if my ISP is throttling my evening internet speed?',
-          a: 'Run our free 10-second ISP Throttling Test at https://sweeprvpn.com/tools/isp-throttling-test between 19:00 and 23:00. If unencrypted CDN/streaming streams drop below 25 Mbps while a 10Gbps WireGuard tunnel achieves 850+ Mbps, your ISP is applying SNI/DPI traffic shaping.'
+          a: 'Run our <a href="/tools/isp-throttling-test" style="color:var(--accent2);text-decoration:underline;">free 10-second ISP Throttling Test</a> between 19:00 and 23:00. If unencrypted CDN/streaming streams drop below 25 Mbps while a 10Gbps WireGuard tunnel achieves 850+ Mbps, your ISP is applying SNI/DPI traffic shaping.'
         },
         {
           q: 'What WireGuard MTU should I use for my ISP?',
@@ -1055,6 +1229,7 @@ if (shouldFix && pseoFilesOnDisk.length > 0) {
   <link rel="canonical" href="${canonicalUrl}" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta property="og:type" content="website" />
+  <meta property="og:locale" content="en_GB" />
   <meta property="og:title" content="${hub.title}" />
   <meta property="og:description" content="${hub.description}" />
   <meta property="og:url" content="${canonicalUrl}" />
@@ -1072,7 +1247,7 @@ if (shouldFix && pseoFilesOnDisk.length > 0) {
   <link rel="shortcut icon" href="/favicon.ico?v=5" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5" />
   <link rel="manifest" href="/manifest.webmanifest" />
-  <script src="/nav.js" defer></script>
+  <script src="/nav.js?v=${ASSET_VERSION_HASHES['nav.js']}" defer></script>
 ${GA4_HEAD_SNIPPET}
   <script type="application/ld+json">${JSON.stringify(collectionSchema)}</script>
   <script type="application/ld+json">${JSON.stringify(breadcrumbSchema)}</script>
@@ -1146,6 +1321,9 @@ ${GA4_HEAD_SNIPPET}
       <a class="hub-tab${hub.dir === 'vs' ? ' active' : ''}" href="/vs">VPN Technical Comparisons (${byCluster.vs.length + 1})</a>
       <a class="hub-tab" href="/tools/leak-test">Free IP/WebRTC Leak Test</a>
       <a class="hub-tab" href="/tools/isp-throttling-test">Free ISP Throttling Test</a>
+      <a class="hub-tab" href="/tools/smart-tv-tracking-check">Smart-TV ACR Checker</a>
+      <a class="hub-tab" href="/tools/whats-on-my-wifi">What's on My Wi-Fi?</a>
+      <a class="hub-tab" href="/tools/vpn-renewal-price-checker">Renewal Price Calculator</a>
     </div>
 
     <div class="cta-strip">
@@ -1190,6 +1368,9 @@ ${GA4_HEAD_SNIPPET}
       <a href="/download">Download</a> |
       <a href="/tools/leak-test">Leak Test</a> |
       <a href="/tools/isp-throttling-test">ISP Speed Test</a> |
+      <a href="/tools/smart-tv-tracking-check">Smart-TV ACR Check</a> |
+      <a href="/tools/whats-on-my-wifi">What's on My Wi-Fi?</a> |
+      <a href="/tools/vpn-renewal-price-checker">Renewal Calculator</a> |
       <a href="/support">Support</a> |
       <a href="/privacy">Privacy Policy</a>
     </p>
@@ -1264,7 +1445,9 @@ const UTILITY_AND_PROTOTYPE_PAGES = [
   'sweepr-vpn-scorecard.html',
   'ui-ux-audit-mockups.html'
 ];
+const UTILITY_ASSET_VERSIONED_PAGES = new Set(['order.html', 'login.html', 'dashboard.html']);
 let autoShieldedProtoCount = 0;
+let autoVersionedUtilCount = 0;
 if (shouldFix) {
   for (const f of UTILITY_AND_PROTOTYPE_PAGES) {
     const p = path.join(WEBSITE_DIR, f);
@@ -1290,6 +1473,14 @@ if (shouldFix) {
       }
       modUtil = true;
     }
+    if (UTILITY_ASSET_VERSIONED_PAGES.has(f)) {
+      const versioned = versionStaticAssetTags(content);
+      if (versioned !== content) {
+        content = versioned;
+        modUtil = true;
+        autoVersionedUtilCount++;
+      }
+    }
     if (modUtil) {
       fs.writeFileSync(p, content, 'utf8');
     }
@@ -1307,6 +1498,11 @@ if (shouldFix) {
 if (autoShieldedProtoCount > 0) {
   auditResults.autoOptimizations.push(
     `Shielded ${autoShieldedProtoCount} internal prototype/review pages with <meta name="robots" content="noindex, nofollow">`
+  );
+}
+if (autoVersionedUtilCount > 0) {
+  auditResults.autoOptimizations.push(
+    `Synced immutable content-hash ?v= asset cache-busting tags across ${autoVersionedUtilCount} active app utility pages`
   );
 }
 
@@ -1334,12 +1530,6 @@ const allCanonicalPages = [
 ];
 
 // Rebuild and synchronize sitemap.xml with content-hash <lastmod> tracking (only bumps <lastmod> when file content changes)
-const todayStr = new Date().toISOString().slice(0, 10);
-const prevSitemapXml = fs.existsSync(SITEMAP_PATH) ? fs.readFileSync(SITEMAP_PATH, 'utf8') : '';
-const prevLastModMap = new Map();
-for (const m of prevSitemapXml.matchAll(/<url>\s*<loc>([^<]+)<\/loc>\s*<lastmod>([^<]+)<\/lastmod>/g)) {
-  prevLastModMap.set(m[1].trim(), m[2].trim());
-}
 let dailyState = { lastRunDate: todayStr, totalGenerated: pseoFilesOnDisk.length, batches: [], urlLastModHashes: {} };
 if (fs.existsSync(DAILY_STATE_PATH)) {
   try {
@@ -1500,10 +1690,12 @@ ${sitemapEntries
   .join('\n')}
 </urlset>
 `;
-writeFileIfChanged(SITEMAP_PATH, newSitemapXml);
-dailyState.totalGenerated = pseoFilesOnDisk.length;
-writeFileIfChanged(DAILY_STATE_PATH, JSON.stringify(dailyState, null, 2));
-auditResults.autoOptimizations.push(`Synchronized sitemap.xml with ${sitemapEntries.length} canonical URLs (content-hash <lastmod>: ${lastModUpdatedCount} modified today)`);
+if (shouldFix) {
+  writeFileIfChanged(SITEMAP_PATH, newSitemapXml);
+  dailyState.totalGenerated = pseoFilesOnDisk.length;
+  writeFileIfChanged(DAILY_STATE_PATH, JSON.stringify(dailyState, null, 2));
+  auditResults.autoOptimizations.push(`Synchronized sitemap.xml with ${sitemapEntries.length} canonical URLs (content-hash <lastmod>: ${lastModUpdatedCount} modified today)`);
+}
 pass('crawlability', 'Sitemap Completeness & Content-Hash Freshness', `${sitemapEntries.length} canonical URLs registered (${consolidatedNoIndexPseoCount} thin/duplicate variants consolidated via 301/noindex)`);
 
 // Rebuild website/llms.txt & website/llms-full.txt for Generative Engine Optimization (GEO / AI citation)
@@ -1542,7 +1734,9 @@ const llmsContent = `# SWEEPR VPN & SWEEPR Wi-Fi Radar (sweeprvpn.com)
 ## Programmatic SEO Technical Library (${pseoFilesOnDisk.length} Indexed Guides & Comparisons)
 ${pseoFilesOnDisk.map((p) => `- [${p.h1}](${p.loc})`).join('\n')}
 `;
-writeFileIfChanged(LLMS_PATH, llmsContent);
+if (shouldFix) {
+  writeFileIfChanged(LLMS_PATH, llmsContent);
+}
 
 // CMO Automation 1: Generate website/llms-full.txt with Live WireGuard POP Telemetry, ACR Blocklist Stats,
 // 7-Currency Price-Lock Matrix vs Competitor Renewal Hikes, and Audited Keyword Q&A
@@ -1687,7 +1881,9 @@ ${topQaOpps.map((o) => `### Q: ${o.enrichmentBrief.faqQuestion}\n- **Canonical G
 ## 7. Complete Canonical Index (${sitemapEntries.length} Pages)
 ${sitemapEntries.map((p) => `- ${p.canonicalLoc}`).join('\n')}
 `;
-writeFileIfChanged(LLMS_FULL_PATH, llmsFullContent);
+if (shouldFix) {
+  writeFileIfChanged(LLMS_FULL_PATH, llmsFullContent);
+}
 const validLlmsPaths = new Set([
   ...canonicalPathSet,
   '/download',
@@ -1707,7 +1903,9 @@ for (const docText of [llmsContent, llmsFullContent]) {
     }
   }
 }
-auditResults.autoOptimizations.push(`Synchronized llms.txt & llms-full.txt with all ${pseoFilesOnDisk.length} pSEO guides and live 04:00 AM WireGuard/ACR telemetry for GEO AI citations`);
+if (shouldFix) {
+  auditResults.autoOptimizations.push(`Synchronized llms.txt & llms-full.txt with all ${pseoFilesOnDisk.length} pSEO guides and live 04:00 AM WireGuard/ACR telemetry for GEO AI citations`);
+}
 if (nonCanonicalLlmsLinks.length === 0) {
   pass('crawlability', 'GEO / LLM Discovery Manifests (llms.txt & llms-full.txt)', `Updated both manifests with ${sitemapEntries.length} canonical URLs, ${topQaOpps.length} canonical FAQs, and live WireGuard/ACR proof (0 non-canonical links)`);
 } else {
@@ -1748,7 +1946,9 @@ for (const url of orderedCandidates) {
 
 indexingQueue.pending_urls = unpingedOrStaleUrls;
 indexingQueue.last_audit = { date: todayStr, totalUrls: sitemapEntries.length, pendingDeltaUrls: unpingedOrStaleUrls.length };
-writeFileIfChanged(INDEXING_QUEUE_PATH, JSON.stringify(indexingQueue, null, 2));
+if (shouldFix) {
+  writeFileIfChanged(INDEXING_QUEUE_PATH, JSON.stringify(indexingQueue, null, 2));
+}
 pass('crawlability', 'Search Engine Indexing Queue (Delta-Only)', `${unpingedOrStaleUrls.length} un-pinged/modified delta URLs queued (out of ${sitemapEntries.length} total canonical URLs)`);
 
 // Optional Bing & IndexNow live ping dispatch (strictly capped to max 25 delta URLs per run to prevent Bing IndexNow throttling)
@@ -1782,7 +1982,9 @@ if (shouldPing) {
       }
       indexingQueue.pending_urls = unpingedOrStaleUrls.slice(deltaBatch.length);
       indexingQueue.last_indexnow_ping = pingIso;
-      writeFileIfChanged(INDEXING_QUEUE_PATH, JSON.stringify(indexingQueue, null, 2));
+      if (shouldFix) {
+        writeFileIfChanged(INDEXING_QUEUE_PATH, JSON.stringify(indexingQueue, null, 2));
+      }
       pass('crawlability', 'IndexNow Delta Ping Broadcast', `Pinged ${deltaBatch.length} delta URLs to Bing & IndexNow (${indexingQueue.pending_urls.length} remaining in rolling queue)`);
     } else {
       pass('crawlability', 'IndexNow Delta Ping Broadcast', '0 new/modified URLs needed pinging (14-day anti-throttle window active)');
@@ -1814,10 +2016,10 @@ if (missingAiBots.length === 0) {
 }
 
 // Crawl budget disallow rules check
-const disallowRules = ['/api/', '/v1/', '/login', '/dashboard', '/popup-alternatives', '/qr-setup'];
+const disallowRules = ['/api/', '/v1/', '/login', '/dashboard', '/popup-alternatives', '/qr-setup', '/*?app=1*'];
 const missingDisallow = disallowRules.filter((r) => !robotsTxt.includes(`Disallow: ${r}`));
 if (missingDisallow.length === 0) {
-  pass('crawlability', 'robots.txt Crawl-Budget Protections', 'Internal APIs, user portals, qr-setup and CRO studios disallowed');
+  pass('crawlability', 'robots.txt Crawl-Budget Protections', 'Internal APIs, user portals, qr-setup, CRO studios & ?app=1 webview embeds disallowed');
 } else {
   warn('crawlability', 'robots.txt Crawl-Budget Protections', `Missing disallow rules: ${missingDisallow.join(', ')}`);
 }
@@ -1937,11 +2139,33 @@ for (const [srcRoute] of serverRedirectRules) {
     brokenGscOrRedirectUrls.push(`${srcRoute}->${resolvedDst} (missing target)`);
   }
 }
+let canonicalHtmlVariantsChecked = 0;
+for (const p of allCanonicalPages) {
+  if (p.urlPath === '/') continue;
+  const htmlVariant = `${p.urlPath}.html`;
+  canonicalHtmlVariantsChecked++;
+  const resolvedHtmlDst = resolveCanonical301(htmlVariant);
+  if (!resolvedHtmlDst) {
+    brokenGscOrRedirectUrls.push(`${htmlVariant} (unmatched .html canonical 301)`);
+  } else {
+    const cleanHtmlDst = resolvedHtmlDst.replace(/\?.*$/, '');
+    if (resolveCanonical301(cleanHtmlDst)) {
+      brokenGscOrRedirectUrls.push(`${htmlVariant}->${resolvedHtmlDst} (.html multi-hop redirect chain)`);
+    } else if (!canonicalRouteSet.has(cleanHtmlDst)) {
+      brokenGscOrRedirectUrls.push(`${htmlVariant}->${resolvedHtmlDst} (.html missing target)`);
+    }
+  }
+}
+canonicalHtmlVariantsChecked++;
+const downloadHtmlDst = resolveCanonical301('/download.html');
+if (downloadHtmlDst !== '/download' || resolveCanonical301('/download')) {
+  brokenGscOrRedirectUrls.push(`/download.html->${downloadHtmlDst || 'null'} (expected 1-hop -> /download)`);
+}
 if (brokenGscOrRedirectUrls.length === 0) {
   pass(
     'crawlability',
     'Historical GSC URLs & 301 Redirect Target Guard',
-    `Verified ${gscUrlsToVerify.length} historical GSC URLs and ${Object.keys(serverRedirectMap).length} 301 rules via resolveCanonical301 (0 404s, 0 redirect chains)`
+    `Verified ${gscUrlsToVerify.length} historical GSC URLs, ${Object.keys(serverRedirectMap).length} 301 rules, and ${canonicalHtmlVariantsChecked} .html canonical variants via resolveCanonical301 (0 404s, 0 redirect chains)`
   );
 } else {
   fail(
@@ -2059,16 +2283,69 @@ for (const page of allCanonicalPages) {
     fs.writeFileSync(page.absPath, healedContent, 'utf8');
     content = healedContent;
   }
+  const htmlWithoutScripts = content.replace(/<script\b[\s\S]*?<\/script>/gi, '');
+  const normHrefLocal = (raw) => {
+    if (!raw) return null;
+    let t = raw.trim();
+    if (/^(?:#|mailto:|tel:|javascript:)/i.test(t)) return null;
+    if (t.startsWith('https://sweeprvpn.com')) t = t.slice('https://sweeprvpn.com'.length) || '/';
+    else if (/^(?:https?:)?\/\//i.test(t) || !t.startsWith('/')) return null;
+    t = t.split('#')[0].split('?')[0].replace(/\/+$/, '') || '/';
+    return t;
+  };
+  const mainBlockForGuard = (htmlWithoutScripts.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] || '').replace(/<!--[\s\S]*?-->/g, '');
+  const mainPillarHrefCounts = new Map();
+  for (const hm of mainBlockForGuard.matchAll(/<a\b[^>]*\bhref=["']([^"']+)["']/gi)) {
+    const nh = normHrefLocal(hm[1]);
+    if (nh && nh !== page.urlPath && /^\/(?:solutions|guides|setup|vs|alternatives)\//.test(nh)) {
+      mainPillarHrefCounts.set(nh, (mainPillarHrefCounts.get(nh) || 0) + 1);
+    }
+  }
+  const hasDupPillarMainLink = [...mainPillarHrefCounts.values()].some((c) => c > 1);
+  const relatedContainers = [
+    mainBlockForGuard.match(/<section[^>]*id="sweepr-related-guides"[\s\S]*?<\/section>/i)?.[0],
+    mainBlockForGuard.match(/<h2>Related Technical Guides[\s\S]*?<div class="card">\s*<ul>[\s\S]*?<\/ul>\s*<\/div>/i)?.[0],
+    mainBlockForGuard.match(/<section\b[^>]*border-t border-gray-200 pt-8[^>]*>[\s\S]*?<div\b[^>]*grid grid-cols-1[^>]*>[\s\S]*?<\/div>\s*<\/section>/i)?.[0],
+    mainBlockForGuard.match(/<div\b[^>]*border-t border-gray-200 pt-10[^>]*>[\s\S]*?<div\b[^>]*grid grid-cols-1[^>]*>[\s\S]*?<\/div>\s*<\/div>/i)?.[0]
+  ].filter(Boolean);
+  let hasDupRelatedBlockLink = false;
+  for (const rc of relatedContainers) {
+    const seenRc = new Set();
+    for (const hm of rc.matchAll(/<a\b[^>]*\bhref=["']([^"']+)["']/gi)) {
+      const nh = normHrefLocal(hm[1]);
+      if (nh && nh !== page.urlPath) {
+        if (seenRc.has(nh)) {
+          hasDupRelatedBlockLink = true;
+          break;
+        }
+        seenRc.add(nh);
+      }
+    }
+    if (hasDupRelatedBlockLink) break;
+  }
   const hasDupJsonLdTerm = [...content.matchAll(/<script\s+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)].some((m) =>
     /\b(WireGuard|Setup|Container)\s+\1\b/i.test(m[1])
   );
+  const hasMalformedAnchor =
+    /<a\b[^>]*<\s*(?:li|a|div|span|p)\b/i.test(htmlWithoutScripts) ||
+    />\s*href=["']/i.test(htmlWithoutScripts);
   if (
     />\s*(?:NaN|undefined|\[object Object\])\s*</i.test(content) ||
     content.includes('&amp;amp;') ||
-    hasDupJsonLdTerm
+    hasDupJsonLdTerm ||
+    hasMalformedAnchor ||
+    hasDupPillarMainLink ||
+    hasDupRelatedBlockLink
   ) {
     templateCorruptionIssues++;
-    failingTemplateCorruptionPages.push(page.file);
+    const tag = hasMalformedAnchor
+      ? ' (malformed anchor)'
+      : hasDupPillarMainLink
+        ? ' (duplicate <main> pillar link)'
+        : hasDupRelatedBlockLink
+          ? ' (duplicate related-guide link)'
+          : '';
+    failingTemplateCorruptionPages.push(`${page.file}${tag}`);
   }
 
   // 1. Title tag check (non-empty, unique, <= 65 decoded chars, no mid-phrase dangling preposition)
@@ -2130,19 +2407,39 @@ for (const page of allCanonicalPages) {
     failingPages.robots.push(page.file);
   }
 
-  // 5. Schema check (JSON-LD + parse validity)
+  // 5. Schema check (JSON-LD parse validity + TechArticle completeness + accurate SoftwareApplication fileSize)
   const jsonLdMatches = content.matchAll(/<script\s+type=["']application\/ld\+json["']>([\s\S]*?)<\/script>/gi);
   let pageHasJsonLd = false;
   let jsonLdParseFailed = false;
+  let schemaMetadataIncomplete = false;
+  const checkLdNode = (node) => {
+    if (!node || typeof node !== 'object') return;
+    const types = Array.isArray(node['@type']) ? node['@type'] : [node['@type']];
+    if (types.includes('TechArticle')) {
+      if (!node.image || !node.datePublished || !node.publisher?.logo?.url) {
+        schemaMetadataIncomplete = true;
+      }
+    }
+    if (types.includes('SoftwareApplication') || types.includes('WebApplication')) {
+      if (typeof node.fileSize === 'string' && /^(?:3\.7\s*MB|14\s*MB)$/i.test(node.fileSize.trim())) {
+        schemaMetadataIncomplete = true;
+      }
+    }
+  };
   for (const m of jsonLdMatches) {
     pageHasJsonLd = true;
     try {
-      JSON.parse(m[1]);
+      const parsedLd = JSON.parse(m[1]);
+      if (Array.isArray(parsedLd['@graph'])) {
+        for (const node of parsedLd['@graph']) checkLdNode(node);
+      } else {
+        checkLdNode(parsedLd);
+      }
     } catch {
       jsonLdParseFailed = true;
     }
   }
-  if (!pageHasJsonLd || jsonLdParseFailed) {
+  if (!pageHasJsonLd || jsonLdParseFailed || schemaMetadataIncomplete) {
     schemaIssues++;
     failingPages.schema.push(page.file);
   }
@@ -2154,12 +2451,14 @@ for (const page of allCanonicalPages) {
     failingPages.h1.push(`${page.file} (count=${h1Matches.length})`);
   }
 
-  // 7. OpenGraph check (including og:image)
+  // 7. OpenGraph check (including og:image, og:image:alt & og:locale)
   const hasOgTitle = content.includes('og:title');
   const hasOgDesc = content.includes('og:description');
   const hasOgUrl = content.includes('og:url');
   const hasOgImage = content.includes('og:image');
-  if (!hasOgTitle || !hasOgDesc || !hasOgUrl || !hasOgImage) {
+  const hasOgImageAlt = content.includes('og:image:alt');
+  const hasOgLocale = content.includes('og:locale');
+  if (!hasOgTitle || !hasOgDesc || !hasOgUrl || !hasOgImage || !hasOgImageAlt || !hasOgLocale) {
     ogIssues++;
     failingPages.og.push(page.file);
   }
@@ -2259,7 +2558,7 @@ if (a11yLandmarkIssues === 0) {
 }
 
 if (ogIssues === 0) {
-  pass('technicalSeo', 'OpenGraph Social Metadata', `All ${allCanonicalPages.length} pages include complete OpenGraph tags (title, desc, url, og:image)`);
+  pass('technicalSeo', 'OpenGraph Social Metadata', `All ${allCanonicalPages.length} pages include complete OpenGraph tags (title, desc, url, og:image, og:image:alt, og:locale)`);
 } else {
   warn('technicalSeo', 'OpenGraph Social Metadata', `${ogIssues} pages with incomplete OpenGraph tags: ${failingPages.og.slice(0, 3).join(', ')}`);
 }
@@ -2289,9 +2588,110 @@ if (brokenInternalLinks.length === 0) {
 }
 
 if (templateCorruptionIssues === 0) {
-  pass('technicalSeo', 'HTML Template Corruption & Duplicate Link Guard', `All ${allCanonicalPages.length} pages verified free of >NaN<, >undefined<, &amp;amp;, and duplicate related-guide links`);
+  pass('technicalSeo', 'HTML Template Corruption & Duplicate Link Guard', `All ${allCanonicalPages.length} pages verified free of >NaN<, >undefined<, &amp;amp;, malformed <a> markup, and duplicate <main>/related-guide links`);
 } else {
   fail('technicalSeo', 'HTML Template Corruption & Duplicate Link Guard', `${templateCorruptionIssues} pages with template corruption: ${failingTemplateCorruptionPages.slice(0, 5).join(', ')}`);
+}
+
+// Hard CI Internal Link Equity & Click-Depth Distribution Audit
+const eqTotalInlinks = new Map();
+const eqBodyInlinks = new Map();
+const eqOutGraph = new Map();
+for (const p of allCanonicalPages) {
+  eqTotalInlinks.set(p.urlPath, new Set());
+  eqBodyInlinks.set(p.urlPath, new Set());
+  eqOutGraph.set(p.urlPath, new Set());
+}
+const normalizeEqHref = (raw) => {
+  if (!raw) return null;
+  let t = raw.trim();
+  if (/^(?:#|mailto:|tel:|javascript:)/i.test(t)) return null;
+  if (t.startsWith('https://sweeprvpn.com')) t = t.slice('https://sweeprvpn.com'.length) || '/';
+  else if (/^(?:https?:)?\/\//i.test(t) || !t.startsWith('/')) return null;
+  t = t.split('#')[0].split('?')[0].replace(/\/+$/, '') || '/';
+  return t;
+};
+for (const p of allCanonicalPages) {
+  const html = fs.readFileSync(p.absPath, 'utf8').replace(/<script\b[\s\S]*?<\/script>/gi, '').replace(/<!--[\s\S]*?-->/g, '');
+  const mainFrag = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] || '';
+  for (const hm of html.matchAll(/<a\b[^>]*\bhref=["']([^"']+)["']/gi)) {
+    const nh = normalizeEqHref(hm[1]);
+    if (nh && nh !== p.urlPath && eqTotalInlinks.has(nh)) {
+      eqTotalInlinks.get(nh).add(p.urlPath);
+      eqOutGraph.get(p.urlPath).add(nh);
+    }
+  }
+  for (const hm of mainFrag.matchAll(/<a\b[^>]*\bhref=["']([^"']+)["']/gi)) {
+    const nh = normalizeEqHref(hm[1]);
+    if (nh && nh !== p.urlPath && eqBodyInlinks.has(nh)) {
+      eqBodyInlinks.get(nh).add(p.urlPath);
+    }
+  }
+}
+const eqDepth = new Map([['/', 0]]);
+const eqQueue = ['/'];
+while (eqQueue.length > 0) {
+  const cur = eqQueue.shift();
+  const d = eqDepth.get(cur);
+  for (const nxt of eqOutGraph.get(cur) || []) {
+    if (!eqDepth.has(nxt)) {
+      eqDepth.set(nxt, d + 1);
+      eqQueue.push(nxt);
+    }
+  }
+}
+const UTILITY_EQUITY_EXCLUSIONS = new Set(['/', '/pricing', '/download', '/support', '/privacy', '/terms', '/refund', '/warrant-canary']);
+const FLAGSHIP_TOOLS = ['/tools/leak-test', '/tools/isp-throttling-test', '/tools/smart-tv-tracking-check', '/tools/whats-on-my-wifi', '/tools/vpn-renewal-price-checker'];
+const equityViolations = [];
+let maxObservedDepth = 0;
+let minObservedTotalInlinks = Infinity;
+let sumObservedTotalInlinks = 0;
+for (const p of allCanonicalPages) {
+  const tot = eqTotalInlinks.get(p.urlPath).size;
+  const body = eqBodyInlinks.get(p.urlPath).size;
+  const dep = eqDepth.has(p.urlPath) ? eqDepth.get(p.urlPath) : 999;
+  if (p.urlPath !== '/' && tot < minObservedTotalInlinks) minObservedTotalInlinks = tot;
+  sumObservedTotalInlinks += tot;
+  if (dep < 999 && dep > maxObservedDepth) maxObservedDepth = dep;
+  if (p.urlPath !== '/' && tot === 0) {
+    equityViolations.push(`${p.urlPath} (orphan: 0 inlinks)`);
+    continue;
+  }
+  if (p.urlPath !== '/' && tot < 4) {
+    equityViolations.push(`${p.urlPath} (tot=${tot} < 4)`);
+  }
+  if (!UTILITY_EQUITY_EXCLUSIONS.has(p.urlPath) && body < 2) {
+    equityViolations.push(`${p.urlPath} (body=${body} < 2)`);
+  }
+  if (/^\/(?:solutions|setup|guides|vs|alternatives)\//.test(p.urlPath) && body < 4) {
+    equityViolations.push(`${p.urlPath} (pillar body=${body} < 4)`);
+  }
+  if (dep > 3) {
+    equityViolations.push(`${p.urlPath} (depth=${dep === 999 ? 'unreachable' : dep} > 3)`);
+  }
+}
+for (const toolUrl of FLAGSHIP_TOOLS) {
+  const tot = eqTotalInlinks.get(toolUrl)?.size ?? 0;
+  const body = eqBodyInlinks.get(toolUrl)?.size ?? 0;
+  const dep = eqDepth.get(toolUrl) ?? 999;
+  if (tot < 10 || body < 5 || dep > 2) {
+    equityViolations.push(`${toolUrl} (tool tot=${tot}/body=${body}/depth=${dep} below 10/5/<=2)`);
+  }
+}
+const avgInlinks = (sumObservedTotalInlinks / Math.max(1, allCanonicalPages.length)).toFixed(1);
+if (equityViolations.length === 0) {
+  const toolSummary = FLAGSHIP_TOOLS.map((u) => `${u.replace('/tools/', '')}:${eqTotalInlinks.get(u).size}/${eqBodyInlinks.get(u).size}`).join(', ');
+  pass(
+    'crawlability',
+    'Internal Link Equity & Click-Depth Distribution',
+    `All ${allCanonicalPages.length} pages passed (0 orphans, min inlinks=${minObservedTotalInlinks}, avg=${avgInlinks}, max depth=${maxObservedDepth}; tools=${toolSummary})`
+  );
+} else {
+  fail(
+    'crawlability',
+    'Internal Link Equity & Click-Depth Distribution',
+    `${equityViolations.length} equity/depth violations: ${equityViolations.slice(0, 6).join(', ')}`
+  );
 }
 
 // Server Canonical Redirects Check
@@ -2473,9 +2873,33 @@ if (downloadFnMatch) {
   }
 }
 if (blockingScripts === 0) {
-  pass('pageSpeed', 'Render-Blocking Script Elimination', 'All external JavaScript resources across 92 static pages & /download use defer or async attributes (0 runtime Tailwind JIT)');
+  pass('pageSpeed', 'Render-Blocking Script Elimination', `All external JavaScript resources across ${allCanonicalPages.length} static pages & /download use defer or async attributes (0 runtime Tailwind JIT)`);
 } else {
   warn('pageSpeed', 'Render-Blocking Script Elimination', `${blockingScripts} non-critical scripts without defer/async or missing /download landmark`);
+}
+
+// Check Immutable ?v= Cache-Busting across CSS/JS assets on all canonical pages + /download
+let unversionedAssetTags = 0;
+const countUnversionedAssets = (htmlText) => {
+  const cssLinks = htmlText.match(/<link\b[^>]*\bhref=["']\/(?:style\.css|tailwind\.min\.css)(?:\?[^"']*)?["'][^>]*>/gi) || [];
+  for (const tag of cssLinks) {
+    if (!/\?v=[a-z0-9]+/i.test(tag)) unversionedAssetTags++;
+  }
+  const jsTags = htmlText.match(/<script\b[^>]*\bsrc=["']\/(?:nav\.js|pricing-config\.js)(?:\?[^"']*)?["'][^>]*>/gi) || [];
+  for (const tag of jsTags) {
+    if (!/\?v=[a-z0-9]+/i.test(tag)) unversionedAssetTags++;
+  }
+};
+for (const page of allCanonicalPages) {
+  countUnversionedAssets(fs.readFileSync(page.absPath, 'utf8'));
+}
+if (downloadFnMatch) {
+  countUnversionedAssets(downloadFnMatch[0]);
+}
+if (unversionedAssetTags === 0) {
+  pass('pageSpeed', 'Immutable Asset Cache-Busting (?v=)', `All CSS/JS tags (/style.css, /tailwind.min.css, /nav.js, /pricing-config.js) across ${allCanonicalPages.length} pages & /download carry content-hashed ?v= tokens`);
+} else {
+  warn('pageSpeed', 'Immutable Asset Cache-Busting (?v=)', `${unversionedAssetTags} unversioned local CSS/JS tags miss 1-year immutable caching`);
 }
 
 // Server.mjs HTTP Compression & Caching Audit
@@ -2491,6 +2915,9 @@ const hasXmlCacheControl = serverCode.includes("ext === '.xml' || ext === '.txt'
 const hasImmutableVersionCache = serverCode.includes("max-age=31536000, immutable");
 const hasStaticHeadParity = serverCode.includes("const isHead = req.method === 'HEAD'");
 const hasPwaStartUrlDownload = serverCode.includes("start_url: '/download'");
+const hasStaticCompressedCache = serverCode.includes('STATIC_COMPRESSED_CACHE') && serverCode.includes('getStaticAssetVersion');
+const hasTrailingAndCaseRedirect = serverCode.includes("urlObj.pathname.endsWith('/')") && serverCode.includes('lowerPath !== pathname');
+const hasAppEmbedNoIndexHeader = serverCode.includes("isAppEmbed") && serverCode.includes("noindex, nofollow");
 
 if (hasZlib && hasBrotli && hasGzip && hasSendHtmlCompression) {
   pass('pageSpeed', 'Server-Side Compression (Brotli + Gzip)', 'Built-in node:zlib Brotli and Gzip transparently enabled across static assets & dynamic HTML (/download)');
@@ -2510,10 +2937,10 @@ if (hasWebpMime && hasAvifMime && hasWoff2Mime) {
   fail('pageSpeed', 'Modern MIME Types & Static Serving', 'Missing modern media MIME types in server.mjs');
 }
 
-if (hasXmlCacheControl && hasImmutableVersionCache && hasStaticHeadParity && hasPwaStartUrlDownload) {
-  pass('pageSpeed', 'Static Cache-Control & HEAD Parity', 'Versioned (?v=) assets served 1yr immutable; HTML 300s/3600s SWR; XML/TXT 3600s/86400s; HEAD parity & PWA /download start_url verified');
+if (hasXmlCacheControl && hasImmutableVersionCache && hasStaticHeadParity && hasPwaStartUrlDownload && hasStaticCompressedCache && hasTrailingAndCaseRedirect && hasAppEmbedNoIndexHeader) {
+  pass('pageSpeed', 'Static Cache-Control, Compression Cache & HEAD Parity', 'Versioned (?v=) assets served 1yr immutable from mtime compression cache; trailing-slash/case 301s, ?app=1 noindex header, HEAD parity & PWA /download start_url verified');
 } else {
-  warn('pageSpeed', 'Static Cache-Control & HEAD Parity', 'Missing immutable versioned cache-control, HEAD empty-body parity, or canonical PWA start_url in server.mjs');
+  warn('pageSpeed', 'Static Cache-Control, Compression Cache & HEAD Parity', 'Missing immutable cache-control, compression cache, trailing-slash/case 301, ?app=1 noindex header, HEAD parity, or canonical PWA start_url in server.mjs');
 }
 
 // Benchmark compression savings on key pages
@@ -2522,7 +2949,7 @@ for (const bFile of benchmarkFiles) {
   const bPath = path.join(WEBSITE_DIR, bFile);
   if (fs.existsSync(bPath)) {
     const raw = fs.readFileSync(bPath);
-    const br = zlib.brotliCompressSync(raw, { params: { [zlib.constants.BROTLI_PARAM_QUALITY]: 5 } });
+    const br = zlib.brotliCompressSync(raw, { params: { [zlib.constants.BROTLI_PARAM_QUALITY]: 9 } });
     const gz = zlib.gzipSync(raw, { level: 6 });
     const brRatio = Math.round((1 - br.length / raw.length) * 100);
     const gzRatio = Math.round((1 - gz.length / raw.length) * 100);
@@ -2632,7 +3059,9 @@ ${auditResults.benchmarks.map((b) => `- **${b.file}** (${b.rawKb} KB raw) &rarr;
   console.log(`\n📝 Persisted daily audit report to ${path.relative(VPN_ROOT, AUDIT_LOG_PATH)}`);
 }
 
-updateAuditLog();
+if (shouldFix) {
+  updateAuditLog();
+}
 
 if (totalFailed > 0) {
   process.exit(1);
