@@ -152,7 +152,20 @@ const stripHtml = (h) =>
     .trim()
     .toLowerCase();
 
-const solShingles = [];
+const buildShingleSet = (raw) => {
+  const words = stripHtml(raw).split(' ').filter(Boolean);
+  const s = new Set();
+  for (let i = 0; i <= words.length - 5; i++) s.add(words.slice(i, i + 5).join(' '));
+  return s;
+};
+
+const diceSimilarityPct = (a, b) => {
+  let inter = 0;
+  for (const g of a) if (b.has(g)) inter++;
+  return ((2 * inter) / (a.size + b.size || 1)) * 100;
+};
+
+const clusterShingles = { solutions: [], vs: [], guides: [], setup: [] };
 const pillarFiles = [];
 for (const dir of pillarDirs) {
   const dirPath = path.join(WEBSITE_DIR, dir);
@@ -165,24 +178,41 @@ for (const dir of pillarDirs) {
     } else {
       pillarFiles.push({ rel: `${dir}/${f}`, abs, raw });
     }
-    if (dir === 'solutions') {
-      const words = stripHtml(raw).split(' ').filter(Boolean);
-      const s = new Set();
-      for (let i = 0; i <= words.length - 5; i++) s.add(words.slice(i, i + 5).join(' '));
-      solShingles.push({ f, s });
+    if (clusterShingles[dir]) {
+      clusterShingles[dir].push({ f: `${dir}/${f}`, s: buildShingleSet(raw) });
     }
   }
 }
 
-let maxOverlap = 0;
-for (let i = 0; i < solShingles.length; i++) {
-  for (let j = i + 1; j < solShingles.length; j++) {
-    let inter = 0;
-    for (const g of solShingles[i].s) if (solShingles[j].s.has(g)) inter++;
-    const sim = ((2 * inter) / (solShingles[i].s.size + solShingles[j].s.size || 1)) * 100;
-    if (sim > maxOverlap) maxOverlap = sim;
-    if (sim >= 30.0) {
-      fail(`5-gram overlap ${sim.toFixed(2)}% >= 30% (${solShingles[i].f} vs ${solShingles[j].f})`);
+const maxOverlapByCluster = { solutions: 0, vs: 0, guides: 0, setup: 0, locales: 0 };
+for (const [cluster, entries] of Object.entries(clusterShingles)) {
+  for (let i = 0; i < entries.length; i++) {
+    for (let j = i + 1; j < entries.length; j++) {
+      const sim = diceSimilarityPct(entries[i].s, entries[j].s);
+      if (sim > maxOverlapByCluster[cluster]) maxOverlapByCluster[cluster] = sim;
+      if (sim >= 30.0) {
+        fail(`[${cluster}] 5-gram overlap ${sim.toFixed(2)}% >= 30% (${entries[i].f} vs ${entries[j].f})`);
+      }
+    }
+  }
+}
+
+const localePairGroups = [
+  ['index.html', 'de-index.html', 'fr-index.html', 'es-index.html'],
+  ['pricing.html', 'de-pricing.html', 'fr-pricing.html', 'es-pricing.html'],
+  ['leak-test.html', 'de-leak-test.html', 'fr-leak-test.html', 'es-leak-test.html', 'pt-br-leak-test.html', 'sv-leak-test.html']
+];
+for (const grp of localePairGroups) {
+  const entries = grp
+    .filter((f) => fs.existsSync(path.join(WEBSITE_DIR, f)))
+    .map((f) => ({ f, s: buildShingleSet(fs.readFileSync(path.join(WEBSITE_DIR, f), 'utf8')) }));
+  for (let i = 0; i < entries.length; i++) {
+    for (let j = i + 1; j < entries.length; j++) {
+      const sim = diceSimilarityPct(entries[i].s, entries[j].s);
+      if (sim > maxOverlapByCluster.locales) maxOverlapByCluster.locales = sim;
+      if (sim >= 30.0) {
+        fail(`[locales] 5-gram overlap ${sim.toFixed(2)}% >= 30% (${entries[i].f} vs ${entries[j].f})`);
+      }
     }
   }
 }
@@ -290,5 +320,5 @@ if (errors.length > 0) {
 }
 
 console.log(
-  `✅ CI SEO Quality Gate PASSED: sitemap=${locs.length}/110, hreflang_groups=${hreflangGroups.size}, pillars=${pillarFiles.length}, json_ld=${jsonLdCount}, max_title=${maxTitleLen}/65, direct_answer_words=${minDirectWords}-${maxDirectWords}, max_solutions_overlap=${maxOverlap.toFixed(2)}%, mojibake=0, deprecated_schema=0`
+  `✅ CI SEO Quality Gate PASSED: sitemap=${locs.length}/110, hreflang_groups=${hreflangGroups.size}, pillars=${pillarFiles.length}, json_ld=${jsonLdCount}, max_title=${maxTitleLen}/65, direct_answer_words=${minDirectWords}-${maxDirectWords}, max_overlap(solutions=${maxOverlapByCluster.solutions.toFixed(2)}%, vs=${maxOverlapByCluster.vs.toFixed(2)}%, guides=${maxOverlapByCluster.guides.toFixed(2)}%, setup=${maxOverlapByCluster.setup.toFixed(2)}%, locales=${maxOverlapByCluster.locales.toFixed(2)}%), mojibake=0, deprecated_schema=0`
 );

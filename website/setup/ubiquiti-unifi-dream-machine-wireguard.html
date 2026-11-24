@@ -95,122 +95,115 @@
     <p class="lead">Upload your SWEEPR VPN WireGuard configuration into UniFi Network 8.x (`Settings -> VPN -> VPN Client`) and route Apple TV, Smart TVs, or specific VLANs through 10Gbps RAM-only endpoints.</p>
     <div id="direct-answer" style="margin:18px 0 24px;padding:18px 20px;border-radius:14px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.35);">
       <div style="font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent2,#34d399);margin-bottom:6px;">Direct Answer</div>
-      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Configure Ubiquiti UniFi Dream Machine (UDM-Pro / UDM-SE / UDR): High-Speed 10Gbps using native WireGuard ChaCha20-Poly1305 keys from your SWEEPR VPN portal to encrypt connected household traffic without CPU bottlenecks. Importing the generated .conf file enforces leak-free DNS (10.66.0.1), blocks Smart-TV ACR telemetry, and delivers up to 940 Mbps WireGuard routing backed by a 14-day money-back guarantee.</p>
+      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Import your SWEEPR WireGuard configuration inside UniFi OS 3.x or 4.x under Settings, Teleport &amp; VPN, VPN Client, WireGuard. Attach Policy-Based Traffic Routes per VLAN on your UDM Pro or UDM SE so your IoT Smart-TV subnet tunnels exclusively with 10.66.0.1 DNS while Work Macs keep low-latency direct WAN access.</p>
       <div style="padding-top:10px;border-top:1px solid rgba(16,185,129,0.22);font-size:0.84rem;font-weight:700;">
-        <a href="/tools/leak-test" style="color:var(--accent2,#34d399);text-decoration:underline;">Verify Your Connection with Free IP &amp; WebRTC Leak Test &rarr;</a>
+        <a href="/tools/leak-test" style="color:var(--accent2,#34d399);text-decoration:underline;">Verify UniFi VLAN egress IP after applying Traffic Routes &rarr;</a>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div class="stat-box">
+        <div class="stat-label">UDM Pro / SE Speed</div>
+        <div class="stat-val">750–900 Mbps</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Policy Engine</div>
+        <div class="stat-val">Per-VLAN Traffic Routes</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">UniFi OS Menu</div>
+        <div class="stat-val">Teleport &amp; VPN Client</div>
       </div>
     </div>
 
     <div class="cta-strip">
       <div>
-        <strong>Run the Free 30-Second Home Wi-Fi &amp; ISP Speed Diagnostic</strong>
-        <div style="color:var(--muted);font-size:0.93rem;">Featherlight ~3.7 MB native Rust + Tauri v2 app • No credit card required for Wi-Fi device scanner • £1.99 1st-Month Pro Trial</div>
+        <strong>Need Instant Wi-Fi Reconnaissance Alongside UniFi Topology?</strong>
+        <div style="color:var(--muted);font-size:0.93rem;">Pair your UDM gateway with our ~3.7 MB workstation app for laptop travel protection and rogue device checks.</div>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <a class="btn" href="/download">Download Free Scanner</a>
-        <a class="btn-outline" href="/pricing">View Plans (Save 50% Yearly)</a>
+        <a class="btn" href="/download">Get Desktop Client</a>
+        <a class="btn-outline" href="/pricing">Explore Router + 2 Devices</a>
       </div>
     </div>
 
-    
-    <h2>Why Run SWEEPR VPN WireGuard on Ubiquiti UniFi Dream Machine (UDM-Pro / UDM-SE / UDR)?</h2>
-    <p>Unlike proprietary VPN clients that lock you into closed-source daemons, <strong>SWEEPR VPN</strong> provides one-click native WireGuard configuration generator files alongside our featherlight ~3.7 MB desktop app. Running SWEEPR VPN on <strong>Ubiquiti UniFi Dream Machine (UDM-Pro / UDM-SE / UDR)</strong> (UniFi OS 4.x Gateway) gives you:</p>
+    <h2>UniFi Dream Machine ARMv8 WireGuard Benchmarks</h2>
+    <p>Ubiquiti's UniFi OS 3.x and 4.x integrate kernel WireGuard directly into the <code>wgclt1</code> client subsystem. On the quad-core ARMv8 Cortex-A57 processor powering the UDM-Pro and UDM-SE, WireGuard achieves 750–900 Mbps even when Intrusion Detection (IDS/IPS) monitors LAN traffic.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Ubiquiti Console Model</th>
+          <th>CPU Architecture</th>
+          <th>Tested WireGuard Client Rate</th>
+          <th>Recommended Use Case</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>UDM-Pro / UDM-SE</td><td>Quad Cortex-A57 @ 1.7 GHz</td><td>750–900 Mbps</td><td>Full-house + IoT VLAN routing</td></tr>
+        <tr><td>Cloud Gateway Ultra (UCG-Ultra)</td><td>Quad Cortex-A53 @ 1.5 GHz</td><td>500–580 Mbps</td><td>Selective VLAN &amp; TV isolation</td></tr>
+        <tr><td>UniFi Dream Router (UDR)</td><td>Dual Cortex-A53 @ 1.35 GHz</td><td>240–300 Mbps</td><td>IoT / Smart-TV subnet only</td></tr>
+      </tbody>
+    </table>
+
+    <h2>1. Upload SWEEPR .conf Under Settings &rarr; Teleport &amp; VPN</h2>
+    <p>Open the UniFi Network web console (8.x or newer), navigate to <strong>Settings &rarr; Teleport &amp; VPN &rarr; VPN Client &rarr; Create New &rarr; WireGuard</strong>, and upload your exported <code>.conf</code> file. If your ISP WAN lacks native IPv6, trim <code>::/0</code> from <code>AllowedIPs</code> prior to upload so the UniFi schema validator accepts the file immediately.</p>
+    <pre><code># Clean UniFi-ready sweepr-lon01.conf (no inline comments):
+[Interface]
+PrivateKey = &lt;UDM_CLIENT_PRIVATE_KEY&gt;
+Address = 10.66.40.8/32
+DNS = 10.66.0.1
+
+[Peer]
+PublicKey = &lt;SWEEPR_LON01_PUBKEY&gt;
+Endpoint = 78.141.205.68:51820
+AllowedIPs = 0.0.0.0/0
+PersistentKeepalive = 25</code></pre>
+
+    <h2>2. Policy-Based Routing: IoT TV VLAN vs. Work Mac</h2>
+    <p>UniFi VPN Client tunnels do not hijack your entire network until you bind Traffic Routes. Separating your noisy Smart TVs onto an isolated IoT VLAN keeps employer corporate laptops off the tunnel while giving living-room hardware automatic ACR blocking.</p>
     <ul>
-      <li><strong>10Gbps RAM-Only Bare-Metal Endpoints:</strong> Direct peering in London (<code>4ms</code>), Amsterdam (<code>8ms</code>), Frankfurt (<code>11ms</code>), Stockholm (<code>14ms</code>), Zurich, and New York.</li>
-      <li><strong>In-Tunnel DNS &amp; Smart-TV ACR Shield:</strong> Point DNS to <code>10.66.0.1</code> to block ISP DNS hijacking and Smart-TV Automatic Content Recognition (ACR) screenshot telemetry across your LAN.</li>
-      <li><strong>Zero Disk Persistence:</strong> All SWEEPR VPN WireGuard nodes boot from cryptographically verified RAM images with zero connection or DNS logs.</li>
+      <li><strong>Route IoT VLAN via WireGuard:</strong> Open <strong>Routing &rarr; Traffic Routes &rarr; Create Entry</strong>. Set <em>What to Route</em> to <strong>All Traffic</strong>, set <em>Target</em> to your <strong>IoT TV VLAN</strong>, pick <strong>Interface: SWEEPR WireGuard</strong>, and tick <strong>Kill Switch</strong> (or fallback drop) so televisions cannot revert to ISP WAN if the tunnel restarts.</li>
+      <li><strong>Keep Work Mac on Direct WAN:</strong> Leave your primary Trusted LAN or specific Work MacBook Pro MAC address outside that Traffic Route—or create a higher-priority route targeting <strong>Primary WAN1</strong>—so corporate SSO or Zoom calls stay untouched.</li>
+      <li><strong>Override VLAN DHCP DNS to 10.66.0.1:</strong> Under <strong>Settings &rarr; Networks &rarr; IoT VLAN &rarr; DHCP Service Management</strong>, switch DNS Server from Auto to Manual <code>10.66.0.1</code>. Without this override, UniFi's local <code>dnsmasq</code> forwards Smart-TV queries through your ISP's WAN resolver instead of the tunnel.</li>
+      <li><strong>PPPoE WAN MSS Clamping:</strong> On BT, Sky, or Vodafone PPPoE circuits, set <strong>UniFi Devices &rarr; UDM &rarr; Settings &rarr; MSS Clamping</strong> to Custom <code>1352</code> and inspect live handshakes over SSH with <code>wg show wgclt1</code>.</li>
     </ul>
 
-    <h2>Step-by-Step Configuration Commands for Ubiquiti UniFi Dream Machine (UDM-Pro / UDM-SE / UDR)</h2>
-    <pre><code># In UniFi Network Controller 8.x+:
-# 1. Navigate to Settings -> VPN -> VPN Client -> Create New -> WireGuard
-# 2. Upload sweepr-uk-lon01.conf (MTU 1412 for PPPoE FTTP or 1420 for DHCP)
-# 3. Go to Routing -> Policy-Based Routes -> Select Apple TV / IoT VLAN -> Interface: SWEEPR-LON01</code></pre>
+    <h2>UniFi OS WireGuard Questions</h2>
+    <div class="card">
+      <h3>Why did UniFi Network reject my valid WireGuard .conf file?</h3>
+      <p>UniFi's web parser rejects profiles containing trailing <code>#</code> comments, <code>MTU =</code> directives inside <code>[Interface]</code>, or IPv6 <code>::/0</code> ranges when WAN IPv6 is disabled. Strip those lines and configure MSS Clamping in the UDM device pane instead.</p>
+    </div>
+    <div class="card">
+      <h3>Can I run multiple SWEEPR WireGuard client tunnels simultaneously on UDM-SE?</h3>
+      <p>Yes. UniFi Network 8.x supports multiple concurrent WireGuard clients (<code>wgclt1</code>, <code>wgclt2</code>), letting you bind VLAN 30 to London and a homelab server VLAN to Amsterdam.</p>
+    </div>
+    <div class="card">
+      <h3>Does UniFi Teleport conflict with a third-party WireGuard VPN Client?</h3>
+      <p>No. UniFi Teleport runs on a separate interface for remote inbound access, while outbound VPN Client routes stay isolated on <code>wgclt*</code> interfaces.</p>
+    </div>
 
-    <h2>Recommended Endpoint &amp; MTU Reference Table</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Endpoint Node</th>
-          <th>Hostname / Port</th>
-          <th>Typical UK/EU Latency</th>
-          <th>Recommended MTU</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td>London Docklands (UK-LON-01)</td><td><code>lon01.sweeprvpn.com:51820</code></td><td>4 ms</td><td>1420 (Cable/DHCP) / 1412 (PPPoE)</td></tr>
-        <tr><td>Amsterdam Core (NL-AMS-01)</td><td><code>ams01.sweeprvpn.com:51820</code></td><td>8 ms</td><td>1420 (Cable/DHCP) / 1412 (PPPoE)</td></tr>
-        <tr><td>Frankfurt IX (DE-FRA-01)</td><td><code>fra01.sweeprvpn.com:51820</code></td><td>11 ms</td><td>1420 (Cable/DHCP) / 1412 (PPPoE)</td></tr>
-        <tr><td>Stockholm Core (SE-STO-01)</td><td><code>sto01.sweeprvpn.com:51820</code></td><td>14 ms</td><td>1420 (Cable/DHCP) / 1412 (PPPoE)</td></tr>
-      </tbody>
-    </table>
-
-    <h2>Transparent Anchor Pricing &amp; 14-Day Money-Back Guarantee</h2>
-    <p>Unlike legacy VPNs that trap you in 24-month renewals or 250 MB bloated installers, SWEEPR VPN offers straightforward pricing with an instant free 30-second Home Wi-Fi Device Scanner:</p>
-    <table>
-      <thead>
-        <tr>
-          <th>Plan Tier</th>
-          <th>Billing Cycle</th>
-          <th>Effective Monthly Cost</th>
-          <th>Included Features</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Yearly Plan (Core Cash Cow — Save 50%)</strong></td>
-          <td>£74.99 / year ($95.99 USD | €89.99 EUR)</td>
-          <td><strong>£6.25 / mo</strong></td>
-          <td>10Gbps RAM-Only WireGuard (UK, NL, DE, SE, CH, US), 3 simultaneous devices (+ router), Kernel Kill-Switch, 14-Day Guarantee</td>
-        </tr>
-        <tr>
-          <td><strong>6-Monthly Plan (Mid-Tier Anchor — Save 35%)</strong></td>
-          <td>£48.99 / 6 months ($61.99 USD | €58.99 EUR)</td>
-          <td><strong>£8.17 / mo</strong></td>
-          <td>All 10Gbps WireGuard Core Locations, In-Tunnel DNS, Port-Forwarding &amp; Streaming Support</td>
-        </tr>
-        <tr>
-          <td><strong>Monthly Plan (Flexible + £1.99 1st Month)</strong></td>
-          <td>£1.99 1st Month, then £12.49 / mo</td>
-          <td>£12.49 / mo</td>
-          <td>Cancel anytime in 1 click, full 10Gbps WireGuard &amp; Wi-Fi diagnostic access</td>
-        </tr>
-        <tr>
-          <td><strong>SWEEPR Wi-Fi Radar &amp; Smart-TV Shield Add-On</strong></td>
-          <td>+£14.99/yr | +£9.99/6mo | +£1.99/mo</td>
-          <td>Optional Add-On</td>
-          <td>24/7 Unknown Wi-Fi Intruder Alerts + Samsung/LG/Sony/Roku/Fire TV ACR Spy Blocker</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <h2>Frequently Asked Questions</h2>
-    <div class="card"><h3>Can I run Ubiquiti UniFi Dream Machine (UDM-Pro / UDM-SE / UDR) alongside the SWEEPR VPN desktop app?</h3><p>Yes. Every SWEEPR VPN plan supports up to 10 simultaneous WireGuard peers across routers, NAS appliances, Linux servers, Windows, macOS, iOS, and Android.</p></div>
-<div class="card"><h3>What DNS server should I use on Ubiquiti UniFi Dream Machine (UDM-Pro / UDM-SE / UDR)?</h3><p>Always set your WireGuard interface DNS to 10.66.0.1 so DNS queries travel inside the encrypted WireGuard tunnel and cannot be intercepted by your ISP.</p></div>
-<div class="card"><h3>Why are my HTTPS pages stalling after enabling WireGuard on Ubiquiti UniFi Dream Machine (UDM-Pro / UDM-SE / UDR)?</h3><p>If your ISP uses PPPoE (such as BT, Sky, TalkTalk, Plusnet, or Vodafone FTTP), lower the WireGuard interface MTU from 1420 to 1412 and enable TCP MSS clamping to 1352–1360.</p></div>
-
-    <h2>Related Technical Guides &amp; Free Diagnostic Tools</h2>
+    <h2>UniFi Policy Routing &amp; Home Diagnostics</h2>
     <div class="card">
       <ul>
-<li><a href="/setup/openwrt-wireguard-router" style="color:var(--accent2);">OpenWrt 23.05 WireGuard Router Setup Guide</a></li>
-<li><a href="/setup/asuswrt-merlin-vpn-router" style="color:var(--accent2);">Asuswrt-Merlin WireGuard VPN Director Guide</a></li>
-<li><a href="/guides/fix-wireguard-mtu-fragmentation-pppoe" style="color:var(--accent2);">Optimal WireGuard MTU Calculator for Fibre & 5G</a></li>
-<li><a href="/setup/gl-inet-travel-router" style="color:var(--accent2);">GL.iNet Beryl AX &amp; Travel Router WireGuard Setup Guide (MTU 1420/1380)</a></li>
-<li><a href="/guides/stop-samsung-smart-tv-acr-tracking" style="color:var(--accent2);">How to Block Samsung Smart-TV ACR Tracking (gpm.samsungqbe.com &amp; samsungacr.com)</a></li>
-<li><a href="/solutions/eduroam-campus-wifi-gaming-packet-loss" style="color:var(--accent2);">Fix Eduroam Campus Wi-Fi Gaming Packet Loss &amp; UDP Port Blocks (Stealth 443)</a></li>
-<li><a href="/setup/nvidia-shield-tv-pro-wireguard" style="color:var(--accent2);">NVIDIA Shield TV Pro 4K &amp; GeForce NOW WireGuard VPN Setup Guide</a></li>
-<li><a href="/solutions/gigaclear-rural-fibre-gaming-packet-loss" style="color:var(--accent2);">Fix Gigaclear Rural Full Fibre UK Gaming Ping Spikes, CGNAT &amp; Packet Loss</a></li>
-<li><a href="/setup/steam-deck-vpn" style="color:var(--accent2);">SteamOS &amp; Steam Deck OLED Native WireGuard VPN Setup Guide</a></li>
-<li class="sweepr-mesh-link"><a href="/setup/almalinux-9-wireguard-gateway" style="color:var(--accent2);">AlmaLinux 9 &amp; Rocky Linux 9 Enterprise WireGuard Gateway: High-Speed 10Gbps WireGuard VPN Setup Guide</a></li>
-<li class="sweepr-mesh-link"><a href="/setup/synology-nas-docker-vpn" style="color:var(--accent2);">WireGuard VPN Setup for Synology NAS &amp; Docker Gluetun WireGuard Container</a></li>
-<li class="sweepr-mesh-link"><a href="/setup/windows-11-wireguard-vpn" style="color:var(--accent2);">WireGuard VPN Setup for Windows 10 &amp; 11 Native Kernel WireGuard</a></li>
-<li class="sweepr-mesh-link"><a href="/guides/stop-isp-deep-packet-inspection-dpi" style="color:var(--accent2);">How to Stop Mobile Carrier 5G Hotspot Throttling & DPI Tethering Caps</a></li>
-<li><a href="/tools/isp-throttling-test" style="color:var(--accent2);">Free ISP Evening Throttling &amp; Latency Checker</a></li>
-<li><a href="/download" style="color:var(--accent2);">Download SWEEPR VPN &amp; Free 30-Second Home Wi-Fi Scanner (~3.7 MB)</a></li>
-        <li><a href="/tools/smart-tv-tracking-check" style="color:var(--accent2);">Free Smart-TV ACR Tracker & Ad-Domain Exposure Checker</a></li>
-        <li><a href="/tools/whats-on-my-wifi" style="color:var(--accent2);">What's on My Wi-Fi? Free Unknown Device & Spy Check</a></li>
-        <li class="sweepr-mesh-link"><a href="/setup/raspberry-pi-home-gateway" style="color:var(--accent2);">WireGuard VPN Setup for Raspberry Pi 5 Whole-Home WireGuard Gateway &amp; TV Shield</a></li>
-        <li class="sweepr-mesh-link"><a href="/setup/freebsd-14-wireguard-kmod" style="color:var(--accent2);">FreeBSD 14.1 Kernel WireGuard (if_wg) & pf Firewall Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</a></li>
+        <li><a href="/setup/openwrt-wireguard-router" style="color:var(--accent2);">OpenWrt 23.05 policy routing</a></li>
+        <li><a href="/setup/asuswrt-merlin-vpn-router" style="color:var(--accent2);">Merlin VPN Director rules</a></li>
+        <li><a href="/guides/fix-wireguard-mtu-fragmentation-pppoe" style="color:var(--accent2);">PPPoE MSS clamping math</a></li>
+        <li><a href="/setup/gl-inet-travel-router" style="color:var(--accent2);">GL.iNet hotel repeater tunnel</a></li>
+        <li><a href="/guides/stop-samsung-smart-tv-acr-tracking" style="color:var(--accent2);">Samsung TV ACR blocklist</a></li>
+        <li><a href="/solutions/eduroam-campus-wifi-gaming-packet-loss" style="color:var(--accent2);">Campus UDP 443 failover</a></li>
+        <li><a href="/setup/nvidia-shield-tv-pro-wireguard" style="color:var(--accent2);">Shield TV Pro wired MTU</a></li>
+        <li><a href="/solutions/gigaclear-rural-fibre-gaming-packet-loss" style="color:var(--accent2);">Rural UK fibre ping tuning</a></li>
+        <li><a href="/setup/steam-deck-vpn" style="color:var(--accent2);">Steam Deck handheld setup</a></li>
+        <li class="sweepr-mesh-link"><a href="/setup/almalinux-9-wireguard-gateway" style="color:var(--accent2);">AlmaLinux 9 enterprise gateway</a></li>
+        <li class="sweepr-mesh-link"><a href="/setup/synology-nas-docker-vpn" style="color:var(--accent2);">Synology DSM Docker tunnel</a></li>
+        <li class="sweepr-mesh-link"><a href="/setup/windows-11-wireguard-vpn" style="color:var(--accent2);">Windows 11 WireGuardNT driver</a></li>
+        <li class="sweepr-mesh-link"><a href="/guides/stop-isp-deep-packet-inspection-dpi" style="color:var(--accent2);">Mitigating ISP DPI shaping</a></li>
+        <li><a href="/tools/isp-throttling-test" style="color:var(--accent2);">ISP line throttling check</a></li>
+        <li><a href="/download" style="color:var(--accent2);">SWEEPR desktop Wi-Fi scanner</a></li>
+        <li><a href="/tools/smart-tv-tracking-check" style="color:var(--accent2);">Smart-TV ACR privacy audit</a></li>
+        <li><a href="/tools/whats-on-my-wifi" style="color:var(--accent2);">LAN rogue host checker</a></li>
+        <li class="sweepr-mesh-link"><a href="/setup/raspberry-pi-home-gateway" style="color:var(--accent2);">Raspberry Pi 5 gateway alternative</a></li>
+        <li class="sweepr-mesh-link"><a href="/setup/freebsd-14-wireguard-kmod" style="color:var(--accent2);">FreeBSD 14 pf firewall setup</a></li>
       </ul>
     </div>
 </main>

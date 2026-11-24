@@ -3788,6 +3788,36 @@ const server = http.createServer(async (req, res) => {
     return res.end();
   }
 
+  // Canonical host enforcement: 1-hop 301 www.sweeprvpn.com -> https://sweeprvpn.com (+ canonical path resolution)
+  const rawHost = String(req.headers['x-forwarded-host'] || req.headers.host || '')
+    .split(',')[0]
+    .trim()
+    .toLowerCase();
+  if ((req.method === 'GET' || req.method === 'HEAD') && /^www\.sweeprvpn\.com(?::\d+)?$/.test(rawHost)) {
+    if (pathname.startsWith('/cdn-cgi/l/email-protection')) {
+      res.writeHead(301, {
+        Location: 'https://sweeprvpn.com/support',
+        'X-Robots-Tag': 'noindex, nofollow',
+        ...COMMON_SECURITY_HEADERS
+      });
+      return res.end();
+    }
+    let targetPath = resolveCanonical301(pathname);
+    if (!targetPath) {
+      targetPath = pathname.length > 1 ? pathname.replace(/[).,\]]+$/, '') || '/' : pathname;
+      const lowerCandidate = targetPath.toLowerCase();
+      if (!lowerCandidate.startsWith('/api/') && !lowerCandidate.startsWith('/.well-known/')) {
+        targetPath = lowerCandidate;
+      }
+    }
+    res.writeHead(301, {
+      Location: `https://sweeprvpn.com${targetPath}${urlObj.search || ''}`,
+      'Cache-Control': 'public, max-age=3600',
+      ...COMMON_SECURITY_HEADERS
+    });
+    return res.end();
+  }
+
   // 301 Permanent Redirect from legacy .html or non-canonical URLs to clean canonical URLs
   if ((req.method === 'GET' || req.method === 'HEAD') && pathname.startsWith('/cdn-cgi/l/email-protection')) {
     res.writeHead(301, { Location: '/support', 'X-Robots-Tag': 'noindex, nofollow', ...COMMON_SECURITY_HEADERS });

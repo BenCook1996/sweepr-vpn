@@ -193,21 +193,21 @@
 
   <!-- Hero Section (Mockup 1: Instrumented Rackmount Telemetry) -->
   <main class="flex-1 pt-24 md:pt-28 pb-16 px-6 max-w-6xl mx-auto w-full">
-    <div id="heroRouteTelemetryBar" class="rack-telemetry-bar mb-8 justify-between" aria-label="Live WireGuard Route Telemetry">
+    <div id="heroRouteTelemetryBar" class="rack-telemetry-bar mb-8 justify-between" aria-label="Live-Telemetrie der WireGuard-Route">
       <div class="flex flex-wrap items-center gap-2 sm:gap-3">
         <span class="inline-flex items-center gap-1.5 font-mono text-[11px] font-bold tracking-wider uppercase text-emerald-700">
           <span class="rack-led"></span>
-          <span>WG-KERNEL LIVE</span>
+          <span>WG-KERNEL AKTIV</span>
         </span>
         <span class="text-gray-300" aria-hidden="true">|</span>
         <span id="heroTelNode" class="font-mono text-xs font-semibold tabular-nums">UK-LON-01 &middot; London</span>
         <span class="text-gray-300" aria-hidden="true">|</span>
-        <span class="font-mono text-xs tabular-nums">EGRESS <strong id="heroTelIp" class="font-bold">185.199.108.42</strong></span>
+        <span class="font-mono text-xs tabular-nums">AUSGANGS-IP <strong id="heroTelIp" class="font-bold">185.199.108.42</strong></span>
         <span class="text-gray-300" aria-hidden="true">|</span>
-        <span class="font-mono text-xs tabular-nums">RTT <strong id="heroTelPing" class="font-bold text-emerald-700">11 ms</strong></span>
+        <span class="font-mono text-xs tabular-nums">LATENZ <strong id="heroTelPing" class="font-bold text-emerald-700">11 ms</strong></span>
       </div>
       <div class="font-mono text-[11px] font-semibold tabular-nums text-emerald-700">
-        DNS 10.66.0.1 ACR SINKHOLE (<span data-live-proof="acr-domains">65</span> DOMAINS)
+        DNS 10.66.0.1 ACR-FILTER (<span data-live-proof="acr-domains">65</span> DOMAINS)
       </div>
     </div>
 
@@ -247,15 +247,15 @@
     <div class="flex-1 relative w-full max-w-sm mx-auto">
       <div id="heroInteractiveCard" class="relative rack-card p-5 sm:p-6 flex flex-col items-stretch text-left gap-4">
         <div class="w-full flex items-center justify-between text-[11px] font-mono font-bold uppercase tracking-wider text-gray-500 pb-2.5 border-b border-black/10">
-          <span>TUNNEL BENCH</span>
+          <span>TUNNEL-PRÜFSTAND</span>
           <span class="tabular-nums text-emerald-700">CHACHA20-POLY1305</span>
         </div>
 
         <!-- 4 Interactive POP Buttons in Rack Track -->
         <div class="w-full">
-          <div class="grid grid-cols-4 gap-1.5 bg-black/[0.03] border border-black/10 p-1 rounded-xl" role="group" aria-label="Select VPN Server Country">
+          <div class="grid grid-cols-4 gap-1.5 bg-black/[0.03] border border-black/10 p-1 rounded-xl" role="group" aria-label="VPN-Serverland wählen">
             <!-- UK-LON-01 (Default Active) -->
-            <button type="button" data-node="UK-LON-01" data-ip="185.199.108.42" onclick="selectHeroServer('United Kingdom \u00b7 London', '11 ms', '10 Gbps', this, 'UK-LON-01', '185.199.108.42')" class="hero-srv-pill flex flex-col items-center justify-center gap-1 py-2 px-1.5 rounded-lg border border-emerald-600 bg-white cursor-pointer transition-colors" aria-label="United Kingdom">
+            <button type="button" data-node="UK-LON-01" data-ip="185.199.108.42" onclick="selectHeroServer('United Kingdom \u00b7 London', '11 ms', '10 Gbps', this, 'UK-LON-01', '185.199.108.42')" class="hero-srv-pill flex flex-col items-center justify-center gap-1 py-2 px-1.5 rounded-lg border border-emerald-600 bg-white cursor-pointer transition-colors" aria-label="Vereinigtes Königreich">
               <span class="w-6 h-4 rounded-xs overflow-hidden border border-black/15 block">
                 <svg width="16" height="12" viewBox="0 0 60 40" class="w-full h-full block"><rect width="60" height="40" fill="#012169"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#fff" stroke-width="8"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#C8102E" stroke-width="4"/><path d="M30,0V40 M0,20H60" stroke="#fff" stroke-width="12"/><path d="M30,0V40 M0,20H60" stroke="#C8102E" stroke-width="7"/></svg>
               </span>
@@ -263,7 +263,7 @@
             </button>
 
             <!-- US-NYC-01 -->
-            <button type="button" data-node="US-NYC-01" data-ip="104.244.42.88" onclick="selectHeroServer('United States \u00b7 New York', '64 ms', '10 Gbps', this, 'US-NYC-01', '104.244.42.88')" class="hero-srv-pill flex flex-col items-center justify-center gap-1 py-2 px-1.5 rounded-lg border border-transparent hover:border-black/15 bg-transparent hover:bg-white/70 cursor-pointer transition-colors" aria-label="United States">
+            <button type="button" data-node="US-NYC-01" data-ip="104.244.42.88" onclick="selectHeroServer('United States \u00b7 New York', '64 ms', '10 Gbps', this, 'US-NYC-01', '104.244.42.88')" class="hero-srv-pill flex flex-col items-center justify-center gap-1 py-2 px-1.5 rounded-lg border border-transparent hover:border-black/15 bg-transparent hover:bg-white/70 cursor-pointer transition-colors" aria-label="Vereinigte Staaten">
               <span class="w-6 h-4 rounded-xs overflow-hidden border border-black/15 block">
                 <svg width="16" height="12" viewBox="0 0 60 40" class="w-full h-full block"><rect width="60" height="40" fill="#B22234"/><path d="M0,6H60 M0,15H60 M0,25H60 M0,34H60" stroke="#fff" stroke-width="4"/><rect width="26" height="22" fill="#3C3B6E"/></svg>
               </span>
@@ -271,7 +271,7 @@
             </button>
 
             <!-- DE-FRA-01 -->
-            <button type="button" data-node="DE-FRA-01" data-ip="195.201.14.92" onclick="selectHeroServer('Germany \u00b7 Frankfurt', '16 ms', '10 Gbps', this, 'DE-FRA-01', '195.201.14.92')" class="hero-srv-pill flex flex-col items-center justify-center gap-1 py-2 px-1.5 rounded-lg border border-transparent hover:border-black/15 bg-transparent hover:bg-white/70 cursor-pointer transition-colors" aria-label="Germany">
+            <button type="button" data-node="DE-FRA-01" data-ip="195.201.14.92" onclick="selectHeroServer('Germany \u00b7 Frankfurt', '16 ms', '10 Gbps', this, 'DE-FRA-01', '195.201.14.92')" class="hero-srv-pill flex flex-col items-center justify-center gap-1 py-2 px-1.5 rounded-lg border border-transparent hover:border-black/15 bg-transparent hover:bg-white/70 cursor-pointer transition-colors" aria-label="Deutschland">
               <span class="w-6 h-4 rounded-xs overflow-hidden border border-black/15 block">
                 <svg width="16" height="12" viewBox="0 0 60 39" class="w-full h-full block"><rect width="60" height="13" y="0" fill="#000"/><rect width="60" height="13" y="13" fill="#D00"/><rect width="60" height="13" y="26" fill="#FFCE00"/></svg>
               </span>
@@ -299,31 +299,31 @@
           <div class="min-w-0 flex-1">
             <div class="flex items-center gap-1.5 text-[11px] font-mono font-bold uppercase tracking-wider text-emerald-700">
               <span id="heroPreviewStatusDot" class="rack-led"></span>
-              <span id="heroPreviewStatusText">TUNNEL READY &middot; ZERO-LOG</span>
+              <span id="heroPreviewStatusText">TUNNEL BEREIT &middot; KEINE LOGS</span>
             </div>
-            <div id="heroVpnCity" class="text-base font-bold text-gray-900 truncate mt-0.5">United Kingdom &middot; London</div>
+            <div id="heroVpnCity" class="text-base font-bold text-gray-900 truncate mt-0.5">Vereinigtes Königreich &middot; London</div>
           </div>
         </div>
 
         <!-- Exposed 1px Hairline Rack Bento Telemetry -->
         <div class="rack-bento-grid grid-cols-2">
           <div class="rack-bento-cell p-3">
-            <div class="text-[10px] font-mono font-bold uppercase tracking-wider text-gray-500">Egress IPv4</div>
+            <div class="text-[10px] font-mono font-bold uppercase tracking-wider text-gray-500">Ausgangs-IPv4</div>
             <div id="heroPreviewIp" class="font-mono text-xs font-bold text-gray-900 tabular-nums mt-1">185.199.108.42</div>
           </div>
           <div class="rack-bento-cell p-3">
-            <div class="text-[10px] font-mono font-bold uppercase tracking-wider text-gray-500">RTT / Uplink</div>
-            <div id="heroPreviewPing" class="font-mono text-xs font-bold text-emerald-700 tabular-nums mt-1">11 ms &middot; 10 Gbps</div>
+            <div class="text-[10px] font-mono font-bold uppercase tracking-wider text-gray-500">Latenz / Anbindung</div>
+            <div id="heroPreviewPing" class="font-mono text-xs font-bold text-emerald-700 tabular-nums mt-1">11 ms &middot; 10 Gbit/s</div>
           </div>
         </div>
 
         <div id="heroVpnMeta" class="text-[11px] font-medium text-gray-600 text-center">
-          Instant Connection &bull; 4K Streaming Ready &bull; Wi-Fi &amp; TV Protection On
+          Sofort verbunden &bull; Bereit für 4K-Streaming &bull; WLAN- &amp; TV-Schutz aktiv
         </div>
 
         <!-- Full-Width Green Enable Now Button -->
         <a rel="nofollow" href="/order?plan=monthly&offer=intro" class="btn btn-go w-full gap-2 text-base font-extrabold py-3.5 justify-center">
-          <span>Enable Now</span>
+          <span>Jetzt aktivieren</span>
           <svg width="16" height="16" class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
       </div>
@@ -334,19 +334,19 @@
   <!-- Below the Fold: Mockup 1 Instrumented Rackmount Bento + Live 8-POP Telemetry Matrix -->
   <section id="features" class="pb-20 pt-6 px-6">
     <div class="max-w-6xl mx-auto" id="purchase">
-      <h2 class="sr-only">Key Privacy &amp; Home Wi-Fi Security Features</h2>
+      <h2 class="sr-only">Wichtige Funktionen für Datenschutz und Heim-WLAN-Sicherheit</h2>
 
       <div class="grid grid-cols-1 md:grid-cols-12 gap-5 text-left">
         <!-- Bento 1 (7 cols): 8 Global Locations Visual Card -->
         <div class="md:col-span-7 rack-card p-6 sm:p-7 flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between gap-2">
-              <span class="rack-pill">FAST GLOBAL VPN</span>
-              <span class="font-mono text-xs font-bold text-gray-500 tabular-nums">10 Gbps RAM-Only Nodes</span>
+              <span class="rack-pill">SCHNELLES GLOBALES VPN</span>
+              <span class="font-mono text-xs font-bold text-gray-500 tabular-nums">10-Gbit/s RAM-Only-Server</span>
             </div>
-            <h3 class="text-xl font-bold text-gray-900 mt-3 mb-1.5">8 High-Speed Countries, Zero Browsing History Saved</h3>
+            <h3 class="text-xl font-bold text-gray-900 mt-3 mb-1.5">8 Highspeed-Standorte, null gespeicherte Surf-Verläufe</h3>
             <p class="text-sm text-gray-600 leading-relaxed max-w-[60ch] text-left">
-              Switch in one click between fast servers in London, New York, Los Angeles, Frankfurt, Amsterdam, Stockholm, Singapore, and Tokyo &mdash; we never track, log, or sell what you browse.
+              Wechseln Sie per Klick zwischen schnellen Standorten in London, New York, Los Angeles, Frankfurt, Amsterdam, Stockholm, Singapur und Tokio &mdash; wir protokollieren, überwachen oder verkaufen Ihre Aktivitäten niemals.
             </p>
           </div>
           <div class="rack-bento-grid grid-cols-2 sm:grid-cols-4 mt-5">
@@ -355,28 +355,28 @@
                 <span class="w-4 h-3 rounded-xs overflow-hidden border border-black/15 inline-block shrink-0"><svg width="16" height="12" viewBox="0 0 60 40" class="w-full h-full block"><rect width="60" height="40" fill="#012169"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#fff" stroke-width="8"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#C8102E" stroke-width="4"/><path d="M30,0V40 M0,20H60" stroke="#fff" stroke-width="12"/><path d="M30,0V40 M0,20H60" stroke="#C8102E" stroke-width="7"/></svg></span>
                 <span>London</span>
               </div>
-              <div class="font-mono text-[10px] font-bold text-emerald-700 tabular-nums mt-1">11 ms &middot; 4K Ready</div>
+              <div class="font-mono text-[10px] font-bold text-emerald-700 tabular-nums mt-1">11 ms &middot; 4K-fähig</div>
             </button>
             <button type="button" onclick="selectHeroServer('Germany \u00b7 Frankfurt', '16 ms', '10 Gbps', document.querySelector('[data-node=DE-FRA-01]'), 'DE-FRA-01', '195.201.14.92')" class="rack-bento-cell p-2.5 text-left hover:bg-emerald-50/40 transition-colors cursor-pointer">
               <div class="flex items-center gap-1.5 text-xs font-bold text-gray-900">
                 <span class="w-4 h-3 rounded-xs overflow-hidden border border-black/15 inline-block shrink-0"><svg width="16" height="12" viewBox="0 0 60 39" class="w-full h-full block"><rect width="60" height="13" y="0" fill="#000"/><rect width="60" height="13" y="13" fill="#D00"/><rect width="60" height="13" y="26" fill="#FFCE00"/></svg></span>
                 <span>Frankfurt</span>
               </div>
-              <div class="font-mono text-[10px] font-bold text-emerald-700 tabular-nums mt-1">16 ms &middot; 4K Ready</div>
+              <div class="font-mono text-[10px] font-bold text-emerald-700 tabular-nums mt-1">16 ms &middot; 4K-fähig</div>
             </button>
             <button type="button" onclick="selectHeroServer('United States \u00b7 New York', '64 ms', '10 Gbps', document.querySelector('[data-node=US-NYC-01]'), 'US-NYC-01', '104.244.42.88')" class="rack-bento-cell p-2.5 text-left hover:bg-emerald-50/40 transition-colors cursor-pointer">
               <div class="flex items-center gap-1.5 text-xs font-bold text-gray-900">
                 <span class="w-4 h-3 rounded-xs overflow-hidden border border-black/15 inline-block shrink-0"><svg width="16" height="12" viewBox="0 0 60 40" class="w-full h-full block"><rect width="60" height="40" fill="#B22234"/><path d="M0,6H60 M0,15H60 M0,25H60 M0,34H60" stroke="#fff" stroke-width="4"/><rect width="26" height="22" fill="#3C3B6E"/></svg></span>
                 <span>New York</span>
               </div>
-              <div class="font-mono text-[10px] font-bold text-emerald-700 tabular-nums mt-1">64 ms &middot; 4K Ready</div>
+              <div class="font-mono text-[10px] font-bold text-emerald-700 tabular-nums mt-1">64 ms &middot; 4K-fähig</div>
             </button>
             <button type="button" onclick="selectHeroServer('Japan \u00b7 Tokyo', '138 ms', '10 Gbps', document.querySelector('[data-node=JP-TYO-01]'), 'JP-TYO-01', '103.152.220.44')" class="rack-bento-cell p-2.5 text-left hover:bg-emerald-50/40 transition-colors cursor-pointer">
               <div class="flex items-center gap-1.5 text-xs font-bold text-gray-900">
                 <span class="w-4 h-3 rounded-xs overflow-hidden border border-black/15 inline-block shrink-0"><svg width="16" height="12" viewBox="0 0 60 40" class="w-full h-full block"><rect width="60" height="40" fill="#fff"/><circle cx="30" cy="20" r="11" fill="#BC002D"/></svg></span>
-                <span>Tokyo</span>
+                <span>Tokio</span>
               </div>
-              <div class="font-mono text-[10px] font-bold text-emerald-700 tabular-nums mt-1">138 ms &middot; HD Ready</div>
+              <div class="font-mono text-[10px] font-bold text-emerald-700 tabular-nums mt-1">138 ms &middot; HD-fähig</div>
             </button>
           </div>
         </div>
@@ -385,19 +385,19 @@
         <div class="md:col-span-5 rack-card p-6 sm:p-7 flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between gap-2">
-              <span class="rack-pill">STOP INTERNET SLOWDOWNS</span>
-              <span class="font-mono text-xs font-bold text-emerald-700 tabular-nums">0.4 ms Overhead</span>
+              <span class="rack-pill">ANBIETER-DROSSELUNG STOPPEN</span>
+              <span class="font-mono text-xs font-bold text-emerald-700 tabular-nums">0,4 ms Zusatzlatenz</span>
             </div>
-            <h3 class="text-xl font-bold text-gray-900 mt-3 mb-1.5">Stop Evening Buffering &amp; Claim Bill Credits</h3>
+            <h3 class="text-xl font-bold text-gray-900 mt-3 mb-1.5">Abendliches Ruckeln beenden &amp; Tarifgutschriften belegen</h3>
             <p class="text-sm text-gray-600 leading-relaxed max-w-[60ch] text-left">
-              Stops your internet provider from slowing down evening Netflix, YouTube, and gaming &mdash; and logs verified speed drops so you can claim $20&ndash;$40 (£20&ndash;£35) off your monthly bill.
+              Verhindert, dass Ihr Internetanbieter abends Netflix, YouTube und Online-Games ausbremst &mdash; und dokumentiert nachweisbare Tempoeinbrüche, um 20 bis 35 £ (ca. 25 bis 40 €) Monatsgutschrift einzufordern.
             </p>
           </div>
-          <div class="space-y-2.5 mt-4 bg-black/[0.025] p-3.5 rounded-xl border border-black/10 cursor-pointer select-none" onclick="replayVpnSpeedBars()" title="Click to replay speed comparison">
+          <div class="space-y-2.5 mt-4 bg-black/[0.025] p-3.5 rounded-xl border border-black/10 cursor-pointer select-none" onclick="replayVpnSpeedBars()" title="Klicken zum Wiederholen des Tempo-Vergleichs">
             <div>
               <div class="flex justify-between text-xs font-bold text-emerald-800 mb-1">
-                <span>With SWEEPR VPN (Full Speed)</span>
-                <span class="font-mono tabular-nums" id="vpnSpeedPeakLabel">Up to 940 Mbps ✓</span>
+                <span>Mit SWEEPR VPN (Volle Leitung)</span>
+                <span class="font-mono tabular-nums" id="vpnSpeedPeakLabel">Bis zu 940 Mbit/s ✓</span>
               </div>
               <div class="w-full h-2.5 bg-gray-200 rounded-full overflow-hidden">
                 <div id="vpnSpeedPeakBar" class="vpn-speed-bar-fill bg-emerald-600 rounded-full" style="transform: scaleX(0.94)"></div>
@@ -405,16 +405,16 @@
             </div>
             <div>
               <div class="flex justify-between text-xs font-semibold text-gray-500 mb-1">
-                <span>Evening Slowdown (Without VPN)</span>
-                <span class="font-mono tabular-nums text-amber-700 font-bold">88 Mbps (-82% &bull; Claim $35)</span>
+                <span>Abend-Drosselung (Ohne VPN)</span>
+                <span class="font-mono tabular-nums text-amber-700 font-bold">88 Mbit/s (-82% &bull; 35 € belegen)</span>
               </div>
               <div class="w-full h-2.5 bg-gray-200 rounded-full overflow-hidden">
                 <div id="vpnSpeedThrottledBar" class="vpn-speed-bar-fill bg-amber-500 rounded-full" style="transform: scaleX(0.24)"></div>
               </div>
             </div>
             <div class="flex items-center justify-between pt-1">
-              <span class="text-[10px] text-gray-500 leading-tight">*Logs evening slowdowns vs. your internet plan.</span>
-              <a href="/tools/isp-throttling-test" onclick="event.stopPropagation()" class="text-[11px] font-bold text-emerald-700 hover:underline">Check My Internet Speed &rarr;</a>
+              <span class="text-[10px] text-gray-500 leading-tight">*Protokolliert abendliche Tempoeinbrüche gegenüber Ihrem gebuchten Tarif.</span>
+              <a href="/tools/isp-throttling-test" onclick="event.stopPropagation()" class="text-[11px] font-bold text-emerald-700 hover:underline">Mein Tempo jetzt testen &rarr;</a>
             </div>
           </div>
         </div>
@@ -422,37 +422,37 @@
         <!-- Bento 3 (6 cols): Plain-English Home Wi-Fi & Airbnb Camera Scanner -->
         <div class="md:col-span-6 rack-card p-6 sm:p-7">
           <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-            <span class="rack-pill">HOME WI-FI DEVICE SCANNER</span>
+            <span class="rack-pill">HEIM-WLAN-GERÄTESCANNER</span>
             <span class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700">
               <svg width="12" height="12" class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
-              <span>Device Alerts + Camera Check</span>
+              <span>Gerätewarnung + Kamera-Check</span>
             </span>
           </div>
-          <h3 class="text-lg font-bold text-gray-900 mb-1">See Everything on Your Wi-Fi in Everyday Words</h3>
+          <h3 class="text-lg font-bold text-gray-900 mb-1">Jedes Gerät in Ihrem WLAN verständlich auf einen Blick</h3>
           <p class="text-sm text-gray-600 mb-4 leading-relaxed max-w-[60ch] text-left">
-            Instead of showing confusing computer codes, SWEEPR clearly names every phone, laptop, TV, and smart speaker on your Wi-Fi, alerts you if a stranger connects, and checks rentals for hidden cameras.
+            Statt kryptischer MAC-Adressen und Netzwerkcodes benennt SWEEPR jedes Smartphone, Notebook, jeden Fernseher und Smart-Speaker im Klartext, warnt sofort bei fremden Zugriffen und prüft Ferienunterkünfte auf versteckte Kameras.
           </p>
           <div class="rack-bento-grid grid-cols-1 sm:grid-cols-3 text-xs">
             <div class="rack-bento-cell p-2.5">
               <div class="flex items-center gap-1.5 font-bold text-gray-900">
                 <svg width="12" height="12" class="w-3.5 h-3.5 text-emerald-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
-                <span>Kitchen Echo Dot</span>
+                <span>Echo Dot (Küche)</span>
               </div>
-              <div class="font-mono text-[10px] text-emerald-700 font-semibold mt-0.5 tabular-nums">Smart Speaker &bull; Verified</div>
+              <div class="font-mono text-[10px] text-emerald-700 font-semibold mt-0.5 tabular-nums">Smart-Speaker &bull; Verifiziert</div>
             </div>
             <div class="rack-bento-cell p-2.5 bg-amber-50/70">
               <div class="flex items-center gap-1.5 font-bold text-gray-900">
                 <svg width="12" height="12" class="w-3.5 h-3.5 text-amber-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-                <span>Unknown Phone</span>
+                <span>Unbekanntes Handy</span>
               </div>
-              <div class="font-mono text-[10px] text-amber-800 font-bold mt-0.5 tabular-nums">New MAC &bull; Alert Sent</div>
+              <div class="font-mono text-[10px] text-amber-800 font-bold mt-0.5 tabular-nums">Neue MAC &bull; Alarm gesendet</div>
             </div>
             <div class="rack-bento-cell p-2.5">
               <div class="flex items-center gap-1.5 font-bold text-gray-900">
                 <svg width="12" height="12" class="w-3.5 h-3.5 text-emerald-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                <span>Hidden Camera Check</span>
+                <span>Kamera-Schnellcheck</span>
               </div>
-              <div class="font-mono text-[10px] text-emerald-700 font-semibold mt-0.5 tabular-nums">0 Cameras Found &bull; Clear</div>
+              <div class="font-mono text-[10px] text-emerald-700 font-semibold mt-0.5 tabular-nums">0 Kameras gefunden &bull; Sicher</div>
             </div>
           </div>
         </div>
@@ -461,26 +461,26 @@
         <div class="md:col-span-6 rack-card p-6 sm:p-7 flex flex-col justify-between">
           <div>
             <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-              <span class="rack-pill">FAMILY &amp; SMART-TV PROTECTION</span>
-              <span class="font-mono text-xs font-bold text-emerald-700 tabular-nums">UP TO 3 DEVICES</span>
+              <span class="rack-pill">FAMILIEN- &amp; SMART-TV-SCHUTZ</span>
+              <span class="font-mono text-xs font-bold text-emerald-700 tabular-nums">BIS ZU 3 GERÄTE</span>
             </div>
-            <h3 class="text-lg font-bold text-gray-900 mb-1">1-Tap Kids Bedtime Pause &amp; Smart-TV Privacy</h3>
+            <h3 class="text-lg font-bold text-gray-900 mb-1">Kinder-WLAN per Fingertipp pausieren &amp; Smart-TV-Datenschutz</h3>
             <p class="text-sm text-gray-600 mb-4 leading-relaxed max-w-[60ch] text-left">
-              Pause Wi-Fi on kids' consoles (PS5, Switch, Xbox) and tablets at bedtime without unplugging the router, and stop Samsung, LG &amp; Roku Smart TVs from tracking what your family watches.
+              Unterbrechen Sie zur Schlafenszeit mit einem Tipp das WLAN auf Konsolen (PS5, Switch, Xbox) und Tablets der Kinder, ohne den Router zu trennen &mdash; und stoppen Sie die Sehgewohnheits-Analyse durch Samsung-, LG- und Roku-Fernseher.
             </p>
           </div>
           <div class="flex flex-wrap gap-2">
             <span class="rack-pill gap-1.5">
               <svg width="12" height="12" class="w-3.5 h-3.5 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
-              <span>1-Tap Bedtime Wi-Fi Pause</span>
+              <span>Schlafenszeit-Pause per Tipp</span>
             </span>
             <span class="rack-pill gap-1.5">
               <svg width="12" height="12" class="w-3.5 h-3.5 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M5 13l4 4L19 7"/></svg>
-              <span>Stops Samsung &amp; LG TV Tracking</span>
+              <span>Stoppt Samsung- &amp; LG-TV-Tracking</span>
             </span>
             <span class="rack-pill gap-1.5">
               <svg width="12" height="12" class="w-3.5 h-3.5 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M5 13l4 4L19 7"/></svg>
-              <span>Stops Roku &amp; Fire TV Tracking</span>
+              <span>Blockt Roku- &amp; Fire-TV-Telemetrie</span>
             </span>
           </div>
         </div>
@@ -491,15 +491,15 @@
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-black/10">
           <div>
             <div class="flex flex-wrap items-center gap-2 mb-1.5">
-              <span class="rack-pill"><span class="rack-led"></span> LIVE 8-POP WIREGUARD TELEMETRY</span>
-              <span id="livePopLastSync" class="font-mono text-[11px] font-semibold text-gray-500 tabular-nums">10 GBPS RAM-ONLY KERNEL NODES</span>
+              <span class="rack-pill"><span class="rack-led"></span> LIVE-TELEMETRIE: 8 WIREGUARD-STANDORTE</span>
+              <span id="livePopLastSync" class="font-mono text-[11px] font-semibold text-gray-500 tabular-nums">10-GBIT/S RAM-ONLY KERNEL-KNOTEN</span>
             </div>
-            <h3 class="text-lg sm:text-xl font-bold text-gray-900">Global WireGuard POP Status &amp; Egress Latency</h3>
+            <h3 class="text-lg sm:text-xl font-bold text-gray-900">Weltweiter WireGuard-Status &amp; Latenzwerte in Echtzeit</h3>
             <p class="text-xs sm:text-sm text-gray-600 mt-1">Kurz erklärt: Diese 8 schnellen RAM-only-Server halten alle Smartphones, Laptops und Fernseher Ihrer Familie mit 1 Klick privat und ruckelfrei.</p>
           </div>
           <button type="button" id="pingNearestPopBtn" onclick="highlightLowestRttPop()" class="btn btn-ghost text-xs font-mono font-bold px-3.5 py-2 shrink-0 gap-1.5 cursor-pointer self-start sm:self-center">
             <svg width="12" height="12" class="w-3.5 h-3.5 text-emerald-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-            <span id="pingNearestPopLabel">Select Lowest-RTT POP</span>
+            <span id="pingNearestPopLabel">Schnellsten Knoten wählen</span>
           </button>
         </div>
 
@@ -507,87 +507,87 @@
           <table id="livePopTelemetryTable" class="w-full text-left border-collapse text-xs">
             <thead>
               <tr class="border-b border-black/10 font-mono text-[10px] uppercase tracking-wider text-gray-500">
-                <th class="py-2.5 pr-3 font-bold">Node</th>
-                <th class="py-2.5 px-3 font-bold">City / Jurisdiction</th>
-                <th class="py-2.5 px-3 font-bold">Egress IP</th>
-                <th class="py-2.5 px-3 font-bold">Protocol</th>
-                <th class="py-2.5 px-3 font-bold">RTT</th>
-                <th class="py-2.5 px-3 font-bold">Load</th>
+                <th class="py-2.5 pr-3 font-bold">Knoten</th>
+                <th class="py-2.5 px-3 font-bold">Stadt / Rechtsraum</th>
+                <th class="py-2.5 px-3 font-bold">Ausgangs-IP</th>
+                <th class="py-2.5 px-3 font-bold">Protokoll</th>
+                <th class="py-2.5 px-3 font-bold">Latenz</th>
+                <th class="py-2.5 px-3 font-bold">Auslastung</th>
                 <th class="py-2.5 pl-3 font-bold text-right">Status</th>
               </tr>
             </thead>
             <tbody id="livePopTelemetryBody" class="divide-y divide-black/[0.06] font-mono tabular-nums text-gray-800">
               <tr data-pop-node="UK-LON-01" onclick="selectHeroServer('United Kingdom \u00b7 London', '11 ms', '10 Gbps', document.querySelector('[data-node=UK-LON-01]'), 'UK-LON-01', '185.199.108.42')" class="pop-row bg-emerald-50/40 hover:bg-emerald-50/70 transition-colors cursor-pointer">
                 <td class="py-2.5 pr-3 font-bold text-gray-900">UK-LON-01</td>
-                <td class="py-2.5 px-3 font-sans font-semibold">London, UK</td>
+                <td class="py-2.5 px-3 font-sans font-semibold">London, Großbritannien</td>
                 <td class="py-2.5 px-3 text-gray-600">185.199.108.42</td>
                 <td class="py-2.5 px-3 text-gray-600">WireGuard / ChaCha20</td>
                 <td class="py-2.5 px-3 font-bold text-emerald-700" data-pop-rtt="11">11 ms</td>
                 <td class="py-2.5 px-3 text-gray-700">14%</td>
-                <td class="py-2.5 pl-3 text-right"><span class="inline-flex items-center gap-1.5 text-emerald-700 font-bold"><span class="rack-led"></span> ONLINE</span></td>
+                <td class="py-2.5 pl-3 text-right"><span class="inline-flex items-center gap-1.5 text-emerald-700 font-bold"><span class="rack-led"></span> AKTIV</span></td>
               </tr>
               <tr data-pop-node="DE-FRA-01" onclick="selectHeroServer('Germany \u00b7 Frankfurt', '16 ms', '10 Gbps', document.querySelector('[data-node=DE-FRA-01]'), 'DE-FRA-01', '195.201.14.92')" class="pop-row hover:bg-black/[0.025] transition-colors cursor-pointer">
                 <td class="py-2.5 pr-3 font-bold text-gray-900">DE-FRA-01</td>
-                <td class="py-2.5 px-3 font-sans font-semibold">Frankfurt, DE</td>
+                <td class="py-2.5 px-3 font-sans font-semibold">Frankfurt am Main, Deutschland</td>
                 <td class="py-2.5 px-3 text-gray-600">195.201.14.92</td>
                 <td class="py-2.5 px-3 text-gray-600">WireGuard / ChaCha20</td>
                 <td class="py-2.5 px-3 font-bold text-emerald-700" data-pop-rtt="16">16 ms</td>
                 <td class="py-2.5 px-3 text-gray-700">19%</td>
-                <td class="py-2.5 pl-3 text-right"><span class="inline-flex items-center gap-1.5 text-emerald-700 font-bold"><span class="rack-led"></span> ONLINE</span></td>
+                <td class="py-2.5 pl-3 text-right"><span class="inline-flex items-center gap-1.5 text-emerald-700 font-bold"><span class="rack-led"></span> AKTIV</span></td>
               </tr>
               <tr data-pop-node="NL-AMS-01" onclick="selectHeroServer('Netherlands \u00b7 Amsterdam', '18 ms', '10 Gbps', null, 'NL-AMS-01', '185.220.101.34')" class="pop-row hover:bg-black/[0.025] transition-colors cursor-pointer">
                 <td class="py-2.5 pr-3 font-bold text-gray-900">NL-AMS-01</td>
-                <td class="py-2.5 px-3 font-sans font-semibold">Amsterdam, NL</td>
+                <td class="py-2.5 px-3 font-sans font-semibold">Amsterdam, Niederlande</td>
                 <td class="py-2.5 px-3 text-gray-600">185.220.101.34</td>
                 <td class="py-2.5 px-3 text-gray-600">WireGuard / ChaCha20</td>
                 <td class="py-2.5 px-3 font-bold text-emerald-700" data-pop-rtt="18">18 ms</td>
                 <td class="py-2.5 px-3 text-gray-700">22%</td>
-                <td class="py-2.5 pl-3 text-right"><span class="inline-flex items-center gap-1.5 text-emerald-700 font-bold"><span class="rack-led"></span> ONLINE</span></td>
+                <td class="py-2.5 pl-3 text-right"><span class="inline-flex items-center gap-1.5 text-emerald-700 font-bold"><span class="rack-led"></span> AKTIV</span></td>
               </tr>
               <tr data-pop-node="SE-STO-01" onclick="selectHeroServer('Sweden \u00b7 Stockholm', '24 ms', '10 Gbps', null, 'SE-STO-01', '193.138.218.74')" class="pop-row hover:bg-black/[0.025] transition-colors cursor-pointer">
                 <td class="py-2.5 pr-3 font-bold text-gray-900">SE-STO-01</td>
-                <td class="py-2.5 px-3 font-sans font-semibold">Stockholm, SE</td>
+                <td class="py-2.5 px-3 font-sans font-semibold">Stockholm, Schweden</td>
                 <td class="py-2.5 px-3 text-gray-600">193.138.218.74</td>
                 <td class="py-2.5 px-3 text-gray-600">WireGuard / ChaCha20</td>
                 <td class="py-2.5 px-3 font-bold text-emerald-700" data-pop-rtt="24">24 ms</td>
                 <td class="py-2.5 px-3 text-gray-700">16%</td>
-                <td class="py-2.5 pl-3 text-right"><span class="inline-flex items-center gap-1.5 text-emerald-700 font-bold"><span class="rack-led"></span> ONLINE</span></td>
+                <td class="py-2.5 pl-3 text-right"><span class="inline-flex items-center gap-1.5 text-emerald-700 font-bold"><span class="rack-led"></span> AKTIV</span></td>
               </tr>
               <tr data-pop-node="US-NYC-01" onclick="selectHeroServer('United States \u00b7 New York', '64 ms', '10 Gbps', document.querySelector('[data-node=US-NYC-01]'), 'US-NYC-01', '104.244.42.88')" class="pop-row hover:bg-black/[0.025] transition-colors cursor-pointer">
                 <td class="py-2.5 pr-3 font-bold text-gray-900">US-NYC-01</td>
-                <td class="py-2.5 px-3 font-sans font-semibold">New York, US</td>
+                <td class="py-2.5 px-3 font-sans font-semibold">New York, Vereinigte Staaten</td>
                 <td class="py-2.5 px-3 text-gray-600">104.244.42.88</td>
                 <td class="py-2.5 px-3 text-gray-600">WireGuard / ChaCha20</td>
                 <td class="py-2.5 px-3 font-bold text-gray-800" data-pop-rtt="64">64 ms</td>
                 <td class="py-2.5 px-3 text-gray-700">27%</td>
-                <td class="py-2.5 pl-3 text-right"><span class="inline-flex items-center gap-1.5 text-emerald-700 font-bold"><span class="rack-led"></span> ONLINE</span></td>
+                <td class="py-2.5 pl-3 text-right"><span class="inline-flex items-center gap-1.5 text-emerald-700 font-bold"><span class="rack-led"></span> AKTIV</span></td>
               </tr>
               <tr data-pop-node="US-LAX-01" onclick="selectHeroServer('United States \u00b7 Los Angeles', '118 ms', '10 Gbps', null, 'US-LAX-01', '107.189.10.21')" class="pop-row hover:bg-black/[0.025] transition-colors cursor-pointer">
                 <td class="py-2.5 pr-3 font-bold text-gray-900">US-LAX-01</td>
-                <td class="py-2.5 px-3 font-sans font-semibold">Los Angeles, US</td>
+                <td class="py-2.5 px-3 font-sans font-semibold">Los Angeles, Vereinigte Staaten</td>
                 <td class="py-2.5 px-3 text-gray-600">107.189.10.21</td>
                 <td class="py-2.5 px-3 text-gray-600">WireGuard / ChaCha20</td>
                 <td class="py-2.5 px-3 font-bold text-gray-800" data-pop-rtt="118">118 ms</td>
                 <td class="py-2.5 px-3 text-gray-700">21%</td>
-                <td class="py-2.5 pl-3 text-right"><span class="inline-flex items-center gap-1.5 text-emerald-700 font-bold"><span class="rack-led"></span> ONLINE</span></td>
+                <td class="py-2.5 pl-3 text-right"><span class="inline-flex items-center gap-1.5 text-emerald-700 font-bold"><span class="rack-led"></span> AKTIV</span></td>
               </tr>
               <tr data-pop-node="SG-SIN-01" onclick="selectHeroServer('Singapore \u00b7 Marina Bay', '142 ms', '10 Gbps', null, 'SG-SIN-01', '103.114.160.19')" class="pop-row hover:bg-black/[0.025] transition-colors cursor-pointer">
                 <td class="py-2.5 pr-3 font-bold text-gray-900">SG-SIN-01</td>
-                <td class="py-2.5 px-3 font-sans font-semibold">Singapore, SG</td>
+                <td class="py-2.5 px-3 font-sans font-semibold">Singapur, Singapur</td>
                 <td class="py-2.5 px-3 text-gray-600">103.114.160.19</td>
                 <td class="py-2.5 px-3 text-gray-600">WireGuard / ChaCha20</td>
                 <td class="py-2.5 px-3 font-bold text-gray-800" data-pop-rtt="142">142 ms</td>
                 <td class="py-2.5 px-3 text-gray-700">15%</td>
-                <td class="py-2.5 pl-3 text-right"><span class="inline-flex items-center gap-1.5 text-emerald-700 font-bold"><span class="rack-led"></span> ONLINE</span></td>
+                <td class="py-2.5 pl-3 text-right"><span class="inline-flex items-center gap-1.5 text-emerald-700 font-bold"><span class="rack-led"></span> AKTIV</span></td>
               </tr>
               <tr data-pop-node="JP-TYO-01" onclick="selectHeroServer('Japan \u00b7 Tokyo', '138 ms', '10 Gbps', document.querySelector('[data-node=JP-TYO-01]'), 'JP-TYO-01', '103.152.220.44')" class="pop-row hover:bg-black/[0.025] transition-colors cursor-pointer">
                 <td class="py-2.5 pr-3 font-bold text-gray-900">JP-TYO-01</td>
-                <td class="py-2.5 px-3 font-sans font-semibold">Tokyo, JP</td>
+                <td class="py-2.5 px-3 font-sans font-semibold">Tokio, Japan</td>
                 <td class="py-2.5 px-3 text-gray-600">103.152.220.44</td>
                 <td class="py-2.5 px-3 text-gray-600">WireGuard / ChaCha20</td>
                 <td class="py-2.5 px-3 font-bold text-gray-800" data-pop-rtt="138">138 ms</td>
                 <td class="py-2.5 px-3 text-gray-700">17%</td>
-                <td class="py-2.5 pl-3 text-right"><span class="inline-flex items-center gap-1.5 text-emerald-700 font-bold"><span class="rack-led"></span> ONLINE</span></td>
+                <td class="py-2.5 pl-3 text-right"><span class="inline-flex items-center gap-1.5 text-emerald-700 font-bold"><span class="rack-led"></span> AKTIV</span></td>
               </tr>
             </tbody>
           </table>
@@ -597,14 +597,14 @@
       <!-- Sweepr Complete Security Suite Annual Bundle Banner -->
       <div class="mt-6 rounded-2xl p-6 sm:p-7 bg-[#111315] text-white border border-emerald-500/35 flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
         <div>
-          <span class="inline-block px-2.5 py-0.5 rounded-full bg-amber-400 text-gray-950 font-mono text-[11px] font-bold uppercase tracking-wider mb-2">New Ecosystem Bundle &bull; Save 45%</span>
-          <h3 class="text-xl font-bold text-white mb-1 tabular-nums">Sweepr Complete Security Suite &mdash; £89.99/yr <span class="text-sm font-normal text-emerald-200 line-through ml-1">£164.97/yr</span></h3>
+          <span class="inline-block px-2.5 py-0.5 rounded-full bg-amber-400 text-gray-950 font-mono text-[11px] font-bold uppercase tracking-wider mb-2">Neues Komplettpaket &bull; 45% sparen</span>
+          <h3 class="text-xl font-bold text-white mb-1 tabular-nums">Sweepr Komplett-Sicherheitspaket &mdash; £89.99/Jahr <span class="text-sm font-normal text-emerald-200 line-through ml-1">£164.97/Jahr</span></h3>
           <p class="text-xs sm:text-sm text-gray-300 max-w-2xl">
-            Get <strong>SWEEPR VPN Pro</strong> + <strong>SWEEPR DeepBlock Pro</strong> (YouTube MV3 AdBlocker, Scam Store Shield &amp; RAM Tamer) + <strong>Sweepr Desktop Cleaner Pro</strong> together on up to 5 devices.
+            Sichern Sie sich <strong>SWEEPR VPN Pro</strong> + <strong>SWEEPR DeepBlock Pro</strong> (YouTube MV3-Werbeblocker, Fakeshop-Schutz &amp; RAM-Bremse) + <strong>Sweepr Desktop Cleaner Pro</strong> gemeinsam für bis zu 5 Geräte.
           </p>
         </div>
         <a href="https://sweeprdeepblock.com/order?plan=suite_annual&utm_source=sweeprvpn&utm_medium=home_suite_banner" class="shrink-0 px-5 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-gray-950 font-bold text-xs sm:text-sm transition-colors tabular-nums">
-          Bundle All 3 Apps (£89.99/yr) &rarr;
+          Alle 3 Apps im Paket (£89.99/Jahr) &rarr;
         </a>
       </div>
     </div>

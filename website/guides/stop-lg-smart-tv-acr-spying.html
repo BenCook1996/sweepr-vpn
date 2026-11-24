@@ -144,134 +144,145 @@
     </div>
     <div id="direct-answer" class="mb-8 p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-gray-800">
       <div class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 mb-1.5">Direct Answer</div>
-      <p class="text-sm sm:text-base leading-relaxed">To stop LG webOS Smart TVs From Taking Screenshots of What You Watch, enable SWEEPR VPN's encrypted WireGuard tunnel with sinkhole DNS (NVIDIA Shield TV Pro 4K WireGuard Setup and Fix ISP Throttling & P2P Congestion). Unlike device menu toggles alone, router-level and kernel WireGuard filtering stops silent background beacons, prevents ISP logging across 3 devices.</p>
+      <p class="text-sm sm:text-base leading-relaxed">Open LG webOS General, System, Additional Settings, and toggle Live Plus off alongside Home Promotion. Because firmware updates restore User Agreements, sinkhole <code>ibs.lgappstv.com</code>, <code>cdpbeacon.lgtvcommon.com</code>, and <code>ad.lgappstv.com</code> via router DNS <code>10.66.0.1</code> to stop screen-hash beacons permanently while preserving 4K HDR streaming apps across three household devices and routers.</p>
       <div class="mt-3 pt-3 border-t border-emerald-200/80 text-xs font-bold">
-        <a href="/tools/leak-test" class="text-emerald-800 hover:text-emerald-950 underline">Verify Your Connection with Free IP &amp; WebRTC Leak Test &rarr;</a>
+        <a href="/tools/leak-test" class="text-emerald-800 hover:text-emerald-950 underline">Verify Household DNS &amp; IP Protection Live &rarr;</a>
       </div>
     </div>
 
-    <!-- GEO Answer-First Quick Verdict Block -->
-        <div class="bg-white border-2 border-emerald-500/30 rounded-2xl p-6 md:p-8 shadow-sm mb-12 relative overflow-hidden">
-      <div class="absolute top-0 right-0 bg-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
-        LG webOS Verification
+    <!-- Quick Verdict Block -->
+    <div class="bg-white border-2 border-emerald-500/30 rounded-2xl p-6 md:p-8 shadow-sm mb-12 relative overflow-hidden">
+      <div class="absolute top-0 right-0 bg-emerald-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
+        LG webOS 22–25 Audited
       </div>
-      <h2 class="text-xl font-bold text-gray-900 mb-2">LG webOS LivePlus Privacy Verdict</h2>
+      <h2 class="text-xl font-bold text-gray-900 mb-2">LG webOS Live Plus &amp; Home Launcher Telemetry Verdict</h2>
       <p class="text-gray-700 leading-relaxed mb-5">
-        LG Smart TVs utilize LivePlus ACR to monitor video feeds across HDMI ports and native applications. SWEEPR Wi-Fi Radar identifies webOS network probes and sinkholes data collection hosts at the DNS layer without degrading 4K HDR playback speeds.
+        Turning off <em>Live Plus</em> inside LG's TV menus stops direct frame-hash ACR sampling, yet webOS continues beaconing home-screen ad and sponsored shelf endpoints such as <code>cdpbeacon.lgtvcommon.com</code> and <code>ibs.lgappstv.com</code>. Router-level sinkholing at <code>10.66.0.1</code> closes both paths permanently without slowing Dolby Vision playback.
       </p>
       <div class="flex flex-wrap gap-3 items-center">
         <a href="/download" class="btn btn-go gap-2">
-          <span>Free 30s Wi-Fi Scanner (14 MB)</span>
+          <span>Scan LG TV on LAN (~3.7 MB)</span>
           <svg width="16" height="16" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
         <a rel="nofollow" href="/order?plan=annual" class="btn btn-ghost text-sm font-semibold">
-          Pro Annual Plan (<span data-price="annualPerMonthStr">£6.25</span>/mo) &rarr;
+          Activate Smart-TV Shield (<span data-price="annualPerMonthStr">£6.25</span>/mo) &rarr;
         </a>
       </div>
-    </div>    <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm mb-14">
+    </div>
+
+    <!-- Structured Endpoint Table -->
+    <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm mb-14">
       <div class="p-6 border-b border-gray-200">
-        <h2 class="text-2xl font-bold text-gray-900">LG webOS Monitoring: Standard Wi-Fi vs. SWEEPR In-Tunnel Sinkhole</h2>
+        <h2 class="text-2xl font-bold text-gray-900">LG webOS Telemetry Endpoints vs. Safe Streaming &amp; Firmware Hosts</h2>
       </div>
       <div class="overflow-x-auto">
         <table class="w-full text-left text-sm">
           <thead>
             <tr class="bg-gray-50 border-b border-gray-200 text-gray-600 font-semibold">
-              <th class="p-4 pl-6">webOS Feature</th>
-              <th class="p-4 w-2/5 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">With SWEEPR Protection</th>
-              <th class="p-4 w-2/5 text-gray-700 border-l border-gray-200">Unfiltered Default Wi-Fi</th>
+              <th class="p-4 pl-6">webOS Telemetry Module</th>
+              <th class="p-4 w-2/5 text-gray-700 border-l border-gray-200">Tracked Domain(s)</th>
+              <th class="p-4 w-2/5 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Sinkhole Effect at <code>10.66.0.1</code></th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-100 text-gray-700">
             <tr>
-              <td class="p-4 pl-6 font-medium">Live Plus Screenshot Fingerprinting</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Blocked before egress at <code>10.66.0.1</code></td>
-              <td class="p-4 border-l border-gray-200">Samples active displays every 10–50ms</td>
+              <td class="p-4 pl-6 font-medium">Live Plus ACR Fingerprinting</td>
+              <td class="p-4 border-l border-gray-200"><code>ibs.lgappstv.com</code>, <code>ad.lgappstv.com</code></td>
+              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Drops HDMI &amp; tuner frame-hash uploads</td>
             </tr>
             <tr>
-              <td class="p-4 pl-6 font-medium">Ad Delivery Domains</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Sinkholes <code>lgtvcommon.com</code> &amp; <code>ad.lgappstv.com</code></td>
-              <td class="p-4 border-l border-gray-200">Transmits viewing metadata across port 443</td>
+              <td class="p-4 pl-6 font-medium">Sponsored Home-Screen Tiles</td>
+              <td class="p-4 border-l border-gray-200"><code>cdpbeacon.lgtvcommon.com</code>, <code>homeprv.lgtvcommon.com</code>, <code>nudge.lgtvcommon.com</code></td>
+              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Suppresses promoted banners &amp; launcher click beacons</td>
             </tr>
             <tr>
-              <td class="p-4 pl-6 font-medium">HDMI Source Recognition</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Private — gaming consoles and players shielded</td>
-              <td class="p-4 border-l border-gray-200">Logs connected consoles, discs, and inputs</td>
+              <td class="p-4 pl-6 font-medium">Third-Party Ad SDK Brokers</td>
+              <td class="p-4 border-l border-gray-200"><code>yumenetworks.com</code>, <code>smartclip.net</code>, <code>lgad.cjpowercast.com</code></td>
+              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Returns <code>0.0.0.0</code> immediately; zero background stalls</td>
             </tr>
             <tr>
-              <td class="p-4 pl-6 font-medium">Streaming App Performance</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Native 10Gbps WireGuard ensures 4K bitrate</td>
-              <td class="p-4 border-l border-gray-200">ISP traffic shaping throttles evening video</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Subscription Cost Lock</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">
-                <span data-price="annualStr">£74.99</span>/yr (Save 50%), <span data-price="sixMonthStr">£48.99</span>/6mo, or <span data-price="introStr">£1.99</span> 1st Month
-              </td>
-              <td class="p-4 border-l border-gray-200">Unencrypted, subject to ad retargeting</td>
+              <td class="p-4 pl-6 font-medium">LG Content Store &amp; Streaming Apps</td>
+              <td class="p-4 border-l border-gray-200"><code>ngfts.lge.com</code>, Netflix/iPlayer/YouTube CDNs</td>
+              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Safelisted — 4K HDR playback &amp; app updates stay intact</td>
             </tr>
           </tbody>
         </table>
       </div>
-    </div><div class="space-y-10 mb-14">
-      
-            <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">1. How LG webOS Screen Fingerprinting Operates</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">LG webOS incorporates Live Plus Automatic Content Recognition directly into television system processes. The service continuously hashes pixel grids from HDMI inputs, video apps, and live broadcasts, transmitting compact signatures to remote marketing clusters.</p>
-        <p class="text-gray-700 leading-relaxed">Endpoints such as <code>lgtvcommon.com</code>, <code>ibs.lgappstv.com</code>, <code>ad.lgappstv.com</code>, and <code>yumenetworks.com</code> collect these payloads to match viewer habits against commercial consumer segments. SWEEPR VPN drops these connections before they leave your router.</p>
+    </div>
+
+    <!-- Deep-Dive Technical Sections -->
+    <div class="space-y-10 mb-14">
+      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
+        <h2 class="text-2xl font-bold text-gray-900 mb-3">1. Exact LG webOS Remote Menu Path to Disable Live Plus &amp; Home Ads</h2>
+        <p class="text-gray-700 leading-relaxed mb-4">Start inside webOS settings (webOS 22, 23, 24, and 25 on LG C2/C3/C4/G4 OLED and QNED sets) so the local Live Plus screenshot daemon stops hashing HDMI inputs:</p>
+        <ol class="list-decimal pl-5 space-y-2 text-sm text-gray-700">
+          <li><strong>Disable Live Plus ACR:</strong> Hold the <strong>Settings</strong> cog button on your Magic Remote, open <code>General &rarr; System &rarr; Additional Settings &rarr; Live Plus</code>, and switch it <strong>Off</strong>.</li>
+          <li><strong>Turn Off Sponsored Home Shelves:</strong> Under <code>General &rarr; System &rarr; Additional Settings &rarr; Home Settings</code>, disable <em>Home Promotion</em> and <em>Content Recommendation</em>.</li>
+          <li><strong>Limit Ad Tracking &amp; User Agreements:</strong> Navigate to <code>Support &rarr; Privacy &amp; Terms &rarr; User Agreements</code>, uncheck <em>Viewing Information</em>, <em>Voice Information</em>, and <em>Interest-Based Advertising</em>, then select <strong>Limit Ad Tracking</strong> under <code>Additional Settings &rarr; Advertisement</code>.</li>
+        </ol>
       </section>
-            <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">2. webOS LivePlus Screen-Sampling Mechanics &amp; Packet Sinks</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">LG webOS employs an Automatic Content Recognition subsystem branded as Live Plus. This service captures visual fingerprints from active HDMI inputs and broadcast signals, transmitting pixel hashes every 500 milliseconds to LG analytics infrastructure.</p>
-        <p class="text-gray-700 leading-relaxed">Target destination hosts include <code>lgtvcommon.com</code>, <code>ibs.lgappstv.com</code>, <code>ad.lgappstv.com</code>, and <code>ngfts.lge.com</code>. SWEEPR VPN isolates these telemetry collectors at the network level, keeping local video signals entirely confidential.</p>
+
+      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
+        <h2 class="text-2xl font-bold text-gray-900 mb-3">2. Why <code>ibs.lgappstv.com</code> &amp; <code>cdpbeacon.lgtvcommon.com</code> Persist After Opt-Out</h2>
+        <p class="text-gray-700 leading-relaxed mb-3">Even when <em>Live Plus</em> is toggled off in the UI, LG's launcher firmware continues contacting <code>cdpbeacon.lgtvcommon.com</code>, <code>homeprv.lgtvcommon.com</code>, and <code>nudge.lgtvcommon.com</code> on startup to populate carousel tiles and measure interface engagement, alongside ad-call probes to <code>ibs.lgappstv.com</code> and <code>ad.lgappstv.com</code>.</p>
+        <p class="text-gray-700 leading-relaxed mb-3">Adding a network DNS sinkhole on your router or SWEEPR gateway blocks those hosts cleanly while keeping core LG firmware/app store infrastructure separate:</p>
+        <pre class="bg-slate-900 text-emerald-300 text-xs sm:text-sm p-4 rounded-xl overflow-x-auto"><code># LG webOS ACR &amp; Sponsored Tile Sinkhole (/etc/dnsmasq.d/lg-acr.conf)
+address=/ibs.lgappstv.com/0.0.0.0
+address=/ad.lgappstv.com/0.0.0.0
+address=/cdpbeacon.lgtvcommon.com/0.0.0.0
+address=/homeprv.lgtvcommon.com/0.0.0.0
+address=/nudge.lgtvcommon.com/0.0.0.0
+address=/lgad.cjpowercast.com/0.0.0.0
+address=/yumenetworks.com/0.0.0.0</code></pre>
       </section>
-            <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">3. Inspect LG webOS Background Beacons on Your Local Subnet</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">Using non-intrusive ARP and SSDP discovery, SWEEPR's native desktop utility detects LG thin-client network services running on your television. The scan enumerates connected displays and identifies persistent outbound telemetry sockets.</p>
-        <p class="text-gray-700 leading-relaxed">Pro tier access (<span data-price="annualStr">£74.99</span>/year — Save 50%) pairs 10Gbps RAM-only WireGuard tunneling with dedicated Wi-Fi Radar monitoring (+<span data-price="addonAnnualStr">£14.99</span>/year) for comprehensive residential privacy.</p>
+
+      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
+        <h2 class="text-2xl font-bold text-gray-900 mb-3">3. Stopping webOS OTA Firmware Resets Permanently</h2>
+        <p class="text-gray-700 leading-relaxed mb-3">Every major LG webOS software update—especially annual upgrades like webOS 23 to webOS 24—prompts a full-screen <em>Terms &amp; Conditions</em> modal where tapping <em>Agree All</em> quietly re-enables <em>Live Plus</em> and <em>Viewing Information</em>. Routing your LG TV through a WireGuard router running SWEEPR DNS (<code>10.66.0.1</code>) guarantees that even if an update flips UI checkboxes back on, zero ACR or ad-beacon packets ever leave your house.</p>
+        <p class="text-gray-700 leading-relaxed">SWEEPR VPN covers 3 simultaneous devices plus your router (£74.99/yr Annual Plan — £6.25/mo, backed by a 14-day money-back guarantee), with automated LG/Samsung/Sony/Roku blocking available in the Wi-Fi Radar &amp; Smart-TV Shield add-on (+£14.99/yr).</p>
       </section>
     </div>
 
-    <!-- FAQ Section (Matches JSON-LD FAQPage) -->
+    <!-- FAQ Section -->
     <div class="bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm mb-14">
-      <h2 class="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">LG webOS Privacy Frequently Asked Questions</h2>
       <div class="space-y-6">
-        
         <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
-          <h3 class="text-base font-bold text-gray-900 mb-2">Will blocking Smart-TV ACR telemetry break Netflix, YouTube, or Disney+?</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">No. SWEEPR Wi-Fi Radar &amp; Smart-TV Shield only sinkholes dedicated ACR screenshot and ad-tracking domains (`lgtvcommon.com`, `ibs.lgappstv.com`, `ad.lgappstv.com`, `yumenetworks.com`, `lgad.cjpowercast.com`) while routing video CDN traffic at full 4K speed.</p>
+          <h3 class="text-base font-bold text-gray-900 mb-2">Does disabling Live Plus stop <code>cdpbeacon.lgtvcommon.com</code> home-screen pings?</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">No. Turning off <em>Live Plus</em> only stops HDMI pixel fingerprinting. LG webOS still fetches sponsored tile configurations and telemetry from <code>cdpbeacon.lgtvcommon.com</code> and <code>nudge.lgtvcommon.com</code> unless you also turn off <em>Home Promotion</em> and sinkhole those domains at the router DNS layer.</p>
         </div>
         <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
-          <h3 class="text-base font-bold text-gray-900 mb-2">Does the Free 30-Second Home Wi-Fi Scanner require router admin passwords?</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">No. The scanner runs non-privileged ARP, mDNS, and SSDP probes directly from your computer to discover devices and check gateway ports in under 30 seconds.</p>
+          <h3 class="text-base font-bold text-gray-900 mb-2">Which LG domains should stay allowed so the LG Content Store and app updates work?</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">If you sinkhole <code>ibs.lgappstv.com</code> and <code>ad.lgappstv.com</code>, keep <code>snu.lge.com</code> and <code>ngfts.lge.com</code> (or update servers selectively) accessible when pulling new webOS app binaries, and avoid blocking playback CDNs like Netflix, Disney+, BBC iPlayer, or YouTube.</p>
         </div>
         <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
-          <h3 class="text-base font-bold text-gray-900 mb-2">How many devices does SWEEPR VPN Pro protect?</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">Every SWEEPR VPN Pro subscription covers up to 3 simultaneous devices (+ router), phones, tablets, or routers simultaneously, plus scans all 15–30+ devices on your home Wi-Fi.</p>
+          <h3 class="text-base font-bold text-gray-900 mb-2">Why did my LG OLED prompt me to re-accept Privacy Terms after an update?</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">LG bundles revised User Agreements inside webOS OTA updates. If a household member clicks <em>Select All</em> to dismiss the screen quickly, <em>Live Plus</em> re-activates immediately—making router-level sinkholing at <code>10.66.0.1</code> essential for persistent protection.</p>
         </div>
       </div>
     </div>
 
     <!-- Conversion Banner -->
     <div class="bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-2xl p-8 md:p-12 text-center shadow-xl mb-14">
-      <h3 class="text-2xl md:text-3xl font-black mb-3">Ready for 10Gbps WireGuard Speed &amp; Whole-Home Wi-Fi Protection?</h3>
+      <h2 class="text-2xl md:text-3xl font-black mb-3">Block LG Live Plus &amp; Home-Screen Beacons at the Router Layer</h2>
       <p class="text-gray-300 max-w-xl mx-auto mb-7 text-base">
-        Scan your home Wi-Fi in under 30 seconds, stop ISP evening throttling, and protect up to 3 devices for just <span data-price="annualPerMonthStr">£6.25</span>/mo (<span data-price="annualStr">£74.99</span>/yr — Save 50%).
+        Locate your LG webOS TV on your subnet with our free Rust scanner, then lock out <code>ibs.lgappstv.com</code> and <code>cdpbeacon.lgtvcommon.com</code> across 3 devices plus router from <span data-price="annualPerMonthStr">£6.25</span>/mo (<span data-price="annualStr">£74.99</span>/yr).
       </p>
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
         <a href="/download" class="btn btn-go btn-big gap-2">
-          <span>Free Download</span>
+          <span>Download LG Subnet Scanner</span>
           <svg width="20" height="20" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
         <a rel="nofollow" href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-big">
-          Get SWEEPR VPN Pro &rarr;
+          Start Annual Shield Plan &rarr;
         </a>
       </div>
       <div class="flex flex-wrap items-center justify-center gap-4 text-xs text-gray-400 mt-6">
-        <span>🛡️ 14-Day Money-Back Guarantee</span>
+        <span>14-Day Refund Policy</span>
         <span>•</span>
-        <span>⚡ 680KB Featherlight App</span>
+        <span>~3.7 MB Rust Installer</span>
         <span>•</span>
-        <span>📡 Free 30s Home Wi-Fi Scanner</span>
+        <span>Zero 4K CDN Interference</span>
       </div>
     </div>
 

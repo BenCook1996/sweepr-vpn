@@ -146,214 +146,162 @@
     </div>
     <div id="direct-answer" class="mb-8 p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-gray-800">
       <div class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 mb-1.5">Direct Answer</div>
-      <p class="text-sm sm:text-base leading-relaxed">Configure this hardware using native WireGuard (WireGuard VPN Setup for Linux CLI (Ubuntu, Debian, Arch & Fedora) with WireGuard VPN Setup for pfSense & OPNsense Home Firewall) from your SWEEPR VPN dashboard to encrypt connected devices without CPU bottlenecks. Using a pre-generated .conf profile enables leak-free DNS (10.66.0.1), Smart-TV ACR blocking, and up to 940 Mbps.</p>
+      <p class="text-sm sm:text-base leading-relaxed">Upload your SWEEPR profile inside ASUSWRT-Merlin under VPN, WireGuard Client (wgc1), then map living-room devices in VPN Director such as 192.168.50.x/32 to WGC1. Hardware-assisted Broadcom Flow Cache on RT-AX86U and GT-AX6000 routers sustains high speeds while exempting NAS boxes and work laptops directly out WAN with 10.66.0.1 DNS enabled.</p>
       <div class="mt-3 pt-3 border-t border-emerald-200/80 text-xs font-bold">
-        <a href="/tools/leak-test" class="text-emerald-800 hover:text-emerald-950 underline">Verify Your Connection with Free IP &amp; WebRTC Leak Test &rarr;</a>
+        <a href="/tools/leak-test" class="text-emerald-800 hover:text-emerald-950 underline">Audit Merlin wgc1 egress IP and resolver privacy &rarr;</a>
       </div>
     </div>
 
-    <!-- GEO Answer-First Quick Verdict Block -->
-    <div class="bg-white border-2 border-emerald-500/30 rounded-2xl p-6 md:p-8 shadow-sm mb-12 relative overflow-hidden">
-      <div class="absolute top-0 right-0 bg-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
-        Verified 2026 Summary
-      </div>
-      <h2 class="text-xl font-bold text-gray-900 mb-2">Quick Setup Summary (ASUSWRT-Merlin Routers)</h2>
+    <div class="bg-white border-2 border-emerald-500/30 rounded-2xl p-6 md:p-8 shadow-sm mb-10">
+      <h2 class="text-xl font-bold text-gray-900 mb-2">ASUSWRT-Merlin WGC1 &amp; VPN Director Snapshot</h2>
       <p class="text-gray-700 leading-relaxed mb-5">
-        Use ASUS VPN Director / VPN Fusion on RT-AX86U, GT-AX6000, and ZenWiFi routers to route your Apple TV, Fire Stick, and gaming consoles through SWEEPR VPN while keeping work devices on direct WAN. Engineered for <strong>ASUSWRT-Merlin 388.x / 3004.x (WireGuard Client + VPN Director)</strong> with recommended MTU <strong>1420</strong> and direct 10Gbps peering via <strong>UK-LON-01 (London) &amp; NL-AMS-01 (Amsterdam)</strong>.
+        Merlin firmware on Broadcom HND routers (<code>RT-AX86U</code>, <code>RT-AX86U Pro</code>, <code>GT-AX6000</code>, <code>RT-AX88U Pro</code>) exposes up to five concurrent WireGuard clients (<code>wgc1</code>–<code>wgc5</code>) managed alongside granular <code>VPN Director</code> IP/CIDR rules. Pair your router tunnel with workstation clients via <span data-price="annualPerMonthStr">£6.25</span>/mo annual billing.
       </p>
       <div class="flex flex-wrap gap-3 items-center">
         <a href="/download" class="btn btn-go gap-2">
-          <span>Free Download (30s Wi-Fi &amp; Speed Scan)</span>
+          <span>Download Wi-Fi Diagnostic App</span>
           <svg width="16" height="16" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
         <a rel="nofollow" href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-ghost text-sm font-semibold">
-          Get Pro (<span data-price="annualPerMonthStr">£6.25</span>/mo — Save 50%) &rarr;
+          Annual Router Bundle (<span data-price="annualStr">£74.99</span>) &rarr;
         </a>
         <a href="/tools/isp-throttling-test" class="text-xs font-bold text-emerald-700 hover:underline ml-auto">
-          Run Browser Throttling Test &rarr;
+          Measure WAN vs. WGC1 Latency &rarr;
         </a>
       </div>
     </div>
 
-    
-    <div class="bg-slate-900 text-slate-100 rounded-2xl p-6 shadow-md mb-12 border border-slate-800">
-      <div class="flex items-center justify-between mb-3">
-        <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Verified WireGuard Configuration / CLI Snippet</span>
-        <span class="text-xs text-slate-400 font-mono">ChaCha20-Poly1305 • 10Gbps RAM-Only</span>
-      </div>
-      <pre class="text-xs sm:text-sm font-mono overflow-x-auto leading-relaxed text-emerald-300"><code># ASUSWRT-Merlin VPN Director Rule Example:
-Interface:     WGC1 (SWEEPR UK-LON-01)
-Description:   Living Room Smart TV &amp; Gaming Console
-Local IP:      192.168.50.100/30
-Remote IP:     0.0.0.0/0
-KillSwitch:    Block internet if tunnel drops = YES</code></pre>
-    </div>
-
-    <!-- Structured Comparison / Benchmark Table -->
-    <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm mb-14">
-      <div class="p-6 border-b border-gray-200">
-        <h2 class="text-2xl font-bold text-gray-900">Technical Specification Matrix: SWEEPR VPN on ASUSWRT-Merlin Routers</h2>
-      </div>
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-sm">
-          <thead>
-            <tr class="bg-gray-50 border-b border-gray-200 text-gray-600 font-semibold">
-              <th class="p-4 pl-6">Metric / Capability</th>
-              <th class="p-4 w-2/5 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">SWEEPR VPN on ASUSWRT-Merlin Routers</th>
-              <th class="p-4 w-2/5 text-gray-700 border-l border-gray-200">Legacy / Bloated Consumer VPNs</th>
+    <section class="mb-10 bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm">
+      <h2 class="text-2xl font-bold text-gray-900 mb-3">1. Broadcom Runner vs. Flow Cache Acceleration on Merlin</h2>
+      <p class="text-gray-700 leading-relaxed mb-3">
+        Legacy OpenVPN on ASUS Broadcom routers saturates a single Cortex-A53/A7 core around 65–190 Mbps because packet crypto runs solely in user space. By contrast, Merlin's kernel <code>wireguard.ko</code> implementation leaves Broadcom <strong>Flow Cache</strong> (<code>fcctl</code>) operational for NAT acceleration while bypassing hardware <strong>Runner</strong> shortcuts selectively on encrypted <code>wgc1</code> flows—pushing 480–780+ Mbps depending on CPU generation.
+      </p>
+      <div class="overflow-x-auto mt-4">
+        <table class="w-full text-left text-sm border border-gray-200 rounded-xl overflow-hidden">
+          <thead class="bg-gray-50 text-gray-700 font-semibold border-b border-gray-200">
+            <tr>
+              <th class="p-3.5">ASUS Merlin Hardware</th>
+              <th class="p-3.5">Broadcom SoC</th>
+              <th class="p-3.5 bg-emerald-50/60 text-emerald-900">WireGuard (wgc1) Speed</th>
+              <th class="p-3.5">Acceleration Notes</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-100 text-gray-700">
-            
-            <tr>
-              <td class="p-4 pl-6 font-medium">Target Platform / Firmware</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">ASUSWRT-Merlin 388.x / 3004.x (WireGuard Client + VPN Director)</td>
-              <td class="p-4 border-l border-gray-200">Often locked to proprietary bloated GUI apps</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Setup Time</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">2 Minutes</td>
-              <td class="p-4 border-l border-gray-200">15–30 minutes of manual troubleshooting</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Recommended Tunnel MTU</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">1420</td>
-              <td class="p-4 border-l border-gray-200">Fixed 1500 MTU (causes packet fragmentation)</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Primary 10Gbps Endpoint</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">UK-LON-01 (London) &amp; NL-AMS-01 (Amsterdam)</td>
-              <td class="p-4 border-l border-gray-200">Overcrowded virtualised servers</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Smart-TV &amp; Tracker Blocking</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Built-in via 10.64.0.1 in-tunnel DNS resolver</td>
-              <td class="p-4 border-l border-gray-200">Requires separate third-party DNS setup</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Simultaneous Device Slots</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Up to 3 Devices (1 router slot covers whole LAN)</td>
-              <td class="p-4 border-l border-gray-200">5–6 Devices or steep renewal surcharges</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Transparent Price-Lock</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">
-                <span data-price="annualStr">£74.99</span>/yr (Save 50%), <span data-price="sixMonthStr">£48.99</span>/6mo, or <span data-price="introStr">£1.99</span> 1st Month
-              </td>
-              <td class="p-4 border-l border-gray-200">Unprotected or subject to 2nd-year renewal hikes</td>
-            </tr>
+            <tr><td class="p-3.5 font-semibold">GT-AX6000 / RT-AX88U Pro</td><td class="p-3.5">BCM4912 Quad 2.0 GHz</td><td class="p-3.5 font-bold text-emerald-800 bg-emerald-50/30">750–840 Mbps</td><td class="p-3.5">Flow Cache active; minimal jitter</td></tr>
+            <tr><td class="p-3.5 font-semibold">RT-AX86U Pro</td><td class="p-3.5">BCM4912 Quad 2.0 GHz</td><td class="p-3.5 font-bold text-emerald-800 bg-emerald-50/30">740+ Mbps</td><td class="p-3.5">Check <code>Tools &rarr; Sysinfo</code> HW accel</td></tr>
+            <tr><td class="p-3.5 font-semibold">RT-AX86U (Non-Pro)</td><td class="p-3.5">BCM4908 Quad 1.8 GHz</td><td class="p-3.5 font-bold text-emerald-800 bg-emerald-50/30">460–520 Mbps</td><td class="p-3.5">Runner bypassed for <code>wgc1</code> only</td></tr>
           </tbody>
         </table>
       </div>
-    </div>
+    </section>
 
-    <!-- Deep-Dive Technical Sections -->
-    <div class="space-y-10 mb-14">
-      
-      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">1. Why ASUSWRT-Merlin Routers Users Choose SWEEPR VPN</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">Use ASUS VPN Director / VPN Fusion on RT-AX86U, GT-AX6000, and ZenWiFi routers to route your Apple TV, Fire Stick, and gaming consoles through SWEEPR VPN while keeping work devices on direct WAN.</p>
-        <p class="text-gray-700 leading-relaxed">Broadcom Runner hardware acceleration maintains fast Wi-Fi 6 / Wi-Fi 6E speeds. Blocks LG, Samsung, and Sony Smart-TV ACR screenshot spying at the router level.</p>
-      </section>
-      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">2. Optimal MTU (1420) &amp; Keepalive Settings</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">When running WireGuard on ASUSWRT-Merlin 388.x / 3004.x (WireGuard Client + VPN Director), setting your interface MTU to 1420 with a 25-second PersistentKeepalive ensures zero packet fragmentation over PPPoE, DOCSIS, and CGNAT broadband links.</p>
-        <p class="text-gray-700 leading-relaxed">Protects every IoT device in your house while only counting as 1 of your 3 device slots. All traffic resolves through SWEEPR’s private 10.64.0.1 DNS shield with zero activity logs.</p>
-      </section>
-      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">3. Testing Your Tunnel &amp; Leak Protection</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">Once connected to UK-LON-01 (London) &amp; NL-AMS-01 (Amsterdam), open SWEEPR’s free <a href="/tools/leak-test" class="text-emerald-700 font-semibold underline hover:text-emerald-900">IP, DNS &amp; WebRTC Leak Test</a> or <a href="/tools/isp-throttling-test" class="text-emerald-700 font-semibold underline hover:text-emerald-900">ISP Speed &amp; Throttling Checker</a> to confirm your public IPv4/IPv6 and DNS resolvers are 100% encrypted.</p>
-        <p class="text-gray-700 leading-relaxed">Every SWEEPR VPN Pro plan covers up to 3 devices simultaneously and is backed by our 14-Day Money-Back Guarantee.</p>
-      </section>
-    </div>
-
-    <!-- FAQ Section (Matches JSON-LD FAQPage) -->
-    <div class="bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm mb-14">
-      <h2 class="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
-      <div class="space-y-6">
-        
-        <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
-          <h3 class="text-base font-bold text-gray-900 mb-2">How long does it take to set up SWEEPR VPN on ASUSWRT-Merlin Routers?</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">Setup takes approximately 2 Minutes using either the native SWEEPR client or our standard WireGuard configuration parameters (1420).</p>
-        </div>
-        <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
-          <h3 class="text-base font-bold text-gray-900 mb-2">Does running SWEEPR VPN on a router count as 1 device or multiple devices?</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">Running SWEEPR VPN on a router or gateway (ASUSWRT-Merlin Routers) counts as just 1 of your 3 device slots while encrypting every laptop, phone, and Smart TV connected behind it.</p>
-        </div>
-        <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
-          <h3 class="text-base font-bold text-gray-900 mb-2">Which SWEEPR server should I pick for ASUSWRT-Merlin Routers?</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">We recommend UK-LON-01 (London) &amp; NL-AMS-01 (Amsterdam) for the lowest ping and 10Gbps RAM-only WireGuard throughput.</p>
-        </div>
+    <section class="mb-10 bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm">
+      <h2 class="text-2xl font-bold text-gray-900 mb-3">2. Configuring WireGuard Client (wgc1) &amp; VPN Director Rules</h2>
+      <ol class="list-decimal pl-5 space-y-2 text-gray-700 text-sm leading-relaxed mb-4">
+        <li>Open <strong>VPN &rarr; WireGuard Client</strong>, select slot <strong>Client 1 (wgc1)</strong>, and click <strong>Import .conf file</strong> using your exported SWEEPR London or Amsterdam keypair.</li>
+        <li>Toggle <strong>Inbound Firewall</strong> to <em>Block</em>, set <strong>Enable NAT</strong> to <em>Yes</em>, and leave <strong>Internet Connection</strong> configured for selective routing if only certain devices should traverse the tunnel.</li>
+        <li>Open <strong>LAN &rarr; DHCP Server</strong> and assign static DHCP reservations (for instance <code>192.168.50.110</code> for your Apple TV and <code>192.168.50.111</code> for a bedroom Smart TV) so their local IPs never drift.</li>
+        <li>Switch to <strong>VPN &rarr; VPN Director</strong> and add explicit policy rows routing your media/gaming range through <code>WGC1</code> while pinning your Synology NAS and work laptop to <code>WAN</code>.</li>
+      </ol>
+      <div class="bg-slate-900 text-slate-100 rounded-xl p-5 border border-slate-800">
+        <div class="text-xs font-bold uppercase tracking-wider text-emerald-400 mb-2">VPN Director Policy Table Example</div>
+        <pre class="text-xs sm:text-sm font-mono overflow-x-auto leading-relaxed text-emerald-300"><code># Rule 1 (Bypass Work MacBook Pro directly to ISP WAN):
+Interface: WAN   | Local IP: 192.168.50.24/32   | Remote IP: 0.0.0.0/0
+# Rule 2 (Exempt Home NAS SMB / Backup Traffic):
+Interface: WAN   | Local IP: 192.168.50.10/32   | Remote IP: 0.0.0.0/0
+# Rule 3 (Tunnel Living Room TVs &amp; Consoles via SWEEPR):
+Interface: WGC1  | Local IP: 192.168.50.108/30  | Remote IP: 0.0.0.0/0
+# Enable "Kill Switch" under VPN Director for WGC1 clients</code></pre>
       </div>
-    </div>
+    </section>
 
-    <!-- Conversion Banner -->
-    <div class="bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-2xl p-8 md:p-12 text-center shadow-xl mb-14">
-      <h3 class="text-2xl md:text-3xl font-black mb-3">Ready for 10Gbps WireGuard Speed &amp; Whole-Home Wi-Fi Protection?</h3>
-      <p class="text-gray-300 max-w-xl mx-auto mb-7 text-base">
-        Scan your home Wi-Fi in under 30 seconds, stop ISP evening throttling, and protect up to 3 devices for just <span data-price="annualPerMonthStr">£6.25</span>/mo (<span data-price="annualStr">£74.99</span>/yr — Save 50%).
+    <section class="mb-10 bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm">
+      <h2 class="text-2xl font-bold text-gray-900 mb-3">3. DNSFilter &amp; Tunnel Verification Behind Merlin</h2>
+      <p class="text-gray-700 leading-relaxed mb-3">
+        To stop Android TVs or Roku boxes from bypassing <code>10.66.0.1</code> with hardcoded <code>8.8.8.8</code> lookups, enable <strong>LAN &rarr; DNSFilter</strong> in <em>Router</em> mode so intercepted UDP/TCP port 53 queries route cleanly through your <code>wgc1</code> DNS assignment. On PPPoE UK fibre links, drop <code>MTU</code> inside <code>wgc1</code> from 1420 to 1412 if web pages hang.
+      </p>
+      <p class="text-gray-700 leading-relaxed mb-3">
+        From a tunneled client behind <code>WGC1</code>, confirm zero IPv6 or ISP resolver leakage with our <a href="/tools/leak-test" class="text-emerald-700 font-semibold underline hover:text-emerald-900">browser IP and DNS leak test</a>, and benchmark evening jitter against your raw WAN route using the <a href="/tools/isp-throttling-test" class="text-emerald-700 font-semibold underline hover:text-emerald-900">ISP throttling diagnostic</a>.
+      </p>
+      <p class="text-sm text-gray-600">
+        Your router eats only one of three simultaneous peer slots—start with <span data-price="introStr">£1.99</span> for month one, <span data-price="sixMonthStr">£48.99</span> semi-annually, or <span data-price="annualStr">£74.99</span> billed once per year.
+      </p>
+    </section>
+
+    <section class="bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm mb-12 space-y-5">
+      <h2 class="text-2xl font-bold text-gray-900">ASUSWRT-Merlin WireGuard Troubleshooting FAQ</h2>
+      <div class="border-b border-gray-100 pb-4">
+        <h3 class="text-base font-bold text-gray-900 mb-1.5">In what order does VPN Director evaluate WAN vs. WGC1 rules?</h3>
+        <p class="text-sm text-gray-600 leading-relaxed">Merlin processes all explicit <code>WAN</code> bypass entries before <code>WGC1</code>–<code>WGC5</code> rules. You can safely route an entire subnet like <code>192.168.50.0/24</code> to <code>WGC1</code> while punching out specific <code>/32</code> IPs to <code>WAN</code>.</p>
+      </div>
+      <div class="border-b border-gray-100 pb-4">
+        <h3 class="text-base font-bold text-gray-900 mb-1.5">Do wired or wireless AiMesh nodes honor VPN Director tunnels?</h3>
+        <p class="text-sm text-gray-600 leading-relaxed">Yes. AiMesh satellites act as Layer-2 access bridges back to the primary Merlin router, so any client IP matched by VPN Director receives encrypted routing seamlessly across mesh rooms.</p>
+      </div>
+      <div>
+        <h3 class="text-base font-bold text-gray-900 mb-1.5">Why does Hardware Acceleration show Flow Cache enabled but Runner disabled?</h3>
+        <p class="text-sm text-gray-600 leading-relaxed">Broadcom's packet Runner engine cannot encapsulate WireGuard headers in silicon, so Merlin cleanly hands <code>wgc1</code> packets to the kernel while keeping Flow Cache active for LAN switching and WAN rules.</p>
+      </div>
+    </section>
+
+    <div class="bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-2xl p-8 md:p-10 text-center shadow-xl mb-12">
+      <h2 class="text-2xl md:text-3xl font-black mb-3">Protect Every Living-Room Device Behind ASUSWRT-Merlin</h2>
+      <p class="text-gray-300 max-w-xl mx-auto mb-6 text-base">
+        Reserve 1 peer slot for your ASUS router and keep 2 mobile/laptop slots ready at <span data-price="annualPerMonthStr">£6.25</span>/mo (<span data-price="annualStr">£74.99</span> yearly).
       </p>
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
         <a href="/download" class="btn btn-go btn-big gap-2">
-          <span>Free Download</span>
+          <span>Download Desktop Scanner</span>
           <svg width="20" height="20" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
         <a rel="nofollow" href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-big">
-          Get SWEEPR VPN Pro &rarr;
+          Activate Router License &rarr;
         </a>
-      </div>
-      <div class="flex flex-wrap items-center justify-center gap-4 text-xs text-gray-400 mt-6">
-        <span>🛡️ 14-Day Money-Back Guarantee</span>
-        <span>•</span>
-        <span>⚡ 680KB Featherlight App</span>
-        <span>•</span>
-        <span>📡 Free 30s Home Wi-Fi Scanner</span>
       </div>
     </div>
 
-    <!-- Related Guides & Internal Crawl Mesh -->
     <div class="border-t border-gray-200 pt-10">
-      <h2 class="text-lg font-bold text-gray-900 mb-4">Related Technical Guides &amp; Comparisons</h2>
+      <h2 class="text-lg font-bold text-gray-900 mb-4">Related Router &amp; Policy Routing Guides</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-<a href="/setup/gl-inet-travel-router" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 WireGuard Setup Guide • 45 Seconds</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">WireGuard VPN Setup for GL.iNet Beryl AX (GL-MT3000) &amp; Slate AX Travel Router</div>
+        <a href="/setup/gl-inet-travel-router" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">Portable Gateway</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">GL.iNet Beryl AX hotel setup</div>
         </a>
-<a href="/setup/linux-cli-wireguard" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 WireGuard Setup Guide • 30 Seconds</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">WireGuard VPN Setup for Linux CLI (Ubuntu, Debian, Arch &amp; Fedora)</div>
+        <a href="/setup/linux-cli-wireguard" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">Workstation CLI</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Ubuntu &amp; Fedora wg-quick guide</div>
         </a>
-<a href="/setup/pfsense-opnsense-router" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 WireGuard Setup Guide • 3 Minutes</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">WireGuard VPN Setup for pfSense &amp; OPNsense Home Firewall</div>
+        <a href="/setup/pfsense-opnsense-router" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">BSD Appliance</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">pfSense and OPNsense tun_wg0</div>
         </a>
-<a href="/setup/steam-deck-vpn" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 WireGuard Setup Guide • 60 Seconds</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">WireGuard VPN Setup for Steam Deck &amp; Handheld Gaming OS (SteamOS)</div>
+        <a href="/setup/steam-deck-vpn" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">Handheld Gaming</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">SteamOS persistent NetworkManager tunnel</div>
         </a>
-<a href="/solutions/virgin-media-remote-dev-ssh" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media Low-Latency Gaming &amp; Packet Loss (AS5089)</div>
+        <a href="/solutions/virgin-media-remote-dev-ssh" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">UK DOCSIS Fix</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Virgin Media AS5089 jitter mitigation</div>
         </a>
-        <a href="/tools/smart-tv-tracking-check" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">FREE SMART-TV TOOL</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Free Smart-TV ACR Tracker & Ad-Domain Exposure Checker</div>
+        <a href="/tools/smart-tv-tracking-check" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">ACR Audit</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Smart-TV telemetry beacon scanner</div>
         </a>
-        <a href="/tools/whats-on-my-wifi" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">FREE WI-FI DIAGNOSTIC</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">What's on My Wi-Fi? Free Unknown Device & Spy Check</div>
+        <a href="/tools/whats-on-my-wifi" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">LAN Discovery</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Identify unknown Wi-Fi clients</div>
         </a>
-        <a href="/setup/raspberry-pi-home-gateway" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">WIREGUARD SETUP GUIDE</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">WireGuard VPN Setup for Raspberry Pi 5 Whole-Home WireGuard Gateway &amp; TV Shield</div>
+        <a href="/setup/raspberry-pi-home-gateway" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">ARM64 Drop-In</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Raspberry Pi 5 LAN gateway</div>
         </a>
-        <a href="/setup/almalinux-9-wireguard-gateway" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">WIREGUARD SETUP GUIDE</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">AlmaLinux 9 & Rocky Linux 9 Enterprise WireGuard Gateway: High-Speed 10Gbps WireGuard VPN Setup Guide</div>
+        <a href="/setup/almalinux-9-wireguard-gateway" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">RHEL 9 Kernel</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">AlmaLinux 9 firewalld VPN host</div>
         </a>
-        <a href="/setup/freebsd-14-wireguard-kmod" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">WIREGUARD SETUP GUIDE</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">FreeBSD 14.1 Kernel WireGuard (if_wg) & pf Firewall Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</div>
+        <a href="/setup/freebsd-14-wireguard-kmod" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">if_wg Driver</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">FreeBSD 14 pf NAT gateway</div>
         </a>
       </div>
     </div>

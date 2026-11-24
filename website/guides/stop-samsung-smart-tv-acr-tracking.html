@@ -144,146 +144,152 @@
     </div>
     <div id="direct-answer" class="mb-8 p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-gray-800">
       <div class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 mb-1.5">Direct Answer</div>
-      <p class="text-sm sm:text-base leading-relaxed">To block Samsung Tizen Smart-TV ACR Telemetry & Home Menu Ads, enable SWEEPR VPN's encrypted WireGuard tunnel with sinkhole DNS (NVIDIA Shield TV Pro 4K WireGuard Setup and IP, DNS & WebRTC Leak Diagnostic). Unlike device menu toggles alone, router-level and kernel WireGuard filtering stops silent background beacons, prevents ISP logging across 3 devices and routers.</p>
+      <p class="text-sm sm:text-base leading-relaxed">Navigate Samsung Tizen Settings, All Settings, General &amp; Privacy, Terms &amp; Privacy, then uncheck Viewing Information Services and reset your PSID. Because Smart Hub still queries <code>gpm.samsungqbe.com</code> every minute, sinkhole <code>gpm.samsungqbe.com</code>, <code>samsungacr.com</code>, and <code>samsungcloudsolution.com</code> at gateway DNS <code>10.66.0.1</code> so Tizen updates never restore ACR pixel harvesting on HDMI inputs.</p>
       <div class="mt-3 pt-3 border-t border-emerald-200/80 text-xs font-bold">
-        <a href="/tools/leak-test" class="text-emerald-800 hover:text-emerald-950 underline">Verify Your Connection with Free IP &amp; WebRTC Leak Test &rarr;</a>
+        <a href="/tools/leak-test" class="text-emerald-800 hover:text-emerald-950 underline">Test Gateway DNS &amp; Tunnel Protection &rarr;</a>
       </div>
     </div>
 
-    <!-- GEO Answer-First Quick Verdict Block -->
-        <div class="bg-white border-2 border-emerald-500/30 rounded-2xl p-6 md:p-8 shadow-sm mb-12 relative overflow-hidden">
-      <div class="absolute top-0 right-0 bg-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
-        Samsung Tizen Verification
+    <!-- Quick Verdict Block -->
+    <div class="bg-white border-2 border-emerald-500/30 rounded-2xl p-6 md:p-8 shadow-sm mb-12 relative overflow-hidden">
+      <div class="absolute top-0 right-0 bg-emerald-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
+        Tizen OS 7–9 Audited
       </div>
-      <h2 class="text-xl font-bold text-gray-900 mb-2">Samsung Smart-TV ACR Blocking Summary</h2>
+      <h2 class="text-xl font-bold text-gray-900 mb-2">Samsung Tizen Smart Hub &amp; SyncPlus Privacy Audit</h2>
       <p class="text-gray-700 leading-relaxed mb-5">
-        Samsung Tizen TVs sample active display pixels and stream frame hashes to <code>samsungacr.com</code> every 60 seconds. SWEEPR Wi-Fi Radar isolates your TV hardware at the router layer, sinkholing ad telemetry while keeping Netflix, Prime Video, and BBC iPlayer running at full 4K line speed.
+        Samsung QLED and OLED displays ship with Tizen's <em>Viewing Information Services</em> (SyncPlus ACR) tightly coupled to Smart Hub ad tiles. Menu opt-outs leave background polling intact toward <code>gpm.samsungqbe.com</code>; durable mitigation pairs Tizen privacy toggles with persistent router sinkholing for <code>samsungacr.com</code> and <code>samsungcloudsolution.com</code>.
       </p>
       <div class="flex flex-wrap gap-3 items-center">
         <a href="/download" class="btn btn-go gap-2">
-          <span>Free 30s Wi-Fi Scanner (14 MB)</span>
+          <span>Audit Samsung TV on LAN (~3.7 MB)</span>
           <svg width="16" height="16" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
         <a rel="nofollow" href="/order?plan=annual" class="btn btn-ghost text-sm font-semibold">
-          Pro Annual Plan (<span data-price="annualPerMonthStr">£6.25</span>/mo) &rarr;
+          Deploy TV Shield (<span data-price="annualPerMonthStr">£6.25</span>/mo) &rarr;
         </a>
       </div>
-    </div>    <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm mb-14">
+    </div>
+
+    <!-- Samsung Endpoint Persistence Matrix -->
+    <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm mb-14">
       <div class="p-6 border-b border-gray-200">
-        <h2 class="text-2xl font-bold text-gray-900">Samsung Tizen Telemetry: Unfiltered Home Network vs. SWEEPR Gateway Shield</h2>
+        <h2 class="text-2xl font-bold text-gray-900">Samsung Tizen Telemetry Endpoints &amp; Sinkhole Behaviour</h2>
       </div>
       <div class="overflow-x-auto">
         <table class="w-full text-left text-sm">
           <thead>
             <tr class="bg-gray-50 border-b border-gray-200 text-gray-600 font-semibold">
-              <th class="p-4 pl-6">Technical Metric</th>
-              <th class="p-4 w-2/5 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">With SWEEPR Protection</th>
-              <th class="p-4 w-2/5 text-gray-700 border-l border-gray-200">Standard Unfiltered Wi-Fi</th>
+              <th class="p-4 pl-6">Samsung Tizen Host</th>
+              <th class="p-4 border-l border-gray-200">Telemetry Function</th>
+              <th class="p-4 border-l border-gray-200">Survives Menu Opt-Out?</th>
+              <th class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">SWEEPR <code>10.66.0.1</code> Action</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-100 text-gray-700">
             <tr>
-              <td class="p-4 pl-6 font-medium">Viewing Information Services</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Intercepted and sinkholed at <code>10.66.0.1</code></td>
-              <td class="p-4 border-l border-gray-200">Active video fingerprinting on HDMI &amp; broadcast</td>
+              <td class="p-4 pl-6 font-medium"><code>gpm.samsungqbe.com</code></td>
+              <td class="p-4 border-l border-gray-200">Smart Hub launcher &amp; 60-second heartbeat</td>
+              <td class="p-4 border-l border-gray-200">Yes — continues polling when opted out</td>
+              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Sinkholed to <code>0.0.0.0</code></td>
             </tr>
             <tr>
-              <td class="p-4 pl-6 font-medium">Outbound Analytics Hosts</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">0 packets reach <code>samsungacr.com</code></td>
-              <td class="p-4 border-l border-gray-200">Continuous background beacons to ad brokers</td>
+              <td class="p-4 pl-6 font-medium"><code>samsungacr.com</code>, <code>log-config.samsungacr.com</code></td>
+              <td class="p-4 border-l border-gray-200">SyncPlus HDMI pixel-hash ACR uploads</td>
+              <td class="p-4 border-l border-gray-200">Often reactivates after Tizen OTA</td>
+              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Sinkholed to <code>0.0.0.0</code></td>
             </tr>
             <tr>
-              <td class="p-4 pl-6 font-medium">Firmware Update Resets</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Network-level blocking survives Tizen OS updates</td>
-              <td class="p-4 border-l border-gray-200">OTA updates reset privacy checkboxes to opt-in</td>
+              <td class="p-4 pl-6 font-medium"><code>acr0.samsungcloudsolution.com</code>, <code>lcprd1.samsungcloudsolution.net</code></td>
+              <td class="p-4 border-l border-gray-200">ACR signature matching &amp; cloud logging</td>
+              <td class="p-4 border-l border-gray-200">Re-polled on boot &amp; app launch</td>
+              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Sinkholed to <code>0.0.0.0</code></td>
             </tr>
             <tr>
-              <td class="p-4 pl-6 font-medium">4K HDR Playback Throughput</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Dedicated 10Gbps WireGuard core endpoints</td>
-              <td class="p-4 border-l border-gray-200">ISP traffic shaping throttles evening streaming</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Transparent Pricing Guarantee</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">
-                <span data-price="annualStr">£74.99</span>/yr (Save 50%), <span data-price="sixMonthStr">£48.99</span>/6mo, or <span data-price="introStr">£1.99</span> 1st Month
-              </td>
-              <td class="p-4 border-l border-gray-200">Unprotected or second-year renewal price hikes</td>
+              <td class="p-4 pl-6 font-medium"><code>config.samsungads.com</code>, <code>ads.samsung.com</code></td>
+              <td class="p-4 border-l border-gray-200">Home bar banner ads &amp; PSID targeting</td>
+              <td class="p-4 border-l border-gray-200">Continues fetching generic ad creatives</td>
+              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Blocked cleanly; TV Plus stays separate</td>
             </tr>
           </tbody>
         </table>
       </div>
-    </div><div class="space-y-10 mb-14">
-      
-            <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">1. How Samsung Tizen OS Tracks Your Viewing Behavior</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">Samsung Smart Hub integrates Automatic Content Recognition into its underlying display driver firmware. The engine hashes video frames from all video sources—including connected set-top boxes, video game consoles, and streaming players—and matches them against an active fingerprint database.</p>
-        <p class="text-gray-700 leading-relaxed">These hashes upload over encrypted TLS tunnels to <code>samsungacr.com</code>, <code>log-config.samsungacr.com</code>, and <code>gpm.samsungqbe.com</code>. SWEEPR VPN neutralizes these endpoints directly at your network perimeter.</p>
+    </div>
+
+    <!-- Deep-Dive Technical Sections -->
+    <div class="space-y-10 mb-14">
+      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
+        <h2 class="text-2xl font-bold text-gray-900 mb-3">1. Why <code>gpm.samsungqbe.com</code> &amp; <code>samsungacr.com</code> Keep Talking After Opt-Out</h2>
+        <p class="text-gray-700 leading-relaxed mb-3">Samsung's SyncPlus engine operates directly inside the Tizen display driver, capturing visual signatures across terrestrial TV, HDMI consoles, and built-in apps. Even when users reject <em>Viewing Information Services</em> during setup, Smart Hub background daemons still resolve <code>gpm.samsungqbe.com</code>, <code>samsungcloudsolution.com</code>, and <code>config.samsungads.com</code> roughly once per minute to fetch remote configuration flags and promoted shelf slots.</p>
+        <p class="text-gray-700 leading-relaxed">Whenever Samsung pushes a seasonal Tizen OS firmware update, revised Terms &amp; Privacy notices frequently reappear at power-on, risking accidental opt-in from anyone holding the remote.</p>
       </section>
-            <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">2. Why Samsung Tizen OS Overrides Privacy Settings After Firmware Updates</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">Samsung Smart Hub terms of service prompts reappear automatically following major Tizen OS over-the-air updates. Even when users previously opted out of Viewing Information Services, firmware upgrades frequently reset telemetry flags to default opt-in status without explicit warning.</p>
-        <p class="text-gray-700 leading-relaxed">Under the hood, Samsung SyncPlus video fingerprinting transmits continuous frame hashes over HTTPS port 443 to <code>samsungacr.com</code>, <code>log-config.samsungacr.com</code>, and <code>gpm.samsungqbe.com</code>. Router-level tunnel encryption blinds these diagnostic sinks permanently.</p>
+
+      <section id="turn-off-acr-samsung-tv-steps" class="bg-white rounded-2xl border border-emerald-200 p-6 md:p-8 shadow-sm">
+        <h2 class="text-2xl font-bold text-gray-900 mb-3">2. Step-by-Step Tizen Menu Hardening &amp; PSID Reset</h2>
+        <p class="text-gray-700 leading-relaxed mb-4">Complete these exact menu changes on 2023–2026 Samsung Tizen Smart TVs before applying your router DNS rules:</p>
+        <ol class="list-decimal pl-5 space-y-2 text-sm text-gray-700">
+          <li><strong>Open Terms &amp; Privacy:</strong> Press <strong>Home</strong> on your Samsung SolarCell remote and open <code>Settings &rarr; All Settings &rarr; General &amp; Privacy &rarr; Terms &amp; Privacy &rarr; Privacy Choices</code>.</li>
+          <li><strong>Uncheck Viewing Information Services:</strong> Deselect <em>Viewing Information Services</em> (Tizen's SyncPlus ACR tracker), <em>Interest-Based Advertisements</em>, and <em>Voice Recognition Services</em> (if unused).</li>
+          <li><strong>Reset Your PSID:</strong> Inside <code>Privacy Choices &rarr; Reset PSID</code>, reset your Personalized Service ID so any previously associated ad-profile token is invalidated locally.</li>
+        </ol>
       </section>
-            <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">3. Audit Samsung Smart Hub Telemetry at the Gateway</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">SWEEPR Wi-Fi Radar identifies Samsung Tizen hardware by matching Organizationally Unique Identifiers (OUIs) on your local subnet. The scanner captures outbound TCP/UDP handshakes from your television and isolates background advertising beacons before packets cross the external gateway.</p>
-        <p class="text-gray-700 leading-relaxed">Upgrading to SWEEPR Pro (<span data-price="annualStr">£74.99</span>/yr — Save 50%) activates the Wi-Fi Radar &amp; Smart-TV Shield add-on (+<span data-price="addonAnnualStr">£14.99</span>/yr) for continuous 24/7 telemetry sinkholing without affecting 4K HDR streaming throughput.</p>
+
+      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
+        <h2 class="text-2xl font-bold text-gray-900 mb-3">3. Router DNS Sinkhole Persistence (OpenWrt, Pi-hole &amp; WireGuard)</h2>
+        <p class="text-gray-700 leading-relaxed mb-3">To guarantee that Samsung Tizen updates can never silently re-activate <code>samsungacr.com</code> or <code>samsungcloudsolution.com</code> beacons, bind your television's LAN subnet to SWEEPR's encrypted <code>10.66.0.1</code> sinkhole or apply wildcard <code>dnsmasq</code> blocks on your router:</p>
+        <pre class="bg-slate-900 text-emerald-300 text-xs sm:text-sm p-4 rounded-xl overflow-x-auto"><code># /etc/dnsmasq.d/samsung-tizen-acr.conf
+address=/gpm.samsungqbe.com/0.0.0.0
+address=/samsungqbe.com/0.0.0.0
+address=/samsungacr.com/0.0.0.0
+address=/samsungcloudsolution.com/0.0.0.0
+address=/samsungcloudsolution.net/0.0.0.0
+address=/samsungads.com/0.0.0.0
+
+# Confirm sinkhole locally from a laptop on the same router:
+nslookup gpm.samsungqbe.com 10.66.0.1</code></pre>
+        <p class="text-gray-700 leading-relaxed mt-3">Note: keep <code>otn.samsungcloudcdn.com</code> allowlisted temporarily if you install official Tizen OS firmware updates over Wi-Fi rather than via USB flash drive. SWEEPR VPN automates Samsung, LG, Sony, Roku, and Fire TV sinkholing across 3 devices plus your router from £6.25/mo (£74.99/yr Annual Plan, 14-day money-back guarantee) with the Wi-Fi Radar &amp; Smart-TV Shield add-on (+£14.99/yr).</p>
       </section>
     </div>
 
-
-      <section id="turn-off-acr-samsung-tv-steps" class="bg-white rounded-2xl border border-emerald-200 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">4. How to Turn Off ACR on a Samsung TV (Tizen Menu Path + <code class="text-emerald-700">gpm.samsungqbe.com</code> Sinkhole)</h2>
-        <p class="text-gray-700 leading-relaxed mb-4">
-          If you are searching for <strong>how to turn off ACR on a Samsung TV</strong>, you must both disable the Tizen OS menu toggle <em>and</em> sinkhole the background telemetry hosts (<code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">gpm.samsungqbe.com</code>, <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">samsungqbe.com</code>, <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">samsungacr.com</code>, and <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">config.samsungads.com</code>), because Samsung Smart Hub still pings <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">gpm.samsungqbe.com</code> every 60 seconds even after you opt out:
-        </p>
-        <ol class="list-decimal pl-5 space-y-2 text-sm text-gray-700 mb-4">
-          <li><strong>Step 1 (Tizen 2024–2026 Remote):</strong> Press the <strong>Home</strong> button on your Samsung remote and navigate to <strong>Settings &rarr; All Settings &rarr; General &amp; Privacy &rarr; Terms &amp; Privacy</strong>.</li>
-          <li><strong>Step 2 (Disable Viewing Information Services):</strong> Select <strong>Viewing Information Services</strong> (Samsung's Automatic Content Recognition / ACR module) and uncheck <strong>I Agree</strong>. Also uncheck <strong>Interest-Based Advertisements</strong>.</li>
-          <li><strong>Step 3 (Block <code class="text-emerald-700">gpm.samsungqbe.com</code> &amp; <code class="text-emerald-700">samsungacr.com</code> Network-Wide):</strong> Enable <strong>SWEEPR VPN + Wi-Fi Radar</strong> (or configure SWEEPR DNS <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">10.64.0.1</code> on your router) to return <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">0.0.0.0</code> for <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">gpm.samsungqbe.com</code>, <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">samsungqbe.com</code>, <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">log-config.samsungacr.com</code>, and <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">ads.samsung.com</code> so Tizen OS updates can never re-activate screenshot tracking.</li>
-        </ol>
-      </section>
-    <!-- FAQ Section (Matches JSON-LD FAQPage) -->
+    <!-- FAQ Section -->
     <div class="bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm mb-14">
-      <h2 class="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Samsung Tizen Privacy Frequently Asked Questions</h2>
       <div class="space-y-6">
-        
         <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
-          <h3 class="text-base font-bold text-gray-900 mb-2">Will blocking Smart-TV ACR telemetry break Netflix, YouTube, or Disney+?</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">No. SWEEPR Wi-Fi Radar &amp; Smart-TV Shield only sinkholes dedicated ACR screenshot and ad-tracking domains (`samsungacr.com`, `samsungads.com`, `samsungcloudsolution.net`, `gpm.samsungqbe.com`, `log-config.samsungacr.com`) while routing video CDN traffic at full 4K speed.</p>
+          <h3 class="text-base font-bold text-gray-900 mb-2">What is the Samsung PSID and why should I reset it after turning off Viewing Information Services?</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">Samsung's Personalized Service ID (PSID) ties your Smart Hub app launches and ACR viewing profiles to a persistent advertising identifier. Resetting it inside <code>Privacy Choices &rarr; Reset PSID</code> wipes that historical identifier while router sinkholes prevent a new profile from uploading.</p>
         </div>
         <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
-          <h3 class="text-base font-bold text-gray-900 mb-2">Does the Free 30-Second Home Wi-Fi Scanner require router admin passwords?</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">No. The scanner runs non-privileged ARP, mDNS, and SSDP probes directly from your computer to discover devices and check gateway ports in under 30 seconds.</p>
+          <h3 class="text-base font-bold text-gray-900 mb-2">Why does <code>gpm.samsungqbe.com</code> still appear in my router query logs after opting out?</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">Samsung Smart Hub uses <code>gpm.samsungqbe.com</code> for telemetry configuration polling and home-bar messaging every 60 seconds regardless of ACR opt-out toggles. Sinkholing the domain at <code>10.66.0.1</code> drops the heartbeat completely.</p>
         </div>
         <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
-          <h3 class="text-base font-bold text-gray-900 mb-2">How many devices does SWEEPR VPN Pro protect?</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">Every SWEEPR VPN Pro subscription covers up to 3 simultaneous devices (+ router), phones, tablets, or routers simultaneously, plus scans all 15–30+ devices on your home Wi-Fi.</p>
+          <h3 class="text-base font-bold text-gray-900 mb-2">Will blocking <code>samsungcloudsolution.com</code> stop Tizen firmware updates or Samsung apps?</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">No. Tizen firmware binaries are served from <code>otn.samsungcloudcdn.com</code> (or can be flashed via USB), while Netflix, BBC iPlayer, YouTube, and Disney+ use independent streaming CDNs untouched by ACR blocks.</p>
         </div>
       </div>
     </div>
 
     <!-- Conversion Banner -->
     <div class="bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-2xl p-8 md:p-12 text-center shadow-xl mb-14">
-      <h3 class="text-2xl md:text-3xl font-black mb-3">Ready for 10Gbps WireGuard Speed &amp; Whole-Home Wi-Fi Protection?</h3>
+      <h2 class="text-2xl md:text-3xl font-black mb-3">Lock Down Samsung Smart Hub &amp; SyncPlus ACR Permanently</h2>
       <p class="text-gray-300 max-w-xl mx-auto mb-7 text-base">
-        Scan your home Wi-Fi in under 30 seconds, stop ISP evening throttling, and protect up to 3 devices for just <span data-price="annualPerMonthStr">£6.25</span>/mo (<span data-price="annualStr">£74.99</span>/yr — Save 50%).
+        Identify every Samsung display on your home subnet in 30 seconds, then sinkhole <code>gpm.samsungqbe.com</code> and <code>samsungacr.com</code> across 3 devices plus your router for <span data-price="annualPerMonthStr">£6.25</span>/mo (<span data-price="annualStr">£74.99</span>/yr).
       </p>
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
         <a href="/download" class="btn btn-go btn-big gap-2">
-          <span>Free Download</span>
+          <span>Download Subnet Auditor</span>
           <svg width="20" height="20" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
         <a rel="nofollow" href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-big">
-          Get SWEEPR VPN Pro &rarr;
+          Activate Smart-TV Shield &rarr;
         </a>
       </div>
       <div class="flex flex-wrap items-center justify-center gap-4 text-xs text-gray-400 mt-6">
-        <span>🛡️ 14-Day Money-Back Guarantee</span>
+        <span>14-Day Money-Back Policy</span>
         <span>•</span>
-        <span>⚡ 680KB Featherlight App</span>
+        <span>Survives Tizen OS Updates</span>
         <span>•</span>
-        <span>📡 Free 30s Home Wi-Fi Scanner</span>
+        <span>Full 4K HDR Bitrate</span>
       </div>
     </div>
 
@@ -327,15 +333,6 @@
         </a>
       </div>
     </div>
-
-    <section id="enriched-how-to-disable-acr-on-samsung-smart-tv" data-enriched-query="how-to-disable-acr-on-samsung-smart-tv" style="margin:28px 0;padding:20px;background:rgba(15,23,42,0.75);border:1px solid rgba(16,185,129,0.3);border-radius:12px;">
-      <h2 style="margin-top:0;">How to Audit & Block Telemetry for How To Disable Acr On Samsung Smart Tv</h2>
-      <p>When addressing "how to disable acr on samsung smart tv", Smart TVs and IoT devices transmit viewing fingerprints and mDNS/ARP beacons over your local subnet every 500ms. SWEEPR VPN's free 30-second Home Wi-Fi Scanner identifies every active LAN device while in-tunnel DNS (10.66.0.1) sinks ACR telemetry domains without breaking 4K HDR streaming.</p>
-      <pre style="background:#020617;padding:14px;border-radius:8px;overflow-x:auto;border:1px solid #1e293b;"><code># Verified SWEEPR In-Tunnel ACR Sinkhole Resolver
-DNS = 10.66.0.1
-# Sinks: gpm.samsungqbe.com, samsungacr.com, lgtvcommon.com, logs.roku.com, tvinteractive.tv
-# Preserves: 100% of Netflix, BBC iPlayer, Prime Video, Disney+ & YouTube 4K CDNs</code></pre>
-    </section>
 
   </main>
 

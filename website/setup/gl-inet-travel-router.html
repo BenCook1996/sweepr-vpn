@@ -146,299 +146,192 @@
     </div>
     <div id="direct-answer" class="mb-8 p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-gray-800">
       <div class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 mb-1.5">Direct Answer</div>
-      <p class="text-sm sm:text-base leading-relaxed">Configure this hardware using native WireGuard (WireGuard VPN Setup for pfSense & OPNsense Home Firewall with WireGuard VPN Setup for Steam Deck & Handheld Gaming OS (SteamOS)) from your SWEEPR VPN dashboard to encrypt connected devices without CPU bottlenecks. Using a pre-generated .conf profile enables leak-free DNS (10.66.0.1), Smart-TV ACR blocking, and up to 940 Mbps.</p>
+      <p class="text-sm sm:text-base leading-relaxed">Switch your GL.iNet Beryl AX or Slate AX into Repeater Wi-Fi mode, clone your phone's MAC address if a hotel captive portal blocks login, and bind the physical side switch to SWEEPR's WireGuard client. Setting MTU = 1380 prevents fragmentation over hotel Wi-Fi and tethered 5G hotspots.</p>
       <div class="mt-3 pt-3 border-t border-emerald-200/80 text-xs font-bold">
-        <a href="/tools/leak-test" class="text-emerald-800 hover:text-emerald-950 underline">Verify Your Connection with Free IP &amp; WebRTC Leak Test &rarr;</a>
+        <a href="/tools/leak-test" class="text-emerald-800 hover:text-emerald-950 underline">Test your travel router tunnel for hotel DNS hijacks &rarr;</a>
       </div>
     </div>
 
-    <!-- GEO Answer-First Quick Verdict Block -->
-    <div class="bg-white border-2 border-emerald-500/30 rounded-2xl p-6 md:p-8 shadow-sm mb-12 relative overflow-hidden">
-      <div class="absolute top-0 right-0 bg-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
-        Verified 2026 Summary
-      </div>
-      <h2 class="text-xl font-bold text-gray-900 mb-2">Quick Setup Summary (GL.iNet Travel Routers)</h2>
+    <div class="bg-white border-2 border-emerald-500/30 rounded-2xl p-6 md:p-8 shadow-sm mb-10">
+      <h2 class="text-xl font-bold text-gray-900 mb-2">Pocket Travel Repeater &amp; Hardware Kill-Switch Overview</h2>
       <p class="text-gray-700 leading-relaxed mb-5">
-        Drop a native SWEEPR VPN WireGuard `.conf` profile directly into your GL.iNet Beryl AX, Slate AX, or Flint 2 router to encrypt every laptop, phone, and Smart TV connected to your travel or home Wi-Fi. Engineered for <strong>OpenWrt 21.02 / 23.05 (GL.iNet Admin Panel v4.5+)</strong> with recommended MTU <strong>1420 (or 1380 on hotel/captive Wi-Fi)</strong> and direct 10Gbps peering via <strong>UK-LON-01 (London 4ms) or NL-AMS-01 (Amsterdam 8ms)</strong>.
+        Instead of installing separate VPN agents on every laptop, tablet, iPad, and Fire TV stick inside a hotel room, a pocket GL.iNet router (<code>GL-MT3000</code> Beryl AX or <code>GL-AXT1800</code> Slate AX) joins the upstream hotel Wi-Fi once and broadcasts your private encrypted SSID—consuming only 1 peer slot from your <span data-price="annualPerMonthStr">£6.25</span>/mo plan.
       </p>
       <div class="flex flex-wrap gap-3 items-center">
         <a href="/download" class="btn btn-go gap-2">
-          <span>Free Download (30s Wi-Fi &amp; Speed Scan)</span>
+          <span>Grab Desktop Wi-Fi Companion</span>
           <svg width="16" height="16" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
         <a rel="nofollow" href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-ghost text-sm font-semibold">
-          Get Pro (<span data-price="annualPerMonthStr">£6.25</span>/mo — Save 50%) &rarr;
+          Annual Plan (<span data-price="annualStr">£74.99</span>/yr) &rarr;
         </a>
         <a href="/tools/isp-throttling-test" class="text-xs font-bold text-emerald-700 hover:underline ml-auto">
-          Run Browser Throttling Test &rarr;
+          Benchmark Hotel Wi-Fi Speed &rarr;
         </a>
       </div>
     </div>
 
-    
-    <div class="bg-slate-900 text-slate-100 rounded-2xl p-6 shadow-md mb-12 border border-slate-800">
-      <div class="flex items-center justify-between mb-3">
-        <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Verified WireGuard Configuration / CLI Snippet</span>
-        <span class="text-xs text-slate-400 font-mono">ChaCha20-Poly1305 • 10Gbps RAM-Only</span>
-      </div>
-      <pre class="text-xs sm:text-sm font-mono overflow-x-auto leading-relaxed text-emerald-300"><code>[Interface]
-PrivateKey = &lt;YOUR_SWEEPR_DEVICE_PRIVATE_KEY&gt;
-Address = 10.64.0.42/32
-DNS = 10.64.0.1
-MTU = 1420
+    <section class="mb-10 bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm">
+      <h2 class="text-2xl font-bold text-gray-900 mb-3">1. Repeater Wi-Fi Setup &amp; Captive-Portal MAC Cloning Walkthrough</h2>
+      <p class="text-gray-700 leading-relaxed mb-3">
+        Hotels, trains, and airport lounges intercept unauthenticated HTTP traffic on a captive portal page before granting internet access. If WireGuard is active or DNS is forced prematurely, that splash page cannot load. Follow this sequence in the <code>192.168.8.1</code> admin UI:
+      </p>
+      <ol class="list-decimal pl-5 space-y-2 text-gray-700 text-sm leading-relaxed mb-4">
+        <li>Temporarily leave <strong>VPN &rarr; WireGuard Client</strong> turned <strong>OFF</strong> and set <strong>Block Non-VPN Traffic</strong> off until authentication finishes.</li>
+        <li>Open <strong>Internet &rarr; Repeater &rarr; Scan</strong>, pick the hotel SSID, and connect. If the splash portal opens automatically on your laptop browser, accept the hotel terms.</li>
+        <li>If the portal refuses to render behind a router, sign in on your smartphone first, note your phone's Wi-Fi MAC address (disable Private Wi-Fi Address for that SSID), then open <strong>Network &rarr; MAC Address &rarr; Clone</strong> on the GL.iNet router and paste your phone's MAC before disconnecting your phone from the hotel SSID.</li>
+        <li>Once hotel bandwidth flows, slide your GL.iNet physical toggle switch to engage SWEEPR WireGuard and turn <strong>Block Non-VPN Traffic</strong> back on.</li>
+      </ol>
+    </section>
+
+    <section class="mb-10 bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm">
+      <h2 class="text-2xl font-bold text-gray-900 mb-3">2. Binding the Physical Toggle Switch &amp; Tuning MTU = 1380</h2>
+      <p class="text-gray-700 leading-relaxed mb-4">
+        Under <strong>System &rarr; Toggle Button Settings</strong>, assign the hardware slide switch to <strong>WireGuard Client</strong>. Flipping that switch physically tears down or restores your encrypted tunnel in under two seconds—handy when clearing airport logins before re-enabling full protection.
+      </p>
+      <div class="bg-slate-900 text-slate-100 rounded-xl p-5 border border-slate-800">
+        <div class="text-xs font-bold uppercase tracking-wider text-emerald-400 mb-2">Hotel &amp; 5G Hotspot Profile (MTU = 1380)</div>
+        <pre class="text-xs sm:text-sm font-mono overflow-x-auto leading-relaxed text-emerald-300"><code>[Interface]
+PrivateKey = &lt;TRAVEL_ROUTER_PRIVATE_KEY&gt;
+Address = 10.66.12.7/32
+DNS = 10.66.0.1
+MTU = 1380
 
 [Peer]
-PublicKey = &lt;SWEEPR_UK_LON_01_PUBLIC_KEY&gt;
-Endpoint = 78.141.205.68:51820
+PublicKey = &lt;SWEEPR_POP_PUBKEY&gt;
+Endpoint = 78.141.205.68:443
 AllowedIPs = 0.0.0.0/0
 PersistentKeepalive = 25</code></pre>
-    </div>
-
-    <!-- Structured Comparison / Benchmark Table -->
-    <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm mb-14">
-      <div class="p-6 border-b border-gray-200">
-        <h2 class="text-2xl font-bold text-gray-900">Technical Specification Matrix: SWEEPR VPN on GL.iNet Travel Routers</h2>
       </div>
+      <p class="text-gray-700 leading-relaxed mt-4 text-sm">
+        Dropping <code>MTU = 1380</code> accommodates nested 4G/5G carrier GRE/CGNAT headers and strict hotel firewall encapsulations without fragmenting HTTPS packets. On home fibre links, raise it back to <code>1420</code> (or <code>1412</code> on PPPoE). Notice port <code>443</code> UDP helps traverse restrictive hospitality networks that drop default port <code>51820</code>.
+      </p>
+    </section>
+
+    <section id="gl-inet-model-compatibility-matrix" class="mb-10 bg-white rounded-2xl border border-emerald-200 p-6 md:p-8 shadow-sm">
+      <h2 class="text-2xl font-bold text-gray-900 mb-3">3. GL.iNet Beryl AX, Slate AX &amp; Flint 2 Throughput Matrix</h2>
+      <p class="text-gray-700 leading-relaxed mb-4">
+        All modern GL.iNet devices running Firmware v4.5+ import standard <code>.conf</code> bundles directly via <strong>VPN &rarr; WireGuard Client &rarr; + Add Manually</strong>.
+      </p>
       <div class="overflow-x-auto">
-        <table class="w-full text-left text-sm">
-          <thead>
-            <tr class="bg-gray-50 border-b border-gray-200 text-gray-600 font-semibold">
-              <th class="p-4 pl-6">Metric / Capability</th>
-              <th class="p-4 w-2/5 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">SWEEPR VPN on GL.iNet Travel Routers</th>
-              <th class="p-4 w-2/5 text-gray-700 border-l border-gray-200">Legacy / Bloated Consumer VPNs</th>
+        <table class="w-full text-left text-xs border border-gray-200 rounded-xl overflow-hidden">
+          <thead class="bg-gray-50 text-gray-700 font-bold border-b border-gray-200">
+            <tr>
+              <th class="p-3">Hardware Model</th>
+              <th class="p-3">Chipset</th>
+              <th class="p-3 bg-emerald-50/50 text-emerald-900">Sustained WireGuard</th>
+              <th class="p-3">Hotel / 5G MTU</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-100 text-gray-700">
-            
-            <tr>
-              <td class="p-4 pl-6 font-medium">Target Platform / Firmware</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">OpenWrt 21.02 / 23.05 (GL.iNet Admin Panel v4.5+)</td>
-              <td class="p-4 border-l border-gray-200">Often locked to proprietary bloated GUI apps</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Setup Time</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">45 Seconds</td>
-              <td class="p-4 border-l border-gray-200">15–30 minutes of manual troubleshooting</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Recommended Tunnel MTU</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">1420 (or 1380 on hotel/captive Wi-Fi)</td>
-              <td class="p-4 border-l border-gray-200">Fixed 1500 MTU (causes packet fragmentation)</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Primary 10Gbps Endpoint</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">UK-LON-01 (London 4ms) or NL-AMS-01 (Amsterdam 8ms)</td>
-              <td class="p-4 border-l border-gray-200">Overcrowded virtualised servers</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Smart-TV &amp; Tracker Blocking</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Built-in via 10.64.0.1 in-tunnel DNS resolver</td>
-              <td class="p-4 border-l border-gray-200">Requires separate third-party DNS setup</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Simultaneous Device Slots</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Up to 3 Devices (1 router slot covers whole LAN)</td>
-              <td class="p-4 border-l border-gray-200">5–6 Devices or steep renewal surcharges</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Transparent Price-Lock</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">
-                <span data-price="annualStr">£74.99</span>/yr (Save 50%), <span data-price="sixMonthStr">£48.99</span>/6mo, or <span data-price="introStr">£1.99</span> 1st Month
-              </td>
-              <td class="p-4 border-l border-gray-200">Unprotected or subject to 2nd-year renewal hikes</td>
-            </tr>
+            <tr><td class="p-3 font-bold">GL-MT3000 (Beryl AX)</td><td class="p-3">MediaTek MT7981B Dual 1.3GHz</td><td class="p-3 text-emerald-700 font-semibold bg-emerald-50/30">300 Mbps</td><td class="p-3 font-mono">1380 (or 1420 home)</td></tr>
+            <tr><td class="p-3 font-bold">GL-AXT1800 (Slate AX)</td><td class="p-3">Qualcomm IPQ6000 Quad 1.2GHz</td><td class="p-3 text-emerald-700 font-semibold bg-emerald-50/30">550 Mbps</td><td class="p-3 font-mono">1380</td></tr>
+            <tr><td class="p-3 font-bold">GL-MT6000 (Flint 2)</td><td class="p-3">MediaTek Filogic 830 Quad 2.0GHz</td><td class="p-3 text-emerald-700 font-semibold bg-emerald-50/30">900 Mbps</td><td class="p-3 font-mono">1380 / 1420</td></tr>
+            <tr><td class="p-3 font-bold">GL-MT2500 (Brume 2)</td><td class="p-3">MediaTek MT7981B</td><td class="p-3 text-emerald-700 font-semibold bg-emerald-50/30">355 Mbps</td><td class="p-3 font-mono">1380</td></tr>
           </tbody>
         </table>
       </div>
-    </div>
+    </section>
 
-    <!-- Deep-Dive Technical Sections -->
-    <div class="space-y-10 mb-14">
-      
-      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">1. Why GL.iNet Travel Routers Users Choose SWEEPR VPN</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">Drop a native SWEEPR VPN WireGuard `.conf` profile directly into your GL.iNet Beryl AX, Slate AX, or Flint 2 router to encrypt every laptop, phone, and Smart TV connected to your travel or home Wi-Fi.</p>
-        <p class="text-gray-700 leading-relaxed">Hardware-accelerated WireGuard up to 300+ Mbps on Beryl AX and 650+ Mbps on Flint 2. Protects work laptops on remote travel without installing software on corporate devices.</p>
-      </section>
-      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">2. Optimal MTU (1420 (or 1380 on hotel/captive Wi-Fi)) &amp; Keepalive Settings</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">When running WireGuard on OpenWrt 21.02 / 23.05 (GL.iNet Admin Panel v4.5+), setting your interface MTU to 1420 (or 1380 on hotel/captive Wi-Fi) with a 25-second PersistentKeepalive ensures zero packet fragmentation over PPPoE, DOCSIS, and CGNAT broadband links.</p>
-        <p class="text-gray-700 leading-relaxed">Built-in `10.64.0.1` DNS automatically blocks Smart-TV ACR trackers and ad domains. All traffic resolves through SWEEPR’s private 10.64.0.1 DNS shield with zero activity logs.</p>
-      </section>
-      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">3. Testing Your Tunnel &amp; Leak Protection</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">Once connected to UK-LON-01 (London 4ms) or NL-AMS-01 (Amsterdam 8ms), open SWEEPR’s free <a href="/tools/leak-test" class="text-emerald-700 font-semibold underline hover:text-emerald-900">IP, DNS &amp; WebRTC Leak Test</a> or <a href="/tools/isp-throttling-test" class="text-emerald-700 font-semibold underline hover:text-emerald-900">ISP Speed &amp; Throttling Checker</a> to confirm your public IPv4/IPv6 and DNS resolvers are 100% encrypted.</p>
-        <p class="text-gray-700 leading-relaxed">Every SWEEPR VPN Pro plan covers up to 3 devices simultaneously and is backed by our 14-Day Money-Back Guarantee.</p>
-      </section>
-    </div>
+    <section class="mb-10 bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm">
+      <h2 class="text-2xl font-bold text-gray-900 mb-3">4. Checking Repeater Leaks &amp; Flexible Pricing Options</h2>
+      <p class="text-gray-700 leading-relaxed mb-3">
+        After flipping your hardware switch back on, visit our <a href="/tools/leak-test" class="text-emerald-700 font-semibold underline hover:text-emerald-900">IP and DNS leak checker</a> and run the <a href="/tools/isp-throttling-test" class="text-emerald-700 font-semibold underline hover:text-emerald-900">ISP throttling tester</a> from a connected laptop to confirm hotel Wi-Fi traffic cannot bypass <code>10.66.0.1</code>.
+      </p>
+      <p class="text-sm text-gray-600">
+        Need coverage solely for a two-week conference or year-round travel? Try SWEEPR at <span data-price="introStr">£1.99</span> for your opening month, lock six months for <span data-price="sixMonthStr">£48.99</span>, or pick annual pricing at <span data-price="annualStr">£74.99</span>.
+      </p>
+    </section>
 
-
-      <section id="gl-inet-model-compatibility-matrix" class="bg-white rounded-2xl border border-emerald-200 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">4. GL.iNet Firmware v4.5 / v4.6 WireGuard Speed &amp; MTU Matrix (Beryl AX, Slate AX &amp; Flint 2)</h2>
-        <p class="text-gray-700 leading-relaxed mb-4">
-          All GL.iNet travel and home routers running <strong>GL.iNet Admin Panel v4.5+ (OpenWrt 21.02 / 23.05)</strong> support direct drag-and-drop import of your SWEEPR VPN <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">wg0.conf</code> profile under <strong>VPN &rarr; WireGuard Client &rarr; + Add Manually</strong>:
-        </p>
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs border border-gray-200 rounded-xl overflow-hidden">
-            <thead class="bg-gray-50 text-gray-700 font-bold border-b border-gray-200">
-              <tr>
-                <th class="p-3">GL.iNet Router Model</th>
-                <th class="p-3">Tested WireGuard Speed</th>
-                <th class="p-3">Home Fibre MTU</th>
-                <th class="p-3">Hotel / Captive Wi-Fi MTU</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-100 text-gray-700">
-              <tr>
-                <td class="p-3 font-bold">GL-MT3000 (Beryl AX)</td>
-                <td class="p-3 text-emerald-700 font-semibold">300 Mbps WireGuard</td>
-                <td class="p-3 font-mono">1420</td>
-                <td class="p-3 font-mono">1380 (UDP 443 / 51820)</td>
-              </tr>
-              <tr>
-                <td class="p-3 font-bold">GL-MT6000 (Flint 2)</td>
-                <td class="p-3 text-emerald-700 font-semibold">900 Mbps WireGuard</td>
-                <td class="p-3 font-mono">1420</td>
-                <td class="p-3 font-mono">1380</td>
-              </tr>
-              <tr>
-                <td class="p-3 font-bold">GL-AXT1800 (Slate AX)</td>
-                <td class="p-3 text-emerald-700 font-semibold">550 Mbps WireGuard</td>
-                <td class="p-3 font-mono">1420</td>
-                <td class="p-3 font-mono">1380</td>
-              </tr>
-              <tr>
-                <td class="p-3 font-bold">GL-MT2500 / Brume 2</td>
-                <td class="p-3 text-emerald-700 font-semibold">355 Mbps WireGuard</td>
-                <td class="p-3 font-mono">1420</td>
-                <td class="p-3 font-mono">1380</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-    <!-- FAQ Section (Matches JSON-LD FAQPage) -->
-    <div class="bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm mb-14">
-      <h2 class="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
-      <div class="space-y-6">
-        
-        <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
-          <h3 class="text-base font-bold text-gray-900 mb-2">How long does it take to set up SWEEPR VPN on GL.iNet Travel Routers?</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">Setup takes approximately 45 Seconds using either the native SWEEPR client or our standard WireGuard configuration parameters (1420 (or 1380 on hotel/captive Wi-Fi)).</p>
-        </div>
-        <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
-          <h3 class="text-base font-bold text-gray-900 mb-2">Does running SWEEPR VPN on a router count as 1 device or multiple devices?</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">Running SWEEPR VPN on a router or gateway (GL.iNet Travel Routers) counts as just 1 of your 3 device slots while encrypting every laptop, phone, and Smart TV connected behind it.</p>
-        </div>
-        <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
-          <h3 class="text-base font-bold text-gray-900 mb-2">Which SWEEPR server should I pick for GL.iNet Travel Routers?</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">We recommend UK-LON-01 (London 4ms) or NL-AMS-01 (Amsterdam 8ms) for the lowest ping and 10Gbps RAM-only WireGuard throughput.</p>
-        </div>
+    <section class="bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm mb-12 space-y-5">
+      <h2 class="text-2xl font-bold text-gray-900">GL.iNet Travel Router Questions</h2>
+      <div class="border-b border-gray-100 pb-4">
+        <h3 class="text-base font-bold text-gray-900 mb-1.5">Why does the hotel login page time out when WireGuard is toggled on?</h3>
+        <p class="text-sm text-gray-600 leading-relaxed">Hospitality splash portals sit on an unroutable local gateway before internet routing unlocks. Toggle the physical switch off, accept the hotel portal, then flip WireGuard back on.</p>
       </div>
-    </div>
+      <div class="border-b border-gray-100 pb-4">
+        <h3 class="text-base font-bold text-gray-900 mb-1.5">Should I enable GL.iNet AdGuard Home alongside SWEEPR 10.66.0.1 DNS?</h3>
+        <p class="text-sm text-gray-600 leading-relaxed">Either disable AdGuard Home or configure its upstream resolver exclusively to <code>10.66.0.1</code> inside the tunnel so DNS queries never leak onto the hotel subnet.</p>
+      </div>
+      <div>
+        <h3 class="text-base font-bold text-gray-900 mb-1.5">Can I power Beryl AX directly from a USB-C laptop port or power bank?</h3>
+        <p class="text-sm text-gray-600 leading-relaxed">Yes—<code>GL-MT3000</code> draws roughly 4–6W under full Wi-Fi 6 repeater load and runs smoothly off any standard 5V/3A USB-C PD battery pack.</p>
+      </div>
+    </section>
 
-    <!-- Conversion Banner -->
-    <div class="bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-2xl p-8 md:p-12 text-center shadow-xl mb-14">
-      <h3 class="text-2xl md:text-3xl font-black mb-3">Ready for 10Gbps WireGuard Speed &amp; Whole-Home Wi-Fi Protection?</h3>
-      <p class="text-gray-300 max-w-xl mx-auto mb-7 text-base">
-        Scan your home Wi-Fi in under 30 seconds, stop ISP evening throttling, and protect up to 3 devices for just <span data-price="annualPerMonthStr">£6.25</span>/mo (<span data-price="annualStr">£74.99</span>/yr — Save 50%).
+    <div class="bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-2xl p-8 md:p-10 text-center shadow-xl mb-12">
+      <h2 class="text-2xl md:text-3xl font-black mb-3">One Travel Router Slot for Every Device in Your Hotel Room</h2>
+      <p class="text-gray-300 max-w-xl mx-auto mb-6 text-base">
+        Encrypt laptops, phones, and portable displays behind a single Beryl AX profile from <span data-price="annualPerMonthStr">£6.25</span>/mo (<span data-price="annualStr">£74.99</span> billed annually).
       </p>
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
         <a href="/download" class="btn btn-go btn-big gap-2">
-          <span>Free Download</span>
+          <span>Get Companion App</span>
           <svg width="20" height="20" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
         <a rel="nofollow" href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-big">
-          Get SWEEPR VPN Pro &rarr;
+          Unlock Travel Keys &rarr;
         </a>
-      </div>
-      <div class="flex flex-wrap items-center justify-center gap-4 text-xs text-gray-400 mt-6">
-        <span>🛡️ 14-Day Money-Back Guarantee</span>
-        <span>•</span>
-        <span>⚡ 680KB Featherlight App</span>
-        <span>•</span>
-        <span>📡 Free 30s Home Wi-Fi Scanner</span>
       </div>
     </div>
 
-    <!-- Related Guides & Internal Crawl Mesh -->
     <div class="border-t border-gray-200 pt-10">
-      <h2 class="text-lg font-bold text-gray-900 mb-4">Related Technical Guides &amp; Comparisons</h2>
+      <h2 class="text-lg font-bold text-gray-900 mb-4">Related Portable &amp; Firewall Setups</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-<a href="/setup/linux-cli-wireguard" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 WireGuard Setup Guide • 30 Seconds</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">WireGuard VPN Setup for Linux CLI (Ubuntu, Debian, Arch &amp; Fedora)</div>
+        <a href="/setup/linux-cli-wireguard" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">Linux Shell</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Linux terminal WireGuard config</div>
         </a>
-<a href="/setup/pfsense-opnsense-router" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 WireGuard Setup Guide • 3 Minutes</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">WireGuard VPN Setup for pfSense &amp; OPNsense Home Firewall</div>
+        <a href="/setup/pfsense-opnsense-router" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">Home Firewall</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">OPNsense os-wireguard deployment</div>
         </a>
-<a href="/setup/steam-deck-vpn" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 WireGuard Setup Guide • 60 Seconds</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">WireGuard VPN Setup for Steam Deck &amp; Handheld Gaming OS (SteamOS)</div>
+        <a href="/setup/steam-deck-vpn" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">Portable Gaming</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Steam Deck hotel Wi-Fi guide</div>
         </a>
-<a href="/setup/windows-11-wireguard-vpn" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 WireGuard Setup Guide • 20 Seconds</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">WireGuard VPN Setup for Windows 10 &amp; 11 Native Kernel WireGuard</div>
+        <a href="/setup/windows-11-wireguard-vpn" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">Laptop Driver</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Windows 11 WireGuardNT setup</div>
         </a>
-<a href="/solutions/virgin-media-remote-dev-ssh" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media Low-Latency Gaming &amp; Packet Loss (AS5089)</div>
+        <a href="/solutions/virgin-media-remote-dev-ssh" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">SSH Stability</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Fixing Virgin Media packet loss</div>
         </a>
-        <a href="/tools/smart-tv-tracking-check" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">FREE SMART-TV TOOL</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Free Smart-TV ACR Tracker & Ad-Domain Exposure Checker</div>
+        <a href="/tools/smart-tv-tracking-check" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">Privacy Check</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Test hotel or home ACR leaks</div>
         </a>
-        <a href="/tools/whats-on-my-wifi" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">FREE WI-FI DIAGNOSTIC</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">What's on My Wi-Fi? Free Unknown Device & Spy Check</div>
+        <a href="/tools/whats-on-my-wifi" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">Wi-Fi Audit</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Inspect unknown subnet neighbors</div>
         </a>
-        <a href="/setup/raspberry-pi-home-gateway" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">WIREGUARD SETUP GUIDE</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">WireGuard VPN Setup for Raspberry Pi 5 Whole-Home WireGuard Gateway &amp; TV Shield</div>
+        <a href="/setup/raspberry-pi-home-gateway" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">Stationary Pi</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Raspberry Pi 5 LAN bridge</div>
         </a>
-        <a href="/setup/almalinux-9-wireguard-gateway" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">WIREGUARD SETUP GUIDE</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">AlmaLinux 9 & Rocky Linux 9 Enterprise WireGuard Gateway: High-Speed 10Gbps WireGuard VPN Setup Guide</div>
+        <a href="/setup/almalinux-9-wireguard-gateway" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">Enterprise OS</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">AlmaLinux 9 gateway forwarding</div>
         </a>
-        <a href="/setup/freebsd-14-wireguard-kmod" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">WIREGUARD SETUP GUIDE</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">FreeBSD 14.1 Kernel WireGuard (if_wg) & pf Firewall Setup: High-Speed 10Gbps WireGuard VPN Setup Guide</div>
+        <a href="/setup/freebsd-14-wireguard-kmod" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">BSD Kernel</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">FreeBSD 14 pf NAT rules</div>
         </a>
       </div>
     </div>
+
     <section id="enriched-gl-inet-nordvpn-wireguard-setup" data-enriched-query="gl-inet-nordvpn-wireguard-setup" style="margin:28px 0;padding:20px;background:rgba(15,23,42,0.88);color:#f8fafc;border:1px solid rgba(16,185,129,0.35);border-radius:12px;">
-      <h2 style="margin-top:0;color:#f8fafc;">Why GL.iNet Travel Router Users Switch From NordVPN to SWEEPR VPN Native WireGuard (.conf)</h2>
-      <p style="color:#cbd5e1;line-height:1.65;">Searching for "gl inet nordvpn wireguard setup"? Many GL.iNet Travel Router owners struggle with NordVPN due to its proprietary NordLynx daemon (which hides WireGuard private keys behind Linux token-extraction scripts). SWEEPR VPN provides instant 1-click standard WireGuard (.conf) export with pre-tuned MTU (1420/1412/1380), in-tunnel Smart-TV ACR & ad-blocking DNS (10.66.0.1), 10Gbps RAM-only bare-metal endpoints, and a flat price-lock guarantee (£1.99 1st-Month Trial, £74.99/yr — Save 50%).</p>
-      <pre style="background:#020617;color:#6ee7b7;padding:14px;border-radius:8px;overflow-x:auto;border:1px solid #1e293b;"><code># NordVPN vs SWEEPR VPN on GL.iNet Travel Router
-# - NordVPN: Requires proprietary NordLynx daemon (which hides WireGuard private keys behind Linux token-extraction scripts)
-# - SWEEPR VPN: Native 1-Click Standard WireGuard .conf Export (Zero Token Scripts)
-
-[Interface]
-Address = 10.66.0.2/32
-DNS = 10.66.0.1
-MTU = 1420 # 1412 on PPPoE Fibre | 1380 on Hotel/5G Wi-Fi
-
-[Peer]
-Endpoint = lon01.wg.sweeprvpn.com:51820
-AllowedIPs = 0.0.0.0/0, ::/0
-PersistentKeepalive = 25</code></pre>
+      <h2 style="margin-top:0;color:#f8fafc;">Direct Key Export vs. Token-Extraction Scripts on GL.iNet</h2>
+      <p style="color:#cbd5e1;line-height:1.65;">Many travel router owners abandon providers that hide WireGuard keys inside proprietary NordLynx daemons, which forces awkward Linux curl scripts to extract temporary credentials. SWEEPR gives Beryl AX and Slate AX owners standard, permanent <code>wg0.conf</code> files directly from the account portal—ready to paste straight into GL.iNet Firmware v4.5+.</p>
+      <pre style="background:#020617;color:#6ee7b7;padding:14px;border-radius:8px;overflow-x:auto;border:1px solid #1e293b;"><code># GL.iNet Admin Panel -&gt; VPN -&gt; WireGuard Client -&gt; Configuration Upload
+# Keep "MTU = 1380" for airport/train repeaters, "1420" at home</code></pre>
     </section>
-<section id="enriched-gl-inet-wireguard-setup" data-enriched-query="gl-inet-wireguard-setup" style="margin:28px 0;padding:20px;background:rgba(15,23,42,0.88);color:#f8fafc;border:1px solid rgba(16,185,129,0.35);border-radius:12px;">
-      <h2 style="margin-top:0;color:#f8fafc;">Verified WireGuard .conf & MTU Configuration: GL.iNet WireGuard Setup</h2>
-      <p style="color:#cbd5e1;line-height:1.65;">To achieve 900+ Mbps sustained throughput and zero UDP packet fragmentation for "gl inet wireguard setup", import a native SWEEPR VPN 10Gbps WireGuard profile (.conf) with in-tunnel DNS set to 10.66.0.1 and PersistentKeepalive = 25.</p>
-      <pre style="background:#020617;color:#6ee7b7;padding:14px;border-radius:8px;overflow-x:auto;border:1px solid #1e293b;"><code>[Interface]
-Address = 10.66.0.2/32
-DNS = 10.66.0.1
-MTU = 1420 # Use 1412 on PPPoE Fibre or 1380 on Hotel/5G Wi-Fi
-
-[Peer]
-Endpoint = lon01.wg.sweeprvpn.com:51820
-AllowedIPs = 0.0.0.0/0, ::/0
-PersistentKeepalive = 25</code></pre>
+    <section id="enriched-gl-inet-wireguard-setup" data-enriched-query="gl-inet-wireguard-setup" style="margin:28px 0;padding:20px;background:rgba(15,23,42,0.88);color:#f8fafc;border:1px solid rgba(16,185,129,0.35);border-radius:12px;">
+      <h2 style="margin-top:0;color:#f8fafc;">GL.iNet VPN Cascading &amp; LAN Policy Whitelisting</h2>
+      <p style="color:#cbd5e1;line-height:1.65;">Under <strong>VPN &rarr; VPN Dashboard &rarr; Global Proxy Options</strong>, switch to <em>MAC Address</em> or <em>VLAN-Based</em> policy routing if you want your travel Fire TV stick tunneled through London while a corporate laptop uses direct repeater Wi-Fi for internal SSO.</p>
     </section>
-
-  </main>
+</main>
 
   <!-- Footer -->
   <footer class="border-t border-gray-200 py-8 text-center text-sm text-gray-500">

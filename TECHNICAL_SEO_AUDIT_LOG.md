@@ -1328,12 +1328,8 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 ### Executive Summary
 - **Overall Scores**: Crawlability **100/100**, Technical SEO **100/100**, PageSpeed & CWV **100/100** across **92 Canonical Pages**.
 - **Auto-Optimizations Executed**:
-  - Fixed CRLF-safe `renderPlatformDownloadPicker` regex & LF-normalized SHA-1 content-hash `<lastmod>` tracking in `scripts/daily-seo-pagespeed-audit.mjs` (`resolveDownloadLastMod` & `/download` CWV/cache-busting audits) so `/download` `<lastmod>` and `website/daily-seo-pages-state.json` stay deterministic across Windows and Linux
-  - Backfilled explicit `width` and `height` attributes on all inline `<svg>` elements across indexable pages (`CLS = 0` protection prior to stylesheet parse) and verified all `<img>` tags include `width`, `height`, `alt`, `loading="lazy"`, and `decoding="async"`
-  - Added `<link rel="preload" as="style">` for `/tailwind.min.css` & `/style.css`, `<link rel="dns-prefetch" href="https://www.googletagmanager.com" />` alongside GA4 preconnects across all 92 indexable pages & `/download`, and `<link rel="dns-prefetch" href="https://sitepatent.com" />` on localized homepages
-  - Expanded 17 short pSEO `<meta name="description">`, `og:description`, and `twitter:description` tags (77–109 chars) to 149–164 chars and enforced 30–65 char `<title>` / 110–165 char `<meta name="description">` bounds in `scripts/daily-seo-pagespeed-audit.mjs`
-  - Added `og:locale` (`en_GB`), aligned `twitter:description` (141 chars), and added CSS `preload` + `dns-prefetch` hints to `/download` in `website/server.mjs`
-  - Synchronized `sitemap.xml` with 93 canonical URLs via content-hash `<lastmod>` tracking (`daily-seo-pages-state.json`) and synchronized `llms.txt` & `llms-full.txt` with all 63 pSEO guides and live WireGuard/ACR telemetry for GEO AI citations
+  - Synchronized sitemap.xml with 93 canonical URLs (content-hash <lastmod>: 0 modified today)
+  - Synchronized llms.txt & llms-full.txt with all 63 pSEO guides and live 04:00 AM WireGuard/ACR telemetry for GEO AI citations
 
 ### Category Scorecards & Verifications
 

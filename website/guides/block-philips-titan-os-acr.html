@@ -94,92 +94,100 @@
     <p class="lead">Philips Titan OS smart TVs capture on-screen video frames to sync Ambilight data and upload viewing statistics to advertising partners.</p>
     <div id="direct-answer" style="margin:18px 0 24px;padding:18px 20px;border-radius:14px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.35);">
       <div style="font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent2,#34d399);margin-bottom:6px;">Direct Answer</div>
-      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">To block Philips Titan OS & Ambilight ACR Screenshot Telemetry, route connections through SWEEPR VPN's encrypted WireGuard tunnel with sinkhole DNS (10.66.0.1 ACR telemetry blocking). Unlike settings menu toggles alone, router and kernel WireGuard filtering blocks background tracking beacons across 3 simultaneous devices and routers, with instant verification via our free browser leak test.</p>
+      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Disable Philips Titan OS Automatic Content Recognition under All Settings, General Settings, and Smart TV Privacy, then sinkhole <code>philips.com/telemetry</code>, <code>titanos.tv/metrics</code>, and <code>epg.corio.com</code> at router DNS <code>10.66.0.1</code> via WireGuard. Local Ambilight LED bias lighting continues processing on-device while network filtering stops silent ACR beacons across your household smart displays and gateways.</p>
       <div style="padding-top:10px;border-top:1px solid rgba(16,185,129,0.22);font-size:0.84rem;font-weight:700;">
-        <a href="/tools/leak-test" style="color:var(--accent2,#34d399);text-decoration:underline;">Verify Your Connection with Free IP &amp; WebRTC Leak Test &rarr;</a>
+        <a href="/tools/leak-test" style="color:var(--accent2,#34d399);text-decoration:underline;">Check DNS &amp; IP Leak Status in Browser &rarr;</a>
       </div>
     </div>
 
     <div class="cta-strip">
       <div>
-        <strong>Run the Free 30-Second Home Wi-Fi &amp; ISP Speed Diagnostic</strong>
-        <div style="color:var(--muted);font-size:0.93rem;">Featherlight ~3.7 MB native Rust + Tauri v2 app • No credit card required for Wi-Fi device scanner • £1.99 1st-Month Pro Trial</div>
+        <strong>Audit Philips Titan OS &amp; Ambilight LAN Traffic in Under 30 Seconds</strong>
+        <div style="color:var(--muted);font-size:0.93rem;">Non-privileged ARP/mDNS scanner built in Rust (~3.7 MB) detects active Smart TVs before configuring WireGuard sinkhole DNS.</div>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <a class="btn" href="/download">Download Free Scanner</a>
-        <a class="btn-outline" href="/pricing">View Plans (Save 50% Yearly)</a>
+        <a class="btn" href="/download">Get Desktop Scanner</a>
+        <a class="btn-outline" href="/pricing">Compare Shield Tiers</a>
       </div>
     </div>
 
-    
-  <h2>Technical Overview &amp; Network Indicators</h2>
-  <p>Philips Titan OS smart TVs capture on-screen video frames to sync Ambilight data and upload viewing statistics to advertising partners.</p>
-  <p>When you run the <strong>SWEEPR VPN Free 30-Second Home Wi-Fi Scanner</strong> (~3.7 MB native Rust client), it inspects local ARP tables, IEEE OUI hardware vendor prefixes, and mDNS service broadcasts on your LAN, then cross-references outbound DNS queries against our Smart-TV ACR &amp; ISP diagnostic rulebase:</p>
-  <pre><code># Verified Indicator / Rule:
-philips.com/telemetry
+  <h2>1. How Philips Titan OS &amp; Ambilight Cloud Sync Separate Local vs. Network Telemetry</h2>
+  <p>TP Vision's Titan OS powers 2024–2026 Philips Ambilight televisions using an embedded Linux runtime optimized for fast launcher rendering. Critically, real-time Ambilight bias lighting operates exclusively on local hardware: the video processor samples edge RGB pixel zones directly from the display pipeline and drives rear LEDs over an internal serial bus without needing cloud connectivity.</p>
+  <p>By contrast, Titan OS viewing analytics, personalized recommendations, and cloud-synced Ambilight+Hue entertainment profiles initiate persistent HTTPS and DNS lookups toward external metrics collectors. Even when streaming through an external Apple TV, PlayStation, or UHD Blu-ray player over HDMI, the television's ACR service can upload programme fingerprints and guide interactions to <code>philips.com/telemetry</code>, <code>titanos.tv/metrics</code>, <code>amzn.philips.tv</code>, <code>epg.corio.com</code>, and <code>tracking.philips.eu</code>.</p>
 
-# Verified Indicator / Rule:
-titanos.tv/metrics
-
-# Verified Indicator / Rule:
-amzn.philips.tv
-
-# Verified Indicator / Rule:
-epg.corio.com
-
-# Verified Indicator / Rule:
-tracking.philips.eu</code></pre>
-
-  <h2>Step-by-Step Remediation With SWEEPR VPN</h2>
+  <h2>2. Philips Titan OS Privacy Menu Walkthrough (Ambilight Preserved)</h2>
+  <p>Start by disabling built-in consent switches directly from your Philips remote control before applying router-level blocks so the operating system stops queuing local analytics payloads:</p>
   <ol>
-    <li><strong>Step 1 — Run the Free 30-Second Home Wi-Fi Audit:</strong> Download <a href="/download" style="color:var(--accent2);">SWEEPR VPN (~3.7 MB)</a> and click <em>Scan My Home Wi-Fi</em> to identify every active IP, MAC vendor, and Smart TV on your local network.</li>
-    <li><strong>Step 2 — Enable 10Gbps RAM-Only WireGuard + In-Tunnel DNS (<code>10.66.0.1</code>):</strong> Route traffic through <code>UK-LON-01</code> (4ms) or <code>NL-AMS-01</code> (8ms) with calibrated MTU.</li>
-    <li><strong>Step 3 — Activate SWEEPR Wi-Fi Radar &amp; Smart-TV Shield:</strong> Block Automatic Content Recognition (ACR) telemetry domains and receive instant alerts whenever an unknown MAC address joins your Wi-Fi.</li>
+    <li><strong>Open Smart TV Privacy Controls:</strong> Press the <strong>Settings</strong> gear button on the Philips remote and navigate to <code>Settings &rarr; All Settings &rarr; General Settings &rarr; Smart TV Privacy</code> (or <code>Privacy Settings</code> on 2024 OLED/PML series builds).</li>
+    <li><strong>Revoke Viewing &amp; Content Recognition Consent:</strong> Toggle off <em>Viewing Experience / Content Recognition</em>, <em>Personalised Advertising</em>, and <em>Diagnostic Usage Telemetry</em>. Confirm that <em>HbbTV Tracking</em> is disabled under <code>All Settings &rarr; Channels &rarr; HbbTV Settings</code> if you watch terrestrial broadcasts.</li>
+    <li><strong>Decouple Ambilight Cloud Sync From Local Bias Lighting:</strong> Keep <code>Ambilight &rarr; Ambilight Style &rarr; Follow Video</code> enabled locally, while signing out of optional Philips cloud account syncing and disabling <em>Ambilight+Hue Cloud Bridge</em> links unless you actively run local Hue Entertainment zones.</li>
   </ol>
 
-    <h2>Transparent Anchor Pricing &amp; 14-Day Money-Back Guarantee</h2>
-    <p>Unlike legacy VPNs that trap you in 24-month renewals or 250 MB bloated installers, SWEEPR VPN offers straightforward pricing with an instant free 30-second Home Wi-Fi Device Scanner:</p>
-    <table>
-      <thead>
-        <tr>
-          <th>Plan Tier</th>
-          <th>Billing Cycle</th>
-          <th>Effective Monthly Cost</th>
-          <th>Included Features</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Yearly Plan (Core Cash Cow — Save 50%)</strong></td>
-          <td>£74.99 / year ($95.99 USD | €89.99 EUR)</td>
-          <td><strong>£6.25 / mo</strong></td>
-          <td>10Gbps RAM-Only WireGuard (UK, NL, DE, SE, CH, US), 3 simultaneous devices (+ router), Kernel Kill-Switch, 14-day guarantee</td>
-        </tr>
-        <tr>
-          <td><strong>6-Monthly Plan (Mid-Tier Anchor — Save 35%)</strong></td>
-          <td>£48.99 / 6 months ($61.99 USD | €58.99 EUR)</td>
-          <td><strong>£8.17 / mo</strong></td>
-          <td>All 10Gbps WireGuard Core Locations, In-Tunnel DNS, Port-Forwarding &amp; Streaming Support</td>
-        </tr>
-        <tr>
-          <td><strong>Monthly Plan (Flexible + £1.99 1st Month)</strong></td>
-          <td>£1.99 1st Month, then £12.49 / mo</td>
-          <td>£12.49 / mo</td>
-          <td>Cancel anytime in 1 click, full 10Gbps WireGuard &amp; Wi-Fi diagnostic access</td>
-        </tr>
-        <tr>
-          <td><strong>SWEEPR Wi-Fi Radar &amp; Smart-TV Shield Add-On</strong></td>
-          <td>+£14.99/yr | +£9.99/6mo | +£1.99/mo</td>
-          <td>Optional Add-On</td>
-          <td>24/7 Unknown Wi-Fi Intruder Alerts + Samsung/LG/Sony/Roku/Fire TV ACR Spy Blocker</td>
-        </tr>
-      </tbody>
-    </table>
+  <h2>3. Enforcing Router DNS Sinkholes (<code>10.66.0.1</code>) &amp; Pi-hole Rules</h2>
+  <p>Firmware updates on connected TVs frequently prompt users to re-accept updated Titan OS terms, quietly restoring opt-in flags. Placing your television behind a WireGuard-capable router (OpenWrt, GL.iNet, ASUSWRT-Merlin) running SWEEPR DNS at <code>10.66.0.1</code>—or an internal Pi-hole / AdGuard Home instance upstreamed through WireGuard—neutralizes telemetry regardless of menu state.</p>
+  <pre><code># /etc/dnsmasq.d/philips-titan-acr.conf (OpenWrt / Pi-hole sinkhole)
+address=/titanos.tv/0.0.0.0
+address=/metrics.titanos.tv/0.0.0.0
+address=/tracking.philips.eu/0.0.0.0
+address=/amzn.philips.tv/0.0.0.0
+address=/epg.corio.com/0.0.0.0
+# Sinkhole philips.com/telemetry hosts via Pi-hole regex or local firewall:
+# (^|\.)telemetry\.philips\.com$
 
-    <h2>Frequently Asked Questions</h2>
-    <div class="card"><h3>Will blocking Smart-TV ACR telemetry break Netflix, BBC iPlayer, or YouTube?</h3><p>No. SWEEPR Smart-TV Shield only sinks Automatic Content Recognition (ACR) screenshot and ad-tracking endpoints while leaving CDN video delivery streams untouched.</p></div>
-<div class="card"><h3>Does the SWEEPR 30-Second Wi-Fi Scanner work on Windows, macOS, and Linux?</h3><p>Yes. The SWEEPR desktop scanner is built in Rust + Tauri v2 (~3.7 MB) and runs natively on Windows 10/11, macOS (Apple Silicon & Intel), and Linux.</p></div>
-<div class="card"><h3>How can I test if my ISP is still intercepting my DNS requests?</h3><p>Run our free browser <a href="/tools/leak-test" style="color:var(--accent2);text-decoration:underline;">IP, DNS &amp; WebRTC Leak Test</a> to verify that your resolver matches SWEEPR VPN's encrypted in-tunnel DNS.</p></div>
+# Verify sinkhole response from any workstation on the same VLAN:
+dig @10.66.0.1 titanos.tv A +short
+# Expected output: 0.0.0.0</code></pre>
+  <p>If your television attempts to bypass DHCP-assigned resolvers using hardcoded DNS (such as <code>8.8.8.8</code>), add a router firewall NAT rule redirecting outbound LAN port 53 UDP/TCP from the TV's static lease to <code>10.66.0.1</code>.</p>
+
+  <h2>4. Titan OS Endpoint &amp; Ambilight Functionality Matrix</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Philips Subsystem</th>
+        <th>Observed Telemetry Host / Path</th>
+        <th>Effect of DNS Sinkhole</th>
+        <th>Ambilight &amp; App Impact</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Titan OS Metrics Agent</strong></td>
+        <td><code>titanos.tv/metrics</code></td>
+        <td>Drops launcher clickstream &amp; app dwell logs</td>
+        <td>Home tiles launch normally; promoted banners disappear</td>
+      </tr>
+      <tr>
+        <td><strong>Philips Cloud Telemetry</strong></td>
+        <td><code>philips.com/telemetry</code>, <code>tracking.philips.eu</code></td>
+        <td>Blocks firmware diagnostic uploads &amp; device IDs</td>
+        <td>Zero impact on local HDMI switching or HDR tone mapping</td>
+      </tr>
+      <tr>
+        <td><strong>Corio EPG Enrichment</strong></td>
+        <td><code>epg.corio.com</code></td>
+        <td>Halts IP-based channel metadata profiling</td>
+        <td>Over-the-air DVB-T/T2 Freeview EIT schedule stays intact</td>
+      </tr>
+      <tr>
+        <td><strong>Sponsored Shopping Tile</strong></td>
+        <td><code>amzn.philips.tv</code></td>
+        <td>Prevents retail ad-carousel preloading</td>
+        <td>4K streaming apps (Netflix, iPlayer, Disney+) unaffected</td>
+      </tr>
+      <tr>
+        <td><strong>Local Ambilight LED Engine</strong></td>
+        <td>Internal SoC SPI bus (no WAN host)</td>
+        <td>Not routed over IP</td>
+        <td>100% full-speed <em>Follow Video</em> &amp; <em>Follow Audio</em> operation</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>For automated multi-vendor Smart-TV filtering without maintaining manual router blocklists, SWEEPR VPN's Annual Plan (£74.99/yr — £6.25/mo equivalent across 3 devices plus router, backed by a 14-day money-back guarantee) pairs with the Wi-Fi Radar &amp; Smart-TV Shield add-on (+£14.99/yr) on <a href="/pricing" style="color:var(--accent2);text-decoration:underline;">our pricing page</a>.</p>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="card"><h3>Will sinkholing <code>titanos.tv/metrics</code> or <code>philips.com/telemetry</code> disable Ambilight around my Philips screen?</h3><p>No. Ambilight LED colour sampling is computed locally inside the TV's picture-processing SoC directly from active HDMI or tuner frames. Only cloud account syncing and remote telemetry reporting rely on external servers.</p></div>
+  <div class="card"><h3>Should I block <code>epg.corio.com</code> if I watch broadcast channels through an aerial?</h3><p>Broadcast DVB-T/Freeview channels transmit 7-day schedules directly inside the radio multiplex stream (EIT tables), so blocking <code>epg.corio.com</code> stops IP-based viewing analytics while keeping terrestrial listings working. Only IP-enriched poster thumbnails are suppressed.</p></div>
+  <div class="card"><h3>How can I tell if my Philips TV ignores router DNS settings and queries public resolvers directly?</h3><p>Check router connection tracking (<code>conntrack -L | grep &lt;TV_IP&gt;</code>) for outbound port 53 or 853 packets, enforce a LAN-to-<code>10.66.0.1</code> port-53 redirect, and test your subnet gateway via our <a href="/tools/leak-test" style="color:var(--accent2);text-decoration:underline;">IP &amp; DNS Leak Diagnostic</a>.</p></div>
 
     <h2>Related Technical Guides &amp; Free Diagnostic Tools</h2>
     <div class="card">

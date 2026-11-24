@@ -134,189 +134,194 @@
     <!-- Breadcrumb & Badge -->
     <div class="text-center mb-10">
       <div class="inline-block text-xs font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full mb-3 border border-emerald-200">
-        2026 Head-to-Head Comparison
+        Proprietary Lightway Protocol vs Open WireGuard .conf
       </div>
       <h1 class="text-3xl md:text-5xl font-black text-gray-900 tracking-tight mb-4">
         SWEEPR VPN vs ExpressVPN (2026 Comparison)
       </h1>
       <div class="flex flex-wrap items-center gap-2 text-xs text-gray-500 mt-3 mb-3" id="eeat-author-byline"><span>By <strong class="text-gray-800">Benjamin Cook</strong>, Principal Network Architect &middot; SWEEPR VPN Inc.</span><span>&bull;</span><span>Updated Nov 2026</span><span>&bull;</span><a href="/warrant-canary" class="text-emerald-700 font-semibold hover:underline">Verified via Cryptographic Warrant Canary &rarr;</a></div>
-      <p class="text-gray-600 text-lg max-w-2xl mx-auto">Compare 10Gbps open-standard WireGuard speeds, whole-home Wi-Fi intruder scanning, and honest locked-in pricing against Kape Technologies' ExpressVPN.</p>
+      <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+        Why open-source WireGuard portability across GL.iNet, OpenWrt, and pfSense routers—plus flat £74.99/yr billing—beats ExpressVPN’s Aircove lock-in and £6.67–£10+/mo renewals.
+      </p>
     </div>
-    <div id="direct-answer" class="mb-8 p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-gray-800">
+<div id="direct-answer" class="mb-8 p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-gray-800">
       <div class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 mb-1.5">Direct Answer</div>
-      <p class="text-sm sm:text-base leading-relaxed">SWEEPR VPN outperforms ExpressVPN for UK and international households seeking predictable renewal pricing. Your £74.99/yr annual rate (or £1.99 1st-month trial) never doubles in Year 2, delivering ~14 MB ChaCha20 WireGuard tunnels on 10 Gbps RAM-only servers plus a free 30-second Home Wi-Fi scanner across 3 devices and routers.</p>
+      <p class="text-sm sm:text-base leading-relaxed">ExpressVPN relies on its proprietary Lightway UDP implementation, Aircove router hardware lock-in, and high £6.67–£10+/mo recurring rates under Kape Technologies ownership. SWEEPR VPN provides audited standard WireGuard .conf exports for OpenWrt, GL.iNet, and pfSense gateways, a ~3.7–14 MB Rust client, free Home Wi-Fi scanning, and locked £74.99/yr billing.</p>
       <div class="mt-3 pt-3 border-t border-emerald-200/80 text-xs font-bold">
-        <a href="/tools/leak-test" class="text-emerald-800 hover:text-emerald-950 underline">Verify Your Connection with Free IP &amp; WebRTC Leak Test &rarr;</a>
+        <a href="/tools/leak-test" class="text-emerald-800 hover:text-emerald-950 underline">Audit Your Lightway Connection for DNS Leaks &rarr;</a>
       </div>
     </div>
 
-    <!-- GEO Answer-First Quick Verdict Block -->
-        <div class="bg-white border-2 border-red-500/30 rounded-2xl p-6 md:p-8 shadow-sm mb-12 relative overflow-hidden">
+    <div class="bg-white border-2 border-red-500/30 rounded-2xl p-6 md:p-8 shadow-sm mb-12 relative overflow-hidden">
       <div class="absolute top-0 right-0 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
-        ExpressVPN Breakdown
+        Protocol &amp; Router Audit
       </div>
-      <h2 class="text-xl font-bold text-gray-900 mb-2">Verdict: SWEEPR Pro vs ExpressVPN</h2>
+      <h2 class="text-xl font-bold text-gray-900 mb-2">Architecture Summary: Open .conf Portability vs Lightway Lock-In</h2>
       <p class="text-gray-700 leading-relaxed mb-5">
-        ExpressVPN relies on its proprietary Lightway daemon, restricts accounts to 8 devices, and renews at high annual rates ($100–$155/year). SWEEPR VPN delivers native 10Gbps WireGuard tunnels, 10-device coverage, a built-in 30s home Wi-Fi scanner, and a locked-in flat fee of £74.99/year.
+        ExpressVPN builds around Lightway (a custom wolfSSL C-daemon) and sells proprietary Aircove routers to cover home networks, while charging roughly £6.67–£10+/mo ($100–$155/yr) upon recurring billing. SWEEPR embraces standard kernel WireGuard so you can export raw <code>.conf</code> files directly onto existing OpenWrt, GL.iNet, or pfSense boxes—alongside a ~3.7–14 MB Rust desktop scanner and locked £74.99/yr pricing.
       </p>
       <div class="flex flex-wrap gap-3 items-center">
         <a href="/download" class="btn btn-go gap-2">
-          <span>Download Free App (14 MB)</span>
+          <span>Download Rust Client (~3.7–14 MB)</span>
           <svg width="16" height="16" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
-        <a rel="nofollow" href="/order?plan=annual" class="btn btn-ghost text-sm font-semibold">
-          Pro Annual Plan (<span data-price="annualPerMonthStr">£6.25</span>/mo) &rarr;
+        <a rel="nofollow" href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-ghost text-sm font-semibold">
+          Start Annual Lock (<span data-price="annualPerMonthStr">£6.25</span>/mo) &rarr;
         </a>
       </div>
-    </div>    <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm mb-14">
+    </div>
+
+    <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm mb-14">
       <div class="p-6 border-b border-gray-200">
-        <h2 class="text-2xl font-bold text-gray-900">Side-by-Side: SWEEPR VPN Pro vs ExpressVPN Lightway</h2>
+        <h2 class="text-2xl font-bold text-gray-900">Technical Comparison: ExpressVPN Lightway vs SWEEPR WireGuard</h2>
       </div>
       <div class="overflow-x-auto">
         <table class="w-full text-left text-sm">
           <thead>
             <tr class="bg-gray-50 border-b border-gray-200 text-gray-600 font-semibold">
-              <th class="p-4 pl-6">Technical Attribute</th>
+              <th class="p-4 pl-6">Architectural Layer</th>
               <th class="p-4 w-2/5 bg-red-50/50 text-red-900 font-bold border-l border-red-100">SWEEPR VPN Pro</th>
               <th class="p-4 w-2/5 text-gray-700 border-l border-gray-200">ExpressVPN</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-100 text-gray-700">
             <tr>
-              <td class="p-4 pl-6 font-medium">Core Tunnel Architecture</td>
-              <td class="p-4 bg-red-50/50 text-red-900 font-bold border-l border-red-100">Standard audited Linux &amp; Windows kernel WireGuard</td>
-              <td class="p-4 border-l border-gray-200">Proprietary Lightway C-daemon wrapper</td>
+              <td class="p-4 pl-6 font-medium">Router Firmware Portability</td>
+              <td class="p-4 bg-red-50/50 text-red-900 font-bold border-l border-red-100">Direct .conf generator for OpenWrt, GL.iNet &amp; pfSense</td>
+              <td class="p-4 border-l border-gray-200">Aircove proprietary hardware or custom ExpressVPN router firmware</td>
             </tr>
             <tr>
-              <td class="p-4 pl-6 font-medium">Desktop Binary Footprint</td>
-              <td class="p-4 bg-red-50/50 text-red-900 font-bold border-l border-red-100">14 MB native Rust &amp; Tauri v2 binary</td>
-              <td class="p-4 border-l border-gray-200">~110 MB installer with background helper services</td>
+              <td class="p-4 pl-6 font-medium">Encryption Protocol</td>
+              <td class="p-4 bg-red-50/50 text-red-900 font-bold border-l border-red-100">Audited kernel WireGuard ChaCha20 + AmneziaWG Stealth 443</td>
+              <td class="p-4 border-l border-gray-200">Proprietary Lightway UDP/TCP C-daemon</td>
+            </tr>
+            <tr>
+              <td class="p-4 pl-6 font-medium">Annual &amp; Monthly Rates</td>
+              <td class="p-4 bg-red-50/50 text-red-900 font-bold border-l border-red-100">
+                <span data-price="annualStr">£74.99</span>/yr (<span data-price="annualPerMonthStr">£6.25</span>/mo) • <span data-price="sixMonthStr">£48.99</span>/6mo • <span data-price="introStr">£1.99</span> intro
+              </td>
+              <td class="p-4 border-l border-gray-200">£6.67–£10+/mo ($100–$155/yr recurring rate)</td>
+            </tr>
+            <tr>
+              <td class="p-4 pl-6 font-medium">Desktop Client Weight</td>
+              <td class="p-4 bg-red-50/50 text-red-900 font-bold border-l border-red-100">~3.7–14 MB native Rust + Tauri v2 package</td>
+              <td class="p-4 border-l border-gray-200">~110 MB installer + persistent helper services</td>
+            </tr>
+            <tr>
+              <td class="p-4 pl-6 font-medium">Home Subnet Radar</td>
+              <td class="p-4 bg-red-50/50 text-red-900 font-bold border-l border-red-100">Free 30s ARP/mDNS scanner + 10.66.0.1 Smart-TV ACR shield</td>
+              <td class="p-4 border-l border-gray-200">No LAN hardware discovery or ACR screenshot filter</td>
             </tr>
             <tr>
               <td class="p-4 pl-6 font-medium">Corporate Ownership</td>
-              <td class="p-4 bg-red-50/50 text-red-900 font-bold border-l border-red-100">Independent cybersecurity lab (SWEEPR Inc.)</td>
-              <td class="p-4 border-l border-gray-200">Kape Technologies conglomerate ownership</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Local Subnet Security</td>
-              <td class="p-4 bg-red-50/50 text-red-900 font-bold border-l border-red-100">Includes free 30s ARP &amp; SSDP home Wi-Fi scanner</td>
-              <td class="p-4 border-l border-gray-200">Zero local network auditing or intruder discovery</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Price Guarantee</td>
-              <td class="p-4 bg-red-50/50 text-red-900 font-bold border-l border-red-100">
-                <span data-price="annualStr">£74.99</span>/yr (Save 50%), <span data-price="sixMonthStr">£48.99</span>/6mo, or <span data-price="introStr">£1.99</span> 1st Month
-              </td>
-              <td class="p-4 border-l border-gray-200">Surges to £85–£120/yr on subsequent renewals</td>
+              <td class="p-4 bg-red-50/50 text-red-900 font-bold border-l border-red-100">Independent team publishing Cryptographic Warrant Canary</td>
+              <td class="p-4 border-l border-gray-200">Owned by Kape Technologies PLC</td>
             </tr>
           </tbody>
         </table>
       </div>
-    </div><div class="space-y-10 mb-14">
-      
+    </div>
+
+    <div class="space-y-10 mb-14">
       <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">1. Transparent Price-Lock vs. ExpressVPN's Renewal Price Jump</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">The #1 reason users search for a ExpressVPN alternative in 2026 is billing shock: One of the most expensive recurring VPN subscriptions on the market, owned by conglomerate Kape Technologies, with no local Home Wi-Fi intruder scanner.</p>
-        <p class="text-gray-700 leading-relaxed">With SWEEPR VPN, there are no dark-pattern renewal hikes. Our Annual Plan is £74.99/year (£6.25/mo equivalent — Save 50%), our 6-Month Plan is £48.99 (£8.17/mo — Save 35%), or you can try your first month for £1.99.</p>
+        <h2 class="text-2xl font-bold text-gray-900 mb-3">1. Why Raw WireGuard .conf Beats Lightway &amp; Aircove Lock-In</h2>
+        <p class="text-gray-700 leading-relaxed mb-3">Lightway delivers quick reconnects inside ExpressVPN’s own apps, yet because it is a custom protocol rather than standard WireGuard, you cannot simply paste a <code>.conf</code> file into OpenWrt, GL.iNet Beryl AX travel routers, MikroTik, or pfSense/OPNsense firewalls. Instead, ExpressVPN nudges households toward buying dedicated Aircove routers or flashing vendor-locked firmware onto a narrow list of Asus/Linksys models.</p>
+        <p class="text-gray-700 leading-relaxed">SWEEPR treats standard WireGuard as a first-class citizen: generate peer keys in seconds, paste directly into any standard gateway, and cover your entire living room while reserving your 3 native client slots for travel laptops and phones.</p>
       </section>
       <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">2. A Featherlight 14 MB App vs. ~110 MB installer (Proprietary Lightway protocol)</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">Built by the engineering team behind SWEEPR Cleaner using memory-safe Rust and Tauri v2, SWEEPR VPN installs in seconds (~14 MB) and uses virtually zero CPU or battery.</p>
-        <p class="text-gray-700 leading-relaxed">In one click, SWEEPR routes your traffic through 10Gbps RAM-only WireGuard servers in London Docklands (4ms), Amsterdam (8ms), Stockholm (14ms), Frankfurt (11ms), New York, Los Angeles, Singapore, and Tokyo.</p>
+        <h2 class="text-2xl font-bold text-gray-900 mb-3">2. Premium Recurring Pricing (£6.67–£10+/mo) vs Locked £74.99/yr</h2>
+        <p class="text-gray-700 leading-relaxed mb-3">ExpressVPN remains one of the costliest consumer VPNs, billing roughly £6.67–£10+/mo depending on billing term ($100–$155/year once discounts roll off). That premium also funds Kape Technologies’ multi-brand portfolio rather than lean open-protocol infrastructure.</p>
+        <p class="text-gray-700 leading-relaxed">SWEEPR keeps billing fixed at £74.99/year (£6.25/mo equivalent), offers a £48.99 six-month tier (£8.17/mo), and includes a £1.99 first-month trial backed by a 14-day refund policy—with zero surprise Year-2 inflation.</p>
       </section>
       <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">3. Whole-Home Wi-Fi Radar &amp; Smart-TV ACR Protection</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">Traditional VPNs like ExpressVPN only encrypt traffic on the single laptop or phone where the app is open, ignoring the 20+ other IoT devices and Smart TVs on your home router.</p>
-        <p class="text-gray-700 leading-relaxed">SWEEPR VPN includes a free 30-second Home Wi-Fi &amp; Speed Scanner that enumerates every device on your LAN, plus the optional SWEEPR Wi-Fi Radar &amp; Smart-TV Shield add-on to alert you when a stranger joins your Wi-Fi and block Smart TVs from capturing ACR screenshots.</p>
+        <h2 class="text-2xl font-bold text-gray-900 mb-3">3. Lightweight Rust Scanner + Living-Room Telemetry Shield</h2>
+        <p class="text-gray-700 leading-relaxed mb-3">Whereas ExpressVPN ships a ~110 MB desktop installer focused strictly on outbound device tunnels, SWEEPR packs a memory-safe ~3.7–14 MB Rust binary that maps every device on your Wi-Fi in 30 seconds.</p>
+        <p class="text-gray-700 leading-relaxed">Pairing the router tunnel with our 10.66.0.1 DNS sinkhole (via the optional Wi-Fi Radar &amp; Smart-TV Shield add-on at +£14.99/yr) strips Samsung, LG, Roku, Vizio, and Fire TV ACR screenshot domains automatically.</p>
       </section>
     </div>
 
-    <!-- FAQ Section (Matches JSON-LD FAQPage) -->
     <div class="bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm mb-14">
-      <h2 class="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">ExpressVPN Migration FAQ</h2>
       <div class="space-y-6">
-        
         <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
-          <h3 class="text-base font-bold text-gray-900 mb-2">Why are users switching from ExpressVPN to SWEEPR VPN in 2026?</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">ExpressVPN charges nearly double on annual renewals while capping standard coverage at 8 devices. SWEEPR VPN gives you 10Gbps open-standard WireGuard speeds, 10-device coverage, a free 30s Home Wi-Fi Scanner, and a flat £74.99/yr price (Save 50%).</p>
+          <h3 class="text-base font-bold text-gray-900 mb-2">Can I run SWEEPR on a GL.iNet or OpenWrt router without buying an Aircove?</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">Yes. Because SWEEPR generates standard WireGuard .conf files, any router running OpenWrt, GL.iNet firmware, Asuswrt-Merlin, or pfSense connects at full line speed using hardware you already own.</p>
         </div>
         <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
-          <h3 class="text-base font-bold text-gray-900 mb-2">Is SWEEPR VPN faster than ExpressVPN on UK broadband?</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">SWEEPR VPN uses lightweight kernel-grade WireGuard tunnels connected to 10Gbps RAM-only servers in London Docklands (4ms ping, up to 940 Mbps) designed specifically to bypass UK ISP evening peering congestion.</p>
+          <h3 class="text-base font-bold text-gray-900 mb-2">Is audited WireGuard faster than Lightway on gigabit fibre?</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">Kernel-space WireGuard executes directly inside the OS networking stack with ChaCha20-Poly1305 encryption, minimizing context switches compared to userspace daemons and reaching 900+ Mbps on 10Gbps bare-metal POPs.</p>
         </div>
         <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
-          <h3 class="text-base font-bold text-gray-900 mb-2">Can I test SWEEPR VPN alongside ExpressVPN for free?</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">Yes! You can download the SWEEPR VPN desktop app to run our free 30-second Home Wi-Fi &amp; Speed Scanner immediately, and every Pro plan includes a 14-day 100% money-back guarantee.</p>
+          <h3 class="text-base font-bold text-gray-900 mb-2">How much do I save switching from ExpressVPN to SWEEPR?</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">Replacing ExpressVPN’s £85–£120+/yr recurring bill with SWEEPR’s locked £74.99/yr plan saves £10–£45+ every year while keeping router portability and adding free LAN scanning.</p>
         </div>
       </div>
     </div>
 
-    <!-- Conversion Banner -->
     <div class="bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-2xl p-8 md:p-12 text-center shadow-xl mb-14">
-      <h3 class="text-2xl md:text-3xl font-black mb-3">Ready for 10Gbps WireGuard Speed &amp; Whole-Home Wi-Fi Protection?</h3>
+      <h3 class="text-2xl md:text-3xl font-black mb-3">Drop Proprietary Router Hardware. Own Open WireGuard.</h3>
       <p class="text-gray-300 max-w-xl mx-auto mb-7 text-base">
-        Scan your home Wi-Fi in under 30 seconds, stop ISP evening throttling, and protect up to 3 devices for just <span data-price="annualPerMonthStr">£6.25</span>/mo (<span data-price="annualStr">£74.99</span>/yr — Save 50%).
+        Export raw .conf profiles to your existing router, run a free 30s LAN audit, and pay <span data-price="annualPerMonthStr">£6.25</span>/mo (<span data-price="annualStr">£74.99</span>/yr locked).
       </p>
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
         <a href="/download" class="btn btn-go btn-big gap-2">
-          <span>Free Download</span>
+          <span>Download Free Scanner</span>
           <svg width="20" height="20" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
         <a rel="nofollow" href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-big">
-          Get SWEEPR VPN Pro &rarr;
+          Get Router-Ready Pro &rarr;
         </a>
       </div>
       <div class="flex flex-wrap items-center justify-center gap-4 text-xs text-gray-400 mt-6">
-        <span>🛡️ 14-Day Money-Back Guarantee</span>
+        <span>OpenWrt &amp; pfSense .conf</span>
         <span>•</span>
-        <span>⚡ 680KB Featherlight App</span>
+        <span>14-Day Refund Guarantee</span>
         <span>•</span>
-        <span>📡 Free 30s Home Wi-Fi Scanner</span>
+        <span>~3.7–14 MB Native Binary</span>
       </div>
     </div>
 
-    <!-- Related Guides & Internal Crawl Mesh -->
-        <div class="border-t border-gray-200 pt-10">
-      <h2 class="text-lg font-bold text-gray-900 mb-4">Related Comparisons &amp; Diagnostics</h2>
+    <div class="border-t border-gray-200 pt-10">
+      <h2 class="text-lg font-bold text-gray-900 mb-4">Related Open-Protocol &amp; Router Resources</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-<a href="/vs/mullvad" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-red-400 no-underline">
-          <div class="text-xs font-bold text-red-600 mb-1">Peer Comparison</div>
-          <div class="text-sm font-bold text-gray-900">SWEEPR VPN vs Mullvad Comparison</div>
-          <div class="text-xs text-gray-500 mt-1">Anonymous account numbers vs whole-home LAN radar.</div>
+        <a href="/vs/mullvad" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-red-400 no-underline">
+          <div class="text-xs font-bold text-red-600 mb-1">WireGuard Pioneer</div>
+          <div class="text-sm font-bold text-gray-900">Mullvad Privacy vs Home Wi-Fi Radar</div>
+          <div class="text-xs text-gray-500 mt-1">Comparing €5 flat billing, port forwarding, and LAN ACR shields.</div>
         </a>
-<a href="/setup/gl-inet-travel-router" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-red-400 no-underline">
-          <div class="text-xs font-bold text-red-600 mb-1">Router Integration</div>
-          <div class="text-sm font-bold text-gray-900">GL.iNet Travel Router WireGuard Setup</div>
-          <div class="text-xs text-gray-500 mt-1">Configure hardware travel routers with WireGuard profiles.</div>
+        <a href="/setup/gl-inet-travel-router" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-red-400 no-underline">
+          <div class="text-xs font-bold text-red-600 mb-1">Travel Hardware</div>
+          <div class="text-sm font-bold text-gray-900">GL.iNet Beryl AX .conf Setup</div>
+          <div class="text-xs text-gray-500 mt-1">Flash open WireGuard tunnels without buying Aircove hardware.</div>
         </a>
-<a href="/tools/isp-throttling-test" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-red-400 no-underline">
-          <div class="text-xs font-bold text-red-600 mb-1">Speed Diagnostic</div>
-          <div class="text-sm font-bold text-gray-900">Broadband Throttling &amp; Bufferbloat Test</div>
-          <div class="text-xs text-gray-500 mt-1">Measure evening packet shaping across video streams.</div>
+        <a href="/tools/isp-throttling-test" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-red-400 no-underline">
+          <div class="text-xs font-bold text-red-600 mb-1">Throughput Probe</div>
+          <div class="text-sm font-bold text-gray-900">Evening ISP Bufferbloat Checker</div>
+          <div class="text-xs text-gray-500 mt-1">Spot peak-hour congestion across broadband uplinks.</div>
         </a>
         <a href="/tools/vpn-renewal-price-checker" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">FREE RENEWAL CALCULATOR</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Free 3-Year VPN Renewal Price-Hike Calculator</div>
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Cost Auditor</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">3-Year VPN Renewal Surge Estimator</div>
         </a>
         <a href="/alternatives/totalvpn" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 BUYER GUIDE</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">The 5 Best Total VPN Alternatives in 2026</div>
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Buyer Overview</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Top Total VPN Alternatives Tested</div>
         </a>
         <a href="/vs/totalvpn" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 COMPARISON</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">SWEEPR VPN vs Total VPN (2026): Speed, Renewal Pricing &amp; Privacy Compared</div>
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">AV Bundle Audit</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Total VPN vs Pure Rust WireGuard</div>
         </a>
         <a href="/vs/windscribe" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 COMPARISON</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">SWEEPR VPN vs Windscribe Pro: 2026 Speed, Footprint & Privacy Comparison</div>
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Custom Plans</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Windscribe Build-A-Plan vs Core Nodes</div>
         </a>
         <a href="/vs/cloudflare-warp-plus" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 COMPARISON</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">SWEEPR VPN vs Cloudflare WARP+: 2026 Speed, Footprint & Privacy Comparison</div>
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Edge Proxy</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Cloudflare WARP+ vs Router .conf</div>
         </a>
       </div>
     </div>
-  </main>
+</main>
 
   <!-- Footer -->
   <footer class="border-t border-gray-200 py-8 text-center text-sm text-gray-500">

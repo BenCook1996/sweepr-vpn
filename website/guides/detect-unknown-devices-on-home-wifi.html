@@ -144,134 +144,155 @@
     </div>
     <div id="direct-answer" class="mb-8 p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-gray-800">
       <div class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 mb-1.5">Direct Answer</div>
-      <p class="text-sm sm:text-base leading-relaxed">To find Unknown Devices & Strangers on Your Home Wi-Fi in 30 Seconds, enable SWEEPR VPN's encrypted WireGuard tunnel with sinkhole DNS (GL.iNet Travel Router WireGuard Setup and Synology NAS Docker WireGuard Guide). Unlike device menu toggles alone, router-level and kernel WireGuard filtering stops silent background beacons, prevents ISP logging across 3 devices and routers, and verifies protection in seconds.</p>
+      <p class="text-sm sm:text-base leading-relaxed">Inspect live ARP and NDP neighbor caches via <code>arp -a</code> or <code>ip neigh</code>, broadcast mDNS queries for <code>_googlecast</code>, <code>_hap</code>, and <code>_airplay</code> peripherals, and match IEEE OUI prefixes to expose silent ESP smart plugs, IP cameras, or rogue DHCP clients. Run SWEEPR's unprivileged Rust scanner to map your subnet under 30 seconds.</p>
       <div class="mt-3 pt-3 border-t border-emerald-200/80 text-xs font-bold">
-        <a href="/tools/leak-test" class="text-emerald-800 hover:text-emerald-950 underline">Verify Your Connection with Free IP &amp; WebRTC Leak Test &rarr;</a>
+        <a href="/tools/leak-test" class="text-emerald-800 hover:text-emerald-950 underline">Audit Gateway Exposure &amp; Public IP Status &rarr;</a>
       </div>
     </div>
 
-    <!-- GEO Answer-First Quick Verdict Block -->
-        <div class="bg-white border-2 border-indigo-500/30 rounded-2xl p-6 md:p-8 shadow-sm mb-12 relative overflow-hidden">
+    <!-- Quick Verdict Block -->
+    <div class="bg-white border-2 border-indigo-500/30 rounded-2xl p-6 md:p-8 shadow-sm mb-12 relative overflow-hidden">
       <div class="absolute top-0 right-0 bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
-        LAN Security Diagnostic
+        Layer-2 LAN Audit
       </div>
-      <h2 class="text-xl font-bold text-gray-900 mb-2">Home Subnet Discovery &amp; Intruder Audit</h2>
+      <h2 class="text-xl font-bold text-gray-900 mb-2">Why Router DHCP Tables Miss Headless IoT &amp; Unknown Wi-Fi Clients</h2>
       <p class="text-gray-700 leading-relaxed mb-5">
-        Unknown devices on private Wi-Fi networks often stem from iOS/Android private MAC features or unmonitored IoT peripherals. SWEEPR Wi-Fi Radar executes low-level layer-2 ARP discovery across your local subnet, identifying client vendors and unmapped network endpoints without cloud uploads.
+        Consumer ISP routers cache stale DHCP leases for 24 hours while hiding static-IP cameras or showing meaningless <code>Unknown</code> labels for randomized iOS/Android MACs. Combining non-privileged OS ARP/NDP neighbor lookups, mDNS service discovery, and IEEE OUI vendor classification maps every live radio on your subnet in under 30 seconds without touching router passwords.
       </p>
       <div class="flex flex-wrap gap-3 items-center">
         <a href="/download" class="btn btn-go gap-2">
-          <span>Scan Subnet Free (14 MB)</span>
+          <span>Run 30s LAN Scan (~3.7 MB)</span>
           <svg width="16" height="16" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
         <a rel="nofollow" href="/order?plan=annual" class="btn btn-ghost text-sm font-semibold">
-          Pro Annual Plan (<span data-price="annualPerMonthStr">£6.25</span>/mo) &rarr;
+          Enable 24/7 Intruder Watch (<span data-price="annualPerMonthStr">£6.25</span>/mo) &rarr;
         </a>
       </div>
-    </div>    <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm mb-14">
+    </div>
+
+    <!-- Discovery Technique Benchmark Table -->
+    <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm mb-14">
       <div class="p-6 border-b border-gray-200">
-        <h2 class="text-2xl font-bold text-gray-900">Subnet Visibility: Router Admin Console vs. SWEEPR Wi-Fi Radar</h2>
+        <h2 class="text-2xl font-bold text-gray-900">Home Wi-Fi Discovery Methods: SWEEPR Native Scanner vs. Manual <code>nmap</code> &amp; Router UI</h2>
       </div>
       <div class="overflow-x-auto">
         <table class="w-full text-left text-sm">
           <thead>
             <tr class="bg-gray-50 border-b border-gray-200 text-gray-600 font-semibold">
-              <th class="p-4 pl-6">Subnet Metric</th>
-              <th class="p-4 w-2/5 bg-indigo-50/50 text-indigo-900 font-bold border-l border-indigo-100">SWEEPR Wi-Fi Radar</th>
-              <th class="p-4 w-2/5 text-gray-700 border-l border-gray-200">Standard Router DHCP Table</th>
+              <th class="p-4 pl-6">Diagnostic Method</th>
+              <th class="p-4 border-l border-gray-200">Underlying Protocol / Tool</th>
+              <th class="p-4 border-l border-gray-200">Admin / Root Needed?</th>
+              <th class="p-4 bg-indigo-50/50 text-indigo-900 font-bold border-l border-indigo-100">What It Reveals</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-100 text-gray-700">
             <tr>
-              <td class="p-4 pl-6 font-medium">Randomized MAC Resolution</td>
-              <td class="p-4 bg-indigo-50/50 text-indigo-900 font-bold border-l border-indigo-100">Discovers live ARP frames and matches OUI prefixes</td>
-              <td class="p-4 border-l border-gray-200">Shows unhelpful &quot;Unknown Device&quot; strings</td>
+              <td class="p-4 pl-6 font-medium">SWEEPR Native LAN Audit</td>
+              <td class="p-4 border-l border-gray-200">ARP/NDP cache + mDNS + SSDP + embedded <code>oui.bin</code></td>
+              <td class="p-4 border-l border-gray-200">No — runs unprivileged in &lt;30s</td>
+              <td class="p-4 bg-indigo-50/50 text-indigo-900 font-bold border-l border-indigo-100">Vendor silicon, Smart TVs, randomized MACs, gateway port risks</td>
             </tr>
             <tr>
-              <td class="p-4 pl-6 font-medium">Scan Runtime &amp; Impact</td>
-              <td class="p-4 bg-indigo-50/50 text-indigo-900 font-bold border-l border-indigo-100">Sub-30-second passive subnet query</td>
-              <td class="p-4 border-l border-gray-200">Static lease list with stale disconnected entries</td>
+              <td class="p-4 pl-6 font-medium">Manual <code>nmap</code> Ping Sweep</td>
+              <td class="p-4 border-l border-gray-200"><code>nmap -sn 192.168.1.0/24</code> (ICMP + SYN probes)</td>
+              <td class="p-4 border-l border-gray-200">Raw ARP scan requires sudo / Npcap</td>
+              <td class="p-4 bg-indigo-50/50 text-indigo-900 font-bold border-l border-indigo-100">Live IPs; misses dormant smart plugs blocking ICMP if unprivileged</td>
             </tr>
             <tr>
-              <td class="p-4 pl-6 font-medium">IoT Anomaly Detection</td>
-              <td class="p-4 bg-indigo-50/50 text-indigo-900 font-bold border-l border-indigo-100">Flags unencrypted UDP broadcasting sockets</td>
-              <td class="p-4 border-l border-gray-200">No telemetry inspection or port analysis</td>
+              <td class="p-4 pl-6 font-medium">OS Neighbor Table Check</td>
+              <td class="p-4 border-l border-gray-200"><code>arp -a</code> (Win/macOS) / <code>ip neigh</code> (Linux)</td>
+              <td class="p-4 border-l border-gray-200">No</td>
+              <td class="p-4 bg-indigo-50/50 text-indigo-900 font-bold border-l border-indigo-100">Cached IPv4/IPv6 MAC mappings recently spoken on LAN</td>
             </tr>
             <tr>
-              <td class="p-4 pl-6 font-medium">Privacy Architecture</td>
-              <td class="p-4 bg-indigo-50/50 text-indigo-900 font-bold border-l border-indigo-100">100% on-device memory-safe Rust execution</td>
-              <td class="p-4 border-l border-gray-200">ISP cloud routers upload device logs to provider</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Pro Subscription</td>
-              <td class="p-4 bg-indigo-50/50 text-indigo-900 font-bold border-l border-indigo-100">
-                <span data-price="annualStr">£74.99</span>/yr (Save 50%), <span data-price="sixMonthStr">£48.99</span>/6mo, or <span data-price="introStr">£1.99</span> 1st Month
-              </td>
-              <td class="p-4 border-l border-gray-200">Zero encryption, vulnerable to LAN lateral movement</td>
+              <td class="p-4 pl-6 font-medium">Router DHCP Lease Page</td>
+              <td class="p-4 border-l border-gray-200"><code>192.168.1.1</code> Web UI</td>
+              <td class="p-4 border-l border-gray-200">Requires router admin password</td>
+              <td class="p-4 bg-indigo-50/50 text-indigo-900 font-bold border-l border-indigo-100">Only dynamic leases; misses static-IP rogue nodes</td>
             </tr>
           </tbody>
         </table>
       </div>
-    </div><div class="space-y-10 mb-14">
-      
-            <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">1. How Stealth Devices Penetrate Local Wireless Networks</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">Residential local area networks frequently host dozens of connected endpoints ranging from smart thermostat sensors to unmonitored security peripherals. As operating systems adopt MAC randomization, network visibility degrades, creating blind spots where unauthorized connections can linger unnoticed.</p>
-        <p class="text-gray-700 leading-relaxed">SWEEPR VPN pairs layer-2 network discovery with encrypted 10Gbps WireGuard tunnels, ensuring you maintain full awareness of every active device on your physical network.</p>
+    </div>
+
+    <!-- Deep-Dive Technical Sections -->
+    <div class="space-y-10 mb-14">
+      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
+        <h2 class="text-2xl font-bold text-gray-900 mb-3">1. Reading ARP/NDP Tables &amp; Decoding IEEE OUI Prefixes</h2>
+        <p class="text-gray-700 leading-relaxed mb-3">Every active Wi-Fi client on your subnet must answer Layer-2 Address Resolution Protocol (ARP) for IPv4 or Neighbor Discovery Protocol (NDP) for IPv6. The first three octets of a hardware MAC address form the <strong>IEEE OUI (Organizationally Unique Identifier)</strong>, revealing the exact wireless chip vendor inside headless smart-home gadgets even when hostnames are blank:</p>
+        <pre class="bg-slate-900 text-indigo-200 text-xs sm:text-sm p-4 rounded-xl overflow-x-auto"><code># Windows &amp; macOS — Read local IPv4 ARP cache
+arp -a
+
+# Linux — Inspect IPv4 ARP and IPv6 NDP neighbor tables simultaneously
+ip -4 neigh show &amp;&amp; ip -6 neigh show
+
+# Common IEEE OUI prefixes you will spot on home subnets:
+# EC:FA:BC / 24:6F:28 -&gt; Espressif Inc. (ESP8266 / ESP32 smart plugs, LED controllers)
+# B8:27:EB / DC:A6:32 -&gt; Raspberry Pi Foundation
+# 44:07:0B / F4:F5:D8 -&gt; Google Nest / Chromecast
+# Note: If the 2nd hex character of the 1st byte is 2, 6, A, or E (e.g. D2:..),
+# the MAC is locally administered (randomized iOS/Android/Windows Private Wi-Fi Address).</code></pre>
       </section>
-            <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">2. Why Modern Devices Evade Standard Router Client Lists</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">Operating systems like iOS, iPadOS, Android, and Windows 11 now utilize randomized Media Access Control (MAC) hardware identifiers by default. When devices rotate private Wi-Fi addresses, standard consumer router admin pages display confusing duplicate entries and unassigned hostnames.</p>
-        <p class="text-gray-700 leading-relaxed">Furthermore, dormant IoT devices, such as smart plugs, Wi-Fi security cameras, and voice assistants, remain silent between transmission bursts, evading standard polling tables until queried with targeted ARP requests.</p>
+
+      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
+        <h2 class="text-2xl font-bold text-gray-900 mb-3">2. Discovering Silent Devices via mDNS (<code>_googlecast</code>, <code>_hap</code>, <code>_airplay</code>)</h2>
+        <p class="text-gray-700 leading-relaxed mb-3">Headless ESP32 outlets, IP cameras, printers, and streaming receivers frequently ignore unsolicited ICMP pings, making basic <code>nmap</code> sweeps unreliable without elevated privileges. However, nearly all consumer devices broadcast multicast DNS (mDNS UDP port <code>5353</code>) and SSDP announcements describing their services:</p>
+        <pre class="bg-slate-900 text-indigo-200 text-xs sm:text-sm p-4 rounded-xl overflow-x-auto"><code># Linux (Avahi) / macOS (dns-sd) — Enumerate active LAN service types
+avahi-browse -art | grep -E "(_googlecast|_hap|_airplay|_rtsp)"
+dns-sd -B _services._dns-sd._udp local.
+
+# Manual nmap comparison (requires elevated privileges for raw ARP)
+sudo nmap -sn 192.168.1.0/24</code></pre>
+        <p class="text-gray-700 leading-relaxed mt-3">SWEEPR's non-privileged Rust scanner triggers parallel UDP mDNS (<code>_services._dns-sd._udp.local</code>) and SSDP (<code>239.255.255.250:1900</code>) probes, then reads your OS neighbor cache (<code>GetIpNetTable2</code> on Windows, <code>NET_RT_FLAGS</code> on macOS, netlink on Linux) and resolves every OUI in under 30 seconds.</p>
       </section>
-            <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">3. Instant Non-Intrusive ARP and SSDP Subnet Sweeping</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">SWEEPR utilizes local raw ARP packets and Universal Plug and Play (UPnP/SSDP) query frames across your Class C subnet (e.g. 192.168.1.0/24). This approach maps every active network interface without aggressive TCP SYN scanning that could trip internal security sensors or crash cheap IoT microcontrollers.</p>
-        <p class="text-gray-700 leading-relaxed">Upgrading to SWEEPR Pro (<span data-price="annualStr">£74.99</span>/year, saving 50%) provides automated intrusion notifications and continuous subnet monitoring (+<span data-price="addonAnnualStr">£14.99</span>/yr add-on).</p>
+
+      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
+        <h2 class="text-2xl font-bold text-gray-900 mb-3">3. Auditing Rogue DHCP Clients &amp; Gateway Ports</h2>
+        <p class="text-gray-700 leading-relaxed mb-3">Once unknown devices appear, inspect your router gateway for exposed management ports—specifically unencrypted HTTP (<code>:80</code>), legacy Telnet (<code>:23</code>), ISP remote-management TR-069 CWMP (<code>:7547</code>), and open UPnP IGD port forwards—and verify whether rogue DHCP leases belong to untrusted IoT modules or neighbors.</p>
+        <p class="text-gray-700 leading-relaxed">Quarantine suspicious smart plugs or cameras onto an isolated Guest SSID, rotate your WPA2/WPA3 passphrase, and optionally upgrade to SWEEPR VPN Pro (£74.99/yr — £6.25/mo for 3 devices plus router, 14-day refund policy) with the Wi-Fi Radar &amp; Smart-TV Shield add-on (+£14.99/yr) for instant alerts whenever a brand-new MAC joins your Wi-Fi BSSID.</p>
       </section>
     </div>
 
-    <!-- FAQ Section (Matches JSON-LD FAQPage) -->
+    <!-- FAQ Section -->
     <div class="bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm mb-14">
-      <h2 class="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Home Wi-Fi Device Discovery FAQs</h2>
       <div class="space-y-6">
-        
         <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
-          <h3 class="text-base font-bold text-gray-900 mb-2">Will blocking Smart-TV ACR telemetry break Netflix, YouTube, or Disney+?</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">No. SWEEPR Wi-Fi Radar &amp; Smart-TV Shield only sinkholes dedicated ACR screenshot and ad-tracking domains (Local ARP / mDNS (`_services._dns-sd._udp.local`) / SSDP (`239.255.255.250:1900`) + IEEE OUI Vendor Lookup) while routing video CDN traffic at full 4K speed.</p>
+          <h3 class="text-base font-bold text-gray-900 mb-2">How can I distinguish an unknown intruder from my own iPhone using Private Wi-Fi Address?</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">Check the second hex digit of the MAC address's first byte. If it is <code>2</code>, <code>6</code>, <code>A</code>, or <code>E</code> (for example <code>3A:8F:...</code>), the locally administered bit is set, indicating OS MAC randomization rather than a physical hardware vendor OUI.</p>
         </div>
         <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
-          <h3 class="text-base font-bold text-gray-900 mb-2">Does the Free 30-Second Home Wi-Fi Scanner require router admin passwords?</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">No. The scanner runs non-privileged ARP, mDNS, and SSDP probes directly from your computer to discover devices and check gateway ports in under 30 seconds.</p>
+          <h3 class="text-base font-bold text-gray-900 mb-2">Why do smart plugs and IP cameras stay hidden from basic ping commands?</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">Embedded IoT firmware often drops ICMP Echo packets or sleeps between Wi-Fi DTIM beacons. Layer-2 ARP/NDP caches paired with mDNS (<code>_hap</code>, <code>_googlecast</code>, <code>_airplay</code>) and SSDP queries wake and identify them reliably.</p>
         </div>
         <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
-          <h3 class="text-base font-bold text-gray-900 mb-2">How many devices does SWEEPR VPN Pro protect?</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">Every SWEEPR VPN Pro subscription covers up to 3 simultaneous devices (+ router), phones, tablets, or routers simultaneously, plus scans all 15–30+ devices on your home Wi-Fi.</p>
+          <h3 class="text-base font-bold text-gray-900 mb-2">How does SWEEPR's 30-second scanner compare to running <code>nmap</code> manually?</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">SWEEPR runs completely unprivileged without installing Npcap or risking aggressive TCP SYN floods against fragile IoT chips, combining native neighbor-table inspection with an embedded IEEE OUI database and gateway vulnerability checks.</p>
         </div>
       </div>
     </div>
 
     <!-- Conversion Banner -->
     <div class="bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-2xl p-8 md:p-12 text-center shadow-xl mb-14">
-      <h3 class="text-2xl md:text-3xl font-black mb-3">Ready for 10Gbps WireGuard Speed &amp; Whole-Home Wi-Fi Protection?</h3>
+      <h2 class="text-2xl md:text-3xl font-black mb-3">Identify Every MAC Vendor &amp; Rogue Client on Your Subnet Free</h2>
       <p class="text-gray-300 max-w-xl mx-auto mb-7 text-base">
-        Scan your home Wi-Fi in under 30 seconds, stop ISP evening throttling, and protect up to 3 devices for just <span data-price="annualPerMonthStr">£6.25</span>/mo (<span data-price="annualStr">£74.99</span>/yr — Save 50%).
+        Run our ~3.7 MB Rust LAN scanner without admin rights or router passwords, then add continuous new-MAC intruder alerts and WireGuard encryption across 3 devices plus router from <span data-price="annualPerMonthStr">£6.25</span>/mo (<span data-price="annualStr">£74.99</span>/yr).
       </p>
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
         <a href="/download" class="btn btn-go btn-big gap-2">
-          <span>Free Download</span>
+          <span>Download Free LAN Scanner</span>
           <svg width="20" height="20" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
         <a rel="nofollow" href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-big">
-          Get SWEEPR VPN Pro &rarr;
+          Add 24/7 Wi-Fi Radar &rarr;
         </a>
       </div>
       <div class="flex flex-wrap items-center justify-center gap-4 text-xs text-gray-400 mt-6">
-        <span>🛡️ 14-Day Money-Back Guarantee</span>
+        <span>Zero Cloud Map Uploads</span>
         <span>•</span>
-        <span>⚡ 680KB Featherlight App</span>
+        <span>14-Day Refund Guarantee</span>
         <span>•</span>
-        <span>📡 Free 30s Home Wi-Fi Scanner</span>
+        <span>ARP + mDNS + OUI Lookup</span>
       </div>
     </div>
 

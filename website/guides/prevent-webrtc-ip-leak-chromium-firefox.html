@@ -94,89 +94,99 @@
     <p class="lead">WebRTC STUN requests bypass standard browser proxy settings to expose your real public and local IP addresses. SWEEPR VPN’s native Windows/macOS kernel kill-switch forces STUN requests through the tunnel.</p>
     <div id="direct-answer" style="margin:18px 0 24px;padding:18px 20px;border-radius:14px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.35);">
       <div style="font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent2,#34d399);margin-bottom:6px;">Direct Answer</div>
-      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">To prevent Silent WebRTC STUN/TURN IP Address Leaks in All Browsers, route connections through SWEEPR VPN's encrypted WireGuard tunnel with sinkhole DNS (10.66.0.1 ACR telemetry blocking). Unlike settings menu toggles alone, router and kernel WireGuard filtering blocks background tracking beacons across 3 simultaneous devices and routers, with instant verification via our free browser leak test.</p>
+      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">WebRTC STUN and TURN ICE probes bypass browser HTTP proxies to expose your public <code>srflx</code> address and local mDNS candidates. Set Firefox <code>about:config</code> <code>media.peerconnection.ice.default_address_only</code> to true, enforce Chromium <code>WebRtcIPHandlingPolicy</code> plus empty <code>WebRtcLocalIpsAllowedUrls</code>, route UDP via kernel WireGuard, and verify zero leaked ICE addresses using our free browser leak diagnostic.</p>
       <div style="padding-top:10px;border-top:1px solid rgba(16,185,129,0.22);font-size:0.84rem;font-weight:700;">
-        <a href="/tools/leak-test" style="color:var(--accent2,#34d399);text-decoration:underline;">Verify Your Connection with Free IP &amp; WebRTC Leak Test &rarr;</a>
+        <a href="/tools/leak-test" style="color:var(--accent2,#34d399);text-decoration:underline;">Inspect Live WebRTC ICE Candidates Now &rarr;</a>
       </div>
     </div>
 
     <div class="cta-strip">
       <div>
-        <strong>Run the Free 30-Second Home Wi-Fi &amp; ISP Speed Diagnostic</strong>
-        <div style="color:var(--muted);font-size:0.93rem;">Featherlight ~3.7 MB native Rust + Tauri v2 app • No credit card required for Wi-Fi device scanner • £1.99 1st-Month Pro Trial</div>
+        <strong>Bind Browser WebRTC UDP Sockets Inside Kernel WireGuard</strong>
+        <div style="color:var(--muted);font-size:0.93rem;">Browser proxy extensions cannot intercept raw STUN/ICE UDP handshakes—SWEEPR's native Rust + WFP/nftables tunnel routes every UDP flow safely.</div>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <a class="btn" href="/download">Download Free Scanner</a>
-        <a class="btn-outline" href="/pricing">View Plans (Save 50% Yearly)</a>
+        <a class="btn" href="/download">Download Native VPN</a>
+        <a class="btn-outline" href="/pricing">View Pro Pricing</a>
       </div>
     </div>
 
-    
-  <h2>Technical Overview &amp; Network Indicators</h2>
-  <p>WebRTC STUN requests bypass standard browser proxy settings to expose your real public and local IP addresses. SWEEPR VPN’s native Windows/macOS kernel kill-switch forces STUN requests through the tunnel.</p>
-  <p>When you run the <strong>SWEEPR VPN Free 30-Second Home Wi-Fi Scanner</strong> (~3.7 MB native Rust client), it inspects local ARP tables, IEEE OUI hardware vendor prefixes, and mDNS service broadcasts on your LAN, then cross-references outbound DNS queries against our Smart-TV ACR &amp; ISP diagnostic rulebase:</p>
-  <pre><code># Verified Indicator / Rule:
-WebRTC STUN Candidate Enumeration
+  <h2>1. How WebRTC ICE Harvesting (<code>host</code>, <code>srflx</code>, <code>relay</code>) Leaks Real IPs</h2>
+  <p>When a website instantiates an <code>RTCPeerConnection</code>, the browser invokes Interactive Connectivity Establishment (ICE) to discover every viable network path before opening peer-to-peer media channels. Even without asking for webcam or microphone permissions, silent JavaScript calls can trigger three candidate types:</p>
+  <ul>
+    <li><strong><code>host</code> candidates:</strong> Enumerate private LAN IPv4/IPv6 interfaces—now masked with ephemeral mDNS <code>.local</code> UUIDs in modern browsers unless an intranet allowlist overrides it.</li>
+    <li><strong><code>srflx</code> (Server Reflexive) candidates:</strong> Query external STUN servers (such as <code>stun:stun.l.google.com:19302</code>) over raw UDP, revealing your true ISP public IP whenever a browser proxy or split tunnel fails to wrap UDP traffic.</li>
+    <li><strong><code>relay</code> candidates:</strong> Route media through an authenticated TURN relay server over UDP or TCP/443 when direct peer traversal fails.</li>
+  </ul>
 
-# Verified Indicator / Rule:
-In-Tunnel Kernel Routing Table (0.0.0.0/0)
+  <h2>2. Firefox Hardening via <code>about:config</code> Preferences</h2>
+  <p>Mozilla Firefox exposes granular WebRTC ICE controls directly in <code>about:config</code> without requiring third-party browser extensions:</p>
+  <pre><code># Open about:config in Firefox and apply:
+media.peerconnection.ice.default_address_only = true
+media.peerconnection.ice.no_host = true
+media.peerconnection.ice.proxy_only_if_behind_proxy = true
 
-# Verified Indicator / Rule:
-RFC 5766 TURN Relay Isolation
+# Optional strict mode (disables WebRTC peer calls entirely if unused):
+media.peerconnection.enabled = false</code></pre>
+  <p>Setting <code>media.peerconnection.ice.default_address_only = true</code> keeps video meetings functional while constraining ICE candidate binding strictly to the OS default route—your WireGuard tunnel interface.</p>
 
-# Verified Indicator / Rule:
-Zero Local Host Interface Leakage</code></pre>
+  <h2>3. Chromium (Chrome, Brave, Edge) Policies, Extensions &amp; mDNS Enforcement</h2>
+  <p>Chromium-based browsers support administrative JSON/Registry policies that lock down ICE candidate gathering across every profile, alongside lightweight open-source extensions like <em>WebRTC Control</em> or Brave's native toggle under <code>brave://settings/privacy</code> (<em>WebRTC IP Handling Policy &rarr; Disable Non-Proxied UDP</em>). Unlike extension-only toggles that only apply inside a single profile, enterprise policies lock down every profile including Guest sessions:</p>
+  <pre><code># Windows Registry Policy for Chrome (replace Chrome with Edge or BraveSoftware\Brave-Browser)
+reg add "HKLM\SOFTWARE\Policies\Google\Chrome" /v WebRtcIPHandlingPolicy /t REG_SZ /d "default_public_interface_only" /f
+# Clear WebRtcLocalIpsAllowedUrls so no origin can bypass mDNS .local obfuscation:
+reg delete "HKLM\SOFTWARE\Policies\Google\Chrome\WebRtcLocalIpsAllowedUrls" /f
 
-  <h2>Step-by-Step Remediation With SWEEPR VPN</h2>
-  <ol>
-    <li><strong>Step 1 — Run the Free 30-Second Home Wi-Fi Audit:</strong> Download <a href="/download" style="color:var(--accent2);">SWEEPR VPN (~3.7 MB)</a> and click <em>Scan My Home Wi-Fi</em> to identify every active IP, MAC vendor, and Smart TV on your local network.</li>
-    <li><strong>Step 2 — Enable 10Gbps RAM-Only WireGuard + In-Tunnel DNS (<code>10.66.0.1</code>):</strong> Route traffic through <code>UK-LON-01</code> (4ms) or <code>NL-AMS-01</code> (8ms) with calibrated MTU.</li>
-    <li><strong>Step 3 — Activate SWEEPR Wi-Fi Radar &amp; Smart-TV Shield:</strong> Block Automatic Content Recognition (ACR) telemetry domains and receive instant alerts whenever an unknown MAC address joins your Wi-Fi.</li>
-  </ol>
+# Linux Chromium / Chrome policy JSON (/etc/opt/chrome/policies/managed/webrtc.json):
+{
+  "WebRtcIPHandlingPolicy": "disable_non_proxied_udp",
+  "WebRtcLocalIpsAllowedUrls": []
+}</code></pre>
+  <p>Verify the exact candidates your browser emits by opening <code>chrome://webrtc-internals</code> (or <code>about:webrtc</code> in Firefox) and confirming with our <a href="/tools/leak-test" style="color:var(--accent2);text-decoration:underline;">browser IP, DNS &amp; WebRTC leak checker</a> that only your WireGuard exit IP appears in <code>srflx</code> records.</p>
 
-    <h2>Transparent Anchor Pricing &amp; 14-Day Money-Back Guarantee</h2>
-    <p>Unlike legacy VPNs that trap you in 24-month renewals or 250 MB bloated installers, SWEEPR VPN offers straightforward pricing with an instant free 30-second Home Wi-Fi Device Scanner:</p>
-    <table>
-      <thead>
-        <tr>
-          <th>Plan Tier</th>
-          <th>Billing Cycle</th>
-          <th>Effective Monthly Cost</th>
-          <th>Included Features</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Yearly Plan (Core Cash Cow — Save 50%)</strong></td>
-          <td>£74.99 / year ($95.99 USD | €89.99 EUR)</td>
-          <td><strong>£6.25 / mo</strong></td>
-          <td>10Gbps RAM-Only WireGuard (UK, NL, DE, SE, CH, US), 3 simultaneous devices (+ router), Kernel Kill-Switch, 14-day guarantee</td>
-        </tr>
-        <tr>
-          <td><strong>6-Monthly Plan (Mid-Tier Anchor — Save 35%)</strong></td>
-          <td>£48.99 / 6 months ($61.99 USD | €58.99 EUR)</td>
-          <td><strong>£8.17 / mo</strong></td>
-          <td>All 10Gbps WireGuard Core Locations, In-Tunnel DNS, Port-Forwarding &amp; Streaming Support</td>
-        </tr>
-        <tr>
-          <td><strong>Monthly Plan (Flexible + £1.99 1st Month)</strong></td>
-          <td>£1.99 1st Month, then £12.49 / mo</td>
-          <td>£12.49 / mo</td>
-          <td>Cancel anytime in 1 click, full 10Gbps WireGuard &amp; Wi-Fi diagnostic access</td>
-        </tr>
-        <tr>
-          <td><strong>SWEEPR Wi-Fi Radar &amp; Smart-TV Shield Add-On</strong></td>
-          <td>+£14.99/yr | +£9.99/6mo | +£1.99/mo</td>
-          <td>Optional Add-On</td>
-          <td>24/7 Unknown Wi-Fi Intruder Alerts + Samsung/LG/Sony/Roku/Fire TV ACR Spy Blocker</td>
-        </tr>
-      </tbody>
-    </table>
+  <h2>4. Browser WebRTC Policy Comparison Matrix</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Browser / Setting</th>
+        <th>Configuration Target</th>
+        <th><code>srflx</code> &amp; <code>host</code> Behaviour</th>
+        <th>Meet / Discord Compatibility</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Firefox (Recommended)</strong></td>
+        <td><code>media.peerconnection.ice.default_address_only = true</code></td>
+        <td>Binds solely to default WireGuard gateway; hides LAN NICs</td>
+        <td>Full audio/video compatibility</td>
+      </tr>
+      <tr>
+        <td><strong>Chrome / Edge Policy</strong></td>
+        <td><code>WebRtcIPHandlingPolicy = default_public_interface_only</code></td>
+        <td>Exposes only active tunnel interface; mDNS masks LAN IPs</td>
+        <td>Full WebRTC meeting support</td>
+      </tr>
+      <tr>
+        <td><strong>Chromium Maximum Privacy</strong></td>
+        <td><code>WebRtcIPHandlingPolicy = disable_non_proxied_udp</code></td>
+        <td>Forces TCP/proxy or TURN relay; zero raw UDP STUN probes</td>
+        <td>Requires TURN TCP fallback on some apps</td>
+      </tr>
+      <tr>
+        <td><strong>Brave Settings UI</strong></td>
+        <td><code>brave://settings/privacy</code> &rarr; Disable Non-Proxied UDP</td>
+        <td>Blocks unproxied UDP ICE traversal natively</td>
+        <td>Works with TURN-enabled rooms</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>Pair browser hardening with SWEEPR VPN's kernel-level WireGuard client (covering 3 devices plus router from £6.25/mo on the £74.99/yr Annual Plan with a 14-day money-back guarantee); compare options on <a href="/pricing" style="color:var(--accent2);text-decoration:underline;">our pricing page</a>.</p>
 
-    <h2>Frequently Asked Questions</h2>
-    <div class="card"><h3>Will blocking Smart-TV ACR telemetry break Netflix, BBC iPlayer, or YouTube?</h3><p>No. SWEEPR Smart-TV Shield only sinks Automatic Content Recognition (ACR) screenshot and ad-tracking endpoints while leaving CDN video delivery streams untouched.</p></div>
-<div class="card"><h3>Does the SWEEPR 30-Second Wi-Fi Scanner work on Windows, macOS, and Linux?</h3><p>Yes. The SWEEPR desktop scanner is built in Rust + Tauri v2 (~3.7 MB) and runs natively on Windows 10/11, macOS (Apple Silicon & Intel), and Linux.</p></div>
-<div class="card"><h3>How can I test if my ISP is still intercepting my DNS requests?</h3><p>Run our free browser <a href="/tools/leak-test" style="color:var(--accent2);text-decoration:underline;">IP, DNS &amp; WebRTC Leak Test</a> to verify that your resolver matches SWEEPR VPN's encrypted in-tunnel DNS.</p></div>
+  <h2>Frequently Asked Questions</h2>
+  <div class="card"><h3>Does mDNS <code>.local</code> obfuscation stop WebRTC IP leaks by itself?</h3><p>No. mDNS obfuscation replaces your private RFC 1918 LAN IP (such as <code>192.168.1.24</code>) with a random <code>.local</code> hostname, but public <code>srflx</code> STUN queries still disclose your ISP WAN address unless all UDP traffic flows through a kernel WireGuard tunnel or <code>disable_non_proxied_udp</code> is enforced.</p></div>
+  <div class="card"><h3>Why do browser VPN extensions still leak WebRTC public IPs?</h3><p>Browser extensions only configure HTTP/HTTPS/SOCKS5 proxies for page fetches. WebRTC ICE runs in a native C++ UDP socket layer outside standard HTTP proxy rules, whereas SWEEPR's OS tunnel captures all UDP traffic at the network driver level.</p></div>
+  <div class="card"><h3>How can I check if my WebRTC policy is active after editing Registry or <code>about:config</code>?</h3><p>Restart the browser, inspect active policies at <code>chrome://policy</code>, and run our <a href="/tools/leak-test" style="color:var(--accent2);text-decoration:underline;">WebRTC Leak Diagnostic</a> to verify zero ISP IPv4 or IPv6 candidates appear.</p></div>
 
     <h2>Related Technical Guides &amp; Free Diagnostic Tools</h2>
     <div class="card">

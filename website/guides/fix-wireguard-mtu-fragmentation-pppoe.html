@@ -95,86 +95,108 @@
     <p class="lead">Mismatched WireGuard MTU values cause silent PMTUD blackholes where pings succeed but TLS handshakes, SSH sessions, and 4K video streams stall.</p>
     <div id="direct-answer" style="margin:18px 0 24px;padding:18px 20px;border-radius:14px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.35);">
       <div style="font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent2,#34d399);margin-bottom:6px;">Direct Answer</div>
-      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">To fix WireGuard MTU Packet Fragmentation on PPPoE Fibre & 5G, route connections through SWEEPR VPN's encrypted WireGuard tunnel with sinkhole DNS (10.66.0.1 ACR telemetry blocking). Unlike settings menu toggles alone, router and kernel WireGuard filtering blocks background tracking beacons across 3 simultaneous devices and routers, with instant verification via our free browser leak test.</p>
+      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Standard 1420-byte WireGuard frames exceed 1492-byte UK PPPoE broadband paths once 80-byte IPv6 encapsulation headers are added, causing silent PMTUD TLS stalls. Set WireGuard MTU to <code>1412</code> on PPPoE fibre or <code>1380</code> on 5G CGNAT, probe exact payload limits with Don't-Fragment ping commands, and enable router TCP MSS clamping rules.</p>
       <div style="padding-top:10px;border-top:1px solid rgba(16,185,129,0.22);font-size:0.84rem;font-weight:700;">
-        <a href="/tools/isp-throttling-test" style="color:var(--accent2,#34d399);text-decoration:underline;">Run Free 10s ISP Throttling &amp; Latency Test &rarr;</a>
+        <a href="/tools/isp-throttling-test" style="color:var(--accent2,#34d399);text-decoration:underline;">Benchmark Tunnel Throughput &amp; Jitter Online &rarr;</a>
       </div>
     </div>
 
     <div class="cta-strip">
       <div>
-        <strong>Run the Free 30-Second Home Wi-Fi &amp; ISP Speed Diagnostic</strong>
-        <div style="color:var(--muted);font-size:0.93rem;">Featherlight ~3.7 MB native Rust + Tauri v2 app • No credit card required for Wi-Fi device scanner • £1.99 1st-Month Pro Trial</div>
+        <strong>Auto-Calibrate PPPoE (1412) &amp; 5G CGNAT (1380) WireGuard Profiles</strong>
+        <div style="color:var(--muted);font-size:0.93rem;">SWEEPR VPN ships pre-tuned MTU presets and <code>fq_codel</code> 10Gbps core nodes so TLS handshakes never stall mid-packet.</div>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <a class="btn" href="/download">Download Free Scanner</a>
-        <a class="btn-outline" href="/pricing">View Plans (Save 50% Yearly)</a>
+        <a class="btn" href="/download">Download Client (~3.7 MB)</a>
+        <a class="btn-outline" href="/pricing">View Pro Plans</a>
       </div>
     </div>
 
-    
-  <h2>Technical Overview &amp; Network Indicators</h2>
-  <p>Mismatched WireGuard MTU values cause silent PMTUD blackholes where pings succeed but TLS handshakes, SSH sessions, and 4K video streams stall.</p>
-  <p>When you run the <strong>SWEEPR VPN Free 30-Second Home Wi-Fi Scanner</strong> (~3.7 MB native Rust client), it inspects local ARP tables, IEEE OUI hardware vendor prefixes, and mDNS service broadcasts on your LAN, then cross-references outbound DNS queries against our Smart-TV ACR &amp; ISP diagnostic rulebase:</p>
-  <pre><code># Verified Indicator / Rule:
-Standard Ethernet (1500) -> WireGuard MTU 1420
+  <h2>1. PMTU Blackhole Math: 1500 Ethernet vs. 1492 PPPoE vs. 5G CGNAT</h2>
+  <p>WireGuard wraps every inner packet inside an outer IP header (20 bytes IPv4 or 40 bytes IPv6), an 8-byte UDP header, and 32 bytes of WireGuard protocol framing and Poly1305 authentication tag—totalling <strong>60 bytes over IPv4</strong> and <strong>80 bytes over IPv6</strong>. Using the conservative 80-byte worst-case budget prevents fragmentation regardless of whether your endpoint connects over IPv4 or IPv6.</p>
+  <p>On a standard 1500-byte DOCSIS/Ethernet WAN, <code>1500 - 80 = 1420</code>. However, UK Openreach PPPoE broadband (BT, Sky, TalkTalk, Plusnet, Zen) inserts an 8-byte PPPoE header, shrinking WAN MTU to <strong>1492 bytes</strong>. Leaving WireGuard at <code>1420</code> creates <code>1500</code>-byte outer frames that get silently dropped by upstream carrier routers filtering ICMP <em>Fragmentation Needed</em> notices—resulting in classic PMTU blackholes where small ICMP pings pass while large HTTPS certificates and SSH transfers hang.</p>
+  <ul>
+    <li><strong>Standard Ethernet / DHCP FTTP (1500 WAN MTU):</strong> <code>1500 - 80 = MTU 1420</code></li>
+    <li><strong>UK Openreach PPPoE Fibre (1492 WAN MTU):</strong> <code>1492 - 80 = MTU 1412</code></li>
+    <li><strong>5G Broadband / LTE CGNAT / Starlink (1440–1460 Path MTU):</strong> <code>MTU 1380</code></li>
+  </ul>
 
-# Verified Indicator / Rule:
-UK Openreach PPPoE (1492) -> WireGuard MTU 1412
+  <h2>2. Finding Your Exact Path Ceiling With Don't-Fragment Ping Tests</h2>
+  <p>Before locking your router's configuration, verify the maximum unfragmented ICMP payload that clears your broadband path. Remember that ICMP adds <strong>28 bytes</strong> (20B IPv4 + 8B ICMP) on top of your specified payload size:</p>
+  <pre><code># Linux / macOS — Test 1412-byte total packet (1384 payload + 28 header = 1412)
+ping -M do -s 1384 10.66.0.1
+# If "Message too long" or 100% loss appears, test 1380 MTU (1352 + 28 = 1380):
+ping -M do -s 1352 10.66.0.1
 
-# Verified Indicator / Rule:
-5G Home Broadband CGNAT (1440) -> WireGuard MTU 1380</code></pre>
+# Windows Command Prompt — Equivalent Don't-Fragment (-f) payload test
+ping -f -l 1384 10.66.0.1
+# Step down -l by 8 bytes (1376, 1368, 1352) until zero "needs to be fragmented" errors occur</code></pre>
 
-  <h2>Step-by-Step Remediation With SWEEPR VPN</h2>
-  <ol>
-    <li><strong>Step 1 — Run the Free 30-Second Home Wi-Fi Audit:</strong> Download <a href="/download" style="color:var(--accent2);">SWEEPR VPN (~3.7 MB)</a> and click <em>Scan My Home Wi-Fi</em> to identify every active IP, MAC vendor, and Smart TV on your local network.</li>
-    <li><strong>Step 2 — Enable 10Gbps RAM-Only WireGuard + In-Tunnel DNS (<code>10.66.0.1</code>):</strong> Route traffic through <code>UK-LON-01</code> (4ms) or <code>NL-AMS-01</code> (8ms) with calibrated MTU.</li>
-    <li><strong>Step 3 — Activate SWEEPR Wi-Fi Radar &amp; Smart-TV Shield:</strong> Block Automatic Content Recognition (ACR) telemetry domains and receive instant alerts whenever an unknown MAC address joins your Wi-Fi.</li>
-  </ol>
+  <h2>3. Applying WireGuard <code>MTU</code> &amp; Router TCP MSS Clamping (<code>iptables</code> / <code>nftables</code>)</h2>
+  <p>After setting the interface MTU inside your <code>.conf</code> file, apply TCP Maximum Segment Size (MSS) clamping on Linux or OpenWrt gateways so remote HTTPS servers automatically shrink TCP segments to fit inside the encrypted tunnel:</p>
+  <pre><code># WireGuard client [Interface] configuration (PPPoE Fibre example)
+[Interface]
+MTU = 1412
+Address = 10.66.12.8/32
+DNS = 10.66.0.1
 
-    <h2>Transparent Anchor Pricing &amp; 14-Day Money-Back Guarantee</h2>
-    <p>Unlike legacy VPNs that trap you in 24-month renewals or 250 MB bloated installers, SWEEPR VPN offers straightforward pricing with an instant free 30-second Home Wi-Fi Device Scanner:</p>
-    <table>
-      <thead>
-        <tr>
-          <th>Plan Tier</th>
-          <th>Billing Cycle</th>
-          <th>Effective Monthly Cost</th>
-          <th>Included Features</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Yearly Plan (Core Cash Cow — Save 50%)</strong></td>
-          <td>£74.99 / year ($95.99 USD | €89.99 EUR)</td>
-          <td><strong>£6.25 / mo</strong></td>
-          <td>10Gbps RAM-Only WireGuard (UK, NL, DE, SE, CH, US), 3 simultaneous devices (+ router), Kernel Kill-Switch, 14-Day Guarantee</td>
-        </tr>
-        <tr>
-          <td><strong>6-Monthly Plan (Mid-Tier Anchor — Save 35%)</strong></td>
-          <td>£48.99 / 6 months ($61.99 USD | €58.99 EUR)</td>
-          <td><strong>£8.17 / mo</strong></td>
-          <td>All 10Gbps WireGuard Core Locations, In-Tunnel DNS, Port-Forwarding &amp; Streaming Support</td>
-        </tr>
-        <tr>
-          <td><strong>Monthly Plan (Flexible + £1.99 1st Month)</strong></td>
-          <td>£1.99 1st Month, then £12.49 / mo</td>
-          <td>£12.49 / mo</td>
-          <td>Cancel anytime in 1 click, full 10Gbps WireGuard &amp; Wi-Fi diagnostic access</td>
-        </tr>
-        <tr>
-          <td><strong>SWEEPR Wi-Fi Radar &amp; Smart-TV Shield Add-On</strong></td>
-          <td>+£14.99/yr | +£9.99/6mo | +£1.99/mo</td>
-          <td>Optional Add-On</td>
-          <td>24/7 Unknown Wi-Fi Intruder Alerts + Samsung/LG/Sony/Roku/Fire TV ACR Spy Blocker</td>
-        </tr>
-      </tbody>
-    </table>
+# Legacy iptables mangle MSS clamp (set 1340 for 1380 MTU or clamp automatically to PMTU)
+iptables -t mangle -A FORWARD -o wg0 -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+iptables -t mangle -A FORWARD -i wg0 -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
 
-    <h2>Frequently Asked Questions</h2>
-    <div class="card"><h3>Will blocking Smart-TV ACR telemetry break Netflix, BBC iPlayer, or YouTube?</h3><p>No. SWEEPR Smart-TV Shield only sinks Automatic Content Recognition (ACR) screenshot and ad-tracking endpoints while leaving CDN video delivery streams untouched.</p></div>
-<div class="card"><h3>Does the SWEEPR 30-Second Wi-Fi Scanner work on Windows, macOS, and Linux?</h3><p>Yes. The SWEEPR desktop scanner is built in Rust + Tauri v2 (~3.7 MB) and runs natively on Windows 10/11, macOS (Apple Silicon & Intel), and Linux.</p></div>
-<div class="card"><h3>How can I test if my ISP is still intercepting my DNS requests?</h3><p>Run our free browser <a href="/tools/leak-test" style="color:var(--accent2);text-decoration:underline;">IP, DNS &amp; WebRTC Leak Test</a> to verify that your resolver matches SWEEPR VPN's encrypted in-tunnel DNS.</p></div>
+# Modern nftables equivalent (OpenWrt 23.05+ / Debian 12+)
+nft add rule inet fw4 forward oifname "wg0" tcp flags syn / syn,rst tcp option maxseg size set rt mtu
+nft add rule inet fw4 forward iifname "wg0" tcp flags syn / syn,rst tcp option maxseg size set rt mtu</code></pre>
+  <p>Once applied, confirm clean DNS resolution inside the tunnel via our <a href="/tools/leak-test" style="color:var(--accent2);text-decoration:underline;">IP &amp; DNS Leak Diagnostic</a> and verify zero bufferbloat spikes during full-rate downloads.</p>
+
+  <h2>4. WireGuard Access-Layer MTU &amp; MSS Calibration Table</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Broadband Link Type</th>
+        <th>Link MTU</th>
+        <th>WireGuard <code>MTU</code></th>
+        <th>DF Ping Payload (<code>-s</code> / <code>-l</code>)</th>
+        <th>Clamped TCP MSS</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Virgin Media DOCSIS / DHCP FTTP</strong></td>
+        <td>1500</td>
+        <td><code>1420</code></td>
+        <td><code>1392</code></td>
+        <td><code>1380</code></td>
+      </tr>
+      <tr>
+        <td><strong>Openreach PPPoE Fibre (BT / Sky / TalkTalk)</strong></td>
+        <td>1492</td>
+        <td><code>1412</code></td>
+        <td><code>1384</code></td>
+        <td><code>1372</code></td>
+      </tr>
+      <tr>
+        <td><strong>DS-Lite / Double-Encapsulated Tunnel</strong></td>
+        <td>1460</td>
+        <td><code>1380</code></td>
+        <td><code>1352</code></td>
+        <td><code>1340</code></td>
+      </tr>
+      <tr>
+        <td><strong>Three / EE 5G CGNAT &amp; Hotel Captive Wi-Fi</strong></td>
+        <td>1440</td>
+        <td><code>1380</code></td>
+        <td><code>1352</code></td>
+        <td><code>1340</code></td>
+      </tr>
+    </tbody>
+  </table>
+  <p>SWEEPR VPN includes one-click <code>1420</code>, <code>1412</code>, and <code>1380</code> MTU profiles across 3 simultaneous devices plus routers—starting at £6.25/mo on the £74.99/yr plan with a 14-day money-back guarantee on <a href="/pricing" style="color:var(--accent2);text-decoration:underline;">our plans page</a>.</p>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="card"><h3>Why do small ICMP pings succeed on PPPoE when TLS websites and SSH sessions freeze?</h3><p>Standard 64-byte ICMP echo packets easily fit inside a 1492-byte PPPoE frame even with 80 bytes of WireGuard overhead. Large TLS ServerHello certificates and SSH key exchanges hit 1420+ bytes, exceed the PPPoE ceiling, and get dropped silently if carrier routers block ICMP Type 3 Code 4 Path MTU signals.</p></div>
+  <div class="card"><h3>Why subtract 80 bytes instead of 60 bytes when calculating WireGuard MTU?</h3><p>WireGuard adds 60 bytes of overhead over an IPv4 outer endpoint and 80 bytes over an IPv6 outer endpoint. Always subtracting 80 bytes guarantees zero outer fragmentation even when roaming between IPv4 Wi-Fi and IPv6 mobile networks.</p></div>
+  <div class="card"><h3>Is setting <code>MTU = 1412</code> enough without adding TCP MSS clamping?</h3><p>Local host apps honour the interface MTU directly, whereas LAN devices sitting behind a WireGuard router (phones, consoles, Smart TVs) advertise a 1460-byte MSS unless the router rewrites SYN headers with <code>TCPMSS --clamp-mss-to-pmtu</code>.</p></div>
 
     <h2>Related Technical Guides &amp; Free Diagnostic Tools</h2>
     <div class="card">

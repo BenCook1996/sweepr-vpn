@@ -30,7 +30,7 @@
   <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png">
 
   <!-- Structured Data (JSON-LD) -->
-  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","@id":"https://sweeprvpn.com/tools/isp-throttling-test#app","name":"SWEEPR Free ISP Speed Slowdown & Throttling Checker","url":"https://sweeprvpn.com/tools/isp-throttling-test","applicationCategory":"UtilitiesApplication","operatingSystem":"All (Browser-based)","offers":{"@type":"Offer","price":"0.00","priceCurrency":"GBP"},"description":"Free interactive browser tool that measures ping, jitter, and streaming throughput to detect whether your internet provider is slowing down video streaming or gaming traffic."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://sweeprvpn.com/"},{"@type":"ListItem","position":2,"name":"Free ISP Speed Slowdown Checker","item":"https://sweeprvpn.com/tools/isp-throttling-test"}]}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","@id":"https://sweeprvpn.com/tools/isp-throttling-test#app","name":"SWEEPR Free ISP Throttling Test & Speed Checker","url":"https://sweeprvpn.com/tools/isp-throttling-test","applicationCategory":"UtilitiesApplication","operatingSystem":"All (Browser-based)","offers":{"@type":"Offer","price":"0.00","priceCurrency":"GBP"},"description":"Free interactive browser ISP throttling test that measures ping, jitter, and streaming responsiveness to detect peak-hour broadband shaping on BT, Virgin Media, Sky, TalkTalk, Comcast, or Rogers."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://sweeprvpn.com/"},{"@type":"ListItem","position":2,"name":"ISP Throttling Test","item":"https://sweeprvpn.com/tools/isp-throttling-test"}]}]}</script>
 
   <link rel="preload" href="/tailwind.min.css?v=fbbf784c" as="style" />
   <link rel="preload" href="/style.css?v=ed321090" as="style" />
@@ -181,7 +181,7 @@
         Free 10-Second Speed &amp; Streaming Check &bull; Zero Signup &bull; <span data-live-proof="london-latency">4ms</span> London IXP
       </span>
       <h1 class="text-3xl sm:text-5xl font-bold tracking-tight text-gray-900 mb-4">
-        ISP Speed Slowdown &amp; Streaming Checker
+        Free ISP Throttling Test &amp; Speed Checker
       </h1>
       <p class="text-base sm:text-lg text-gray-600 leading-relaxed">
         Check your connection responsiveness, ping stability, and whether your internet provider can inspect and slow down your evening 4K video streaming or gaming.
@@ -441,7 +441,7 @@
       <div class="grid md:grid-cols-2 gap-4 text-sm text-gray-700">
         <div class="p-4 rounded-xl bg-gray-50 border border-gray-200"><h3 class="font-bold text-gray-900 mb-1">How do ISPs detect and throttle 4K streams?</h3><p>Broadband providers inspect unencrypted DNS lookups, TLS SNI hostnames, and high-bitrate UDP signatures during 18:00–23:00 peak hours to deprioritize video, P2P, and gaming flows.</p></div>
         <div class="p-4 rounded-xl bg-gray-50 border border-gray-200"><h3 class="font-bold text-gray-900 mb-1">Does WireGuard really bypass bandwidth shaping?</h3><p>When all DNS queries and payloads travel inside an encrypted WireGuard interface with <code>fq_codel</code> pacing and Stealth UDP 443 fallback, your ISP sees only opaque UDP packets.</p></div>
-        <div class="p-4 rounded-xl bg-gray-50 border border-gray-200"><h3 class="font-bold text-gray-900 mb-1">Why run two tests (unencrypted vs VPN)?</h3><p>Compare your ping and throughput first on raw broadband and again immediately after connecting to SWEEPR VPN — a jitter drop proves middlebox DPI prioritization was active.</p></div>
+        <div class="p-4 rounded-xl bg-gray-50 border border-gray-200"><h3 class="font-bold text-gray-900 mb-1">How does this ISP throttling test compare unencrypted vs VPN speeds?</h3><p>Compare your ping and throughput first on raw broadband and again immediately after connecting to SWEEPR VPN — a jitter drop proves middlebox DPI prioritization was active.</p></div>
         <div class="p-4 rounded-xl bg-gray-50 border border-gray-200"><h3 class="font-bold text-gray-900 mb-1">Which MTU stops bufferbloat during uploads?</h3><p>Set <code>MTU = 1412</code> on PPPoE fibre (BT/Sky/Plusnet), <code>1420</code> on DOCSIS/DHCP cable (Virgin Media), or <code>1380</code> on 5G/Starlink CGNAT.</p></div>
       </div>
     </section>

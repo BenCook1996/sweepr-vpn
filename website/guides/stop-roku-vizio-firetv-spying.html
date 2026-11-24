@@ -144,132 +144,135 @@
     </div>
     <div id="direct-answer" class="mb-8 p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-gray-800">
       <div class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 mb-1.5">Direct Answer</div>
-      <p class="text-sm sm:text-base leading-relaxed">To block Roku, Vizio Inscape & Fire TV ACR Spying on Your Home Wi-Fi, enable SWEEPR VPN's encrypted WireGuard tunnel with sinkhole DNS (Steam Deck & SteamOS Native VPN Guide and Broadband Throttling & Bufferbloat Test). Unlike device menu toggles alone, router-level and kernel WireGuard filtering stops silent background beacons, prevents ISP logging across 3 devices.</p>
+      <p class="text-sm sm:text-base leading-relaxed">Disable <em>Smart TV Experience</em> under Roku Privacy settings, turn off <em>Viewing Data</em> in Vizio SmartCast Admin &amp; Privacy, and opt out inside Fire OS Preferences. Sinkhole <code>cooper.logs.roku.com</code>, <code>inscape.tv</code>, and <code>device-metrics-us.amazon.com</code> at your router (<code>10.66.0.1</code>) with port-53 redirects so hardcoded stick DNS cannot leak viewing telemetry during sleep or HDMI playback.</p>
       <div class="mt-3 pt-3 border-t border-emerald-200/80 text-xs font-bold">
-        <a href="/tools/leak-test" class="text-emerald-800 hover:text-emerald-950 underline">Verify Your Connection with Free IP &amp; WebRTC Leak Test &rarr;</a>
+        <a href="/tools/leak-test" class="text-emerald-800 hover:text-emerald-950 underline">Verify Router &amp; Streaming Subnet DNS Security &rarr;</a>
       </div>
     </div>
 
-    <!-- GEO Answer-First Quick Verdict Block -->
-        <div class="bg-white border-2 border-purple-500/30 rounded-2xl p-6 md:p-8 shadow-sm mb-12 relative overflow-hidden">
+    <!-- Quick Verdict Block -->
+    <div class="bg-white border-2 border-purple-500/30 rounded-2xl p-6 md:p-8 shadow-sm mb-12 relative overflow-hidden">
       <div class="absolute top-0 right-0 bg-purple-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
-        Roku &amp; Fire TV Protection Verified
+        3-Ecosystem Privacy Guide
       </div>
-      <h2 class="text-xl font-bold text-gray-900 mb-2">Streaming Device Privacy Overview (Roku &amp; Fire OS)</h2>
+      <h2 class="text-xl font-bold text-gray-900 mb-2">Contrasting Roku OS, Vizio Inscape &amp; Amazon Fire OS Telemetry</h2>
       <p class="text-gray-700 leading-relaxed mb-5">
-        Roku and Amazon streaming dongles continuously upload playback metrics to <code>bsp.roku.com</code> and <code>device-metrics-us.amazon.com</code>. SWEEPR VPN isolates HDMI devices on private subnets and sinkholes ACR telemetry before it leaves your home network.
+        Roku streaming players, Vizio SmartCast displays (powered by Inscape ACR), and Amazon Fire TV sticks each run fundamentally different data-harvesting stacks. Roku ignores DHCP DNS using hardcoded Google resolvers, Vizio Inscape fingerprints every connected HDMI port, and Fire OS pairs deep Amazon retail analytics with home-screen ad servers.
       </p>
       <div class="flex flex-wrap gap-3 items-center">
         <a href="/download" class="btn btn-go gap-2">
-          <span>Get Free Wi-Fi Scanner (14 MB)</span>
+          <span>Audit Streaming Sticks Free (~3.7 MB)</span>
           <svg width="16" height="16" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
         <a rel="nofollow" href="/order?plan=annual" class="btn btn-ghost text-sm font-semibold">
-          Pro Annual Plan (<span data-price="annualPerMonthStr">£6.25</span>/mo) &rarr;
+          Get Router Shield (<span data-price="annualPerMonthStr">£6.25</span>/mo) &rarr;
         </a>
       </div>
-    </div>    <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm mb-14">
+    </div>
+
+    <!-- 3-Ecosystem Side-by-Side Matrix -->
+    <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm mb-14">
       <div class="p-6 border-b border-gray-200">
-        <h2 class="text-2xl font-bold text-gray-900">Streaming Telemetry Comparison: Unfiltered Wi-Fi vs. SWEEPR Shield</h2>
+        <h2 class="text-2xl font-bold text-gray-900">Roku vs. Vizio SmartCast vs. Amazon Fire OS: Telemetry &amp; Sinkhole Matrix</h2>
       </div>
       <div class="overflow-x-auto">
         <table class="w-full text-left text-sm">
           <thead>
             <tr class="bg-gray-50 border-b border-gray-200 text-gray-600 font-semibold">
-              <th class="p-4 pl-6">Streaming Metric</th>
-              <th class="p-4 w-2/5 bg-purple-50/50 text-purple-900 font-bold border-l border-purple-100">With SWEEPR Protection</th>
-              <th class="p-4 w-2/5 text-gray-700 border-l border-gray-200">Unfiltered Default Streaming Setup</th>
+              <th class="p-4 pl-6">Ecosystem</th>
+              <th class="p-4 border-l border-gray-200">On-Device Privacy Menu Path</th>
+              <th class="p-4 border-l border-gray-200">Core Telemetry Hosts</th>
+              <th class="p-4 bg-purple-50/50 text-purple-900 font-bold border-l border-purple-100">Router Defense Requirement</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-100 text-gray-700">
             <tr>
-              <td class="p-4 pl-6 font-medium">Dongle Data Collection</td>
-              <td class="p-4 bg-purple-50/50 text-purple-900 font-bold border-l border-purple-100">Sinkholed at <code>10.66.0.1</code> private gateway</td>
-              <td class="p-4 border-l border-gray-200">Roku / Amazon analytics servers receive telemetry every 60s</td>
+              <td class="p-4 pl-6 font-bold">Roku OS / Roku TV</td>
+              <td class="p-4 border-l border-gray-200"><code>Settings &rarr; Privacy &rarr; Smart TV Experience</code> (Uncheck <em>Use info from TV inputs</em>)</td>
+              <td class="p-4 border-l border-gray-200"><code>cooper.logs.roku.com</code>, <code>scribe.logs.roku.com</code>, <code>ads.roku.com</code>, <code>ravm.tv</code></td>
+              <td class="p-4 bg-purple-50/50 text-purple-900 font-semibold border-l border-purple-100">Requires NAT redirect on UDP/53 (Roku hardcodes <code>8.8.8.8</code>)</td>
             </tr>
             <tr>
-              <td class="p-4 pl-6 font-medium">Tracking Domain Access</td>
-              <td class="p-4 bg-purple-50/50 text-purple-900 font-bold border-l border-purple-100">0 outbound packets reach <code>bsp.roku.com</code></td>
-              <td class="p-4 border-l border-gray-200">Continuous background logging over port 443</td>
+              <td class="p-4 pl-6 font-bold">Vizio SmartCast (Inscape)</td>
+              <td class="p-4 border-l border-gray-200"><code>All Settings &rarr; Admin &amp; Privacy &rarr; Viewing Data &rarr; Off</code></td>
+              <td class="p-4 border-l border-gray-200"><code>inscape.tv</code>, <code>tvinteractive.tv</code>, <code>cognitivetv.com</code>, <code>analytics.vizio.com</code></td>
+              <td class="p-4 bg-purple-50/50 text-purple-900 font-semibold border-l border-purple-100">Sinkholes HDMI acoustic/visual Inscape ACR hashes</td>
             </tr>
             <tr>
-              <td class="p-4 pl-6 font-medium">Vizio Inscape Sampling</td>
-              <td class="p-4 bg-purple-50/50 text-purple-900 font-bold border-l border-purple-100">Blocklist prevents TV interactive beacons</td>
-              <td class="p-4 border-l border-gray-200">Acoustic &amp; visual frame buffer profiling</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Video Buffering &amp; Speed</td>
-              <td class="p-4 bg-purple-50/50 text-purple-900 font-bold border-l border-purple-100">Full 10Gbps WireGuard throughput for 4K HDR</td>
-              <td class="p-4 border-l border-gray-200">ISP traffic shaping throttles evening video streams</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Subscription Cost</td>
-              <td class="p-4 bg-purple-50/50 text-purple-900 font-bold border-l border-purple-100"><span data-price="annualStr">£74.99</span>/year (Save 50%), <span data-price="sixMonthStr">£48.99</span>/6mo, or <span data-price="introStr">£1.99</span> 1st Month</td>
-              <td class="p-4 border-l border-gray-200">Zero encryption, vulnerable to ISP monitoring</td>
+              <td class="p-4 pl-6 font-bold">Amazon Fire TV (Fire OS)</td>
+              <td class="p-4 border-l border-gray-200"><code>Settings &rarr; Preferences &rarr; Privacy Settings</code> (Disable Usage &amp; App Metrics)</td>
+              <td class="p-4 border-l border-gray-200"><code>device-metrics-us.amazon.com</code>, <code>fls-na.amazon.com</code>, <code>aax-eu.amazon-adsystem.com</code></td>
+              <td class="p-4 bg-purple-50/50 text-purple-900 font-semibold border-l border-purple-100">Sinkhole metrics while safelisting <code>aiv-cdn.net</code> &amp; <code>primevideo.com</code></td>
             </tr>
           </tbody>
         </table>
       </div>
-    </div><div class="space-y-10 mb-14">
-      
-            <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">1. How Media Sticks and Smart Displays Track User Behavior</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">Modern streaming media dongles incorporate persistent background reporting engines. Whether streaming through Roku OS, Amazon Fire OS, or Vizio SmartCast displays, internal processes periodically snapshot playback timestamps, application runtimes, and local network topologies.</p>
-        <p class="text-gray-700 leading-relaxed">These beacons transmit encrypted telemetry to remote analytics hubs without displaying notifications to the viewer. SWEEPR VPN traps and drops these packets directly at the network boundary.</p>
+    </div>
+
+    <!-- Deep-Dive Technical Sections -->
+    <div class="space-y-10 mb-14">
+      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
+        <h2 class="text-2xl font-bold text-gray-900 mb-3">1. Roku OS: Disabling Smart TV Experience &amp; Catching Hardcoded DNS</h2>
+        <p class="text-gray-700 leading-relaxed mb-3">On Roku TVs and streaming sticks, navigate to <code>Settings &rarr; Privacy &rarr; Smart TV Experience</code> and uncheck <strong>Use info from TV inputs</strong>, then open <code>Settings &rarr; Privacy &rarr; Advertising</code> and check <strong>Limit ad tracking</strong> (plus click <em>Reset advertising identifier</em>).</p>
+        <p class="text-gray-700 leading-relaxed mb-3">Crucially, Roku OS firmware attempts direct queries to Google's <code>8.8.8.8</code> and <code>8.8.4.4</code> even when DHCP hands out a custom DNS IP. Without a router firewall DNAT intercept rule redirecting port 53 to <code>10.66.0.1</code>, calls to <code>cooper.logs.roku.com</code>, <code>scribe.logs.roku.com</code>, and <code>amoeba.roku.com</code> slip straight past Pi-hole or ISP DNS filters:</p>
+        <pre class="bg-slate-900 text-purple-200 text-xs sm:text-sm p-4 rounded-xl overflow-x-auto"><code># OpenWrt / Linux router: Force hardcoded Roku DNS (8.8.8.8) into SWEEPR sinkhole 10.66.0.1
+iptables -t nat -A PREROUTING -i br-lan -p udp --dport 53 -j DNAT --to-destination 10.66.0.1:53
+iptables -t nat -A PREROUTING -i br-lan -p tcp --dport 53 -j DNAT --to-destination 10.66.0.1:53</code></pre>
       </section>
-            <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">2. Roku OS &amp; Fire OS Hidden Frame Buffer Telemetry</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">Streaming media dongles such as Roku Streaming Stick 4K and Amazon Fire TV devices maintain background telemetry daemons that poll diagnostic APIs continuously. Vizio SmartCast hardware incorporates Inscape technology to capture acoustic and visual signatures directly from HDMI-CEC feeds.</p>
-        <p class="text-gray-700 leading-relaxed">Endpoints such as <code>bsp.roku.com</code>, <code>device-metrics-us.amazon.com</code>, and <code>tvinteractive.tv</code> upload periodic metric payloads even when connected televisions are in sleep mode. Network-level DNS interception halts these transmissions before they leave your router.</p>
+
+      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
+        <h2 class="text-2xl font-bold text-gray-900 mb-3">2. Vizio SmartCast: Stopping Inscape Frame &amp; Audio Fingerprinting</h2>
+        <p class="text-gray-700 leading-relaxed mb-3">Vizio embeds its subsidiary <strong>Inscape</strong> directly into the SmartCast display pipeline. Even if you ignore SmartCast apps completely and watch TV purely via an Apple TV or game console over HDMI-1, Inscape samples video frames and audio waveforms every second and posts telemetry to <code>inscape.tv</code>, <code>tvinteractive.tv</code>, <code>cognitivetv.com</code>, and <code>analytics.vizio.com</code>.</p>
+        <p class="text-gray-700 leading-relaxed">Disable it via <code>All Settings &rarr; Admin &amp; Privacy &rarr; Viewing Data &rarr; Off</code> (or <code>System &rarr; Reset &amp; Admin &rarr; Smart Interactivity &rarr; Off</code> on older Vizio models), choose <em>Reset Advertiser ID</em>, and sinkhole all four Inscape domains at the router layer so SmartCast updates cannot quietly re-enable ACR.</p>
       </section>
-            <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">3. Audit Streaming Dongles Across Local Subnets in 30 Seconds</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">SWEEPR Wi-Fi Radar scans 2.4GHz and 5GHz local wireless frequencies to catalog every connected streaming dongle, smart TV stick, and set-top box. The tool highlights unencrypted UDP discovery beacons and unexpected external socket bindings across your subnet.</p>
-        <p class="text-gray-700 leading-relaxed">Subscribing to SWEEPR Pro at <span data-price="annualStr">£74.99</span>/year (£6.25/month) gives you full access to 10Gbps WireGuard tunnels and automated IoT intruder alarms (+<span data-price="addonAnnualStr">£14.99</span>/year).</p>
+
+      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
+        <h2 class="text-2xl font-bold text-gray-900 mb-3">3. Amazon Fire OS: Blocking <code>device-metrics-us.amazon.com</code> Safely</h2>
+        <p class="text-gray-700 leading-relaxed mb-3">On Fire TV Stick 4K Max and Fire TV Cube devices, go to <code>Settings &rarr; Preferences &rarr; Privacy Settings</code> and turn off <em>Device Usage Data</em>, <em>Collect App Usage Data</em>, and <em>Interest-based Ads</em>. Under <code>Settings &rarr; Preferences &rarr; Featured Content</code>, disable <em>Allow Video Autoplay</em> and <em>Allow Audio Autoplay</em> to stop background carousel preloads.</p>
+        <p class="text-gray-700 leading-relaxed">At the network boundary, sinkholing <code>device-metrics-us.amazon.com</code>, <code>device-metrics-us-2.amazon.com</code>, <code>fls-na.amazon.com</code>, <code>fls-eu.amazon.com</code>, and <code>aax-eu.amazon-adsystem.com</code> halts Fire OS usage uploads while explicitly safelisting <code>primevideo.com</code>, <code>aiv-cdn.net</code>, and <code>pv-cdn.net</code> so Prime Video streams in full 4K UHD. You can deploy automated router-level rules across 3 devices plus your gateway with SWEEPR Pro (£74.99/yr — £6.25/mo, 14-day guarantee) plus the Wi-Fi Radar &amp; Smart-TV Shield add-on (+£14.99/yr).</p>
       </section>
     </div>
 
-    <!-- FAQ Section (Matches JSON-LD FAQPage) -->
+    <!-- FAQ Section -->
     <div class="bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm mb-14">
-      <h2 class="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Roku, Vizio &amp; Fire TV Privacy FAQs</h2>
       <div class="space-y-6">
-        
         <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
-          <h3 class="text-base font-bold text-gray-900 mb-2">Will blocking Smart-TV ACR telemetry break Netflix, YouTube, or Disney+?</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">No. SWEEPR Wi-Fi Radar &amp; Smart-TV Shield only sinkholes dedicated ACR screenshot and ad-tracking domains (`scribe.logs.roku.com`, `cooper.logs.roku.com`, `ads.roku.com`, `tvinteractive.tv`, `inscape.tv`, `device-metrics-us.amazon.com`) while routing video CDN traffic at full 4K speed.</p>
+          <h3 class="text-base font-bold text-gray-900 mb-2">Why does Roku still reach <code>cooper.logs.roku.com</code> after I change DHCP DNS on my router?</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">Roku players hardcode <code>8.8.8.8</code> as a fallback/primary resolver inside Roku OS. Unless your router uses a port-53 NAT redirect (or routes the entire Roku subnet inside a WireGuard tunnel), telemetry queries bypass standard DHCP DNS assignments.</p>
         </div>
         <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
-          <h3 class="text-base font-bold text-gray-900 mb-2">Does the Free 30-Second Home Wi-Fi Scanner require router admin passwords?</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">No. The scanner runs non-privileged ARP, mDNS, and SSDP probes directly from your computer to discover devices and check gateway ports in under 30 seconds.</p>
+          <h3 class="text-base font-bold text-gray-900 mb-2">Does Vizio Inscape collect viewing data even when I use an external HDMI streamer?</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">Yes. Because Inscape sits at the television panel's input scaler rather than inside an individual app, it hashes video frames from cable boxes, Blu-ray players, consoles, and external sticks unless <em>Viewing Data</em> is disabled and <code>inscape.tv</code> is sinkholed.</p>
         </div>
         <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
-          <h3 class="text-base font-bold text-gray-900 mb-2">How many devices does SWEEPR VPN Pro protect?</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">Every SWEEPR VPN Pro subscription covers up to 3 simultaneous devices (+ router), phones, tablets, or routers simultaneously, plus scans all 15–30+ devices on your home Wi-Fi.</p>
+          <h3 class="text-base font-bold text-gray-900 mb-2">Will sinkholing <code>device-metrics-us.amazon.com</code> break Prime Video playback or Alexa search?</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">No. SWEEPR's safelist keeps <code>primevideo.com</code>, <code>aiv-cdn.net</code>, and <code>pv-cdn.net</code> completely unblocked while dropping only Fire OS metrics and ad-system telemetry collectors.</p>
         </div>
       </div>
     </div>
 
     <!-- Conversion Banner -->
     <div class="bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-2xl p-8 md:p-12 text-center shadow-xl mb-14">
-      <h3 class="text-2xl md:text-3xl font-black mb-3">Ready for 10Gbps WireGuard Speed &amp; Whole-Home Wi-Fi Protection?</h3>
+      <h2 class="text-2xl md:text-3xl font-black mb-3">Silence Streaming Stick &amp; SmartCast Beacons Network-Wide</h2>
       <p class="text-gray-300 max-w-xl mx-auto mb-7 text-base">
-        Scan your home Wi-Fi in under 30 seconds, stop ISP evening throttling, and protect up to 3 devices for just <span data-price="annualPerMonthStr">£6.25</span>/mo (<span data-price="annualStr">£74.99</span>/yr — Save 50%).
+        Detect every Roku stick, Vizio panel, and Fire TV dongle on your Wi-Fi in seconds, then block ACR domains across 3 devices plus your router for <span data-price="annualPerMonthStr">£6.25</span>/mo (<span data-price="annualStr">£74.99</span>/yr).
       </p>
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
         <a href="/download" class="btn btn-go btn-big gap-2">
-          <span>Free Download</span>
+          <span>Get Subnet &amp; Stick Scanner</span>
           <svg width="20" height="20" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
         <a rel="nofollow" href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-big">
-          Get SWEEPR VPN Pro &rarr;
+          Choose Annual Router Shield &rarr;
         </a>
       </div>
       <div class="flex flex-wrap items-center justify-center gap-4 text-xs text-gray-400 mt-6">
-        <span>🛡️ 14-Day Money-Back Guarantee</span>
+        <span>14-Day Money-Back Guarantee</span>
         <span>•</span>
-        <span>⚡ 680KB Featherlight App</span>
+        <span>Roku Port-53 DNAT Ready</span>
         <span>•</span>
-        <span>📡 Free 30s Home Wi-Fi Scanner</span>
+        <span>Zero Prime Video Buffering</span>
       </div>
     </div>
 

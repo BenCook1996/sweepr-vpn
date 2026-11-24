@@ -146,240 +146,186 @@
     </div>
     <div id="direct-answer" class="mb-8 p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-gray-800">
       <div class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 mb-1.5">Direct Answer</div>
-      <p class="text-sm sm:text-base leading-relaxed">Configure this hardware using native WireGuard (WireGuard VPN Setup for Linux CLI (Ubuntu, Debian, Arch & Fedora) with WireGuard VPN Setup for pfSense & OPNsense Home Firewall) from your SWEEPR VPN dashboard to encrypt connected devices without CPU bottlenecks. Using a pre-generated .conf profile enables leak-free DNS (10.64.0.1), Smart-TV ACR blocking, and up to 940 Mbps.</p>
+      <p class="text-sm sm:text-base leading-relaxed">Run native ARM64 WireGuard on M1 through M4 Macs using either SWEEPR's lightweight macOS client or the WireGuardKit App Store app. Apple Silicon NEON SIMD accelerates ChaCha20-Poly1305 at sub-watt draw without Rosetta translation, while On-Demand SSID exceptions automatically shield your MacBook whenever leaving trusted home Wi-Fi.</p>
       <div class="mt-3 pt-3 border-t border-emerald-200/80 text-xs font-bold">
-        <a href="/tools/leak-test" class="text-emerald-800 hover:text-emerald-950 underline">Verify Your Connection with Free IP &amp; WebRTC Leak Test &rarr;</a>
+        <a href="/tools/leak-test" class="text-emerald-800 hover:text-emerald-950 underline">Check macOS utun DNS and WebRTC status &rarr;</a>
       </div>
     </div>
 
-    <!-- GEO Answer-First Quick Verdict Block -->
-    <div class="bg-white border-2 border-emerald-500/30 rounded-2xl p-6 md:p-8 shadow-sm mb-12 relative overflow-hidden">
-      <div class="absolute top-0 right-0 bg-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
-        Verified 2026 Summary
-      </div>
-      <h2 class="text-xl font-bold text-gray-900 mb-2">Quick Setup Summary (macOS Apple Silicon)</h2>
+    <div class="bg-white border-2 border-emerald-500/30 rounded-2xl p-6 md:p-8 shadow-sm mb-10">
+      <h2 class="text-xl font-bold text-gray-900 mb-2">Apple Silicon Battery &amp; Thermal Efficiency Advantage</h2>
       <p class="text-gray-700 leading-relaxed mb-5">
-        Protect your MacBook Air, MacBook Pro, or Mac Studio on public cafe Wi-Fi and home networks with native Apple Silicon efficiency, `pf` packet-filter drop protection, and local LAN device scanning. Engineered for <strong>macOS Sonoma / Sequoia (Universal Apple Silicon Native)</strong> with recommended MTU <strong>1380</strong> and direct 10Gbps peering via <strong>UK-LON-01 (London) / US-NYC-01 (New York)</strong>.
+        Bloated Electron VPN helpers run background Chromium tabs and Rosetta-translated helper daemons that drain MacBook Pro batteries during long travel days. Native ARM64 WireGuard leverages Apple's M-series NEON vector registers inside <code>NEPacketTunnelProvider</code>, running fanless on MacBook Air from <span data-price="annualPerMonthStr">£6.25</span>/mo.
       </p>
       <div class="flex flex-wrap gap-3 items-center">
         <a href="/download" class="btn btn-go gap-2">
-          <span>Free Download (30s Wi-Fi &amp; Speed Scan)</span>
+          <span>Download Universal macOS .dmg</span>
           <svg width="16" height="16" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
         <a rel="nofollow" href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-ghost text-sm font-semibold">
-          Get Pro (<span data-price="annualPerMonthStr">£6.25</span>/mo — Save 50%) &rarr;
+          Get Mac + Mobile Plan (<span data-price="annualStr">£74.99</span>) &rarr;
         </a>
         <a href="/tools/isp-throttling-test" class="text-xs font-bold text-emerald-700 hover:underline ml-auto">
-          Run Browser Throttling Test &rarr;
+          Test Cafe Wi-Fi Throttling &rarr;
         </a>
       </div>
     </div>
 
-    
-    <div class="bg-slate-900 text-slate-100 rounded-2xl p-6 shadow-md mb-12 border border-slate-800">
-      <div class="flex items-center justify-between mb-3">
-        <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Verified WireGuard Configuration / CLI Snippet</span>
-        <span class="text-xs text-slate-400 font-mono">ChaCha20-Poly1305 • 10Gbps RAM-Only</span>
-      </div>
-      <pre class="text-xs sm:text-sm font-mono overflow-x-auto leading-relaxed text-emerald-300"><code># macOS Network Extension &amp; ARP/mDNS Wi-Fi Scanner
-# Tunnel Engine: WireGuard Go / NEPacketTunnelProvider
-# Kill Switch: macOS pf (Packet Filter) strict anchor rules
-# DNS Resolver: 10.64.0.1 (Encrypted DoH + Smart-TV ACR Sinkhole)</code></pre>
-    </div>
-
-    <!-- Structured Comparison / Benchmark Table -->
-    <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm mb-14">
-      <div class="p-6 border-b border-gray-200">
-        <h2 class="text-2xl font-bold text-gray-900">Technical Specification Matrix: SWEEPR VPN on macOS Apple Silicon</h2>
-      </div>
+    <section class="mb-10 bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm">
+      <h2 class="text-2xl font-bold text-gray-900 mb-3">1. ChaCha20-Poly1305 NEON SIMD vs. Rosetta x86 &amp; OpenVPN</h2>
+      <p class="text-gray-700 leading-relaxed mb-4">
+        ARMv8.5-A cores inside M1, M2, M3, and M4 chips execute ChaCha20 quarter-rounds natively across 128-bit NEON SIMD lanes. Compared against x86 binaries running under Rosetta 2 emulation or legacy OpenVPN TAP extensions, native WireGuard slashes wake-ups and CPU wattage while holding gigabit throughput.
+      </p>
       <div class="overflow-x-auto">
-        <table class="w-full text-left text-sm">
-          <thead>
-            <tr class="bg-gray-50 border-b border-gray-200 text-gray-600 font-semibold">
-              <th class="p-4 pl-6">Metric / Capability</th>
-              <th class="p-4 w-2/5 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">SWEEPR VPN on macOS Apple Silicon</th>
-              <th class="p-4 w-2/5 text-gray-700 border-l border-gray-200">Legacy / Bloated Consumer VPNs</th>
+        <table class="w-full text-left text-sm border border-gray-200 rounded-xl overflow-hidden">
+          <thead class="bg-gray-50 text-gray-700 font-semibold border-b border-gray-200">
+            <tr>
+              <th class="p-3.5">Mac Hardware Class</th>
+              <th class="p-3.5 bg-emerald-50/60 text-emerald-900">Native ARM64 WireGuard</th>
+              <th class="p-3.5">Rosetta / Electron OpenVPN</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-100 text-gray-700">
-            
-            <tr>
-              <td class="p-4 pl-6 font-medium">Target Platform / Firmware</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">macOS Sonoma / Sequoia (Universal Apple Silicon Native)</td>
-              <td class="p-4 border-l border-gray-200">Often locked to proprietary bloated GUI apps</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Setup Time</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">30 Seconds</td>
-              <td class="p-4 border-l border-gray-200">15–30 minutes of manual troubleshooting</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Recommended Tunnel MTU</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">1380</td>
-              <td class="p-4 border-l border-gray-200">Fixed 1500 MTU (causes packet fragmentation)</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Primary 10Gbps Endpoint</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">UK-LON-01 (London) / US-NYC-01 (New York)</td>
-              <td class="p-4 border-l border-gray-200">Overcrowded virtualised servers</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Smart-TV &amp; Tracker Blocking</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Built-in via 10.64.0.1 in-tunnel DNS resolver</td>
-              <td class="p-4 border-l border-gray-200">Requires separate third-party DNS setup</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Simultaneous Device Slots</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">Up to 3 Devices (1 router slot covers whole LAN)</td>
-              <td class="p-4 border-l border-gray-200">5–6 Devices or steep renewal surcharges</td>
-            </tr>
-            <tr>
-              <td class="p-4 pl-6 font-medium">Transparent Price-Lock</td>
-              <td class="p-4 bg-emerald-50/50 text-emerald-900 font-bold border-l border-emerald-100">
-                <span data-price="annualStr">£74.99</span>/yr (Save 50%), <span data-price="sixMonthStr">£48.99</span>/6mo, or <span data-price="introStr">£1.99</span> 1st Month
-              </td>
-              <td class="p-4 border-l border-gray-200">Unprotected or subject to 2nd-year renewal hikes</td>
-            </tr>
+            <tr><td class="p-3.5 font-semibold">MacBook Pro / Studio (M2–M4)</td><td class="p-3.5 font-bold text-emerald-800 bg-emerald-50/30">1.8+ Gbps (Thunderbolt NIC)</td><td class="p-3.5">320–480 Mbps</td></tr>
+            <tr><td class="p-3.5 font-semibold">MacBook Air M1 / M2 / M3</td><td class="p-3.5 font-bold text-emerald-800 bg-emerald-50/30">940 Mbps @ &lt;3% CPU</td><td class="p-3.5">260 Mbps @ 28% CPU + heat</td></tr>
+            <tr><td class="p-3.5 font-semibold">Idle Memory Footprint</td><td class="p-3.5 font-bold text-emerald-800 bg-emerald-50/30">~18 MB native daemon</td><td class="p-3.5">380–650 MB Chromium helper</td></tr>
           </tbody>
         </table>
       </div>
-    </div>
+    </section>
 
-    <!-- Deep-Dive Technical Sections -->
-    <div class="space-y-10 mb-14">
-      
-      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">1. Why macOS Apple Silicon Users Choose SWEEPR VPN</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">Protect your MacBook Air, MacBook Pro, or Mac Studio on public cafe Wi-Fi and home networks with native Apple Silicon efficiency, `pf` packet-filter drop protection, and local LAN device scanning.</p>
-        <p class="text-gray-700 leading-relaxed">Native Apple Silicon architecture uses virtually zero battery during 8-hour workdays. Instant auto-connect when joining untrusted cafe, airport, or hotel Wi-Fi SSIDs.</p>
-      </section>
-      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">2. Optimal MTU (1380) &amp; Keepalive Settings</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">When running WireGuard on macOS Sonoma / Sequoia (Universal Apple Silicon Native), setting your interface MTU to 1380 with a 25-second PersistentKeepalive ensures zero packet fragmentation over PPPoE, DOCSIS, and CGNAT broadband links.</p>
-        <p class="text-gray-700 leading-relaxed">Protects up to 10 Macs, PCs, phones, and routers on a single SWEEPR Pro license. All traffic resolves through SWEEPR’s private 10.64.0.1 DNS shield with zero activity logs.</p>
-      </section>
-      <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">3. Testing Your Tunnel &amp; Leak Protection</h2>
-        <p class="text-gray-700 leading-relaxed mb-3">Once connected to UK-LON-01 (London) / US-NYC-01 (New York), open SWEEPR’s free <a href="/tools/leak-test" class="text-emerald-700 font-semibold underline hover:text-emerald-900">IP, DNS &amp; WebRTC Leak Test</a> or <a href="/tools/isp-throttling-test" class="text-emerald-700 font-semibold underline hover:text-emerald-900">ISP Speed &amp; Throttling Checker</a> to confirm your public IPv4/IPv6 and DNS resolvers are 100% encrypted.</p>
-        <p class="text-gray-700 leading-relaxed">Every SWEEPR VPN Pro plan covers up to 3 devices simultaneously and is backed by our 14-Day Money-Back Guarantee.</p>
-      </section>
-    </div>
+    <section class="mb-10 bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm">
+      <h2 class="text-2xl font-bold text-gray-900 mb-3">2. SWEEPR macOS Client vs. WireGuardKit On-Demand SSID Rules</h2>
+      <p class="text-gray-700 leading-relaxed mb-3">
+        Install either the standalone SWEEPR macOS package (which adds local Wi-Fi device discovery and packet-filter kill-switch enforcement) or the signed Apple Mac App Store <strong>WireGuard</strong> client built on <code>WireGuardKit</code>. If you use <code>WireGuardKit</code>, enable <strong>On-Demand</strong> rules directly in the tunnel editor so macOS raises the encrypted <code>utun</code> interface the instant your laptop associates with untrusted cafe or airport Wi-Fi:
+      </p>
+      <div class="bg-slate-900 text-slate-100 rounded-xl p-5 border border-slate-800">
+        <div class="text-xs font-bold uppercase tracking-wider text-emerald-400 mb-2">macOS WireGuardKit On-Demand + DNS Verification</div>
+        <pre class="text-xs sm:text-sm font-mono overflow-x-auto leading-relaxed text-emerald-300"><code># In WireGuard.app -&gt; Edit Tunnel -&gt; On-Demand Activation:
+[x] Ethernet
+[x] Wi-Fi  -&gt;  Except these SSIDs: Home_5GHz, Studio_Fiber
 
-    <!-- FAQ Section (Matches JSON-LD FAQPage) -->
-    <div class="bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm mb-14">
-      <h2 class="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
-      <div class="space-y-6">
-        
-        <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
-          <h3 class="text-base font-bold text-gray-900 mb-2">How long does it take to set up SWEEPR VPN on macOS Apple Silicon?</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">Setup takes approximately 30 Seconds using either the native SWEEPR client or our standard WireGuard configuration parameters (1380).</p>
-        </div>
-        <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
-          <h3 class="text-base font-bold text-gray-900 mb-2">Does running SWEEPR VPN on a router count as 1 device or multiple devices?</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">Running SWEEPR VPN on a router or gateway (macOS Apple Silicon) counts as just 1 of your 3 device slots while encrypting every laptop, phone, and Smart TV connected behind it.</p>
-        </div>
-        <div class="border-b border-gray-100 pb-5 last:border-b-0 last:pb-0">
-          <h3 class="text-base font-bold text-gray-900 mb-2">Which SWEEPR server should I pick for macOS Apple Silicon?</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">We recommend UK-LON-01 (London) / US-NYC-01 (New York) for the lowest ping and 10Gbps RAM-only WireGuard throughput.</p>
-        </div>
+# Verify macOS mDNSResponder scoped resolver after connecting:
+scutil --dns | grep -A6 "10.66.0.1"
+ifconfig utun4 | grep mtu</code></pre>
       </div>
-    </div>
+      <p class="text-gray-700 leading-relaxed mt-3 text-sm">
+        When roaming on coffee-shop Wi-Fi or tethered 5G hotspots, adjust <code>MTU = 1380</code> inside your Mac configuration so oversized TLS packets never drop behind carrier CGNAT framing.
+      </p>
+    </section>
 
-    <!-- Conversion Banner -->
-    <div class="bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-2xl p-8 md:p-12 text-center shadow-xl mb-14">
-      <h3 class="text-2xl md:text-3xl font-black mb-3">Ready for 10Gbps WireGuard Speed &amp; Whole-Home Wi-Fi Protection?</h3>
-      <p class="text-gray-300 max-w-xl mx-auto mb-7 text-base">
-        Scan your home Wi-Fi in under 30 seconds, stop ISP evening throttling, and protect up to 3 devices for just <span data-price="annualPerMonthStr">£6.25</span>/mo (<span data-price="annualStr">£74.99</span>/yr — Save 50%).
+    <section class="mb-10 bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm">
+      <h2 class="text-2xl font-bold text-gray-900 mb-3">3. Verifying macOS DNS Isolation &amp; Plan Flexibility</h2>
+      <p class="text-gray-700 leading-relaxed mb-3">
+        Even with <code>utun</code> active, verify Safari, Chrome, and terminal lookups point cleanly through <code>10.66.0.1</code> by running our <a href="/tools/leak-test" class="text-emerald-700 font-semibold underline hover:text-emerald-900">macOS WebRTC and DNS leak test</a>. When troubleshooting hotel captive throttles, measure encrypted vs. raw link throughput via the <a href="/tools/isp-throttling-test" class="text-emerald-700 font-semibold underline hover:text-emerald-900">ISP throttling tester</a>.
+      </p>
+      <p class="text-sm text-gray-600">
+        Mac owners receive 3 simultaneous peer slots—start for <span data-price="introStr">£1.99</span> in month one, pay <span data-price="sixMonthStr">£48.99</span> every six months, or choose <span data-price="annualStr">£74.99</span> per year.
+      </p>
+    </section>
+
+    <section class="bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm mb-12 space-y-5">
+      <h2 class="text-2xl font-bold text-gray-900">macOS Apple Silicon WireGuard FAQ</h2>
+      <div class="border-b border-gray-100 pb-4">
+        <h3 class="text-base font-bold text-gray-900 mb-1.5">Does WireGuard conflict with macOS iCloud Private Relay or AirDrop?</h3>
+        <p class="text-sm text-gray-600 leading-relaxed">When a system-wide WireGuard tunnel is active, Safari honors the VPN route instead of Apple's Private Relay proxy, while AWDL peer-to-peer AirDrop continues functioning locally over direct Wi-Fi links.</p>
+      </div>
+      <div class="border-b border-gray-100 pb-4">
+        <h3 class="text-base font-bold text-gray-900 mb-1.5">Why should I disable On-Demand on my trusted home SSID?</h3>
+        <p class="text-sm text-gray-600 leading-relaxed">If you already run SWEEPR on your home OpenWrt, UniFi, or ASUSWRT-Merlin router, excluding your home SSID prevents double-encapsulating traffic inside a second WireGuard header.</p>
+      </div>
+      <div>
+        <h3 class="text-base font-bold text-gray-900 mb-1.5">How do I keep Time Machine NAS backups working while tunneled?</h3>
+        <p class="text-sm text-gray-600 leading-relaxed">Check <em>Exclude Private IPs</em> inside the tunnel preferences (or keep RFC1918 ranges out of <code>AllowedIPs</code>) so Bonjour <code>.local</code> Time Machine SMB mounts remain on your local LAN.</p>
+      </div>
+    </section>
+
+    <div class="bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-2xl p-8 md:p-10 text-center shadow-xl mb-12">
+      <h2 class="text-2xl md:text-3xl font-black mb-3">Sub-Watt ARM64 Encryption Built for MacBook Battery Life</h2>
+      <p class="text-gray-300 max-w-xl mx-auto mb-6 text-base">
+        Native Apple Silicon builds plus raw WireGuardKit keys for 3 devices starting at <span data-price="annualPerMonthStr">£6.25</span>/mo (<span data-price="annualStr">£74.99</span>/yr).
       </p>
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
         <a href="/download" class="btn btn-go btn-big gap-2">
-          <span>Free Download</span>
+          <span>Download macOS Universal App</span>
           <svg width="20" height="20" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
         <a rel="nofollow" href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-big">
-          Get SWEEPR VPN Pro &rarr;
+          Start Pro Coverage &rarr;
         </a>
-      </div>
-      <div class="flex flex-wrap items-center justify-center gap-4 text-xs text-gray-400 mt-6">
-        <span>🛡️ 14-Day Money-Back Guarantee</span>
-        <span>•</span>
-        <span>⚡ 680KB Featherlight App</span>
-        <span>•</span>
-        <span>📡 Free 30s Home Wi-Fi Scanner</span>
       </div>
     </div>
 
-    <!-- Related Guides & Internal Crawl Mesh -->
     <div class="border-t border-gray-200 pt-10">
-      <h2 class="text-lg font-bold text-gray-900 mb-4">Related Technical Guides &amp; Comparisons</h2>
+      <h2 class="text-lg font-bold text-gray-900 mb-4">Related Apple, Router &amp; Broadband References</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-<a href="/setup/gl-inet-travel-router" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 WireGuard Setup Guide • 45 Seconds</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">WireGuard VPN Setup for GL.iNet Beryl AX (GL-MT3000) &amp; Slate AX Travel Router</div>
+        <a href="/setup/gl-inet-travel-router" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">Hotel Companion</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Beryl AX travel router</div>
         </a>
-<a href="/setup/linux-cli-wireguard" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 WireGuard Setup Guide • 30 Seconds</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">WireGuard VPN Setup for Linux CLI (Ubuntu, Debian, Arch &amp; Fedora)</div>
+        <a href="/setup/linux-cli-wireguard" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">Linux Dev Box</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Command-line WireGuard on Linux</div>
         </a>
-<a href="/setup/pfsense-opnsense-router" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 WireGuard Setup Guide • 3 Minutes</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">WireGuard VPN Setup for pfSense &amp; OPNsense Home Firewall</div>
+        <a href="/setup/pfsense-opnsense-router" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">Home Perimeter</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">pfSense / OPNsense firewall setup</div>
         </a>
-<a href="/setup/steam-deck-vpn" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">2026 WireGuard Setup Guide • 60 Seconds</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">WireGuard VPN Setup for Steam Deck &amp; Handheld Gaming OS (SteamOS)</div>
+        <a href="/setup/steam-deck-vpn" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">Valve Handheld</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Steam Deck Wi-Fi protection</div>
         </a>
-<a href="/solutions/virgin-media-remote-dev-ssh" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">Virgin Media (AS5089) Technical Fix</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Virgin Media Low-Latency Gaming &amp; Packet Loss (AS5089)</div>
+        <a href="/solutions/virgin-media-remote-dev-ssh" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">Remote SSH</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Stabilizing Virgin Media connections</div>
         </a>
-        <a href="/tools/smart-tv-tracking-check" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">FREE SMART-TV TOOL</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Free Smart-TV ACR Tracker & Ad-Domain Exposure Checker</div>
+        <a href="/tools/smart-tv-tracking-check" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">Living Room</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Check Smart-TV ACR leaks</div>
         </a>
-        <a href="/tools/vpn-renewal-price-checker" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">FREE RENEWAL CALCULATOR</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Free 3-Year VPN Renewal Price-Hike Calculator</div>
+        <a href="/tools/vpn-renewal-price-checker" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">Billing Math</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Compare renewal price hikes</div>
         </a>
-        <a href="/solutions/brsk-better-net-uk-voip-teams-zoom-jitter" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">ISP & NETWORK FIX</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Microsoft Teams, Zoom & VoIP Jitter on Brsk BetterNet 1Gbps Fibre UK Using Low-Latency WireGuard</div>
+        <a href="/solutions/brsk-better-net-uk-voip-teams-zoom-jitter" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">Video Calls</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Brsk Teams/Zoom jitter fix</div>
         </a>
-        <a href="/solutions/comcast-xfinity-broadband-isp-throttling" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">ISP & NETWORK FIX</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Stop Comcast Xfinity Cable Broadband Speed Throttling & DPI Traffic Shaping</div>
+        <a href="/solutions/comcast-xfinity-broadband-isp-throttling" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">North America</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Bypassing Xfinity traffic shaping</div>
         </a>
-        <a href="/solutions/community-fibre-london-p2p-port-forwarding" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">ISP & NETWORK FIX</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Bypass Community Fibre London CGNAT & P2P Bandwidth Throttling</div>
+        <a href="/solutions/community-fibre-london-p2p-port-forwarding" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">CGNAT Fix</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Community Fibre port routing</div>
         </a>
-        <a href="/solutions/o2-uk-mobile-tethering-uhd-streaming-buffering" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">ISP & NETWORK FIX</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Eliminate O2 UK 5G & Mobile Tethering 4K UHD Streaming Buffering & CDN Throttling</div>
+        <a href="/solutions/o2-uk-mobile-tethering-uhd-streaming-buffering" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">Personal Hotspot</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">O2 UK tethering optimization</div>
         </a>
-        <a href="/solutions/rogers-ignite-canada-isp-throttling" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">ISP & NETWORK FIX</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Stop Rogers Ignite Broadband Canada Speed Throttling & DPI Traffic Shaping</div>
+        <a href="/solutions/rogers-ignite-canada-isp-throttling" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">Canadian Cable</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Rogers Ignite speed restoration</div>
         </a>
-        <a href="/solutions/starlink-satellite-uk-isp-throttling" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">ISP & NETWORK FIX</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Stop Starlink LEO Satellite Internet Speed Throttling & DPI Traffic Shaping</div>
+        <a href="/solutions/starlink-satellite-uk-isp-throttling" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">Satellite Link</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Starlink terminal low-jitter tunneling</div>
         </a>
-        <a href="/solutions/telstra-nbn-australia-gaming-packet-loss" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">ISP & NETWORK FIX</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Telstra NBN Australia Gaming Packet Loss, High Ping & Rubberbanding</div>
+        <a href="/solutions/telstra-nbn-australia-gaming-packet-loss" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">APAC Broadband</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Telstra NBN ping stabilization</div>
         </a>
-        <a href="/solutions/three-5g-home-broadband-uhd-streaming-buffering" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">ISP & NETWORK FIX</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Eliminate Three 5G Home Broadband UK 4K UHD Streaming Buffering & CDN Throttling</div>
+        <a href="/solutions/three-5g-home-broadband-uhd-streaming-buffering" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">Cellular WAN</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Three 5G broadband MTU tuning</div>
         </a>
-        <a href="/solutions/toob-full-fibre-uk-voip-teams-zoom-jitter" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">ISP & NETWORK FIX</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Fix Microsoft Teams, Zoom & VoIP Jitter on toob 900Mbps Full Fibre UK Using Low-Latency WireGuard</div>
+        <a href="/solutions/toob-full-fibre-uk-voip-teams-zoom-jitter" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">Southern UK</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">toob fibre conferencing quality</div>
         </a>
-        <a href="/solutions/zen-internet-uk-isp-throttling" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all no-underline group">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-1">ISP & NETWORK FIX</div>
-          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">How to Stop Zen Internet UK Speed Throttling & DPI Traffic Shaping</div>
+        <a href="/solutions/zen-internet-uk-isp-throttling" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 transition-all no-underline group">
+          <div class="text-[11px] font-bold uppercase text-emerald-600 mb-1">UK ISP Peering</div>
+          <div class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">Zen Internet evening stability</div>
         </a>
       </div>
     </div>

@@ -89,125 +89,133 @@
     </nav>
   </header>
   <main>
-    <span class="badge">2026 Technical VPN Comparison • Verified Benchmarks</span>
+    <span class="badge">Edge Proxy vs Dedicated WireGuard • 2026 Engineering Audit</span>
     <h1>SWEEPR VPN vs Cloudflare WARP+: 2026 Speed, Footprint & Privacy Comparison</h1>
       <div id="eeat-author-byline" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:0.82rem;color:var(--muted,#94a3b8);margin:10px 0 14px;"><span>By <strong style="color:var(--text,#e5e7eb);">Benjamin Cook</strong>, Principal Network Architect &middot; SWEEPR VPN Inc.</span><span>&bull;</span><span>Updated Nov 2026</span><span>&bull;</span><a href="/warrant-canary" style="color:var(--accent2,#34d399);font-weight:700;text-decoration:underline;">Verified via Cryptographic Warrant Canary &rarr;</a></div>
-    <p class="lead">Comparing SWEEPR VPN against Cloudflare WARP+? See how our featherlight ~3.7 MB native Rust + Tauri v2 client, 10Gbps RAM-only WireGuard infrastructure, and built-in 30-second Home Wi-Fi Device Scanner stack up against Cloudflare WARP+.</p>
+<p class="lead">Cloudflare WARP+ is built as an anycast transit accelerator inside the 1.1.1.1 app, not a city-selectable privacy tunnel. Compare BoringTun and MASQUE auto-routing against SWEEPR VPN's kernel WireGuard stack, router .conf exports, and Smart-TV ACR shield.</p>
     <div id="direct-answer" style="margin:18px 0 24px;padding:18px 20px;border-radius:14px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.35);">
       <div style="font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent2,#34d399);margin-bottom:6px;">Direct Answer</div>
-      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">SWEEPR VPN outperforms Cloudflare WARP+: 2026 Speed, Footprint & Privacy Comparison for households wanting locked-in renewal pricing and native speed. Your £74.99/yr annual plan (or £1.99 1st-month trial) never doubles in Year 2, delivering ~14 MB ChaCha20 WireGuard tunnels on 10 Gbps RAM-only servers plus a free 30-second Home Wi-Fi scanner across 3 devices and routers.</p>
+      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Cloudflare WARP+ optimizes mobile and desktop latency over Argo anycast routing via BoringTun and MASQUE, yet offers no city exit selector, router configuration export, or LAN auditing. SWEEPR VPN delivers deterministic 10Gbps WireGuard endpoints, standard .conf portability, and Smart-TV ACR blocking for £6.25/mo annually (£74.99/yr) or £1.99 first month.</p>
       <div style="padding-top:10px;border-top:1px solid rgba(16,185,129,0.22);font-size:0.84rem;font-weight:700;">
-        <a href="/tools/leak-test" style="color:var(--accent2,#34d399);text-decoration:underline;">Verify Your Connection with Free IP &amp; WebRTC Leak Test &rarr;</a>
+        <a href="/tools/leak-test" style="color:var(--accent2,#34d399);text-decoration:underline;">Inspect Your Current Egress IP &amp; DNS Resolver &rarr;</a>
       </div>
     </div>
 
     <div class="cta-strip">
       <div>
-        <strong>Run the Free 30-Second Home Wi-Fi &amp; ISP Speed Diagnostic</strong>
-        <div style="color:var(--muted);font-size:0.93rem;">Featherlight ~3.7 MB native Rust + Tauri v2 app • No credit card required for Wi-Fi device scanner • £1.99 1st-Month Pro Trial</div>
+        <strong>Audit Your Home Router &amp; Subnet Before Picking an Edge Proxy</strong>
+        <div style="color:var(--muted);font-size:0.93rem;">Compiled ~3.7 MB Rust binary • Local Wi-Fi device inventory with zero card signup • Test Pro for £1.99</div>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <a class="btn" href="/download">Download Free Scanner</a>
-        <a class="btn-outline" href="/pricing">View Plans (Save 50% Yearly)</a>
+        <a class="btn" href="/download">Grab Free LAN Scanner</a>
+        <a class="btn-outline" href="/pricing">Compare Locked Tiers</a>
       </div>
     </div>
 
-    
-    <h2>Head-to-Head Technical Specification Table</h2>
+    <div class="grid-3">
+      <div class="stat-box">
+        <div class="stat-label">WARP+ Routing Model</div>
+        <div class="stat-val">Argo Anycast</div>
+        <div style="color:var(--muted);font-size:0.88rem;margin-top:6px;">Selects nearest Cloudflare POP automatically; zero city or country pinning.</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">SWEEPR Egress Control</div>
+        <div class="stat-val">Pin Any Core City</div>
+        <div style="color:var(--muted);font-size:0.88rem;margin-top:6px;">Deterministic 10Gbps exit hops in UK, NL, DE, SE, CH, US, SG &amp; JP.</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Router Portability</div>
+        <div class="stat-val">Raw .conf Export</div>
+        <div style="color:var(--muted);font-size:0.88rem;margin-top:6px;">Import directly into OpenWrt, GL.iNet, MikroTik, or pfSense gateways.</div>
+      </div>
+    </div>
+
+    <h2>Protocol &amp; Topology Comparison: Anycast WARP+ vs Kernel WireGuard</h2>
     <table>
       <thead>
         <tr>
-          <th>Metric / Capability</th>
-          <th>SWEEPR VPN</th>
+          <th>Engineering Factor</th>
+          <th>SWEEPR VPN Pro</th>
           <th>Cloudflare WARP+</th>
         </tr>
       </thead>
       <tbody>
-        <tr><td><strong>Desktop Installer Footprint</strong></td><td><strong>~3.7 MB (Native Rust + Tauri v2)</strong></td><td>~115 MB</td></tr>
-        <tr><td><strong>Background RAM Consumption</strong></td><td><strong>~18 MB</strong></td><td>~160 MB</td></tr>
-        <tr><td><strong>WireGuard Server Uplinks</strong></td><td><strong>10Gbps RAM-Only (Diskless Boot)</strong></td><td>Mixed 1Gbps–10Gbps</td></tr>
-        <tr><td><strong>Free 30-Second Home Wi-Fi Scanner</strong></td><td><strong>Included Free (ARP/mDNS/OUI Audit)</strong></td><td>No</td></tr>
-        <tr><td><strong>Smart-TV ACR Telemetry Blocker</strong></td><td><strong>SWEEPR Wi-Fi Radar &amp; Smart-TV Shield</strong></td><td>No</td></tr>
-        <tr><td><strong>Annual Pricing &amp; Renewals</strong></td><td><strong>£74.99/yr (£6.25/mo) • £1.99 1st-Mo Trial</strong></td><td>£48.00/yr ($4.99/mo)</td></tr>
-        <tr><td><strong>Corporate / Logging Jurisdiction</strong></td><td><strong>Zero-Log RAM-Only Architecture</strong></td><td>USA (Logs Device & Account Telemetry, No Geo/Server Selection)</td></tr>
+        <tr><td><strong>Tunnel Engine</strong></td><td>Kernel WireGuard + AmneziaWG Stealth 443</td><td>Userspace BoringTun / MASQUE HTTP/3 proxy</td></tr>
+        <tr><td><strong>Exit City Selection</strong></td><td>Manual pinning across London, Frankfurt, Stockholm, NYC &amp; more</td><td>None — locked to nearest local Cloudflare colocation</td></tr>
+        <tr><td><strong>Router Firmware Support</strong></td><td>Standard WireGuard .conf files for OpenWrt, GL.iNet &amp; pfSense</td><td>Device-posture app only; no native router .conf generator</td></tr>
+        <tr><td><strong>Desktop Resource Footprint</strong></td><td>~3.7–14 MB Rust + Tauri v2 client (~18 MB idle RAM)</td><td>~115 MB installer (~160 MB background memory)</td></tr>
+        <tr><td><strong>LAN &amp; Smart-TV Defense</strong></td><td>ARP/mDNS Wi-Fi radar + 10.66.0.1 Smart-TV ACR sinkhole</td><td>1.1.1.2 malware DNS filter; zero LAN host visibility</td></tr>
+        <tr><td><strong>Billing &amp; Simultaneous Slots</strong></td><td>£74.99/yr (£6.25/mo) locked • 3 client slots + unlimited router LAN</td><td>£4.99/mo ($4.99/mo, ~£48/yr via app stores) • Zero Trust ties</td></tr>
       </tbody>
     </table>
 
-    <h2>3 Reasons Users Switch From Cloudflare WARP+ to SWEEPR VPN</h2>
+    <h2>Why Edge Acceleration Is Not a Drop-In Replacement for Full Tunnel Control</h2>
     <ol>
-      <li><strong>No 200 MB Background Bloatware:</strong> Cloudflare WARP+ installs ~115 MB of background services consuming ~160 MB of RAM. SWEEPR VPN is compiled in native Rust (~3.7 MB installer, ~18 MB RAM) with zero telemetry SDKs.</li>
-      <li><strong>Built-In Home Wi-Fi Scanner &amp; Smart-TV ACR Blocker:</strong> Standard VPNs only encrypt a single laptop while leaving 15–30 Smart TVs, cameras, and IoT devices on your home Wi-Fi unmonitored. SWEEPR VPN scans your entire home Wi-Fi in 30 seconds for free.</li>
-      <li><strong>Honest Pricing Without Renewal Traps:</strong> Try SWEEPR VPN for £1.99 in your first month, or lock in £48.99 / 6 months (Save 35%) or £74.99 / year (Save 50%) with a 14-day money-back guarantee.</li>
+      <li><strong>Deterministic Egress vs Nearest-Edge Anycast:</strong> WARP+ relies on Argo Smart Routing to hop traffic toward the closest Cloudflare data center, meaning a UK fiber subscriber cannot choose a Frankfurt, Zurich, or New York exit node when testing latency or isolating public-IP exposure. SWEEPR routes directly over dedicated 10Gbps bare-metal uplinks you control.</li>
+      <li><strong>Zero-Trust Device Posture vs Portable Router Profiles:</strong> Cloudflare designed WARP around enterprise Zero Trust posture checks rather than home hardware portability. SWEEPR generates clean standard WireGuard configurations that flash onto OpenWrt, GL.iNet travel boxes, and pfSense firewalls, shielding every smart appliance behind your gateway without wasting mobile slots.</li>
+      <li><strong>No Smart-TV ACR Sinkhole or Subnet Intruder Alerts:</strong> While 1.1.1.1 resolves encrypted queries fast, it never inspects your home /24 subnet for unfamiliar MAC addresses or silences Samsung, LG, Roku, and Vizio ACR screenshot beacons inside the tunnel.</li>
     </ol>
 
-    <h2>Transparent Anchor Pricing &amp; 14-Day Money-Back Guarantee</h2>
-    <p>Unlike legacy VPNs that trap you in 24-month renewals or 250 MB bloated installers, SWEEPR VPN offers straightforward pricing with an instant free 30-second Home Wi-Fi Device Scanner:</p>
-    <table>
-      <thead>
-        <tr>
-          <th>Plan Tier</th>
-          <th>Billing Cycle</th>
-          <th>Effective Monthly Cost</th>
-          <th>Included Features</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Yearly Plan (Core Cash Cow — Save 50%)</strong></td>
-          <td>£74.99 / year ($95.99 USD | €89.99 EUR)</td>
-          <td><strong>£6.25 / mo</strong></td>
-          <td>10Gbps RAM-Only WireGuard (UK, NL, DE, SE, CH, US), 3 simultaneous devices (+ router), Kernel Kill-Switch, 14-Day Guarantee</td>
-        </tr>
-        <tr>
-          <td><strong>6-Monthly Plan (Mid-Tier Anchor — Save 35%)</strong></td>
-          <td>£48.99 / 6 months ($61.99 USD | €58.99 EUR)</td>
-          <td><strong>£8.17 / mo</strong></td>
-          <td>All 10Gbps WireGuard Core Locations, In-Tunnel DNS, Port-Forwarding &amp; Streaming Support</td>
-        </tr>
-        <tr>
-          <td><strong>Monthly Plan (Flexible + £1.99 1st Month)</strong></td>
-          <td>£1.99 1st Month, then £12.49 / mo</td>
-          <td>£12.49 / mo</td>
-          <td>Cancel anytime in 1 click, full 10Gbps WireGuard &amp; Wi-Fi diagnostic access</td>
-        </tr>
-        <tr>
-          <td><strong>SWEEPR Wi-Fi Radar &amp; Smart-TV Shield Add-On</strong></td>
-          <td>+£14.99/yr | +£9.99/6mo | +£1.99/mo</td>
-          <td>Optional Add-On</td>
-          <td>24/7 Unknown Wi-Fi Intruder Alerts + Samsung/LG/Sony/Roku/Fire TV ACR Spy Blocker</td>
-        </tr>
-      </tbody>
-    </table>
+    <h2>Sample Portable WireGuard Profile (Unavailable in WARP+)</h2>
+    <p>Unlike Cloudflare WARP+, which keeps keys locked inside its mobile/desktop daemon or Zero Trust enrollment client, SWEEPR exports clean profiles ready for any standard <code style="color:var(--accent2);">wg-quick</code> or router interface:</p>
+    <pre><code>[Interface]
+PrivateKey = &lt;generated-on-client-ed25519&gt;
+Address = 10.66.42.19/32
+DNS = 10.66.0.1        # In-tunnel Smart-TV ACR &amp; telemetry sinkhole
+MTU = 1412
 
-    <h2>Frequently Asked Questions</h2>
-    <div class="card"><h3>Is SWEEPR VPN faster than Cloudflare WARP+ on UK and European fibre?</h3><p>Yes. Because SWEEPR VPN uses kernel-grade WireGuard with calibrated MTU (1412/1420) and direct 10Gbps LINX/AMS-IX peering, users routinely achieve 890–940 Mbps on 1Gbps FTTP lines with 4ms London latency.</p></div>
-<div class="card"><h3>Does SWEEPR VPN include a free tool if I am currently using Cloudflare WARP+?</h3><p>Yes. You can download SWEEPR VPN (~3.7 MB) and run the Free 30-Second Home Wi-Fi Device Scanner immediately without entering a credit card.</p></div>
-<div class="card"><h3>Can I export raw WireGuard .conf files from SWEEPR VPN?</h3><p>Yes. Every SWEEPR VPN subscription includes full WireGuard configuration export for OpenWrt, GL.iNet, Asuswrt-Merlin, MikroTik, UniFi, and Linux wg-quick.</p></div>
+[Peer]
+PublicKey = &lt;sweepr-uk-lon-01-pubkey&gt;
+Endpoint = uk-lon-01.sweeprvpn.com:51820
+AllowedIPs = 0.0.0.0/0, ::/0
+PersistentKeepalive = 25</code></pre>
 
-    <h2>Related Technical Guides &amp; Free Diagnostic Tools</h2>
+    <h2>Price-Locked Plans vs App-Store Monthly Billing</h2>
+    <p>Cloudflare WARP+ bills £4.99/month ($4.99/mo) for unpinned anycast routing. SWEEPR charges £6.25/mo equivalent on an annual price-lock with full router <code>.conf</code> generation, 3 simultaneous client seats, and 14-day refund protection:</p>
+    <div class="grid-3">
+      <div class="card">
+        <h3>Annual Price-Lock (£74.99/yr)</h3>
+        <p style="color:var(--muted);font-size:0.93rem;">Equates to £6.25/mo ($95.99 USD | €89.99 EUR) — saves 50% off monthly rates and never spikes in year two. Covers 3 simultaneous devices plus unlimited router-attached hardware across every 10Gbps diskless node.</p>
+      </div>
+      <div class="card">
+        <h3>Semi-Annual Tier (£48.99 / 6 mo)</h3>
+        <p style="color:var(--muted);font-size:0.93rem;">Works out to £8.17/mo ($61.99 USD | €58.99 EUR) for 35% savings, bundling AmneziaWG Stealth 443 obfuscation, port-forwarding, and raw router exports.</p>
+      </div>
+      <div class="card">
+        <h3>£1.99 Intro + Optional LAN Shield</h3>
+        <p style="color:var(--muted);font-size:0.93rem;">Test month one for £1.99 before £12.49/mo flexible renewals. Upgrade anytime with SWEEPR Wi-Fi Radar &amp; Smart-TV Shield (+£14.99/yr, +£9.99/6mo, or +£1.99/mo) for 24/7 stranger alerts and TV telemetry blocking.</p>
+      </div>
+    </div>
+
+    <h2>Cloudflare WARP+ Technical FAQ</h2>
+    <div class="card"><h3>Why does Cloudflare WARP+ omit manual city or country selection?</h3><p>Cloudflare routes WARP+ using global BGP anycast and Argo congestion metrics, which always terminate at the nearest colocation facility. If you specifically need a fixed UK, German, Swiss, or US egress node for SSH allowlists or stable peering, you need a city-selectable VPN like SWEEPR.</p></div>
+    <div class="card"><h3>Can I export a BoringTun or MASQUE key from WARP+ for GL.iNet or OpenWrt?</h3><p>Not officially. While unofficial third-party scripts attempt to scrape WARP registration keys, Cloudflare relies on its native client for MASQUE and posture telemetry. SWEEPR natively generates standard WireGuard .conf files in your dashboard for one-paste router deployment.</p></div>
+    <div class="card"><h3>Does WARP+ detect rogue IoT cameras or block Smart-TV ACR tracking?</h3><p>No. WARP+ stops at encrypted DNS and edge tunneling on the single device running 1.1.1.1. SWEEPR ships a built-in ARP/mDNS/OUI Wi-Fi scanner at zero cost and pairs it with our optional Smart-TV ACR sinkhole at 10.66.0.1.</p></div>
+
+    <h2>Related Technical Guides: Edge Proxies &amp; Routers</h2>
     <div class="card">
       <ul>
-<li><a href="/vs/nordvpn" style="color:var(--accent2);">SWEEPR VPN vs NordVPN Benchmark Comparison</a></li>
-<li><a href="/vs/mullvad" style="color:var(--accent2);">SWEEPR VPN vs Mullvad VPN Comparison</a></li>
-<li><a href="/vs/protonvpn" style="color:var(--accent2);">SWEEPR VPN vs Proton VPN Comparison</a></li>
-<li><a href="/setup/gl-inet-travel-router" style="color:var(--accent2);">GL.iNet Beryl AX &amp; Travel Router WireGuard Setup Guide (MTU 1420/1380)</a></li>
-<li><a href="/guides/stop-samsung-smart-tv-acr-tracking" style="color:var(--accent2);">How to Block Samsung Smart-TV ACR Tracking (gpm.samsungqbe.com &amp; samsungacr.com)</a></li>
-<li><a href="/solutions/eduroam-campus-wifi-gaming-packet-loss" style="color:var(--accent2);">Fix Eduroam Campus Wi-Fi Gaming Packet Loss &amp; UDP Port Blocks (Stealth 443)</a></li>
-<li><a href="/setup/nvidia-shield-tv-pro-wireguard" style="color:var(--accent2);">NVIDIA Shield TV Pro 4K &amp; GeForce NOW WireGuard VPN Setup Guide</a></li>
-<li><a href="/solutions/gigaclear-rural-fibre-gaming-packet-loss" style="color:var(--accent2);">Fix Gigaclear Rural Full Fibre UK Gaming Ping Spikes, CGNAT &amp; Packet Loss</a></li>
-<li><a href="/setup/steam-deck-vpn" style="color:var(--accent2);">SteamOS &amp; Steam Deck OLED Native WireGuard VPN Setup Guide</a></li>
-<li class="sweepr-mesh-link"><a href="/vs/cyberghost" style="color:var(--accent2);">SWEEPR VPN vs CyberGhost (2026 Comparison)</a></li>
-<li class="sweepr-mesh-link"><a href="/vs/expressvpn" style="color:var(--accent2);">SWEEPR VPN vs ExpressVPN (2026 Comparison)</a></li>
-<li class="sweepr-mesh-link"><a href="/vs/ipvanish" style="color:var(--accent2);">SWEEPR VPN vs IPVanish (2026 Comparison)</a></li>
-<li class="sweepr-mesh-link"><a href="/vs/private-internet-access" style="color:var(--accent2);">SWEEPR VPN vs Private Internet Access (PIA): 2026 Speed, Footprint &amp; Privacy Comparison</a></li>
-<li class="sweepr-mesh-link"><a href="/setup/macos-apple-silicon-vpn" style="color:var(--accent2);">WireGuard VPN Setup for macOS (Apple Silicon M1/M2/M3/M4 &amp; Intel)</a></li>
-<li class="sweepr-mesh-link"><a href="/guides/stop-roku-vizio-firetv-spying" style="color:var(--accent2);">How to Block Roku, Vizio Inscape &amp; Fire TV ACR Spying on Your Home Wi-Fi</a></li>
-<li><a href="/tools/isp-throttling-test" style="color:var(--accent2);">Free ISP Evening Throttling &amp; Latency Checker</a></li>
-<li><a href="/download" style="color:var(--accent2);">Download SWEEPR VPN &amp; Free 30-Second Home Wi-Fi Scanner (~3.7 MB)</a></li>
-        <li><a href="/tools/vpn-renewal-price-checker" style="color:var(--accent2);">Free 3-Year VPN Renewal Price-Hike Calculator</a></li>
-        <li><a href="/alternatives/totalvpn" style="color:var(--accent2);">The 5 Best Total VPN Alternatives in 2026</a></li>
-        <li class="sweepr-mesh-link"><a href="/vs/totalvpn" style="color:var(--accent2);">SWEEPR VPN vs Total VPN (2026): Speed, Renewal Pricing &amp; Privacy Compared</a></li>
-        <li class="sweepr-mesh-link"><a href="/vs/windscribe" style="color:var(--accent2);">SWEEPR VPN vs Windscribe Pro: 2026 Speed, Footprint & Privacy Comparison</a></li>
+        <li><a href="/vs/nordvpn" style="color:var(--accent2);">NordVPN vs SWEEPR: NordLynx NAT vs Native .conf</a></li>
+        <li><a href="/vs/mullvad" style="color:var(--accent2);">Mullvad Privacy Model vs Home Wi-Fi Radar</a></li>
+        <li><a href="/vs/protonvpn" style="color:var(--accent2);">Proton Secure Core Hops vs Direct 10Gbps Peering</a></li>
+        <li><a href="/setup/gl-inet-travel-router" style="color:var(--accent2);">Configure WireGuard on GL.iNet Beryl AX Routers</a></li>
+        <li><a href="/guides/stop-samsung-smart-tv-acr-tracking" style="color:var(--accent2);">Silence Samsung Tizen ACR Screenshot Endpoints</a></li>
+        <li><a href="/solutions/eduroam-campus-wifi-gaming-packet-loss" style="color:var(--accent2);">Campus Eduroam UDP Blocking Workaround (Port 443)</a></li>
+        <li><a href="/setup/nvidia-shield-tv-pro-wireguard" style="color:var(--accent2);">NVIDIA Shield Pro Tunnel Tuning for 4K Streams</a></li>
+        <li><a href="/solutions/gigaclear-rural-fibre-gaming-packet-loss" style="color:var(--accent2);">Gigaclear Full-Fibre CGNAT &amp; Jitter Mitigation</a></li>
+        <li><a href="/setup/steam-deck-vpn" style="color:var(--accent2);">SteamOS Handheld WireGuard Kernel Integration</a></li>
+        <li class="sweepr-mesh-link"><a href="/vs/cyberghost" style="color:var(--accent2);">CyberGhost Desktop Bloat vs Rust Footprint</a></li>
+        <li class="sweepr-mesh-link"><a href="/vs/expressvpn" style="color:var(--accent2);">ExpressVPN Lightway vs Standard WireGuard</a></li>
+        <li class="sweepr-mesh-link"><a href="/vs/ipvanish" style="color:var(--accent2);">IPVanish Ziff Davis Audit &amp; Renewal Math</a></li>
+        <li class="sweepr-mesh-link"><a href="/vs/private-internet-access" style="color:var(--accent2);">PIA NextGen vs Bare-Metal 10Gbps Nodes</a></li>
+        <li class="sweepr-mesh-link"><a href="/setup/macos-apple-silicon-vpn" style="color:var(--accent2);">Apple Silicon M-Series Native Tunnel Setup</a></li>
+        <li class="sweepr-mesh-link"><a href="/guides/stop-roku-vizio-firetv-spying" style="color:var(--accent2);">Stop Roku, Vizio Inscape &amp; Fire TV Tracking</a></li>
+        <li><a href="/tools/isp-throttling-test" style="color:var(--accent2);">Browser ISP Peak-Hour Throttling Probe</a></li>
+        <li><a href="/download" style="color:var(--accent2);">Download Rust Client &amp; Free 30s LAN Scan</a></li>
+        <li><a href="/tools/vpn-renewal-price-checker" style="color:var(--accent2);">3-Year Auto-Renewal Inflation Calculator</a></li>
+        <li><a href="/alternatives/totalvpn" style="color:var(--accent2);">Top Total VPN Replacement Options</a></li>
+        <li class="sweepr-mesh-link"><a href="/vs/totalvpn" style="color:var(--accent2);">Total VPN Bundle vs Locked-In WireGuard</a></li>
+        <li class="sweepr-mesh-link"><a href="/vs/windscribe" style="color:var(--accent2);">Windscribe R.O.B.E.R.T. vs Smart-TV Shield</a></li>
       </ul>
     </div>
 </main>
