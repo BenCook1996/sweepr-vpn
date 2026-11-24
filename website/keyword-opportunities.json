@@ -1,14 +1,5 @@
 {
   "schemaVersion": "1.0.0",
-  "lastUpdatedAt": "2026-11-24T05:33:37.814Z",
-  "corpusSummary": {
-    "canonicalSitemapUrls": 93,
-    "consolidatedCannibalUrlsBlocked": 31,
-    "gscTitleCooldownLockedUrls": 24,
-    "rolling7DayNewPillarsCreated": 0,
-    "weeklyNewPillarCap": 10,
-    "dailyNewPillarCap": 2
-  },
   "opportunities": [
     {
       "id": "kw_what_is_espressif_on_my_wifi",
@@ -31317,8 +31308,17 @@
       "appliedAt": null
     }
   ],
+  "lastUpdatedAt": "2026-11-24T05:33:37.814Z",
+  "corpusSummary": {
+    "canonicalSitemapUrls": 93,
+    "consolidatedCannibalUrlsBlocked": 31,
+    "gscTitleCooldownLockedUrls": 24,
+    "rolling7DayNewPillarsCreated": 0,
+    "weeklyNewPillarCap": 10,
+    "dailyNewPillarCap": 2
+  },
   "auditSummary": {
-    "auditedAt": "2026-11-24T05:33:39.082Z",
+    "auditedAt": "2026-11-24T10:03:27.523Z",
     "assertionsPassed": "10/10 PASS",
     "autoRepairsApplied": 0,
     "repairLog": []
