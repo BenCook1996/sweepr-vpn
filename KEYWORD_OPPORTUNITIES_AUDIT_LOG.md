@@ -1,11 +1,11 @@
 # SWEEPR VPN — Automated Keyword Opportunities, Competitor SEO & Pre/Post Forecast Audit Log
 
-- **Last Audited**: `2026-11-23T15:38:42.683Z`
+- **Last Audited**: `2026-11-24T05:33:39.082Z`
 - **Canonical Sitemap Corpus**: `93` URLs (`31` consolidated cannibal slugs blocked)
-- **Total Candidate Queries Evaluated**: `345`
+- **Total Candidate Queries Evaluated**: `339`
 - **Approved / Applied `CREATE_NEW_PILLAR`**: `25` (Caps: `2/day`, `10/week` | Rolling 7-Day Post-Consolidation Created: `0`)
-- **Approved / Applied `ENRICH_EXISTING`**: `48`
-- **Filtered / Rejected (`REJECT_OR_DEFER`)**: `191`
+- **Approved / Applied `ENRICH_EXISTING`**: `47`
+- **Filtered / Rejected (`REJECT_OR_DEFER`)**: `189`
 - **Pre/Post Strategy Ledger**: `website/seo-strategy-performance-ledger.json` (`126` tracked entries; live input from `website/gsc-ga4-latest-snapshot.json`)
 - **Quality Gate Status**: **`10/10 PASS`** (`0` automated self-healing repairs applied)
 
@@ -33,19 +33,19 @@
 | 3 | `ofcom broadband automatic compensation` | `/solutions/uk-ofcom-broadband-speed-guarantee-compensation-claim` | `OFCOM_FCC_ISP_REFUND_AND_THROTTLING` | **13** (`VERY_EASY`) | 520–1,380/mo | 6–12 days (Fast Weak-Spot) | `T1_BOFU_TOOL_ACTION` (3.9%) | **89** | `APPROVED` |
 | 4 | `mikrotik wireguard config generator` | `/setup/mikrotik-hap-ax3-wireguard-setup` | `HARDWARE_WIREGUARD_SETUP` | **17** (`VERY_EASY`) | 490–1,300/mo | 6–12 days (Fast Weak-Spot) | `T1_BOFU_TOOL_ACTION` (3.9%) | **87** | `APPROVED` |
 | 5 | `kaspersky vpn alternative options` | `/vs/kaspersky-vpn-alternative-wireguard` | `BOFU_COMPETITOR_SWITCHER` | **24** (`EASY`) | 500–1,340/mo | 11–22 days | `T1_BOFU_SWITCHER` (4.5%) | **82** | `APPROVED` |
-| 6 | `wireguard vpn zu fritzbox` | `/setup/fritzbox-7590-ax-wireguard-vpn` | `HARDWARE_WIREGUARD_SETUP` | **13** (`VERY_EASY`) | 490–1,300/mo | 6–12 days (Fast Weak-Spot) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **82** | `APPROVED` |
-| 7 | `unknown device on wifi randomized mac address` | `/guides/private-wifi-address-mac-randomization-unknown-device` | `FIREWALLA_MAC_AND_ISOLATION` | **28** (`EASY`) | 200–500/mo | 12–25 days | `T2_MOFU_FAMILY_WIFI_CONTROL` (3.2%) | **81** | `APPROVED` |
-| 8 | `legion go wireguard vpn` | `/setup/lenovo-legion-go-steamos-wireguard` | `HARDWARE_WIREGUARD_SETUP` | **13** (`VERY_EASY`) | 190–490/mo | 6–12 days (Fast Weak-Spot) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **81** | `APPROVED` |
-| 9 | `how to pause wifi on ps5 at bedtime` | `/guides/pause-ps5-xbox-wifi-at-bedtime-without-unplugging-router` | `BARK_CONSOLE_BEDTIME_PAUSE` | **28** (`EASY`) | 190–490/mo | 13–25 days | `T2_MOFU_FAMILY_WIFI_CONTROL` (3.2%) | **80** | `APPROVED` |
-| 10 | `unifi cloud gateway max wireguard` | `/setup/unifi-cloud-gateway-max-ucg-max-wireguard` | `HARDWARE_WIREGUARD_SETUP` | **17** (`VERY_EASY`) | 190–490/mo | 6–12 days (Fast Weak-Spot) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **80** | `APPROVED` |
-| 11 | `mcafee safe connect alternative reddit` | `/vs/mcafee-safe-connect-auto-renewal-alternative` | `BOFU_COMPETITOR_SWITCHER` | **24** (`EASY`) | 500–1,340/mo | 11–22 days | `T1_BOFU_SWITCHER` (4.5%) | **80** | `APPROVED` |
-| 12 | `cudy wr3000 wireguard vpn setup` | `/setup/cudy-wr3000-openwrt-wireguard-setup` | `HARDWARE_WIREGUARD_SETUP` | **13** (`VERY_EASY`) | 190–490/mo | 6–12 days (Fast Weak-Spot) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **80** | `APPROVED` |
-| 13 | `truenas scale electric eel wireguard vpn` | `/setup/truenas-scale-electric-eel-wireguard` | `HARDWARE_WIREGUARD_SETUP` | **13** (`VERY_EASY`) | 190–490/mo | 6–12 days (Fast Weak-Spot) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **80** | `APPROVED` |
-| 14 | `gl-be3600 wireguard vpn download` | `/setup/gl-inet-slate-7-be3600-wireguard` | `HARDWARE_WIREGUARD_SETUP` | **26** (`EASY`) | 490–1,300/mo | 12–24 days | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **79** | `APPROVED` |
-| 15 | `unifi express wireguard vpn client` | `/setup/unifi-express-ux-wireguard-client` | `HARDWARE_WIREGUARD_SETUP` | **17** (`VERY_EASY`) | 190–490/mo | 6–12 days (Fast Weak-Spot) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **79** | `APPROVED` |
-| 16 | `draytek vigor 2865 wireguard vpn setup` | `/setup/draytek-vigor-2865-wireguard-uk-fttp` | `HARDWARE_WIREGUARD_SETUP` | **17** (`VERY_EASY`) | 190–490/mo | 6–12 days (Fast Weak-Spot) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **79** | `APPROVED` |
-| 17 | `terramaster tos 6 wireguard vpn` | `/setup/terramaster-tos-6-wireguard-docker` | `HARDWARE_WIREGUARD_SETUP` | **17** (`VERY_EASY`) | 190–490/mo | 6–12 days (Fast Weak-Spot) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **79** | `APPROVED` |
-| 18 | `proxmox lxc wireguard vpn gateway` | `/setup/proxmox-ve-8-lxc-wireguard-gateway` | `HARDWARE_WIREGUARD_SETUP` | **12** (`VERY_EASY`) | 190–490/mo | 6–12 days (Fast Weak-Spot) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **79** | `APPROVED` |
+| 6 | `legion go wireguard vpn` | `/setup/lenovo-legion-go-steamos-wireguard` | `HARDWARE_WIREGUARD_SETUP` | **13** (`VERY_EASY`) | 190–490/mo | 6–12 days (Fast Weak-Spot) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **81** | `APPROVED` |
+| 7 | `how to pause wifi on ps5 at bedtime` | `/guides/pause-ps5-xbox-wifi-at-bedtime-without-unplugging-router` | `BARK_CONSOLE_BEDTIME_PAUSE` | **28** (`EASY`) | 190–490/mo | 13–25 days | `T2_MOFU_FAMILY_WIFI_CONTROL` (3.2%) | **80** | `APPROVED` |
+| 8 | `private wifi address showing as unknown device` | `/guides/private-wifi-address-mac-randomization-unknown-device` | `FIREWALLA_MAC_AND_ISOLATION` | **28** (`EASY`) | 200–500/mo | 12–25 days | `T2_MOFU_FAMILY_WIFI_CONTROL` (3.2%) | **80** | `APPROVED` |
+| 9 | `unifi cloud gateway max wireguard` | `/setup/unifi-cloud-gateway-max-ucg-max-wireguard` | `HARDWARE_WIREGUARD_SETUP` | **17** (`VERY_EASY`) | 190–490/mo | 6–12 days (Fast Weak-Spot) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **80** | `APPROVED` |
+| 10 | `mcafee safe connect alternative reddit` | `/vs/mcafee-safe-connect-auto-renewal-alternative` | `BOFU_COMPETITOR_SWITCHER` | **24** (`EASY`) | 500–1,340/mo | 11–22 days | `T1_BOFU_SWITCHER` (4.5%) | **80** | `APPROVED` |
+| 11 | `cudy wr3000 wireguard vpn setup` | `/setup/cudy-wr3000-openwrt-wireguard-setup` | `HARDWARE_WIREGUARD_SETUP` | **13** (`VERY_EASY`) | 190–490/mo | 6–12 days (Fast Weak-Spot) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **80** | `APPROVED` |
+| 12 | `truenas scale electric eel wireguard vpn` | `/setup/truenas-scale-electric-eel-wireguard` | `HARDWARE_WIREGUARD_SETUP` | **13** (`VERY_EASY`) | 190–490/mo | 6–12 days (Fast Weak-Spot) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **80** | `APPROVED` |
+| 13 | `gl-be3600 wireguard vpn download` | `/setup/gl-inet-slate-7-be3600-wireguard` | `HARDWARE_WIREGUARD_SETUP` | **26** (`EASY`) | 490–1,300/mo | 12–24 days | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **79** | `APPROVED` |
+| 14 | `unifi express wireguard vpn client` | `/setup/unifi-express-ux-wireguard-client` | `HARDWARE_WIREGUARD_SETUP` | **17** (`VERY_EASY`) | 190–490/mo | 6–12 days (Fast Weak-Spot) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **79** | `APPROVED` |
+| 15 | `draytek vigor 2865 wireguard vpn setup` | `/setup/draytek-vigor-2865-wireguard-uk-fttp` | `HARDWARE_WIREGUARD_SETUP` | **17** (`VERY_EASY`) | 190–490/mo | 6–12 days (Fast Weak-Spot) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **79** | `APPROVED` |
+| 16 | `terramaster tos 6 wireguard vpn` | `/setup/terramaster-tos-6-wireguard-docker` | `HARDWARE_WIREGUARD_SETUP` | **17** (`VERY_EASY`) | 190–490/mo | 6–12 days (Fast Weak-Spot) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **79** | `APPROVED` |
+| 17 | `proxmox lxc wireguard vpn gateway` | `/setup/proxmox-ve-8-lxc-wireguard-gateway` | `HARDWARE_WIREGUARD_SETUP` | **12** (`VERY_EASY`) | 190–490/mo | 6–12 days (Fast Weak-Spot) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **79** | `APPROVED` |
+| 18 | `windows 11 wireguard vpn fritzbox` | `/setup/fritzbox-7590-ax-wireguard-vpn` | `HARDWARE_WIREGUARD_SETUP` | **26** (`EASY`) | 190–490/mo | 12–24 days | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **78** | `APPROVED` |
 | 19 | `omada er605 wireguard client` | `/setup/tp-link-omada-er605-wireguard-vpn` | `HARDWARE_WIREGUARD_SETUP` | **26** (`EASY`) | 490–1,300/mo | 12–24 days | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **77** | `APPROVED` |
 | 20 | `chromecast 4k wireguard setup server` | `/setup/google-tv-streamer-4k-wireguard-acr-shield` | `HARDWARE_WIREGUARD_SETUP` | **26** (`EASY`) | 490–1,300/mo | 12–24 days | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **77** | `APPROVED` |
 | 21 | `zimaboard wireguard vpn gateway` | `/setup/zimaboard-casaos-gluetun-wireguard` | `HARDWARE_WIREGUARD_SETUP` | **26** (`EASY`) | 190–490/mo | 12–24 days | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **76** | `APPROVED` |
@@ -58,24 +58,24 @@
 
 | Rank | Query | Target Canonical Pillar | Playbook | KD (Tier) | Est. Volume/mo | Calibrated Time to Top 10 | Transactional Tier | Score | Status |
 |---|---|---|---|---|---|---|---|---|---|
-| 1 | `azurewave technology device on my wifi` | `/guides/what-is-hon-hai-liteon-azurewave-on-my-wifi` | `FING_OUI_DIRECTORY` | **13** (`VERY_EASY`) | 520–1,380/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_TOOL_ACTION` (3.9%) | **91** | `APPROVED` |
-| 2 | `azurewave technology wifi modules` | `/guides/what-is-hon-hai-liteon-azurewave-on-my-wifi` | `FING_OUI_DIRECTORY` | **13** (`VERY_EASY`) | 520–1,380/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_TOOL_ACTION` (3.9%) | **90** | `APPROVED` |
+| 1 | `azurewave technology wifi modules` | `/guides/what-is-hon-hai-liteon-azurewave-on-my-wifi` | `FING_OUI_DIRECTORY` | **13** (`VERY_EASY`) | 520–1,380/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_TOOL_ACTION` (3.9%) | **91** | `APPROVED` |
+| 2 | `azurewave technology device on my wifi` | `/guides/what-is-hon-hai-liteon-azurewave-on-my-wifi` | `FING_OUI_DIRECTORY` | **13** (`VERY_EASY`) | 520–1,380/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_TOOL_ACTION` (3.9%) | **90** | `APPROVED` |
 | 3 | `what is espressif on my wifi router` | `/guides/what-is-espressif-tuya-murata-on-my-wifi` | `FING_OUI_DIRECTORY` | **13** (`VERY_EASY`) | 210–520/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_TOOL_ACTION` (3.9%) | **89** | `APPROVED` |
-| 4 | `virgin media minimum speed guarantee` | `/solutions/uk-ofcom-broadband-speed-guarantee-compensation-claim` | `OFCOM_FCC_ISP_REFUND_AND_THROTTLING` | **13** (`VERY_EASY`) | 520–1,380/mo | 3–8 days (Indexed Pillar) | `T1_BOFU_TOOL_ACTION` (3.9%) | **89** | `APPROVED` |
-| 5 | `ofcom minimum speed guarantee` | `/solutions/uk-ofcom-broadband-speed-guarantee-compensation-claim` | `OFCOM_FCC_ISP_REFUND_AND_THROTTLING` | **13** (`VERY_EASY`) | 210–520/mo | 3–8 days (Indexed Pillar) | `T1_BOFU_TOOL_ACTION` (3.9%) | **88** | `APPROVED` |
-| 6 | `bitdefender vpn wireguard config file` | `/vs/bitdefender-vpn-renewal-alternative` | `BOFU_COMPETITOR_SWITCHER` | **13** (`VERY_EASY`) | 200–500/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_SWITCHER` (4.5%) | **87** | `APPROVED` |
-| 7 | `what device is espressif on my wifi` | `/guides/what-is-espressif-tuya-murata-on-my-wifi` | `FING_OUI_DIRECTORY` | **28** (`EASY`) | 520–1,380/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_TOOL_ACTION` (3.9%) | **83** | `APPROVED` |
-| 8 | `fritzbox 7590 wireguard vpn` | `/setup/fritzbox-7590-ax-wireguard-vpn` | `HARDWARE_WIREGUARD_SETUP` | **8** (`VERY_EASY`) | 490–1,300/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **82** | `APPROVED` |
-| 9 | `mikrotik wireguard client config generator` | `/setup/mikrotik-hap-ax3-wireguard-setup` | `HARDWARE_WIREGUARD_SETUP` | **26** (`EASY`) | 190–490/mo | 3–9 days (Indexed Pillar) | `T1_BOFU_TOOL_ACTION` (3.9%) | **81** | `APPROVED` |
-| 10 | `private wifi address showing as unknown device` | `/guides/private-wifi-address-mac-randomization-unknown-device` | `FIREWALLA_MAC_AND_ISOLATION` | **28** (`EASY`) | 200–500/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_FAMILY_WIFI_CONTROL` (3.2%) | **80** | `APPROVED` |
-| 11 | `mullvad port forwarding alternative` | `/vs/mullvad` | `BOFU_COMPETITOR_SWITCHER` | **24** (`EASY`) | 200–500/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_SWITCHER` (4.5%) | **80** | `APPROVED` |
-| 12 | `does bitdefender vpn use wireguard` | `/vs/bitdefender-vpn-renewal-alternative` | `BOFU_COMPETITOR_SWITCHER` | **24** (`EASY`) | 200–500/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_SWITCHER` (4.5%) | **79** | `APPROVED` |
-| 13 | `mikrotik wireguard export client config` | `/setup/mikrotik-hap-ax3-wireguard-setup` | `HARDWARE_WIREGUARD_SETUP` | **26** (`EASY`) | 490–1,300/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **79** | `APPROVED` |
-| 14 | `windows 11 wireguard vpn fritzbox` | `/setup/fritzbox-7590-ax-wireguard-vpn` | `HARDWARE_WIREGUARD_SETUP` | **26** (`EASY`) | 190–490/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **78** | `APPROVED` |
-| 15 | `gl-be3600 wireguard vpn configuration` | `/setup/gl-inet-slate-7-be3600-wireguard` | `HARDWARE_WIREGUARD_SETUP` | **26** (`EASY`) | 490–1,300/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **78** | `APPROVED` |
-| 16 | `gl inet slate 7 wireguard` | `/setup/gl-inet-slate-7-be3600-wireguard` | `HARDWARE_WIREGUARD_SETUP` | **22** (`VERY_EASY`) | 190–490/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **78** | `APPROVED` |
-| 17 | `mcafee safe connect alternatives` | `/vs/mcafee-safe-connect-auto-renewal-alternative` | `BOFU_COMPETITOR_SWITCHER` | **24** (`EASY`) | 200–500/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_SWITCHER` (4.5%) | **78** | `APPROVED` |
-| 18 | `unifi express wireguard setup server` | `/setup/unifi-express-ux-wireguard-client` | `HARDWARE_WIREGUARD_SETUP` | **26** (`EASY`) | 490–1,300/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **77** | `APPROVED` |
+| 4 | `what device is espressif on my wifi` | `/guides/what-is-espressif-tuya-murata-on-my-wifi` | `FING_OUI_DIRECTORY` | **13** (`VERY_EASY`) | 520–1,380/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_TOOL_ACTION` (3.9%) | **89** | `APPROVED` |
+| 5 | `bitdefender vpn wireguard config file` | `/vs/bitdefender-vpn-renewal-alternative` | `BOFU_COMPETITOR_SWITCHER` | **13** (`VERY_EASY`) | 200–500/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_SWITCHER` (4.5%) | **87** | `APPROVED` |
+| 6 | `ofcom broadband speed guarantee compensation` | `/solutions/uk-ofcom-broadband-speed-guarantee-compensation-claim` | `OFCOM_FCC_ISP_REFUND_AND_THROTTLING` | **13** (`VERY_EASY`) | 210–520/mo | 3–8 days (Indexed Pillar) | `T1_BOFU_TOOL_ACTION` (3.9%) | **87** | `APPROVED` |
+| 7 | `virgin media minimum speed guarantee` | `/solutions/uk-ofcom-broadband-speed-guarantee-compensation-claim` | `OFCOM_FCC_ISP_REFUND_AND_THROTTLING` | **28** (`EASY`) | 520–1,380/mo | 3–8 days (Indexed Pillar) | `T1_BOFU_TOOL_ACTION` (3.9%) | **83** | `APPROVED` |
+| 8 | `mikrotik wireguard client config generator` | `/setup/mikrotik-hap-ax3-wireguard-setup` | `HARDWARE_WIREGUARD_SETUP` | **26** (`EASY`) | 190–490/mo | 3–9 days (Indexed Pillar) | `T1_BOFU_TOOL_ACTION` (3.9%) | **81** | `APPROVED` |
+| 9 | `kaspersky vpn alternative` | `/vs/kaspersky-vpn-alternative-wireguard` | `BOFU_COMPETITOR_SWITCHER` | **24** (`EASY`) | 500–1,340/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_SWITCHER` (4.5%) | **81** | `APPROVED` |
+| 10 | `mullvad port forwarding alternative` | `/vs/mullvad` | `BOFU_COMPETITOR_SWITCHER` | **24** (`EASY`) | 200–500/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_SWITCHER` (4.5%) | **80** | `APPROVED` |
+| 11 | `does bitdefender vpn use wireguard` | `/vs/bitdefender-vpn-renewal-alternative` | `BOFU_COMPETITOR_SWITCHER` | **24** (`EASY`) | 200–500/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_SWITCHER` (4.5%) | **79** | `APPROVED` |
+| 12 | `mikrotik wireguard export client config` | `/setup/mikrotik-hap-ax3-wireguard-setup` | `HARDWARE_WIREGUARD_SETUP` | **26** (`EASY`) | 490–1,300/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **79** | `APPROVED` |
+| 13 | `gl-be3600 wireguard vpn configuration` | `/setup/gl-inet-slate-7-be3600-wireguard` | `HARDWARE_WIREGUARD_SETUP` | **26** (`EASY`) | 490–1,300/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **78** | `APPROVED` |
+| 14 | `gl inet slate 7 wireguard` | `/setup/gl-inet-slate-7-be3600-wireguard` | `HARDWARE_WIREGUARD_SETUP` | **22** (`VERY_EASY`) | 190–490/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **78** | `APPROVED` |
+| 15 | `mcafee safe connect alternatives` | `/vs/mcafee-safe-connect-auto-renewal-alternative` | `BOFU_COMPETITOR_SWITCHER` | **24** (`EASY`) | 200–500/mo | 2–8 days (Indexed Pillar) | `T1_BOFU_SWITCHER` (4.5%) | **78** | `APPROVED` |
+| 16 | `fritzbox wireguard vpn setup` | `/setup/fritzbox-7590-ax-wireguard-vpn` | `HARDWARE_WIREGUARD_SETUP` | **26** (`EASY`) | 490–1,300/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **77** | `APPROVED` |
+| 17 | `unifi express wireguard setup server` | `/setup/unifi-express-ux-wireguard-client` | `HARDWARE_WIREGUARD_SETUP` | **26** (`EASY`) | 490–1,300/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **77** | `APPROVED` |
+| 18 | `cudy tr3000 wireguard configuration` | `/setup/cudy-wr3000-openwrt-wireguard-setup` | `HARDWARE_WIREGUARD_SETUP` | **26** (`EASY`) | 490–1,300/mo | 3–9 days (Indexed Pillar) | `T2_MOFU_HARDWARE_SETUP` (2.8%) | **77** | `APPROVED` |
 
 ## 4. Pre- vs. Post-Change SEO Performance Ledger (Forecast vs. Actual GSC + GA4 Lift)
 

@@ -9,6 +9,7 @@
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="https://sweeprvpn.com/tools/smart-tv-tracking-check">
   <meta name="theme-color" content="#10b981" />
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
   <link rel="preconnect" href="https://www.googletagmanager.com">
 
   <!-- Open Graph / Social Meta -->
@@ -31,6 +32,8 @@
   <!-- Structured Data (JSON-LD) -->
   <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","@id":"https://sweeprvpn.com/tools/smart-tv-tracking-check#app","name":"SWEEPR Free Smart-TV ACR Tracking Domain Inspector","url":"https://sweeprvpn.com/tools/smart-tv-tracking-check","applicationCategory":"SecurityApplication","operatingSystem":"All (Browser-based)","offers":{"@type":"Offer","price":"0.00","priceCurrency":"GBP","validFrom":"2026-01-01"},"description":"Free interactive diagnostic tool that lists exact Automatic Content Recognition (ACR) telemetry domains used by Samsung, LG, Roku, Vizio, Fire TV, and Sony Smart TVs and provides a 1-click DNS sinkhole rule list."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://sweeprvpn.com/"},{"@type":"ListItem","position":2,"name":"Smart-TV ACR Domain Checker","item":"https://sweeprvpn.com/tools/smart-tv-tracking-check"}]}]}</script>
 
+  <link rel="preload" href="/tailwind.min.css?v=fbbf784c" as="style" />
+  <link rel="preload" href="/style.css?v=ed321090" as="style" />
   <link rel="stylesheet" href="/tailwind.min.css?v=fbbf784c">
   <link rel="icon" type="image/svg+xml" href="/logo-emerald.svg?v=5">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5">
@@ -111,8 +114,8 @@
         <div class="shrink-0">
 <button type="button" id="copyAcrBtn" onclick="copyAcrBlocklist()" class="copy-spring-btn btn bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-bold px-5 py-3 rounded-xl cursor-pointer">
           <span class="copy-icon-stack" aria-hidden="true">
-            <svg class="icon-copy w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-            <svg class="icon-check w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+            <svg height="12" class="icon-copy w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            <svg height="12" class="icon-check w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
           </span>
           <span class="copy-btn-label">Copy DNS Blocklist Rules</span>
         </button>
@@ -151,7 +154,7 @@
       <div class="rounded-2xl bg-[#111315] border border-slate-800 text-white p-6 flex flex-col md:flex-row items-center justify-between gap-6">
         <div class="text-left space-y-1.5">
           <div class="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-emerald-300">
-            <span class="inline-flex items-center gap-1.5"><svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2L4 5v6c0 5.25 3.4 10.15 8 11.35 4.6-1.2 8-6.1 8-11.35V5l-8-3z"/><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4"/></svg><span>Automatic Whole-Home Smart-TV Shield</span></span>
+            <span class="inline-flex items-center gap-1.5"><svg height="16" class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2L4 5v6c0 5.25 3.4 10.15 8 11.35 4.6-1.2 8-6.1 8-11.35V5l-8-3z"/><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4"/></svg><span>Automatic Whole-Home Smart-TV Shield</span></span>
           </div>
           <h2 id="tvBridgeTitle" class="text-lg sm:text-xl font-bold">Silence Samsung Smart-TV ACR tracking automatically</h2>
           <p class="text-xs sm:text-sm text-slate-300 max-w-xl">

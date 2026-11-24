@@ -1323,3 +1323,68 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 - **index.html** (77.8 KB raw) &rarr; Gzip: **15.7 KB** (80% reduction) | Brotli: **14.2 KB** (82% reduction)
 - **sitemap.xml** (24.1 KB raw) &rarr; Gzip: **1.7 KB** (93% reduction) | Brotli: **1.5 KB** (94% reduction)
 
+## 2026-11-24 — Daily Technical SEO, Crawlability & PageSpeed Audit & Auto-Optimization Pass
+
+### Executive Summary
+- **Overall Scores**: Crawlability **100/100**, Technical SEO **100/100**, PageSpeed & CWV **100/100** across **92 Canonical Pages**.
+- **Auto-Optimizations Executed**:
+  - Fixed CRLF-safe `renderPlatformDownloadPicker` regex & LF-normalized SHA-1 content-hash `<lastmod>` tracking in `scripts/daily-seo-pagespeed-audit.mjs` (`resolveDownloadLastMod` & `/download` CWV/cache-busting audits) so `/download` `<lastmod>` and `website/daily-seo-pages-state.json` stay deterministic across Windows and Linux
+  - Backfilled explicit `width` and `height` attributes on all inline `<svg>` elements across indexable pages (`CLS = 0` protection prior to stylesheet parse) and verified all `<img>` tags include `width`, `height`, `alt`, `loading="lazy"`, and `decoding="async"`
+  - Added `<link rel="preload" as="style">` for `/tailwind.min.css` & `/style.css`, `<link rel="dns-prefetch" href="https://www.googletagmanager.com" />` alongside GA4 preconnects across all 92 indexable pages & `/download`, and `<link rel="dns-prefetch" href="https://sitepatent.com" />` on localized homepages
+  - Expanded 17 short pSEO `<meta name="description">`, `og:description`, and `twitter:description` tags (77–109 chars) to 149–164 chars and enforced 30–65 char `<title>` / 110–165 char `<meta name="description">` bounds in `scripts/daily-seo-pagespeed-audit.mjs`
+  - Added `og:locale` (`en_GB`), aligned `twitter:description` (141 chars), and added CSS `preload` + `dns-prefetch` hints to `/download` in `website/server.mjs`
+  - Synchronized `sitemap.xml` with 93 canonical URLs via content-hash `<lastmod>` tracking (`daily-seo-pages-state.json`) and synchronized `llms.txt` & `llms-full.txt` with all 63 pSEO guides and live WireGuard/ACR telemetry for GEO AI citations
+
+### Category Scorecards & Verifications
+
+#### 1. Crawlability & Indexability (100/100)
+- **Sitemap Completeness & Content-Hash Freshness**: PASS — 93 canonical URLs registered (0 thin/duplicate variants consolidated via 301/noindex)
+- **GEO / LLM Discovery Manifests (llms.txt & llms-full.txt)**: PASS — Updated both manifests with 93 canonical URLs, 14 canonical FAQs, and live WireGuard/ACR proof (0 non-canonical links)
+- **Search Engine Indexing Queue (Delta-Only)**: PASS — 0 un-pinged/modified delta URLs queued (out of 93 total canonical URLs)
+- **robots.txt Sitemap Directive**: PASS — Valid sitemap directive points to https://sweeprvpn.com/sitemap.xml
+- **robots.txt AI Crawler Allowances (GEO)**: PASS — All 7 major AI search bots explicitly permitted
+- **robots.txt Crawl-Budget Protections**: PASS — Internal APIs, user portals, qr-setup, CRO studios & ?app=1 webview embeds disallowed
+- **Utility & Prototype Pages Noindex Guard**: PASS — All 16 internal utility and prototype pages properly shielded with noindex
+- **PAD 4.0 XML Feed**: PASS — Valid PAD 4.0 metadata for software directory syndication
+- **Public Smart-TV ACR Blocklist Asset**: PASS — smart-tv-acr-blocklist.txt verified for Pi-hole/AdGuard Home & GEO citations
+- **301 Consolidation & Eduroam Hub Redirects (server.mjs)**: PASS — All consolidated noindex variants and Eduroam duplicate slugs 301-redirected to canonical hubs
+- **Historical GSC URLs & 301 Redirect Target Guard**: PASS — Verified 76 historical GSC URLs, 99 301 rules, and 92 .html canonical variants via resolveCanonical301 (0 404s, 0 redirect chains)
+- **Internal Link Equity & Click-Depth Distribution**: PASS — All 92 pages passed (0 orphans, min inlinks=5, avg=20.7, max depth=2; tools=leak-test:81/54, isp-throttling-test:78/61, smart-tv-tracking-check:30/27, whats-on-my-wifi:30/27, vpn-renewal-price-checker:28/26)
+
+#### 2. Technical SEO & Rich Schemas (100/100)
+- **Page Titles**: PASS — All 92 pages have valid, descriptive <title> tags
+- **Meta Descriptions**: PASS — All 92 pages have compelling, search-optimized meta descriptions
+- **Canonical URLs**: PASS — All 92 pages have exact self-referencing canonical tags
+- **Robots Snippet Controls**: PASS — All 92 pages specify max-image-preview:large for search & Discover snippets
+- **JSON-LD Structured Data**: PASS — All 92 pages inject verified Schema.org JSON-LD structured data
+- **H1 Heading Hierarchy**: PASS — All 92 pages have exactly 1 descriptive <h1> heading
+- **Document Landmarks & Heading Continuity**: PASS — All 92 pages declare <html lang>, <main>, and sequential heading levels
+- **OpenGraph Social Metadata**: PASS — All 92 pages include complete OpenGraph tags (title, desc, url, og:image, og:image:alt, og:locale)
+- **Twitter Card Metadata**: PASS — All 92 pages include complete summary_large_image Twitter card tags
+- **Mobile Theme-Color Support**: PASS — All 92 pages declare theme-color for mobile chrome styling
+- **Google Analytics 4 (G-7D28EEMNXX) Coverage**: PASS — All 92 canonical pages include active GA4 telemetry
+- **Internal Link Integrity**: PASS — All internal links across 92 pages resolve to valid routes (0 broken links)
+- **HTML Template Corruption & Duplicate Link Guard**: PASS — All 92 pages verified free of >NaN<, >undefined<, &amp;amp;, malformed <a> markup, and duplicate <main>/related-guide links
+- **Server Canonical 301 Architecture**: PASS — Legacy .html and alias routes seamlessly 301 redirected to clean URLs
+- **Anti-Cannibalization & Title Cooldown Guard**: PASS — 0 consolidated cannibal slugs in sitemap.xml; all 20 GSC Top-20 pillars protected by 14-day title lock
+- **Ad-Platform Policy Compliance Guard (AGENTS.md Principle 2)**: PASS — 0 geo-unblocking, copyright circumvention, or piracy phrases across all 92 indexable pages
+
+#### 3. PageSpeed & Core Web Vitals (100/100)
+- **Image Optimization (<100KB)**: PASS — All 12 website image assets are under 100 KB
+- **Cumulative Layout Shift (CLS) Protection**: PASS — All <img> and inline <svg> tags across 92 pages & /download have explicit width & height attributes
+- **Image Accessibility & Alt-Text**: PASS — All <img> tags have descriptive alt attributes
+- **Async Image Decoding**: PASS — All lazy-loaded <img> tags specify decoding="async"
+- **PWA Manifest & Touch Icons**: PASS — 180x180 apple-touch-icon.png, 192x192/512x512 PWA icons, favicon.png and /manifest.webmanifest linked across all 92 pages
+- **Network Preconnect & Resource Hints (preload/dns-prefetch)**: PASS — All 92 pages & /download include CSS preload + GA4 preconnect/dns-prefetch (0 unused Google Fonts preconnects)
+- **Render-Blocking Script Elimination**: PASS — All external JavaScript resources across 92 static pages & /download use defer or async attributes (0 runtime Tailwind JIT)
+- **Immutable Asset Cache-Busting (?v=)**: PASS — All CSS/JS tags (/style.css, /tailwind.min.css, /nav.js, /pricing-config.js) across 92 pages & /download carry content-hashed ?v= tokens
+- **Server-Side Compression (Brotli + Gzip)**: PASS — Built-in node:zlib Brotli and Gzip transparently enabled across static assets & dynamic HTML (/download)
+- **HTTP ETag & 304 Not Modified Caching**: PASS — Conditional request validation implemented in server.mjs
+- **Modern MIME Types & Static Serving**: PASS — .webp, .avif, .woff2, .woff, .ttf supported in server.mjs
+- **Static Cache-Control, Compression Cache & HEAD Parity**: PASS — Versioned (?v=) assets served 1yr immutable from mtime compression cache; trailing-slash/case 301s, ?app=1 noindex header, HEAD parity & PWA /download start_url verified
+
+### Compression Benchmark Results
+- **order.html** (130.0 KB raw) &rarr; Gzip: **29.4 KB** (77% reduction) | Brotli: **26.5 KB** (80% reduction)
+- **index.html** (78.9 KB raw) &rarr; Gzip: **15.7 KB** (80% reduction) | Brotli: **14.3 KB** (82% reduction)
+- **sitemap.xml** (24.1 KB raw) &rarr; Gzip: **1.7 KB** (93% reduction) | Brotli: **1.5 KB** (94% reduction)
+

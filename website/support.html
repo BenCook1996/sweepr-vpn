@@ -9,6 +9,7 @@
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="https://sweeprvpn.com/support">
   <meta name="theme-color" content="#10b981" />
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
   <link rel="preconnect" href="https://www.googletagmanager.com">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="SWEEPR VPN">
@@ -24,6 +25,8 @@
   <meta name="twitter:description" content="Need help with SWEEPR VPN? Contact our 24/7 support team or manage your subscription online.">
   <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png">
   <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"ContactPage","@id":"https://sweeprvpn.com/support#contact","url":"https://sweeprvpn.com/support","name":"SWEEPR VPN Support & Help Center","description":"Contact SWEEPR VPN support for technical assistance, billing inquiries, or subscription management."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://sweeprvpn.com/"},{"@type":"ListItem","position":2,"name":"Support","item":"https://sweeprvpn.com/support"}]}]}</script>
+  <link rel="preload" href="/tailwind.min.css?v=fbbf784c" as="style" />
+  <link rel="preload" href="/style.css?v=ed321090" as="style" />
   <link rel="stylesheet" href="/tailwind.min.css?v=fbbf784c">
   <link rel="icon" type="image/svg+xml" href="/logo-emerald.svg?v=5">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5">
@@ -54,7 +57,7 @@
         <button type="button" id="langDropdownBtn" class="btn btn-ghost text-sm flex items-center gap-1.5 px-2.5 py-1.5 cursor-pointer font-medium text-gray-700 hover:text-emerald-600 transition-colors" aria-expanded="false" aria-label="Select Language">
           <span class="font-mono text-[11px] font-bold px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200" id="currentLangFlag">GB</span>
           <span class="text-xs font-bold tracking-wide" id="currentLangCode">EN</span>
-          <svg id="langDropdownChevron" class="w-3 h-3 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg width="12" height="12" id="langDropdownChevron" class="w-3 h-3 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
           </svg>
         </button>
@@ -82,7 +85,7 @@
       <a rel="nofollow" href="/login" class="btn btn-ghost text-sm">Login</a>
       <a href="/download" class="hidden sm:inline-flex btn btn-go gap-2">
         <span>Get SWEEPR VPN</span>
-        <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        <svg width="16" height="16" class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
       </a>
     </div>
   </nav>
@@ -99,7 +102,7 @@
     <h2 class="sr-only">Support &amp; Self-Service Options</h2>
     <div class="grid md:grid-cols-2 gap-8 text-left">
       <div class="rack-card glass-card p-8">
-        <div class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center mb-4"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+        <div class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center mb-4"><svg height="20" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
         <h3 class="text-xl font-bold mb-2 text-gray-900">Contact Support</h3>
         <p class="text-gray-600 mb-3 text-sm">Send a message directly to our support team for technical assistance, billing inquiries, or refund requests, or email us directly at <!--email_off--><a href="mailto:support@sweeprvpn.com" class="font-semibold text-emerald-700 underline hover:text-emerald-800">support@sweeprvpn.com</a><!--/email_off-->.</p>
         <div class="mb-4 inline-flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50/70 px-3 py-1.5 text-xs font-semibold text-emerald-900">
@@ -118,7 +121,7 @@
           </div>
           <button type="submit" id="supBtn" class="btn btn-go btn-async-grid w-full justify-center text-sm py-2.5 cursor-pointer">
             <span class="btn-state-idle">Send Message</span>
-            <span class="btn-state-loading"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.5" opacity="0.25"/><path d="M21 12a9 9 0 0 0-9-9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg><span>Sending…</span></span>
+            <span class="btn-state-loading"><svg width="16" height="16" class="w-4 h-4" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.5" opacity="0.25"/><path d="M21 12a9 9 0 0 0-9-9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg><span>Sending…</span></span>
           </button>
           <p id="supStatus" class="text-xs font-medium hidden"></p>
         </form>
@@ -126,7 +129,7 @@
       
       <div class="rack-card glass-card p-8 flex flex-col justify-between">
         <div>
-          <div class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center mb-4"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg></div>
+          <div class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center mb-4"><svg height="20" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg></div>
           <h3 class="text-xl font-bold mb-2 text-gray-900">Customer Portal</h3>
           <p class="text-gray-600 mb-4">Manage your subscription, view your SWEEPR-VPN-XXXX-XXXX-XXXX license key, update payment methods, or cancel anytime.</p>
         </div>

@@ -255,7 +255,8 @@ const GSC_STRIKING_DISTANCE_OVERRIDES = {
 };
 
 const GA4_MEASUREMENT_ID = 'G-7D28EEMNXX';
-const GA4_HEAD_SNIPPET = `  <link rel="preconnect" href="https://www.googletagmanager.com" />
+const GA4_HEAD_SNIPPET = `  <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+  <link rel="preconnect" href="https://www.googletagmanager.com" />
   <!-- Google tag (gtag.js) - Sweepr VPN -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=${GA4_MEASUREMENT_ID}"></script>
   <script>
@@ -317,7 +318,7 @@ function tightenMetaDescription(rawDesc) {
   ];
   for (const pat of trimPatterns) {
     const stripped = d.replace(pat, '').trim();
-    if (stripped.length >= 70) {
+    if (stripped.length >= 110) {
       d = stripped;
       if (decodeHtmlEntities(d).length <= 165) return /[.!?]$/.test(d) ? d : `${d}.`;
     }
@@ -326,7 +327,7 @@ function tightenMetaDescription(rawDesc) {
   const decoded = decodeHtmlEntities(d);
   if (decoded.length <= 165) return d;
 
-  const firstSentenceMatch = decoded.match(/^(.{70,164}?[.!?])(?:\s|$)/);
+  const firstSentenceMatch = decoded.match(/^(.{110,164}?[.!?])(?:\s|$)/);
   if (firstSentenceMatch) {
     return firstSentenceMatch[1].replace(/&/g, '&amp;').replace(/"/g, '&quot;');
   }
@@ -371,8 +372,73 @@ function versionStaticAssetTags(html) {
   return out;
 }
 
+function ensureHeadResourceHints(html) {
+  let out = html;
+  if (/googletagmanager\.com\/gtag\/js/i.test(out)) {
+    const hasGtmDns = /<link\b[^>]*rel=["']dns-prefetch["'][^>]*href=["']https:\/\/www\.googletagmanager\.com["']/i.test(out);
+    const hasGtmPre = /<link\b[^>]*rel=["']preconnect["'][^>]*href=["']https:\/\/www\.googletagmanager\.com["']/i.test(out);
+    if (!hasGtmDns && hasGtmPre) {
+      out = out.replace(
+        /([ \t]*)<link\b[^>]*rel=["']preconnect["'][^>]*href=["']https:\/\/www\.googletagmanager\.com["'][^>]*>/i,
+        (m, indent) => `${indent}<link rel="dns-prefetch" href="https://www.googletagmanager.com" />\n${m}`
+      );
+    } else if (!hasGtmDns && !hasGtmPre && /<\/head>/i.test(out)) {
+      out = out.replace(
+        /<\/head>/i,
+        '  <link rel="dns-prefetch" href="https://www.googletagmanager.com" />\n  <link rel="preconnect" href="https://www.googletagmanager.com" />\n</head>'
+      );
+    }
+  }
+  if (/sitepatent\.com/i.test(out) && !/<link\b[^>]*rel=["']dns-prefetch["'][^>]*href=["']https:\/\/sitepatent\.com["']/i.test(out)) {
+    const preAnchor = out.match(/([ \t]*)<link\b[^>]*rel=["']preconnect["'][^>]*href=["']https:\/\/www\.googletagmanager\.com["'][^>]*>/i);
+    if (preAnchor) {
+      out = out.replace(preAnchor[0], `${preAnchor[0]}\n${preAnchor[1]}<link rel="dns-prefetch" href="https://sitepatent.com" />`);
+    }
+  }
+  for (const cssAsset of ['tailwind.min.css', 'style.css']) {
+    const hasStylesheet = new RegExp(`<link\\b[^>]*rel=["']stylesheet["'][^>]*href=["']\\/${cssAsset.replace('.', '\\.')}(?:\\?[^"']*)?["']`, 'i').test(out);
+    const hasPreload = new RegExp(`<link\\b[^>]*rel=["']preload["'][^>]*href=["']\\/${cssAsset.replace('.', '\\.')}(?:\\?[^"']*)?["']`, 'i').test(out);
+    if (hasStylesheet && !hasPreload) {
+      const preloadTag = `<link rel="preload" href="/${cssAsset}?v=${ASSET_VERSION_HASHES[cssAsset]}" as="style" />`;
+      const anchor =
+        out.match(/([ \t]*)<link\b[^>]*rel=["']stylesheet["'][^>]*href=["']\/tailwind\.min\.css(?:\?[^"']*)?["'][^>]*>/i) ||
+        out.match(/([ \t]*)<link\b[^>]*rel=["']stylesheet["'][^>]*href=["']\/style\.css(?:\?[^"']*)?["'][^>]*>/i);
+      if (anchor) {
+        out = out.replace(anchor[0], `${anchor[1]}${preloadTag}\n${anchor[0]}`);
+      }
+    }
+  }
+  return out;
+}
+
+function ensureSvgDimensions(html) {
+  const blocks = html.split(/(<(?:script|style)\b[\s\S]*?<\/(?:script|style)>)/gi);
+  for (let i = 0; i < blocks.length; i += 2) {
+    blocks[i] = blocks[i].replace(/<svg\b([^>]*)>/gi, (full, attrs) => {
+      if (/\bwidth=/i.test(attrs) && /\bheight=/i.test(attrs)) return full;
+      const cls = (attrs.match(/\bclass=["']([^"']*)["']/i) || [])[1] || '';
+      const vb = (attrs.match(/\bviewBox=["']([^"']*)["']/i) || [])[1] || '';
+      let w = null;
+      let h = null;
+      if (/\bw-3\b/.test(cls)) { w = 12; h = 12; }
+      else if (/\bw-3\.5\b/.test(cls) || /\bicon-(?:copy|check)\b/.test(cls)) { w = 14; h = 14; }
+      else if (/\bw-4\b/.test(cls)) { w = 16; h = 16; }
+      else if (/\bw-5\b/.test(cls)) { w = 20; h = 20; }
+      else if (/\bw-6\b/.test(cls)) { w = 24; h = 24; }
+      else if (/\bw-full\b/.test(cls) && /^0\s+0\s+60\s+(?:39|40)$/.test(vb.trim())) { w = 16; h = 12; }
+      if (!w || !h) return full;
+      const addW = /\bwidth=/i.test(attrs) ? '' : ` width="${w}"`;
+      const addH = /\bheight=/i.test(attrs) ? '' : ` height="${h}"`;
+      return `<svg${addW}${addH}${attrs}>`;
+    });
+  }
+  return blocks.join('');
+}
+
 function applyNonVisualHeadAndSchemaFixes(html, urlPath) {
-  let out = versionStaticAssetTags(html);
+  let out = ensureHeadResourceHints(html);
+  out = versionStaticAssetTags(out);
+  out = ensureSvgDimensions(out);
 
   if (!/<meta\s+[^>]*property=["']og:locale["']/i.test(out)) {
     const localeVal = resolveOgLocaleForPath(urlPath);
@@ -1644,7 +1710,8 @@ function resolveDownloadLastMod(loc) {
   const serverPath = path.join(WEBSITE_DIR, 'server.mjs');
   const exePath = path.join(WEBSITE_DIR, 'SWEEPRVPN.exe');
   const serverSrc = fs.existsSync(serverPath) ? fs.readFileSync(serverPath, 'utf8') : '';
-  const pickerSlice = (serverSrc.match(/function renderPlatformDownloadPicker[\s\S]*?\n\}\n/) || [''])[0];
+  const pickerSliceRaw = (serverSrc.match(/function renderPlatformDownloadPicker[\s\S]*?\r?\n\}\r?\n/) || [''])[0];
+  const pickerSlice = pickerSliceRaw.replace(/\r\n/g, '\n');
   const exeHash = fs.existsSync(exePath) ? crypto.createHash('sha1').update(fs.readFileSync(exePath)).digest('hex') : '';
   const dlHash = pickerSlice ? crypto.createHash('sha1').update(`${pickerSlice}\n${exeHash}`).digest('hex').slice(0, 12) : '';
   const prevRec = dailyState.urlLastModHashes[loc];
@@ -2348,12 +2415,12 @@ for (const page of allCanonicalPages) {
     failingTemplateCorruptionPages.push(`${page.file}${tag}`);
   }
 
-  // 1. Title tag check (non-empty, unique, <= 65 decoded chars, no mid-phrase dangling preposition)
+  // 1. Title tag check (non-empty, unique, 30..65 decoded chars, no mid-phrase dangling preposition)
   const titleMatch = content.match(/<title[^>]*>(.*?)<\/title>/is);
   const decodedTitle = decodeHtmlEntities(titleMatch ? titleMatch[1] : '');
-  if (!decodedTitle) {
+  if (!decodedTitle || decodedTitle.length < 30) {
     titleIssues++;
-    failingPages.title.push(page.file);
+    failingPages.title.push(`${page.file} (title ${decodedTitle.length} < 30 chars)`);
   } else {
     if (decodedTitle.length > 65) {
       titleIssues++;
@@ -2368,13 +2435,13 @@ for (const page of allCanonicalPages) {
     seenTitles.set(decodedTitle, page.urlPath);
   }
 
-  // 2. Meta description check (non-empty, 60..165 chars, unique, no abrupt mid-sentence truncation)
+  // 2. Meta description check (non-empty, 110..165 chars, unique, no abrupt mid-sentence truncation)
   const descMatch = content.match(/<meta\s+name=["']description["']\s+content="([^"]*)"/is) ||
     content.match(/<meta\s+name=["']description["']\s+content='([^']*)'/is);
   const decodedDesc = decodeHtmlEntities(descMatch ? descMatch[1] : '');
-  if (!decodedDesc || decodedDesc.length < 60) {
+  if (!decodedDesc || decodedDesc.length < 110) {
     descIssues++;
-    failingPages.desc.push(page.file);
+    failingPages.desc.push(`${page.file} (desc ${decodedDesc.length} < 110 chars)`);
   } else if (decodedDesc.length > 165) {
     descIssues++;
     failingPages.desc.push(`${page.file} (desc ${decodedDesc.length} > 165 chars)`);
@@ -2763,8 +2830,9 @@ if (oversizedImages === 0) {
   pass('pageSpeed', 'Image Optimization (<100KB)', `All ${imageFiles.length} website image assets are under 100 KB`);
 }
 
-// Check CLS & Alt attributes: explicit width and height, and alt attribute on img tags
+// Check CLS & Alt attributes: explicit width and height on <img> and <svg>, and alt attribute on <img> tags
 let missingImgDimensions = 0;
+let missingSvgDimensions = 0;
 let missingImgAlt = 0;
 for (const page of allCanonicalPages) {
   const content = fs.readFileSync(page.absPath, 'utf8');
@@ -2780,11 +2848,27 @@ for (const page of allCanonicalPages) {
       missingImgAlt++;
     }
   }
+  const htmlNoScripts = content.replace(/<(?:script|style)\b[\s\S]*?<\/(?:script|style)>/gi, '');
+  const svgTags = htmlNoScripts.match(/<svg\b[^>]*>/gi) || [];
+  for (const svgTag of svgTags) {
+    if (!/\bwidth=["']?\d+/i.test(svgTag) || !/\bheight=["']?\d+/i.test(svgTag)) {
+      missingSvgDimensions++;
+    }
+  }
 }
-if (missingImgDimensions === 0) {
-  pass('pageSpeed', 'Cumulative Layout Shift (CLS) Protection', 'All <img> tags have explicit width & height attributes');
+const dlPickerSliceForAudit = (serverCode.match(/function renderPlatformDownloadPicker[\s\S]*?\r?\n\}\r?\n/) || [''])[0];
+if (dlPickerSliceForAudit) {
+  const dlSvgs = dlPickerSliceForAudit.match(/<svg\b[^>]*>/gi) || [];
+  for (const svgTag of dlSvgs) {
+    if (!/\bwidth=["']?\d+/i.test(svgTag) || !/\bheight=["']?\d+/i.test(svgTag)) {
+      missingSvgDimensions++;
+    }
+  }
+}
+if (missingImgDimensions === 0 && missingSvgDimensions === 0) {
+  pass('pageSpeed', 'Cumulative Layout Shift (CLS) Protection', `All <img> and inline <svg> tags across ${allCanonicalPages.length} pages & /download have explicit width & height attributes`);
 } else {
-  warn('pageSpeed', 'Cumulative Layout Shift (CLS) Protection', `${missingImgDimensions} <img> tags missing width/height attributes`);
+  warn('pageSpeed', 'Cumulative Layout Shift (CLS) Protection', `${missingImgDimensions} <img> and ${missingSvgDimensions} <svg> tags missing width/height attributes`);
 }
 
 if (missingImgAlt === 0) {
@@ -2832,18 +2916,42 @@ if (hasAppleTouchIcon && hasFaviconPng && hasPwa192Icon && hasPwa512Icon && hasM
   warn('pageSpeed', 'PWA Manifest & Touch Icons', `${pagesMissingManifestOrIcon} pages or manifest icons missing (192/512/apple-touch/manifest)`);
 }
 
-// Check for unused preconnects to Google Fonts
+// Check for unused preconnects to Google Fonts and required resource hints (preconnect, dns-prefetch, CSS preload)
 let unusedPreconnectCount = 0;
+let missingResourceHintPages = 0;
 for (const page of allCanonicalPages) {
   const content = fs.readFileSync(page.absPath, 'utf8');
   if (content.includes('fonts.googleapis.com') && !content.includes('fonts.googleapis.com/css')) {
     unusedPreconnectCount++;
   }
+  const hasGtmPreconnect = /<link\b[^>]*rel=["']preconnect["'][^>]*href=["']https:\/\/www\.googletagmanager\.com["']/i.test(content);
+  const hasGtmDns = /<link\b[^>]*rel=["']dns-prefetch["'][^>]*href=["']https:\/\/www\.googletagmanager\.com["']/i.test(content);
+  if (!hasGtmPreconnect || !hasGtmDns) {
+    missingResourceHintPages++;
+    continue;
+  }
+  for (const cssAsset of ['tailwind.min.css', 'style.css']) {
+    const hasCss = new RegExp(`<link\\b[^>]*rel=["']stylesheet["'][^>]*href=["']\\/${cssAsset.replace('.', '\\.')}`, 'i').test(content);
+    const hasPreload = new RegExp(`<link\\b[^>]*rel=["']preload["'][^>]*href=["']\\/${cssAsset.replace('.', '\\.')}`, 'i').test(content);
+    if (hasCss && !hasPreload) {
+      missingResourceHintPages++;
+      break;
+    }
+  }
 }
-if (unusedPreconnectCount === 0) {
-  pass('pageSpeed', 'Network Preconnect Efficiency', 'Zero unused preconnects to Google Fonts found across all pages');
+if (dlPickerSliceForAudit) {
+  if (
+    !/rel=["']dns-prefetch["'][^>]*googletagmanager\.com/i.test(dlPickerSliceForAudit) ||
+    !/rel=["']preload["'][^>]*tailwind\.min\.css/i.test(dlPickerSliceForAudit) ||
+    !/rel=["']preload["'][^>]*style\.css/i.test(dlPickerSliceForAudit)
+  ) {
+    missingResourceHintPages++;
+  }
+}
+if (unusedPreconnectCount === 0 && missingResourceHintPages === 0) {
+  pass('pageSpeed', 'Network Preconnect & Resource Hints (preload/dns-prefetch)', `All ${allCanonicalPages.length} pages & /download include CSS preload + GA4 preconnect/dns-prefetch (0 unused Google Fonts preconnects)`);
 } else {
-  warn('pageSpeed', 'Network Preconnect Efficiency', `${unusedPreconnectCount} pages contain unused preconnects to Google Fonts`);
+  warn('pageSpeed', 'Network Preconnect & Resource Hints (preload/dns-prefetch)', `${unusedPreconnectCount} unused Google Fonts preconnects, ${missingResourceHintPages} pages missing preload/dns-prefetch`);
 }
 
 // Check script loading (defer or async) & dynamic /download route compliance
@@ -2859,7 +2967,7 @@ for (const page of allCanonicalPages) {
     }
   }
 }
-const downloadFnMatch = serverCode.match(/function renderPlatformDownloadPicker[\s\S]*?\n\}\n/);
+const downloadFnMatch = serverCode.match(/function renderPlatformDownloadPicker[\s\S]*?\r?\n\}\r?\n/);
 if (downloadFnMatch) {
   const dlTemplate = downloadFnMatch[0];
   if (dlTemplate.includes('cdn.tailwindcss.com') || !dlTemplate.includes('<main')) {
@@ -2880,21 +2988,22 @@ if (blockingScripts === 0) {
 
 // Check Immutable ?v= Cache-Busting across CSS/JS assets on all canonical pages + /download
 let unversionedAssetTags = 0;
-const countUnversionedAssets = (htmlText) => {
+const countUnversionedAssets = (htmlText, allowTemplateVars = false) => {
+  const verRe = allowTemplateVars ? /\?v=(?:[a-z0-9]+|\$\{(?:twVer|cssVer|pricingVer|navVer)\})/i : /\?v=[a-z0-9]+/i;
   const cssLinks = htmlText.match(/<link\b[^>]*\bhref=["']\/(?:style\.css|tailwind\.min\.css)(?:\?[^"']*)?["'][^>]*>/gi) || [];
   for (const tag of cssLinks) {
-    if (!/\?v=[a-z0-9]+/i.test(tag)) unversionedAssetTags++;
+    if (!verRe.test(tag)) unversionedAssetTags++;
   }
   const jsTags = htmlText.match(/<script\b[^>]*\bsrc=["']\/(?:nav\.js|pricing-config\.js)(?:\?[^"']*)?["'][^>]*>/gi) || [];
   for (const tag of jsTags) {
-    if (!/\?v=[a-z0-9]+/i.test(tag)) unversionedAssetTags++;
+    if (!verRe.test(tag)) unversionedAssetTags++;
   }
 };
 for (const page of allCanonicalPages) {
   countUnversionedAssets(fs.readFileSync(page.absPath, 'utf8'));
 }
 if (downloadFnMatch) {
-  countUnversionedAssets(downloadFnMatch[0]);
+  countUnversionedAssets(downloadFnMatch[0], true);
 }
 if (unversionedAssetTags === 0) {
   pass('pageSpeed', 'Immutable Asset Cache-Busting (?v=)', `All CSS/JS tags (/style.css, /tailwind.min.css, /nav.js, /pricing-config.js) across ${allCanonicalPages.length} pages & /download carry content-hashed ?v= tokens`);

@@ -3381,6 +3381,7 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
   <meta name="theme-color" content="#10b981">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="SWEEPR VPN">
+  <meta property="og:locale" content="en_GB">
   <meta property="og:title" content="Download SWEEPR VPN (Windows, macOS, Android &amp; iOS)">
   <meta property="og:description" content="Download official SWEEPR VPN v2.6.0 installers for Windows 10/11, macOS, Android, and iOS with free 30s Home Wi-Fi Device Scanner and SHA-256 verification.">
   <meta property="og:url" content="https://sweeprvpn.com/download">
@@ -3389,7 +3390,7 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://sweeprvpn.com/download">
   <meta name="twitter:title" content="Download SWEEPR VPN (Windows, macOS, Android &amp; iOS)">
-  <meta name="twitter:description" content="Official SWEEPR VPN v2.6.0 installers with SHA-256 checksums and Free 30-Second Home Wi-Fi Scanner.">
+  <meta name="twitter:description" content="Download official SWEEPR VPN v2.6.0 installers for Windows 10/11 (.exe), macOS (.dmg), Android (.apk) &amp; iOS with verified SHA-256 checksums.">
   <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png">
   <link rel="icon" type="image/svg+xml" href="/logo-emerald.svg?v=5">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5">
@@ -3397,7 +3398,10 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
   <link rel="shortcut icon" href="/favicon.ico?v=5">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5">
   <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com">
   <link rel="preconnect" href="https://www.googletagmanager.com">
+  <link rel="preload" href="/tailwind.min.css?v=${twVer}" as="style">
+  <link rel="preload" href="/style.css?v=${cssVer}" as="style">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
   <script>
     window.dataLayer = window.dataLayer || [];

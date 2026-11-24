@@ -5,10 +5,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OpenWrt 23.05+ Router WireGuard Setup | SWEEPR VPN</title>
-  <meta name="description" content="Step-by-step OpenWrt 23.05+ Router &amp; Policy Routing WireGuard VPN setup guide (2 Minutes)." />
+  <meta name="description" content="2-minute OpenWrt 23.05+ router WireGuard &amp; policy routing setup guide. Copy-paste UCI/.conf config, MTU 1420 settings, 10.66.0.1 DNS &amp; 4ms 10Gbps servers." />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="https://sweeprvpn.com/setup/openwrt-wireguard-router">
   <meta name="theme-color" content="#10b981">
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
   <link rel="preconnect" href="https://www.googletagmanager.com">
 
   <!-- Open Graph -->
@@ -17,7 +18,7 @@
   <meta property="og:locale" content="en_GB">
   <meta property="og:url" content="https://sweeprvpn.com/setup/openwrt-wireguard-router">
   <meta property="og:title" content="OpenWrt 23.05+ Router WireGuard Setup | SWEEPR VPN" />
-  <meta property="og:description" content="Step-by-step OpenWrt 23.05+ Router &amp; Policy Routing WireGuard VPN setup guide (2 Minutes)." />
+  <meta property="og:description" content="2-minute OpenWrt 23.05+ router WireGuard &amp; policy routing setup guide. Copy-paste UCI/.conf config, MTU 1420 settings, 10.66.0.1 DNS &amp; 4ms 10Gbps servers." />
   <meta property="og:image" content="https://sweeprvpn.com/og-image.png">
   <meta property="og:image:alt" content="SWEEPR VPN 10Gbps WireGuard &amp; Home Wi-Fi Radar" />
 
@@ -25,7 +26,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://sweeprvpn.com/setup/openwrt-wireguard-router">
   <meta name="twitter:title" content="OpenWrt 23.05+ Router WireGuard Setup | SWEEPR VPN" />
-  <meta name="twitter:description" content="Step-by-step OpenWrt 23.05+ Router &amp; Policy Routing WireGuard VPN setup guide (2 Minutes)." />
+  <meta name="twitter:description" content="2-minute OpenWrt 23.05+ router WireGuard &amp; policy routing setup guide. Copy-paste UCI/.conf config, MTU 1420 settings, 10.66.0.1 DNS &amp; 4ms 10Gbps servers." />
   <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png">
 
   <!-- Schema Markup (TechArticle + SoftwareApplication + BreadcrumbList) -->
@@ -35,6 +36,8 @@
   <link rel="icon" type="image/png" href="/favicon.png" media="(prefers-color-scheme: light)">
   <link rel="icon" type="image/png" href="/favicon-dark.png" media="(prefers-color-scheme: dark)">
   <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="preload" href="/tailwind.min.css?v=fbbf784c" as="style" />
+  <link rel="preload" href="/style.css?v=ed321090" as="style" />
   <link rel="stylesheet" href="/tailwind.min.css?v=fbbf784c">
   <link rel="stylesheet" href="/style.css?v=ed321090">
   <script src="/pricing-config.js?v=7b9c5702" defer></script>
@@ -65,7 +68,7 @@
         <div class="relative inline-block text-left" id="navDropdownContainer">
           <button type="button" id="navDropdownBtn" class="btn btn-ghost text-sm flex items-center gap-1.5 cursor-pointer font-medium" aria-expanded="false" aria-haspopup="true">
             <span>Compare &amp; Guides</span>
-            <svg id="navDropdownChevron" class="w-3.5 h-3.5 text-gray-500 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg width="12" height="12" id="navDropdownChevron" class="w-3.5 h-3.5 text-gray-500 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
             </svg>
           </button>
@@ -121,7 +124,7 @@
       <a rel="nofollow" href="/login" class="btn btn-ghost text-sm">Login</a>
       <a href="/download" class="btn btn-go gap-2 text-sm">
         <span>Get SWEEPR VPN</span>
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        <svg width="16" height="16" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
       </a>
     </div>
   </nav>
@@ -161,7 +164,7 @@
       <div class="flex flex-wrap gap-3 items-center">
         <a href="/download" class="btn btn-go gap-2">
           <span>Free Download (30s Wi-Fi &amp; Speed Scan)</span>
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          <svg width="16" height="16" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
         <a rel="nofollow" href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-ghost text-sm font-semibold">
           Get Pro (<span data-price="annualPerMonthStr">£6.25</span>/mo — Save 50%) &rarr;
@@ -292,7 +295,7 @@ uci commit network &amp;&amp; /etc/init.d/network reload</code></pre>
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
         <a href="/download" class="btn btn-go btn-big gap-2">
           <span>Free Download</span>
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          <svg width="20" height="20" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
         <a rel="nofollow" href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-big">
           Get SWEEPR VPN Pro &rarr;

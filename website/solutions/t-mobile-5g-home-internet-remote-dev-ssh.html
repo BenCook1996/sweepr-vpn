@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>T-Mobile 5G Home: Fix Dropping SSH &amp; Docker | SWEEPR VPN</title>
-  <meta name="description" content="Fix Dropping SSH, Kubernetes &amp; Git Sessions on T-Mobile 5G Home Internet (AS21928) with persistent WireGuard." />
+  <meta name="description" content="Fix dropping SSH, Kubernetes &amp; Git sessions on T-Mobile 5G Home Internet (AS21928) using persistent 1380 MTU WireGuard keepalives &amp; 10Gbps RAM-only routing." />
   <link rel="canonical" href="https://sweeprvpn.com/solutions/t-mobile-5g-home-internet-remote-dev-ssh">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta property="og:type" content="article" />
   <meta property="og:locale" content="en_GB" />
   <meta property="og:title" content="T-Mobile 5G Home: Fix Dropping SSH &amp; Docker | SWEEPR VPN" />
-  <meta property="og:description" content="Fix Dropping SSH, Kubernetes &amp; Git Sessions on T-Mobile 5G Home Internet (AS21928) with persistent WireGuard." />
+  <meta property="og:description" content="Fix dropping SSH, Kubernetes &amp; Git sessions on T-Mobile 5G Home Internet (AS21928) using persistent 1380 MTU WireGuard keepalives &amp; 10Gbps RAM-only routing." />
   <meta property="og:url" content="https://sweeprvpn.com/solutions/t-mobile-5g-home-internet-remote-dev-ssh">
   <meta property="og:site_name" content="SWEEPR VPN" />
   <meta property="og:image" content="https://sweeprvpn.com/og-image.png" />
@@ -18,7 +18,7 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:url" content="https://sweeprvpn.com/solutions/t-mobile-5g-home-internet-remote-dev-ssh" />
   <meta name="twitter:title" content="T-Mobile 5G Home: Fix Dropping SSH &amp; Docker | SWEEPR VPN" />
-  <meta name="twitter:description" content="Fix Dropping SSH, Kubernetes &amp; Git Sessions on T-Mobile 5G Home Internet (AS21928) with persistent WireGuard." />
+  <meta name="twitter:description" content="Fix dropping SSH, Kubernetes &amp; Git sessions on T-Mobile 5G Home Internet (AS21928) using persistent 1380 MTU WireGuard keepalives &amp; 10Gbps RAM-only routing." />
   <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png" />
   <meta name="theme-color" content="#070b14" />
   
@@ -56,6 +56,7 @@
     footer { border-top:1px solid var(--border); padding:32px 20px; text-align:center; color:var(--muted); font-size:0.88rem; }
     footer a { color:var(--accent2); text-decoration:none; margin:0 8px; }
   </style>
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
   <link rel="preconnect" href="https://www.googletagmanager.com" />
   <!-- Google tag (gtag.js) - Sweepr VPN -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
