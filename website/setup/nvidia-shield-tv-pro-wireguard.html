@@ -40,7 +40,7 @@
   <link rel="preload" href="/style.css?v=ed321090" as="style" />
   <link rel="stylesheet" href="/tailwind.min.css?v=fbbf784c">
   <link rel="stylesheet" href="/style.css?v=ed321090">
-  <script src="/pricing-config.js?v=7b9c5702" defer></script>
+  <script src="/pricing-config.js?v=7b348060" defer></script>
   <script src="/nav.js?v=02bccc22" defer></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
   <script>
@@ -90,7 +90,7 @@
                     <span class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">SWEEPR VPN vs NordVPN</span>
                     <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">2026 Guide</span>
                   </div>
-                  <p class="text-xs text-gray-500 leading-snug">Compare ~14 MB lightweight WireGuard performance and locked-in renewal pricing.</p>
+                  <p class="text-xs text-gray-500 leading-snug">Compare lightweight (~723 KB Win) WireGuard performance and locked-in renewal pricing.</p>
                 </div>
               </a>
               <a href="/tools/leak-test" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
@@ -191,13 +191,13 @@
         <p class="mb-3">Download your Shield-tuned configuration from the SWEEPR VPN dashboard (or sideload <code class="font-mono text-emerald-700">SWEEPRVPN.apk</code> via <code class="font-mono text-emerald-700">adb install</code>) with split-LAN routing and ACR sinkhole DNS enabled:</p>
         <pre class="bg-slate-900 text-emerald-300 p-4 rounded-xl text-xs overflow-x-auto my-4">[Interface]
 PrivateKey = &lt;GENERATED_IN_SWEEPR_PORTAL&gt;
-Address = 10.66.14.2/32
-DNS = 10.66.0.1
+Address = 10.64.0.2/32
+DNS = 10.64.0.1
 MTU = 1412
 
 [Peer]
 PublicKey = &lt;UK_LON_01_PUBLIC_KEY&gt;
-Endpoint = uk-lon.sweeprvpn.net:51820
+Endpoint = lon01.wg.sweeprvpn.com:51820
 AllowedIPs = 0.0.0.0/1, 128.0.0.0/1
 PersistentKeepalive = 25</pre>
       </div>
@@ -206,7 +206,7 @@ PersistentKeepalive = 25</pre>
     <section class="mb-10">
       <h2 class="text-2xl font-black text-gray-900 mb-3">3. Blocking Android TV &amp; Nvidia Telemetry Domains</h2>
       <div class="space-y-3 text-gray-700 leading-relaxed">
-        <p>Setting DNS to <code class="font-mono text-emerald-700">10.66.0.1</code> inside the tunnel automatically routes your Shield TV Pro through SWEEPR's smart-TV ACR sinkhole, dropping beacons to <code class="font-mono text-emerald-700">androidtvwatsonfe-pa.googleapis.com</code>, <code class="font-mono text-emerald-700">events.gfe.nvidia.com</code>, and partner ad-measurement hosts while keeping Android TV app downloads and Plex metadata online.</p>
+        <p>Setting DNS to <code class="font-mono text-emerald-700">10.64.0.1</code> inside the tunnel automatically routes your Shield TV Pro through SWEEPR's smart-TV ACR sinkhole, dropping beacons to <code class="font-mono text-emerald-700">androidtvwatsonfe-pa.googleapis.com</code>, <code class="font-mono text-emerald-700">events.gfe.nvidia.com</code>, and partner ad-measurement hosts while keeping Android TV app downloads and Plex metadata online.</p>
       </div>
     </section>
 
@@ -226,7 +226,7 @@ PersistentKeepalive = 25</pre>
             <tr><td class="p-3.5 font-semibold">Sustained Throughput</td><td class="p-3.5 font-bold text-emerald-800 bg-emerald-50/30">780+ Mbps (4K Dolby Vision Remux safe)</td><td class="p-3.5">95–130 Mbps CPU bottleneck</td></tr>
             <tr><td class="p-3.5 font-semibold">Optimal Frame Clamping</td><td class="p-3.5 font-bold text-emerald-800 bg-emerald-50/30">MTU 1412 (GbE) / 1380 (CGNAT) + TCPMSS 1340</td><td class="p-3.5">Prone to PPPoE fragmentation</td></tr>
             <tr><td class="p-3.5 font-semibold">Local Plex &amp; NAS SMB Access</td><td class="p-3.5 font-bold text-emerald-800 bg-emerald-50/30">Instant LAN split-tunnel (192.168.0.0/16 direct)</td><td class="p-3.5">Often breaks local SSDP discovery</td></tr>
-            <tr><td class="p-3.5 font-semibold">Nvidia / Android TV ACR Filtering</td><td class="p-3.5 font-bold text-emerald-800 bg-emerald-50/30">In-tunnel DNS 10.66.0.1 sinks telemetry hosts</td><td class="p-3.5">Standard ISP / public DNS</td></tr>
+            <tr><td class="p-3.5 font-semibold">Nvidia / Android TV ACR Filtering</td><td class="p-3.5 font-bold text-emerald-800 bg-emerald-50/30">In-tunnel DNS 10.64.0.1 sinks telemetry hosts</td><td class="p-3.5">Standard ISP / public DNS</td></tr>
           </tbody>
         </table>
       </div>
@@ -236,7 +236,7 @@ PersistentKeepalive = 25</pre>
       <h2 class="text-xl font-black text-gray-900">NVIDIA Shield WireGuard FAQ</h2>
       <div><h3 class="text-sm font-bold text-gray-900">What MTU should I use on NVIDIA Shield TV Pro?</h3><p class="text-sm text-gray-600">Use <code>MTU = 1412</code> over wired Gigabit Ethernet on UK FTTP/PPPoE lines, or drop to <code>MTU = 1380</code> when connected through mobile 5G hotspots or double-NAT extenders.</p></div>
       <div><h3 class="text-sm font-bold text-gray-900">Does WireGuard on Shield TV keep local Plex direct-play working?</h3><p class="text-sm text-gray-600">Yes. Split-tunneling or LAN route exclusions for <code>192.168.0.0/16</code> keep local NAS/Plex media flowing directly across your home switch without traversing the remote tunnel.</p></div>
-      <div><h3 class="text-sm font-bold text-gray-900">How does SWEEPR block Android TV telemetry?</h3><p class="text-sm text-gray-600">Setting <code>DNS = 10.66.0.1</code> drops known Android TV and Nvidia diagnostic beacons while leaving 4K media playback CDNs unblocked.</p></div>
+      <div><h3 class="text-sm font-bold text-gray-900">How does SWEEPR block Android TV telemetry?</h3><p class="text-sm text-gray-600">Setting <code>DNS = 10.64.0.1</code> drops known Android TV and Nvidia diagnostic beacons while leaving 4K media playback CDNs unblocked.</p></div>
       <div><h3 class="text-sm font-bold text-gray-900">How can I install SWEEPR VPN on Android TV?</h3><p class="text-sm text-gray-600">Install via Google Play / sideloaded APK or generate a native <code>.conf</code> file in your portal for the WireGuard Android TV client.</p></div>
     </section>
 

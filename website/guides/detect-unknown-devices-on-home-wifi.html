@@ -40,7 +40,7 @@
   <link rel="preload" href="/style.css?v=ed321090" as="style" />
   <link rel="stylesheet" href="/tailwind.min.css?v=fbbf784c">
   <link rel="stylesheet" href="/style.css?v=ed321090">
-  <script src="/pricing-config.js?v=7b9c5702" defer></script>
+  <script src="/pricing-config.js?v=7b348060" defer></script>
   <script src="/nav.js?v=02bccc22" defer></script>
   <!-- Google tag (gtag.js) - Sweepr VPN -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
@@ -91,7 +91,7 @@
                     <span class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">SWEEPR VPN vs NordVPN</span>
                     <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">2026 Guide</span>
                   </div>
-                  <p class="text-xs text-gray-500 leading-snug">Compare 14MB lightweight WireGuard performance and locked-in renewal pricing.</p>
+                  <p class="text-xs text-gray-500 leading-snug">Compare lightweight (~723 KB Win) WireGuard performance and locked-in renewal pricing.</p>
                 </div>
               </a>
               <a href="/tools/leak-test" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
@@ -144,7 +144,7 @@
     </div>
     <div id="direct-answer" class="mb-8 p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-gray-800">
       <div class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 mb-1.5">Direct Answer</div>
-      <p class="text-sm sm:text-base leading-relaxed">Inspect live ARP and NDP neighbor caches via <code>arp -a</code> or <code>ip neigh</code>, broadcast mDNS queries for <code>_googlecast</code>, <code>_hap</code>, and <code>_airplay</code> peripherals, and match IEEE OUI prefixes to expose silent ESP smart plugs, IP cameras, or rogue DHCP clients. Run SWEEPR's unprivileged Rust scanner to map your subnet under 30 seconds.</p>
+      <p class="text-sm sm:text-base leading-relaxed">Inspect live ARP and NDP neighbor caches via <code>arp -a</code> or <code>ip neigh</code>, broadcast mDNS queries for <code>_googlecast</code>, <code>_hap</code>, and <code>_airplay</code> peripherals, and match IEEE OUI prefixes to expose silent ESP smart plugs, IP cameras, or rogue DHCP clients. Run SWEEPR's unprivileged desktop scanner to map your subnet under 30 seconds.</p>
       <div class="mt-3 pt-3 border-t border-emerald-200/80 text-xs font-bold">
         <a href="/tools/leak-test" class="text-emerald-800 hover:text-emerald-950 underline">Audit Gateway Exposure &amp; Public IP Status &rarr;</a>
       </div>
@@ -161,7 +161,7 @@
       </p>
       <div class="flex flex-wrap gap-3 items-center">
         <a href="/download" class="btn btn-go gap-2">
-          <span>Run 30s LAN Scan (~3.7 MB)</span>
+          <span>Run 30s LAN Scan (~723 KB Win)</span>
           <svg width="16" height="16" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
         <a rel="nofollow" href="/order?plan=annual" class="btn btn-ghost text-sm font-semibold">
@@ -243,7 +243,7 @@ dns-sd -B _services._dns-sd._udp local.
 
 # Manual nmap comparison (requires elevated privileges for raw ARP)
 sudo nmap -sn 192.168.1.0/24</code></pre>
-        <p class="text-gray-700 leading-relaxed mt-3">SWEEPR's non-privileged Rust scanner triggers parallel UDP mDNS (<code>_services._dns-sd._udp.local</code>) and SSDP (<code>239.255.255.250:1900</code>) probes, then reads your OS neighbor cache (<code>GetIpNetTable2</code> on Windows, <code>NET_RT_FLAGS</code> on macOS, netlink on Linux) and resolves every OUI in under 30 seconds.</p>
+        <p class="text-gray-700 leading-relaxed mt-3">SWEEPR's non-privileged desktop scanner triggers parallel UDP mDNS (<code>_services._dns-sd._udp.local</code>) and SSDP (<code>239.255.255.250:1900</code>) probes, then reads your OS neighbor cache (<code>GetIpNetTable2</code> on Windows, <code>NET_RT_FLAGS</code> on macOS, netlink on Linux) and resolves every OUI in under 30 seconds.</p>
       </section>
 
       <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
@@ -276,7 +276,7 @@ sudo nmap -sn 192.168.1.0/24</code></pre>
     <div class="bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-2xl p-8 md:p-12 text-center shadow-xl mb-14">
       <h2 class="text-2xl md:text-3xl font-black mb-3">Identify Every MAC Vendor &amp; Rogue Client on Your Subnet Free</h2>
       <p class="text-gray-300 max-w-xl mx-auto mb-7 text-base">
-        Run our ~3.7 MB Rust LAN scanner without admin rights or router passwords, then add continuous new-MAC intruder alerts and WireGuard encryption across 3 devices plus router from <span data-price="annualPerMonthStr">£6.25</span>/mo (<span data-price="annualStr">£74.99</span>/yr).
+        Run our ~723 KB Windows (~7.6 MB macOS) LAN scanner without admin rights or router passwords, then add continuous new-MAC intruder alerts and WireGuard encryption across 3 devices plus router from <span data-price="annualPerMonthStr">£6.25</span>/mo (<span data-price="annualStr">£74.99</span>/yr).
       </p>
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
         <a href="/download" class="btn btn-go btn-big gap-2">

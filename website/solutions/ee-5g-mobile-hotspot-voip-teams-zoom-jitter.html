@@ -84,7 +84,7 @@
         <a href="/pricing">Pricing (£1.99 Trial)</a>
         <a href="/tools/leak-test">IP &amp; DNS Leak Test</a>
         <a href="/tools/isp-throttling-test">ISP Speed Checker</a>
-        <a class="btn" href="/download">Download (~3.7 MB)</a>
+        <a class="btn" href="/download">Download (~723 KB)</a>
       </div>
     </nav>
   </header>
@@ -95,7 +95,7 @@
     <p class="lead">Laptops tethered to EE 5G smartphones or Hub routers run behind IPv6-only cellular cores translated via 464XLAT (CLAT/PLAT). Without reducing MTU to 1380 bytes, large WebRTC DTLS and SIP packets silently drop between mast handovers.</p>
     <div id="direct-answer" style="margin:18px 0 24px;padding:18px 20px;border-radius:14px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.35);">
       <div style="font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent2,#34d399);margin-bottom:6px;">Direct Answer</div>
-      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Eliminate Microsoft Teams, Zoom & VoIP Jitter on EE 5G & Home Router UK Using Low-Latency WireGuard throttling and jitter by wrapping traffic in SWEEPR VPN's 10 Gbps RAM-only WireGuard tunnel (1380 bytes (prevents CLAT fragmentation), Seamless mast swap via Key Exchange). Because ChaCha20-encrypted datagrams conceal packet signatures from ISP deep packet inspection, evening streaming and.</p>
+      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Clamping WireGuard to MTU = 1380 with PersistentKeepalive = 15 over SWEEPR VPN (lon01.wg.sweeprvpn.com) prevents silent 464XLAT packet drops when tethering Microsoft Teams or Zoom over EE 5G. Cryptographic roaming keys maintain uninterrupted audio across mast handovers while 10.64.0.1 secures private DNS queries across three devices and compatible travel routers.</p>
       <div style="padding-top:10px;border-top:1px solid rgba(16,185,129,0.22);font-size:0.84rem;font-weight:700;">
         <a href="/tools/isp-throttling-test" style="color:var(--accent2,#34d399);text-decoration:underline;">Run Free 10s ISP Throttling &amp; Latency Test &rarr;</a>
       </div>
@@ -129,7 +129,7 @@ MTU = 1380
 DNS = 10.64.0.1
 
 [Peer]
-Endpoint = uk-lon.sweeprvpn.net:51820
+Endpoint = lon01.wg.sweeprvpn.com:51820
 AllowedIPs = 0.0.0.0/0, ::/0
 PersistentKeepalive = 15</code></pre>
 
@@ -154,7 +154,7 @@ PersistentKeepalive = 15</code></pre>
     </ul>
   </main>
   <footer>
-    <p>&copy; 2026 SWEEPR VPN Security Lab. Built in Rust + Tauri v2 with Audited Kernel WireGuard &amp; RAM-Only Servers.</p>
+    <p>&copy; 2026 SWEEPR VPN Security Lab. Built with Open-Source Kernel WireGuard &amp; RAM-Only Servers.</p>
     <p>
       <a href="/">Home</a> |
       <a href="/solutions">ISP Solutions</a> |

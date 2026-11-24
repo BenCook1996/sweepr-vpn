@@ -1336,7 +1336,7 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 #### 1. Crawlability & Indexability (100/100)
 - **Sitemap Completeness & Content-Hash Freshness**: PASS — 93 canonical URLs registered (0 thin/duplicate variants consolidated via 301/noindex)
 - **GEO / LLM Discovery Manifests (llms.txt & llms-full.txt)**: PASS — Updated both manifests with 93 canonical URLs, 14 canonical FAQs, and live WireGuard/ACR proof (0 non-canonical links)
-- **Search Engine Indexing Queue (Delta-Only)**: PASS — 0 un-pinged/modified delta URLs queued (out of 93 total canonical URLs)
+- **Search Engine Indexing Queue (Delta-Only)**: PASS — 4 un-pinged/modified delta URLs queued (out of 93 total canonical URLs)
 - **robots.txt Sitemap Directive**: PASS — Valid sitemap directive points to https://sweeprvpn.com/sitemap.xml
 - **robots.txt AI Crawler Allowances (GEO)**: PASS — All 7 major AI search bots explicitly permitted
 - **robots.txt Crawl-Budget Protections**: PASS — Internal APIs, user portals, qr-setup, CRO studios & ?app=1 webview embeds disallowed
@@ -1381,6 +1381,6 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 
 ### Compression Benchmark Results
 - **order.html** (130.0 KB raw) &rarr; Gzip: **29.4 KB** (77% reduction) | Brotli: **26.5 KB** (80% reduction)
-- **index.html** (78.9 KB raw) &rarr; Gzip: **15.7 KB** (80% reduction) | Brotli: **14.3 KB** (82% reduction)
-- **sitemap.xml** (24.1 KB raw) &rarr; Gzip: **1.7 KB** (93% reduction) | Brotli: **1.5 KB** (94% reduction)
+- **index.html** (81.3 KB raw) &rarr; Gzip: **16.1 KB** (80% reduction) | Brotli: **14.6 KB** (82% reduction)
+- **sitemap.xml** (24.1 KB raw) &rarr; Gzip: **1.6 KB** (93% reduction) | Brotli: **1.4 KB** (94% reduction)
 

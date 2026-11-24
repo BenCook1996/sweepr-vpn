@@ -84,7 +84,7 @@
         <a href="/pricing">Pricing (£1.99 Trial)</a>
         <a href="/tools/leak-test">IP &amp; DNS Leak Test</a>
         <a href="/tools/isp-throttling-test">ISP Speed Checker</a>
-        <a class="btn" href="/download">Download (~3.7 MB)</a>
+        <a class="btn" href="/download">Download (~723 KB)</a>
       </div>
     </nav>
   </header>
@@ -95,7 +95,7 @@
     <p class="lead">Brsk BetterNet full-fibre connections in Manchester, West Yorkshire, and the Midlands share Carrier-Grade NAT pools during peak residential call hours. When upstream UDP NAT translations recycle every 30 seconds, Microsoft Teams, Zoom, and SIP trunks suffer packet reordering and robotic audio artifacts.</p>
     <div id="direct-answer" style="margin:18px 0 24px;padding:18px 20px;border-radius:14px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.35);">
       <div style="font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent2,#34d399);margin-bottom:6px;">Direct Answer</div>
-      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Eliminate Microsoft Teams, Zoom & VoIP Jitter on Brsk BetterNet 1Gbps Fibre UK Using Low-Latency WireGuard throttling and jitter by wrapping traffic in SWEEPR VPN's 10 Gbps RAM-only WireGuard tunnel (24–65 ms unencrypted vs 1.4 ms tunnelled, 1420 bytes IPv4 / UDP keepalive 15s). Because ChaCha20-encrypted datagrams conceal packet signatures from ISP deep packet inspection, evening.</p>
+      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Encapsulating Microsoft Teams, Zoom, and SIP audio inside SWEEPR VPN's 10 Gbps WireGuard tunnel (lon01.wg.sweeprvpn.com, MTU 1420, 15s keepalive) prevents Brsk BetterNet CGNAT session resets and evening latency spikes. ChaCha20 encryption plus 10.64.0.1 DNS protects voice calls across three devices and compatible routers without congestion.</p>
       <div style="padding-top:10px;border-top:1px solid rgba(16,185,129,0.22);font-size:0.84rem;font-weight:700;">
         <a href="/tools/isp-throttling-test" style="color:var(--accent2,#34d399);text-decoration:underline;">Run Free 10s ISP Throttling &amp; Latency Test &rarr;</a>
       </div>
@@ -114,7 +114,7 @@
     <h2>Linux & macOS Call-Path Verification</h2>
     <pre><code># Trace Brsk egress hop and verify zero path MTU blackholing
 mtr -ubwz -c 20 -P 3478 teams.microsoft.com
-ping -M do -s 1392 uk-lon.sweeprvpn.net</code></pre>
+ping -M do -s 1392 lon01.wg.sweeprvpn.com</code></pre>
 
     <h2>Brsk VoIP Telemetry Comparison</h2>
     <table>
@@ -129,7 +129,7 @@ MTU = 1420
 DNS = 10.64.0.1
 
 [Peer]
-Endpoint = uk-lon.sweeprvpn.net:51820
+Endpoint = lon01.wg.sweeprvpn.com:51820
 AllowedIPs = 0.0.0.0/0, ::/0
 PersistentKeepalive = 15</code></pre>
 
@@ -154,7 +154,7 @@ PersistentKeepalive = 15</code></pre>
     </ul>
   </main>
   <footer>
-    <p>&copy; 2026 SWEEPR VPN Security Lab. Built in Rust + Tauri v2 with Audited Kernel WireGuard &amp; RAM-Only Servers.</p>
+    <p>&copy; 2026 SWEEPR VPN Security Lab. Built with Open-Source Kernel WireGuard &amp; RAM-Only Servers.</p>
     <p>
       <a href="/">Home</a> |
       <a href="/solutions">ISP Solutions</a> |

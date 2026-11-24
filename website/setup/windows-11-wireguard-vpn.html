@@ -40,7 +40,7 @@
   <link rel="preload" href="/style.css?v=ed321090" as="style" />
   <link rel="stylesheet" href="/tailwind.min.css?v=fbbf784c">
   <link rel="stylesheet" href="/style.css?v=ed321090">
-  <script src="/pricing-config.js?v=7b9c5702" defer></script>
+  <script src="/pricing-config.js?v=7b348060" defer></script>
   <script src="/nav.js?v=02bccc22" defer></script>
   <!-- Google tag (gtag.js) - Sweepr VPN -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
@@ -91,7 +91,7 @@
                     <span class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">SWEEPR VPN vs NordVPN</span>
                     <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">2026 Guide</span>
                   </div>
-                  <p class="text-xs text-gray-500 leading-snug">Compare 14MB lightweight WireGuard performance and locked-in renewal pricing.</p>
+                  <p class="text-xs text-gray-500 leading-snug">Compare lightweight (~723 KB Win) WireGuard performance and locked-in renewal pricing.</p>
                 </div>
               </a>
               <a href="/tools/leak-test" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
@@ -141,25 +141,25 @@
       </h1>
       <div class="flex flex-wrap items-center gap-2 text-xs text-gray-500 mt-3 mb-3" id="eeat-author-byline"><span>By <strong class="text-gray-800">Benjamin Cook</strong>, Principal Network Architect &middot; SWEEPR VPN Inc.</span><span>&bull;</span><span>Updated Nov 2026</span><span>&bull;</span><a href="/warrant-canary" class="text-emerald-700 font-semibold hover:underline">Verified via Cryptographic Warrant Canary &rarr;</a></div>
       <p class="text-gray-600 text-lg max-w-2xl mx-auto">
-        Install the standalone 14 MB SWEEPR VPN Windows app powered by WireGuardNT kernel drivers and Windows Filtering Platform (WFP) kill-switch rules—plus our free 30-second Home Wi-Fi &amp; Speed Scanner.
+        Install the standalone ~723 KB SWEEPR VPN Windows desktop installer powered by WireGuardNT kernel drivers and Windows Filtering Platform (WFP) kill-switch rules—plus our free 30-second Home Wi-Fi &amp; Speed Scanner.
       </p>
     </div>
     <div id="direct-answer" class="mb-8 p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-gray-800">
       <div class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 mb-1.5">Direct Answer</div>
-      <p class="text-sm sm:text-base leading-relaxed">Run SWEEPR's ~3.7 MB Rust desktop client or native WireGuardNT on Windows 10 and 11 for kernel-bypass ring-buffer throughput up to 940 Mbps. Windows Filtering Platform (WFP) kill-switch rules halt cleartext drops and suppress Smart Multi-Homed Name Resolution (SMHNR) DNS and IPv6 leaks across active adapters.</p>
+      <p class="text-sm sm:text-base leading-relaxed">Run SWEEPR's ~723 KB Windows desktop installer or native WireGuardNT on Windows 10 and 11 for kernel-bypass ring-buffer throughput up to 940 Mbps. Windows Filtering Platform (WFP) kill-switch rules halt cleartext drops and suppress Smart Multi-Homed Name Resolution (SMHNR) DNS and IPv6 leaks across active adapters.</p>
       <div class="mt-3 pt-3 border-t border-emerald-200/80 text-xs font-bold">
         <a href="/tools/leak-test" class="text-emerald-800 hover:text-emerald-950 underline">Audit Windows 11 WebRTC, IPv6, and SMHNR DNS leaks &rarr;</a>
       </div>
     </div>
 
     <div class="bg-white border-2 border-emerald-500/30 rounded-2xl p-6 md:p-8 shadow-sm mb-10">
-      <h2 class="text-xl font-bold text-gray-900 mb-2">~3.7 MB Native Rust + WireGuardNT vs. 250 MB Electron Suites</h2>
+      <h2 class="text-xl font-bold text-gray-900 mb-2">~723 KB Windows Desktop + WireGuardNT vs. 250 MB Electron Suites</h2>
       <p class="text-gray-700 leading-relaxed mb-5">
-        Instead of bundling a 250 MB Chromium/Electron wrapper and background adware updaters, SWEEPR pairs a tiny ~3.7 MB Tauri v2 Rust executable with Windows' audited <strong>WireGuardNT</strong> kernel NDIS driver—unlocking free 30-second LAN Wi-Fi inspection and 3 protected devices from <span data-price="annualPerMonthStr">£6.25</span>/mo.
+        Instead of bundling a 250 MB Chromium/Electron wrapper and background adware updaters, SWEEPR pairs a tiny ~723 KB Windows desktop installer (~7.6 MB macOS .dmg, ~14.6 MB Android .apk) with Windows' open-source <strong>WireGuardNT</strong> kernel NDIS driver—unlocking free 30-second LAN Wi-Fi inspection and 3 protected devices from <span data-price="annualPerMonthStr">£6.25</span>/mo.
       </p>
       <div class="flex flex-wrap gap-3 items-center">
         <a href="/download" class="btn btn-go gap-2">
-          <span>Download SWEEPRVPN.exe (~3.7 MB)</span>
+          <span>Download SWEEPRVPN.exe (~723 KB)</span>
           <svg width="16" height="16" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
         <a rel="nofollow" href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-ghost text-sm font-semibold">
@@ -181,13 +181,13 @@
           <thead class="bg-gray-50 text-gray-700 font-semibold border-b border-gray-200">
             <tr>
               <th class="p-3.5">Windows Tunnel Architecture</th>
-              <th class="p-3.5 bg-emerald-50/60 text-emerald-900">SWEEPR (~3.7 MB Rust + WireGuardNT)</th>
+              <th class="p-3.5 bg-emerald-50/60 text-emerald-900">SWEEPR (~723 KB Win + WireGuardNT)</th>
               <th class="p-3.5">Legacy 250 MB Electron + TAP-Windows</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-100 text-gray-700">
             <tr><td class="p-3.5 font-semibold">Gigabit Fibre Throughput</td><td class="p-3.5 font-bold text-emerald-800 bg-emerald-50/30">940 Mbps (NDIS ring-buffer)</td><td class="p-3.5">180–340 Mbps context-switch cap</td></tr>
-            <tr><td class="p-3.5 font-semibold">Disk &amp; RAM Overhead</td><td class="p-3.5 font-bold text-emerald-800 bg-emerald-50/30">~3.7 MB binary / &lt;20 MB idle RAM</td><td class="p-3.5">250+ MB disk / 450 MB Chromium RAM</td></tr>
+            <tr><td class="p-3.5 font-semibold">Disk &amp; RAM Overhead</td><td class="p-3.5 font-bold text-emerald-800 bg-emerald-50/30">~723 KB installer / &lt;20 MB idle RAM</td><td class="p-3.5">250+ MB disk / 450 MB Chromium RAM</td></tr>
             <tr><td class="p-3.5 font-semibold">Kill-Switch Enforcement</td><td class="p-3.5 font-bold text-emerald-800 bg-emerald-50/30">Windows Filtering Platform (WFP)</td><td class="p-3.5">User-space route polling delays</td></tr>
           </tbody>
         </table>
@@ -210,7 +210,7 @@ New-Item -Path "HKLM:SOFTWAREPoliciesMicrosoftWindows NTDNSClient" -Force | Out-
 Set-ItemProperty -Path "HKLM:SOFTWAREPoliciesMicrosoftWindows NTDNSClient" -Name "DisableSmartNameResolution" -Type DWord -Value 1</code></pre>
       </div>
       <p class="text-gray-700 leading-relaxed text-sm">
-        Both SWEEPR's Rust client and the standalone WireGuard Windows app install strict WFP block rules matching <code>AllowedIPs = 0.0.0.0/0, ::/0</code>, trapping SMHNR probes and IPv6 SLAAC traffic inside the kernel tunnel while keeping gaming QoS packet pacing stable.
+        Both SWEEPR's Windows desktop client and the standalone WireGuard Windows app install strict WFP block rules matching <code>AllowedIPs = 0.0.0.0/0, ::/0</code>, trapping SMHNR probes and IPv6 SLAAC traffic inside the kernel tunnel while keeping gaming QoS packet pacing stable.
       </p>
     </section>
 
@@ -247,7 +247,7 @@ Set-ItemProperty -Path "HKLM:SOFTWAREPoliciesMicrosoftWindows NTDNSClient" -Name
       </p>
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
         <a href="/download" class="btn btn-go btn-big gap-2">
-          <span>Download ~3.7 MB Installer</span>
+          <span>Download ~723 KB Installer</span>
           <svg width="20" height="20" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
         <a rel="nofollow" href="/order?plan=annual" onclick="try{sessionStorage.setItem('sweepr_selected_plan','annual')}catch(e){}" class="btn btn-big">

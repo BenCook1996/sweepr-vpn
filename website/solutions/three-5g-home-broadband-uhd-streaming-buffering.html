@@ -84,7 +84,7 @@
         <a href="/pricing">Pricing (£1.99 Trial)</a>
         <a href="/tools/leak-test">IP &amp; DNS Leak Test</a>
         <a href="/tools/isp-throttling-test">ISP Speed Checker</a>
-        <a class="btn" href="/download">Download (~3.7 MB)</a>
+        <a class="btn" href="/download">Download (~723 KB)</a>
       </div>
     </nav>
   </header>
@@ -95,7 +95,7 @@
     <p class="lead">Three UK 5G home hubs replace wired broadband for millions of renters, yet heavy evening mast contention paired with strict cellular CGNAT and SNI traffic policies routinely downshifts high-bitrate video to choppy SD.</p>
     <div id="direct-answer" style="margin:18px 0 24px;padding:18px 20px;border-radius:14px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.35);">
       <div style="font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent2,#34d399);margin-bottom:6px;">Direct Answer</div>
-      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Eliminate Eliminate Three 5G Home Broadband UK 4K UHD Streaming Buffering & CDN Throttling throttling and jitter by wrapping traffic in SWEEPR VPN's 10 Gbps RAM-only WireGuard tunnel (1380 MTU avoids IPv6/CGNAT fragmentation, Blocks carrier resolver monitoring). Because ChaCha20-encrypted datagrams conceal packet signatures from ISP deep packet inspection, evening streaming and gaming maintain steady low latency.</p>
+      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Encapsulating Three 5G Hub ZTE MC888 traffic inside SWEEPR VPN (lon01.wg.sweeprvpn.com, MTU 1380, 20s keepalive) hides HTTPS SNI headers from carrier video rate-limiters during busy evenings. Avoiding 464XLAT frame splits and routing encrypted DNS through 10.64.0.1 restores smooth 4K streaming playback across three simultaneous connected devices and travel routers.</p>
       <div style="padding-top:10px;border-top:1px solid rgba(16,185,129,0.22);font-size:0.84rem;font-weight:700;">
         <a href="/tools/isp-throttling-test" style="color:var(--accent2,#34d399);text-decoration:underline;">Run Free 10s ISP Throttling &amp; Latency Test &rarr;</a>
       </div>
@@ -113,7 +113,7 @@
 
     <h2>Three 5G Hub Diagnostic Verification</h2>
     <pre><code># Check ZTE MC888 gateway path and validate 1380 MTU tunnel fit
-ping -M do -s 1352 uk-lon.sweeprvpn.net
+ping -M do -s 1352 lon01.wg.sweeprvpn.com
 curl -sI https://speed.cloudflare.com/__down?bytes=10000000</code></pre>
 
     <h2>Three UK 5G Hub Evening Flow Profile</h2>
@@ -129,7 +129,7 @@ MTU = 1380
 DNS = 10.64.0.1
 
 [Peer]
-Endpoint = uk-lon.sweeprvpn.net:51820
+Endpoint = lon01.wg.sweeprvpn.com:51820
 AllowedIPs = 0.0.0.0/0, ::/0
 PersistentKeepalive = 20</code></pre>
 
@@ -154,7 +154,7 @@ PersistentKeepalive = 20</code></pre>
     </ul>
   </main>
   <footer>
-    <p>&copy; 2026 SWEEPR VPN Security Lab. Built in Rust + Tauri v2 with Audited Kernel WireGuard &amp; RAM-Only Servers.</p>
+    <p>&copy; 2026 SWEEPR VPN Security Lab. Built with Open-Source Kernel WireGuard &amp; RAM-Only Servers.</p>
     <p>
       <a href="/">Home</a> |
       <a href="/solutions">ISP Solutions</a> |

@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OpenWrt 23.05+ Router WireGuard Setup | SWEEPR VPN</title>
-  <meta name="description" content="2-minute OpenWrt 23.05+ router WireGuard &amp; policy routing setup guide. Copy-paste UCI/.conf config, MTU 1420 settings, 10.66.0.1 DNS &amp; 4ms 10Gbps servers." />
+  <meta name="description" content="2-minute OpenWrt 23.05+ router WireGuard &amp; policy routing setup guide. Copy-paste UCI/.conf config, MTU 1420 settings, 10.64.0.1 DNS &amp; 4ms 10Gbps servers." />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="https://sweeprvpn.com/setup/openwrt-wireguard-router">
   <meta name="theme-color" content="#10b981">
@@ -18,7 +18,7 @@
   <meta property="og:locale" content="en_GB">
   <meta property="og:url" content="https://sweeprvpn.com/setup/openwrt-wireguard-router">
   <meta property="og:title" content="OpenWrt 23.05+ Router WireGuard Setup | SWEEPR VPN" />
-  <meta property="og:description" content="2-minute OpenWrt 23.05+ router WireGuard &amp; policy routing setup guide. Copy-paste UCI/.conf config, MTU 1420 settings, 10.66.0.1 DNS &amp; 4ms 10Gbps servers." />
+  <meta property="og:description" content="2-minute OpenWrt 23.05+ router WireGuard &amp; policy routing setup guide. Copy-paste UCI/.conf config, MTU 1420 settings, 10.64.0.1 DNS &amp; 4ms 10Gbps servers." />
   <meta property="og:image" content="https://sweeprvpn.com/og-image.png">
   <meta property="og:image:alt" content="SWEEPR VPN 10Gbps WireGuard &amp; Home Wi-Fi Radar" />
 
@@ -26,7 +26,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://sweeprvpn.com/setup/openwrt-wireguard-router">
   <meta name="twitter:title" content="OpenWrt 23.05+ Router WireGuard Setup | SWEEPR VPN" />
-  <meta name="twitter:description" content="2-minute OpenWrt 23.05+ router WireGuard &amp; policy routing setup guide. Copy-paste UCI/.conf config, MTU 1420 settings, 10.66.0.1 DNS &amp; 4ms 10Gbps servers." />
+  <meta name="twitter:description" content="2-minute OpenWrt 23.05+ router WireGuard &amp; policy routing setup guide. Copy-paste UCI/.conf config, MTU 1420 settings, 10.64.0.1 DNS &amp; 4ms 10Gbps servers." />
   <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png">
 
   <!-- Schema Markup (TechArticle + SoftwareApplication + BreadcrumbList) -->
@@ -40,7 +40,7 @@
   <link rel="preload" href="/style.css?v=ed321090" as="style" />
   <link rel="stylesheet" href="/tailwind.min.css?v=fbbf784c">
   <link rel="stylesheet" href="/style.css?v=ed321090">
-  <script src="/pricing-config.js?v=7b9c5702" defer></script>
+  <script src="/pricing-config.js?v=7b348060" defer></script>
   <script src="/nav.js?v=02bccc22" defer></script>
   <!-- Google tag (gtag.js) - Sweepr VPN -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
@@ -91,7 +91,7 @@
                     <span class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">SWEEPR VPN vs NordVPN</span>
                     <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">2026 Guide</span>
                   </div>
-                  <p class="text-xs text-gray-500 leading-snug">Compare 14MB lightweight WireGuard performance and locked-in renewal pricing.</p>
+                  <p class="text-xs text-gray-500 leading-snug">Compare lightweight (~723 KB Win) WireGuard performance and locked-in renewal pricing.</p>
                 </div>
               </a>
               <a href="/tools/leak-test" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
@@ -146,7 +146,7 @@
     </div>
     <div id="direct-answer" class="mb-8 p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-gray-800">
       <div class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 mb-1.5">Direct Answer</div>
-      <p class="text-sm sm:text-base leading-relaxed">Install luci-proto-wireguard and kmod-wireguard on OpenWrt 23.05 using opkg, create a WireGuard VPN interface inside LuCI, and attach a masqueraded firewall zone with MSS clamping enabled. Deploy the pbr package whenever you want specific LAN hosts routed via SWEEPR 10.66.0.1 while keeping trusted devices direct on WAN.</p>
+      <p class="text-sm sm:text-base leading-relaxed">Install luci-proto-wireguard and kmod-wireguard on OpenWrt 23.05 using opkg, create a WireGuard VPN interface inside LuCI, and attach a masqueraded firewall zone with MSS clamping enabled. Deploy the pbr package whenever you want specific LAN hosts routed via SWEEPR 10.64.0.1 while keeping trusted devices direct on WAN.</p>
       <div class="mt-3 pt-3 border-t border-emerald-200/80 text-xs font-bold">
         <a href="/tools/leak-test" class="text-emerald-800 hover:text-emerald-950 underline">Audit OpenWrt firewall zone DNS and egress IP &rarr;</a>
       </div>
@@ -184,7 +184,7 @@ opkg install pbr luci-app-pbr
 service rpcd restart &amp;&amp; service network reload</code></pre>
       </div>
       <ol class="list-decimal pl-5 space-y-2 text-gray-700 text-sm leading-relaxed">
-        <li>In LuCI open <strong>Network &rarr; Interfaces &rarr; Add new interface</strong>, name it <code>wg0</code>, pick Protocol <strong>WireGuard VPN</strong>, and paste your SWEEPR PrivateKey plus tunnel IP (<code>10.66.x.x/32</code>).</li>
+        <li>In LuCI open <strong>Network &rarr; Interfaces &rarr; Add new interface</strong>, name it <code>wg0</code>, pick Protocol <strong>WireGuard VPN</strong>, and paste your SWEEPR PrivateKey plus tunnel IP (<code>10.64.0.2/32</code>).</li>
         <li>Under the <strong>Peers</strong> tab, click <strong>Add peer</strong> (or use <em>Import configuration</em> in OpenWrt 23.05+), enter the server PublicKey, Endpoint host/port <code>51820</code>, <code>Allowed IPs: 0.0.0.0/0</code>, and <strong>Persistent Keep Alive: 25</strong>.</li>
         <li>Check <strong>Route Allowed IPs</strong> for whole-home encryption, or leave it <em>unchecked</em> when letting <code>pbr</code> drive per-device rules.</li>
       </ol>
@@ -212,7 +212,7 @@ service rpcd restart &amp;&amp; service network reload</code></pre>
         </table>
       </div>
       <p class="text-gray-700 leading-relaxed text-sm">
-        Inside <strong>Network &rarr; Interfaces &rarr; WAN &rarr; Advanced Settings</strong>, uncheck <em>Use DNS servers advertised by peer</em> and configure <strong>Network &rarr; DHCP and DNS &rarr; DNS Forwardings</strong> to <code>10.66.0.1</code> so <code>dnsmasq</code> routes all LAN lookups through SWEEPR's ACR sinkhole.
+        Inside <strong>Network &rarr; Interfaces &rarr; WAN &rarr; Advanced Settings</strong>, uncheck <em>Use DNS servers advertised by peer</em> and configure <strong>Network &rarr; DHCP and DNS &rarr; DNS Forwardings</strong> to <code>10.64.0.1</code> so <code>dnsmasq</code> routes all LAN lookups through SWEEPR's ACR sinkhole.
       </p>
     </section>
 

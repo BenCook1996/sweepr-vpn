@@ -84,7 +84,7 @@
         <a href="/pricing">Pricing (£1.99 Trial)</a>
         <a href="/tools/leak-test">IP &amp; DNS Leak Test</a>
         <a href="/tools/isp-throttling-test">ISP Speed Checker</a>
-        <a class="btn" href="/download">Download (~3.7 MB)</a>
+        <a class="btn" href="/download">Download (~723 KB)</a>
       </div>
     </nav>
   </header>
@@ -95,7 +95,7 @@
     <p class="lead">Zen Internet maintains strong support scores across UK Openreach and CityFibre circuits, yet evening bulk transfers and international routes still face PPPoE 1412 MTU limits and third-party wholesale peering congestion unless encrypted.</p>
     <div id="direct-answer" style="margin:18px 0 24px;padding:18px 20px;border-radius:14px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.35);">
       <div style="font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent2,#34d399);margin-bottom:6px;">Direct Answer</div>
-      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Eliminate Zen Internet UK Speed Throttling & DPI Traffic Shaping throttling and jitter by wrapping traffic in SWEEPR VPN's 10 Gbps RAM-only WireGuard tunnel (1412 bytes clean over PPPoE 1492 limit, Keeps all recursive queries off WAN logs). Because ChaCha20-encrypted datagrams conceal packet signatures from ISP deep packet inspection, evening streaming and gaming maintain steady low.</p>
+      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Calibrating SWEEPR VPN (lon01.wg.sweeprvpn.com) to MTU = 1412 keeps ChaCha20 WireGuard packets safely under Zen Internet's 1492-byte PPPoE frame ceiling on FRITZ!Box and Asus routers. Encrypted 10.64.0.1 DNS conceals traffic patterns from upstream QoS shapers while keeping three simultaneous devices and home routers fast and protected.</p>
       <div style="padding-top:10px;border-top:1px solid rgba(16,185,129,0.22);font-size:0.84rem;font-weight:700;">
         <a href="/tools/isp-throttling-test" style="color:var(--accent2,#34d399);text-decoration:underline;">Run Free 10s ISP Throttling &amp; Latency Test &rarr;</a>
       </div>
@@ -113,8 +113,8 @@
 
     <h2>FRITZ!Box PPPoE Fragmentation Validation</h2>
     <pre><code># Validate largest non-fragmented ICMP frame over AS13037 PPPoE
-ping -M do -s 1384 uk-lon.sweeprvpn.net
-traceroute -n -w 2 uk-lon.sweeprvpn.net</code></pre>
+ping -M do -s 1384 lon01.wg.sweeprvpn.com
+traceroute -n -w 2 lon01.wg.sweeprvpn.com</code></pre>
 
     <h2>Zen Broadband Path Efficiency Summary</h2>
     <table>
@@ -129,7 +129,7 @@ MTU = 1412
 DNS = 10.64.0.1
 
 [Peer]
-Endpoint = uk-lon.sweeprvpn.net:51820
+Endpoint = lon01.wg.sweeprvpn.com:51820
 AllowedIPs = 0.0.0.0/0, ::/0
 PersistentKeepalive = 25</code></pre>
 
@@ -154,7 +154,7 @@ PersistentKeepalive = 25</code></pre>
     </ul>
   </main>
   <footer>
-    <p>&copy; 2026 SWEEPR VPN Security Lab. Built in Rust + Tauri v2 with Audited Kernel WireGuard &amp; RAM-Only Servers.</p>
+    <p>&copy; 2026 SWEEPR VPN Security Lab. Built with Open-Source Kernel WireGuard &amp; RAM-Only Servers.</p>
     <p>
       <a href="/">Home</a> |
       <a href="/solutions">ISP Solutions</a> |

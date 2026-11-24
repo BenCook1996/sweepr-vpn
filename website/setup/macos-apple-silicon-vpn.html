@@ -40,7 +40,7 @@
   <link rel="preload" href="/style.css?v=ed321090" as="style" />
   <link rel="stylesheet" href="/tailwind.min.css?v=fbbf784c">
   <link rel="stylesheet" href="/style.css?v=ed321090">
-  <script src="/pricing-config.js?v=7b9c5702" defer></script>
+  <script src="/pricing-config.js?v=7b348060" defer></script>
   <script src="/nav.js?v=02bccc22" defer></script>
   <!-- Google tag (gtag.js) - Sweepr VPN -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
@@ -91,7 +91,7 @@
                     <span class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">SWEEPR VPN vs NordVPN</span>
                     <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">2026 Guide</span>
                   </div>
-                  <p class="text-xs text-gray-500 leading-snug">Compare 14MB lightweight WireGuard performance and locked-in renewal pricing.</p>
+                  <p class="text-xs text-gray-500 leading-snug">Compare lightweight (~723 KB Win) WireGuard performance and locked-in renewal pricing.</p>
                 </div>
               </a>
               <a href="/tools/leak-test" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
@@ -206,7 +206,7 @@
 [x] Wi-Fi  -&gt;  Except these SSIDs: Home_5GHz, Studio_Fiber
 
 # Verify macOS mDNSResponder scoped resolver after connecting:
-scutil --dns | grep -A6 "10.66.0.1"
+scutil --dns | grep -A6 "10.64.0.1"
 ifconfig utun4 | grep mtu</code></pre>
       </div>
       <p class="text-gray-700 leading-relaxed mt-3 text-sm">
@@ -217,7 +217,7 @@ ifconfig utun4 | grep mtu</code></pre>
     <section class="mb-10 bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm">
       <h2 class="text-2xl font-bold text-gray-900 mb-3">3. Verifying macOS DNS Isolation &amp; Plan Flexibility</h2>
       <p class="text-gray-700 leading-relaxed mb-3">
-        Even with <code>utun</code> active, verify Safari, Chrome, and terminal lookups point cleanly through <code>10.66.0.1</code> by running our <a href="/tools/leak-test" class="text-emerald-700 font-semibold underline hover:text-emerald-900">macOS WebRTC and DNS leak test</a>. When troubleshooting hotel captive throttles, measure encrypted vs. raw link throughput via the <a href="/tools/isp-throttling-test" class="text-emerald-700 font-semibold underline hover:text-emerald-900">ISP throttling tester</a>.
+        Even with <code>utun</code> active, verify Safari, Chrome, and terminal lookups point cleanly through <code>10.64.0.1</code> by running our <a href="/tools/leak-test" class="text-emerald-700 font-semibold underline hover:text-emerald-900">macOS WebRTC and DNS leak test</a>. When troubleshooting hotel captive throttles, measure encrypted vs. raw link throughput via the <a href="/tools/isp-throttling-test" class="text-emerald-700 font-semibold underline hover:text-emerald-900">ISP throttling tester</a>.
       </p>
       <p class="text-sm text-gray-600">
         Mac owners receive 3 simultaneous peer slots—start for <span data-price="introStr">£1.99</span> in month one, pay <span data-price="sixMonthStr">£48.99</span> every six months, or choose <span data-price="annualStr">£74.99</span> per year.

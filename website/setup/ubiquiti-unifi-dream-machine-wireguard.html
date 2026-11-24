@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>UniFi Dream Machine WireGuard VPN Setup | SWEEPR VPN</title>
-  <meta name="description" content="Step-by-step Ubiquiti UniFi Dream Machine (UDM-Pro / UDM-SE / UDR) WireGuard setup guide. Configure 10Gbps RAM-only nodes, MTU tuning, 10.66.0.1 DNS &amp; kill-switch." />
+  <meta name="description" content="Step-by-step Ubiquiti UniFi Dream Machine (UDM-Pro / UDM-SE / UDR) WireGuard setup guide. Configure 10Gbps RAM-only nodes, MTU tuning, 10.64.0.1 DNS &amp; kill-switch." />
   <link rel="canonical" href="https://sweeprvpn.com/setup/ubiquiti-unifi-dream-machine-wireguard" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta property="og:type" content="article" />
   <meta property="og:locale" content="en_GB" />
   <meta property="og:title" content="UniFi Dream Machine WireGuard VPN Setup | SWEEPR VPN" />
-  <meta property="og:description" content="Step-by-step Ubiquiti UniFi Dream Machine (UDM-Pro / UDM-SE / UDR) WireGuard setup guide. Configure 10Gbps RAM-only nodes, MTU tuning, 10.66.0.1 DNS &amp; kill-switch." />
+  <meta property="og:description" content="Step-by-step Ubiquiti UniFi Dream Machine (UDM-Pro / UDM-SE / UDR) WireGuard setup guide. Configure 10Gbps RAM-only nodes, MTU tuning, 10.64.0.1 DNS &amp; kill-switch." />
   <meta property="og:url" content="https://sweeprvpn.com/setup/ubiquiti-unifi-dream-machine-wireguard" />
   <meta property="og:site_name" content="SWEEPR VPN" />
   <meta property="og:image" content="https://sweeprvpn.com/og-image.png" />
@@ -18,7 +18,7 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:url" content="https://sweeprvpn.com/setup/ubiquiti-unifi-dream-machine-wireguard" />
   <meta name="twitter:title" content="UniFi Dream Machine WireGuard VPN Setup | SWEEPR VPN" />
-  <meta name="twitter:description" content="Step-by-step Ubiquiti UniFi Dream Machine (UDM-Pro / UDM-SE / UDR) WireGuard setup guide. Configure 10Gbps RAM-only nodes, MTU tuning, 10.66.0.1 DNS &amp; kill-switch." />
+  <meta name="twitter:description" content="Step-by-step Ubiquiti UniFi Dream Machine (UDM-Pro / UDM-SE / UDR) WireGuard setup guide. Configure 10Gbps RAM-only nodes, MTU tuning, 10.64.0.1 DNS &amp; kill-switch." />
   <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png" />
   <meta name="theme-color" content="#070b14" />
   
@@ -71,7 +71,7 @@
     gtag('config', 'G-7D28EEMNXX');
   </script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://sweeprvpn.com/"},{"@type":"ListItem","position":2,"name":"Router & Device Setup Guides","item":"https://sweeprvpn.com/setup"},{"@type":"ListItem","position":3,"name":"Ubiquiti UniFi Dream Machine (UDM-Pro / UDM-SE / UDR): High-Speed 10Gbps WireGuard VPN Setup Guide","item":"https://sweeprvpn.com/setup/ubiquiti-unifi-dream-machine-wireguard"}]}</script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"UniFi Dream Machine WireGuard VPN Setup | SWEEPR VPN","description":"Step-by-step Ubiquiti UniFi Dream Machine (UDM-Pro / UDM-SE / UDR) WireGuard VPN setup guide. Configure 10Gbps RAM-only endpoints, optimal MTU, in-tunnel DNS (10.66.0.1), and kill-switch routing.","proficiencyLevel":"Beginner to Expert","author":{"@type":"Person","name":"Benjamin Cook","jobTitle":"Principal Network Architect","url":"https://sweeprvpn.com/warrant-canary","worksFor":{"@type":"Organization","name":"SWEEPR VPN Inc."}},"publisher":{"@type":"Organization","name":"SWEEPR VPN","logo":{"@type":"ImageObject","url":"https://sweeprvpn.com/logo-emerald.svg"}},"mainEntityOfPage":"https://sweeprvpn.com/setup/ubiquiti-unifi-dream-machine-wireguard","reviewedBy":{"@type":"Organization","name":"SWEEPR Security Engineering Lab","url":"https://sweeprvpn.com/"},"dateModified":"2026-11-17","image":"https://sweeprvpn.com/og-image.png","datePublished":"2026-11-17"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"UniFi Dream Machine WireGuard VPN Setup | SWEEPR VPN","description":"Step-by-step Ubiquiti UniFi Dream Machine (UDM-Pro / UDM-SE / UDR) WireGuard VPN setup guide. Configure 10Gbps RAM-only endpoints, optimal MTU, in-tunnel DNS (10.64.0.1), and kill-switch routing.","proficiencyLevel":"Beginner to Expert","author":{"@type":"Person","name":"Benjamin Cook","jobTitle":"Principal Network Architect","url":"https://sweeprvpn.com/warrant-canary","worksFor":{"@type":"Organization","name":"SWEEPR VPN Inc."}},"publisher":{"@type":"Organization","name":"SWEEPR VPN","logo":{"@type":"ImageObject","url":"https://sweeprvpn.com/logo-emerald.svg"}},"mainEntityOfPage":"https://sweeprvpn.com/setup/ubiquiti-unifi-dream-machine-wireguard","reviewedBy":{"@type":"Organization","name":"SWEEPR Security Engineering Lab","url":"https://sweeprvpn.com/"},"dateModified":"2026-11-17","image":"https://sweeprvpn.com/og-image.png","datePublished":"2026-11-17"}</script>
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5" />
   <link rel="manifest" href="/manifest.webmanifest" />
 </head>
@@ -84,7 +84,7 @@
         <a href="/pricing">Pricing (£1.99 Trial)</a>
         <a href="/tools/leak-test">IP &amp; DNS Leak Test</a>
         <a href="/tools/isp-throttling-test">ISP Speed Checker</a>
-        <a class="btn" href="/download">Download (~3.7 MB)</a>
+        <a class="btn" href="/download">Download (~723 KB)</a>
       </div>
     </nav>
   </header>
@@ -95,7 +95,7 @@
     <p class="lead">Upload your SWEEPR VPN WireGuard configuration into UniFi Network 8.x (`Settings -> VPN -> VPN Client`) and route Apple TV, Smart TVs, or specific VLANs through 10Gbps RAM-only endpoints.</p>
     <div id="direct-answer" style="margin:18px 0 24px;padding:18px 20px;border-radius:14px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.35);">
       <div style="font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent2,#34d399);margin-bottom:6px;">Direct Answer</div>
-      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Import your SWEEPR WireGuard configuration inside UniFi OS 3.x or 4.x under Settings, Teleport &amp; VPN, VPN Client, WireGuard. Attach Policy-Based Traffic Routes per VLAN on your UDM Pro or UDM SE so your IoT Smart-TV subnet tunnels exclusively with 10.66.0.1 DNS while Work Macs keep low-latency direct WAN access.</p>
+      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Import your SWEEPR WireGuard configuration inside UniFi OS 3.x or 4.x under Settings, Teleport &amp; VPN, VPN Client, WireGuard. Attach Policy-Based Traffic Routes per VLAN on your UDM Pro or UDM SE so your IoT Smart-TV subnet tunnels exclusively with 10.64.0.1 DNS while Work Macs keep low-latency direct WAN access.</p>
       <div style="padding-top:10px;border-top:1px solid rgba(16,185,129,0.22);font-size:0.84rem;font-weight:700;">
         <a href="/tools/leak-test" style="color:var(--accent2,#34d399);text-decoration:underline;">Verify UniFi VLAN egress IP after applying Traffic Routes &rarr;</a>
       </div>
@@ -119,7 +119,7 @@
     <div class="cta-strip">
       <div>
         <strong>Need Instant Wi-Fi Reconnaissance Alongside UniFi Topology?</strong>
-        <div style="color:var(--muted);font-size:0.93rem;">Pair your UDM gateway with our ~3.7 MB workstation app for laptop travel protection and rogue device checks.</div>
+        <div style="color:var(--muted);font-size:0.93rem;">Pair your UDM gateway with our ~723 KB Windows (~7.6 MB macOS) workstation app for laptop travel protection and rogue device checks.</div>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
         <a class="btn" href="/download">Get Desktop Client</a>
@@ -150,8 +150,8 @@
     <pre><code># Clean UniFi-ready sweepr-lon01.conf (no inline comments):
 [Interface]
 PrivateKey = &lt;UDM_CLIENT_PRIVATE_KEY&gt;
-Address = 10.66.40.8/32
-DNS = 10.66.0.1
+Address = 10.64.0.2/32
+DNS = 10.64.0.1
 
 [Peer]
 PublicKey = &lt;SWEEPR_LON01_PUBKEY&gt;
@@ -164,7 +164,7 @@ PersistentKeepalive = 25</code></pre>
     <ul>
       <li><strong>Route IoT VLAN via WireGuard:</strong> Open <strong>Routing &rarr; Traffic Routes &rarr; Create Entry</strong>. Set <em>What to Route</em> to <strong>All Traffic</strong>, set <em>Target</em> to your <strong>IoT TV VLAN</strong>, pick <strong>Interface: SWEEPR WireGuard</strong>, and tick <strong>Kill Switch</strong> (or fallback drop) so televisions cannot revert to ISP WAN if the tunnel restarts.</li>
       <li><strong>Keep Work Mac on Direct WAN:</strong> Leave your primary Trusted LAN or specific Work MacBook Pro MAC address outside that Traffic Route—or create a higher-priority route targeting <strong>Primary WAN1</strong>—so corporate SSO or Zoom calls stay untouched.</li>
-      <li><strong>Override VLAN DHCP DNS to 10.66.0.1:</strong> Under <strong>Settings &rarr; Networks &rarr; IoT VLAN &rarr; DHCP Service Management</strong>, switch DNS Server from Auto to Manual <code>10.66.0.1</code>. Without this override, UniFi's local <code>dnsmasq</code> forwards Smart-TV queries through your ISP's WAN resolver instead of the tunnel.</li>
+      <li><strong>Override VLAN DHCP DNS to 10.64.0.1:</strong> Under <strong>Settings &rarr; Networks &rarr; IoT VLAN &rarr; DHCP Service Management</strong>, switch DNS Server from Auto to Manual <code>10.64.0.1</code>. Without this override, UniFi's local <code>dnsmasq</code> forwards Smart-TV queries through your ISP's WAN resolver instead of the tunnel.</li>
       <li><strong>PPPoE WAN MSS Clamping:</strong> On BT, Sky, or Vodafone PPPoE circuits, set <strong>UniFi Devices &rarr; UDM &rarr; Settings &rarr; MSS Clamping</strong> to Custom <code>1352</code> and inspect live handshakes over SSH with <code>wg show wgclt1</code>.</li>
     </ul>
 
@@ -208,7 +208,7 @@ PersistentKeepalive = 25</code></pre>
     </div>
 </main>
   <footer>
-    <p>&copy; 2026 SWEEPR VPN Security Lab. Built in Rust + Tauri v2 with Audited Kernel WireGuard &amp; RAM-Only Servers.</p>
+    <p>&copy; 2026 SWEEPR VPN Security Lab. Built with Open-Source Kernel WireGuard &amp; RAM-Only Servers.</p>
     <p>
       <a href="/">Home</a> |
       <a href="/solutions">ISP Solutions</a> |

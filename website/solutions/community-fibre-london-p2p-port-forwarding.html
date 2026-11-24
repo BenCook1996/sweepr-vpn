@@ -84,7 +84,7 @@
         <a href="/pricing">Pricing (£1.99 Trial)</a>
         <a href="/tools/leak-test">IP &amp; DNS Leak Test</a>
         <a href="/tools/isp-throttling-test">ISP Speed Checker</a>
-        <a class="btn" href="/download">Download (~3.7 MB)</a>
+        <a class="btn" href="/download">Download (~723 KB)</a>
       </div>
     </nav>
   </header>
@@ -95,7 +95,7 @@
     <p class="lead">Community Fibre delivers multi-gigabit speeds across Greater London, yet residential non-Premium plans live inside 100.64.0.0/10 Carrier-Grade NAT where inbound peer handshakes and tracker announces hit closed upstream translations.</p>
     <div id="direct-answer" style="margin:18px 0 24px;padding:18px 20px;border-radius:14px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.35);">
       <div style="font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent2,#34d399);margin-bottom:6px;">Direct Answer</div>
-      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Eliminate How to Bypass Community Fibre London CGNAT & P2P Bandwidth Throttling throttling and jitter by wrapping traffic in SWEEPR VPN's 10 Gbps RAM-only WireGuard tunnel (RFC 6598 100.64.0.0/10 CGNAT, 1.8 ms RTT into Docklands UK-LON). Because ChaCha20-encrypted datagrams conceal packet signatures from ISP deep packet inspection, evening streaming and gaming maintain steady low latency across.</p>
+      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Tunneling Community Fibre AS200052 traffic over SWEEPR VPN's London Docklands UK-LON-01 WireGuard node (lon01.wg.sweeprvpn.com, MTU 1420) conceals peer swarm metadata from carrier DPI shaping and prevents CGNAT state table exhaustion. ChaCha20 encryption and 10.64.0.1 DNS protect household IP privacy across three devices and compatible routers.</p>
       <div style="padding-top:10px;border-top:1px solid rgba(16,185,129,0.22);font-size:0.84rem;font-weight:700;">
         <a href="/tools/isp-throttling-test" style="color:var(--accent2,#34d399);text-decoration:underline;">Run Free 10s ISP Throttling &amp; Latency Test &rarr;</a>
       </div>
@@ -107,8 +107,8 @@
       <div class="stat-box"><div class="stat-label">London Cross-Connect</div><div class="stat-val" style="font-size:1.05rem;">1.8 ms RTT into Docklands UK-LON</div></div>
     </div>
 
-    <h2>Sustaining Inbound Peer Connectivity Behind AS200052 CGNAT</h2>
-    <div class="card"><p>Because no unique public IPv4 socket terminates at your Linksys Velop gateway, distributed peer swarms on Linux ISO mirrors or decentralized sync tools fall back strictly to slow outbound-only connections—cutting symmetric 1Gbps potential by 85%.</p>
+    <h2>Preventing AS200052 CGNAT State Exhaustion &amp; DPI Shaping</h2>
+    <div class="card"><p>Even on symmetric 1Gbps London fibre, unencrypted peer swarm announces expose your household IP and trigger carrier DPI throttling or CGNAT translation table exhaustion inside Linksys Velop gateways during heavy Linux ISO transfers.</p>
 <p>Anchoring your swarm client inside an encrypted persistent UDP socket eliminates carrier table exhaustion and protects your London household IP from third-party swarm scrapers.</p></div>
 
     <h2>Inspecting Shared WAN Address & Pinned Peers</h2>
@@ -119,7 +119,7 @@ wg show sweepr-lon latest-handshakes</code></pre>
     <h2>Greater London Fibre Swarm Behaviour</h2>
     <table>
       <thead><tr><th>Swarm Operational Metric</th><th>Uncovered 100.64.x.x WAN</th><th>Persistent 1.8ms Docklands Tunnel</th></tr></thead>
-      <tbody><tr><td>Active Peer Handshake Ratio</td><td>22% outbound-only stalled</td><td>94% bidirectional mesh</td></tr><tr><td>Household IP Exposure in Swarm</td><td>Leaks shared London CGNAT node</td><td>Masked behind Docklands PoP</td></tr><tr><td>Peak Evening ISO Sync Rate</td><td>11 MB/s throttled burst</td><td>98+ MB/s sustained queue</td></tr></tbody>
+      <tbody><tr><td>CGNAT Table &amp; DPI Stability</td><td>State exhaustion &amp; burst shaping</td><td>Single persistent ChaCha20 UDP flow</td></tr><tr><td>Household IP Exposure in Swarm</td><td>Leaks shared London CGNAT node</td><td>Masked behind Docklands PoP</td></tr><tr><td>Peak Evening ISO Sync Rate</td><td>11 MB/s throttled burst</td><td>98+ MB/s sustained queue</td></tr></tbody>
     </table>
 
     <h2>WireGuard Profile Calibration (1420 MTU)</h2>
@@ -129,7 +129,7 @@ MTU = 1420
 DNS = 10.64.0.1
 
 [Peer]
-Endpoint = uk-lon.sweeprvpn.net:51820
+Endpoint = lon01.wg.sweeprvpn.com:51820
 AllowedIPs = 0.0.0.0/0, ::/0
 PersistentKeepalive = 20</code></pre>
 
@@ -154,7 +154,7 @@ PersistentKeepalive = 20</code></pre>
     </ul>
   </main>
   <footer>
-    <p>&copy; 2026 SWEEPR VPN Security Lab. Built in Rust + Tauri v2 with Audited Kernel WireGuard &amp; RAM-Only Servers.</p>
+    <p>&copy; 2026 SWEEPR VPN Security Lab. Built with Open-Source Kernel WireGuard &amp; RAM-Only Servers.</p>
     <p>
       <a href="/">Home</a> |
       <a href="/solutions">ISP Solutions</a> |

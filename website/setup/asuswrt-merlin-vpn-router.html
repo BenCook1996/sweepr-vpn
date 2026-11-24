@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ASUSWRT-Merlin &amp; VPN Fusion WireGuard Guide | SWEEPR VPN</title>
-  <meta name="description" content="2-minute ASUSWRT-Merlin &amp; ASUS VPN Fusion WireGuard router setup guide with copy-paste .conf config, MTU 1420 tuning, 10.66.0.1 DNS &amp; 4ms 10Gbps servers." />
+  <meta name="description" content="2-minute ASUSWRT-Merlin &amp; ASUS VPN Fusion WireGuard router setup guide with copy-paste .conf config, MTU 1420 tuning, 10.64.0.1 DNS &amp; 4ms 10Gbps servers." />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="https://sweeprvpn.com/setup/asuswrt-merlin-vpn-router">
   <meta name="theme-color" content="#10b981">
@@ -18,7 +18,7 @@
   <meta property="og:locale" content="en_GB">
   <meta property="og:url" content="https://sweeprvpn.com/setup/asuswrt-merlin-vpn-router">
   <meta property="og:title" content="ASUSWRT-Merlin &amp; VPN Fusion WireGuard Guide | SWEEPR VPN" />
-  <meta property="og:description" content="2-minute ASUSWRT-Merlin &amp; ASUS VPN Fusion WireGuard router setup guide with copy-paste .conf config, MTU 1420 tuning, 10.66.0.1 DNS &amp; 4ms 10Gbps servers." />
+  <meta property="og:description" content="2-minute ASUSWRT-Merlin &amp; ASUS VPN Fusion WireGuard router setup guide with copy-paste .conf config, MTU 1420 tuning, 10.64.0.1 DNS &amp; 4ms 10Gbps servers." />
   <meta property="og:image" content="https://sweeprvpn.com/og-image.png">
   <meta property="og:image:alt" content="SWEEPR VPN 10Gbps WireGuard &amp; Home Wi-Fi Radar" />
 
@@ -26,7 +26,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://sweeprvpn.com/setup/asuswrt-merlin-vpn-router">
   <meta name="twitter:title" content="ASUSWRT-Merlin &amp; VPN Fusion WireGuard Guide | SWEEPR VPN" />
-  <meta name="twitter:description" content="2-minute ASUSWRT-Merlin &amp; ASUS VPN Fusion WireGuard router setup guide with copy-paste .conf config, MTU 1420 tuning, 10.66.0.1 DNS &amp; 4ms 10Gbps servers." />
+  <meta name="twitter:description" content="2-minute ASUSWRT-Merlin &amp; ASUS VPN Fusion WireGuard router setup guide with copy-paste .conf config, MTU 1420 tuning, 10.64.0.1 DNS &amp; 4ms 10Gbps servers." />
   <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png">
 
   <!-- Schema Markup (TechArticle + SoftwareApplication + BreadcrumbList) -->
@@ -40,7 +40,7 @@
   <link rel="preload" href="/style.css?v=ed321090" as="style" />
   <link rel="stylesheet" href="/tailwind.min.css?v=fbbf784c">
   <link rel="stylesheet" href="/style.css?v=ed321090">
-  <script src="/pricing-config.js?v=7b9c5702" defer></script>
+  <script src="/pricing-config.js?v=7b348060" defer></script>
   <script src="/nav.js?v=02bccc22" defer></script>
   <!-- Google tag (gtag.js) - Sweepr VPN -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
@@ -91,7 +91,7 @@
                     <span class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">SWEEPR VPN vs NordVPN</span>
                     <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">2026 Guide</span>
                   </div>
-                  <p class="text-xs text-gray-500 leading-snug">Compare 14MB lightweight WireGuard performance and locked-in renewal pricing.</p>
+                  <p class="text-xs text-gray-500 leading-snug">Compare lightweight (~723 KB Win) WireGuard performance and locked-in renewal pricing.</p>
                 </div>
               </a>
               <a href="/tools/leak-test" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
@@ -146,7 +146,7 @@
     </div>
     <div id="direct-answer" class="mb-8 p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-gray-800">
       <div class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 mb-1.5">Direct Answer</div>
-      <p class="text-sm sm:text-base leading-relaxed">Upload your SWEEPR profile inside ASUSWRT-Merlin under VPN, WireGuard Client (wgc1), then map living-room devices in VPN Director such as 192.168.50.x/32 to WGC1. Hardware-assisted Broadcom Flow Cache on RT-AX86U and GT-AX6000 routers sustains high speeds while exempting NAS boxes and work laptops directly out WAN with 10.66.0.1 DNS enabled.</p>
+      <p class="text-sm sm:text-base leading-relaxed">Upload your SWEEPR profile inside ASUSWRT-Merlin under VPN, WireGuard Client (wgc1), then map living-room devices in VPN Director such as 192.168.50.x/32 to WGC1. Hardware-assisted Broadcom Flow Cache on RT-AX86U and GT-AX6000 routers sustains high speeds while exempting NAS boxes and work laptops directly out WAN with 10.64.0.1 DNS enabled.</p>
       <div class="mt-3 pt-3 border-t border-emerald-200/80 text-xs font-bold">
         <a href="/tools/leak-test" class="text-emerald-800 hover:text-emerald-950 underline">Audit Merlin wgc1 egress IP and resolver privacy &rarr;</a>
       </div>
@@ -218,7 +218,7 @@ Interface: WGC1  | Local IP: 192.168.50.108/30  | Remote IP: 0.0.0.0/0
     <section class="mb-10 bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm">
       <h2 class="text-2xl font-bold text-gray-900 mb-3">3. DNSFilter &amp; Tunnel Verification Behind Merlin</h2>
       <p class="text-gray-700 leading-relaxed mb-3">
-        To stop Android TVs or Roku boxes from bypassing <code>10.66.0.1</code> with hardcoded <code>8.8.8.8</code> lookups, enable <strong>LAN &rarr; DNSFilter</strong> in <em>Router</em> mode so intercepted UDP/TCP port 53 queries route cleanly through your <code>wgc1</code> DNS assignment. On PPPoE UK fibre links, drop <code>MTU</code> inside <code>wgc1</code> from 1420 to 1412 if web pages hang.
+        To stop Android TVs or Roku boxes from bypassing <code>10.64.0.1</code> with hardcoded <code>8.8.8.8</code> lookups, enable <strong>LAN &rarr; DNSFilter</strong> in <em>Router</em> mode so intercepted UDP/TCP port 53 queries route cleanly through your <code>wgc1</code> DNS assignment. On PPPoE UK fibre links, drop <code>MTU</code> inside <code>wgc1</code> from 1420 to 1412 if web pages hang.
       </p>
       <p class="text-gray-700 leading-relaxed mb-3">
         From a tunneled client behind <code>WGC1</code>, confirm zero IPv6 or ISP resolver leakage with our <a href="/tools/leak-test" class="text-emerald-700 font-semibold underline hover:text-emerald-900">browser IP and DNS leak test</a>, and benchmark evening jitter against your raw WAN route using the <a href="/tools/isp-throttling-test" class="text-emerald-700 font-semibold underline hover:text-emerald-900">ISP throttling diagnostic</a>.

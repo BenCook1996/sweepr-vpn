@@ -171,6 +171,8 @@
       }
       const saved = localStorage.getItem('sweepr_vpn_currency');
       if (saved && SWEEPR_PRICING[saved]) return saved;
+      const p = String(window.location.pathname || '/').toLowerCase();
+      if (/^\/(?:de|fr|es)(?:\/|$)/.test(p)) return 'EUR';
     } catch (e) {}
     return 'GBP';
   }

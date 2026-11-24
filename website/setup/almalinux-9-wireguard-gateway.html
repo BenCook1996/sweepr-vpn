@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AlmaLinux 9 &amp; Rocky Linux 9 Enterprise Gateway | SWEEPR VPN</title>
-  <meta name="description" content="Step-by-step AlmaLinux 9 &amp; Rocky Linux 9 WireGuard gateway setup guide. Configure 10Gbps RAM-only servers, optimal MTU, 10.66.0.1 DNS &amp; nftables kill-switch." />
+  <meta name="description" content="Step-by-step AlmaLinux 9 &amp; Rocky Linux 9 WireGuard gateway setup guide. Configure 10Gbps RAM-only servers, optimal MTU, 10.64.0.1 DNS &amp; nftables kill-switch." />
   <link rel="canonical" href="https://sweeprvpn.com/setup/almalinux-9-wireguard-gateway" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta property="og:type" content="article" />
   <meta property="og:locale" content="en_GB" />
   <meta property="og:title" content="AlmaLinux 9 &amp; Rocky Linux 9 Enterprise Gateway | SWEEPR VPN" />
-  <meta property="og:description" content="Step-by-step AlmaLinux 9 &amp; Rocky Linux 9 WireGuard gateway setup guide. Configure 10Gbps RAM-only servers, optimal MTU, 10.66.0.1 DNS &amp; nftables kill-switch." />
+  <meta property="og:description" content="Step-by-step AlmaLinux 9 &amp; Rocky Linux 9 WireGuard gateway setup guide. Configure 10Gbps RAM-only servers, optimal MTU, 10.64.0.1 DNS &amp; nftables kill-switch." />
   <meta property="og:url" content="https://sweeprvpn.com/setup/almalinux-9-wireguard-gateway" />
   <meta property="og:site_name" content="SWEEPR VPN" />
   <meta property="og:image" content="https://sweeprvpn.com/og-image.png" />
@@ -18,7 +18,7 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:url" content="https://sweeprvpn.com/setup/almalinux-9-wireguard-gateway" />
   <meta name="twitter:title" content="AlmaLinux 9 &amp; Rocky Linux 9 Enterprise Gateway | SWEEPR VPN" />
-  <meta name="twitter:description" content="Step-by-step AlmaLinux 9 &amp; Rocky Linux 9 WireGuard gateway setup guide. Configure 10Gbps RAM-only servers, optimal MTU, 10.66.0.1 DNS &amp; nftables kill-switch." />
+  <meta name="twitter:description" content="Step-by-step AlmaLinux 9 &amp; Rocky Linux 9 WireGuard gateway setup guide. Configure 10Gbps RAM-only servers, optimal MTU, 10.64.0.1 DNS &amp; nftables kill-switch." />
   <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png" />
   <meta name="theme-color" content="#070b14" />
   
@@ -67,7 +67,7 @@
     gtag('config', 'G-7D28EEMNXX');
   </script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://sweeprvpn.com/"},{"@type":"ListItem","position":2,"name":"Router & Device Setup Guides","item":"https://sweeprvpn.com/setup"},{"@type":"ListItem","position":3,"name":"AlmaLinux 9 & Rocky Linux 9 Enterprise WireGuard Gateway: High-Speed 10Gbps WireGuard VPN Setup Guide","item":"https://sweeprvpn.com/setup/almalinux-9-wireguard-gateway"}]}</script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"AlmaLinux 9 & Rocky Linux 9 Enterprise Gateway | SWEEPR VPN","description":"Step-by-step AlmaLinux 9 & Rocky Linux 9 Enterprise Gateway WireGuard VPN setup guide. Configure 10Gbps RAM-only endpoints, optimal MTU, in-tunnel DNS (10.66.0.1), and kill-switch routing.","proficiencyLevel":"Beginner to Expert","author":{"@type":"Person","name":"Benjamin Cook","jobTitle":"Principal Network Architect","url":"https://sweeprvpn.com/warrant-canary","worksFor":{"@type":"Organization","name":"SWEEPR VPN Inc."}},"publisher":{"@type":"Organization","name":"SWEEPR VPN","logo":{"@type":"ImageObject","url":"https://sweeprvpn.com/logo-emerald.svg"}},"mainEntityOfPage":"https://sweeprvpn.com/setup/almalinux-9-wireguard-gateway","reviewedBy":{"@type":"Organization","name":"SWEEPR Security Engineering Lab","url":"https://sweeprvpn.com/"},"dateModified":"2026-11-17","image":"https://sweeprvpn.com/og-image.png","datePublished":"2026-11-17"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"AlmaLinux 9 & Rocky Linux 9 Enterprise Gateway | SWEEPR VPN","description":"Step-by-step AlmaLinux 9 & Rocky Linux 9 Enterprise Gateway WireGuard VPN setup guide. Configure 10Gbps RAM-only endpoints, optimal MTU, in-tunnel DNS (10.64.0.1), and kill-switch routing.","proficiencyLevel":"Beginner to Expert","author":{"@type":"Person","name":"Benjamin Cook","jobTitle":"Principal Network Architect","url":"https://sweeprvpn.com/warrant-canary","worksFor":{"@type":"Organization","name":"SWEEPR VPN Inc."}},"publisher":{"@type":"Organization","name":"SWEEPR VPN","logo":{"@type":"ImageObject","url":"https://sweeprvpn.com/logo-emerald.svg"}},"mainEntityOfPage":"https://sweeprvpn.com/setup/almalinux-9-wireguard-gateway","reviewedBy":{"@type":"Organization","name":"SWEEPR Security Engineering Lab","url":"https://sweeprvpn.com/"},"dateModified":"2026-11-17","image":"https://sweeprvpn.com/og-image.png","datePublished":"2026-11-17"}</script>
   <link rel="icon" type="image/svg+xml" href="/logo-emerald.svg?v=5" />
   <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png?v=5" />
   <link rel="shortcut icon" href="/favicon.ico?v=5" />
@@ -83,7 +83,7 @@
         <a href="/pricing">Pricing (£1.99 Trial)</a>
         <a href="/tools/leak-test">IP &amp; DNS Leak Test</a>
         <a href="/tools/isp-throttling-test">ISP Speed Checker</a>
-        <a class="btn" href="/download">Download (~3.7 MB)</a>
+        <a class="btn" href="/download">Download (~723 KB)</a>
       </div>
     </nav>
   </header>
@@ -118,7 +118,7 @@
     <div class="cta-strip">
       <div>
         <strong>Deploying Workstation Endpoints Alongside Your RHEL 9 Gateway?</strong>
-        <div style="color:var(--muted);font-size:0.93rem;">Pair headless Linux gateways with our ~3.7 MB Rust desktop client or export raw peer keys from any active subscription.</div>
+        <div style="color:var(--muted);font-size:0.93rem;">Pair headless Linux gateways with our ~723 KB Windows (~7.6 MB macOS) desktop client or export raw peer keys from any active subscription.</div>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
         <a class="btn" href="/download">Grab Desktop Client</a>
@@ -151,7 +151,7 @@ sudo dnf install -y wireguard-tools
 sudo install -m 600 ~/sweepr-ams01.conf /etc/wireguard/sweepr-ams01.conf
 sudo restorecon -Rv /etc/wireguard
 sudo nmcli connection import type wireguard file /etc/wireguard/sweepr-ams01.conf
-sudo nmcli connection modify sweepr-ams01 ipv4.dns "10.66.0.1" ipv4.ignore-auto-dns yes
+sudo nmcli connection modify sweepr-ams01 ipv4.dns "10.64.0.1" ipv4.ignore-auto-dns yes
 sudo nmcli connection up sweepr-ams01</code></pre>
     <p>Avoid running both <code>wg-quick@wg0.service</code> and a NetworkManager-imported connection for the same tunnel simultaneously; pick <code>nmcli</code> on multi-NIC gateways managed by RHEL cockpit or Ansible.</p>
 
@@ -210,14 +210,14 @@ sudo nft list ruleset | grep -A4 masquerade</code></pre>
         <li class="sweepr-mesh-link"><a href="/setup/ubiquiti-unifi-dream-machine-wireguard" style="color:var(--accent2);">UniFi Dream Machine VLAN routing</a></li>
         <li class="sweepr-mesh-link"><a href="/guides/block-sony-bravia-samba-tv-acr" style="color:var(--accent2);">Sony Bravia Samba ACR sinkholing</a></li>
         <li><a href="/tools/isp-throttling-test" style="color:var(--accent2);">Browser ISP throttling benchmark</a></li>
-        <li><a href="/download" style="color:var(--accent2);">SWEEPR desktop binaries (~3.7 MB)</a></li>
+        <li><a href="/download" style="color:var(--accent2);">SWEEPR desktop installers (~723 KB Win / ~7.6 MB Mac)</a></li>
         <li><a href="/tools/whats-on-my-wifi" style="color:var(--accent2);">LAN rogue device audit tool</a></li>
         <li><a href="/tools/vpn-renewal-price-checker" style="color:var(--accent2);">Multi-year VPN renewal cost audit</a></li>
       </ul>
     </div>
 </main>
   <footer>
-    <p>&copy; 2026 SWEEPR VPN Security Lab. Built in Rust + Tauri v2 with Audited Kernel WireGuard &amp; RAM-Only Servers.</p>
+    <p>&copy; 2026 SWEEPR VPN Security Lab. Built with Open-Source Kernel WireGuard &amp; RAM-Only Servers.</p>
     <p>
       <a href="/">Home</a> |
       <a href="/solutions">ISP Solutions</a> |

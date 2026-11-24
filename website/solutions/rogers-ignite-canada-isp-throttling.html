@@ -84,18 +84,18 @@
         <a href="/pricing">Pricing (£1.99 Trial)</a>
         <a href="/tools/leak-test">IP &amp; DNS Leak Test</a>
         <a href="/tools/isp-throttling-test">ISP Speed Checker</a>
-        <a class="btn" href="/download">Download (~3.7 MB)</a>
+        <a class="btn" href="/download">Download (~723 KB)</a>
       </div>
     </nav>
   </header>
   <main>
-    <span class="badge">Canadian DOCSIS & Ignite Fibre • AS812 • Toronto Peering Edge</span>
+    <span class="badge">Canadian DOCSIS & Ignite Fibre • AS812 • US-NYC-01 East Edge</span>
     <h1>How to Stop Rogers Ignite Broadband Canada Speed Throttling & DPI Traffic Shaping</h1>
       <div id="eeat-author-byline" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:0.82rem;color:var(--muted,#94a3b8);margin:10px 0 14px;"><span>By <strong style="color:var(--text,#e5e7eb);">Benjamin Cook</strong>, Principal Network Architect &middot; SWEEPR VPN Inc.</span><span>&bull;</span><span>Updated Nov 2026</span><span>&bull;</span><a href="/warrant-canary" style="color:var(--accent2,#34d399);font-weight:700;text-decoration:underline;">Verified via Cryptographic Warrant Canary &rarr;</a></div>
     <p class="lead">Rogers Ignite Hitron and XB7/XB8 gateways across Ontario and Atlantic Canada sit on deeply buffered DOCSIS segments where evening ISP queue management throttles high-volume uploads, cloud backups, and peer syncs.</p>
     <div id="direct-answer" style="margin:18px 0 24px;padding:18px 20px;border-radius:14px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.35);">
       <div style="font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent2,#34d399);margin-bottom:6px;">Direct Answer</div>
-      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Eliminate Rogers Ignite Broadband Canada Speed Throttling & DPI Traffic Shaping throttling and jitter by wrapping traffic in SWEEPR VPN's 10 Gbps RAM-only WireGuard tunnel (Toronto (TorIX) 7 ms ingress, 1420 MTU / UDP 51820). Because ChaCha20-encrypted datagrams conceal packet signatures from ISP deep packet inspection, evening streaming and gaming maintain steady low latency across 3.</p>
+      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Securing Rogers Ignite AS812 DOCSIS circuits via SWEEPR VPN's nearest North America East 10 Gbps node (US-NYC-01, nyc01.wg.sweeprvpn.com, MTU 1420) conceals TLS SNI metadata from evening traffic shapers. ChaCha20 encapsulation and 10.64.0.1 DNS keep upstream backups and cloud syncs predictable across three devices and routers.</p>
       <div style="padding-top:10px;border-top:1px solid rgba(16,185,129,0.22);font-size:0.84rem;font-weight:700;">
         <a href="/tools/isp-throttling-test" style="color:var(--accent2,#34d399);text-decoration:underline;">Run Free 10s ISP Throttling &amp; Latency Test &rarr;</a>
       </div>
@@ -103,33 +103,33 @@
 
     <div class="grid-3">
       <div class="stat-box"><div class="stat-label">Gateway Hardware</div><div class="stat-val" style="font-size:1.05rem;">Rogers Ignite XB7 / Gen 2/3 Wi-Fi</div></div>
-      <div class="stat-box"><div class="stat-label">Canadian Cross-Connect</div><div class="stat-val" style="font-size:1.05rem;">Toronto (TorIX) 7 ms ingress</div></div>
+      <div class="stat-box"><div class="stat-label">Nearest East Ingress</div><div class="stat-val" style="font-size:1.05rem;">New York (US-NYC-01) 19 ms ingress</div></div>
       <div class="stat-box"><div class="stat-label">Standard Frame Spec</div><div class="stat-val" style="font-size:1.05rem;">1420 MTU / UDP 51820</div></div>
     </div>
 
     <h2>Avoiding Rogers AS812 Bufferbloat & Evening Flow Deprioritization</h2>
     <div class="card"><p>Heavy evening neighborhood utilization across Canadian cable nodes pushes upstream queue delays well past 100ms while DPI policies throttle sustained non-web bulk ports.</p>
-<p>Anchoring traffic through our Toronto PoP (<code class="font-mono">ca-yyz.sweeprvpn.net</code>) prevents hostname inspection and keeps upstream latency predictable across work-from-home and backup schedules.</p></div>
+<p>Anchoring traffic through our nearest North America East PoP in New York (<code class="font-mono">nyc01.wg.sweeprvpn.com</code>) prevents hostname inspection and keeps upstream latency predictable across work-from-home and backup schedules.</p></div>
 
     <h2>Canadian Transit & Bufferbloat Audit</h2>
-    <pre><code># Trace Toronto transit hop and verify WireGuard MTU cleanly
-traceroute -n ca-yyz.sweeprvpn.net
-ping -M do -s 1392 ca-yyz.sweeprvpn.net</code></pre>
+    <pre><code># Trace US-NYC-01 transit hop and verify WireGuard MTU cleanly
+traceroute -n nyc01.wg.sweeprvpn.com
+ping -M do -s 1392 nyc01.wg.sweeprvpn.com</code></pre>
 
     <h2>Rogers Ignite Evening Flow Metrics</h2>
     <table>
-      <thead><tr><th>Toronto Segment Metric</th><th>Native Ignite Shaping</th><th>Encrypted TorIX Ingress</th></tr></thead>
+      <thead><tr><th>Rogers Segment Metric</th><th>Native Ignite Shaping</th><th>Encrypted US-NYC-01 Ingress</th></tr></thead>
       <tbody><tr><td>Peak Cloud Upload Stability</td><td>Erratic pacing / stalls</td><td>Full upstream plan saturation</td></tr><tr><td>Inspection Privacy</td><td>SNI & bulk-port exposed</td><td>Zero visibility ChaCha20 UDP</td></tr><tr><td>Local Smart-TV Telemetry</td><td>Exposed to ISP DNS logs</td><td>Shielded with LAN add-on</td></tr></tbody>
     </table>
 
     <h2>WireGuard Profile Calibration (1420 MTU)</h2>
-    <pre><code># Canadian Toronto TorIX PoP stanza
+    <pre><code># North America East US-NYC-01 PoP stanza
 [Interface]
 MTU = 1420
 DNS = 10.64.0.1
 
 [Peer]
-Endpoint = ca-yyz.sweeprvpn.net:51820
+Endpoint = nyc01.wg.sweeprvpn.com:51820
 AllowedIPs = 0.0.0.0/0, ::/0
 PersistentKeepalive = 25</code></pre>
 
@@ -154,7 +154,7 @@ PersistentKeepalive = 25</code></pre>
     </ul>
   </main>
   <footer>
-    <p>&copy; 2026 SWEEPR VPN Security Lab. Built in Rust + Tauri v2 with Audited Kernel WireGuard &amp; RAM-Only Servers.</p>
+    <p>&copy; 2026 SWEEPR VPN Security Lab. Built with Open-Source Kernel WireGuard &amp; RAM-Only Servers.</p>
     <p>
       <a href="/">Home</a> |
       <a href="/solutions">ISP Solutions</a> |

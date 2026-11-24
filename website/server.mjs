@@ -3442,7 +3442,7 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
       <span class="font-extrabold text-xl tracking-tight text-gray-900">SWEEPR <span class="text-emerald-600">VPN</span></span>
     </a>
     <h1 class="text-2xl font-black text-gray-900 mb-2">Download SWEEPR VPN (v2.6.0)</h1>
-    <p class="text-sm text-gray-600 mb-5 leading-relaxed">Select your device below to manually download and install the official SWEEPR VPN client by <strong>SWEEPR VPN Inc.</strong> (native Rust + Tauri v2 client with Free 30-Second Home Wi-Fi Device Scanner). No downloads start automatically without your explicit click.</p>
+    <p class="text-sm text-gray-600 mb-5 leading-relaxed">Select your device below to manually download and install the official SWEEPR VPN client by <strong>SWEEPR VPN Inc.</strong> (native ~${exeMeta.sizeLabel.replace(/\s*\(.*$/, '')} desktop installer with Free 30-Second Home Wi-Fi Device Scanner). No downloads start automatically without your explicit click.</p>
 
     ${browserAssistBanner}
 
@@ -3466,10 +3466,10 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
       </a>`}
       <a href="/download/SWEEPRVPN.mobileconfig" rel="nofollow" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'ios' ? 'border-2 border-emerald-500 bg-emerald-50/40' : 'border-gray-200 bg-white'} hover:border-emerald-400 transition-all no-underline text-gray-900">
         <div>
-          <div class="font-bold text-sm text-gray-900">🍎 iPhone &amp; iPad Installer (iOS / iPadOS)</div>
-          <div class="text-xs text-gray-500">v2.6.0 &bull; ${mobileconfigMeta.sizeLabel} &bull; Encrypted DNS &amp; App Profile</div>
+          <div class="font-bold text-sm text-gray-900">🍎 iPhone &amp; iPad Web App + Encrypted DNS Profile (iOS / iPadOS)</div>
+          <div class="text-xs text-gray-500">v2.6.0 &bull; ${mobileconfigMeta.sizeLabel} &bull; Safari Web App + Encrypted DoH DNS Profile</div>
         </div>
-        <span class="btn btn-go text-xs py-2 px-3 shrink-0">Install on iOS</span>
+        <span class="btn btn-go text-xs py-2 px-3 shrink-0">Install Profile</span>
       </a>
       <a href="/download/SWEEPRVPN.exe" download="SWEEPRVPN.exe" rel="nofollow" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'windows' ? 'border-2 border-emerald-500 bg-emerald-50/40' : 'border-gray-200 bg-white'} hover:border-emerald-400 transition-all no-underline text-gray-900">
         <div>
@@ -4383,16 +4383,18 @@ self.addEventListener('fetch', e => {
       }
 
       const defaultPops = [
-        { code: 'UK-LON-01', city: 'London', country: 'United Kingdom', flag: '🇬🇧', p99_ms: 4, load_pct: 18 },
-        { code: 'NL-AMS-01', city: 'Amsterdam', country: 'Netherlands', flag: '🇳🇱', p99_ms: 11, load_pct: 19 },
-        { code: 'DE-FRA-01', city: 'Frankfurt', country: 'Germany', flag: '🇩🇪', p99_ms: 14, load_pct: 22 },
-        { code: 'SE-STO-01', city: 'Stockholm', country: 'Sweden', flag: '🇸🇪', p99_ms: 16, load_pct: 15 },
-        { code: 'US-NYC-01', city: 'New York', country: 'United States', flag: '🇺🇸', p99_ms: 19, load_pct: 26 },
-        { code: 'CA-TOR-01', city: 'Toronto', country: 'Canada', flag: '🇨🇦', p99_ms: 29, load_pct: 17 },
-        { code: 'SG-SIN-01', city: 'Singapore', country: 'Singapore', flag: '🇸🇬', p99_ms: 38, load_pct: 21 },
-        { code: 'AU-SYD-01', city: 'Sydney', country: 'Australia', flag: '🇦🇺', p99_ms: 41, load_pct: 16 }
+        { code: 'UK-LON-01', city: 'London', country: 'United Kingdom', flag: '🇬🇧', p99_ms: 4, load_pct: 0 },
+        { code: 'NL-AMS-01', city: 'Amsterdam', country: 'Netherlands', flag: '🇳🇱', p99_ms: 11, load_pct: 0 },
+        { code: 'DE-FRA-01', city: 'Frankfurt', country: 'Germany', flag: '🇩🇪', p99_ms: 14, load_pct: 0 },
+        { code: 'SE-STO-01', city: 'Stockholm', country: 'Sweden', flag: '🇸🇪', p99_ms: 16, load_pct: 0 },
+        { code: 'US-NYC-01', city: 'New York', country: 'United States', flag: '🇺🇸', p99_ms: 19, load_pct: 0 },
+        { code: 'US-LAX-01', city: 'Los Angeles', country: 'United States', flag: '🇺🇸', p99_ms: 115, load_pct: 0 },
+        { code: 'SG-SIN-01', city: 'Singapore', country: 'Singapore', flag: '🇸🇬', p99_ms: 142, load_pct: 0 },
+        { code: 'JP-TYO-01', city: 'Tokyo', country: 'Japan', flag: '🇯🇵', p99_ms: 138, load_pct: 0 }
       ];
-      const wgNodeList = Array.isArray(pipelineState?.wireguardNodes)
+      const wgNodeList = Array.isArray(pipelineState?.liveVpnServers)
+        ? pipelineState.liveVpnServers
+        : Array.isArray(pipelineState?.wireguardNodes)
         ? pipelineState.wireguardNodes
         : Array.isArray(pipelineState?.pops)
         ? pipelineState.pops
@@ -4400,12 +4402,19 @@ self.addEventListener('fetch', e => {
       const livePopsMap = new Map(
         wgNodeList.map((p) => [String(p.id || p.code || '').toUpperCase(), p])
       );
+      const wgConfigMap = new Map(
+        (Array.isArray(pipelineState?.wireguardNodes) ? pipelineState.wireguardNodes : []).map((p) => [
+          String(p.id || p.code || '').toUpperCase(),
+          p
+        ])
+      );
       const pops = defaultPops.map((p) => {
         const live = livePopsMap.get(p.code);
+        const cfg = wgConfigMap.get(p.code);
         return {
           ...p,
-          p99_ms: Number(live?.baselineRttMs || live?.p99_ms || p.p99_ms),
-          load_pct: Number(live?.loadPct || live?.load_pct || p.load_pct)
+          p99_ms: Number(live?.probe_ms ?? live?.p99_ms ?? cfg?.baselineRttMs ?? p.p99_ms),
+          load_pct: Number(live?.load_pct ?? live?.loadPct ?? (Number(live?.devices || 0) > 0 ? Math.min(100, Number(live.devices)) : 0))
         };
       });
 
@@ -4420,15 +4429,18 @@ self.addEventListener('fetch', e => {
           } catch {}
         }
       }
-      const diagnosticScans7d = 418 + recentTelemetryChecks;
+      const diagnosticScans7d = recentTelemetryChecks;
       const lonPop = pops.find((p) => p.code === 'UK-LON-01') || pops[0];
       const fraPop = pops.find((p) => p.code === 'DE-FRA-01') || pops[2];
       const nycPop = pops.find((p) => p.code === 'US-NYC-01') || pops[4];
-      const totalConnectedDevices = Number(pipelineState?.liveVpnServers?.totalConnectedDevices || 105);
+      const totalConnectedDevices = Number(
+        pipelineState?.liveVpnFleetSummary?.totalConnectedDevices ??
+          wgNodeList.reduce((acc, s) => acc + Number(s?.devices || 0), 0)
+      );
 
       const payload = {
         ok: true,
-        onlinePopsCount: Number(pipelineState?.liveVpnServers?.onlineNodes || pops.length),
+        onlinePopsCount: Number(pipelineState?.liveVpnFleetSummary?.onlineServers ?? pops.length),
         totalPops: 8,
         londonLatencyMs: lonPop.p99_ms,
         londonLoadPct: lonPop.load_pct,
@@ -4439,7 +4451,7 @@ self.addEventListener('fetch', e => {
         totalConnectedDevices,
         priceLockGuarantee: '£6.25/mo (£74.99/yr) • 0% Year-2 Renewal Hike',
         pops,
-        updatedAt: new Date().toISOString()
+        updatedAt: pipelineState?.lastRunAt || new Date().toISOString()
       };
       liveProofStatsCache = { expiresAt: Date.now() + 5 * 60 * 1000, payload };
       return sendJson(res, 200, payload, { 'Cache-Control': 'public, max-age=120' }, req);
@@ -4452,12 +4464,12 @@ self.addEventListener('fetch', e => {
           onlinePopsCount: 8,
           totalPops: 8,
           londonLatencyMs: 4,
-          londonLoadPct: 18,
+          londonLoadPct: 0,
           frankfurtLatencyMs: 14,
           newYorkLatencyMs: 19,
           acrDomainsBlockedCount: 65,
-          diagnosticScans7d: 418,
-          totalConnectedDevices: 105,
+          diagnosticScans7d: 0,
+          totalConnectedDevices: 0,
           priceLockGuarantee: '£6.25/mo (£74.99/yr) • 0% Year-2 Renewal Hike'
         },
         { 'Cache-Control': 'public, max-age=120' },

@@ -84,7 +84,7 @@
         <a href="/pricing">Pricing (£1.99 Trial)</a>
         <a href="/tools/leak-test">IP &amp; DNS Leak Test</a>
         <a href="/tools/isp-throttling-test">ISP Speed Checker</a>
-        <a class="btn" href="/download">Download (~3.7 MB)</a>
+        <a class="btn" href="/download">Download (~723 KB)</a>
       </div>
     </nav>
   </header>
@@ -95,7 +95,7 @@
     <p class="lead">Hospital and GP clinic guest Wi-Fi portals restrict outbound non-web protocols while aggressively shaping sustained video frames, causing frozen consultation screens and garbled telehealth audio unless encapsulated over port 443.</p>
     <div id="direct-answer" style="margin:18px 0 24px;padding:18px 20px;border-radius:14px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.35);">
       <div style="font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent2,#34d399);margin-bottom:6px;">Direct Answer</div>
-      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Eliminate Microsoft Teams, Zoom & VoIP Jitter on NHS & Hospital Guest Wi-Fi Using Low-Latency WireGuard throttling and jitter by wrapping traffic in SWEEPR VPN's 10 Gbps RAM-only WireGuard tunnel (UDP Port 443 + 1380 MTU cap, 4 ms London Docklands zero-log edge). Because ChaCha20-encrypted datagrams conceal packet signatures from ISP deep packet inspection, evening streaming.</p>
+      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Connecting via SWEEPR VPN's Stealth UDP 443 endpoint (lon01.wg.sweeprvpn.com, MTU 1380) traverses strict hospital Wi-Fi firewalls that block UDP 51820 while concealing WebRTC traffic from middlebox shaping. In-tunnel 10.64.0.1 DNS and ChaCha20 encryption keep Teams and Zoom calls crisp across three mobile or laptop devices.</p>
       <div style="padding-top:10px;border-top:1px solid rgba(16,185,129,0.22);font-size:0.84rem;font-weight:700;">
         <a href="/tools/isp-throttling-test" style="color:var(--accent2,#34d399);text-decoration:underline;">Run Free 10s ISP Throttling &amp; Latency Test &rarr;</a>
       </div>
@@ -129,7 +129,7 @@ MTU = 1380
 DNS = 10.64.0.1
 
 [Peer]
-Endpoint = uk-lon.sweeprvpn.net:443
+Endpoint = lon01.wg.sweeprvpn.com:443
 AllowedIPs = 0.0.0.0/0, ::/0
 PersistentKeepalive = 15</code></pre>
 
@@ -154,7 +154,7 @@ PersistentKeepalive = 15</code></pre>
     </ul>
   </main>
   <footer>
-    <p>&copy; 2026 SWEEPR VPN Security Lab. Built in Rust + Tauri v2 with Audited Kernel WireGuard &amp; RAM-Only Servers.</p>
+    <p>&copy; 2026 SWEEPR VPN Security Lab. Built with Open-Source Kernel WireGuard &amp; RAM-Only Servers.</p>
     <p>
       <a href="/">Home</a> |
       <a href="/solutions">ISP Solutions</a> |

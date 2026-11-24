@@ -46,7 +46,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5" />
   <link rel="manifest" href="/manifest.webmanifest" />
   <link rel="stylesheet" href="/style.css?v=ed321090">
-  <script src="/pricing-config.js?v=7b9c5702" defer></script>
+  <script src="/pricing-config.js?v=7b348060" defer></script>
   <script src="/nav.js?v=02bccc22" defer></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
   <script>
@@ -112,7 +112,7 @@
           </p>
         </div>
         <div class="flex flex-col sm:flex-row gap-3 shrink-0">
-          <a rel="nofollow" href="/order?plan=annual&amp;currency=EUR&amp;utm_source=leak_test_sv&amp;utm_medium=localized_cluster" class="btn btn-go px-6 py-3 text-sm">Skydda Nu (2,99 € Prova)</a>
+          <a rel="nofollow" href="/order?plan=monthly&amp;offer=intro&amp;currency=EUR&amp;utm_source=leak_test_sv&amp;utm_medium=localized_cluster" onclick="try{sessionStorage.setItem('sweepr_selected_plan','monthly');}catch(_){}" class="btn btn-go px-6 py-3 text-sm">Skydda Nu (2,99 € Prova)</a>
           <a href="/download" class="btn bg-white/10 hover:bg-white/20 text-white border border-white/20 text-sm">Gratis Nedladdning</a>
         </div>
       </div>
@@ -134,12 +134,12 @@
         </div>
         <div class="p-4 rounded-2xl bg-gray-50 border border-gray-200">
           <h3 class="font-bold text-gray-900 mb-1">Krypterad DNS i tunneln</h3>
-          <p class="text-gray-600 leading-relaxed">Stoppar operatörens DNS-loggning och filtrering med vår interna DNS (<code>10.66.0.1</code>) samt inbyggd skanner för okända enheter på ditt hemma-Wi-Fi.</p>
+          <p class="text-gray-600 leading-relaxed">Stoppar operatörens DNS-loggning och filtrering med vår interna DNS (<code>10.64.0.1</code>) samt inbyggd skanner för okända enheter på ditt hemma-Wi-Fi.</p>
         </div>
       </div>
       <div class="border-t border-gray-200 pt-5 space-y-3 text-sm text-gray-700">
         <h3 class="text-lg font-bold text-gray-900">Vanliga frågor om läckagetestet</h3>
-        <p><strong>Hur stoppar jag en upptäckt DNS- eller WebRTC-läcka?</strong> Använd den inbyggda SWEEPR VPN-klienten (~740 KB på Windows) eller exportera en WireGuard-konfiguration för din router med <code>AllowedIPs = 0.0.0.0/0, ::/0</code> och <code>MTU = 1420</code>.</p>
+        <p><strong>Hur stoppar jag en upptäckt DNS- eller WebRTC-läcka?</strong> Använd den inbyggda SWEEPR VPN-klienten (~723 KB på Windows) eller exportera en WireGuard-konfiguration för din router med <code>AllowedIPs = 0.0.0.0/0, ::/0</code> och <code>MTU = 1420</code>.</p>
         <p><strong>Sparas min IP-adress när jag kör testet?</strong> Nej. WebRTC-kontrollen sker lokalt i din webbläsare och SWEEPR VPN sparar inga användarloggar.</p>
       </div>
       <div class="border-t border-gray-200 pt-4 flex flex-wrap items-center justify-between gap-3 text-xs">

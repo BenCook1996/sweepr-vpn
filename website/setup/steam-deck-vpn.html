@@ -40,7 +40,7 @@
   <link rel="preload" href="/style.css?v=ed321090" as="style" />
   <link rel="stylesheet" href="/tailwind.min.css?v=fbbf784c">
   <link rel="stylesheet" href="/style.css?v=ed321090">
-  <script src="/pricing-config.js?v=7b9c5702" defer></script>
+  <script src="/pricing-config.js?v=7b348060" defer></script>
   <script src="/nav.js?v=02bccc22" defer></script>
   <!-- Google tag (gtag.js) - Sweepr VPN -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
@@ -91,7 +91,7 @@
                     <span class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">SWEEPR VPN vs NordVPN</span>
                     <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">2026 Guide</span>
                   </div>
-                  <p class="text-xs text-gray-500 leading-snug">Compare 14MB lightweight WireGuard performance and locked-in renewal pricing.</p>
+                  <p class="text-xs text-gray-500 leading-snug">Compare lightweight (~723 KB Win) WireGuard performance and locked-in renewal pricing.</p>
                 </div>
               </a>
               <a href="/tools/leak-test" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
@@ -180,7 +180,7 @@
         <div class="text-xs font-bold uppercase tracking-wider text-emerald-400 mb-2">Konsole Commands on Steam Deck OLED / LCD</div>
         <pre class="text-xs sm:text-sm font-mono overflow-x-auto leading-relaxed text-emerald-300"><code># Import directly as persistent .nmconnection (survives SteamOS updates):
 nmcli connection import type wireguard file ~/Downloads/sweepr-lon01.conf
-nmcli connection modify sweepr-lon01 wireguard.mtu 1412 ipv4.dns "10.66.0.1"
+nmcli connection modify sweepr-lon01 wireguard.mtu 1412 ipv4.dns "10.64.0.1"
 nmcli connection up sweepr-lon01
 
 # Verify handshake &amp; clean permissions:

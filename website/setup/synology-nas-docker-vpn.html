@@ -40,7 +40,7 @@
   <link rel="preload" href="/style.css?v=ed321090" as="style" />
   <link rel="stylesheet" href="/tailwind.min.css?v=fbbf784c">
   <link rel="stylesheet" href="/style.css?v=ed321090">
-  <script src="/pricing-config.js?v=7b9c5702" defer></script>
+  <script src="/pricing-config.js?v=7b348060" defer></script>
   <script src="/nav.js?v=02bccc22" defer></script>
   <!-- Google tag (gtag.js) - Sweepr VPN -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
@@ -91,7 +91,7 @@
                     <span class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">SWEEPR VPN vs NordVPN</span>
                     <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">2026 Guide</span>
                   </div>
-                  <p class="text-xs text-gray-500 leading-snug">Compare 14MB lightweight WireGuard performance and locked-in renewal pricing.</p>
+                  <p class="text-xs text-gray-500 leading-snug">Compare lightweight (~723 KB Win) WireGuard performance and locked-in renewal pricing.</p>
                 </div>
               </a>
               <a href="/tools/leak-test" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
@@ -199,9 +199,9 @@ services:
       - WIREGUARD_PRIVATE_KEY=&lt;NAS_CLIENT_PRIVATE_KEY&gt;
       - WIREGUARD_ENDPOINT_IP=95.179.181.53
       - WIREGUARD_ENDPOINT_PORT=51820
-      - WIREGUARD_ADDRESSES=10.66.33.9/32
+      - WIREGUARD_ADDRESSES=10.64.0.2/32
       - WIREGUARD_MTU=1420
-      - DNS_ADDRESS=10.66.0.1
+      - DNS_ADDRESS=10.64.0.1
       - FIREWALL_VPN_INPUT_PORTS=8080
       - FIREWALL_OUTBOUND_SUBNETS=192.168.1.0/24
     restart: unless-stopped
@@ -226,7 +226,7 @@ services:
         </div>
         <div class="p-4 rounded-xl bg-gray-50 border border-gray-200">
           <h3 class="font-bold text-gray-900 mb-1.5">Option B: Synology Router SRM 1.3 Client</h3>
-          <p class="text-xs leading-relaxed">On Synology RT6600ax or WRX560 routers, open <strong>Network Center &rarr; Internet &rarr; VPN Connection &rarr; Create &rarr; WireGuard</strong>, import your SWEEPR <code>.conf</code> (<code>10.66.0.1</code> DNS), and enable Policy Route targeting specific LAN MACs.</p>
+          <p class="text-xs leading-relaxed">On Synology RT6600ax or WRX560 routers, open <strong>Network Center &rarr; Internet &rarr; VPN Connection &rarr; Create &rarr; WireGuard</strong>, import your SWEEPR <code>.conf</code> (<code>10.64.0.1</code> DNS), and enable Policy Route targeting specific LAN MACs.</p>
         </div>
       </div>
     </section>
@@ -315,9 +315,9 @@ services:
       <h2 style="margin-top:0;color:#f8fafc;">Native Gluetun Keys vs. Proprietary NordLynx Token Scripts</h2>
       <p style="color:#cbd5e1;line-height:1.65;">DiskStation owners migrating away from consumer apps often hit a wall when providers hide WireGuard credentials behind rotating CLI tokens. SWEEPR publishes static, standard WireGuard keypairs ready to paste straight into <code>WIREGUARD_PRIVATE_KEY</code> and <code>WIREGUARD_PUBLIC_KEY</code> inside Gluetun Compose stacks.</p>
     </section>
-    <section id="enriched-synology-vpn-server-setup" data-enriched-query="synology-vpn-server-setup" style="margin:28px 0;padding:20px;background:rgba(15,23,42,0.75);border:1px solid rgba(16,185,129,0.3);border-radius:12px;">
-      <h2 style="margin-top:0;">Synology VPN Client MTU Tuning Over PPPoE Broadband</h2>
-      <p style="line-height:1.65;">When your DiskStation sits behind a UK PPPoE FTTP circuit, adjust <code>WIREGUARD_MTU=1412</code> in <code>docker-compose.yml</code> so container HTTP/API fetches never stall waiting on fragmented TLS frames.</p>
+    <section id="enriched-synology-vpn-server-setup" data-enriched-query="synology-vpn-server-setup" class="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 mb-10 text-gray-800">
+      <h2 class="text-xl font-bold text-gray-900 mt-0 mb-2">Synology VPN Client MTU Tuning Over PPPoE Broadband</h2>
+      <p class="text-sm text-gray-700 leading-relaxed">When your DiskStation sits behind a UK PPPoE FTTP circuit, adjust <code>WIREGUARD_MTU=1412</code> in <code>docker-compose.yml</code> so container HTTP/API fetches never stall waiting on fragmented TLS frames.</p>
     </section>
     <section id="enriched-synology-nas-wireguard-vpn" data-enriched-query="synology-nas-wireguard-vpn" style="margin:28px 0;padding:20px;background:rgba(15,23,42,0.88);color:#f8fafc;border:1px solid rgba(16,185,129,0.35);border-radius:12px;">
       <h2 style="margin-top:0;color:#f8fafc;">Healthchecks &amp; Automatic Container Restart Recovery</h2>

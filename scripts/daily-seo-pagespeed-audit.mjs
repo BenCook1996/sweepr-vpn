@@ -234,7 +234,7 @@ const GSC_STRIKING_DISTANCE_OVERRIDES = {
   },
   '/solutions/ee-5g-mobile-hotspot-wifi-arp-spoofing-protection': {
     title: 'EE 5G Hotspot Security & CGNAT Fix | SWEEPR VPN',
-    description: 'Protect laptops & phones on EE 5G & 4G Mobile Hotspot UK (AS12576) with 1380 MTU 10Gbps WireGuard encryption, in-tunnel DNS (10.66.0.1) & 30s LAN device scanner.'
+    description: 'Protect laptops & phones on EE 5G & 4G Mobile Hotspot UK (AS12576) with 1380 MTU 10Gbps WireGuard encryption, in-tunnel DNS (10.64.0.1) & 30s LAN device scanner.'
   },
   '/solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter': {
     title: 'EE 5G Hotspot: Fix Teams & Zoom Jitter | SWEEPR VPN',
@@ -1193,7 +1193,7 @@ if (shouldFix && pseoFilesOnDisk.length > 0) {
       telemetryLabel: `SETUP // ${byCluster.setup.length} ROUTER & CONSOLE GUIDES`,
       filterPlaceholder: `Filter ${byCluster.setup.length} router & device guides (e.g. GL.iNet, Steam Deck, Synology)...`,
       h1: 'WireGuard Router, NAS, Linux & Console Setup Guides',
-      lead: `Import standard SWEEPR VPN 10Gbps RAM-only WireGuard profiles (.conf) or run our ~680 KB native Windows/macOS/Linux app across ${byCluster.setup.length} routers, firewalls, NAS servers, and gaming devices.`,
+      lead: `Import standard SWEEPR VPN 10Gbps RAM-only WireGuard profiles (.conf) or run our ~723 KB native Windows desktop client across ${byCluster.setup.length} routers, firewalls, NAS servers, and gaming devices.`,
       items: byCluster.setup,
       faqs: [
         {
@@ -1202,7 +1202,7 @@ if (shouldFix && pseoFilesOnDisk.length > 0) {
         },
         {
           q: 'Which DNS address should I configure in my router WireGuard client?',
-          a: 'Set your WireGuard interface DNS to 10.66.0.1 so all DNS lookups travel inside the encrypted WireGuard tunnel and automatically sink Smart-TV ACR telemetry domains.'
+          a: 'Set your WireGuard interface DNS to 10.64.0.1 so all DNS lookups travel inside the encrypted WireGuard tunnel and automatically sink Smart-TV ACR telemetry domains.'
         }
       ]
     },
@@ -1216,16 +1216,16 @@ if (shouldFix && pseoFilesOnDisk.length > 0) {
       telemetryLabel: `GUIDES // ${byCluster.guides.length} SMART-TV ACR BLOCKLISTS`,
       filterPlaceholder: `Filter ${byCluster.guides.length} Smart-TV ACR & Wi-Fi guides (e.g. Samsung, LG, Roku)...`,
       h1: 'Smart-TV ACR Spying Blocklists & Home Wi-Fi Security Guides',
-      lead: `Deep-dive engineering guides from the SWEEPR VPN Security Lab covering Smart-TV Automatic Content Recognition (ACR) domain blocklists, 30-second LAN ARP/mDNS device auditing, CGNAT port forwarding, and WireGuard cryptography.`,
+      lead: `Deep-dive engineering guides from the SWEEPR VPN Security Lab covering Smart-TV Automatic Content Recognition (ACR) domain blocklists, 30-second LAN ARP/mDNS device auditing, and WireGuard cryptography.`,
       items: byCluster.guides,
       faqs: [
         {
           q: 'How can I block Samsung, LG, Roku, and Fire TV ACR tracking without breaking Netflix?',
-          a: 'Use SWEEPR VPN with In-Tunnel DNS (10.66.0.1) and the SWEEPR Wi-Fi Radar & Smart-TV Shield Add-On, which sinks ACR screenshot telemetry endpoints (such as gpm.samsungqbe.com and lgtvcommon.com) while preserving 4K CDN video delivery.'
+          a: 'Use SWEEPR VPN with In-Tunnel DNS (10.64.0.1) and the SWEEPR Wi-Fi Radar & Smart-TV Shield Add-On, which sinks ACR screenshot telemetry endpoints (such as gpm.samsungqbe.com and lgtvcommon.com) while preserving 4K CDN video delivery.'
         },
         {
           q: 'How do I scan my home Wi-Fi for unknown devices or hidden cameras?',
-          a: 'Download the featherlight SWEEPR VPN desktop app and run the Free 30-Second Home Wi-Fi Scanner (no credit card required) to inspect local ARP tables, MAC OUI vendors, and mDNS broadcasts.'
+          a: 'Download the lightweight (~723 KB) SWEEPR VPN Windows desktop app and run the Free 30-Second Home Wi-Fi Scanner (no credit card required) to inspect local ARP tables, MAC OUI vendors, and open camera/casting ports.'
         }
       ]
     },
@@ -1234,8 +1234,8 @@ if (shouldFix && pseoFilesOnDisk.length > 0) {
       file: 'vs.html',
       urlPath: '/vs',
       title: `SWEEPR VPN vs NordVPN, Mullvad & TotalVPN | SWEEPR VPN`,
-      description: `2026 technical VPN comparisons: SWEEPR VPN (Rust + Tauri v2, 10Gbps RAM-only WireGuard, free 30s Wi-Fi Scanner & £1.99 trial) vs legacy VPN providers.`,
-      badge: '2026 Technical VPN Benchmarks • Speed, RAM Footprint & Price',
+      description: `2026 technical VPN comparisons: SWEEPR VPN (~723 KB Windows app, 10Gbps RAM-only WireGuard, free 30s Wi-Fi Scanner & £1.99 trial) vs legacy VPN providers.`,
+      badge: '2026 Technical VPN Benchmarks • Speed, Footprint & Price',
       telemetryLabel: `BENCHMARKS // ${byCluster.vs.length + 1} COMPARISONS`,
       filterPlaceholder: `Filter ${byCluster.vs.length + 1} provider comparisons (e.g. NordVPN, Mullvad, TotalVPN)...`,
       h1: 'SWEEPR VPN vs Legacy VPN Providers: 2026 Technical Comparisons',
@@ -1247,7 +1247,7 @@ if (shouldFix && pseoFilesOnDisk.length > 0) {
       faqs: [
         {
           q: 'What makes SWEEPR VPN different from traditional 200 MB VPN apps?',
-          a: 'SWEEPR VPN is built in native Rust + Tauri v2 (~680 KB Windows installer, ~18 MB RAM) and combines 10Gbps RAM-only WireGuard tunnels with a Free 30-Second Home Wi-Fi Device Scanner and Smart-TV ACR telemetry blocker.'
+          a: 'SWEEPR VPN ships as a lightweight (~723 KB) native Windows installer combining 10Gbps RAM-only WireGuard tunnels with a Free 30-Second Home Wi-Fi Device Scanner and Smart-TV ACR telemetry blocker.'
         },
         {
           q: 'Does SWEEPR VPN increase prices on renewal like TotalVPN or NordVPN?',
@@ -1367,7 +1367,7 @@ ${GA4_HEAD_SNIPPET}
         <a href="/tools/leak-test">Leak Test</a>
         <a href="/tools/isp-throttling-test">Speed Test</a>
         <a href="/pricing">Pricing (£1.99 Trial)</a>
-        <a class="btn" href="/download">Download (~680 KB)</a>
+        <a class="btn" href="/download">Download (~723 KB)</a>
       </div>
     </nav>
   </header>
@@ -1395,7 +1395,7 @@ ${GA4_HEAD_SNIPPET}
     <div class="cta-strip">
       <div>
         <strong>Run the Free 30-Second Home Wi-Fi &amp; ISP Speed Diagnostic</strong>
-        <div style="color:var(--muted);font-size:0.93rem;">Authenticode-Signed Native Rust + Tauri v2 App • Free 30s LAN Device Scanner • £1.99 1st-Month Pro Trial (Save 50% Yearly at £74.99/yr)</div>
+        <div style="color:var(--muted);font-size:0.93rem;">Authenticode-Signed Native Desktop App (~723 KB Win) • Free 30s LAN Device Scanner • £1.99 1st-Month Pro Trial (Save 50% Yearly at £74.99/yr)</div>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
         <a class="btn" href="/download">Download Free Scanner</a>
@@ -1423,7 +1423,7 @@ ${GA4_HEAD_SNIPPET}
     ${hub.faqs.map((f) => `<div class="card" style="margin:14px 0;"><h3>${f.q}</h3><p style="margin:6px 0 0;color:var(--muted);">${f.a}</p></div>`).join('\n    ')}
   </main>
   <footer>
-    <p>&copy; 2026 SWEEPR VPN Security Lab. Built in Rust + Tauri v2 with Audited Kernel WireGuard &amp; RAM-Only Servers.</p>
+    <p>&copy; 2026 SWEEPR VPN Security Lab. Open-Source Kernel WireGuard &amp; RAM-Only Servers.</p>
     <p>
       <a href="/">Home</a> |
       <a href="/solutions">ISP Solutions</a> |
@@ -1768,7 +1768,7 @@ pass('crawlability', 'Sitemap Completeness & Content-Hash Freshness', `${sitemap
 // Rebuild website/llms.txt & website/llms-full.txt for Generative Engine Optimization (GEO / AI citation)
 const llmsContent = `# SWEEPR VPN & SWEEPR Wi-Fi Radar (sweeprvpn.com)
 
-> SWEEPR VPN is an ultra-lightweight (~740 KB), fast, and easy-to-use 10Gbps WireGuard VPN and Free 30-Second Home Wi-Fi Scanner for Windows 10/11, macOS, Linux, and routers. Built by the team behind SWEEPR Cleaner, it combines 1-click 10Gbps private browsing with a free 30-second Home Wi-Fi & Speed Scanner and a Smart-TV ACR spy blocker.
+> SWEEPR VPN is an ultra-lightweight (~723 KB Windows installer), fast, and easy-to-use 10Gbps WireGuard VPN and Free 30-Second Home Wi-Fi Scanner for Windows 10/11, macOS, Android, iOS, and Linux WireGuard CLI/routers. Built by the team behind SWEEPR Cleaner, it combines 1-click 10Gbps private browsing with a free 30-second Home Wi-Fi & Speed Scanner and a Smart-TV ACR spy blocker.
 
 ## Core Capabilities & Technical Differentiators
 - **1-Click Private Browsing & Streaming Speed Booster**: Eliminates ISP evening traffic shaping (Virgin Media, BT, Sky, TalkTalk, Vodafone, Eduroam) on 4K streaming, gaming, and remote SSH/Docker workflows. Strict zero-logs policy on diskless RAM-only 10Gbps servers.
@@ -1821,13 +1821,13 @@ try {
 
 const regionalLatencyFallback = {
   'UK-LON-01': 4,
-  'UK-MAN-02': 6,
   'NL-AMS-01': 11,
   'DE-FRA-01': 14,
   'SE-STO-01': 16,
-  'CH-ZRH-01': 18,
   'US-NYC-01': 19,
-  'US-LAX-01': 32
+  'US-LAX-01': 115,
+  'SG-SIN-01': 142,
+  'JP-TYO-01': 138
 };
 const wgNodesByCode = new Map(
   (wgAcrState.wireguardNodes || []).map((n) => [n.code || n.id, n])
@@ -1836,12 +1836,14 @@ const wgNodesByCode = new Map(
 const rawLiveNodes = Array.isArray(wgAcrState.liveVpnServers) && wgAcrState.liveVpnServers.length > 0
   ? wgAcrState.liveVpnServers
   : [
-      { id: 'UK-LON-01', city: 'London', country: 'UK', capacity_gbps: 10, load_pct: 18, probe_ms: 4, devices: 85 },
-      { id: 'UK-MAN-02', city: 'Manchester', country: 'UK', capacity_gbps: 10, load_pct: 12, probe_ms: 6, devices: 62 },
-      { id: 'NL-AMS-01', city: 'Amsterdam', country: 'Netherlands', capacity_gbps: 10, load_pct: 22, probe_ms: 11, devices: 91 },
-      { id: 'DE-FRA-01', city: 'Frankfurt', country: 'Germany', capacity_gbps: 10, load_pct: 19, probe_ms: 14, devices: 78 },
-      { id: 'CH-ZRH-01', city: 'Zurich', country: 'Switzerland', capacity_gbps: 10, load_pct: 9, probe_ms: 18, devices: 54 },
-      { id: 'US-NYC-01', city: 'New York', country: 'USA', capacity_gbps: 10, load_pct: 24, probe_ms: 19, devices: 112 }
+      { id: 'UK-LON-01', city: 'London', country: 'United Kingdom', capacity_gbps: 10, load_pct: 0, probe_ms: 4, devices: 0 },
+      { id: 'NL-AMS-01', city: 'Amsterdam', country: 'Netherlands', capacity_gbps: 10, load_pct: 0, probe_ms: 11, devices: 0 },
+      { id: 'DE-FRA-01', city: 'Frankfurt', country: 'Germany', capacity_gbps: 10, load_pct: 0, probe_ms: 14, devices: 0 },
+      { id: 'SE-STO-01', city: 'Stockholm', country: 'Sweden', capacity_gbps: 10, load_pct: 0, probe_ms: 16, devices: 0 },
+      { id: 'US-NYC-01', city: 'New York', country: 'USA', capacity_gbps: 10, load_pct: 0, probe_ms: 19, devices: 0 },
+      { id: 'US-LAX-01', city: 'Los Angeles', country: 'USA', capacity_gbps: 10, load_pct: 0, probe_ms: 115, devices: 0 },
+      { id: 'SG-SIN-01', city: 'Singapore', country: 'Singapore', capacity_gbps: 10, load_pct: 0, probe_ms: 142, devices: 0 },
+      { id: 'JP-TYO-01', city: 'Tokyo', country: 'Japan', capacity_gbps: 10, load_pct: 0, probe_ms: 138, devices: 0 }
     ];
 
 const liveNodes = rawLiveNodes.map((n) => {
@@ -1849,8 +1851,9 @@ const liveNodes = rawLiveNodes.map((n) => {
   const wgNode = wgNodesByCode.get(code);
   const regionalRtt = wgNode?.baselineRttMs
     ? Math.round(wgNode.baselineRttMs)
-    : regionalLatencyFallback[code] || (n.probe_ms && n.probe_ms <= 45 ? n.probe_ms : 15);
-  const loadPct = n.load_pct || (n.devices ? Math.min(45, Math.max(8, Math.round(n.devices / 5))) : 15);
+    : regionalLatencyFallback[code] || (n.probe_ms && n.probe_ms <= 200 ? n.probe_ms : 15);
+  const devCount = Number.isFinite(Number(n.devices)) ? Number(n.devices) : 0;
+  const loadPct = Number.isFinite(Number(n.load_pct)) ? Number(n.load_pct) : (devCount > 0 ? Math.min(45, Math.max(2, devCount)) : 0);
   return {
     code,
     city: n.city,
@@ -1858,7 +1861,7 @@ const liveNodes = rawLiveNodes.map((n) => {
     capacity_gbps: n.capacity_gbps || 10,
     load_pct: loadPct,
     regional_ms: regionalRtt,
-    devices: n.devices || 64
+    devices: devCount
   };
 });
 
@@ -1893,7 +1896,7 @@ const llmsFullContent = `# SWEEPR VPN & SWEEPR Wi-Fi Radar — Comprehensive Tec
 
 ## 1. Executive Product Identity & Cryptographic Architecture
 - **Product Name**: SWEEPR VPN (with Free 30-Second Home Wi-Fi Device Scanner & optional SWEEPR Wi-Fi Radar + Smart-TV ACR Shield).
-- **Desktop & Mobile Stack**: Native Rust + Tauri v2 desktop binary (~${exeKbForManifest} KB / ${exeBytesForManifest.toLocaleString('en-US')} bytes; SSL.com Authenticode Thumbprint \`1800DBEA6FE847D384E549D02CA372C3D45D8B81\`, SHA-256 \`${exeSha256ForManifest}\`) for Windows 10/11, macOS, Linux, Android (\`com.sweepr.vpn\`), and iOS.
+- **Desktop & Mobile Stack**: Native Windows (~${exeKbForManifest} KB / ${exeBytesForManifest.toLocaleString('en-US')} bytes; SSL.com Authenticode Thumbprint \`1800DBEA6FE847D384E549D02CA372C3D45D8B81\`, SHA-256 \`${exeSha256ForManifest}\`), macOS (~7.6 MB Universal \`.dmg\`), Android (\`com.sweepr.vpn\` / ~14.6 MB \`.apk\`), iOS/iPadOS WireGuard profiles, plus Linux WireGuard CLI & router \`.conf\` support.
 - **Tunnel Protocol & Ciphers**: Kernel-grade WireGuard & AmneziaWG (ChaCha20-Poly1305 AEAD, Curve25519 ECDH, BLAKE2s hashing) over standard UDP \`51820\` and Stealth UDP \`443\` (for Eduroam campus Wi-Fi, NHS guest Wi-Fi, and hotel captive portals).
 - **Native Router & NAS .conf Export**: 1-click standard WireGuard \`.conf\` profile export (zero proprietary NordLynx/Lightway daemon lock-in or Linux token scripts) for GL.iNet (Beryl AX, Slate AX, Slate 7 BE3600, Flint 2), Ubiquiti UniFi Cloud Gateway Ultra/Max (UCG-Ultra/UCG-Max), Synology NAS DSM 7 (\`gluetun\` Docker), Steam Deck / Lenovo Legion Go (SteamOS), OPNsense, pfSense, AVM FRITZ!Box, and MikroTik RouterOS v7.
 
@@ -1903,7 +1906,7 @@ const llmsFullContent = `# SWEEPR VPN & SWEEPR Wi-Fi Radar — Comprehensive Tec
 ${liveNodes.map((n) => `| \`${n.code}\` | ${n.city}, ${n.country} | ${n.capacity_gbps} Gbps | ${n.load_pct}% | ${n.devices} | ${n.regional_ms} ms | Yes (tmpfs) |`).join('\n')}
 
 ## 3. Smart-TV ACR Telemetry Sinkhole & Home Wi-Fi Radar Proof
-- **In-Tunnel Encrypted DNS Resolver**: \`10.66.0.1\`
+- **In-Tunnel Encrypted DNS Resolver**: \`10.64.0.1\`
 - **Verified Blocked ACR & Ad-Beacon Domains**: \`${acrDomainCount}\` domains across 8 Smart-TV OS families (Samsung Tizen Smart Hub, LG webOS LivePlus, Roku OS Cooper/Scribe, Vizio SmartCast Inscape, Sony Bravia Samba TV, Amazon Fire TV OS, Hisense VIDAA, Philips/Panasonic HbbTV).
 - **Public Open-Source Blocklist**: https://sweeprvpn.com/smart-tv-acr-blocklist.txt (SHA-1: \`${acrSha1}\`)
 - **4K HDR Streaming Playback Safelist**: 100% safelisted video delivery CDNs (\`nflxvideo.net\`, \`bbci.co.uk\`, \`googlevideo.com\`, \`bamgrid.com\`, \`aiv-cdn.net\`, \`ttvnw.net\`).
@@ -1927,8 +1930,8 @@ ${liveNodes.map((n) => `| \`${n.code}\` | ${n.city}, ${n.country} | ${n.capacity
 \`\`\`ini
 [Interface]
 PrivateKey = <CLIENT_CURVE25519_PRIVATE_KEY>
-Address = 10.66.0.2/32
-DNS = 10.66.0.1
+Address = 10.64.0.2/32
+DNS = 10.64.0.1
 # MTU Presets:
 # - 1420: Standard Cable / DHCP Full-Fibre (Virgin Media, Hyperoptic, Community Fibre, Comcast Xfinity)
 # - 1412: PPPoE Full-Fibre / VDSL (BT, Sky, TalkTalk, Plusnet, Gigaclear, Vodafone, Deutsche Telekom)

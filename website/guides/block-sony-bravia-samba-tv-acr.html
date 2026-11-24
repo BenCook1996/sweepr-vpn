@@ -84,7 +84,7 @@
         <a href="/pricing">Pricing (£1.99 Trial)</a>
         <a href="/tools/leak-test">IP &amp; DNS Leak Test</a>
         <a href="/tools/isp-throttling-test">ISP Speed Checker</a>
-        <a class="btn" href="/download">Download (~3.7 MB)</a>
+        <a class="btn" href="/download">Download (~723 KB)</a>
       </div>
     </nav>
   </header>
@@ -95,7 +95,7 @@
     <p class="lead">Sony Bravia Google TV sets bundle Samba TV Interactive TV Services, which fingerprints every frame on HDMI inputs to build cross-device household ad profiles.</p>
     <div id="direct-answer" style="margin:18px 0 24px;padding:18px 20px;border-radius:14px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.35);">
       <div style="font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent2,#34d399);margin-bottom:6px;">Direct Answer</div>
-      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Turn off Samba Interactive TV inside Sony Bravia Settings, Privacy, and Samba Interactive TV, delete your Google TV advertising ID, and sinkhole <code>sambametrics.com</code> plus <code>tracking.samba.tv</code> on a WireGuard gateway using <code>10.66.0.1</code>. Disabling background Android packages via ADB alongside DNS filtering stops HDMI frame fingerprinting permanently without interrupting Netflix, YouTube, or console playback.</p>
+      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Turn off Samba Interactive TV inside Sony Bravia Settings, Privacy, and Samba Interactive TV, delete your Google TV advertising ID, and sinkhole <code>sambametrics.com</code> plus <code>tracking.samba.tv</code> on a WireGuard gateway using <code>10.64.0.1</code>. Disabling background Android packages via ADB alongside DNS filtering stops HDMI frame fingerprinting permanently without interrupting Netflix, YouTube, or console playback.</p>
       <div style="padding-top:10px;border-top:1px solid rgba(16,185,129,0.22);font-size:0.84rem;font-weight:700;">
         <a href="/tools/leak-test" style="color:var(--accent2,#34d399);text-decoration:underline;">Run Browser IP &amp; DNS Resolver Audit &rarr;</a>
       </div>
@@ -104,7 +104,7 @@
     <div class="cta-strip">
       <div>
         <strong>Inspect Sony Bravia Google TV &amp; Samba Interactive Beacons Locally</strong>
-        <div style="color:var(--muted);font-size:0.93rem;">Identify active Bravia LAN sockets with the ~3.7 MB Rust Wi-Fi Scanner and isolate Samba ACR telemetry over WireGuard.</div>
+        <div style="color:var(--muted);font-size:0.93rem;">Identify active Bravia LAN sockets with the ~723 KB Windows (~7.6 MB macOS) Wi-Fi Scanner and isolate Samba ACR telemetry over WireGuard.</div>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
         <a class="btn" href="/download">Install Wi-Fi Scanner</a>
@@ -135,7 +135,7 @@ adb shell pm list packages | grep -Ei "samba|bravia|sony|metrics"
 adb shell pm disable-user --user 0 tv.samba.interactive
 adb shell pm disable-user --user 0 com.sony.dtv.braviasyncservice
 
-# Router / WireGuard DNS sinkhole rules (10.66.0.1 or Pi-hole)
+# Router / WireGuard DNS sinkhole rules (10.64.0.1 or Pi-hole)
 0.0.0.0 sambametrics.com
 0.0.0.0 tracking.samba.tv
 0.0.0.0 api.cid.samba.tv
@@ -143,7 +143,7 @@ adb shell pm disable-user --user 0 com.sony.dtv.braviasyncservice
 0.0.0.0 agn.fe.ca.sambatv.com
 0.0.0.0 flingo.tv
 0.0.0.0 sonyselect.tv</code></pre>
-  <p>Pair ADB package hardening with router-layer WireGuard DNS sinkholing (<code>10.66.0.1</code>) so system updates or factory-reinstated packages remain permanently isolated from external Samba brokers.</p>
+  <p>Pair ADB package hardening with router-layer WireGuard DNS sinkholing (<code>10.64.0.1</code>) so system updates or factory-reinstated packages remain permanently isolated from external Samba brokers.</p>
 
   <h2>4. Sony Bravia Telemetry Component &amp; Countermeasure Reference</h2>
   <table>
@@ -185,9 +185,9 @@ adb shell pm disable-user --user 0 com.sony.dtv.braviasyncservice
   <p>To automate Samba, Google TV, and multi-device protection across 3 simultaneous devices plus your router, SWEEPR VPN's Annual Plan (£74.99/yr — £6.25/mo) and Wi-Fi Radar &amp; Smart-TV Shield add-on (+£14.99/yr, backed by a 14-day money-back guarantee) can be reviewed on <a href="/pricing" style="color:var(--accent2);text-decoration:underline;">the SWEEPR pricing page</a>.</p>
 
   <h2>Frequently Asked Questions</h2>
-  <div class="card"><h3>Will disabling <code>tv.samba.interactive</code> via ADB survive a Sony Bravia Google TV OS upgrade?</h3><p>ADB <code>pm disable-user --user 0</code> flags usually persist across minor security patches, though major Android TV version jumps or new regional packages can introduce updated Samba package names. Combining ADB with router DNS sinkholing at <code>10.66.0.1</code> ensures zero packets escape regardless of package updates.</p></div>
+  <div class="card"><h3>Will disabling <code>tv.samba.interactive</code> via ADB survive a Sony Bravia Google TV OS upgrade?</h3><p>ADB <code>pm disable-user --user 0</code> flags usually persist across minor security patches, though major Android TV version jumps or new regional packages can introduce updated Samba package names. Combining ADB with router DNS sinkholing at <code>10.64.0.1</code> ensures zero packets escape regardless of package updates.</p></div>
   <div class="card"><h3>Does blocking <code>sambametrics.com</code> and <code>tracking.samba.tv</code> break Google Cast or Bravia Core movies?</h3><p>No. Google Cast discovery operates locally over multicast mDNS (<code>224.0.0.251:5353</code>), while streaming media CDNs remain completely separate from Samba's tracking subdomains.</p></div>
-  <div class="card"><h3>How do I verify my Sony Bravia isn't still resolving Samba endpoints?</h3><p>Query <code>nslookup tracking.samba.tv 10.66.0.1</code> from your terminal, audit LAN sockets using SWEEPR's scanner, and verify your gateway DNS alignment on our <a href="/tools/leak-test" style="color:var(--accent2);text-decoration:underline;">IP &amp; DNS Leak Test</a>.</p></div>
+  <div class="card"><h3>How do I verify my Sony Bravia isn't still resolving Samba endpoints?</h3><p>Query <code>nslookup tracking.samba.tv 10.64.0.1</code> from your terminal, audit LAN sockets using SWEEPR's scanner, and verify your gateway DNS alignment on our <a href="/tools/leak-test" style="color:var(--accent2);text-decoration:underline;">IP &amp; DNS Leak Test</a>.</p></div>
 
     <h2>Related Technical Guides &amp; Free Diagnostic Tools</h2>
     <div class="card">
@@ -207,14 +207,14 @@ adb shell pm disable-user --user 0 com.sony.dtv.braviasyncservice
 <li class="sweepr-mesh-link"><a href="/setup/windows-11-wireguard-vpn" style="color:var(--accent2);">WireGuard VPN Setup for Windows 10 &amp; 11 Native Kernel WireGuard</a></li>
 <li class="sweepr-mesh-link"><a href="/vs/ipvanish" style="color:var(--accent2);">SWEEPR VPN vs IPVanish (2026 Comparison)</a></li>
 <li><a href="/tools/isp-throttling-test" style="color:var(--accent2);">Free ISP Evening Throttling &amp; Latency Checker</a></li>
-<li><a href="/download" style="color:var(--accent2);">Download SWEEPR VPN &amp; Free 30-Second Home Wi-Fi Scanner (~3.7 MB)</a></li>
+<li><a href="/download" style="color:var(--accent2);">Download SWEEPR VPN &amp; Free 30-Second Home Wi-Fi Scanner (~723 KB Win)</a></li>
         <li><a href="/tools/smart-tv-tracking-check" style="color:var(--accent2);">Free Smart-TV ACR Tracker & Ad-Domain Exposure Checker</a></li>
         <li><a href="/tools/whats-on-my-wifi" style="color:var(--accent2);">What's on My Wi-Fi? Free Unknown Device & Spy Check</a></li>
       </ul>
     </div>
 </main>
   <footer>
-    <p>&copy; 2026 SWEEPR VPN Security Lab. Built in Rust + Tauri v2 with Audited Kernel WireGuard &amp; RAM-Only Servers.</p>
+    <p>&copy; 2026 SWEEPR VPN Security Lab. Built with Open-Source Kernel WireGuard &amp; RAM-Only Servers.</p>
     <p>
       <a href="/">Home</a> |
       <a href="/solutions">ISP Solutions</a> |

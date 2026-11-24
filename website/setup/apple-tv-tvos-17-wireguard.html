@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Apple TV 4K Native WireGuard VPN Setup | SWEEPR VPN</title>
-  <meta name="description" content="Step-by-step Apple TV 4K (tvOS 17 / tvOS 18) WireGuard setup guide. Configure 10Gbps RAM-only endpoints, optimal MTU, 10.66.0.1 DNS &amp; Smart-TV ACR blocking." />
+  <meta name="description" content="Step-by-step Apple TV 4K (tvOS 17 / tvOS 18) WireGuard setup guide. Configure 10Gbps RAM-only endpoints, optimal MTU, 10.64.0.1 DNS &amp; Smart-TV ACR blocking." />
   <link rel="canonical" href="https://sweeprvpn.com/setup/apple-tv-tvos-17-wireguard" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta property="og:type" content="article" />
   <meta property="og:locale" content="en_GB" />
   <meta property="og:title" content="Apple TV 4K Native WireGuard VPN Setup | SWEEPR VPN" />
-  <meta property="og:description" content="Step-by-step Apple TV 4K (tvOS 17 / tvOS 18) WireGuard setup guide. Configure 10Gbps RAM-only endpoints, optimal MTU, 10.66.0.1 DNS &amp; Smart-TV ACR blocking." />
+  <meta property="og:description" content="Step-by-step Apple TV 4K (tvOS 17 / tvOS 18) WireGuard setup guide. Configure 10Gbps RAM-only endpoints, optimal MTU, 10.64.0.1 DNS &amp; Smart-TV ACR blocking." />
   <meta property="og:url" content="https://sweeprvpn.com/setup/apple-tv-tvos-17-wireguard" />
   <meta property="og:site_name" content="SWEEPR VPN" />
   <meta property="og:image" content="https://sweeprvpn.com/og-image.png" />
@@ -18,7 +18,7 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:url" content="https://sweeprvpn.com/setup/apple-tv-tvos-17-wireguard" />
   <meta name="twitter:title" content="Apple TV 4K Native WireGuard VPN Setup | SWEEPR VPN" />
-  <meta name="twitter:description" content="Step-by-step Apple TV 4K (tvOS 17 / tvOS 18) WireGuard setup guide. Configure 10Gbps RAM-only endpoints, optimal MTU, 10.66.0.1 DNS &amp; Smart-TV ACR blocking." />
+  <meta name="twitter:description" content="Step-by-step Apple TV 4K (tvOS 17 / tvOS 18) WireGuard setup guide. Configure 10Gbps RAM-only endpoints, optimal MTU, 10.64.0.1 DNS &amp; Smart-TV ACR blocking." />
   <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png" />
   <meta name="theme-color" content="#070b14" />
   
@@ -71,7 +71,7 @@
     gtag('config', 'G-7D28EEMNXX');
   </script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://sweeprvpn.com/"},{"@type":"ListItem","position":2,"name":"Router & Device Setup Guides","item":"https://sweeprvpn.com/setup"},{"@type":"ListItem","position":3,"name":"Apple TV 4K (tvOS 17 / tvOS 18) Native WireGuard Setup: High-Speed 10Gbps WireGuard VPN Setup Guide","item":"https://sweeprvpn.com/setup/apple-tv-tvos-17-wireguard"}]}</script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Apple TV 4K Native WireGuard VPN Setup | SWEEPR VPN","description":"Step-by-step Apple TV 4K (tvOS 17 / tvOS 18) Native WireGuard VPN setup guide. Configure 10Gbps RAM-only endpoints, optimal MTU, in-tunnel DNS (10.66.0.1), and kill-switch routing.","proficiencyLevel":"Beginner to Expert","author":{"@type":"Person","name":"Benjamin Cook","jobTitle":"Principal Network Architect","url":"https://sweeprvpn.com/warrant-canary","worksFor":{"@type":"Organization","name":"SWEEPR VPN Inc."}},"publisher":{"@type":"Organization","name":"SWEEPR VPN","logo":{"@type":"ImageObject","url":"https://sweeprvpn.com/logo-emerald.svg"}},"mainEntityOfPage":"https://sweeprvpn.com/setup/apple-tv-tvos-17-wireguard","reviewedBy":{"@type":"Organization","name":"SWEEPR Security Engineering Lab","url":"https://sweeprvpn.com/"},"dateModified":"2026-11-17","image":"https://sweeprvpn.com/og-image.png","datePublished":"2026-11-17"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Apple TV 4K Native WireGuard VPN Setup | SWEEPR VPN","description":"Step-by-step Apple TV 4K (tvOS 17 / tvOS 18) Native WireGuard VPN setup guide. Configure 10Gbps RAM-only endpoints, optimal MTU, in-tunnel DNS (10.64.0.1), and kill-switch routing.","proficiencyLevel":"Beginner to Expert","author":{"@type":"Person","name":"Benjamin Cook","jobTitle":"Principal Network Architect","url":"https://sweeprvpn.com/warrant-canary","worksFor":{"@type":"Organization","name":"SWEEPR VPN Inc."}},"publisher":{"@type":"Organization","name":"SWEEPR VPN","logo":{"@type":"ImageObject","url":"https://sweeprvpn.com/logo-emerald.svg"}},"mainEntityOfPage":"https://sweeprvpn.com/setup/apple-tv-tvos-17-wireguard","reviewedBy":{"@type":"Organization","name":"SWEEPR Security Engineering Lab","url":"https://sweeprvpn.com/"},"dateModified":"2026-11-17","image":"https://sweeprvpn.com/og-image.png","datePublished":"2026-11-17"}</script>
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5" />
   <link rel="manifest" href="/manifest.webmanifest" />
 </head>
@@ -84,7 +84,7 @@
         <a href="/pricing">Pricing (£1.99 Trial)</a>
         <a href="/tools/leak-test">IP &amp; DNS Leak Test</a>
         <a href="/tools/isp-throttling-test">ISP Speed Checker</a>
-        <a class="btn" href="/download">Download (~3.7 MB)</a>
+        <a class="btn" href="/download">Download (~723 KB)</a>
       </div>
     </nav>
   </header>
@@ -95,7 +95,7 @@
     <p class="lead">Configure SWEEPR VPN on Apple TV 4K via native tvOS Network Extension or router policy routing for zero-buffering 4K Dolby Vision and zero ACR tracking.</p>
     <div id="direct-answer" style="margin:18px 0 24px;padding:18px 20px;border-radius:14px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.35);">
       <div style="font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent2,#34d399);margin-bottom:6px;">Direct Answer</div>
-      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Install the official WireGuard client from the tvOS App Store on Apple TV 4K running tvOS 17 or 18, paste a dedicated SWEEPR peer configuration using iPhone Universal Clipboard, and set DNS to 10.66.0.1. Native NetworkExtension tunneling strips tvOS telemetry beacons without throttling 4K HDR playback bitrates.</p>
+      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Install the official WireGuard client from the tvOS App Store on Apple TV 4K running tvOS 17 or 18, paste a dedicated SWEEPR peer configuration using iPhone Universal Clipboard, and set DNS to 10.64.0.1. Native NetworkExtension tunneling strips tvOS telemetry beacons without throttling 4K HDR playback bitrates.</p>
       <div style="padding-top:10px;border-top:1px solid rgba(16,185,129,0.22);font-size:0.84rem;font-weight:700;">
         <a href="/tools/leak-test" style="color:var(--accent2,#34d399);text-decoration:underline;">Confirm living-room tunnel DNS and egress IP &rarr;</a>
       </div>
@@ -112,7 +112,7 @@
       </div>
       <div class="stat-box">
         <div class="stat-label">ACR &amp; Ad Resolver</div>
-        <div class="stat-val">10.66.0.1 Sinkhole</div>
+        <div class="stat-val">10.64.0.1 Sinkhole</div>
       </div>
     </div>
 
@@ -149,19 +149,19 @@
     <p>Always mint a separate WireGuard keypair in your SWEEPR dashboard specifically for your Apple TV. Reusing the exact private key from your iPhone or iPad causes both devices to steal the server-side UDP session back and forth every few seconds.</p>
     <pre><code>[Interface]
 PrivateKey = &lt;APPLE_TV_UNIQUE_PRIVATE_KEY&gt;
-Address = 10.66.22.5/32
-DNS = 10.66.0.1
+Address = 10.64.0.2/32
+DNS = 10.64.0.1
 MTU = 1420
 
 [Peer]
 PublicKey = &lt;SWEEPR_POP_PUBLIC_KEY&gt;
-Endpoint = lon01.sweeprvpn.com:51820
+Endpoint = lon01.wg.sweeprvpn.com:51820
 AllowedIPs = 0.0.0.0/0
 PersistentKeepalive = 25</code></pre>
     <p>Open the WireGuard app on Apple TV, choose <strong>Add a Tunnel &rarr; Create from scratch</strong> (or companion paste), tap the configuration field so the keyboard prompt appears on your nearby iPhone via Continuity, and paste the entire <code>.conf</code> block in one tap.</p>
 
     <h2>2. Blocking tvOS Telemetry &amp; Smart-TV ACR Without Hurting Bitrate</h2>
-    <p>Pointing <code>DNS = 10.66.0.1</code> forces all tvOS app lookups through SWEEPR's encrypted in-tunnel resolver, dropping analytics beacons while keeping Apple CDN video chunks and local HomeKit hubs responsive.</p>
+    <p>Pointing <code>DNS = 10.64.0.1</code> forces all tvOS app lookups through SWEEPR's encrypted in-tunnel resolver, dropping analytics beacons while keeping Apple CDN video chunks and local HomeKit hubs responsive.</p>
     <ul>
       <li><strong>Preserving Infuse / Plex Local NAS Shares:</strong> WireGuard's tvOS client automatically bypasses your directly attached subnet mask (e.g., <code>192.168.1.0/24</code>), so local SMB or NFS 4K remux playback stays on Gigabit Ethernet rather than hairpinning through London.</li>
       <li><strong>PPPoE Broadband Frame Tuning:</strong> If your fibre router wraps traffic in PPPoE (BT, Sky, Plusnet), change <code>MTU = 1420</code> to <code>MTU = 1412</code> inside the Apple TV tunnel editor to stop TLS stalls inside third-party streaming apps.</li>
@@ -209,7 +209,7 @@ PersistentKeepalive = 25</code></pre>
     </div>
 </main>
   <footer>
-    <p>&copy; 2026 SWEEPR VPN Security Lab. Built in Rust + Tauri v2 with Audited Kernel WireGuard &amp; RAM-Only Servers.</p>
+    <p>&copy; 2026 SWEEPR VPN Security Lab. Built with Open-Source Kernel WireGuard &amp; RAM-Only Servers.</p>
     <p>
       <a href="/">Home</a> |
       <a href="/solutions">ISP Solutions</a> |

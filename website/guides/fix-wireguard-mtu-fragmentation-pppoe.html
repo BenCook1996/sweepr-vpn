@@ -84,7 +84,7 @@
         <a href="/pricing">Pricing (£1.99 Trial)</a>
         <a href="/tools/leak-test">IP &amp; DNS Leak Test</a>
         <a href="/tools/isp-throttling-test">ISP Speed Checker</a>
-        <a class="btn" href="/download">Download (~3.7 MB)</a>
+        <a class="btn" href="/download">Download (~723 KB)</a>
       </div>
     </nav>
   </header>
@@ -107,7 +107,7 @@
         <div style="color:var(--muted);font-size:0.93rem;">SWEEPR VPN ships pre-tuned MTU presets and <code>fq_codel</code> 10Gbps core nodes so TLS handshakes never stall mid-packet.</div>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <a class="btn" href="/download">Download Client (~3.7 MB)</a>
+        <a class="btn" href="/download">Download Client (~723 KB Win)</a>
         <a class="btn-outline" href="/pricing">View Pro Plans</a>
       </div>
     </div>
@@ -124,12 +124,12 @@
   <h2>2. Finding Your Exact Path Ceiling With Don't-Fragment Ping Tests</h2>
   <p>Before locking your router's configuration, verify the maximum unfragmented ICMP payload that clears your broadband path. Remember that ICMP adds <strong>28 bytes</strong> (20B IPv4 + 8B ICMP) on top of your specified payload size:</p>
   <pre><code># Linux / macOS — Test 1412-byte total packet (1384 payload + 28 header = 1412)
-ping -M do -s 1384 10.66.0.1
+ping -M do -s 1384 10.64.0.1
 # If "Message too long" or 100% loss appears, test 1380 MTU (1352 + 28 = 1380):
-ping -M do -s 1352 10.66.0.1
+ping -M do -s 1352 10.64.0.1
 
 # Windows Command Prompt — Equivalent Don't-Fragment (-f) payload test
-ping -f -l 1384 10.66.0.1
+ping -f -l 1384 10.64.0.1
 # Step down -l by 8 bytes (1376, 1368, 1352) until zero "needs to be fragmented" errors occur</code></pre>
 
   <h2>3. Applying WireGuard <code>MTU</code> &amp; Router TCP MSS Clamping (<code>iptables</code> / <code>nftables</code>)</h2>
@@ -137,8 +137,8 @@ ping -f -l 1384 10.66.0.1
   <pre><code># WireGuard client [Interface] configuration (PPPoE Fibre example)
 [Interface]
 MTU = 1412
-Address = 10.66.12.8/32
-DNS = 10.66.0.1
+Address = 10.64.0.2/32
+DNS = 10.64.0.1
 
 # Legacy iptables mangle MSS clamp (set 1340 for 1380 MTU or clamp automatically to PMTU)
 iptables -t mangle -A FORWARD -o wg0 -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
@@ -214,12 +214,12 @@ nft add rule inet fw4 forward iifname "wg0" tcp flags syn / syn,rst tcp option m
 <li class="sweepr-mesh-link"><a href="/guides/stop-isp-deep-packet-inspection-dpi" style="color:var(--accent2);">How to Stop Mobile Carrier 5G Hotspot Throttling & DPI Tethering Caps</a></li>
 <li class="sweepr-mesh-link"><a href="/guides/stop-roku-vizio-firetv-spying" style="color:var(--accent2);">How to Block Roku, Vizio Inscape &amp; Fire TV ACR Spying on Your Home Wi-Fi</a></li>
 <li class="sweepr-mesh-link"><a href="/vs/mullvad" style="color:var(--accent2);">SWEEPR VPN vs Mullvad VPN (2026 Comparison)</a></li>
-<li><a href="/download" style="color:var(--accent2);">Download SWEEPR VPN &amp; Free 30-Second Home Wi-Fi Scanner (~3.7 MB)</a></li>
+<li><a href="/download" style="color:var(--accent2);">Download SWEEPR VPN &amp; Free 30-Second Home Wi-Fi Scanner (~723 KB Win)</a></li>
       </ul>
     </div>
 </main>
   <footer>
-    <p>&copy; 2026 SWEEPR VPN Security Lab. Built in Rust + Tauri v2 with Audited Kernel WireGuard &amp; RAM-Only Servers.</p>
+    <p>&copy; 2026 SWEEPR VPN Security Lab. Built with Open-Source Kernel WireGuard &amp; RAM-Only Servers.</p>
     <p>
       <a href="/">Home</a> |
       <a href="/solutions">ISP Solutions</a> |

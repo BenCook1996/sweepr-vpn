@@ -42,7 +42,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5" />
   <link rel="manifest" href="/manifest.webmanifest" />
   <link rel="stylesheet" href="/style.css?v=ed321090">
-  <script src="/pricing-config.js?v=7b9c5702" defer></script>
+  <script src="/pricing-config.js?v=7b348060" defer></script>
   <script src="/nav.js?v=02bccc22" defer></script>
   <!-- Google tag (gtag.js) - Sweepr VPN -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
@@ -113,6 +113,7 @@
             <option value="protonvpn">Proton VPN Plus (Standard Annual Renewal)</option>
             <option value="ipvanish">IPVanish (Intro -> Annual Auto-Renewal)</option>
             <option value="pia">Private Internet Access / PIA (Renewal Rate)</option>
+            <option value="mullvad">Mullvad VPN (Flat Annualized Rate — 0% Hike)</option>
           </select>
         </div>
         <div>
@@ -138,8 +139,8 @@
         </div>
         <div class="bg-slate-900 text-white rounded-2xl p-5">
           <div class="text-xs font-extrabold uppercase tracking-wider text-emerald-300 mb-1">Your Renewal Savings + Extras</div>
-          <div id="savingsAmount" class="text-2xl sm:text-3xl font-bold font-mono tabular-nums text-emerald-400">Save £68.02</div>
-          <div id="savingsNote" class="text-xs text-slate-300 mt-1.5">Across 2 renewals + Free Wi-Fi Scanner &amp; .conf Export</div>
+          <div id="savingsAmount" class="text-2xl sm:text-3xl font-bold font-mono tabular-nums text-emerald-400">Save £22.03</div>
+          <div id="savingsNote" class="text-xs text-slate-300 mt-1.5">3-year total ownership (Year 1 + 2 renewals)</div>
         </div>
       </div>
 
@@ -149,7 +150,7 @@
           <div class="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-emerald-300">
             <span class="inline-flex items-center gap-1.5"><svg height="16" class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2L4 5v6c0 5.25 3.4 10.15 8 11.35 4.6-1.2 8-6.1 8-11.35V5l-8-3z"/><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4"/></svg><span>Honest Flat Pricing &bull; Zero Renewal Surprises</span></span>
           </div>
-          <h2 id="bridgeHeadline" class="text-lg sm:text-xl font-bold">Switch from TotalVPN in 60 seconds — try Month 1 for £1.99</h2>
+          <h2 id="bridgeHeadline" class="text-lg sm:text-xl font-bold">Switch from TotalVPN — lock £74.99/yr with 0% renewal hikes</h2>
           <p class="text-xs sm:text-sm text-slate-300 max-w-xl">
             Every SWEEPR VPN plan includes 10Gbps RAM-only WireGuard, 1-click router <code>.conf</code> exports (GL.iNet, OpenWrt, SteamOS, Shield TV), our free 30-second Home Wi-Fi Device Scanner, and a mandatory 7-day pre-renewal reminder email.
           </p>
@@ -296,34 +297,66 @@
       cyberghost: { name: 'CyberGhost VPN', intro: 34, renewal: 96 },
       protonvpn: { name: 'Proton VPN Plus', intro: 52, renewal: 96 },
       ipvanish: { name: 'IPVanish', intro: 32, renewal: 99 },
-      pia: { name: 'Private Internet Access', intro: 31, renewal: 89 }
+      pia: { name: 'Private Internet Access', intro: 31, renewal: 89 },
+      mullvad: { name: 'Mullvad VPN', intro: 52, renewal: 52 }
     };
+
+    function getActiveRenewalCurrency() {
+      return window.SWEEPR_ACTIVE_PRICING
+        || (typeof window.getSweeprPricing === 'function' ? window.getSweeprPricing('GBP') : null)
+        || { code: 'GBP', symbol: '£', decimals: 2, annual: 74.99, annualStr: '£74.99' };
+    }
+
+    function fmtCalcCurrency(cfg, val) {
+      if (!cfg) return '£' + Number(val || 0).toFixed(2);
+      if (typeof cfg.fmt === 'function') return cfg.fmt(val);
+      if (cfg.decimals === 0) return cfg.symbol + Math.round(val).toLocaleString();
+      return cfg.symbol + Number(val || 0).toFixed(2);
+    }
 
     function updateRenewalCalc() {
       const key = document.getElementById('providerSelect').value || 'totalvpn';
       const years = parseInt(document.getElementById('horizonSelect').value || '3', 10);
       const p = PROVIDERS[key] || PROVIDERS.totalvpn;
-      const sweeprAnnual = 74.99;
-      const hikePct = Math.round(((p.renewal - p.intro) / p.intro) * 100);
+      const active = getActiveRenewalCurrency();
+      const sweeprAnnual = Number(active.annual || 74.99);
+      const fxRatio = sweeprAnnual / 74.99;
+      const compIntro = p.intro * fxRatio;
+      const compRenewal = p.renewal * fxRatio;
+      const hikePct = compIntro > 0 ? Math.round(((compRenewal - compIntro) / compIntro) * 100) : 0;
 
       document.getElementById('compNameLabel').textContent = `${p.name} Year-2 Renewal`;
-      document.getElementById('compRenewalPrice').textContent = `£${p.renewal.toFixed(2)} / yr`;
-      document.getElementById('compHikeBadge').textContent = `+${hikePct}% jump vs. £${p.intro.toFixed(2)} Year-1 Intro`;
+      document.getElementById('compRenewalPrice').textContent = `${fmtCalcCurrency(active, compRenewal)} / yr`;
+      document.getElementById('compHikeBadge').textContent = hikePct === 0
+        ? `0% renewal hike (flat ${fmtCalcCurrency(active, compIntro)}/yr)`
+        : `+${hikePct}% jump vs. ${fmtCalcCurrency(active, compIntro)} Year-1 Intro`;
 
-      const renewalYears = years === 2 ? 1 : 2;
-      const compRenewalTotal = p.renewal * renewalYears;
-      const sweeprRenewalTotal = sweeprAnnual * renewalYears;
-      const saved = Math.max(0, compRenewalTotal - sweeprRenewalTotal);
+      const compTotal = years === 2 ? compRenewal : (compIntro + 2 * compRenewal);
+      const sweeprTotal = years === 2 ? sweeprAnnual : (3 * sweeprAnnual);
+      const saved = compTotal - sweeprTotal;
 
-      document.getElementById('savingsAmount').textContent = `Save £${saved.toFixed(2)}`;
-      document.getElementById('savingsNote').textContent =
-        years === 2
-          ? `On your very next renewal bill vs. ${p.name}`
-          : `Across Years 2 & 3 vs. ${p.name} auto-renewal`;
-      document.getElementById('bridgeHeadline').textContent = `Switch from ${p.name} in 60 seconds — try Month 1 for £1.99`;
+      const savingsEl = document.getElementById('savingsAmount');
+      const noteEl = document.getElementById('savingsNote');
+      if (saved >= 0) {
+        savingsEl.textContent = `Save ${fmtCalcCurrency(active, saved)}`;
+        savingsEl.className = 'text-2xl sm:text-3xl font-bold font-mono tabular-nums text-emerald-400';
+        noteEl.textContent = years === 2
+          ? `Year-2 renewal (${fmtCalcCurrency(active, compTotal)} vs. ${fmtCalcCurrency(active, sweeprTotal)})`
+          : `3-yr total incl. Year 1 (${fmtCalcCurrency(active, compTotal)} vs. ${fmtCalcCurrency(active, sweeprTotal)})`;
+      } else {
+        savingsEl.textContent = `${fmtCalcCurrency(active, Math.abs(saved))} more`;
+        savingsEl.className = 'text-2xl sm:text-3xl font-bold font-mono tabular-nums text-amber-300';
+        noteEl.textContent = years === 2
+          ? `vs. ${p.name} renewal (${fmtCalcCurrency(active, compTotal)}) — 0% hike on SWEEPR`
+          : `Over 3 yrs vs. ${p.name} (${fmtCalcCurrency(active, compTotal)} vs. ${fmtCalcCurrency(active, sweeprTotal)}) — includes Wi-Fi Scanner & 0% hike`;
+      }
+
+      const annualDisplay = active.annualStr || fmtCalcCurrency(active, sweeprAnnual);
+      document.getElementById('bridgeHeadline').textContent = `Switch from ${p.name} — lock ${annualDisplay}/yr with 0% renewal hikes`;
       const btn = document.getElementById('calcOrderBtn');
       if (btn) {
         btn.href = `/order?plan=annual&utm_source=renewal_checker&utm_medium=tool_bridge&utm_content=${encodeURIComponent(key)}`;
+        btn.onclick = function() { try { sessionStorage.setItem('sweepr_selected_plan', 'annual'); } catch(e) {} };
       }
       try {
         fetch('/api/tools/telemetry', {
@@ -334,6 +367,8 @@
       } catch {}
     }
 
+    window.onSweeprCurrencyChanged = function () { updateRenewalCalc(); };
+    window.addEventListener('sweepr:currencyChanged', updateRenewalCalc);
     document.addEventListener('DOMContentLoaded', updateRenewalCalc);
   </script>
 </body>

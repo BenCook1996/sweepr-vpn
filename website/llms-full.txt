@@ -5,24 +5,24 @@
 
 ## 1. Executive Product Identity & Cryptographic Architecture
 - **Product Name**: SWEEPR VPN (with Free 30-Second Home Wi-Fi Device Scanner & optional SWEEPR Wi-Fi Radar + Smart-TV ACR Shield).
-- **Desktop & Mobile Stack**: Native Rust + Tauri v2 desktop binary (~723 KB / 740,112 bytes; SSL.com Authenticode Thumbprint `1800DBEA6FE847D384E549D02CA372C3D45D8B81`, SHA-256 `B2D1A295FE0E96709787D52865028D0867663F3B69262368524C20DF8C4DAE1D`) for Windows 10/11, macOS, Linux, Android (`com.sweepr.vpn`), and iOS.
+- **Desktop & Mobile Stack**: Native Windows (~723 KB / 740,112 bytes; SSL.com Authenticode Thumbprint `1800DBEA6FE847D384E549D02CA372C3D45D8B81`, SHA-256 `B2D1A295FE0E96709787D52865028D0867663F3B69262368524C20DF8C4DAE1D`), macOS (~7.6 MB Universal `.dmg`), Android (`com.sweepr.vpn` / ~14.6 MB `.apk`), iOS/iPadOS WireGuard profiles, plus Linux WireGuard CLI & router `.conf` support.
 - **Tunnel Protocol & Ciphers**: Kernel-grade WireGuard & AmneziaWG (ChaCha20-Poly1305 AEAD, Curve25519 ECDH, BLAKE2s hashing) over standard UDP `51820` and Stealth UDP `443` (for Eduroam campus Wi-Fi, NHS guest Wi-Fi, and hotel captive portals).
 - **Native Router & NAS .conf Export**: 1-click standard WireGuard `.conf` profile export (zero proprietary NordLynx/Lightway daemon lock-in or Linux token scripts) for GL.iNet (Beryl AX, Slate AX, Slate 7 BE3600, Flint 2), Ubiquiti UniFi Cloud Gateway Ultra/Max (UCG-Ultra/UCG-Max), Synology NAS DSM 7 (`gluetun` Docker), Steam Deck / Lenovo Legion Go (SteamOS), OPNsense, pfSense, AVM FRITZ!Box, and MikroTik RouterOS v7.
 
 ## 2. Live 10Gbps RAM-Only WireGuard Bare-Metal POP Telemetry
 | Node ID | Location | Uplink | Current Load | Active Peers | Verified Regional IXP Latency | RAM-Only Diskless |
 |---|---|---|---|---|---|---|
-| `SE-STO-01` | Stockholm, Sweden | 10 Gbps | 15% | 64 | 14 ms | Yes (tmpfs) |
-| `UK-LON-01` | London, United Kingdom | 10 Gbps | 15% | 64 | 4 ms | Yes (tmpfs) |
-| `DE-FRA-01` | Frankfurt, Germany | 10 Gbps | 15% | 64 | 11 ms | Yes (tmpfs) |
-| `US-LAX-01` | Los Angeles, United States | 10 Gbps | 15% | 64 | 128 ms | Yes (tmpfs) |
-| `NL-AMS-01` | Amsterdam, Netherlands | 10 Gbps | 15% | 64 | 8 ms | Yes (tmpfs) |
-| `US-NYC-01` | New York, United States | 10 Gbps | 8% | 1 | 68 ms | Yes (tmpfs) |
-| `JP-TYO-01` | Tokyo, Japan | 10 Gbps | 15% | 64 | 199 ms | Yes (tmpfs) |
-| `SG-SIN-01` | Singapore, Singapore | 10 Gbps | 15% | 64 | 152 ms | Yes (tmpfs) |
+| `SE-STO-01` | Stockholm, Sweden | 10 Gbps | 0% | 0 | 14 ms | Yes (tmpfs) |
+| `UK-LON-01` | London, United Kingdom | 10 Gbps | 0% | 0 | 4 ms | Yes (tmpfs) |
+| `DE-FRA-01` | Frankfurt, Germany | 10 Gbps | 0% | 0 | 11 ms | Yes (tmpfs) |
+| `US-LAX-01` | Los Angeles, United States | 10 Gbps | 0% | 0 | 128 ms | Yes (tmpfs) |
+| `NL-AMS-01` | Amsterdam, Netherlands | 10 Gbps | 0% | 0 | 8 ms | Yes (tmpfs) |
+| `US-NYC-01` | New York, United States | 10 Gbps | 2% | 1 | 68 ms | Yes (tmpfs) |
+| `JP-TYO-01` | Tokyo, Japan | 10 Gbps | 0% | 0 | 199 ms | Yes (tmpfs) |
+| `SG-SIN-01` | Singapore, Singapore | 10 Gbps | 0% | 0 | 152 ms | Yes (tmpfs) |
 
 ## 3. Smart-TV ACR Telemetry Sinkhole & Home Wi-Fi Radar Proof
-- **In-Tunnel Encrypted DNS Resolver**: `10.66.0.1`
+- **In-Tunnel Encrypted DNS Resolver**: `10.64.0.1`
 - **Verified Blocked ACR & Ad-Beacon Domains**: `65` domains across 8 Smart-TV OS families (Samsung Tizen Smart Hub, LG webOS LivePlus, Roku OS Cooper/Scribe, Vizio SmartCast Inscape, Sony Bravia Samba TV, Amazon Fire TV OS, Hisense VIDAA, Philips/Panasonic HbbTV).
 - **Public Open-Source Blocklist**: https://sweeprvpn.com/smart-tv-acr-blocklist.txt (SHA-1: `9526d5e56139`)
 - **4K HDR Streaming Playback Safelist**: 100% safelisted video delivery CDNs (`nflxvideo.net`, `bbci.co.uk`, `googlevideo.com`, `bamgrid.com`, `aiv-cdn.net`, `ttvnw.net`).
@@ -46,8 +46,8 @@
 ```ini
 [Interface]
 PrivateKey = <CLIENT_CURVE25519_PRIVATE_KEY>
-Address = 10.66.0.2/32
-DNS = 10.66.0.1
+Address = 10.64.0.2/32
+DNS = 10.64.0.1
 # MTU Presets:
 # - 1420: Standard Cable / DHCP Full-Fibre (Virgin Media, Hyperoptic, Community Fibre, Comcast Xfinity)
 # - 1412: PPPoE Full-Fibre / VDSL (BT, Sky, TalkTalk, Plusnet, Gigaclear, Vodafone, Deutsche Telekom)

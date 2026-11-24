@@ -84,7 +84,7 @@
         <a href="/pricing">Pricing (£1.99 Trial)</a>
         <a href="/tools/leak-test">IP &amp; DNS Leak Test</a>
         <a href="/tools/isp-throttling-test">ISP Speed Checker</a>
-        <a class="btn" href="/download">Download (~3.7 MB)</a>
+        <a class="btn" href="/download">Download (~723 KB)</a>
       </div>
     </nav>
   </header>
@@ -95,7 +95,7 @@
     <p class="lead">Multi-gigabit YouFibre households connect dozens of smart TVs, thermostats, cameras, and shared guest phones onto the same Layer-2 broadcast domain—leaving laptops vulnerable to lateral ARP cache poisoning if routers go unmonitored.</p>
     <div id="direct-answer" style="margin:18px 0 24px;padding:18px 20px;border-radius:14px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.35);">
       <div style="font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent2,#34d399);margin-bottom:6px;">Direct Answer</div>
-      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Eliminate Protect Your Devices on YouFibre UK 1Gbps–8Gbps Full Fibre From ARP Spoofing, Sniffing & Unknown Intruders throttling and jitter by wrapping traffic in SWEEPR VPN's 10 Gbps RAM-only WireGuard tunnel (Live MAC/OUI inventory + ARP watch, Hardware AES/ChaCha20 at 1420 MTU). Because ChaCha20-encrypted datagrams conceal packet signatures from ISP deep packet inspection, evening streaming and.</p>
+      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Run SWEEPR's free 30-second LAN scanner to audit ARP tables and flag unknown MAC vendors on multi-gig YouFibre AS209386 networks before lateral spoofing occurs. Pairing live Wi-Fi Radar with 1420-MTU WireGuard (lon01.wg.sweeprvpn.com) and 10.64.0.1 DNS isolates laptops and Smart TVs safely across three simultaneous household devices and routers.</p>
       <div style="padding-top:10px;border-top:1px solid rgba(16,185,129,0.22);font-size:0.84rem;font-weight:700;">
         <a href="/tools/isp-throttling-test" style="color:var(--accent2,#34d399);text-decoration:underline;">Run Free 10s ISP Throttling &amp; Latency Test &rarr;</a>
       </div>
@@ -129,7 +129,7 @@ MTU = 1420
 DNS = 10.64.0.1
 
 [Peer]
-Endpoint = uk-lon.sweeprvpn.net:51820
+Endpoint = lon01.wg.sweeprvpn.com:51820
 AllowedIPs = 0.0.0.0/0, ::/0
 PersistentKeepalive = 25</code></pre>
 
@@ -154,7 +154,7 @@ PersistentKeepalive = 25</code></pre>
     </ul>
   </main>
   <footer>
-    <p>&copy; 2026 SWEEPR VPN Security Lab. Built in Rust + Tauri v2 with Audited Kernel WireGuard &amp; RAM-Only Servers.</p>
+    <p>&copy; 2026 SWEEPR VPN Security Lab. Built with Open-Source Kernel WireGuard &amp; RAM-Only Servers.</p>
     <p>
       <a href="/">Home</a> |
       <a href="/solutions">ISP Solutions</a> |

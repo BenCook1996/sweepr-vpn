@@ -83,7 +83,7 @@
         <a href="/pricing">Pricing (£1.99 Trial)</a>
         <a href="/tools/leak-test">IP &amp; DNS Leak Test</a>
         <a href="/tools/isp-throttling-test">ISP Speed Checker</a>
-        <a class="btn" href="/download">Download (~3.7 MB)</a>
+        <a class="btn" href="/download">Download (~723 KB)</a>
       </div>
     </nav>
   </header>
@@ -94,7 +94,7 @@
     <p class="lead">Philips Titan OS smart TVs capture on-screen video frames to sync Ambilight data and upload viewing statistics to advertising partners.</p>
     <div id="direct-answer" style="margin:18px 0 24px;padding:18px 20px;border-radius:14px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.35);">
       <div style="font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent2,#34d399);margin-bottom:6px;">Direct Answer</div>
-      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Disable Philips Titan OS Automatic Content Recognition under All Settings, General Settings, and Smart TV Privacy, then sinkhole <code>philips.com/telemetry</code>, <code>titanos.tv/metrics</code>, and <code>epg.corio.com</code> at router DNS <code>10.66.0.1</code> via WireGuard. Local Ambilight LED bias lighting continues processing on-device while network filtering stops silent ACR beacons across your household smart displays and gateways.</p>
+      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Disable Philips Titan OS Automatic Content Recognition under All Settings, General Settings, and Smart TV Privacy, then sinkhole <code>philips.com/telemetry</code>, <code>titanos.tv/metrics</code>, and <code>epg.corio.com</code> at router DNS <code>10.64.0.1</code> via WireGuard. Local Ambilight LED bias lighting continues processing on-device while network filtering stops silent ACR beacons across your household smart displays and gateways.</p>
       <div style="padding-top:10px;border-top:1px solid rgba(16,185,129,0.22);font-size:0.84rem;font-weight:700;">
         <a href="/tools/leak-test" style="color:var(--accent2,#34d399);text-decoration:underline;">Check DNS &amp; IP Leak Status in Browser &rarr;</a>
       </div>
@@ -103,7 +103,7 @@
     <div class="cta-strip">
       <div>
         <strong>Audit Philips Titan OS &amp; Ambilight LAN Traffic in Under 30 Seconds</strong>
-        <div style="color:var(--muted);font-size:0.93rem;">Non-privileged ARP/mDNS scanner built in Rust (~3.7 MB) detects active Smart TVs before configuring WireGuard sinkhole DNS.</div>
+        <div style="color:var(--muted);font-size:0.93rem;">Non-privileged ARP/mDNS desktop scanner (~723 KB Windows / ~7.6 MB macOS) detects active Smart TVs before configuring WireGuard sinkhole DNS.</div>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
         <a class="btn" href="/download">Get Desktop Scanner</a>
@@ -123,8 +123,8 @@
     <li><strong>Decouple Ambilight Cloud Sync From Local Bias Lighting:</strong> Keep <code>Ambilight &rarr; Ambilight Style &rarr; Follow Video</code> enabled locally, while signing out of optional Philips cloud account syncing and disabling <em>Ambilight+Hue Cloud Bridge</em> links unless you actively run local Hue Entertainment zones.</li>
   </ol>
 
-  <h2>3. Enforcing Router DNS Sinkholes (<code>10.66.0.1</code>) &amp; Pi-hole Rules</h2>
-  <p>Firmware updates on connected TVs frequently prompt users to re-accept updated Titan OS terms, quietly restoring opt-in flags. Placing your television behind a WireGuard-capable router (OpenWrt, GL.iNet, ASUSWRT-Merlin) running SWEEPR DNS at <code>10.66.0.1</code>—or an internal Pi-hole / AdGuard Home instance upstreamed through WireGuard—neutralizes telemetry regardless of menu state.</p>
+  <h2>3. Enforcing Router DNS Sinkholes (<code>10.64.0.1</code>) &amp; Pi-hole Rules</h2>
+  <p>Firmware updates on connected TVs frequently prompt users to re-accept updated Titan OS terms, quietly restoring opt-in flags. Placing your television behind a WireGuard-capable router (OpenWrt, GL.iNet, ASUSWRT-Merlin) running SWEEPR DNS at <code>10.64.0.1</code>—or an internal Pi-hole / AdGuard Home instance upstreamed through WireGuard—neutralizes telemetry regardless of menu state.</p>
   <pre><code># /etc/dnsmasq.d/philips-titan-acr.conf (OpenWrt / Pi-hole sinkhole)
 address=/titanos.tv/0.0.0.0
 address=/metrics.titanos.tv/0.0.0.0
@@ -135,9 +135,9 @@ address=/epg.corio.com/0.0.0.0
 # (^|\.)telemetry\.philips\.com$
 
 # Verify sinkhole response from any workstation on the same VLAN:
-dig @10.66.0.1 titanos.tv A +short
+dig @10.64.0.1 titanos.tv A +short
 # Expected output: 0.0.0.0</code></pre>
-  <p>If your television attempts to bypass DHCP-assigned resolvers using hardcoded DNS (such as <code>8.8.8.8</code>), add a router firewall NAT rule redirecting outbound LAN port 53 UDP/TCP from the TV's static lease to <code>10.66.0.1</code>.</p>
+  <p>If your television attempts to bypass DHCP-assigned resolvers using hardcoded DNS (such as <code>8.8.8.8</code>), add a router firewall NAT rule redirecting outbound LAN port 53 UDP/TCP from the TV's static lease to <code>10.64.0.1</code>.</p>
 
   <h2>4. Titan OS Endpoint &amp; Ambilight Functionality Matrix</h2>
   <table>
@@ -187,7 +187,7 @@ dig @10.66.0.1 titanos.tv A +short
   <h2>Frequently Asked Questions</h2>
   <div class="card"><h3>Will sinkholing <code>titanos.tv/metrics</code> or <code>philips.com/telemetry</code> disable Ambilight around my Philips screen?</h3><p>No. Ambilight LED colour sampling is computed locally inside the TV's picture-processing SoC directly from active HDMI or tuner frames. Only cloud account syncing and remote telemetry reporting rely on external servers.</p></div>
   <div class="card"><h3>Should I block <code>epg.corio.com</code> if I watch broadcast channels through an aerial?</h3><p>Broadcast DVB-T/Freeview channels transmit 7-day schedules directly inside the radio multiplex stream (EIT tables), so blocking <code>epg.corio.com</code> stops IP-based viewing analytics while keeping terrestrial listings working. Only IP-enriched poster thumbnails are suppressed.</p></div>
-  <div class="card"><h3>How can I tell if my Philips TV ignores router DNS settings and queries public resolvers directly?</h3><p>Check router connection tracking (<code>conntrack -L | grep &lt;TV_IP&gt;</code>) for outbound port 53 or 853 packets, enforce a LAN-to-<code>10.66.0.1</code> port-53 redirect, and test your subnet gateway via our <a href="/tools/leak-test" style="color:var(--accent2);text-decoration:underline;">IP &amp; DNS Leak Diagnostic</a>.</p></div>
+  <div class="card"><h3>How can I tell if my Philips TV ignores router DNS settings and queries public resolvers directly?</h3><p>Check router connection tracking (<code>conntrack -L | grep &lt;TV_IP&gt;</code>) for outbound port 53 or 853 packets, enforce a LAN-to-<code>10.64.0.1</code> port-53 redirect, and test your subnet gateway via our <a href="/tools/leak-test" style="color:var(--accent2);text-decoration:underline;">IP &amp; DNS Leak Diagnostic</a>.</p></div>
 
     <h2>Related Technical Guides &amp; Free Diagnostic Tools</h2>
     <div class="card">
@@ -207,14 +207,14 @@ dig @10.66.0.1 titanos.tv A +short
 <li class="sweepr-mesh-link"><a href="/setup/asuswrt-merlin-vpn-router" style="color:var(--accent2);">WireGuard VPN Setup for ASUSWRT-Merlin &amp; ASUS VPN Fusion Routers</a></li>
 <li class="sweepr-mesh-link"><a href="/vs/private-internet-access" style="color:var(--accent2);">SWEEPR VPN vs Private Internet Access (PIA): 2026 Speed, Footprint &amp; Privacy Comparison</a></li>
 <li><a href="/tools/isp-throttling-test" style="color:var(--accent2);">Free ISP Evening Throttling &amp; Latency Checker</a></li>
-<li><a href="/download" style="color:var(--accent2);">Download SWEEPR VPN &amp; Free 30-Second Home Wi-Fi Scanner (~3.7 MB)</a></li>
+<li><a href="/download" style="color:var(--accent2);">Download SWEEPR VPN &amp; Free 30-Second Home Wi-Fi Scanner (~723 KB Win)</a></li>
         <li><a href="/tools/smart-tv-tracking-check" style="color:var(--accent2);">Free Smart-TV ACR Tracker & Ad-Domain Exposure Checker</a></li>
         <li><a href="/tools/whats-on-my-wifi" style="color:var(--accent2);">What's on My Wi-Fi? Free Unknown Device & Spy Check</a></li>
       </ul>
     </div>
 </main>
   <footer>
-    <p>&copy; 2026 SWEEPR VPN Security Lab. Built in Rust + Tauri v2 with Audited Kernel WireGuard &amp; RAM-Only Servers.</p>
+    <p>&copy; 2026 SWEEPR VPN Security Lab. Built with Open-Source Kernel WireGuard &amp; RAM-Only Servers.</p>
     <p>
       <a href="/">Home</a> |
       <a href="/solutions">ISP Solutions</a> |

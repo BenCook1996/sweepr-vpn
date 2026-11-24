@@ -40,7 +40,7 @@
   <link rel="preload" href="/style.css?v=ed321090" as="style" />
   <link rel="stylesheet" href="/tailwind.min.css?v=fbbf784c">
   <link rel="stylesheet" href="/style.css?v=ed321090">
-  <script src="/pricing-config.js?v=7b9c5702" defer></script>
+  <script src="/pricing-config.js?v=7b348060" defer></script>
   <script src="/nav.js?v=02bccc22" defer></script>
   <!-- Google tag (gtag.js) - Sweepr VPN -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
@@ -91,7 +91,7 @@
                     <span class="text-sm font-bold text-gray-900 group-hover:text-emerald-700">SWEEPR VPN vs NordVPN</span>
                     <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">2026 Guide</span>
                   </div>
-                  <p class="text-xs text-gray-500 leading-snug">Compare 14MB lightweight WireGuard performance and locked-in renewal pricing.</p>
+                  <p class="text-xs text-gray-500 leading-snug">Compare lightweight (~723 KB Win) WireGuard performance and locked-in renewal pricing.</p>
                 </div>
               </a>
               <a href="/tools/leak-test" class="flex items-start gap-3 p-3 rounded-xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-200/60 transition-all text-inherit no-underline group">
@@ -144,7 +144,7 @@
     </div>
     <div id="direct-answer" class="mb-8 p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-gray-800">
       <div class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 mb-1.5">Direct Answer</div>
-      <p class="text-sm sm:text-base leading-relaxed">Disable <em>Smart TV Experience</em> under Roku Privacy settings, turn off <em>Viewing Data</em> in Vizio SmartCast Admin &amp; Privacy, and opt out inside Fire OS Preferences. Sinkhole <code>cooper.logs.roku.com</code>, <code>inscape.tv</code>, and <code>device-metrics-us.amazon.com</code> at your router (<code>10.66.0.1</code>) with port-53 redirects so hardcoded stick DNS cannot leak viewing telemetry during sleep or HDMI playback.</p>
+      <p class="text-sm sm:text-base leading-relaxed">Disable <em>Smart TV Experience</em> under Roku Privacy settings, turn off <em>Viewing Data</em> in Vizio SmartCast Admin &amp; Privacy, and opt out inside Fire OS Preferences. Sinkhole <code>cooper.logs.roku.com</code>, <code>inscape.tv</code>, and <code>device-metrics-us.amazon.com</code> at your router (<code>10.64.0.1</code>) with port-53 redirects so hardcoded stick DNS cannot leak viewing telemetry during sleep or HDMI playback.</p>
       <div class="mt-3 pt-3 border-t border-emerald-200/80 text-xs font-bold">
         <a href="/tools/leak-test" class="text-emerald-800 hover:text-emerald-950 underline">Verify Router &amp; Streaming Subnet DNS Security &rarr;</a>
       </div>
@@ -161,7 +161,7 @@
       </p>
       <div class="flex flex-wrap gap-3 items-center">
         <a href="/download" class="btn btn-go gap-2">
-          <span>Audit Streaming Sticks Free (~3.7 MB)</span>
+          <span>Audit Streaming Sticks Free (~723 KB Win)</span>
           <svg width="16" height="16" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
         <a rel="nofollow" href="/order?plan=annual" class="btn btn-ghost text-sm font-semibold">
@@ -214,10 +214,10 @@
       <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
         <h2 class="text-2xl font-bold text-gray-900 mb-3">1. Roku OS: Disabling Smart TV Experience &amp; Catching Hardcoded DNS</h2>
         <p class="text-gray-700 leading-relaxed mb-3">On Roku TVs and streaming sticks, navigate to <code>Settings &rarr; Privacy &rarr; Smart TV Experience</code> and uncheck <strong>Use info from TV inputs</strong>, then open <code>Settings &rarr; Privacy &rarr; Advertising</code> and check <strong>Limit ad tracking</strong> (plus click <em>Reset advertising identifier</em>).</p>
-        <p class="text-gray-700 leading-relaxed mb-3">Crucially, Roku OS firmware attempts direct queries to Google's <code>8.8.8.8</code> and <code>8.8.4.4</code> even when DHCP hands out a custom DNS IP. Without a router firewall DNAT intercept rule redirecting port 53 to <code>10.66.0.1</code>, calls to <code>cooper.logs.roku.com</code>, <code>scribe.logs.roku.com</code>, and <code>amoeba.roku.com</code> slip straight past Pi-hole or ISP DNS filters:</p>
-        <pre class="bg-slate-900 text-purple-200 text-xs sm:text-sm p-4 rounded-xl overflow-x-auto"><code># OpenWrt / Linux router: Force hardcoded Roku DNS (8.8.8.8) into SWEEPR sinkhole 10.66.0.1
-iptables -t nat -A PREROUTING -i br-lan -p udp --dport 53 -j DNAT --to-destination 10.66.0.1:53
-iptables -t nat -A PREROUTING -i br-lan -p tcp --dport 53 -j DNAT --to-destination 10.66.0.1:53</code></pre>
+        <p class="text-gray-700 leading-relaxed mb-3">Crucially, Roku OS firmware attempts direct queries to Google's <code>8.8.8.8</code> and <code>8.8.4.4</code> even when DHCP hands out a custom DNS IP. Without a router firewall DNAT intercept rule redirecting port 53 to <code>10.64.0.1</code>, calls to <code>cooper.logs.roku.com</code>, <code>scribe.logs.roku.com</code>, and <code>amoeba.roku.com</code> slip straight past Pi-hole or ISP DNS filters:</p>
+        <pre class="bg-slate-900 text-purple-200 text-xs sm:text-sm p-4 rounded-xl overflow-x-auto"><code># OpenWrt / Linux router: Force hardcoded Roku DNS (8.8.8.8) into SWEEPR sinkhole 10.64.0.1
+iptables -t nat -A PREROUTING -i br-lan -p udp --dport 53 -j DNAT --to-destination 10.64.0.1:53
+iptables -t nat -A PREROUTING -i br-lan -p tcp --dport 53 -j DNAT --to-destination 10.64.0.1:53</code></pre>
       </section>
 
       <section class="bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 shadow-sm">

@@ -83,7 +83,7 @@
         <a href="/pricing">Pricing (£1.99 Trial)</a>
         <a href="/tools/leak-test">IP &amp; DNS Leak Test</a>
         <a href="/tools/isp-throttling-test">ISP Speed Checker</a>
-        <a class="btn" href="/download">Download (~3.7 MB)</a>
+        <a class="btn" href="/download">Download (~723 KB)</a>
       </div>
     </nav>
   </header>
@@ -94,7 +94,7 @@
     <p class="lead">T-Mobile 5G Home Internet gateways operate exclusively over IPv6-to-IPv4 464XLAT translation with aggressive NAT state timeouts, breaking long-running SSH terminals, Docker builds, and VPN-less developer work every 90 seconds.</p>
     <div id="direct-answer" style="margin:18px 0 24px;padding:18px 20px;border-radius:14px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.35);">
       <div style="font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent2,#34d399);margin-bottom:6px;">Direct Answer</div>
-      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Eliminate Fix Dropping SSH, Kubernetes & Git Sessions on T-Mobile 5G Home Internet With Persistent WireGuard throttling and jitter by wrapping traffic in SWEEPR VPN's 10 Gbps RAM-only WireGuard tunnel (Strict 1380-byte WireGuard ceiling, PersistentKeepalive = 15s defeats timeout). Because ChaCha20-encrypted datagrams conceal packet signatures from ISP deep packet inspection, evening streaming and gaming maintain steady.</p>
+      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">T-Mobile 5G Home Internet gateways drop idle developer connections via 464XLAT translation and aggressive carrier NAT timeouts. Tunneling through SWEEPR VPN's US-NYC-01 or US-LAX-01 WireGuard nodes (nyc01.wg.sweeprvpn.com, MTU 1380, 15s keepalive, 10.64.0.1 DNS) prevents silent packet clipping and keeps SSH, Git, and Kubernetes sessions alive across three workstations.</p>
       <div style="padding-top:10px;border-top:1px solid rgba(16,185,129,0.22);font-size:0.84rem;font-weight:700;">
         <a href="/tools/isp-throttling-test" style="color:var(--accent2,#34d399);text-decoration:underline;">Run Free 10s ISP Throttling &amp; Latency Test &rarr;</a>
       </div>
@@ -112,14 +112,14 @@
 
     <h2>Inspecting CLAT Frame Drops on Workstations</h2>
     <pre><code># Probe path MTU threshold through Arcadyan/Sagemcom gateway
-ping -c 5 -M do -s 1352 us-iad.sweeprvpn.net
+ping -c 5 -M do -s 1352 nyc01.wg.sweeprvpn.com
 # Confirm zero stale SSH hang on idle tunnel
 ssh -o TCPKeepAlive=yes dev-box</code></pre>
 
     <h2>5G Gateway Developer Workflow Stability</h2>
     <table>
       <thead><tr><th>Developer Task</th><th>Raw AS21928 464XLAT Gateway</th><th>MTU 1380 + 15s Keepalive</th></tr></thead>
-      <tbody><tr><td>Idle SSH / kubectl Port-Forward</td><td>Evicted after 60–90s silence</td><td>Persists indefinitely</td></tr><tr><td>Docker Image Push Stalls</td><td>Packet drops past 1400 bytes</td><td>Full frame fit under CLAT limit</td></tr><tr><td>US East Latency Overhead</td><td>Erratic cellular NAT shifts</td><td>Direct Ashburn / Chicago tunnel</td></tr></tbody>
+      <tbody><tr><td>Idle SSH / kubectl Port-Forward</td><td>Evicted after 60–90s silence</td><td>Persists indefinitely</td></tr><tr><td>Docker Image Push Stalls</td><td>Packet drops past 1400 bytes</td><td>Full frame fit under CLAT limit</td></tr><tr><td>US East Latency Overhead</td><td>Erratic cellular NAT shifts</td><td>Direct US-NYC-01 / US-LAX-01 tunnel</td></tr></tbody>
     </table>
 
     <h2>WireGuard Profile Calibration (1380 MTU)</h2>
@@ -129,7 +129,7 @@ MTU = 1380
 DNS = 10.64.0.1
 
 [Peer]
-Endpoint = us-iad.sweeprvpn.net:51820
+Endpoint = nyc01.wg.sweeprvpn.com:51820
 AllowedIPs = 0.0.0.0/0, ::/0
 PersistentKeepalive = 15</code></pre>
 
@@ -154,7 +154,7 @@ PersistentKeepalive = 15</code></pre>
     </ul>
   </main>
   <footer>
-    <p>&copy; 2026 SWEEPR VPN Security Lab. Built in Rust + Tauri v2 with Audited Kernel WireGuard &amp; RAM-Only Servers.</p>
+    <p>&copy; 2026 SWEEPR VPN Security Lab. Built with Open-Source Kernel WireGuard &amp; RAM-Only Servers.</p>
     <p>
       <a href="/">Home</a> |
       <a href="/solutions">ISP Solutions</a> |

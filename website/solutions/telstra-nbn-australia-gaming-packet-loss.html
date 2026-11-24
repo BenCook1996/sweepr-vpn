@@ -84,18 +84,18 @@
         <a href="/pricing">Pricing (£1.99 Trial)</a>
         <a href="/tools/leak-test">IP &amp; DNS Leak Test</a>
         <a href="/tools/isp-throttling-test">ISP Speed Checker</a>
-        <a class="btn" href="/download">Download (~3.7 MB)</a>
+        <a class="btn" href="/download">Download (~723 KB)</a>
       </div>
     </nav>
   </header>
   <main>
-    <span class="badge">Australian NBN FTTP/HFC • AS1221 • Sydney / SEA Transit Optimization</span>
+    <span class="badge">Australian NBN FTTP/HFC • AS1221 • APAC Singapore &amp; Tokyo Transit</span>
     <h1>How to Fix Telstra NBN Australia Gaming Packet Loss, High Ping & Rubberbanding</h1>
       <div id="eeat-author-byline" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:0.82rem;color:var(--muted,#94a3b8);margin:10px 0 14px;"><span>By <strong style="color:var(--text,#e5e7eb);">Benjamin Cook</strong>, Principal Network Architect &middot; SWEEPR VPN Inc.</span><span>&bull;</span><span>Updated Nov 2026</span><span>&bull;</span><a href="/warrant-canary" style="color:var(--accent2,#34d399);font-weight:700;text-decoration:underline;">Verified via Cryptographic Warrant Canary &rarr;</a></div>
-    <p class="lead">Telstra NBN evening circuits across Sydney, Melbourne, and Brisbane contend heavily on regional international transit (SEA / US West) unless game packets ride direct high-capacity fiber peering through a calibrated 1412 MTU WireGuard profile.</p>
+    <p class="lead">Telstra NBN evening circuits across Australia contend heavily on regional international transit toward Southeast Asia and Japan unless game packets ride direct high-capacity fiber peering through a calibrated 1412 MTU WireGuard profile.</p>
     <div id="direct-answer" style="margin:18px 0 24px;padding:18px 20px;border-radius:14px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.35);">
       <div style="font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent2,#34d399);margin-bottom:6px;">Direct Answer</div>
-      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Eliminate Telstra NBN Australia Gaming Packet Loss, High Ping & Rubberbanding throttling and jitter by wrapping traffic in SWEEPR VPN's 10 Gbps RAM-only WireGuard tunnel (1412-byte safe ceiling against drops). Because ChaCha20-encrypted datagrams conceal packet signatures from ISP deep packet inspection, evening streaming and gaming maintain steady low latency across 3 simultaneous devices and routers with a 14-day guarantee.</p>
+      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Routing Telstra NBN AS1221 connections onto SWEEPR VPN's nearest APAC 10 Gbps POPs—Singapore SG-SIN-01 (sin01.wg.sweeprvpn.com) or Tokyo JP-TYO-01 (tyo01.wg.sweeprvpn.com)—at MTU = 1412 clears PPPoE fragmentation and evening international transit congestion. ChaCha20 encryption and in-tunnel 10.64.0.1 DNS steady matchmaking ping across three concurrent gaming devices and compatible home routers.</p>
       <div style="padding-top:10px;border-top:1px solid rgba(16,185,129,0.22);font-size:0.84rem;font-weight:700;">
         <a href="/tools/isp-throttling-test" style="color:var(--accent2,#34d399);text-decoration:underline;">Run Free 10s ISP Throttling &amp; Latency Test &rarr;</a>
       </div>
@@ -103,23 +103,23 @@
 
     <div class="grid-3">
       <div class="stat-box"><div class="stat-label">Modem Compatibility</div><div class="stat-val" style="font-size:1.05rem;">Telstra Smart Modem Gen 3 / Asus WAN</div></div>
-      <div class="stat-box"><div class="stat-label">Australian Edge Ingress</div><div class="stat-val" style="font-size:1.05rem;">Sydney (Equinix SY1) < 12 ms local</div></div>
+      <div class="stat-box"><div class="stat-label">Nearest APAC Ingress</div><div class="stat-val" style="font-size:1.05rem;">SG-SIN-01 Singapore &amp; JP-TYO-01 Tokyo</div></div>
       <div class="stat-box"><div class="stat-label">PPPoE / NBN Margin</div><div class="stat-val" style="font-size:1.05rem;">1412-byte safe ceiling against drops</div></div>
     </div>
 
     <h2>Dodging Evening NBN CVC Congestion & Submarine Hairpinning</h2>
     <div class="card"><p>When Australian ISPs prioritize consumer video streams over third-party game server traffic during 19:00–22:30 AEST peak usage, routing toward Singapore or Tokyo game clusters detours poorly across budget transit tiers.</p>
-<p>Pinning sessions onto Sydney (<code class="font-mono">au-syd.sweeprvpn.net</code>) streamlines BGP path selection onto direct international subsea trunks while masking UDP game port heuristics.</p></div>
+<p>Pinning sessions onto Singapore (<code class="font-mono">SG-SIN-01</code>, <code class="font-mono">sin01.wg.sweeprvpn.com</code>) or Tokyo (<code class="font-mono">JP-TYO-01</code>, <code class="font-mono">tyo01.wg.sweeprvpn.com</code>) streamlines BGP path selection onto direct subsea trunks while masking UDP game port heuristics.</p></div>
 
     <h2>Australian NBN Packet Loss Inspection</h2>
-    <pre><code># Check Telstra NBN evening hop jitter toward Sydney & Singapore
-mtr -ubwz -c 30 au-syd.sweeprvpn.net
-ping -M do -s 1384 au-syd.sweeprvpn.net</code></pre>
+    <pre><code># Check Telstra NBN evening hop jitter toward Singapore & Tokyo
+mtr -ubwz -c 30 sin01.wg.sweeprvpn.com
+ping -M do -s 1384 sin01.wg.sweeprvpn.com</code></pre>
 
     <h2>Telstra NBN Peak-Hour Latency Summary</h2>
     <table>
-      <thead><tr><th>Oceania Routing Metric</th><th>Unencrypted Telstra Evening WAN</th><th>Sydney Equinix WireGuard</th></tr></thead>
-      <tbody><tr><td>Evening Peak Packet Loss</td><td>2.5–4.1% burst jitter</td><td>< 0.1% steady flow</td></tr><tr><td>Sydney Local Ingress RTT</td><td>14–35 ms variable</td><td>9 ms consistent baseline</td></tr><tr><td>MTU Overhead Safety</td><td>1492 PPPoE clip risk</td><td>1412B clean margin</td></tr></tbody>
+      <thead><tr><th>Oceania Routing Metric</th><th>Unencrypted Telstra Evening WAN</th><th>APAC SG-SIN-01 WireGuard</th></tr></thead>
+      <tbody><tr><td>Evening Peak Packet Loss</td><td>2.5–4.1% burst jitter</td><td>< 0.1% steady flow</td></tr><tr><td>APAC Subsea Transit RTT</td><td>High evening variance</td><td>Steady SG-SIN-01 / JP-TYO-01 path</td></tr><tr><td>MTU Overhead Safety</td><td>1492 PPPoE clip risk</td><td>1412B clean margin</td></tr></tbody>
     </table>
 
     <h2>WireGuard Profile Calibration (1412 MTU)</h2>
@@ -129,7 +129,7 @@ MTU = 1412
 DNS = 10.64.0.1
 
 [Peer]
-Endpoint = au-syd.sweeprvpn.net:51820
+Endpoint = sin01.wg.sweeprvpn.com:51820
 AllowedIPs = 0.0.0.0/0, ::/0
 PersistentKeepalive = 25</code></pre>
 
@@ -154,7 +154,7 @@ PersistentKeepalive = 25</code></pre>
     </ul>
   </main>
   <footer>
-    <p>&copy; 2026 SWEEPR VPN Security Lab. Built in Rust + Tauri v2 with Audited Kernel WireGuard &amp; RAM-Only Servers.</p>
+    <p>&copy; 2026 SWEEPR VPN Security Lab. Built with Open-Source Kernel WireGuard &amp; RAM-Only Servers.</p>
     <p>
       <a href="/">Home</a> |
       <a href="/solutions">ISP Solutions</a> |
