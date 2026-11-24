@@ -1330,7 +1330,7 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 - **Auto-Optimizations Executed**:
   - Auto-optimized 29 core static pages (theme-color #10b981, ?v= asset cache-busting, OpenGraph/schema metadata & nofollow checkout guards)
   - Auto-optimized 63 pSEO pages with BreadcrumbList + TechArticle JSON-LD, GA4 (G-7D28EEMNXX) & manifest/nofollow guards
-  - Synced immutable content-hash ?v= asset cache-busting tags across 3 active app utility pages
+  - Synced immutable content-hash ?v= asset cache-busting tags across 1 active app utility pages
   - Synchronized sitemap.xml with 93 canonical URLs (content-hash <lastmod>: 0 modified today)
   - Synchronized llms.txt & llms-full.txt with all 63 pSEO guides and live 04:00 AM WireGuard/ACR telemetry for GEO AI citations
 
@@ -1339,7 +1339,7 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 #### 1. Crawlability & Indexability (100/100)
 - **Sitemap Completeness & Content-Hash Freshness**: PASS — 93 canonical URLs registered (0 thin/duplicate variants consolidated via 301/noindex)
 - **GEO / LLM Discovery Manifests (llms.txt & llms-full.txt)**: PASS — Updated both manifests with 93 canonical URLs, 14 canonical FAQs, and live WireGuard/ACR proof (0 non-canonical links)
-- **Search Engine Indexing Queue (Delta-Only)**: PASS — 4 un-pinged/modified delta URLs queued (out of 93 total canonical URLs)
+- **Search Engine Indexing Queue (Delta-Only)**: PASS — 0 un-pinged/modified delta URLs queued (out of 93 total canonical URLs)
 - **robots.txt Sitemap Directive**: PASS — Valid sitemap directive points to https://sweeprvpn.com/sitemap.xml
 - **robots.txt AI Crawler Allowances (GEO)**: PASS — All 7 major AI search bots explicitly permitted
 - **robots.txt Crawl-Budget Protections**: PASS — Internal APIs, user portals, qr-setup, CRO studios & ?app=1 webview embeds disallowed
