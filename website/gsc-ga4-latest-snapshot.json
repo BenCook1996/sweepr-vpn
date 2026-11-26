@@ -1,19 +1,19 @@
 {
-  "capturedAt": "2026-11-24T15:28:55.628Z",
+  "capturedAt": "2026-11-25T15:15:43.777Z",
   "windowDays": 28,
   "property": "sc-domain:sweeprvpn.com",
   "gscSummary": {
     "last28Days": {
-      "dateRange": "2026-10-25 to 2026-11-22",
+      "dateRange": "2026-10-26 to 2026-11-23",
       "clicks": 3,
-      "impressions": 486,
-      "ctrPct": 0.62,
-      "avgPosition": 22.2
+      "impressions": 432,
+      "ctrPct": 0.69,
+      "avgPosition": 22.1
     },
     "last7Days": {
-      "dateRange": "2026-11-15 to 2026-11-22",
+      "dateRange": "2026-11-16 to 2026-11-23",
       "clicks": 0,
-      "impressions": 0,
+      "impressions": 2,
       "ctrPct": 0,
       "avgPosition": 23
     },
@@ -44,11 +44,11 @@
   },
   "pages": {
     "/setup/gl-inet-travel-router": {
-      "impressions28d": 95,
+      "impressions28d": 90,
       "impressions7d": 7,
       "clicks28d": 1,
-      "ctrPct": 1.05,
-      "avgPosition": 19.5,
+      "ctrPct": 1.11,
+      "avgPosition": 18,
       "avgPosition7d": 10.6,
       "topQuery": "gl-mt3000 wireguard speed",
       "ga4Sessions": 3,
@@ -64,23 +64,23 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
-        "gscImpressions28d": 95,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
+        "gscImpressions28d": 90,
         "gscClicks28d": 1,
-        "gscCtrPct": 1.05,
-        "gscAvgPosition": 19.5,
+        "gscCtrPct": 1.11,
+        "gscAvgPosition": 18,
         "ga4ToolOrDownloadEvents": 1,
         "ga4CheckoutStarts": 0
       },
       "changeType": "GSC_TITLE_SURGERY"
     },
     "/tools/leak-test": {
-      "impressions28d": 60,
+      "impressions28d": 58,
       "impressions7d": 7,
       "clicks28d": 0,
       "ctrPct": 0,
-      "avgPosition": 68.5,
+      "avgPosition": 68.1,
       "avgPosition7d": 60.4,
       "topQuery": "check webrtc leak online",
       "ga4Sessions": 3,
@@ -96,23 +96,23 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
-        "gscImpressions28d": 60,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
+        "gscImpressions28d": 58,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
-        "gscAvgPosition": 68.5,
+        "gscAvgPosition": 68.1,
         "ga4ToolOrDownloadEvents": 1,
         "ga4CheckoutStarts": 0
       },
       "changeType": "GSC_TITLE_SURGERY"
     },
     "/guides/stop-samsung-smart-tv-acr-tracking": {
-      "impressions28d": 42,
+      "impressions28d": 26,
       "impressions7d": 2,
       "clicks28d": 0,
       "ctrPct": 0,
-      "avgPosition": 13.8,
+      "avgPosition": 14.3,
       "avgPosition7d": 8.5,
       "topQuery": "how to turn off acr on samsung tv",
       "ga4Sessions": 2,
@@ -128,23 +128,23 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
-        "gscImpressions28d": 42,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
+        "gscImpressions28d": 26,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
-        "gscAvgPosition": 13.8,
+        "gscAvgPosition": 14.3,
         "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0
       },
       "changeType": "GSC_TITLE_SURGERY"
     },
     "/guides/stop-lg-smart-tv-acr-spying": {
-      "impressions28d": 6,
+      "impressions28d": 3,
       "impressions7d": 1,
       "clicks28d": 0,
       "ctrPct": 0,
-      "avgPosition": 17.7,
+      "avgPosition": 6.7,
       "avgPosition7d": 3,
       "topQuery": "how to turn off acr on lg tv",
       "ga4Sessions": 2,
@@ -160,23 +160,23 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
-        "gscImpressions28d": 6,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
+        "gscImpressions28d": 3,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
-        "gscAvgPosition": 17.7,
+        "gscAvgPosition": 6.7,
         "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0
       },
       "changeType": "GSC_TITLE_SURGERY"
     },
     "/setup/synology-nas-docker-vpn": {
-      "impressions28d": 24,
+      "impressions28d": 20,
       "impressions7d": 1,
       "clicks28d": 0,
       "ctrPct": 0,
-      "avgPosition": 20.2,
+      "avgPosition": 18,
       "avgPosition7d": 7,
       "topQuery": "wireguard synology",
       "ga4Sessions": 3,
@@ -192,12 +192,12 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
-        "gscImpressions28d": 24,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
+        "gscImpressions28d": 20,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
-        "gscAvgPosition": 20.2,
+        "gscAvgPosition": 18,
         "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0
       },
@@ -205,13 +205,13 @@
     },
     "/": {
       "impressions28d": 1,
-      "impressions7d": 16,
+      "impressions7d": 1,
       "clicks28d": 0,
       "ctrPct": 0,
-      "avgPosition": 4,
-      "avgPosition7d": 58.6,
+      "avgPosition": 1,
+      "avgPosition7d": 1,
       "topQuery": "sweepr vpn",
-      "ga4Sessions": 114,
+      "ga4Sessions": 111,
       "ga4Conversions": 2,
       "appliedAt": "2026-11-04T05:00:00.000Z",
       "preChangeBaseline": {
@@ -224,12 +224,12 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-23T15:38:38.327Z",
-        "daysElapsed": 19,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
-        "gscAvgPosition": 4,
+        "gscAvgPosition": 1,
         "ga4ToolOrDownloadEvents": 2,
         "ga4CheckoutStarts": 0
       },
@@ -256,8 +256,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 18,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -268,11 +268,11 @@
       "changeType": "GSC_TITLE_SURGERY"
     },
     "/guides/detect-unknown-devices-on-home-wifi": {
-      "impressions28d": 4,
+      "impressions28d": 1,
       "impressions7d": 1,
       "clicks28d": 0,
       "ctrPct": 0,
-      "avgPosition": 44.8,
+      "avgPosition": 6,
       "avgPosition7d": 6,
       "topQuery": "find devices not connected to vpn",
       "ga4Sessions": 6,
@@ -288,12 +288,12 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
-        "gscImpressions28d": 4,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
+        "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
-        "gscAvgPosition": 44.8,
+        "gscAvgPosition": 6,
         "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0
       },
@@ -320,8 +320,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 16,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -332,7 +332,7 @@
       "changeType": "GSC_TITLE_SURGERY"
     },
     "/solutions/eduroam-campus-wifi-gaming-packet-loss": {
-      "impressions28d": 22,
+      "impressions28d": 20,
       "impressions7d": 1,
       "clicks28d": 0,
       "ctrPct": 0,
@@ -352,9 +352,9 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
-        "gscImpressions28d": 22,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
+        "gscImpressions28d": 20,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
         "gscAvgPosition": 7.7,
@@ -384,8 +384,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 17,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -416,8 +416,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 11,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -448,8 +448,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 5,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -460,11 +460,11 @@
       "changeType": "GSC_TITLE_SURGERY"
     },
     "/setup/nvidia-shield-tv-pro-wireguard": {
-      "impressions28d": 9,
+      "impressions28d": 8,
       "impressions7d": 1,
       "clicks28d": 0,
       "ctrPct": 0,
-      "avgPosition": 5.7,
+      "avgPosition": 5.4,
       "avgPosition7d": 8,
       "topQuery": "nvidia shield wireguard",
       "ga4Sessions": 2,
@@ -480,12 +480,12 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
-        "gscImpressions28d": 9,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
+        "gscImpressions28d": 8,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
-        "gscAvgPosition": 5.7,
+        "gscAvgPosition": 5.4,
         "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0
       },
@@ -512,8 +512,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 7,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -524,11 +524,11 @@
       "changeType": "GSC_TITLE_SURGERY"
     },
     "/solutions/rogers-ignite-canada-isp-throttling": {
-      "impressions28d": 4,
+      "impressions28d": 2,
       "impressions7d": 3,
       "clicks28d": 0,
       "ctrPct": 0,
-      "avgPosition": 11,
+      "avgPosition": 14.5,
       "avgPosition7d": 42,
       "topQuery": "rogers ignite vpn throttling",
       "ga4Sessions": 3,
@@ -544,12 +544,12 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
-        "gscImpressions28d": 4,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
+        "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
-        "gscAvgPosition": 11,
+        "gscAvgPosition": 14.5,
         "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0
       },
@@ -563,7 +563,7 @@
       "avgPosition": 15.5,
       "avgPosition7d": 5,
       "topQuery": "adguard home keenetic",
-      "ga4Sessions": 6,
+      "ga4Sessions": 7,
       "ga4Conversions": 1,
       "appliedAt": "2026-11-04T05:00:00.000Z",
       "preChangeBaseline": {
@@ -576,8 +576,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 10,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -588,11 +588,11 @@
       "changeType": "GSC_TITLE_SURGERY"
     },
     "/solutions/gigaclear-rural-fibre-gaming-packet-loss": {
-      "impressions28d": 11,
+      "impressions28d": 9,
       "impressions7d": 2,
       "clicks28d": 0,
       "ctrPct": 0,
-      "avgPosition": 6.7,
+      "avgPosition": 6.3,
       "avgPosition7d": 6.5,
       "topQuery": "gigaclear gaming packet loss",
       "ga4Sessions": 4,
@@ -608,23 +608,23 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
-        "gscImpressions28d": 11,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
+        "gscImpressions28d": 9,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
-        "gscAvgPosition": 6.7,
+        "gscAvgPosition": 6.3,
         "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0
       },
       "changeType": "GSC_TITLE_SURGERY"
     },
     "/solutions/talktalk-p2p-port-forwarding": {
-      "impressions28d": 12,
+      "impressions28d": 11,
       "impressions7d": 7,
       "clicks28d": 1,
-      "ctrPct": 8.33,
-      "avgPosition": 26.8,
+      "ctrPct": 9.09,
+      "avgPosition": 21.7,
       "avgPosition7d": 30.9,
       "topQuery": "talktalk port forwarding",
       "ga4Sessions": 1,
@@ -640,12 +640,12 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
-        "gscImpressions28d": 12,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
+        "gscImpressions28d": 11,
         "gscClicks28d": 1,
-        "gscCtrPct": 8.33,
-        "gscAvgPosition": 26.8,
+        "gscCtrPct": 9.09,
+        "gscAvgPosition": 21.7,
         "ga4ToolOrDownloadEvents": 1,
         "ga4CheckoutStarts": 0
       },
@@ -672,8 +672,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 5,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -684,12 +684,12 @@
       "changeType": "GSC_TITLE_SURGERY"
     },
     "/download": {
-      "impressions28d": 3,
+      "impressions28d": 4,
       "impressions7d": 1,
       "clicks28d": 1,
-      "ctrPct": 33.33,
-      "avgPosition": 3.3,
-      "avgPosition7d": 5,
+      "ctrPct": 25,
+      "avgPosition": 3.5,
+      "avgPosition7d": 4,
       "topQuery": "sweepr vpn download",
       "ga4Sessions": 6,
       "ga4Conversions": 2,
@@ -704,12 +704,12 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
-        "gscImpressions28d": 3,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
+        "gscImpressions28d": 4,
         "gscClicks28d": 1,
-        "gscCtrPct": 33.33,
-        "gscAvgPosition": 3.3,
+        "gscCtrPct": 25,
+        "gscAvgPosition": 3.5,
         "ga4ToolOrDownloadEvents": 2,
         "ga4CheckoutStarts": 0
       },
@@ -735,8 +735,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -765,8 +765,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 3,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -796,8 +796,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 3,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -826,8 +826,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -856,8 +856,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -886,8 +886,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -916,8 +916,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 3,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -946,8 +946,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -976,8 +976,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 3,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1006,8 +1006,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1036,8 +1036,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 21,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 22,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1066,8 +1066,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1096,8 +1096,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1126,8 +1126,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 21,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 22,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1157,8 +1157,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1187,8 +1187,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1217,8 +1217,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1247,8 +1247,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1277,8 +1277,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1318,11 +1318,11 @@
       }
     },
     "/solutions/comcast-xfinity-broadband-smart-tv-acr-blocking": {
-      "impressions28d": 6,
+      "impressions28d": 5,
       "impressions7d": 0,
       "clicks28d": 0,
       "ctrPct": 0,
-      "avgPosition": 6.3,
+      "avgPosition": 5.8,
       "avgPosition7d": 6.3,
       "topQuery": "",
       "appliedAt": "2026-11-04T05:00:00.000Z",
@@ -1337,12 +1337,12 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
-        "gscImpressions28d": 6,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
+        "gscImpressions28d": 5,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
-        "gscAvgPosition": 6.3,
+        "gscAvgPosition": 5.8,
         "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0
       }
@@ -1367,8 +1367,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1397,8 +1397,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 7,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1408,11 +1408,11 @@
       }
     },
     "/solutions/eduroam-campus-wifi-remote-dev-ssh": {
-      "impressions28d": 7,
+      "impressions28d": 6,
       "impressions7d": 0,
       "clicks28d": 0,
       "ctrPct": 0,
-      "avgPosition": 8.7,
+      "avgPosition": 8.5,
       "avgPosition7d": 8.8,
       "topQuery": "",
       "appliedAt": "2026-11-04T05:00:00.000Z",
@@ -1427,12 +1427,12 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
-        "gscImpressions28d": 7,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
+        "gscImpressions28d": 6,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
-        "gscAvgPosition": 8.7,
+        "gscAvgPosition": 8.5,
         "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0
       }
@@ -1517,8 +1517,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1547,8 +1547,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1577,8 +1577,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1607,8 +1607,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1637,8 +1637,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1667,8 +1667,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1697,8 +1697,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1727,8 +1727,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1757,8 +1757,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1787,8 +1787,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1817,8 +1817,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1847,8 +1847,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1858,11 +1858,11 @@
       }
     },
     "/solutions/three-5g-home-broadband-uhd-streaming-buffering": {
-      "impressions28d": 2,
+      "impressions28d": 1,
       "impressions7d": 0,
       "clicks28d": 0,
       "ctrPct": 0,
-      "avgPosition": 8.5,
+      "avgPosition": 8,
       "avgPosition7d": 8.5,
       "topQuery": "",
       "appliedAt": "2026-11-04T05:00:00.000Z",
@@ -1877,12 +1877,12 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
-        "gscImpressions28d": 2,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
+        "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
-        "gscAvgPosition": 8.5,
+        "gscAvgPosition": 8,
         "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0
       }
@@ -1937,8 +1937,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1967,8 +1967,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -1997,8 +1997,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2027,8 +2027,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 21,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 22,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2057,8 +2057,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2087,8 +2087,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 5,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2117,8 +2117,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2147,8 +2147,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2177,8 +2177,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2207,8 +2207,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2218,11 +2218,11 @@
       }
     },
     "/solutions/zen-internet-uk-isp-throttling": {
-      "impressions28d": 4,
+      "impressions28d": 3,
       "impressions7d": 0,
       "clicks28d": 0,
       "ctrPct": 0,
-      "avgPosition": 39.3,
+      "avgPosition": 49.7,
       "avgPosition7d": 32.8,
       "topQuery": "",
       "appliedAt": "2026-11-03T21:30:00.000Z",
@@ -2237,12 +2237,12 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 21,
-        "gscImpressions28d": 4,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 22,
+        "gscImpressions28d": 3,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
-        "gscAvgPosition": 39.3,
+        "gscAvgPosition": 49.7,
         "ga4ToolOrDownloadEvents": 0,
         "ga4CheckoutStarts": 0
       }
@@ -2267,8 +2267,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 2,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2298,8 +2298,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2329,8 +2329,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2359,8 +2359,8 @@
         "ga4CheckoutStarts": 0
       },
       "postChangeActual": {
-        "lastMeasuredAt": "2026-11-24T15:28:55.628Z",
-        "daysElapsed": 20,
+        "lastMeasuredAt": "2026-11-25T15:15:43.777Z",
+        "daysElapsed": 21,
         "gscImpressions28d": 1,
         "gscClicks28d": 0,
         "gscCtrPct": 0,
@@ -2373,33 +2373,33 @@
   },
   "historicalGscRedirectedUrls": [],
   "ga4Summary": {
-    "capturedAt": "2026-11-24T15:28:55.628Z",
+    "capturedAt": "2026-11-25T15:15:43.777Z",
     "propertyId": "559903365",
-    "activeUsers": 150,
-    "sessions": 157,
-    "engagedSessions": 46,
-    "engagementRate": 29.3,
-    "totalEvents": 768,
+    "activeUsers": 149,
+    "sessions": 158,
+    "engagedSessions": 51,
+    "engagementRate": 32.28,
+    "totalEvents": 790,
     "events": {
       "begin_checkout": {
-        "count": 23,
-        "users": 18
+        "count": 27,
+        "users": 20
       },
       "file_download": {
-        "count": 22,
-        "users": 6
+        "count": 25,
+        "users": 7
       },
       "installer_download": {
-        "count": 19,
-        "users": 6
+        "count": 21,
+        "users": 7
       },
       "view_pricing": {
-        "count": 4,
-        "users": 4
+        "count": 5,
+        "users": 5
       },
       "checkout_cta_click": {
-        "count": 3,
-        "users": 3
+        "count": 4,
+        "users": 4
       },
       "throttling_test_completed": {
         "count": 2,
@@ -2412,12 +2412,12 @@
     }
   },
   "lastCrmSync": {
-    "syncedAt": "2026-11-24T15:28:55.628Z",
+    "syncedAt": "2026-11-25T15:15:43.777Z",
     "cloudSync": {
       "url": "https://sweepr-crm-production.up.railway.app/api/crm/seo/gsc/cloud-sync",
       "status": 200,
       "ok": true,
-      "body": "{\"ok\":true,\"mode\":\"cloud_ingest\",\"project_id\":\"vpn\",\"ingested\":66,\"keywords_added\":25,\"total_rows\":116,\"latest_date\":\"2026-11-18\"}"
+      "body": "{\"ok\":true,\"mode\":\"cloud_ingest\",\"project_id\":\"vpn\",\"ingested\":57,\"keywords_added\":25,\"total_rows\":116,\"latest_date\":\"2026-11-18\"}"
     },
     "telemetry": {
       "url": "https://sweepr-crm-production.up.railway.app/v1/telemetry/event",

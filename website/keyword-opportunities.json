@@ -31357,8 +31357,8 @@
         "timeToRankMultiplier": 0.84,
         "playbookPriorityBoost": 3,
         "measuredSampleSize": 8,
-        "avgPositionLift": 3.1,
-        "avgImpressionsLift28d": 2
+        "avgPositionLift": 4,
+        "avgImpressionsLift28d": 1
       },
       "BOFU_COMPETITOR_SWITCHER": {
         "volumeMultiplier": 1.12,
@@ -31373,16 +31373,16 @@
         "timeToRankMultiplier": 0.86,
         "playbookPriorityBoost": 2,
         "measuredSampleSize": 7,
-        "avgPositionLift": 3.8,
-        "avgImpressionsLift28d": 24
+        "avgPositionLift": 5.2,
+        "avgImpressionsLift28d": 21
       },
       "SMART_TV_ACR_SHIELD": {
         "volumeMultiplier": 1.05,
         "timeToRankMultiplier": 0.92,
         "playbookPriorityBoost": 1,
         "measuredSampleSize": 2,
-        "avgPositionLift": 3.8,
-        "avgImpressionsLift28d": 10
+        "avgPositionLift": 3.5,
+        "avgImpressionsLift28d": 2
       }
     },
     "playbookSummaries": [
@@ -31438,8 +31438,8 @@
         "volumeMultiplier": 1.15,
         "timeToRankMultiplier": 0.84,
         "playbookPriorityBoost": 3,
-        "avgPositionLift": 3.1,
-        "avgImpressionsLift28d": 2,
+        "avgPositionLift": 4,
+        "avgImpressionsLift28d": 1,
         "strategyAdjustment": "PRIORITIZE_TOOL_BRIDGE (+20%) — Verified Nov 9 GSC: TalkTalk Pos 5.9 (11.1% CTR), Gigaclear Pos 6.8, Eduroam Pos 8.2 (34 impr), Virgin Media SSH Pos 9.2."
       },
       {
@@ -31466,8 +31466,8 @@
         "volumeMultiplier": 1.08,
         "timeToRankMultiplier": 0.86,
         "playbookPriorityBoost": 2,
-        "avgPositionLift": 3.8,
-        "avgImpressionsLift28d": 24,
+        "avgPositionLift": 5.2,
+        "avgImpressionsLift28d": 21,
         "strategyAdjustment": "FOCUS_ON_NEW_2026_MODELS — Verified Nov 9 GSC: GL.iNet #1 Impression Driver (93 impr, 1 click), Steam Deck Pos 5.4 (7d), Nvidia Shield Pos 5.4."
       },
       {
@@ -31480,8 +31480,8 @@
         "volumeMultiplier": 1.05,
         "timeToRankMultiplier": 0.92,
         "playbookPriorityBoost": 1,
-        "avgPositionLift": 3.8,
-        "avgImpressionsLift28d": 10,
+        "avgPositionLift": 3.5,
+        "avgImpressionsLift28d": 2,
         "strategyAdjustment": "ENRICH_EXISTING_PILLARS — Verified Nov 9 GSC: Samsung ACR 49 impr (Pos 13.1), LG ACR jumped Pos 27.2 -> 8.5 (7d), Roku/Vizio Pos 7.3."
       }
     ]

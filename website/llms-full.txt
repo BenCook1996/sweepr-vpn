@@ -18,7 +18,7 @@
 | `DE-FRA-01` | Frankfurt, Germany | 10 Gbps | 0% | 0 | 11 ms | Yes (tmpfs) |
 | `US-LAX-01` | Los Angeles, United States | 10 Gbps | 0% | 0 | 128 ms | Yes (tmpfs) |
 | `NL-AMS-01` | Amsterdam, Netherlands | 10 Gbps | 0% | 0 | 8 ms | Yes (tmpfs) |
-| `US-NYC-01` | New York, United States | 10 Gbps | 2% | 1 | 68 ms | Yes (tmpfs) |
+| `US-NYC-01` | New York, United States | 10 Gbps | 0% | 0 | 68 ms | Yes (tmpfs) |
 | `JP-TYO-01` | Tokyo, Japan | 10 Gbps | 0% | 0 | 199 ms | Yes (tmpfs) |
 | `SG-SIN-01` | Singapore, Singapore | 10 Gbps | 0% | 0 | 152 ms | Yes (tmpfs) |
 
