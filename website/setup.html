@@ -52,6 +52,15 @@
     .nav-links a:hover { color:var(--text); }
     .btn { display:inline-block; background:var(--accent); color:#042f2e; font-weight:700; padding:10px 18px; border-radius:8px; text-decoration:none; }
     .btn-outline { display:inline-block; border:1px solid var(--accent2); color:var(--accent2); font-weight:600; padding:10px 18px; border-radius:8px; text-decoration:none; }
+    .hidden { display:none !important; }
+    #mobileNavBtn { display:none; align-items:center; justify-content:center; width:40px; height:40px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text); cursor:pointer; flex-shrink:0; }
+    #mobileNavBackdrop { position:fixed; inset:0; background:rgba(17,19,21,0.72); backdrop-filter:blur(4px); z-index:9998; }
+    #mobileNavDrawer { position:fixed; left:0; right:0; top:64px; background:#ffffff; color:#0f172a; border-bottom:1px solid #e2e8f0; box-shadow:0 20px 35px rgba(0,0,0,0.35); padding:16px; max-height:calc(100vh - 64px); overflow-y:auto; z-index:9999; }
+    #mobileNavDrawer a { color:#0f172a; text-decoration:none; }
+    @media (max-width:767px) {
+      .nav-links { display:none !important; }
+      #mobileNavBtn { display:inline-flex !important; }
+    }
     main { max-width:1080px; margin:0 auto; padding:42px 20px 72px; }
     .badge { display:inline-block; background:rgba(16,185,129,0.14); color:var(--accent); border:1px solid rgba(16,185,129,0.35); padding:4px 12px; border-radius:999px; font-size:0.8rem; font-weight:700; margin-bottom:14px; }
     h1 { font-size:2.15rem; line-height:1.2; margin:0 0 16px; }
@@ -91,8 +100,30 @@
         <a href="/pricing">Pricing (£1.99 Trial)</a>
         <a class="btn" href="/download">Download (~723 KB)</a>
       </div>
+      <button type="button" id="mobileNavBtn" aria-label="Toggle navigation menu" aria-expanded="false">
+        <svg id="mobileNavIconOpen" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <svg id="mobileNavIconClose" width="20" height="20" class="hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
     </nav>
   </header>
+  <div id="mobileNavBackdrop" class="hidden" style="z-index:9998;display:none;"></div>
+  <div id="mobileNavDrawer" class="hidden" style="background-color:#ffffff;z-index:9999;display:none;">
+    <div style="max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:10px;">
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;">
+        <a href="/#features" style="padding:10px 12px;border-radius:10px;background:#f8fafc;border:1px solid #e2e8f0;font-weight:700;font-size:14px;">Features</a>
+        <a href="/pricing" style="padding:10px 12px;border-radius:10px;background:#f8fafc;border:1px solid #e2e8f0;font-weight:700;font-size:14px;">Pricing</a>
+      </div>
+      <a href="/tools/leak-test" style="padding:10px 12px;border-radius:10px;border:1px solid #e2e8f0;font-weight:700;font-size:14px;">Free IP, DNS &amp; WebRTC Leak Test</a>
+      <a href="/tools/isp-throttling-test" style="padding:10px 12px;border-radius:10px;border:1px solid #e2e8f0;font-weight:700;font-size:14px;">Free ISP Speed Slowdown Checker</a>
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;">
+        <a href="/solutions" style="padding:8px 10px;border-radius:10px;background:#f8fafc;border:1px solid #e2e8f0;font-size:12px;font-weight:700;">ISP Solutions &rarr;</a>
+        <a href="/setup" style="padding:8px 10px;border-radius:10px;background:#f8fafc;border:1px solid #e2e8f0;font-size:12px;font-weight:700;">Router Setups &rarr;</a>
+        <a href="/guides" style="padding:8px 10px;border-radius:10px;background:#f8fafc;border:1px solid #e2e8f0;font-size:12px;font-weight:700;">Privacy Guides &rarr;</a>
+        <a href="/vs" style="padding:8px 10px;border-radius:10px;background:#f8fafc;border:1px solid #e2e8f0;font-size:12px;font-weight:700;">Comparisons &rarr;</a>
+      </div>
+      <a href="/download" style="display:flex;justify-content:center;padding:12px;border-radius:10px;background:#10b981;color:#042f2e;font-weight:800;font-size:14px;">Install Now</a>
+    </div>
+  </div>
   <main>
     <div class="hub-telemetry">
       <span><span class="hub-led"></span>SETUP // 15 ROUTER & CONSOLE GUIDES</span>
