@@ -2017,6 +2017,12 @@ if (!indexingQueue.indexnow_submitted_at || typeof indexingQueue.indexnow_submit
   indexingQueue.indexnow_submitted_at = {};
 }
 const allCanonicalLocs = sitemapEntries.map((p) => p.canonicalLoc);
+const canonicalLocSet = new Set(allCanonicalLocs);
+for (const existingUrl of Object.keys(indexingQueue.indexnow_submitted_at)) {
+  if (!canonicalLocSet.has(existingUrl) || existingUrl.includes('-p2p-port-forwarding')) {
+    delete indexingQueue.indexnow_submitted_at[existingUrl];
+  }
+}
 const nowMs = Date.now();
 const FOURTEEN_DAYS_MS = 14 * 24 * 60 * 60 * 1000;
 
