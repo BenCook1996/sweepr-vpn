@@ -619,7 +619,8 @@
     "/solutions/community-fibre-london-p2p-port-forwarding": "2026-11-04T00:00:00.000Z",
     "/vs/totalvpn": "2026-11-04T00:00:00.000Z",
     "/solutions/talktalk-fibre-wireguard-cgnat": "2026-11-04T00:00:00.000Z",
-    "/solutions/hotel-captive-portal-wifi-wireguard": "2026-11-04T00:00:00.000Z"
+    "/solutions/hotel-captive-portal-wifi-wireguard": "2026-11-04T00:00:00.000Z",
+    "/solutions/community-fibre-london-wireguard-cgnat": "2026-11-04T00:00:00.000Z"
   },
   "intentMixSummary": {
     "commercial_vs": 37,

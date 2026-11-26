@@ -12395,8 +12395,8 @@
         "faqAnswer": "Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT."
       },
       "ctrUpgradeBrief": {
-        "isLockedByGsc14DayCooldown": false,
-        "cooldownExpiresAt": "2026-11-17T21:30:00.000Z"
+        "isLockedByGsc14DayCooldown": true,
+        "cooldownExpiresAt": "2026-12-09T17:00:00.000Z"
       },
       "createdAt": "2026-11-24T05:31:41.550Z",
       "appliedAt": null
@@ -14167,7 +14167,7 @@
       },
       "ctrUpgradeBrief": {
         "isLockedByGsc14DayCooldown": true,
-        "cooldownExpiresAt": "2026-12-02T13:38:24.253Z"
+        "cooldownExpiresAt": "2026-12-09T17:00:00.000Z"
       },
       "createdAt": "2026-11-24T05:31:41.550Z",
       "appliedAt": null
@@ -15987,7 +15987,7 @@
       },
       "ctrUpgradeBrief": {
         "isLockedByGsc14DayCooldown": true,
-        "cooldownExpiresAt": "2026-12-02T13:38:24.253Z"
+        "cooldownExpiresAt": "2026-12-09T17:00:00.000Z"
       },
       "createdAt": "2026-11-24T05:31:41.550Z",
       "appliedAt": null
@@ -31318,15 +31318,80 @@
     "dailyNewPillarCap": 2
   },
   "auditSummary": {
-    "auditedAt": "2026-11-25T10:15:39.333Z",
+    "auditedAt": "2026-11-26T14:40:25.003Z",
     "assertionsPassed": "10/10 PASS",
-    "autoRepairsApplied": 0,
-    "repairLog": []
+    "autoRepairsApplied": 64,
+    "repairLog": [
+      "Normalized claims & schema in /alternatives/totalvpn",
+      "Normalized claims & schema in /solutions/brsk-better-net-uk-voip-teams-zoom-jitter",
+      "Normalized claims & schema in /solutions/bt-broadband-gaming-packet-loss",
+      "Normalized claims & schema in /solutions/comcast-xfinity-broadband-isp-throttling",
+      "Normalized claims & schema in /solutions/community-fibre-london-wireguard-cgnat",
+      "Normalized claims & schema in /solutions/eduroam-campus-wifi-gaming-packet-loss",
+      "Normalized claims & schema in /solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter",
+      "Normalized claims & schema in /solutions/gigaclear-rural-fibre-gaming-packet-loss",
+      "Normalized claims & schema in /solutions/hotel-captive-portal-wifi-wireguard",
+      "Normalized claims & schema in /solutions/hyperoptic-broadband-isp-throttling",
+      "Normalized claims & schema in /solutions/national-rail-train-wifi-remote-dev-ssh",
+      "Normalized claims & schema in /solutions/nhs-guest-wifi-voip-teams-zoom-jitter",
+      "Normalized claims & schema in /solutions/o2-uk-mobile-tethering-uhd-streaming-buffering",
+      "Normalized claims & schema in /solutions/rogers-ignite-canada-isp-throttling",
+      "Normalized claims & schema in /solutions/sky-broadband-gaming-packet-loss",
+      "Normalized claims & schema in /solutions/starlink-satellite-uk-isp-throttling",
+      "Normalized claims & schema in /solutions/t-mobile-5g-home-internet-remote-dev-ssh",
+      "Normalized claims & schema in /solutions/talktalk-fibre-wireguard-cgnat",
+      "Normalized claims & schema in /solutions/telstra-nbn-australia-gaming-packet-loss",
+      "Normalized claims & schema in /solutions/three-5g-home-broadband-uhd-streaming-buffering",
+      "Normalized claims & schema in /solutions/toob-full-fibre-uk-voip-teams-zoom-jitter",
+      "Normalized claims & schema in /solutions/virgin-media-remote-dev-ssh",
+      "Normalized claims & schema in /solutions/vodafone-uk-gaming-packet-loss",
+      "Normalized claims & schema in /solutions/youfibre-uk-wifi-arp-spoofing-protection",
+      "Normalized claims & schema in /solutions/zen-internet-uk-isp-throttling",
+      "Normalized claims & schema in /setup/almalinux-9-wireguard-gateway",
+      "Normalized claims & schema in /setup/apple-tv-tvos-17-wireguard",
+      "Normalized claims & schema in /setup/asuswrt-merlin-vpn-router",
+      "Normalized claims & schema in /setup/freebsd-14-wireguard-kmod",
+      "Normalized claims & schema in /setup/gl-inet-travel-router",
+      "Normalized claims & schema in /setup/linux-cli-wireguard",
+      "Normalized claims & schema in /setup/macos-apple-silicon-vpn",
+      "Normalized claims & schema in /setup/nvidia-shield-tv-pro-wireguard",
+      "Normalized claims & schema in /setup/openwrt-wireguard-router",
+      "Normalized claims & schema in /setup/pfsense-opnsense-router",
+      "Normalized claims & schema in /setup/raspberry-pi-home-gateway",
+      "Normalized claims & schema in /setup/steam-deck-vpn",
+      "Normalized claims & schema in /setup/synology-nas-docker-vpn",
+      "Normalized claims & schema in /setup/ubiquiti-unifi-dream-machine-wireguard",
+      "Normalized claims & schema in /setup/windows-11-wireguard-vpn",
+      "Normalized claims & schema in /vs/cloudflare-warp-plus",
+      "Normalized claims & schema in /vs/cyberghost",
+      "Normalized claims & schema in /vs/expressvpn",
+      "Normalized claims & schema in /vs/ipvanish",
+      "Normalized claims & schema in /vs/mullvad",
+      "Normalized claims & schema in /vs/nordvpn",
+      "Normalized claims & schema in /vs/private-internet-access",
+      "Normalized claims & schema in /vs/protonvpn",
+      "Normalized claims & schema in /vs/surfshark",
+      "Normalized claims & schema in /vs/totalvpn",
+      "Normalized claims & schema in /vs/windscribe",
+      "Normalized claims & schema in /guides/block-philips-titan-os-acr",
+      "Normalized claims & schema in /guides/block-sony-bravia-samba-tv-acr",
+      "Normalized claims & schema in /guides/detect-unknown-devices-on-home-wifi",
+      "Normalized claims & schema in /guides/disable-ipv6-leak-windows-linux",
+      "Normalized claims & schema in /guides/fix-isp-dns-hijacking-and-throttling",
+      "Normalized claims & schema in /guides/fix-wireguard-mtu-fragmentation-pppoe",
+      "Normalized claims & schema in /guides/prevent-webrtc-ip-leak-chromium-firefox",
+      "Normalized claims & schema in /guides/prevent-windows-11-dns-leaks-doh",
+      "Normalized claims & schema in /guides/public-hotel-airport-wifi-security",
+      "Normalized claims & schema in /guides/stop-isp-deep-packet-inspection-dpi",
+      "Normalized claims & schema in /guides/stop-lg-smart-tv-acr-spying",
+      "Normalized claims & schema in /guides/stop-roku-vizio-firetv-spying",
+      "Normalized claims & schema in /guides/stop-samsung-smart-tv-acr-tracking"
+    ]
   },
   "strategyLedgerSummary": {
     "ledgerPath": "website/seo-strategy-performance-ledger.json",
     "snapshotInputPath": "website/gsc-ga4-latest-snapshot.json",
-    "totalTrackedEntries": 126,
+    "totalTrackedEntries": 127,
     "calibrationMultipliers": {
       "FING_OUI_DIRECTORY": {
         "volumeMultiplier": 1.15,
@@ -31357,7 +31422,7 @@
         "timeToRankMultiplier": 0.84,
         "playbookPriorityBoost": 3,
         "measuredSampleSize": 8,
-        "avgPositionLift": 4,
+        "avgPositionLift": 3.5,
         "avgImpressionsLift28d": 1
       },
       "BOFU_COMPETITOR_SWITCHER": {
@@ -31373,16 +31438,16 @@
         "timeToRankMultiplier": 0.86,
         "playbookPriorityBoost": 2,
         "measuredSampleSize": 7,
-        "avgPositionLift": 5.2,
-        "avgImpressionsLift28d": 21
+        "avgPositionLift": 5,
+        "avgImpressionsLift28d": 16
       },
       "SMART_TV_ACR_SHIELD": {
         "volumeMultiplier": 1.05,
         "timeToRankMultiplier": 0.92,
         "playbookPriorityBoost": 1,
         "measuredSampleSize": 2,
-        "avgPositionLift": 3.5,
-        "avgImpressionsLift28d": 2
+        "avgPositionLift": 3,
+        "avgImpressionsLift28d": 0
       }
     },
     "playbookSummaries": [
@@ -31431,14 +31496,14 @@
       {
         "playbookId": "OFCOM_FCC_ISP_REFUND_AND_THROTTLING",
         "label": "Playbook 4: Surfshark + Ofcom/FCC Speed Guarantee & Bill Credit Scripts",
-        "trackedQueriesCount": 14,
+        "trackedQueriesCount": 15,
         "measuredPagesCount": 8,
         "avgForecastKd": 20,
         "targetTimeToRank": "3–12 days",
         "volumeMultiplier": 1.15,
         "timeToRankMultiplier": 0.84,
         "playbookPriorityBoost": 3,
-        "avgPositionLift": 4,
+        "avgPositionLift": 3.5,
         "avgImpressionsLift28d": 1,
         "strategyAdjustment": "PRIORITIZE_TOOL_BRIDGE (+20%) — Verified Nov 9 GSC: TalkTalk Pos 5.9 (11.1% CTR), Gigaclear Pos 6.8, Eduroam Pos 8.2 (34 impr), Virgin Media SSH Pos 9.2."
       },
@@ -31466,8 +31531,8 @@
         "volumeMultiplier": 1.08,
         "timeToRankMultiplier": 0.86,
         "playbookPriorityBoost": 2,
-        "avgPositionLift": 5.2,
-        "avgImpressionsLift28d": 21,
+        "avgPositionLift": 5,
+        "avgImpressionsLift28d": 16,
         "strategyAdjustment": "FOCUS_ON_NEW_2026_MODELS — Verified Nov 9 GSC: GL.iNet #1 Impression Driver (93 impr, 1 click), Steam Deck Pos 5.4 (7d), Nvidia Shield Pos 5.4."
       },
       {
@@ -31480,8 +31545,8 @@
         "volumeMultiplier": 1.05,
         "timeToRankMultiplier": 0.92,
         "playbookPriorityBoost": 1,
-        "avgPositionLift": 3.5,
-        "avgImpressionsLift28d": 2,
+        "avgPositionLift": 3,
+        "avgImpressionsLift28d": 0,
         "strategyAdjustment": "ENRICH_EXISTING_PILLARS — Verified Nov 9 GSC: Samsung ACR 49 impr (Pos 13.1), LG ACR jumped Pos 27.2 -> 8.5 (7d), Roku/Vizio Pos 7.3."
       }
     ]
