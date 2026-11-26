@@ -29,11 +29,11 @@ const AUTHORITATIVE_SOLUTIONS_PILLARS = new Set([
   "brsk-better-net-uk-voip-teams-zoom-jitter",
   "bt-broadband-gaming-packet-loss",
   "comcast-xfinity-broadband-isp-throttling",
-  "community-fibre-london-p2p-port-forwarding",
+  "community-fibre-london-wireguard-cgnat",
   "eduroam-campus-wifi-gaming-packet-loss",
   "ee-5g-mobile-hotspot-voip-teams-zoom-jitter",
   "gigaclear-rural-fibre-gaming-packet-loss",
-  "hotel-captive-portal-wifi-p2p-port-forwarding",
+  "hotel-captive-portal-wifi-wireguard",
   "hyperoptic-broadband-isp-throttling",
   "national-rail-train-wifi-remote-dev-ssh",
   "nhs-guest-wifi-voip-teams-zoom-jitter",
@@ -42,7 +42,7 @@ const AUTHORITATIVE_SOLUTIONS_PILLARS = new Set([
   "sky-broadband-gaming-packet-loss",
   "starlink-satellite-uk-isp-throttling",
   "t-mobile-5g-home-internet-remote-dev-ssh",
-  "talktalk-p2p-port-forwarding",
+  "talktalk-fibre-wireguard-cgnat",
   "telstra-nbn-australia-gaming-packet-loss",
   "three-5g-home-broadband-uhd-streaming-buffering",
   "toob-full-fibre-uk-voip-teams-zoom-jitter",
@@ -57,12 +57,13 @@ const SPECIFIC_SOLUTIONS_CANONICAL_MAP = {
   "eduroam-campus-wifi-remote-dev-ssh": "/solutions/eduroam-campus-wifi-gaming-packet-loss",
   "eduroam-campus-wifi-uhd-streaming-buffering": "/solutions/eduroam-campus-wifi-gaming-packet-loss",
   "eduroam-campus-wifi-isp-throttling": "/solutions/eduroam-campus-wifi-gaming-packet-loss",
-  "talktalk-gaming-packet-loss": "/solutions/talktalk-p2p-port-forwarding",
-  "talktalk-remote-dev-ssh": "/solutions/talktalk-p2p-port-forwarding",
-  "talktalk-uhd-streaming-buffering": "/solutions/talktalk-p2p-port-forwarding",
-  "talktalk-isp-throttling": "/solutions/talktalk-p2p-port-forwarding",
-  "talktalk-fibre-uk-uhd-streaming-buffering": "/solutions/talktalk-p2p-port-forwarding",
-  "talktalk-fibre-uk-wifi-arp-spoofing-protection": "/solutions/talktalk-p2p-port-forwarding",
+  "talktalk-p2p-port-forwarding": "/solutions/talktalk-fibre-wireguard-cgnat",
+  "talktalk-gaming-packet-loss": "/solutions/talktalk-fibre-wireguard-cgnat",
+  "talktalk-remote-dev-ssh": "/solutions/talktalk-fibre-wireguard-cgnat",
+  "talktalk-uhd-streaming-buffering": "/solutions/talktalk-fibre-wireguard-cgnat",
+  "talktalk-isp-throttling": "/solutions/talktalk-fibre-wireguard-cgnat",
+  "talktalk-fibre-uk-uhd-streaming-buffering": "/solutions/talktalk-fibre-wireguard-cgnat",
+  "talktalk-fibre-uk-wifi-arp-spoofing-protection": "/solutions/talktalk-fibre-wireguard-cgnat",
   "virgin-media-ireland-isp-throttling": "/solutions",
   "virgin-media-p2p-port-forwarding": "/solutions/virgin-media-remote-dev-ssh",
   "virgin-media-uhd-streaming-buffering": "/solutions/virgin-media-remote-dev-ssh",
@@ -72,7 +73,8 @@ const SPECIFIC_SOLUTIONS_CANONICAL_MAP = {
   "virgin-media-isp-throttling": "/solutions/virgin-media-remote-dev-ssh",
   "t-mobile-5g-home-internet-isp-throttling": "/solutions/t-mobile-5g-home-internet-remote-dev-ssh",
   "t-mobile-5g-home-discord-voice-drop": "/solutions/t-mobile-5g-home-internet-remote-dev-ssh",
-  "community-fibre-london-isp-throttling": "/solutions/community-fibre-london-p2p-port-forwarding",
+  "community-fibre-london-p2p-port-forwarding": "/solutions/community-fibre-london-wireguard-cgnat",
+  "community-fibre-london-isp-throttling": "/solutions/community-fibre-london-wireguard-cgnat",
   "bt-broadband-p2p-port-forwarding": "/solutions/bt-broadband-gaming-packet-loss",
   "bt-broadband-remote-dev-ssh": "/solutions/bt-broadband-gaming-packet-loss",
   "bt-broadband-uhd-streaming-buffering": "/solutions/bt-broadband-gaming-packet-loss",
@@ -106,7 +108,8 @@ const SPECIFIC_SOLUTIONS_CANONICAL_MAP = {
   "o2-uk-mobile-tethering-isp-throttling": "/solutions/o2-uk-mobile-tethering-uhd-streaming-buffering",
   "nhs-guest-wifi-isp-throttling": "/solutions/nhs-guest-wifi-voip-teams-zoom-jitter",
   "nhs-guest-wifi-uhd-streaming-buffering": "/solutions/nhs-guest-wifi-voip-teams-zoom-jitter",
-  "hotel-captive-portal-wifi-isp-throttling": "/solutions/hotel-captive-portal-wifi-p2p-port-forwarding",
+  "hotel-captive-portal-wifi-p2p-port-forwarding": "/solutions/hotel-captive-portal-wifi-wireguard",
+  "hotel-captive-portal-wifi-isp-throttling": "/solutions/hotel-captive-portal-wifi-wireguard",
   "national-rail-train-wifi-isp-throttling": "/solutions/national-rail-train-wifi-remote-dev-ssh",
   "gigaclear-rural-fibre-isp-throttling": "/solutions/gigaclear-rural-fibre-gaming-packet-loss",
   "gigaclear-rural-fibre-voip-teams-zoom-jitter": "/solutions/gigaclear-rural-fibre-gaming-packet-loss",
@@ -176,7 +179,7 @@ function resolveCanonicalForConsolidatedSolution(slug) {
     return '/solutions';
   }
   for (const authSlug of AUTHORITATIVE_SOLUTIONS_PILLARS) {
-    const suffixMatch = authSlug.match(/-(isp-throttling|remote-dev-ssh|p2p-port-forwarding|gaming-packet-loss|voip-teams-zoom-jitter|uhd-streaming-buffering|wifi-arp-spoofing-protection|broadband-isp-throttling|mobile-hotspot-voip-teams-zoom-jitter|rural-fibre-gaming-packet-loss|campus-wifi-gaming-packet-loss)$/);
+    const suffixMatch = authSlug.match(/-(isp-throttling|remote-dev-ssh|p2p-port-forwarding|gaming-packet-loss|voip-teams-zoom-jitter|uhd-streaming-buffering|wifi-arp-spoofing-protection|broadband-isp-throttling|mobile-hotspot-voip-teams-zoom-jitter|rural-fibre-gaming-packet-loss|campus-wifi-gaming-packet-loss|wireguard-cgnat|wireguard)$/);
     if (suffixMatch) {
       const ispPrefix = authSlug.slice(0, -suffixMatch[0].length);
       if (slug.startsWith(`${ispPrefix}-`)) {

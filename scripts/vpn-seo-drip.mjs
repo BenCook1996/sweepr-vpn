@@ -253,7 +253,7 @@ const GSC_PRIORITY_URLS = new Set([
   'https://sweeprvpn.com/tools/vpn-renewal-price-checker',
   'https://sweeprvpn.com/vs/totalvpn',
   'https://sweeprvpn.com/alternatives/totalvpn',
-  'https://sweeprvpn.com/solutions/talktalk-p2p-port-forwarding',
+  'https://sweeprvpn.com/solutions/talktalk-fibre-wireguard-cgnat',
   'https://sweeprvpn.com/setup/gl-inet-travel-router',
   'https://sweeprvpn.com/guides/stop-samsung-smart-tv-acr-tracking',
   'https://sweeprvpn.com/solutions/eduroam-campus-wifi-gaming-packet-loss',
@@ -261,7 +261,7 @@ const GSC_PRIORITY_URLS = new Set([
   'https://sweeprvpn.com/solutions/gigaclear-rural-fibre-gaming-packet-loss',
   'https://sweeprvpn.com/setup/synology-nas-docker-vpn',
   'https://sweeprvpn.com/guides/stop-lg-smart-tv-acr-spying',
-  'https://sweeprvpn.com/solutions/hotel-captive-portal-wifi-p2p-port-forwarding',
+  'https://sweeprvpn.com/solutions/hotel-captive-portal-wifi-wireguard',
   'https://sweeprvpn.com/solutions/rogers-ignite-canada-isp-throttling',
   'https://sweeprvpn.com/setup/steam-deck-vpn',
   'https://sweeprvpn.com/download',
@@ -272,7 +272,7 @@ const GSC_PRIORITY_URLS = new Set([
   'https://sweeprvpn.com/warrant-canary',
   'https://sweeprvpn.com/solutions/virgin-media-remote-dev-ssh',
   'https://sweeprvpn.com/solutions/t-mobile-5g-home-internet-remote-dev-ssh',
-  'https://sweeprvpn.com/solutions/community-fibre-london-p2p-port-forwarding'
+  'https://sweeprvpn.com/solutions/community-fibre-london-wireguard-cgnat'
 ]);
 
 function loadTargetItemsFromSitemap() {
