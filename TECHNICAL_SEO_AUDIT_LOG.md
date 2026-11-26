@@ -1453,10 +1453,13 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 ### Executive Summary
 - **Overall Scores**: Crawlability **100/100**, Technical SEO **100/100**, PageSpeed & CWV **100/100** across **92 Canonical Pages**.
 - **Auto-Optimizations Executed**:
-  - Updated `scripts/consolidate-and-optimize-gsc.mjs` (`AUTHORITATIVE_SOLUTIONS_PILLARS`, `SPECIFIC_SOLUTIONS_CANONICAL_MAP`, and cluster suffix regex) and `scripts/vpn-seo-drip.mjs` (`GSC_PRIORITY_URLS`) to reference the 3 renamed canonical `/solutions/` pillars (`/solutions/community-fibre-london-wireguard-cgnat`, `/solutions/hotel-captive-portal-wifi-wireguard`, `/solutions/talktalk-fibre-wireguard-cgnat`), preventing `consolidate-and-optimize-gsc.mjs` from flagging them `noindex`
-  - Synchronized sitemap.xml with 93 canonical URLs (content-hash `<lastmod>`: 80 updated for P0/P1 structural & entity standardization, 0 subsequent churn)
+  - Updated `scripts/consolidate-and-optimize-gsc.mjs` (`AUTHORITATIVE_SOLUTIONS_PILLARS`, `SPECIFIC_SOLUTIONS_CANONICAL_MAP`, and cluster suffix regex) and `scripts/vpn-seo-drip.mjs` (`GSC_PRIORITY_URLS`) to reference the 3 renamed canonical `/solutions/` pillars (`/solutions/community-fibre-london-wireguard-cgnat`, `/solutions/hotel-captive-portal-wifi-wireguard`, `/solutions/talktalk-fibre-wireguard-cgnat`), preventing `consolidate-and-optimize-gsc.mjs` from marking them `noindex`
+  - Auto-optimized 25 core static pages (theme-color #10b981, ?v= asset cache-busting, OpenGraph/schema metadata & nofollow checkout guards)
+  - Auto-optimized 31 pSEO pages with BreadcrumbList + TechArticle JSON-LD, GA4 (G-7D28EEMNXX) & manifest/nofollow guards
+  - Synced immutable content-hash ?v= asset cache-busting tags across 2 active app utility pages (`login.html`, `dashboard.html`)
+  - Synchronized sitemap.xml with 93 canonical URLs (content-hash <lastmod>: 0 modified after P0/P1 sync)
   - Synchronized llms.txt & llms-full.txt with all 63 pSEO guides and live 04:00 AM WireGuard/ACR telemetry for GEO AI citations
-  - Verified live HTTP server (`website/server.mjs`): `/download` returns `200 OK` HTML with `index, follow` to both Chrome and Googlebot UAs, Brotli compression + `ETag`/`304` caching active, and all consolidated 301 redirects resolve in 1 hop to `200 OK`
+  - Verified live HTTP server (`website/server.mjs`): `/download` returns `200 OK` HTML with `index, follow` to both Chrome and Googlebot UAs, Brotli compression + `ETag`/`304` caching active, and consolidated 301 redirects resolve in 1 hop to `200 OK`
 
 ### Category Scorecards & Verifications
 
