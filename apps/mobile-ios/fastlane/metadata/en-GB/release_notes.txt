@@ -1,0 +1,5 @@
+Initial v2.6.0 release for iPhone, iPad, and macOS:
+• Native WireGuard PacketTunnel across 8 global 10Gbps bare-metal locations with IPv6 DNS64/NAT64 support.
+• Wi-Fi Shield tab featuring Smart-TV & Tracker DNS Shield (10.64.0.1 + 1.1.1.2), LAN Bypass, NWPathMonitor link diagnostics, and on-device Bonjour AirPlay checks.
+• macOS MenuBarExtra status bar control with Launch at Login support.
+• StoreKit 2 subscriptions, QR pairing, and instant in-app Delete Account & Data.

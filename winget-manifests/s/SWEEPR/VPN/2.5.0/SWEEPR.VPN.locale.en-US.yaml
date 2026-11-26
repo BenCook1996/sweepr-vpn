@@ -3,16 +3,16 @@
 PackageIdentifier: SWEEPR.VPN
 PackageVersion: 2.5.0
 PackageLocale: en-US
-Publisher: SWEEPR Global Limited
+Publisher: SWEEPR VPN (UK Sole Trader)
 PublisherUrl: https://sweeprvpn.com
 PublisherSupportUrl: https://sweeprvpn.com/support
 PrivacyUrl: https://sweeprvpn.com/privacy
-Author: SWEEPR Global Limited
+Author: SWEEPR VPN Engineering (Independent UK Developer)
 PackageName: SWEEPR VPN
 PackageUrl: https://sweeprvpn.com
 License: Proprietary / Freemium
 LicenseUrl: https://sweeprvpn.com/terms
-Copyright: Copyright (c) 2026 SWEEPR Global Limited. All rights reserved.
+Copyright: Copyright (c) 2026 SWEEPR VPN (UK Sole Trader). All rights reserved.
 CopyrightUrl: https://sweeprvpn.com/terms
 ShortDescription: Lightweight 10Gbps WireGuard VPN, free 30-second Home Wi-Fi device scanner, and Smart-TV ACR telemetry shield.
 Description: >-

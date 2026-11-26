@@ -7,6 +7,7 @@ import net from 'node:net';
 import http from 'node:http';
 import { spawn, execSync } from 'node:child_process';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import crypto from 'node:crypto';
 
@@ -175,6 +176,12 @@ export async function getFreePort() {
   });
 }
 
+let activeServerStateDir = null;
+
+export function getServerStateDir() {
+  return activeServerStateDir;
+}
+
 /**
  * Starts a live instance of website/server.mjs on an allocated port
  * Waits for readiness signal on stdout or polls health endpoint
@@ -182,6 +189,12 @@ export async function getFreePort() {
 export async function startServer(port, options = {}) {
   const timeoutMs = options.timeoutMs || 12000;
   const verbose = options.verbose || false;
+  const providedStateDir = options.stateDir || process.env.SWEEPR_STATE_DIR || '';
+  const stateDir = providedStateDir || fs.mkdtempSync(path.join(os.tmpdir(), 'sweepr-e2e-state-'));
+  const ownsStateDir = !providedStateDir;
+
+  fs.mkdirSync(stateDir, { recursive: true });
+  activeServerStateDir = stateDir;
 
   const child = spawn(process.execPath, [path.join(WEBSITE_DIR, 'server.mjs')], {
     cwd: ROOT_DIR,
@@ -189,7 +202,8 @@ export async function startServer(port, options = {}) {
       ...process.env,
       PORT: String(port),
       NODE_ENV: 'test',
-      IS_LIVE_STRIPE: 'false'
+      IS_LIVE_STRIPE: 'false',
+      SWEEPR_STATE_DIR: stateDir
     },
     stdio: ['ignore', 'pipe', 'pipe']
   });
@@ -214,6 +228,8 @@ export async function startServer(port, options = {}) {
     child,
     port,
     baseUrl: `http://127.0.0.1:${port}`,
+    stateDir,
+    ownsStateDir,
     getStdout: () => stdoutBuffer,
     getStderr: () => stderrBuffer
   };
@@ -248,23 +264,35 @@ export async function startServer(port, options = {}) {
 }
 
 /**
- * Stop server child process cleanly and terminate process tree
+ * Stop server child process cleanly, terminate process tree, and clean up owned stateDir
  */
 export function stopServer(serverInstance) {
-  if (!serverInstance || !serverInstance.child) return;
-  const pid = serverInstance.child.pid;
-  try {
-    if (process.platform === 'win32' && pid) {
-      try {
-        execSync(`taskkill /pid ${pid} /T /F`, { stdio: 'ignore' });
-      } catch {
+  if (!serverInstance) return;
+  if (serverInstance.child) {
+    const pid = serverInstance.child.pid;
+    try {
+      if (process.platform === 'win32' && pid) {
+        try {
+          execSync(`taskkill /pid ${pid} /T /F`, { stdio: 'ignore' });
+        } catch {
+          serverInstance.child.kill('SIGTERM');
+        }
+      } else {
         serverInstance.child.kill('SIGTERM');
       }
-    } else {
-      serverInstance.child.kill('SIGTERM');
+    } catch {
+      // Process may already be dead
     }
-  } catch {
-    // Process may already be dead
+  }
+  if (serverInstance.stateDir && serverInstance.stateDir === activeServerStateDir) {
+    activeServerStateDir = null;
+  }
+  if (serverInstance.ownsStateDir && serverInstance.stateDir) {
+    try {
+      fs.rmSync(serverInstance.stateDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
+    } catch {
+      // Best-effort temp cleanup
+    }
   }
 }
 
@@ -361,6 +389,54 @@ export async function fetchOpaque(url, options = {}, retries = 2) {
     location: response.headers.get('location') || null,
     headers: headersObj,
     body: bodyText,
+    durationMs,
+    getHeader(name) {
+      return headersObj[name.toLowerCase()] || null;
+    }
+  };
+}
+
+/**
+ * Binary-safe HTTP request helper returning raw Buffer and exact byteLength
+ * (avoiding UTF-8 decoding distortion on .webp / binary responses)
+ */
+export async function fetchBinary(url, options = {}, retries = 2) {
+  const method = (options.method || 'GET').toUpperCase();
+  const reqOptions = {
+    method,
+    redirect: options.redirect || 'manual',
+    headers: options.headers || {},
+    signal: options.signal || AbortSignal.timeout(options.timeoutMs || 8000)
+  };
+  if (options.body) reqOptions.body = options.body;
+
+  const startTime = Date.now();
+  let response;
+  try {
+    response = await fetch(url, reqOptions);
+  } catch (err) {
+    if (retries > 0 && (err.message.includes('fetch failed') || err.message.includes('ECONNREFUSED') || err.message.includes('UND_ERR'))) {
+      await new Promise((r) => setTimeout(r, 250));
+      return fetchBinary(url, options, retries - 1);
+    }
+    throw new Error(`fetchBinary failed to connect to ${url}: ${err.message}`);
+  }
+  const durationMs = Date.now() - startTime;
+  const buffer = method === 'HEAD' ? Buffer.alloc(0) : Buffer.from(await response.arrayBuffer());
+
+  const headersObj = {};
+  for (const [k, v] of response.headers.entries()) {
+    headersObj[k.toLowerCase()] = v;
+  }
+
+  return {
+    status: response.status,
+    statusText: response.statusText,
+    ok: response.ok,
+    location: response.headers.get('location') || null,
+    headers: headersObj,
+    buffer,
+    byteLength: buffer.length,
     durationMs,
     getHeader(name) {
       return headersObj[name.toLowerCase()] || null;
@@ -660,23 +736,128 @@ export function findFilesWithPattern(dirPath, pattern, recursive = true) {
 }
 
 /**
- * List authoritative pillars across directories
+ * Compute SHA-256 hex digest of a file on disk
+ */
+export function sha256File(filePath) {
+  const buf = fs.readFileSync(filePath);
+  return crypto.createHash('sha256').update(buf).digest('hex');
+}
+
+/**
+ * Execute scripts/consolidate-and-optimize-gsc.mjs inside an isolated temporary sandbox
+ * copy of the website text clusters so the repository working tree is never mutated.
+ */
+export function runConsolidationInTempSandbox() {
+  const sandboxRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'sweepr-e2e-consol-'));
+  try {
+    const sandboxScripts = path.join(sandboxRoot, 'scripts');
+    const sandboxWebsite = path.join(sandboxRoot, 'website');
+    fs.mkdirSync(sandboxScripts, { recursive: true });
+    fs.mkdirSync(sandboxWebsite, { recursive: true });
+
+    fs.copyFileSync(
+      path.join(SCRIPTS_DIR, 'consolidate-and-optimize-gsc.mjs'),
+      path.join(sandboxScripts, 'consolidate-and-optimize-gsc.mjs')
+    );
+
+    for (const dir of ['solutions', 'vs', 'setup', 'guides']) {
+      const srcDir = path.join(WEBSITE_DIR, dir);
+      const dstDir = path.join(sandboxWebsite, dir);
+      if (fs.existsSync(srcDir)) {
+        fs.cpSync(srcDir, dstDir, { recursive: true });
+      }
+    }
+    for (const file of ['leak-test.html', 'isp-throttling-test.html', 'smart-tv-acr-blocklist.txt']) {
+      const srcFile = path.join(WEBSITE_DIR, file);
+      if (fs.existsSync(srcFile)) {
+        fs.copyFileSync(srcFile, path.join(sandboxWebsite, file));
+      }
+    }
+
+    const stdout = execSync(`node "${path.join(sandboxScripts, 'consolidate-and-optimize-gsc.mjs')}"`, {
+      cwd: sandboxRoot,
+      encoding: 'utf8'
+    });
+    return stdout;
+  } finally {
+    try {
+      fs.rmSync(sandboxRoot, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
+    } catch {
+      // Best-effort cleanup
+    }
+  }
+}
+
+/**
+ * List all 62 authoritative pSEO pillars across directories (23 solutions + 11 vs + 15 setup + 13 guides)
  */
 export function getAuthoritativePillars() {
   return [
-    'talktalk-p2p-port-forwarding.html',
-    'virgin-media-remote-dev-ssh.html',
-    'bt-broadband-gaming-packet-loss.html',
-    'eduroam-campus-wifi-gaming-packet-loss.html',
-    'gl-inet-travel-router.html',
-    'synology-nas-docker-vpn.html',
-    'steam-deck-vpn.html',
-    'nvidia-shield-tv-pro-wireguard.html',
-    'stop-samsung-smart-tv-acr-tracking.html',
-    'stop-lg-smart-tv-acr-spying.html',
-    'stop-roku-vizio-firetv-spying.html',
-    'nordvpn.html',
-    'expressvpn.html',
-    'surfshark.html'
+    // /solutions/ (23 canonicals)
+    'solutions/brsk-better-net-uk-voip-teams-zoom-jitter.html',
+    'solutions/bt-broadband-gaming-packet-loss.html',
+    'solutions/comcast-xfinity-broadband-isp-throttling.html',
+    'solutions/community-fibre-london-wireguard-cgnat.html',
+    'solutions/eduroam-campus-wifi-gaming-packet-loss.html',
+    'solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter.html',
+    'solutions/gigaclear-rural-fibre-gaming-packet-loss.html',
+    'solutions/hotel-captive-portal-wifi-wireguard.html',
+    'solutions/national-rail-train-wifi-remote-dev-ssh.html',
+    'solutions/nhs-guest-wifi-voip-teams-zoom-jitter.html',
+    'solutions/o2-uk-mobile-tethering-uhd-streaming-buffering.html',
+    'solutions/rogers-ignite-canada-isp-throttling.html',
+    'solutions/sky-broadband-gaming-packet-loss.html',
+    'solutions/starlink-satellite-uk-isp-throttling.html',
+    'solutions/t-mobile-5g-home-internet-remote-dev-ssh.html',
+    'solutions/talktalk-fibre-wireguard-cgnat.html',
+    'solutions/telstra-nbn-australia-gaming-packet-loss.html',
+    'solutions/three-5g-home-broadband-uhd-streaming-buffering.html',
+    'solutions/toob-full-fibre-uk-voip-teams-zoom-jitter.html',
+    'solutions/virgin-media-remote-dev-ssh.html',
+    'solutions/vodafone-uk-gaming-packet-loss.html',
+    'solutions/youfibre-uk-wifi-arp-spoofing-protection.html',
+    'solutions/zen-internet-uk-isp-throttling.html',
+    // /vs/ (11 canonicals)
+    'vs/cloudflare-warp-plus.html',
+    'vs/cyberghost.html',
+    'vs/expressvpn.html',
+    'vs/ipvanish.html',
+    'vs/mullvad.html',
+    'vs/nordvpn.html',
+    'vs/private-internet-access.html',
+    'vs/protonvpn.html',
+    'vs/surfshark.html',
+    'vs/totalvpn.html',
+    'vs/windscribe.html',
+    // /setup/ (15 canonicals)
+    'setup/almalinux-9-wireguard-gateway.html',
+    'setup/apple-tv-tvos-17-wireguard.html',
+    'setup/asuswrt-merlin-vpn-router.html',
+    'setup/freebsd-14-wireguard-kmod.html',
+    'setup/gl-inet-travel-router.html',
+    'setup/linux-cli-wireguard.html',
+    'setup/macos-apple-silicon-vpn.html',
+    'setup/nvidia-shield-tv-pro-wireguard.html',
+    'setup/openwrt-wireguard-router.html',
+    'setup/pfsense-opnsense-router.html',
+    'setup/raspberry-pi-home-gateway.html',
+    'setup/steam-deck-vpn.html',
+    'setup/synology-nas-docker-vpn.html',
+    'setup/ubiquiti-unifi-dream-machine-wireguard.html',
+    'setup/windows-11-wireguard-vpn.html',
+    // /guides/ (13 canonicals)
+    'guides/block-philips-titan-os-acr.html',
+    'guides/block-sony-bravia-samba-tv-acr.html',
+    'guides/detect-unknown-devices-on-home-wifi.html',
+    'guides/disable-ipv6-leak-windows-linux.html',
+    'guides/fix-isp-dns-hijacking-and-throttling.html',
+    'guides/fix-wireguard-mtu-fragmentation-pppoe.html',
+    'guides/prevent-webrtc-ip-leak-chromium-firefox.html',
+    'guides/prevent-windows-11-dns-leaks-doh.html',
+    'guides/public-hotel-airport-wifi-security.html',
+    'guides/stop-isp-deep-packet-inspection-dpi.html',
+    'guides/stop-lg-smart-tv-acr-spying.html',
+    'guides/stop-roku-vizio-firetv-spying.html',
+    'guides/stop-samsung-smart-tv-acr-tracking.html'
   ];
 }

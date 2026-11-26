@@ -40,14 +40,24 @@ jobs:
         run: |
           node scripts/daily-wireguard-and-acr-pipeline.mjs
 
-      - name: 2. Cloud Google Search Console, GA4 & Play Console Sync + Strike-Zone CTR Surgery (05:00 Task A)
+      - name: 2. Cloud Google Search Console, GA4 & Play Console Sync (Read-Only Telemetry, No CTR Rewrite)
         run: |
           node scripts/lib/google-cloud-api.mjs --self-test
-          node scripts/cloud-gsc-ga4-sync.mjs
+          node scripts/cloud-gsc-ga4-sync.mjs --no-ctr-rewrite
 
-      - name: 3. Automated Keyword Discovery, 10-Assertion Quality Gate & Pre/Post Forecaster (05:00 Task B)
+      - name: 3. Automated Keyword Discovery, 10-Assertion Quality Gate & Pre/Post Forecaster (JSON-Only)
         run: |
-          node scripts/keyword-research-engine.mjs --discover --score --audit --apply --limit=0
+          node scripts/keyword-research-engine.mjs --discover --score --audit --json-only
+
+      - name: 3.5. Upload Keyword Opportunities JSON & Audit Log Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: keyword-research-artifacts
+          path: |
+            website/keyword-opportunities.json
+            KEYWORD_OPPORTUNITIES_AUDIT_LOG.md
+          if-no-files-found: ignore
 
       - name: 4. GSC Winner Lock Consolidation (05:00 Task C)
         run: |
@@ -58,26 +68,50 @@ jobs:
           node scripts/daily-seo-pagespeed-audit.mjs
           node .agents/skills/vpn-seo-and-geo/scripts/pseo_and_seo_validator.mjs --action validate
 
-      - name: 6. PAD 4.0 XML, CRM Backlink Verification & Delta IndexNow Sync (10:00 Task)
+      - name: 6. PAD 4.0 XML & CRM Backlink Verification (Pre-Gate, No Push, IndexNow Deferred)
         run: |
-          node scripts/vpn-seo-drip.mjs
+          node scripts/vpn-seo-drip.mjs --no-push --skip-indexnow
 
-      - name: 6.5. CI Quality Gate Assertions (Sitemap <= 110, 0 Deprecated Schema, 0 Mojibake, Overlap < 30%)
+      - name: 6.5. CI Quality Gate Assertions (Sitemap <= 110, <= 1800KB HTML, Entity Hygiene, Mobile Nav)
         run: node scripts/ci-seo-quality-gate.mjs
 
-      - name: Commit & Push Cloud SEO Updates to Production (Material Content Changes or force_run)
+      - name: 7. Commit & Push Non-HTML Telemetry & Sitemap Updates (Abort on HTML Mutations)
         run: |
+          HTML_MUTATIONS=$(git status --porcelain -- 'website/*.html' 'website/guides/' 'website/setup/' 'website/solutions/' 'website/vs/')
+          if [ -n "$HTML_MUTATIONS" ]; then
+            echo "::error::Unexpected HTML mutations detected in daily read-only SEO pipeline:"
+            echo "$HTML_MUTATIONS"
+            exit 1
+          fi
           git config user.name "sweepr-cloud-bot"
           git config user.email "bot@sweeprvpn.com"
           MATERIAL_DIFF=$(git status --porcelain -- \
-            'website/*.html' 'website/guides/' 'website/setup/' 'website/solutions/' 'website/vs/' \
             'website/sitemap.xml' 'website/llms.txt' 'website/llms-full.txt' 'website/smart-tv-acr-blocklist.txt' \
-            'website/indexing-queue.json' 'website/pillar-enrichment-state.json' 'website/pad.xml')
+            'website/indexing-queue.json' 'website/pillar-enrichment-state.json' 'website/pad.xml' \
+            'website/daily-seo-pages-state.json' 'website/keyword-opportunities.json' \
+            'website/seo-strategy-performance-ledger.json' 'website/gsc-ga4-latest-snapshot.json' \
+            'website/wireguard-acr-pipeline-state.json' 'website/outreach-seed.json')
           if [ -z "$MATERIAL_DIFF" ] && [ "${{ github.event.inputs.force_run }}" != "true" ]; then
-            echo "Telemetry synced cleanly to CRM with zero material website content changes — skipping redundant Railway container rebuild."
+            echo "Telemetry synced cleanly to CRM with zero material website data changes — skipping redundant Railway container rebuild."
             exit 0
           fi
-          git add website/ KEYWORD_OPPORTUNITIES_AUDIT_LOG.md TECHNICAL_SEO_AUDIT_LOG.md WIREGUARD_AND_ACR_DAILY_AUDIT_LOG.md
+          git add \
+            website/sitemap.xml \
+            website/llms.txt \
+            website/llms-full.txt \
+            website/smart-tv-acr-blocklist.txt \
+            website/indexing-queue.json \
+            website/pillar-enrichment-state.json \
+            website/pad.xml \
+            website/daily-seo-pages-state.json \
+            website/keyword-opportunities.json \
+            website/seo-strategy-performance-ledger.json \
+            website/gsc-ga4-latest-snapshot.json \
+            website/wireguard-acr-pipeline-state.json \
+            website/outreach-seed.json \
+            KEYWORD_OPPORTUNITIES_AUDIT_LOG.md \
+            TECHNICAL_SEO_AUDIT_LOG.md \
+            WIREGUARD_AND_ACR_DAILY_AUDIT_LOG.md
           if ! git diff --staged --quiet; then
             git commit -m "chore(seo): automated cloud GSC/GA4 sync, WireGuard/ACR proof & sitemap audit"
             git pull --rebase -X ours origin main
@@ -89,9 +123,22 @@ jobs:
                 -H "Origin: ${SWEEPR_RAILWAY_CRM}" \
                 -H "X-Sweepr-Project: vpn" \
                 -H "Content-Type: application/json" \
-                -d "{\"project_id\":\"vpn\",\"category\":\"gsc_indexing\",\"title\":\"Daily Cloud SEO & WireGuard/ACR Pipeline (${COMMIT_SHA})\",\"description\":\"Automated GSC/GA4 telemetry sync, keyword audit, WireGuard/ACR live proof refresh, and IndexNow drip pushed to main.\",\"impact_area\":\"sweeprvpn.com pillars & sitemap\",\"author\":\"sweepr-cloud-bot\",\"status\":\"deployed\"}" \
+                -d "{\"project_id\":\"vpn\",\"category\":\"gsc_indexing\",\"title\":\"Daily Cloud SEO & WireGuard/ACR Pipeline (${COMMIT_SHA})\",\"description\":\"Automated GSC/GA4 telemetry sync, read-only keyword audit, WireGuard/ACR live proof refresh, and post-deploy IndexNow/410 ping.\",\"impact_area\":\"sweeprvpn.com pillars & sitemap\",\"author\":\"sweepr-cloud-bot\",\"status\":\"deployed\"}" \
                 || echo "::warning::Central CRM changelog sync skipped or unreachable"
             fi
           else
             echo "No content hashes changed today — skipping commit."
+          fi
+
+      - name: 8. Post-Deploy IndexNow & HTTP 410 Gone Pruned-URL Ping
+        if: success()
+        run: |
+          node scripts/vpn-seo-drip.mjs --ping-only --no-push
+          if ! git diff --quiet -- website/indexing-queue.json; then
+            git config user.name "sweepr-cloud-bot"
+            git config user.email "bot@sweeprvpn.com"
+            git add website/indexing-queue.json
+            git commit -m "chore(seo): record post-deploy IndexNow & 410 ping timestamps [skip ci]" -- website/indexing-queue.json
+            git pull --rebase -X ours origin main
+            git push origin HEAD:main
           fi

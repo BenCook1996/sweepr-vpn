@@ -795,11 +795,10 @@ function renderPseoHtmlPage(page, allPages) {
         datePublished: '2026-10-21',
         dateModified: '2026-11-17',
         author: {
-          '@type': 'Person',
-          name: 'Benjamin Cook',
-          jobTitle: 'Principal Network Architect',
+          '@type': 'Organization',
+          name: 'SWEEPR VPN Engineering (Independent UK Developer)',
           url: 'https://sweeprvpn.com/warrant-canary',
-          worksFor: { '@type': 'Organization', name: 'SWEEPR VPN Inc.' }
+          parentOrganization: { '@type': 'Organization', name: 'SWEEPR VPN (UK Sole Trader)' }
         },
         reviewedBy: {
           '@type': 'Organization',
@@ -808,7 +807,7 @@ function renderPseoHtmlPage(page, allPages) {
         },
         publisher: {
           '@type': 'Organization',
-          name: 'SWEEPR VPN Inc.',
+          name: 'SWEEPR VPN (UK Sole Trader)',
           logo: {
             '@type': 'ImageObject',
             url: 'https://sweeprvpn.com/logo-emerald.svg'
@@ -1141,7 +1140,7 @@ ${JSON.stringify(schemaGraph, null, 2)}
   <!-- Footer -->
   <footer class="border-t border-gray-200 py-8 text-center text-sm text-gray-500">
     <div class="max-w-4xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <p>&copy; 2026 SWEEPR VPN Inc. All rights reserved.</p>
+      <p>&copy; 2026 SWEEPR VPN (UK Sole Trader). All rights reserved.</p>
       <div class="flex flex-wrap items-center justify-center gap-5">
         <a href="/pricing" class="hover:underline">Pricing</a>
         <a href="/tools/leak-test" class="hover:underline">IP Leak Test</a>

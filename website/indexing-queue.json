@@ -1,6 +1,9 @@
 {
   "indexnow_key": "e159f60b7cbd19abe8a6c1c8d84bb2b7",
-  "pending_urls": [],
+  "pending_urls": [
+    "https://sweeprvpn.com/faq",
+    "https://sweeprvpn.com/ai-info"
+  ],
   "indexnow_submitted_at": {
     "https://sweeprvpn.com/solutions/talktalk-fibre-wireguard-cgnat": "2026-11-17T10:14:37.370Z",
     "https://sweeprvpn.com/setup/gl-inet-travel-router": "2026-11-17T10:14:37.370Z",
@@ -70,7 +73,6 @@
     "https://sweeprvpn.com/solutions/sky-broadband-gaming-packet-loss": "2026-11-18T13:39:27.254Z",
     "https://sweeprvpn.com/solutions/o2-uk-mobile-tethering-uhd-streaming-buffering": "2026-11-18T13:39:27.254Z",
     "https://sweeprvpn.com/solutions/nhs-guest-wifi-voip-teams-zoom-jitter": "2026-11-18T13:39:27.254Z",
-    "https://sweeprvpn.com/solutions/hyperoptic-broadband-isp-throttling": "2026-11-18T13:39:27.254Z",
     "https://sweeprvpn.com/solutions/comcast-xfinity-broadband-isp-throttling": "2026-11-18T13:39:27.254Z",
     "https://sweeprvpn.com/solutions/bt-broadband-gaming-packet-loss": "2026-11-18T13:39:27.254Z",
     "https://sweeprvpn.com/download": "2026-11-18T13:39:27.254Z",
@@ -113,7 +115,7 @@
   },
   "last_audit": {
     "date": "2026-11-26",
-    "totalUrls": 93,
-    "pendingDeltaUrls": 0
+    "totalUrls": 94,
+    "pendingDeltaUrls": 2
   }
 }

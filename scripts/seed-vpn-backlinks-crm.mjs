@@ -308,7 +308,7 @@ const VPN_DIRECTORY_TARGETS = [
     how: 'Web Portal Company Creation (Free)',
     category: 'DR 91 · Authoritative Company Knowledge Graph Signal',
     status: 'pending',
-    notes: 'Create SWEEPR VPN Inc. profile linking to https://sweeprvpn.com — Strengthens Google Knowledge Graph & LLM entity recognition.'
+    notes: 'Create SWEEPR VPN (UK Sole Trader) profile linking to https://sweeprvpn.com — Strengthens Google Knowledge Graph & LLM entity recognition.'
   },
   {
     who: 'F6S Startup & SaaS Directory',

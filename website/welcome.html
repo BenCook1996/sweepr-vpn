@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="color-scheme" content="light">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to SWEEPR VPN — 3-Step Quick-Connect Guide</title>
+  <meta name="description" content="Get protected in 60 seconds with SWEEPR VPN: 1-Click Quick-Connect, Kill-Switch verification, and instant IP, DNS &amp; WebRTC leak testing.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="canonical" href="https://sweeprvpn.com/welcome">
+  <link rel="preconnect" href="https://www.googletagmanager.com">
+  <link rel="stylesheet" href="/tailwind.min.css?v=fbbf784c">
+  <link rel="icon" type="image/svg+xml" href="/logo-emerald.svg?v=5">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5">
+  <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png?v=5">
+  <link rel="shortcut icon" href="/favicon.ico?v=5">
+  <link rel="stylesheet" href="/style.css?v=ed321090">
+  <!-- Google tag (gtag.js) - Sweepr VPN -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-7D28EEMNXX');
+  </script>
+</head>
+<body class="text-gray-800 flex flex-col items-center justify-center min-h-screen px-4 py-10">
+
+  <div class="rack-telemetry-bar w-full max-w-2xl mb-3">
+    <span class="rack-telemetry-segment"><span class="rack-led"></span>ONBOARDING // QUICK-CONNECT</span>
+    <span class="rack-telemetry-segment">WIREGUARD 10GBPS &middot; 3-STEP CHECKLIST</span>
+  </div>
+
+  <main class="rack-card glass-card p-6 sm:p-10 w-full max-w-2xl">
+    <div class="flex items-center justify-between gap-4 mb-6">
+      <a href="/" class="flex items-center gap-2.5 text-inherit no-underline">
+        <div class="logo-box">S</div>
+        <span class="font-extrabold text-lg tracking-tight text-gray-900">SWEEPR <span class="text-emerald-600">VPN</span></span>
+      </a>
+      <a rel="nofollow" href="/login" class="btn btn-ghost text-xs font-semibold">Customer Portal &rarr;</a>
+    </div>
+
+    <header class="mb-6">
+      <h1 class="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight mb-2">Welcome to SWEEPR VPN</h1>
+      <p class="text-sm text-gray-600">Complete these three quick checks right after installing to lock down your tunnel, verify kill-switch drop protection, and confirm zero DNS/WebRTC leaks.</p>
+    </header>
+
+    <ol class="space-y-4 text-sm text-gray-700 mb-8">
+      <li class="p-4 rounded-xl bg-gray-50 border border-gray-200">
+        <div class="text-xs font-extrabold uppercase tracking-wider text-emerald-700 mb-1">Step 1 &bull; 1-Click Quick-Connect</div>
+        <h2 class="text-base font-bold text-gray-900 mb-1">Connect to Your Lowest-Latency WireGuard POP</h2>
+        <p class="leading-relaxed">Launch SWEEPR VPN (covers <strong>3 simultaneous devices</strong> plus unlimited hardware via router <code>.conf</code> exports in <a rel="nofollow" href="/login" class="text-emerald-700 font-semibold underline">/login</a>). Pick your closest 10Gbps node (such as <code>UK-LON-01</code>, <code>DE-FRA-01</code>, <code>NL-AMS-01</code>, or <code>US-NYC-01</code>) and click <strong>Connect</strong>.</p>
+      </li>
+      <li class="p-4 rounded-xl bg-gray-50 border border-gray-200">
+        <div class="text-xs font-extrabold uppercase tracking-wider text-emerald-700 mb-1">Step 2 &bull; Kill-Switch &amp; Stealth UDP 443</div>
+        <h2 class="text-base font-bold text-gray-900 mb-1">Verify Automatic Kill-Switch Protection</h2>
+        <p class="leading-relaxed">Confirm the <strong>Kill-Switch / Drop Protection</strong> toggle is enabled in app settings so unencrypted packets never escape during Wi-Fi handoffs. On university eduroam or hotel captive-portal Wi-Fi, switch to <strong>Stealth UDP 443</strong> (<code>MTU = 1380</code>).</p>
+      </li>
+      <li class="p-4 rounded-xl bg-emerald-50/70 border border-emerald-200">
+        <div class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 mb-1">Step 3 &bull; 5-Second Verification</div>
+        <h2 class="text-base font-bold text-gray-900 mb-1">Run the Instant IP, DNS &amp; WebRTC Leak Test</h2>
+        <p class="leading-relaxed mb-3">Once connected, verify that your public IP matches your selected SWEEPR exit node and that your ISP resolver is hidden behind <code>10.64.0.1</code>.</p>
+        <a href="/tools/leak-test" class="btn btn-go inline-flex items-center gap-2 text-sm">
+          <span>Verify IP, DNS &amp; WebRTC Leak Test</span>
+          <svg width="16" height="16" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+      </li>
+    </ol>
+
+    <div class="pt-4 border-t border-gray-100 flex flex-wrap items-center justify-between gap-3 text-xs text-gray-500">
+      <div class="flex flex-wrap gap-4">
+        <a href="/tools/isp-throttling-test" class="text-emerald-700 font-semibold hover:underline">Run ISP Speed Test &rarr;</a>
+        <a href="/support" class="text-emerald-700 font-semibold hover:underline">24/7 Support Center &rarr;</a>
+      </div>
+      <span>&copy; 2026 SWEEPR VPN (UK Sole Trader)</span>
+    </div>
+  </main>
+</body>
+</html>

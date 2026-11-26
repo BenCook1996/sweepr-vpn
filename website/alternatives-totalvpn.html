@@ -230,6 +230,7 @@
 
   <!-- Content Container -->
   <main class="max-w-4xl mx-auto px-6 py-12 md:py-16">
+    <article>
     <div class="rack-telemetry-bar mb-6">
       <span class="rack-telemetry-segment"><span class="rack-led"></span>BENCHMARK // 2026 RENEWAL-AUDIT</span>
       <span class="rack-telemetry-segment">0% YEAR-2 HIKE</span>
@@ -242,7 +243,7 @@
       <h1 class="text-3xl md:text-5xl font-bold text-gray-900 tracking-tight mb-4">
         TotalVPN Alternatives Without Year-2 Renewal Hikes (2026)
       </h1>
-      <div class="flex flex-wrap items-center justify-center gap-2 text-xs text-gray-500 mt-3 mb-3" id="eeat-author-byline"><span>Authored by <strong class="text-gray-800">SWEEPR VPN Engineering</strong> &middot; Independent UK Sole Trader</span><span>&bull;</span><span>Updated Nov 2026</span><span>&bull;</span><a href="/warrant-canary" class="text-emerald-700 font-semibold hover:underline">Verified via Warrant Canary &amp; Binary Checksums &rarr;</a></div>
+      <div class="flex flex-wrap items-center justify-center gap-2 text-xs text-gray-500 mt-3 mb-3" id="eeat-author-byline"><span>Authored by <strong class="text-gray-800">SWEEPR VPN Engineering</strong> &middot; Independent UK Sole Trader</span><span>&bull;</span><span>Client v2.6.0 (740,112 B / ~723 KB Win) &bull; Probe Verified: 2026-11-25</span><span>&bull;</span><a href="/warrant-canary" class="text-emerald-700 font-semibold hover:underline">Verified via Warrant Canary &amp; Binary Checksums &rarr;</a></div>
       <p class="text-gray-600 text-lg max-w-2xl mx-auto">
         Compare 3-year total ownership cost, desktop antivirus bloatware footprint, and open WireGuard <code>.conf</code> support across the 5 leading TotalVPN replacements.
       </p>
@@ -269,7 +270,29 @@
         <li><strong>4. Surfshark (Multi-Device):</strong> Unlimited device connections, but renewal prices jump 200%+ after your introductory term and the app includes extra upsell popups.</li>
         <li><strong>5. NordVPN (Large Server List):</strong> Large server list, but features a busy map interface and steep second-year renewal price increases.</li>
       </ul>
+      <dl class="grid md:grid-cols-3 gap-3 mt-5 pt-4 border-t border-gray-100 text-xs text-gray-600">
+        <div class="p-3 rounded-xl bg-gray-50 border border-gray-200"><dt class="font-bold text-gray-900 mb-0.5">3-Year Flat Total Cost</dt><dd>SWEEPR Pro: &pound;224.97 (&pound;74.99/yr &times; 3, 0% hike) vs TotalVPN ~&pound;217&ndash;&pound;277 with Year-2/3 renewal spikes.</dd></div>
+        <div class="p-3 rounded-xl bg-gray-50 border border-gray-200"><dt class="font-bold text-gray-900 mb-0.5">Windows Installer Weight</dt><dd>SWEEPR v2.6.0: 740,112 B (~723 KB) native binary vs bundled ~250 MB+ TotalAV security suites.</dd></div>
+        <div class="p-3 rounded-xl bg-gray-50 border border-gray-200"><dt class="font-bold text-gray-900 mb-0.5">Router &amp; Seat Portability</dt><dd>3 simultaneous client seats + unlimited household devices via standard WireGuard <code>.conf</code> exports.</dd></div>
+      </dl>
     </div>
+
+    <!-- Visual Break #1: Real Client Footprint vs Antivirus Bloatware (P2-1 / C9) -->
+    <figure id="alt-totalvpn-ui-break-1" class="rack-card bg-white border border-gray-200 rounded-2xl p-4 sm:p-5 mb-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+        <img src="/assets/desktop-home-light.webp" width="960" height="608" loading="lazy" decoding="async" class="w-full rounded-xl border border-gray-200 block" alt="SWEEPR VPN v2.6.0 Windows desktop app showing 8 WireGuard POPs, Kill Switch, and 723 KB footprint" />
+        <div class="flex flex-col sm:flex-row items-center gap-4 bg-gray-50 border border-gray-200 rounded-xl p-3">
+          <img src="/assets/mobile-ui-connect.webp" width="390" height="844" loading="lazy" decoding="async" style="max-width:140px;height:auto;" class="w-full rounded-xl border border-gray-200 block shrink-0" alt="SWEEPR VPN Mobile Companion UI showing WireGuard UDP 51820 ready state and 10.64.0.1 DNS shield" />
+          <div class="text-xs text-gray-600 leading-relaxed">
+            <strong class="text-gray-900 block mb-1">Zero Bloatware vs. ~250 MB+ AV Suites:</strong>
+            Genuine <code>SWEEPRVPN.exe</code> (<code>v2.6.0</code>, <code>740,112</code> bytes / <code>~723 KB</code>) alongside our Mobile Companion UI (<code>vpn-mobile-ui.mjs</code>). Native Android APK (<code>v2.5.3</code>) is on Google Play; native iOS App Store is pre-launch (uses <code>.conf</code> / <code>.mobileconfig</code>).
+          </div>
+        </div>
+      </div>
+      <figcaption class="mt-3 text-xs text-gray-500">
+        Captured directly from <code>SWEEPRVPN.exe</code> (v2.6.0) and <code>vpn-mobile-ui.mjs</code> &bull; Client v2.6.0 (740,112 B / ~723 KB Win) &bull; Probe Verified: 2026-11-25.
+      </figcaption>
+    </figure>
 
     <!-- Campaign 1: Sourced Renewal Price Truth Table (S4 + S1 Commercial Proof) -->
     <div class="rack-card bg-white border-2 border-emerald-500/80 rounded-2xl p-6 md:p-8 shadow-sm mb-12">
@@ -396,6 +419,33 @@
         </div>
       </div>
 
+      <!-- Visual Break #2: Reproducible 8-POP Telemetry & Browser RTT Capture -->
+      <div id="alt-totalvpn-probe-break-2" class="rack-card bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+          <h2 class="text-lg font-bold text-gray-900">Reproducible 8-POP Probe Snapshot &amp; Browser RTT Proof (2026-11-25)</h2>
+          <span class="font-mono text-[11px] font-semibold text-gray-600 tabular-nums">Snapshot: 2026-11-25T15:15:42Z</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center mt-3">
+          <figure class="bg-gray-50 border border-gray-200 rounded-xl p-2.5">
+            <img src="/assets/tool-isp-throttling.webp" width="960" height="508" loading="lazy" decoding="async" class="w-full rounded-lg border border-gray-200 block" alt="SWEEPR browser 5-sample HTTP RTT and jitter diagnostic capture" />
+            <figcaption class="mt-2 text-xs text-gray-600">
+              Live 5-sample HTTP RTT &amp; jitter probe from <code>/tools/isp-throttling-test</code>.
+            </figcaption>
+          </figure>
+          <div class="text-xs text-gray-700 leading-relaxed space-y-2">
+            <p>
+              <strong>8/8 10 Gbps WireGuard POPs Online</strong> (<code>fq_codel</code>, TCPMSS <code>1340</code>, UDP <code>51820</code>/<code>443</code>). UK Regional Baselines (<code>baselineRttMs</code>): <strong>4.1 ms</strong> London, <strong>8.4 ms</strong> Amsterdam, <strong>11.2 ms</strong> Frankfurt, <strong>14.1 ms</strong> Stockholm, <strong>68.4 ms</strong> NYC, <strong>128 ms</strong> LAX, <strong>152 ms</strong> Singapore, <strong>198.5 ms</strong> Tokyo.
+            </p>
+            <p>
+              <strong>US-East Control-Plane Health Probe</strong> (<code>2026-11-25</code>): <code>US-NYC-01</code> <strong>14 ms</strong> (p99 <code>18 ms</code>), <code>US-LAX-01</code> <strong>131 ms</strong>, <code>UK-LON-01</code> <strong>157 ms</strong>, <code>NL-AMS-01</code> <strong>177 ms</strong>, <code>DE-FRA-01</code> <strong>185 ms</strong>, <code>SE-STO-01</code> <strong>202 ms</strong>, <code>JP-TYO-01</code> <strong>357 ms</strong>, <code>SG-SIN-01</code> <strong>469 ms</strong>.
+            </p>
+            <p>
+              <strong>ACR Shield:</strong> <code>65</code> Smart-TV telemetry domains blocked across <code>8</code> OS categories (<code>43</code> streaming CDNs safelisted, <code>0</code> false positives).
+            </p>
+          </div>
+        </div>
+      </div>
+
       <!-- #2 Mullvad VPN -->
       <div class="bg-white p-8 rounded-2xl border border-gray-200 shadow-sm">
         <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
@@ -422,6 +472,25 @@
         <p class="text-gray-700 leading-relaxed">
           <strong>The trade-off:</strong> The desktop app is much larger and slower to launch than SWEEPR VPN, and its standard annual pricing is noticeably more expensive.
         </p>
+      </div>
+
+      <!-- Visual Break #3: Honest Trade-Offs & Real Wi-Fi Radar UI -->
+      <div id="alt-totalvpn-limitations-break-3" class="rack-card bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+        <h2 class="text-lg font-bold text-gray-900 mb-3">SWEEPR VPN Honest Trade-Offs &amp; Wi-Fi Radar UI Proof</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+          <figure class="bg-gray-50 border border-gray-200 rounded-xl p-2.5">
+            <img src="/assets/desktop-wifi-radar.webp" width="960" height="638" loading="lazy" decoding="async" class="w-full rounded-lg border border-gray-200 block" alt="SWEEPR Home Wi-Fi Radar UI listing connected LAN devices and Smart-TV ACR filter" />
+            <figcaption class="mt-2 text-xs text-gray-600">
+              Built-in 30-second LAN device &amp; Smart-TV ACR scanner inside the Windows client (synthetic preview mode).
+            </figcaption>
+          </figure>
+          <div class="p-4 rounded-xl bg-amber-50/70 border border-amber-200 text-xs text-amber-900 leading-relaxed space-y-1.5">
+            <p><strong>Where Larger Competitors Differ (Honest Limitations):</strong></p>
+            <p>&bull; <strong>8 Bare-Metal POPs:</strong> SWEEPR focuses on 8 fast 10 Gbps gateways rather than NordVPN or Surfshark's 100+ country drop-downs.</p>
+            <p>&bull; <strong>3 Direct Seats (+ Router Unlimited):</strong> Each license protects 3 devices simultaneously (unlimited behind a WireGuard router <code>.conf</code>), WireGuard-only with no inbound port forwarding.</p>
+            <p>&bull; <strong>Platform &amp; Network Realities:</strong> Native iOS App Store app is pre-launch (uses <code>.conf</code>/<code>.mobileconfig</code> today); intercontinental routes add propagation RTT; shared exit IPs occasionally trigger CAPTCHAs; no residential <code>iperf3</code> tunnel logs or physical phone photos are claimed.</p>
+          </div>
+        </div>
       </div>
 
       <!-- #4 Surfshark -->
@@ -469,6 +538,7 @@
         </a>
       </div>
     </div>
+    </article>
 
     <section id="alt-totalvpn-mesh" class="mt-8 p-5 rounded-2xl bg-gray-50 border border-gray-200">
       <h2 class="text-base font-bold text-gray-900 mb-3">Compare Individual Providers &amp; Free Privacy Tools</h2>
@@ -483,41 +553,26 @@
   </main>
 
   <!-- Footer -->
-  <footer class="border-t border-gray-200 py-8 text-center text-sm text-gray-500">
-    <div class="max-w-4xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div class="flex flex-wrap justify-center gap-x-4 gap-y-1.5 mb-4 px-4 text-xs text-gray-400 max-w-5xl mx-auto">
-      <a href="/setup/gl-inet-travel-router" class="hover:text-emerald-600 transition-colors">GL.iNet Router WireGuard</a>
-      <span>&bull;</span>
-      <a href="/guides/stop-samsung-smart-tv-acr-tracking" class="hover:text-emerald-600 transition-colors">Block Samsung TV ACR Tracking</a>
-      <span>&bull;</span>
-      <a href="/guides/stop-lg-smart-tv-acr-spying" class="hover:text-emerald-600 transition-colors">Stop LG TV ACR Spying</a>
-      <span>&bull;</span>
-      <a href="/solutions/eduroam-campus-wifi-gaming-packet-loss" class="hover:text-emerald-600 transition-colors">Eduroam Gaming &amp; WireGuard</a>
-      <span>&bull;</span>
-      <a href="/setup/nvidia-shield-tv-pro-wireguard" class="hover:text-emerald-600 transition-colors">Nvidia Shield TV WireGuard</a>
-      <span>&bull;</span>
-      <a href="/setup/steam-deck-vpn" class="hover:text-emerald-600 transition-colors">SteamOS &amp; Steam Deck VPN</a>
-      <span>&bull;</span>
-      <a href="/setup/synology-nas-docker-vpn" class="hover:text-emerald-600 transition-colors">Synology NAS Docker VPN</a>
-      <span>&bull;</span>
-      <a href="/solutions/gigaclear-rural-fibre-gaming-packet-loss" class="hover:text-emerald-600 transition-colors">Gigaclear Packet Loss Fix</a>
-      <span>&bull;</span>
-      <a href="/solutions/talktalk-fibre-wireguard-cgnat" class="hover:text-emerald-600 transition-colors">TalkTalk Fibre WireGuard Fix</a>
-      <span>&bull;</span>
-      <a href="/solutions/hotel-captive-portal-wifi-wireguard" class="hover:text-emerald-600 transition-colors">Hotel Wi-Fi Captive Portal VPN</a>
-      <span>&bull;</span>
-      <a href="/solutions/rogers-ignite-canada-isp-throttling" class="hover:text-emerald-600 transition-colors">Rogers Ignite Throttling Fix</a>
-      <span>&bull;</span>
-      <a href="/alternatives/totalvpn" class="hover:text-emerald-600 transition-colors">Best TotalVPN Alternatives</a>
+  <footer class="mt-auto py-8 text-center text-gray-500 text-sm border-t border-gray-100">
+    <div class="max-w-5xl mx-auto px-4 flex flex-wrap justify-center gap-x-5 gap-y-2 mb-4 text-xs font-medium">
+      <a href="/solutions" class="hover:text-emerald-600 transition-colors">ISP Solutions</a>
+      <a href="/setup" class="hover:text-emerald-600 transition-colors">Router Setup</a>
+      <a href="/guides" class="hover:text-emerald-600 transition-colors">Privacy Guides</a>
+      <a href="/vs" class="hover:text-emerald-600 transition-colors">VPN Comparisons</a>
+      <a href="/pricing" class="hover:text-emerald-600 transition-colors">Pricing</a>
+      <a href="/download" class="hover:text-emerald-600 transition-colors">Download</a>
+      <a href="/tools/leak-test" class="hover:text-emerald-600 transition-colors">Leak Test</a>
+      <a href="/tools/isp-throttling-test" class="hover:text-emerald-600 transition-colors">ISP Speed Test</a>
+      <a href="/faq" class="hover:text-emerald-600 transition-colors">Technical FAQ</a>
+      <a href="/ai-info" class="hover:text-emerald-600 transition-colors">Brand Fact Sheet</a>
+      <a href="/privacy" class="hover:text-emerald-600 transition-colors">Privacy Policy</a>
+      <a href="/refund" class="hover:text-emerald-600 transition-colors">Refund Policy</a>
+      <a href="/terms" class="hover:text-emerald-600 transition-colors">Terms of Service</a>
+    </div>
+    <div class="mb-3">
+      <a href="https://www.google.com/preferences/source?q=sweeprvpn.com" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 text-xs font-semibold no-underline transition-colors">&#9733; Add SWEEPR VPN to Google Preferred Sources</a>
     </div>
     <p>&copy; 2026 SWEEPR VPN (UK Sole Trader). All rights reserved.</p>
-      <div class="flex items-center gap-6">
-        <a href="/pricing" class="hover:underline">Pricing</a>
-        <a href="/privacy" class="hover:underline">Privacy Policy</a>
-        <a href="/terms" class="hover:underline">Terms of Service</a>
-        <a href="/support" class="hover:underline">Support</a>
-      </div>
-    </div>
   </footer>
 </body>
 </html>

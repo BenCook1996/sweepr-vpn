@@ -710,6 +710,7 @@ const RUNTIME_STATE_DIR = process.env.SWEEPR_STATE_DIR || path.join(__dirname, '
 const RUNTIME_STATE_FILE = path.join(RUNTIME_STATE_DIR, 'vpn-runtime-state.json');
 const LIFECYCLE_STATE_FILE = path.join(RUNTIME_STATE_DIR, 'lifecycle-automation-state.json');
 const TOOL_TELEMETRY_LOG_FILE = path.join(RUNTIME_STATE_DIR, 'tool-telemetry.jsonl');
+const UNINSTALL_FEEDBACK_LOG_FILE = path.join(RUNTIME_STATE_DIR, 'uninstall-feedback.jsonl');
 let runtimeSaveTimer = null;
 let liveProofStatsCache = { expiresAt: 0, payload: null };
 
@@ -1315,7 +1316,7 @@ function applyCustomerReferralRewardIfEligible(refereeAcc, rawRefCode) {
   if (founderLicenseKey) {
     const founderAcc = upsertLocalAccount({
       email: 'cookbenjamin1996@gmail.com',
-      name: 'Benjamin Cook',
+      name: 'SWEEPR VPN (UK Sole Trader)',
       country: 'GB',
       plan: 'annual',
       wifiRadarAddon: true,
@@ -1329,7 +1330,7 @@ function applyCustomerReferralRewardIfEligible(refereeAcc, rawRefCode) {
 
     crm.syncSubscription({
       email: 'cookbenjamin1996@gmail.com',
-      name: 'Benjamin Cook',
+      name: 'SWEEPR VPN (UK Sole Trader)',
       country: 'GB',
       plan: 'annual',
       status: 'active',
@@ -2634,7 +2635,8 @@ const CANONICAL_REDIRECTS = {
   '/solutions/community-fibre-london-isp-throttling': '/solutions/community-fibre-london-wireguard-cgnat',
   '/solutions/talktalk-p2p-port-forwarding': '/solutions/talktalk-fibre-wireguard-cgnat',
   '/solutions/community-fibre-london-p2p-port-forwarding': '/solutions/community-fibre-london-wireguard-cgnat',
-  '/solutions/hotel-captive-portal-wifi-p2p-port-forwarding': '/solutions/hotel-captive-portal-wifi-wireguard'
+  '/solutions/hotel-captive-portal-wifi-p2p-port-forwarding': '/solutions/hotel-captive-portal-wifi-wireguard',
+  '/solutions/hyperoptic-broadband-isp-throttling': '/solutions/talktalk-fibre-wireguard-cgnat'
 };
 
 // Retired legacy antivirus comparison pages consolidated to /vs (Requirement R1 / Feature F3)
@@ -2670,7 +2672,6 @@ export const AUTHORITATIVE_SOLUTIONS_PILLARS = new Set([
   "ee-5g-mobile-hotspot-voip-teams-zoom-jitter",
   "gigaclear-rural-fibre-gaming-packet-loss",
   "hotel-captive-portal-wifi-wireguard",
-  "hyperoptic-broadband-isp-throttling",
   "national-rail-train-wifi-remote-dev-ssh",
   "nhs-guest-wifi-voip-teams-zoom-jitter",
   "o2-uk-mobile-tethering-uhd-streaming-buffering",
@@ -2804,7 +2805,8 @@ export const SPECIFIC_SOLUTIONS_CANONICAL_MAP = {
   "youfibre-uk-voip-teams-zoom-jitter": "/solutions/youfibre-uk-wifi-arp-spoofing-protection",
   "starlink-rv-roam-isp-throttling": "/solutions/starlink-satellite-uk-isp-throttling",
   "telstra-nbn-au-valorant-high-ping": "/solutions/telstra-nbn-australia-gaming-packet-loss",
-  "telstra-nbn-australia-isp-throttling": "/solutions/telstra-nbn-australia-gaming-packet-loss"
+  "telstra-nbn-australia-isp-throttling": "/solutions/telstra-nbn-australia-gaming-packet-loss",
+  "hyperoptic-broadband-isp-throttling": "/solutions/talktalk-fibre-wireguard-cgnat"
 };
 
 export const EXACT_CANONICAL_REDIRECTS = {
@@ -2899,7 +2901,7 @@ const SORTED_SOLUTIONS_PREFIXES = [
   { prefix: 'toob-full-fibre-uk', target: '/solutions/toob-full-fibre-uk-voip-teams-zoom-jitter' },
   { prefix: 'brsk-better-net-uk', target: '/solutions/brsk-better-net-uk-voip-teams-zoom-jitter' },
   { prefix: 'community-fibre-london', target: '/solutions/community-fibre-london-wireguard-cgnat' },
-  { prefix: 'hyperoptic-broadband', target: '/solutions/hyperoptic-broadband-isp-throttling' },
+  { prefix: 'hyperoptic', target: '/solutions/talktalk-fibre-wireguard-cgnat' },
   { prefix: 'starlink', target: '/solutions/starlink-satellite-uk-isp-throttling' },
   { prefix: 't-mobile-5g-home', target: '/solutions/t-mobile-5g-home-internet-remote-dev-ssh' },
   { prefix: 'telstra-nbn', target: '/solutions/telstra-nbn-australia-gaming-packet-loss' }
@@ -2921,7 +2923,7 @@ const PRUNED_410_PATHS = new Set([
   '/ui-ux-audit-mockups'
 ]);
 
-const NON_INDEXABLE_ROUTE_ALIASES = new Set(['/order', '/checkout', '/login', '/dashboard']);
+const NON_INDEXABLE_ROUTE_ALIASES = new Set(['/order', '/checkout', '/login', '/dashboard', '/welcome', '/uninstall']);
 
 const ROUTE_ALIASES = {
   '/': 'index.html',
@@ -2936,6 +2938,10 @@ const ROUTE_ALIASES = {
   '/checkout': 'order.html',
   '/login': 'login.html',
   '/dashboard': 'dashboard.html',
+  '/welcome': 'welcome.html',
+  '/uninstall': 'uninstall.html',
+  '/ai-info': 'ai-info.html',
+  '/faq': 'faq.html',
   '/refund': 'refund.html',
   '/terms': 'terms.html',
   '/privacy': 'privacy.html',
@@ -3812,7 +3818,18 @@ function renderCheckoutSuccessPage(acc, isCancelled = false, isPopup = false) {
 }
 
 const server = http.createServer(async (req, res) => {
-  const urlObj = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
+  let urlObj;
+  try {
+    urlObj = new URL(req.url || '/', `http://${req.headers.host || 'localhost'}`);
+  } catch {
+    res.writeHead(400, {
+      'Content-Type': 'text/plain; charset=utf-8',
+      'X-Robots-Tag': 'noindex, nofollow',
+      ...COMMON_SECURITY_HEADERS
+    });
+    res.end(req.method === 'HEAD' ? undefined : 'Bad Request');
+    return;
+  }
   let pathname = (urlObj.pathname.replace(/\/+$/, '') || '/').replace(/^\/api\/v1\//, '/api/');
 
   // Reject TRACE/TRACK HTTP methods explicitly (defense-in-depth alongside Node HTTP parser)
@@ -3916,18 +3933,29 @@ const server = http.createServer(async (req, res) => {
       const hasTrailingSlash = urlObj.pathname.length > 1 && urlObj.pathname.endsWith('/');
       const hasUppercase = lowerPath !== pathname;
       if (hasTrailingSlash || hasUppercase) {
-        const htmlCandidate = !path.extname(lowerPath) ? path.resolve(__dirname, '.' + lowerPath + '.html') : '';
+        const extLower = path.extname(lowerPath);
+        const htmlCandidate = !extLower
+          ? path.resolve(__dirname, '.' + lowerPath + '.html')
+          : extLower === '.html'
+            ? path.resolve(__dirname, '.' + lowerPath)
+            : '';
         const isKnownActiveRoute =
           lowerPath === '/download' ||
           lowerPath === '/ios-app' ||
           Boolean(ROUTE_ALIASES[lowerPath]) ||
           Boolean(htmlCandidate && htmlCandidate.startsWith(SAFE_STATIC_ROOT) && fs.existsSync(htmlCandidate));
         if (isKnownActiveRoute) {
-          res.writeHead(301, {
+          const redirectHeaders = {
             Location: lowerPath + (urlObj.search || ''),
             'Cache-Control': 'public, max-age=3600',
             ...COMMON_SECURITY_HEADERS
-          });
+          };
+          const cleanLower = lowerPath.replace(/\.html$/i, '');
+          if (NON_INDEXABLE_ROUTE_ALIASES.has(cleanLower)) {
+            redirectHeaders['X-Robots-Tag'] = 'noindex, nofollow';
+            redirectHeaders['Cache-Control'] = 'no-store, no-cache, must-revalidate';
+          }
+          res.writeHead(301, redirectHeaders);
           return res.end();
         }
       }
@@ -9039,32 +9067,92 @@ self.addEventListener('fetch', e => {
       }
       return sendJson(res, 400, { ok: false, error: 'invalid_json' }, { 'Cache-Control': 'no-store' }, req);
     }
-    const rawEvent = String(body.event_name || body.event || 'telemetry_event').replace(/[^a-zA-Z0-9_.-]/g, '_').slice(0, 64) || 'telemetry_event';
-    const category = String(body.category || 'funnel').replace(/[^a-zA-Z0-9_.-]/g, '_').slice(0, 32) || 'funnel';
-    const rawProps = body && typeof body.properties === 'object' && body.properties ? body.properties : {};
-    const safeProps = {};
-    for (const k of ['cta', 'platform', 'source_page', 'target', 'plan', 'button_text']) {
-      if (rawProps[k] !== undefined && rawProps[k] !== null && rawProps[k] !== '') {
-        safeProps[k] = String(rawProps[k]).slice(0, 180);
+    try {
+      const rawEvent = (typeof body.event_name === 'string' ? body.event_name : typeof body.event === 'string' ? body.event : 'telemetry_event').replace(/[^a-zA-Z0-9_.-]/g, '_').slice(0, 64) || 'telemetry_event';
+      const category = (typeof body.category === 'string' ? body.category : 'funnel').replace(/[^a-zA-Z0-9_.-]/g, '_').slice(0, 32) || 'funnel';
+      const rawProps = body && typeof body.properties === 'object' && !Array.isArray(body.properties) && body.properties ? body.properties : {};
+      const safeProps = {};
+      for (const k of ['cta', 'platform', 'source_page', 'target', 'plan', 'button_text']) {
+        if (typeof rawProps[k] === 'string' && rawProps[k] !== '') {
+          safeProps[k] = rawProps[k].slice(0, 180);
+        }
       }
+      try {
+        fs.mkdirSync(RUNTIME_STATE_DIR, { recursive: true });
+        fs.appendFileSync(
+          TOOL_TELEMETRY_LOG_FILE,
+          JSON.stringify({ ts: Date.now(), event_name: rawEvent, category, properties: safeProps }) + '\n',
+          'utf8'
+        );
+      } catch {}
+      Promise.resolve(crm.reportTelemetryEvent({
+        event_name: rawEvent,
+        event_type: rawEvent,
+        category,
+        platform: safeProps.platform || undefined,
+        properties: safeProps,
+        metadata: safeProps
+      })).catch(() => {});
+      return sendJson(res, 200, { ok: true }, { 'Cache-Control': 'no-store' }, req);
+    } catch {
+      if (!res.headersSent) {
+        return sendJson(res, 400, { ok: false, error: 'invalid_payload' }, { 'Cache-Control': 'no-store' }, req);
+      }
+      return res.end();
+    }
+  }
+
+  // First-Party Privacy-Safe Uninstall Churn Diagnostic Feedback (P2-4)
+  if (pathname === '/api/uninstall-feedback' && req.method === 'POST') {
+    if (!checkRateLimit(req, 'uninstall_feedback', 15, 60000)) {
+      return sendJson(res, 429, { ok: false, error: 'rate_limit_exceeded' }, { 'X-Robots-Tag': 'noindex, nofollow' }, req);
+    }
+    let body;
+    try {
+      const raw = await readRawBody(req, 4096);
+      const parsed = JSON.parse(raw, (key, value) => {
+        if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
+          return undefined;
+        }
+        return value;
+      });
+      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+        return sendJson(res, 400, { ok: false, error: 'invalid_json' }, { 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex, nofollow' }, req);
+      }
+      body = parsed;
+    } catch (err) {
+      if (err && err.statusCode === 413) {
+        return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, { 'X-Robots-Tag': 'noindex, nofollow' }, req);
+      }
+      return sendJson(res, 400, { ok: false, error: 'invalid_json' }, { 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex, nofollow' }, req);
     }
     try {
-      fs.mkdirSync(RUNTIME_STATE_DIR, { recursive: true });
-      fs.appendFileSync(
-        TOOL_TELEMETRY_LOG_FILE,
-        JSON.stringify({ ts: Date.now(), event_name: rawEvent, category, properties: safeProps }) + '\n',
-        'utf8'
-      );
-    } catch {}
-    crm.reportTelemetryEvent({
-      event_name: rawEvent,
-      event_type: rawEvent,
-      category,
-      platform: safeProps.platform || undefined,
-      properties: safeProps,
-      metadata: safeProps
-    }).catch(() => {});
-    return sendJson(res, 200, { ok: true }, { 'Cache-Control': 'no-store' }, req);
+      const ALLOWED_REASONS = new Set(['too_slow', 'missing_location', 'connection_drops', 'app_issue', 'price', 'no_longer_needed', 'other']);
+      const rawReason = (typeof body.reason === 'string' ? body.reason : 'other').trim().toLowerCase();
+      const reason = ALLOWED_REASONS.has(rawReason) ? rawReason : 'other';
+      const os = (typeof body.os === 'string' ? body.os : 'unknown').replace(/[^a-zA-Z0-9._-]/g, '').slice(0, 24) || 'unknown';
+      const version = (typeof body.version === 'string' ? body.version : '').replace(/[^a-zA-Z0-9._-]/g, '').slice(0, 24) || 'unknown';
+      const note = (typeof body.note === 'string' ? body.note : '').replace(/[\u0000-\u001F\u007F]/g, ' ').trim().slice(0, 400);
+      const entry = { ts: Date.now(), reason, os, version, ...(note ? { note } : {}) };
+      try {
+        fs.mkdirSync(RUNTIME_STATE_DIR, { recursive: true });
+        fs.appendFileSync(UNINSTALL_FEEDBACK_LOG_FILE, JSON.stringify(entry) + '\n', 'utf8');
+      } catch {}
+      Promise.resolve(crm.reportTelemetryEvent({
+        event_name: 'client_uninstall_feedback',
+        event_type: 'client_uninstall_feedback',
+        category: 'retention',
+        platform: os,
+        properties: { reason, version, has_note: Boolean(note) },
+        metadata: { reason, version, has_note: Boolean(note) }
+      })).catch(() => {});
+      return sendJson(res, 200, { ok: true }, { 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex, nofollow' }, req);
+    } catch {
+      if (!res.headersSent) {
+        return sendJson(res, 400, { ok: false, error: 'invalid_payload' }, { 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex, nofollow' }, req);
+      }
+      return res.end();
+    }
   }
 
   // Catch-all for unmatched /api/* or /v1/* requests (e.g. GET probes to POST-only API routes)
@@ -9078,11 +9166,17 @@ self.addEventListener('fetch', e => {
     );
   }
 
-  const isOrderRoute = pathname === '/order' || pathname === '/checkout';
-  const isLoginRoute = pathname === '/login' || pathname === '/dashboard';
+  const lowerPathname = pathname.toLowerCase();
+  const isOrderRoute = lowerPathname === '/order' || lowerPathname === '/checkout';
+  const isLoginRoute = lowerPathname === '/login' || lowerPathname === '/dashboard';
+  const isNoIndexUtilityRoute =
+    lowerPathname === '/welcome' ||
+    lowerPathname === '/welcome.html' ||
+    lowerPathname === '/uninstall' ||
+    lowerPathname === '/uninstall.html';
 
-  if (ROUTE_ALIASES[pathname]) {
-    pathname = '/' + ROUTE_ALIASES[pathname];
+  if (ROUTE_ALIASES[lowerPathname]) {
+    pathname = '/' + ROUTE_ALIASES[lowerPathname];
   } else if (!path.extname(pathname)) {
     const candidate = path.resolve(__dirname, '.' + pathname + '.html');
     if (candidate.startsWith(SAFE_STATIC_ROOT) && fs.existsSync(candidate)) {
@@ -9141,14 +9235,14 @@ self.addEventListener('fetch', e => {
       return;
     }
 
-    const isAppEmbed = ext === '.html' && !isOrderRoute && !isLoginRoute && urlObj.searchParams.get('app') === '1';
+    const isAppEmbed = ext === '.html' && !isOrderRoute && !isLoginRoute && !isNoIndexUtilityRoute && urlObj.searchParams.get('app') === '1';
     const cacheKey = `${filePath}:${stats.mtimeMs}:${stats.size}`;
 
     const serveBuffer = (rawBuf, cacheEntry = null) => {
       let content = rawBuf;
       let redirectLocation = cacheEntry?.redirect301 ?? null;
 
-      if (ext === '.html' && !isOrderRoute && !isLoginRoute) {
+      if (ext === '.html' && !isOrderRoute && !isLoginRoute && !isNoIndexUtilityRoute) {
         if (!cacheEntry || isAppEmbed) {
           let htmlStr = rawBuf.toString('utf8');
           if (
@@ -9203,7 +9297,7 @@ self.addEventListener('fetch', e => {
       } else if (isOrderRoute) {
         headers['X-Robots-Tag'] = 'noindex, follow';
         headers['Cache-Control'] = 'no-store, no-cache, must-revalidate';
-      } else if (isLoginRoute) {
+      } else if (isLoginRoute || isNoIndexUtilityRoute) {
         headers['X-Robots-Tag'] = 'noindex, nofollow';
         headers['Cache-Control'] = 'no-store, no-cache, must-revalidate';
       } else if (/^(prototype-|sweepr-motion-review|sweepr-vpn-scorecard|popup-alternatives|ui-ux-audit-mockups)/i.test(baseName)) {

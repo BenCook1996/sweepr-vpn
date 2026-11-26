@@ -177,6 +177,7 @@
 
   <!-- Main Content -->
   <main class="max-w-4xl mx-auto px-6 py-12 md:py-16">
+<article>
     <!-- Breadcrumb & Badge -->
     <div class="text-center mb-10">
       <div class="inline-block text-xs font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full mb-3 border border-emerald-200">
@@ -197,6 +198,11 @@
         <a href="/tools/leak-test" class="text-emerald-800 hover:text-emerald-950 underline">Validate pfSense or OPNsense WAN failover isolation &rarr;</a>
       </div>
     </div>
+    <dl class="sweepr-geo-specs grid grid-cols-1 md:grid-cols-3 gap-3 my-6 text-xs text-gray-700">
+      <div class="p-3.5 rounded-xl bg-white border border-gray-200 shadow-sm"><dt class="font-bold text-gray-900 mb-1">Firewall Kernel Engines</dt><dd>pfSense Plus / CE (os-wireguard pkg) and OPNsense 24.x (os-wireguard plugin) with Outbound NAT rules.</dd></div>
+      <div class="p-3.5 rounded-xl bg-white border border-gray-200 shadow-sm"><dt class="font-bold text-gray-900 mb-1">Gateway Group & Kill-Switch</dt><dd>Tag WAN_NO_VPN egress rules with NO_WAN_EGRESS floating block rule for leak-proof failover.</dd></div>
+      <div class="p-3.5 rounded-xl bg-white border border-gray-200 shadow-sm"><dt class="font-bold text-gray-900 mb-1">MSS & Dual-WAN Tuning</dt><dd>Set MSS 1380/1412 on WG_SWEEPR interface and monitor peer handshake via dpinger on 10.64.0.1.</dd></div>
+    </dl>
 
     <div class="bg-white border-2 border-emerald-500/30 rounded-2xl p-6 md:p-8 shadow-sm mb-10">
       <h2 class="text-xl font-bold text-gray-900 mb-2">pfSense Plus &amp; OPNsense Firewall Gateway Blueprint</h2>
@@ -342,6 +348,8 @@ Unbound Outgoing IF: SWEEPR_WG (or DNS Forwarder -&gt; 10.64.0.1)</code></pre>
         </a>
       </div>
     </div>
+
+</article>
 </main>
 
   <!-- Footer -->
@@ -357,6 +365,7 @@ Unbound Outgoing IF: SWEEPR_WG (or DNS Forwarder -&gt; 10.64.0.1)</code></pre>
         <a href="/privacy" class="hover:underline">Privacy Policy</a>
         <a href="/terms" class="hover:underline">Terms</a>
         <a href="/support" class="hover:underline">Support</a>
+        <a href="https://www.google.com/preferences/source?q=sweeprvpn.com" target="_blank" rel="noopener noreferrer" class="hover:underline text-emerald-700 font-semibold">Google Preferred Sources</a>
       </div>
     </div>
   </footer>

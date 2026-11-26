@@ -119,6 +119,7 @@
     </div>
   </div>
   <main>
+<article>
     <span class="badge">Enterprise Linux Gateway Setup Guide • WireGuard 10Gbps</span>
     <h1>AlmaLinux 9 & Rocky Linux 9 Enterprise WireGuard Gateway: High-Speed 10Gbps WireGuard VPN Setup Guide</h1>
       <div id="eeat-author-byline" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:0.82rem;color:var(--muted,#94a3b8);margin:10px 0 14px;"><span>Technical documentation by <strong style="color:var(--text,#e5e7eb);">SWEEPR VPN Engineering</strong> &middot; Independent UK Sole Trader</span><span>&bull;</span><span>Updated Nov 2026</span><span>&bull;</span><a href="/warrant-canary" style="color:var(--accent2,#34d399);font-weight:700;text-decoration:underline;">Verified via Cryptographic Warrant Canary &rarr;</a></div>
@@ -130,6 +131,11 @@
         <a href="/tools/leak-test" style="color:var(--accent2,#34d399);text-decoration:underline;">Check EL9 gateway egress IP and DNS hygiene &rarr;</a>
       </div>
     </div>
+    <dl class="sweepr-geo-specs" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:18px 0;">
+      <div class="stat-box" style="margin:0;"><dt class="stat-label" style="font-weight:700;">Target OS & Kernel Module</dt><dd style="margin:6px 0 0;font-size:0.88rem;color:var(--muted);">AlmaLinux 9 / Rocky Linux 9 (RHEL 9 EL9 kernel native wireguard.ko via NetworkManager or wg-quick).</dd></div>
+      <div class="stat-box" style="margin:0;"><dt class="stat-label" style="font-weight:700;">Firewall & Interface MTU</dt><dd style="margin:6px 0 0;font-size:0.88rem;color:var(--muted);">firewalld masquerade + TCPMSS clamp 1340; MTU 1420 (datacenter/DHCP) or 1412 (PPPoE uplink).</dd></div>
+      <div class="stat-box" style="margin:0;"><dt class="stat-label" style="font-weight:700;">Tunnel DNS & Endpoint Ports</dt><dd style="margin:6px 0 0;font-size:0.88rem;color:var(--muted);">DNS = 10.64.0.1 for 65-domain ACR filtering across UDP 51820 or Stealth UDP 443.</dd></div>
+    </dl>
 
     <div class="grid-3">
       <div class="stat-box">
@@ -246,6 +252,8 @@ sudo nft list ruleset | grep -A4 masquerade</code></pre>
         <li><a href="/tools/vpn-renewal-price-checker" style="color:var(--accent2);">Multi-year VPN renewal cost audit</a></li>
       </ul>
     </div>
+
+</article>
 </main>
   <footer>
     <p>&copy; 2026 SWEEPR VPN (UK Sole Trader). Independent UK Developer &bull; Open-Source Kernel WireGuard &amp; RAM-Only Servers.</p>
@@ -261,6 +269,8 @@ sudo nft list ruleset | grep -A4 masquerade</code></pre>
       <a href="/tools/isp-throttling-test">ISP Speed Test</a> |
       <a href="/support">Support</a> |
       <a href="/privacy">Privacy Policy</a>
+     |
+      <a href="https://www.google.com/preferences/source?q=sweeprvpn.com" target="_blank" rel="noopener noreferrer">Google Preferred Sources</a>
     </p>
   </footer>
   <script src="/nav.js?v=f9d994cf" defer></script>

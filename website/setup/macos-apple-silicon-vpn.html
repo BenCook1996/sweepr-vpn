@@ -177,6 +177,7 @@
 
   <!-- Main Content -->
   <main class="max-w-4xl mx-auto px-6 py-12 md:py-16">
+<article>
     <!-- Breadcrumb & Badge -->
     <div class="text-center mb-10">
       <div class="inline-block text-xs font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full mb-3 border border-emerald-200">
@@ -197,6 +198,11 @@
         <a href="/tools/leak-test" class="text-emerald-800 hover:text-emerald-950 underline">Check macOS utun DNS and WebRTC status &rarr;</a>
       </div>
     </div>
+    <dl class="sweepr-geo-specs grid grid-cols-1 md:grid-cols-3 gap-3 my-6 text-xs text-gray-700">
+      <div class="p-3.5 rounded-xl bg-white border border-gray-200 shadow-sm"><dt class="font-bold text-gray-900 mb-1">Universal Binary Architecture</dt><dd>macOS Universal .dmg (~7.6 MB) supporting Apple Silicon M1/M2/M3/M4 and Intel Macs cleanly.</dd></div>
+      <div class="p-3.5 rounded-xl bg-white border border-gray-200 shadow-sm"><dt class="font-bold text-gray-900 mb-1">Local Network Privacy Prompt</dt><dd>Grant Local Network permission in macOS Privacy & Security for the 30-second ARP/mDNS Wi-Fi scanner.</dd></div>
+      <div class="p-3.5 rounded-xl bg-white border border-gray-200 shadow-sm"><dt class="font-bold text-gray-900 mb-1">Socket & Battery Overhead</dt><dd>On-demand WireGuard utun interface keeps idle RAM minimal without Rosetta 2 translation.</dd></div>
+    </dl>
 
     <div class="bg-white border-2 border-emerald-500/30 rounded-2xl p-6 md:p-8 shadow-sm mb-10">
       <h2 class="text-xl font-bold text-gray-900 mb-2">Apple Silicon Battery &amp; Thermal Efficiency Advantage</h2>
@@ -375,6 +381,8 @@ ifconfig utun4 | grep mtu</code></pre>
         </a>
       </div>
     </div>
+
+</article>
 </main>
 
   <!-- Footer -->
@@ -390,6 +398,7 @@ ifconfig utun4 | grep mtu</code></pre>
         <a href="/privacy" class="hover:underline">Privacy Policy</a>
         <a href="/terms" class="hover:underline">Terms</a>
         <a href="/support" class="hover:underline">Support</a>
+        <a href="https://www.google.com/preferences/source?q=sweeprvpn.com" target="_blank" rel="noopener noreferrer" class="hover:underline text-emerald-700 font-semibold">Google Preferred Sources</a>
       </div>
     </div>
   </footer>

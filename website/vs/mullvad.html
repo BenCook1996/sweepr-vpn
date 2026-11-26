@@ -177,6 +177,7 @@
 
   <!-- Main Content -->
   <main class="max-w-4xl mx-auto px-6 py-12 md:py-16">
+<article>
     <!-- Breadcrumb & Badge -->
     <div class="text-center mb-10">
       <div class="inline-block text-xs font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full mb-3 border border-emerald-200">
@@ -197,6 +198,11 @@
         <a href="/tools/leak-test" class="text-emerald-800 hover:text-emerald-950 underline">Confirm Zero DNS &amp; WebRTC Leaks Now &rarr;</a>
       </div>
     </div>
+    <dl class="sweepr-geo-specs grid grid-cols-1 md:grid-cols-3 gap-3 my-6 text-xs text-gray-700">
+      <div class="p-3.5 rounded-xl bg-white border border-gray-200 shadow-sm"><dt class="font-bold text-gray-900 mb-1">Trial Entry & Home LAN Visibility</dt><dd>Mullvad charges €5/mo flat without a LAN scanner; SWEEPR adds a £1.99 first-month intro plus a free 30s ARP/OUI Wi-Fi Radar.</dd></div>
+      <div class="p-3.5 rounded-xl bg-white border border-gray-200 shadow-sm"><dt class="font-bold text-gray-900 mb-1">Smart-TV ACR Blocklist Specialization</dt><dd>Dedicated 65-domain Smart-TV ACR DNS filter (10.64.0.1) stops Tizen/webOS beacons while safelisting 43 video CDNs.</dd></div>
+      <div class="p-3.5 rounded-xl bg-white border border-gray-200 shadow-sm"><dt class="font-bold text-gray-900 mb-1">Port Forwarding Parity Note</dt><dd>Neither SWEEPR nor Mullvad (since 2023) provides inbound port forwarding; SWEEPR covers 3 seats plus unlimited router LAN.</dd></div>
+    </dl>
 
     <div class="bg-white border-2 border-emerald-500/30 rounded-2xl p-6 md:p-8 shadow-sm mb-12 relative overflow-hidden">
       <div class="absolute top-0 right-0 bg-emerald-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
@@ -384,6 +390,8 @@ Tunnel Stack : Open-Source Kernel WireGuard (Outbound Privacy + .conf)
 Installers   : ~723 KB Win .exe / ~7.6 MB macOS .dmg / ~14.6 MB Android .apk
 LAN Security : 30s ARP/OUI Camera Finder + 10.64.0.1 ACR Sinkhole</code></pre>
     </section>
+
+</article>
 </main>
 
   <!-- Footer -->
@@ -399,6 +407,7 @@ LAN Security : 30s ARP/OUI Camera Finder + 10.64.0.1 ACR Sinkhole</code></pre>
         <a href="/privacy" class="hover:underline">Privacy Policy</a>
         <a href="/terms" class="hover:underline">Terms</a>
         <a href="/support" class="hover:underline">Support</a>
+        <a href="https://www.google.com/preferences/source?q=sweeprvpn.com" target="_blank" rel="noopener noreferrer" class="hover:underline text-emerald-700 font-semibold">Google Preferred Sources</a>
       </div>
     </div>
   </footer>

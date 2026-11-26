@@ -239,6 +239,8 @@
         <span class="font-mono text-xs font-semibold tabular-nums text-emerald-800">0% RENEWAL HIKE</span>
         <span class="text-gray-300" aria-hidden="true">|</span>
         <span class="font-mono text-xs tabular-nums"><strong data-live-proof="online-pops" class="font-bold">8/8</strong> POPS ONLINE</span>
+        <span class="text-gray-300" aria-hidden="true">|</span>
+        <span class="font-mono text-[11px] text-gray-600 tabular-nums">Client v2.6.0 (740,112 B / ~723 KB Win) &bull; Probe Verified: 2026-11-25</span>
       </div>
       <div class="font-mono text-[11px] font-semibold tabular-nums text-amber-800" id="pricingLiveIp">
         Your IP is currently exposed
@@ -398,6 +400,31 @@
 
     </div>
 
+    <!-- Visual Break #1: Real Windows Client & Wi-Fi Radar Captures (P2-1 / C9) -->
+    <section id="pricing-ui-preview" class="mt-8 rack-card p-5 sm:p-6">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+        <h2 class="text-xl font-bold text-gray-900">Inside the v2.6.0 App: Lightweight WireGuard &amp; 30-Second Wi-Fi Radar</h2>
+        <span class="font-mono text-[11px] font-semibold text-gray-600 tabular-nums">Client v2.6.0 (740,112 B / ~723 KB Win) &bull; Probe Verified: 2026-11-25</span>
+      </div>
+      <p class="text-sm text-gray-600">
+        Every subscription unlocks the ~723 KB Windows desktop client (no bloated antivirus bundle), built-in LAN intruder radar, and a 65-domain Smart-TV ACR DNS sinkhole.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <figure class="bg-gray-50 border border-gray-200 rounded-xl p-3">
+          <img src="/assets/desktop-home-light.webp" width="960" height="608" loading="lazy" decoding="async" class="w-full rounded-lg border border-gray-200 block" alt="SWEEPR VPN v2.6.0 Windows desktop app showing Kill Switch, DNS Shield, and 8 WireGuard locations" />
+          <figcaption class="mt-2 text-xs text-gray-600 leading-relaxed">
+            <strong class="text-gray-900">Desktop VPN View (<code>SWEEPRVPN.exe</code> v2.6.0):</strong> 1-click WireGuard connect, Kill Switch, LAN Bypass, and <code>10.64.0.1</code> tracker-filtering DNS.
+          </figcaption>
+        </figure>
+        <figure class="bg-gray-50 border border-gray-200 rounded-xl p-3">
+          <img src="/assets/desktop-wifi-radar.webp" width="960" height="638" loading="lazy" decoding="async" class="w-full rounded-lg border border-gray-200 block" alt="SWEEPR Home Wi-Fi Radar tab flagging unrecognized devices and Smart-TV ACR filtering" />
+          <figcaption class="mt-2 text-xs text-gray-600 leading-relaxed">
+            <strong class="text-gray-900">Wi-Fi &amp; TV Radar Tab:</strong> Identifies unknown LAN devices and filters Smart-TV ACR telemetry across 8 TV OS categories (43 streaming CDNs safelisted).
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
     <!-- Feature Comparison Matrix & Plan Selector -->
     <section id="compare-plans" class="mt-20">
       <div class="text-center max-w-2xl mx-auto mb-8">
@@ -521,6 +548,29 @@
 
       </div>
 
+      <!-- Visual Break #2: Desktop Dark Mode & Mobile Companion UI -->
+      <div id="pricing-mobile-dark-preview" class="mb-8 rack-card p-5 sm:p-6">
+        <h3 class="text-lg font-bold text-gray-900 mb-1">Cross-Device Coverage: Desktop Dark Mode &amp; Mobile Companion UI</h3>
+        <p class="text-xs sm:text-sm text-gray-600 mb-4">
+          Use your license key across <strong>3 simultaneous devices</strong> (Windows, macOS, Linux, Android) plus unlimited devices behind a WireGuard router <code>.conf</code>.
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+          <figure class="bg-gray-50 border border-gray-200 rounded-xl p-3">
+            <img src="/assets/desktop-dark-mode.webp" width="960" height="638" loading="lazy" decoding="async" class="w-full rounded-lg border border-gray-200 block" alt="SWEEPR VPN v2.6.0 dark mode desktop client listing all 8 global WireGuard gateways" />
+            <figcaption class="mt-2 text-xs text-gray-600 leading-relaxed">
+              <strong class="text-gray-900">Desktop Dark Theme (<code>v2.6.0</code>):</strong> Full 8-POP roster (UK, NL, DE, SE, US-NYC, US-LAX, SG, JP) with instant switching.
+            </figcaption>
+          </figure>
+          <figure class="bg-gray-50 border border-gray-200 rounded-xl p-3 flex flex-col sm:flex-row items-center gap-4">
+            <img src="/assets/mobile-ui-connect.webp" width="390" height="844" loading="lazy" decoding="async" style="max-width:155px;height:auto;" class="w-full rounded-xl border border-gray-200 block shrink-0" alt="SWEEPR VPN Mobile Companion UI showing WireGuard UDP 51820 ready state and DNS Filter 10.64.0.1" />
+            <figcaption class="text-xs text-gray-600 leading-relaxed">
+              <strong class="text-gray-900 block mb-1">Mobile Companion UI (<code>vpn-mobile-ui.mjs</code>):</strong>
+              Supports <code>UDP 51820</code> and Stealth <code>UDP 443</code> switching plus <code>10.64.0.1</code> DNS filter. Native Android APK (<code>v2.5.3</code>) is on Google Play; native iOS App Store is pre-launch (NOT YET LIVE — uses <code>.conf</code> / <code>.mobileconfig</code> today).
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+
       <!-- Sweepr Complete Security Suite Annual Bundle Banner -->
       <div class="mb-10 rounded-2xl p-6 sm:p-8 bg-[#111315] text-white border border-emerald-500/35 relative overflow-hidden">
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
@@ -623,6 +673,52 @@
       </div>
     </section>
 
+    <!-- Visual Break #3: Reproducible 8-POP Probe Snapshot & Honest Trade-Offs (P2-1 / C9) -->
+    <section id="pricing-telemetry-proof" class="mt-8 rack-card p-5 sm:p-6">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+        <h2 class="text-xl font-bold text-gray-900">Reproducible 8-POP Probe Snapshot &amp; Honest Trade-Offs (2026-11-25)</h2>
+        <span class="font-mono text-[11px] font-semibold text-gray-600 tabular-nums">Snapshot: 2026-11-25T15:15:42Z &bull; 8/8 Online</span>
+      </div>
+      <p class="text-xs sm:text-sm text-gray-600 mb-4">
+        Transparency before checkout: below are our verbatim <code>wireguard-acr-pipeline-state.json</code> metrics comparing UK Regional Reference Baselines (<code>baselineRttMs</code>) against US-East Railway control-plane health probes (<code>probe_ms</code> / <code>p99_ms</code>).
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+        <div class="overflow-x-auto bg-white border border-gray-200 rounded-xl">
+          <table class="w-full text-left border-collapse text-xs tabular-nums">
+            <thead>
+              <tr class="border-b border-gray-200 bg-gray-50 font-mono text-[10px] uppercase text-gray-500">
+                <th class="p-2.5">POP Code</th>
+                <th class="p-2.5">City</th>
+                <th class="p-2.5">UK Baseline</th>
+                <th class="p-2.5">US Probe (p99)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 font-mono text-gray-800">
+              <tr><td class="p-2 font-bold">UK-LON-01</td><td class="p-2 font-sans">London Docklands</td><td class="p-2 text-emerald-700 font-bold">4.1 ms</td><td class="p-2">157 ms (229 ms)</td></tr>
+              <tr><td class="p-2 font-bold">NL-AMS-01</td><td class="p-2 font-sans">Amsterdam</td><td class="p-2 text-emerald-700 font-bold">8.4 ms</td><td class="p-2">177 ms (203 ms)</td></tr>
+              <tr><td class="p-2 font-bold">DE-FRA-01</td><td class="p-2 font-sans">Frankfurt</td><td class="p-2 text-emerald-700 font-bold">11.2 ms</td><td class="p-2">185 ms (198 ms)</td></tr>
+              <tr><td class="p-2 font-bold">SE-STO-01</td><td class="p-2 font-sans">Stockholm</td><td class="p-2 text-emerald-700 font-bold">14.1 ms</td><td class="p-2">202 ms (220 ms)</td></tr>
+              <tr><td class="p-2 font-bold">US-NYC-01</td><td class="p-2 font-sans">New York</td><td class="p-2">68.4 ms</td><td class="p-2 text-emerald-700 font-bold">14 ms (18 ms)</td></tr>
+              <tr><td class="p-2 font-bold">US-LAX-01</td><td class="p-2 font-sans">Los Angeles</td><td class="p-2">128 ms</td><td class="p-2">131 ms (139 ms)</td></tr>
+              <tr><td class="p-2 font-bold">SG-SIN-01</td><td class="p-2 font-sans">Singapore</td><td class="p-2">152 ms</td><td class="p-2">469 ms (499 ms)</td></tr>
+              <tr><td class="p-2 font-bold">JP-TYO-01</td><td class="p-2 font-sans">Tokyo</td><td class="p-2">198.5 ms</td><td class="p-2">357 ms (357 ms)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <figure class="bg-gray-50 border border-gray-200 rounded-xl p-3">
+          <img src="/assets/tool-isp-throttling.webp" width="960" height="508" loading="lazy" decoding="async" class="w-full rounded-lg border border-gray-200 block" alt="SWEEPR 5-sample HTTP RTT and jitter browser diagnostic before connecting" />
+          <figcaption class="mt-2 text-xs text-gray-600 leading-relaxed">
+            <strong class="text-gray-900">Free Pre-Purchase Diagnostic:</strong> Test your direct ISP HTTP RTT and jitter at <code>/tools/isp-throttling-test</code> before choosing a plan. All 8 POPs run 10 Gbps links with <code>fq_codel</code> AQM and TCPMSS <code>1340</code>.
+          </figcaption>
+        </figure>
+      </div>
+
+      <div class="mt-4 p-4 rounded-xl bg-amber-50/70 border border-amber-200 text-xs text-amber-900 leading-relaxed">
+        <strong>Honest Limitations &amp; Trade-Offs:</strong> (1) <strong>Focused 8-POP Network:</strong> We operate 8 bare-metal 10 Gbps POPs rather than 100+ virtual country endpoints. (2) <strong>3 Direct Seats (+ Unlimited Behind Router):</strong> Standard accounts cover 3 simultaneous VPN devices directly, or your whole household behind one router <code>.conf</code>. (3) <strong>Protocol &amp; Port Scope:</strong> WireGuard-only (UDP <code>51820</code> / <code>443</code>) with no inbound port forwarding. (4) <strong>Physics &amp; CAPTCHAs:</strong> Intercontinental routes add propagation RTT (e.g., UK-to-Tokyo <code>198.5 ms</code> baseline), shared exit IPs occasionally trigger CAPTCHAs, native iOS App Store is pre-launch, and no residential <code>iperf3</code> lab throughput logs are claimed here.
+      </div>
+    </section>
+
     <!-- Frequently Asked Questions (Matched to sweeprcleaner.com/pricing) -->
     <section id="faqs" class="mt-28">
       <div class="text-center max-w-2xl mx-auto mb-16">
@@ -655,92 +751,41 @@
         <div class="glass-card p-6">
           <h3 class="font-bold text-gray-900 mb-2">Is my payment information safe?</h3>
           <p class="text-sm text-gray-600 leading-relaxed">
-            All transactions are handled directly by Stripe using industry-standard 256-bit SSL encryption. We never store your credit card information and never keep logs of what you browse.
+            All transactions are handled directly by Stripe using industry-standard 256-bit SSL encryption. We never store your credit card information and never keep logs of what you browse. Read our full <a href="/faq" class="text-emerald-700 font-semibold underline">Technical FAQ</a> for protocol and billing details.
           </p>
         </div>
       </div>
+
+      <dl class="grid md:grid-cols-3 gap-4 max-w-4xl mx-auto mt-8 text-xs text-gray-600 text-left">
+        <div class="p-4 rounded-xl bg-white border border-gray-200"><dt class="font-bold text-gray-900 mb-1">7-Currency Price-Lock</dt><dd>Flat renewal rates across GBP (&pound;74.99/yr), USD ($95.99/yr), EUR (&euro;89.99/yr), CAD, AUD, CHF, and JPY with 0% Year-2 renewal hike.</dd></div>
+        <div class="p-4 rounded-xl bg-white border border-gray-200"><dt class="font-bold text-gray-900 mb-1">Device &amp; Router Coverage</dt><dd>3 simultaneous client seats plus unlimited household devices behind a standard WireGuard router <code>.conf</code> export.</dd></div>
+        <div class="p-4 rounded-xl bg-white border border-gray-200"><dt class="font-bold text-gray-900 mb-1">Refund &amp; Add-On Terms</dt><dd>14-day 100% money-back guarantee on all plans; optional Wi-Fi Radar &amp; Smart-TV Shield add-on (+&pound;14.99/yr, +&pound;9.99/6mo, or +&pound;1.99/mo).</dd></div>
+      </dl>
     </section>
 
   </main>
 
   <!-- Footer -->
-  <footer class="mt-20 py-8 text-center text-gray-500 text-sm border-t border-gray-100">
-    <div class="flex flex-wrap items-center justify-center gap-6 mb-3 text-xs font-medium">
-      <a href="/" class="hover:text-gray-900 transition-colors">Home</a>
-      <a href="/pricing" class="hover:text-gray-900 transition-colors">Pricing</a>
-      <a rel="nofollow" href="/login" class="hover:text-gray-900 transition-colors">Login</a>
-      <a href="/refund" class="hover:text-gray-900 transition-colors">Refund Policy</a>
-      <a href="/terms" class="hover:text-gray-900 transition-colors">Terms of Service</a>
-      <a href="/privacy" class="hover:text-gray-900 transition-colors">Privacy Policy</a>
-      <a href="/support" class="hover:text-gray-900 transition-colors">Support &amp; Help</a>
+  <footer class="mt-auto py-8 text-center text-gray-500 text-sm border-t border-gray-100">
+    <div class="max-w-5xl mx-auto px-4 flex flex-wrap justify-center gap-x-5 gap-y-2 mb-4 text-xs font-medium">
+      <a href="/solutions" class="hover:text-emerald-600 transition-colors">ISP Solutions</a>
+      <a href="/setup" class="hover:text-emerald-600 transition-colors">Router Setup</a>
+      <a href="/guides" class="hover:text-emerald-600 transition-colors">Privacy Guides</a>
+      <a href="/vs" class="hover:text-emerald-600 transition-colors">VPN Comparisons</a>
+      <a href="/pricing" class="hover:text-emerald-600 transition-colors">Pricing</a>
+      <a href="/download" class="hover:text-emerald-600 transition-colors">Download</a>
+      <a href="/tools/leak-test" class="hover:text-emerald-600 transition-colors">Leak Test</a>
+      <a href="/tools/isp-throttling-test" class="hover:text-emerald-600 transition-colors">ISP Speed Test</a>
+      <a href="/faq" class="hover:text-emerald-600 transition-colors">Technical FAQ</a>
+      <a href="/ai-info" class="hover:text-emerald-600 transition-colors">Brand Fact Sheet</a>
+      <a href="/privacy" class="hover:text-emerald-600 transition-colors">Privacy Policy</a>
+      <a href="/refund" class="hover:text-emerald-600 transition-colors">Refund Policy</a>
+      <a href="/terms" class="hover:text-emerald-600 transition-colors">Terms of Service</a>
     </div>
-    <!-- Curated Editorial 12-Pillar Navigation Grid -->
-    <nav id="sweepr-curated-pillars-grid" aria-label="Curated Network Tools &amp; Engineering Guides" class="max-w-5xl mx-auto my-6 px-4 pt-6 border-t border-gray-100 text-left">
-      <div class="mb-4 text-center md:text-left">
-        <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400">Core Network Tools &amp; Engineering Guides</h3>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-xs text-gray-500">
-        <!-- Column 1: Diagnostic Tools & Authority -->
-        <div>
-          <h4 class="font-bold text-gray-900 mb-2.5 flex items-center gap-1.5">
-            <svg width="16" height="16" class="w-4 h-4 text-emerald-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-            <span>Diagnostic Tools</span>
-          </h4>
-          <ul class="space-y-2">
-            <li><a href="/tools/leak-test" class="hover:text-emerald-600 transition-colors">IP, DNS &amp; WebRTC Leak Test</a></li>
-            <li><a href="/tools/isp-throttling-test" class="hover:text-emerald-600 transition-colors">ISP Speed &amp; Throttling Test</a></li>
-            <li><a href="/tools/smart-tv-tracking-check" class="hover:text-emerald-600 transition-colors">Smart-TV ACR Tracker Check</a></li>
-            <li><a href="/tools/whats-on-my-wifi" class="hover:text-emerald-600 transition-colors">What's on My Wi-Fi?</a></li>
-            <li><a href="/tools/vpn-renewal-price-checker" class="hover:text-emerald-600 transition-colors">VPN Renewal Price Calculator</a></li>
-            <li><a href="/warrant-canary" class="hover:text-emerald-600 transition-colors font-medium text-gray-700">Cryptographic Warrant Canary</a></li>
-          </ul>
-        </div>
-        <!-- Column 2: Hardware & Router Setups -->
-        <div>
-          <h4 class="font-bold text-gray-900 mb-2.5 flex items-center gap-1.5">
-            <svg width="16" height="16" class="w-4 h-4 text-emerald-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"/></svg>
-            <span>Hardware Setup Guides</span>
-          </h4>
-          <ul class="space-y-2">
-            <li><a href="/setup/gl-inet-travel-router" class="hover:text-emerald-600 transition-colors">GL.iNet Travel Router WireGuard</a></li>
-            <li><a href="/setup/synology-nas-docker-vpn" class="hover:text-emerald-600 transition-colors">Synology NAS Docker WireGuard</a></li>
-            <li><a href="/setup/steam-deck-vpn" class="hover:text-emerald-600 transition-colors">Steam Deck &amp; SteamOS VPN</a></li>
-            <li><a href="/setup/nvidia-shield-tv-pro-wireguard" class="hover:text-emerald-600 transition-colors">NVIDIA Shield TV Pro WireGuard</a></li>
-            <li><a href="/setup" class="hover:text-emerald-600 transition-colors font-semibold text-emerald-700">All Router Setup Guides &rarr;</a></li>
-          </ul>
-        </div>
-        <!-- Column 3: Smart-TV & IoT Privacy Guides -->
-        <div>
-          <h4 class="font-bold text-gray-900 mb-2.5 flex items-center gap-1.5">
-            <svg width="16" height="16" class="w-4 h-4 text-emerald-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-            <span>Smart-TV Privacy Guides</span>
-          </h4>
-          <ul class="space-y-2">
-            <li><a href="/guides/stop-samsung-smart-tv-acr-tracking" class="hover:text-emerald-600 transition-colors">Block Samsung Smart-TV ACR</a></li>
-            <li><a href="/guides/stop-lg-smart-tv-acr-spying" class="hover:text-emerald-600 transition-colors">Stop LG webOS LivePlus Spying</a></li>
-            <li><a href="/guides/stop-roku-vizio-firetv-spying" class="hover:text-emerald-600 transition-colors">Block Roku, Vizio &amp; Fire TV ACR</a></li>
-            <li><a href="/guides" class="hover:text-emerald-600 transition-colors font-semibold text-emerald-700">All Smart-TV &amp; Wi-Fi Guides &rarr;</a></li>
-          </ul>
-        </div>
-        <!-- Column 4: ISP Network Solutions & Comparisons -->
-        <div>
-          <h4 class="font-bold text-gray-900 mb-2.5 flex items-center gap-1.5">
-            <svg width="16" height="16" class="w-4 h-4 text-emerald-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/></svg>
-            <span>ISP Solutions &amp; Reviews</span>
-          </h4>
-          <ul class="space-y-2">
-            <li><a href="/solutions/eduroam-campus-wifi-gaming-packet-loss" class="hover:text-emerald-600 transition-colors">Eduroam Gaming Packet Loss Fix</a></li>
-            <li><a href="/solutions/talktalk-fibre-wireguard-cgnat" class="hover:text-emerald-600 transition-colors">TalkTalk Fibre WireGuard &amp; CGNAT</a></li>
-            <li><a href="/solutions/gigaclear-rural-fibre-gaming-packet-loss" class="hover:text-emerald-600 transition-colors">Gigaclear Gaming Packet Loss Fix</a></li>
-            <li><a href="/vs/totalvpn" class="hover:text-emerald-600 transition-colors font-medium text-gray-700">SWEEPR VPN vs Total VPN</a></li>
-            <li><a href="/vs/protonvpn" class="hover:text-emerald-600 transition-colors font-medium text-gray-700">Proton VPN Alternative (2026)</a></li>
-            <li><a href="/alternatives/totalvpn" class="hover:text-emerald-600 transition-colors font-medium text-gray-700">TotalVPN Alternatives (2026)</a></li>
-            <li><a href="/solutions" class="hover:text-emerald-600 transition-colors font-semibold text-emerald-700">All ISP Solutions</a> &bull; <a href="/vs" class="hover:text-emerald-600 transition-colors font-semibold text-emerald-700">All Comparisons &rarr;</a></li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-        <p>&copy; 2026 SWEEPR VPN (UK Sole Trader). All rights reserved.</p>
+    <div class="mb-3">
+      <a href="https://www.google.com/preferences/source?q=sweeprvpn.com" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 text-xs font-semibold no-underline transition-colors">&#9733; Add SWEEPR VPN to Google Preferred Sources</a>
+    </div>
+    <p>&copy; 2026 SWEEPR VPN (UK Sole Trader). All rights reserved.</p>
   </footer>
 
   <script>

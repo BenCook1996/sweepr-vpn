@@ -7,13 +7,15 @@
  *  - ZERO PASTEBIN SYNDICATION (Mass pastebin links on telegra.ph / dpaste.org / catbox.moe are permanently disabled).
  *
  * Actions performed on every daily 10:00 AM run:
- *  1. Verifies `website/pad.xml` (v1.4.0, 715,264 bytes) and `website/keyword-opportunities.json` (`--audit`).
- *  2. Loads all canonical URLs from `website/sitemap.xml` (prioritizing Top GSC Pillars & Interactive Tools).
+ *  1. Verifies `website/pad.xml` (v2.6.0, 740,112 bytes) and `website/keyword-opportunities.json` (`--audit`).
+ *  2. Loads all canonical URLs from `website/sitemap.xml` (prioritizing Top GSC Pillars & Interactive Tools)
+ *     plus `PRUNED_410_PATHS` from `website/server.mjs`.
  *  3. Syncs verified Tier-1 software directory listings into the SWEEPR CRM (`project=vpn`) and verifies live backlinks.
- *  4. Pings Bing IndexNow (`www.bing.com/indexnow` & `api.indexnow.org/indexnow`) with up to 25 delta URLs (14-day cooldown).
+ *  4. Pings Bing, IndexNow, and Yandex (`www.bing.com/indexnow`, `api.indexnow.org/indexnow`, `yandex.com/indexnow`)
+ *     with up to 25 canonical delta URLs plus due HTTP 410 Gone pruned URLs (14-day cooldown).
  *
  * Usage:
- *   node c:\Users\Benjamin\Downloads\vpn\scripts\vpn-seo-drip.mjs
+ *   node scripts/vpn-seo-drip.mjs [--dry-run] [--no-push] [--skip-indexnow] [--ping-only] [--ping-410]
  */
 
 import fs from 'node:fs';
@@ -21,6 +23,14 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { DatabaseSync } from 'node:sqlite';
 import { execFileSync } from 'node:child_process';
+import { loadPruned410Urls, submitIndexNowWith410 } from './lib/indexnow-410.mjs';
+
+const cliArgs = process.argv.slice(2);
+const isDryRun = cliArgs.includes('--dry-run');
+const skipIndexNow = cliArgs.includes('--skip-indexnow');
+const pingOnly = cliArgs.includes('--ping-only');
+const force410 = cliArgs.includes('--ping-410');
+const noPush = isDryRun || cliArgs.includes('--no-push');
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const VPN_ROOT = path.resolve(__dirname, '..');
@@ -489,238 +499,260 @@ async function fetchExistingCrmState(localSeed = []) {
 
 async function runVpnDrip(targetCount = 300) {
   console.log('==========================================================================');
-  console.log(`  STARTING 6-HOURLY SWEEPR VPN WORKFLOW (TARGET: ${targetCount} BACKLINKS)`);
+  console.log(`  STARTING SWEEPR VPN SEO DRIP WORKFLOW (${pingOnly ? 'PING-ONLY' : `TARGET: ${targetCount} BACKLINKS`}${isDryRun ? ' | DRY-RUN' : ''})`);
   console.log('  STRICT RULE ENFORCED: ZERO EMAILS SENT — NO SMTP, NO OUTREACH EMAILS');
   console.log('==========================================================================');
 
-  const padInfo = await verifyAndProbePadXml();
-
-  // Run Automated Keyword Opportunities Quality Gate Self-Auditor (--audit)
-  try {
-    execFileSync(
-      process.execPath,
-      [path.join(__dirname, 'keyword-research-engine.mjs'), '--audit'],
-      { cwd: VPN_ROOT, stdio: 'inherit' }
-    );
-  } catch (kwErr) {
-    console.warn('[Keyword Quality Gate Notice]', kwErr?.message || kwErr);
-  }
-
-  const items = loadTargetItemsFromSitemap();
+  let padInfo = null;
   let vpnSeed = [];
-  if (fs.existsSync(VPN_SEED_PATH)) {
-    try {
-      vpnSeed = JSON.parse(fs.readFileSync(VPN_SEED_PATH, 'utf8'));
-    } catch {}
-  }
-
-  let sharedSeed = null;
-  if (fs.existsSync(SHARED_CRM_SEED_PATH)) {
-    try {
-      sharedSeed = JSON.parse(fs.readFileSync(SHARED_CRM_SEED_PATH, 'utf8'));
-    } catch {}
-  }
-
-  let centralSeed = null;
-  if (fs.existsSync(CENTRAL_CRM_SEED_PATH)) {
-    try {
-      centralSeed = JSON.parse(fs.readFileSync(CENTRAL_CRM_SEED_PATH, 'utf8'));
-    } catch {}
-  }
-
-  // Query live CRM first to check what sites and (platform, language, targetUrl) combinations were already posted
-  const crmState = await fetchExistingCrmState(vpnSeed);
-  console.log(
-    `[CRM Deduplication Check (project=vpn)] Live CRM Rows: ${crmState.crmTotalRows} | Already Tracked URLs: ${crmState.postedUrls.size} | Already Posted Combos: ${crmState.postedCombos.size} | Submitted Directories: ${[...crmState.postedDirectoryDomains].join(', ') || 'none'}`
-  );
-
-  // Ensure verified live directory listings (SaaSHub, DevHunt, Wellfound) & LaunchingNext are synced cleanly
-  const existingMsgIds = new Set(vpnSeed.map((e) => e.message_id));
-  for (const dirSub of VERIFIED_DIRECTORY_SUBMISSIONS) {
-    if (!existingMsgIds.has(dirSub.message_id)) {
-      vpnSeed.unshift(dirSub);
-      if (Array.isArray(sharedSeed)) sharedSeed.push(dirSub);
-      if (Array.isArray(centralSeed)) centralSeed.push(dirSub);
-    } else {
-      const found = vpnSeed.find((e) => e.message_id === dirSub.message_id);
-      if (found) {
-        found.url = dirSub.url;
-        found.how = dirSub.how;
-        if (dirSub.status === 'listed') found.status = 'listed';
-      }
-    }
-    if (!crmState.postedUrls.has(dirSub.url)) {
-      await syncEntryToCrm(dirSub, dirSub.status === 'listed' ? dirSub.url : null);
-      crmState.postedUrls.add(dirSub.url);
-    }
-  }
-  const staleSitePatent = vpnSeed.find((e) => e?.message_id === 'portal-vpn-sitepatent-com');
-  if (staleSitePatent && staleSitePatent.status === 'listed') {
-    staleSitePatent.status = 'pending';
-  }
-
-  // Normalize any prior seed items (ensure 'how' never contains the word 'email' and each 'who' is unique)
-  for (let k = 0; k < vpnSeed.length; k++) {
-    const prev = vpnSeed[k];
-    if (!prev || !prev.url) continue;
-    if (prev.how && prev.how.toLowerCase().includes('email')) {
-      prev.how = prev.how.replace(/\s*[—-]\s*No Email/gi, '').replace(/email/gi, 'Portal');
-      await syncEntryToCrm(prev, prev.url);
-    }
-    if (/^(Telegraph VPN Drip|DPaste VPN Spec|Catbox VPN Guide)\s*\([A-Z]{2}\)$/.test(prev.who)) {
-      const slug = prev.url.split('/').filter(Boolean).pop() || `seed-${k}`;
-      prev.who = `${prev.who} [${slug.slice(-14)}]`;
-      await syncEntryToCrm(prev, prev.url);
-    }
-  }
-
   const nowIso = new Date().toISOString();
   const runTag = nowIso.slice(0, 13).replace('T', '-');
   let completed = 0;
 
-  // HARD GUARDRAIL: Mass pastebin syndication (telegra.ph / dpaste.org / catbox.moe) is permanently paused
-  // to comply with Google Search Spam Policies (Link Schemes) and protect Bing/Google domain trust.
-  if (targetCount > 0) {
-    console.log('[Guardrail] Mass pastebin syndication (telegra.ph / dpaste.org / catbox.moe) is paused. Skipping pastebin loop.');
-  }
+  const items = loadTargetItemsFromSitemap();
 
-  fs.writeFileSync(VPN_SEED_PATH, JSON.stringify(vpnSeed, null, 2), 'utf8');
-  if (Array.isArray(sharedSeed)) {
+  if (!pingOnly) {
+    padInfo = await verifyAndProbePadXml();
+
+    // Run Automated Keyword Opportunities Quality Gate Self-Auditor (--audit, read-only HTML)
     try {
-      fs.writeFileSync(SHARED_CRM_SEED_PATH, JSON.stringify(sharedSeed, null, 2), 'utf8');
-    } catch {}
-  }
-  if (Array.isArray(centralSeed)) {
-    try {
-      fs.writeFileSync(CENTRAL_CRM_SEED_PATH, JSON.stringify(centralSeed, null, 2), 'utf8');
-    } catch {}
-  }
+      const kwArgs = isDryRun ? ['--audit', '--dry-run'] : ['--audit', '--json-only'];
+      execFileSync(
+        process.execPath,
+        [path.join(__dirname, 'keyword-research-engine.mjs'), ...kwArgs],
+        { cwd: VPN_ROOT, stdio: 'inherit' }
+      );
+    } catch (kwErr) {
+      console.warn('[Keyword Quality Gate Notice]', kwErr?.message || kwErr);
+    }
 
-  // Trigger CRM Backlink Verification on Railway Multi-Project CRM (project=vpn)
-  const verifyBody = JSON.stringify({ project_id: 'vpn', only: 'unchecked', limit: 1000 });
-  await fetch(`${RAILWAY_CRM_BASE}/api/crm/seo/backlinks/verify?project=vpn`, {
-    method: 'POST',
-    headers: buildCrmHeaders(RAILWAY_CRM_BASE),
-    body: verifyBody,
-    signal: AbortSignal.timeout(10000)
-  }).catch(() => {});
-
-  console.log(`[SWEEPR VPN Drip ${runTag}] Published, logged & verified ${completed} new dofollow backlinks. Total VPN CRM outreach entries: ${vpnSeed.length}`);
-
-  // Submit delta-only newly created/modified URLs (max 25 per run, 14-day cooldown) to Bing IndexNow API
-  // Prioritizes pending queue + localized DE/FR/ES & /vs/totalvpn priority URLs before crawling the remaining sitemap
-  let indexStatus = { sitemapUrls: 0, deltaSubmitted: 0, bingRes: 'N/A', indexNowRes: 'N/A', yandexRes: 'N/A' };
-  try {
-    let queue = {
-      indexnow_key: INDEXNOW_KEY,
-      gsc_requested: [],
-      bing_requested: [],
-      directory_forms_submitted: ['https://www.saashub.com/sweepr-vpn/added', 'https://www.launchingnext.com/submit/'],
-      last_indexnow_ping: null,
-      last_sitemap_ping: null,
-      pending_urls: [],
-      indexnow_submitted_at: {}
-    };
-    if (fs.existsSync(INDEXING_QUEUE_PATH)) {
+    if (fs.existsSync(VPN_SEED_PATH)) {
       try {
-        queue = { ...queue, ...JSON.parse(fs.readFileSync(INDEXING_QUEUE_PATH, 'utf8')) };
+        vpnSeed = JSON.parse(fs.readFileSync(VPN_SEED_PATH, 'utf8'));
       } catch {}
     }
-    if (!queue.indexnow_submitted_at || typeof queue.indexnow_submitted_at !== 'object') {
-      queue.indexnow_submitted_at = {};
+
+    // Filter out any legacy sitepatent.com entries in memory (never mutating disk during --dry-run)
+    vpnSeed = vpnSeed.filter(
+      (e) =>
+        e &&
+        String(e.website || '').trim().toLowerCase() !== 'sitepatent.com' &&
+        e.message_id !== 'portal-vpn-sitepatent-com'
+    );
+
+    let sharedSeed = null;
+    if (fs.existsSync(SHARED_CRM_SEED_PATH)) {
+      try {
+        sharedSeed = JSON.parse(fs.readFileSync(SHARED_CRM_SEED_PATH, 'utf8'));
+      } catch {}
     }
 
-    const sitemapUrls = items.map((it) => it.url);
-    indexStatus.sitemapUrls = sitemapUrls.length;
+    let centralSeed = null;
+    if (fs.existsSync(CENTRAL_CRM_SEED_PATH)) {
+      try {
+        centralSeed = JSON.parse(fs.readFileSync(CENTRAL_CRM_SEED_PATH, 'utf8'));
+      } catch {}
+    }
 
-    const nowMs = Date.now();
-    const FOURTEEN_DAYS_MS = 14 * 24 * 60 * 60 * 1000;
-    const candidatePool = [
-      ...(Array.isArray(queue.pending_urls) ? queue.pending_urls : []),
-      ...Array.from(GSC_PRIORITY_URLS).filter((u) => sitemapUrls.includes(u)),
-      ...sitemapUrls.slice().reverse()
-    ];
-    const seen = new Set();
-    const unpingedUrls = [];
-    for (const u of candidatePool) {
-      if (!u || seen.has(u)) continue;
-      seen.add(u);
-      const lastPingIso = queue.indexnow_submitted_at[u];
-      const lastPingMs = lastPingIso ? Date.parse(lastPingIso) : 0;
-      if (!lastPingMs || (nowMs - lastPingMs) > FOURTEEN_DAYS_MS) {
-        unpingedUrls.push(u);
+    // Query live CRM first to check what sites and (platform, language, targetUrl) combinations were already posted
+    const crmState = await fetchExistingCrmState(vpnSeed);
+    console.log(
+      `[CRM Deduplication Check (project=vpn)] Live CRM Rows: ${crmState.crmTotalRows} | Already Tracked URLs: ${crmState.postedUrls.size} | Already Posted Combos: ${crmState.postedCombos.size} | Submitted Directories: ${[...crmState.postedDirectoryDomains].join(', ') || 'none'}`
+    );
+
+    // Ensure verified live directory listings (SaaSHub, DevHunt, Wellfound) & LaunchingNext are synced cleanly
+    const existingMsgIds = new Set(vpnSeed.map((e) => e.message_id));
+    for (const dirSub of VERIFIED_DIRECTORY_SUBMISSIONS) {
+      if (!existingMsgIds.has(dirSub.message_id)) {
+        vpnSeed.unshift(dirSub);
+        if (Array.isArray(sharedSeed)) sharedSeed.push(dirSub);
+        if (Array.isArray(centralSeed)) centralSeed.push(dirSub);
+      } else {
+        const found = vpnSeed.find((e) => e.message_id === dirSub.message_id);
+        if (found) {
+          found.url = dirSub.url;
+          found.how = dirSub.how;
+          if (dirSub.status === 'listed') found.status = 'listed';
+        }
+      }
+      if (!crmState.postedUrls.has(dirSub.url)) {
+        if (!isDryRun) {
+          await syncEntryToCrm(dirSub, dirSub.status === 'listed' ? dirSub.url : null);
+        }
+        crmState.postedUrls.add(dirSub.url);
       }
     }
 
-    const deltaBatch = unpingedUrls.slice(0, 25);
-    indexStatus.deltaSubmitted = deltaBatch.length;
+    // Normalize any prior seed items (ensure 'how' never contains the word 'email' and each 'who' is unique)
+    for (let k = 0; k < vpnSeed.length; k++) {
+      const prev = vpnSeed[k];
+      if (!prev || !prev.url) continue;
+      if (prev.how && prev.how.toLowerCase().includes('email')) {
+        prev.how = prev.how.replace(/\s*[—-]\s*No Email/gi, '').replace(/email/gi, 'Portal');
+        if (!isDryRun) await syncEntryToCrm(prev, prev.url);
+      }
+      if (/^(Telegraph VPN Drip|DPaste VPN Spec|Catbox VPN Guide)\s*\([A-Z]{2}\)$/.test(prev.who)) {
+        const slug = prev.url.split('/').filter(Boolean).pop() || `seed-${k}`;
+        prev.who = `${prev.who} [${slug.slice(-14)}]`;
+        if (!isDryRun) await syncEntryToCrm(prev, prev.url);
+      }
+    }
 
-    let bingRes = 'SKIPPED (0 delta URLs due)';
-    let indexNowRes = 'SKIPPED (0 delta URLs due)';
-    let yandexRes = 'SKIPPED (0 delta URLs due)';
+    // HARD GUARDRAIL: Mass pastebin syndication (telegra.ph / dpaste.org / catbox.moe) is permanently paused
+    // to comply with Google Search Spam Policies (Link Schemes) and protect Bing/Google domain trust.
+    if (targetCount > 0) {
+      console.log('[Guardrail] Mass pastebin syndication (telegra.ph / dpaste.org / catbox.moe) is paused. Skipping pastebin loop.');
+    }
 
-    if (deltaBatch.length > 0) {
-      const indexNowPayload = {
-        host: 'sweeprvpn.com',
-        key: queue.indexnow_key || INDEXNOW_KEY,
-        keyLocation: `https://sweeprvpn.com/${queue.indexnow_key || INDEXNOW_KEY}.txt`,
-        urlList: deltaBatch
+    if (!isDryRun) {
+      fs.writeFileSync(VPN_SEED_PATH, JSON.stringify(vpnSeed, null, 2), 'utf8');
+      if (Array.isArray(sharedSeed)) {
+        try {
+          fs.writeFileSync(SHARED_CRM_SEED_PATH, JSON.stringify(sharedSeed, null, 2), 'utf8');
+        } catch {}
+      }
+      if (Array.isArray(centralSeed)) {
+        try {
+          fs.writeFileSync(CENTRAL_CRM_SEED_PATH, JSON.stringify(centralSeed, null, 2), 'utf8');
+        } catch {}
+      }
+
+      // Trigger CRM Backlink Verification on Railway Multi-Project CRM (project=vpn)
+      const verifyBody = JSON.stringify({ project_id: 'vpn', only: 'unchecked', limit: 1000 });
+      await fetch(`${RAILWAY_CRM_BASE}/api/crm/seo/backlinks/verify?project=vpn`, {
+        method: 'POST',
+        headers: buildCrmHeaders(RAILWAY_CRM_BASE),
+        body: verifyBody,
+        signal: AbortSignal.timeout(10000)
+      }).catch(() => {});
+    } else {
+      console.log(`[DRY-RUN] Skipped CRM SQLite/HTTP writes, outreach-seed JSON writes, and CRM backlink verify POST (${vpnSeed.length} clean seed entries evaluated).`);
+    }
+
+    console.log(`[SWEEPR VPN Drip ${runTag}] Published, logged & verified ${completed} new dofollow backlinks. Total VPN CRM outreach entries: ${vpnSeed.length}`);
+  } else {
+    console.log('[PING-ONLY] Skipping PAD probe, keyword audit, and CRM directory sync; executing IndexNow + 410 Gone ping stage only.');
+  }
+
+  // Submit delta-only newly created/modified URLs (max 25 per run, 14-day cooldown) + HTTP 410 Gone pruned URLs to IndexNow
+  let indexStatus = {
+    sitemapUrls: items.length,
+    deltaSubmitted: 0,
+    gone410Submitted: 0,
+    total410Urls: 0,
+    bingRes: 'SKIPPED (--skip-indexnow)',
+    indexNowRes: 'SKIPPED (--skip-indexnow)',
+    yandexRes: 'SKIPPED (--skip-indexnow)'
+  };
+  if (!skipIndexNow) {
+    try {
+      let queue = {
+        indexnow_key: INDEXNOW_KEY,
+        gsc_requested: [],
+        bing_requested: [],
+        directory_forms_submitted: ['https://www.saashub.com/sweepr-vpn/added', 'https://www.launchingnext.com/submit/'],
+        last_indexnow_ping: null,
+        last_410_ping: null,
+        last_sitemap_ping: null,
+        pending_urls: [],
+        indexnow_submitted_at: {},
+        pruned_410_submitted_at: {}
+      };
+      if (fs.existsSync(INDEXING_QUEUE_PATH)) {
+        try {
+          queue = { ...queue, ...JSON.parse(fs.readFileSync(INDEXING_QUEUE_PATH, 'utf8')) };
+        } catch {}
+      }
+      if (!queue.indexnow_submitted_at || typeof queue.indexnow_submitted_at !== 'object') {
+        queue.indexnow_submitted_at = {};
+      }
+      if (!queue.pruned_410_submitted_at || typeof queue.pruned_410_submitted_at !== 'object') {
+        queue.pruned_410_submitted_at = {};
+      }
+
+      const sitemapUrls = items.map((it) => it.url);
+      const pruned410Urls = loadPruned410Urls({ serverMjsPath: path.join(WEBSITE_DIR, 'server.mjs') });
+
+      const nowMs = Date.now();
+      const FOURTEEN_DAYS_MS = 14 * 24 * 60 * 60 * 1000;
+      const candidatePool = [
+        ...(Array.isArray(queue.pending_urls) ? queue.pending_urls : []),
+        ...Array.from(GSC_PRIORITY_URLS).filter((u) => sitemapUrls.includes(u)),
+        ...sitemapUrls.slice().reverse()
+      ];
+      const seen = new Set();
+      const unpingedUrls = [];
+      for (const u of candidatePool) {
+        if (!u || seen.has(u)) continue;
+        seen.add(u);
+        const lastPingIso = queue.indexnow_submitted_at[u];
+        const lastPingMs = lastPingIso ? Date.parse(lastPingIso) : 0;
+        if (!lastPingMs || (nowMs - lastPingMs) > FOURTEEN_DAYS_MS) {
+          unpingedUrls.push(u);
+        }
+      }
+
+      const pingRes = await submitIndexNowWith410({
+        queue,
+        canonicalDeltaUrls: unpingedUrls,
+        pruned410Urls,
+        key: INDEXNOW_KEY,
+        dryRun: isDryRun,
+        force410
+      });
+
+      const bingRes = pingRes.responses['https://www.bing.com/indexnow'] || 'N/A';
+      const indexNowRes = pingRes.responses['https://api.indexnow.org/indexnow'] || 'N/A';
+      const yandexRes = pingRes.responses['https://yandex.com/indexnow'] || 'N/A';
+
+      if (!isDryRun) {
+        const nextQueue = pingRes.updatedQueue;
+        nextQueue.pending_urls = unpingedUrls.slice(pingRes.canonicalBatch.length);
+        nextQueue.last_sitemap_ping = new Date().toISOString();
+        fs.writeFileSync(INDEXING_QUEUE_PATH, JSON.stringify(nextQueue, null, 2), 'utf8');
+        queue = nextQueue;
+      }
+
+      indexStatus = {
+        sitemapUrls: sitemapUrls.length,
+        deltaSubmitted: pingRes.canonicalBatch.length,
+        gone410Submitted: pingRes.due410Batch.length,
+        total410Urls: pingRes.total410Urls,
+        bingRes,
+        indexNowRes,
+        yandexRes
       };
 
-      [bingRes, indexNowRes, yandexRes] = await Promise.all([
-        fetch('https://www.bing.com/indexnow', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json; charset=utf-8' },
-          body: JSON.stringify(indexNowPayload),
-          signal: AbortSignal.timeout(15000)
-        }).then((r) => `HTTP ${r.status}`).catch((e) => `Err: ${e.message}`),
-        fetch('https://api.indexnow.org/indexnow', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json; charset=utf-8' },
-          body: JSON.stringify(indexNowPayload),
-          signal: AbortSignal.timeout(15000)
-        }).then((r) => `HTTP ${r.status}`).catch((e) => `Err: ${e.message}`),
-        fetch('https://yandex.com/indexnow', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json; charset=utf-8' },
-          body: JSON.stringify(indexNowPayload),
-          signal: AbortSignal.timeout(15000)
-        }).then((r) => `HTTP ${r.status}`).catch((e) => `Err: ${e.message}`)
-      ]);
-
-      const pingIso = new Date().toISOString();
-      for (const u of deltaBatch) {
-        queue.indexnow_submitted_at[u] = pingIso;
+      console.log(
+        `[Bing & Yandex IndexNow Delta + 410 Gone (sweeprvpn.com)] ${isDryRun ? '[DRY-RUN] ' : ''}Canonical delta: ${pingRes.canonicalBatch.length} (of ${sitemapUrls.length} total, ${Math.max(0, unpingedUrls.length - pingRes.canonicalBatch.length)} remaining) | 410 Gone pruned URLs: ${pingRes.due410Batch.length}/${pingRes.total410Urls}`
+      );
+      if (isDryRun && pingRes.due410Batch.length > 0) {
+        console.log(`  - Sample 410 Gone URLs (${pingRes.due410Batch.length}): ${pingRes.due410Batch.slice(0, 5).join(', ')}${pingRes.due410Batch.length > 5 ? ', ...' : ''}`);
       }
-      queue.last_indexnow_ping = pingIso;
+      console.log(`  - www.bing.com/indexnow: ${bingRes}`);
+      console.log(`  - api.indexnow.org/indexnow: ${indexNowRes}`);
+      console.log(`  - yandex.com/indexnow: ${yandexRes}`);
+    } catch (err) {
+      console.error('[IndexNow Queue Error]', err.message);
     }
-
-    queue.pending_urls = unpingedUrls.slice(deltaBatch.length);
-    queue.last_sitemap_ping = new Date().toISOString();
-    fs.writeFileSync(INDEXING_QUEUE_PATH, JSON.stringify(queue, null, 2), 'utf8');
-
-    indexStatus = { sitemapUrls: sitemapUrls.length, deltaSubmitted: deltaBatch.length, bingRes, indexNowRes, yandexRes };
-
-    console.log(`[Bing & Yandex IndexNow Delta (sweeprvpn.com)] Submitted ${deltaBatch.length} delta URLs (of ${sitemapUrls.length} total in sitemap, ${queue.pending_urls.length} remaining in rolling queue):`);
-    console.log(`  - www.bing.com/indexnow: ${bingRes}`);
-    console.log(`  - api.indexnow.org/indexnow: ${indexNowRes}`);
-    console.log(`  - yandex.com/indexnow: ${yandexRes}`);
-  } catch (err) {
-    console.error('[IndexNow Queue Error]', err.message);
+  } else {
+    console.log('[IndexNow] Skipped IndexNow submission (--skip-indexnow); deferring to post-push ping stage.');
   }
 
   console.log('\n==========================================================================');
   console.log('  DAILY SWEEPR VPN DIRECTORY, PAD XML & DELTA INDEXING SUMMARY');
   console.log('==========================================================================');
-  console.log(`✓ PAD XML Specification: v${padInfo?.version || '2.6.0'} (${padInfo?.sizeBytes || '740112'} bytes, HTTPS live probe checked)`);
-  console.log(`✓ Verified Directory Submissions Synced: ${VERIFIED_DIRECTORY_SUBMISSIONS.length} authority listings (Pastebin spam disabled: ${completed})`);
-  console.log(`✓ Search Indexing (Delta-Only): ${indexStatus.deltaSubmitted} delta URLs submitted via IndexNow (out of ${indexStatus.sitemapUrls} canonical URLs)`);
-  console.log(`✓ CRM Database Sync: Upserted to Railway Multi-Project CRM, Cleaner CRM, and local SQLite (Total VPN entries: ${vpnSeed.length})`);
-  console.log(`✓ Live Backlink Verification: Triggered /api/crm/seo/backlinks/verify?project=vpn`);
+  if (!pingOnly) {
+    console.log(`✓ PAD XML Specification: v${padInfo?.version || '2.6.0'} (${padInfo?.sizeBytes || '740112'} bytes, HTTPS live probe checked)`);
+    console.log(`✓ Verified Directory Submissions Synced: ${VERIFIED_DIRECTORY_SUBMISSIONS.length} authority listings (Pastebin spam disabled: ${completed})`);
+    console.log(`✓ CRM Database Sync: ${isDryRun ? '[DRY-RUN skipped]' : 'Upserted to Railway Multi-Project CRM, Cleaner CRM, and local SQLite'} (Total VPN entries: ${vpnSeed.length})`);
+    console.log(`✓ Live Backlink Verification: ${isDryRun ? '[DRY-RUN skipped]' : 'Triggered /api/crm/seo/backlinks/verify?project=vpn'}`);
+  }
+  console.log(`✓ Search Indexing (Delta-Only + 410 Gone): ${indexStatus.deltaSubmitted} canonical delta URLs + ${indexStatus.gone410Submitted}/${indexStatus.total410Urls} 410 Gone URLs (${skipIndexNow ? 'skipped via --skip-indexnow' : isDryRun ? 'dry-run' : 'submitted'})`);
   console.log(`✓ STRICT RULE AUDIT: 0 emails sent. No SMTP / no email outreach.`);
   console.log('==========================================================================\n');
 
-  if (!process.argv.includes('--no-push')) {
+  if (!noPush && !pingOnly) {
     try {
       const statusOut = execFileSync(
         'git',
@@ -759,7 +791,7 @@ async function runVpnDrip(targetCount = 300) {
         );
         execFileSync(
           'git',
-          ['commit', '-m', `chore(seo): sync verified directory seed & delta indexing queue (${indexStatus.deltaSubmitted} URLs)`],
+          ['commit', '-m', `chore(seo): sync verified directory seed & delta indexing queue (${indexStatus.deltaSubmitted} canonical + ${indexStatus.gone410Submitted} 410 URLs)`],
           { cwd: VPN_ROOT, stdio: 'inherit' }
         );
         execFileSync('git', ['push', 'origin', 'main'], { cwd: VPN_ROOT, stdio: 'inherit' });

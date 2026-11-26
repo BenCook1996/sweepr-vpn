@@ -8,7 +8,7 @@
  *
  * Options:
  *   --tier=<1,2,3,4>     Filter tests by tier (comma-separated, e.g. --tier=1,3)
- *   --feature=<F1..F22>  Filter tests by feature (comma-separated, e.g. --feature=F1,F4)
+ *   --feature=<F1..F28>  Filter tests by feature (comma-separated, e.g. --feature=F1,F4)
  *   --verbose            Print detailed test execution details and stack traces
  *   --summary            Print tabular execution summary breakdown
  *   --self-test          Validate test registry, syntax, and harness without starting server
@@ -82,7 +82,7 @@ ${C.bold}USAGE:${C.reset}
 
 ${C.bold}OPTIONS:${C.reset}
   ${C.green}--tier=1,2,3,4${C.reset}     Filter tests by tier (comma-separated)
-  ${C.green}--feature=F1..F22${C.reset}  Filter tests by feature (comma-separated)
+  ${C.green}--feature=F1..F28${C.reset}  Filter tests by feature (comma-separated)
   ${C.green}--verbose${C.reset}          Print verbose assertion and failure output
   ${C.green}--summary${C.reset}          Print execution summary breakdown table
   ${C.green}--self-test${C.reset}        Validate test definitions, registry, and helpers (no server needed)
@@ -127,27 +127,27 @@ async function runSelfTest() {
 
   // 1. Check Registry Counts
   console.log(`${C.bold}1. Test Registry Inventory Checks:${C.reset}`);
-  check(`Tier 1 has >= 110 tests (actual: ${tier1Tests.length})`, () => {
-    helpers.assertGreaterThanOrEqual(tier1Tests.length, 110);
+  check(`Tier 1 has >= 140 tests (actual: ${tier1Tests.length})`, () => {
+    helpers.assertGreaterThanOrEqual(tier1Tests.length, 140);
   });
-  check(`Tier 2 has >= 110 tests (actual: ${tier2Tests.length})`, () => {
-    helpers.assertGreaterThanOrEqual(tier2Tests.length, 110);
+  check(`Tier 2 has >= 140 tests (actual: ${tier2Tests.length})`, () => {
+    helpers.assertGreaterThanOrEqual(tier2Tests.length, 140);
   });
-  check(`Tier 3 has >= 22 tests (actual: ${tier3Tests.length})`, () => {
-    helpers.assertGreaterThanOrEqual(tier3Tests.length, 22);
+  check(`Tier 3 has >= 28 tests (actual: ${tier3Tests.length})`, () => {
+    helpers.assertGreaterThanOrEqual(tier3Tests.length, 28);
   });
-  check(`Tier 4 has >= 11 scenarios (actual: ${tier4Scenarios.length})`, () => {
-    helpers.assertGreaterThanOrEqual(tier4Scenarios.length, 11);
+  check(`Tier 4 has >= 14 scenarios (actual: ${tier4Scenarios.length})`, () => {
+    helpers.assertGreaterThanOrEqual(tier4Scenarios.length, 14);
   });
 
   const totalRegistry = tier1Tests.length + tier2Tests.length + tier3Tests.length + tier4Scenarios.length;
-  check(`Total registered tests >= 253 (actual: ${totalRegistry})`, () => {
-    helpers.assertGreaterThanOrEqual(totalRegistry, 253);
+  check(`Total registered tests >= 322 (actual: ${totalRegistry})`, () => {
+    helpers.assertGreaterThanOrEqual(totalRegistry, 322);
   });
 
   // 2. Feature Coverage Verification
-  console.log(`\n${C.bold}2. Feature Inventory Mapping (F1 to F22):${C.reset}`);
-  for (let f = 1; f <= 22; f++) {
+  console.log(`\n${C.bold}2. Feature Inventory Mapping (F1 to F28):${C.reset}`);
+  for (let f = 1; f <= 28; f++) {
     const featureKey = `F${f}`;
     const t1Matches = tier1Tests.filter((t) => t.feature === featureKey || t.id.startsWith(`F${String(f).padStart(2, '0')}`));
     const t2Matches = tier2Tests.filter((t) => t.feature === featureKey || t.id.startsWith(`F${String(f).padStart(2, '0')}`));
@@ -207,6 +207,17 @@ async function runSelfTest() {
     helpers.assertTrue(res.isValidXml);
     helpers.assertEqual(res.totalUrls, 2);
     helpers.assertEqual(res.lastmods['https://sweeprvpn.com/'], '2026-11-13');
+  });
+
+  check('getAuthoritativePillars() lists 62 canonicals without deleted hyperoptic/talktalk-p2p', () => {
+    const pillars = helpers.getAuthoritativePillars();
+    helpers.assertEqual(pillars.length, 62);
+    helpers.assertTrue(pillars.includes('solutions/talktalk-fibre-wireguard-cgnat.html'));
+    helpers.assertTrue(pillars.includes('vs/totalvpn.html'));
+    helpers.assertFalse(pillars.includes('solutions/hyperoptic-broadband-isp-throttling.html'));
+    helpers.assertFalse(pillars.includes('solutions/talktalk-p2p-port-forwarding.html'));
+    helpers.assertEqual(typeof helpers.fetchBinary, 'function');
+    helpers.assertEqual(typeof helpers.getServerStateDir, 'function');
   });
 
   // Self-Test Summary
@@ -295,6 +306,8 @@ async function runExecution(flags) {
   }
 
   // Execution tracking
+  const stateDir = serverInstance?.stateDir || process.env.SWEEPR_STATE_DIR || null;
+  const testEnv = stateDir ? { ...process.env, SWEEPR_STATE_DIR: stateDir } : { ...process.env };
   const results = [];
   let passedCount = 0;
   let failedCount = 0;
@@ -308,7 +321,7 @@ async function runExecution(flags) {
     let error = null;
 
     try {
-      await test.fn({ baseUrl, helpers, env: process.env });
+      await test.fn({ baseUrl, helpers, stateDir, env: testEnv });
       passedCount++;
     } catch (err) {
       status = 'FAIL';

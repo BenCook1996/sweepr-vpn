@@ -1451,54 +1451,55 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 ## 2026-11-26 — Daily Technical SEO, Crawlability & PageSpeed Audit & Auto-Optimization Pass
 
 ### Executive Summary
-- **Overall Scores**: Crawlability **100/100**, Technical SEO **100/100**, PageSpeed & CWV **100/100** across **92 Canonical Pages**.
+- **Overall Scores**: Crawlability **100/100**, Technical SEO **97/100**, PageSpeed & CWV **100/100** across **93 Canonical Pages**.
 - **Auto-Optimizations Executed**:
-  - Synchronized sitemap.xml with 93 canonical URLs (content-hash <lastmod>: 0 modified today)
-  - Synchronized llms.txt & llms-full.txt with all 63 pSEO guides and live 04:00 AM WireGuard/ACR telemetry for GEO AI citations
+  - Synchronized sitemap.xml with 94 canonical URLs (content-hash <lastmod>: 0 modified today)
+  - Synchronized llms.txt & llms-full.txt with all 62 pSEO guides and live 04:00 AM WireGuard/ACR telemetry for GEO AI citations
 
 ### Category Scorecards & Verifications
 
 #### 1. Crawlability & Indexability (100/100)
-- **Sitemap Completeness & Content-Hash Freshness**: PASS — 93 canonical URLs registered (0 thin/duplicate variants consolidated via 301/noindex)
-- **GEO / LLM Discovery Manifests (llms.txt & llms-full.txt)**: PASS — Updated both manifests with 93 canonical URLs, 14 canonical FAQs, and live WireGuard/ACR proof (0 non-canonical links)
-- **Search Engine Indexing Queue (Delta-Only)**: PASS — 0 un-pinged/modified delta URLs queued (out of 93 total canonical URLs)
+- **Sitemap Completeness & Content-Hash Freshness**: PASS — 94 canonical URLs registered (0 thin/duplicate variants consolidated via 301/noindex)
+- **GEO / LLM Discovery Manifests (llms.txt & llms-full.txt)**: PASS — Updated both manifests with 94 canonical URLs, 14 canonical FAQs, and live WireGuard/ACR proof (0 non-canonical links)
+- **Search Engine Indexing Queue (Delta-Only)**: PASS — 2 un-pinged/modified delta URLs queued (out of 94 total canonical URLs)
 - **robots.txt Sitemap Directive**: PASS — Valid sitemap directive points to https://sweeprvpn.com/sitemap.xml
-- **robots.txt AI Crawler Allowances (GEO)**: PASS — All 7 major AI search bots explicitly permitted
+- **robots.txt AI Crawler Allowances (GEO)**: PASS — All 8 major AI search bots explicitly permitted
 - **robots.txt Crawl-Budget Protections**: PASS — Internal APIs, user portals, qr-setup, CRO studios & ?app=1 webview embeds disallowed
-- **Utility & Prototype Pages Noindex Guard**: PASS — All 16 internal utility and prototype pages properly shielded with noindex
+- **Utility & Prototype Pages Noindex Guard**: PASS — All 18 internal utility and prototype pages properly shielded with noindex
 - **PAD 4.0 XML Feed**: PASS — Valid PAD 4.0 metadata for software directory syndication
 - **Public Smart-TV ACR Blocklist Asset**: PASS — smart-tv-acr-blocklist.txt verified for Pi-hole/AdGuard Home & GEO citations
 - **301 Consolidation & Eduroam Hub Redirects (server.mjs)**: PASS — All consolidated noindex variants and Eduroam duplicate slugs 301-redirected to canonical hubs
-- **Historical GSC URLs & 301 Redirect Target Guard**: PASS — Verified 76 historical GSC URLs, 102 301 rules, and 92 .html canonical variants via resolveCanonical301 (0 404s, 0 redirect chains)
-- **Internal Link Equity & Click-Depth Distribution**: PASS — All 92 pages passed (0 orphans, min inlinks=5, avg=23.4, max depth=2; tools=leak-test:85/54, isp-throttling-test:91/61, smart-tv-tracking-check:30/27, whats-on-my-wifi:30/27, vpn-renewal-price-checker:28/26)
+- **Historical GSC URLs & 301 Redirect Target Guard**: PASS — Verified 76 historical GSC URLs, 103 301 rules, and 93 .html canonical variants via resolveCanonical301 (0 404s, 0 redirect chains)
+- **Internal Link Equity & Click-Depth Distribution**: PASS — All 93 pages passed (0 orphans, min inlinks=5, avg=21.8, max depth=2; tools=leak-test:86/55, isp-throttling-test:92/61, smart-tv-tracking-check:29/28, whats-on-my-wifi:29/28, vpn-renewal-price-checker:28/27)
 
-#### 2. Technical SEO & Rich Schemas (100/100)
-- **Page Titles**: PASS — All 92 pages have valid, descriptive <title> tags
-- **Meta Descriptions**: PASS — All 92 pages have compelling, search-optimized meta descriptions
-- **Canonical URLs**: PASS — All 92 pages have exact self-referencing canonical tags
-- **Robots Snippet Controls**: PASS — All 92 pages specify max-image-preview:large for search & Discover snippets
-- **JSON-LD Structured Data**: PASS — All 92 pages inject verified Schema.org JSON-LD structured data
-- **H1 Heading Hierarchy**: PASS — All 92 pages have exactly 1 descriptive <h1> heading
-- **Document Landmarks & Heading Continuity**: PASS — All 92 pages declare <html lang>, <main>, and sequential heading levels
-- **OpenGraph Social Metadata**: PASS — All 92 pages include complete OpenGraph tags (title, desc, url, og:image, og:image:alt, og:locale)
-- **Twitter Card Metadata**: PASS — All 92 pages include complete summary_large_image Twitter card tags
-- **Mobile Theme-Color Support**: PASS — All 92 pages declare theme-color for mobile chrome styling
-- **Google Analytics 4 (G-7D28EEMNXX) Coverage**: PASS — All 92 canonical pages include active GA4 telemetry
-- **Internal Link Integrity**: PASS — All internal links across 92 pages resolve to valid routes (0 broken links)
-- **HTML Template Corruption & Duplicate Link Guard**: PASS — All 92 pages verified free of >NaN<, >undefined<, &amp;amp;, malformed <a> markup, and duplicate <main>/related-guide links
+#### 2. Technical SEO & Rich Schemas (97/100)
+- **Page Titles**: PASS — All 93 pages have valid, descriptive <title> tags
+- **Meta Descriptions**: PASS — All 93 pages have compelling, search-optimized meta descriptions
+- **Canonical URLs**: PASS — All 93 pages have exact self-referencing canonical tags
+- **Robots Snippet Controls**: PASS — All 93 pages specify max-image-preview:large for search & Discover snippets
+- **JSON-LD Structured Data**: PASS — All 93 pages inject verified Schema.org JSON-LD structured data
+- **H1 Heading Hierarchy**: PASS — All 93 pages have exactly 1 descriptive <h1> heading
+- **Document Landmarks & Heading Continuity**: PASS — All 93 pages declare <html lang>, <main>, and sequential heading levels
+- **OpenGraph Social Metadata**: PASS — All 93 pages include complete OpenGraph tags (title, desc, url, og:image, og:image:alt, og:locale)
+- **Twitter Card Metadata**: PASS — All 93 pages include complete summary_large_image Twitter card tags
+- **Mobile Theme-Color Support**: PASS — All 93 pages declare theme-color for mobile chrome styling
+- **Google Analytics 4 (G-7D28EEMNXX) Coverage**: PASS — All 93 canonical pages include active GA4 telemetry
+- **Internal Link Integrity**: PASS — All internal links across 93 pages resolve to valid routes (0 broken links)
+- **HTML Template Corruption & Duplicate Link Guard**: PASS — All 93 pages verified free of >NaN<, >undefined<, &amp;amp;, malformed <a> markup, and duplicate <main>/related-guide links
 - **Server Canonical 301 Architecture**: PASS — Legacy .html and alias routes seamlessly 301 redirected to clean URLs
 - **Anti-Cannibalization & Title Cooldown Guard**: PASS — 0 consolidated cannibal slugs in sitemap.xml; all 20 GSC Top-20 pillars protected by 14-day title lock
-- **Ad-Platform Policy Compliance Guard (AGENTS.md Principle 2)**: PASS — 0 geo-unblocking, copyright circumvention, or piracy phrases across all 92 indexable pages
+- **Ad-Platform Policy Compliance Guard (AGENTS.md Principle 2)**: PASS — 0 geo-unblocking, copyright circumvention, or piracy phrases across all 93 indexable pages
+- **VideoObject Rich Snippet Readiness (P3-2)**: WARN — 0/5 YouTube IDs configured — 5 local 1080p MP4s in scripts/youtube-demo-pipeline/output/ awaiting manual YouTube upload; zero VideoObject emitted
 
 #### 3. PageSpeed & Core Web Vitals (100/100)
 - **Image Optimization (<100KB)**: PASS — All 12 website image assets are under 100 KB
-- **Cumulative Layout Shift (CLS) Protection**: PASS — All <img> and inline <svg> tags across 92 pages & /download have explicit width & height attributes
+- **Cumulative Layout Shift (CLS) Protection**: PASS — All <img> and inline <svg> tags across 93 pages & /download have explicit width & height attributes
 - **Image Accessibility & Alt-Text**: PASS — All <img> tags have descriptive alt attributes
 - **Async Image Decoding**: PASS — All lazy-loaded <img> tags specify decoding="async"
-- **PWA Manifest & Touch Icons**: PASS — 180x180 apple-touch-icon.png, 192x192/512x512 PWA icons, favicon.png and /manifest.webmanifest linked across all 92 pages
-- **Network Preconnect & Resource Hints (preload/dns-prefetch)**: PASS — All 92 pages & /download include CSS preload + GA4 preconnect/dns-prefetch (0 unused Google Fonts preconnects)
-- **Render-Blocking Script Elimination**: PASS — All external JavaScript resources across 92 static pages & /download use defer or async attributes (0 runtime Tailwind JIT)
-- **Immutable Asset Cache-Busting (?v=)**: PASS — All CSS/JS tags (/style.css, /tailwind.min.css, /nav.js, /pricing-config.js) across 92 pages & /download carry content-hashed ?v= tokens
+- **PWA Manifest & Touch Icons**: PASS — 180x180 apple-touch-icon.png, 192x192/512x512 PWA icons, favicon.png and /manifest.webmanifest linked across all 93 pages
+- **Network Preconnect & Resource Hints (preload/dns-prefetch)**: PASS — All 93 pages & /download include CSS preload + GA4 preconnect/dns-prefetch (0 unused Google Fonts preconnects)
+- **Render-Blocking Script Elimination**: PASS — All external JavaScript resources across 93 static pages & /download use defer or async attributes (0 runtime Tailwind JIT)
+- **Immutable Asset Cache-Busting (?v=)**: PASS — All CSS/JS tags (/style.css, /tailwind.min.css, /nav.js, /pricing-config.js) across 93 pages & /download carry content-hashed ?v= tokens
 - **Server-Side Compression (Brotli + Gzip)**: PASS — Built-in node:zlib Brotli and Gzip transparently enabled across static assets & dynamic HTML (/download)
 - **HTTP ETag & 304 Not Modified Caching**: PASS — Conditional request validation implemented in server.mjs
 - **Modern MIME Types & Static Serving**: PASS — .webp, .avif, .woff2, .woff, .ttf supported in server.mjs
@@ -1506,6 +1507,6 @@ Tracks automated daily technical SEO audits and under-the-hood optimizations (st
 
 ### Compression Benchmark Results
 - **order.html** (130.1 KB raw) &rarr; Gzip: **29.4 KB** (77% reduction) | Brotli: **26.5 KB** (80% reduction)
-- **index.html** (86.5 KB raw) &rarr; Gzip: **16.9 KB** (80% reduction) | Brotli: **15.3 KB** (82% reduction)
-- **sitemap.xml** (24.1 KB raw) &rarr; Gzip: **1.7 KB** (93% reduction) | Brotli: **1.5 KB** (94% reduction)
+- **index.html** (87.9 KB raw) &rarr; Gzip: **18.0 KB** (80% reduction) | Brotli: **16.3 KB** (81% reduction)
+- **sitemap.xml** (24.2 KB raw) &rarr; Gzip: **1.7 KB** (93% reduction) | Brotli: **1.5 KB** (94% reduction)
 

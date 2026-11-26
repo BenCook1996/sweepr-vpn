@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="color-scheme" content="light">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Help Us Improve SWEEPR VPN — Quick Uninstall Feedback</title>
+  <meta name="description" content="Tell us why you uninstalled SWEEPR VPN in one quick click so our engineering team can fix speed, server, or compatibility issues.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="canonical" href="https://sweeprvpn.com/uninstall">
+  <link rel="preconnect" href="https://www.googletagmanager.com">
+  <link rel="stylesheet" href="/tailwind.min.css?v=fbbf784c">
+  <link rel="icon" type="image/svg+xml" href="/logo-emerald.svg?v=5">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5">
+  <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png?v=5">
+  <link rel="shortcut icon" href="/favicon.ico?v=5">
+  <link rel="stylesheet" href="/style.css?v=ed321090">
+  <!-- Google tag (gtag.js) - Sweepr VPN -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-7D28EEMNXX');
+  </script>
+</head>
+<body class="text-gray-800 flex flex-col items-center justify-center min-h-screen px-4 py-10">
+
+  <div class="rack-telemetry-bar w-full max-w-xl mb-3">
+    <span class="rack-telemetry-segment"><span class="rack-led"></span>FEEDBACK // UNINSTALL-SURVEY</span>
+    <span class="rack-telemetry-segment">ANONYMOUS DIAGNOSTIC &middot; NO PII STORED</span>
+  </div>
+
+  <main class="rack-card glass-card p-6 sm:p-10 w-full max-w-xl">
+    <div class="flex items-center justify-between gap-4 mb-6">
+      <a href="/" class="flex items-center gap-2.5 text-inherit no-underline">
+        <div class="logo-box">S</div>
+        <span class="font-extrabold text-lg tracking-tight text-gray-900">SWEEPR <span class="text-emerald-600">VPN</span></span>
+      </a>
+      <a href="/support" class="text-xs font-semibold text-emerald-700 hover:underline">Need Help? &rarr;</a>
+    </div>
+
+    <header class="mb-5">
+      <h1 class="text-2xl font-black text-gray-900 tracking-tight mb-2">Help Us Improve SWEEPR VPN</h1>
+      <p class="text-sm text-gray-600">SWEEPR VPN has been uninstalled. What was the main reason? One click helps our UK engineering team improve.</p>
+    </header>
+
+    <form id="uninstallForm" class="space-y-4">
+      <fieldset class="space-y-2">
+        <legend class="sr-only">Primary reason for uninstalling SWEEPR VPN</legend>
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 bg-white hover:border-emerald-400 cursor-pointer text-sm">
+          <input type="radio" name="reason" value="too_slow" required class="accent-emerald-600">
+          <span>Speeds felt slower than expected on my connection</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 bg-white hover:border-emerald-400 cursor-pointer text-sm">
+          <input type="radio" name="reason" value="connection_drops" class="accent-emerald-600">
+          <span>Connection drops or blocked on campus / hotel Wi-Fi</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 bg-white hover:border-emerald-400 cursor-pointer text-sm">
+          <input type="radio" name="reason" value="missing_location" class="accent-emerald-600">
+          <span>Needed a server country/city outside the 8 POPs</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 bg-white hover:border-emerald-400 cursor-pointer text-sm">
+          <input type="radio" name="reason" value="app_issue" class="accent-emerald-600">
+          <span>Installation, driver, or app compatibility issue</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 bg-white hover:border-emerald-400 cursor-pointer text-sm">
+          <input type="radio" name="reason" value="price" class="accent-emerald-600">
+          <span>Pricing or billing / refund question</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 bg-white hover:border-emerald-400 cursor-pointer text-sm">
+          <input type="radio" name="reason" value="no_longer_needed" class="accent-emerald-600">
+          <span>Only needed a VPN temporarily</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 bg-white hover:border-emerald-400 cursor-pointer text-sm">
+          <input type="radio" name="reason" value="other" class="accent-emerald-600">
+          <span>Other reason</span>
+        </label>
+      </fieldset>
+
+      <div>
+        <label for="uninstallNote" class="block text-xs font-semibold text-gray-600 mb-1">Optional technical note (do not enter your email or personal details)</label>
+        <textarea id="uninstallNote" maxlength="400" rows="2" placeholder="e.g. ISP name, router model, or error message..." class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-emerald-500 bg-white"></textarea>
+      </div>
+
+      <button type="submit" id="uninstallBtn" class="btn btn-go w-full justify-center py-2.5 text-sm cursor-pointer">
+        Send Anonymous Feedback
+      </button>
+    </form>
+
+    <div id="uninstallResult" class="hidden mt-5 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-sm text-emerald-950 space-y-2">
+      <p class="font-bold">Thank you &mdash; your feedback has been logged anonymously.</p>
+      <p id="uninstallHelpTip" class="text-xs text-emerald-900"></p>
+      <div class="pt-1 flex flex-wrap gap-3 text-xs font-semibold">
+        <a id="uninstallHelpLink" href="/support" class="text-emerald-800 underline">Open Recommended Fix &rarr;</a>
+        <a href="/download" class="text-emerald-800 underline">Reinstall Latest Version &rarr;</a>
+      </div>
+    </div>
+
+    <p id="uninstallError" class="hidden mt-4 text-xs font-semibold text-red-600"></p>
+  </main>
+
+  <script>
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      const os = (params.get('os') || 'unknown').slice(0, 24);
+      const version = (params.get('version') || params.get('v') || 'unknown').slice(0, 24);
+      const form = document.getElementById('uninstallForm');
+      const btn = document.getElementById('uninstallBtn');
+      const resultBox = document.getElementById('uninstallResult');
+      const errEl = document.getElementById('uninstallError');
+      const tipEl = document.getElementById('uninstallHelpTip');
+      const helpLink = document.getElementById('uninstallHelpLink');
+
+      const helpMap = {
+        too_slow: { tip: 'Try MTU 1412 on UK PPPoE fibre or test baseline ISP throttling in your browser.', href: '/tools/isp-throttling-test', label: 'Run ISP Speed & Throttling Test' },
+        connection_drops: { tip: 'On hotel or campus Eduroam Wi-Fi, enable Stealth UDP 443 and MTU 1380.', href: '/solutions/hotel-captive-portal-wifi-wireguard', label: 'View Stealth UDP 443 & Captive Portal Guide' },
+        price: { tip: 'Web plans carry a 14-day 100% money-back guarantee with 1-click portal cancellation.', href: '/login', label: 'Manage Subscription or Refund in Portal' },
+        app_issue: { tip: 'Our UK engineering desk can inspect client logs or provide standard WireGuard .conf files.', href: '/support', label: 'Contact SWEEPR VPN Support' },
+        missing_location: { tip: 'View our current 8 bare-metal 10Gbps POPs and technical roadmap.', href: '/ai-info', label: 'View Live 8-POP Network Specs' },
+        no_longer_needed: { tip: 'Remember to cancel any active recurring plan in one click inside the Customer Portal.', href: '/login', label: 'Open Customer Portal' },
+        other: { tip: 'Browse troubleshooting answers or reach out anytime.', href: '/support', label: 'Open Help & Support' }
+      };
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const selected = form.querySelector('input[name="reason"]:checked');
+        const reason = selected ? selected.value : 'other';
+        const note = (document.getElementById('uninstallNote').value || '').trim().slice(0, 400);
+        btn.disabled = true;
+        errEl.classList.add('hidden');
+        try {
+          const res = await fetch('/api/uninstall-feedback', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ reason, os, version, note })
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok || !data.ok) throw new Error(data.error || 'Could not submit feedback');
+          const advice = helpMap[reason] || helpMap.other;
+          tipEl.textContent = advice.tip;
+          helpLink.href = advice.href;
+          helpLink.textContent = advice.label + ' \u2192';
+          form.classList.add('hidden');
+          resultBox.classList.remove('hidden');
+        } catch (err) {
+          errEl.textContent = err.message || 'Submission failed. Please try again.';
+          errEl.classList.remove('hidden');
+          btn.disabled = false;
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

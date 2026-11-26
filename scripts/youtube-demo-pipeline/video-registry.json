@@ -1,0 +1,108 @@
+{
+  "schemaVersion": "1.0.0",
+  "channelUrl": "https://www.youtube.com/@sweeprvpn",
+  "updatedAt": "2026-11-26T00:00:00.000Z",
+  "note": "VideoObject JSON-LD is emitted ONLY after a real 11-char YouTube video ID and ISO uploadDate are populated post-manual YouTube Studio upload. Never fabricate video IDs.",
+  "videos": [
+    {
+      "id": "01",
+      "slug": "01-smart-tv-acr-blocklist",
+      "title": "Stop Samsung & LG Smart-TV ACR Tracking (Free 65-Domain Blocklist)",
+      "durationSec": 110.794,
+      "width": 1920,
+      "height": 1080,
+      "sizeBytes": 15216474,
+      "localMp4": "scripts/youtube-demo-pipeline/output/01-smart-tv-acr-blocklist/01-smart-tv-acr-blocklist.mp4",
+      "localThumbnail": "scripts/youtube-demo-pipeline/output/01-smart-tv-acr-blocklist/thumbnail.png",
+      "localCaptions": "scripts/youtube-demo-pipeline/output/01-smart-tv-acr-blocklist/captions.srt",
+      "targetUrlPaths": [
+        "/tools/smart-tv-tracking-check",
+        "/guides/stop-samsung-smart-tv-acr-tracking",
+        "/guides/stop-lg-smart-tv-acr-spying"
+      ],
+      "youtubeVideoId": null,
+      "uploadDate": null,
+      "uploadStatus": "PENDING_MANUAL_YOUTUBE_UPLOAD"
+    },
+    {
+      "id": "02",
+      "slug": "02-glinet-wireguard-mtu",
+      "title": "GL.iNet Beryl AX WireGuard Setup: Fix Hotel Wi-Fi With MTU 1380",
+      "durationSec": 80.48,
+      "width": 1920,
+      "height": 1080,
+      "sizeBytes": 9385588,
+      "localMp4": "scripts/youtube-demo-pipeline/output/02-glinet-wireguard-mtu/02-glinet-wireguard-mtu.mp4",
+      "localThumbnail": "scripts/youtube-demo-pipeline/output/02-glinet-wireguard-mtu/thumbnail.png",
+      "localCaptions": "scripts/youtube-demo-pipeline/output/02-glinet-wireguard-mtu/captions.srt",
+      "targetUrlPaths": [
+        "/setup/gl-inet-travel-router",
+        "/guides/fix-wireguard-mtu-fragmentation-pppoe",
+        "/tools/isp-throttling-test"
+      ],
+      "youtubeVideoId": null,
+      "uploadDate": null,
+      "uploadStatus": "PENDING_MANUAL_YOUTUBE_UPLOAD"
+    },
+    {
+      "id": "03",
+      "slug": "03-steam-deck-wireguard",
+      "title": "Steam Deck WireGuard VPN in 60 Seconds (No RootFS Unlock Needed)",
+      "durationSec": 63.776,
+      "width": 1920,
+      "height": 1080,
+      "sizeBytes": 8560894,
+      "localMp4": "scripts/youtube-demo-pipeline/output/03-steam-deck-wireguard/03-steam-deck-wireguard.mp4",
+      "localThumbnail": "scripts/youtube-demo-pipeline/output/03-steam-deck-wireguard/thumbnail.png",
+      "localCaptions": "scripts/youtube-demo-pipeline/output/03-steam-deck-wireguard/captions.srt",
+      "targetUrlPaths": [
+        "/setup/steam-deck-vpn",
+        "/guides/public-hotel-airport-wifi-security",
+        "/tools/leak-test"
+      ],
+      "youtubeVideoId": null,
+      "uploadDate": null,
+      "uploadStatus": "PENDING_MANUAL_YOUTUBE_UPLOAD"
+    },
+    {
+      "id": "04",
+      "slug": "04-synology-docker-gluetun",
+      "title": "Synology DSM 7.2 WireGuard VPN in Docker (Gluetun Kill-Switch)",
+      "durationSec": 67.995,
+      "width": 1920,
+      "height": 1080,
+      "sizeBytes": 5552342,
+      "localMp4": "scripts/youtube-demo-pipeline/output/04-synology-docker-gluetun/04-synology-docker-gluetun.mp4",
+      "localThumbnail": "scripts/youtube-demo-pipeline/output/04-synology-docker-gluetun/thumbnail.png",
+      "localCaptions": "scripts/youtube-demo-pipeline/output/04-synology-docker-gluetun/captions.srt",
+      "targetUrlPaths": [
+        "/setup/synology-nas-docker-vpn",
+        "/tools/leak-test"
+      ],
+      "youtubeVideoId": null,
+      "uploadDate": null,
+      "uploadStatus": "PENDING_MANUAL_YOUTUBE_UPLOAD"
+    },
+    {
+      "id": "05",
+      "slug": "05-webrtc-dns-isp-throttling-check",
+      "title": "Check WebRTC, IPv6, DNS Leaks & ISP Throttling Free in 30 Seconds",
+      "durationSec": 83.004,
+      "width": 1920,
+      "height": 1080,
+      "sizeBytes": 8577046,
+      "localMp4": "scripts/youtube-demo-pipeline/output/05-webrtc-dns-isp-throttling-check/05-webrtc-dns-isp-throttling-check.mp4",
+      "localThumbnail": "scripts/youtube-demo-pipeline/output/05-webrtc-dns-isp-throttling-check/thumbnail.png",
+      "localCaptions": "scripts/youtube-demo-pipeline/output/05-webrtc-dns-isp-throttling-check/captions.srt",
+      "targetUrlPaths": [
+        "/tools/leak-test",
+        "/tools/isp-throttling-test",
+        "/guides/prevent-webrtc-ip-leak-chromium-firefox",
+        "/guides/disable-ipv6-leak-windows-linux"
+      ],
+      "youtubeVideoId": null,
+      "uploadDate": null,
+      "uploadStatus": "PENDING_MANUAL_YOUTUBE_UPLOAD"
+    }
+  ]
+}

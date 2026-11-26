@@ -177,6 +177,7 @@
 
   <!-- Main Content -->
   <main class="max-w-4xl mx-auto px-4 sm:px-6 pt-10 pb-20">
+<article>
     <div class="mb-8">
       <div class="inline-block text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full mb-3 border border-emerald-200">
         AS13285 Fibre &amp; FTTC &bull; TalkTalk Anti-Throttling &bull; WireGuard CGNAT Guide
@@ -219,7 +220,7 @@
       <div class="px-4 py-3 bg-gray-50 border-b border-gray-200 font-bold text-sm text-gray-900">TalkTalk AS13285 WireGuard Throughput Audit</div>
       <div class="overflow-x-auto">
         <table class="w-full border-collapse">
-          <thead><tr class="bg-gray-50"><th class="p-3 text-left text-xs font-extrabold uppercase tracking-wider text-gray-700 border-b border-gray-200">Transfer Benchmark (19:00–23:00 GMT)</th><th class="p-3 text-left text-xs font-extrabold uppercase tracking-wider text-gray-700 border-b border-gray-200">Unencrypted TalkTalk WAN</th><th class="p-3 text-left text-xs font-extrabold uppercase tracking-wider text-gray-700 border-b border-gray-200">SWEEPR WireGuard + 1420 MTU</th></tr></thead>
+          <thead><tr class="bg-gray-50"><th class="p-3 text-left text-xs font-extrabold uppercase tracking-wider text-gray-700 border-b border-gray-200">Transfer Benchmark (19:00–23:00 GMT)</th><th class="p-3 text-left text-xs font-extrabold uppercase tracking-wider text-gray-700 border-b border-gray-200">Unencrypted TalkTalk WAN</th><th class="p-3 text-left text-xs font-extrabold uppercase tracking-wider text-gray-700 border-b border-gray-200">SWEEPR WireGuard (1420 / 1412 MTU)</th></tr></thead>
           <tbody><tr class="border-b border-gray-100"><td class="p-3 text-sm font-semibold text-gray-900">Ubuntu LTS Mirror Download Rate</td><td class="p-3 text-sm text-gray-600">1.4–2.8 MB/s policed trickle</td><td class="p-3 text-sm font-semibold text-emerald-700">42–88 MB/s full circuit pace</td></tr><tr class="border-b border-gray-100"><td class="p-3 text-sm font-semibold text-gray-900">WAN IP Privacy Exposure</td><td class="p-3 text-sm text-gray-600">Household WAN logged publicly</td><td class="p-3 text-sm font-semibold text-emerald-700">Masked at Docklands exit IP</td></tr><tr class="border-b border-gray-100"><td class="p-3 text-sm font-semibold text-gray-900">Router Firmware Stability</td><td class="p-3 text-sm text-gray-600">FAST 5364 NAT table saturation</td><td class="p-3 text-sm font-semibold text-emerald-700">Offloaded single UDP stream</td></tr></tbody>
         </table>
       </div>
@@ -229,6 +230,7 @@
       <h2 class="text-2xl font-black text-gray-900 mb-3">Isolating NAS &amp; Desktop Workflows Inside Encrypted UDP Tunnels</h2>
       <div class="text-gray-700 leading-relaxed"><p>Running SWEEPR natively on Windows/Linux or inside a Docker Gluetun stack encapsulates SSH, rsync, and container traffic simultaneously—preserving clean 1420-byte framing on CityFibre DHCP or trimming down to 1412 on Openreach VDSL.</p>
 <pre class="bg-slate-900 text-emerald-300 p-4 rounded-xl text-xs overflow-x-auto my-4">[Interface]
+# Use 1420 on CityFibre DHCP, or 1412 on Openreach PPPoE/VDSL
 MTU = 1420
 DNS = 10.64.0.1
 
@@ -255,9 +257,9 @@ PersistentKeepalive = 25</pre></div>
         <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 mb-1">SOLUTIONS RESOURCE</div>
         <div class="text-sm font-bold text-gray-900">Community Fibre London WireGuard &amp; CGNAT Setup Guide (AS200052)</div>
       </a>
-      <a href="/solutions/hyperoptic-broadband-isp-throttling" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 shadow-sm transition-all no-underline block">
+      <a href="/solutions/zen-internet-uk-isp-throttling" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 shadow-sm transition-all no-underline block">
         <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 mb-1">SOLUTIONS RESOURCE</div>
-        <div class="text-sm font-bold text-gray-900">How to Stop Hyperoptic 1Gbps Full Fibre Speed Throttling &amp; DPI Traffic Shaping</div>
+        <div class="text-sm font-bold text-gray-900">How to Stop Zen Internet UK Speed Throttling &amp; DPI Traffic Shaping</div>
       </a>
       <a href="/setup/pfsense-opnsense-router" class="p-4 rounded-xl bg-white border border-gray-200 hover:border-emerald-400 shadow-sm transition-all no-underline block">
         <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 mb-1">SETUP RESOURCE</div>
@@ -277,7 +279,9 @@ PersistentKeepalive = 25</pre></div>
       </a>
       </div>
     </section>
-  </main>
+  
+</article>
+</main>
 
   <!-- Footer -->
   <footer class="border-t border-gray-200 py-8 text-center text-sm text-gray-500">
@@ -292,6 +296,7 @@ PersistentKeepalive = 25</pre></div>
         <a href="/privacy" class="hover:underline">Privacy Policy</a>
         <a href="/terms" class="hover:underline">Terms</a>
         <a href="/support" class="hover:underline">Support</a>
+        <a href="https://www.google.com/preferences/source?q=sweeprvpn.com" target="_blank" rel="noopener noreferrer" class="hover:underline text-emerald-700 font-semibold">Google Preferred Sources</a>
       </div>
     </div>
   </footer>

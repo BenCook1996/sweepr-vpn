@@ -2834,7 +2834,7 @@ export function applyEnrichmentToHtmlFile(absPath, enrichmentBrief, previousFaqQ
  * double parentheticals, FAQ fluency, CSS contrast on disk, SERP weak-spot citations, and 14-day GSC cooldown locks,
  * and writes a human-readable scorecard to KEYWORD_OPPORTUNITIES_AUDIT_LOG.md.
  */
-export function auditAndHealOpportunities(opportunitiesPayload, corpusPages, dailyState, pillarState = {}, dryRun = false) {
+export function auditAndHealOpportunities(opportunitiesPayload, corpusPages, dailyState, pillarState = {}, dryRun = false, noHtmlMutate = false) {
   const repairLog = [];
   const opportunities = opportunitiesPayload.opportunities || [];
 
@@ -2902,7 +2902,7 @@ export function auditAndHealOpportunities(opportunitiesPayload, corpusPages, dai
       ) {
         repairLog.push(`Healed enrichment H2/FAQ on "${opp.query}" (${opp.targetUrlPath}): "${oldH2}" -> "${freshBrief.generatedH2}"`);
         opp.enrichmentBrief = freshBrief;
-        if (!dryRun) {
+        if (!dryRun && !noHtmlMutate) {
           const targetPage = corpusPages.find((p) => p.urlPath === opp.targetUrlPath);
           if (targetPage && fs.existsSync(targetPage.absPath)) {
             applyEnrichmentToHtmlFile(targetPage.absPath, freshBrief, oldFaqQ);
@@ -2945,7 +2945,7 @@ export function auditAndHealOpportunities(opportunitiesPayload, corpusPages, dai
   }
 
   // Also scan existing enriched pillar HTML files on disk to remove any legacy subtitle section or double-parenthetical FAQ
-  if (!dryRun) {
+  if (!dryRun && !noHtmlMutate) {
     for (const page of corpusPages) {
       if (!fs.existsSync(page.absPath)) continue;
       let html = fs.readFileSync(page.absPath, 'utf8');
@@ -3836,11 +3836,14 @@ export async function runKeywordResearchPipeline(options = {}) {
     score = true,
     audit = true,
     apply = false,
+    jsonOnly = false,
     dryRun = false,
     offline = false,
     limit = 65,
     applyLimit = DAILY_NEW_PILLAR_CAP
   } = options;
+  const effectiveApply = Boolean(apply && !jsonOnly);
+  const noHtmlMutate = Boolean(dryRun || !effectiveApply || jsonOnly);
 
   const nowIso = new Date().toISOString();
   const keywordCache = loadJsonCache(KEYWORD_CACHE_PATH, { version: '1.0.0', updatedAt: nowIso, entries: {} });
@@ -4199,9 +4202,9 @@ export async function runKeywordResearchPipeline(options = {}) {
 
   // Run the Automated 9-Assertion Opportunity Self-Auditor & Self-Healing Quality Gate (--audit)
   if (audit) {
-    const { repairLog } = auditAndHealOpportunities(opportunitiesPayload, corpusPages, dailyState, pillarState, dryRun);
+    const { repairLog } = auditAndHealOpportunities(opportunitiesPayload, corpusPages, dailyState, pillarState, dryRun, noHtmlMutate);
     if (repairLog.length > 0) {
-      console.log(`\n[Quality Gate Self-Auditor] Applied ${repairLog.length} automated repairs to keyword opportunities & HTML.`);
+      console.log(`\n[Quality Gate Self-Auditor] Applied ${repairLog.length} automated repairs to keyword opportunities${noHtmlMutate ? ' (HTML read-only)' : ' & HTML'}.`);
     }
   }
 
@@ -4242,7 +4245,7 @@ export async function runKeywordResearchPipeline(options = {}) {
   let enrichedFilesCount = 0;
   let newPillarsCreatedCount = 0;
 
-  if (apply && !dryRun) {
+  if (effectiveApply && !dryRun) {
     const cappedNewPillarCount = Math.max(
       0,
       Math.min(applyLimit, DAILY_NEW_PILLAR_CAP, WEEKLY_NEW_PILLAR_CAP - rolling7DayNewPillarsCreated, createApproved.length)
@@ -4284,7 +4287,7 @@ export async function runKeywordResearchPipeline(options = {}) {
     if (audit) {
       const refreshedCorpus = loadExistingSiteCorpus();
       opportunitiesPayload.corpusSummary.canonicalSitemapUrls = refreshedCorpus.length + 1;
-      auditAndHealOpportunities(opportunitiesPayload, refreshedCorpus, dailyState, pillarState, dryRun);
+      auditAndHealOpportunities(opportunitiesPayload, refreshedCorpus, dailyState, pillarState, dryRun, noHtmlMutate);
       saveJsonCacheAtomic(OPPORTUNITIES_PATH, opportunitiesPayload);
     }
 
@@ -4426,13 +4429,14 @@ if (isMainModule) {
     const discover = !auditOnly && (args.includes('--discover') || (!args.includes('--score') && !args.includes('--apply')));
     const score = !auditOnly && (args.includes('--score') || discover);
     const audit = true;
-    const apply = args.includes('--apply');
+    const jsonOnly = args.includes('--json-only');
+    const apply = args.includes('--apply') && !jsonOnly;
     const dryRun = args.includes('--dry-run');
     const offline = args.includes('--offline');
     const limitArg = args.find((a) => a.startsWith('--limit='));
     const limitVal = limitArg ? Number(limitArg.split('=')[1]) : apply ? DAILY_NEW_PILLAR_CAP : 65;
-    if (limitArg && Number.isFinite(limitVal) && limitVal <= 0) {
-      console.log('[Keyword Engine] Page generation paused (limit=0): 0 new pillar pages created.');
+    if (apply && limitArg && Number.isFinite(limitVal) && limitVal <= 0) {
+      console.log('[Keyword Engine] --apply paused (limit=0): 0 new pillar pages created.');
       process.exit(0);
     }
 
@@ -4441,9 +4445,10 @@ if (isMainModule) {
       score,
       audit,
       apply,
+      jsonOnly,
       dryRun,
       offline,
-      limit: apply ? 65 : limitVal,
+      limit: apply ? 65 : (Number.isFinite(limitVal) && limitVal > 0 ? limitVal : 65),
       applyLimit: apply ? Math.min(limitVal, DAILY_NEW_PILLAR_CAP) : DAILY_NEW_PILLAR_CAP
     }).catch((err) => {
       console.error(err);

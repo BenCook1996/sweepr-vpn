@@ -27,10 +27,12 @@
 - Free Home Wi-Fi Device & Hidden Camera Exposure Checker: https://sweeprvpn.com/tools/whats-on-my-wifi
 - Public Wi-Fi, Airport, Hotel & Eduroam Security Hub: https://sweeprvpn.com/public-wifi
 - Public Smart-TV ACR DNS Blocklist (Pi-hole / AdGuard Home / hosts): https://sweeprvpn.com/smart-tv-acr-blocklist.txt
+- Official Brand & Technical Fact Sheet (AI / GEO Reference): https://sweeprvpn.com/ai-info
+- Technical FAQ & Troubleshooting Hub: https://sweeprvpn.com/faq
 - Comprehensive Machine-Ingestible GEO Context & Telemetry Proof: https://sweeprvpn.com/llms-full.txt
 - Official PAD 4.0 XML Feed: https://sweeprvpn.com/pad.xml
 
-## Programmatic SEO Technical Library (63 Indexed Guides & Comparisons)
+## Programmatic SEO Technical Library (62 Indexed Guides & Comparisons)
 - [How to Fix Microsoft Teams, Zoom & VoIP Jitter on Brsk BetterNet 1Gbps Fibre UK Using Low-Latency WireGuard](https://sweeprvpn.com/solutions/brsk-better-net-uk-voip-teams-zoom-jitter)
 - [How to Fix BT Broadband Low-Latency Gaming &amp; Packet Loss (AS2856)](https://sweeprvpn.com/solutions/bt-broadband-gaming-packet-loss)
 - [How to Stop Comcast Xfinity Cable Broadband Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/comcast-xfinity-broadband-isp-throttling)
@@ -39,7 +41,6 @@
 - [How to Fix Microsoft Teams, Zoom & VoIP Jitter on EE 5G & Home Router UK Using Low-Latency WireGuard](https://sweeprvpn.com/solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter)
 - [How to Fix Gigaclear Rural Full Fibre UK Gaming Packet Loss, High Ping & Rubberbanding](https://sweeprvpn.com/solutions/gigaclear-rural-fibre-gaming-packet-loss)
 - [Hotel Wi-Fi WireGuard Guide (Premier Inn, Travelodge, Hilton): Captive Portals &amp; Stealth UDP 443](https://sweeprvpn.com/solutions/hotel-captive-portal-wifi-wireguard)
-- [How to Stop Hyperoptic 1Gbps Full Fibre Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/hyperoptic-broadband-isp-throttling)
 - [Fix Dropping SSH, Kubernetes & Git Sessions on UK Train Wi-Fi (LNER, GWR, Avanti) With Persistent WireGuard](https://sweeprvpn.com/solutions/national-rail-train-wifi-remote-dev-ssh)
 - [How to Fix Microsoft Teams, Zoom & VoIP Jitter on NHS & Hospital Guest Wi-Fi Using Low-Latency WireGuard](https://sweeprvpn.com/solutions/nhs-guest-wifi-voip-teams-zoom-jitter)
 - [Eliminate O2 UK 5G & Mobile Tethering 4K UHD Streaming Buffering & CDN Throttling](https://sweeprvpn.com/solutions/o2-uk-mobile-tethering-uhd-streaming-buffering)

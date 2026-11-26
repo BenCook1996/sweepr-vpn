@@ -6,6 +6,8 @@ Disallow: /login
 Disallow: /dashboard
 Disallow: /order
 Disallow: /checkout/
+Disallow: /welcome
+Disallow: /uninstall
 Disallow: /ios-app
 Disallow: /qr-setup
 Disallow: /popup-alternatives
@@ -30,6 +32,8 @@ Allow: /
 User-agent: PerplexityBot
 Allow: /
 User-agent: ClaudeBot
+Allow: /
+User-agent: Claude-SearchBot
 Allow: /
 User-agent: Google-Extended
 Allow: /

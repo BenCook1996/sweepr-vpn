@@ -177,6 +177,7 @@
 
   <!-- Main Content -->
   <main class="max-w-4xl mx-auto px-6 py-12 md:py-16">
+<article>
     <!-- Breadcrumb & Badge -->
     <div class="text-center mb-10">
       <div class="inline-block text-xs font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full mb-3 border border-emerald-200">
@@ -185,7 +186,7 @@
       <h1 class="text-3xl md:text-5xl font-black text-gray-900 tracking-tight mb-4">
         WireGuard VPN Setup for GL.iNet Beryl AX (GL-MT3000) &amp; Slate AX Travel Router
       </h1>
-      <div class="flex flex-wrap items-center gap-2 text-xs text-gray-500 mt-3 mb-3" id="eeat-author-byline"><span>Technical documentation by <strong class="text-gray-800">SWEEPR VPN Engineering</strong> &middot; Independent UK Sole Trader</span><span>&bull;</span><span>Updated Nov 2026</span><span>&bull;</span><a href="/warrant-canary" class="text-emerald-700 font-semibold hover:underline">Verified via Cryptographic Warrant Canary &rarr;</a></div>
+      <div class="flex flex-wrap items-center gap-2 text-xs text-gray-500 mt-3 mb-3" id="eeat-author-byline"><span>Technical documentation by <strong class="text-gray-800">SWEEPR VPN Engineering</strong> &middot; Independent UK Sole Trader</span><span>&bull;</span><span>Client v2.6.0 (740,112 B / ~723 KB Win) &bull; Probe Verified: 2026-11-25</span><span>&bull;</span><a href="/warrant-canary" class="text-emerald-700 font-semibold hover:underline">Verified via Cryptographic Warrant Canary &rarr;</a></div>
       <p class="text-gray-600 text-lg max-w-2xl mx-auto">
         Drop a native SWEEPR VPN WireGuard <code>.conf</code> profile directly into your GL.iNet Beryl AX, Slate AX, or Flint 2 router to encrypt every laptop, phone, and Smart TV connected to your travel or home Wi-Fi.
       </p>
@@ -197,6 +198,11 @@
         <a href="/tools/leak-test" class="text-emerald-800 hover:text-emerald-950 underline">Test your travel router tunnel for hotel DNS hijacks &rarr;</a>
       </div>
     </div>
+    <dl class="sweepr-geo-specs grid grid-cols-1 md:grid-cols-3 gap-3 my-6 text-xs text-gray-700">
+      <div class="p-3.5 rounded-xl bg-white border border-gray-200 shadow-sm"><dt class="font-bold text-gray-900 mb-1">Supported Travel Hardware</dt><dd>GL.iNet GL-MT3000 (Beryl AX), GL-AXT1800 (Slate AX), and Flint 2 running GL firmware 4.x.</dd></div>
+      <div class="p-3.5 rounded-xl bg-white border border-gray-200 shadow-sm"><dt class="font-bold text-gray-900 mb-1">Hotel Captive Portal Workflow</dt><dd>Disable Block Non-VPN Traffic, clone smartphone MAC if needed, authenticate, then flip hardware toggle on.</dd></div>
+      <div class="p-3.5 rounded-xl bg-white border border-gray-200 shadow-sm"><dt class="font-bold text-gray-900 mb-1">Hotel & 5G Hotspot MTU</dt><dd>Clamped to MTU = 1380 and Stealth UDP 443 to prevent silent fragmentation on hotel VLANs.</dd></div>
+    </dl>
 
     <div class="bg-white border-2 border-emerald-500/30 rounded-2xl p-6 md:p-8 shadow-sm mb-10">
       <h2 class="text-xl font-bold text-gray-900 mb-2">Pocket Travel Repeater &amp; Hardware Kill-Switch Overview</h2>
@@ -276,6 +282,30 @@ PersistentKeepalive = 25</code></pre>
             <tr><td class="p-3 font-bold">GL-MT2500 (Brume 2)</td><td class="p-3">MediaTek MT7981B</td><td class="p-3 text-emerald-700 font-semibold bg-emerald-50/30">355 Mbps</td><td class="p-3 font-mono">1380</td></tr>
           </tbody>
         </table>
+      </div>
+      <div class="mt-4 p-4 rounded-xl bg-amber-50/70 border border-amber-200 text-xs text-amber-900 leading-relaxed">
+        <strong>Honest Hardware &amp; Benchmark Caveats:</strong> The GL-MT3000 (<code>300 Mbps</code>), Slate AX (<code>550 Mbps</code>), Brume 2 (<code>355 Mbps</code>), and Flint 2 (<code>900 Mbps</code>) figures above are chipset/firmware WireGuard routing ceilings rather than residential ISP <code>iperf3</code> lab runs, and no physical GL-MT3000 <code>192.168.8.1</code> admin screenshot is claimed on this page. Our <strong>2026-11-25T15:15:42Z</strong> pipeline snapshot verified <strong>8/8</strong> 10 Gbps POPs online (<code>fq_codel</code>, MTU presets <code>1420/1412/1380</code>): UK baseline RTTs are <strong>4.1 ms</strong> (<code>UK-LON-01</code>), <strong>8.4 ms</strong> (<code>NL-AMS-01</code>), <strong>11.2 ms</strong> (<code>DE-FRA-01</code>), <strong>14.1 ms</strong> (<code>SE-STO-01</code>), <strong>68.4 ms</strong> (<code>US-NYC-01</code>), <strong>128 ms</strong> (<code>US-LAX-01</code>), <strong>152 ms</strong> (<code>SG-SIN-01</code>), and <strong>198.5 ms</strong> (<code>JP-TYO-01</code>), while US-East Railway control-plane health probes measured <code>14 ms</code> NYC / <code>157 ms</code> London / <code>357 ms</code> Tokyo. Note real-world hotel caveats: captive portals require pausing WireGuard or cloning a phone MAC; intercontinental hops add physical propagation latency; shared exit IPs can occasionally trigger CAPTCHAs; each account includes <strong>3 direct VPN seats</strong> plus unlimited client devices behind a single router <code>.conf</code> (WireGuard-only, no inbound port forwarding; native iOS App Store client pre-launch).
+      </div>
+    </section>
+
+    <section id="gl-inet-verified-proof" class="mb-10 bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm">
+      <h2 class="text-xl font-bold text-gray-900 mb-2">Verified Companion UI &amp; Router Tunnel Leak Check (v2.6.0)</h2>
+      <p class="text-sm text-gray-600 mb-4">
+        Use the desktop companion client or mobile web UI to export your 8-POP WireGuard parameters, then confirm your GL.iNet SSID egress on a connected laptop via our browser leak probe.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <figure class="bg-gray-50 border border-gray-200 rounded-xl p-3">
+          <img src="/assets/desktop-home-light.webp" width="960" height="608" loading="lazy" decoding="async" class="w-full rounded-lg border border-gray-200 block" alt="SWEEPR VPN v2.6.0 desktop interface displaying 8 WireGuard server locations and 10.64.0.1 DNS shield" />
+          <figcaption class="mt-2.5 text-xs text-gray-600 leading-relaxed">
+            <strong class="text-gray-900">SWEEPR Companion Client (v2.6.0, 740,112 B):</strong> Select from 8 10 Gbps POPs (<code>UK-LON-01</code>, <code>US-NYC-01</code>, <code>DE-FRA-01</code>, etc.) matching your router <code>.conf</code> endpoint.
+          </figcaption>
+        </figure>
+        <figure class="bg-gray-50 border border-gray-200 rounded-xl p-3">
+          <img src="/assets/tool-leak-test.webp" width="960" height="536" loading="lazy" decoding="async" class="w-full rounded-lg border border-gray-200 block" alt="Browser IPv4 egress and WebRTC STUN leak check output confirming no IPv4 STUN leak" />
+          <figcaption class="mt-2.5 text-xs text-gray-600 leading-relaxed">
+            <strong class="text-gray-900">Post-Switch Egress Check:</strong> Verify connected laptops show the SWEEPR POP IPv4 address and zero IPv4 WebRTC STUN exposure (note: IPv6 and OS DNS tables are not directly readable from browser JS).
+          </figcaption>
+        </figure>
       </div>
     </section>
 
@@ -377,6 +407,8 @@ PersistentKeepalive = 25</code></pre>
       <h2 style="margin-top:0;color:#f8fafc;">GL.iNet VPN Cascading &amp; LAN Policy Whitelisting</h2>
       <p style="color:#cbd5e1;line-height:1.65;">Under <strong>VPN &rarr; VPN Dashboard &rarr; Global Proxy Options</strong>, switch to <em>MAC Address</em> or <em>VLAN-Based</em> policy routing if you want your travel Fire TV stick tunneled through London while a corporate laptop uses direct repeater Wi-Fi for internal SSO.</p>
     </section>
+
+</article>
 </main>
 
   <!-- Footer -->
@@ -392,6 +424,7 @@ PersistentKeepalive = 25</code></pre>
         <a href="/privacy" class="hover:underline">Privacy Policy</a>
         <a href="/terms" class="hover:underline">Terms</a>
         <a href="/support" class="hover:underline">Support</a>
+        <a href="https://www.google.com/preferences/source?q=sweeprvpn.com" target="_blank" rel="noopener noreferrer" class="hover:underline text-emerald-700 font-semibold">Google Preferred Sources</a>
       </div>
     </div>
   </footer>

@@ -1,0 +1,30 @@
+SWEEPR VPN delivers a high-speed WireGuard PacketTunnel client with a Smart-TV & Tracker DNS Shield and local Wi-Fi diagnostics for iPhone, iPad, and Mac. Built for public Wi-Fi encryption, zero-logs privacy, and ISP bandwidth throttling defence without bloated background services.
+
+FAST WIREGUARD TUNNEL (8 GLOBAL 10GBPS LOCATIONS)
+• Native NetworkExtension PacketTunnel powered by WireGuard ChaCha20-Poly1305 encryption with automatic IPv6 DNS64/NAT64 compatibility.
+• Connect in one tap to the lowest-latency server or choose from 8 bare-metal 10Gbps locations: London, Amsterdam, Frankfurt, Stockholm, New York, Los Angeles, Singapore, and Tokyo.
+• Pre-consent VPN data disclosure sheet explains tunnel handling clearly before iOS or macOS asks for VPN permission.
+
+WI-FI SHIELD & LOCAL BONJOUR CHECK
+• Smart-TV & Tracker DNS Shield: Routes tunnel DNS through 10.64.0.1 with 1.1.1.2 malware/tracker protection to block Smart-TV ACR telemetry domains.
+• Local Network Diagnostic: Uses NWPathMonitor and on-device Bonjour (mDNS) discovery to verify local Wi-Fi reachability and AirPlay devices—processed strictly on your device with zero cloud upload.
+• LAN Bypass Toggle: Keep local printers, NAS shares, and AirPlay speakers accessible while VPN protection stays active.
+
+BUILT FOR IPHONE, IPAD & MAC
+• macOS Menu Bar app (MenuBarExtra) with optional Launch at Login (SMAppService) for quiet, instant desktop control.
+• Up to 3 simultaneous VPN devices per subscription, plus unlimited devices behind a compatible WireGuard router using standard .conf exports.
+• Pair effortlessly via QR code scanning, 6-digit email OTP, or your license key.
+
+TRANSPARENT FLAT-RATE PRICING (STOREKIT 2)
+• SWEEPR VPN Pro — Yearly: £74.99/year (Save 50%, flat renewal rate).
+• SWEEPR VPN Pro — 6 Months: £48.99/6 months (Save 35%).
+• SWEEPR VPN Pro — Monthly: £12.49/month (with £1.99 1st-Month Introductory Offer where eligible).
+• SWEEPR Wi-Fi Radar & TV Shield Add-On: £14.99/year.
+
+RAM-ONLY PRIVACY & ACCOUNT CONTROL
+• Diskless RAM-only server architecture: zero browsing activity, DNS query, or traffic payload logs inside the tunnel.
+• Includes permanent in-app Delete Account & Data inside the Account tab.
+• Operated by SWEEPR VPN (UK Sole Trader) / SWEEPR VPN Engineering (Independent UK Developer).
+
+Support: https://sweeprvpn.com/support.html?app=1
+Privacy Policy: https://sweeprvpn.com/privacy.html?app=1

@@ -65,15 +65,15 @@ PersistentKeepalive = 25
 ## 6. High-Intent Technical FAQ Knowledge Base
 ### Q: How does SWEEPR VPN compare as a Mullvad alternative in 2026?
 - **Canonical Guide**: https://sweeprvpn.com/vs/mullvad
-- **Answer**: SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner.
+- **Answer**: SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Intro Offer), provides a featherlight ~723 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner.
 
 ### Q: What are the optimal WireGuard MTU and DNS settings for Synology NAS WireGuard VPN?
 - **Canonical Guide**: https://sweeprvpn.com/setup/synology-nas-docker-vpn
-- **Answer**: Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT.
+- **Answer**: Set DNS = 10.64.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT.
 
 ### Q: What are the optimal WireGuard MTU and DNS settings for Steam Deck WireGuard VPN?
 - **Canonical Guide**: https://sweeprvpn.com/setup/steam-deck-vpn
-- **Answer**: Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT.
+- **Answer**: Set DNS = 10.64.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT.
 
 ### Q: Does blocking Espressif on My Wi-Fi break Netflix, BBC iPlayer, or 4K streaming apps?
 - **Canonical Guide**: https://sweeprvpn.com/tools/whats-on-my-wifi
@@ -81,15 +81,15 @@ PersistentKeepalive = 25
 
 ### Q: What are the optimal WireGuard MTU and DNS settings for GL.iNet Beryl AX WireGuard?
 - **Canonical Guide**: https://sweeprvpn.com/setup/gl-inet-travel-router
-- **Answer**: Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT.
+- **Answer**: Set DNS = 10.64.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT.
 
 ### Q: What are the optimal WireGuard MTU and DNS settings for UniFi Cloud Gateway Ultra WireGuard?
 - **Canonical Guide**: https://sweeprvpn.com/setup/ubiquiti-unifi-dream-machine-wireguard
-- **Answer**: Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT.
+- **Answer**: Set DNS = 10.64.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT.
 
 ### Q: What are the optimal WireGuard MTU and DNS settings for Nvidia Shield TV Pro WireGuard?
 - **Canonical Guide**: https://sweeprvpn.com/setup/nvidia-shield-tv-pro-wireguard
-- **Answer**: Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT.
+- **Answer**: Set DNS = 10.64.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT.
 
 ### Q: How do I fix Gigaclear CGNAT Port Forwarding using WireGuard?
 - **Canonical Guide**: https://sweeprvpn.com/solutions/gigaclear-rural-fibre-gaming-packet-loss
@@ -97,29 +97,29 @@ PersistentKeepalive = 25
 
 ### Q: How does SWEEPR VPN compare to NordVPN's Year-2 renewal price?
 - **Canonical Guide**: https://sweeprvpn.com/vs/nordvpn
-- **Answer**: SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner.
+- **Answer**: SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Intro Offer), provides a featherlight ~723 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner.
 
 ### Q: How does SWEEPR VPN compare to Surfshark's Year-2 renewal price?
 - **Canonical Guide**: https://sweeprvpn.com/vs/surfshark
-- **Answer**: SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner.
+- **Answer**: SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Intro Offer), provides a featherlight ~723 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner.
 
 ### Q: How does SWEEPR VPN compare to ExpressVPN's Year-2 renewal price?
 - **Canonical Guide**: https://sweeprvpn.com/vs/expressvpn
-- **Answer**: SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner.
+- **Answer**: SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Intro Offer), provides a featherlight ~723 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner.
 
 ### Q: How does SWEEPR VPN compare to CyberGhost's Year-2 renewal price?
 - **Canonical Guide**: https://sweeprvpn.com/vs/cyberghost
-- **Answer**: SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner.
+- **Answer**: SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Intro Offer), provides a featherlight ~723 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner.
 
 ### Q: What are the optimal WireGuard MTU and DNS settings for GL.iNet Flint 2 WireGuard?
 - **Canonical Guide**: https://sweeprvpn.com/setup/gl-inet-travel-router
-- **Answer**: Set DNS = 10.66.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT.
+- **Answer**: Set DNS = 10.64.0.1 (for in-tunnel encrypted resolution and Smart-TV ACR blocking), PersistentKeepalive = 25, and MTU = 1420 for standard DHCP/Cable, 1412 for PPPoE Fibre, or 1380 for hotel captive portals and 5G CGNAT.
 
 ### Q: How does SWEEPR VPN compare as a ProtonVPN alternative in 2026?
 - **Canonical Guide**: https://sweeprvpn.com/vs/protonvpn
-- **Answer**: SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Trial), provides a featherlight ~680 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner.
+- **Answer**: SWEEPR VPN eliminates Year-2 renewal price hikes (£74.99/yr locked rate or £1.99 1st-Month Intro Offer), provides a featherlight ~723 KB native Rust/Tauri client, exports standard WireGuard .conf router profiles, and includes a free 30-second Home Wi-Fi Device Scanner.
 
-## 7. Complete Canonical Index (93 Pages)
+## 7. Complete Canonical Index (94 Pages)
 - https://sweeprvpn.com/
 - https://sweeprvpn.com/de
 - https://sweeprvpn.com/fr
@@ -149,6 +149,8 @@ PersistentKeepalive = 25
 - https://sweeprvpn.com/privacy
 - https://sweeprvpn.com/warrant-canary
 - https://sweeprvpn.com/terms
+- https://sweeprvpn.com/faq
+- https://sweeprvpn.com/ai-info
 - https://sweeprvpn.com/solutions/brsk-better-net-uk-voip-teams-zoom-jitter
 - https://sweeprvpn.com/solutions/bt-broadband-gaming-packet-loss
 - https://sweeprvpn.com/solutions/comcast-xfinity-broadband-isp-throttling
@@ -157,7 +159,6 @@ PersistentKeepalive = 25
 - https://sweeprvpn.com/solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter
 - https://sweeprvpn.com/solutions/gigaclear-rural-fibre-gaming-packet-loss
 - https://sweeprvpn.com/solutions/hotel-captive-portal-wifi-wireguard
-- https://sweeprvpn.com/solutions/hyperoptic-broadband-isp-throttling
 - https://sweeprvpn.com/solutions/national-rail-train-wifi-remote-dev-ssh
 - https://sweeprvpn.com/solutions/nhs-guest-wifi-voip-teams-zoom-jitter
 - https://sweeprvpn.com/solutions/o2-uk-mobile-tethering-uhd-streaming-buffering

@@ -258,6 +258,18 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://sweeprvpn.com/faq</loc>
+    <lastmod>2026-11-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sweeprvpn.com/ai-info</loc>
+    <lastmod>2026-11-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://sweeprvpn.com/solutions/brsk-better-net-uk-voip-teams-zoom-jitter</loc>
     <lastmod>2026-11-26</lastmod>
     <changefreq>weekly</changefreq>
@@ -302,12 +314,6 @@
   <url>
     <loc>https://sweeprvpn.com/solutions/hotel-captive-portal-wifi-wireguard</loc>
     <lastmod>2026-11-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://sweeprvpn.com/solutions/hyperoptic-broadband-isp-throttling</loc>
-    <lastmod>2026-11-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>

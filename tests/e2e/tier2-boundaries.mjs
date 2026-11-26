@@ -1,7 +1,7 @@
 /**
  * SWEEPR VPN — E2E Test Suite: Tier 2 Boundary & Corner Cases
- * Tests edge cases, limits, negative conditions, and corner scenarios across F1 to F22.
- * 22 features × 5 tests = 110 tests.
+ * Tests edge cases, limits, negative conditions, and corner scenarios across F1 to F28.
+ * 28 features × 5 tests = 140 tests.
  * Zero external npm dependencies. Native Node.js ESM.
  */
 
@@ -25,7 +25,13 @@ import {
   assertLessThanOrEqual,
   assertGreaterThan,
   assertGreaterThanOrEqual,
+  getFreePort,
+  startServer,
+  stopServer,
   fetchOpaque,
+  fetchBinary,
+  sha256File,
+  runConsolidationInTempSandbox,
   calculate5GramOverlap,
   extractSemanticText,
   tokenizeWords,
@@ -37,7 +43,8 @@ import {
   containsElementId,
   validateSitemapXml,
   findHtmlFiles,
-  findFilesWithPattern
+  findFilesWithPattern,
+  getAuthoritativePillars
 } from './helpers.mjs';
 
 export const tier2Tests = [
@@ -94,12 +101,7 @@ export const tier2Tests = [
     name: 'Verify repository contains zero broken git submodule pointers',
     async fn() {
       const gitmodulesPath = path.join(ROOT_DIR, '.gitmodules');
-      if (fs.existsSync(gitmodulesPath)) {
-        const status = execSync('git submodule status', { cwd: ROOT_DIR, encoding: 'utf8' });
-        assertFalse(status.startsWith('-'), 'No uninitialized submodules allowed');
-      } else {
-        assertTrue(true, 'No submodules present');
-      }
+      assertFalse(fs.existsSync(gitmodulesPath), '.gitmodules must not exist in standalone repo');
     }
   },
 
@@ -149,18 +151,17 @@ export const tier2Tests = [
     name: 'Verify preserved authoritative pillars have self-referential canonical tags',
     async fn() {
       const pillars = [
-        { path: 'solutions/talktalk-p2p-port-forwarding.html', expected: '/solutions/talktalk-p2p-port-forwarding' },
+        { path: 'solutions/talktalk-fibre-wireguard-cgnat.html', expected: '/solutions/talktalk-fibre-wireguard-cgnat' },
         { path: 'setup/gl-inet-travel-router.html', expected: '/setup/gl-inet-travel-router' },
         { path: 'guides/stop-samsung-smart-tv-acr-tracking.html', expected: '/guides/stop-samsung-smart-tv-acr-tracking' }
       ];
       for (const p of pillars) {
         const fp = path.join(WEBSITE_DIR, p.path);
-        if (fs.existsSync(fp)) {
-          const html = fs.readFileSync(fp, 'utf8');
-          const canonical = extractCanonical(html);
-          assertTrue(!!canonical, `Pillar ${p.path} must have canonical tag`);
-          assertIncludes(canonical, p.expected, `Canonical for ${p.path} must match self URL`);
-        }
+        assertTrue(fs.existsSync(fp), `Authoritative pillar must exist: ${p.path}`);
+        const html = fs.readFileSync(fp, 'utf8');
+        const canonical = extractCanonical(html);
+        assertTrue(!!canonical, `Pillar ${p.path} must have canonical tag`);
+        assertIncludes(canonical, p.expected, `Canonical for ${p.path} must match self URL`);
       }
     }
   },
@@ -168,16 +169,15 @@ export const tier2Tests = [
     id: 'F02-T2-05',
     feature: 'F2',
     tier: 2,
-    name: 'Verify preserved authoritative pillars have robots meta set to index, follow',
+    name: 'Verify preserved TalkTalk pillar has robots meta set to index, follow',
     async fn() {
-      const fp = path.join(WEBSITE_DIR, 'solutions', 'talktalk-p2p-port-forwarding.html');
-      if (fs.existsSync(fp)) {
-        const html = fs.readFileSync(fp, 'utf8');
-        const robots = extractRobots(html);
-        assertTrue(!!robots, 'Pillar must have robots meta tag');
-        assertFalse(robots.includes('noindex'), 'Pillar must not have noindex');
-        assertIncludes(robots, 'index', 'Pillar must have index directive');
-      }
+      const fp = path.join(WEBSITE_DIR, 'solutions', 'talktalk-fibre-wireguard-cgnat.html');
+      assertTrue(fs.existsSync(fp), 'talktalk-fibre-wireguard-cgnat.html must exist');
+      const html = fs.readFileSync(fp, 'utf8');
+      const robots = extractRobots(html);
+      assertTrue(!!robots, 'Pillar must have robots meta tag');
+      assertFalse(robots.includes('noindex'), 'Pillar must not have noindex');
+      assertIncludes(robots, 'index', 'Pillar must have index directive');
     }
   },
 
@@ -293,11 +293,13 @@ export const tier2Tests = [
     id: 'F04-T2-05',
     feature: 'F4',
     tier: 2,
-    name: 'Verify legacy /vs-totalvpn.html request redirects to /alternatives/totalvpn',
+    name: 'Verify legacy /vs-totalvpn.html redirects 301 to /vs/totalvpn (200 OK)',
     async fn({ baseUrl }) {
       const res = await fetchOpaque(`${baseUrl}/vs-totalvpn.html`);
-      assertEqual(res.status, 301, 'Legacy .html totalvpn must return 301');
-      assertEqual(res.location, '/alternatives/totalvpn', 'Must redirect to alternatives');
+      assertEqual(res.status, 301, 'Legacy /vs-totalvpn.html must return 301');
+      assertEqual(res.location, '/vs/totalvpn', 'Must redirect to active /vs/totalvpn canonical');
+      const followed = await fetchOpaque(`${baseUrl}${res.location}`);
+      assertEqual(followed.status, 200, 'Canonical /vs/totalvpn must return 200 OK');
     }
   },
 
@@ -342,13 +344,12 @@ export const tier2Tests = [
     tier: 2,
     name: 'Verify no orphaned closing section tags exist around proof removal points',
     async fn() {
-      const fp = path.join(WEBSITE_DIR, 'solutions', 'talktalk-p2p-port-forwarding.html');
-      if (fs.existsSync(fp)) {
-        const html = fs.readFileSync(fp, 'utf8');
-        const openSections = (html.match(/<section\b/gi) || []).length;
-        const closeSections = (html.match(/<\/section>/gi) || []).length;
-        assertEqual(openSections, closeSections, 'Open and close <section> tag counts must balance');
-      }
+      const fp = path.join(WEBSITE_DIR, 'solutions', 'talktalk-fibre-wireguard-cgnat.html');
+      assertTrue(fs.existsSync(fp), 'talktalk-fibre-wireguard-cgnat.html must exist');
+      const html = fs.readFileSync(fp, 'utf8');
+      const openSections = (html.match(/<section\b/gi) || []).length;
+      const closeSections = (html.match(/<\/section>/gi) || []).length;
+      assertEqual(openSections, closeSections, 'Open and close <section> tag counts must balance');
     }
   },
   {
@@ -357,12 +358,11 @@ export const tier2Tests = [
     tier: 2,
     name: 'Verify modified HTML files remain valid UTF-8 without byte order mark (BOM)',
     async fn() {
-      const fp = path.join(WEBSITE_DIR, 'solutions', 'talktalk-p2p-port-forwarding.html');
-      if (fs.existsSync(fp)) {
-        const buf = fs.readFileSync(fp);
-        const hasBom = buf[0] === 0xef && buf[1] === 0xbb && buf[2] === 0xbf;
-        assertFalse(hasBom, 'File must not have UTF-8 BOM');
-      }
+      const fp = path.join(WEBSITE_DIR, 'solutions', 'talktalk-fibre-wireguard-cgnat.html');
+      assertTrue(fs.existsSync(fp), 'talktalk-fibre-wireguard-cgnat.html must exist');
+      const buf = fs.readFileSync(fp);
+      const hasBom = buf[0] === 0xef && buf[1] === 0xbb && buf[2] === 0xbf;
+      assertFalse(hasBom, 'File must not have UTF-8 BOM');
     }
   },
 
@@ -395,11 +395,10 @@ export const tier2Tests = [
     tier: 2,
     name: 'Verify heading "How SWEEPR VPN Solves This" and surrounding prose remain intact',
     async fn() {
-      const fp = path.join(WEBSITE_DIR, 'solutions', 'talktalk-p2p-port-forwarding.html');
-      if (fs.existsSync(fp)) {
-        const html = fs.readFileSync(fp, 'utf8');
-        assertTrue(html.includes('How SWEEPR VPN Solves') || html.includes('WireGuard'), 'Surrounding prose should be intact');
-      }
+      const fp = path.join(WEBSITE_DIR, 'solutions', 'talktalk-fibre-wireguard-cgnat.html');
+      assertTrue(fs.existsSync(fp), 'talktalk-fibre-wireguard-cgnat.html must exist');
+      const html = fs.readFileSync(fp, 'utf8');
+      assertTrue(html.includes('How SWEEPR VPN Solves') || html.includes('WireGuard'), 'Surrounding prose should be intact');
     }
   },
   {
@@ -408,13 +407,12 @@ export const tier2Tests = [
     tier: 2,
     name: 'Verify table tag balance in solutions pillars after matrix removal',
     async fn() {
-      const fp = path.join(WEBSITE_DIR, 'solutions', 'talktalk-p2p-port-forwarding.html');
-      if (fs.existsSync(fp)) {
-        const html = fs.readFileSync(fp, 'utf8');
-        const openTables = (html.match(/<table\b/gi) || []).length;
-        const closeTables = (html.match(/<\/table>/gi) || []).length;
-        assertEqual(openTables, closeTables, 'Open and close <table> tag counts must balance');
-      }
+      const fp = path.join(WEBSITE_DIR, 'solutions', 'talktalk-fibre-wireguard-cgnat.html');
+      assertTrue(fs.existsSync(fp), 'talktalk-fibre-wireguard-cgnat.html must exist');
+      const html = fs.readFileSync(fp, 'utf8');
+      const openTables = (html.match(/<table\b/gi) || []).length;
+      const closeTables = (html.match(/<\/table>/gi) || []).length;
+      assertEqual(openTables, closeTables, 'Open and close <table> tag counts must balance');
     }
   },
   {
@@ -423,63 +421,66 @@ export const tier2Tests = [
     tier: 2,
     name: 'Verify zero orphaned table cell or row tags exist in solutions pillars',
     async fn() {
-      const fp = path.join(WEBSITE_DIR, 'solutions', 'talktalk-p2p-port-forwarding.html');
-      if (fs.existsSync(fp)) {
-        const html = fs.readFileSync(fp, 'utf8');
-        const openTr = (html.match(/<tr\b/gi) || []).length;
-        const closeTr = (html.match(/<\/tr>/gi) || []).length;
-        assertEqual(openTr, closeTr, 'Open and close <tr> counts must balance');
-      }
+      const fp = path.join(WEBSITE_DIR, 'solutions', 'talktalk-fibre-wireguard-cgnat.html');
+      assertTrue(fs.existsSync(fp), 'talktalk-fibre-wireguard-cgnat.html must exist');
+      const html = fs.readFileSync(fp, 'utf8');
+      const openTr = (html.match(/<tr\b/gi) || []).length;
+      const closeTr = (html.match(/<\/tr>/gi) || []).length;
+      assertEqual(openTr, closeTr, 'Open and close <tr> counts must balance');
     }
   },
 
   // =========================================================================
-  // Feature F7: Disable Boilerplate Injection Scripts Boundaries
+  // Feature F7: Remove Boilerplate Injection Scripts Boundaries
   // =========================================================================
   {
     id: 'F07-T2-01',
     feature: 'F7',
     tier: 2,
-    name: 'Verify enrich-pillars script ignores --force-proof flag and does not modify disk',
+    name: 'Verify enrich-pillars script remains deleted and keyword engine dry-run injects zero proof',
     async fn() {
-      const fp = path.join(SCRIPTS_DIR, 'enrich-pillars-with-live-proof.mjs');
-      const res = execSync(`node "${fp}" --force-proof 500`, { cwd: ROOT_DIR, encoding: 'utf8' });
+      assertFalse(fs.existsSync(path.join(SCRIPTS_DIR, 'enrich-pillars-with-live-proof.mjs')), 'Deleted script must remain absent');
+      const kwPath = path.join(SCRIPTS_DIR, 'keyword-research-engine.mjs');
+      const res = execSync(`node "${kwPath}" --discover --score --audit --json-only --offline --dry-run`, { cwd: ROOT_DIR, encoding: 'utf8' });
+      assertTrue(res.length > 0, 'Keyword engine dry-run completes cleanly');
       const matches = findFilesWithPattern(WEBSITE_DIR, /id=["']sweepr-live-wireguard-acr-proof["']/i);
-      assertEqual(matches.length, 0, '--force-proof must not re-inject boilerplate');
+      assertEqual(matches.length, 0, 'Dry-run must not re-inject boilerplate');
     }
   },
   {
     id: 'F07-T2-02',
     feature: 'F7',
     tier: 2,
-    name: 'Verify daily audit script runs cleanly when .gcp-service-account.json is absent',
+    name: 'Verify daily audit script runs cleanly with --no-fix --no-ping',
     async fn() {
       const fp = path.join(SCRIPTS_DIR, 'daily-seo-pagespeed-audit.mjs');
-      // Should not throw ENOENT or unhandled rejection
       const res = execSync(`node "${fp}" --no-fix --no-ping`, { cwd: ROOT_DIR, encoding: 'utf8' });
-      assertTrue(res.length > 0, 'Audit script runs without GCP credentials');
+      assertTrue(res.length > 0, 'Audit script runs cleanly');
     }
   },
   {
     id: 'F07-T2-03',
     feature: 'F7',
     tier: 2,
-    name: 'Verify enrich-pillars script handles non-existent cluster folders without crashing',
+    name: 'Verify zero scripts reference enrich-pillars-with-live-proof.mjs execution',
     async fn() {
-      const fp = path.join(SCRIPTS_DIR, 'enrich-pillars-with-live-proof.mjs');
-      // Running should exit 0
-      const exitCode = 0;
-      assertTrue(exitCode === 0, 'Script completes with exit 0');
+      const scriptFiles = fs.readdirSync(SCRIPTS_DIR).filter((f) => f.endsWith('.mjs'));
+      for (const sf of scriptFiles) {
+        const src = fs.readFileSync(path.join(SCRIPTS_DIR, sf), 'utf8');
+        assertFalse(src.includes('enrich-pillars-with-live-proof.mjs'), `Script ${sf} must not invoke deleted enrich-pillars script`);
+      }
+      const res = execSync(`node "${path.join(SCRIPTS_DIR, 'daily-seo-pagespeed-audit.mjs')}" --no-fix --no-ping`, { cwd: ROOT_DIR, encoding: 'utf8' });
+      assertIncludes(res, '100% HEALTHY', 'Daily audit must report 100% HEALTHY');
     }
   },
   {
     id: 'F07-T2-04',
     feature: 'F7',
     tier: 2,
-    name: 'Verify scripts do not throw UnhandledPromiseRejection on unexpected parameters',
+    name: 'Verify daily audit script does not throw UnhandledPromiseRejection on unexpected parameters',
     async fn() {
-      const fp = path.join(SCRIPTS_DIR, 'enrich-pillars-with-live-proof.mjs');
-      const res = execSync(`node "${fp}" --invalid-arg --unknown`, { cwd: ROOT_DIR, encoding: 'utf8' });
+      const fp = path.join(SCRIPTS_DIR, 'daily-seo-pagespeed-audit.mjs');
+      const res = execSync(`node "${fp}" --no-fix --no-ping --invalid-arg --unknown`, { cwd: ROOT_DIR, encoding: 'utf8' });
       assertFalse(res.includes('UnhandledPromiseRejection'), 'No unhandled rejection');
     }
   },
@@ -714,10 +715,17 @@ export const tier2Tests = [
     id: 'F11-T2-03',
     feature: 'F11',
     tier: 2,
-    name: 'Verify running audit twice in succession produces zero git diff on index.html',
+    name: 'Verify running audit twice in succession preserves exact SHA-256 of index.html and sitemap.xml',
     async fn() {
-      const diff = execSync('git diff website/index.html', { cwd: ROOT_DIR, encoding: 'utf8' });
-      assertEqual(diff, '', 'Consecutive runs must produce zero diff');
+      const auditPath = path.join(SCRIPTS_DIR, 'daily-seo-pagespeed-audit.mjs');
+      const indexPath = path.join(WEBSITE_DIR, 'index.html');
+      const sitemapPath = path.join(WEBSITE_DIR, 'sitemap.xml');
+      const idxBefore = sha256File(indexPath);
+      const smBefore = sha256File(sitemapPath);
+      execSync(`node "${auditPath}" --no-fix --no-ping`, { cwd: ROOT_DIR, encoding: 'utf8' });
+      execSync(`node "${auditPath}" --no-fix --no-ping`, { cwd: ROOT_DIR, encoding: 'utf8' });
+      assertEqual(sha256File(indexPath), idxBefore, 'index.html SHA-256 must remain invariant');
+      assertEqual(sha256File(sitemapPath), smBefore, 'sitemap.xml SHA-256 must remain invariant');
     }
   },
   {
@@ -764,40 +772,37 @@ export const tier2Tests = [
     id: 'F12-T2-02',
     feature: 'F12',
     tier: 2,
-    name: 'Verify grid uses canonical path /alternatives/totalvpn, not alias /vs/totalvpn',
+    name: 'Verify homepage links directly (200 OK, no nofollow) to both /vs/totalvpn and /alternatives/totalvpn',
     async fn({ baseUrl }) {
       const res = await fetchOpaque(`${baseUrl}/`);
-      const links = extractLinks(res.body).map((l) => l.href);
-      assertTrue(links.includes('/alternatives/totalvpn'), 'Must link to /alternatives/totalvpn');
-      assertFalse(links.includes('/vs/totalvpn'), 'Must not link to retired alias /vs/totalvpn');
+      const links = extractLinks(res.body);
+      for (const target of ['/vs/totalvpn', '/alternatives/totalvpn']) {
+        const linkObj = links.find((l) => l.href === target);
+        assertTrue(!!linkObj, `Homepage must link to ${target}`);
+        assertFalse(hasNofollow(linkObj), `Link to ${target} must not have nofollow`);
+        const dest = await fetchOpaque(`${baseUrl}${target}`, { method: 'HEAD' });
+        assertEqual(dest.status, 200, `${target} must return 200 OK`);
+      }
     }
   },
   {
     id: 'F12-T2-03',
     feature: 'F12',
     tier: 2,
-    name: 'Verify exactly 13 unique pillar links exist in the curated grid container',
+    name: 'Verify all core pages maintain <15 (14) BOFU footer links + Google Preferred Sources badge',
     async fn({ baseUrl }) {
-      const res = await fetchOpaque(`${baseUrl}/`);
-      const links = extractLinks(res.body).map((l) => l.href);
-      const uniqueLinks = new Set(links);
-      const required = [
-        '/tools/leak-test',
-        '/tools/isp-throttling-test',
-        '/setup/gl-inet-travel-router',
-        '/setup/synology-nas-docker-vpn',
-        '/setup/steam-deck-vpn',
-        '/setup/nvidia-shield-tv-pro-wireguard',
-        '/guides/stop-samsung-smart-tv-acr-tracking',
-        '/guides/stop-lg-smart-tv-acr-spying',
-        '/guides/stop-roku-vizio-firetv-spying',
-        '/solutions/eduroam-campus-wifi-gaming-packet-loss',
-        '/solutions/talktalk-p2p-port-forwarding',
-        '/alternatives/totalvpn',
-        '/warrant-canary'
-      ];
-      for (const r of required) {
-        assertTrue(uniqueLinks.has(r), `Grid must contain ${r}`);
+      const pages = ['/', '/pricing', '/tools/leak-test', '/tools/isp-throttling-test', '/privacy', '/ai-info', '/faq'];
+      for (const p of pages) {
+        const res = await fetchOpaque(`${baseUrl}${p}`);
+        assertEqual(res.status, 200, `${p} must return 200`);
+        const footerMatch = res.body.match(/<footer[\s\S]*?<\/footer>/i);
+        assertTrue(!!footerMatch, `${p} must contain <footer>`);
+        const footerLinks = extractLinks(footerMatch[0]).map((l) => l.href);
+        assertLessThan(footerLinks.length, 15, `${p} footer must have < 15 links, got ${footerLinks.length}`);
+        assertTrue(
+          footerLinks.includes('https://www.google.com/preferences/source?q=sweeprvpn.com'),
+          `${p} footer must include Google Preferred Sources badge`
+        );
       }
     }
   },
@@ -805,13 +810,15 @@ export const tier2Tests = [
     id: 'F12-T2-04',
     feature: 'F12',
     tier: 2,
-    name: 'Verify all 13 grid links have descriptive anchor text for accessibility',
+    name: 'Verify BOFU footer links and Preferred Sources badge have descriptive anchor text',
     async fn({ baseUrl }) {
       const res = await fetchOpaque(`${baseUrl}/`);
-      const links = extractLinks(res.body);
-      const canary = links.find((l) => l.href === '/warrant-canary');
-      if (canary) {
-        assertTrue(canary.text.length > 3, 'Canary anchor text must be descriptive');
+      const footerMatch = res.body.match(/<footer[\s\S]*?<\/footer>/i);
+      assertTrue(!!footerMatch, 'Homepage must contain <footer>');
+      const footerLinks = extractLinks(footerMatch[0]);
+      assertEqual(footerLinks.length, 14, `Expected 14 footer links on /, got ${footerLinks.length}`);
+      for (const fl of footerLinks) {
+        assertTrue(fl.text.length > 1, `Footer link ${fl.href} must have descriptive anchor text`);
       }
     }
   },
@@ -819,9 +826,9 @@ export const tier2Tests = [
     id: 'F12-T2-05',
     feature: 'F12',
     tier: 2,
-    name: 'Verify grid targets resolve with HTTP 200 OK on HEAD requests',
+    name: 'Verify BOFU and pillar targets resolve with HTTP 200 OK on HEAD requests',
     async fn({ baseUrl }) {
-      const sample = ['/tools/leak-test', '/setup/gl-inet-travel-router', '/warrant-canary'];
+      const sample = ['/tools/leak-test', '/setup/gl-inet-travel-router', '/warrant-canary', '/ai-info', '/faq'];
       for (const s of sample) {
         const res = await fetchOpaque(`${baseUrl}${s}`, { method: 'HEAD' });
         assertEqual(res.status, 200, `Target ${s} must return 200 on HEAD`);
@@ -861,12 +868,11 @@ export const tier2Tests = [
     id: 'F13-T2-03',
     feature: 'F13',
     tier: 2,
-    name: 'Verify consolidate-and-optimize-gsc handles corrupted JSON snapshot gracefully',
+    name: 'Verify consolidate-and-optimize-gsc runs cleanly in temp sandbox without mutating repo',
     async fn() {
-      const fp = path.join(SCRIPTS_DIR, 'consolidate-and-optimize-gsc.mjs');
-      // Execution without crashing
-      const res = execSync(`node "${fp}"`, { cwd: ROOT_DIR, encoding: 'utf8' });
-      assertTrue(res.length > 0, 'Script completes gracefully');
+      const res = runConsolidationInTempSandbox();
+      assertTrue(res.length > 0, 'Script completes gracefully in isolated sandbox');
+      assertIncludes(res, '[GSC Consolidation & Optimization Complete]', 'Sandbox output confirms completion');
     }
   },
   {
@@ -887,10 +893,9 @@ export const tier2Tests = [
     id: 'F13-T2-05',
     feature: 'F13',
     tier: 2,
-    name: 'Verify console logs contain 0 Winner Lock log lines for consolidated slugs',
+    name: 'Verify console logs in isolated sandbox contain 0 Winner Lock log lines for consolidated slugs',
     async fn() {
-      const fp = path.join(SCRIPTS_DIR, 'consolidate-and-optimize-gsc.mjs');
-      const res = execSync(`node "${fp}"`, { cwd: ROOT_DIR, encoding: 'utf8' });
+      const res = runConsolidationInTempSandbox();
       assertFalse(res.includes('[GSC Winner Lock] Dynamically protecting'), 'Winner lock line should not trigger');
     }
   },
@@ -1029,12 +1034,9 @@ export const tier2Tests = [
     name: 'Verify binary /download mapping to .exe handles hash resolution safely',
     async fn() {
       const exePath = path.join(WEBSITE_DIR, 'SWEEPRVPN.exe');
-      if (fs.existsSync(exePath)) {
-        const stats = fs.statSync(exePath);
-        assertTrue(stats.size > 0, 'Installer binary exists with non-zero size');
-      } else {
-        assertTrue(true, 'Binary handling verified');
-      }
+      assertTrue(fs.existsSync(exePath), 'Installer binary website/SWEEPRVPN.exe must exist');
+      const stats = fs.statSync(exePath);
+      assertGreaterThan(stats.size, 0, 'Installer binary must have non-zero size');
     }
   },
 
@@ -1175,29 +1177,44 @@ export const tier2Tests = [
     id: 'F18-T2-01',
     feature: 'F18',
     tier: 2,
-    name: 'Verify Googlebot crawler receives initial server HTML with canary link without JS execution',
+    name: 'Verify Googlebot crawler receives initial server HTML with BOFU footer, Preferred Sources & #homeToolsAndHubsStrip',
     async fn({ baseUrl }) {
       const res = await fetchOpaque(`${baseUrl}/`, {
         headers: { 'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)' }
       });
       assertEqual(res.status, 200, 'Must return 200 to Googlebot');
-      assertTrue(res.body.includes('href="/warrant-canary"'), 'Initial HTML must contain canary link');
+      assertTrue(res.body.includes('id="homeToolsAndHubsStrip"'), 'Initial HTML must contain #homeToolsAndHubsStrip');
+      assertTrue(res.body.includes('https://www.google.com/preferences/source?q=sweeprvpn.com'), 'Initial HTML must contain Preferred Sources badge');
+      const aiRes = await fetchOpaque(`${baseUrl}/ai-info`, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)' }
+      });
+      assertEqual(aiRes.status, 200, 'Must return 200 for /ai-info to Googlebot');
+      assertTrue(aiRes.body.includes('href="/warrant-canary"'), '/ai-info initial HTML must contain canary link');
     }
   },
   {
     id: 'F18-T2-02',
     feature: 'F18',
     tier: 2,
-    name: 'Verify none of the 6 demoted pillar links contain rel="nofollow" or rel="ugc"',
+    name: 'Verify none of the homepage hub/tool/TotalVPN links contain rel="nofollow" or rel="ugc"',
     async fn({ baseUrl }) {
       const res = await fetchOpaque(`${baseUrl}/`);
       const links = extractLinks(res.body);
-      const testPillars = ['/guides/stop-samsung-smart-tv-acr-tracking', '/setup/gl-inet-travel-router'];
-      for (const tp of testPillars) {
+      const targets = [
+        '/tools/leak-test',
+        '/tools/isp-throttling-test',
+        '/solutions',
+        '/setup',
+        '/guides',
+        '/vs',
+        '/vs/totalvpn',
+        '/alternatives/totalvpn'
+      ];
+      for (const tp of targets) {
         const linkObj = links.find((l) => l.href === tp);
-        if (linkObj) {
-          assertFalse(hasNofollow(linkObj), `Link to ${tp} must not have nofollow`);
-        }
+        assertTrue(!!linkObj, `Homepage must contain link to ${tp}`);
+        assertFalse(hasNofollow(linkObj), `Link to ${tp} must not have nofollow`);
+        assertFalse(/\bugc\b/i.test(linkObj.rel || ''), `Link to ${tp} must not have ugc`);
       }
     }
   },
@@ -1205,20 +1222,22 @@ export const tier2Tests = [
     id: 'F18-T2-03',
     feature: 'F18',
     tier: 2,
-    name: 'Verify all 6 demoted pillar links respond with HTTP 200 OK directly (0 redirects)',
+    name: 'Verify homepage hub, tool, and TotalVPN canonicals respond 200 OK directly (0 redirects)',
     async fn({ baseUrl }) {
       const pillars = [
-        '/guides/stop-samsung-smart-tv-acr-tracking',
-        '/setup/gl-inet-travel-router',
+        '/solutions',
+        '/setup',
+        '/guides',
+        '/vs',
         '/tools/leak-test',
         '/tools/isp-throttling-test',
-        '/setup/synology-nas-docker-vpn',
+        '/vs/totalvpn',
         '/alternatives/totalvpn'
       ];
       for (const p of pillars) {
         const res = await fetchOpaque(`${baseUrl}${p}`);
-        assertEqual(res.status, 200, `Demoted pillar ${p} must return HTTP 200 OK`);
-        assertEqual(res.location, null, `Demoted pillar ${p} must not redirect`);
+        assertEqual(res.status, 200, `Canonical ${p} must return HTTP 200 OK`);
+        assertEqual(res.location, null, `Canonical ${p} must not redirect`);
       }
     }
   },
@@ -1226,12 +1245,18 @@ export const tier2Tests = [
     id: 'F18-T2-04',
     feature: 'F18',
     tier: 2,
-    name: 'Verify download picker platform variants (?platform=win, ?platform=mac) retain crawlable links',
+    name: 'Verify /download?platform=picker & ?picker=1 serve HTML with canary while ?platform=win/mac serve attachment binary',
     async fn({ baseUrl }) {
+      for (const q of ['?platform=picker', '?picker=1']) {
+        const res = await fetchOpaque(`${baseUrl}/download${q}`);
+        assertEqual(res.status, 200, `/download${q} must return 200`);
+        assertIncludes(res.getHeader('content-type') || '', 'text/html', `/download${q} must serve text/html`);
+        assertTrue(res.body.includes('href="/warrant-canary"'), `/download${q} must retain canary link`);
+      }
       for (const plat of ['win', 'mac']) {
-        const res = await fetchOpaque(`${baseUrl}/download?platform=${plat}`);
-        assertEqual(res.status, 200, `/download?platform=${plat} must return 200`);
-        assertTrue(res.body.includes('href="/warrant-canary"'), `Platform ${plat} must retain canary link`);
+        const binRes = await fetchOpaque(`${baseUrl}/download?platform=${plat}`, { method: 'HEAD' });
+        assertEqual(binRes.status, 200, `/download?platform=${plat} must return 200`);
+        assertIncludes(binRes.getHeader('content-disposition') || '', 'attachment', `/download?platform=${plat} must serve attachment binary`);
       }
     }
   },
@@ -1254,61 +1279,66 @@ export const tier2Tests = [
     id: 'F19-T2-01',
     feature: 'F19',
     tier: 2,
-    name: 'Verify passing --limit=0 strictly overrides any internal default limit in keyword engine',
+    name: 'Verify passing --json-only or --limit=0 strictly blocks HTML mutations in keyword engine',
     async fn() {
       const scriptPath = path.join(SCRIPTS_DIR, 'keyword-research-engine.mjs');
-      if (fs.existsSync(scriptPath)) {
-        const content = fs.readFileSync(scriptPath, 'utf8');
-        assertTrue(content.includes('limit'), 'Keyword engine handles limit parameter');
-      }
+      assertTrue(fs.existsSync(scriptPath), 'keyword-research-engine.mjs must exist');
+      const content = fs.readFileSync(scriptPath, 'utf8');
+      assertIncludes(content, '--json-only', 'Keyword engine must support --json-only');
+      assertIncludes(content, 'apply && !jsonOnly', 'jsonOnly must disable apply mode');
     }
   },
   {
     id: 'F19-T2-02',
     feature: 'F19',
     tier: 2,
-    name: 'Verify keyword engine dry-run with empty opportunities cache exits cleanly code 0',
+    name: 'Verify keyword engine --verify-calibration and --apply --limit=0 exit 0 cleanly with zero writes',
     async fn() {
       const scriptPath = path.join(SCRIPTS_DIR, 'keyword-research-engine.mjs');
-      if (fs.existsSync(scriptPath)) {
-        const res = execSync(`node "${scriptPath}" --limit=0`, { cwd: ROOT_DIR, encoding: 'utf8' });
-        assertTrue(res.length >= 0, 'Executes cleanly');
-      }
+      const calRes = execSync(`node "${scriptPath}" --verify-calibration`, { cwd: ROOT_DIR, encoding: 'utf8' });
+      assertIncludes(calRes, 'calibration assertions passed', 'Calibration check must pass');
+      const limRes = execSync(`node "${scriptPath}" --apply --limit=0`, { cwd: ROOT_DIR, encoding: 'utf8' });
+      assertIncludes(limRes, '0 new pillar pages created', 'Limit=0 must exit 0 cleanly');
     }
   },
   {
     id: 'F19-T2-03',
     feature: 'F19',
     tier: 2,
-    name: 'Verify workflow failing to specify --limit=0 triggers CI test violation',
+    name: 'Verify workflow locks keyword engine to --json-only and gates push with ci-seo-quality-gate.mjs',
     async fn() {
       const wfPath = path.join(ROOT_DIR, '.github', 'workflows', 'vpn-daily-seo-pipeline.yml');
       const content = fs.readFileSync(wfPath, 'utf8');
-      assertIncludes(content, '--limit=0', 'Workflow must explicitly contain --limit=0');
+      assertIncludes(content, '--json-only', 'Workflow must explicitly use --json-only');
+      assertFalse(/\bkeyword-research-engine\.mjs[^\n]*--apply\b/.test(content), 'Workflow must never pass --apply');
+      assertIncludes(content, 'node scripts/ci-seo-quality-gate.mjs', 'Workflow must run ci-seo-quality-gate.mjs');
     }
   },
   {
     id: 'F19-T2-04',
     feature: 'F19',
     tier: 2,
-    name: 'Verify keyword engine does not invoke live proof injection when limit=0',
+    name: 'Verify keyword engine does not invoke enrich-pillars-with-live-proof.mjs and honors dryRun',
     async fn() {
       const scriptPath = path.join(SCRIPTS_DIR, 'keyword-research-engine.mjs');
-      if (fs.existsSync(scriptPath)) {
-        const content = fs.readFileSync(scriptPath, 'utf8');
-        // Keyword engine should not force-call enrich-pillars
-        assertTrue(true, 'Checked keyword engine logic');
-      }
+      const content = fs.readFileSync(scriptPath, 'utf8');
+      assertFalse(content.includes('enrich-pillars-with-live-proof.mjs'), 'Keyword engine must never invoke retired enrich-pillars script');
+      assertIncludes(content, 'if (!dryRun)', 'Keyword engine must guard writes with !dryRun');
     }
   },
   {
     id: 'F19-T2-05',
     feature: 'F19',
     tier: 2,
-    name: 'Verify pipeline dry-run maintains zero git diff in cluster directories',
+    name: 'Verify pipeline dry-run maintains exact SHA-256 invariance across all 62 cluster HTML files',
     async fn() {
-      const diff = execSync('git diff --name-only website/solutions website/vs website/setup website/guides', { cwd: ROOT_DIR, encoding: 'utf8' });
-      assertEqual(diff.trim(), '', 'Cluster directories must have 0 diff');
+      const pillars = getAuthoritativePillars();
+      const before = Object.fromEntries(pillars.map((rel) => [rel, sha256File(path.join(WEBSITE_DIR, rel))]));
+      execSync(`node "${path.join(SCRIPTS_DIR, 'keyword-research-engine.mjs')}" --discover --score --audit --json-only --offline --dry-run`, { cwd: ROOT_DIR, encoding: 'utf8' });
+      execSync(`node "${path.join(SCRIPTS_DIR, 'daily-seo-pagespeed-audit.mjs')}" --no-fix --no-ping`, { cwd: ROOT_DIR, encoding: 'utf8' });
+      for (const rel of pillars) {
+        assertEqual(sha256File(path.join(WEBSITE_DIR, rel)), before[rel], `Cluster file ${rel} must not be mutated by dry-run pipeline`);
+      }
     }
   },
 
@@ -1386,12 +1416,20 @@ export const tier2Tests = [
     id: 'F21-T2-01',
     feature: 'F21',
     tier: 2,
-    name: 'Verify audit script idempotency: running twice with --no-fix produces identical state',
+    name: 'Verify audit script idempotency: running twice with --no-fix --no-ping produces identical SHA-256 hashes',
     async fn() {
       const scriptPath = path.join(SCRIPTS_DIR, 'daily-seo-pagespeed-audit.mjs');
+      const files = [
+        path.join(WEBSITE_DIR, 'sitemap.xml'),
+        path.join(WEBSITE_DIR, 'index.html'),
+        path.join(ROOT_DIR, 'TECHNICAL_SEO_AUDIT_LOG.md')
+      ];
+      const before = files.map((f) => sha256File(f));
       execSync(`node "${scriptPath}" --no-fix --no-ping`, { cwd: ROOT_DIR, encoding: 'utf8' });
       execSync(`node "${scriptPath}" --no-fix --no-ping`, { cwd: ROOT_DIR, encoding: 'utf8' });
-      assertTrue(true, 'Consecutive executions complete without state divergence');
+      files.forEach((f, idx) => {
+        assertEqual(sha256File(f), before[idx], `Repeated --no-fix --no-ping run mutated ${path.basename(f)}`);
+      });
     }
   },
   {
@@ -1463,15 +1501,24 @@ export const tier2Tests = [
     id: 'F22-T2-02',
     feature: 'F22',
     tier: 2,
-    name: 'Verify cloud-gsc-ga4-sync.mjs logs clean warning and exits 0 when credentials absent',
+    name: 'Verify cloud-gsc-ga4-sync.mjs --dry-run --no-ctr-rewrite --skip-crm logs warning and writes 0 bytes when credentials absent',
     async fn() {
       const scriptPath = path.join(SCRIPTS_DIR, 'cloud-gsc-ga4-sync.mjs');
-      const res = execSync(`node "${scriptPath}"`, {
+      const trackedJson = [
+        path.join(WEBSITE_DIR, 'gsc-ga4-latest-snapshot.json'),
+        path.join(WEBSITE_DIR, 'pillar-enrichment-state.json'),
+        path.join(WEBSITE_DIR, 'indexing-queue.json')
+      ];
+      const before = trackedJson.map((f) => sha256File(f));
+      const res = execSync(`node "${scriptPath}" --dry-run --no-ctr-rewrite --skip-crm`, {
         cwd: ROOT_DIR,
         encoding: 'utf8',
-        env: { ...process.env, GCP_SERVICE_ACCOUNT_JSON: '' }
+        env: { ...process.env, GCP_SERVICE_ACCOUNT_JSON: '{}' }
       });
-      assertTrue(res.includes('GSC') || res.includes('warning') || res.includes('sitemap') || res.includes('credentials') || res.length >= 0, 'Graceful exit on absent credentials');
+      assertIncludes(res, 'GCP_SERVICE_ACCOUNT_JSON not set', 'Graceful warning when credentials absent');
+      trackedJson.forEach((f, idx) => {
+        assertEqual(sha256File(f), before[idx], `Dry-run sync must not mutate ${path.basename(f)}`);
+      });
     }
   },
   {
@@ -1507,6 +1554,556 @@ export const tier2Tests = [
       const wfPath = path.join(ROOT_DIR, '.github', 'workflows', 'vpn-daily-seo-pipeline.yml');
       const content = fs.readFileSync(wfPath, 'utf8');
       assertFalse(content.includes('git add .'), 'Workflow must not use blanket git add .');
+    }
+  },
+
+  // =========================================================================
+  // Feature F23: R1 Real Benchmarks & WebP Asset Boundaries
+  // =========================================================================
+  {
+    id: 'F23-T2-01',
+    feature: 'F23',
+    tier: 2,
+    name: 'Verify missing WebP asset (/assets/nonexistent-capture.webp) returns HTTP 404',
+    async fn({ baseUrl }) {
+      const res = await fetchBinary(`${baseUrl}/assets/nonexistent-capture.webp`);
+      assertEqual(res.status, 404, 'Missing .webp asset must return HTTP 404');
+    }
+  },
+  {
+    id: 'F23-T2-02',
+    feature: 'F23',
+    tier: 2,
+    name: 'Verify HTTP HEAD on all 6 .webp assets returns 200 image/webp, Content-Length < 81920, and 0-byte body',
+    async fn({ baseUrl }) {
+      const assets = [
+        'desktop-dark-mode.webp',
+        'desktop-home-light.webp',
+        'desktop-wifi-radar.webp',
+        'mobile-ui-connect.webp',
+        'tool-isp-throttling.webp',
+        'tool-leak-test.webp'
+      ];
+      for (const name of assets) {
+        const res = await fetchBinary(`${baseUrl}/assets/${name}`, { method: 'HEAD' });
+        assertEqual(res.status, 200, `HEAD /assets/${name} must return 200`);
+        assertIncludes(res.getHeader('content-type') || '', 'image/webp', `HEAD /assets/${name} must return image/webp`);
+        const contentLen = Number(res.getHeader('content-length'));
+        assertGreaterThan(contentLen, 0, `HEAD /assets/${name} Content-Length must be > 0`);
+        assertLessThan(contentLen, 81920, `HEAD /assets/${name} Content-Length must be < 80 KB`);
+        assertEqual(res.byteLength, 0, `HEAD /assets/${name} body must be empty`);
+      }
+    }
+  },
+  {
+    id: 'F23-T2-03',
+    feature: 'F23',
+    tier: 2,
+    name: 'Verify /assets/desktop-home-light.webp supports ETag and conditional 304 Not Modified',
+    async fn({ baseUrl }) {
+      const first = await fetchBinary(`${baseUrl}/assets/desktop-home-light.webp`);
+      assertEqual(first.status, 200, 'Initial GET must return 200');
+      const etag = first.getHeader('etag');
+      assertTrue(!!etag, 'Static WebP response must include ETag header');
+
+      const second = await fetchBinary(`${baseUrl}/assets/desktop-home-light.webp`, {
+        headers: { 'If-None-Match': etag }
+      });
+      assertEqual(second.status, 304, 'Conditional GET with matching ETag must return 304 Not Modified');
+      assertEqual(second.byteLength, 0, '304 response body must be empty');
+    }
+  },
+  {
+    id: 'F23-T2-04',
+    feature: 'F23',
+    tier: 2,
+    name: 'Verify all 17 embedded .webp <img> tags include decoding="async" and positive numeric dimensions',
+    async fn() {
+      const htmlFiles = findHtmlFiles(WEBSITE_DIR, true);
+      let checked = 0;
+      for (const fp of htmlFiles) {
+        const html = fs.readFileSync(fp, 'utf8');
+        for (const m of html.matchAll(/<img\b([^>]*\.webp[^>]*)>/gi)) {
+          checked++;
+          const attrs = m[1];
+          assertMatch(attrs, /\bdecoding=["']async["']/i, `Missing decoding="async" in ${fp}`);
+          const w = Number((attrs.match(/\bwidth=["'](\d+)["']/i) || [])[1] || 0);
+          const h = Number((attrs.match(/\bheight=["'](\d+)["']/i) || [])[1] || 0);
+          assertGreaterThan(w, 0, `Width must be > 0 in ${fp}`);
+          assertGreaterThan(h, 0, `Height must be > 0 in ${fp}`);
+        }
+      }
+      assertEqual(checked, 17, `Expected 17 .webp <img> elements, checked ${checked}`);
+    }
+  },
+  {
+    id: 'F23-T2-05',
+    feature: 'F23',
+    tier: 2,
+    name: 'Verify zero inline base64 data:image/ <img> bloat exists across all website HTML files',
+    async fn() {
+      const matches = findFilesWithPattern(WEBSITE_DIR, /<img\b[^>]*src=["']data:image\//i);
+      assertEqual(matches.length, 0, `Found unexpected base64 data:image <img> in ${matches.join(', ')}`);
+    }
+  },
+
+  // =========================================================================
+  // Feature F24: R2 Privacy, /ai-info, GEO <dl>, robots & llms.txt Boundaries
+  // =========================================================================
+  {
+    id: 'F24-T2-01',
+    feature: 'F24',
+    tier: 2,
+    name: 'Verify /ai-info/, /ai-info.html, and uppercase /AI-INFO return 1-hop 301 -> /ai-info',
+    async fn({ baseUrl }) {
+      for (const variant of ['/ai-info/', '/ai-info.html', '/AI-INFO']) {
+        const res = await fetchOpaque(`${baseUrl}${variant}`);
+        assertEqual(res.status, 301, `${variant} must return 301`);
+        assertEqual(res.location, '/ai-info', `${variant} must redirect 1-hop to /ai-info`);
+      }
+    }
+  },
+  {
+    id: 'F24-T2-02',
+    feature: 'F24',
+    tier: 2,
+    name: 'Verify ai-info.html JSON-LD blocks contain zero deprecated FAQPage or HowTo types',
+    async fn({ baseUrl }) {
+      const res = await fetchOpaque(`${baseUrl}/ai-info`);
+      assertEqual(res.status, 200, '/ai-info must return 200');
+      const jsonLdMatches = [...res.body.matchAll(/<script\s+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)];
+      assertGreaterThan(jsonLdMatches.length, 0, '/ai-info must contain JSON-LD structured data');
+      for (const m of jsonLdMatches) {
+        const parsed = JSON.parse(m[1]);
+        const serialized = JSON.stringify(parsed);
+        assertFalse(serialized.includes('"FAQPage"') || serialized.includes('"HowTo"'), '/ai-info JSON-LD must not emit FAQPage/HowTo');
+      }
+    }
+  },
+  {
+    id: 'F24-T2-03',
+    feature: 'F24',
+    tier: 2,
+    name: 'Verify /privacy wraps body in <article> and documents RAM tmpfs & /dev/null billing separation',
+    async fn({ baseUrl }) {
+      const res = await fetchOpaque(`${baseUrl}/privacy`);
+      assertEqual(res.status, 200, '/privacy must return 200');
+      assertMatch(res.body, /<article\b/i, '/privacy must contain <article>');
+      assertIncludes(res.body, 'tmpfs', '/privacy must document volatile RAM tmpfs');
+      assertIncludes(res.body, '/dev/null', '/privacy must document /dev/null zero-disk logging');
+    }
+  },
+  {
+    id: 'F24-T2-04',
+    feature: 'F24',
+    tier: 2,
+    name: 'Verify zero forbidden entity names (founder name, SWEEPR VPN Inc., sitepatent.com) across all 93 indexable HTML + llms*.txt',
+    async fn() {
+      const founderRe = new RegExp(`\\b${['Ben' + 'jamin', 'Co' + 'ok'].join('\\s+')}\\b`, 'i');
+      const incRe = /\bSWEEPR\s+VPN\s+Inc\b\.?/i;
+      const sitepatentRe = /sitepatent\.com/i;
+      for (const fp of findHtmlFiles(WEBSITE_DIR, true)) {
+        const html = fs.readFileSync(fp, 'utf8');
+        if (/<meta\s+name=["']robots["']\s+content=["'][^"']*noindex/i.test(html)) continue;
+        assertFalse(founderRe.test(html), `Forbidden founder name in ${fp}`);
+        assertFalse(incRe.test(html), `Forbidden SWEEPR VPN Inc. in ${fp}`);
+        assertFalse(sitepatentRe.test(html), `Forbidden sitepatent.com in ${fp}`);
+      }
+      for (const txt of ['llms.txt', 'llms-full.txt', 'pad.xml']) {
+        const content = fs.readFileSync(path.join(WEBSITE_DIR, txt), 'utf8');
+        assertFalse(founderRe.test(content), `Forbidden founder name in ${txt}`);
+        assertFalse(incRe.test(content), `Forbidden SWEEPR VPN Inc. in ${txt}`);
+        assertFalse(sitepatentRe.test(content), `Forbidden sitepatent.com in ${txt}`);
+      }
+    }
+  },
+  {
+    id: 'F24-T2-05',
+    feature: 'F24',
+    tier: 2,
+    name: 'Verify /robots.txt returns 200 with Cache-Control and does not block indexable /ai-info or /faq',
+    async fn({ baseUrl }) {
+      const res = await fetchOpaque(`${baseUrl}/robots.txt`);
+      assertEqual(res.status, 200, '/robots.txt must return 200');
+      assertFalse(/Disallow:\s*\/ai-info/i.test(res.body), 'robots.txt must not disallow /ai-info');
+      assertFalse(/Disallow:\s*\/faq/i.test(res.body), 'robots.txt must not disallow /faq');
+    }
+  },
+
+  // =========================================================================
+  // Feature F25: R3 /faq PAA Colony, BOFU Footers & <article> Boundaries
+  // =========================================================================
+  {
+    id: 'F25-T2-01',
+    feature: 'F25',
+    tier: 2,
+    name: 'Verify /faq/, /faq.html, and uppercase /FAQ return 1-hop 301 -> /faq',
+    async fn({ baseUrl }) {
+      for (const variant of ['/faq/', '/faq.html', '/FAQ']) {
+        const res = await fetchOpaque(`${baseUrl}${variant}`);
+        assertEqual(res.status, 301, `${variant} must return 301`);
+        assertEqual(res.location, '/faq', `${variant} must redirect 1-hop to /faq`);
+      }
+    }
+  },
+  {
+    id: 'F25-T2-02',
+    feature: 'F25',
+    tier: 2,
+    name: 'Verify every contextual <main> internal link on /faq returns HTTP 200 OK (zero 404s or redirects)',
+    async fn({ baseUrl }) {
+      const faqRes = await fetchOpaque(`${baseUrl}/faq`);
+      assertEqual(faqRes.status, 200, '/faq must return 200');
+      const mainHtml = extractMainContent(faqRes.body);
+      const uniqueTargets = [...new Set(extractLinks(mainHtml).map((l) => l.href).filter((h) => h.startsWith('/')))];
+      assertGreaterThanOrEqual(uniqueTargets.length, 20, 'Expected >= 20 unique internal targets in /faq <main>');
+      for (const t of uniqueTargets) {
+        const res = await fetchOpaque(`${baseUrl}${t}`, { method: 'HEAD' });
+        assertEqual(res.status, 200, `/faq target ${t} must return 200 OK`);
+        assertEqual(res.location, null, `/faq target ${t} must not redirect`);
+      }
+    }
+  },
+  {
+    id: 'F25-T2-03',
+    feature: 'F25',
+    tier: 2,
+    name: 'Verify faq.html JSON-LD parses cleanly with zero deprecated FAQPage or HowTo schema',
+    async fn() {
+      const html = fs.readFileSync(path.join(WEBSITE_DIR, 'faq.html'), 'utf8');
+      const blocks = [...html.matchAll(/<script\s+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)];
+      assertGreaterThan(blocks.length, 0, 'faq.html must contain JSON-LD');
+      for (const b of blocks) {
+        const parsed = JSON.parse(b[1]);
+        const s = JSON.stringify(parsed);
+        assertFalse(s.includes('"FAQPage"') || s.includes('"HowTo"'), 'faq.html must not contain FAQPage or HowTo schema');
+      }
+    }
+  },
+  {
+    id: 'F25-T2-04',
+    feature: 'F25',
+    tier: 2,
+    name: 'Verify maximum footer link count across all 93 indexable pages is strictly <= 14',
+    async fn() {
+      let maxLinks = 0;
+      for (const fp of findHtmlFiles(WEBSITE_DIR, true)) {
+        const html = fs.readFileSync(fp, 'utf8');
+        if (/<meta\s+name=["']robots["']\s+content=["'][^"']*noindex/i.test(html)) continue;
+        const footerMatch = html.match(/<footer[\s\S]*?<\/footer>/i);
+        assertTrue(!!footerMatch, `Missing <footer> in ${fp}`);
+        const count = extractLinks(footerMatch[0]).length;
+        if (count > maxLinks) maxLinks = count;
+      }
+      assertLessThanOrEqual(maxLinks, 14, `Max indexable footer link count must be <= 14, got ${maxLinks}`);
+    }
+  },
+  {
+    id: 'F25-T2-05',
+    feature: 'F25',
+    tier: 2,
+    name: 'Verify balanced <article>...</article> tags across all 62 pSEO pages',
+    async fn() {
+      for (const rel of getAuthoritativePillars()) {
+        const html = fs.readFileSync(path.join(WEBSITE_DIR, rel), 'utf8');
+        const openCount = (html.match(/<article\b/gi) || []).length;
+        const closeCount = (html.match(/<\/article>/gi) || []).length;
+        assertGreaterThanOrEqual(openCount, 1, `${rel} must contain <article>`);
+        assertEqual(openCount, closeCount, `${rel} <article> open/close count mismatch (${openCount} vs ${closeCount})`);
+      }
+    }
+  },
+
+  // =========================================================================
+  // Feature F26: R4 Onboarding, Churn & Telemetry Adversarial Boundaries
+  // =========================================================================
+  {
+    id: 'F26-T2-01',
+    feature: 'F26',
+    tier: 2,
+    name: 'Verify /welcome/ & /uninstall/ return 301 while /welcome.html & /uninstall.html serve 200 noindex, nofollow',
+    async fn({ baseUrl }) {
+      const wSlash = await fetchOpaque(`${baseUrl}/welcome/`);
+      assertEqual(wSlash.status, 301, '/welcome/ must return 301');
+      assertEqual(wSlash.location, '/welcome', '/welcome/ must redirect to /welcome');
+
+      const uSlash = await fetchOpaque(`${baseUrl}/uninstall/`);
+      assertEqual(uSlash.status, 301, '/uninstall/ must return 301');
+      assertEqual(uSlash.location, '/uninstall', '/uninstall/ must redirect to /uninstall');
+
+      for (const dotHtml of ['/welcome.html', '/uninstall.html']) {
+        const res = await fetchOpaque(`${baseUrl}${dotHtml}`);
+        assertEqual(res.status, 200, `${dotHtml} must serve 200 directly`);
+        assertIncludes((res.getHeader('x-robots-tag') || '').toLowerCase(), 'noindex, nofollow', `${dotHtml} must send X-Robots-Tag: noindex, nofollow`);
+      }
+    }
+  },
+  {
+    id: 'F26-T2-02',
+    feature: 'F26',
+    tier: 2,
+    name: 'Verify POST /api/uninstall-feedback rejects malformed JSON, arrays, >4096B (413), and GET (405)',
+    async fn({ baseUrl }) {
+      const badJson = await fetchOpaque(`${baseUrl}/api/uninstall-feedback`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: '{invalid-json'
+      });
+      assertEqual(badJson.status, 400, 'Malformed JSON must return 400');
+
+      const arrBody = await fetchOpaque(`${baseUrl}/api/uninstall-feedback`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: '["too_slow"]'
+      });
+      assertEqual(arrBody.status, 400, 'Array JSON payload must return 400');
+
+      const tooBig = await fetchOpaque(`${baseUrl}/api/uninstall-feedback`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason: 'other', note: 'x'.repeat(4200) })
+      });
+      assertEqual(tooBig.status, 413, 'Payload > 4096 B must return 413');
+
+      const getRes = await fetchOpaque(`${baseUrl}/api/uninstall-feedback`);
+      assertEqual(getRes.status, 405, 'GET /api/uninstall-feedback must return 405');
+    }
+  },
+  {
+    id: 'F26-T2-03',
+    feature: 'F26',
+    tier: 2,
+    name: 'Verify POST /api/uninstall-feedback neutralizes {toString:null} and __proto__ pollution safely',
+    async fn({ baseUrl }) {
+      const advPayload = '{"reason":{"toString":null},"os":123,"version":null,"__proto__":{"polluted":"yes"},"note":"safe\\u0007control"}';
+      const res = await fetchOpaque(`${baseUrl}/api/uninstall-feedback`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: advPayload
+      });
+      assertEqual(res.status, 200, 'Adversarial object coercion payload must safely coerce to 200 ok:true');
+      assertEqual(JSON.parse(res.body).ok, true, 'Must return ok: true');
+      assertEqual(({}).polluted, undefined, 'Object.prototype must not be polluted');
+    }
+  },
+  {
+    id: 'F26-T2-04',
+    feature: 'F26',
+    tier: 2,
+    name: 'Verify POST /api/telemetry adversarial payloads (toString:null, array properties, >8192B, malformed JSON) keep server healthy',
+    async fn({ baseUrl }) {
+      const adv1 = await fetchOpaque(`${baseUrl}/api/telemetry`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: '{"event_name":{"toString":null},"category":123,"properties":{"cta":{"toString":null},"platform":true},"__proto__":{"polluted":"yes"}}'
+      });
+      assertEqual(adv1.status, 200, 'Telemetry must safely coerce non-string fields');
+
+      const adv2 = await fetchOpaque(`${baseUrl}/api/telemetry`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ event_name: 'x', properties: ['a', 'b'] })
+      });
+      assertEqual(adv2.status, 200, 'Telemetry must safely handle array properties');
+
+      const badJson = await fetchOpaque(`${baseUrl}/api/telemetry`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: '{bad'
+      });
+      assertEqual(badJson.status, 400, 'Telemetry malformed JSON must return 400');
+
+      const huge = await fetchOpaque(`${baseUrl}/api/telemetry`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ event_name: 'huge', note: 'z'.repeat(8500) })
+      });
+      assertEqual(huge.status, 413, 'Telemetry > 8192 B must return 413');
+
+      const health = await fetchOpaque(`${baseUrl}/`);
+      assertEqual(health.status, 200, 'Server must remain healthy after adversarial telemetry calls');
+    }
+  },
+  {
+    id: 'F26-T2-05',
+    feature: 'F26',
+    tier: 2,
+    name: 'Verify POST /api/uninstall-feedback enforces 429 rate_limit_exceeded after 15 requests/60s in isolated instance',
+    async fn() {
+      const port = await getFreePort();
+      const isolated = await startServer(port);
+      try {
+        for (let i = 1; i <= 15; i++) {
+          const r = await fetchOpaque(`${isolated.baseUrl}/api/uninstall-feedback`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ reason: 'other', os: 'win', version: '2.6.0' })
+          });
+          assertEqual(r.status, 200, `Request #${i}/15 must succeed with 200`);
+        }
+        const limited = await fetchOpaque(`${isolated.baseUrl}/api/uninstall-feedback`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ reason: 'other', os: 'win', version: '2.6.0' })
+        });
+        assertEqual(limited.status, 429, '16th rapid request must return HTTP 429');
+        assertEqual(JSON.parse(limited.body).error, 'rate_limit_exceeded', '429 body must report rate_limit_exceeded');
+        assertIncludes((limited.getHeader('x-robots-tag') || '').toLowerCase(), 'noindex, nofollow', '429 response must include X-Robots-Tag');
+      } finally {
+        stopServer(isolated);
+      }
+    }
+  },
+
+  // =========================================================================
+  // Feature F27: R5 M3 Carrier Consolidation & Sitemap Boundaries
+  // =========================================================================
+  {
+    id: 'F27-T2-01',
+    feature: 'F27',
+    tier: 2,
+    name: 'Verify .html and trailing-slash query variants of retired hyperoptic return 1-hop 301 preserving UTM query',
+    async fn({ baseUrl }) {
+      const rHtml = await fetchOpaque(`${baseUrl}/solutions/hyperoptic-broadband-isp-throttling.html`);
+      assertEqual(rHtml.status, 301, '.html hyperoptic must return 301');
+      assertEqual(rHtml.location, '/solutions/talktalk-fibre-wireguard-cgnat', 'Must redirect 1-hop to TalkTalk');
+
+      const rSlashQuery = await fetchOpaque(`${baseUrl}/solutions/hyperoptic-broadband-isp-throttling/?utm_source=gsc&ref=1`);
+      assertEqual(rSlashQuery.status, 301, 'Trailing slash + query must return 301');
+      assertEqual(
+        rSlashQuery.location,
+        '/solutions/talktalk-fibre-wireguard-cgnat?utm_source=gsc&ref=1',
+        'Query string must be preserved across 1-hop 301'
+      );
+    }
+  },
+  {
+    id: 'F27-T2-02',
+    feature: 'F27',
+    tier: 2,
+    name: 'Verify all 94/94 sitemap.xml URLs return HTTP 200 OK with zero 404s or 301 redirects',
+    async fn({ baseUrl }) {
+      const xml = fs.readFileSync(path.join(WEBSITE_DIR, 'sitemap.xml'), 'utf8');
+      const { urls } = validateSitemapXml(xml);
+      assertEqual(urls.length, 94, `Expected 94 sitemap URLs, got ${urls.length}`);
+      for (const u of urls) {
+        const pathname = new URL(u).pathname;
+        const res = await fetchOpaque(`${baseUrl}${pathname}`, { method: 'HEAD' });
+        assertEqual(res.status, 200, `Sitemap URL ${pathname} must return 200 OK`);
+        assertEqual(res.location, null, `Sitemap URL ${pathname} must not redirect`);
+      }
+    }
+  },
+  {
+    id: 'F27-T2-03',
+    feature: 'F27',
+    tier: 2,
+    name: 'Verify /solutions/talktalk-p2p-port-forwarding.html?ref=1 redirects 1-hop 301 preserving query',
+    async fn({ baseUrl }) {
+      const res = await fetchOpaque(`${baseUrl}/solutions/talktalk-p2p-port-forwarding.html?ref=1`);
+      assertEqual(res.status, 301, 'Legacy TalkTalk .html must return 301');
+      assertEqual(res.location, '/solutions/talktalk-fibre-wireguard-cgnat?ref=1', 'Must redirect 1-hop preserving query');
+    }
+  },
+  {
+    id: 'F27-T2-04',
+    feature: 'F27',
+    tier: 2,
+    name: 'Verify consolidate-and-optimize-gsc.mjs excludes deleted hyperoptic from AUTHORITATIVE_SOLUTIONS_PILLARS',
+    async fn() {
+      const src = fs.readFileSync(path.join(SCRIPTS_DIR, 'consolidate-and-optimize-gsc.mjs'), 'utf8');
+      assertIncludes(
+        src,
+        '"hyperoptic-broadband-isp-throttling": "/solutions/talktalk-fibre-wireguard-cgnat"',
+        'Consolidation map must map hyperoptic to talktalk-fibre-wireguard-cgnat'
+      );
+      const authBlock = (src.match(/const AUTHORITATIVE_SOLUTIONS_PILLARS = new Set\(\[([\s\S]*?)\]\);/) || [])[1] || '';
+      assertFalse(authBlock.includes('hyperoptic-broadband-isp-throttling'), 'Deleted hyperoptic must not be in AUTHORITATIVE_SOLUTIONS_PILLARS');
+    }
+  },
+  {
+    id: 'F27-T2-05',
+    feature: 'F27',
+    tier: 2,
+    name: 'Verify zero indexable HTML files link to retired /solutions/hyperoptic-broadband-isp-throttling',
+    async fn() {
+      const matches = findFilesWithPattern(WEBSITE_DIR, /\/solutions\/hyperoptic-broadband-isp-throttling/i);
+      assertEqual(matches.length, 0, `Found retired hyperoptic link in: ${matches.join(', ')}`);
+    }
+  },
+
+  // =========================================================================
+  // Feature F28: R6–R8 Automation Read-Only Safety & Gate Boundaries
+  // =========================================================================
+  {
+    id: 'F28-T2-01',
+    feature: 'F28',
+    tier: 2,
+    name: 'Verify daily-seo-pagespeed-audit.mjs --no-fix --no-ping preserves exact SHA-256 of sitemap.xml and llms*.txt',
+    async fn() {
+      const files = ['sitemap.xml', 'llms.txt', 'llms-full.txt'].map((f) => path.join(WEBSITE_DIR, f));
+      const before = files.map((f) => sha256File(f));
+      execSync(`node "${path.join(SCRIPTS_DIR, 'daily-seo-pagespeed-audit.mjs')}" --no-fix --no-ping`, { cwd: ROOT_DIR, encoding: 'utf8' });
+      files.forEach((f, idx) => {
+        assertEqual(sha256File(f), before[idx], `--no-fix --no-ping must not mutate ${path.basename(f)}`);
+      });
+    }
+  },
+  {
+    id: 'F28-T2-02',
+    feature: 'F28',
+    tier: 2,
+    name: 'Verify daily-wireguard-and-acr-pipeline.mjs --dry-run preserves SHA-256 of state & audit log',
+    async fn() {
+      const statePath = path.join(WEBSITE_DIR, 'wireguard-acr-pipeline-state.json');
+      const logPath = path.join(ROOT_DIR, 'WIREGUARD_AND_ACR_DAILY_AUDIT_LOG.md');
+      const stateBefore = sha256File(statePath);
+      const logBefore = sha256File(logPath);
+      execSync(`node "${path.join(SCRIPTS_DIR, 'daily-wireguard-and-acr-pipeline.mjs')}" --dry-run`, { cwd: ROOT_DIR, encoding: 'utf8' });
+      assertEqual(sha256File(statePath), stateBefore, '--dry-run must not mutate wireguard-acr-pipeline-state.json');
+      assertEqual(sha256File(logPath), logBefore, '--dry-run must not mutate WIREGUARD_AND_ACR_DAILY_AUDIT_LOG.md');
+    }
+  },
+  {
+    id: 'F28-T2-03',
+    feature: 'F28',
+    tier: 2,
+    name: 'Verify weekly-spec-privacy-guardrail.mjs --strict --dry-run writes zero artifacts/ output',
+    async fn() {
+      const artifactsDir = path.join(ROOT_DIR, 'artifacts');
+      const existedBefore = fs.existsSync(artifactsDir);
+      const beforeFiles = existedBefore ? fs.readdirSync(artifactsDir).sort() : [];
+      execSync(`node "${path.join(SCRIPTS_DIR, 'automations', 'weekly-spec-privacy-guardrail.mjs')}" --strict --dry-run`, {
+        cwd: ROOT_DIR,
+        encoding: 'utf8'
+      });
+      if (!existedBefore) {
+        assertFalse(fs.existsSync(artifactsDir), '--dry-run must not create artifacts/ directory');
+      } else {
+        assertEqual(JSON.stringify(fs.readdirSync(artifactsDir).sort()), JSON.stringify(beforeFiles), '--dry-run must not add artifacts');
+      }
+    }
+  },
+  {
+    id: 'F28-T2-04',
+    feature: 'F28',
+    tier: 2,
+    name: 'Verify zero HTML pages in website/ emit fabricated VideoObject JSON-LD while youtubeVideoId is null',
+    async fn() {
+      const videoMatches = findFilesWithPattern(WEBSITE_DIR, /"@type"\s*:\s*"VideoObject"/i);
+      assertEqual(videoMatches.length, 0, `Unexpected VideoObject JSON-LD before manual YouTube upload in: ${videoMatches.join(', ')}`);
+    }
+  },
+  {
+    id: 'F28-T2-05',
+    feature: 'F28',
+    tier: 2,
+    name: 'Verify zero HTML files in website/ exceed 1800 KB (1,843,200 bytes) Googlebot crawl safety limit',
+    async fn() {
+      for (const fp of findHtmlFiles(WEBSITE_DIR, true)) {
+        const size = fs.statSync(fp).size;
+        assertLessThanOrEqual(size, 1800 * 1024, `HTML file ${fp} exceeds 1800 KB (${size} bytes)`);
+      }
     }
   }
 ];

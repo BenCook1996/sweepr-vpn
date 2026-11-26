@@ -1,0 +1,6 @@
+v2.5.3 (Build 19):
+• WireGuard GoBackend MTU set to 1380 for LTE/5G and CGNAT across all 8 10Gbps locations.
+• Live Network Security Check (transport, gateway, DNS, captive portal & RTT latency).
+• Malware-Blocking Fallback DNS (10.64.0.1 + 1.1.1.2) and LAN Bypass toggles.
+• Zero-permission QR desktop pairing and Google Play Billing 8.0.0 updates.
+• Shortcut to Android Always-On VPN kill switch and in-app account deletion.

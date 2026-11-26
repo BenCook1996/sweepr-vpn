@@ -22,6 +22,8 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import zlib from 'node:zlib';
 import { fileURLToPath } from 'node:url';
+import { loadPruned410Urls, submitIndexNowWith410 } from './lib/indexnow-410.mjs';
+import { auditVideoReadiness } from './lib/video-object-helper.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const VPN_ROOT = path.resolve(__dirname, '..');
@@ -135,7 +137,9 @@ const CORE_STATIC_ROUTES = [
   { urlPath: '/refund', file: 'refund.html', priority: '0.5', changefreq: 'monthly' },
   { urlPath: '/privacy', file: 'privacy.html', priority: '0.5', changefreq: 'monthly' },
   { urlPath: '/warrant-canary', file: 'warrant-canary.html', priority: '0.6', changefreq: 'monthly' },
-  { urlPath: '/terms', file: 'terms.html', priority: '0.5', changefreq: 'monthly' }
+  { urlPath: '/terms', file: 'terms.html', priority: '0.5', changefreq: 'monthly' },
+  { urlPath: '/faq', file: 'faq.html', priority: '0.8', changefreq: 'weekly' },
+  { urlPath: '/ai-info', file: 'ai-info.html', priority: '0.7', changefreq: 'monthly' }
 ];
 
 
@@ -167,7 +171,8 @@ const CONSOLIDATED_CANNIBAL_MAP = {
   '/solutions/ee-5g-mobile-hotspot-smart-tv-acr-blocking': '/guides/stop-samsung-smart-tv-acr-tracking',
   '/solutions/virgin-media-p2p-port-forwarding': '/solutions/virgin-media-remote-dev-ssh',
   '/solutions/t-mobile-5g-home-internet-isp-throttling': '/solutions/t-mobile-5g-home-internet-remote-dev-ssh',
-  '/solutions/community-fibre-london-isp-throttling': '/solutions/community-fibre-london-wireguard-cgnat'
+  '/solutions/community-fibre-london-isp-throttling': '/solutions/community-fibre-london-wireguard-cgnat',
+  '/solutions/hyperoptic-broadband-isp-throttling': '/solutions/talktalk-fibre-wireguard-cgnat'
 };
 
 // High-CTR Title & Meta Description Overrides for Top Google Search Console "Striking Distance" Pages
@@ -571,41 +576,6 @@ if (shouldFix) {
       content = content.replace(/<\/head>/i, `${GA4_HEAD_SNIPPET}\n</head>`);
       modified = true;
       autoBackfilledGa4Count++;
-    }
-    if (
-      content.includes('<p>&copy; 2026 SWEEPR VPN (UK Sole Trader). All rights reserved.</p>') &&
-      !content.includes('/setup/gl-inet-travel-router')
-    ) {
-      const footerHubRow = `    <div class="flex flex-wrap justify-center gap-x-4 gap-y-1.5 mb-4 px-4 text-xs text-gray-400 max-w-5xl mx-auto">
-      <a href="/setup/gl-inet-travel-router" class="hover:text-emerald-600 transition-colors">GL.iNet Router WireGuard</a>
-      <span>&bull;</span>
-      <a href="/guides/stop-samsung-smart-tv-acr-tracking" class="hover:text-emerald-600 transition-colors">Block Samsung TV ACR Tracking</a>
-      <span>&bull;</span>
-      <a href="/guides/stop-lg-smart-tv-acr-spying" class="hover:text-emerald-600 transition-colors">Stop LG TV ACR Spying</a>
-      <span>&bull;</span>
-      <a href="/solutions/eduroam-campus-wifi-gaming-packet-loss" class="hover:text-emerald-600 transition-colors">Eduroam Gaming &amp; WireGuard</a>
-      <span>&bull;</span>
-      <a href="/setup/nvidia-shield-tv-pro-wireguard" class="hover:text-emerald-600 transition-colors">Nvidia Shield TV WireGuard</a>
-      <span>&bull;</span>
-      <a href="/setup/steam-deck-vpn" class="hover:text-emerald-600 transition-colors">SteamOS &amp; Steam Deck VPN</a>
-      <span>&bull;</span>
-      <a href="/setup/synology-nas-docker-vpn" class="hover:text-emerald-600 transition-colors">Synology NAS Docker VPN</a>
-      <span>&bull;</span>
-      <a href="/solutions/gigaclear-rural-fibre-gaming-packet-loss" class="hover:text-emerald-600 transition-colors">Gigaclear Packet Loss Fix</a>
-      <span>&bull;</span>
-      <a href="/solutions/talktalk-fibre-wireguard-cgnat" class="hover:text-emerald-600 transition-colors">TalkTalk Throttling Fix</a>
-      <span>&bull;</span>
-      <a href="/solutions/hotel-captive-portal-wifi-wireguard" class="hover:text-emerald-600 transition-colors">Hotel Wi-Fi Captive Portal VPN</a>
-      <span>&bull;</span>
-      <a href="/solutions/rogers-ignite-canada-isp-throttling" class="hover:text-emerald-600 transition-colors">Rogers Ignite Throttling Fix</a>
-      <span>&bull;</span>
-      <a href="/alternatives/totalvpn" class="hover:text-emerald-600 transition-colors">Best TotalVPN Alternatives</a>
-    </div>\n`;
-      content = content.replace(
-        /<p>&copy; 2026 SWEEPR VPN \(UK Sole Trader\)\. All rights reserved\.<\/p>/i,
-        `${footerHubRow}    <p>&copy; 2026 SWEEPR VPN (UK Sole Trader). All rights reserved.</p>`
-      );
-      modified = true;
     }
     // Clean legacy /?home=1 links & /order?plan=monthly schema URL, and add rel="nofollow" to checkout/login links
     if (content.includes('/?home=1')) {
@@ -1461,7 +1431,7 @@ ${GA4_HEAD_SNIPPET}
       <a href="/tools/isp-throttling-test">ISP Speed Test</a> |
       <a href="/tools/smart-tv-tracking-check">Smart-TV ACR Check</a> |
       <a href="/tools/whats-on-my-wifi">What's on My Wi-Fi?</a> |
-      <a href="/tools/vpn-renewal-price-checker">Renewal Calculator</a> |
+      <a href="https://www.google.com/preferences/source?q=sweeprvpn.com" target="_blank" rel="noopener noreferrer">Google Preferred Sources</a> |
       <a href="/support">Support</a> |
       <a href="/privacy">Privacy Policy</a>
     </p>
@@ -1522,6 +1492,8 @@ const UTILITY_AND_PROTOTYPE_PAGES = [
   'order.html',
   'login.html',
   'dashboard.html',
+  'welcome.html',
+  'uninstall.html',
   'popup-alternatives.html',
   'prototype-ergonomic-hub.html',
   'prototype-ergonomic-option-1.html',
@@ -1639,31 +1611,35 @@ for (const gscPath of Object.keys(GSC_STRIKING_DISTANCE_OVERRIDES)) {
   }
 }
 
+const CONTENT_HASH_ALGO = 'sha256-main-text-v1';
 let lastModUpdatedCount = 0;
-function extractSemanticMain(html) {
-  const normalized = String(html || '').replace(/\r\n/g, '\n');
-  const m = normalized.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i);
-  if (!m) return '';
-  return m[1]
+
+function stripHtmlForEditorialHash(fragment) {
+  const cleaned = String(fragment || '')
+    .replace(/\r\n?/g, '\n')
     .replace(/<!--[\s\S]*?-->/g, ' ')
     .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
     .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
+    .replace(/<noscript\b[^>]*>[\s\S]*?<\/noscript>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ');
+  return decodeHtmlEntities(cleaned).replace(/\s+/g, ' ').trim();
+}
+
+function extractSemanticMain(html) {
+  const normalized = String(html || '').replace(/\r\n?/g, '\n');
+  const m = normalized.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i);
+  if (!m) return '';
+  return stripHtmlForEditorialHash(m[1]);
 }
 
 function extractSemanticFallback(html) {
-  return String(html || '')
-    .replace(/\r\n/g, '\n')
+  const withoutChrome = String(html || '')
+    .replace(/\r\n?/g, '\n')
     .replace(/<head\b[^>]*>[\s\S]*?<\/head>/gi, ' ')
     .replace(/<nav\b[^>]*>[\s\S]*?<\/nav>/gi, ' ')
     .replace(/<header\b[^>]*>[\s\S]*?<\/header>/gi, ' ')
-    .replace(/<footer\b[^>]*>[\s\S]*?<\/footer>/gi, ' ')
-    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
-    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, ' ')
-    .replace(/<!--[\s\S]*?-->/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
+    .replace(/<footer\b[^>]*>[\s\S]*?<\/footer>/gi, ' ');
+  return stripHtmlForEditorialHash(withoutChrome);
 }
 
 function resolveContentHashLastMod(loc, absPath) {
@@ -1673,23 +1649,34 @@ function resolveContentHashLastMod(loc, absPath) {
       const html = fs.readFileSync(absPath, 'utf8');
       const semanticMain = extractSemanticMain(html);
       const hashInput = semanticMain.length > 0 ? semanticMain : extractSemanticFallback(html);
-      hash = crypto.createHash('sha1').update(hashInput).digest('hex').slice(0, 12);
+      hash = crypto.createHash('sha256').update(hashInput, 'utf8').digest('hex');
     } else {
-      hash = crypto.createHash('sha1').update(fs.readFileSync(absPath)).digest('hex').slice(0, 12);
+      hash = crypto.createHash('sha256').update(fs.readFileSync(absPath)).digest('hex');
     }
   }
   const prevRecord = dailyState.urlLastModHashes[loc];
   const prevSitemapDate = prevLastModMap.get(loc);
-  if (prevRecord && prevRecord.hash === hash && prevRecord.lastmod) {
+  if (prevRecord && prevRecord.hashAlgo === CONTENT_HASH_ALGO && prevRecord.hash === hash && prevRecord.lastmod) {
     return prevRecord.lastmod;
   }
+  if (prevRecord && prevRecord.hashAlgo !== CONTENT_HASH_ALGO && (prevRecord.lastmod || prevSitemapDate) && hash) {
+    const preservedDate = prevRecord.lastmod || prevSitemapDate;
+    if (shouldFix) {
+      dailyState.urlLastModHashes[loc] = { hash, hashAlgo: CONTENT_HASH_ALGO, lastmod: preservedDate };
+    }
+    return preservedDate;
+  }
   if (!prevRecord && prevSitemapDate && hash) {
-    dailyState.urlLastModHashes[loc] = { hash, lastmod: prevSitemapDate };
+    if (shouldFix) {
+      dailyState.urlLastModHashes[loc] = { hash, hashAlgo: CONTENT_HASH_ALGO, lastmod: prevSitemapDate };
+    }
     return prevSitemapDate;
   }
   const newDate = todayStr;
   if (hash) {
-    dailyState.urlLastModHashes[loc] = { hash, lastmod: newDate };
+    if (shouldFix) {
+      dailyState.urlLastModHashes[loc] = { hash, hashAlgo: CONTENT_HASH_ALGO, lastmod: newDate };
+    }
     lastModUpdatedCount++;
   }
   return newDate;
@@ -1735,21 +1722,32 @@ function resolveDownloadLastMod(loc) {
   const serverPath = path.join(WEBSITE_DIR, 'server.mjs');
   const exePath = path.join(WEBSITE_DIR, 'SWEEPRVPN.exe');
   const serverSrc = fs.existsSync(serverPath) ? fs.readFileSync(serverPath, 'utf8') : '';
-  const pickerSliceRaw = (serverSrc.match(/function renderPlatformDownloadPicker[\s\S]*?\r?\n\}\r?\n/) || [''])[0];
-  const pickerSlice = pickerSliceRaw.replace(/\r\n/g, '\n');
-  const exeHash = fs.existsSync(exePath) ? crypto.createHash('sha1').update(fs.readFileSync(exePath)).digest('hex') : '';
-  const dlHash = pickerSlice ? crypto.createHash('sha1').update(`${pickerSlice}\n${exeHash}`).digest('hex').slice(0, 12) : '';
+  const pickerSliceRaw = (serverSrc.match(/function renderPlatformDownloadPicker[\s\S]*?\r?\n\}(?=\r?\n|$)/) || [''])[0];
+  const pickerMainText = extractSemanticMain(pickerSliceRaw) || extractSemanticFallback(pickerSliceRaw);
+  const exeHash = fs.existsSync(exePath) ? crypto.createHash('sha256').update(fs.readFileSync(exePath)).digest('hex') : '';
+  const dlHash = pickerMainText ? crypto.createHash('sha256').update(`${pickerMainText}\n${exeHash}`, 'utf8').digest('hex') : '';
   const prevRec = dailyState.urlLastModHashes[loc];
-  if (dlHash && prevRec && prevRec.hash === dlHash && prevRec.lastmod) {
+  if (dlHash && prevRec && prevRec.hashAlgo === CONTENT_HASH_ALGO && prevRec.hash === dlHash && prevRec.lastmod) {
     return prevRec.lastmod;
   }
+  if (dlHash && prevRec && prevRec.hashAlgo !== CONTENT_HASH_ALGO && (prevRec.lastmod || prevSitemapDate)) {
+    const preservedDate = prevRec.lastmod || prevSitemapDate;
+    if (shouldFix) {
+      dailyState.urlLastModHashes[loc] = { hash: dlHash, hashAlgo: CONTENT_HASH_ALGO, lastmod: preservedDate };
+    }
+    return preservedDate;
+  }
   if (dlHash && !prevRec && prevSitemapDate) {
-    dailyState.urlLastModHashes[loc] = { hash: dlHash, lastmod: prevSitemapDate };
+    if (shouldFix) {
+      dailyState.urlLastModHashes[loc] = { hash: dlHash, hashAlgo: CONTENT_HASH_ALGO, lastmod: prevSitemapDate };
+    }
     return prevSitemapDate;
   }
   const newDate = todayStr;
   if (dlHash) {
-    dailyState.urlLastModHashes[loc] = { hash: dlHash, lastmod: newDate };
+    if (shouldFix) {
+      dailyState.urlLastModHashes[loc] = { hash: dlHash, hashAlgo: CONTENT_HASH_ALGO, lastmod: newDate };
+    }
     lastModUpdatedCount++;
   }
   return newDate;
@@ -1820,6 +1818,8 @@ const llmsContent = `# SWEEPR VPN & SWEEPR Wi-Fi Radar (sweeprvpn.com)
 - Free Home Wi-Fi Device & Hidden Camera Exposure Checker: https://sweeprvpn.com/tools/whats-on-my-wifi
 - Public Wi-Fi, Airport, Hotel & Eduroam Security Hub: https://sweeprvpn.com/public-wifi
 - Public Smart-TV ACR DNS Blocklist (Pi-hole / AdGuard Home / hosts): https://sweeprvpn.com/smart-tv-acr-blocklist.txt
+- Official Brand & Technical Fact Sheet (AI / GEO Reference): https://sweeprvpn.com/ai-info
+- Technical FAQ & Troubleshooting Hub: https://sweeprvpn.com/faq
 - Comprehensive Machine-Ingestible GEO Context & Telemetry Proof: https://sweeprvpn.com/llms-full.txt
 - Official PAD 4.0 XML Feed: https://sweeprvpn.com/pad.xml
 
@@ -2018,9 +2018,11 @@ if (!indexingQueue.indexnow_submitted_at || typeof indexingQueue.indexnow_submit
 }
 const allCanonicalLocs = sitemapEntries.map((p) => p.canonicalLoc);
 const canonicalLocSet = new Set(allCanonicalLocs);
-for (const existingUrl of Object.keys(indexingQueue.indexnow_submitted_at)) {
-  if (!canonicalLocSet.has(existingUrl) || existingUrl.includes('-p2p-port-forwarding')) {
-    delete indexingQueue.indexnow_submitted_at[existingUrl];
+if (shouldFix) {
+  for (const existingUrl of Object.keys(indexingQueue.indexnow_submitted_at)) {
+    if (!canonicalLocSet.has(existingUrl) || existingUrl.includes('-p2p-port-forwarding')) {
+      delete indexingQueue.indexnow_submitted_at[existingUrl];
+    }
   }
 }
 const nowMs = Date.now();
@@ -2046,53 +2048,41 @@ for (const url of orderedCandidates) {
   }
 }
 
-indexingQueue.pending_urls = unpingedOrStaleUrls;
-indexingQueue.last_audit = { date: todayStr, totalUrls: sitemapEntries.length, pendingDeltaUrls: unpingedOrStaleUrls.length };
 if (shouldFix) {
+  indexingQueue.pending_urls = unpingedOrStaleUrls;
+  indexingQueue.last_audit = { date: todayStr, totalUrls: sitemapEntries.length, pendingDeltaUrls: unpingedOrStaleUrls.length };
   writeFileIfChanged(INDEXING_QUEUE_PATH, JSON.stringify(indexingQueue, null, 2));
 }
 pass('crawlability', 'Search Engine Indexing Queue (Delta-Only)', `${unpingedOrStaleUrls.length} un-pinged/modified delta URLs queued (out of ${sitemapEntries.length} total canonical URLs)`);
 
-// Optional Bing & IndexNow live ping dispatch (strictly capped to max 25 delta URLs per run to prevent Bing IndexNow throttling)
+// Optional Bing, IndexNow & Yandex live ping dispatch (canonical delta URLs + 410 Gone pruned URLs)
 if (shouldPing) {
   try {
-    const deltaBatch = unpingedOrStaleUrls.slice(0, 25);
-    if (deltaBatch.length > 0) {
-      const indexNowPayload = {
-        host: 'sweeprvpn.com',
-        key: INDEXNOW_KEY,
-        keyLocation: `https://sweeprvpn.com/${INDEXNOW_KEY}.txt`,
-        urlList: deltaBatch
-      };
-      await Promise.allSettled([
-        fetch('https://www.bing.com/indexnow', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json; charset=utf-8' },
-          body: JSON.stringify(indexNowPayload),
-          signal: AbortSignal.timeout(8000)
-        }),
-        fetch('https://api.indexnow.org/indexnow', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json; charset=utf-8' },
-          body: JSON.stringify(indexNowPayload),
-          signal: AbortSignal.timeout(8000)
-        })
-      ]);
-      const pingIso = new Date().toISOString();
-      for (const u of deltaBatch) {
-        indexingQueue.indexnow_submitted_at[u] = pingIso;
-      }
-      indexingQueue.pending_urls = unpingedOrStaleUrls.slice(deltaBatch.length);
-      indexingQueue.last_indexnow_ping = pingIso;
+    const pruned410Urls = loadPruned410Urls({ serverMjsPath: SERVER_PATH });
+    const pingRes = await submitIndexNowWith410({
+      queue: indexingQueue,
+      canonicalDeltaUrls: unpingedOrStaleUrls,
+      pruned410Urls,
+      key: INDEXNOW_KEY,
+      dryRun: !shouldFix
+    });
+    if (pingRes.combinedUrlList.length > 0) {
       if (shouldFix) {
+        indexingQueue = pingRes.updatedQueue;
+        indexingQueue.pending_urls = unpingedOrStaleUrls.slice(pingRes.canonicalBatch.length);
         writeFileIfChanged(INDEXING_QUEUE_PATH, JSON.stringify(indexingQueue, null, 2));
       }
-      pass('crawlability', 'IndexNow Delta Ping Broadcast', `Pinged ${deltaBatch.length} delta URLs to Bing & IndexNow (${indexingQueue.pending_urls.length} remaining in rolling queue)`);
+      const modeTag = shouldFix ? '' : ' [DRY-RUN (--no-fix)]';
+      pass(
+        'crawlability',
+        'IndexNow Delta & 410 Gone Ping Broadcast',
+        `${modeTag}Processed ${pingRes.canonicalBatch.length} canonical delta URLs + ${pingRes.due410Batch.length} HTTP 410 Gone pruned URLs (${indexingQueue.pending_urls.length} remaining in rolling queue)`
+      );
     } else {
-      pass('crawlability', 'IndexNow Delta Ping Broadcast', '0 new/modified URLs needed pinging (14-day anti-throttle window active)');
+      pass('crawlability', 'IndexNow Delta & 410 Gone Ping Broadcast', '0 new/modified canonical or 410 Gone URLs needed pinging (14-day anti-throttle window active)');
     }
   } catch (err) {
-    warn('crawlability', 'IndexNow Delta Ping Broadcast', `Network notice: ${err.message}`);
+    warn('crawlability', 'IndexNow Delta & 410 Gone Ping Broadcast', `Network notice: ${err.message}`);
   }
 }
 
@@ -2109,10 +2099,10 @@ if (hasSitemapDirective) {
   fail('crawlability', 'robots.txt Sitemap Directive', 'Missing or invalid Sitemap directive in robots.txt');
 }
 
-const aiBots = ['GPTBot', 'OAI-SearchBot', 'ChatGPT-User', 'PerplexityBot', 'ClaudeBot', 'Google-Extended', 'Applebot-Extended'];
+const aiBots = ['GPTBot', 'OAI-SearchBot', 'ChatGPT-User', 'PerplexityBot', 'ClaudeBot', 'Claude-SearchBot', 'Google-Extended', 'Applebot-Extended'];
 const missingAiBots = aiBots.filter((bot) => !robotsTxt.includes(`User-agent: ${bot}`));
 if (missingAiBots.length === 0) {
-  pass('crawlability', 'robots.txt AI Crawler Allowances (GEO)', 'All 7 major AI search bots explicitly permitted');
+  pass('crawlability', 'robots.txt AI Crawler Allowances (GEO)', `All ${aiBots.length} major AI search bots explicitly permitted`);
 } else {
   warn('crawlability', 'robots.txt AI Crawler Allowances (GEO)', `Missing bots: ${missingAiBots.join(', ')}`);
 }
@@ -2354,7 +2344,10 @@ const validInternalUrls = new Set([
   '/sitemap.xml',
   '/robots.txt',
   '/llms.txt',
-  '/llms-full.txt'
+  '/llms-full.txt',
+  ...(fs.existsSync(path.join(WEBSITE_DIR, 'assets'))
+    ? fs.readdirSync(path.join(WEBSITE_DIR, 'assets')).map((f) => `/assets/${f}`)
+    : [])
 ]);
 
 let brokenInternalLinks = [];
@@ -2742,7 +2735,7 @@ while (eqQueue.length > 0) {
     }
   }
 }
-const UTILITY_EQUITY_EXCLUSIONS = new Set(['/', '/pricing', '/download', '/support', '/privacy', '/terms', '/refund', '/warrant-canary']);
+const UTILITY_EQUITY_EXCLUSIONS = new Set(['/', '/pricing', '/download', '/support', '/privacy', '/terms', '/refund', '/warrant-canary', '/ai-info']);
 const FLAGSHIP_TOOLS = ['/tools/leak-test', '/tools/isp-throttling-test', '/tools/smart-tv-tracking-check', '/tools/whats-on-my-wifi', '/tools/vpn-renewal-price-checker'];
 const equityViolations = [];
 let maxObservedDepth = 0;
@@ -2843,6 +2836,34 @@ if (adPolicyViolationPages === 0) {
     'technicalSeo',
     'Ad-Platform Policy Compliance Guard (AGENTS.md Principle 2)',
     `${adPolicyViolationPages} pages contain forbidden geo-unblocking/circumvention copy`
+  );
+}
+
+// VideoObject / Shorts Readiness Check (P3-2 / R6: never fabricate YouTube IDs)
+const videoReadiness = auditVideoReadiness();
+if (videoReadiness.invalidIds.length > 0) {
+  fail(
+    'technicalSeo',
+    'VideoObject Rich Snippet Readiness (P3-2)',
+    `Invalid or placeholder YouTube IDs detected in video-registry.json: ${videoReadiness.invalidIds.map((v) => `${v.slug}=${v.youtubeVideoId}`).join(', ')}`
+  );
+} else if (videoReadiness.missingLocalFiles.length > 0) {
+  warn(
+    'technicalSeo',
+    'VideoObject Rich Snippet Readiness (P3-2)',
+    `Missing local MP4 render files for: ${videoReadiness.missingLocalFiles.join(', ')}`
+  );
+} else if (videoReadiness.configuredCount === 0) {
+  warn(
+    'technicalSeo',
+    'VideoObject Rich Snippet Readiness (P3-2)',
+    `0/${videoReadiness.totalVideos} YouTube IDs configured — ${videoReadiness.pendingUploadCount} local 1080p MP4s in scripts/youtube-demo-pipeline/output/ awaiting manual YouTube upload; zero VideoObject emitted`
+  );
+} else {
+  pass(
+    'technicalSeo',
+    'VideoObject Rich Snippet Readiness (P3-2)',
+    `${videoReadiness.configuredCount}/${videoReadiness.totalVideos} real YouTube VideoObject entries verified (${videoReadiness.pendingUploadCount} awaiting upload)`
   );
 }
 

@@ -4,16 +4,16 @@
 PackageIdentifier: SWEEPR.VPN
 PackageVersion: 1.0.0
 PackageLocale: en-US
-Publisher: SWEEPR VPN Inc.
+Publisher: SWEEPR VPN (UK Sole Trader)
 PublisherUrl: https://sweeprvpn.com
 PublisherSupportUrl: https://sweeprvpn.com/support
 PrivacyUrl: https://sweeprvpn.com/privacy
-Author: SWEEPR VPN Engineering
+Author: SWEEPR VPN Engineering (Independent UK Developer)
 PackageName: SWEEPR VPN
 PackageUrl: https://sweeprvpn.com
 License: Freemium
 LicenseUrl: https://sweeprvpn.com/terms
-Copyright: Copyright (c) 2026 SWEEPR VPN Inc.
+Copyright: Copyright (c) 2026 SWEEPR VPN (UK Sole Trader)
 ShortDescription: Lightweight 10Gbps WireGuard VPN, free 30-second Home Wi-Fi device scanner, and Smart-TV ACR spy blocker.
 Description: >-
   SWEEPR VPN is an ultra-lightweight (~3.7 MB) 10Gbps WireGuard VPN and Free 30-Second Home Wi-Fi Security Scanner for Windows 10 and Windows 11.

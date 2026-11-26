@@ -34,7 +34,6 @@ const AUTHORITATIVE_SOLUTIONS_PILLARS = new Set([
   "ee-5g-mobile-hotspot-voip-teams-zoom-jitter",
   "gigaclear-rural-fibre-gaming-packet-loss",
   "hotel-captive-portal-wifi-wireguard",
-  "hyperoptic-broadband-isp-throttling",
   "national-rail-train-wifi-remote-dev-ssh",
   "nhs-guest-wifi-voip-teams-zoom-jitter",
   "o2-uk-mobile-tethering-uhd-streaming-buffering",
@@ -119,7 +118,8 @@ const SPECIFIC_SOLUTIONS_CANONICAL_MAP = {
   "youfibre-uk-voip-teams-zoom-jitter": "/solutions/youfibre-uk-wifi-arp-spoofing-protection",
   "starlink-rv-roam-isp-throttling": "/solutions/starlink-satellite-uk-isp-throttling",
   "telstra-nbn-au-valorant-high-ping": "/solutions/telstra-nbn-australia-gaming-packet-loss",
-  "telstra-nbn-australia-isp-throttling": "/solutions/telstra-nbn-australia-gaming-packet-loss"
+  "telstra-nbn-australia-isp-throttling": "/solutions/telstra-nbn-australia-gaming-packet-loss",
+  "hyperoptic-broadband-isp-throttling": "/solutions/talktalk-fibre-wireguard-cgnat"
 };
 
 // [GSC Winner Lock] disabled per turnaround plan (F13): no dynamic additions to AUTHORITATIVE_SOLUTIONS_PILLARS.

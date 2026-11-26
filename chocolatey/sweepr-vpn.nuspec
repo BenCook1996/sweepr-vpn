@@ -6,10 +6,10 @@
     <packageSourceUrl>https://github.com/BenCook1996/sweepr-vpn/tree/main/chocolatey</packageSourceUrl>
     <owners>Bcook96</owners>
     <title>SWEEPR VPN</title>
-    <authors>Benjamin Cook</authors>
+    <authors>SWEEPR VPN Engineering (Independent UK Developer)</authors>
     <projectUrl>https://sweeprvpn.com</projectUrl>
     <iconUrl>https://cdn.jsdelivr.net/gh/BenCook1996/sweepr-vpn@main/play-store-icon-vpn-512.png</iconUrl>
-    <copyright>Copyright (c) 2026 Benjamin Cook. All rights reserved.</copyright>
+    <copyright>Copyright (c) 2026 SWEEPR VPN (UK Sole Trader). All rights reserved.</copyright>
     <licenseUrl>https://sweeprvpn.com/terms</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <docsUrl>https://sweeprvpn.com/guides/</docsUrl>

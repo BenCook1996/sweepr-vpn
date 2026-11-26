@@ -7,6 +7,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { extractYouTubeIdFromUrl, isValidYouTubeId } from './lib/video-object-helper.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const VPN_ROOT = path.resolve(__dirname, '..');
@@ -26,6 +27,7 @@ const ROUTE_TO_HTML = {
   '/setup': 'setup.html',
   '/guides': 'guides.html',
   '/vs': 'vs.html',
+  '/vs/totalvpn': 'vs/totalvpn.html',
   '/tools/leak-test': 'leak-test.html',
   '/de/tools/leak-test': 'de-leak-test.html',
   '/fr/tools/leak-test': 'fr-leak-test.html',
@@ -42,11 +44,46 @@ const ROUTE_TO_HTML = {
   '/refund': 'refund.html',
   '/privacy': 'privacy.html',
   '/warrant-canary': 'warrant-canary.html',
-  '/terms': 'terms.html'
+  '/terms': 'terms.html',
+  '/ai-info': 'ai-info.html',
+  '/faq': 'faq.html'
 };
 
 const MOJIBAKE_RE =
   /\u00c3[\u0192\u00a2\u00b0\u00a9\u00bc\u00a4]|\u00c2[\u00a3\u00b7\u00a9\u00ae\u00bb]|\u00e2[\u201a\u20ac][\u00ac\u0093\u0094\u009c\u009d\u00a2\u201d\u201c]|\u00e2\u201a\u00ac|\u00f0\u0178|\u00ef\u00b8/;
+
+const MAX_HTML_BYTES = 1800 * 1024; // 1800 KB (safety buffer under 2 MB Googlebot crawl cutoff)
+const NOINDEX_RE = /<meta\s+name=["']robots["']\s+content=["'][^"']*noindex/i;
+const SITEPATENT_RE = /sitepatent\.com/i;
+const INC_ENTITY_RE = /\bSWEEPR\s+VPN\s+Inc\b\.?/i;
+const FOUNDER_NAME_RE = new RegExp(`\\b${['Ben' + 'jamin', 'Co' + 'ok'].join('\\s+')}\\b`, 'i');
+
+function collectAllHtmlFiles(dirPath, rootDir = dirPath, out = []) {
+  if (!fs.existsSync(dirPath)) return out;
+  for (const entry of fs.readdirSync(dirPath, { withFileTypes: true })) {
+    const abs = path.join(dirPath, entry.name);
+    if (entry.isDirectory()) {
+      collectAllHtmlFiles(abs, rootDir, out);
+    } else if (entry.isFile() && entry.name.endsWith('.html')) {
+      const rel = path.relative(rootDir, abs).replace(/\\/g, '/');
+      out.push({ rel, abs, sizeBytes: fs.statSync(abs).size, raw: fs.readFileSync(abs, 'utf8') });
+    }
+  }
+  return out;
+}
+
+function collectVideoObjects(node, out = []) {
+  if (!node || typeof node !== 'object') return out;
+  if (Array.isArray(node)) {
+    for (const item of node) collectVideoObjects(item, out);
+    return out;
+  }
+  const t = node['@type'];
+  const isVideo = t === 'VideoObject' || (Array.isArray(t) && t.includes('VideoObject'));
+  if (isVideo) out.push(node);
+  if (Array.isArray(node['@graph'])) collectVideoObjects(node['@graph'], out);
+  return out;
+}
 
 function decodeHtmlEntities(str) {
   return String(str || '')
@@ -79,8 +116,9 @@ function collectNodeTypes(node, found = []) {
 }
 
 function resolveRouteFile(urlPath) {
-  if (ROUTE_TO_HTML[urlPath]) return path.join(WEBSITE_DIR, ROUTE_TO_HTML[urlPath]);
-  const clean = urlPath.replace(/^\/+/, '');
+  const normPath = urlPath === '/' ? '/' : urlPath.replace(/\/+$/, '');
+  if (ROUTE_TO_HTML[normPath]) return path.join(WEBSITE_DIR, ROUTE_TO_HTML[normPath]);
+  const clean = normPath.replace(/^\/+|\/+$/g, '');
   if (!clean || clean === 'download') return null;
   const candidate = path.join(WEBSITE_DIR, `${clean}.html`);
   return fs.existsSync(candidate) ? candidate : null;
@@ -235,6 +273,9 @@ let maxTitleLen = 0;
 let jsonLdCount = 0;
 for (const file of checkedFiles.values()) {
   const { rel, html } = file;
+  if (NOINDEX_RE.test(html)) {
+    fail(`Sitemap URL ${file.loc} maps to HTML containing noindex meta tag: website/${rel}`);
+  }
   const titleMatch = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
   const decodedTitle = decodeHtmlEntities(titleMatch ? titleMatch[1] : '');
   if (!decodedTitle) {
@@ -258,6 +299,15 @@ for (const file of checkedFiles.values()) {
     const types = collectNodeTypes(parsed);
     if (types.includes('FAQPage') || types.includes('HowTo')) {
       fail(`Deprecated schema type (${types.filter((t) => t === 'FAQPage' || t === 'HowTo').join(', ')}) in website/${rel}`);
+    }
+    for (const vo of collectVideoObjects(parsed)) {
+      const ytId = extractYouTubeIdFromUrl(vo.embedUrl || '') || extractYouTubeIdFromUrl(vo.contentUrl || '');
+      if (!ytId || !isValidYouTubeId(ytId)) {
+        fail(`VideoObject JSON-LD in website/${rel} lacks a valid non-placeholder 11-char YouTube ID (embedUrl/contentUrl)`);
+      }
+      if (!vo.thumbnailUrl || !vo.uploadDate) {
+        fail(`VideoObject JSON-LD in website/${rel} missing required thumbnailUrl or uploadDate`);
+      }
     }
   }
 
@@ -290,12 +340,65 @@ for (const p of pillarFiles) {
   if (!/SWEEPR VPN Engineering/i.test(p.raw)) {
     fail(`Missing SWEEPR VPN Engineering E-E-A-T attribution on website/${p.rel}`);
   }
-  if (/\bBenjamin Cook\b/i.test(p.raw) || /SWEEPR VPN Inc\./i.test(p.raw)) {
+  if (FOUNDER_NAME_RE.test(p.raw) || INC_ENTITY_RE.test(p.raw)) {
     fail(`Forbidden personal name or Inc. entity found on website/${p.rel}`);
   }
 }
 
-// 5. Server.mjs download safety, back-button hijack removal & UTF-8 integrity
+// 4b. Uncompressed HTML <= 1800 KB, Entity/Tracker Hygiene & Static Mobile Nav Links
+const allHtmlFiles = collectAllHtmlFiles(WEBSITE_DIR).sort((a, b) => a.rel.localeCompare(b.rel));
+let maxHtmlBytes = 0;
+const indexableHtmlMap = new Map();
+for (const f of allHtmlFiles) {
+  if (f.sizeBytes > maxHtmlBytes) maxHtmlBytes = f.sizeBytes;
+  if (f.sizeBytes > MAX_HTML_BYTES) {
+    fail(`Uncompressed HTML exceeds 1800 KB (${(f.sizeBytes / 1024).toFixed(1)} KB): website/${f.rel}`);
+  }
+  if (!NOINDEX_RE.test(f.raw)) {
+    indexableHtmlMap.set(f.rel, f);
+  }
+}
+for (const [rel, f] of checkedFiles.entries()) {
+  if (!indexableHtmlMap.has(rel)) {
+    indexableHtmlMap.set(rel, { rel, abs: f.abs, sizeBytes: Buffer.byteLength(f.html, 'utf8'), raw: f.html });
+  }
+}
+
+for (const f of indexableHtmlMap.values()) {
+  if (SITEPATENT_RE.test(f.raw)) {
+    fail(`Forbidden sitepatent.com reference found in indexable HTML website/${f.rel}`);
+  }
+  if (INC_ENTITY_RE.test(f.raw)) {
+    fail(`Forbidden "SWEEPR VPN Inc." entity found in indexable HTML website/${f.rel}`);
+  }
+  if (FOUNDER_NAME_RE.test(f.raw)) {
+    fail(`Forbidden founder personal name found in indexable HTML website/${f.rel}`);
+  }
+  if (!/<nav\b/i.test(f.raw)) {
+    fail(`Missing <nav> element in indexable HTML website/${f.rel}`);
+  }
+  const drawerIdx = f.raw.search(/id=["']mobileNavDrawer["']/i);
+  const mainIdx = f.raw.search(/<main\b/i);
+  if (drawerIdx < 0 || (mainIdx >= 0 && drawerIdx > mainIdx)) {
+    fail(`Missing static #mobileNavDrawer links before <main> in indexable HTML website/${f.rel}`);
+  } else {
+    const drawerSlice = f.raw.slice(drawerIdx, mainIdx >= 0 ? mainIdx : drawerIdx + 6000);
+    if (!/<a\s+[^>]*href=["'][^"']+["']/i.test(drawerSlice)) {
+      fail(`Missing static #mobileNavDrawer links before <main> in indexable HTML website/${f.rel}`);
+    }
+  }
+}
+
+for (const extraRel of ['pad.xml', 'llms.txt', 'llms-full.txt']) {
+  const extraAbs = path.join(WEBSITE_DIR, extraRel);
+  if (!fs.existsSync(extraAbs)) continue;
+  const extraRaw = fs.readFileSync(extraAbs, 'utf8');
+  if (SITEPATENT_RE.test(extraRaw)) fail(`Forbidden sitepatent.com reference found in website/${extraRel}`);
+  if (INC_ENTITY_RE.test(extraRaw)) fail(`Forbidden "SWEEPR VPN Inc." entity found in website/${extraRel}`);
+  if (FOUNDER_NAME_RE.test(extraRaw)) fail(`Forbidden founder personal name found in website/${extraRel}`);
+}
+
+// 5. Server.mjs download safety, back-button hijack removal, CSP & UTF-8 integrity
 const serverPath = path.join(WEBSITE_DIR, 'server.mjs');
 const serverSrc = fs.existsSync(serverPath) ? fs.readFileSync(serverPath, 'utf8') : '';
 if (MOJIBAKE_RE.test(serverSrc)) {
@@ -310,6 +413,13 @@ if (/<iframe[^>]*src=["']\/download\/SWEEPRVPN\.apk/i.test(serverSrc)) {
 if (!serverSrc.includes('wantsDirectBinary') || !serverSrc.includes('renderPlatformDownloadPicker')) {
   fail('Missing indexable /download HTML hub & explicit wantsDirectBinary gate (?direct=1 / ?platform=*) in website/server.mjs');
 }
+const cspMatch = serverSrc.match(/['"]Content-Security-Policy['"]\s*:\s*(["'])([^\r\n]*?)\1/);
+const cspVal = cspMatch ? cspMatch[2] : '';
+if (!cspVal) {
+  fail('Missing Content-Security-Policy header in website/server.mjs');
+} else if (cspVal.includes("'unsafe-eval'") || cspVal.includes('cdn.tailwindcss.com')) {
+  fail(`Unsafe CSP directive detected in website/server.mjs: ${cspVal}`);
+}
 const navJsPath = path.join(WEBSITE_DIR, 'nav.js');
 const navJsSrc = fs.existsSync(navJsPath) ? fs.readFileSync(navJsPath, 'utf8') : '';
 if (!navJsSrc.includes("'/download/SWEEPRVPN.exe'") || !navJsSrc.includes("'/download/SWEEPRVPN.dmg'")) {
@@ -323,5 +433,5 @@ if (errors.length > 0) {
 }
 
 console.log(
-  `✅ CI SEO Quality Gate PASSED: sitemap=${locs.length}/110, hreflang_groups=${hreflangGroups.size}, pillars=${pillarFiles.length}, json_ld=${jsonLdCount}, max_title=${maxTitleLen}/65, direct_answer_words=${minDirectWords}-${maxDirectWords}, max_overlap(solutions=${maxOverlapByCluster.solutions.toFixed(2)}%, vs=${maxOverlapByCluster.vs.toFixed(2)}%, guides=${maxOverlapByCluster.guides.toFixed(2)}%, setup=${maxOverlapByCluster.setup.toFixed(2)}%, locales=${maxOverlapByCluster.locales.toFixed(2)}%), mojibake=0, deprecated_schema=0`
+  `✅ CI SEO Quality Gate PASSED: sitemap=${locs.length}/110, indexable_html=${indexableHtmlMap.size}/${allHtmlFiles.length}, max_html_kb=${(maxHtmlBytes / 1024).toFixed(1)}/1800, hreflang_groups=${hreflangGroups.size}, pillars=${pillarFiles.length}, json_ld=${jsonLdCount}, max_title=${maxTitleLen}/65, direct_answer_words=${minDirectWords}-${maxDirectWords}, max_overlap(solutions=${maxOverlapByCluster.solutions.toFixed(2)}%, vs=${maxOverlapByCluster.vs.toFixed(2)}%, guides=${maxOverlapByCluster.guides.toFixed(2)}%, setup=${maxOverlapByCluster.setup.toFixed(2)}%, locales=${maxOverlapByCluster.locales.toFixed(2)}%), mojibake=0, deprecated_schema=0`
 );

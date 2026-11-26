@@ -177,6 +177,7 @@
 
   <!-- Main Content -->
   <main class="max-w-4xl mx-auto px-6 py-12 md:py-16">
+<article>
     <!-- Breadcrumb & Badge -->
     <div class="text-center mb-10">
       <div class="inline-block text-xs font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full mb-3 border border-emerald-200">
@@ -197,6 +198,11 @@
         <a href="/tools/leak-test" class="text-emerald-800 hover:text-emerald-950 underline">Test SteamOS browser IP and WebRTC isolation &rarr;</a>
       </div>
     </div>
+    <dl class="sweepr-geo-specs grid grid-cols-1 md:grid-cols-3 gap-3 my-6 text-xs text-gray-700">
+      <div class="p-3.5 rounded-xl bg-white border border-gray-200 shadow-sm"><dt class="font-bold text-gray-900 mb-1">Zero Read-Only Root Unlock</dt><dd>Works in SteamOS Desktop Mode via NetworkManager WireGuard plugin without disabling steamos-readonly.</dd></div>
+      <div class="p-3.5 rounded-xl bg-white border border-gray-200 shadow-sm"><dt class="font-bold text-gray-900 mb-1">Gaming Latency & Stealth 443</dt><dd>Low-jitter 10Gbps UK/EU/US POPs plus Stealth UDP 443 bypass campus Eduroam game port blocks.</dd></div>
+      <div class="p-3.5 rounded-xl bg-white border border-gray-200 shadow-sm"><dt class="font-bold text-gray-900 mb-1">Handheld Wi-Fi MTU (1380)</dt><dd>Set MTU = 1380 in NM connection settings to stop SteamOS packet drops on tethered 5G hotspots.</dd></div>
+    </dl>
 
     <div class="bg-white border-2 border-emerald-500/30 rounded-2xl p-6 md:p-8 shadow-sm mb-10">
       <h2 class="text-xl font-bold text-gray-900 mb-2">Zero-Rootfs-Unlock WireGuard That Survives SteamOS OTA Updates</h2>
@@ -336,6 +342,8 @@ ls -l /etc/NetworkManager/system-connections/</code></pre>
       <pre style="background:#020617;color:#6ee7b7;padding:14px;border-radius:8px;overflow-x:auto;border:1px solid #1e293b;"><code>sudo chmod 600 /etc/NetworkManager/system-connections/sweepr-lon01.nmconnection
 nmcli connection modify sweepr-lon01 connection.autoconnect no</code></pre>
     </section>
+
+</article>
 </main>
 
   <!-- Footer -->
@@ -351,6 +359,7 @@ nmcli connection modify sweepr-lon01 connection.autoconnect no</code></pre>
         <a href="/privacy" class="hover:underline">Privacy Policy</a>
         <a href="/terms" class="hover:underline">Terms</a>
         <a href="/support" class="hover:underline">Support</a>
+        <a href="https://www.google.com/preferences/source?q=sweeprvpn.com" target="_blank" rel="noopener noreferrer" class="hover:underline text-emerald-700 font-semibold">Google Preferred Sources</a>
       </div>
     </div>
   </footer>

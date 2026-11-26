@@ -4,8 +4,8 @@
  *
  * Runs daily at 4:00 AM (Europe/London) before the 5:00 AM Pillar SEO & CTR Optimizer:
  * 1. Probes the live production WireGuard fleet via https://sweeprvpn.com/api/vpn/servers
- *    and verifies the 6 core 10Gbps WireGuard bare-metal POPs (UK-LON-01, UK-MAN-02, NL-AMS-01,
- *    DE-FRA-01, US-NYC-01, CH-ZRH-01) with MTU presets (1420 standard, 1412 PPPoE, 1380 CGNAT).
+ *    and verifies the 8 live 10Gbps WireGuard bare-metal POPs (UK-LON-01, NL-AMS-01, DE-FRA-01,
+ *    SE-STO-01, US-NYC-01, US-LAX-01, JP-TYO-01, SG-SIN-01) with MTU presets (1420 standard, 1412 PPPoE, 1380 CGNAT).
  * 2. Audits and maintains the public Smart-TV ACR & IoT Telemetry Blocklist (website/smart-tv-acr-blocklist.txt)
  *    across 8 Smart-TV & Streaming OS platforms (Samsung Tizen, LG webOS, Roku OS, Vizio Inscape,
  *    Amazon Fire TV, Sony Bravia / Google TV, Hisense VIDAA, and TCL / Cross-Vendor Samba TV & Alphonso).
@@ -20,7 +20,20 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import assert from 'node:assert/strict';
 import { fileURLToPath } from 'node:url';
+
+const dryRun = process.argv.includes('--dry-run');
+const EXPECTED_POP_IDS = [
+  'UK-LON-01',
+  'NL-AMS-01',
+  'DE-FRA-01',
+  'SE-STO-01',
+  'US-NYC-01',
+  'US-LAX-01',
+  'JP-TYO-01',
+  'SG-SIN-01'
+];
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -356,14 +369,22 @@ async function runDailyWireGuardAndAcrPipeline() {
   const existingTxt = fs.existsSync(BLOCKLIST_PATH) ? fs.readFileSync(BLOCKLIST_PATH, 'utf8') : '';
   let blocklistUpdated = false;
   if (existingTxt.replace(/\r\n/g, '\n') !== txt.replace(/\r\n/g, '\n')) {
-    fs.writeFileSync(BLOCKLIST_PATH, txt, 'utf8');
-    blocklistUpdated = true;
-    console.log(`📝  Wrote updated smart-tv-acr-blocklist.txt to website/`);
+    if (!dryRun) {
+      fs.writeFileSync(BLOCKLIST_PATH, txt, 'utf8');
+      blocklistUpdated = true;
+      console.log(`📝  Wrote updated smart-tv-acr-blocklist.txt to website/`);
+    } else {
+      console.log(`📝  [DRY-RUN] Blocklist diff detected; skipped writing smart-tv-acr-blocklist.txt`);
+    }
   } else {
     console.log(`🔒  Blocklist content unchanged — preserving canonical content hash stability`);
   }
 
-  const blocklistSha1 = crypto.createHash('sha1').update(fs.readFileSync(BLOCKLIST_PATH)).digest('hex').slice(0, 12);
+  const blocklistSha1 = crypto
+    .createHash('sha1')
+    .update(dryRun || !fs.existsSync(BLOCKLIST_PATH) ? Buffer.from(txt, 'utf8') : fs.readFileSync(BLOCKLIST_PATH))
+    .digest('hex')
+    .slice(0, 12);
 
   // 2. Probe Live Storefront Endpoint (https://sweeprvpn.com/)
   let liveSiteReachable = false;
@@ -400,6 +421,11 @@ async function runDailyWireGuardAndAcrPipeline() {
       const vpnData = await vpnRes.json();
       if (vpnData && Array.isArray(vpnData.servers)) {
         liveVpnServers = vpnData.servers;
+        assert.strictEqual(
+          liveVpnServers.length,
+          8,
+          `Expected live /api/vpn/servers POP count === 8, got ${liveVpnServers.length}`
+        );
         liveVpnOnlineCount = liveVpnServers.filter(s => s.online).length;
         totalConnectedDevices = liveVpnServers.reduce((sum, s) => sum + (Number(s.devices) || 0), 0);
         console.log(`⚡  Live WireGuard Fleet (/api/vpn/servers): ${liveVpnOnlineCount}/${liveVpnServers.length} POPs online | ${totalConnectedDevices} active connected devices | API latency: ${vpnApiLatencyMs}ms`);
@@ -409,11 +435,23 @@ async function runDailyWireGuardAndAcrPipeline() {
       }
     }
   } catch (err) {
+    if (err instanceof assert.AssertionError) throw err;
     console.warn(`⚠️   Live /api/vpn/servers fetch failed: ${err.message}`);
   }
 
-  // 4. Verify 6 Core Bare-Metal 10Gbps WireGuard POPs & MTU Presets
-  console.log(`🔌  Reference Bare-Metal WireGuard POPs: ${WIREGUARD_FLEET_NODES.length} POPs configured with dual-port UDP 51820 & TCP/UDP 443 fallback`);
+  // 4. Verify 8 Live Bare-Metal 10Gbps WireGuard POPs & MTU Presets
+  assert.strictEqual(
+    WIREGUARD_FLEET_NODES.length,
+    8,
+    `Expected WIREGUARD_FLEET_NODES.length === 8, got ${WIREGUARD_FLEET_NODES.length}`
+  );
+  for (const popId of EXPECTED_POP_IDS) {
+    assert.ok(
+      WIREGUARD_FLEET_NODES.some((n) => n.id === popId),
+      `Missing required WireGuard POP ${popId} in WIREGUARD_FLEET_NODES`
+    );
+  }
+  console.log(`🔌  Reference Bare-Metal WireGuard POPs: ${WIREGUARD_FLEET_NODES.length} live POPs configured with dual-port UDP 51820 & TCP/UDP 443 fallback`);
   for (const node of WIREGUARD_FLEET_NODES) {
     console.log(`    • [${node.id}] ${node.city} (${node.country}): baseline=${node.baselineRttMs}ms | MTU presets=[std:${node.mtuPresets.standard}, pppoe:${node.mtuPresets.pppoe}, cgnat:${node.mtuPresets.cgnat}]`);
   }
@@ -462,8 +500,12 @@ async function runDailyWireGuardAndAcrPipeline() {
     }
   };
 
-  fs.writeFileSync(PIPELINE_STATE_PATH, JSON.stringify(state, null, 2), 'utf8');
-  console.log(`💾  Saved pipeline telemetry state to ${path.relative(VPN_ROOT, PIPELINE_STATE_PATH)}`);
+  if (!dryRun) {
+    fs.writeFileSync(PIPELINE_STATE_PATH, JSON.stringify(state, null, 2), 'utf8');
+    console.log(`💾  Saved pipeline telemetry state to ${path.relative(VPN_ROOT, PIPELINE_STATE_PATH)}`);
+  } else {
+    console.log(`💾  [DRY-RUN] Skipped writing ${path.relative(VPN_ROOT, PIPELINE_STATE_PATH)}`);
+  }
 
   // 7. Persist Daily Scorecard to WIREGUARD_AND_ACR_DAILY_AUDIT_LOG.md
   const sectionHeader = `## ${todayStr} — Daily WireGuard Node Health & Smart-TV ACR Blocklist Audit`;
@@ -483,7 +525,7 @@ ${sectionHeader}
 |:---|:---|:---:|:---:|:---:|:---:|:---:|
 ${liveVpnServers.map(s => `| **${s.code}** | ${s.city} | ${s.country} (${s.flag}) | ${s.online ? '🟢 Online' : '🔴 Offline'} | \`${s.probe_ms}ms\` | \`${s.p99_ms}ms\` | \`${s.devices}\` |`).join('\n')}
 
-### Core Bare-Metal 10Gbps Reference Configurations & MTU Presets
+### Core Bare-Metal 10Gbps Reference Configurations & MTU Presets (8 Live POPs)
 | POP ID | City | Endpoint | Ports | Capacity | Baseline RTT | MTU Presets (Std / PPPoE / CGNAT) |
 |:---|:---|:---|:---:|:---:|:---:|:---:|
 ${WIREGUARD_FLEET_NODES.map(n => `| **${n.id}** | ${n.city} | \`${n.endpoint}\` | \`${n.ports.join(', ')}\` | ${n.capacityGbps} Gbps | \`${n.baselineRttMs}ms\` | \`${n.mtuPresets.standard}\` / \`${n.mtuPresets.pppoe}\` / \`${n.mtuPresets.cgnat}\` |`).join('\n')}
@@ -513,8 +555,12 @@ ${WIREGUARD_FLEET_NODES.map(n => `| **${n.id}** | ${n.city} | \`${n.endpoint}\` 
     existingLog = existingLog.trimEnd() + '\n' + mdBlock + '\n';
   }
 
-  fs.writeFileSync(DAILY_AUDIT_LOG_PATH, existingLog, 'utf8');
-  console.log(`📝  Logged daily audit report to ${path.relative(VPN_ROOT, DAILY_AUDIT_LOG_PATH)}`);
+  if (!dryRun) {
+    fs.writeFileSync(DAILY_AUDIT_LOG_PATH, existingLog, 'utf8');
+    console.log(`📝  Logged daily audit report to ${path.relative(VPN_ROOT, DAILY_AUDIT_LOG_PATH)}`);
+  } else {
+    console.log(`📝  [DRY-RUN] Skipped writing ${path.relative(VPN_ROOT, DAILY_AUDIT_LOG_PATH)}`);
+  }
   console.log('='.repeat(80));
   console.log(`✅ [SWEEPR VPN Pipeline Complete] 100% checks passed | 0 streaming CDNs blocked | 0 emails sent`);
   console.log('='.repeat(80));

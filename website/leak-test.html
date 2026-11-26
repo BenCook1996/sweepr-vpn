@@ -225,7 +225,7 @@
         <span>BENCH // IP, DNS & WEBRTC LEAK PROBE</span>
       </div>
       <div class="flex flex-wrap items-center gap-3 font-mono text-xs tabular-nums">
-        <span>AUDITS (7D): <strong data-live-proof="scans-7d" class="text-emerald-400">--</strong></span><span>STACK: <strong>IPv4 ICE STUN (NO IPV6 PROBE)</strong></span>
+        <span>AUDITS (7D): <strong data-live-proof="scans-7d" class="text-emerald-400">--</strong></span><span>STACK: <strong>IPv4 ICE STUN (NO IPV6 PROBE)</strong></span><span>Client v2.6.0 (740,112 B / ~723 KB Win) &bull; Probe Verified: 2026-11-25</span>
       </div>
     </div>
     <!-- Answer-First Header Block (GEO-Optimized) -->
@@ -354,6 +354,39 @@
           </tbody>
         </table>
       </div>
+    </div>
+
+    <!-- Captured Diagnostic Output & Scope Disclosure (P2-1 / C9) -->
+    <div class="glass-card p-6 sm:p-8 mb-8" id="leak-test-captured-proof">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+        <h2 class="text-2xl font-bold text-gray-900">Example Diagnostic Capture &amp; Test Methodology (2026-11-25)</h2>
+        <span class="font-mono text-[11px] font-semibold text-gray-600 tabular-nums">Client v2.6.0 (740,112 B / ~723 KB Win) &bull; Probe Verified: 2026-11-25</span>
+      </div>
+      <p class="text-sm text-gray-600 mb-5">
+        Below is a reproducible diagnostic capture using RFC 5737 test IP <code>203.0.113.42</code> alongside the native SWEEPR WireGuard desktop client (<code>v2.6.0</code>) that routes UDP STUN and DNS inside ChaCha20-Poly1305.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <figure class="bg-gray-50 border border-gray-200 rounded-xl p-3">
+          <img src="/assets/tool-leak-test.webp" width="960" height="536" loading="lazy" decoding="async" class="w-full rounded-xl border border-gray-200 block" alt="SWEEPR Leak Test capture displaying test IP 203.0.113.42, GB location, and No IPv4 Leak status" />
+          <figcaption class="mt-2.5 text-xs text-gray-600 leading-relaxed">
+            <strong class="text-gray-900">Live Browser Probe Output:</strong> Queries <code>/api/tools/network-check</code> for HTTP egress IP and opens an ephemeral <code>RTCPeerConnection</code> against STUN to check for exposed IPv4 <code>srflx</code> candidates.
+          </figcaption>
+        </figure>
+        <figure class="bg-gray-50 border border-gray-200 rounded-xl p-3">
+          <img src="/assets/desktop-dark-mode.webp" width="960" height="638" loading="lazy" decoding="async" class="w-full rounded-xl border border-gray-200 block" alt="SWEEPR VPN v2.6.0 dark mode desktop client showing 8 live WireGuard POPs and Kill Switch" />
+          <figcaption class="mt-2.5 text-xs text-gray-600 leading-relaxed">
+            <strong class="text-gray-900">OS-Level WireGuard Tunnel (v2.6.0):</strong> Covers 8 10 Gbps POPs (<code>UK-LON-01</code> <code>4.1 ms</code> UK baseline / <code>157 ms</code> US-probe RTT; <code>US-NYC-01</code> <code>14 ms</code> US-probe RTT) with <code>10.64.0.1</code> DNS and a 65-domain Smart-TV ACR sinkhole.
+          </figcaption>
+        </figure>
+      </div>
+      <div class="mt-5 p-4 rounded-xl bg-amber-50/70 border border-amber-200 text-xs text-amber-900 leading-relaxed">
+        <strong>Honest Scope &amp; Limitations:</strong> Browser JavaScript can only probe public IPv4 HTTP egress and IPv4 WebRTC STUN ICE candidates—<strong>IPv6 is not probed</strong> by this browser STUN check, and browser JS <strong>cannot directly read your OS DNS resolver table</strong> (confirm <code>DNS = 10.64.0.1</code> inside your WireGuard <code>.conf</code> or client status). Note also that intercontinental hops incur physical propagation RTT, shared egress IPs may occasionally trigger CAPTCHAs, each license includes 3 simultaneous VPN seats (plus unlimited behind a router <code>.conf</code>), WireGuard has no inbound port forwarding, native iOS App Store is pre-launch, and no residential <code>iperf3</code> lab logs are claimed here.
+      </div>
+      <dl class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3 text-xs text-gray-700">
+        <div class="p-3 rounded-xl bg-gray-50 border border-gray-200"><dt class="font-bold text-gray-900 mb-0.5">HTTP Egress Endpoint</dt><dd>Probes <code>/api/tools/network-check</code> directly from your browser without external third-party tracker scripts.</dd></div>
+        <div class="p-3 rounded-xl bg-gray-50 border border-gray-200"><dt class="font-bold text-gray-900 mb-0.5">WebRTC STUN Candidate Check</dt><dd>Inspects ephemeral <code>RTCPeerConnection</code> ICE <code>srflx</code> candidates for exposed IPv4 addresses.</dd></div>
+        <div class="p-3 rounded-xl bg-gray-50 border border-gray-200"><dt class="font-bold text-gray-900 mb-0.5">Recommended In-Tunnel DNS</dt><dd>Set <code>DNS = 10.64.0.1</code> in WireGuard <code>.conf</code> or enable the SWEEPR v2.6.0 desktop Kill-Switch.</dd></div>
+      </dl>
     </div>
 
     <!-- WebRTC, DNS & IPv6 Technical Deep-Dive (GSC Query Expansion: check webrtc leak online) -->
@@ -495,69 +528,24 @@
       </div>
     </section>
   <footer class="mt-auto py-8 text-center text-gray-500 text-sm border-t border-gray-100">
-    <div class="flex flex-wrap justify-center gap-6 mb-3">
-      <a href="/tools/leak-test" class="hover:text-emerald-600 transition-colors font-medium text-emerald-700">Free IP Leak Test</a>
-      <a href="/tools/isp-throttling-test" class="hover:text-emerald-600 transition-colors">Free Speed Slowdown Checker</a>
-      <a href="/alternatives/totalvpn" class="hover:text-emerald-600 transition-colors">Total VPN Alternatives</a>
+    <div class="max-w-5xl mx-auto px-4 flex flex-wrap justify-center gap-x-5 gap-y-2 mb-4 text-xs font-medium">
+      <a href="/solutions" class="hover:text-emerald-600 transition-colors">ISP Solutions</a>
+      <a href="/setup" class="hover:text-emerald-600 transition-colors">Router Setup</a>
+      <a href="/guides" class="hover:text-emerald-600 transition-colors">Privacy Guides</a>
+      <a href="/vs" class="hover:text-emerald-600 transition-colors">VPN Comparisons</a>
+      <a href="/pricing" class="hover:text-emerald-600 transition-colors">Pricing</a>
+      <a href="/download" class="hover:text-emerald-600 transition-colors">Download</a>
+      <a href="/tools/leak-test" class="hover:text-emerald-600 transition-colors">Leak Test</a>
+      <a href="/tools/isp-throttling-test" class="hover:text-emerald-600 transition-colors">ISP Speed Test</a>
+      <a href="/faq" class="hover:text-emerald-600 transition-colors">Technical FAQ</a>
+      <a href="/ai-info" class="hover:text-emerald-600 transition-colors">Brand Fact Sheet</a>
+      <a href="/privacy" class="hover:text-emerald-600 transition-colors">Privacy Policy</a>
       <a href="/refund" class="hover:text-emerald-600 transition-colors">Refund Policy</a>
       <a href="/terms" class="hover:text-emerald-600 transition-colors">Terms of Service</a>
-      <a href="/privacy" class="hover:text-emerald-600 transition-colors">Privacy Policy</a>
-      <a href="/support" class="hover:text-emerald-600 transition-colors">Support &amp; Help</a>
     </div>
-    <!-- Curated Editorial 12-Pillar Navigation Grid -->
-    <nav id="sweepr-curated-pillars-grid" aria-label="Curated Network Tools &amp; Engineering Guides" class="max-w-5xl mx-auto my-6 px-4 pt-6 border-t border-gray-100 text-left">
-      <div class="mb-4 text-center md:text-left">
-        <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400">Core Network Tools &amp; Engineering Guides</h3>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-xs text-gray-500">
-        <!-- Column 1: Diagnostic Tools & Authority -->
-        <div>
-          <h4 class="font-bold text-gray-900 mb-2.5 flex items-center gap-1.5">
-            <span class="text-emerald-600"><svg height="16" class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></span> Diagnostic Tools
-          </h4>
-          <ul class="space-y-2">
-            <li><a href="/tools/leak-test" class="hover:text-emerald-600 transition-colors">IP, DNS &amp; WebRTC Leak Test</a></li>
-            <li><a href="/tools/isp-throttling-test" class="hover:text-emerald-600 transition-colors">ISP Speed &amp; Throttling Test</a></li>
-            <li><a href="/warrant-canary" class="hover:text-emerald-600 transition-colors font-medium text-gray-700">Cryptographic Warrant Canary</a></li>
-          </ul>
-        </div>
-        <!-- Column 2: Hardware & Router Setups -->
-        <div>
-          <h4 class="font-bold text-gray-900 mb-2.5 flex items-center gap-1.5">
-            <span class="text-emerald-600"><svg height="16" class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></span> Hardware Setup Guides
-          </h4>
-          <ul class="space-y-2">
-            <li><a href="/setup/gl-inet-travel-router" class="hover:text-emerald-600 transition-colors">GL.iNet Travel Router WireGuard</a></li>
-            <li><a href="/setup/synology-nas-docker-vpn" class="hover:text-emerald-600 transition-colors">Synology NAS Docker WireGuard</a></li>
-            <li><a href="/setup/steam-deck-vpn" class="hover:text-emerald-600 transition-colors">Steam Deck &amp; SteamOS VPN</a></li>
-            <li><a href="/setup/nvidia-shield-tv-pro-wireguard" class="hover:text-emerald-600 transition-colors">NVIDIA Shield TV Pro WireGuard</a></li>
-          </ul>
-        </div>
-        <!-- Column 3: Smart-TV & IoT Privacy Guides -->
-        <div>
-          <h4 class="font-bold text-gray-900 mb-2.5 flex items-center gap-1.5">
-            <span class="text-emerald-600"><svg height="16" class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="17 2 12 7 7 2"/></svg></span> Smart-TV Privacy Guides
-          </h4>
-          <ul class="space-y-2">
-            <li><a href="/guides/stop-samsung-smart-tv-acr-tracking" class="hover:text-emerald-600 transition-colors">Block Samsung Smart-TV ACR</a></li>
-            <li><a href="/guides/stop-lg-smart-tv-acr-spying" class="hover:text-emerald-600 transition-colors">Stop LG webOS LivePlus Spying</a></li>
-            <li><a href="/guides/stop-roku-vizio-firetv-spying" class="hover:text-emerald-600 transition-colors">Block Roku, Vizio &amp; Fire TV ACR</a></li>
-          </ul>
-        </div>
-        <!-- Column 4: ISP Network Solutions & Comparisons -->
-        <div>
-          <h4 class="font-bold text-gray-900 mb-2.5 flex items-center gap-1.5">
-            <span class="text-emerald-600"><svg height="16" class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></span> ISP Solutions &amp; Reviews
-          </h4>
-          <ul class="space-y-2">
-            <li><a href="/solutions/eduroam-campus-wifi-gaming-packet-loss" class="hover:text-emerald-600 transition-colors">Eduroam Gaming Packet Loss Fix</a></li>
-            <li><a href="/solutions/talktalk-fibre-wireguard-cgnat" class="hover:text-emerald-600 transition-colors">TalkTalk WireGuard &amp; CGNAT Fix</a></li>
-            <li><a href="/alternatives/totalvpn" class="hover:text-emerald-600 transition-colors font-medium text-gray-700">TotalVPN Alternatives (2026)</a></li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-
+    <div class="mb-3">
+      <a href="https://www.google.com/preferences/source?q=sweeprvpn.com" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 text-xs font-semibold no-underline transition-colors">&#9733; Add SWEEPR VPN to Google Preferred Sources</a>
+    </div>
     <p>&copy; 2026 SWEEPR VPN (UK Sole Trader). All rights reserved.</p>
   </footer>
 

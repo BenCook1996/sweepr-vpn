@@ -1,0 +1,30 @@
+SWEEPR VPN pairs a fast kernel-grade WireGuard VPN with a live Wi-Fi security check and malware-blocking DNS shield—built for everyday privacy, public Wi-Fi protection, and ISP throttling defence without background bloat.
+
+FAST WIREGUARD TUNNEL (8 GLOBAL 10GBPS LOCATIONS)
+• Built on the official WireGuard GoBackend tunnel with MTU 1380 and PersistentKeepalive (25s) tuned for mobile LTE/5G and CGNAT networks.
+• Connect in one tap using Recommended Location auto-selection or pin any of our 8 bare-metal 10Gbps locations: London (UK-LON-01), Amsterdam (NL-AMS-01), Frankfurt (DE-FRA-01), Stockholm (SE-STO-01), New York (US-NYC-01), Los Angeles (US-LAX-01), Singapore (SG-SIN-01), and Tokyo (JP-TYO-01).
+• Inspect live session duration, encrypted rx/tx byte counters, tunnel IP, and active in-tunnel DNS right from the Protect screen.
+
+LIVE NETWORK SECURITY CHECK & DNS SHIELD
+• Live Network Security Check: Inspect active transport (Wi-Fi/Cellular), local IP, gateway, active DNS resolver, captive portal status, and measured round-trip latency before trusting hotel, cafe, or airport Wi-Fi.
+• Malware-Blocking Fallback DNS: Route tunnel DNS through 10.64.0.1 with 1.1.1.2 malware-blocking fallback to filter known malicious and telemetry domains.
+• LAN Bypass & Kill Switch Shortcut: Keep Chromecast, printers, and local NAS devices reachable on trusted LANs, and jump straight to Android's native Always-On VPN and "Block connections without VPN" kill switch settings.
+
+MULTI-DEVICE & ROUTER COVERAGE
+• Use SWEEPR VPN Pro across up to 3 simultaneous VPN devices, plus unlimited devices behind a WireGuard router using standard .conf exports from your account portal.
+• Zero-permission QR pairing: Scan from your desktop client with Google Play Code Scanner or sign in via 6-digit email OTP or license key.
+• Home Wi-Fi Radar on Desktop: Full router-level ARP LAN device identification and Smart-TV ACR host telemetry blocking are included with your 3-device SWEEPR Pro subscription in the Windows and macOS desktop apps.
+
+TRANSPARENT ZERO-HIKE PRICING
+• Yearly Plan: £74.99/year (£6.25/mo equivalent — Save 50% vs monthly) with 0% Year-2+ renewal price hikes.
+• 6-Month Plan: £48.99/6 months (Save 35%).
+• Monthly Plan: £12.49/month (1st-Month Introductory Offer available in Google Play Billing where eligible).
+• Backed by a 14-day money-back guarantee.
+
+RAM-ONLY PRIVACY & FULL DATA CONTROL
+• Diskless RAM-only WireGuard server architecture—zero browsing activity, DNS query, or traffic payload logs inside the tunnel.
+• Instant in-app Account & Data Deletion: Permanently delete your account and associated metadata directly from the Account tab at any time.
+• Operated by SWEEPR VPN (UK Sole Trader) / SWEEPR VPN Engineering (Independent UK Developer).
+
+Support: support@sweeprvpn.com | https://sweeprvpn.com/support
+Privacy Policy: https://sweeprvpn.com/privacy

@@ -1,6 +1,6 @@
 /**
  * SWEEPR VPN — E2E Test Suite: Tier 3 Cross-Feature Interactions
- * Tests 22 pairwise interaction scenarios (P01 through P22).
+ * Tests 28 pairwise interaction scenarios (P01 through P28).
  * Zero external npm dependencies. Native Node.js ESM.
  */
 
@@ -21,8 +21,13 @@ import {
   assertNotIncludes,
   assertLessThan,
   assertLessThanOrEqual,
+  assertGreaterThan,
   assertGreaterThanOrEqual,
   fetchOpaque,
+  fetchBinary,
+  sha256File,
+  runConsolidationInTempSandbox,
+  getServerStateDir,
   calculate5GramOverlap,
   extractSemanticText,
   tokenizeWords,
@@ -30,6 +35,7 @@ import {
   extractCanonical,
   extractRobots,
   extractLinks,
+  hasNofollow,
   containsElementId,
   validateSitemapXml,
   findHtmlFiles,
@@ -121,12 +127,11 @@ export const tier3Tests = [
 
       const p1 = path.join(WEBSITE_DIR, 'setup', 'gl-inet-travel-router.html');
       const p2 = path.join(WEBSITE_DIR, 'guides', 'stop-samsung-smart-tv-acr-tracking.html');
-      if (fs.existsSync(p1) && fs.existsSync(p2)) {
-        const h1 = fs.readFileSync(p1, 'utf8');
-        const h2 = fs.readFileSync(p2, 'utf8');
-        const overlap = calculate5GramOverlap(h1, h2);
-        assertLessThan(overlap, 25.0, `Overlap must be < 25%, got ${overlap.toFixed(2)}%`);
-      }
+      assertTrue(fs.existsSync(p1) && fs.existsSync(p2), 'Both cross-cluster pillars must exist');
+      const h1 = fs.readFileSync(p1, 'utf8');
+      const h2 = fs.readFileSync(p2, 'utf8');
+      const overlap = calculate5GramOverlap(h1, h2);
+      assertLessThan(overlap, 25.0, `Overlap must be < 25%, got ${overlap.toFixed(2)}%`);
     }
   },
 
@@ -140,14 +145,13 @@ export const tier3Tests = [
       const matches = findFilesWithPattern(WEBSITE_DIR, /id=["']sweepr-isp-master-matrix["']/i);
       assertEqual(matches.length, 0, 'No files contain matrix table');
 
-      const p1 = path.join(WEBSITE_DIR, 'solutions', 'talktalk-p2p-port-forwarding.html');
+      const p1 = path.join(WEBSITE_DIR, 'solutions', 'talktalk-fibre-wireguard-cgnat.html');
       const p2 = path.join(WEBSITE_DIR, 'solutions', 'virgin-media-remote-dev-ssh.html');
-      if (fs.existsSync(p1) && fs.existsSync(p2)) {
-        const h1 = fs.readFileSync(p1, 'utf8');
-        const h2 = fs.readFileSync(p2, 'utf8');
-        const overlap = calculate5GramOverlap(h1, h2);
-        assertLessThan(overlap, 25.0, `Solutions overlap must be < 25%, got ${overlap.toFixed(2)}%`);
-      }
+      assertTrue(fs.existsSync(p1) && fs.existsSync(p2), 'Both solutions pillars must exist');
+      const h1 = fs.readFileSync(p1, 'utf8');
+      const h2 = fs.readFileSync(p2, 'utf8');
+      const overlap = calculate5GramOverlap(h1, h2);
+      assertLessThan(overlap, 25.0, `Solutions overlap must be < 25%, got ${overlap.toFixed(2)}%`);
     }
   },
 
@@ -169,51 +173,62 @@ export const tier3Tests = [
     }
   },
 
-  // P08: F9 × F12 — Footer Directory Removal vs Curated 12-Pillar Grid
+  // P08: F9 × F12 — Footer Directory Removal vs Focused 14-Link BOFU Hub Footer
   {
     id: 'P08',
     feature: 'F9xF12',
     tier: 3,
-    name: 'P08: Footer directory is absent while curated 12-pillar grid is present on index and pricing',
+    name: 'P08: Footer directory is absent while 14-link BOFU Hub footer + Preferred Sources are present on / and /pricing',
     async fn({ baseUrl }) {
       for (const p of ['/', '/pricing']) {
         const res = await fetchOpaque(`${baseUrl}${p}`);
         assertEqual(res.status, 200, `${p} must return 200`);
         assertFalse(containsElementId(res.body, 'sweepr-seo-directory'), `Directory absent on ${p}`);
-        assertTrue(res.body.includes('/warrant-canary'), `12-pillar grid present on ${p}`);
+        const footerMatch = res.body.match(/<footer[\s\S]*?<\/footer>/i);
+        assertTrue(!!footerMatch, `${p} must contain <footer>`);
+        const flinks = extractLinks(footerMatch[0]).map((l) => l.href);
+        assertLessThan(flinks.length, 15, `${p} footer must have < 15 links`);
+        assertTrue(flinks.includes('https://www.google.com/preferences/source?q=sweeprvpn.com'), `Preferred Sources present on ${p}`);
       }
     }
   },
 
-  // P09: F10 × F12 — Rotator Bridge Banner Removal vs 12-Pillar Grid
+  // P09: F10 × F12 — Rotator Bridge Banner Removal vs Focused 14-Link BOFU Hub Footer
   {
     id: 'P09',
     feature: 'F10xF12',
     tier: 3,
-    name: 'P09: Rotator bridge banner is absent while curated 12-pillar grid is present on tool pages',
+    name: 'P09: Rotator bridge banner is absent while 14-link BOFU Hub footer + Preferred Sources are present on tool pages',
     async fn({ baseUrl }) {
       for (const p of ['/tools/leak-test', '/tools/isp-throttling-test']) {
         const res = await fetchOpaque(`${baseUrl}${p}`);
         assertEqual(res.status, 200, `${p} must return 200`);
         assertFalse(containsElementId(res.body, 'sweepr-unindexed-guides-bridge'), `Bridge absent on ${p}`);
-        assertTrue(res.body.includes('/warrant-canary'), `Curated grid present on ${p}`);
+        const footerMatch = res.body.match(/<footer[\s\S]*?<\/footer>/i);
+        assertTrue(!!footerMatch, `${p} must contain <footer>`);
+        const flinks = extractLinks(footerMatch[0]).map((l) => l.href);
+        assertLessThan(flinks.length, 15, `${p} footer must have < 15 links`);
+        assertTrue(flinks.includes('https://www.google.com/preferences/source?q=sweeprvpn.com'), `Preferred Sources present on ${p}`);
       }
     }
   },
 
-  // P10: F11 × F12 — Disabled Audit Footer Injection vs 12-Pillar Grid
+  // P10: F11 × F12 — Disabled Audit Footer Injection vs BOFU Hub Footer
   {
     id: 'P10',
     feature: 'F11xF12',
     tier: 3,
-    name: 'P10: Audit script execution preserves 12-pillar navigation grid without re-injecting directory',
+    name: 'P10: Audit script execution preserves 14-link BOFU footer without re-injecting directory',
     async fn({ baseUrl }) {
       const scriptPath = path.join(SCRIPTS_DIR, 'daily-seo-pagespeed-audit.mjs');
       execSync(`node "${scriptPath}" --no-fix --no-ping`, { cwd: ROOT_DIR, encoding: 'utf8' });
 
       const res = await fetchOpaque(`${baseUrl}/`);
       assertFalse(containsElementId(res.body, 'sweepr-seo-directory'), 'Directory must remain absent');
-      assertTrue(res.body.includes('/warrant-canary'), '12-pillar grid must remain intact');
+      const footerMatch = res.body.match(/<footer[\s\S]*?<\/footer>/i);
+      assertTrue(!!footerMatch, 'Footer must remain present');
+      assertLessThan(extractLinks(footerMatch[0]).length, 15, 'BOFU footer link count must remain < 15');
+      assertTrue(footerMatch[0].includes('https://www.google.com/preferences/source?q=sweeprvpn.com'), 'Preferred Sources badge must remain intact');
     }
   },
 
@@ -222,10 +237,10 @@ export const tier3Tests = [
     id: 'P11',
     feature: 'F13xF14',
     tier: 3,
-    name: 'P11: GSC consolidation does not resurrect retired pages; sitemap stays strictly <= 95 URLs',
+    name: 'P11: GSC consolidation sandbox does not resurrect retired pages; sitemap stays strictly <= 95 URLs',
     async fn() {
-      const fp = path.join(SCRIPTS_DIR, 'consolidate-and-optimize-gsc.mjs');
-      execSync(`node "${fp}"`, { cwd: ROOT_DIR, encoding: 'utf8' });
+      const out = runConsolidationInTempSandbox();
+      assertFalse(out.includes('[GSC Winner Lock]'), 'Winner Lock must not resurrect retired pages');
 
       const sitemapPath = path.join(WEBSITE_DIR, 'sitemap.xml');
       const content = fs.readFileSync(sitemapPath, 'utf8');
@@ -240,7 +255,7 @@ export const tier3Tests = [
     id: 'P12',
     feature: 'F14xF15',
     tier: 3,
-    name: 'P12: Consecutive audit runs without modifying <main> keep sitemap lastmod dates identical',
+    name: 'P12: Consecutive audit runs without modifying <main> keep every per-URL sitemap lastmod date identical',
     async fn() {
       const sitemapPath = path.join(WEBSITE_DIR, 'sitemap.xml');
       const content1 = fs.readFileSync(sitemapPath, 'utf8');
@@ -253,6 +268,9 @@ export const tier3Tests = [
       const { lastmods: lm2 } = validateSitemapXml(content2);
 
       assertEqual(Object.keys(lm1).length, Object.keys(lm2).length, 'Lastmod counts must match');
+      for (const u of Object.keys(lm1)) {
+        assertEqual(lm1[u], lm2[u], `lastmod for ${u} must remain identical (${lm1[u]} vs ${lm2[u]})`);
+      }
     }
   },
 
@@ -300,30 +318,32 @@ export const tier3Tests = [
     }
   },
 
-  // P15: F18 × F3 — Prominent Pillar Links vs 301 Redirect Resolver
+  // P15: F18 × F3 — Prominent Hub/Tool/TotalVPN Links vs 301 Redirect Resolver
   {
     id: 'P15',
     feature: 'F18xF3',
     tier: 3,
-    name: 'P15: Prominent pillar links from homepage resolve directly to HTTP 200 without triggering 301',
+    name: 'P15: Prominent #homeToolsAndHubsStrip and TotalVPN links on / resolve 200 OK without triggering 301',
     async fn({ baseUrl }) {
       const res = await fetchOpaque(`${baseUrl}/`);
       const links = extractLinks(res.body);
       const pillarLinks = [
-        '/guides/stop-samsung-smart-tv-acr-tracking',
-        '/setup/gl-inet-travel-router',
         '/tools/leak-test',
         '/tools/isp-throttling-test',
-        '/setup/synology-nas-docker-vpn',
+        '/solutions',
+        '/setup',
+        '/guides',
+        '/vs',
+        '/vs/totalvpn',
         '/alternatives/totalvpn'
       ];
       for (const pl of pillarLinks) {
         const linkObj = links.find((l) => l.href === pl);
-        if (linkObj) {
-          const targetRes = await fetchOpaque(`${baseUrl}${pl}`);
-          assertEqual(targetRes.status, 200, `Target ${pl} must return 200 directly`);
-          assertEqual(targetRes.location, null, `Target ${pl} must not redirect`);
-        }
+        assertTrue(!!linkObj, `Homepage must link to ${pl}`);
+        assertFalse(hasNofollow(linkObj), `Link to ${pl} must not be nofollow`);
+        const targetRes = await fetchOpaque(`${baseUrl}${pl}`);
+        assertEqual(targetRes.status, 200, `Target ${pl} must return 200 directly`);
+        assertEqual(targetRes.location, null, `Target ${pl} must not redirect`);
       }
     }
   },
@@ -333,10 +353,13 @@ export const tier3Tests = [
     id: 'P16',
     feature: 'F18xF22',
     tier: 3,
-    name: 'P16: Warrant canary link from homepage resolves to HTTP 200 with cryptographic PGP block',
+    name: 'P16: Warrant canary links from /download, /tools/leak-test, /ai-info, and /faq resolve to 200 OK with PGP block',
     async fn({ baseUrl }) {
-      const res = await fetchOpaque(`${baseUrl}/`);
-      assertTrue(res.body.includes('href="/warrant-canary"'), 'Homepage must link to warrant canary');
+      for (const p of ['/download?platform=picker', '/tools/leak-test', '/ai-info', '/faq']) {
+        const res = await fetchOpaque(`${baseUrl}${p}`);
+        assertEqual(res.status, 200, `${p} must return 200`);
+        assertTrue(res.body.includes('href="/warrant-canary"'), `${p} must link to /warrant-canary`);
+      }
 
       const canaryRes = await fetchOpaque(`${baseUrl}/warrant-canary`);
       assertEqual(canaryRes.status, 200, 'Canary must return 200');
@@ -347,17 +370,21 @@ export const tier3Tests = [
     }
   },
 
-  // P17: F19 × F20 — Pipeline Lock (--limit=0) vs CI Assertions
+  // P17: F19 × F20 — Read-Only Pipeline Lock (--json-only) vs CI Quality Gate
   {
     id: 'P17',
     feature: 'F19xF20',
     tier: 3,
-    name: 'P17: Workflow with --limit=0 satisfies all CI guardrail assertions',
+    name: 'P17: Workflow with --json-only & --no-ctr-rewrite satisfies ci-seo-quality-gate.mjs assertions',
     async fn() {
       const wfPath = path.join(ROOT_DIR, '.github', 'workflows', 'vpn-daily-seo-pipeline.yml');
       const content = fs.readFileSync(wfPath, 'utf8');
-      assertIncludes(content, '--limit=0', 'Workflow frozen with --limit=0');
-      assertTrue(content.includes('95') || content.includes('assertion'), 'CI guardrails present');
+      assertIncludes(content, '--json-only', 'Workflow must lock keyword discovery to --json-only');
+      assertIncludes(content, '--no-ctr-rewrite', 'Workflow must lock GSC sync to --no-ctr-rewrite');
+      assertIncludes(content, 'ci-seo-quality-gate.mjs', 'Workflow must invoke ci-seo-quality-gate.mjs');
+      assertIncludes(content, 'Abort on HTML Mutations', 'Workflow must abort on HTML mutations');
+      const gateOut = execSync(`node "${path.join(SCRIPTS_DIR, 'ci-seo-quality-gate.mjs')}"`, { cwd: ROOT_DIR, encoding: 'utf8' });
+      assertIncludes(gateOut, 'CI SEO Quality Gate PASSED', 'CI quality gate must pass');
     }
   },
 
@@ -404,12 +431,11 @@ export const tier3Tests = [
     tier: 3,
     name: 'P20: CI assertion verifies 5-gram shingle overlap stays strictly below 30% ceiling',
     async fn() {
-      const p1 = path.join(WEBSITE_DIR, 'solutions', 'talktalk-p2p-port-forwarding.html');
+      const p1 = path.join(WEBSITE_DIR, 'solutions', 'talktalk-fibre-wireguard-cgnat.html');
       const p2 = path.join(WEBSITE_DIR, 'setup', 'gl-inet-travel-router.html');
-      if (fs.existsSync(p1) && fs.existsSync(p2)) {
-        const overlap = calculate5GramOverlap(fs.readFileSync(p1, 'utf8'), fs.readFileSync(p2, 'utf8'));
-        assertLessThan(overlap, 30.0, `Overlap must be < 30% CI ceiling, got ${overlap.toFixed(2)}%`);
-      }
+      assertTrue(fs.existsSync(p1) && fs.existsSync(p2), 'Both pillars must exist');
+      const overlap = calculate5GramOverlap(fs.readFileSync(p1, 'utf8'), fs.readFileSync(p2, 'utf8'));
+      assertLessThan(overlap, 30.0, `Overlap must be < 30% CI ceiling, got ${overlap.toFixed(2)}%`);
     }
   },
 
@@ -418,12 +444,13 @@ export const tier3Tests = [
     id: 'P21',
     feature: 'F21xF15',
     tier: 3,
-    name: 'P21: Local audit script run leaves sitemap.xml with 0 diff when semantic main is unchanged',
+    name: 'P21: Local audit script --no-fix --no-ping preserves exact SHA-256 of sitemap.xml',
     async fn() {
+      const sitemapPath = path.join(WEBSITE_DIR, 'sitemap.xml');
+      const beforeSha = sha256File(sitemapPath);
       const scriptPath = path.join(SCRIPTS_DIR, 'daily-seo-pagespeed-audit.mjs');
       execSync(`node "${scriptPath}" --no-fix --no-ping`, { cwd: ROOT_DIR, encoding: 'utf8' });
-      // Sitemaps should remain stable
-      assertTrue(true, 'Audit script runs stably without churning unchanged entries');
+      assertEqual(sha256File(sitemapPath), beforeSha, 'Audit --no-fix --no-ping must leave sitemap.xml SHA-256 unchanged');
     }
   },
 
@@ -438,6 +465,139 @@ export const tier3Tests = [
       const res = await fetchOpaque(`${baseUrl}/leak-test${query}`);
       assertEqual(res.status, 301, 'Must return 301');
       assertEqual(res.location, `/tools/leak-test${query}`, 'Must preserve entire UTM query string');
+    }
+  },
+
+  // P23: F23 × F24 — Real WebP Proof Assets vs /ai-info 8-POP GEO Fact Sheet
+  {
+    id: 'P23',
+    feature: 'F23xF24',
+    tier: 3,
+    name: 'P23: Homepage WebP proof captures and /ai-info 8-POP fact sheet align without deprecated schema',
+    async fn({ baseUrl }) {
+      const home = await fetchOpaque(`${baseUrl}/`);
+      assertEqual(home.status, 200, '/ must return 200');
+      assertIncludes(home.body, '/assets/desktop-home-light.webp', 'Homepage must embed desktop-home-light.webp');
+      const imgRes = await fetchBinary(`${baseUrl}/assets/desktop-home-light.webp`);
+      assertEqual(imgRes.status, 200, 'desktop-home-light.webp must return 200');
+      assertLessThan(imgRes.byteLength, 81920, 'WebP must be < 80 KB');
+
+      const aiInfo = await fetchOpaque(`${baseUrl}/ai-info`);
+      assertEqual(aiInfo.status, 200, '/ai-info must return 200');
+      assertIncludes(aiInfo.body, 'UK-LON-01', '/ai-info must list UK-LON-01 POP');
+      assertFalse(/"@type"\s*:\s*"(FAQPage|HowTo)"/i.test(aiInfo.body), '/ai-info must omit FAQPage/HowTo');
+    }
+  },
+
+  // P24: F25 × F27 — /faq PAA Colony vs Consolidated 23 /solutions/ Hubs
+  {
+    id: 'P24',
+    feature: 'F25xF27',
+    tier: 3,
+    name: 'P24: /faq PAA links resolve 200 OK across consolidated /solutions/ hubs and exclude retired hyperoptic',
+    async fn({ baseUrl }) {
+      const faqRes = await fetchOpaque(`${baseUrl}/faq`);
+      assertEqual(faqRes.status, 200, '/faq must return 200');
+      const mainHtml = extractMainContent(faqRes.body);
+      assertFalse(mainHtml.includes('hyperoptic-broadband-isp-throttling'), '/faq must not link to deleted hyperoptic page');
+      const solLinks = [...new Set(extractLinks(mainHtml).map((l) => l.href).filter((h) => h.startsWith('/solutions/')))];
+      assertGreaterThanOrEqual(solLinks.length, 5, 'Expected >= 5 /solutions/ links inside /faq <main>');
+      for (const s of solLinks) {
+        const res = await fetchOpaque(`${baseUrl}${s}`, { method: 'HEAD' });
+        assertEqual(res.status, 200, `/faq solution link ${s} must return 200`);
+        assertEqual(res.location, null, `/faq solution link ${s} must not redirect`);
+      }
+    }
+  },
+
+  // P25: F24 × F26 — robots.txt & sitemap.xml Exclusion vs Live noindex Utility Headers
+  {
+    id: 'P25',
+    feature: 'F24xF26',
+    tier: 3,
+    name: 'P25: robots.txt Disallow and sitemap.xml exclusion match live X-Robots-Tag noindex on /welcome and /uninstall',
+    async fn({ baseUrl }) {
+      const robots = await fetchOpaque(`${baseUrl}/robots.txt`);
+      assertIncludes(robots.body, 'Disallow: /welcome', 'robots.txt must disallow /welcome');
+      assertIncludes(robots.body, 'Disallow: /uninstall', 'robots.txt must disallow /uninstall');
+
+      const sitemap = await fetchOpaque(`${baseUrl}/sitemap.xml`);
+      const { urls } = validateSitemapXml(sitemap.body);
+      assertFalse(urls.some((u) => u.endsWith('/welcome') || u.endsWith('/uninstall')), 'sitemap.xml must exclude /welcome and /uninstall');
+
+      for (const p of ['/welcome', '/uninstall']) {
+        const res = await fetchOpaque(`${baseUrl}${p}`);
+        assertEqual(res.status, 200, `${p} must return 200`);
+        assertIncludes((res.getHeader('x-robots-tag') || '').toLowerCase(), 'noindex, nofollow', `${p} must send X-Robots-Tag: noindex, nofollow`);
+      }
+    }
+  },
+
+  // P26: F26 × F26 — Isolated SWEEPR_STATE_DIR Log Separation
+  {
+    id: 'P26',
+    feature: 'F26xF26',
+    tier: 3,
+    name: 'P26: POST /api/uninstall-feedback writes to isolated uninstall-feedback.jsonl without polluting tool-telemetry.jsonl or website/data/',
+    async fn({ baseUrl, stateDir }) {
+      const resolvedStateDir = stateDir || getServerStateDir();
+      assertTrue(!!resolvedStateDir, 'Isolated SWEEPR_STATE_DIR must be active');
+      const telPath = path.join(resolvedStateDir, 'tool-telemetry.jsonl');
+      const telBefore = fs.existsSync(telPath) ? fs.readFileSync(telPath, 'utf8') : '';
+
+      const marker = `p26-isolation-${Date.now()}`;
+      const res = await fetchOpaque(`${baseUrl}/api/uninstall-feedback`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason: 'connection_drops', os: 'mac', version: '2.6.0', note: marker })
+      });
+      assertEqual(res.status, 200, 'Uninstall feedback must succeed');
+
+      const fbPath = path.join(resolvedStateDir, 'uninstall-feedback.jsonl');
+      assertTrue(fs.existsSync(fbPath), 'uninstall-feedback.jsonl must exist in isolated stateDir');
+      assertIncludes(fs.readFileSync(fbPath, 'utf8'), marker, 'Marker must appear in uninstall-feedback.jsonl');
+
+      const telAfter = fs.existsSync(telPath) ? fs.readFileSync(telPath, 'utf8') : '';
+      assertEqual(telAfter, telBefore, 'POST /api/uninstall-feedback must not pollute tool-telemetry.jsonl');
+      assertFalse(telAfter.includes(marker), 'Uninstall feedback marker must never appear in tool-telemetry.jsonl');
+    }
+  },
+
+  // P27: F25 × F28 — BOFU Footer & Mobile Nav Drawer vs CI Quality Gate
+  {
+    id: 'P27',
+    feature: 'F25xF28',
+    tier: 3,
+    name: 'P27: BOFU <15 footers and static #mobileNavDrawer links before <main> agree with ci-seo-quality-gate.mjs',
+    async fn({ baseUrl }) {
+      for (const p of ['/', '/ai-info', '/faq', '/solutions/talktalk-fibre-wireguard-cgnat']) {
+        const res = await fetchOpaque(`${baseUrl}${p}`);
+        assertEqual(res.status, 200, `${p} must return 200`);
+        const drawerIdx = res.body.search(/id=["']mobileNavDrawer["']/i);
+        const mainIdx = res.body.search(/<main\b/i);
+        assertTrue(drawerIdx >= 0 && mainIdx > drawerIdx, `${p} must place #mobileNavDrawer before <main>`);
+      }
+      const gateOut = execSync(`node "${path.join(SCRIPTS_DIR, 'ci-seo-quality-gate.mjs')}"`, { cwd: ROOT_DIR, encoding: 'utf8' });
+      assertIncludes(gateOut, 'CI SEO Quality Gate PASSED', 'CI quality gate must pass');
+    }
+  },
+
+  // P28: F27 × F28 — M3 23 /solutions/ & 94-URL Sitemap vs Daily Audit
+  {
+    id: 'P28',
+    feature: 'F27xF28',
+    tier: 3,
+    name: 'P28: Consolidated 23 /solutions/ + 94-URL sitemap.xml passes daily-seo-pagespeed-audit.mjs --no-fix --no-ping with 0 failures',
+    async fn() {
+      const solutionsCount = fs.readdirSync(path.join(WEBSITE_DIR, 'solutions')).filter((f) => f.endsWith('.html')).length;
+      assertEqual(solutionsCount, 23, `Expected 23 /solutions/ HTML files, got ${solutionsCount}`);
+      const { totalUrls } = validateSitemapXml(fs.readFileSync(path.join(WEBSITE_DIR, 'sitemap.xml'), 'utf8'));
+      assertEqual(totalUrls, 94, `Expected 94 sitemap URLs, got ${totalUrls}`);
+      const auditOut = execSync(`node "${path.join(SCRIPTS_DIR, 'daily-seo-pagespeed-audit.mjs')}" --no-fix --no-ping`, {
+        cwd: ROOT_DIR,
+        encoding: 'utf8'
+      });
+      assertIncludes(auditOut, '100% HEALTHY', 'Daily audit must report 100% HEALTHY');
     }
   }
 ];

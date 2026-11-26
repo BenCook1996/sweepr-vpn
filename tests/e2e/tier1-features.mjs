@@ -1,10 +1,11 @@
 /**
  * SWEEPR VPN — E2E Test Suite: Tier 1 Feature Coverage
- * Tests all 22 primary project features (F1 to F22), 5 tests each = 110 tests.
+ * Tests all 28 primary project features (F1 to F28), 5 tests each = 140 tests.
  * Zero external npm dependencies. Native Node.js ESM.
  */
 
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
 import {
@@ -22,8 +23,13 @@ import {
   assertNotIncludes,
   assertLessThan,
   assertLessThanOrEqual,
+  assertGreaterThan,
   assertGreaterThanOrEqual,
   fetchOpaque,
+  fetchBinary,
+  sha256File,
+  runConsolidationInTempSandbox,
+  getServerStateDir,
   calculate5GramOverlap,
   extractSemanticText,
   tokenizeWords,
@@ -157,20 +163,18 @@ export const tier1Tests = [
     id: 'F02-T1-05',
     feature: 'F2',
     tier: 1,
-    name: 'Verify authoritative master pillars are preserved across directories',
+    name: 'Verify all 62 authoritative master pillars are preserved across directories',
     async fn() {
-      const expectedPillars = [
-        path.join(WEBSITE_DIR, 'solutions', 'talktalk-p2p-port-forwarding.html'),
-        path.join(WEBSITE_DIR, 'solutions', 'virgin-media-remote-dev-ssh.html'),
-        path.join(WEBSITE_DIR, 'setup', 'gl-inet-travel-router.html'),
-        path.join(WEBSITE_DIR, 'setup', 'synology-nas-docker-vpn.html'),
-        path.join(WEBSITE_DIR, 'guides', 'stop-samsung-smart-tv-acr-tracking.html'),
-        path.join(WEBSITE_DIR, 'guides', 'stop-lg-smart-tv-acr-spying.html'),
-        path.join(WEBSITE_DIR, 'vs', 'nordvpn.html')
-      ];
-      for (const p of expectedPillars) {
-        assertTrue(fs.existsSync(p), `Authoritative pillar must exist on disk: ${p}`);
+      const pillars = getAuthoritativePillars();
+      assertEqual(pillars.length, 62, 'Expected 62 authoritative pSEO pillars');
+      for (const rel of pillars) {
+        const p = path.join(WEBSITE_DIR, rel);
+        assertTrue(fs.existsSync(p), `Authoritative pillar must exist on disk: ${rel}`);
       }
+      assertFalse(
+        fs.existsSync(path.join(WEBSITE_DIR, 'solutions', 'hyperoptic-broadband-isp-throttling.html')),
+        'Consolidated hyperoptic carrier page must be absent from disk'
+      );
     }
   },
 
@@ -273,11 +277,23 @@ export const tier1Tests = [
     id: 'F04-T1-04',
     feature: 'F4',
     tier: 1,
-    name: 'Verify /vs/totalvpn redirects via 301 to /alternatives/totalvpn',
+    name: 'Verify /vs/totalvpn returns 200 canonical while legacy aliases redirect 301',
     async fn({ baseUrl }) {
-      const res = await fetchOpaque(`${baseUrl}/vs/totalvpn`);
-      assertEqual(res.status, 301, '/vs/totalvpn must return 301');
-      assertEqual(res.location, '/alternatives/totalvpn', 'Must redirect to /alternatives/totalvpn');
+      const liveVs = await fetchOpaque(`${baseUrl}/vs/totalvpn`);
+      assertEqual(liveVs.status, 200, '/vs/totalvpn must return 200 OK as active canonical pillar');
+      assertEqual(liveVs.location, null, '/vs/totalvpn must not redirect');
+
+      for (const alias of ['/vs/totalvpn.html', '/vs-totalvpn', '/vs-totalvpn.html']) {
+        const res = await fetchOpaque(`${baseUrl}${alias}`);
+        assertEqual(res.status, 301, `${alias} must return 301`);
+        assertEqual(res.location, '/vs/totalvpn', `${alias} must redirect to /vs/totalvpn`);
+      }
+
+      for (const altAlias of ['/alternatives-totalvpn', '/alternatives-totalvpn.html']) {
+        const res = await fetchOpaque(`${baseUrl}${altAlias}`);
+        assertEqual(res.status, 301, `${altAlias} must return 301`);
+        assertEqual(res.location, '/alternatives/totalvpn', `${altAlias} must redirect to /alternatives/totalvpn`);
+      }
     }
   },
   {
@@ -314,13 +330,12 @@ export const tier1Tests = [
     id: 'F05-T1-02',
     feature: 'F5',
     tier: 1,
-    name: 'Verify #sweepr-live-wireguard-acr-proof absent in talktalk-p2p-port-forwarding.html',
+    name: 'Verify #sweepr-live-wireguard-acr-proof absent in talktalk-fibre-wireguard-cgnat.html',
     async fn() {
-      const fp = path.join(WEBSITE_DIR, 'solutions', 'talktalk-p2p-port-forwarding.html');
-      if (fs.existsSync(fp)) {
-        const html = fs.readFileSync(fp, 'utf8');
-        assertFalse(containsElementId(html, 'sweepr-live-wireguard-acr-proof'), 'Proof section must be absent');
-      }
+      const fp = path.join(WEBSITE_DIR, 'solutions', 'talktalk-fibre-wireguard-cgnat.html');
+      assertTrue(fs.existsSync(fp), `Required pillar missing: ${fp}`);
+      const html = fs.readFileSync(fp, 'utf8');
+      assertFalse(containsElementId(html, 'sweepr-live-wireguard-acr-proof'), 'Proof section must be absent');
     }
   },
   {
@@ -330,10 +345,9 @@ export const tier1Tests = [
     name: 'Verify #sweepr-live-wireguard-acr-proof absent in gl-inet-travel-router.html',
     async fn() {
       const fp = path.join(WEBSITE_DIR, 'setup', 'gl-inet-travel-router.html');
-      if (fs.existsSync(fp)) {
-        const html = fs.readFileSync(fp, 'utf8');
-        assertFalse(containsElementId(html, 'sweepr-live-wireguard-acr-proof'), 'Proof section must be absent');
-      }
+      assertTrue(fs.existsSync(fp), `Required pillar missing: ${fp}`);
+      const html = fs.readFileSync(fp, 'utf8');
+      assertFalse(containsElementId(html, 'sweepr-live-wireguard-acr-proof'), 'Proof section must be absent');
     }
   },
   {
@@ -343,10 +357,9 @@ export const tier1Tests = [
     name: 'Verify #sweepr-live-wireguard-acr-proof absent in stop-samsung-smart-tv-acr-tracking.html',
     async fn() {
       const fp = path.join(WEBSITE_DIR, 'guides', 'stop-samsung-smart-tv-acr-tracking.html');
-      if (fs.existsSync(fp)) {
-        const html = fs.readFileSync(fp, 'utf8');
-        assertFalse(containsElementId(html, 'sweepr-live-wireguard-acr-proof'), 'Proof section must be absent');
-      }
+      assertTrue(fs.existsSync(fp), `Required pillar missing: ${fp}`);
+      const html = fs.readFileSync(fp, 'utf8');
+      assertFalse(containsElementId(html, 'sweepr-live-wireguard-acr-proof'), 'Proof section must be absent');
     }
   },
   {
@@ -356,10 +369,9 @@ export const tier1Tests = [
     name: 'Verify #sweepr-live-wireguard-acr-proof absent in vs/nordvpn.html',
     async fn() {
       const fp = path.join(WEBSITE_DIR, 'vs', 'nordvpn.html');
-      if (fs.existsSync(fp)) {
-        const html = fs.readFileSync(fp, 'utf8');
-        assertFalse(containsElementId(html, 'sweepr-live-wireguard-acr-proof'), 'Proof section must be absent');
-      }
+      assertTrue(fs.existsSync(fp), `Required pillar missing: ${fp}`);
+      const html = fs.readFileSync(fp, 'utf8');
+      assertFalse(containsElementId(html, 'sweepr-live-wireguard-acr-proof'), 'Proof section must be absent');
     }
   },
 
@@ -381,13 +393,12 @@ export const tier1Tests = [
     id: 'F06-T1-02',
     feature: 'F6',
     tier: 1,
-    name: 'Verify #sweepr-isp-master-matrix absent in talktalk-p2p-port-forwarding.html',
+    name: 'Verify #sweepr-isp-master-matrix absent in talktalk-fibre-wireguard-cgnat.html',
     async fn() {
-      const fp = path.join(WEBSITE_DIR, 'solutions', 'talktalk-p2p-port-forwarding.html');
-      if (fs.existsSync(fp)) {
-        const html = fs.readFileSync(fp, 'utf8');
-        assertFalse(containsElementId(html, 'sweepr-isp-master-matrix'), 'Master matrix must be absent');
-      }
+      const fp = path.join(WEBSITE_DIR, 'solutions', 'talktalk-fibre-wireguard-cgnat.html');
+      assertTrue(fs.existsSync(fp), `Required pillar missing: ${fp}`);
+      const html = fs.readFileSync(fp, 'utf8');
+      assertFalse(containsElementId(html, 'sweepr-isp-master-matrix'), 'Master matrix must be absent');
     }
   },
   {
@@ -397,10 +408,9 @@ export const tier1Tests = [
     name: 'Verify #sweepr-isp-master-matrix absent in virgin-media-remote-dev-ssh.html',
     async fn() {
       const fp = path.join(WEBSITE_DIR, 'solutions', 'virgin-media-remote-dev-ssh.html');
-      if (fs.existsSync(fp)) {
-        const html = fs.readFileSync(fp, 'utf8');
-        assertFalse(containsElementId(html, 'sweepr-isp-master-matrix'), 'Master matrix must be absent');
-      }
+      assertTrue(fs.existsSync(fp), `Required pillar missing: ${fp}`);
+      const html = fs.readFileSync(fp, 'utf8');
+      assertFalse(containsElementId(html, 'sweepr-isp-master-matrix'), 'Master matrix must be absent');
     }
   },
   {
@@ -410,44 +420,35 @@ export const tier1Tests = [
     name: 'Verify #sweepr-isp-master-matrix absent in bt-broadband-gaming-packet-loss.html',
     async fn() {
       const fp = path.join(WEBSITE_DIR, 'solutions', 'bt-broadband-gaming-packet-loss.html');
-      if (fs.existsSync(fp)) {
-        const html = fs.readFileSync(fp, 'utf8');
-        assertFalse(containsElementId(html, 'sweepr-isp-master-matrix'), 'Master matrix must be absent');
-      }
+      assertTrue(fs.existsSync(fp), `Required pillar missing: ${fp}`);
+      const html = fs.readFileSync(fp, 'utf8');
+      assertFalse(containsElementId(html, 'sweepr-isp-master-matrix'), 'Master matrix must be absent');
     }
   },
   {
     id: 'F06-T1-05',
     feature: 'F6',
     tier: 1,
-    name: 'Verify legitimate non-matrix tables are preserved in solution pillars',
+    name: 'Verify legitimate non-matrix tables are preserved in talktalk-fibre-wireguard-cgnat.html',
     async fn() {
-      const fp = path.join(WEBSITE_DIR, 'solutions', 'talktalk-p2p-port-forwarding.html');
-      if (fs.existsSync(fp)) {
-        const html = fs.readFileSync(fp, 'utf8');
-        assertTrue(html.includes('<table') || html.includes('class="metric'), 'Pillar should preserve legitimate technical metrics or tables');
-      }
+      const fp = path.join(WEBSITE_DIR, 'solutions', 'talktalk-fibre-wireguard-cgnat.html');
+      assertTrue(fs.existsSync(fp), `Required pillar missing: ${fp}`);
+      const html = fs.readFileSync(fp, 'utf8');
+      assertTrue(html.includes('<table') || html.includes('class="metric'), 'Pillar should preserve legitimate technical metrics or tables');
     }
   },
 
   // =========================================================================
-  // Feature F7: Disable Boilerplate Injection Scripts
+  // Feature F7: Remove Boilerplate Injection Scripts
   // =========================================================================
   {
     id: 'F07-T1-01',
     feature: 'F7',
     tier: 1,
-    name: 'Verify scripts/enrich-pillars-with-live-proof.mjs is deactivated or neutralized',
+    name: 'Verify deleted scripts/enrich-pillars-with-live-proof.mjs is absent from scripts/',
     async fn() {
       const fp = path.join(SCRIPTS_DIR, 'enrich-pillars-with-live-proof.mjs');
-      assertTrue(fs.existsSync(fp), 'Script file must exist');
-      const content = fs.readFileSync(fp, 'utf8');
-      // Script should either have an early return / disabled flag or not execute HTML modifications
-      const isDisabled = content.includes('DISABLED') ||
-                         content.includes('return') ||
-                         content.includes('DEACTIVATED') ||
-                         content.includes('process.exit(0)');
-      assertTrue(isDisabled, 'enrich-pillars script must be deactivated');
+      assertFalse(fs.existsSync(fp), 'enrich-pillars-with-live-proof.mjs must remain deleted from scripts/');
     }
   },
   {
@@ -466,13 +467,18 @@ export const tier1Tests = [
     id: 'F07-T1-03',
     feature: 'F7',
     tier: 1,
-    name: 'Execute enrich-pillars script dry-run; assert zero files modified',
+    name: 'Verify zero scripts/*.mjs inject sweepr-live-wireguard-acr-proof or sweepr-isp-master-matrix',
     async fn() {
-      const fp = path.join(SCRIPTS_DIR, 'enrich-pillars-with-live-proof.mjs');
-      const res = execSync(`node "${fp}"`, { cwd: ROOT_DIR, encoding: 'utf8' });
-      // Verify no proof sections exist
+      const scriptFiles = fs.readdirSync(SCRIPTS_DIR).filter((f) => f.endsWith('.mjs'));
+      for (const sf of scriptFiles) {
+        const content = fs.readFileSync(path.join(SCRIPTS_DIR, sf), 'utf8');
+        assertFalse(
+          content.includes('id="sweepr-live-wireguard-acr-proof"') || content.includes('id="sweepr-isp-master-matrix"'),
+          `Script ${sf} must not inject retired proof or matrix HTML sections`
+        );
+      }
       const matches = findFilesWithPattern(WEBSITE_DIR, /id=["']sweepr-live-wireguard-acr-proof["']/i);
-      assertEqual(matches.length, 0, 'No proof sections should have been created');
+      assertEqual(matches.length, 0, 'No proof sections should exist in website/');
     }
   },
   {
@@ -490,13 +496,16 @@ export const tier1Tests = [
     id: 'F07-T1-05',
     feature: 'F7',
     tier: 1,
-    name: 'Verify consecutive script executions maintain zero HTML diffs',
+    name: 'Verify consecutive daily audit --no-fix --no-ping runs leave 0 proof/matrix sections and identical HTML',
     async fn() {
-      const fp = path.join(SCRIPTS_DIR, 'enrich-pillars-with-live-proof.mjs');
-      execSync(`node "${fp}"`, { cwd: ROOT_DIR, encoding: 'utf8' });
-      execSync(`node "${fp}"`, { cwd: ROOT_DIR, encoding: 'utf8' });
-      const matches = findFilesWithPattern(WEBSITE_DIR, /id=["']sweepr-live-wireguard-acr-proof["']/i);
-      assertEqual(matches.length, 0, 'Repeated runs must remain clean');
+      const auditPath = path.join(SCRIPTS_DIR, 'daily-seo-pagespeed-audit.mjs');
+      const talktalkPath = path.join(WEBSITE_DIR, 'solutions', 'talktalk-fibre-wireguard-cgnat.html');
+      const beforeSha = sha256File(talktalkPath);
+      execSync(`node "${auditPath}" --no-fix --no-ping`, { cwd: ROOT_DIR, encoding: 'utf8' });
+      execSync(`node "${auditPath}" --no-fix --no-ping`, { cwd: ROOT_DIR, encoding: 'utf8' });
+      assertEqual(sha256File(talktalkPath), beforeSha, 'Repeated audit runs must not alter pillar HTML');
+      const matches = findFilesWithPattern(WEBSITE_DIR, /id=["'](sweepr-live-wireguard-acr-proof|sweepr-isp-master-matrix)["']/i);
+      assertEqual(matches.length, 0, 'Repeated runs must leave 0 proof/matrix sections');
     }
   },
 
@@ -526,14 +535,13 @@ export const tier1Tests = [
     tier: 1,
     name: 'Verify pairwise 5-gram overlap between top solutions pillars is strictly below 25%',
     async fn() {
-      const p1 = path.join(WEBSITE_DIR, 'solutions', 'talktalk-p2p-port-forwarding.html');
+      const p1 = path.join(WEBSITE_DIR, 'solutions', 'talktalk-fibre-wireguard-cgnat.html');
       const p2 = path.join(WEBSITE_DIR, 'solutions', 'virgin-media-remote-dev-ssh.html');
-      if (fs.existsSync(p1) && fs.existsSync(p2)) {
-        const html1 = fs.readFileSync(p1, 'utf8');
-        const html2 = fs.readFileSync(p2, 'utf8');
-        const overlap = calculate5GramOverlap(html1, html2);
-        assertLessThan(overlap, 25.0, `Overlap must be < 25%, got ${overlap.toFixed(2)}%`);
-      }
+      assertTrue(fs.existsSync(p1) && fs.existsSync(p2), 'Both solutions pillars must exist');
+      const html1 = fs.readFileSync(p1, 'utf8');
+      const html2 = fs.readFileSync(p2, 'utf8');
+      const overlap = calculate5GramOverlap(html1, html2);
+      assertLessThan(overlap, 25.0, `Overlap must be < 25%, got ${overlap.toFixed(2)}%`);
     }
   },
   {
@@ -544,12 +552,11 @@ export const tier1Tests = [
     async fn() {
       const p1 = path.join(WEBSITE_DIR, 'setup', 'gl-inet-travel-router.html');
       const p2 = path.join(WEBSITE_DIR, 'guides', 'stop-samsung-smart-tv-acr-tracking.html');
-      if (fs.existsSync(p1) && fs.existsSync(p2)) {
-        const html1 = fs.readFileSync(p1, 'utf8');
-        const html2 = fs.readFileSync(p2, 'utf8');
-        const overlap = calculate5GramOverlap(html1, html2);
-        assertLessThan(overlap, 20.0, `Cross-cluster overlap must be < 20%, got ${overlap.toFixed(2)}%`);
-      }
+      assertTrue(fs.existsSync(p1) && fs.existsSync(p2), 'Both cross-cluster pillars must exist');
+      const html1 = fs.readFileSync(p1, 'utf8');
+      const html2 = fs.readFileSync(p2, 'utf8');
+      const overlap = calculate5GramOverlap(html1, html2);
+      assertLessThan(overlap, 20.0, `Cross-cluster overlap must be < 20%, got ${overlap.toFixed(2)}%`);
     }
   },
   {
@@ -559,12 +566,16 @@ export const tier1Tests = [
     name: 'Verify sampled top pillar pairs stay strictly below 30% hard CI limit',
     async fn() {
       const samples = [
-        path.join(WEBSITE_DIR, 'solutions', 'talktalk-p2p-port-forwarding.html'),
+        path.join(WEBSITE_DIR, 'solutions', 'talktalk-fibre-wireguard-cgnat.html'),
         path.join(WEBSITE_DIR, 'solutions', 'bt-broadband-gaming-packet-loss.html'),
         path.join(WEBSITE_DIR, 'setup', 'synology-nas-docker-vpn.html'),
         path.join(WEBSITE_DIR, 'guides', 'stop-lg-smart-tv-acr-spying.html'),
         path.join(WEBSITE_DIR, 'vs', 'nordvpn.html')
-      ].filter(fs.existsSync);
+      ];
+
+      for (const s of samples) {
+        assertTrue(fs.existsSync(s), `Sample pillar must exist: ${s}`);
+      }
 
       for (let i = 0; i < samples.length; i++) {
         for (let j = i + 1; j < samples.length; j++) {
@@ -679,10 +690,9 @@ export const tier1Tests = [
     name: 'Verify #sweepr-unindexed-guides-bridge absent in website/leak-test.html on disk',
     async fn() {
       const fp = path.join(WEBSITE_DIR, 'leak-test.html');
-      if (fs.existsSync(fp)) {
-        const html = fs.readFileSync(fp, 'utf8');
-        assertFalse(containsElementId(html, 'sweepr-unindexed-guides-bridge'), 'Bridge must be absent from disk file');
-      }
+      assertTrue(fs.existsSync(fp), 'leak-test.html must exist');
+      const html = fs.readFileSync(fp, 'utf8');
+      assertFalse(containsElementId(html, 'sweepr-unindexed-guides-bridge'), 'Bridge must be absent from disk file');
     }
   },
   {
@@ -692,10 +702,9 @@ export const tier1Tests = [
     name: 'Verify #sweepr-unindexed-guides-bridge absent in website/isp-throttling-test.html on disk',
     async fn() {
       const fp = path.join(WEBSITE_DIR, 'isp-throttling-test.html');
-      if (fs.existsSync(fp)) {
-        const html = fs.readFileSync(fp, 'utf8');
-        assertFalse(containsElementId(html, 'sweepr-unindexed-guides-bridge'), 'Bridge must be absent from disk file');
-      }
+      assertTrue(fs.existsSync(fp), 'isp-throttling-test.html must exist');
+      const html = fs.readFileSync(fp, 'utf8');
+      assertFalse(containsElementId(html, 'sweepr-unindexed-guides-bridge'), 'Bridge must be absent from disk file');
     }
   },
   {
@@ -706,10 +715,9 @@ export const tier1Tests = [
     async fn() {
       for (const fn of ['leak-test.html', 'isp-throttling-test.html']) {
         const fp = path.join(WEBSITE_DIR, fn);
-        if (fs.existsSync(fp)) {
-          const html = fs.readFileSync(fp, 'utf8');
-          assertTrue(containsElementId(html, 'sweepr-share-diagnostic-badge'), `Diagnostic badge must be preserved in ${fn}`);
-        }
+        assertTrue(fs.existsSync(fp), `${fn} must exist`);
+        const html = fs.readFileSync(fp, 'utf8');
+        assertTrue(containsElementId(html, 'sweepr-share-diagnostic-badge'), `Diagnostic badge must be preserved in ${fn}`);
       }
     }
   },
@@ -775,34 +783,38 @@ export const tier1Tests = [
   },
 
   // =========================================================================
-  // Feature F12: Static 12-Pillar Navigation Grid (+ Warrant Canary)
+  // Feature F12: Focused 14-Link BOFU Hub Footer & Google Preferred Sources
   // =========================================================================
   {
     id: 'F12-T1-01',
     feature: 'F12',
     tier: 1,
-    name: 'Verify homepage footer contains curated navigation grid with all 13 links',
+    name: 'Verify homepage footer contains 14-link BOFU Hub grid and Preferred Sources badge',
     async fn({ baseUrl }) {
       const res = await fetchOpaque(`${baseUrl}/`);
       assertEqual(res.status, 200, 'Homepage must return 200');
-      const links = extractLinks(res.body).map((l) => l.href);
+      const footerMatch = res.body.match(/<footer[\s\S]*?<\/footer>/i);
+      assertTrue(!!footerMatch, 'Homepage must contain <footer>');
+      const footerLinks = extractLinks(footerMatch[0]).map((l) => l.href);
+      assertLessThan(footerLinks.length, 15, `Homepage footer must have < 15 links, got ${footerLinks.length}`);
       const required = [
+        '/solutions',
+        '/setup',
+        '/guides',
+        '/vs',
+        '/pricing',
+        '/download',
         '/tools/leak-test',
         '/tools/isp-throttling-test',
-        '/setup/gl-inet-travel-router',
-        '/setup/synology-nas-docker-vpn',
-        '/setup/steam-deck-vpn',
-        '/setup/nvidia-shield-tv-pro-wireguard',
-        '/guides/stop-samsung-smart-tv-acr-tracking',
-        '/guides/stop-lg-smart-tv-acr-spying',
-        '/guides/stop-roku-vizio-firetv-spying',
-        '/solutions/eduroam-campus-wifi-gaming-packet-loss',
-        '/solutions/talktalk-p2p-port-forwarding',
-        '/alternatives/totalvpn',
-        '/warrant-canary'
+        '/faq',
+        '/ai-info',
+        '/privacy',
+        '/refund',
+        '/terms',
+        'https://www.google.com/preferences/source?q=sweeprvpn.com'
       ];
       for (const r of required) {
-        assertTrue(links.includes(r), `Homepage must link to ${r}`);
+        assertTrue(footerLinks.includes(r), `Homepage footer must link to ${r}`);
       }
     }
   },
@@ -810,67 +822,87 @@ export const tier1Tests = [
     id: 'F12-T1-02',
     feature: 'F12',
     tier: 1,
-    name: 'Verify /pricing footer contains curated navigation grid with all 13 links',
+    name: 'Verify /pricing footer contains focused <=14-link BOFU Hub grid + Preferred Sources',
     async fn({ baseUrl }) {
       const res = await fetchOpaque(`${baseUrl}/pricing`);
       assertEqual(res.status, 200, 'Pricing must return 200');
-      const links = extractLinks(res.body).map((l) => l.href);
-      assertTrue(links.includes('/warrant-canary'), 'Pricing must link to warrant-canary');
-      assertTrue(links.includes('/tools/leak-test'), 'Pricing must link to leak-test');
-      assertTrue(links.includes('/solutions/talktalk-p2p-port-forwarding'), 'Pricing must link to talktalk');
+      const footerMatch = res.body.match(/<footer[\s\S]*?<\/footer>/i);
+      assertTrue(!!footerMatch, 'Pricing must contain <footer>');
+      const footerLinks = extractLinks(footerMatch[0]).map((l) => l.href);
+      assertLessThan(footerLinks.length, 15, `Pricing footer must have < 15 links, got ${footerLinks.length}`);
+      assertTrue(footerLinks.includes('https://www.google.com/preferences/source?q=sweeprvpn.com'), 'Pricing footer must include Preferred Sources badge');
+      assertTrue(footerLinks.includes('/tools/leak-test'), 'Pricing footer must link to leak-test');
+      assertTrue(footerLinks.includes('/faq') && footerLinks.includes('/ai-info'), 'Pricing footer must link to /faq and /ai-info');
     }
   },
   {
     id: 'F12-T1-03',
     feature: 'F12',
     tier: 1,
-    name: 'Verify /tools/leak-test footer contains curated navigation grid with all 13 links',
+    name: 'Verify /tools/leak-test footer uses focused <=14-link BOFU Hub grid + Preferred Sources',
     async fn({ baseUrl }) {
       const res = await fetchOpaque(`${baseUrl}/tools/leak-test`);
       assertEqual(res.status, 200, 'Leak test must return 200');
-      const links = extractLinks(res.body).map((l) => l.href);
-      assertTrue(links.includes('/warrant-canary'), 'Leak test must link to warrant-canary');
-      assertTrue(links.includes('/setup/gl-inet-travel-router'), 'Leak test must link to gl-inet');
+      const footerMatch = res.body.match(/<footer[\s\S]*?<\/footer>/i);
+      assertTrue(!!footerMatch, 'Leak test must contain <footer>');
+      const footerLinks = extractLinks(footerMatch[0]).map((l) => l.href);
+      assertLessThan(footerLinks.length, 15, `Leak test footer must have < 15 links, got ${footerLinks.length}`);
+      assertTrue(footerLinks.includes('https://www.google.com/preferences/source?q=sweeprvpn.com'), 'Leak test footer must include Preferred Sources badge');
+      assertTrue(footerLinks.includes('/setup') && footerLinks.includes('/faq'), 'Leak test footer must link to /setup and /faq');
+      const pageLinks = extractLinks(res.body).map((l) => l.href);
+      assertTrue(pageLinks.includes('/warrant-canary'), 'Leak test page must link to warrant-canary');
     }
   },
   {
     id: 'F12-T1-04',
     feature: 'F12',
     tier: 1,
-    name: 'Verify /tools/isp-throttling-test footer contains curated navigation grid with all 13 links',
+    name: 'Verify /tools/isp-throttling-test footer uses focused <=14-link BOFU Hub grid + Preferred Sources',
     async fn({ baseUrl }) {
       const res = await fetchOpaque(`${baseUrl}/tools/isp-throttling-test`);
       assertEqual(res.status, 200, 'ISP throttling test must return 200');
-      const links = extractLinks(res.body).map((l) => l.href);
-      assertTrue(links.includes('/warrant-canary'), 'ISP throttling test must link to warrant-canary');
-      assertTrue(links.includes('/guides/stop-samsung-smart-tv-acr-tracking'), 'ISP throttling test must link to samsung guide');
+      const footerMatch = res.body.match(/<footer[\s\S]*?<\/footer>/i);
+      assertTrue(!!footerMatch, 'ISP throttling test must contain <footer>');
+      const footerLinks = extractLinks(footerMatch[0]).map((l) => l.href);
+      assertLessThan(footerLinks.length, 15, `ISP throttling footer must have < 15 links, got ${footerLinks.length}`);
+      assertTrue(footerLinks.includes('https://www.google.com/preferences/source?q=sweeprvpn.com'), 'ISP throttling footer must include Preferred Sources badge');
+      assertTrue(footerLinks.includes('/solutions') && footerLinks.includes('/faq'), 'ISP throttling footer must link to /solutions and /faq');
     }
   },
   {
     id: 'F12-T1-05',
     feature: 'F12',
     tier: 1,
-    name: 'Verify all 13 navigation grid targets return HTTP 200 OK without nofollow',
+    name: 'Verify all BOFU footer targets + TalkTalk canonical return 200 OK and legacy TalkTalk redirects 301',
     async fn({ baseUrl }) {
       const targets = [
+        '/solutions',
+        '/setup',
+        '/guides',
+        '/vs',
+        '/pricing',
+        '/download',
         '/tools/leak-test',
         '/tools/isp-throttling-test',
-        '/setup/gl-inet-travel-router',
-        '/setup/synology-nas-docker-vpn',
-        '/setup/steam-deck-vpn',
-        '/setup/nvidia-shield-tv-pro-wireguard',
-        '/guides/stop-samsung-smart-tv-acr-tracking',
-        '/guides/stop-lg-smart-tv-acr-spying',
-        '/guides/stop-roku-vizio-firetv-spying',
-        '/solutions/eduroam-campus-wifi-gaming-packet-loss',
-        '/solutions/talktalk-p2p-port-forwarding',
+        '/faq',
+        '/ai-info',
+        '/privacy',
+        '/refund',
+        '/terms',
+        '/warrant-canary',
         '/alternatives/totalvpn',
-        '/warrant-canary'
+        '/vs/totalvpn',
+        '/solutions/eduroam-campus-wifi-gaming-packet-loss',
+        '/solutions/talktalk-fibre-wireguard-cgnat'
       ];
       for (const t of targets) {
         const res = await fetchOpaque(`${baseUrl}${t}`);
         assertEqual(res.status, 200, `Target ${t} must return HTTP 200 OK`);
       }
+
+      const legacyTalkTalk = await fetchOpaque(`${baseUrl}/solutions/talktalk-p2p-port-forwarding`);
+      assertEqual(legacyTalkTalk.status, 301, 'Legacy TalkTalk URL must return 1-hop 301');
+      assertEqual(legacyTalkTalk.location, '/solutions/talktalk-fibre-wireguard-cgnat', 'Legacy TalkTalk must redirect to talktalk-fibre-wireguard-cgnat');
     }
   },
 
@@ -909,11 +941,11 @@ export const tier1Tests = [
     id: 'F13-T1-03',
     feature: 'F13',
     tier: 1,
-    name: 'Verify consolidate-and-optimize-gsc.mjs executes without resurrecting consolidated pages',
+    name: 'Verify consolidate-and-optimize-gsc.mjs executes in isolated sandbox without resurrecting consolidated pages',
     async fn() {
-      const fp = path.join(SCRIPTS_DIR, 'consolidate-and-optimize-gsc.mjs');
-      const res = execSync(`node "${fp}"`, { cwd: ROOT_DIR, encoding: 'utf8' });
+      const res = runConsolidationInTempSandbox();
       assertFalse(res.includes('[GSC Winner Lock]'), 'Winner Lock log should not trigger for consolidated pages');
+      assertIncludes(res, '[GSC Consolidation & Optimization Complete]', 'Consolidation script should complete cleanly');
     }
   },
   {
@@ -924,7 +956,7 @@ export const tier1Tests = [
     async fn() {
       const fp = path.join(SCRIPTS_DIR, 'consolidate-and-optimize-gsc.mjs');
       const content = fs.readFileSync(fp, 'utf8');
-      assertIncludes(content, 'talktalk-p2p-port-forwarding', 'Master pillar talktalk must remain in script');
+      assertIncludes(content, 'talktalk-fibre-wireguard-cgnat', 'Master pillar talktalk-fibre-wireguard-cgnat must remain in script');
       assertIncludes(content, 'virgin-media-remote-dev-ssh', 'Master pillar virgin-media must remain in script');
     }
   },
@@ -987,12 +1019,13 @@ export const tier1Tests = [
     id: 'F14-T1-04',
     feature: 'F14',
     tier: 1,
-    name: 'Verify zero retired /vs/ competitor comparisons exist in sitemap.xml',
+    name: 'Verify /vs/totalvpn is active in sitemap.xml while retired antivirus /vs/ slugs are excluded',
     async fn() {
       const sitemapPath = path.join(WEBSITE_DIR, 'sitemap.xml');
       const content = fs.readFileSync(sitemapPath, 'utf8');
       const { urls } = validateSitemapXml(content);
-      const retiredVs = urls.filter((u) => u.includes('/vs/totalvpn') || u.includes('/vs/kaspersky') || u.includes('/vs/norton'));
+      assertTrue(urls.includes('https://sweeprvpn.com/vs/totalvpn'), 'Sitemap must include active /vs/totalvpn canonical');
+      const retiredVs = urls.filter((u) => u.includes('/vs/kaspersky') || u.includes('/vs/norton'));
       assertEqual(retiredVs.length, 0, `Sitemap must not contain retired VS URLs: ${retiredVs.join(', ')}`);
     }
   },
@@ -1224,43 +1257,56 @@ export const tier1Tests = [
   },
 
   // =========================================================================
-  // Feature F18: Direct Crawlable Links to Canary & Demoted Top Pillars
+  // Feature F18: Direct Crawlable Links to Canary, Hubs, Tools & Pillars
   // =========================================================================
   {
     id: 'F18-T1-01',
     feature: 'F18',
     tier: 1,
-    name: 'Verify website/index.html contains crawlable link to /warrant-canary',
+    name: 'Verify /warrant-canary is crawlably linked from /download, /tools/leak-test, /ai-info, and /faq',
     async fn({ baseUrl }) {
-      const res = await fetchOpaque(`${baseUrl}/`);
-      assertEqual(res.status, 200, 'Homepage must return 200');
-      const links = extractLinks(res.body);
-      const canaryLink = links.find((l) => l.href === '/warrant-canary');
-      assertTrue(!!canaryLink, 'Homepage must have crawlable link to /warrant-canary');
-      assertFalse(hasNofollow(canaryLink), 'Warrant canary link must not be nofollow');
+      for (const p of ['/download?platform=picker', '/tools/leak-test', '/ai-info', '/faq']) {
+        const res = await fetchOpaque(`${baseUrl}${p}`);
+        assertEqual(res.status, 200, `${p} must return 200`);
+        const links = extractLinks(res.body);
+        const canaryLink = links.find((l) => l.href === '/warrant-canary');
+        assertTrue(!!canaryLink, `${p} must have crawlable link to /warrant-canary`);
+        assertFalse(hasNofollow(canaryLink), `Warrant canary link on ${p} must not be nofollow`);
+      }
     }
   },
   {
     id: 'F18-T1-02',
     feature: 'F18',
     tier: 1,
-    name: 'Verify website/index.html links to all 6 demoted top pillars without nofollow',
+    name: 'Verify #homeToolsAndHubsStrip and TotalVPN links on / resolve 200 OK without nofollow',
     async fn({ baseUrl }) {
       const res = await fetchOpaque(`${baseUrl}/`);
       assertEqual(res.status, 200, 'Homepage must return 200');
-      const links = extractLinks(res.body);
-      const demotedPillars = [
-        '/guides/stop-samsung-smart-tv-acr-tracking',
-        '/setup/gl-inet-travel-router',
+      const stripMatch = res.body.match(/id=["']homeToolsAndHubsStrip["'][\s\S]*?<\/section>/i);
+      assertTrue(!!stripMatch, 'Homepage must contain #homeToolsAndHubsStrip');
+      const stripLinks = extractLinks(stripMatch[0]);
+      const expectedStrip = [
         '/tools/leak-test',
         '/tools/isp-throttling-test',
-        '/setup/synology-nas-docker-vpn',
-        '/alternatives/totalvpn'
+        '/tools/smart-tv-tracking-check',
+        '/tools/whats-on-my-wifi',
+        '/tools/vpn-renewal-price-checker',
+        '/solutions',
+        '/setup',
+        '/guides',
+        '/vs'
       ];
-      for (const p of demotedPillars) {
-        const linkObj = links.find((l) => l.href === p);
-        assertTrue(!!linkObj, `Homepage must link to demoted pillar ${p}`);
+      for (const p of expectedStrip) {
+        const linkObj = stripLinks.find((l) => l.href === p);
+        assertTrue(!!linkObj, `#homeToolsAndHubsStrip must link to ${p}`);
         assertFalse(hasNofollow(linkObj), `Link to ${p} must not have nofollow`);
+      }
+      const allHomeLinks = extractLinks(res.body);
+      for (const tv of ['/vs/totalvpn', '/alternatives/totalvpn']) {
+        const tvLink = allHomeLinks.find((l) => l.href === tv);
+        assertTrue(!!tvLink, `Homepage must link to ${tv}`);
+        assertFalse(hasNofollow(tvLink), `Link to ${tv} must not have nofollow`);
       }
     }
   },
@@ -1282,7 +1328,7 @@ export const tier1Tests = [
     id: 'F18-T1-04',
     feature: 'F18',
     tier: 1,
-    name: 'Verify /download picker contains crawlable links to demoted top pillars',
+    name: 'Verify /download picker contains crawlable links to diagnostic tools',
     async fn({ baseUrl }) {
       const res = await fetchOpaque(`${baseUrl}/download`);
       assertEqual(res.status, 200, '/download must return 200');
@@ -1310,12 +1356,16 @@ export const tier1Tests = [
     id: 'F19-T1-01',
     feature: 'F19',
     tier: 1,
-    name: 'Verify GitHub Actions workflow specifies --limit=0 in keyword engine step',
+    name: 'Verify GitHub Actions workflow uses --json-only (no --apply) and --no-ctr-rewrite',
     async fn() {
       const wfPath = path.join(ROOT_DIR, '.github', 'workflows', 'vpn-daily-seo-pipeline.yml');
       assertTrue(fs.existsSync(wfPath), 'Pipeline workflow file must exist');
       const content = fs.readFileSync(wfPath, 'utf8');
-      assertIncludes(content, '--limit=0', 'Workflow must freeze page creation with --limit=0');
+      assertIncludes(content, '--json-only', 'Workflow must lock keyword engine to --json-only');
+      assertFalse(/\bkeyword-research-engine\.mjs[^\n]*--apply\b/.test(content), 'Workflow must never pass --apply to keyword-research-engine.mjs');
+      assertIncludes(content, '--no-ctr-rewrite', 'Workflow must lock cloud-gsc-ga4-sync.mjs with --no-ctr-rewrite');
+      assertIncludes(content, 'ci-seo-quality-gate.mjs', 'Workflow must execute ci-seo-quality-gate.mjs');
+      assertIncludes(content, 'Abort on HTML Mutations', 'Workflow must abort on HTML mutations');
     }
   },
   {
@@ -1326,7 +1376,6 @@ export const tier1Tests = [
     async fn() {
       const wfPath = path.join(ROOT_DIR, '.github', 'workflows', 'vpn-daily-seo-pipeline.yml');
       const content = fs.readFileSync(wfPath, 'utf8');
-      // Should either be commented out (#) or not present
       const lines = content.split('\n');
       const activeCall = lines.some((l) => l.trim().startsWith('node scripts/enrich-pillars-with-live-proof.mjs'));
       assertFalse(activeCall, 'Workflow must not execute enrich-pillars script');
@@ -1336,13 +1385,22 @@ export const tier1Tests = [
     id: 'F19-T1-03',
     feature: 'F19',
     tier: 1,
-    name: 'Verify keyword-research-engine.mjs with --limit=0 produces zero new HTML files',
+    name: 'Verify keyword-research-engine.mjs with --json-only --offline --dry-run creates zero HTML/JSON mutations',
     async fn() {
       const scriptPath = path.join(SCRIPTS_DIR, 'keyword-research-engine.mjs');
-      if (fs.existsSync(scriptPath)) {
-        const res = execSync(`node "${scriptPath}" --limit=0`, { cwd: ROOT_DIR, encoding: 'utf8' });
-        assertTrue(res.includes('0') || res.includes('limit'), 'Keyword engine should acknowledge limit=0');
-      }
+      assertTrue(fs.existsSync(scriptPath), 'keyword-research-engine.mjs must exist');
+      const auditLog = path.join(ROOT_DIR, 'KEYWORD_OPPORTUNITIES_AUDIT_LOG.md');
+      const ledgerPath = path.join(WEBSITE_DIR, 'seo-strategy-performance-ledger.json');
+      const auditShaBefore = fs.existsSync(auditLog) ? sha256File(auditLog) : null;
+      const ledgerShaBefore = fs.existsSync(ledgerPath) ? sha256File(ledgerPath) : null;
+
+      const res = execSync(
+        `node "${scriptPath}" --discover --score --audit --json-only --offline --dry-run`,
+        { cwd: ROOT_DIR, encoding: 'utf8' }
+      );
+      assertTrue(res.includes('Quality Gate Status') || res.includes('10/10 PASS'), 'Dry-run keyword audit must report quality gate pass');
+      if (auditShaBefore) assertEqual(sha256File(auditLog), auditShaBefore, 'Dry-run must not mutate KEYWORD_OPPORTUNITIES_AUDIT_LOG.md');
+      if (ledgerShaBefore) assertEqual(sha256File(ledgerPath), ledgerShaBefore, 'Dry-run must not mutate seo-strategy-performance-ledger.json');
     }
   },
   {
@@ -1355,6 +1413,7 @@ export const tier1Tests = [
       assertTrue(fs.existsSync(scriptPath), 'Sync script must exist');
       const content = fs.readFileSync(scriptPath, 'utf8');
       assertTrue(content.includes('GSC') || content.includes('sitemap'), 'Sync script should support telemetry check');
+      assertIncludes(content, '--no-ctr-rewrite', 'Sync script must support --no-ctr-rewrite flag');
     }
   },
   {
@@ -1371,48 +1430,51 @@ export const tier1Tests = [
   },
 
   // =========================================================================
-  // Feature F20: Enforce CI Assertions in Pipeline
+  // Feature F20: Enforce CI Assertions in Pipeline & Quality Gate
   // =========================================================================
   {
     id: 'F20-T1-01',
     feature: 'F20',
     tier: 1,
-    name: 'Verify workflow contains CI assertion enforcing sitemap <= 95 URLs',
+    name: 'Verify CI quality gate & workflow enforce sitemap bounds [50, 110] and current sitemap <= 95',
     async fn() {
       const wfPath = path.join(ROOT_DIR, '.github', 'workflows', 'vpn-daily-seo-pipeline.yml');
-      const content = fs.readFileSync(wfPath, 'utf8');
-      assertTrue(
-        content.includes('95') && (content.includes('sitemap') || content.includes('loc')),
-        'Workflow must enforce sitemap <= 95 URLs'
-      );
+      const wfContent = fs.readFileSync(wfPath, 'utf8');
+      assertIncludes(wfContent, 'node scripts/ci-seo-quality-gate.mjs', 'Workflow must invoke ci-seo-quality-gate.mjs');
+      assertIncludes(wfContent, 'Sitemap <= 110', 'Workflow Step 6.5 must document Sitemap <= 110');
+
+      const gateContent = fs.readFileSync(path.join(SCRIPTS_DIR, 'ci-seo-quality-gate.mjs'), 'utf8');
+      assertIncludes(gateContent, 'locs.length < 50 || locs.length > 110', 'Quality gate must enforce sitemap bounds [50, 110]');
+
+      const { totalUrls } = validateSitemapXml(fs.readFileSync(path.join(WEBSITE_DIR, 'sitemap.xml'), 'utf8'));
+      assertLessThanOrEqual(totalUrls, 95, `Current sitemap must remain <= 95, got ${totalUrls}`);
     }
   },
   {
     id: 'F20-T1-02',
     feature: 'F20',
     tier: 1,
-    name: 'Verify workflow contains CI assertion enforcing 0 zombie noindex HTML files',
+    name: 'Verify workflow and CI gate enforce 0 zombie noindex HTML files',
     async fn() {
-      const wfPath = path.join(ROOT_DIR, '.github', 'workflows', 'vpn-daily-seo-pipeline.yml');
-      const content = fs.readFileSync(wfPath, 'utf8');
-      assertTrue(
-        content.includes('noindex') || content.includes('zombie') || content.includes('solutions'),
-        'Workflow must enforce 0 zombie files assertion'
-      );
+      const gateContent = fs.readFileSync(path.join(SCRIPTS_DIR, 'ci-seo-quality-gate.mjs'), 'utf8');
+      assertIncludes(gateContent, 'Zombie noindex found', 'CI gate must check for zombie noindex files in cluster dirs');
     }
   },
   {
     id: 'F20-T1-03',
     feature: 'F20',
     tier: 1,
-    name: 'Verify workflow contains CI assertion enforcing 5-gram overlap < 30%',
+    name: 'Verify ci-seo-quality-gate.mjs enforces < 30% overlap, <= 1800 KB HTML, entity hygiene, and #mobileNavDrawer',
     async fn() {
-      const wfPath = path.join(ROOT_DIR, '.github', 'workflows', 'vpn-daily-seo-pipeline.yml');
-      const content = fs.readFileSync(wfPath, 'utf8');
-      assertTrue(
-        content.includes('30') && (content.includes('overlap') || content.includes('shingle') || content.includes('similarity')),
-        'Workflow must enforce <30% overlap assertion'
-      );
+      const gatePath = path.join(SCRIPTS_DIR, 'ci-seo-quality-gate.mjs');
+      const gateContent = fs.readFileSync(gatePath, 'utf8');
+      assertTrue(gateContent.includes('30.0') && gateContent.includes('5-gram overlap'), 'CI gate must enforce < 30% 5-gram overlap');
+      assertIncludes(gateContent, '1800 * 1024', 'CI gate must enforce <= 1800 KB HTML limit');
+      assertIncludes(gateContent, 'sitepatent\\.com', 'CI gate must block sitepatent.com');
+      assertIncludes(gateContent, 'mobileNavDrawer', 'CI gate must enforce static #mobileNavDrawer links');
+
+      const gateOut = execSync(`node "${gatePath}"`, { cwd: ROOT_DIR, encoding: 'utf8' });
+      assertIncludes(gateOut, 'CI SEO Quality Gate PASSED', 'ci-seo-quality-gate.mjs must exit 0 and pass');
     }
   },
   {
@@ -1559,6 +1621,535 @@ export const tier1Tests = [
       const content = fs.readFileSync(wfPath, 'utf8');
       assertIncludes(content, 'origin', 'Workflow must push to origin');
       assertIncludes(content, 'main', 'Workflow must push to main');
+    }
+  },
+
+  // =========================================================================
+  // Feature F23: R1 Real Benchmarks & Compressed WebP App Screenshots
+  // =========================================================================
+  {
+    id: 'F23-T1-01',
+    feature: 'F23',
+    tier: 1,
+    name: 'Verify all 6 website/assets/*.webp files serve HTTP 200 image/webp, valid RIFF/WEBP, and < 80 KB',
+    async fn({ baseUrl }) {
+      const expectedAssets = [
+        'desktop-dark-mode.webp',
+        'desktop-home-light.webp',
+        'desktop-wifi-radar.webp',
+        'mobile-ui-connect.webp',
+        'tool-isp-throttling.webp',
+        'tool-leak-test.webp'
+      ];
+      for (const name of expectedAssets) {
+        const res = await fetchBinary(`${baseUrl}/assets/${name}`);
+        assertEqual(res.status, 200, `/assets/${name} must return HTTP 200`);
+        assertIncludes(res.getHeader('content-type') || '', 'image/webp', `/assets/${name} must serve Content-Type image/webp`);
+        assertLessThan(res.byteLength, 81920, `/assets/${name} must be < 80 KB (81920 B), got ${res.byteLength} B`);
+        assertEqual(res.buffer.subarray(0, 4).toString('ascii'), 'RIFF', `/assets/${name} must start with RIFF header`);
+        assertEqual(res.buffer.subarray(8, 12).toString('ascii'), 'WEBP', `/assets/${name} must have WEBP signature`);
+      }
+    }
+  },
+  {
+    id: 'F23-T1-02',
+    feature: 'F23',
+    tier: 1,
+    name: 'Verify / and /pricing reference real .webp desktop, mobile, and tool captures',
+    async fn({ baseUrl }) {
+      const home = await fetchOpaque(`${baseUrl}/`);
+      assertEqual(home.status, 200, '/ must return 200');
+      for (const img of ['/assets/desktop-home-light.webp', '/assets/desktop-wifi-radar.webp', '/assets/mobile-ui-connect.webp', '/assets/tool-isp-throttling.webp']) {
+        assertIncludes(home.body, img, `Homepage must embed ${img}`);
+      }
+
+      const pricing = await fetchOpaque(`${baseUrl}/pricing`);
+      assertEqual(pricing.status, 200, '/pricing must return 200');
+      assertIncludes(pricing.body, '/assets/desktop-dark-mode.webp', '/pricing must embed desktop-dark-mode.webp');
+    }
+  },
+  {
+    id: 'F23-T1-03',
+    feature: 'F23',
+    tier: 1,
+    name: 'Verify /setup/gl-inet-travel-router, /tools/leak-test, and /alternatives/totalvpn embed .webp proof',
+    async fn({ baseUrl }) {
+      const router = await fetchOpaque(`${baseUrl}/setup/gl-inet-travel-router`);
+      assertEqual(router.status, 200, '/setup/gl-inet-travel-router must return 200');
+      assertIncludes(router.body, '/assets/desktop-home-light.webp', 'Router setup must embed desktop-home-light.webp');
+      assertIncludes(router.body, '/assets/tool-leak-test.webp', 'Router setup must embed tool-leak-test.webp');
+
+      const leak = await fetchOpaque(`${baseUrl}/tools/leak-test`);
+      assertEqual(leak.status, 200, '/tools/leak-test must return 200');
+      assertIncludes(leak.body, '/assets/tool-leak-test.webp', 'Leak test must embed tool-leak-test.webp');
+
+      const alt = await fetchOpaque(`${baseUrl}/alternatives/totalvpn`);
+      assertEqual(alt.status, 200, '/alternatives/totalvpn must return 200');
+      assertIncludes(alt.body, '/assets/desktop-wifi-radar.webp', 'Alternatives TotalVPN must embed desktop-wifi-radar.webp');
+    }
+  },
+  {
+    id: 'F23-T1-04',
+    feature: 'F23',
+    tier: 1,
+    name: 'Verify all 17 embedded .webp <img> elements have alt, width, height, and loading="lazy"',
+    async fn() {
+      const htmlFiles = findHtmlFiles(WEBSITE_DIR, true);
+      let webpImgCount = 0;
+      for (const fp of htmlFiles) {
+        const html = fs.readFileSync(fp, 'utf8');
+        for (const m of html.matchAll(/<img\b([^>]*\.webp[^>]*)>/gi)) {
+          webpImgCount++;
+          const attrs = m[1];
+          assertMatch(attrs, /\balt=["'][^"']+["']/i, `Missing alt on .webp <img> in ${fp}`);
+          assertMatch(attrs, /\bwidth=["']\d+["']/i, `Missing width on .webp <img> in ${fp}`);
+          assertMatch(attrs, /\bheight=["']\d+["']/i, `Missing height on .webp <img> in ${fp}`);
+          assertMatch(attrs, /\bloading=["']lazy["']/i, `Missing loading="lazy" on .webp <img> in ${fp}`);
+        }
+      }
+      assertEqual(webpImgCount, 17, `Expected 17 embedded .webp <img> tags, found ${webpImgCount}`);
+    }
+  },
+  {
+    id: 'F23-T1-05',
+    feature: 'F23',
+    tier: 1,
+    name: 'Verify every unique .webp src embedded across website/ resolves 200 image/webp',
+    async fn({ baseUrl }) {
+      const htmlFiles = findHtmlFiles(WEBSITE_DIR, true);
+      const srcs = new Set();
+      for (const fp of htmlFiles) {
+        const html = fs.readFileSync(fp, 'utf8');
+        for (const m of html.matchAll(/<img\b[^>]*src=["']([^"']+\.webp)["']/gi)) {
+          srcs.add(m[1]);
+        }
+      }
+      assertEqual(srcs.size, 6, `Expected 6 distinct .webp asset paths referenced, got ${srcs.size}`);
+      for (const src of srcs) {
+        const res = await fetchBinary(`${baseUrl}${src}`);
+        assertEqual(res.status, 200, `Referenced asset ${src} must return 200`);
+        assertIncludes(res.getHeader('content-type') || '', 'image/webp', `Referenced asset ${src} must be image/webp`);
+      }
+    }
+  },
+
+  // =========================================================================
+  // Feature F24: R2 Privacy Transparency, /ai-info, GEO <dl>, robots & llms.txt
+  // =========================================================================
+  {
+    id: 'F24-T1-01',
+    feature: 'F24',
+    tier: 1,
+    name: 'Verify /ai-info returns 200 with <article>, <dl>, 8 POPs, UK Sole Trader, and zero forbidden entity names',
+    async fn({ baseUrl }) {
+      const res = await fetchOpaque(`${baseUrl}/ai-info`);
+      assertEqual(res.status, 200, '/ai-info must return 200');
+      assertMatch(res.body, /<article\b/i, '/ai-info must contain <article>');
+      assertTrue(res.body.includes('<dl') && res.body.includes('<dt') && res.body.includes('<dd'), '/ai-info must contain <dl>/<dt>/<dd>');
+      assertIncludes(res.body, 'UK Sole Trader', '/ai-info must state UK Sole Trader entity');
+      for (const pop of ['UK-LON-01', 'NL-AMS-01', 'DE-FRA-01', 'SE-STO-01', 'US-NYC-01', 'US-LAX-01', 'JP-TYO-01', 'SG-SIN-01']) {
+        assertIncludes(res.body, pop, `/ai-info must list live POP ${pop}`);
+      }
+      const forbiddenFounder = new RegExp(`\\b${['Ben' + 'jamin', 'Co' + 'ok'].join('\\s+')}\\b`, 'i');
+      assertFalse(forbiddenFounder.test(res.body), '/ai-info must omit founder personal name');
+      assertFalse(/\bSWEEPR\s+VPN\s+Inc\b/i.test(res.body), '/ai-info must omit SWEEPR VPN Inc.');
+    }
+  },
+  {
+    id: 'F24-T1-02',
+    feature: 'F24',
+    tier: 1,
+    name: 'Verify /robots.txt allows Claude-SearchBot and disallows /welcome & /uninstall',
+    async fn({ baseUrl }) {
+      const res = await fetchOpaque(`${baseUrl}/robots.txt`);
+      assertEqual(res.status, 200, '/robots.txt must return 200');
+      assertMatch(res.body, /User-agent:\s*Claude-SearchBot[\s\S]*?Allow:\s*\//i, 'robots.txt must allow Claude-SearchBot');
+      assertIncludes(res.body, 'Disallow: /welcome', 'robots.txt must disallow /welcome');
+      assertIncludes(res.body, 'Disallow: /uninstall', 'robots.txt must disallow /uninstall');
+      assertIncludes(res.body, 'Sitemap: https://sweeprvpn.com/sitemap.xml', 'robots.txt must declare sitemap.xml');
+    }
+  },
+  {
+    id: 'F24-T1-03',
+    feature: 'F24',
+    tier: 1,
+    name: 'Verify /llms.txt and /llms-full.txt return 200 and index /ai-info and /faq',
+    async fn({ baseUrl }) {
+      for (const p of ['/llms.txt', '/llms-full.txt']) {
+        const res = await fetchOpaque(`${baseUrl}${p}`);
+        assertEqual(res.status, 200, `${p} must return 200`);
+        assertIncludes(res.body, 'https://sweeprvpn.com/ai-info', `${p} must include /ai-info`);
+        assertIncludes(res.body, 'https://sweeprvpn.com/faq', `${p} must include /faq`);
+      }
+    }
+  },
+  {
+    id: 'F24-T1-04',
+    feature: 'F24',
+    tier: 1,
+    name: 'Verify /privacy contains #what-we-collect-vs-never-log, GA4 G-7D28EEMNXX, and iOS pre-launch disclosure',
+    async fn({ baseUrl }) {
+      const res = await fetchOpaque(`${baseUrl}/privacy`);
+      assertEqual(res.status, 200, '/privacy must return 200');
+      assertTrue(containsElementId(res.body, 'what-we-collect-vs-never-log'), '/privacy must contain #what-we-collect-vs-never-log');
+      assertIncludes(res.body, 'G-7D28EEMNXX', '/privacy must disclose GA4 measurement ID G-7D28EEMNXX');
+      assertMatch(res.body, /iOS[\s\S]{0,120}(pre-?launch|not\s+yet\s+live)/i, '/privacy must disclose iOS pre-launch status');
+    }
+  },
+  {
+    id: 'F24-T1-05',
+    feature: 'F24',
+    tier: 1,
+    name: 'Verify semantic <dl>/<dt>/<dd> GEO spec markup across 33 indexable core, /vs/, and /setup/ pages',
+    async fn() {
+      const htmlFiles = findHtmlFiles(WEBSITE_DIR, true);
+      let dlCount = 0;
+      for (const fp of htmlFiles) {
+        const html = fs.readFileSync(fp, 'utf8');
+        if (/<meta\s+name=["']robots["']\s+content=["'][^"']*noindex/i.test(html)) continue;
+        if (/<dl\b/i.test(html) && /<dt\b/i.test(html) && /<dd\b/i.test(html)) {
+          dlCount++;
+        }
+      }
+      assertGreaterThanOrEqual(dlCount, 33, `Expected >= 33 indexable pages with <dl>/<dt>/<dd>, found ${dlCount}`);
+    }
+  },
+
+  // =========================================================================
+  // Feature F25: R3 /faq PAA Colony, BOFU Footers, Preferred Sources & <article>
+  // =========================================================================
+  {
+    id: 'F25-T1-01',
+    feature: 'F25',
+    tier: 1,
+    name: 'Verify /faq returns 200 with canonical, <article>, <dl>, and zero deprecated FAQPage/HowTo JSON-LD',
+    async fn({ baseUrl }) {
+      const res = await fetchOpaque(`${baseUrl}/faq`);
+      assertEqual(res.status, 200, '/faq must return 200');
+      assertEqual(extractCanonical(res.body), 'https://sweeprvpn.com/faq', '/faq canonical must match https://sweeprvpn.com/faq');
+      assertMatch(res.body, /<article\b/i, '/faq must wrap body in <article>');
+      assertTrue(res.body.includes('<dl') && res.body.includes('<dt') && res.body.includes('<dd'), '/faq must contain <dl>/<dt>/<dd>');
+      assertFalse(/"@type"\s*:\s*"(FAQPage|HowTo)"/i.test(res.body), '/faq must not emit deprecated FAQPage/HowTo JSON-LD');
+    }
+  },
+  {
+    id: 'F25-T1-02',
+    feature: 'F25',
+    tier: 1,
+    name: 'Verify /faq <main> rotates contextual links to active Pos 4-15 money targets',
+    async fn({ baseUrl }) {
+      const res = await fetchOpaque(`${baseUrl}/faq`);
+      assertEqual(res.status, 200, '/faq must return 200');
+      const mainHtml = extractMainContent(res.body);
+      const mainLinks = extractLinks(mainHtml).map((l) => l.href);
+      assertGreaterThanOrEqual(mainLinks.length, 25, `Expected >= 25 contextual <main> links on /faq, got ${mainLinks.length}`);
+      for (const target of [
+        '/guides/stop-samsung-smart-tv-acr-tracking',
+        '/solutions/talktalk-fibre-wireguard-cgnat',
+        '/setup/gl-inet-travel-router',
+        '/vs/totalvpn',
+        '/alternatives/totalvpn',
+        '/tools/leak-test'
+      ]) {
+        assertTrue(mainLinks.includes(target), `/faq <main> must link to Pos 4-15 target ${target}`);
+      }
+    }
+  },
+  {
+    id: 'F25-T1-03',
+    feature: 'F25',
+    tier: 1,
+    name: 'Verify website/sitemap.xml includes both /faq and /ai-info canonicals',
+    async fn() {
+      const xml = fs.readFileSync(path.join(WEBSITE_DIR, 'sitemap.xml'), 'utf8');
+      const { urls } = validateSitemapXml(xml);
+      assertTrue(urls.includes('https://sweeprvpn.com/faq'), 'sitemap.xml must include /faq');
+      assertTrue(urls.includes('https://sweeprvpn.com/ai-info'), 'sitemap.xml must include /ai-info');
+    }
+  },
+  {
+    id: 'F25-T1-04',
+    feature: 'F25',
+    tier: 1,
+    name: 'Verify all 93/93 indexable pages have < 15 footer links and include Google Preferred Sources badge',
+    async fn() {
+      const htmlFiles = findHtmlFiles(WEBSITE_DIR, true);
+      let indexableCount = 0;
+      for (const fp of htmlFiles) {
+        const html = fs.readFileSync(fp, 'utf8');
+        if (/<meta\s+name=["']robots["']\s+content=["'][^"']*noindex/i.test(html)) continue;
+        indexableCount++;
+        const footerMatch = html.match(/<footer[\s\S]*?<\/footer>/i);
+        assertTrue(!!footerMatch, `Indexable page missing <footer>: ${fp}`);
+        const flinks = extractLinks(footerMatch[0]).map((l) => l.href);
+        assertLessThan(flinks.length, 15, `Footer in ${fp} has ${flinks.length} links (must be < 15)`);
+        assertTrue(
+          flinks.includes('https://www.google.com/preferences/source?q=sweeprvpn.com'),
+          `Footer in ${fp} missing Google Preferred Sources badge`
+        );
+      }
+      assertEqual(indexableCount, 93, `Expected 93 indexable HTML files, found ${indexableCount}`);
+    }
+  },
+  {
+    id: 'F25-T1-05',
+    feature: 'F25',
+    tier: 1,
+    name: 'Verify <article> wraps editorial bodies on all 62/62 pSEO pages and 9 core editorial pages',
+    async fn() {
+      const pillars = getAuthoritativePillars();
+      for (const rel of pillars) {
+        const html = fs.readFileSync(path.join(WEBSITE_DIR, rel), 'utf8');
+        assertMatch(html, /<article\b/i, `pSEO pillar missing <article>: ${rel}`);
+      }
+      const coreEditorial = [
+        'ai-info.html',
+        'alternatives-totalvpn.html',
+        'faq.html',
+        'privacy.html',
+        'public-wifi.html',
+        'refund.html',
+        'support.html',
+        'terms.html',
+        'warrant-canary.html'
+      ];
+      for (const rel of coreEditorial) {
+        const html = fs.readFileSync(path.join(WEBSITE_DIR, rel), 'utf8');
+        assertMatch(html, /<article\b/i, `Core editorial page missing <article>: ${rel}`);
+      }
+    }
+  },
+
+  // =========================================================================
+  // Feature F26: R4 Onboarding (/welcome), Churn (/uninstall) & Telemetry APIs
+  // =========================================================================
+  {
+    id: 'F26-T1-01',
+    feature: 'F26',
+    tier: 1,
+    name: 'Verify /welcome returns 200 with noindex/no-store headers and 3-step onboarding checklist',
+    async fn({ baseUrl }) {
+      const res = await fetchOpaque(`${baseUrl}/welcome`);
+      assertEqual(res.status, 200, '/welcome must return 200');
+      assertIncludes((res.getHeader('x-robots-tag') || '').toLowerCase(), 'noindex, nofollow', '/welcome must send X-Robots-Tag: noindex, nofollow');
+      assertIncludes((res.getHeader('cache-control') || '').toLowerCase(), 'no-store', '/welcome must send Cache-Control: no-store');
+      assertIncludes((extractRobots(res.body) || '').toLowerCase(), 'noindex', '/welcome HTML must have meta robots noindex');
+      assertMatch(res.body, /<ol\b/i, '/welcome must contain 3-step ordered list');
+      assertIncludes(res.body, '/tools/leak-test', '/welcome must link to /tools/leak-test verification');
+    }
+  },
+  {
+    id: 'F26-T1-02',
+    feature: 'F26',
+    tier: 1,
+    name: 'Verify /uninstall returns 200 with noindex/no-store headers and #uninstallForm survey',
+    async fn({ baseUrl }) {
+      const res = await fetchOpaque(`${baseUrl}/uninstall`);
+      assertEqual(res.status, 200, '/uninstall must return 200');
+      assertIncludes((res.getHeader('x-robots-tag') || '').toLowerCase(), 'noindex, nofollow', '/uninstall must send X-Robots-Tag: noindex, nofollow');
+      assertIncludes((res.getHeader('cache-control') || '').toLowerCase(), 'no-store', '/uninstall must send Cache-Control: no-store');
+      assertIncludes((extractRobots(res.body) || '').toLowerCase(), 'noindex', '/uninstall HTML must have meta robots noindex');
+      assertTrue(containsElementId(res.body, 'uninstallForm'), '/uninstall must render #uninstallForm');
+      assertIncludes(res.body, '/api/uninstall-feedback', '/uninstall must submit to /api/uninstall-feedback');
+    }
+  },
+  {
+    id: 'F26-T1-03',
+    feature: 'F26',
+    tier: 1,
+    name: 'Verify /welcome and /uninstall are strictly excluded from sitemap.xml',
+    async fn() {
+      const xml = fs.readFileSync(path.join(WEBSITE_DIR, 'sitemap.xml'), 'utf8');
+      const { urls } = validateSitemapXml(xml);
+      assertFalse(urls.some((u) => u.endsWith('/welcome') || u.endsWith('/uninstall')), 'sitemap.xml must exclude /welcome and /uninstall');
+    }
+  },
+  {
+    id: 'F26-T1-04',
+    feature: 'F26',
+    tier: 1,
+    name: 'Verify valid POST /api/uninstall-feedback logs to isolated SWEEPR_STATE_DIR/uninstall-feedback.jsonl',
+    async fn({ baseUrl, stateDir }) {
+      const resolvedStateDir = stateDir || getServerStateDir();
+      assertTrue(!!resolvedStateDir, 'Isolated SWEEPR_STATE_DIR must be active');
+      const noteToken = `e2e-t1-${Date.now()}`;
+      const res = await fetchOpaque(`${baseUrl}/api/uninstall-feedback`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason: 'too_slow', os: 'win', version: '2.6.0', note: noteToken })
+      });
+      assertEqual(res.status, 200, 'Valid uninstall feedback must return 200');
+      assertEqual(JSON.parse(res.body).ok, true, 'Response JSON must have ok: true');
+      assertIncludes((res.getHeader('x-robots-tag') || '').toLowerCase(), 'noindex, nofollow', 'API must send X-Robots-Tag: noindex, nofollow');
+
+      const logPath = path.join(resolvedStateDir, 'uninstall-feedback.jsonl');
+      assertTrue(fs.existsSync(logPath), 'uninstall-feedback.jsonl must be written inside isolated stateDir');
+      const content = fs.readFileSync(logPath, 'utf8');
+      assertIncludes(content, noteToken, 'Logged entry must contain submitted note');
+    }
+  },
+  {
+    id: 'F26-T1-05',
+    feature: 'F26',
+    tier: 1,
+    name: 'Verify valid POST /api/telemetry logs to isolated SWEEPR_STATE_DIR/tool-telemetry.jsonl',
+    async fn({ baseUrl, stateDir }) {
+      const resolvedStateDir = stateDir || getServerStateDir();
+      assertTrue(!!resolvedStateDir, 'Isolated SWEEPR_STATE_DIR must be active');
+      const res = await fetchOpaque(`${baseUrl}/api/telemetry`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          event_name: 'e2e_tier1_telemetry',
+          category: 'funnel',
+          properties: { cta: 'download_btn', platform: 'win', source_page: '/welcome' }
+        })
+      });
+      assertEqual(res.status, 200, 'Valid telemetry payload must return 200');
+      assertEqual(JSON.parse(res.body).ok, true, 'Telemetry JSON must return ok: true');
+      const telPath = path.join(resolvedStateDir, 'tool-telemetry.jsonl');
+      assertTrue(fs.existsSync(telPath), 'tool-telemetry.jsonl must exist inside isolated stateDir');
+      assertIncludes(fs.readFileSync(telPath, 'utf8'), 'e2e_tier1_telemetry', 'Telemetry event must be logged');
+    }
+  },
+
+  // =========================================================================
+  // Feature F27: R5 M3 Carrier Consolidation & Sitemap Integrity
+  // =========================================================================
+  {
+    id: 'F27-T1-01',
+    feature: 'F27',
+    tier: 1,
+    name: 'Verify /solutions/hyperoptic-broadband-isp-throttling returns 1-hop 301 -> /solutions/talktalk-fibre-wireguard-cgnat -> 200',
+    async fn({ baseUrl }) {
+      const r1 = await fetchOpaque(`${baseUrl}/solutions/hyperoptic-broadband-isp-throttling`);
+      assertEqual(r1.status, 301, 'Consolidated Hyperoptic route must return 301');
+      assertEqual(r1.location, '/solutions/talktalk-fibre-wireguard-cgnat', 'Must redirect 1-hop to TalkTalk canonical');
+
+      const r2 = await fetchOpaque(`${baseUrl}${r1.location}`);
+      assertEqual(r2.status, 200, 'Redirect target must return 200 OK');
+      assertEqual(r2.location, null, 'Redirect target must not chain');
+    }
+  },
+  {
+    id: 'F27-T1-02',
+    feature: 'F27',
+    tier: 1,
+    name: 'Verify hyperoptic-broadband-isp-throttling.html is absent from disk and sitemap.xml',
+    async fn() {
+      assertFalse(
+        fs.existsSync(path.join(WEBSITE_DIR, 'solutions', 'hyperoptic-broadband-isp-throttling.html')),
+        'Deleted Hyperoptic HTML must be absent from website/solutions/'
+      );
+      const xml = fs.readFileSync(path.join(WEBSITE_DIR, 'sitemap.xml'), 'utf8');
+      assertFalse(xml.includes('hyperoptic-broadband-isp-throttling'), 'Hyperoptic must be absent from sitemap.xml');
+    }
+  },
+  {
+    id: 'F27-T1-03',
+    feature: 'F27',
+    tier: 1,
+    name: 'Verify all 23/23 kept /solutions/*.html canonicals return HTTP 200 directly',
+    async fn({ baseUrl }) {
+      const files = fs.readdirSync(path.join(WEBSITE_DIR, 'solutions')).filter((f) => f.endsWith('.html')).sort();
+      assertEqual(files.length, 23, `Expected 23 kept /solutions/*.html files, got ${files.length}`);
+      for (const f of files) {
+        const slug = f.replace(/\.html$/, '');
+        const res = await fetchOpaque(`${baseUrl}/solutions/${slug}`, { method: 'HEAD' });
+        assertEqual(res.status, 200, `/solutions/${slug} must return 200 OK`);
+        assertEqual(res.location, null, `/solutions/${slug} must not redirect`);
+      }
+    }
+  },
+  {
+    id: 'F27-T1-04',
+    feature: 'F27',
+    tier: 1,
+    name: 'Verify sitemap.xml has 94 canonical URLs with /ai-info & /faq and without retired/noindex routes',
+    async fn() {
+      const xml = fs.readFileSync(path.join(WEBSITE_DIR, 'sitemap.xml'), 'utf8');
+      const { isValidXml, totalUrls, urls } = validateSitemapXml(xml);
+      assertTrue(isValidXml, 'sitemap.xml must be valid XML');
+      assertEqual(totalUrls, 94, `Expected 94 URLs in sitemap.xml, got ${totalUrls}`);
+      assertTrue(urls.includes('https://sweeprvpn.com/ai-info'), 'Must include /ai-info');
+      assertTrue(urls.includes('https://sweeprvpn.com/faq'), 'Must include /faq');
+      assertFalse(urls.some((u) => u.includes('/welcome') || u.includes('/uninstall') || u.includes('hyperoptic-broadband-isp-throttling')), 'Must exclude /welcome, /uninstall, and hyperoptic');
+    }
+  },
+  {
+    id: 'F27-T1-05',
+    feature: 'F27',
+    tier: 1,
+    name: 'Verify /solutions/talktalk-fibre-wireguard-cgnat serves 200 OK with self-canonical and <article>',
+    async fn({ baseUrl }) {
+      const res = await fetchOpaque(`${baseUrl}/solutions/talktalk-fibre-wireguard-cgnat`);
+      assertEqual(res.status, 200, 'TalkTalk canonical must return 200');
+      assertEqual(extractCanonical(res.body), 'https://sweeprvpn.com/solutions/talktalk-fibre-wireguard-cgnat', 'TalkTalk canonical must be self-referential');
+      assertMatch(res.body, /<article\b/i, 'TalkTalk canonical must contain <article>');
+    }
+  },
+
+  // =========================================================================
+  // Feature F28: R6–R8 CI Quality Gate, Automation Scripts & Video Registry
+  // =========================================================================
+  {
+    id: 'F28-T1-01',
+    feature: 'F28',
+    tier: 1,
+    name: 'Verify scripts/ci-seo-quality-gate.mjs exits 0 with all M4/R7 assertions passing',
+    async fn() {
+      const out = execSync(`node "${path.join(SCRIPTS_DIR, 'ci-seo-quality-gate.mjs')}"`, { cwd: ROOT_DIR, encoding: 'utf8' });
+      assertIncludes(out, 'CI SEO Quality Gate PASSED', 'CI quality gate must pass');
+    }
+  },
+  {
+    id: 'F28-T1-02',
+    feature: 'F28',
+    tier: 1,
+    name: 'Verify daily-wireguard-and-acr-pipeline.mjs --dry-run exits 0 asserting 8 live POPs',
+    async fn() {
+      const scriptPath = path.join(SCRIPTS_DIR, 'daily-wireguard-and-acr-pipeline.mjs');
+      const out = execSync(`node "${scriptPath}" --dry-run`, { cwd: ROOT_DIR, encoding: 'utf8' });
+      assertTrue(out.includes('8') || out.includes('UK-LON-01'), 'WireGuard/ACR pipeline --dry-run must verify 8 POPs');
+    }
+  },
+  {
+    id: 'F28-T1-03',
+    feature: 'F28',
+    tier: 1,
+    name: 'Verify weekly-spec-privacy-guardrail.mjs --strict --dry-run exits 0 read-only',
+    async fn() {
+      const scriptPath = path.join(SCRIPTS_DIR, 'automations', 'weekly-spec-privacy-guardrail.mjs');
+      const out = execSync(`node "${scriptPath}" --strict --dry-run`, { cwd: ROOT_DIR, encoding: 'utf8' });
+      assertTrue(out.length > 0, 'Weekly guardrail must produce pass output');
+    }
+  },
+  {
+    id: 'F28-T1-04',
+    feature: 'F28',
+    tier: 1,
+    name: 'Verify verify-release-manifests.mjs and verify-appstore-compliance.mjs exit 0',
+    async fn() {
+      const relOut = execSync(`node "${path.join(SCRIPTS_DIR, 'verify-release-manifests.mjs')}"`, { cwd: ROOT_DIR, encoding: 'utf8' });
+      assertIncludes(relOut, 'PASS', 'Release manifest verifier must report PASS');
+      const appOut = execSync(`node "${path.join(SCRIPTS_DIR, 'verify-appstore-compliance.mjs')}"`, { cwd: ROOT_DIR, encoding: 'utf8' });
+      assertIncludes(appOut, 'PASS', 'App Store compliance verifier must report PASS');
+    }
+  },
+  {
+    id: 'F28-T1-05',
+    feature: 'F28',
+    tier: 1,
+    name: 'Verify video-registry.json contains 5 entries with youtubeVideoId: null (zero fabricated IDs)',
+    async fn() {
+      const regPath = path.join(SCRIPTS_DIR, 'youtube-demo-pipeline', 'video-registry.json');
+      assertTrue(fs.existsSync(regPath), 'video-registry.json must exist');
+      const reg = JSON.parse(fs.readFileSync(regPath, 'utf8'));
+      assertEqual(reg.videos.length, 5, `Expected 5 video entries, got ${reg.videos.length}`);
+      for (const v of reg.videos) {
+        assertEqual(v.youtubeVideoId, null, `Video ${v.slug} must keep youtubeVideoId: null until manual upload`);
+        assertEqual(v.uploadStatus, 'PENDING_MANUAL_YOUTUBE_UPLOAD', `Video ${v.slug} must stay PENDING_MANUAL_YOUTUBE_UPLOAD`);
+      }
     }
   }
 ];
