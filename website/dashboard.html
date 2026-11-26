@@ -55,7 +55,7 @@
               <span>Instant 15-Second Setup Rescue</span>
             </span>
             <h3 id="rescueHeadline" class="text-lg sm:text-xl font-bold text-white">0 Devices Linked Yet — Activate Your 10Gbps WireGuard Tunnel</h3>
-            <p id="rescueSubheadline" class="text-xs sm:text-sm text-gray-300 mt-1 max-w-2xl">Scan an instant QR code on iPhone/Android, install a 1-click Apple .mobileconfig profile, or generate a native .conf for GL.iNet &amp; routers.</p>
+            <p id="rescueSubheadline" class="text-xs sm:text-sm text-gray-300 mt-1 max-w-2xl">Scan an instant QR code on Android or WireGuard iOS, install a Safari Web App + Encrypted DNS .mobileconfig profile on iPhone/iPad (native iOS App Store client pre-launch), or generate a native .conf for GL.iNet &amp; routers.</p>
           </div>
           <div class="flex flex-wrap items-center gap-2 shrink-0 w-full sm:w-auto">
             <button type="button" onclick="generatePortalPairingQr()" class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl font-bold text-xs bg-emerald-500 hover:bg-emerald-400 text-[#0B1210] transition-colors cursor-pointer">
@@ -64,7 +64,7 @@
             </button>
             <a href="/api/vpn/apple-mobileconfig" class="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl font-semibold text-xs bg-white/10 hover:bg-white/15 text-white border border-white/15 no-underline">
               <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-              <span>iOS .mobileconfig</span>
+              <span>iOS Web App + DNS (.mobileconfig)</span>
             </a>
             <a href="/setup" class="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl font-semibold text-xs bg-white/10 hover:bg-white/15 text-white border border-white/15 no-underline">
               <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
@@ -223,13 +223,14 @@
               <span>Android (Google Play)</span>
             </a>
             <a href="/api/vpn/apple-mobileconfig" id="iosProfileLink" class="btn btn-go justify-center gap-2 text-xs sm:text-sm py-3 no-underline" style="background:#1c2128;border-color:#2d343f;">
-              <span>iOS (.mobileconfig)</span>
+              <span>iOS Web App + DNS (.mobileconfig)</span>
             </a>
           </div>
           <p class="text-xs text-gray-400 mt-3 max-w-xs leading-relaxed">
             <strong>Windows:</strong> Click <strong>More info &rarr; Run anyway</strong> if SmartScreen appears.<br>
             <strong>macOS:</strong> Open <code>SWEEPRVPN.dmg</code> and drag <strong>SWEEPR VPN</strong> to Applications.<br>
-            <strong>Android / iOS:</strong> Install from Google Play (<a href="/download/SWEEPRVPN.apk" download="SWEEPRVPN.apk" class="underline text-emerald-700 font-semibold">Direct .apk</a> fallback) or iOS profile and scan your pairing QR code.
+            <strong>Android:</strong> Install from Google Play (<a href="/download/SWEEPRVPN.apk" download="SWEEPRVPN.apk" class="underline text-emerald-700 font-semibold">Direct .apk</a> fallback) and scan your pairing QR code.<br>
+            <strong>iPhone &amp; iPad:</strong> Native iOS App Store client is pre-launch &mdash; install our Safari Web App + Encrypted DNS <code>.mobileconfig</code> profile or import an official WireGuard iOS <code>.conf</code> via QR.
           </p>
         </div>
       </div>
@@ -311,7 +312,7 @@
       <a href="/support" class="hover:text-emerald-700 transition-colors">Support &amp; Help</a>
       <a href="/delete-account" class="hover:text-red-600 transition-colors">Delete Account &amp; Data</a>
     </div>
-    <p class="text-gray-400">&copy; 2026 SWEEPR VPN. All rights reserved.</p>
+    <p class="text-gray-400">&copy; 2026 SWEEPR VPN (UK Sole Trader). All rights reserved.</p>
   </footer>
 
   <script>

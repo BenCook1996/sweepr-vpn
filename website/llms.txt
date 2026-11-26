@@ -1,6 +1,6 @@
 # SWEEPR VPN & SWEEPR Wi-Fi Radar (sweeprvpn.com)
 
-> SWEEPR VPN is an ultra-lightweight (~723 KB Windows installer), fast, and easy-to-use 10Gbps WireGuard VPN and Free 30-Second Home Wi-Fi Scanner for Windows 10/11, macOS, Android, iOS, and Linux WireGuard CLI/routers. Built by the team behind SWEEPR Cleaner, it combines 1-click 10Gbps private browsing with a free 30-second Home Wi-Fi & Speed Scanner and a Smart-TV ACR spy blocker.
+> SWEEPR VPN is an ultra-lightweight (~723 KB Windows installer), fast, and easy-to-use 10Gbps WireGuard VPN and Free 30-Second Home Wi-Fi Scanner for Windows 10/11, macOS, Android, Linux WireGuard CLI/routers, and iOS/iPadOS WireGuard profiles (native iOS App Store client pre-launch). Built and maintained independently in the UK by SWEEPR VPN (UK Sole Trader), it combines 1-click 10Gbps private browsing with a free 30-second Home Wi-Fi & Speed Scanner and a Smart-TV ACR spy blocker.
 
 ## Core Capabilities & Technical Differentiators
 - **1-Click Private Browsing & Streaming Speed Booster**: Eliminates ISP evening traffic shaping (Virgin Media, BT, Sky, TalkTalk, Vodafone, Eduroam) on 4K streaming, gaming, and remote SSH/Docker workflows. Strict zero-logs policy on diskless RAM-only 10Gbps servers.
@@ -34,11 +34,11 @@
 - [How to Fix Microsoft Teams, Zoom & VoIP Jitter on Brsk BetterNet 1Gbps Fibre UK Using Low-Latency WireGuard](https://sweeprvpn.com/solutions/brsk-better-net-uk-voip-teams-zoom-jitter)
 - [How to Fix BT Broadband Low-Latency Gaming &amp; Packet Loss (AS2856)](https://sweeprvpn.com/solutions/bt-broadband-gaming-packet-loss)
 - [How to Stop Comcast Xfinity Cable Broadband Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/comcast-xfinity-broadband-isp-throttling)
-- [How to Bypass Community Fibre London CGNAT & P2P Bandwidth Throttling](https://sweeprvpn.com/solutions/community-fibre-london-p2p-port-forwarding)
+- [Community Fibre London WireGuard &amp; CGNAT Setup Guide (AS200052)](https://sweeprvpn.com/solutions/community-fibre-london-wireguard-cgnat)
 - [How to Fix Eduroam Campus Wi-Fi Low-Latency Gaming &amp; Packet Loss (AS786 (Jisc Janet))](https://sweeprvpn.com/solutions/eduroam-campus-wifi-gaming-packet-loss)
 - [How to Fix Microsoft Teams, Zoom & VoIP Jitter on EE 5G & Home Router UK Using Low-Latency WireGuard](https://sweeprvpn.com/solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter)
 - [How to Fix Gigaclear Rural Full Fibre UK Gaming Packet Loss, High Ping & Rubberbanding](https://sweeprvpn.com/solutions/gigaclear-rural-fibre-gaming-packet-loss)
-- [How to Bypass Hotel Wi-Fi (Premier Inn, Travelodge, Hilton) CGNAT & P2P Bandwidth Throttling](https://sweeprvpn.com/solutions/hotel-captive-portal-wifi-p2p-port-forwarding)
+- [Hotel Wi-Fi WireGuard Guide (Premier Inn, Travelodge, Hilton): Captive Portals &amp; Stealth UDP 443](https://sweeprvpn.com/solutions/hotel-captive-portal-wifi-wireguard)
 - [How to Stop Hyperoptic 1Gbps Full Fibre Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/hyperoptic-broadband-isp-throttling)
 - [Fix Dropping SSH, Kubernetes & Git Sessions on UK Train Wi-Fi (LNER, GWR, Avanti) With Persistent WireGuard](https://sweeprvpn.com/solutions/national-rail-train-wifi-remote-dev-ssh)
 - [How to Fix Microsoft Teams, Zoom & VoIP Jitter on NHS & Hospital Guest Wi-Fi Using Low-Latency WireGuard](https://sweeprvpn.com/solutions/nhs-guest-wifi-voip-teams-zoom-jitter)
@@ -47,7 +47,7 @@
 - [How to Fix Sky Broadband Low-Latency Gaming &amp; Packet Loss (AS5607)](https://sweeprvpn.com/solutions/sky-broadband-gaming-packet-loss)
 - [How to Stop Starlink LEO Satellite Internet Speed Throttling & DPI Traffic Shaping](https://sweeprvpn.com/solutions/starlink-satellite-uk-isp-throttling)
 - [Fix Dropping SSH, Kubernetes & Git Sessions on T-Mobile 5G Home Internet With Persistent WireGuard](https://sweeprvpn.com/solutions/t-mobile-5g-home-internet-remote-dev-ssh)
-- [How to Fix TalkTalk P2P File Sharing &amp; High-Speed Transfers (AS13285)](https://sweeprvpn.com/solutions/talktalk-p2p-port-forwarding)
+- [How to Fix TalkTalk Fibre Evening Throttling &amp; CGNAT With WireGuard (AS13285)](https://sweeprvpn.com/solutions/talktalk-fibre-wireguard-cgnat)
 - [How to Fix Telstra NBN Australia Gaming Packet Loss, High Ping & Rubberbanding](https://sweeprvpn.com/solutions/telstra-nbn-australia-gaming-packet-loss)
 - [Eliminate Three 5G Home Broadband UK 4K UHD Streaming Buffering & CDN Throttling](https://sweeprvpn.com/solutions/three-5g-home-broadband-uhd-streaming-buffering)
 - [How to Fix Microsoft Teams, Zoom & VoIP Jitter on toob 900Mbps Full Fibre UK Using Low-Latency WireGuard](https://sweeprvpn.com/solutions/toob-full-fibre-uk-voip-teams-zoom-jitter)
@@ -88,7 +88,7 @@
 - [How UK ISPs Use DNS Inspection to Throttle Evening Speeds (And How to Fix It)](https://sweeprvpn.com/guides/fix-isp-dns-hijacking-and-throttling)
 - [How to Fix WireGuard MTU Packet Fragmentation on PPPoE Fibre (1412) & 5G (1380)](https://sweeprvpn.com/guides/fix-wireguard-mtu-fragmentation-pppoe)
 - [How to Prevent Silent WebRTC STUN/TURN IP Address Leaks in All Browsers](https://sweeprvpn.com/guides/prevent-webrtc-ip-leak-chromium-firefox)
-- [Fix Windows 11 Multi-Homed DNS Leaks & Bypass ISP Port 53 Interception](https://sweeprvpn.com/guides/prevent-windows-11-dns-leaks-doh)
+- [Fix Windows 11 Multi-Homed DNS Leaks & Prevent ISP Port 53 Interception](https://sweeprvpn.com/guides/prevent-windows-11-dns-leaks-doh)
 - [Public, Hotel &amp; Airport Wi-Fi Security: Evil Twin &amp; Packet Sniffing Protection](https://sweeprvpn.com/guides/public-hotel-airport-wifi-security)
 - [How to Defeat ISP Deep Packet Inspection (DPI) & SNI Censorship with WireGuard](https://sweeprvpn.com/guides/stop-isp-deep-packet-inspection-dpi)
 - [How to Stop LG webOS Smart TVs From Taking Screenshots of What You Watch (2026 Guide)](https://sweeprvpn.com/guides/stop-lg-smart-tv-acr-spying)

@@ -272,7 +272,7 @@ for (const file of checkedFiles.values()) {
   }
 }
 
-// 4. Pillar Direct-Answer [40, 60] words & Benjamin Cook E-E-A-T byline
+// 4. Pillar Direct-Answer [40, 60] words & SWEEPR VPN Engineering E-E-A-T byline
 let minDirectWords = 999;
 let maxDirectWords = 0;
 for (const p of pillarFiles) {
@@ -287,8 +287,11 @@ for (const p of pillarFiles) {
       fail(`#direct-answer word count ${words} outside [40, 60] on website/${p.rel}`);
     }
   }
-  if (!/Benjamin Cook/i.test(p.raw)) {
-    fail(`Missing Benjamin Cook E-E-A-T attribution on website/${p.rel}`);
+  if (!/SWEEPR VPN Engineering/i.test(p.raw)) {
+    fail(`Missing SWEEPR VPN Engineering E-E-A-T attribution on website/${p.rel}`);
+  }
+  if (/\bBenjamin Cook\b/i.test(p.raw) || /SWEEPR VPN Inc\./i.test(p.raw)) {
+    fail(`Forbidden personal name or Inc. entity found on website/${p.rel}`);
   }
 }
 

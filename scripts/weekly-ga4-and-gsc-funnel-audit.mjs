@@ -273,7 +273,7 @@ async function runWeeklyFunnelAndGscAudit() {
   const promotedPage1Winners = [
     'solutions/virgin-media-remote-dev-ssh.html',
     'solutions/t-mobile-5g-home-internet-remote-dev-ssh.html',
-    'solutions/community-fibre-london-p2p-port-forwarding.html'
+    'solutions/community-fibre-london-wireguard-cgnat.html'
   ];
   const winnersAllIndexable = promotedPage1Winners.every((rel) => {
     const abs = path.join(WEBSITE_DIR, rel);

@@ -6,7 +6,7 @@
     <MASTER_PAD_INFO>Portable Application Description, or PAD for short, is a data set that is used by shareware authors to disseminate information to anyone interested in their software products.</MASTER_PAD_INFO>
   </MASTER_PAD_VERSION_INFO>
   <Company_Info>
-    <Company_Name>SWEEPR VPN Inc.</Company_Name>
+    <Company_Name>SWEEPR VPN (UK Sole Trader)</Company_Name>
     <Address_1>Docklands Digital Exchange</Address_1>
     <City_Town>London</City_Town>
     <Country>United Kingdom</Country>
@@ -16,7 +16,7 @@
       <Author_Last_Name>VPN Engineering</Author_Last_Name>
       <Author_Email>support@sweeprvpn.com</Author_Email>
       <Contact_First_Name>SWEEPR</Contact_First_Name>
-      <Contact_Last_Name>VPN Team</Contact_Last_Name>
+      <Contact_Last_Name>Engineering</Contact_Last_Name>
       <Contact_Email>support@sweeprvpn.com</Contact_Email>
     </Contact_Info>
     <Support_Info>
@@ -56,7 +56,7 @@
       <Char_Desc_45>Fast 10Gbps WireGuard VPN &amp; Wi-Fi Scanner.</Char_Desc_45>
       <Char_Desc_80>Lightweight 10Gbps WireGuard VPN, free 30s Home Wi-Fi scanner &amp; Smart-TV shield.</Char_Desc_80>
       <Char_Desc_250>SWEEPR VPN is an ultra-lightweight (~740 KB Authenticode-signed installer) 10Gbps WireGuard VPN and Free 30-Second Home Wi-Fi Scanner for Windows 10/11, macOS, and Linux. Stops ISP evening throttling, detects unknown Wi-Fi devices, and blocks Smart-TV ACR spying.</Char_Desc_250>
-      <Char_Desc_450>SWEEPR VPN is a fast, lightweight WireGuard VPN and Home Wi-Fi Security Scanner built by the team behind SWEEPR Cleaner. It installs in seconds with zero bloatware, never logs what you browse, and includes a free 30-second Home Wi-Fi &amp; Speed Scanner that lists all 15-30+ devices on your network. Upgrade to Pro to unlock 10Gbps global servers, 1-click ISP throttling protection, stranger Wi-Fi alerts, and Smart-TV ACR screenshot blocking.</Char_Desc_450>
+      <Char_Desc_450>SWEEPR VPN is a fast, lightweight WireGuard VPN and Home Wi-Fi Security Scanner built independently alongside SWEEPR Cleaner. It installs in seconds with zero bloatware, never logs what you browse, and includes a free 30-second Home Wi-Fi &amp; Speed Scanner that lists all 15-30+ devices on your network. Upgrade to Pro to unlock 10Gbps global servers, 1-click ISP throttling protection, stranger Wi-Fi alerts, and Smart-TV ACR screenshot blocking.</Char_Desc_450>
       <Char_Desc_2000>SWEEPR VPN is an ultra-lightweight, memory-safe Rust + Tauri v2 Virtual Private Network (VPN) and Home Wi-Fi Security Scanner for Windows 10, Windows 11, macOS, Linux, and WireGuard routers.
 
 Built for everyday users, remote workers, and gamers who are tired of bloated 150 MB+ VPN apps and surprise 3x second-year renewal price hikes, SWEEPR VPN combines 10Gbps RAM-only WireGuard encryption with whole-home Wi-Fi visibility.

@@ -207,8 +207,15 @@
         const href = target.getAttribute('href') || '';
         const text = (target.innerText || target.textContent || '').trim().slice(0, 60);
 
-        // A. Installer / Download Clicks -> Fire standard GA4 `file_download` + `installer_download`
-        if (
+        // A. Installer / Download / Store CTA Clicks -> GA4 `file_download` + `installer_download` + first-party `/api/telemetry`
+        const storeCtaAttr = target.getAttribute('data-store-cta') || '';
+        const isPlayStore = href.includes('play.google.com/store/apps/details');
+        const isMicrosoftStore = href.includes('apps.microsoft.com');
+        const isDownloadOrStoreMatch =
+          Boolean(storeCtaAttr) ||
+          isPlayStore ||
+          isMicrosoftStore ||
+          target.hasAttribute('download') ||
           href === '/download' ||
           href.startsWith('/download?') ||
           href.startsWith('/download/') ||
@@ -216,11 +223,11 @@
           href.includes('SWEEPRVPN.dmg') ||
           href.includes('SWEEPRVPN.apk') ||
           href.includes('SWEEPRVPN.mobileconfig') ||
-          href.includes('play.google.com/store/apps/details?id=com.sweepr.vpn') ||
-          target.id === 'downloadBtn'
-        ) {
-          const isPlayStore = href.includes('play.google.com');
-          const platform = isPlayStore ? 'android' : detectClientPlatform(href);
+          target.id === 'downloadBtn';
+
+        if (isDownloadOrStoreMatch) {
+          const storeCta = storeCtaAttr || (isMicrosoftStore ? 'microsoft_store' : isPlayStore ? 'google_play' : '');
+          const platform = isMicrosoftStore ? 'windows' : isPlayStore ? 'android' : detectClientPlatform(href);
           const extMap = { windows: 'exe', macos: 'dmg', android: 'apk', ios: 'mobileconfig', linux: 'conf' };
           const fileMap = {
             windows: 'SWEEPRVPN.exe',
@@ -230,8 +237,8 @@
             linux: 'sweepr-wg0.conf'
           };
           window.sweeprTrack('file_download', {
-            file_name: isPlayStore ? 'google-play-com.sweepr.vpn' : (fileMap[platform] || 'SWEEPRVPN.exe'),
-            file_extension: isPlayStore ? 'play_store' : (extMap[platform] || 'exe'),
+            file_name: isMicrosoftStore ? 'microsoft-store-XPFPBXXLLG7604' : isPlayStore ? 'google-play-com.sweepr.vpn' : (fileMap[platform] || 'SWEEPRVPN.exe'),
+            file_extension: isMicrosoftStore ? 'microsoft_store' : isPlayStore ? 'play_store' : (extMap[platform] || 'exe'),
             link_url: href || '/download',
             link_text: text,
             platform: platform,
@@ -239,10 +246,41 @@
           });
           window.sweeprTrack('installer_download', {
             platform: platform,
+            cta: storeCta || 'direct_installer',
             button_text: text,
             link_url: href || '/download',
             source_page: window.location.pathname
           });
+
+          const isBeaconTarget =
+            target.matches('a[data-store-cta], a[href*="play.google.com"], a[href*="apps.microsoft.com"], a[download]') ||
+            href.startsWith('/download/');
+          if (isBeaconTarget && !window['ga-disable-' + GA_ID]) {
+            try {
+              const telemetryPayload = JSON.stringify({
+                event_name: storeCta ? 'store_cta_click' : 'installer_download',
+                category: 'funnel',
+                properties: {
+                  cta: storeCta || 'direct_installer',
+                  platform: platform,
+                  source_page: window.location.pathname,
+                  target: href.slice(0, 180)
+                }
+              });
+              let beaconSent = false;
+              if (typeof navigator !== 'undefined' && typeof navigator.sendBeacon === 'function') {
+                beaconSent = navigator.sendBeacon('/api/telemetry', new Blob([telemetryPayload], { type: 'application/json' }));
+              }
+              if (!beaconSent && typeof fetch === 'function') {
+                fetch('/api/telemetry', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: telemetryPayload,
+                  keepalive: true
+                }).catch(() => {});
+              }
+            } catch {}
+          }
         }
         // B. Order / Checkout CTA Clicks
         else if (href.startsWith('/order') || href.startsWith('/checkout')) {
@@ -323,176 +361,224 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Mobile Hamburger Menu & Slide-Down Drawer Injection
-  const nav = document.querySelector('nav.glass-nav');
+  // Mobile Hamburger Menu & Slide-Down Drawer Binding (Static HTML primary + dynamic fallback)
+  const nav = document.querySelector('nav.glass-nav') || document.querySelector('nav.nav');
   if (nav) {
+    const isDarkNav = nav.classList.contains('nav') && !nav.classList.contains('glass-nav');
     const brandLink = nav.querySelector('a[href="/"], a[href="/?home=1"]');
     if (brandLink) {
       brandLink.style.whiteSpace = 'nowrap';
       brandLink.style.flexShrink = '0';
     }
-  }
-  if (nav && !document.getElementById('mobileNavBtn')) {
-    const rightGroup = nav.children[nav.children.length - 1];
-    if (rightGroup) {
-      const mobileBtn = document.createElement('button');
+
+    if (isDarkNav && !document.getElementById('sweepr-dark-nav-drawer-css')) {
+      const styleEl = document.createElement('style');
+      styleEl.id = 'sweepr-dark-nav-drawer-css';
+      styleEl.textContent = `
+        @media (min-width: 768px) {
+          #mobileNavBtn, #mobileNavBackdrop, #mobileNavDrawer, #mobileMenu { display: none !important; }
+        }
+        @media (max-width: 767px) {
+          nav.nav .nav-links { display: none !important; }
+          #mobileNavBtn { display: inline-flex !important; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 10px; border: 1px solid #262b33; background: #181b1f; color: #f3f4f6; cursor: pointer; flex-shrink: 0; }
+          #mobileNavBackdrop { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.55); z-index: 9998; }
+          #mobileNavDrawer, #mobileMenu { position: fixed; left: 0; right: 0; top: 64px; background: #ffffff; color: #0f172a; border-bottom: 1px solid #e2e8f0; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.25); padding: 16px; max-height: calc(100vh - 64px); overflow-y: auto; z-index: 9999; }
+          #mobileNavDrawer.hidden, #mobileNavBackdrop.hidden, #mobileMenu.hidden { display: none !important; }
+          #mobileNavDrawer a, #mobileMenu a { color: #0f172a; text-decoration: none; }
+          #mobileNavIconClose.hidden, #mobileNavIconOpen.hidden { display: none !important; }
+        }
+      `;
+      document.head.appendChild(styleEl);
+    }
+
+    let mobileBtn = document.getElementById('mobileNavBtn');
+    if (!mobileBtn) {
+      const btnParent = isDarkNav ? nav : (nav.children[nav.children.length - 1] || nav);
+      mobileBtn = document.createElement('button');
       mobileBtn.type = 'button';
       mobileBtn.id = 'mobileNavBtn';
       mobileBtn.setAttribute('aria-label', 'Toggle navigation menu');
       mobileBtn.setAttribute('aria-expanded', 'false');
-      mobileBtn.className =
-        'md:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl border border-gray-200 bg-white text-gray-800 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 transition-colors cursor-pointer shrink-0 shadow-2xs';
+      mobileBtn.className = isDarkNav
+        ? 'md:hidden inline-flex items-center justify-center'
+        : 'md:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl border border-gray-200 bg-white text-gray-800 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 transition-colors cursor-pointer shrink-0 shadow-2xs';
       mobileBtn.innerHTML =
-        '<svg id="mobileNavIconOpen" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6h16M4 12h16M4 18h16"/></svg>' +
-        '<svg id="mobileNavIconClose" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M6 18L18 6M6 6l12 12"/></svg>';
-      rightGroup.appendChild(mobileBtn);
+        '<svg id="mobileNavIconOpen" width="20" height="20" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6h16M4 12h16M4 18h16"/></svg>' +
+        '<svg id="mobileNavIconClose" width="20" height="20" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M6 18L18 6M6 6l12 12"/></svg>';
+      btnParent.appendChild(mobileBtn);
+    }
 
-      const backdrop = document.createElement('div');
+    let backdrop = document.getElementById('mobileNavBackdrop');
+    if (!backdrop) {
+      backdrop = document.createElement('div');
       backdrop.id = 'mobileNavBackdrop';
       backdrop.className = 'hidden md:hidden fixed inset-0 bg-slate-900/45 backdrop-blur-xs';
       backdrop.style.zIndex = '9998';
+      backdrop.style.display = 'none';
       document.body.appendChild(backdrop);
+    }
 
-      const drawer = document.createElement('div');
+    let drawer = document.getElementById('mobileNavDrawer') || document.getElementById('mobileMenu');
+    if (!drawer) {
+      drawer = document.createElement('div');
       drawer.id = 'mobileNavDrawer';
       drawer.className =
         'hidden md:hidden fixed left-0 right-0 top-[72px] bg-white border-b border-gray-200 shadow-2xl px-4 py-4 max-h-[calc(100vh-72px)] overflow-y-auto';
       drawer.style.backgroundColor = '#ffffff';
       drawer.style.zIndex = '9999';
+      drawer.style.display = 'none';
       drawer.innerHTML = `
-        <div class="max-w-lg mx-auto space-y-3 text-left" style="background: var(--surface);">
-          <div class="grid grid-cols-2 gap-2">
-            <a href="/#features" class="mobile-nav-link flex items-center gap-2.5 p-3 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 text-gray-900 font-bold text-sm no-underline">
-              <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        <div class="max-w-lg mx-auto space-y-3 text-left" style="background: var(--surface, #ffffff);">
+          <div class="grid grid-cols-2 gap-2" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:12px;">
+            <a href="/#features" class="mobile-nav-link flex items-center gap-2.5 p-3 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 text-gray-900 font-bold text-sm no-underline" style="display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:10px;background:#f8fafc;border:1px solid #e2e8f0;font-weight:700;font-size:14px;">
+              <svg class="w-4 h-4 text-emerald-600 shrink-0" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
               <span>Features</span>
             </a>
-            <a href="/pricing" class="mobile-nav-link flex items-center gap-2.5 p-3 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 text-gray-900 font-bold text-sm no-underline">
-              <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h10l3 5-8 8-8-8 3-5z"/></svg>
+            <a href="/pricing" class="mobile-nav-link flex items-center gap-2.5 p-3 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 text-gray-900 font-bold text-sm no-underline" style="display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:10px;background:#f8fafc;border:1px solid #e2e8f0;font-weight:700;font-size:14px;">
+              <svg class="w-4 h-4 text-emerald-600 shrink-0" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h10l3 5-8 8-8-8 3-5z"/></svg>
               <span>Pricing</span>
             </a>
           </div>
 
-          <div class="pt-1">
-            <div class="text-[11px] font-extrabold uppercase tracking-wider text-gray-400 px-1 mb-1.5">Free Privacy &amp; Speed Tools</div>
-            <div class="space-y-1.5">
-              <a href="/tools/leak-test" class="mobile-nav-link flex items-center justify-between p-3 rounded-xl bg-white hover:bg-emerald-50 border border-gray-200 text-gray-900 no-underline">
+          <div class="pt-1" style="margin-bottom:12px;">
+            <div class="text-[11px] font-extrabold uppercase tracking-wider text-gray-400 px-1 mb-1.5" style="font-size:11px;font-weight:800;text-transform:uppercase;color:#64748b;margin-bottom:6px;">Free Privacy &amp; Speed Tools</div>
+            <div class="space-y-1.5" style="display:flex;flex-direction:column;gap:6px;">
+              <a href="/tools/leak-test" class="mobile-nav-link flex items-center justify-between p-3 rounded-xl bg-white hover:bg-emerald-50 border border-gray-200 text-gray-900 no-underline" style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:10px;border:1px solid #e2e8f0;">
                 <div>
-                  <div class="text-sm font-bold">Free IP, DNS &amp; WebRTC Leak Test</div>
-                  <div class="text-xs text-gray-500">Check if your real IP is visible in 5 seconds</div>
+                  <div class="text-sm font-bold" style="font-size:14px;font-weight:700;">Free IP, DNS &amp; WebRTC Leak Test</div>
+                  <div class="text-xs text-gray-500" style="font-size:12px;color:#64748b;">Check if your real IP is visible in 5 seconds</div>
                 </div>
-                <span class="text-[10px] font-extrabold uppercase text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full shrink-0">Free</span>
+                <span class="text-[10px] font-extrabold uppercase text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full shrink-0" style="font-size:10px;font-weight:800;color:#047857;background:#ecfdf5;border:1px solid #a7f3d0;padding:2px 8px;border-radius:999px;">Free</span>
               </a>
-              <a href="/tools/isp-throttling-test" class="mobile-nav-link flex items-center justify-between p-3 rounded-xl bg-white hover:bg-emerald-50 border border-gray-200 text-gray-900 no-underline">
+              <a href="/tools/isp-throttling-test" class="mobile-nav-link flex items-center justify-between p-3 rounded-xl bg-white hover:bg-emerald-50 border border-gray-200 text-gray-900 no-underline" style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:10px;border:1px solid #e2e8f0;">
                 <div>
-                  <div class="text-sm font-bold">Free ISP Speed Slowdown Checker</div>
-                  <div class="text-xs text-gray-500">Test if your provider throttles 4K streaming</div>
+                  <div class="text-sm font-bold" style="font-size:14px;font-weight:700;">Free ISP Speed Slowdown Checker</div>
+                  <div class="text-xs text-gray-500" style="font-size:12px;color:#64748b;">Test if your provider throttles 4K streaming</div>
                 </div>
-                <span class="text-[10px] font-extrabold uppercase text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full shrink-0">Free</span>
+                <span class="text-[10px] font-extrabold uppercase text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full shrink-0" style="font-size:10px;font-weight:800;color:#047857;background:#ecfdf5;border:1px solid #a7f3d0;padding:2px 8px;border-radius:999px;">Free</span>
               </a>
-              <a href="/tools/smart-tv-tracking-check" class="mobile-nav-link flex items-center justify-between p-3 rounded-xl bg-white hover:bg-emerald-50 border border-gray-200 text-gray-900 no-underline">
+              <a href="/tools/smart-tv-tracking-check" class="mobile-nav-link flex items-center justify-between p-3 rounded-xl bg-white hover:bg-emerald-50 border border-gray-200 text-gray-900 no-underline" style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:10px;border:1px solid #e2e8f0;">
                 <div>
-                  <div class="text-sm font-bold">Smart-TV ACR Tracker Check</div>
-                  <div class="text-xs text-gray-500">Audit Samsung, LG, Roku &amp; Fire TV telemetry</div>
+                  <div class="text-sm font-bold" style="font-size:14px;font-weight:700;">Smart-TV ACR Tracker Check</div>
+                  <div class="text-xs text-gray-500" style="font-size:12px;color:#64748b;">Audit Samsung, LG, Roku &amp; Fire TV telemetry</div>
                 </div>
-                <span class="text-[10px] font-extrabold uppercase text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full shrink-0">Free</span>
+                <span class="text-[10px] font-extrabold uppercase text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full shrink-0" style="font-size:10px;font-weight:800;color:#047857;background:#ecfdf5;border:1px solid #a7f3d0;padding:2px 8px;border-radius:999px;">Free</span>
               </a>
-              <a href="/tools/whats-on-my-wifi" class="mobile-nav-link flex items-center justify-between p-3 rounded-xl bg-white hover:bg-emerald-50 border border-gray-200 text-gray-900 no-underline">
+              <a href="/tools/whats-on-my-wifi" class="mobile-nav-link flex items-center justify-between p-3 rounded-xl bg-white hover:bg-emerald-50 border border-gray-200 text-gray-900 no-underline" style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:10px;border:1px solid #e2e8f0;">
                 <div>
-                  <div class="text-sm font-bold">What's on My Wi-Fi? Translator</div>
-                  <div class="text-xs text-gray-500">Identify unknown devices &amp; hidden cameras</div>
+                  <div class="text-sm font-bold" style="font-size:14px;font-weight:700;">What's on My Wi-Fi? Translator</div>
+                  <div class="text-xs text-gray-500" style="font-size:12px;color:#64748b;">Identify unknown devices &amp; hidden cameras</div>
                 </div>
-                <span class="text-[10px] font-extrabold uppercase text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full shrink-0">Free</span>
+                <span class="text-[10px] font-extrabold uppercase text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full shrink-0" style="font-size:10px;font-weight:800;color:#047857;background:#ecfdf5;border:1px solid #a7f3d0;padding:2px 8px;border-radius:999px;">Free</span>
               </a>
-              <a href="/tools/vpn-renewal-price-checker" class="mobile-nav-link flex items-center justify-between p-3 rounded-xl bg-white hover:bg-emerald-50 border border-gray-200 text-gray-900 no-underline">
+              <a href="/tools/vpn-renewal-price-checker" class="mobile-nav-link flex items-center justify-between p-3 rounded-xl bg-white hover:bg-emerald-50 border border-gray-200 text-gray-900 no-underline" style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:10px;border:1px solid #e2e8f0;">
                 <div>
-                  <div class="text-sm font-bold">VPN Renewal Price Calculator</div>
-                  <div class="text-xs text-gray-500">Compare Year-2 renewal price hikes</div>
+                  <div class="text-sm font-bold" style="font-size:14px;font-weight:700;">VPN Renewal Price Calculator</div>
+                  <div class="text-xs text-gray-500" style="font-size:12px;color:#64748b;">Compare Year-2 renewal price hikes</div>
                 </div>
-                <span class="text-[10px] font-extrabold uppercase text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full shrink-0">Free</span>
+                <span class="text-[10px] font-extrabold uppercase text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full shrink-0" style="font-size:10px;font-weight:800;color:#047857;background:#ecfdf5;border:1px solid #a7f3d0;padding:2px 8px;border-radius:999px;">Free</span>
               </a>
             </div>
           </div>
 
-          <div class="pt-1">
-            <div class="text-[11px] font-extrabold uppercase tracking-wider text-gray-400 px-1 mb-1.5">Comparisons &amp; Guides</div>
-            <div class="grid grid-cols-1 gap-1.5">
-              <a href="/alternatives/totalvpn" class="mobile-nav-link flex items-center justify-between px-3 py-2.5 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 text-xs font-bold text-gray-800 no-underline">
+          <div class="pt-1" style="margin-bottom:12px;">
+            <div class="text-[11px] font-extrabold uppercase tracking-wider text-gray-400 px-1 mb-1.5" style="font-size:11px;font-weight:800;text-transform:uppercase;color:#64748b;margin-bottom:6px;">Comparisons &amp; Guides</div>
+            <div class="grid grid-cols-1 gap-1.5" style="display:flex;flex-direction:column;gap:6px;">
+              <a href="/alternatives/totalvpn" class="mobile-nav-link flex items-center justify-between px-3 py-2.5 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 text-xs font-bold text-gray-800 no-underline" style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:10px;background:#f8fafc;border:1px solid #e2e8f0;font-size:13px;font-weight:700;">
                 <span>Best Total VPN Alternatives (2026 Guide)</span>
                 <span class="text-emerald-600">&rarr;</span>
               </a>
-              <div class="grid grid-cols-2 gap-1.5">
-                <a href="/solutions" class="mobile-nav-link flex items-center justify-between px-3 py-2 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 text-xs font-bold text-gray-800 no-underline">
+              <div class="grid grid-cols-2 gap-1.5" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;">
+                <a href="/solutions" class="mobile-nav-link flex items-center justify-between px-3 py-2 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 text-xs font-bold text-gray-800 no-underline" style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-radius:10px;background:#f8fafc;border:1px solid #e2e8f0;font-size:12px;font-weight:700;">
                   <span>ISP Solutions</span><span class="text-emerald-600">&rarr;</span>
                 </a>
-                <a href="/setup" class="mobile-nav-link flex items-center justify-between px-3 py-2 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 text-xs font-bold text-gray-800 no-underline">
+                <a href="/setup" class="mobile-nav-link flex items-center justify-between px-3 py-2 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 text-xs font-bold text-gray-800 no-underline" style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-radius:10px;background:#f8fafc;border:1px solid #e2e8f0;font-size:12px;font-weight:700;">
                   <span>Router Setups</span><span class="text-emerald-600">&rarr;</span>
                 </a>
-                <a href="/guides" class="mobile-nav-link flex items-center justify-between px-3 py-2 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 text-xs font-bold text-gray-800 no-underline">
+                <a href="/guides" class="mobile-nav-link flex items-center justify-between px-3 py-2 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 text-xs font-bold text-gray-800 no-underline" style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-radius:10px;background:#f8fafc;border:1px solid #e2e8f0;font-size:12px;font-weight:700;">
                   <span>Privacy Guides</span><span class="text-emerald-600">&rarr;</span>
                 </a>
-                <a href="/vs" class="mobile-nav-link flex items-center justify-between px-3 py-2 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 text-xs font-bold text-gray-800 no-underline">
+                <a href="/vs" class="mobile-nav-link flex items-center justify-between px-3 py-2 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 text-xs font-bold text-gray-800 no-underline" style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-radius:10px;background:#f8fafc;border:1px solid #e2e8f0;font-size:12px;font-weight:700;">
                   <span>Comparisons</span><span class="text-emerald-600">&rarr;</span>
                 </a>
               </div>
             </div>
           </div>
 
-          <div class="pt-2 border-t border-gray-100 flex flex-col gap-2">
-            <a href="/download" class="mobile-nav-link btn btn-go w-full justify-center py-3 text-sm font-extrabold">
+          <div class="pt-2 border-t border-gray-100 flex flex-col gap-2" style="display:flex;flex-direction:column;gap:8px;padding-top:10px;border-top:1px solid #e2e8f0;">
+            <a href="/download" class="mobile-nav-link btn btn-go w-full justify-center py-3 text-sm font-extrabold" style="display:flex;align-items:center;justify-content:center;padding:12px;border-radius:10px;background:#10b981;color:#042f2e;font-weight:800;font-size:14px;">
               <span>Install Now</span>
             </a>
-            <a href="/order?plan=annual" class="mobile-nav-link flex items-center justify-center rounded-xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 w-full py-2.5 px-4 text-xs font-extrabold no-underline transition-colors">
+            <a href="/order?plan=annual" class="mobile-nav-link flex items-center justify-center rounded-xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 w-full py-2.5 px-4 text-xs font-extrabold no-underline transition-colors" style="display:flex;align-items:center;justify-content:center;padding:10px;border-radius:10px;background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;font-weight:800;font-size:12px;">
               <span>Get SWEEPR VPN Pro &mdash; Save 50%</span>
             </a>
-            <div class="grid grid-cols-2 gap-2">
-              <a href="/login" class="mobile-nav-link flex items-center justify-center rounded-xl border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-800 w-full text-xs font-bold py-2.5 px-3 no-underline transition-colors">Customer Login</a>
-              <a href="/support" class="mobile-nav-link flex items-center justify-center rounded-xl border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-800 w-full text-xs font-bold py-2.5 px-3 no-underline transition-colors">Help &amp; Support</a>
+            <div class="grid grid-cols-2 gap-2" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;">
+              <a href="/login" class="mobile-nav-link flex items-center justify-center rounded-xl border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-800 w-full text-xs font-bold py-2.5 px-3 no-underline transition-colors" style="display:flex;align-items:center;justify-content:center;padding:10px;border-radius:10px;background:#f8fafc;border:1px solid #e2e8f0;font-size:12px;font-weight:700;">Customer Login</a>
+              <a href="/support" class="mobile-nav-link flex items-center justify-center rounded-xl border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-800 w-full text-xs font-bold py-2.5 px-3 no-underline transition-colors" style="display:flex;align-items:center;justify-content:center;padding:10px;border-radius:10px;background:#f8fafc;border:1px solid #e2e8f0;font-size:12px;font-weight:700;">Help &amp; Support</a>
             </div>
           </div>
         </div>
       `;
       document.body.appendChild(drawer);
+    }
+
+    if (mobileBtn && drawer && !mobileBtn.dataset.sweeprDrawerBound) {
+      mobileBtn.dataset.sweeprDrawerBound = '1';
+
+      const setDrawerOpen = (isOpen) => {
+        drawer.classList.toggle('hidden', !isOpen);
+        drawer.style.display = isOpen ? 'block' : 'none';
+        if (backdrop) {
+          backdrop.classList.toggle('hidden', !isOpen);
+          backdrop.style.display = isOpen ? 'block' : 'none';
+        }
+        nav.classList.toggle('mobile-menu-open', isOpen);
+        document.body.style.overflow = isOpen ? 'hidden' : '';
+        mobileBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        const openIcon = document.getElementById('mobileNavIconOpen');
+        const closeIcon = document.getElementById('mobileNavIconClose');
+        if (openIcon) {
+          openIcon.classList.toggle('hidden', isOpen);
+          openIcon.style.display = isOpen ? 'none' : '';
+        }
+        if (closeIcon) {
+          closeIcon.classList.toggle('hidden', !isOpen);
+          closeIcon.style.display = isOpen ? '' : 'none';
+        }
+      };
 
       const syncDrawerPosition = () => {
-        const navHeight = Math.max(64, Math.round(nav.getBoundingClientRect().height || 72));
+        const navRect = nav.getBoundingClientRect();
+        const navHeight = Math.max(56, Math.round(navRect.bottom > 0 ? navRect.bottom : navRect.height || 72));
         drawer.style.top = navHeight + 'px';
         drawer.style.maxHeight = `calc(100vh - ${navHeight}px)`;
       };
 
-      const closeMobileDrawer = () => {
-        drawer.classList.add('hidden');
-        backdrop.classList.add('hidden');
-        nav.classList.remove('mobile-menu-open');
-        document.body.style.overflow = '';
-        mobileBtn.setAttribute('aria-expanded', 'false');
-        const openIcon = document.getElementById('mobileNavIconOpen');
-        const closeIcon = document.getElementById('mobileNavIconClose');
-        if (openIcon) openIcon.classList.remove('hidden');
-        if (closeIcon) closeIcon.classList.add('hidden');
-      };
+      const closeMobileDrawer = () => setDrawerOpen(false);
+
+      if (drawer.classList.contains('hidden')) {
+        drawer.style.display = 'none';
+      }
+      if (backdrop && backdrop.classList.contains('hidden')) {
+        backdrop.style.display = 'none';
+      }
 
       mobileBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const isHidden = drawer.classList.contains('hidden');
-        if (isHidden) {
+        const isClosed = drawer.classList.contains('hidden') || drawer.style.display === 'none';
+        if (isClosed) {
           syncDrawerPosition();
-          drawer.classList.remove('hidden');
-          backdrop.classList.remove('hidden');
-          nav.classList.add('mobile-menu-open');
-          document.body.style.overflow = 'hidden';
-          mobileBtn.setAttribute('aria-expanded', 'true');
-          const openIcon = document.getElementById('mobileNavIconOpen');
-          const closeIcon = document.getElementById('mobileNavIconClose');
-          if (openIcon) openIcon.classList.add('hidden');
-          if (closeIcon) closeIcon.classList.remove('hidden');
+          setDrawerOpen(true);
         } else {
           closeMobileDrawer();
         }
       });
 
-      backdrop.addEventListener('click', () => closeMobileDrawer());
+      if (backdrop) {
+        backdrop.addEventListener('click', () => closeMobileDrawer());
+      }
 
-      drawer.querySelectorAll('.mobile-nav-link').forEach((link) => {
+      drawer.querySelectorAll('.mobile-nav-link, a').forEach((link) => {
         link.addEventListener('click', () => closeMobileDrawer());
       });
 
@@ -519,7 +605,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const isLinuxDesktop = !isAndroid && !isOtherMobile && ua.includes('linux');
     const detectedPlatform = isIos ? 'ios' : (isAndroid || isOtherMobile) ? 'android' : isMacDesktop ? 'mac' : isLinuxDesktop ? 'linux' : 'win';
 
-    const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.sweepr.vpn';
+    const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.sweepr.vpn&utm_source=sweeprvpn.com&utm_medium=web_nav&utm_campaign=storefront_cta';
     const platformDirectMap = {
       win: { href: '/download/SWEEPRVPN.exe', filename: 'SWEEPRVPN.exe' },
       windows: { href: '/download/SWEEPRVPN.exe', filename: 'SWEEPRVPN.exe' },
@@ -544,6 +630,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (resolved.external) {
           a.setAttribute('target', '_blank');
           a.setAttribute('rel', 'noopener');
+          a.setAttribute('data-store-cta', 'google_play');
           a.removeAttribute('download');
         } else if (resolved.filename) {
           a.setAttribute('download', resolved.filename);
@@ -571,17 +658,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="flex items-center justify-between">
                   <div class="inline-flex items-center gap-2 font-bold text-sm text-gray-900">
                     <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                    <span>Installing SWEEPR VPN on iOS</span>
+                    <span>iPhone &amp; iPad Setup (.mobileconfig + WireGuard)</span>
                   </div>
                   <button type="button" id="closeMobileInstallSheet" class="text-xs font-bold text-gray-400 hover:text-gray-700 px-2 py-1 cursor-pointer">&#10005;</button>
                 </div>
                 <p class="text-xs text-gray-600 leading-relaxed">
-                  <strong>1.</strong> Tap <strong>Allow</strong> on the download prompt.<br>
-                  <strong>2.</strong> Open <strong>Settings &rarr; Profile Downloaded &rarr; Install</strong>, or launch the iOS app directly below:
+                  Our native iOS App Store app is <strong>pre-launch (not yet live)</strong>.<br>
+                  <strong>1.</strong> Tap <strong>Allow</strong> to save the Safari Web App + Encrypted DNS <code>.mobileconfig</code> profile, then open <strong>Settings &rarr; Profile Downloaded &rarr; Install</strong>.<br>
+                  <strong>2.</strong> Or grab an official WireGuard iOS <code>.conf</code> from your Customer Portal:
                 </p>
                 <div class="grid grid-cols-1 gap-2 pt-1">
-                  <a href="/ios-app" class="btn btn-go w-full justify-center py-2.5 text-xs font-bold">Open SWEEPR VPN App Now</a>
-                  <a href="/download/SWEEPRVPN.mobileconfig" class="flex items-center justify-center rounded-xl border border-gray-200 bg-gray-50 text-gray-800 w-full py-2 text-xs font-semibold no-underline">Re-download iOS Installer Profile</a>
+                  <a href="/dashboard" class="btn btn-go w-full justify-center py-2.5 text-xs font-bold">Get Official WireGuard iOS .conf</a>
+                  <a href="/download/SWEEPRVPN.mobileconfig" data-store-cta="ios_mobileconfig" class="flex items-center justify-center rounded-xl border border-gray-200 bg-gray-50 text-gray-800 w-full py-2 text-xs font-semibold no-underline">Re-download Safari Web App + DNS Profile</a>
                 </div>
               </div>`
             : `
@@ -597,7 +685,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   Install from the official Google Play Store for automatic updates, or sideload the verified direct APK below:
                 </p>
                 <div class="grid grid-cols-1 gap-2 pt-1">
-                  <a href="https://play.google.com/store/apps/details?id=com.sweepr.vpn" target="_blank" rel="noopener" class="btn btn-go w-full justify-center py-2.5 text-xs font-bold">Get it on Google Play &rarr;</a>
+                  <a href="${PLAY_STORE_URL}" target="_blank" rel="noopener" data-store-cta="google_play" class="btn btn-go w-full justify-center py-2.5 text-xs font-bold">Get it on Google Play &rarr;</a>
                   <a href="/download/SWEEPRVPN.apk" download="SWEEPRVPN.apk" class="flex items-center justify-center rounded-xl border border-emerald-300 bg-emerald-50 text-emerald-900 w-full py-2 text-xs font-bold no-underline">Direct APK Fallback (SWEEPRVPN.apk)</a>
                 </div>
               </div>`;
@@ -624,6 +712,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const curHref = a.getAttribute('href') || '';
           if (curHref.includes('picker') || /SWEEPRVPN\.(exe|dmg|apk)/i.test(curHref)) return;
           a.setAttribute('href', targetHref);
+          a.setAttribute('data-store-cta', 'ios_mobileconfig');
           a.removeAttribute('download');
           attachSheetTrigger(a);
         });
@@ -638,6 +727,7 @@ document.addEventListener('DOMContentLoaded', () => {
             a.setAttribute('href', PLAY_STORE_URL);
             a.setAttribute('target', '_blank');
             a.setAttribute('rel', 'noopener');
+            a.setAttribute('data-store-cta', 'google_play');
             a.removeAttribute('download');
             attachSheetTrigger(a);
           });

@@ -882,12 +882,12 @@ export const SEED_TAXONOMY = [
     id: 'isp_talktalk',
     pillar: 'D_ISP_NETWORK',
     cluster: 'solutions',
-    entitySlug: 'talktalk-p2p-port-forwarding',
+    entitySlug: 'talktalk-fibre-wireguard-cgnat',
     entityTokens: ['talktalk', 'as13285'],
     stems: ['talktalk throttling evening', 'talktalk port forwarding vpn', 'talktalk wifi calling dropping'],
     locales: ['en-GB'],
     isTierSGscWinner: true,
-    canonicalTarget: '/solutions/talktalk-p2p-port-forwarding'
+    canonicalTarget: '/solutions/talktalk-fibre-wireguard-cgnat'
   },
   {
     id: 'isp_eduroam',
@@ -2142,11 +2142,11 @@ export const CONSOLIDATED_CANNIBAL_SLUGS_MAP = {
   '/solutions/eduroam-campus-wifi-isp-throttling': '/solutions/eduroam-campus-wifi-gaming-packet-loss',
   '/solutions/virgin-media-p2p-port-forwarding': '/solutions/virgin-media-remote-dev-ssh',
   '/solutions/t-mobile-5g-home-internet-isp-throttling': '/solutions/t-mobile-5g-home-internet-remote-dev-ssh',
-  '/solutions/community-fibre-london-isp-throttling': '/solutions/community-fibre-london-p2p-port-forwarding'
+  '/solutions/community-fibre-london-isp-throttling': '/solutions/community-fibre-london-wireguard-cgnat'
 };
 
 export const GSC_PROTECTED_TOP_URLS = new Set([
-  '/solutions/talktalk-p2p-port-forwarding',
+  '/solutions/talktalk-fibre-wireguard-cgnat',
   '/setup/gl-inet-travel-router',
   '/guides/stop-samsung-smart-tv-acr-tracking',
   '/tools/leak-test',
@@ -2157,7 +2157,7 @@ export const GSC_PROTECTED_TOP_URLS = new Set([
   '/solutions/gigaclear-rural-fibre-gaming-packet-loss',
   '/setup/synology-nas-docker-vpn',
   '/guides/stop-lg-smart-tv-acr-spying',
-  '/solutions/hotel-captive-portal-wifi-p2p-port-forwarding',
+  '/solutions/hotel-captive-portal-wifi-wireguard',
   '/tools/isp-throttling-test',
   '/solutions/rogers-ignite-canada-isp-throttling',
   '/setup/steam-deck-vpn',
@@ -2169,7 +2169,7 @@ export const GSC_PROTECTED_TOP_URLS = new Set([
   '/guides/stop-roku-vizio-firetv-spying',
   '/solutions/virgin-media-remote-dev-ssh',
   '/solutions/t-mobile-5g-home-internet-remote-dev-ssh',
-  '/solutions/community-fibre-london-p2p-port-forwarding'
+  '/solutions/community-fibre-london-wireguard-cgnat'
 ]);
 
 const STOPWORDS = new Set([
@@ -2694,13 +2694,12 @@ function stripDeprecatedSchemaAndRefreshTechArticle(html) {
     const types = Array.isArray(node['@type']) ? node['@type'] : [node['@type']];
     if (!types.includes('TechArticle')) return false;
     let changed = false;
-    if (!node.author || node.author['@type'] !== 'Person' || node.author.name !== 'Benjamin Cook') {
+    if (!node.author || node.author.name !== 'SWEEPR VPN Engineering') {
       node.author = {
-        '@type': 'Person',
-        name: 'Benjamin Cook',
-        jobTitle: 'Principal Network Architect',
-        url: 'https://sweeprvpn.com/warrant-canary',
-        worksFor: { '@type': 'Organization', name: 'SWEEPR VPN Inc.' }
+        '@type': 'Organization',
+        name: 'SWEEPR VPN Engineering',
+        description: 'Independent UK Developer (SWEEPR VPN (UK Sole Trader))',
+        url: 'https://sweeprvpn.com/warrant-canary'
       };
       node.dateModified = todayStr;
       changed = true;
@@ -2760,7 +2759,7 @@ function stripDeprecatedSchemaAndRefreshTechArticle(html) {
 
 /**
  * Applies an ENRICH_EXISTING brief idempotently to an existing canonical HTML file on disk.
- * Strips deprecated FAQPage/HowTo JSON-LD if present, ensures TechArticle author (Benjamin Cook),
+ * Strips deprecated FAQPage/HowTo JSON-LD if present, ensures TechArticle author (SWEEPR VPN Engineering),
  * and appends visible FAQ copy rather than deprecated FAQPage JSON-LD.
  */
 export function applyEnrichmentToHtmlFile(absPath, enrichmentBrief, previousFaqQuestion = null) {
@@ -3538,7 +3537,7 @@ export function syncSeoStrategyPerformanceLedger(opportunitiesPayload, dryRun = 
     },
     {
       query: 'talktalk evening throttling port forwarding vpn',
-      targetUrlPath: '/solutions/talktalk-p2p-port-forwarding',
+      targetUrlPath: '/solutions/talktalk-fibre-wireguard-cgnat',
       action: 'ENRICH_EXISTING',
       competitorPlaybook: 'OFCOM_FCC_ISP_REFUND_AND_THROTTLING',
       forecast: {

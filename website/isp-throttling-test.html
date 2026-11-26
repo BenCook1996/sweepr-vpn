@@ -4,7 +4,7 @@
   <meta name="color-scheme" content="light">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Free ISP Speed &amp; Throttling Test (10s Check) | SWEEPR VPN</title>
+  <title>Free ISP Throttling Test (HTTP RTT &amp; Jitter Check) | SWEEPR VPN</title>
   <meta name="description" content="Run a free 10-second ISP throttling test in your browser. Detect evening speed shaping on Virgin Media, BT, Sky, TalkTalk, Comcast, or Rogers instantly." />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="https://sweeprvpn.com/tools/isp-throttling-test">
@@ -17,7 +17,7 @@
   <meta property="og:site_name" content="SWEEPR VPN">
   <meta property="og:locale" content="en_GB">
   <meta property="og:url" content="https://sweeprvpn.com/tools/isp-throttling-test">
-  <meta property="og:title" content="Free ISP Speed &amp; Throttling Test (10s Check) | SWEEPR VPN" />
+  <meta property="og:title" content="Free ISP Throttling Test (HTTP RTT &amp; Jitter Check) | SWEEPR VPN" />
   <meta property="og:description" content="Run a free 10-second ISP throttling test in your browser. Detect evening speed shaping on Virgin Media, BT, Sky, TalkTalk, Comcast, or Rogers instantly." />
   <meta property="og:image" content="https://sweeprvpn.com/og-image.png">
   <meta property="og:image:alt" content="SWEEPR VPN Free ISP Speed Slowdown Checker">
@@ -25,7 +25,7 @@
   <!-- Twitter Meta -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://sweeprvpn.com/tools/isp-throttling-test">
-  <meta name="twitter:title" content="Free ISP Speed &amp; Throttling Test (10s Check) | SWEEPR VPN" />
+  <meta name="twitter:title" content="Free ISP Throttling Test (HTTP RTT &amp; Jitter Check) | SWEEPR VPN" />
   <meta name="twitter:description" content="Run a free 10-second ISP throttling test in your browser. Detect evening speed shaping on Virgin Media, BT, Sky, TalkTalk, Comcast, or Rogers instantly." />
   <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png">
 
@@ -43,7 +43,7 @@
   <link rel="manifest" href="/manifest.webmanifest" />
   <link rel="stylesheet" href="/style.css?v=ed321090">
   <script src="/pricing-config.js?v=7b348060" defer></script>
-  <script src="/nav.js?v=02bccc22" defer></script>
+  <script src="/nav.js?v=f9d994cf" defer></script>
   <!-- Google tag (gtag.js) - Sweepr VPN -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D28EEMNXX"></script>
   <script>
@@ -162,8 +162,54 @@
         <span>Get SWEEPR VPN</span>
         <svg width="16" height="16" class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
       </a>
+      <button type="button" id="mobileNavBtn" aria-label="Toggle navigation menu" aria-expanded="false" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl border border-gray-200 bg-white text-gray-800 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 transition-colors cursor-pointer shrink-0 shadow-2xs">
+        <svg id="mobileNavIconOpen" width="20" height="20" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <svg id="mobileNavIconClose" width="20" height="20" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
     </div>
   </nav>
+  <div id="mobileNavBackdrop" class="hidden md:hidden fixed inset-0 bg-slate-900/45 backdrop-blur-xs" style="z-index: 9998; display: none;"></div>
+  <div id="mobileNavDrawer" class="hidden md:hidden fixed left-0 right-0 top-[72px] bg-white border-b border-gray-200 shadow-2xl px-4 py-4 max-h-[calc(100vh-72px)] overflow-y-auto" style="background-color: #ffffff; z-index: 9999; display: none;">
+    <div class="max-w-lg mx-auto space-y-3 text-left" style="background: var(--surface, #ffffff);">
+      <div class="grid grid-cols-2 gap-2">
+        <a href="/#features" class="mobile-nav-link flex items-center gap-2.5 p-3 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 text-gray-900 font-bold text-sm no-underline">
+          <span>Features</span>
+        </a>
+        <a href="/pricing" class="mobile-nav-link flex items-center gap-2.5 p-3 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 text-gray-900 font-bold text-sm no-underline">
+          <span>Pricing</span>
+        </a>
+      </div>
+      <div class="pt-1">
+        <div class="text-[11px] font-extrabold uppercase tracking-wider text-gray-400 px-1 mb-1.5">Free Privacy &amp; Speed Tools</div>
+        <div class="space-y-1.5">
+          <a href="/tools/leak-test" class="mobile-nav-link flex items-center justify-between p-3 rounded-xl bg-white hover:bg-emerald-50 border border-gray-200 text-gray-900 no-underline">
+            <div><div class="text-sm font-bold">Free IP, DNS &amp; WebRTC Leak Test</div><div class="text-xs text-gray-500">Check if your real IP is visible in 5 seconds</div></div>
+            <span class="text-[10px] font-extrabold uppercase text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full shrink-0">Free</span>
+          </a>
+          <a href="/tools/isp-throttling-test" class="mobile-nav-link flex items-center justify-between p-3 rounded-xl bg-white hover:bg-emerald-50 border border-gray-200 text-gray-900 no-underline">
+            <div><div class="text-sm font-bold">Free ISP Speed Slowdown Checker</div><div class="text-xs text-gray-500">Test if your provider throttles 4K streaming</div></div>
+            <span class="text-[10px] font-extrabold uppercase text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full shrink-0">Free</span>
+          </a>
+        </div>
+      </div>
+      <div class="pt-1">
+        <div class="text-[11px] font-extrabold uppercase tracking-wider text-gray-400 px-1 mb-1.5">Comparisons &amp; Guides</div>
+        <div class="grid grid-cols-2 gap-1.5">
+          <a href="/solutions" class="mobile-nav-link flex items-center justify-between px-3 py-2 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 text-xs font-bold text-gray-800 no-underline"><span>ISP Solutions</span><span class="text-emerald-600">&rarr;</span></a>
+          <a href="/setup" class="mobile-nav-link flex items-center justify-between px-3 py-2 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 text-xs font-bold text-gray-800 no-underline"><span>Router Setups</span><span class="text-emerald-600">&rarr;</span></a>
+          <a href="/guides" class="mobile-nav-link flex items-center justify-between px-3 py-2 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 text-xs font-bold text-gray-800 no-underline"><span>Privacy Guides</span><span class="text-emerald-600">&rarr;</span></a>
+          <a href="/vs" class="mobile-nav-link flex items-center justify-between px-3 py-2 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 text-xs font-bold text-gray-800 no-underline"><span>Comparisons</span><span class="text-emerald-600">&rarr;</span></a>
+        </div>
+      </div>
+      <div class="pt-2 border-t border-gray-100 flex flex-col gap-2">
+        <a href="/download" class="mobile-nav-link btn btn-go w-full justify-center py-3 text-sm font-extrabold"><span>Install Now</span></a>
+        <div class="grid grid-cols-2 gap-2">
+          <a rel="nofollow" href="/login" class="mobile-nav-link flex items-center justify-center rounded-xl border border-gray-200 bg-gray-50 text-gray-800 w-full text-xs font-bold py-2.5 px-3 no-underline">Customer Login</a>
+          <a href="/support" class="mobile-nav-link flex items-center justify-center rounded-xl border border-gray-200 bg-gray-50 text-gray-800 w-full text-xs font-bold py-2.5 px-3 no-underline">Help &amp; Support</a>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <main class="flex-1 pt-28 pb-16 px-4 sm:px-6 max-w-5xl mx-auto w-full">
     <div class="rack-telemetry-bar mb-6">
@@ -191,7 +237,7 @@
 
     <div id="direct-answer" class="max-w-3xl mx-auto mb-8 p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-gray-800 text-left">
       <div class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 mb-1.5">Direct Answer</div>
-      <p class="text-sm sm:text-base leading-relaxed">This browser probe measures 5-sample HTTP round-trip latency (RTT) and jitter stability to SWEEPR's endpoint—pair it with your ISP speed test below to document peak-hour slowdowns on Virgin Media, BT, Sky, TalkTalk, Comcast, or Rogers. Wrapping traffic inside SWEEPR VPN's 10 Gbps ChaCha20 WireGuard tunnel encrypts traffic payloads from provider inspection.</p>
+      <p class="text-sm sm:text-base leading-relaxed">Run this browser ISP throttling test to measure live 5-sample HTTP RTT latency and jitter against SWEEPR's UK endpoint without any download required. Pair it with your ISP speed test below to document evening slowdowns on Virgin Media, BT, Sky, TalkTalk, Comcast, or Rogers, then encrypt traffic with 10 Gbps WireGuard.</p>
     </div>
 
     <!-- Interactive Throttling & Latency Probe Card -->
@@ -234,7 +280,7 @@
         <div class="bg-white/90 border border-gray-100 rounded-2xl p-4">
           <div class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1">1-Click Speed Boost</div>
           <div class="text-xl font-bold text-emerald-600">Available</div>
-          <div class="text-xs font-semibold text-emerald-700 mt-1">Bypass provider slowdowns</div>
+          <div class="text-xs font-semibold text-emerald-700 mt-1">Stop ISP traffic shaping</div>
         </div>
       </div>
 
@@ -384,7 +430,7 @@
               <td class="py-3.5 pr-4 font-bold text-gray-900">Comcast Xfinity / AT&amp;T / Verizon (US)</td>
               <td class="py-3.5 px-4">19:00 – 23:00 Local</td>
               <td class="py-3.5 px-4">Peering slowdowns on streaming &amp; large downloads</td>
-              <td class="py-3.5 pl-4 font-semibold text-emerald-700">Bypasses content-based traffic shaping</td>
+              <td class="py-3.5 pl-4 font-semibold text-emerald-700">Encrypts streams against DPI traffic shaping</td>
             </tr>
             <tr>
               <td class="py-3.5 pr-4 font-bold text-gray-900">P2P / BitTorrent &amp; Large Game Patches</td>
@@ -410,7 +456,7 @@
         </div>
         <div class="bg-white/90 border border-gray-100 rounded-xl p-4">
           <h3 class="font-bold text-gray-900 text-sm mb-1">2. CGNAT &amp; UDP Queue Starvation</h3>
-          <p>Broadband and 5G providers using Carrier-Grade NAT (<code>100.64.x.x</code>) deprioritize high-packet-rate UDP gaming and WebRTC calls. Tunneling over SWEEPR VPN's <code>4ms UK-LON-01</code> or <code>8ms NL-AMS-01</code> nodes bypasses retail CGNAT queues.</p>
+          <p>Broadband and 5G providers using Carrier-Grade NAT (<code>100.64.x.x</code>) deprioritize high-packet-rate UDP gaming and WebRTC calls. Tunneling over SWEEPR VPN's <code>4ms UK-LON-01</code> or <code>8ms NL-AMS-01</code> nodes avoids retail CGNAT queue starvation.</p>
         </div>
         <div class="bg-white/90 border border-gray-100 rounded-xl p-4">
           <h3 class="font-bold text-gray-900 text-sm mb-1">3. Calibrated MTU (1420 / 1412 / 1380)</h3>
@@ -440,7 +486,7 @@
       <h2 class="text-2xl font-bold text-gray-900">ISP Throttling &amp; Speed Shaping FAQ</h2>
       <div class="grid md:grid-cols-2 gap-4 text-sm text-gray-700">
         <div class="p-4 rounded-xl bg-gray-50 border border-gray-200"><h3 class="font-bold text-gray-900 mb-1">How do ISPs detect and throttle 4K streams?</h3><p>Broadband providers inspect unencrypted DNS lookups, TLS SNI hostnames, and high-bitrate UDP signatures during 18:00–23:00 peak hours to deprioritize video, P2P, and gaming flows.</p></div>
-        <div class="p-4 rounded-xl bg-gray-50 border border-gray-200"><h3 class="font-bold text-gray-900 mb-1">Does WireGuard really bypass bandwidth shaping?</h3><p>When all DNS queries and payloads travel inside an encrypted WireGuard interface with <code>fq_codel</code> pacing and Stealth UDP 443 fallback, your ISP sees only opaque UDP packets.</p></div>
+        <div class="p-4 rounded-xl bg-gray-50 border border-gray-200"><h3 class="font-bold text-gray-900 mb-1">Does WireGuard stop ISP bandwidth shaping?</h3><p>When all DNS queries and payloads travel inside an encrypted WireGuard interface with <code>fq_codel</code> pacing and Stealth UDP 443 fallback, your ISP sees only opaque UDP packets.</p></div>
         <div class="p-4 rounded-xl bg-gray-50 border border-gray-200"><h3 class="font-bold text-gray-900 mb-1">How does this ISP throttling test compare unencrypted vs VPN speeds?</h3><p>Compare your ping and throughput first on raw broadband and again immediately after connecting to SWEEPR VPN — a jitter drop proves middlebox DPI prioritization was active.</p></div>
         <div class="p-4 rounded-xl bg-gray-50 border border-gray-200"><h3 class="font-bold text-gray-900 mb-1">Which MTU stops bufferbloat during uploads?</h3><p>Set <code>MTU = 1412</code> on PPPoE fibre (BT/Sky/Plusnet), <code>1420</code> on DOCSIS/DHCP cable (Virgin Media), or <code>1380</code> on 5G/Starlink CGNAT.</p></div>
       </div>
@@ -474,15 +520,15 @@
         </a>
         <a href="/solutions/virgin-media-remote-dev-ssh" class="p-3 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 hover:border-emerald-300 no-underline text-gray-900">
           <div class="font-bold">Virgin Media Hub Shaping &amp; SSH</div>
-          <div class="text-gray-500 mt-0.5">Bypass DOCSIS 3.1 PUMA latency</div>
+          <div class="text-gray-500 mt-0.5">Smooth DOCSIS 3.1 PUMA latency</div>
         </a>
         <a href="/solutions/bt-broadband-gaming-packet-loss" class="p-3 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 hover:border-emerald-300 no-underline text-gray-900">
           <div class="font-bold">BT Halo / Smart Hub Gaming Ping</div>
           <div class="text-gray-500 mt-0.5">1412 MTU PPPoE route optimization</div>
         </a>
-        <a href="/solutions/talktalk-p2p-port-forwarding" class="p-3 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 hover:border-emerald-300 no-underline text-gray-900">
-          <div class="font-bold">TalkTalk P2P &amp; Throttling Fix</div>
-          <div class="text-gray-500 mt-0.5">AS13285 4K &amp; port-block bypass</div>
+        <a href="/solutions/talktalk-fibre-wireguard-cgnat" class="p-3 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 hover:border-emerald-300 no-underline text-gray-900">
+          <div class="font-bold">TalkTalk Fibre WireGuard &amp; CGNAT</div>
+          <div class="text-gray-500 mt-0.5">AS13285 evening throttling &amp; CGNAT fix</div>
         </a>
       </div>
       <div class="mt-3 pt-3 border-t border-gray-100 flex flex-wrap gap-3 text-xs font-bold">
@@ -584,14 +630,14 @@
           </h4>
           <ul class="space-y-2">
             <li><a href="/solutions/eduroam-campus-wifi-gaming-packet-loss" class="hover:text-emerald-600 transition-colors">Eduroam Gaming Packet Loss Fix</a></li>
-            <li><a href="/solutions/talktalk-p2p-port-forwarding" class="hover:text-emerald-600 transition-colors">TalkTalk P2P Port Forwarding</a></li>
+            <li><a href="/solutions/talktalk-fibre-wireguard-cgnat" class="hover:text-emerald-600 transition-colors">TalkTalk Fibre WireGuard &amp; CGNAT</a></li>
             <li><a href="/alternatives/totalvpn" class="hover:text-emerald-600 transition-colors font-medium text-gray-700">TotalVPN Alternatives (2026)</a></li>
           </ul>
         </div>
       </div>
     </nav>
 
-    <p>&copy; 2026 SWEEPR VPN Inc. All rights reserved.</p>
+    <p>&copy; 2026 SWEEPR VPN (UK Sole Trader). All rights reserved.</p>
   </footer>
 
   <script>

@@ -43,7 +43,7 @@ const COMMON_SECURITY_HEADERS = {
   'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
   'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
   'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
-  'Content-Security-Policy': "frame-ancestors 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://js.stripe.com https://pay.google.com https://www.googletagmanager.com https://www.google-analytics.com https://static.cloudflareinsights.com https://challenges.cloudflare.com",
+  'Content-Security-Policy': "frame-ancestors 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' https://js.stripe.com https://pay.google.com https://www.googletagmanager.com https://www.google-analytics.com https://challenges.cloudflare.com",
   'X-Sweepr-Api-Version': '2026-10'
 };
 
@@ -898,7 +898,7 @@ async function runLifecycleAutomationSweeps({ dryRun = false } = {}) {
               `• Resume Your Selected Plan (${pricing.annualFormatted}/yr Price-Lock — Save 50%): ${resumeAnnualUrl}\n` +
               `• Or test-drive SWEEPR VPN Pro for 30 days for just ${pricing.introMonthlyFormatted}: ${resumeTrialUrl}\n\n` +
               `Every plan covers up to 3 devices (Windows, macOS, iOS, Android & WireGuard routers) and is backed by our 30-day 100% money-back guarantee.\n\n` +
-              `— SWEEPR VPN Team\n` +
+              `— SWEEPR VPN Support (UK Sole Trader)\n` +
               `Unsubscribe from checkout reminders: ${unsubUrl}`
           }).catch(() => {});
         }
@@ -928,7 +928,7 @@ async function runLifecycleAutomationSweeps({ dryRun = false } = {}) {
             `• License Key: ${acc.licenseKey}\n` +
             `• Instant Mobile QR & Apple .mobileconfig Portal: https://sweeprvpn.com/dashboard\n` +
             `• GL.iNet / UniFi / Synology .conf Generator: https://sweeprvpn.com/tools/wireguard-config-generator\n\n` +
-            `Reply directly to this email if you'd like help setting up your router or device.\n— SWEEPR VPN Team`
+            `Reply directly to this email if you'd like help setting up your router or device.\n— SWEEPR VPN Support (UK Sole Trader)`
         }).catch(() => {});
       }
     }
@@ -946,7 +946,7 @@ async function runLifecycleAutomationSweeps({ dryRun = false } = {}) {
             `Your SWEEPR VPN Pro subscription includes 3 simultaneous device slots, but 0 devices are currently linked.\n\n` +
             `Click below to open your Customer Portal and scan a 1-time QR code with your phone or download the Windows/macOS app:\n` +
             `https://sweeprvpn.com/dashboard\n\n` +
-            `Your License Key: ${acc.licenseKey}\n— SWEEPR VPN Team`
+            `Your License Key: ${acc.licenseKey}\n— SWEEPR VPN Support (UK Sole Trader)`
         }).catch(() => {});
       }
     }
@@ -964,7 +964,7 @@ async function runLifecycleAutomationSweeps({ dryRun = false } = {}) {
             `Your monthly SWEEPR VPN plan is scheduled to renew in ~9 days at the standard flexible rate (${pricing.monthlyFormatted}/mo).\n\n` +
             `Want to cut your bill by 50% and avoid renewal hikes forever? You can switch to our Annual Price-Lock Plan (${pricing.annualFormatted}/yr — ${pricing.annualMonthlyEqFormatted}/mo equivalent) in 1 click inside your Customer Portal, and we'll include the SWEEPR Wi-Fi Radar & Smart-TV ACR Shield (${pricing.wifiRadarAnnualFormatted}/yr value) FREE for your first year:\n\n` +
             `Upgrade or manage your plan in 1 click: https://sweeprvpn.com/dashboard?upgrade=annual\n\n` +
-            `— SWEEPR VPN Team`
+            `— SWEEPR VPN Support (UK Sole Trader)`
         }).catch(() => {});
       }
     }
@@ -2145,7 +2145,7 @@ async function sendWelcomeLicenseEmail(acc) {
   if (!acc.licenseKey) acc.licenseKey = licenseKey;
   acc.activation_code = null;
   const subject = 'Welcome to SWEEPR VPN Pro — Your License Key & Setup Guide';
-  const textBody = `Hi ${acc.name || 'there'},\n\nThank you for subscribing to SWEEPR VPN Pro! Your subscription is active for up to 3 devices (any combination of desktop or mobile).\n\nFull Product License Key (Paste in App): ${licenseKey}\nRegistered Email: ${email}\n\n1. Open SWEEPR VPN (or download at https://sweeprvpn.com/download?key=${encodeURIComponent(licenseKey)}&autoconf=1)\n2. Paste ${licenseKey} into the license key box to unlock all 8 global locations and Smart-TV shields.\n\nBest regards,\nThe SWEEPR VPN Team`;
+  const textBody = `Hi ${acc.name || 'there'},\n\nThank you for subscribing to SWEEPR VPN Pro! Your subscription is active for up to 3 devices (any combination of desktop or mobile).\n\nFull Product License Key (Paste in App): ${licenseKey}\nRegistered Email: ${email}\n\n1. Open SWEEPR VPN (or download at https://sweeprvpn.com/download?key=${encodeURIComponent(licenseKey)}&autoconf=1)\n2. Paste ${licenseKey} into the license key box to unlock all 8 global locations and Smart-TV shields.\n\nBest regards,\nSWEEPR VPN Support (UK Sole Trader)`;
   const htmlBody = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:520px;margin:0 auto;padding:28px 24px;color:#0f172a;background:#ffffff;border:1px solid #e2e8f0;border-radius:16px">
   <h2 style="margin:0 0 8px;font-size:21px;font-weight:800;color:#0f172a">Welcome to SWEEPR VPN Pro!</h2>
   <p style="margin:0 0 18px;font-size:14px;color:#475569">Hi ${escapeHtml(acc.name || 'there')}, your subscription is active across up to 3 devices (any combination of desktop or mobile). Here is your product license key:</p>
@@ -2631,7 +2631,10 @@ const CANONICAL_REDIRECTS = {
   // Redirect 0-impression sibling slugs to GSC Page-1 winning canonicals
   '/solutions/virgin-media-p2p-port-forwarding': '/solutions/virgin-media-remote-dev-ssh',
   '/solutions/t-mobile-5g-home-internet-isp-throttling': '/solutions/t-mobile-5g-home-internet-remote-dev-ssh',
-  '/solutions/community-fibre-london-isp-throttling': '/solutions/community-fibre-london-p2p-port-forwarding'
+  '/solutions/community-fibre-london-isp-throttling': '/solutions/community-fibre-london-wireguard-cgnat',
+  '/solutions/talktalk-p2p-port-forwarding': '/solutions/talktalk-fibre-wireguard-cgnat',
+  '/solutions/community-fibre-london-p2p-port-forwarding': '/solutions/community-fibre-london-wireguard-cgnat',
+  '/solutions/hotel-captive-portal-wifi-p2p-port-forwarding': '/solutions/hotel-captive-portal-wifi-wireguard'
 };
 
 // Retired legacy antivirus comparison pages consolidated to /vs (Requirement R1 / Feature F3)
@@ -2662,11 +2665,11 @@ export const AUTHORITATIVE_SOLUTIONS_PILLARS = new Set([
   "brsk-better-net-uk-voip-teams-zoom-jitter",
   "bt-broadband-gaming-packet-loss",
   "comcast-xfinity-broadband-isp-throttling",
-  "community-fibre-london-p2p-port-forwarding",
+  "community-fibre-london-wireguard-cgnat",
   "eduroam-campus-wifi-gaming-packet-loss",
   "ee-5g-mobile-hotspot-voip-teams-zoom-jitter",
   "gigaclear-rural-fibre-gaming-packet-loss",
-  "hotel-captive-portal-wifi-p2p-port-forwarding",
+  "hotel-captive-portal-wifi-wireguard",
   "hyperoptic-broadband-isp-throttling",
   "national-rail-train-wifi-remote-dev-ssh",
   "nhs-guest-wifi-voip-teams-zoom-jitter",
@@ -2675,7 +2678,7 @@ export const AUTHORITATIVE_SOLUTIONS_PILLARS = new Set([
   "sky-broadband-gaming-packet-loss",
   "starlink-satellite-uk-isp-throttling",
   "t-mobile-5g-home-internet-remote-dev-ssh",
-  "talktalk-p2p-port-forwarding",
+  "talktalk-fibre-wireguard-cgnat",
   "telstra-nbn-australia-gaming-packet-loss",
   "three-5g-home-broadband-uhd-streaming-buffering",
   "toob-full-fibre-uk-voip-teams-zoom-jitter",
@@ -2739,12 +2742,13 @@ export const SPECIFIC_SOLUTIONS_CANONICAL_MAP = {
   "eduroam-campus-wifi-remote-dev-ssh": "/solutions/eduroam-campus-wifi-gaming-packet-loss",
   "eduroam-campus-wifi-uhd-streaming-buffering": "/solutions/eduroam-campus-wifi-gaming-packet-loss",
   "eduroam-campus-wifi-isp-throttling": "/solutions/eduroam-campus-wifi-gaming-packet-loss",
-  "talktalk-gaming-packet-loss": "/solutions/talktalk-p2p-port-forwarding",
-  "talktalk-remote-dev-ssh": "/solutions/talktalk-p2p-port-forwarding",
-  "talktalk-uhd-streaming-buffering": "/solutions/talktalk-p2p-port-forwarding",
-  "talktalk-isp-throttling": "/solutions/talktalk-p2p-port-forwarding",
-  "talktalk-fibre-uk-uhd-streaming-buffering": "/solutions/talktalk-p2p-port-forwarding",
-  "talktalk-fibre-uk-wifi-arp-spoofing-protection": "/solutions/talktalk-p2p-port-forwarding",
+  "talktalk-p2p-port-forwarding": "/solutions/talktalk-fibre-wireguard-cgnat",
+  "talktalk-gaming-packet-loss": "/solutions/talktalk-fibre-wireguard-cgnat",
+  "talktalk-remote-dev-ssh": "/solutions/talktalk-fibre-wireguard-cgnat",
+  "talktalk-uhd-streaming-buffering": "/solutions/talktalk-fibre-wireguard-cgnat",
+  "talktalk-isp-throttling": "/solutions/talktalk-fibre-wireguard-cgnat",
+  "talktalk-fibre-uk-uhd-streaming-buffering": "/solutions/talktalk-fibre-wireguard-cgnat",
+  "talktalk-fibre-uk-wifi-arp-spoofing-protection": "/solutions/talktalk-fibre-wireguard-cgnat",
   "virgin-media-ireland-isp-throttling": "/solutions",
   "virgin-media-p2p-port-forwarding": "/solutions/virgin-media-remote-dev-ssh",
   "virgin-media-uhd-streaming-buffering": "/solutions/virgin-media-remote-dev-ssh",
@@ -2754,7 +2758,8 @@ export const SPECIFIC_SOLUTIONS_CANONICAL_MAP = {
   "virgin-media-isp-throttling": "/solutions/virgin-media-remote-dev-ssh",
   "t-mobile-5g-home-internet-isp-throttling": "/solutions/t-mobile-5g-home-internet-remote-dev-ssh",
   "t-mobile-5g-home-discord-voice-drop": "/solutions/t-mobile-5g-home-internet-remote-dev-ssh",
-  "community-fibre-london-isp-throttling": "/solutions/community-fibre-london-p2p-port-forwarding",
+  "community-fibre-london-p2p-port-forwarding": "/solutions/community-fibre-london-wireguard-cgnat",
+  "community-fibre-london-isp-throttling": "/solutions/community-fibre-london-wireguard-cgnat",
   "bt-broadband-p2p-port-forwarding": "/solutions/bt-broadband-gaming-packet-loss",
   "bt-broadband-remote-dev-ssh": "/solutions/bt-broadband-gaming-packet-loss",
   "bt-broadband-uhd-streaming-buffering": "/solutions/bt-broadband-gaming-packet-loss",
@@ -2788,7 +2793,8 @@ export const SPECIFIC_SOLUTIONS_CANONICAL_MAP = {
   "o2-uk-mobile-tethering-isp-throttling": "/solutions/o2-uk-mobile-tethering-uhd-streaming-buffering",
   "nhs-guest-wifi-isp-throttling": "/solutions/nhs-guest-wifi-voip-teams-zoom-jitter",
   "nhs-guest-wifi-uhd-streaming-buffering": "/solutions/nhs-guest-wifi-voip-teams-zoom-jitter",
-  "hotel-captive-portal-wifi-isp-throttling": "/solutions/hotel-captive-portal-wifi-p2p-port-forwarding",
+  "hotel-captive-portal-wifi-p2p-port-forwarding": "/solutions/hotel-captive-portal-wifi-wireguard",
+  "hotel-captive-portal-wifi-isp-throttling": "/solutions/hotel-captive-portal-wifi-wireguard",
   "national-rail-train-wifi-isp-throttling": "/solutions/national-rail-train-wifi-remote-dev-ssh",
   "gigaclear-rural-fibre-isp-throttling": "/solutions/gigaclear-rural-fibre-gaming-packet-loss",
   "gigaclear-rural-fibre-voip-teams-zoom-jitter": "/solutions/gigaclear-rural-fibre-gaming-packet-loss",
@@ -2873,7 +2879,7 @@ const SORTED_SOLUTIONS_PREFIXES = [
   { prefix: 'virgin-media-ireland', target: '/solutions' },
   { prefix: 'virgin-media', target: '/solutions/virgin-media-remote-dev-ssh' },
   { prefix: 'sky-broadband', target: '/solutions/sky-broadband-gaming-packet-loss' },
-  { prefix: 'talktalk', target: '/solutions/talktalk-p2p-port-forwarding' },
+  { prefix: 'talktalk', target: '/solutions/talktalk-fibre-wireguard-cgnat' },
   { prefix: 'vodafone-ireland', target: '/solutions' },
   { prefix: 'vodafone-uk', target: '/solutions/vodafone-uk-gaming-packet-loss' },
   { prefix: 'eduroam-campus-wifi', target: '/solutions/eduroam-campus-wifi-gaming-packet-loss' },
@@ -2887,17 +2893,33 @@ const SORTED_SOLUTIONS_PREFIXES = [
   { prefix: 'three-5g-home-broadband', target: '/solutions/three-5g-home-broadband-uhd-streaming-buffering' },
   { prefix: 'o2-uk-mobile-tethering', target: '/solutions/o2-uk-mobile-tethering-uhd-streaming-buffering' },
   { prefix: 'nhs-guest-wifi', target: '/solutions/nhs-guest-wifi-voip-teams-zoom-jitter' },
-  { prefix: 'hotel-captive-portal-wifi', target: '/solutions/hotel-captive-portal-wifi-p2p-port-forwarding' },
+  { prefix: 'hotel-captive-portal-wifi', target: '/solutions/hotel-captive-portal-wifi-wireguard' },
   { prefix: 'national-rail-train-wifi', target: '/solutions/national-rail-train-wifi-remote-dev-ssh' },
   { prefix: 'youfibre-uk', target: '/solutions/youfibre-uk-wifi-arp-spoofing-protection' },
   { prefix: 'toob-full-fibre-uk', target: '/solutions/toob-full-fibre-uk-voip-teams-zoom-jitter' },
   { prefix: 'brsk-better-net-uk', target: '/solutions/brsk-better-net-uk-voip-teams-zoom-jitter' },
-  { prefix: 'community-fibre-london', target: '/solutions/community-fibre-london-p2p-port-forwarding' },
+  { prefix: 'community-fibre-london', target: '/solutions/community-fibre-london-wireguard-cgnat' },
   { prefix: 'hyperoptic-broadband', target: '/solutions/hyperoptic-broadband-isp-throttling' },
   { prefix: 'starlink', target: '/solutions/starlink-satellite-uk-isp-throttling' },
   { prefix: 't-mobile-5g-home', target: '/solutions/t-mobile-5g-home-internet-remote-dev-ssh' },
   { prefix: 'telstra-nbn', target: '/solutions/telstra-nbn-australia-gaming-packet-loss' }
 ].sort((a, b) => b.prefix.length - a.prefix.length);
+
+const PRUNED_410_PATHS = new Set([
+  '/popup-alternatives',
+  '/prototype-ergonomic-hub',
+  '/prototype-ergonomic-option-1',
+  '/prototype-ergonomic-option-2',
+  '/prototype-ergonomic-option-3',
+  '/prototype-ergonomic-option-4',
+  '/prototype-ergonomic-option-5',
+  '/prototype-memorisely-ui',
+  '/prototype-mockup-a',
+  '/prototype-mockup-b',
+  '/sweepr-motion-review',
+  '/sweepr-vpn-scorecard',
+  '/ui-ux-audit-mockups'
+]);
 
 const NON_INDEXABLE_ROUTE_ALIASES = new Set(['/order', '/checkout', '/login', '/dashboard']);
 
@@ -3246,9 +3268,21 @@ function buildIosWebClipMobileconfig(req) {
 }
 
 function renderStandaloneIosVpnApp() {
+  const preLaunchBanner = `<div style="padding:9px 12px;margin-bottom:10px;border:1px solid var(--accent-border);background:var(--accent-soft);border-radius:12px;font-size:11.5px;line-height:1.45;color:var(--text-sub)"><strong style="color:var(--accent-fg)">iOS App Store Status (Pre-Launch):</strong> The native iOS App Store client is pre-launch (not yet live). Use this Safari Web App with our Encrypted DNS <code>.mobileconfig</code> profile or export an official WireGuard <code>.conf</code> from <a href="/dashboard" style="color:var(--accent-fg);font-weight:700;text-decoration:underline">/dashboard</a>.</div>\n    <div class="c3-status-header">`;
+  const nonIosFallback = `  lbl.textContent = 'EXPORT .CONF';
+  pill.textContent = 'USE .CONF / .MOBILECONFIG';
+  head.textContent = 'Native iOS App Is Pre-Launch';
+  sub.textContent = 'Open on iPhone Safari for Encrypted DNS .mobileconfig or export WireGuard .conf at /dashboard';
+  showToast('Use /dashboard for official WireGuard .conf or iPhone Safari for .mobileconfig');`;
+
   return String(VPN_ANDROID_HTML || '')
     .replace(/NVIDIA Shield TV Pro \(Android TV WireGuard\)/g, 'Apple TV / Router (WireGuard Profile)')
     .replace(/'Android Device'/g, "'iPhone / iPad'")
+    .replace(/<div class="c3-status-header">/, preLaunchBanner)
+    .replace(
+      /  lbl\.textContent = 'OPEN ANDROID APP';[\s\S]*?window\.location\.href = 'sweeprvpn:\/\/activate\?key=' \+ encodeURIComponent\(key\) \+ '&email=' \+ encodeURIComponent\(email\);/,
+      nonIosFallback
+    )
     .replace(/'OPEN ANDROID APP'/g, "'OPEN SWEEPR APP'")
     .replace(/'READY FOR ANDROID VPN'/g, "'READY FOR APPLE VPN'")
     .replace(/'Opening SWEEPR Android App\.\.\.'/g, "'Opening SWEEPR VPN App...'")
@@ -3349,11 +3383,11 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
 
   const browserAssistBanner = isNonSafariIos
     ? `<div class="mb-5 p-4 rounded-2xl border-2 border-emerald-400 bg-emerald-50/90 text-left space-y-2.5">
-        <div class="font-extrabold text-sm text-emerald-950">📱 iPhone / iPad Detected — 1-Tap Install</div>
-        <p class="text-xs text-emerald-900 leading-relaxed">Apple requires iOS Configuration Profiles to be opened in <strong>Safari</strong>, or you can launch the iOS app directly below:</p>
+        <div class="font-extrabold text-sm text-emerald-950">📱 iPhone / iPad — Safari Web App + Encrypted DNS &amp; WireGuard</div>
+        <p class="text-xs text-emerald-900 leading-relaxed">Our native iOS App Store app is <strong>pre-launch (not yet live)</strong>. Open in <strong>Safari</strong> to install the iPhone &amp; iPad Web App + Encrypted DNS <code>.mobileconfig</code> profile, or grab an official WireGuard iOS <code>.conf</code> from your Customer Portal:</p>
         <div class="grid grid-cols-1 gap-2 pt-1">
-          <a href="${safariDeepLink}" class="btn btn-go w-full justify-center py-2.5 text-xs font-extrabold">🧭 Open in Safari &amp; Install iOS App</a>
-          <a href="/ios-app" class="btn btn-ghost bg-white border border-emerald-300 w-full justify-center py-2.5 text-xs font-extrabold text-emerald-900">🚀 Launch SWEEPR VPN iOS App Now</a>
+          <a href="${safariDeepLink}" data-store-cta="ios_mobileconfig" class="btn btn-go w-full justify-center py-2.5 text-xs font-extrabold">🧭 Open in Safari &amp; Install .mobileconfig</a>
+          <a href="/dashboard" class="btn btn-ghost bg-white border border-emerald-300 w-full justify-center py-2.5 text-xs font-extrabold text-emerald-900">🔑 Get Official WireGuard iOS .conf</a>
         </div>
       </div>`
     : isAndroidWebView
@@ -3361,12 +3395,20 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
         <div class="font-extrabold text-sm text-emerald-950">📱 Android Detected — Install SWEEPR VPN</div>
         <p class="text-xs text-emerald-900 leading-relaxed">Install directly from the official Google Play Store for automatic updates, or open in Chrome to sideload the verified APK:</p>
         <div class="grid grid-cols-1 gap-2 pt-1">
-          <a href="https://play.google.com/store/apps/details?id=com.sweepr.vpn" target="_blank" rel="noopener" class="btn btn-go w-full justify-center py-2.5 text-xs font-extrabold">Get it on Google Play</a>
+          <a href="https://play.google.com/store/apps/details?id=com.sweepr.vpn&utm_source=sweeprvpn.com&utm_medium=download_hub&utm_campaign=storefront_cta" target="_blank" rel="noopener" data-store-cta="google_play" class="btn btn-go w-full justify-center py-2.5 text-xs font-extrabold">Get it on Google Play</a>
           <a href="${chromeIntentLink}" class="btn btn-ghost bg-white border border-emerald-300 w-full justify-center py-2.5 text-xs font-extrabold text-emerald-900">🌐 Open in Chrome &amp; Install APK</a>
           <a href="/download/SWEEPRVPN.apk" download="SWEEPRVPN.apk" class="btn btn-ghost bg-white border border-gray-200 w-full justify-center py-2 text-xs font-bold text-gray-700">⬇️ Direct Download SWEEPRVPN.apk</a>
         </div>
       </div>`
     : '';
+
+  const renderChecksumRow = (label, meta) => {
+    const hasValidHash = /^[a-f0-9]{64}$/i.test(String(meta?.sha256 || ''));
+    const vtLink = hasValidHash
+      ? ` <a href="https://www.virustotal.com/gui/file/${meta.sha256}" target="_blank" rel="noopener nofollow" class="font-bold text-emerald-700 hover:text-emerald-900 underline ml-1">VirusTotal Report &rarr;</a>`
+      : '';
+    return `<div class="break-all"><strong>${label} &mdash; ${meta.sizeLabel}:</strong>${vtLink}<br><code class="text-[11px] bg-white px-1 py-0.5 rounded border border-emerald-100">${meta.sha256}</code></div>`;
+  };
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -3426,7 +3468,7 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
     applicationCategory: 'SecurityApplication',
     downloadUrl: 'https://sweeprvpn.com/download/SWEEPRVPN.exe',
     fileSize: exeMeta.sizeLabel,
-    publisher: { '@type': 'Organization', name: 'SWEEPR VPN Inc.', url: 'https://sweeprvpn.com/' },
+    publisher: { '@type': 'Organization', name: 'SWEEPR VPN (UK Sole Trader)', url: 'https://sweeprvpn.com/' },
     offers: { '@type': 'AggregateOffer', priceCurrency: 'GBP', lowPrice: '1.99', highPrice: '74.99', offerCount: '3' }
   })}</script>
   <link rel="stylesheet" href="/tailwind.min.css?v=${twVer}">
@@ -3442,12 +3484,12 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
       <span class="font-extrabold text-xl tracking-tight text-gray-900">SWEEPR <span class="text-emerald-600">VPN</span></span>
     </a>
     <h1 class="text-2xl font-black text-gray-900 mb-2">Download SWEEPR VPN (v2.6.0)</h1>
-    <p class="text-sm text-gray-600 mb-5 leading-relaxed">Select your device below to manually download and install the official SWEEPR VPN client by <strong>SWEEPR VPN Inc.</strong> (native ~${exeMeta.sizeLabel.replace(/\s*\(.*$/, '')} desktop installer with Free 30-Second Home Wi-Fi Device Scanner). No downloads start automatically without your explicit click.</p>
+    <p class="text-sm text-gray-600 mb-5 leading-relaxed">Select your device below to manually download and install the official SWEEPR VPN client by <strong>SWEEPR VPN (UK Sole Trader)</strong> (native ~${exeMeta.sizeLabel.replace(/\s*\(.*$/, '')} desktop installer with Free 30-Second Home Wi-Fi Device Scanner). No downloads start automatically without your explicit click.</p>
 
     ${browserAssistBanner}
 
     <div class="space-y-3 text-left mb-6">
-      ${(osType === 'ios' || osType === 'mac') ? '' : `<a href="https://play.google.com/store/apps/details?id=com.sweepr.vpn" target="_blank" rel="noopener" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'android' ? 'border-2 border-emerald-500 bg-emerald-50/60' : 'border-emerald-300 bg-emerald-50/40'} hover:border-emerald-500 transition-all no-underline text-gray-900">
+      ${(osType === 'ios' || osType === 'mac') ? '' : `<a href="https://play.google.com/store/apps/details?id=com.sweepr.vpn&utm_source=sweeprvpn.com&utm_medium=download_hub&utm_campaign=storefront_cta" target="_blank" rel="noopener" data-store-cta="google_play" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'android' ? 'border-2 border-emerald-500 bg-emerald-50/60' : 'border-emerald-300 bg-emerald-50/40'} hover:border-emerald-500 transition-all no-underline text-gray-900">
         <div class="flex items-center gap-3">
           <svg width="18" height="18" viewBox="0 0 24 24" class="shrink-0 text-emerald-600" fill="currentColor" aria-hidden="true"><path d="M3.609 1.814L13.792 12 3.61 22.186a1.75 1.75 0 0 1-.61-1.335V3.149c0-.517.224-.998.609-1.335zM14.853 13.061l2.893 2.893-10.22 5.839 7.327-8.732zm3.922-2.24l2.444 1.396a1.25 1.25 0 0 1 0 2.166l-2.444 1.396-3.164-3.164 3.164-1.794zM7.526 2.207l10.22 5.839-2.893 2.893-7.327-8.732z"/></svg>
           <div>
@@ -3464,12 +3506,19 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
         </div>
         <span class="btn btn-go text-xs py-2 px-3 shrink-0">Download .apk</span>
       </a>`}
-      <a href="/download/SWEEPRVPN.mobileconfig" rel="nofollow" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'ios' ? 'border-2 border-emerald-500 bg-emerald-50/40' : 'border-gray-200 bg-white'} hover:border-emerald-400 transition-all no-underline text-gray-900">
+      <a href="/download/SWEEPRVPN.mobileconfig" rel="nofollow" data-store-cta="ios_mobileconfig" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'ios' ? 'border-2 border-emerald-500 bg-emerald-50/40' : 'border-gray-200 bg-white'} hover:border-emerald-400 transition-all no-underline text-gray-900">
         <div>
-          <div class="font-bold text-sm text-gray-900">🍎 iPhone &amp; iPad Web App + Encrypted DNS Profile (iOS / iPadOS)</div>
-          <div class="text-xs text-gray-500">v2.6.0 &bull; ${mobileconfigMeta.sizeLabel} &bull; Safari Web App + Encrypted DoH DNS Profile</div>
+          <div class="font-bold text-sm text-gray-900">🍎 iPhone &amp; iPad Web App + Encrypted DNS Profile (.mobileconfig)</div>
+          <div class="text-xs text-gray-500">v2.6.0 &bull; ${mobileconfigMeta.sizeLabel} &bull; Safari Web App + Encrypted DoH DNS &bull; WireGuard iOS .conf in Portal (native App Store client pre-launch)</div>
         </div>
         <span class="btn btn-go text-xs py-2 px-3 shrink-0">Install Profile</span>
+      </a>
+      <a href="https://apps.microsoft.com/store/detail/XPFPBXXLLG7604?utm_source=sweeprvpn.com&utm_medium=download_hub&utm_campaign=storefront_cta" target="_blank" rel="noopener" data-store-cta="microsoft_store" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'windows' ? 'border-2 border-emerald-500 bg-emerald-50/40' : 'border-gray-200 bg-white'} hover:border-emerald-400 transition-all no-underline text-gray-900">
+        <div>
+          <div class="font-bold text-sm text-gray-900">🪟 Get it from Microsoft Store (Windows 10 &amp; 11)</div>
+          <div class="text-xs text-gray-500">Official Microsoft Store Listing (XPFPBXXLLG7604) &bull; Automatic Updates &amp; SmartScreen Verified</div>
+        </div>
+        <span class="btn btn-go text-xs py-2 px-3 shrink-0">Microsoft Store &rarr;</span>
       </a>
       <a href="/download/SWEEPRVPN.exe" download="SWEEPRVPN.exe" rel="nofollow" class="flex items-center justify-between gap-3 p-4 rounded-xl border ${osType === 'windows' ? 'border-2 border-emerald-500 bg-emerald-50/40' : 'border-gray-200 bg-white'} hover:border-emerald-400 transition-all no-underline text-gray-900">
         <div>
@@ -3502,12 +3551,12 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
     </div>
     <details open class="mt-4 mb-5 p-3.5 rounded-xl border border-emerald-200 bg-emerald-50/50 text-left text-xs text-gray-700 space-y-2">
       <summary class="font-extrabold text-emerald-900 cursor-pointer flex items-center gap-1.5">🛡️ Publisher Identity, SHA-256 Checksums &amp; Uninstallation (v2.6.0)</summary>
-      <div><strong>Publisher:</strong> SWEEPR VPN Inc. (SSL.com OV Code Signing: CN=Benjamin Cook, O=Benjamin Cook, L=Worthing, C=GB)</div>
+      <div><strong>Publisher:</strong> SWEEPR VPN (UK Sole Trader) &bull; Independent UK Developer &bull; Independently Digitally Signed (Authenticode)</div>
       <div class="space-y-1.5 pt-1">
-        <div class="break-all"><strong>Windows (.exe) — ${exeMeta.sizeLabel}:</strong><br><code class="text-[11px] bg-white px-1 py-0.5 rounded border border-emerald-100">${exeMeta.sha256}</code></div>
-        <div class="break-all"><strong>macOS (.dmg) — ${dmgMeta.sizeLabel}:</strong><br><code class="text-[11px] bg-white px-1 py-0.5 rounded border border-emerald-100">${dmgMeta.sha256}</code></div>
-        <div class="break-all"><strong>Android (.apk) — ${apkMeta.sizeLabel}:</strong><br><code class="text-[11px] bg-white px-1 py-0.5 rounded border border-emerald-100">${apkMeta.sha256}</code></div>
-        <div class="break-all"><strong>iOS (.mobileconfig) — ${mobileconfigMeta.sizeLabel}:</strong><br><code class="text-[11px] bg-white px-1 py-0.5 rounded border border-emerald-100">${mobileconfigMeta.sha256}</code></div>
+        ${renderChecksumRow('Windows (.exe)', exeMeta)}
+        ${renderChecksumRow('macOS (.dmg)', dmgMeta)}
+        ${renderChecksumRow('Android (.apk)', apkMeta)}
+        ${renderChecksumRow('iOS (.mobileconfig)', mobileconfigMeta)}
       </div>
       <div class="pt-1"><strong>Clean Uninstall:</strong> Windows Settings &rarr; Apps &rarr; Installed Apps &rarr; SWEEPR VPN &rarr; Uninstall; macOS drag SWEEPR VPN.app to Trash; Android/iOS standard OS app or profile removal.</div>
       <div class="pt-1"><a href="/warrant-canary" class="font-bold text-emerald-700 hover:text-emerald-900 underline">Verify Signed Release &amp; Cryptographic Warrant Canary &rarr;</a></div>
@@ -3549,7 +3598,7 @@ function renderPlatformDownloadPicker(osType = 'other', rawUa = '', hostOrigin =
         <a href="/setup/steam-deck-vpn" class="hover:text-emerald-600">Steam Deck VPN</a>
         <a href="/setup/synology-nas-docker-vpn" class="hover:text-emerald-600">Synology Docker VPN</a>
         <a href="/solutions/eduroam-campus-wifi-gaming-packet-loss" class="hover:text-emerald-600">Eduroam Gaming Fix</a>
-        <a href="/solutions/talktalk-p2p-port-forwarding" class="hover:text-emerald-600">TalkTalk Throttling Fix</a>
+        <a href="/solutions/talktalk-fibre-wireguard-cgnat" class="hover:text-emerald-600">TalkTalk WireGuard Fix</a>
         <a href="/vs/totalvpn" class="hover:text-emerald-600">SWEEPR vs Total VPN</a>
         <a href="/alternatives/totalvpn" class="hover:text-emerald-600">TotalVPN Alternatives</a>
       </div>
@@ -3786,6 +3835,25 @@ const server = http.createServer(async (req, res) => {
       ...COMMON_SECURITY_HEADERS
     });
     return res.end();
+  }
+
+  // P0-2: Return 410 Gone for the 13 internal dev/prototype pages before host/canonical 301s
+  let decoded410Path = pathname;
+  try {
+    decoded410Path = decodeURIComponent(pathname);
+  } catch {}
+  const clean410Path = decoded410Path.toLowerCase().replace(/\.html$/i, '');
+  if (
+    (req.method === 'GET' || req.method === 'HEAD') &&
+    (PRUNED_410_PATHS.has(clean410Path) || clean410Path.startsWith('/prototype-ergonomic-option-'))
+  ) {
+    res.writeHead(410, {
+      'Content-Type': 'text/plain; charset=utf-8',
+      'X-Robots-Tag': 'noindex, nofollow',
+      'Cache-Control': 'public, max-age=86400',
+      ...COMMON_SECURITY_HEADERS
+    });
+    return res.end(req.method === 'HEAD' ? undefined : '410 Gone');
   }
 
   // Canonical host enforcement: 1-hop 301 www.sweeprvpn.com -> https://sweeprvpn.com (+ canonical path resolution)
@@ -5440,7 +5508,7 @@ self.addEventListener('fetch', e => {
               `Friendly heads-up from SWEEPR VPN: your subscription is scheduled to renew in ~7 days for ${amountFormatted} (covered by our No-Renewal-Hike Guarantee).\n\n` +
               `Need to pause for 30 days at £0.00, switch plans, or cancel auto-renewal in one click? Manage your subscription anytime with zero dark patterns:\n` +
               `https://sweeprvpn.com/dashboard\n\n` +
-              `Thank you for supporting independent, zero-log WireGuard privacy.\n— SWEEPR VPN Team`
+              `Thank you for supporting independent, zero-log WireGuard privacy.\n— SWEEPR VPN Support (UK Sole Trader)`
           }).catch(() => {});
         }
       } else if (event.type === 'invoice.payment_failed') {
@@ -5463,7 +5531,7 @@ self.addEventListener('fetch', e => {
               `We have kept your 10Gbps WireGuard VPN tunnel and Smart-TV Shield ACTIVE for a 7-day grace period so your devices stay protected without interruption.\n\n` +
               `Please update your payment method in 1 click here:\n` +
               `https://sweeprvpn.com/dashboard\n\n` +
-              `— SWEEPR VPN Team`
+              `— SWEEPR VPN Support (UK Sole Trader)`
           }).catch(() => {});
         }
       } else if (event.type === 'charge.refunded' || event.type === 'charge.dispute.created') {
@@ -8820,7 +8888,7 @@ self.addEventListener('fetch', e => {
         notes: 'Resend Key Sync'
       }).catch(() => {});
       const subject = 'Your SWEEPR VPN Pro License Key';
-      const textBody = `Hi ${localAcc.name || 'there'},\n\nHere is your active SWEEPR VPN Pro subscription license key (up to 3 devices — desktop or mobile):\n\nFull Product License Key: ${licenseKey}\nRegistered Email: ${email}\n\nPaste ${licenseKey} into the license key field inside SWEEPR VPN to unlock all 8 global locations and Smart-TV shields.\n\nBest regards,\nThe SWEEPR VPN Team`;
+      const textBody = `Hi ${localAcc.name || 'there'},\n\nHere is your active SWEEPR VPN Pro subscription license key (up to 3 devices — desktop or mobile):\n\nFull Product License Key: ${licenseKey}\nRegistered Email: ${email}\n\nPaste ${licenseKey} into the license key field inside SWEEPR VPN to unlock all 8 global locations and Smart-TV shields.\n\nBest regards,\nSWEEPR VPN Support (UK Sole Trader)`;
       const htmlBody = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:520px;margin:0 auto;padding:28px 24px;color:#0f172a;background:#ffffff;border:1px solid #e2e8f0;border-radius:16px">
   <h2 style="margin:0 0 8px;font-size:21px;font-weight:800;color:#0f172a">Your SWEEPR VPN Pro License Key</h2>
   <p style="margin:0 0 18px;font-size:14px;color:#475569">Hi ${escapeHtml(localAcc.name || 'there')}, here is your active SWEEPR VPN Pro subscription key (up to 3 devices &mdash; desktop or mobile):</p>
@@ -8945,6 +9013,58 @@ self.addEventListener('fetch', e => {
     if (body && body.__tooLarge) return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, {}, req);
     const data = await crm.reportTelemetryEvent(body);
     return sendJson(res, 200, data, {}, req);
+  }
+
+  // First-Party Privacy-Safe Store & Installer Click Telemetry (P1-1)
+  if (pathname === '/api/telemetry' && req.method === 'POST') {
+    if (!checkRateLimit(req, 'web_telemetry', 60, 60000)) {
+      return sendJson(res, 429, { ok: false, error: 'rate_limit_exceeded' }, {}, req);
+    }
+    let body;
+    try {
+      const raw = await readRawBody(req, 8192);
+      const parsed = JSON.parse(raw, (key, value) => {
+        if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
+          return undefined;
+        }
+        return value;
+      });
+      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+        return sendJson(res, 400, { ok: false, error: 'invalid_json' }, { 'Cache-Control': 'no-store' }, req);
+      }
+      body = parsed;
+    } catch (err) {
+      if (err && err.statusCode === 413) {
+        return sendJson(res, 413, { ok: false, error: 'payload_too_large' }, {}, req);
+      }
+      return sendJson(res, 400, { ok: false, error: 'invalid_json' }, { 'Cache-Control': 'no-store' }, req);
+    }
+    const rawEvent = String(body.event_name || body.event || 'telemetry_event').replace(/[^a-zA-Z0-9_.-]/g, '_').slice(0, 64) || 'telemetry_event';
+    const category = String(body.category || 'funnel').replace(/[^a-zA-Z0-9_.-]/g, '_').slice(0, 32) || 'funnel';
+    const rawProps = body && typeof body.properties === 'object' && body.properties ? body.properties : {};
+    const safeProps = {};
+    for (const k of ['cta', 'platform', 'source_page', 'target', 'plan', 'button_text']) {
+      if (rawProps[k] !== undefined && rawProps[k] !== null && rawProps[k] !== '') {
+        safeProps[k] = String(rawProps[k]).slice(0, 180);
+      }
+    }
+    try {
+      fs.mkdirSync(RUNTIME_STATE_DIR, { recursive: true });
+      fs.appendFileSync(
+        TOOL_TELEMETRY_LOG_FILE,
+        JSON.stringify({ ts: Date.now(), event_name: rawEvent, category, properties: safeProps }) + '\n',
+        'utf8'
+      );
+    } catch {}
+    crm.reportTelemetryEvent({
+      event_name: rawEvent,
+      event_type: rawEvent,
+      category,
+      platform: safeProps.platform || undefined,
+      properties: safeProps,
+      metadata: safeProps
+    }).catch(() => {});
+    return sendJson(res, 200, { ok: true }, { 'Cache-Control': 'no-store' }, req);
   }
 
   // Catch-all for unmatched /api/* or /v1/* requests (e.g. GET probes to POST-only API routes)

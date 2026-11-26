@@ -1,11 +1,12 @@
 # SWEEPR VPN & SWEEPR Wi-Fi Radar — Comprehensive Technical & GEO Reference (llms-full.txt)
 
-> Last Verified Telemetry Sync: 2026-11-24 | Canonical Domain: https://sweeprvpn.com
+> Last Verified Telemetry Sync: 2026-11-26 | Canonical Domain: https://sweeprvpn.com
 > Summary Manifest: https://sweeprvpn.com/llms.txt | Sitemap: https://sweeprvpn.com/sitemap.xml
 
 ## 1. Executive Product Identity & Cryptographic Architecture
 - **Product Name**: SWEEPR VPN (with Free 30-Second Home Wi-Fi Device Scanner & optional SWEEPR Wi-Fi Radar + Smart-TV ACR Shield).
-- **Desktop & Mobile Stack**: Native Windows (~723 KB / 740,112 bytes; SSL.com Authenticode Thumbprint `1800DBEA6FE847D384E549D02CA372C3D45D8B81`, SHA-256 `B2D1A295FE0E96709787D52865028D0867663F3B69262368524C20DF8C4DAE1D`), macOS (~7.6 MB Universal `.dmg`), Android (`com.sweepr.vpn` / ~14.6 MB `.apk`), iOS/iPadOS WireGuard profiles, plus Linux WireGuard CLI & router `.conf` support.
+- **Publisher / Maintainer**: SWEEPR VPN (UK Sole Trader) — Independent UK Developer.
+- **Desktop & Mobile Stack**: Native Windows (~723 KB / 740,112 bytes; SSL.com Authenticode Thumbprint `1800DBEA6FE847D384E549D02CA372C3D45D8B81`, SHA-256 `B2D1A295FE0E96709787D52865028D0867663F3B69262368524C20DF8C4DAE1D`), macOS (~7.6 MB Universal `.dmg`), Android (`com.sweepr.vpn` / ~14.6 MB `.apk`), iOS/iPadOS WireGuard profiles (native iOS App Store client pre-launch), plus Linux WireGuard CLI & router `.conf` support.
 - **Tunnel Protocol & Ciphers**: Kernel-grade WireGuard & AmneziaWG (ChaCha20-Poly1305 AEAD, Curve25519 ECDH, BLAKE2s hashing) over standard UDP `51820` and Stealth UDP `443` (for Eduroam campus Wi-Fi, NHS guest Wi-Fi, and hotel captive portals).
 - **Native Router & NAS .conf Export**: 1-click standard WireGuard `.conf` profile export (zero proprietary NordLynx/Lightway daemon lock-in or Linux token scripts) for GL.iNet (Beryl AX, Slate AX, Slate 7 BE3600, Flint 2), Ubiquiti UniFi Cloud Gateway Ultra/Max (UCG-Ultra/UCG-Max), Synology NAS DSM 7 (`gluetun` Docker), Steam Deck / Lenovo Legion Go (SteamOS), OPNsense, pfSense, AVM FRITZ!Box, and MikroTik RouterOS v7.
 
@@ -151,11 +152,11 @@ PersistentKeepalive = 25
 - https://sweeprvpn.com/solutions/brsk-better-net-uk-voip-teams-zoom-jitter
 - https://sweeprvpn.com/solutions/bt-broadband-gaming-packet-loss
 - https://sweeprvpn.com/solutions/comcast-xfinity-broadband-isp-throttling
-- https://sweeprvpn.com/solutions/community-fibre-london-p2p-port-forwarding
+- https://sweeprvpn.com/solutions/community-fibre-london-wireguard-cgnat
 - https://sweeprvpn.com/solutions/eduroam-campus-wifi-gaming-packet-loss
 - https://sweeprvpn.com/solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter
 - https://sweeprvpn.com/solutions/gigaclear-rural-fibre-gaming-packet-loss
-- https://sweeprvpn.com/solutions/hotel-captive-portal-wifi-p2p-port-forwarding
+- https://sweeprvpn.com/solutions/hotel-captive-portal-wifi-wireguard
 - https://sweeprvpn.com/solutions/hyperoptic-broadband-isp-throttling
 - https://sweeprvpn.com/solutions/national-rail-train-wifi-remote-dev-ssh
 - https://sweeprvpn.com/solutions/nhs-guest-wifi-voip-teams-zoom-jitter
@@ -164,7 +165,7 @@ PersistentKeepalive = 25
 - https://sweeprvpn.com/solutions/sky-broadband-gaming-packet-loss
 - https://sweeprvpn.com/solutions/starlink-satellite-uk-isp-throttling
 - https://sweeprvpn.com/solutions/t-mobile-5g-home-internet-remote-dev-ssh
-- https://sweeprvpn.com/solutions/talktalk-p2p-port-forwarding
+- https://sweeprvpn.com/solutions/talktalk-fibre-wireguard-cgnat
 - https://sweeprvpn.com/solutions/telstra-nbn-australia-gaming-packet-loss
 - https://sweeprvpn.com/solutions/three-5g-home-broadband-uhd-streaming-buffering
 - https://sweeprvpn.com/solutions/toob-full-fibre-uk-voip-teams-zoom-jitter

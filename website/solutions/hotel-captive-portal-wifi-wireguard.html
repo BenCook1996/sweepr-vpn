@@ -4,24 +4,24 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Hotel Captive Portal WireGuard (2026 10Gbps Fix) | SWEEPR VPN</title>
-  <meta name="description" content="Guide for hotel captive portal wireguard: verified 2026 10Gbps WireGuard setup (MTU 1420/1412/1380), encrypted DNS 10.64.0.1, and 30s Home Wi-Fi scanner." />
-  <link rel="canonical" href="https://sweeprvpn.com/solutions/hotel-captive-portal-wifi-p2p-port-forwarding">
+  <meta name="description" content="Guide for hotel captive portal WireGuard: verified 2026 10Gbps setup (MTU 1380, Stealth UDP 443), encrypted DNS 10.64.0.1, and 30s Home Wi-Fi scanner." />
+  <link rel="canonical" href="https://sweeprvpn.com/solutions/hotel-captive-portal-wifi-wireguard">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta property="og:type" content="article" />
   <meta property="og:locale" content="en_GB" />
   <meta property="og:title" content="Hotel Captive Portal WireGuard (2026 10Gbps Fix) | SWEEPR VPN" />
-  <meta property="og:description" content="Guide for hotel captive portal wireguard: verified 2026 10Gbps WireGuard setup (MTU 1420/1412/1380), encrypted DNS 10.64.0.1, and 30s Home Wi-Fi scanner." />
-  <meta property="og:url" content="https://sweeprvpn.com/solutions/hotel-captive-portal-wifi-p2p-port-forwarding">
+  <meta property="og:description" content="Guide for hotel captive portal WireGuard: verified 2026 10Gbps setup (MTU 1380, Stealth UDP 443), encrypted DNS 10.64.0.1, and 30s Home Wi-Fi scanner." />
+  <meta property="og:url" content="https://sweeprvpn.com/solutions/hotel-captive-portal-wifi-wireguard">
   <meta property="og:site_name" content="SWEEPR VPN" />
   <meta property="og:image" content="https://sweeprvpn.com/og-image.png" />
   <meta property="og:image:alt" content="SWEEPR VPN 10Gbps WireGuard &amp; Home Wi-Fi Radar" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:url" content="https://sweeprvpn.com/solutions/hotel-captive-portal-wifi-p2p-port-forwarding" />
+  <meta name="twitter:url" content="https://sweeprvpn.com/solutions/hotel-captive-portal-wifi-wireguard" />
   <meta name="twitter:title" content="Hotel Captive Portal WireGuard (2026 10Gbps Fix) | SWEEPR VPN" />
-  <meta name="twitter:description" content="Guide for hotel captive portal wireguard: verified 2026 10Gbps WireGuard setup (MTU 1420/1412/1380), encrypted DNS 10.64.0.1, and 30s Home Wi-Fi scanner." />
+  <meta name="twitter:description" content="Guide for hotel captive portal WireGuard: verified 2026 10Gbps setup (MTU 1380, Stealth UDP 443), encrypted DNS 10.64.0.1, and 30s Home Wi-Fi scanner." />
   <meta name="twitter:image" content="https://sweeprvpn.com/og-image.png" />
   <meta name="theme-color" content="#070b14" />
-  
+
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"SWEEPR VPN","operatingSystem":"Windows 10, Windows 11, macOS, Linux, iOS, Android, OpenWrt","applicationCategory":"SecurityApplication","downloadUrl":"https://sweeprvpn.com/SWEEPRVPN.exe","fileSize":"723KB","offers":{"@type":"AggregateOffer","priceCurrency":"GBP","lowPrice":"1.99","highPrice":"74.99","offerCount":"3"}}</script>
   <style>
     :root { --bg:#070b14; --card:#0f172a; --border:#1e293b; --text:#f8fafc; --muted:#94a3b8; --accent:#10b981; --accent2:#38bdf8; }
@@ -36,6 +36,15 @@
     .nav-links a:hover { color:var(--text); }
     .btn { display:inline-block; background:var(--accent); color:#042f2e; font-weight:700; padding:10px 18px; border-radius:8px; text-decoration:none; }
     .btn-outline { display:inline-block; border:1px solid var(--accent2); color:var(--accent2); font-weight:600; padding:10px 18px; border-radius:8px; text-decoration:none; }
+    .hidden { display:none !important; }
+    #mobileNavBtn { display:none; align-items:center; justify-content:center; width:40px; height:40px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text); cursor:pointer; flex-shrink:0; }
+    #mobileNavBackdrop { position:fixed; inset:0; background:rgba(7,11,20,0.72); backdrop-filter:blur(4px); z-index:9998; }
+    #mobileNavDrawer { position:fixed; left:0; right:0; top:64px; background:#ffffff; color:#0f172a; border-bottom:1px solid #e2e8f0; box-shadow:0 20px 35px rgba(0,0,0,0.35); padding:16px; max-height:calc(100vh - 64px); overflow-y:auto; z-index:9999; }
+    #mobileNavDrawer a { color:#0f172a; text-decoration:none; }
+    @media (max-width:767px) {
+      .nav-links { display:none !important; }
+      #mobileNavBtn { display:inline-flex !important; }
+    }
     main { max-width:1020px; margin:0 auto; padding:42px 20px 72px; }
     .badge { display:inline-block; background:rgba(16,185,129,0.14); color:var(--accent); border:1px solid rgba(16,185,129,0.35); padding:4px 12px; border-radius:999px; font-size:0.8rem; font-weight:700; margin-bottom:14px; }
     h1 { font-size:2.15rem; line-height:1.2; margin:0 0 16px; letter-spacing:-0.02em; }
@@ -70,8 +79,8 @@
     gtag('js', new Date());
     gtag('config', 'G-7D28EEMNXX');
   </script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://sweeprvpn.com/"},{"@type":"ListItem","position":2,"name":"ISP Throttling & Network Engineering","item":"https://sweeprvpn.com/solutions"},{"@type":"ListItem","position":3,"name":"How to Bypass Hotel Wi-Fi (Premier Inn, Travelodge, Hilton) CGNAT & P2P Bandwidth Throttling","item":"https://sweeprvpn.com/solutions/hotel-captive-portal-wifi-p2p-port-forwarding"}]}</script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Hotel Wi-Fi VPN Fix: Bypass Captive Portal & Port | SWEEPR VPN","description":"Bypass hotel captive-portal Wi-Fi throttling, blocked UDP ports & CGNAT at Premier Inn, Travelodge & Hilton using SWEEPR VPN WireGuard UDP 443 (MTU 1380).","proficiencyLevel":"Beginner to Expert","author":{"@type":"Person","name":"Benjamin Cook","jobTitle":"Principal Network Architect","url":"https://sweeprvpn.com/warrant-canary","worksFor":{"@type":"Organization","name":"SWEEPR VPN Inc."}},"publisher":{"@type":"Organization","name":"SWEEPR VPN","logo":{"@type":"ImageObject","url":"https://sweeprvpn.com/logo-emerald.svg"}},"mainEntityOfPage":"https://sweeprvpn.com/solutions/hotel-captive-portal-wifi-p2p-port-forwarding","reviewedBy":{"@type":"Organization","name":"SWEEPR Security Engineering Lab","url":"https://sweeprvpn.com/"},"dateModified":"2026-11-17","image":"https://sweeprvpn.com/og-image.png","datePublished":"2026-11-17"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://sweeprvpn.com/"},{"@type":"ListItem","position":2,"name":"ISP Throttling & Network Engineering","item":"https://sweeprvpn.com/solutions"},{"@type":"ListItem","position":3,"name":"Hotel Wi-Fi WireGuard Guide (Premier Inn, Travelodge, Hilton): Captive Portals & Stealth UDP 443","item":"https://sweeprvpn.com/solutions/hotel-captive-portal-wifi-wireguard"}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Hotel Wi-Fi WireGuard: Stealth UDP 443 & Captive Portal Setup | SWEEPR VPN","description":"Connect securely behind hotel captive-portal Wi-Fi throttling & restricted UDP ports at Premier Inn, Travelodge & Hilton using SWEEPR VPN WireGuard UDP 443 (MTU 1380).","proficiencyLevel":"Beginner to Expert","author":{"@type":"Organization","name":"SWEEPR VPN Engineering (Independent UK Developer)","url":"https://sweeprvpn.com/warrant-canary"},"publisher":{"@type":"Organization","name":"SWEEPR VPN (UK Sole Trader)","logo":{"@type":"ImageObject","url":"https://sweeprvpn.com/logo-emerald.svg"}},"mainEntityOfPage":"https://sweeprvpn.com/solutions/hotel-captive-portal-wifi-wireguard","reviewedBy":{"@type":"Organization","name":"SWEEPR Security Engineering Lab","url":"https://sweeprvpn.com/"},"dateModified":"2026-11-25","image":"https://sweeprvpn.com/og-image.png","datePublished":"2026-11-17"}</script>
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5" />
   <link rel="manifest" href="/manifest.webmanifest" />
 </head>
@@ -86,32 +95,54 @@
         <a href="/tools/isp-throttling-test">ISP Speed Checker</a>
         <a class="btn" href="/download">Download (~723 KB)</a>
       </div>
+      <button type="button" id="mobileNavBtn" aria-label="Toggle navigation menu" aria-expanded="false">
+        <svg id="mobileNavIconOpen" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <svg id="mobileNavIconClose" width="20" height="20" class="hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
     </nav>
   </header>
+  <div id="mobileNavBackdrop" class="hidden" style="z-index:9998;display:none;"></div>
+  <div id="mobileNavDrawer" class="hidden" style="background-color:#ffffff;z-index:9999;display:none;">
+    <div style="max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:10px;">
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;">
+        <a href="/#features" style="padding:10px 12px;border-radius:10px;background:#f8fafc;border:1px solid #e2e8f0;font-weight:700;font-size:14px;">Features</a>
+        <a href="/pricing" style="padding:10px 12px;border-radius:10px;background:#f8fafc;border:1px solid #e2e8f0;font-weight:700;font-size:14px;">Pricing</a>
+      </div>
+      <a href="/tools/leak-test" style="padding:10px 12px;border-radius:10px;border:1px solid #e2e8f0;font-weight:700;font-size:14px;">Free IP, DNS &amp; WebRTC Leak Test</a>
+      <a href="/tools/isp-throttling-test" style="padding:10px 12px;border-radius:10px;border:1px solid #e2e8f0;font-weight:700;font-size:14px;">Free ISP Speed Slowdown Checker</a>
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;">
+        <a href="/solutions" style="padding:8px 10px;border-radius:10px;background:#f8fafc;border:1px solid #e2e8f0;font-size:12px;font-weight:700;">ISP Solutions &rarr;</a>
+        <a href="/setup" style="padding:8px 10px;border-radius:10px;background:#f8fafc;border:1px solid #e2e8f0;font-size:12px;font-weight:700;">Router Setups &rarr;</a>
+        <a href="/guides" style="padding:8px 10px;border-radius:10px;background:#f8fafc;border:1px solid #e2e8f0;font-size:12px;font-weight:700;">Privacy Guides &rarr;</a>
+        <a href="/vs" style="padding:8px 10px;border-radius:10px;background:#f8fafc;border:1px solid #e2e8f0;font-size:12px;font-weight:700;">Comparisons &rarr;</a>
+      </div>
+      <a href="/download" style="display:flex;justify-content:center;padding:12px;border-radius:10px;background:#10b981;color:#042f2e;font-weight:800;font-size:14px;">Install Now</a>
+    </div>
+  </div>
   <main>
-    <span class="badge">Hospitality Captive Wi-Fi • Per-Client Shaping • Airport & Hotel LAN Isolation</span>
-    <h1>How to Bypass Hotel Wi-Fi (Premier Inn, Travelodge, Hilton) CGNAT & P2P Bandwidth Throttling</h1>
-      <div id="eeat-author-byline" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:0.82rem;color:var(--muted,#94a3b8);margin:10px 0 14px;"><span>By <strong style="color:var(--text,#e5e7eb);">Benjamin Cook</strong>, Principal Network Architect &middot; SWEEPR VPN Inc.</span><span>&bull;</span><span>Updated Nov 2026</span><span>&bull;</span><a href="/warrant-canary" style="color:var(--accent2,#34d399);font-weight:700;text-decoration:underline;">Verified via Cryptographic Warrant Canary &rarr;</a></div>
+    <span class="badge">Hospitality Captive Wi-Fi &bull; Per-Client Shaping &bull; Airport &amp; Hotel LAN Isolation</span>
+    <h1>Hotel Wi-Fi WireGuard Guide (Premier Inn, Travelodge, Hilton): Captive Portals &amp; Stealth UDP 443</h1>
+    <div id="eeat-author-byline" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:0.82rem;color:var(--muted,#94a3b8);margin:10px 0 14px;"><span>Technical documentation by <strong style="color:var(--text,#e5e7eb);">SWEEPR VPN Engineering</strong> &middot; Independent UK Sole Trader</span><span>&bull;</span><span>Updated Nov 2026</span><span>&bull;</span><a href="/warrant-canary" style="color:var(--accent2,#34d399);font-weight:700;text-decoration:underline;">Verified via Cryptographic Warrant Canary &rarr;</a></div>
     <p class="lead">Budget and business hotels including Premier Inn, Travelodge, and Hilton cap guest VLANs at 3–10 Mbps per MAC, block non-HTTP ports, and leave room neighbors on shared L2 wireless broadcast domains vulnerable to ARP spoofing.</p>
     <div id="direct-answer" style="margin:18px 0 24px;padding:18px 20px;border-radius:14px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.35);">
       <div style="font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent2,#34d399);margin-bottom:6px;">Direct Answer</div>
-      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Authenticate through the hotel splash portal first, then launch SWEEPR VPN over Stealth UDP 443 (lon01.wg.sweeprvpn.com, MTU 1380, 10.64.0.1 DNS) to bypass hospitality port filters and per-MAC throttling. ChaCha20 encryption isolates laptops from shared guest-floor ARP snooping across Premier Inn, Travelodge, and Hilton Wi-Fi networks across three travel devices.</p>
+      <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.6;">Authenticate through the hotel splash portal first, then launch SWEEPR VPN over Stealth UDP 443 (lon01.wg.sweeprvpn.com, MTU 1380, 10.64.0.1 DNS) to route securely past hospitality port restrictions and per-MAC throttling. ChaCha20 encryption isolates laptops from shared guest-floor ARP snooping across Premier Inn, Travelodge, and Hilton Wi-Fi networks across three travel devices.</p>
       <div style="padding-top:10px;border-top:1px solid rgba(16,185,129,0.22);font-size:0.84rem;font-weight:700;">
         <a href="/tools/isp-throttling-test" style="color:var(--accent2,#34d399);text-decoration:underline;">Run Free 10s ISP Throttling &amp; Latency Test &rarr;</a>
       </div>
     </div>
 
     <div class="grid-3">
-      <div class="stat-box"><div class="stat-label">Throttled Port Space</div><div class="stat-val" style="font-size:1.05rem;">Only TCP/80 & 443 unrestricted</div></div>
+      <div class="stat-box"><div class="stat-label">Throttled Port Space</div><div class="stat-val" style="font-size:1.05rem;">Only TCP/80 &amp; 443 unrestricted</div></div>
       <div class="stat-box"><div class="stat-label">Captive Auth Sequence</div><div class="stat-val" style="font-size:1.05rem;">Complete browser login before tunnel up</div></div>
       <div class="stat-box"><div class="stat-label">Encapsulation Tuning</div><div class="stat-val" style="font-size:1.05rem;">1380 MTU + UDP/443 Stealth listener</div></div>
     </div>
 
-    <h2>Securing Shared Hospitality Subnets & Bypassing Port Filters</h2>
+    <h2>Securing Shared Hospitality Subnets Over Stealth UDP 443</h2>
     <div class="card"><p>Hospitality gateways inspect unencrypted traffic for bulk transfer heuristics while allowing fellow guests connected to the same floor access point to probe open laptop SMB/SSH shares via multicast discovery.</p>
-<p>First authenticate through the captive splash portal (`http://neverssl.com`), then engage UDP/443 encapsulation plus our local ARP monitor to drop hostile rogue-gateway redirects immediately.</p></div>
+<p>First authenticate through the captive splash portal (<code>http://neverssl.com</code>), then engage UDP/443 encapsulation plus SWEEPR's local ARP monitor to drop hostile rogue-gateway redirects immediately.</p></div>
 
-    <h2>Hospitality LAN Safety & Portal Sequence</h2>
+    <h2>Hospitality LAN Safety &amp; Portal Sequence</h2>
     <pre><code># 1. Inspect local gateway ARP entry prior to connecting
 arp -a
 # 2. Authenticate splash screen, then validate DNS privacy
@@ -120,7 +151,7 @@ nslookup whoami.akamai.net 10.64.0.1</code></pre>
     <h2>Hotel Floor Wi-Fi Risk vs Protection Matrix</h2>
     <table>
       <thead><tr><th>Hospitality Risk Surface</th><th>Exposed Guest Room AP</th><th>Tunnelled + Shielded Laptop</th></tr></thead>
-      <tbody><tr><td>Evil-Twin / Neighbor Sniffing</td><td>Cleartext SNI & DNS visible</td><td>End-to-end AEAD encrypted</td></tr><tr><td>Arbitrary UDP Port Blocking</td><td>Drops ports > 1024 silently</td><td>Flows cleanly over UDP/443</td></tr><tr><td>Subnet Device Exposure</td><td>mDNS/SMB visible to guests</td><td>Strict firewall + LAN alert</td></tr></tbody>
+      <tbody><tr><td>Evil-Twin / Neighbor Sniffing</td><td>Cleartext SNI &amp; DNS visible</td><td>End-to-end AEAD encrypted</td></tr><tr><td>Arbitrary UDP Port Blocking</td><td>Drops ports &gt; 1024 silently</td><td>Flows cleanly over UDP/443</td></tr><tr><td>Subnet Device Exposure</td><td>mDNS/SMB visible to guests</td><td>Strict firewall + LAN alert</td></tr></tbody>
     </table>
 
     <h2>WireGuard Profile Calibration (1380 MTU)</h2>
@@ -136,15 +167,13 @@ PersistentKeepalive = 15</code></pre>
 
     <div class="cta-strip">
       <div style="flex:1 1 320px;">
-        <p style="margin:0; font-size:0.95rem; color:#e2e8f0;">Protect frequent work trips for £1.99 first month (£12.49 regular), save 35% semi-annually at £48.99, or grab our annual tier at £74.99 (50% off) plus +£14.99/yr Wi-Fi Radar & Smart-TV ACR blocker for 3 travel devices — 14-day refund covered.</p>
+        <p style="margin:0; font-size:0.95rem; color:#e2e8f0;">Protect frequent work trips for £1.99 first month (£12.49 regular), save 35% semi-annually at £48.99, or grab our annual tier at £74.99 (50% off) plus +£14.99/yr Wi-Fi Radar &amp; Smart-TV ACR blocker for 3 travel devices — 14-day refund covered.</p>
       </div>
       <div style="display:flex; gap:10px; flex-wrap:wrap;">
         <a class="btn" href="/download">Lock Down Hotel Wi-Fi</a>
         <a class="btn-outline" href="/guides/public-hotel-airport-wifi-security">Read Hotel Security Guide</a>
       </div>
     </div>
-
-    
 
     <h2>Cross-Cluster Engineering Manuals</h2>
     <ul>
@@ -155,7 +184,7 @@ PersistentKeepalive = 15</code></pre>
     </ul>
   </main>
   <footer>
-    <p>&copy; 2026 SWEEPR VPN Security Lab. Built with Open-Source Kernel WireGuard &amp; RAM-Only Servers.</p>
+    <p>&copy; 2026 SWEEPR VPN (UK Sole Trader). Independent UK Developer &bull; Open-Source Kernel WireGuard &amp; RAM-Only Servers.</p>
     <p>
       <a href="/">Home</a> |
       <a href="/solutions">ISP Solutions</a> |
@@ -170,6 +199,6 @@ PersistentKeepalive = 15</code></pre>
       <a href="/privacy">Privacy Policy</a>
     </p>
   </footer>
-  <script src="/nav.js?v=02bccc22" defer></script>
+  <script src="/nav.js?v=f9d994cf" defer></script>
 </body>
 </html>

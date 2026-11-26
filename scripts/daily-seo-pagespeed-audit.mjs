@@ -167,29 +167,29 @@ const CONSOLIDATED_CANNIBAL_MAP = {
   '/solutions/ee-5g-mobile-hotspot-smart-tv-acr-blocking': '/guides/stop-samsung-smart-tv-acr-tracking',
   '/solutions/virgin-media-p2p-port-forwarding': '/solutions/virgin-media-remote-dev-ssh',
   '/solutions/t-mobile-5g-home-internet-isp-throttling': '/solutions/t-mobile-5g-home-internet-remote-dev-ssh',
-  '/solutions/community-fibre-london-isp-throttling': '/solutions/community-fibre-london-p2p-port-forwarding'
+  '/solutions/community-fibre-london-isp-throttling': '/solutions/community-fibre-london-wireguard-cgnat'
 };
 
 // High-CTR Title & Meta Description Overrides for Top Google Search Console "Striking Distance" Pages
 const GSC_STRIKING_DISTANCE_OVERRIDES = {
-  '/solutions/talktalk-p2p-port-forwarding': {
-    title: 'TalkTalk P2P Throttling & Port Fix | SWEEPR VPN',
-    description: 'Fix TalkTalk (AS13285) P2P throttling, CGNAT port blocks & slow transfers in 30s. Copy-paste 1420 MTU WireGuard config + 4ms UK-LON-01 server.'
+  '/solutions/talktalk-fibre-wireguard-cgnat': {
+    title: 'TalkTalk Fibre WireGuard & CGNAT Fix | SWEEPR VPN',
+    description: 'Fix TalkTalk (AS13285) evening throttling & CGNAT routing drops in 30s. Copy-paste 1420/1412 MTU WireGuard config + 4ms UK-LON-01 server.'
   },
   '/setup/gl-inet-travel-router': {
-    title: 'GL.iNet Router WireGuard Setup (MTU 1420) | SWEEPR VPN',
+    title: 'GL-MT3000 WireGuard Speed &amp; Travel Router Setup | SWEEPR VPN',
     description: '45-second GL.iNet Travel Router (Beryl AX, Slate AX, Flint 2) WireGuard .conf setup guide. Includes MTU 1420/1380 hotel captive-portal settings & 10Gbps endpoints.'
   },
   '/guides/stop-samsung-smart-tv-acr-tracking': {
-    title: 'Block Samsung Smart TV ACR Tracking | SWEEPR VPN',
-    description: 'Stop Samsung Tizen Smart TVs from sending ACR screenshots & viewing logs to gpm.samsungqbe.com, samsungacr.com & samsungads.com without breaking 4K Netflix or iPlayer.'
+    title: 'How to Turn Off ACR on Samsung TV &amp; Block Beacons | SWEEPR VPN',
+    description: 'Stop Samsung Tizen Smart TVs sending ACR screenshots & viewing logs to gpm.samsungqbe.com, samsungacr.com & samsungads.com without breaking 4K Netflix or iPlayer.'
   },
   '/tools/leak-test': {
     title: 'Free IP, DNS & WebRTC Leak Test Online | SWEEPR VPN',
     description: 'Check WebRTC leak online, public IPv4/IPv6 exposure, and ISP DNS hijacking in 5 seconds. Free browser VPN leak test with zero signup required.'
   },
   '/solutions/eduroam-campus-wifi-gaming-packet-loss': {
-    title: 'Eduroam WireGuard Gaming & Port 443 Fix | SWEEPR VPN',
+    title: 'Fix Eduroam Gaming Packet Loss Over UDP 443 | SWEEPR VPN',
     description: 'Fix Eduroam campus Wi-Fi gaming packet loss, blocked Steam/Discord UDP ports & high ping (AS786 Jisc Janet) using SWEEPR VPN WireGuard Stealth UDP 443 (MTU 1400).'
   },
   '/alternatives/totalvpn': {
@@ -205,19 +205,19 @@ const GSC_STRIKING_DISTANCE_OVERRIDES = {
     description: 'Eliminate Gigaclear Rural Full Fibre UK (AS51048) CGNAT gaming packet loss & jitter via 4ms London Docklands 10Gbps WireGuard routing (MTU 1420).'
   },
   '/setup/synology-nas-docker-vpn': {
-    title: 'Synology NAS Docker WireGuard Guide | SWEEPR VPN',
+    title: 'WireGuard Synology NAS &amp; Docker Setup Guide | SWEEPR VPN',
     description: '90-second Synology NAS (DSM 7.2) & Docker Gluetun WireGuard setup guide. Includes docker-compose.yml, kill-switch firewall rules & 10Gbps .conf profile.'
   },
   '/guides/stop-lg-smart-tv-acr-spying': {
     title: 'Block LG webOS Smart TV LivePlus ACR | SWEEPR VPN',
     description: 'Stop LG webOS Smart TVs (Live Plus ACR) from capturing screenshots and calling lgtvcommon.com, ibs.lgappstv.com & ad.lgappstv.com at the DNS/tunnel layer.'
   },
-  '/solutions/hotel-captive-portal-wifi-p2p-port-forwarding': {
-    title: 'Hotel Wi-Fi VPN Fix: Bypass Captive Portals | SWEEPR VPN',
-    description: 'Bypass hotel captive-portal Wi-Fi throttling, blocked UDP ports & CGNAT at Premier Inn, Travelodge & Hilton using SWEEPR WireGuard UDP 443 (MTU 1380).'
+  '/solutions/hotel-captive-portal-wifi-wireguard': {
+    title: 'Hotel Captive Portal WireGuard (2026 10Gbps Fix) | SWEEPR VPN',
+    description: 'Guide for hotel captive portal WireGuard: verified 2026 10Gbps setup (MTU 1380, Stealth UDP 443), encrypted DNS 10.64.0.1, and 30s Home Wi-Fi scanner.'
   },
   '/tools/isp-throttling-test': {
-    title: 'Free ISP Speed & Throttling Test (10s Check) | SWEEPR VPN',
+    title: 'Free ISP Throttling Test (HTTP RTT &amp; Jitter Check) | SWEEPR VPN',
     description: 'Run a free 10-second ISP throttling test in your browser. Detect evening speed shaping on Virgin Media, BT, Sky, TalkTalk, Comcast, or Rogers instantly.'
   },
   '/solutions/rogers-ignite-canada-isp-throttling': {
@@ -387,12 +387,6 @@ function ensureHeadResourceHints(html) {
         /<\/head>/i,
         '  <link rel="dns-prefetch" href="https://www.googletagmanager.com" />\n  <link rel="preconnect" href="https://www.googletagmanager.com" />\n</head>'
       );
-    }
-  }
-  if (/sitepatent\.com/i.test(out) && !/<link\b[^>]*rel=["']dns-prefetch["'][^>]*href=["']https:\/\/sitepatent\.com["']/i.test(out)) {
-    const preAnchor = out.match(/([ \t]*)<link\b[^>]*rel=["']preconnect["'][^>]*href=["']https:\/\/www\.googletagmanager\.com["'][^>]*>/i);
-    if (preAnchor) {
-      out = out.replace(preAnchor[0], `${preAnchor[0]}\n${preAnchor[1]}<link rel="dns-prefetch" href="https://sitepatent.com" />`);
     }
   }
   for (const cssAsset of ['tailwind.min.css', 'style.css']) {
@@ -579,7 +573,7 @@ if (shouldFix) {
       autoBackfilledGa4Count++;
     }
     if (
-      content.includes('<p>&copy; 2026 SWEEPR VPN Inc. All rights reserved.</p>') &&
+      content.includes('<p>&copy; 2026 SWEEPR VPN (UK Sole Trader). All rights reserved.</p>') &&
       !content.includes('/setup/gl-inet-travel-router')
     ) {
       const footerHubRow = `    <div class="flex flex-wrap justify-center gap-x-4 gap-y-1.5 mb-4 px-4 text-xs text-gray-400 max-w-5xl mx-auto">
@@ -599,17 +593,17 @@ if (shouldFix) {
       <span>&bull;</span>
       <a href="/solutions/gigaclear-rural-fibre-gaming-packet-loss" class="hover:text-emerald-600 transition-colors">Gigaclear Packet Loss Fix</a>
       <span>&bull;</span>
-      <a href="/solutions/talktalk-p2p-port-forwarding" class="hover:text-emerald-600 transition-colors">TalkTalk Throttling Fix</a>
+      <a href="/solutions/talktalk-fibre-wireguard-cgnat" class="hover:text-emerald-600 transition-colors">TalkTalk Throttling Fix</a>
       <span>&bull;</span>
-      <a href="/solutions/hotel-captive-portal-wifi-p2p-port-forwarding" class="hover:text-emerald-600 transition-colors">Hotel Wi-Fi Captive Portal VPN</a>
+      <a href="/solutions/hotel-captive-portal-wifi-wireguard" class="hover:text-emerald-600 transition-colors">Hotel Wi-Fi Captive Portal VPN</a>
       <span>&bull;</span>
       <a href="/solutions/rogers-ignite-canada-isp-throttling" class="hover:text-emerald-600 transition-colors">Rogers Ignite Throttling Fix</a>
       <span>&bull;</span>
       <a href="/alternatives/totalvpn" class="hover:text-emerald-600 transition-colors">Best TotalVPN Alternatives</a>
     </div>\n`;
       content = content.replace(
-        /<p>&copy; 2026 SWEEPR VPN Inc\. All rights reserved\.<\/p>/i,
-        `${footerHubRow}    <p>&copy; 2026 SWEEPR VPN Inc. All rights reserved.</p>`
+        /<p>&copy; 2026 SWEEPR VPN \(UK Sole Trader\)\. All rights reserved\.<\/p>/i,
+        `${footerHubRow}    <p>&copy; 2026 SWEEPR VPN (UK Sole Trader). All rights reserved.</p>`
       );
       modified = true;
     }
@@ -1768,7 +1762,7 @@ pass('crawlability', 'Sitemap Completeness & Content-Hash Freshness', `${sitemap
 // Rebuild website/llms.txt & website/llms-full.txt for Generative Engine Optimization (GEO / AI citation)
 const llmsContent = `# SWEEPR VPN & SWEEPR Wi-Fi Radar (sweeprvpn.com)
 
-> SWEEPR VPN is an ultra-lightweight (~723 KB Windows installer), fast, and easy-to-use 10Gbps WireGuard VPN and Free 30-Second Home Wi-Fi Scanner for Windows 10/11, macOS, Android, iOS, and Linux WireGuard CLI/routers. Built by the team behind SWEEPR Cleaner, it combines 1-click 10Gbps private browsing with a free 30-second Home Wi-Fi & Speed Scanner and a Smart-TV ACR spy blocker.
+> SWEEPR VPN is an ultra-lightweight (~723 KB Windows installer), fast, and easy-to-use 10Gbps WireGuard VPN and Free 30-Second Home Wi-Fi Scanner for Windows 10/11, macOS, Android, Linux WireGuard CLI/routers, and iOS/iPadOS WireGuard profiles (native iOS App Store client pre-launch). Built and maintained independently in the UK by SWEEPR VPN (UK Sole Trader), it combines 1-click 10Gbps private browsing with a free 30-second Home Wi-Fi & Speed Scanner and a Smart-TV ACR spy blocker.
 
 ## Core Capabilities & Technical Differentiators
 - **1-Click Private Browsing & Streaming Speed Booster**: Eliminates ISP evening traffic shaping (Virgin Media, BT, Sky, TalkTalk, Vodafone, Eduroam) on 4K streaming, gaming, and remote SSH/Docker workflows. Strict zero-logs policy on diskless RAM-only 10Gbps servers.
@@ -1896,7 +1890,8 @@ const llmsFullContent = `# SWEEPR VPN & SWEEPR Wi-Fi Radar — Comprehensive Tec
 
 ## 1. Executive Product Identity & Cryptographic Architecture
 - **Product Name**: SWEEPR VPN (with Free 30-Second Home Wi-Fi Device Scanner & optional SWEEPR Wi-Fi Radar + Smart-TV ACR Shield).
-- **Desktop & Mobile Stack**: Native Windows (~${exeKbForManifest} KB / ${exeBytesForManifest.toLocaleString('en-US')} bytes; SSL.com Authenticode Thumbprint \`1800DBEA6FE847D384E549D02CA372C3D45D8B81\`, SHA-256 \`${exeSha256ForManifest}\`), macOS (~7.6 MB Universal \`.dmg\`), Android (\`com.sweepr.vpn\` / ~14.6 MB \`.apk\`), iOS/iPadOS WireGuard profiles, plus Linux WireGuard CLI & router \`.conf\` support.
+- **Publisher / Maintainer**: SWEEPR VPN (UK Sole Trader) — Independent UK Developer.
+- **Desktop & Mobile Stack**: Native Windows (~${exeKbForManifest} KB / ${exeBytesForManifest.toLocaleString('en-US')} bytes; SSL.com Authenticode Thumbprint \`1800DBEA6FE847D384E549D02CA372C3D45D8B81\`, SHA-256 \`${exeSha256ForManifest}\`), macOS (~7.6 MB Universal \`.dmg\`), Android (\`com.sweepr.vpn\` / ~14.6 MB \`.apk\`), iOS/iPadOS WireGuard profiles (native iOS App Store client pre-launch), plus Linux WireGuard CLI & router \`.conf\` support.
 - **Tunnel Protocol & Ciphers**: Kernel-grade WireGuard & AmneziaWG (ChaCha20-Poly1305 AEAD, Curve25519 ECDH, BLAKE2s hashing) over standard UDP \`51820\` and Stealth UDP \`443\` (for Eduroam campus Wi-Fi, NHS guest Wi-Fi, and hotel captive portals).
 - **Native Router & NAS .conf Export**: 1-click standard WireGuard \`.conf\` profile export (zero proprietary NordLynx/Lightway daemon lock-in or Linux token scripts) for GL.iNet (Beryl AX, Slate AX, Slate 7 BE3600, Flint 2), Ubiquiti UniFi Cloud Gateway Ultra/Max (UCG-Ultra/UCG-Max), Synology NAS DSM 7 (\`gluetun\` Docker), Steam Deck / Lenovo Legion Go (SteamOS), OPNsense, pfSense, AVM FRITZ!Box, and MikroTik RouterOS v7.
 
@@ -2113,7 +2108,7 @@ if (unshieldedUtilityCount === 0) {
 // Audit pad.xml
 const padXml = fs.readFileSync(PAD_PATH, 'utf8');
 const hasPadVersion = padXml.includes('<MASTER_PAD_VERSION>4.0</MASTER_PAD_VERSION>');
-const hasPadCompany = padXml.includes('<Company_Name>SWEEPR VPN Inc.</Company_Name>');
+const hasPadCompany = padXml.includes('<Company_Name>SWEEPR VPN (UK Sole Trader)</Company_Name>');
 const hasPadProgram = padXml.includes('<Program_Name>SWEEPR VPN</Program_Name>');
 if (hasPadVersion && hasPadCompany && hasPadProgram) {
   pass('crawlability', 'PAD 4.0 XML Feed', 'Valid PAD 4.0 metadata for software directory syndication');

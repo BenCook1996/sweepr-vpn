@@ -1,16 +1,8 @@
 {
   "indexnow_key": "e159f60b7cbd19abe8a6c1c8d84bb2b7",
-  "gsc_requested": [],
-  "bing_requested": [],
-  "directory_forms_submitted": [
-    "https://www.saashub.com/sweepr-vpn/added",
-    "https://www.launchingnext.com/submit/"
-  ],
-  "last_indexnow_ping": null,
-  "last_sitemap_ping": "2026-11-25T10:16:00.066Z",
   "pending_urls": [],
   "indexnow_submitted_at": {
-    "https://sweeprvpn.com/solutions/talktalk-p2p-port-forwarding": "2026-11-17T10:14:37.370Z",
+    "https://sweeprvpn.com/solutions/talktalk-fibre-wireguard-cgnat": "2026-11-17T10:14:37.370Z",
     "https://sweeprvpn.com/setup/gl-inet-travel-router": "2026-11-17T10:14:37.370Z",
     "https://sweeprvpn.com/guides/stop-samsung-smart-tv-acr-tracking": "2026-11-17T10:14:37.370Z",
     "https://sweeprvpn.com/tools/leak-test": "2026-11-17T10:14:37.370Z",
@@ -20,7 +12,7 @@
     "https://sweeprvpn.com/solutions/gigaclear-rural-fibre-gaming-packet-loss": "2026-11-16T10:06:37.396Z",
     "https://sweeprvpn.com/setup/synology-nas-docker-vpn": "2026-11-17T10:14:37.370Z",
     "https://sweeprvpn.com/guides/stop-lg-smart-tv-acr-spying": "2026-11-16T10:06:37.396Z",
-    "https://sweeprvpn.com/solutions/hotel-captive-portal-wifi-p2p-port-forwarding": "2026-11-16T10:06:37.396Z",
+    "https://sweeprvpn.com/solutions/hotel-captive-portal-wifi-wireguard": "2026-11-16T10:06:37.396Z",
     "https://sweeprvpn.com/tools/isp-throttling-test": "2026-11-17T10:14:37.370Z",
     "https://sweeprvpn.com/solutions/rogers-ignite-canada-isp-throttling": "2026-11-16T10:06:37.396Z",
     "https://sweeprvpn.com/setup/steam-deck-vpn": "2026-11-17T10:14:37.370Z",
@@ -410,7 +402,7 @@
     "https://sweeprvpn.com/solutions/gigaclear-rural-fibre-voip-teams-zoom-jitter": "2026-11-10T13:13:41.797Z",
     "https://sweeprvpn.com/solutions/eduroam-campus-wifi-remote-dev-ssh": "2026-11-10T13:13:41.797Z",
     "https://sweeprvpn.com/solutions/eduroam-campus-wifi-p2p-port-forwarding": "2026-11-10T13:13:41.797Z",
-    "https://sweeprvpn.com/solutions/community-fibre-london-p2p-port-forwarding": "2026-11-24T15:29:02.124Z",
+    "https://sweeprvpn.com/solutions/community-fibre-london-wireguard-cgnat": "2026-11-24T15:29:02.124Z",
     "https://sweeprvpn.com/solutions/bt-broadband-uhd-streaming-buffering": "2026-11-10T13:13:41.797Z",
     "https://sweeprvpn.com/solutions/brsk-better-net-uk-voip-teams-zoom-jitter": "2026-11-24T15:29:02.124Z",
     "https://sweeprvpn.com/de": "2026-11-18T13:39:27.254Z",
@@ -422,6 +414,14 @@
     "https://sweeprvpn.com/fr/tools/leak-test": "2026-11-18T13:39:27.254Z",
     "https://sweeprvpn.com/es/tools/leak-test": "2026-11-18T13:39:27.254Z"
   },
+  "gsc_requested": [],
+  "bing_requested": [],
+  "directory_forms_submitted": [
+    "https://www.saashub.com/sweepr-vpn/added",
+    "https://www.launchingnext.com/submit/"
+  ],
+  "last_indexnow_ping": null,
+  "last_sitemap_ping": "2026-11-25T10:16:00.066Z",
   "last_daily_50_batch": {
     "date": "2026-11-12",
     "newCount": 0,
@@ -430,7 +430,7 @@
     "totalSitemapUrls": 223
   },
   "last_audit": {
-    "date": "2026-11-24",
+    "date": "2026-11-26",
     "totalUrls": 93,
     "pendingDeltaUrls": 0
   }
