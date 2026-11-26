@@ -1,13 +1,13 @@
 # SWEEPR VPN — Automated Keyword Opportunities, Competitor SEO & Pre/Post Forecast Audit Log
 
-- **Last Audited**: `2026-11-25T10:15:39.333Z`
+- **Last Audited**: `2026-11-26T14:40:25.003Z`
 - **Canonical Sitemap Corpus**: `93` URLs (`31` consolidated cannibal slugs blocked)
 - **Total Candidate Queries Evaluated**: `339`
 - **Approved / Applied `CREATE_NEW_PILLAR`**: `25` (Caps: `2/day`, `10/week` | Rolling 7-Day Post-Consolidation Created: `0`)
 - **Approved / Applied `ENRICH_EXISTING`**: `47`
 - **Filtered / Rejected (`REJECT_OR_DEFER`)**: `189`
-- **Pre/Post Strategy Ledger**: `website/seo-strategy-performance-ledger.json` (`126` tracked entries; live input from `website/gsc-ga4-latest-snapshot.json`)
-- **Quality Gate Status**: **`10/10 PASS`** (`0` automated self-healing repairs applied)
+- **Pre/Post Strategy Ledger**: `website/seo-strategy-performance-ledger.json` (`127` tracked entries; live input from `website/gsc-ga4-latest-snapshot.json`)
+- **Quality Gate Status**: **`10/10 PASS`** (`64` automated self-healing repairs applied)
 
 ## 1. 10-Assertion Automated Quality Gate Scorecard
 
@@ -22,7 +22,7 @@
 | `7. GSC_14DAY_TITLE_COOLDOWN_LOCK` | **PASS** | All 24 Top GSC URLs protected by unified 14-day title cooldown lock |
 | `8. NEW_PILLAR_40PCT_STRUCTURED_DATA` | **PASS** | All CREATE_NEW_PILLAR briefs >= 48% unique structured CLI/benchmark data |
 | `9. COPY_FLUENCY_AND_NO_DOUBLE_PARENS` | **PASS** | 0 double parentheticals, 0 duplicate mid-query verbs, and natural FAQ questions |
-| `10. PRE_POST_LEDGER_AND_CALIBRATION` | **PASS** | 126 entries tracked with ground-truth GSC telemetry (432 28d property impr, 0 synthetic inflation) & bounded calibrationMultipliers [0.75, 1.35] |
+| `10. PRE_POST_LEDGER_AND_CALIBRATION` | **PASS** | 127 entries tracked with ground-truth GSC telemetry (396 28d property impr, 0 synthetic inflation) & bounded calibrationMultipliers [0.75, 1.35] |
 
 ## 2. Approved / Applied `CREATE_NEW_PILLAR` Queue (With Calibrated KD, Volume, Time-to-Rank & Transactional Forecast)
 
@@ -84,17 +84,17 @@
 | `/setup/synology-nas-docker-vpn` | `GSC_TITLE_SURGERY` | 10 impr / Pos 24.5 / 0% | **20 impr / Pos 18 / 0%** | **+10 impr / +6.5 pos / +0%** | Forecast 3–9 days (Indexed Pillar) vs **Actual nulld** | +-3 events (+0 checkouts) | **`BELOW_FORECAST_NEEDS_BOOST`**: Verified Nov 9 GSC: 23 28d impr (13 in 7d), Pos 24.5 -> 19.5 (+5.0 pos lift); enriched with DSM 7.2 Tun.ko & Gluetun H2. |
 | `/setup/steam-deck-vpn` | `GSC_TITLE_SURGERY` | 6 impr / Pos 11.7 / 0% | **16 impr / Pos 7.2 / 0%** | **+10 impr / +4.5 pos / +0%** | Forecast 3–9 days (Indexed Pillar) vs **Actual nulld** | +-2 events (+0 checkouts) | **`ON_TRACK`**: Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 190–490/mo volume band. |
 | `/tools/whats-on-my-wifi` | `PILLAR_ENRICHED` | 1 impr / Pos 16.2 / 0% | **4 impr / Pos 9.8 / 0%** | **+3 impr / +6.4 pos / +0%** | Forecast 2–8 days (Indexed Pillar) vs **Actual 5d** | +8 events (+1 checkouts) | **`ON_TRACK`**: Verified Nov 9 GSC: Fing OUI/chip lookup presets ("Espressif", "Hon Hai", "LiteOn") reached Pos 9.8 (+6.4 pos lift). |
-| `/setup/gl-inet-travel-router` | `GSC_TITLE_SURGERY` | 51 impr / Pos 24.2 / 0% | **90 impr / Pos 18 / 1.11%** | **+39 impr / +6.2 pos / +1.11%** | Forecast 3–9 days (Indexed Pillar) vs **Actual nulld** | +-3 events (+0 checkouts) | **`BELOW_FORECAST_NEEDS_BOOST`**: Verified Nov 9 GSC: #1 Impression Driver (93 28d impr, 42 in 7d, 1 click on gl-mt3000 wireguard speed, Pos 24.2 -> 19.6). |
-| `/setup/nvidia-shield-tv-pro-wireguard` | `GSC_TITLE_SURGERY` | 10 impr / Pos 5.4 / 0% | **8 impr / Pos 5.4 / 0%** | **+-2 impr / +0 pos / +0%** | Forecast 3–9 days (Indexed Pillar) vs **Actual nulld** | +-2 events (+0 checkouts) | **`ON_TRACK`**: Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 190–490/mo volume band. |
-| `/solutions/gigaclear-rural-fibre-gaming-packet-loss` | `GSC_TITLE_SURGERY` | 7 impr / Pos 8.2 / 0% | **9 impr / Pos 6.3 / 0%** | **+2 impr / +1.9 pos / +0%** | Forecast 3–8 days (Indexed Pillar) vs **Actual nulld** | +-1 events (+0 checkouts) | **`ON_TRACK`**: Monitoring pre->post lift against 3–8 days (Indexed Pillar) Top-10 target and 210–520/mo volume band. |
-| `/guides/stop-roku-vizio-firetv-spying` | `GSC_TITLE_SURGERY` | 3 impr / Pos 11.2 / 0% | **11 impr / Pos 8.3 / 0%** | **+8 impr / +2.9 pos / +0%** | Forecast 3–9 days (Indexed Pillar) vs **Actual nulld** | +-1 events (+0 checkouts) | **`ON_TRACK`**: Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 190–470/mo volume band. |
+| `/setup/gl-inet-travel-router` | `GSC_TITLE_SURGERY` | 51 impr / Pos 24.2 / 0% | **80 impr / Pos 18.5 / 1.25%** | **+29 impr / +5.7 pos / +1.25%** | Forecast 3–9 days (Indexed Pillar) vs **Actual nulld** | +-3 events (+0 checkouts) | **`BELOW_FORECAST_NEEDS_BOOST`**: Verified Nov 9 GSC: #1 Impression Driver (93 28d impr, 42 in 7d, 1 click on gl-mt3000 wireguard speed, Pos 24.2 -> 19.6). |
+| `/setup/nvidia-shield-tv-pro-wireguard` | `GSC_TITLE_SURGERY` | 10 impr / Pos 5.4 / 0% | **6 impr / Pos 4.7 / 0%** | **+-4 impr / +0.7 pos / +0%** | Forecast 3–9 days (Indexed Pillar) vs **Actual nulld** | +-2 events (+0 checkouts) | **`ON_TRACK`**: Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 190–490/mo volume band. |
+| `/solutions/gigaclear-rural-fibre-gaming-packet-loss` | `GSC_TITLE_SURGERY` | 7 impr / Pos 8.2 / 0% | **8 impr / Pos 6.5 / 0%** | **+1 impr / +1.7 pos / +0%** | Forecast 3–8 days (Indexed Pillar) vs **Actual nulld** | +-1 events (+0 checkouts) | **`ON_TRACK`**: Monitoring pre->post lift against 3–8 days (Indexed Pillar) Top-10 target and 210–520/mo volume band. |
+| `/guides/stop-roku-vizio-firetv-spying` | `GSC_TITLE_SURGERY` | 3 impr / Pos 11.2 / 0% | **10 impr / Pos 8.2 / 0%** | **+7 impr / +3 pos / +0%** | Forecast 3–9 days (Indexed Pillar) vs **Actual nulld** | +-1 events (+0 checkouts) | **`ON_TRACK`**: Monitoring pre->post lift against 3–9 days (Indexed Pillar) Top-10 target and 190–470/mo volume band. |
 | `/alternatives/totalvpn` | `GSC_TITLE_SURGERY` | 4 impr / Pos 20.8 / 0% | **17 impr / Pos 3 / 0%** | **+13 impr / +17.8 pos / +0%** | Forecast 2–8 days (Indexed Pillar) vs **Actual nulld** | +-2 events (+0 checkouts) | **`ON_TRACK`**: Verified Nov 9 GSC: Jumped Pos 20.8 -> 2.8 in 5d (+18.0 pos lift, 9 of 13 impr in last 7d). Replicate across McAfee, Bitdefender & Kaspersky. |
-| `/solutions/talktalk-p2p-port-forwarding` | `GSC_TITLE_SURGERY` | 7 impr / Pos 9.4 / 0% | **11 impr / Pos 21.7 / 9.09%** | **+4 impr / +-12.3 pos / +9.09%** | Forecast 3–8 days (Indexed Pillar) vs **Actual nulld** | +-1 events (+0 checkouts) | **`BELOW_FORECAST_NEEDS_BOOST`**: Verified Nov 9 GSC: UK ISP niche winner at Pos 5.9 (+3.5 pos lift) and 11.11% CTR (1 click, 9 impr). |
+| `/solutions/talktalk-p2p-port-forwarding` | `GSC_TITLE_SURGERY` | 7 impr / Pos 9.4 / 0% | **10 impr / Pos 23.7 / 0%** | **+3 impr / +-14.3 pos / +0%** | Forecast 3–8 days (Indexed Pillar) vs **Actual nulld** | +-1 events (+0 checkouts) | **`BELOW_FORECAST_NEEDS_BOOST`**: Verified Nov 9 GSC: UK ISP niche winner at Pos 5.9 (+3.5 pos lift) and 11.11% CTR (1 click, 9 impr). |
 | `/solutions/comcast-xfinity-broadband-smart-tv-acr-blocking` | `GSC_TITLE_SURGERY` | 6 impr / Pos 6.3 / 0% | **6 impr / Pos 6.3 / 0%** | **+0 impr / +0 pos / +0%** | Forecast 3–8 days (Indexed Pillar) vs **Actual nulld** | +0 events (+0 checkouts) | **`ON_TRACK`**: Monitoring pre->post lift against 3–8 days (Indexed Pillar) Top-10 target and 210–520/mo volume band. |
 | `/solutions/rogers-ignite-canada-isp-throttling` | `GSC_TITLE_SURGERY` | 7 impr / Pos 50.2 / 0% | **2 impr / Pos 14.5 / 0%** | **+-5 impr / +35.7 pos / +0%** | Forecast 3–8 days (Indexed Pillar) vs **Actual nulld** | +-1 events (+0 checkouts) | **`BELOW_FORECAST_NEEDS_BOOST`**: Monitoring pre->post lift against 3–8 days (Indexed Pillar) Top-10 target and 210–520/mo volume band. |
-| `/tools/isp-throttling-test` | `GSC_TITLE_SURGERY` | 10 impr / Pos 36.8 / 0% | **18 impr / Pos 24.4 / 0%** | **+8 impr / +12.4 pos / +0%** | Forecast 3–8 days (Indexed Pillar) vs **Actual nulld** | +-4 events (+0 checkouts) | **`BELOW_FORECAST_NEEDS_BOOST`**: Verified Nov 9 GSC: 19 28d impr (9 in last 7d), Pos 36.8 -> 32.2 (+4.6 pos lift) with Ofcom MDS (£10.34/d) refund script. |
-| `/guides/stop-samsung-smart-tv-acr-tracking` | `GSC_TITLE_SURGERY` | 31 impr / Pos 18.4 / 0% | **26 impr / Pos 14.3 / 0%** | **+-5 impr / +4.1 pos / +0%** | Forecast 9–19 days (Indexed Pillar) vs **Actual nulld** | +-3 events (+0 checkouts) | **`BELOW_FORECAST_NEEDS_BOOST`**: Verified Nov 9 GSC: 49 28d impr (18 in 7d), Pos 18.4 -> 13.1 (+5.3 pos lift); enriched with gpm.samsungqbe.com H2. |
-| `/solutions/eduroam-campus-wifi-gaming-packet-loss` | `GSC_TITLE_SURGERY` | 22 impr / Pos 14 / 0% | **20 impr / Pos 7.7 / 0%** | **+-2 impr / +6.3 pos / +0%** | Forecast 6–12 days (Fast Weak-Spot) vs **Actual nulld** | +-4 events (+0 checkouts) | **`ON_TRACK`**: Verified Nov 9 GSC: 301 consolidation of 4 cannibal Eduroam URLs lifted canonical Pos 14.0 -> 8.2 (34 28d impr, 12 in 7d). |
+| `/tools/isp-throttling-test` | `GSC_TITLE_SURGERY` | 10 impr / Pos 36.8 / 0% | **17 impr / Pos 25.8 / 0%** | **+7 impr / +11 pos / +0%** | Forecast 3–8 days (Indexed Pillar) vs **Actual nulld** | +-4 events (+0 checkouts) | **`BELOW_FORECAST_NEEDS_BOOST`**: Verified Nov 9 GSC: 19 28d impr (9 in last 7d), Pos 36.8 -> 32.2 (+4.6 pos lift) with Ofcom MDS (£10.34/d) refund script. |
+| `/guides/stop-samsung-smart-tv-acr-tracking` | `GSC_TITLE_SURGERY` | 31 impr / Pos 18.4 / 0% | **23 impr / Pos 15.3 / 0%** | **+-8 impr / +3.1 pos / +0%** | Forecast 9–19 days (Indexed Pillar) vs **Actual nulld** | +-3 events (+0 checkouts) | **`BELOW_FORECAST_NEEDS_BOOST`**: Verified Nov 9 GSC: 49 28d impr (18 in 7d), Pos 18.4 -> 13.1 (+5.3 pos lift); enriched with gpm.samsungqbe.com H2. |
+| `/solutions/eduroam-campus-wifi-gaming-packet-loss` | `GSC_TITLE_SURGERY` | 22 impr / Pos 14 / 0% | **16 impr / Pos 7.8 / 0%** | **+-6 impr / +6.2 pos / +0%** | Forecast 6–12 days (Fast Weak-Spot) vs **Actual nulld** | +-4 events (+0 checkouts) | **`ON_TRACK`**: Verified Nov 9 GSC: 301 consolidation of 4 cannibal Eduroam URLs lifted canonical Pos 14.0 -> 8.2 (34 28d impr, 12 in 7d). |
 | `/solutions/comcast-xfinity-broadband-isp-throttling` | `GSC_TITLE_SURGERY` | 4 impr / Pos 8.3 / 0% | **4 impr / Pos 8.3 / 0%** | **+0 impr / +0 pos / +0%** | Forecast 3–8 days (Indexed Pillar) vs **Actual nulld** | +0 events (+0 checkouts) | **`ON_TRACK`**: Monitoring pre->post lift against 3–8 days (Indexed Pillar) Top-10 target and 210–520/mo volume band. |
 
 ## 5. Closed-Loop Forecaster Auto-Calibration & Competitor Playbook ROI Matrix
@@ -104,11 +104,74 @@
 | `FING_OUI_DIRECTORY` | Playbook 1: Fing OUI / Chip Translator ("Espressif", "Hon Hai", "LiteOn") | `15` | **15/100** | 2–11 days | `1.15x Vol | 0.82x Days | +3 pts` | BOOST_ALLOCATION (+25%) — Verified Nov 9 GSC: /guides/detect-unknown-devices-on-home-wifi jumped Pos 46.7 -> 6.0 (7d) & /tools/whats-on-my-wifi at Pos 9.8. |
 | `FIREWALLA_MAC_AND_ISOLATION` | Playbook 2: Firewalla Private MAC Randomization & Airbnb Camera Audit | `5` | **19/100** | 6–16 days | `1.1x Vol | 0.88x Days | +2 pts` | BOOST_ALLOCATION (+20%) — Solves "Unknown Device" router panic in software vs $300+ hardware; crawl-bridged from /tools/leak-test. |
 | `BARK_CONSOLE_BEDTIME_PAUSE` | Playbook 3: Bark / Qustodio Console Bedtime Wi-Fi Pause (PS5/Xbox/Switch) | `1` | **21/100** | 6–19 days | `1.08x Vol | 0.9x Days | +2 pts` | EXPAND_CONSOLE_GUIDES (+15%) — Captures parents searching for PS5/Switch bedtime cutoffs; crawl-bridged from /tools/leak-test. |
-| `OFCOM_FCC_ISP_REFUND_AND_THROTTLING` | Playbook 4: Surfshark + Ofcom/FCC Speed Guarantee & Bill Credit Scripts | `14` | **20/100** | 3–12 days | `1.15x Vol | 0.84x Days | +3 pts` | PRIORITIZE_TOOL_BRIDGE (+20%) — Verified Nov 9 GSC: TalkTalk Pos 5.9 (11.1% CTR), Gigaclear Pos 6.8, Eduroam Pos 8.2 (34 impr), Virgin Media SSH Pos 9.2. |
+| `OFCOM_FCC_ISP_REFUND_AND_THROTTLING` | Playbook 4: Surfshark + Ofcom/FCC Speed Guarantee & Bill Credit Scripts | `15` | **20/100** | 3–12 days | `1.15x Vol | 0.84x Days | +3 pts` | PRIORITIZE_TOOL_BRIDGE (+20%) — Verified Nov 9 GSC: TalkTalk Pos 5.9 (11.1% CTR), Gigaclear Pos 6.8, Eduroam Pos 8.2 (34 impr), Virgin Media SSH Pos 9.2. |
 | `BOFU_COMPETITOR_SWITCHER` | Playbook 5: BOFU Renewal Price-Hike & Cancellation Switchers | `18` | **22/100** | 5–11 days | `1.12x Vol | 0.8x Days | +3 pts` | MAINTAIN_HIGH_PRIORITY — Verified Nov 9 GSC: /alternatives/totalvpn jumped Pos 20.8 -> 2.8 in 7d (13 impr, 9 in last 7d). |
 | `HARDWARE_WIREGUARD_SETUP` | Playbook 6: Prosumer Router, NAS & Handheld WireGuard (.conf) Setup | `71` | **23/100** | 6–18 days | `1.08x Vol | 0.86x Days | +2 pts` | FOCUS_ON_NEW_2026_MODELS — Verified Nov 9 GSC: GL.iNet #1 Impression Driver (93 impr, 1 click), Steam Deck Pos 5.4 (7d), Nvidia Shield Pos 5.4. |
 | `SMART_TV_ACR_SHIELD` | Playbook 7: Smart-TV ACR Telemetry Sinkhole (Samsung, LG, TCL, Titan OS) | `2` | **25/100** | 9–22 days | `1.05x Vol | 0.92x Days | +1 pts` | ENRICH_EXISTING_PILLARS — Verified Nov 9 GSC: Samsung ACR 49 impr (Pos 13.1), LG ACR jumped Pos 27.2 -> 8.5 (7d), Roku/Vizio Pos 7.3. |
 
 ## 6. Automated Self-Healing Repair Log
 
-- Zero repairs needed on this run (100% clean).
+- Normalized claims & schema in /alternatives/totalvpn
+- Normalized claims & schema in /solutions/brsk-better-net-uk-voip-teams-zoom-jitter
+- Normalized claims & schema in /solutions/bt-broadband-gaming-packet-loss
+- Normalized claims & schema in /solutions/comcast-xfinity-broadband-isp-throttling
+- Normalized claims & schema in /solutions/community-fibre-london-wireguard-cgnat
+- Normalized claims & schema in /solutions/eduroam-campus-wifi-gaming-packet-loss
+- Normalized claims & schema in /solutions/ee-5g-mobile-hotspot-voip-teams-zoom-jitter
+- Normalized claims & schema in /solutions/gigaclear-rural-fibre-gaming-packet-loss
+- Normalized claims & schema in /solutions/hotel-captive-portal-wifi-wireguard
+- Normalized claims & schema in /solutions/hyperoptic-broadband-isp-throttling
+- Normalized claims & schema in /solutions/national-rail-train-wifi-remote-dev-ssh
+- Normalized claims & schema in /solutions/nhs-guest-wifi-voip-teams-zoom-jitter
+- Normalized claims & schema in /solutions/o2-uk-mobile-tethering-uhd-streaming-buffering
+- Normalized claims & schema in /solutions/rogers-ignite-canada-isp-throttling
+- Normalized claims & schema in /solutions/sky-broadband-gaming-packet-loss
+- Normalized claims & schema in /solutions/starlink-satellite-uk-isp-throttling
+- Normalized claims & schema in /solutions/t-mobile-5g-home-internet-remote-dev-ssh
+- Normalized claims & schema in /solutions/talktalk-fibre-wireguard-cgnat
+- Normalized claims & schema in /solutions/telstra-nbn-australia-gaming-packet-loss
+- Normalized claims & schema in /solutions/three-5g-home-broadband-uhd-streaming-buffering
+- Normalized claims & schema in /solutions/toob-full-fibre-uk-voip-teams-zoom-jitter
+- Normalized claims & schema in /solutions/virgin-media-remote-dev-ssh
+- Normalized claims & schema in /solutions/vodafone-uk-gaming-packet-loss
+- Normalized claims & schema in /solutions/youfibre-uk-wifi-arp-spoofing-protection
+- Normalized claims & schema in /solutions/zen-internet-uk-isp-throttling
+- Normalized claims & schema in /setup/almalinux-9-wireguard-gateway
+- Normalized claims & schema in /setup/apple-tv-tvos-17-wireguard
+- Normalized claims & schema in /setup/asuswrt-merlin-vpn-router
+- Normalized claims & schema in /setup/freebsd-14-wireguard-kmod
+- Normalized claims & schema in /setup/gl-inet-travel-router
+- Normalized claims & schema in /setup/linux-cli-wireguard
+- Normalized claims & schema in /setup/macos-apple-silicon-vpn
+- Normalized claims & schema in /setup/nvidia-shield-tv-pro-wireguard
+- Normalized claims & schema in /setup/openwrt-wireguard-router
+- Normalized claims & schema in /setup/pfsense-opnsense-router
+- Normalized claims & schema in /setup/raspberry-pi-home-gateway
+- Normalized claims & schema in /setup/steam-deck-vpn
+- Normalized claims & schema in /setup/synology-nas-docker-vpn
+- Normalized claims & schema in /setup/ubiquiti-unifi-dream-machine-wireguard
+- Normalized claims & schema in /setup/windows-11-wireguard-vpn
+- Normalized claims & schema in /vs/cloudflare-warp-plus
+- Normalized claims & schema in /vs/cyberghost
+- Normalized claims & schema in /vs/expressvpn
+- Normalized claims & schema in /vs/ipvanish
+- Normalized claims & schema in /vs/mullvad
+- Normalized claims & schema in /vs/nordvpn
+- Normalized claims & schema in /vs/private-internet-access
+- Normalized claims & schema in /vs/protonvpn
+- Normalized claims & schema in /vs/surfshark
+- Normalized claims & schema in /vs/totalvpn
+- Normalized claims & schema in /vs/windscribe
+- Normalized claims & schema in /guides/block-philips-titan-os-acr
+- Normalized claims & schema in /guides/block-sony-bravia-samba-tv-acr
+- Normalized claims & schema in /guides/detect-unknown-devices-on-home-wifi
+- Normalized claims & schema in /guides/disable-ipv6-leak-windows-linux
+- Normalized claims & schema in /guides/fix-isp-dns-hijacking-and-throttling
+- Normalized claims & schema in /guides/fix-wireguard-mtu-fragmentation-pppoe
+- Normalized claims & schema in /guides/prevent-webrtc-ip-leak-chromium-firefox
+- Normalized claims & schema in /guides/prevent-windows-11-dns-leaks-doh
+- Normalized claims & schema in /guides/public-hotel-airport-wifi-security
+- Normalized claims & schema in /guides/stop-isp-deep-packet-inspection-dpi
+- Normalized claims & schema in /guides/stop-lg-smart-tv-acr-spying
+- Normalized claims & schema in /guides/stop-roku-vizio-firetv-spying
+- Normalized claims & schema in /guides/stop-samsung-smart-tv-acr-tracking
